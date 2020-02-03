@@ -1,0 +1,251 @@
+package org.terraform.structure.room;
+
+import org.bukkit.Material;
+import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.utils.GenUtils;
+
+public class CubeRoom {
+	
+	int widthX;
+	int widthZ;
+	int height;
+	
+	int x;
+	int y;
+	int z;
+	
+	RoomPopulatorAbstract pop;
+	
+	boolean isActivated = false;
+	
+	public CubeRoom(int widthX, int widthZ, int height, int x, int y, int z) {
+		super();
+		this.widthX = widthX;
+		this.widthZ = widthZ;
+		this.height = height;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
+	public void setRoomPopulator(RoomPopulatorAbstract pop){
+		this.pop = pop;
+	}
+	
+	public void populate(PopulatorDataAbstract data){
+		if(pop == null) return;
+		pop.populate(data, this);
+	}
+	
+	public void fillRoom(PopulatorDataAbstract data, Material[] mat){
+		for(int nx = x-widthX/2; nx <= x+widthX/2; nx++){
+			
+			for(int ny = y; ny <= y+height; ny++){
+				for(int nz = z-widthZ/2; nz <= z+widthZ/2; nz++){					//Tis' a pathway
+					if(data.getType(nx,ny,nz) == Material.CAVE_AIR)
+						continue;
+					//TODO: Set to fill ceiling later on. Now using barriers for easy sight
+//					if(ny == y+height){
+//						data.setType(nx, ny, nz, Material.BARRIER);
+//						continue;
+//					}
+					data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
+				}
+			}
+		}
+		for(int nx = x-widthX/2 +1; nx <= x+widthX/2-1; nx++){
+			for(int ny = y+1; ny <= y+height-1; ny++){
+				for(int nz = z-widthZ/2+1; nz <= z+widthZ/2-1; nz++){
+					data.setType(nx, ny, nz, Material.AIR);
+				}
+			}
+		}
+	}
+	
+	public int[] getCenter(){
+		return new int[]{x,y,z};
+	}
+	
+	public double centralDistanceSquared(int[] other){
+		return Math.pow(x-other[0], 2)+Math.pow(y-other[1], 2)+Math.pow(z-other[2], 2);
+	}
+	
+	public boolean isClone(CubeRoom other){
+		return this.x == other.getX()
+				&& this.y == other.getY()
+				&& this.z == other.getZ()
+				&& this.widthX == other.widthX
+				&& this.height == other.height
+				&& this.widthZ == other.widthZ;
+	}
+
+	public boolean isOverlapping(CubeRoom room){
+//		int[][] corners = getAllCorners();
+//		int[][] otherCorners = room.getAllCorners();
+//		for(int i = 0; i < 4; i++){
+//			if(room.isPointInside(corners[i]))
+//				return true;
+//			if(isPointInside(otherCorners[i]))
+//				return true;
+//		}
+//		
+		if(Math.abs(room.x - this.x) < (Math.abs(room.getWidthX() + this.getWidthX()) / 2) 
+		 && (Math.abs(room.z - this.z) < (Math.abs(room.getWidthZ() + this.getWidthZ()) / 2)))
+		 return true;
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param point 2d point (size 2 int array)
+	 * @return
+	 */
+	public boolean isPointInside(int[] point){
+		int[] boundOne = getUpperCorner();
+		int[] boundTwo = getLowerCorner();
+		
+		if(boundOne[0] >= point[0]
+				&& boundOne[1] >= point[1]){
+			if(boundTwo[0] <= point[0]
+					&& boundTwo[1] <= point[1]){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * @return the isActivated
+	 */
+	public boolean isActivated() {
+		return isActivated;
+	}
+
+	/**
+	 * @param isActivated the isActivated to set
+	 */
+	public void setActivated(boolean isActivated) {
+		this.isActivated = isActivated;
+	}
+	
+	/**
+	 * 
+	 * @return 2d X,Z corners
+	 */
+	public int[][] getAllCorners(){
+		int[][] corners = new int[8][3];
+		
+		corners[0] = new int[]{x+widthX/2,z+widthZ/2}; //++
+		corners[1] = new int[]{x-widthX/2,z+widthZ/2}; //-+
+		corners[2] = new int[]{x+widthX/2,z-widthZ/2}; //+-
+		corners[3] = new int[]{x-widthX/2,z-widthZ/2}; //--
+		
+		return corners;
+	}
+
+	//Positive x,z corner
+	public int[] getUpperCorner(){
+		return new int[]{x+widthX/2,z+widthZ/2};
+	}
+	
+	//Negative x,z corner
+	public int[] getLowerCorner(){
+		return new int[]{x-widthX/2,z-widthZ/2};
+	}
+	
+	public boolean isBig(){
+		return widthX*widthZ*height >= 2000;
+	}
+	
+	public boolean isHuge(){
+		return widthX*widthZ*height >= 7000;
+	}
+
+	/**
+	 * @return the widthX
+	 */
+	public int getWidthX() {
+		return widthX;
+	}
+
+	/**
+	 * @return the widthZ
+	 */
+	public int getWidthZ() {
+		return widthZ;
+	}
+
+	/**
+	 * @return the height
+	 */
+	public int getHeight() {
+		return height;
+	}
+
+	/**
+	 * @return the x
+	 */
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * @return the y
+	 */
+	public int getY() {
+		return y;
+	}
+
+	/**
+	 * @return the z
+	 */
+	public int getZ() {
+		return z;
+	}
+
+	/**
+	 * @param widthX the widthX to set
+	 */
+	public void setWidthX(int widthX) {
+		this.widthX = widthX;
+	}
+
+	/**
+	 * @param widthZ the widthZ to set
+	 */
+	public void setWidthZ(int widthZ) {
+		this.widthZ = widthZ;
+	}
+
+	/**
+	 * @param height the height to set
+	 */
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	/**
+	 * @param x the x to set
+	 */
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	/**
+	 * @param y the y to set
+	 */
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	/**
+	 * @param z the z to set
+	 */
+	public void setZ(int z) {
+		this.z = z;
+	}
+	
+	
+
+}
