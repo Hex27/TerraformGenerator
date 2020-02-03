@@ -17,6 +17,7 @@ import org.terraform.biome.*;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.populators.OrePopulator;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
@@ -102,5 +103,13 @@ public class TerraformGenerator extends ChunkGenerator{
     	//Bukkit.getLogger().info("Finished: " + chunkX + "," + chunkZ);
     	
     	return chunk;
+    }
+    
+    @Override
+    public List<BlockPopulator> getDefaultPopulators(World world) {
+        TerraformWorld tw = TerraformWorld.get(world);
+        return new ArrayList<BlockPopulator>(){{
+        	add(new TerraformStructurePopulator(tw,TerraformGeneratorPlugin.injector));
+        }};
     }
 }

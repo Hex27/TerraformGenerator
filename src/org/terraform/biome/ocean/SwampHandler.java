@@ -14,11 +14,13 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.CoralWallFan;
 import org.bukkit.block.data.type.SeaPickle;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.structure.WitchHutPopulator;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
@@ -71,7 +73,6 @@ public class SwampHandler extends BiomeHandler {
 
 	@Override
 	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-
 		final int seaLevel = TerraformGenerator.seaLevel;
 		int treeX = 0, treeY, treeZ = 0;
 		if(GenUtils.chance(random,3,10)){
@@ -125,7 +126,14 @@ public class SwampHandler extends BiomeHandler {
 				if(GenUtils.chance(random, 2, 100)){
 					BlockUtils.generateClayDeposit(x,y,z,data,random);
 				}
-			}
+			}	
+		}
+		
+		WitchHutPopulator whp = new WitchHutPopulator();
+		if(whp.canSpawn(random, new ArrayList<BiomeBank>(){{
+			add(BiomeBank.SWAMP);
+		}})){
+			whp.populate(tw, random, data);
 		}
 	}
 	

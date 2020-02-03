@@ -35,7 +35,6 @@ public class StrongholdPopulator extends StructurePopulator{
 
 	@Override
 	public boolean canSpawn(Random rand,ArrayList<BiomeBank> biomes) {
-		if(!biomes.contains(BiomeBank.SWAMP)) return false;
 		return GenUtils.chance(rand,1,100);
 	}
 

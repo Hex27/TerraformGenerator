@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -58,21 +60,27 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 
 	@Override
 	public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-		c.getWorld().spawnEntity(new Location(c.getWorld(),rawX,rawY,rawZ), type);
+		Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),rawX,rawY,rawZ), type);
+		e.setPersistent(true);
 	}
 
 	@Override
 	public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
 
-		w.getBlockAt(rawX, rawY, rawZ).setType(Material.SPAWNER,false);
+		Block b = w.getBlockAt(rawX, rawY, rawZ);
+		b.setType(Material.SPAWNER,false);
+		CreatureSpawner spawner = (CreatureSpawner) b.getState(); 
+		spawner.setSpawnedType(type);
+		spawner.update();
+		//TerraformGeneratorPlugin.injector.getICAData(c).setSpawner(rawX, rawY, rawZ, type);
 	}
 
 	@Override
 	public void lootTableChest(int x, int y, int z, TerraLootTable table) {
-		//Can't do that for ya, sorry
 		if(!w.getBlockAt(x,y,z).getType().toString().contains("CHEST")){
 			TerraformGeneratorPlugin.logger.error("Attempted to set loot table to a non chest @ " + x +"," + y + "," + z);
 		}
+		TerraformGeneratorPlugin.injector.getICAData(c).lootTableChest(x, y, z, table);
 	}
 
 }

@@ -100,8 +100,12 @@ public class NMSChunkGenerator extends ChunkGenerator {
 	}
 	
 //	@Override
-//	public void createStructures(BiomeManager biomemanager, IChunkAccess ichunkaccess, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager) {
-//		
+//	public void createStructures(BiomeManager biomemanager, IChunkAccess ica, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager) {
+//		int chunkX = ica.getPos().x;
+//        int chunkZ = ica.getPos().z;
+//        
+//        PopulatorDataICA popDat = new PopulatorDataICA(tw,this.getWorld().getWorld().getHandle(),ica,this,chunkX,chunkZ);
+//        pop.populate(tw, this.getWorld().getWorld().getHandle().getRandom(), popDat);
 //	}
 
 	@Override 

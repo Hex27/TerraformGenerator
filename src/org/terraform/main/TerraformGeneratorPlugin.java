@@ -17,7 +17,7 @@ import org.terraform.utils.TickTimer;
 public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 
 	private static TerraformGeneratorPlugin i;
-	private NMSInjectorAbstract injector;
+	public static NMSInjectorAbstract injector;
 	
 	public static TerraformGeneratorPlugin get(){ return i;}
 	

@@ -32,9 +32,7 @@ public class TerraformPopulator{
 		add(new OrePopulator(Material.REDSTONE_ORE, 40, 10, 15, 12, 15));
 	}};
 	
-	private ArrayList<StructurePopulator> structurePops = new ArrayList<StructurePopulator>(){{
-		add(new WitchHutPopulator());
-	}};
+
 	
 	private CaveWormCreator cavePop;
 	
@@ -84,15 +82,7 @@ public class TerraformPopulator{
 			bank.getHandler().populate(tw, random, data);
 		}
 		
-		for(StructurePopulator spop:structurePops){
-			if(spop.canSpawn(random,banks))
-				spop.populate(tw, random, data);
-		}
 		
-		//TODO: Remove after test.
-		if(data.getChunkX() == 20 && data.getChunkZ() == 20){
-			new StrongholdPopulator().populate(tw, random, data);
-		}
 		
 	}
 	
