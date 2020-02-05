@@ -2,13 +2,16 @@ package org.terraform.structure.stronghold;
 
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.GenUtils;
 
 public class SilverfishDenPopulator extends RoomPopulatorAbstract{
 
@@ -24,6 +27,26 @@ public class SilverfishDenPopulator extends RoomPopulatorAbstract{
 		
 		//Silverfish spawner in the middle
 		data.setSpawner(room.getX(), room.getY()+1, room.getZ(), EntityType.SILVERFISH);
+	
+		//Spawn loot chests
+		int[] upperBounds = room.getUpperCorner();
+		int[] lowerBounds = room.getLowerCorner();
+		
+		for(int i = 0; i < GenUtils.randInt(rand, 1, 3); i++){
+			int x = GenUtils.randInt(rand,lowerBounds[0]+1,upperBounds[0]-1);
+			int z = GenUtils.randInt(rand,lowerBounds[1]+1,upperBounds[1]-1);
+			int ny = room.getY()+1;
+			while(data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()){
+				ny++;
+			}
+			if(ny == room.getHeight() + room.getY()) continue;
+			
+			data.setType(x, ny, z, Material.CHEST);
+			org.bukkit.block.data.type.Chest chest = (org.bukkit.block.data.type.Chest) Bukkit.createBlockData(Material.CHEST);
+			chest.setFacing(BlockUtils.getDirectBlockFace(rand));
+			data.setBlockData(x, ny, z, chest);
+			data.lootTableChest(x, ny, z, TerraLootTable.STRONGHOLD_CORRIDOR);
+		}
 	}
 
 	@Override

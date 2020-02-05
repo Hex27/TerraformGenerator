@@ -105,14 +105,14 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract{
 				}else{
 					
 					//Spawn loot chest
-					if(GenUtils.chance(rand, 1,100)){
+					if(GenUtils.chance(rand, 5,100)){
 						SimpleBlock cBlock = pWall.getRelative(0,1,0).get();
 						cBlock.setType(Material.CHEST);
 						
 						org.bukkit.block.data.type.Chest chest = (org.bukkit.block.data.type.Chest) Bukkit.createBlockData(Material.CHEST);
 						chest.setFacing(pWall.getDirection());
 						cBlock.setBlockData(chest);
-						data.lootTableChest(cBlock.getX(),cBlock.getY(),cBlock.getZ(), TerraLootTable.STRONGHOLD_CROSSING);
+						data.lootTableChest(cBlock.getX(),cBlock.getY(),cBlock.getZ(), TerraLootTable.STRONGHOLD_LIBRARY);
 					}
 					//Place slabs
 					for(int i = 0; i < 3; i++){

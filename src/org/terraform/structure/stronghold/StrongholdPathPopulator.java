@@ -28,7 +28,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract{
 	public void populate(PathPopulatorData ppd) {
 		
 		//Loot chests
-		if(GenUtils.chance(rand,1,200)){
+		if(GenUtils.chance(rand,1,100)){
 			int i = GenUtils.randInt(rand,0,1);
 			Wall w = new Wall(ppd.base.getRelative(0,1,0),ppd.dir);
 			int depth = 0;
@@ -65,14 +65,14 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract{
 		}
 
 		//Sometimes parts of the ceiling falls down
-		if(GenUtils.chance(rand,1,35)){
-			for(int i = 0; i < GenUtils.randInt(rand, 1, 3); i++){
+		if(GenUtils.chance(rand,1,25)){
+			for(int i = 0; i < GenUtils.randInt(rand, 1, 5); i++){
 				dropDownBlock(ceil.getRelative(GenUtils.randInt(rand,-1,1),0,GenUtils.randInt(rand,-1,1)));
 			}
 		}
 		
 		//Cobwebs
-		if(GenUtils.chance(rand,1,35)){
+		if(GenUtils.chance(rand,1,25)){
 			SimpleBlock webBase = ceil.getRelative(0,-1,0);
 			webBase.setType(Material.COBWEB);
 			

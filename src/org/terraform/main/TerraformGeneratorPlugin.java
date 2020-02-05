@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
@@ -68,6 +69,11 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 				logger.error("&cInjection failed.");
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onWorldLoad(WorldLoadEvent event){
+		logger.info(event.getWorld().getName() + " loaded.");
 	}
 	
 	@Override

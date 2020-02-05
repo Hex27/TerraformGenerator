@@ -121,6 +121,14 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract{
 				Wall front = w.getFront();
 				for(int cor = 0; cor < bigCellLength-1; cor++){
 					front.LPillar(room.getHeight(), rand, Material.STONE_BRICKS,Material.STONE_BRICKS,Material.MOSSY_STONE_BRICKS,Material.CRACKED_STONE_BRICKS);
+					
+					//Two blocks of iron bars
+					front.setType(Material.IRON_BARS);
+					front.getRelative(0,1,0).setType(Material.IRON_BARS);
+					BlockUtils.correctSurroundingMultifacingData(front.get());
+					BlockUtils.correctSurroundingMultifacingData(front.get().getRelative(0,1,0));
+					
+					//Doors.
 					if((front.getFront().getRight().get().getType().isSolid()
 							&& !front.getRight().get().getType().isSolid())
 							|| (front.getFront().getLeft().get().getType().isSolid()
