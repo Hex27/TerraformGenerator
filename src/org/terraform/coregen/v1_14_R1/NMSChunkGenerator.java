@@ -1,62 +1,32 @@
 package org.terraform.coregen.v1_14_R1;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.server.v1_14_R1.BiomeBase;
-import net.minecraft.server.v1_14_R1.BiomePlains;
-import net.minecraft.server.v1_14_R1.Biomes;
 import net.minecraft.server.v1_14_R1.BlockPosition;
-import net.minecraft.server.v1_14_R1.Blocks;
-import net.minecraft.server.v1_14_R1.ChunkCoordIntPair;
 import net.minecraft.server.v1_14_R1.ChunkGenerator;
 import net.minecraft.server.v1_14_R1.ChunkSection;
 import net.minecraft.server.v1_14_R1.GeneratorAccess;
 import net.minecraft.server.v1_14_R1.GeneratorSettingsDefault;
-import net.minecraft.server.v1_14_R1.GeneratorSettingsFlat;
+import net.minecraft.server.v1_14_R1.HeightMap.Type;
+import net.minecraft.server.v1_14_R1.IChunkAccess;
 import net.minecraft.server.v1_14_R1.ITileEntity;
 import net.minecraft.server.v1_14_R1.RegionLimitedWorldAccess;
-import net.minecraft.server.v1_14_R1.SeededRandom;
-import net.minecraft.server.v1_14_R1.StructureGenerator;
 import net.minecraft.server.v1_14_R1.TileEntity;
-import net.minecraft.server.v1_14_R1.WorldGenCarverWrapper;
-import net.minecraft.server.v1_14_R1.WorldGenFeatureConfiguration;
-import net.minecraft.server.v1_14_R1.HeightMap.Type;
-import net.minecraft.server.v1_14_R1.IBlockData;
-import net.minecraft.server.v1_14_R1.IChunkAccess;
 import net.minecraft.server.v1_14_R1.WorldChunkManager;
-import net.minecraft.server.v1_14_R1.ProtoChunk;
-import net.minecraft.server.v1_14_R1.WorldGenStage;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.generator.BlockPopulator;
-import org.bukkit.generator.ChunkGenerator.BiomeGrid;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
-import org.bukkit.craftbukkit.libs.jline.internal.Preconditions;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_14_R1.generator.CraftChunkData;
-import org.bukkit.craftbukkit.v1_14_R1.generator.CustomChunkGenerator;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
-import org.terraform.biome.BiomeBank;
+import org.bukkit.generator.ChunkGenerator.BiomeGrid;
+import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 
 public class NMSChunkGenerator extends ChunkGenerator {
 	

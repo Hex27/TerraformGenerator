@@ -1,19 +1,14 @@
 package org.terraform.data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
-import org.drycell.data.constants.DCData;
 import org.terraform.biome.BiomeBank;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.TickTimer;
 
 public class TerraformWorld{
@@ -81,6 +76,14 @@ public class TerraformWorld{
 	
 	public Random getRand(long d){
 		return new Random(seed*d);
+	}
+	
+	public Random getHashedRand(int x, int y, int z){
+		return new Random(Objects.hash(seed,x,y,z));
+	}
+	
+	public Random getHashedRand(int x, int y, int z, long multiplier){
+		return new Random(Objects.hash(seed,x,y,z) * multiplier);
 	}
 	
 	//HashMap<int[], BiomeBank> banks = new HashMap<>();

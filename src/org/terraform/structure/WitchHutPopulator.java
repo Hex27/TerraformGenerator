@@ -6,8 +6,6 @@ import java.util.Random;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.type.Slab;
@@ -20,13 +18,13 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.utils.GenUtils;
 
 public class WitchHutPopulator extends StructurePopulator{
 
 	@Override
-	public boolean canSpawn(Random rand,ArrayList<BiomeBank> biomes) {
+	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
 		if(!biomes.contains(BiomeBank.SWAMP)) return false;
 		return GenUtils.chance(rand,1,100);
 	}

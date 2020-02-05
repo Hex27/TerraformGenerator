@@ -8,7 +8,6 @@ import net.minecraft.server.v1_15_R1.IChunkAccess;
 import net.minecraft.server.v1_15_R1.PlayerChunkMap;
 import net.minecraft.server.v1_15_R1.WorldServer;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
@@ -55,7 +54,9 @@ public class NMSInjector extends NMSInjectorAbstract {
 		IChunkAccess ica = ((CraftChunk) chunk).getHandle();
 		CraftWorld cw = (CraftWorld) chunk.getWorld();
 		WorldServer ws = cw.getHandle();
+
 		TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
+		//return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
 		return new PopulatorDataICA(tw, ws, ica, chunk.getX(), chunk.getZ());
 	}
 

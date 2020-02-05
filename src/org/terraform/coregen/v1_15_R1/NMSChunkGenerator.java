@@ -2,66 +2,48 @@ package org.terraform.coregen.v1_15_R1;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.server.v1_15_R1.BiomeBase;
 import net.minecraft.server.v1_15_R1.BiomeManager;
-import net.minecraft.server.v1_15_R1.BiomePlains;
 import net.minecraft.server.v1_15_R1.BiomeStorage;
-import net.minecraft.server.v1_15_R1.Biomes;
 import net.minecraft.server.v1_15_R1.BlockPosition;
-import net.minecraft.server.v1_15_R1.Blocks;
 import net.minecraft.server.v1_15_R1.ChunkCoordIntPair;
 import net.minecraft.server.v1_15_R1.ChunkGenerator;
 import net.minecraft.server.v1_15_R1.ChunkSection;
-import net.minecraft.server.v1_15_R1.DefinedStructureManager;
 import net.minecraft.server.v1_15_R1.GeneratorAccess;
 import net.minecraft.server.v1_15_R1.GeneratorSettingsDefault;
-import net.minecraft.server.v1_15_R1.GeneratorSettingsFlat;
-import net.minecraft.server.v1_15_R1.HeightMap;
+import net.minecraft.server.v1_15_R1.StructureGenerator;
+import net.minecraft.server.v1_15_R1.World;
+import net.minecraft.server.v1_15_R1.WorldGenerator;
+import net.minecraft.server.v1_15_R1.HeightMap.Type;
+import net.minecraft.server.v1_15_R1.IChunkAccess;
 import net.minecraft.server.v1_15_R1.ITileEntity;
+import net.minecraft.server.v1_15_R1.ProtoChunk;
 import net.minecraft.server.v1_15_R1.RegionLimitedWorldAccess;
 import net.minecraft.server.v1_15_R1.SeededRandom;
-import net.minecraft.server.v1_15_R1.StructureGenerator;
 import net.minecraft.server.v1_15_R1.TileEntity;
-import net.minecraft.server.v1_15_R1.WorldGenCarverWrapper;
-import net.minecraft.server.v1_15_R1.WorldGenFeatureConfiguration;
-import net.minecraft.server.v1_15_R1.HeightMap.Type;
-import net.minecraft.server.v1_15_R1.IBlockData;
-import net.minecraft.server.v1_15_R1.IChunkAccess;
 import net.minecraft.server.v1_15_R1.WorldChunkManager;
-import net.minecraft.server.v1_15_R1.StructureGenerator;
-import net.minecraft.server.v1_15_R1.WorldGenFeatureConfiguration;
-import net.minecraft.server.v1_15_R1.ProtoChunk;
+import net.minecraft.server.v1_15_R1.WorldGenCarverWrapper;
 import net.minecraft.server.v1_15_R1.WorldGenStage;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.generator.BlockPopulator;
-import org.bukkit.generator.ChunkGenerator.BiomeGrid;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
-import org.bukkit.craftbukkit.libs.jline.internal.Preconditions;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_15_R1.generator.CraftChunkData;
-import org.bukkit.craftbukkit.v1_15_R1.generator.CustomChunkGenerator;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
-import org.terraform.biome.BiomeBank;
+import org.bukkit.generator.ChunkGenerator.BiomeGrid;
+import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.structure.StrongholdPopulator;
 
 public class NMSChunkGenerator extends ChunkGenerator {
 	
@@ -107,6 +89,27 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //        PopulatorDataICA popDat = new PopulatorDataICA(tw,this.getWorld().getWorld().getHandle(),ica,this,chunkX,chunkZ);
 //        pop.populate(tw, this.getWorld().getWorld().getHandle().getRandom(), popDat);
 //	}
+	
+	@Override
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i, boolean flag) {
+        //StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.ao.get(s.toLowerCase(Locale.ROOT));
+		int pX = blockposition.getX();
+		int pZ = blockposition.getZ();
+		if(s.equalsIgnoreCase("Stronghold")){
+			double minDistanceSquared = Integer.MAX_VALUE;
+			int[] min = null;
+			for(int[] loc:StrongholdPopulator.strongholdPositions(tw)){
+				double distSqr = Math.pow(loc[0]-pX,2) + Math.pow(loc[1]-pZ,2);
+				if(distSqr < minDistanceSquared){
+					minDistanceSquared = distSqr;
+					min = loc;
+				}
+			}
+			return new BlockPosition(min[0],20,min[1]);
+		}
+		
+        return null;
+    }
 
 	@Override 
     protected BiomeBase getBiome(BiomeManager biomemanager, BlockPosition bp) {

@@ -1,30 +1,19 @@
 package org.terraform.biome.ocean;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.TreeType;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.CoralWallFan;
-import org.bukkit.block.data.type.SeaPickle;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
-import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.WitchHutPopulator;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
@@ -130,7 +119,7 @@ public class SwampHandler extends BiomeHandler {
 		}
 		
 		WitchHutPopulator whp = new WitchHutPopulator();
-		if(whp.canSpawn(random, new ArrayList<BiomeBank>(){{
+		if(whp.canSpawn(random, tw, data.getChunkX(),data.getChunkZ(),new ArrayList<BiomeBank>(){{
 			add(BiomeBank.SWAMP);
 		}})){
 			whp.populate(tw, random, data);

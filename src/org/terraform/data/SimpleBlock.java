@@ -1,19 +1,14 @@
 package org.terraform.data;
 
-import java.util.ArrayList;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.BlockUtils;
 
 import com.google.gson.annotations.SerializedName;
 

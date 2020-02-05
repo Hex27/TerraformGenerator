@@ -9,14 +9,12 @@ import org.bukkit.generator.BlockPopulator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.StrongholdPopulator;
-import org.terraform.structure.StructurePopulator;
-import org.terraform.structure.WitchHutPopulator;
+import org.terraform.structure.*;
 
 public class TerraformStructurePopulator extends BlockPopulator {
 	
 	private ArrayList<StructurePopulator> structurePops = new ArrayList<StructurePopulator>(){{
-		//add(new WitchHutPopulator());
+		add(new StrongholdPopulator());
 	}};
 	
 	TerraformWorld tw;
@@ -28,10 +26,12 @@ public class TerraformStructurePopulator extends BlockPopulator {
 	
 	@Override
 	public void populate(World world, Random random, Chunk chunk) {
-		
+		//Don't attempt generation pre-injection.
+		if(!TerraformGeneratorPlugin.injectedWorlds.contains(world.getName())) 
+			return;
 		PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
 		//PopulatorDataAbstract data = TerraformGeneratorPlugin.injector.getICAData(chunk);
-		
+		//TerraformGeneratorPlugin.logger.debug("s-pop-1");
 		ArrayList<BiomeBank> banks = new ArrayList<>();
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
@@ -47,16 +47,15 @@ public class TerraformStructurePopulator extends BlockPopulator {
 				}
 			}
 		}
-		
+		//TerraformGeneratorPlugin.logger.debug("s-pop-2");
 		for(StructurePopulator spop:structurePops){
-			if(spop.canSpawn(random,banks))
+			//TerraformGeneratorPlugin.logger.debug("s-pop-3");
+			if(spop.canSpawn(random,tw,data.getChunkX(),data.getChunkZ(),banks)){
+				//TerraformGeneratorPlugin.logger.debug("s-pop-4");
 				spop.populate(tw, random, data);
+			}
 		}
 		
-		//TODO: Remove after test.
-		if(data.getChunkX() == 20 && data.getChunkZ() == 20){
-			new StrongholdPopulator().populate(tw, random, data);
-		}
 	}
 
 }

@@ -2,26 +2,16 @@ package org.terraform.biome.flat;
 
 import java.util.Random;
 
-import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.TreeType;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Snowable;
 import org.bukkit.util.Vector;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.FastNoise.NoiseType;
 
 public class IceSpikesHandler extends BiomeHandler {
 

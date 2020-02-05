@@ -1,21 +1,5 @@
 package org.terraform.coregen.v1_15_R1;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Biome;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
-import org.bukkit.entity.EntityType;
-import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraLootTable;
-import org.terraform.data.SimpleBlock;
-import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
-
-import net.minecraft.server.v1_15_R1.Block;
 import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.Blocks;
 import net.minecraft.server.v1_15_R1.Entity;
@@ -24,15 +8,25 @@ import net.minecraft.server.v1_15_R1.EntityTypes;
 import net.minecraft.server.v1_15_R1.EnumMobSpawn;
 import net.minecraft.server.v1_15_R1.GroupDataEntity;
 import net.minecraft.server.v1_15_R1.IBlockData;
+import net.minecraft.server.v1_15_R1.IChunkAccess;
 import net.minecraft.server.v1_15_R1.LootTables;
 import net.minecraft.server.v1_15_R1.MinecraftKey;
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
-import net.minecraft.server.v1_15_R1.IChunkAccess;
 import net.minecraft.server.v1_15_R1.TileEntity;
 import net.minecraft.server.v1_15_R1.TileEntityLootable;
 import net.minecraft.server.v1_15_R1.TileEntityMobSpawner;
-import net.minecraft.server.v1_15_R1.WorldGenDungeons;
 import net.minecraft.server.v1_15_R1.WorldServer;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
+import org.bukkit.entity.EntityType;
+import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.TerraLootTable;
+import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorDataICA extends PopulatorDataAbstract{
 	IChunkAccess ica;

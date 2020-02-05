@@ -2,14 +2,8 @@ package org.terraform.biome.mountainous;
 
 import java.util.Random;
 
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.TreeType;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.Snowable;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;

@@ -4,18 +4,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import net.minecraft.server.v1_14_R1.GeneratorSettingsFlat;
+import net.minecraft.server.v1_14_R1.IChunkAccess;
 import net.minecraft.server.v1_14_R1.PlayerChunkMap;
 import net.minecraft.server.v1_14_R1.WorldServer;
-import net.minecraft.server.v1_14_R1.IChunkAccess;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.CraftChunk;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.v1_14_R1.PopulatorDataICA;
 import org.terraform.data.TerraformWorld;
 
 public class NMSInjector extends NMSInjectorAbstract {

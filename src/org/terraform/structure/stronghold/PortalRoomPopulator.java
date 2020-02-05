@@ -1,7 +1,5 @@
 package org.terraform.structure.stronghold;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -9,15 +7,12 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.EndPortalFrame;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;

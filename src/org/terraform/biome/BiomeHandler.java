@@ -3,9 +3,7 @@ package org.terraform.biome;
 import java.util.Random;
 
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.generator.BlockPopulator;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 

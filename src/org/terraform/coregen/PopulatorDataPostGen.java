@@ -1,6 +1,5 @@
 package org.terraform.coregen;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,13 +33,14 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 	@Override
 	public void setType(int x, int y, int z, Material type) {
 		//if(type == Material.DIRT) Bukkit.getLogger().info("Set " + x + "," + y + "," + z + " to dirt.");
-	
-		w.getBlockAt(x, y, z).setType(type,false);
+		boolean isFragile = type.toString().contains("DOOR");
+		w.getBlockAt(x, y, z).setType(type,!isFragile);
 	}
 
 	@Override
 	public void setBlockData(int x, int y, int z, BlockData data) {
-		w.getBlockAt(x,y,z).setBlockData(data,false);
+		boolean isFragile = data.getMaterial().toString().contains("DOOR");
+		w.getBlockAt(x,y,z).setBlockData(data,!isFragile);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 		if(!w.getBlockAt(x,y,z).getType().toString().contains("CHEST")){
 			TerraformGeneratorPlugin.logger.error("Attempted to set loot table to a non chest @ " + x +"," + y + "," + z);
 		}
-		TerraformGeneratorPlugin.injector.getICAData(c).lootTableChest(x, y, z, table);
+		TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk()).lootTableChest(x, y, z, table);
 	}
 
 }

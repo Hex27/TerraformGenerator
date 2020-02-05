@@ -1,28 +1,17 @@
 package org.terraform.structure.stronghold;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Skull;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Orientable;
-import org.bukkit.block.data.Rotatable;
-import org.bukkit.block.data.type.Slab;
-import org.bukkit.block.data.type.Slab.Type;
-import org.bukkit.block.data.type.Stairs;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.GenUtils;
 
 public class NetherPortalRoomPopulator extends RoomPopulatorAbstract{
 
@@ -79,7 +68,9 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract{
 				Material.NETHERRACK,
 				Material.NETHERRACK,
 				Material.SOUL_SAND,
-				Material.NETHERRACK);
+				Material.NETHERRACK,
+				Material.NETHERRACK,
+				Material.MAGMA_BLOCK);
 		
 		while(data.getType(x,y,z).isSolid() && y < room.getY()+room.getHeight()-5){
 			y++;
@@ -105,9 +96,6 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract{
 		
 		wall.Pillar(3, rand, Material.CAVE_AIR);
 		wall.getRight().Pillar(3, rand, Material.CAVE_AIR);
-		
-		
-		
 	}
 	
 	@Override

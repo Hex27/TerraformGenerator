@@ -1,17 +1,12 @@
 package org.terraform.populators;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;

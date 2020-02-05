@@ -1,29 +1,15 @@
 package org.terraform.command;
 
-import java.util.Random;
 import java.util.Stack;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.noise.PerlinOctaveGenerator;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
-import org.terraform.biome.beach.SandyBeachHandler;
-import org.terraform.biome.flat.IceSpikesHandler;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.StrongholdPopulator;
-import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.structure.stronghold.StrongholdPathPopulator;
-import org.terraform.tree.TreeDB;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.GenUtils;
 
 public class RoomTestCommand extends DCCommand {
 

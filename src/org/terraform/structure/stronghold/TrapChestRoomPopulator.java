@@ -1,28 +1,14 @@
 package org.terraform.structure.stronghold;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Orientable;
-import org.bukkit.block.data.Rotatable;
-import org.bukkit.block.data.type.Slab;
-import org.bukkit.block.data.type.Slab.Type;
-import org.bukkit.block.data.type.Stairs;
-import org.bukkit.entity.EntityType;
-import org.bukkit.block.Chest;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
@@ -36,6 +22,16 @@ public class TrapChestRoomPopulator extends RoomPopulatorAbstract{
 
 	@Override
 	public void populate(PopulatorDataAbstract data, CubeRoom room) {
+		
+		//Mines
+		for(int i = 0; i < GenUtils.randInt(rand,0,5); i++){
+			int x = room.getX()+GenUtils.randInt(rand, -room.getWidthX()/2,room.getWidthX()/2);
+			int z = room.getZ()+GenUtils.randInt(rand, -room.getWidthZ()/2,room.getWidthZ()/2);
+			data.setType(x, room.getY()+1, z, Material.STONE_PRESSURE_PLATE);
+			
+			if(GenUtils.chance(rand, 4,5))
+				data.setType(x, room.getY()-1, z, Material.TNT);
+		}
 		
 		int y = room.getY()+1;
 		int x = room.getX();

@@ -1,28 +1,17 @@
 package org.terraform.coregen;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.util.noise.PerlinOctaveGenerator;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
-import org.terraform.biome.*;
-import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleChunkLocation;
+import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.populators.OrePopulator;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.TickTimer;
-import org.terraform.utils.FastNoise.NoiseType;
 
 public class TerraformGenerator extends ChunkGenerator{
 	

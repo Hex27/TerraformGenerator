@@ -4,20 +4,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.utils.GenUtils;
 
 public class CaveWormCreator extends BlockPopulator {
 		

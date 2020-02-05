@@ -1,17 +1,9 @@
 package org.terraform.coregen;
 
-import net.minecraft.server.v1_15_R1.BlockPosition;
-import net.minecraft.server.v1_15_R1.IBlockData;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.terraform.data.SimpleBlock;
 
 public abstract class PopulatorDataAbstract {
 

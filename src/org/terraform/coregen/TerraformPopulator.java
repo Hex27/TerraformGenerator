@@ -5,20 +5,12 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.generator.BlockPopulator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.populators.CaveWormCreator;
 import org.terraform.populators.OrePopulator;
-import org.terraform.structure.*;
-import org.terraform.utils.GenUtils;
 
 public class TerraformPopulator{
     private static Set<SimpleChunkLocation> chunks = new HashSet<SimpleChunkLocation>();

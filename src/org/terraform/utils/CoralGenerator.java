@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.CoralWallFan;
 import org.bukkit.block.data.type.SeaPickle;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
-import org.terraform.data.SimpleChunkLocation;
 
 public class CoralGenerator {
 

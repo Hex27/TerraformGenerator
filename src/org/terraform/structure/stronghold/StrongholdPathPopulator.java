@@ -6,7 +6,6 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;

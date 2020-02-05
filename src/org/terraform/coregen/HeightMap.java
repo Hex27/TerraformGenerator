@@ -1,7 +1,5 @@
 package org.terraform.coregen;
 
-import java.util.Random;
-
 import org.bukkit.util.noise.PerlinOctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.data.TerraformWorld;

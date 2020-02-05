@@ -61,12 +61,38 @@ public class RoomLayoutGenerator {
 	
 	public void generate(){ generate(true); }
 	
-	public void forceAddRoom(int widthX, int widthZ, int heightY){
+	/**
+	 * DO NOT CALL THIS METHOD VERY OFTEN.
+	 * This method will keep trying to add the room until it is added.
+	 * If the layout already has a lot of rooms, this will result in a
+	 * very long while loop.
+	 * @param widthX
+	 * @param widthZ
+	 * @param heightY
+	 */
+	public CubeRoom forceAddRoom(int widthX, int widthZ, int heightY){
 		CubeRoom room = new CubeRoom(widthX, widthZ,heightY,
 				centX+GenUtils.randInt(rand,-range/2,range/2),
 				centY, 
 				centZ+GenUtils.randInt(rand,-range/2,range/2));
+		
+		boolean canAdd = false;
+		while(!canAdd){
+			canAdd = true;
+			for(CubeRoom other:rooms){
+				if(other.isOverlapping(room)){
+					canAdd = false;
+					room = new CubeRoom(widthX, widthZ,heightY,
+							centX+GenUtils.randInt(rand,-range/2,range/2),
+							centY, 
+							centZ+GenUtils.randInt(rand,-range/2,range/2));
+					break;
+				}
+			}
+		}
+		
 		rooms.add(room);
+		return room;
 	}
 	
 	public void generate(boolean normalise){

@@ -5,22 +5,14 @@ import java.util.Stack;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.noise.NoiseGenerator;
-import org.bukkit.util.noise.PerlinOctaveGenerator;
-import org.bukkit.util.noise.SimplexNoiseGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.TerraformGenerator;
-import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.CellularDistanceFunction;
-import org.terraform.utils.FastNoise.CellularReturnType;
-import org.terraform.utils.FastNoise.FractalType;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.Spline3D;
+import org.terraform.utils.GenUtils;
 
 public class PreviewCommand extends DCCommand {
 

@@ -10,8 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -22,15 +22,18 @@ import org.terraform.utils.FastNoise.NoiseType;
 
 public class BlockUtils {
 	
+	// N
+	//W E
+	// S
 	public static final ArrayList<BlockFace> xzPlaneBlockFaces = new ArrayList<BlockFace>(){{
 		add(BlockFace.NORTH);
-		add(BlockFace.SOUTH);
-		add(BlockFace.EAST);
-		add(BlockFace.WEST);
 		add(BlockFace.NORTH_EAST);
+		add(BlockFace.EAST);
+		add(BlockFace.SOUTH_EAST);
+		add(BlockFace.SOUTH);
+		add(BlockFace.SOUTH_WEST);
+		add(BlockFace.WEST);
 		add(BlockFace.NORTH_WEST);
-		add(BlockFace.SOUTH_EAST);
-		add(BlockFace.SOUTH_EAST);
 	}};
 	
 	public static final Material[] stoneBricks = new Material[]{

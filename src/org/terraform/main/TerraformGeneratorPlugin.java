@@ -1,23 +1,21 @@
 package org.terraform.main;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.TerraformGenerator;
-import org.terraform.data.TerraformWorld;
-import org.terraform.utils.TickTimer;
 
 public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 
 	private static TerraformGeneratorPlugin i;
 	public static NMSInjectorAbstract injector;
+	public static ArrayList<String> injectedWorlds = new ArrayList<>();
 	
 	public static TerraformGeneratorPlugin get(){ return i;}
 	
@@ -64,6 +62,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 		if(event.getWorld().getGenerator() instanceof TerraformGenerator){
 			logger.info("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
 			if(injector.attemptInject(event.getWorld())){
+				injectedWorlds.add(event.getWorld().getName());
 				logger.info("&aInjection success! Proceeding with generation.");
 			}else{
 				logger.error("&cInjection failed.");

@@ -3,66 +3,140 @@ package org.terraform.structure;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Bisected.Half;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Levelled;
-import org.bukkit.block.data.MultipleFacing;
-import org.bukkit.block.data.Orientable;
-import org.bukkit.block.data.type.Slab;
-import org.bukkit.block.data.type.Slab.Type;
-import org.bukkit.block.data.type.Stairs;
-import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.room.PathPopulatorAbstract;
-import org.terraform.structure.room.PathPopulatorData;
+import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.structure.stronghold.*;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CoralGenerator;
-import org.terraform.utils.FastNoise;
+import org.terraform.structure.stronghold.LibraryRoomPopulator;
+import org.terraform.structure.stronghold.NetherPortalRoomPopulator;
+import org.terraform.structure.stronghold.PortalRoomPopulator;
+import org.terraform.structure.stronghold.PrisonRoomPopulator;
+import org.terraform.structure.stronghold.SilverfishDenPopulator;
+import org.terraform.structure.stronghold.StairwayRoomPopulator;
+import org.terraform.structure.stronghold.StairwayTopPopulator;
+import org.terraform.structure.stronghold.StrongholdPathPopulator;
+import org.terraform.structure.stronghold.SupplyRoomPopulator;
+import org.terraform.structure.stronghold.TrapChestRoomPopulator;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.FastNoise.NoiseType;
 
 public class StrongholdPopulator extends StructurePopulator{
 
+	private static ArrayList<int[]> positions;
+	
+	public static ArrayList<int[]> strongholdPositions(TerraformWorld tw){
+		if(positions != null) return positions;
+		Random rand = tw.getRand(3);
+		ArrayList<int[]> positions = new ArrayList<>();
+		int radius = 1408;
+		for(int i = 0; i < 3; i++){
+			int[] coords = randomCircleCoords(rand,radius);
+			Bukkit.getLogger().info("Will spawn stronghold at: " + coords[0] + "," + coords[1]);
+
+			positions.add(coords);
+		}
+		radius += 3072;
+		//TerraformGeneratorPlugin.logger.debug("sp-1");
+		for(int i = 0; i < 6; i++) positions.add(randomCircleCoords(rand,radius));
+		radius += 3072;
+		//TerraformGeneratorPlugin.logger.debug("sp-2");
+		for(int i = 0; i < 10; i++) positions.add(randomCircleCoords(rand,radius));
+		radius += 3072;
+		//TerraformGeneratorPlugin.logger.debug("sp-3");
+		for(int i = 0; i < 15; i++) positions.add(randomCircleCoords(rand,radius));
+		radius += 3072;
+		//TerraformGeneratorPlugin.logger.debug("s-pop-4");
+		for(int i = 0; i < 21; i++) positions.add(randomCircleCoords(rand,radius));
+		radius += 3072;
+		//TerraformGeneratorPlugin.logger.debug("s-pop-5");
+		for(int i = 0; i < 28; i++) positions.add(randomCircleCoords(rand,radius));
+		radius += 3072;
+		//TerraformGeneratorPlugin.logger.debug("s-pop-6");
+		for(int i = 0; i < 36; i++) positions.add(randomCircleCoords(rand,radius));
+		radius += 3072;
+		//TerraformGeneratorPlugin.logger.debug("s-pop-7");
+		for(int i = 0; i < 9; i++) positions.add(randomCircleCoords(rand,radius));
+		//TerraformGeneratorPlugin.logger.debug("s-pop-8");
+		StrongholdPopulator.positions = positions;
+		return positions;
+	}
+	
+	/**
+	 * 
+	 * @param rand
+	 * @param radius
+	 * @return x,z coords on the circumference of 
+	 * a circle of the specified radius, center 0,0
+	 */
+	private static int[] randomCircleCoords(Random rand, int radius){
+		double angle = Math.random()*Math.PI*2;
+		int x = (int) (Math.cos(angle)*radius);
+		int y = (int) (Math.sin(angle)*radius);
+		return new int[]{x,y};
+	}
+	
+	private boolean areCoordsEqual(int[] a,int[] b){
+		return a[0] == b[0] && a[1] == b[1];
+	}
+	
 	@Override
-	public boolean canSpawn(Random rand,ArrayList<BiomeBank> biomes) {
-		return GenUtils.chance(rand,1,100);
+	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
+		ArrayList<int[]> positions = strongholdPositions(tw);
+		for(int x = chunkX*16; x<chunkX*16+16;x++){
+			for(int z = chunkZ*16; z<chunkZ*16+16;z++){
+				for(int[] pos:positions){
+					if(areCoordsEqual(pos,new int[]{x,z}))
+						return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
-		int seaLevel = TerraformGenerator.seaLevel;
-		int x = data.getChunkX()*16 + random.nextInt(16);
-		int z = data.getChunkZ()*16 + random.nextInt(16);
-		int height = GenUtils.getHighestGround(data, x, z);
-		//Strongholds start underground. Burrow down
-		height -= 40;
-		if(height < 3) height = 5;
-		spawnStronghold(tw,random,data,x,height,z);
+		TerraformGeneratorPlugin.logger.debug("s-populate");
+		
+		ArrayList<int[]> positions = strongholdPositions(tw);
+		for(int x = data.getChunkX()*16; x<data.getChunkX()*16+16;x++){
+			for(int z = data.getChunkZ()*16; z<data.getChunkZ()*16+16;z++){
+				for(int[] pos:positions){
+					if(areCoordsEqual(pos,new int[]{x,z})){
+						int height = GenUtils.getHighestGround(data, x, z);
+						//Strongholds start underground. Burrow down
+						height -= 40;
+						if(height < 3) height = 5;
+						spawnStronghold(tw,random,data,x,height,z);
+						break;
+					}
+				}
+			}
+		}
+		
 		
 	}
 	
 	public void spawnStronghold(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
+		Bukkit.getLogger().info("Spawning stronghold at: " + x + "," + z);
+		
 		int numRooms = 70;
 		int range = 100;
 		
 		//Level One
-		RoomLayoutGenerator gen = new RoomLayoutGenerator(tw.getRand(8),numRooms,x,y,z,range);
-		gen.setPathPopulator(new StrongholdPathPopulator(tw.getRand(13)));
+		RoomLayoutGenerator gen = new RoomLayoutGenerator(tw.getHashedRand(x, y, z),numRooms,x,y,z,range);
+		gen.setPathPopulator(new StrongholdPathPopulator(tw.getHashedRand(x, y, z, 2)));
 		gen.setRoomMaxX(30);
 		gen.setRoomMaxZ(30);
 		gen.setRoomMaxHeight(15);
 		gen.forceAddRoom(25, 25, 15); //At least one room that can be the Portal room.
+		CubeRoom stairwayOne = gen.forceAddRoom(5, 5, 18);
+		stairwayOne.setRoomPopulator(new StairwayRoomPopulator(random,false,false));
 		gen.registerRoomPopulator(new PortalRoomPopulator(random, true, true));
 		gen.registerRoomPopulator(new LibraryRoomPopulator(random, false, false));
 		gen.registerRoomPopulator(new NetherPortalRoomPopulator(random, false, true));
@@ -73,15 +147,19 @@ public class StrongholdPopulator extends StructurePopulator{
 		gen.generate();
 		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 		
-//		gen.reset();
-//		
-//		//Level Two
-//		gen.setCentY(y+18);
-//		gen.setRand(tw.getRand(9));
-//		gen.setPathPopulator(new StrongholdPathPopulator(tw.getRand(14)));
-//		gen.generate();
-//		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
-//		
+		gen.reset();
+		
+		//Level Two
+		y += 18;
+		gen.setCentY(y);
+		gen.setRand(tw.getHashedRand(x, y, z));
+		gen.setPathPopulator(new StrongholdPathPopulator(tw.getHashedRand(x, y, z, 2)));
+		CubeRoom stairwayTwo = new CubeRoom(5, 5, 5, stairwayOne.getX(), y, stairwayOne.getZ());
+		stairwayTwo.setRoomPopulator(new StairwayTopPopulator(random,false,false));
+		gen.getRooms().add(stairwayTwo);
+		gen.generate();
+		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
+		
 	}
 	
 

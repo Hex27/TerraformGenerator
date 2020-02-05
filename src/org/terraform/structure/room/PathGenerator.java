@@ -1,17 +1,12 @@
 package org.terraform.structure.room;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Map.Entry;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.data.SimpleBlock;
-import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 
 public class PathGenerator{
@@ -48,10 +43,10 @@ public class PathGenerator{
 //		Bukkit.getLogger().info(base.getX() + "," + base.getZ() + ": " 
 //	+ upperBound[0] + "," + upperBound[1]
 //	+ " - " + lowerBound[0] + "," + lowerBound[1]);
-		return base.getX() >= upperBound[0]
-				|| base.getZ() >= upperBound[1]
-				|| base.getX() <= lowerBound[0]
-				|| base.getZ() <= lowerBound[1];
+		return base.getX() >= upperBound[0]+10
+				|| base.getZ() >= upperBound[1]+10
+				|| base.getX() <= lowerBound[0]-10
+				|| base.getZ() <= lowerBound[1]-10;
 	}
 	
 	public void die(){

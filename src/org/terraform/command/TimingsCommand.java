@@ -1,12 +1,9 @@
 package org.terraform.command;
 
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Stack;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;

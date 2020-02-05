@@ -1,23 +1,13 @@
 package org.terraform.biome.ocean;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.TreeType;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.CoralWallFan;
-import org.bukkit.block.data.type.SeaPickle;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
-import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
