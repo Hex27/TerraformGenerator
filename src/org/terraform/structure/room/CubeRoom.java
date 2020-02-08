@@ -1,7 +1,12 @@
 package org.terraform.structure.room;
 
+import java.util.HashMap;
+
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
+import org.terraform.data.Wall;
 import org.terraform.utils.GenUtils;
 
 public class CubeRoom {
@@ -28,6 +33,30 @@ public class CubeRoom {
 		this.z = z;
 	}
 	
+	public HashMap<Wall,Integer> getFourWalls(PopulatorDataAbstract data, int padding){
+		int[] lowerBounds = getLowerCorner();
+		int[] upperBounds = getUpperCorner();
+		HashMap<Wall,Integer> walls = new HashMap<>();
+		Wall north = new Wall(
+				new SimpleBlock(data, lowerBounds[0]+padding,getY()+1,upperBounds[1]+padding)
+				,BlockFace.NORTH);
+		Wall south = new Wall(
+				new SimpleBlock(data, upperBounds[0]-padding,getY()+1,lowerBounds[1]+padding)
+				,BlockFace.SOUTH);
+		Wall east = new Wall(
+				new SimpleBlock(data, lowerBounds[0]+padding,getY()+1,lowerBounds[1]+padding)
+				,BlockFace.EAST);
+		Wall west = new Wall(
+				new SimpleBlock(data, upperBounds[0]-padding,getY()+1,upperBounds[1]-padding)
+				,BlockFace.WEST);
+		//West wall minuses one, so as to not overlap.
+		walls.put(north,getWidthX()-2*padding);
+		walls.put(south,getWidthX()-2*padding);
+		walls.put(east,getWidthZ()-2*padding);
+		walls.put(west,getWidthZ()-2*padding);
+		return walls;
+	}
+	
 	public void setRoomPopulator(RoomPopulatorAbstract pop){
 		this.pop = pop;
 	}
@@ -38,6 +67,9 @@ public class CubeRoom {
 	}
 	
 	public void fillRoom(PopulatorDataAbstract data, Material[] mat){
+		fillRoom(data,mat,false);
+	}
+	public void fillRoom(PopulatorDataAbstract data, Material[] mat, boolean fillCaveAir){
 		for(int nx = x-widthX/2; nx <= x+widthX/2; nx++){
 			
 			for(int ny = y; ny <= y+height; ny++){
@@ -56,7 +88,10 @@ public class CubeRoom {
 		for(int nx = x-widthX/2 +1; nx <= x+widthX/2-1; nx++){
 			for(int ny = y+1; ny <= y+height-1; ny++){
 				for(int nz = z-widthZ/2+1; nz <= z+widthZ/2-1; nz++){
-					data.setType(nx, ny, nz, Material.AIR);
+					if(!fillCaveAir)
+						data.setType(nx, ny, nz, Material.AIR);
+					else
+						data.setType(nx,ny,nz,Material.CAVE_AIR);
 				}
 			}
 		}
@@ -89,8 +124,8 @@ public class CubeRoom {
 //				return true;
 //		}
 //		
-		if(Math.abs(room.x - this.x) < (Math.abs(room.getWidthX() + this.getWidthX()) / 2) 
-		 && (Math.abs(room.z - this.z) < (Math.abs(room.getWidthZ() + this.getWidthZ()) / 2)))
+		if(Math.abs(room.x - this.x) < (int) (Math.abs(room.getWidthX() + this.getWidthX()) / 2) 
+		 && (Math.abs(room.z - this.z) < (int) (Math.abs(room.getWidthZ() + this.getWidthZ()) / 2)))
 		 return true;
 		return false;
 	}
@@ -113,6 +148,18 @@ public class CubeRoom {
 		}
 		
 		return false;
+	}
+	
+	public boolean isInside(CubeRoom other){
+		for(int[] corner:getAllCorners()){
+			if(!other.isPointInside(corner))
+				return false;
+		}
+		return true;
+	}
+	
+	public boolean envelopesOrIsInside(CubeRoom other){
+		return isInside(other) || other.isInside(this);
 	}
 	
 	/**

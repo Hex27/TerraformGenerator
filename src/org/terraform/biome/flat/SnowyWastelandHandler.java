@@ -10,6 +10,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 public class SnowyWastelandHandler extends BiomeHandler {
@@ -34,9 +35,9 @@ public class SnowyWastelandHandler extends BiomeHandler {
 
 	@Override
 	public Material[] getSurfaceCrust(Random rand) {
-		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.DIRT,25, Material.PACKED_ICE, 3, Material.ICE, 2),
-				Material.DIRT,
-				GenUtils.randMaterial(rand, Material.DIRT,Material.DIRT),
+		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.PACKED_ICE, 3, Material.ICE, 2),
+				GenUtils.weightedRandomMaterial(rand, Material.PACKED_ICE, 3, Material.ICE, 2),
+				GenUtils.randMaterial(rand, Material.PACKED_ICE, Material.ICE, Material.DIRT,Material.DIRT),
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE),
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE)};
 	}
@@ -49,14 +50,17 @@ public class SnowyWastelandHandler extends BiomeHandler {
 			//Block b = loc.getBlock().getRelative(0,1,0);
 			if(data.getBiome(loc[0],loc[2]) != getBiome()) continue;
 			if(data.getType(loc[0],loc[1],loc[2]) != Material.DIRT) continue;
-			if(GenUtils.chance(1,3))
-				new FractalTreeBuilder(FractalTreeType.WASTELAND_COLLAPSED)
-				.setSnowy(true).build(world,data,loc[0],loc[1]+1,loc[2]);
-				//BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
 			
-			if(GenUtils.chance(1,30))
-				new FractalTreeBuilder(FractalTreeType.WASTELAND_BIG)
-				.setSnowy(true).build(world,data,loc[0],loc[1]+1,loc[2]);
+			BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
+			//Ugly af.
+//			if(GenUtils.chance(1,3))
+//				new FractalTreeBuilder(FractalTreeType.WASTELAND_COLLAPSED)
+//				.setSnowy(true).build(world,data,loc[0],loc[1]+1,loc[2]);
+//				//BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
+//			
+//			if(GenUtils.chance(1,30))
+//				new FractalTreeBuilder(FractalTreeType.WASTELAND_BIG)
+//				.setSnowy(true).build(world,data,loc[0],loc[1]+1,loc[2]);
 		}
 
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){

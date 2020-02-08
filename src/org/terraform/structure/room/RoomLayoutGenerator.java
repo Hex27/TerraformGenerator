@@ -26,9 +26,10 @@ public class RoomLayoutGenerator {
 	private int[] lowerBound;
 	private PathPopulatorAbstract pathPop;
 	private ArrayList<RoomPopulatorAbstract> roomPops = new ArrayList<>();
-	
-	public RoomLayoutGenerator(Random random, int numRooms, int centX, int centY, int centZ, int range){
+	private RoomLayout layout;
+	public RoomLayoutGenerator(Random random, RoomLayout layout, int numRooms, int centX, int centY, int centZ, int range){
 		this.numRooms = numRooms;
+		this.layout = layout;
 		this.centX = centX;
 		this.centY = centY;
 		this.centZ = centZ;
@@ -62,37 +63,39 @@ public class RoomLayoutGenerator {
 	public void generate(){ generate(true); }
 	
 	/**
-	 * DO NOT CALL THIS METHOD VERY OFTEN.
-	 * This method will keep trying to add the room until it is added.
-	 * If the layout already has a lot of rooms, this will result in a
-	 * very long while loop.
 	 * @param widthX
 	 * @param widthZ
 	 * @param heightY
 	 */
 	public CubeRoom forceAddRoom(int widthX, int widthZ, int heightY){
-		CubeRoom room = new CubeRoom(widthX, widthZ,heightY,
-				centX+GenUtils.randInt(rand,-range/2,range/2),
-				centY, 
-				centZ+GenUtils.randInt(rand,-range/2,range/2));
-		
-		boolean canAdd = false;
-		while(!canAdd){
-			canAdd = true;
-			for(CubeRoom other:rooms){
-				if(other.isOverlapping(room)){
-					canAdd = false;
-					room = new CubeRoom(widthX, widthZ,heightY,
-							centX+GenUtils.randInt(rand,-range/2,range/2),
-							centY, 
-							centZ+GenUtils.randInt(rand,-range/2,range/2));
-					break;
-				}
+		if(layout == RoomLayout.RANDOM_BRUTEFORCE){
+			CubeRoom room = new CubeRoom(widthX, widthZ,heightY,
+					centX+GenUtils.randInt(rand,-range/2,range/2),
+					centY, 
+					centZ+GenUtils.randInt(rand,-range/2,range/2));
+			
+			boolean canAdd = false;
+			while(!canAdd){
+				canAdd = true;
+				if(!allowOverlaps)
+					for(CubeRoom other:rooms){
+						if(other.isOverlapping(room)){
+							canAdd = false;
+							room = new CubeRoom(widthX, widthZ,heightY,
+									centX+GenUtils.randInt(rand,-range/2,range/2),
+									centY, 
+									centZ+GenUtils.randInt(rand,-range/2,range/2));
+							break;
+						}
+					}
 			}
+			
+			rooms.add(room);
+			return room;
+		}else{
+			//Todo: make force spawn for corner budding
+			return null;
 		}
-		
-		rooms.add(room);
-		return room;
 	}
 	
 	public void generate(boolean normalise){
@@ -115,23 +118,43 @@ public class RoomLayoutGenerator {
 					centX+GenUtils.randInt(rand,-range/2,range/2),
 					centY, 
 					centZ+GenUtils.randInt(rand,-range/2,range/2));
-			boolean canAdd = true;
-			for(CubeRoom other:rooms){
-				if(other.isOverlapping(room)){
-					canAdd = false;
-					break;
+			if(layout == RoomLayout.RANDOM_BRUTEFORCE){
+				boolean canAdd = true;
+				if(!allowOverlaps)
+					for(CubeRoom other:rooms){
+						if(other.isOverlapping(room)){
+							canAdd = false;
+							break;
+						}
+					}	
+				if(canAdd)
+					rooms.add(room);
+			}else if(layout == RoomLayout.OVERLAP_CONNECTED){
+				room.setX(centX+GenUtils.randInt(rand,-4,4));
+				room.setZ(centZ+GenUtils.randInt(rand,-4,4));
+
+				boolean canAdd = true;
+				
+				for(CubeRoom other:rooms){
+					if(other.envelopesOrIsInside(room)){
+						canAdd = false;
+						break;
+					}
 				}
-			}	
-			if(canAdd)
-				rooms.add(room);
-			
-			//Give rooms a "connectedTo" variable list that contains other rooms.
-			//These connected rooms will generate paths to each other.
-			//Every room must have at least one connection
+				for(CubeRoom other:rooms){
+					if(!other.isOverlapping(room)){
+						canAdd = false;
+						break;
+					}
+				}
+				if(canAdd)
+					rooms.add(room);
+			}
 		}
 	}
 	
 	public boolean anyOverlaps(){
+		if(allowOverlaps) return false;
 		for(CubeRoom room:rooms){
 			for(CubeRoom other:rooms){
 				if(other.isClone(room)) continue;
@@ -142,20 +165,31 @@ public class RoomLayoutGenerator {
 		return false;
 	}
 	
+	boolean genPaths = true;
+	
+	public void setGenPaths(boolean genPaths){
+		this.genPaths = genPaths;
+	}
+	boolean allowOverlaps = false;
+	public void setAllowOverlaps(boolean allowOverlaps){
+		this.allowOverlaps = allowOverlaps;
+	}
+	
 	public void fill(PopulatorDataAbstract data, TerraformWorld tw, Material... mat){
 		ArrayList<PathGenerator> pathGens = new ArrayList<>();
-		for(CubeRoom room:rooms){
-			SimpleBlock base = new SimpleBlock(data, room.getX(),room.getY(),room.getZ());
-			PathGenerator gen = new PathGenerator(base,mat,rand,upperBound,lowerBound);
-			if(pathPop != null) gen.setPopulator(pathPop);
-			while(!gen.isDead()){
-				gen.next();
+		if(genPaths)
+			for(CubeRoom room:rooms){
+				SimpleBlock base = new SimpleBlock(data, room.getX(),room.getY(),room.getZ());
+				PathGenerator gen = new PathGenerator(base,mat,rand,upperBound,lowerBound);
+				if(pathPop != null) gen.setPopulator(pathPop);
+				while(!gen.isDead()){
+					gen.next();
+				}
+				pathGens.add(gen);
 			}
-			pathGens.add(gen);
-		}
 		
 		for(CubeRoom room:rooms){
-			room.fillRoom(data, mat);
+			room.fillRoom(data, mat, allowOverlaps);
 		}
 		
 		//Populate pathways

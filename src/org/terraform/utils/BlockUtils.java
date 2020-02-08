@@ -14,6 +14,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
+import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
@@ -58,6 +59,25 @@ public class BlockUtils {
 		return xzPlaneBlockFaces.get(rand.nextInt(8));
 	}
 	
+	public static Axis axisFromBlockFace(BlockFace face){
+		switch(face){
+		case NORTH:
+			return Axis.Z;
+		case SOUTH:
+			return Axis.Z;
+		case EAST:
+			return Axis.X;
+		case WEST:
+			return Axis.X;
+		case UP:
+			return Axis.Y;
+		case DOWN:
+			return Axis.Y;
+		default:
+			return null;
+		}
+	}
+	
 	public static final ArrayList<BlockFace> directBlockFaces = new ArrayList<BlockFace>(){{
 		add(BlockFace.NORTH);
 		add(BlockFace.SOUTH);
@@ -78,7 +98,57 @@ public class BlockUtils {
 		add(Material.MYCELIUM);
 	}};
 	
-
+	public static Material getWoodForBiome(BiomeBank biome, String wood){
+		switch(biome){
+		case BADLANDS:
+			return Material.valueOf("ACACIA_" + wood);
+		case BADLANDS_MOUNTAINS:
+			return Material.valueOf("ACACIA_" + wood);
+		case BIRCH_MOUNTAINS:
+			return Material.valueOf("BIRCH_" + wood);
+		case COLD_OCEAN:
+			return Material.valueOf("OAK_" + wood);
+		case DESERT:
+			return Material.valueOf("ACACIA_" + wood);
+		case DESERT_MOUNTAINS:
+			return Material.valueOf("ACACIA_" + wood);
+		case FOREST:
+			return Material.valueOf("OAK_" + wood);
+		case FROZEN_OCEAN:
+			return Material.valueOf("SPRUCE_" + wood);
+		case ICE_SPIKES:
+			return Material.valueOf("SPRUCE_" + wood);
+		case LUKEWARM_OCEAN:
+			return Material.valueOf("OAK_" + wood);
+		case MUDFLATS:
+			return Material.valueOf("OAK_" + wood);
+		case OCEAN:
+			return Material.valueOf("OAK_" + wood);
+		case PLAINS:
+			return Material.valueOf("OAK_" + wood);
+		case ROCKY_BEACH:
+			return Material.valueOf("SPRUCE_" + wood);
+		case ROCKY_MOUNTAINS:
+			return Material.valueOf("SPRUCE_" + wood);
+		case SANDY_BEACH:
+			return Material.valueOf("JUNGLE_" + wood);
+		case SAVANNA:
+			return Material.valueOf("ACACIA_" + wood);
+		case SNOWY_MOUNTAINS:
+			return Material.valueOf("SPRUCE_" + wood);
+		case SNOWY_TAIGA:
+			return Material.valueOf("SPRUCE_" + wood);
+		case SNOWY_WASTELAND:
+			return Material.valueOf("SPRUCE_" + wood);
+		case SWAMP:
+			return Material.valueOf("OAK_" + wood);
+		case TAIGA:
+			return Material.valueOf("SPRUCE_" + wood);
+		case WARM_OCEAN:
+			return Material.valueOf("OAK_" + wood);
+		}
+		return Material.valueOf("OAK_" + wood);
+	}
 	
 	public static final ArrayList<Material> stoneLike = new ArrayList<Material>(){{
 		add(Material.STONE);
@@ -144,9 +214,9 @@ public class BlockUtils {
 //		c.getBlock(x,y,z).setBlockData(data,false);
 //	}
 	
-	public static void setDownUntilSolid(int x, int y, int z, PopulatorDataAbstract data, Material type){
+	public static void setDownUntilSolid(int x, int y, int z, PopulatorDataAbstract data, Material... type){
 		while(!data.getType(x,y,z).isSolid()){
-			data.setType(x,y,z,type);
+			data.setType(x,y,z,GenUtils.randMaterial(type));
 			y--;
 		}
 	}
@@ -383,7 +453,8 @@ public class BlockUtils {
 		if(!(target.getBlockData() instanceof MultipleFacing)) return;
 		MultipleFacing data = (MultipleFacing) target.getBlockData();
 		for(BlockFace face:data.getAllowedFaces()){
-			if(target.getRelative(face).getType().isSolid()){
+			if(target.getRelative(face).getType().isSolid() && 
+					!target.getRelative(face).getType().toString().contains("PRESSURE_PLATE")){
 				data.setFace(face, true);
 			}else data.setFace(face,false);
 		}

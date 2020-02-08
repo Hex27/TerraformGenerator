@@ -30,7 +30,7 @@ public class ValuesCommand extends DCCommand {
 	@Override
 	public boolean hasPermission(CommandSender sender) {
 		
-		return true;
+		return sender.isOp();
 	}
 
 	@Override

@@ -154,6 +154,7 @@ public class PathGenerator{
 	 */
 	public void setPopulator(PathPopulatorAbstract populator) {
 		this.populator = populator;
+		this.pathWidth = populator.getPathWidth();
 	}
 	
 	

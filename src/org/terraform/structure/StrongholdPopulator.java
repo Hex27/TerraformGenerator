@@ -11,6 +11,7 @@ import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
+import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.stronghold.LibraryRoomPopulator;
 import org.terraform.structure.stronghold.NetherPortalRoomPopulator;
@@ -123,18 +124,20 @@ public class StrongholdPopulator extends StructurePopulator{
 	}
 	
 	public void spawnStronghold(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
-		Bukkit.getLogger().info("Spawning stronghold at: " + x + "," + z);
+		TerraformGeneratorPlugin.logger.info("Spawning stronghold at: " + x + "," + z);
 		
 		int numRooms = 70;
 		int range = 100;
 		
 		//Level One
-		RoomLayoutGenerator gen = new RoomLayoutGenerator(tw.getHashedRand(x, y, z),numRooms,x,y,z,range);
+		Random hashedRand = tw.getHashedRand(x, y, z);
+		RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand,RoomLayout.RANDOM_BRUTEFORCE,numRooms,x,y,z,range);
 		gen.setPathPopulator(new StrongholdPathPopulator(tw.getHashedRand(x, y, z, 2)));
 		gen.setRoomMaxX(30);
 		gen.setRoomMaxZ(30);
 		gen.setRoomMaxHeight(15);
 		gen.forceAddRoom(25, 25, 15); //At least one room that can be the Portal room.
+		
 		CubeRoom stairwayOne = gen.forceAddRoom(5, 5, 18);
 		stairwayOne.setRoomPopulator(new StairwayRoomPopulator(random,false,false));
 		gen.registerRoomPopulator(new PortalRoomPopulator(random, true, true));

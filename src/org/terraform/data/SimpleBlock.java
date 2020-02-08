@@ -9,6 +9,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.PopulatorDataPostGen;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -74,6 +75,12 @@ public class SimpleBlock {
 		return false;
 	}
 	
+	public SimpleBlock(Block b){
+		this.popData = new PopulatorDataPostGen(b.getChunk());
+		this.x = b.getX();
+		this.y = b.getY();
+		this.z = b.getZ();
+	}
 	
 	public SimpleBlock(PopulatorDataAbstract data, int x, int y, int z){
 		//this.world = world;

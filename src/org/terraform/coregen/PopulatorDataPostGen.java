@@ -10,6 +10,9 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.loot.LootTable;
+import org.bukkit.loot.LootTables;
+import org.bukkit.loot.Lootable;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorDataPostGen extends PopulatorDataAbstract {
@@ -77,10 +80,17 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 
 	@Override
 	public void lootTableChest(int x, int y, int z, TerraLootTable table) {
-		if(!w.getBlockAt(x,y,z).getType().toString().contains("CHEST")){
-			TerraformGeneratorPlugin.logger.error("Attempted to set loot table to a non chest @ " + x +"," + y + "," + z);
+//		if(!w.getBlockAt(x,y,z).getType().toString().contains("CHEST")){
+//			TerraformGeneratorPlugin.logger.error("Attempted to set loot table to a non chest @ " + x +"," + y + "," + z);
+//		}
+//		TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk()).lootTableChest(x, y, z, table);
+		LootTable lt = LootTables.valueOf(table.toString()).getLootTable();
+		Block chestBlock = w.getBlockAt(x,y,z);
+		if((chestBlock.getState() instanceof Lootable)){
+			Lootable state = (Lootable) chestBlock.getState();
+			state.setLootTable(lt);
+			//chestBlock.getState().update();
 		}
-		TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk()).lootTableChest(x, y, z, table);
 	}
 
 }

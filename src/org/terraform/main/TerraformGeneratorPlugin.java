@@ -11,6 +11,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.TerraformGenerator;
+import org.terraform.schematic.SchematicListener;
 
 public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 
@@ -35,6 +36,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 //			}
 //		}.runTaskTimerAsynchronously(this, 10*20, 10*20);
 		Bukkit.getPluginManager().registerEvents(this, this);
+		Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
 		String version = getVersionPackage();
 		logger.info("Detected version: " + version);
 		try {

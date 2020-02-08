@@ -16,12 +16,20 @@ public class TerraformPopulator{
     private static Set<SimpleChunkLocation> chunks = new HashSet<SimpleChunkLocation>();
     
 	private ArrayList<OrePopulator> orePops = new ArrayList<OrePopulator>(){{
+		
+		//Ores
 		add(new OrePopulator(Material.COAL_ORE, 70, 30, 50, 128, 131));
 		add(new OrePopulator(Material.IRON_ORE, 50, 10, 30, 64, 67));
 		add(new OrePopulator(Material.GOLD_ORE, 40, 10, 15, 29, 33));
 		add(new OrePopulator(Material.DIAMOND_ORE, 40, 7, 5, 12, 15));
 		add(new OrePopulator(Material.LAPIS_ORE, 40, 7, 15, 14, 23, 33));
 		add(new OrePopulator(Material.REDSTONE_ORE, 40, 10, 15, 12, 15));
+		
+		//Non-ores
+		add(new OrePopulator(Material.GRAVEL, 70, 33, 8, 255, 255));
+		add(new OrePopulator(Material.ANDESITE, 70, 33, 8, 80, 80));
+		add(new OrePopulator(Material.DIORITE, 70, 33, 8, 80, 80));
+		add(new OrePopulator(Material.GRANITE, 70, 33, 8, 80, 80));
 	}};
 	
 

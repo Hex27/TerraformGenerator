@@ -28,7 +28,7 @@ public class TimingsCommand extends DCCommand {
 	@Override
 	public boolean hasPermission(CommandSender sender) {
 		
-		return true;
+		return sender.isOp();
 	}
 
 	@Override

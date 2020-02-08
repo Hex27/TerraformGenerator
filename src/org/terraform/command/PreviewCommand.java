@@ -33,7 +33,7 @@ public class PreviewCommand extends DCCommand {
 	@Override
 	public boolean hasPermission(CommandSender sender) {
 		
-		return true;
+		return sender.isOp();
 	}
 	
 	private double getCoreHeight(int seed, int x, int z){

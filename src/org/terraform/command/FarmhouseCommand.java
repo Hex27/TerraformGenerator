@@ -9,17 +9,18 @@ import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
+import org.terraform.structure.FarmhousePopulator;
 import org.terraform.structure.StrongholdPopulator;
 
-public class RoomTestCommand extends DCCommand {
+public class FarmhouseCommand extends DCCommand {
 
-	public RoomTestCommand(DrycellPlugin plugin, String... aliases) {
+	public FarmhouseCommand(DrycellPlugin plugin, String... aliases) {
 		super(plugin, aliases);
 	}
 
 	@Override
 	public String getDefaultDescription() {
-		return "Spawntest for rooms";
+		return "Spawntest for farmhouse";
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class RoomTestCommand extends DCCommand {
 //		gen.generate();
 //		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 //		
-		new StrongholdPopulator().spawnStronghold(tw, tw.getRand(1), data, x, y, z);
+		new FarmhousePopulator().spawnFarmHouse(tw, tw.getRand(1), data, x, y, z);
 	}
 
 }
