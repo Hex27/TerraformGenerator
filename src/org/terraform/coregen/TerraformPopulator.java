@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.populators.CaveWormCreator;
 import org.terraform.populators.OrePopulator;
 

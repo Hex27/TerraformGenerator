@@ -15,6 +15,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 	
 	private ArrayList<StructurePopulator> structurePops = new ArrayList<StructurePopulator>(){{
 		add(new StrongholdPopulator());
+		add(new FarmhousePopulator());
 	}};
 	
 	TerraformWorld tw;
@@ -51,7 +52,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 		for(StructurePopulator spop:structurePops){
 			//TerraformGeneratorPlugin.logger.debug("s-pop-3");
 			if(spop.canSpawn(random,tw,data.getChunkX(),data.getChunkZ(),banks)){
-				//TerraformGeneratorPlugin.logger.debug("s-pop-4");
+				TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
 				spop.populate(tw, random, data);
 			}
 		}

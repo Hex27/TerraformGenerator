@@ -232,8 +232,12 @@ public class BlockUtils {
 	}
 	
 	public static void setPersistentLeaves(PopulatorDataAbstract data, int x, int y, int z){
+		setPersistentLeaves(data,x,y,z,Material.OAK_LEAVES);
+	}
+	
+	public static void setPersistentLeaves(PopulatorDataAbstract data, int x, int y, int z, Material type){
 		data.setType(x,y,z,Material.OAK_LEAVES);
-		Leaves bd = (Leaves) Bukkit.createBlockData(Material.OAK_LEAVES);
+		Leaves bd = (Leaves) Bukkit.createBlockData(type);
 		bd.setPersistent(true);
 		data.setBlockData(x,y,z,bd);
 	}

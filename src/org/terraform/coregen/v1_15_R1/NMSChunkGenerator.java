@@ -42,7 +42,9 @@ import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
+import org.terraform.coregen.TerraformStructurePopulator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.structure.FarmhousePopulator;
 import org.terraform.structure.StrongholdPopulator;
 
 public class NMSChunkGenerator extends ChunkGenerator {
@@ -96,16 +98,20 @@ public class NMSChunkGenerator extends ChunkGenerator {
 		int pX = blockposition.getX();
 		int pZ = blockposition.getZ();
 		if(s.equalsIgnoreCase("Stronghold")){
-			double minDistanceSquared = Integer.MAX_VALUE;
-			int[] min = null;
-			for(int[] loc:StrongholdPopulator.strongholdPositions(tw)){
-				double distSqr = Math.pow(loc[0]-pX,2) + Math.pow(loc[1]-pZ,2);
-				if(distSqr < minDistanceSquared){
-					minDistanceSquared = distSqr;
-					min = loc;
-				}
-			}
-			return new BlockPosition(min[0],20,min[1]);
+//			double minDistanceSquared = Integer.MAX_VALUE;
+//			int[] min = null;
+//			for(int[] loc:StrongholdPopulator.strongholdPositions(tw)){
+//				double distSqr = Math.pow(loc[0]-pX,2) + Math.pow(loc[1]-pZ,2);
+//				if(distSqr < minDistanceSquared){
+//					minDistanceSquared = distSqr;
+//					min = loc;
+//				}
+//			}
+			int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
+			return new BlockPosition(coords[0],20,coords[1]);
+		}else if(s.equalsIgnoreCase("Village")){
+			int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
+			return new BlockPosition(coords[0],100,coords[1]);
 		}
 		
         return null;
@@ -183,7 +189,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
 	@Override
 	public int getSpawnHeight() {
-		return 50;
+		return getBaseHeight(0,0,null);
 	}
 
 
@@ -303,34 +309,34 @@ public class NMSChunkGenerator extends ChunkGenerator {
 		return new org.terraform.coregen.HeightMap().getHeight(tw,i,j);
 	}
 	
-	   private class CustomBiomeGrid implements BiomeGrid {
+   private class CustomBiomeGrid implements BiomeGrid {
 
-	        private final BiomeStorage biome;
+        private final BiomeStorage biome;
 
-	        public CustomBiomeGrid(BiomeStorage biome) {
-	            this.biome = biome;
-	        }
+        public CustomBiomeGrid(BiomeStorage biome) {
+            this.biome = biome;
+        }
 
-	        @Override
-	        public Biome getBiome(int x, int z) {
-	            return getBiome(x, 0, z);
-	        }
+        @Override
+        public Biome getBiome(int x, int z) {
+            return getBiome(x, 0, z);
+        }
 
-	        @Override
-	        public void setBiome(int x, int z, Biome bio) {
-	            for (int y = 0; y < tw.getWorld().getMaxHeight(); y++) {
-	                setBiome(x, y, z, bio);
-	            }
-	        }
+        @Override
+        public void setBiome(int x, int z, Biome bio) {
+            for (int y = 0; y < tw.getWorld().getMaxHeight(); y++) {
+                setBiome(x, y, z, bio);
+            }
+        }
 
-	        @Override
-	        public Biome getBiome(int x, int y, int z) {
-	            return CraftBlock.biomeBaseToBiome(biome.getBiome(x, y, z));
-	        }
+        @Override
+        public Biome getBiome(int x, int y, int z) {
+            return CraftBlock.biomeBaseToBiome(biome.getBiome(x, y, z));
+        }
 
-	        @Override
-	        public void setBiome(int x, int y, int z, Biome bio) {
-	            biome.setBiome(x, y, z, CraftBlock.biomeToBiomeBase(bio));
-	        }
-	    }
+        @Override
+        public void setBiome(int x, int y, int z, Biome bio) {
+            biome.setBiome(x, y, z, CraftBlock.biomeToBiomeBase(bio));
+        }
+    }
 }

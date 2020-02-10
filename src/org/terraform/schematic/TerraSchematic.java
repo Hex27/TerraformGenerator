@@ -34,6 +34,7 @@ public class TerraSchematic {
 	HashMap<Vector,BlockData> data = new HashMap<>();
 	Location refPoint;
 	BlockFace face = BlockFace.NORTH;
+	public SchematicParser parser = new SchematicParser();
 	//North is always the default blockface.
 	//
 	public TerraSchematic(Location refPoint){
@@ -54,15 +55,15 @@ public class TerraSchematic {
 			BlockData bd = data.get(key);
 			if(face == BlockFace.WEST){
 				int x = pos.getBlockX();
-				pos.setX(pos.getZ()*-1);
-				pos.setZ(x);
+				pos.setX(pos.getZ());
+				pos.setZ(x*-1);
 			}else if(face == BlockFace.SOUTH){
 				pos.setX(pos.getX()*-1);
 				pos.setZ(pos.getZ()*-1);
 			}else if(face == BlockFace.EAST){
 				int x = pos.getBlockX();
-				pos.setX(pos.getZ());
-				pos.setZ(x*-1);
+				pos.setX(pos.getZ()*-1);
+				pos.setZ(x);
 			}
 			
 			if(face != BlockFace.NORTH)
@@ -80,25 +81,26 @@ public class TerraSchematic {
 					if(face == BlockFace.SOUTH){
 						r.setRotation(r.getRotation().getOppositeFace());
 					}else if(face == BlockFace.EAST){
-						r.setRotation(BlockUtils.getAdjacentFaces(r.getRotation())[1]);
-					}else if(face == BlockFace.WEST){
 						r.setRotation(BlockUtils.getAdjacentFaces(r.getRotation())[0]);
+					}else if(face == BlockFace.WEST){
+						r.setRotation(BlockUtils.getAdjacentFaces(r.getRotation())[1]);
 					}
 				}else if(bd instanceof Directional){
 					Directional r = (Directional) bd;
 					if(BlockUtils.directBlockFaces.contains(r.getFacing()))
 						if(face == BlockFace.SOUTH){
 							r.setFacing(r.getFacing().getOppositeFace());
-						}else if(face == BlockFace.EAST){
-							r.setFacing(BlockUtils.getAdjacentFaces(r.getFacing())[1]);
 						}else if(face == BlockFace.WEST){
+							r.setFacing(BlockUtils.getAdjacentFaces(r.getFacing())[1]);
+						}else if(face == BlockFace.EAST){
 							r.setFacing(BlockUtils.getAdjacentFaces(r.getFacing())[0]);
 						}
 				}else if(bd instanceof MultipleFacing){
 					multiFace.add(pos);
 				}
 			
-			refPoint.getBlock().getRelative(pos.getBlockX(),pos.getBlockY(),pos.getBlockZ()).setBlockData(bd);
+			
+			parser.applyData(refPoint.getBlock().getRelative(pos.getBlockX(),pos.getBlockY(),pos.getBlockZ()),bd);
 		}
 		
 		//Multiple-facing blocks are just gonna be painful.
@@ -142,8 +144,18 @@ public class TerraSchematic {
 		sc.close();  
 		return schem;
 	}
-	
-	public void rotate(BlockFace face){
+
+	/**
+	 * @return the face
+	 */
+	public BlockFace getFace() {
+		return face;
+	}
+
+	/**
+	 * @param face the face to set
+	 */
+	public void setFace(BlockFace face) {
 		this.face = face;
 	}
 

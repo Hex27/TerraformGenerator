@@ -118,12 +118,12 @@ public class SwampHandler extends BiomeHandler {
 			}	
 		}
 		
-		WitchHutPopulator whp = new WitchHutPopulator();
-		if(whp.canSpawn(random, tw, data.getChunkX(),data.getChunkZ(),new ArrayList<BiomeBank>(){{
-			add(BiomeBank.SWAMP);
-		}})){
-			whp.populate(tw, random, data);
-		}
+//		WitchHutPopulator whp = new WitchHutPopulator();
+//		if(whp.canSpawn(random, tw, data.getChunkX(),data.getChunkZ(),new ArrayList<BiomeBank>(){{
+//			add(BiomeBank.SWAMP);
+//		}})){
+//			whp.populate(tw, random, data);
+//		}
 	}
 	
 

@@ -13,6 +13,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.loot.LootTable;
 import org.bukkit.loot.LootTables;
 import org.bukkit.loot.Lootable;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorDataPostGen extends PopulatorDataAbstract {
@@ -36,14 +37,26 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 	@Override
 	public void setType(int x, int y, int z, Material type) {
 		//if(type == Material.DIRT) Bukkit.getLogger().info("Set " + x + "," + y + "," + z + " to dirt.");
-		boolean isFragile = type.toString().contains("DOOR");
-		w.getBlockAt(x, y, z).setType(type,!isFragile);
+		boolean isFragile = type.toString().contains("DOOR")||
+				type == Material.FARMLAND||
+						type == Material.WATER;
+		//TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())
+		//.setType(x, y, z, type);
+		Block b = w.getBlockAt(x, y, z);
+		b.setType(type,!isFragile);
+		b.setMetadata("terra-gen", new FixedMetadataValue(TerraformGeneratorPlugin.get(),""));
 	}
 
 	@Override
 	public void setBlockData(int x, int y, int z, BlockData data) {
-		boolean isFragile = data.getMaterial().toString().contains("DOOR");
-		w.getBlockAt(x,y,z).setBlockData(data,!isFragile);
+		boolean isFragile = data.getMaterial().toString().contains("DOOR")||
+				data.getMaterial() == Material.FARMLAND||
+						data.getMaterial() == Material.WATER;
+		//TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())
+		//.setBlockData(x, y, z, data);
+		Block b = w.getBlockAt(x, y, z);
+		b.setBlockData(data.clone(),!isFragile);
+		b.setMetadata("terra-gen", new FixedMetadataValue(TerraformGeneratorPlugin.get(),""));
 	}
 
 	@Override
@@ -83,14 +96,14 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 //		if(!w.getBlockAt(x,y,z).getType().toString().contains("CHEST")){
 //			TerraformGeneratorPlugin.logger.error("Attempted to set loot table to a non chest @ " + x +"," + y + "," + z);
 //		}
-//		TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk()).lootTableChest(x, y, z, table);
-		LootTable lt = LootTables.valueOf(table.toString()).getLootTable();
-		Block chestBlock = w.getBlockAt(x,y,z);
-		if((chestBlock.getState() instanceof Lootable)){
-			Lootable state = (Lootable) chestBlock.getState();
-			state.setLootTable(lt);
-			//chestBlock.getState().update();
-		}
+		TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk()).lootTableChest(x, y, z, table);
+//		LootTable lt = LootTables.valueOf(table.toString()).getLootTable();
+//		Block chestBlock = w.getBlockAt(x,y,z);
+//		if((chestBlock.getState() instanceof Lootable)){
+//			Lootable state = (Lootable) chestBlock.getState();
+//			state.setLootTable(lt);
+//			//chestBlock.getState().update();
+//		}
 	}
 
 }

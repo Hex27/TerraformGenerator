@@ -3,8 +3,12 @@ package org.terraform.main;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
@@ -36,6 +40,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 //			}
 //		}.runTaskTimerAsynchronously(this, 10*20, 10*20);
 		Bukkit.getPluginManager().registerEvents(this, this);
+		Bukkit.getPluginManager().registerEvents(new BlockPhysicsFixer(), this);
 		Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
 		String version = getVersionPackage();
 		logger.info("Detected version: " + version);

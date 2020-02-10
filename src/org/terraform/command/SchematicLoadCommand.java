@@ -50,7 +50,7 @@ public class SchematicLoadCommand extends DCCommand {
 		Player p = (Player) sender;
 		ArrayList<Object> parsed = this.parseArguments(sender, args);
 		TerraSchematic schem = (TerraSchematic) parsed.get(0);
-		schem.rotate(BlockUtils.getDirectBlockFace(new Random()));
+		schem.setFace(BlockUtils.getDirectBlockFace(new Random()));
 		schem.apply();
 	}
 }

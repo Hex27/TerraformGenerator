@@ -21,15 +21,13 @@ import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 
-public class WitchHutPopulator extends StructurePopulator{
+public class WitchHutPopulator{
 
-	@Override
 	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
 		if(!biomes.contains(BiomeBank.SWAMP)) return false;
 		return GenUtils.chance(rand,1,100);
 	}
 
-	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
 		int seaLevel = TerraformGenerator.seaLevel;

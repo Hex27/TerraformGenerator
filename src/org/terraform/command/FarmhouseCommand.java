@@ -1,5 +1,6 @@
 package org.terraform.command;
 
+import java.util.Random;
 import java.util.Stack;
 
 import org.bukkit.command.CommandSender;
@@ -54,7 +55,7 @@ public class FarmhouseCommand extends DCCommand {
 //		gen.generate();
 //		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 //		
-		new FarmhousePopulator().spawnFarmHouse(tw, tw.getRand(1), data, x, y, z);
+		new FarmhousePopulator().spawnFarmHouse(tw, new Random(), data, x, y, z);
 	}
 
 }

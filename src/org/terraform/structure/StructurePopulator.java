@@ -13,4 +13,6 @@ public abstract class StructurePopulator {
 	
 	public abstract void populate(TerraformWorld world, Random random, PopulatorDataAbstract data);
 
+	public abstract int[] getNearestFeature(TerraformWorld world, int rawX, int rawZ);
+	
 }

@@ -27,9 +27,9 @@ public class IceSpikesHandler extends BiomeHandler {
 
 	@Override
 	public Material[] getSurfaceCrust(Random rand) {
-		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.ICE,5, Material.PACKED_ICE, 25),
-				Material.PACKED_ICE,
-				GenUtils.randMaterial(rand, Material.PACKED_ICE,Material.DIRT),
+		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.ICE,5, Material.SNOW_BLOCK, 25),
+				Material.ICE,
+				GenUtils.randMaterial(rand, Material.ICE,Material.DIRT),
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE),
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE)};
 	}
@@ -55,10 +55,16 @@ public class IceSpikesHandler extends BiomeHandler {
 
 		for(int i = 0; i < GenUtils.randInt(random, 1, 3); i++){
 			int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
-			if(data.getType(loc[0],loc[1],loc[2]) == Material.PACKED_ICE)
-				genSpike(world,random,data,loc[0],loc[1],loc[2],
-						 GenUtils.randInt(3, 10), //radius
-						 GenUtils.randInt(10,50)); //height
+			if(data.getType(loc[0],loc[1],loc[2]) == Material.SNOW_BLOCK){
+				if(GenUtils.chance(random,1,10)){ //big spike
+					genSpike(world,random,data,loc[0],loc[1],loc[2],
+							 GenUtils.randInt(3, 10), //radius
+							 GenUtils.randInt(30,50));
+				}else //Small spike
+					genSpike(world,random,data,loc[0],loc[1],loc[2],
+							 GenUtils.randInt(3, 7), //radius
+							 GenUtils.randInt(3,10));
+			}
 		}
 	}
 	
@@ -76,7 +82,7 @@ public class IceSpikesHandler extends BiomeHandler {
 			SimpleBlock segment = one.getRelative(seg);
 //			segment.setHardReplace();
 //			segment.setType(type);
-			BlockUtils.replaceSphere((int) (tw.getSeed()*12), (float)radius, 2, (float)radius, segment, false, Material.BLUE_ICE, Material.BLUE_ICE, Material.BLUE_ICE, Material.ICE);
+			BlockUtils.replaceSphere((int) (tw.getSeed()*12), (float)radius, 2, (float)radius, segment, false, Material.PACKED_ICE, Material.ICE);
 //			Block segment = one.getLocation().add(seg).getBlock();
 //			segment.setType(type);
 			radius = ((double)baseRadius)*(1- ((double)i)/((double)segments));

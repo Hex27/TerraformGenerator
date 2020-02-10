@@ -36,7 +36,7 @@ public class StrongholdPopulator extends StructurePopulator{
 		int radius = 1408;
 		for(int i = 0; i < 3; i++){
 			int[] coords = randomCircleCoords(rand,radius);
-			Bukkit.getLogger().info("Will spawn stronghold at: " + coords[0] + "," + coords[1]);
+			TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + "," + coords[1]);
 
 			positions.add(coords);
 		}
@@ -102,7 +102,7 @@ public class StrongholdPopulator extends StructurePopulator{
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
-		TerraformGeneratorPlugin.logger.debug("s-populate");
+		//TerraformGeneratorPlugin.logger.debug("s-populate");
 		
 		ArrayList<int[]> positions = strongholdPositions(tw);
 		for(int x = data.getChunkX()*16; x<data.getChunkX()*16+16;x++){
@@ -124,7 +124,7 @@ public class StrongholdPopulator extends StructurePopulator{
 	}
 	
 	public void spawnStronghold(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
-		TerraformGeneratorPlugin.logger.info("Spawning stronghold at: " + x + "," + z);
+		//TerraformGeneratorPlugin.logger.info("Spawning stronghold at: " + x + "," + z);
 		
 		int numRooms = 70;
 		int range = 100;
@@ -163,6 +163,21 @@ public class StrongholdPopulator extends StructurePopulator{
 		gen.generate();
 		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 		
+	}
+
+	@Override
+	public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+
+		double minDistanceSquared = Integer.MAX_VALUE;
+		int[] min = null;
+		for(int[] loc:strongholdPositions(tw)){
+			double distSqr = Math.pow(loc[0]-rawX,2) + Math.pow(loc[1]-rawZ,2);
+			if(distSqr < minDistanceSquared){
+				minDistanceSquared = distSqr;
+				min = loc;
+			}
+		}
+		return new int[]{min[0],min[1]};
 	}
 	
 
