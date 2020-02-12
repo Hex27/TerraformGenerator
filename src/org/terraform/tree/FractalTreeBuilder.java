@@ -10,6 +10,7 @@ import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
@@ -245,8 +246,14 @@ public class FractalTreeBuilder {
 							+ Math.pow(z,2)/Math.pow(rZ,2);
 					if(equationResult <= 1+0.7*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())){
 					//if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-
-						rel.setType(type);
+						
+						if(BlockUtils.isDirtLike(rel.getRelative(0,-1,0).getType())){
+							rel.getRelative(0,-1,0).setType(Material.DIRT);
+						}
+						
+						if(!(type.toString().contains("LEAVES") && rel.getType().isSolid()))
+							rel.setType(type);
+						
 						if(snowy){
 							if(!rel.getRelative(0,1,0).getType().isSolid()){
 								rel.getRelative(0,1,0).setType(Material.SNOW);

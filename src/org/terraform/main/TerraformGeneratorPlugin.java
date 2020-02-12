@@ -40,7 +40,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 //			}
 //		}.runTaskTimerAsynchronously(this, 10*20, 10*20);
 		Bukkit.getPluginManager().registerEvents(this, this);
-		Bukkit.getPluginManager().registerEvents(new BlockPhysicsFixer(), this);
+		//Bukkit.getPluginManager().registerEvents(new BlockPhysicsFixer(), this);
 		Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
 		String version = getVersionPackage();
 		logger.info("Detected version: " + version);
