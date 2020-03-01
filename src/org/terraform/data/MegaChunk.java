@@ -24,8 +24,8 @@ public class MegaChunk {
 	}
 	
 	public MegaChunk(int chunkX, int chunkZ){
-		this.x = chunkX>>4;
-		this.z = chunkZ>>4;
+		this.x = chunkX>>6;
+		this.z = chunkZ>>6;
 	}
 	
 	public MegaChunk getRelative(int nx, int nz){
@@ -41,10 +41,10 @@ public class MegaChunk {
 	 * @return A random pair of xz block coords within the mega chunk
 	 */
 	public int[] getRandomCoords(Random rand){
-		int lowChunkX = this.x << 4;
-		int lowChunkZ = this.z << 4;
-		int highChunkX = (this.x << 4) | 15;
-		int highChunkZ = (this.z << 4) | 15;
+		int lowChunkX = this.x << 6;
+		int lowChunkZ = this.z << 6;
+		int highChunkX = (this.x << 6) | 15;
+		int highChunkZ = (this.z << 6) | 15;
 
 		int lowX = lowChunkX << 4;
 		int lowZ = lowChunkZ << 4;

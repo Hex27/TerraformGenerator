@@ -46,12 +46,24 @@ public class Wall {
 		block.setType(type);
 	}
 
+	/**
+	 * Replaces everything in its way
+	 * @param height
+	 * @param rand
+	 * @param types
+	 */
 	public void Pillar(int height, Random rand, Material... types){
 		for(int i = 0; i < height; i++){
 			block.getRelative(0,i,0).setType(GenUtils.randMaterial(rand, types));
 		}
 	}
 	
+	/**
+	 * Replaces until a solid block is reached.
+	 * @param height
+	 * @param rand
+	 * @param types
+	 */
 	public void LPillar(int height, Random rand, Material... types){
 		for(int i = 0; i < height; i++){
 			if(block.getRelative(0,i,0).getType().isSolid()) break;
@@ -59,9 +71,28 @@ public class Wall {
 		}
 	}
 	
+	/**
+	 * Replaces non-solid blocks only
+	 * @param height
+	 * @param rand
+	 * @param types
+	 */
 	public void RPillar(int height, Random rand, Material... types){
 		for(int i = 0; i < height; i++){
 			if(!block.getRelative(0,i,0).getType().isSolid())
+				block.getRelative(0,i,0).setType(GenUtils.randMaterial(rand, types));
+		}
+	}
+	
+	/**
+	 * Replaces non-cave air only
+	 * @param height
+	 * @param rand
+	 * @param types
+	 */
+	public void CAPillar(int height, Random rand, Material... types){
+		for(int i = 0; i < height; i++){
+			if(block.getRelative(0,i,0).getType() != Material.CAVE_AIR)
 				block.getRelative(0,i,0).setType(GenUtils.randMaterial(rand, types));
 		}
 	}

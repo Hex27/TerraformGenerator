@@ -95,9 +95,25 @@ public class GenUtils {
 	
 	public static int randInt(Random rand,int min, int max) {
 
-
 	    int randomNum = rand.nextInt((max - min) + 1) + min;
 
+	    return randomNum;
+	}
+	
+	/**
+	 * Try to have a max-min of more than 2.
+	 * @param rand
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public static int randOddInt(Random rand,int min, int max) {
+
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+	    if(randomNum % 2 == 0){
+	    	randomNum++;
+	    	if(randomNum > max) randomNum-=2;
+	    }
 	    return randomNum;
 	}
 	

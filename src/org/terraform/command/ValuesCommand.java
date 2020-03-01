@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
@@ -48,12 +49,15 @@ public class ValuesCommand extends DCCommand {
 		caveNoise.SetFractalOctaves(3);
 		caveNoise.SetFrequency(0.03f);
 		
+		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(new Random(),4);
+		gen.setScale(0.003D);
+		
 		for(int i = 0; i<10000; i++){
 			int x = GenUtils.randInt(0,1000);
 			int y = GenUtils.randInt(0,100);
 			int z = GenUtils.randInt(0,1000);
 
-			double height = caveNoise.GetNoise(x, y, z)*2;
+			double height = gen.noise(x, z, 0.1, 1.9, true)*500.0;
 			//sender.sendMessage(x + "," + z + ":" + height);
 			heightV.addValue(height);
 			

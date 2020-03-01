@@ -347,6 +347,10 @@ public class BlockUtils {
 	}
 	
 	public static void replaceSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean hardReplace,Material... type){
+		replaceSphere(seed,rX,rY,rZ,block,hardReplace,false,type);
+	}
+	
+	public static void replaceSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean hardReplace,boolean snowy,Material... type){
 		if(rX <= 0 &&
 				rY <= 0 &&
 				rZ <= 0){
@@ -374,9 +378,12 @@ public class BlockUtils {
 							+ Math.pow(z,2)/Math.pow(rZ,2);
 					if(equationResult <= 1+0.7*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())){
 					//if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-						if(hardReplace || !rel.getType().isSolid())
-						rel.setType(GenUtils.randMaterial(rand,type));
-						//rel.setReplaceType(ReplaceType.ALL);
+						if(hardReplace || !rel.getType().isSolid()){
+							rel.setType(GenUtils.randMaterial(rand,type));
+							if(snowy){
+								rel.getRelative(0,1,0).lsetType(Material.SNOW);
+							}
+						}
 					}
 				}
 			}

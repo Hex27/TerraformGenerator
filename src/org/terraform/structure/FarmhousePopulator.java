@@ -31,7 +31,6 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
-import org.terraform.structure.farmhouse.FarmhouseRoomPopulator;
 import org.terraform.structure.farmhouse.FarmhouseSchematicParser;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
@@ -40,21 +39,11 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.Temperature;
 
-public class FarmhousePopulator extends StructurePopulator{
+public class FarmhousePopulator extends VillageHousePopulator{
 
-	@Override
-	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
-		if(!biomes.contains(BiomeBank.FOREST)
-				&& !biomes.contains(BiomeBank.PLAINS)
-				&& !biomes.contains(BiomeBank.TAIGA)
-				&& !biomes.contains(BiomeBank.SAVANNA)
-				&& !biomes.contains(BiomeBank.SNOWY_WASTELAND)
-				&& !biomes.contains(BiomeBank.SNOWY_TAIGA)) return false;
-		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
-		int[] coords = getCoordsFromMegaChunk(tw,mc);
-		return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ;
-	}
+
 
 	@Override
 	public void populate(TerraformWorld tw, Random random,
@@ -144,17 +133,30 @@ public class FarmhousePopulator extends StructurePopulator{
 		fieldNoise.SetNoiseType(NoiseType.Simplex);
 		fieldNoise.SetFrequency(0.05f);
 		
+		FastNoise radiusNoise = new FastNoise(tw.getHashedRand(x, y, z,23).nextInt(225));
+		radiusNoise.SetNoiseType(NoiseType.Cubic);
+		radiusNoise.SetFrequency(0.09f);
+		
+		Material cropOne = Material.WHEAT;
+		Material cropTwo = Material.CARROTS;
+		
+		if(tw.getTemperature(x, z) <= Temperature.SNOWY){
+			cropOne = Material.POTATOES;
+			cropTwo = Material.BEETROOTS;
+		}
+		
 		for(int nx = -50; nx <= 50; nx++){
 			for(int nz = -50; nz <= 50; nz++){
 				int height = GenUtils.getTrueHighestBlock(data, x+nx, z+nz);
-				if(!BlockUtils.isDirtLike(data.getType(x+nx, height, z+nz)))
+				if(!BlockUtils.isDirtLike(data.getType(x+nx, height, z+nz)) ||
+						data.getType(x+nx,height+1,z+nz) != Material.AIR)
 					continue;
 				
 				double noise = fieldNoise.GetNoise(nx+x, nz+z);
 				
 				double dist = Math.pow(nx,2) + Math.pow(nz, 2);
 				double multiplier = Math.pow((1/(dist-2500))+1,255);
-				if(multiplier < 0 || dist > 2500) multiplier = 0;
+				if(multiplier < 0 || dist > 2500+(radiusNoise.GetNoise(nx, nz)*500.0)) multiplier = 0;
 				noise = noise*multiplier;
 				
 				if(dist < 2500)
@@ -164,13 +166,18 @@ public class FarmhousePopulator extends StructurePopulator{
 					}
 				
 				if(noise < -0.2){ //Crop one
-					if(GenUtils.chance(random, 1,15))
+					if(GenUtils.chance(random, 1,15)){
 						data.setType(nx+x, height, nz+z, Material.WATER);
-					else{
+						for(BlockFace face:BlockUtils.directBlockFaces){
+							BlockUtils.setDownUntilSolid(nx+x+face.getModX(), height, nz+z+face.getModZ(), 
+									data,
+									Material.FARMLAND);
+						}
+					}else{
 						Farmland fl = (Farmland) Bukkit.createBlockData(Material.FARMLAND);
 						fl.setMoisture(fl.getMaximumMoisture());
 						data.setBlockData(nx+x, height, nz+z, fl);
-						Ageable crop = (Ageable) Bukkit.createBlockData(Material.WHEAT);
+						Ageable crop = (Ageable) Bukkit.createBlockData(cropOne);
 						crop.setAge(GenUtils.randInt(random,0,crop.getMaximumAge()));
 						data.setBlockData(nx+x, height+1, nz+z, crop);
 					}
@@ -181,7 +188,7 @@ public class FarmhousePopulator extends StructurePopulator{
 						Farmland fl = (Farmland) Bukkit.createBlockData(Material.FARMLAND);
 						fl.setMoisture(fl.getMaximumMoisture());
 						data.setBlockData(nx+x, height, nz+z, fl);
-						Ageable crop = (Ageable) Bukkit.createBlockData(Material.CARROTS);
+						Ageable crop = (Ageable) Bukkit.createBlockData(cropTwo);
 						crop.setAge(GenUtils.randInt(random,0,crop.getMaximumAge()));
 						data.setBlockData(nx+x, height+1, nz+z, crop);
 					}
@@ -204,27 +211,6 @@ public class FarmhousePopulator extends StructurePopulator{
 		
 	}
 	
-	private int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
-		return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),2392224));
-	}
 
-	@Override
-	public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
-		MegaChunk mc = new MegaChunk(rawX,0,rawZ);
-		
-		double minDistanceSquared = Integer.MAX_VALUE;
-		int[] min = null;
-		for(int nx = -1; nx <= 1; nx++){
-			for(int nz = -1; nz <= 1; nz++){
-				int[] loc = getCoordsFromMegaChunk(tw,mc.getRelative(nx, nz));
-				double distSqr = Math.pow(loc[0]-rawX,2) + Math.pow(loc[1]-rawZ,2);
-				if(distSqr < minDistanceSquared){
-					minDistanceSquared = distSqr;
-					min = loc;
-				}
-			}
-		}
-		return min;
-	}
 	
 }

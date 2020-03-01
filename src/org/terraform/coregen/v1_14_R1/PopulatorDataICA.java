@@ -127,7 +127,7 @@ public class PopulatorDataICA extends PopulatorDataAbstract{
 	@Override
 	public void lootTableChest(int x, int y, int z, TerraLootTable table) {
 		BlockPosition pos = new BlockPosition(x,y,z);
-		TileEntityLootable.a(ica, ws.getRandom(), pos, getLootTable(table));
+		TileEntityLootable.a(ica, tw.getHashedRand(x, y, z), pos, getLootTable(table));
 	}
 	
 	private MinecraftKey getLootTable(TerraLootTable table){

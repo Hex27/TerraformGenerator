@@ -15,7 +15,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 	
 	private ArrayList<StructurePopulator> structurePops = new ArrayList<StructurePopulator>(){{
 		add(new StrongholdPopulator());
-		//add(new FarmhousePopulator());
+		add(new VillageHousePopulator());
 	}};
 	
 	TerraformWorld tw;

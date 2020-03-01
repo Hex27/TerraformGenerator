@@ -38,7 +38,7 @@ public class CubeRoom {
 		int[] upperBounds = getUpperCorner();
 		HashMap<Wall,Integer> walls = new HashMap<>();
 		Wall north = new Wall(
-				new SimpleBlock(data, lowerBounds[0]+padding,getY()+1,upperBounds[1]+padding)
+				new SimpleBlock(data, lowerBounds[0]+padding,getY()+1,upperBounds[1]-padding)
 				,BlockFace.NORTH);
 		Wall south = new Wall(
 				new SimpleBlock(data, upperBounds[0]-padding,getY()+1,lowerBounds[1]+padding)

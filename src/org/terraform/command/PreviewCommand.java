@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.noise.PerlinOctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
@@ -78,8 +79,8 @@ public class PreviewCommand extends DCCommand {
 	public void execute(CommandSender sender, Stack<String> args)
 			throws InvalidArgumentException {
 		int seed = GenUtils.randInt(100, 10000);
-//		PerlinOctaveGenerator gen = new PerlinOctaveGenerator(new Random(),1);
-//		gen.setScale(0.001D);
+		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(new Random(),6);
+		gen.setScale(0.003D);
 		int x = 110;
 		int z = 30;
 		int[][] heightMap = new int[x][z];
@@ -90,7 +91,7 @@ public class PreviewCommand extends DCCommand {
 			String message = "";
 			for(int nx = 0; nx < x; nx++){
 				
-				int noise = (int) (getCoreHeight(seed,nx,nz)+getSeaHeight(seed,nx,nz));
+				int noise = (int) (gen.noise(nx, nz, 1.5, 1.9, true)*60.0) + TerraformGenerator.seaLevel;//(int) (getCoreHeight(seed,nx,nz)+getSeaHeight(seed,nx,nz));
 				//int noise = 2+(int) (getCoreHeight(seed,nx,nz)*getSeaHeight(seed,nx,nz));
 				//if(noise < 0) noise = 0;
 				if(noise > highest) highest = noise;

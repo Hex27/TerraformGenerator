@@ -10,7 +10,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.WitchHutPopulator;
+import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;

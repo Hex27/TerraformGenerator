@@ -1,4 +1,4 @@
-package org.terraform.structure;
+package org.terraform.structure.small;
 
 import java.util.ArrayList;
 import java.util.Random;
