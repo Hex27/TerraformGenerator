@@ -91,6 +91,7 @@ public class ForestHandler extends BiomeHandler {
 				if(data.getType(x,y,z) == Material.GRASS_BLOCK){
 					//Bukkit.broadcastMessage("3");
 					if(GenUtils.chance(random, 3, 10)){
+						if(data.getType(x, y+1, z) != Material.AIR) continue;
 						//Grass & Flowers
 						data.setType(x, y+1, z,Material.GRASS);
 						if(random.nextBoolean()){

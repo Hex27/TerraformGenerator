@@ -28,7 +28,7 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-public class UndergroundDungeonPopulator extends SmallDungeonPopulator{
+public class DrownedDungeonPopulator extends SmallDungeonPopulator{
 
 	@Override
 	public void populate(TerraformWorld tw, Random random,
@@ -49,13 +49,8 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator{
 		int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
 		Random rand = tw.getHashedRand(x, z, 9993);
 		
-		int y = GenUtils.getHighestGround(data, x, z) - GenUtils.randInt(rand, 15, 50);
+		int y = GenUtils.getHighestGround(data, x, z);
 		
-		if(y < 10) y = 10;
-		
-		while(data.getType(x, y, z) == Material.CAVE_AIR){
-			y--;
-		}
 		
 		spawnDungeonRoom(x,y,z,tw,rand,data);
 	}
@@ -70,7 +65,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator{
 		room.fillRoom(data, new Material[]{
 				Material.COBBLESTONE,
 				Material.MOSSY_COBBLESTONE},
-				Material.CAVE_AIR);
+				Material.WATER);
 		
 		//Make some fence pattern.
 		for(Entry<Wall,Integer> entry:room.getFourWalls(data, 0).entrySet()){

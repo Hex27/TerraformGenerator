@@ -1,6 +1,7 @@
 package org.terraform.structure.room;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -67,9 +68,9 @@ public class CubeRoom {
 	}
 	
 	public void fillRoom(PopulatorDataAbstract data, Material[] mat){
-		fillRoom(data,mat,false);
+		fillRoom(data,mat,Material.AIR);
 	}
-	public void fillRoom(PopulatorDataAbstract data, Material[] mat, boolean fillCaveAir){
+	public void fillRoom(PopulatorDataAbstract data, Material[] mat, Material fillMat){
 		for(int nx = x-widthX/2; nx <= x+widthX/2; nx++){
 			
 			for(int ny = y; ny <= y+height; ny++){
@@ -88,10 +89,11 @@ public class CubeRoom {
 		for(int nx = x-widthX/2 +1; nx <= x+widthX/2-1; nx++){
 			for(int ny = y+1; ny <= y+height-1; ny++){
 				for(int nz = z-widthZ/2+1; nz <= z+widthZ/2-1; nz++){
-					if(!fillCaveAir)
-						data.setType(nx, ny, nz, Material.AIR);
-					else
-						data.setType(nx,ny,nz,Material.CAVE_AIR);
+//					if(!fillMat)
+//						data.setType(nx, ny, nz, Material.AIR);
+//					else
+//						data.setType(nx,ny,nz,Material.CAVE_AIR);
+					data.setType(nx, ny, nz, fillMat);
 				}
 			}
 		}
@@ -128,6 +130,15 @@ public class CubeRoom {
 		 && (Math.abs(room.z - this.z) < (int) (Math.abs(room.getWidthZ() + this.getWidthZ()) / 2)))
 		 return true;
 		return false;
+	}
+	
+	/**
+	 *@return random coordinates from inside the room.
+	 */
+	public int[] randomCoords(Random rand){
+		return GenUtils.randomCoords(rand, 
+				new int[]{getLowerCorner()[0],y,getUpperCorner()[0]}, 
+				new int[]{getLowerCorner()[1],y+height-1,getUpperCorner()[1]});
 	}
 	
 	/**

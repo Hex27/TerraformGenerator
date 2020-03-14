@@ -10,12 +10,14 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.*;
+import org.terraform.structure.dungeon.SmallDungeonPopulator;
 
 public class TerraformStructurePopulator extends BlockPopulator {
 	
 	private ArrayList<StructurePopulator> structurePops = new ArrayList<StructurePopulator>(){{
 		add(new StrongholdPopulator());
 		add(new VillageHousePopulator());
+		add(new SmallDungeonPopulator());
 	}};
 	
 	TerraformWorld tw;

@@ -23,6 +23,7 @@ public class MegaChunk {
 		this(x>>4,z>>4);
 	}
 	
+	//A megachunk is 64 chunks wide. (1024 blocks)
 	public MegaChunk(int chunkX, int chunkZ){
 		this.x = chunkX>>6;
 		this.z = chunkZ>>6;

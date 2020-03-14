@@ -49,11 +49,14 @@ public class SmallDungeonPopulator extends StructurePopulator{
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
 		ArrayList<BiomeBank> banks = new ArrayList<>();
+		int numOceanic = 0;
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int height = new HeightMap().getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
 				for(BiomeBank bank:BiomeBank.values()){
 					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
+					
+					if(bank.toString().contains("OCEANS")) numOceanic++;
 					
 					if(bank == currentBiome){
 						if(!banks.contains(bank))
@@ -63,6 +66,13 @@ public class SmallDungeonPopulator extends StructurePopulator{
 				}
 			}
 		}
+		
+		if(((float)numOceanic)/((float)banks.size()) > 0.6){
+			
+		}else{
+			new UndergroundDungeonPopulator().populate(tw, random, data);
+		}
+		
 		
 //		if(!banks.contains(BiomeBank.FOREST)
 //				&& !banks.contains(BiomeBank.PLAINS)

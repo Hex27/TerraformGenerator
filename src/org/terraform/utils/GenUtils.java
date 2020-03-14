@@ -38,6 +38,12 @@ public class GenUtils {
 		c.getBlock(x, y, z).setType(types[randInt(random,0,types.length-1)]);
 	}
 	
+	public static int[] randomCoords(Random rand, int[] lowBound, int[] highBound){
+		return new int[]{randInt(rand,lowBound[0],highBound[0]),
+				randInt(rand,lowBound[1],highBound[1]),
+				randInt(rand,lowBound[2],highBound[2])};
+	}
+	
 	public static boolean chance(Random rand, int chance,int outOf){
 		return randInt(rand,1,outOf) <= chance;
 	}

@@ -189,7 +189,10 @@ public class RoomLayoutGenerator {
 			}
 		
 		for(CubeRoom room:rooms){
-			room.fillRoom(data, mat, allowOverlaps);
+			if(allowOverlaps)
+				room.fillRoom(data, mat, Material.CAVE_AIR);
+			else
+				room.fillRoom(data, mat, Material.AIR);
 		}
 		
 		//Populate pathways

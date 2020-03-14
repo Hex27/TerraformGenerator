@@ -44,9 +44,10 @@ public class MudflatsHandler extends BiomeHandler {
 
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int y = GenUtils.getTrueHighestBlock(data, x, z);
+				int y = GenUtils.getHighestGround(data, x, z);
 				if(data.getBiome(x,z) != getBiome()) continue;
 				y++;
+				if(data.getType(x, y, z) != Material.AIR) continue;
 				if(GenUtils.chance(5,100)){
 					if(random.nextBoolean())
 						BlockUtils.setDoublePlant(data, x, y, z, Material.TALL_GRASS);
