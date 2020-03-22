@@ -56,7 +56,7 @@ public class SmallDungeonPopulator extends StructurePopulator{
 				for(BiomeBank bank:BiomeBank.values()){
 					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
 					
-					if(bank.toString().contains("OCEANS")) numOceanic++;
+					if(bank.toString().contains("OCEAN")) numOceanic++;
 					
 					if(bank == currentBiome){
 						if(!banks.contains(bank))
@@ -68,7 +68,7 @@ public class SmallDungeonPopulator extends StructurePopulator{
 		}
 		
 		if(((float)numOceanic)/((float)banks.size()) > 0.6){
-			
+			new DrownedDungeonPopulator().populate(tw,random,data);
 		}else{
 			new UndergroundDungeonPopulator().populate(tw, random, data);
 		}

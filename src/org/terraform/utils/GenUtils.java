@@ -100,9 +100,23 @@ public class GenUtils {
 	}
 	
 	public static int randInt(Random rand,int min, int max) {
-
+		boolean negative = false;
+		if(min < 0 && max < 0){
+			negative = true;
+			min = -min;
+			max = -max;
+			
+		}
+		
+		if(max < min){
+			int temp = min;
+			min = max;
+			max = temp;
+		}
+		
 	    int randomNum = rand.nextInt((max - min) + 1) + min;
-
+	    
+	    if(negative) randomNum = -randomNum;
 	    return randomNum;
 	}
 	

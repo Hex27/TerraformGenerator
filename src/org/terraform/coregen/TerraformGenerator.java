@@ -89,6 +89,7 @@ public class TerraformGenerator extends ChunkGenerator{
                 
             }
     	}
+    	
     	//Bukkit.getLogger().info("Finished: " + chunkX + "," + chunkZ);
     	
     	return chunk;

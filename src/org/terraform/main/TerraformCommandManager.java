@@ -21,6 +21,7 @@ public class TerraformCommandManager extends DCCommandManager {
 		this.registerCommand(new StrongholdCommand(plugin, "stronghold","sh"));
 		this.registerCommand(new FarmhouseCommand(plugin, "farmhouse","fh"));
 		this.registerCommand(new UndergroundDungeonCommand(plugin, "ud","undergrounddungeon"));
+		this.registerCommand(new DrownedDungeonCommand(plugin, "dd","drowneddungeon"));
 		this.registerCommand(new CheckHeightCommand(plugin, "checkheight","ch"));
 		this.registerCommand(new WandCommand(plugin, "wand"));
 		this.registerCommand(new SchematicSaveCommand(plugin, "save"));

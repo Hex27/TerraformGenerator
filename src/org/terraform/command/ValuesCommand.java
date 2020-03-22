@@ -8,6 +8,7 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
+import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
@@ -33,6 +34,15 @@ public class ValuesCommand extends DCCommand {
 		
 		return sender.isOp();
 	}
+	
+	private double ridge(int nx, int ny){
+		FastNoise noise = new FastNoise();
+		noise.SetNoiseType(NoiseType.PerlinFractal);
+		noise.SetFrequency(0.01f);
+		noise.SetFractalOctaves(3);
+		
+		return (Math.abs(noise.GetNoise(nx, ny)));
+	}
 
 	@Override
 	public void execute(CommandSender sender, Stack<String> args)
@@ -56,10 +66,12 @@ public class ValuesCommand extends DCCommand {
 			int x = GenUtils.randInt(0,1000);
 			int y = GenUtils.randInt(0,100);
 			int z = GenUtils.randInt(0,1000);
-
-			double height = gen.noise(x, z, 0.1, 1.9, true)*500.0;
+			
+		
+			
+//			double height = gen.noise(x, z, 0.1, 1.9, true)*500.0;
 			//sender.sendMessage(x + "," + z + ":" + height);
-			heightV.addValue(height);
+			heightV.addValue(ridge(x,z));
 			
 //			PerlinOctaveGenerator mountainGenerator = new PerlinOctaveGenerator(new Random(),1);
 //			mountainGenerator.setScale(0.03D);

@@ -1,7 +1,13 @@
 package org.terraform.command;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Stack;
+
+import javax.imageio.ImageIO;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -10,7 +16,9 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformGenerator;
+import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
@@ -79,64 +87,48 @@ public class PreviewCommand extends DCCommand {
 	public void execute(CommandSender sender, Stack<String> args)
 			throws InvalidArgumentException {
 		int seed = GenUtils.randInt(100, 10000);
-		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(new Random(),6);
-		gen.setScale(0.003D);
-		int x = 110;
-		int z = 30;
-		int[][] heightMap = new int[x][z];
-		int highest = -1;
-		int lowest = 10000;	
+		int x = 500;
+		int z = 300;
+		double highest = -1;
+		double lowest = 10000;	
+		BufferedImage img = new BufferedImage(x, z, BufferedImage.TYPE_INT_RGB);
+		//file object
+		File f = null;
 		
 		for(int nz = 0; nz < z; nz++){
-			String message = "";
 			for(int nx = 0; nx < x; nx++){
-				
-				int noise = (int) (gen.noise(nx, nz, 1.5, 1.9, true)*60.0) + TerraformGenerator.seaLevel;//(int) (getCoreHeight(seed,nx,nz)+getSeaHeight(seed,nx,nz));
-				//int noise = 2+(int) (getCoreHeight(seed,nx,nz)*getSeaHeight(seed,nx,nz));
-				//if(noise < 0) noise = 0;
-				if(noise > highest) highest = noise;
-				if(noise < lowest) lowest = noise;
-				
-				//heightMap[nx][nz] = noise;
-				String tag = ("" + ((int) (noise/10))).replaceAll("-","");
-				if(noise > 9) tag = "X";
-				String seg = colorFromGen(noise,lowest,highest) + tag;
-				//if(seg.equals(ChatColor.BLACK + tag)) seg = ""+noise;
-				message += seg;
+				double ridge = TerraformWorld.get("world-"+seed, seed).getRiverDepth(nx, nz);
+				int noise = (int) (new HeightMap().getHeight(TerraformWorld.get("world-"+seed, seed), nx, nz)
+						);//(realRidge(seed,nx,nz)*2);
+				if(ridge > highest) highest = ridge;
+				if(ridge < lowest) lowest = ridge;
+//				int r = (int) (perc*256.0); //red
+//				int g = (int) (perc*256.0); //green
+//				int b = (int) (perc*256.0); //blue
+//				
+				if(ridge <= 0 || noise < TerraformGenerator.seaLevel){
+					img.setRGB(nx, nz, getColorFromNoise(noise).getRGB());
+				}else
+					img.setRGB(nx,nz,new Color(0,70,150).getRGB());
+				//sender.sendMessage(new Color(r, g, b).getRGB() +"");
 			}
-			sender.sendMessage(message);
 		}
-		sender.sendMessage("");
-		sender.sendMessage(ChatColor.YELLOW + "============================================================");
-		sender.sendMessage(ChatColor.AQUA + "" + lowest + " - " + highest);
-//		int nz = 25;
-//		for(int nx = 0; nx < x; nx++){
-//			String message = ChatColor.AQUA + "";
-//			for(int i = 0; i <= heightMap[nx][nz]; i++){
-//				message += "X";
-//			}
-//			sender.sendMessage(message);
-//		}
+		try{
+			  f = new File("output.png");
+			  ImageIO.write(img, "png", f);
+			}catch(IOException e){
+			  System.out.println(e);
+			}
+		sender.sendMessage("Exported. H: " + highest + ", L: " + lowest);
 	}
 	
-	private ChatColor colorFromGen(int y, int min, int max){
-		int seaLevel = TerraformGenerator.seaLevel;
-		
-		if(y<=seaLevel-33) return ChatColor.DARK_BLUE;
-		if(y < seaLevel){
-			return ChatColor.AQUA;
-		}else if(y <= seaLevel+3){
-			return ChatColor.YELLOW;
-		}else if(y < 80){
-			return ChatColor.GREEN;
-//		}else if(y < 80){
-//			return ChatColor.DARK_GREEN;
-		}else if(y < 110){
-			return ChatColor.GRAY;
-		}else if(y < 150)
-			return ChatColor.WHITE;
-		else
-			return ChatColor.RED;
+	private Color getColorFromNoise(int noise){
+		if(noise <= TerraformGenerator.seaLevel){
+			return new Color(50,150,50);//Blue
+		}else if(noise < TerraformGenerator.seaLevel+30){
+			return new Color(50,150,50);//Green
+		}else{
+			return new Color(255,255,255);//White
+		}
 	}
-
 }

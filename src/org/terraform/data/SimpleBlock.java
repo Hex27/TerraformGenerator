@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -45,7 +46,17 @@ public class SimpleBlock {
 	}
 	
 	public void setType(Material type){
-		popData.setType(x, y, z, type);
+		if(popData.getType(x, y, z) == Material.WATER){
+			BlockData data = Bukkit.createBlockData(type);
+			if(data instanceof Waterlogged){
+				Waterlogged wl = (Waterlogged) data;
+				wl.setWaterlogged(true);
+				data = wl;
+			}
+			popData.setBlockData(x,y,z,data);
+		}else
+			popData.setType(x, y, z, type);
+		
 		//All leaves persistent.
 		if(type.toString().contains("LEAVES")){
 			Leaves l = (Leaves) Bukkit.createBlockData(type);
@@ -116,6 +127,13 @@ public class SimpleBlock {
 	}
 	
 	public void setBlockData(BlockData dat){
+		if(popData.getType(x, y, z) == Material.WATER){
+			if(dat instanceof Waterlogged){
+				Waterlogged wl = (Waterlogged) dat;
+				wl.setWaterlogged(true);
+				dat = wl;
+			}
+		}
 		popData.setBlockData(x, y, z, dat);
 	}
 	
