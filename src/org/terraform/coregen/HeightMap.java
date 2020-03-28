@@ -17,7 +17,7 @@ public class HeightMap {
 		FastNoise cubic = new FastNoise((int) tw.getSeed());
 		cubic.SetNoiseType(NoiseType.CubicFractal);
 		cubic.SetFractalOctaves(6);
-		cubic.SetFrequency(0.002f); //Was: 0.003
+		cubic.SetFrequency(0.003f); //Was: 0.003
 		
 		double height = cubic.GetNoise(x, z)*2*50 + TerraformGenerator.seaLevel;
 		
@@ -76,6 +76,12 @@ public class HeightMap {
 		if(height > 230) height = 230 + (height-230)*0.3;
 		if(height > 240) height = 240 + (height-240)*0.1;
 		if(height > 250) height = 250 + (height-250)*0.05;
+		
+		if(height > TerraformGenerator.seaLevel-15){
+			double depth = tw.getRiverDepth(x,z);
+			height -= depth;
+			
+		}
 		
 		return (int) height;
 	}

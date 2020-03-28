@@ -99,7 +99,7 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator{
 				}else if(GenUtils.chance(rand, 1,10)){
 					CoralGenerator.generateKelpGrowth(data, nx+x, y+1, nz+z);
 				}else if(GenUtils.chance(rand,1,10)){
-					CoralGenerator.attemptReplace(data, x+nx,y,z+nz,Material.MAGMA_BLOCK);
+					data.setType(x+nx,y,z+nz,Material.MAGMA_BLOCK);
 				}
 			}
 		}

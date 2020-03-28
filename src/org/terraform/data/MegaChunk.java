@@ -8,7 +8,7 @@ import org.terraform.utils.GenUtils;
 public class MegaChunk {
 	
 	/**
-	 * Refers to a cluster of 16x16 chunks
+	 * Refers to a cluster of 64x64 chunks
 	 * Used for spawning structures.
 	 */
 	

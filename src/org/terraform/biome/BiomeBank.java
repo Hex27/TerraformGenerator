@@ -118,7 +118,7 @@ public enum BiomeBank {
 				return SANDY_BEACH;
 			else if(temperature >= 1 + GenUtils.randDouble(random,-0.1,0.1))
 				return MUDFLATS;
-			else if(temperature >= -1.5 + GenUtils.randDouble(random,-0.1,0.1))
+			else if(temperature >= -0.89 + GenUtils.randDouble(random,-0.1,0.1))
 				return SANDY_BEACH;
 			else
 				return ROCKY_BEACH;

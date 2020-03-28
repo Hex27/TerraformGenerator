@@ -44,51 +44,13 @@ public class PreviewCommand extends DCCommand {
 		
 		return sender.isOp();
 	}
-	
-	private double getCoreHeight(int seed, int x, int z){
-		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(new Random(seed), 8);
-		gen.setScale(0.007D);
-		
-		double height = gen.noise(x,z,1,0.5)*25+TerraformGenerator.seaLevel;
-		
-		if(height > TerraformGenerator.seaLevel + 10){
-			height = (height-TerraformGenerator.seaLevel-10)*0.3 + TerraformGenerator.seaLevel + 10;
-		}
-		if(height < TerraformGenerator.seaLevel - 20){
-			height = -(TerraformGenerator.seaLevel-20-height)*0.3 + TerraformGenerator.seaLevel -20;
-		}
-		
-		return height;
-	}
-	
-	private double getSeaHeight(int seed, int x, int z){
-
-		FastNoise gen = new FastNoise(seed);
-		gen.SetNoiseType(NoiseType.Cubic);
-		gen.SetFrequency(0.005f);		
-		
-		double height = gen.GetNoise(x, z)*40;
-		if(height > 0) return 0.0;
-		
-		return height;
-	}
-	
-//	private double getMountainMap(int seed, int x, int z){
-//
-//		FastNoise gen = new FastNoise(seed);
-//		gen.SetNoiseType(NoiseType.Cubic);
-//		gen.SetFrequency(0.005f);
-//		double height = (gen.GetNoise(x, z)+0.5)*0.5 + 1 ;
-//		
-//		return height;
-//	}
 
 	@Override
 	public void execute(CommandSender sender, Stack<String> args)
 			throws InvalidArgumentException {
-		int seed = GenUtils.randInt(100, 10000);
-		int x = 500;
-		int z = 300;
+		int seed = GenUtils.randInt(1, 1000000);
+		int x = 2000;
+		int z = 1600;
 		double highest = -1;
 		double lowest = 10000;	
 		BufferedImage img = new BufferedImage(x, z, BufferedImage.TYPE_INT_RGB);
@@ -106,10 +68,13 @@ public class PreviewCommand extends DCCommand {
 //				int g = (int) (perc*256.0); //green
 //				int b = (int) (perc*256.0); //blue
 //				
-				if(ridge <= 0 || noise < TerraformGenerator.seaLevel){
+
+				
+//				if(ridge > 0 && noise > 62) //River
+//					img.setRGB(nx,nz,new Color(50,150,(int) (50+25*ridge)).getRGB());
+//				else //Normal Gen
 					img.setRGB(nx, nz, getColorFromNoise(noise).getRGB());
-				}else
-					img.setRGB(nx,nz,new Color(0,70,150).getRGB());
+				
 				//sender.sendMessage(new Color(r, g, b).getRGB() +"");
 			}
 		}
@@ -123,10 +88,12 @@ public class PreviewCommand extends DCCommand {
 	}
 	
 	private Color getColorFromNoise(int noise){
-		if(noise <= TerraformGenerator.seaLevel){
-			return new Color(50,150,50);//Blue
-		}else if(noise < TerraformGenerator.seaLevel+30){
-			return new Color(50,150,50);//Green
+		if(noise <= 62){
+			return new Color(50,50,(int) (100+(noise*2)));//Blue
+		}else if(noise < 62+4){
+			return new Color(240, 238, 108);//Green
+		}else if(noise < 92){
+			return new Color(50,(int) (100+(noise*1.5)),50);//Green
 		}else{
 			return new Color(255,255,255);//White
 		}

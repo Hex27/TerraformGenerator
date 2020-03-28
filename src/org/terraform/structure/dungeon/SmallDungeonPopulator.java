@@ -67,7 +67,8 @@ public class SmallDungeonPopulator extends StructurePopulator{
 			}
 		}
 		
-		if(((float)numOceanic)/((float)banks.size()) > 0.6){
+		if(numOceanic/banks.size() == 1){
+			//Only spawn these in full oceans
 			new DrownedDungeonPopulator().populate(tw,random,data);
 		}else{
 			new UndergroundDungeonPopulator().populate(tw, random, data);
@@ -103,15 +104,10 @@ public class SmallDungeonPopulator extends StructurePopulator{
 	protected int[][] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
 		return new int[][]{
 				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317324)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317325)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317326)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317327)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317328)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317329)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317320)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317321)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317322)),
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1317323))
+				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),131732)),
+				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),13176)),
+				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),131327)),
+				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),17328))
 				};
 	}
 
