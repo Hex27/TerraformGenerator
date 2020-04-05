@@ -136,9 +136,16 @@ public class CubeRoom {
 	 *@return random coordinates from inside the room.
 	 */
 	public int[] randomCoords(Random rand){
+		return randomCoords(rand,0);
+	}
+	
+	/**
+	 *@return random coordinates from inside the room.
+	 */
+	public int[] randomCoords(Random rand, int pad){
 		return GenUtils.randomCoords(rand, 
-				new int[]{getLowerCorner()[0],y,getUpperCorner()[0]}, 
-				new int[]{getLowerCorner()[1],y+height-1,getUpperCorner()[1]});
+				new int[]{x-widthX/2+pad,y+pad,z-widthZ/2+pad}, 
+				new int[]{x+widthX/2-pad,y+height-1-pad,z+widthZ/2-pad});
 	}
 	
 	/**

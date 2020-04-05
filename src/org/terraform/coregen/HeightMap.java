@@ -17,7 +17,7 @@ public class HeightMap {
 		FastNoise cubic = new FastNoise((int) tw.getSeed());
 		cubic.SetNoiseType(NoiseType.CubicFractal);
 		cubic.SetFractalOctaves(6);
-		cubic.SetFrequency(0.003f); //Was: 0.003
+		cubic.SetFrequency(0.003f);
 		
 		double height = cubic.GetNoise(x, z)*2*50 + TerraformGenerator.seaLevel;
 		

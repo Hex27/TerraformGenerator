@@ -30,6 +30,14 @@ public class Wall {
 		return new Wall(block.getRelative(BlockUtils.getAdjacentFaces(direction)[1]), direction);
 	}
 	
+	public Wall getHighestSolidBlockFromAbove(){
+		int highest = GenUtils.getHighestGround(block.getPopData(), block.getX(), block.getZ());
+		int x = block.getX();
+		int z = block.getZ();
+		
+		return new Wall(new SimpleBlock(block.getPopData(), x, highest, z),direction);
+	}
+	
 	public SimpleBlock get(){
 		return block;
 	}

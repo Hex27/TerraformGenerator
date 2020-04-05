@@ -1,0 +1,51 @@
+package org.terraform.structure.animalfarm;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.terraform.coregen.TerraLootTable;
+import org.terraform.data.SimpleBlock;
+import org.terraform.data.Wall;
+import org.terraform.structure.room.CubeRoom;
+import org.terraform.structure.room.PathPopulatorAbstract;
+import org.terraform.structure.room.PathPopulatorData;
+import org.terraform.structure.room.RoomLayoutGenerator;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.CoralGenerator;
+import org.terraform.utils.GenUtils;
+
+public class AnimalFarmPathPopulator extends PathPopulatorAbstract{
+	
+	Random rand;
+	RoomLayoutGenerator gen;
+	public AnimalFarmPathPopulator(RoomLayoutGenerator gen, Random rand) {
+		super();
+		this.gen = gen;
+		this.rand = rand;
+	}
+
+	@Override
+	public void populate(PathPopulatorData ppd) {
+		Wall w = new Wall(ppd.base,ppd.dir);
+		for(CubeRoom room:gen.getRooms()){
+			if(room.isPointInside(new int[]{w.get().getX(),w.get().getZ()}))
+				return;
+		}
+		if(GenUtils.chance(rand,1,50)){
+			w.getLeft().getHighestSolidBlockFromAbove().getRelative(0, 1, 0)
+			.setType(Material.CAMPFIRE);
+		}
+		if(GenUtils.chance(rand, 2,10))
+			w.getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE,Material.COARSE_DIRT,Material.MOSSY_COBBLESTONE));
+		if(GenUtils.chance(rand, 2,10))
+			w.getLeft().getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE,Material.COARSE_DIRT,Material.MOSSY_COBBLESTONE));
+		if(GenUtils.chance(rand, 2,10))
+			w.getRight().getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE,Material.COARSE_DIRT,Material.MOSSY_COBBLESTONE));
+		
+	}
+	
+	
+}

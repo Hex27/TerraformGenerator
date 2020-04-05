@@ -11,17 +11,18 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.StrongholdPopulator;
+import org.terraform.structure.animalfarm.AnimalFarmPopulator;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 
-public class FarmhouseCommand extends DCCommand {
+public class AnimalFarmCommand extends DCCommand {
 
-	public FarmhouseCommand(DrycellPlugin plugin, String... aliases) {
+	public AnimalFarmCommand(DrycellPlugin plugin, String... aliases) {
 		super(plugin, aliases);
 	}
 
 	@Override
 	public String getDefaultDescription() {
-		return "Spawntest for farmhouse";
+		return "Spawntest for animal farm";
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class FarmhouseCommand extends DCCommand {
 //		gen.generate();
 //		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 //		
-		new FarmhousePopulator().spawnFarmHouse(tw, new Random(), data, x, y, z);
+		new AnimalFarmPopulator().spawnAnimalFarm(tw, new Random(), data, x, y, z);
 	}
 
 }

@@ -35,8 +35,8 @@ public class SnowyWastelandHandler extends BiomeHandler {
 
 	@Override
 	public Material[] getSurfaceCrust(Random rand) {
-		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.PACKED_ICE, 3, Material.ICE, 2),
-				GenUtils.weightedRandomMaterial(rand, Material.PACKED_ICE, 3, Material.ICE, 2),
+		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.PACKED_ICE, 3, Material.BLUE_ICE, 2),
+				GenUtils.weightedRandomMaterial(rand, Material.PACKED_ICE, 3, Material.BLUE_ICE, 2),
 				GenUtils.randMaterial(rand, Material.PACKED_ICE, Material.ICE, Material.DIRT,Material.DIRT),
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE),
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE)};

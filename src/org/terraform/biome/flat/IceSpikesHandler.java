@@ -82,7 +82,7 @@ public class IceSpikesHandler extends BiomeHandler {
 			SimpleBlock segment = one.getRelative(seg);
 //			segment.setHardReplace();
 //			segment.setType(type);
-			BlockUtils.replaceSphere((int) (tw.getSeed()*12), (float)radius, 2, (float)radius, segment, false, true, Material.PACKED_ICE, Material.ICE);
+			BlockUtils.replaceSphere((int) (tw.getSeed()*12), (float)radius, 2, (float)radius, segment, false, true, Material.PACKED_ICE);
 //			Block segment = one.getLocation().add(seg).getBlock();
 //			segment.setType(type);
 			radius = ((double)baseRadius)*(1- ((double)i)/((double)segments));

@@ -105,7 +105,6 @@ public class GenUtils {
 			negative = true;
 			min = -min;
 			max = -max;
-			
 		}
 		
 		if(max < min){
@@ -216,6 +215,11 @@ public class GenUtils {
 				if(data.getType(x, y, z).toString().contains("LEAVES")){
 				}else if(data.getType(x, y, z).toString().contains("LOG")){
 				}else if(data.getType(x, y, z).toString().contains("WOOD")){
+				}else if(data.getType(x, y, z).toString().contains("FENCE")){
+				}else if(data.getType(x, y, z).toString().contains("WALL")){
+				}else if(data.getType(x, y, z) == Material.HAY_BLOCK){
+				}else if(data.getType(x, y, z).toString().contains("BRICK")){
+				}else if(data.getType(x, y, z).isInteractable()){
 				}else
 					break;
 			}

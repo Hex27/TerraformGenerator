@@ -9,6 +9,8 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
+import org.terraform.structure.animalfarm.AnimalFarmPopulator;
+import org.terraform.structure.farmhouse.FarmhousePopulator;
 
 public class VillageHousePopulator extends StructurePopulator {
 
@@ -38,14 +40,25 @@ public class VillageHousePopulator extends StructurePopulator {
 			}
 		}
 		
-		if(!banks.contains(BiomeBank.FOREST)
-				&& !banks.contains(BiomeBank.PLAINS)
-				&& !banks.contains(BiomeBank.TAIGA)
-				&& !banks.contains(BiomeBank.SAVANNA)
-				&& !banks.contains(BiomeBank.SNOWY_WASTELAND)
-				&& !banks.contains(BiomeBank.SNOWY_TAIGA)){
-			
-		}else{
+		if(banks.contains(BiomeBank.LUKEWARM_OCEAN)
+				||banks.contains(BiomeBank.WARM_OCEAN)
+				||banks.contains(BiomeBank.OCEAN)
+				||banks.contains(BiomeBank.COLD_OCEAN)
+				||banks.contains(BiomeBank.FROZEN_OCEAN)
+				||banks.contains(BiomeBank.SWAMP)){
+			//Ships
+		}else if(banks.contains(BiomeBank.DESERT)
+				|| banks.contains(BiomeBank.DESERT_MOUNTAINS)
+				|| banks.contains(BiomeBank.BADLANDS)
+				|| banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
+				|| banks.contains(BiomeBank.SNOWY_WASTELAND)
+				|| banks.contains(BiomeBank.ICE_SPIKES)){
+			new AnimalFarmPopulator().populate(tw,random,data);
+		}else if(banks.contains(BiomeBank.FOREST)
+				|| banks.contains(BiomeBank.PLAINS)
+				|| banks.contains(BiomeBank.TAIGA)
+				|| banks.contains(BiomeBank.SAVANNA)
+				|| banks.contains(BiomeBank.SNOWY_TAIGA)){
 			new FarmhousePopulator().populate(tw, random, data);
 		}
 	}

@@ -91,6 +91,7 @@ public class PathGenerator{
 	}
 	
 	private void wall(){
+		if(mat[0] == Material.BARRIER) return;
 		if(base.getRelative(0,1,0).getType() != Material.CAVE_AIR) 
 			base.getRelative(0,1,0).setType(GenUtils.randMaterial(mat));
 		if(base.getRelative(0,2,0).getType() != Material.CAVE_AIR) 
@@ -115,6 +116,7 @@ public class PathGenerator{
 	}
 	
 	private void setHall(){
+		if(mat[0] == Material.BARRIER) return;
 		
 		if(base.getType() != Material.CAVE_AIR) 
 			base.setType(GenUtils.randMaterial(mat));

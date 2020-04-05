@@ -31,8 +31,8 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
-import org.terraform.structure.FarmhousePopulator;
 import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.farmhouse.FarmhouseSchematicParser;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
@@ -56,7 +56,7 @@ public class SmallDungeonPopulator extends StructurePopulator{
 				for(BiomeBank bank:BiomeBank.values()){
 					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
 					
-					if(bank.toString().contains("OCEAN")) numOceanic++;
+					if(currentBiome.toString().contains("OCEAN")) numOceanic++;
 					
 					if(bank == currentBiome){
 						if(!banks.contains(bank))

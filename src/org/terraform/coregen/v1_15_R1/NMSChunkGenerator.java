@@ -44,8 +44,8 @@ import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.TerraformStructurePopulator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.FarmhousePopulator;
 import org.terraform.structure.StrongholdPopulator;
+import org.terraform.structure.farmhouse.FarmhousePopulator;
 
 public class NMSChunkGenerator extends ChunkGenerator {
 	

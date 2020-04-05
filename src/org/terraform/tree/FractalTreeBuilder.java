@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
+import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -235,24 +236,37 @@ public class FractalTreeBuilder {
 		FastNoise noise = new FastNoise(seed);
 		noise.SetNoiseType(NoiseType.Simplex);
 		noise.SetFrequency(0.09f);
+		
+		double maxR = rX;
+		if(rX < rY) maxR = rY;
+		if(rY < rZ) maxR = rZ;
+		
 		for(float x = -rX; x <= rX; x++){
 			for(float y = -rY; y <= rY; y++){
 				for(float z = -rZ; z <= rZ; z++){
 					
 					SimpleBlock rel = block.getRelative((int)Math.round(x),(int)Math.round(y),(int)Math.round(z));
-					//double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
 					double equationResult = Math.pow(x,2)/Math.pow(rX,2)
 							+ Math.pow(y,2)/Math.pow(rY,2)
 							+ Math.pow(z,2)/Math.pow(rZ,2);
 					if(equationResult <= 1+0.7*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())){
-					//if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
 						
+						//Anti-dirt block glitch
 						if(BlockUtils.isDirtLike(rel.getRelative(0,-1,0).getType())){
 							rel.getRelative(0,-1,0).setType(Material.DIRT);
 						}
 						
-						if(!(type.toString().contains("LEAVES") && rel.getType().isSolid()))
+						//Leaves do not replace solid blocks.
+						if(type.toString().contains("LEAVES") && !rel.getType().isSolid()){
+							Leaves leaf = (Leaves) Bukkit.createBlockData(type);
+							if((int) Math.ceil(maxR) > 4)
+								leaf.setPersistent(true);
+							else
+								leaf.setDistance((int) Math.ceil(maxR));
+							rel.setBlockData(leaf);
+						}else if(!type.toString().contains("LEAVES")){
 							rel.setType(type);
+						}
 						
 						if(snowy){
 							if(!rel.getRelative(0,1,0).getType().isSolid()){
@@ -263,7 +277,9 @@ public class FractalTreeBuilder {
 								&& Math.abs(x) >= rX-2
 								&& Math.abs(z) >= rZ-2){
 							if(GenUtils.chance(2, 10))
-								dangleLeavesDown(rel,vines/2, vines);
+								dangleLeavesDown(rel,(int) Math.ceil(maxR),vines/2, vines);
+							
+							//Vine blocks
 							if(GenUtils.chance(1,10)){
 								for(BlockFace face:new BlockFace[]{BlockFace.NORTH,BlockFace.SOUTH,BlockFace.EAST,BlockFace.WEST}){
 									MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
@@ -288,10 +304,17 @@ public class FractalTreeBuilder {
 		}
 	}
 	
-	private void dangleLeavesDown(SimpleBlock block, int min, int max){
+	private void dangleLeavesDown(SimpleBlock block, int leafDist, int min, int max){
 		
 		for(int i = 1; i <= GenUtils.randInt(min, max); i++){
 			if(!block.getRelative(0,0-i,0).getType().isSolid()){
+//				Leaves leaf = (Leaves) Bukkit.createBlockData(leafType);
+//
+//				if(leafDist + i*2 > 5)
+//					leaf.setPersistent(true);
+//				else
+//					leaf.setDistance(leafDist + i*2);
+				
 				block.getRelative(0,0-i,0).setType(leafType);
 			}else
 				break;

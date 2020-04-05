@@ -12,16 +12,17 @@ import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.StrongholdPopulator;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
+import org.terraform.structure.shipwreck.ShipwreckPopulator;
 
-public class FarmhouseCommand extends DCCommand {
+public class ShipwreckCommand extends DCCommand {
 
-	public FarmhouseCommand(DrycellPlugin plugin, String... aliases) {
+	public ShipwreckCommand(DrycellPlugin plugin, String... aliases) {
 		super(plugin, aliases);
 	}
 
 	@Override
 	public String getDefaultDescription() {
-		return "Spawntest for farmhouse";
+		return "Spawntest for shipwreck";
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class FarmhouseCommand extends DCCommand {
 //		gen.generate();
 //		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 //		
-		new FarmhousePopulator().spawnFarmHouse(tw, new Random(), data, x, y, z);
+		new ShipwreckPopulator().spawnShipwreck(tw, new Random(), data, x, y, z);
 	}
 
 }

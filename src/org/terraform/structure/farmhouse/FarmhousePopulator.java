@@ -1,4 +1,4 @@
-package org.terraform.structure;
+package org.terraform.structure.farmhouse;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
-import org.terraform.structure.farmhouse.FarmhouseSchematicParser;
+import org.terraform.structure.VillageHousePopulator;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.stronghold.StrongholdPathPopulator;

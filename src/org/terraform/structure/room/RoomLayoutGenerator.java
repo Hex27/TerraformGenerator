@@ -239,6 +239,25 @@ public class RoomLayoutGenerator {
 			room.populate(data);
 		}
 	}
+	
+	public void fillPathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat){
+		ArrayList<PathGenerator> pathGens = new ArrayList<>();
+		if(genPaths)
+			for(CubeRoom room:rooms){
+				SimpleBlock base = new SimpleBlock(data, room.getX(),room.getY(),room.getZ());
+				PathGenerator gen = new PathGenerator(base,mat,rand,upperBound,lowerBound);
+				if(pathPop != null) gen.setPopulator(pathPop);
+				while(!gen.isDead()){
+					gen.next();
+				}
+				pathGens.add(gen);
+			}
+		
+		//Populate pathways
+		for(PathGenerator pGen:pathGens){
+			pGen.populate();
+		}
+	}
 
 	/**
 	 * @return the numRooms
