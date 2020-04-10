@@ -10,40 +10,18 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
 public class TerraformGenerator extends ChunkGenerator{
 	
-	public static final int seaLevel = 62;
+	public static int seaLevel = 62;
 	private HeightMap map;
 	
-//	/**
-//	 * 
-//	 * @param tw
-//	 * @param chunkx
-//	 * @param chunkz
-//	 * @param x relative x
-//	 * @param y relative y
-//	 * @param z relative z
-//	 * @return whether or not the terrain block should be placed.
-//	 */
-//	public boolean attemptSimpleBlockUpdate(TerraformWorld tw, ChunkData data, int chunkx, int chunkz, int x, int y, int z){
-//		TChunk tc = tw.getChanges().get(new SimpleChunkLocation(tw.getName(), chunkx, chunkz));
-//		if(tc == null) return false;
-//		
-//		SimpleBlock b = tc.getBlock(x,y,z);
-//		if(b != null){
-//			data.setBlock(x,y,z,b.getType());
-//			if(b.getBlockData() != null) 
-//				data.setBlock(x,y,z,b.getBlockData());
-//			
-//			if(b.getType() == Material.WATER) return false;
-//			return true;
-//		}
-//		return false;
-//	}
-//	
+	public static void updateSeaLevelFromConfig(){
+		seaLevel = TConfigOption.SEA_LEVEL.getInt();
+	}
 	
     @Override
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
@@ -99,7 +77,8 @@ public class TerraformGenerator extends ChunkGenerator{
     public List<BlockPopulator> getDefaultPopulators(World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return new ArrayList<BlockPopulator>(){{
-        	add(new TerraformStructurePopulator(tw,TerraformGeneratorPlugin.injector));
+        	add(new TerraformStructurePopulator(tw));
+        	//add(new TerraformAnimalSpawner());
         }};
     }
 }

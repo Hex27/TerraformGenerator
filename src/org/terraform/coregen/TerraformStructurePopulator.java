@@ -11,6 +11,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.*;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
+import org.terraform.structure.shipwreck.ShipwreckPopulator;
 
 public class TerraformStructurePopulator extends BlockPopulator {
 	
@@ -18,13 +19,12 @@ public class TerraformStructurePopulator extends BlockPopulator {
 		add(new StrongholdPopulator());
 		add(new VillageHousePopulator());
 		add(new SmallDungeonPopulator());
+		add(new ShipwreckPopulator());
 	}};
 	
 	TerraformWorld tw;
-	NMSInjectorAbstract inj;
-	public TerraformStructurePopulator(TerraformWorld tw,NMSInjectorAbstract inj){
+	public TerraformStructurePopulator(TerraformWorld tw){
 		this.tw = tw;
-		this.inj = inj;
 	}
 	
 	@Override
@@ -52,6 +52,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 		}
 		//TerraformGeneratorPlugin.logger.debug("s-pop-2");
 		for(StructurePopulator spop:structurePops){
+			
 			//TerraformGeneratorPlugin.logger.debug("s-pop-3");
 			if(spop.canSpawn(random,tw,data.getChunkX(),data.getChunkZ(),banks)){
 				TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());

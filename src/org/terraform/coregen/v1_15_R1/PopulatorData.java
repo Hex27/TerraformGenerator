@@ -17,10 +17,13 @@ import net.minecraft.server.v1_15_R1.TileEntityLootable;
 import net.minecraft.server.v1_15_R1.TileEntityMobSpawner;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
@@ -83,23 +86,20 @@ public class PopulatorData extends PopulatorDataAbstract{
 
 	@Override
 	public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-		EntityTypes<?> types;
+		EntityTypes et;
 		try {
-			types = (EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null);
-		
-			Entity entity = types.a(rlwa.getMinecraftWorld());
-			if(entity instanceof EntityInsentient){
-	
-				((EntityInsentient)entity).setPersistent();
-				((EntityInsentient) entity).prepare(rlwa.getMinecraftWorld(), rlwa.getMinecraftWorld().getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), 
-						EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
+			et = (EntityTypes) EntityTypes.class.getDeclaredField(type.toString()).get(null);
+			Entity e = et.a(rlwa.getMinecraftWorld());
+			e.setPositionRotation((double) rawX + 0.5D, (double) rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
+			if(e instanceof EntityInsentient){
+				((EntityInsentient) e).setPersistent();
+				((EntityInsentient) e).prepare(rlwa, rlwa.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
 			}
-			entity.setPositionRotation((double) rawX + 0.5D, (double) rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
 			
-			rlwa.addEntity(entity);
+            rlwa.addEntity(e);
 		} catch (IllegalArgumentException | IllegalAccessException
-				| NoSuchFieldException | SecurityException e) {
-			e.printStackTrace();
+				| NoSuchFieldException | SecurityException e1) {
+			e1.printStackTrace();
 		}
 	}
 

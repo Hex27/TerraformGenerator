@@ -91,24 +91,20 @@ public class PopulatorData extends PopulatorDataAbstract{
 
 	@Override
 	public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-
-		EntityTypes<?> types;
+		EntityTypes et;
 		try {
-			types = (EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null);
-		
-			Entity entity = types.a(rlwa.getMinecraftWorld());
-			if(entity instanceof EntityInsentient){
-	
-				((EntityInsentient)entity).setPersistent();
-				((EntityInsentient) entity).prepare(rlwa.getMinecraftWorld(), rlwa.getMinecraftWorld().getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), 
-						EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
+			et = (EntityTypes) EntityTypes.class.getDeclaredField(type.toString()).get(null);
+			Entity e = et.a(rlwa.getMinecraftWorld());
+			e.setPositionRotation((double) rawX + 0.5D, (double) rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
+			if(e instanceof EntityInsentient){
+				((EntityInsentient) e).setPersistent();
+				((EntityInsentient) e).prepare(rlwa, rlwa.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
 			}
-			entity.setPositionRotation((double) rawX + 0.5D, (double) rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
 			
-			rlwa.addEntity(entity);
+            rlwa.addEntity(e);
 		} catch (IllegalArgumentException | IllegalAccessException
-				| NoSuchFieldException | SecurityException e) {
-			e.printStackTrace();
+				| NoSuchFieldException | SecurityException e1) {
+			e1.printStackTrace();
 		}
 	
 	}

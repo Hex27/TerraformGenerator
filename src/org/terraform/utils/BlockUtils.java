@@ -243,13 +243,12 @@ public class BlockUtils {
 	}
 	
 	public static void setDoublePlant(PopulatorDataAbstract data, int x, int y, int z, Material doublePlant){
-		data.setType(x, y, z,doublePlant);
-		Bisected d = ((Bisected)data.getBlockData(x, y, z));
+		
+		Bisected d = ((Bisected) Bukkit.createBlockData(doublePlant));
 		d.setHalf(Half.BOTTOM);
 		data.setBlockData(x, y, z, d);
 		
-		data.setType(x, y+1, z,doublePlant);
-		d = ((Bisected)data.getBlockData(x, y+1, z));
+		d = ((Bisected) Bukkit.createBlockData(doublePlant));
 		d.setHalf(Half.TOP);
 		data.setBlockData(x, y+1, z, d);
 	}
@@ -523,7 +522,6 @@ public class BlockUtils {
 		
 		data.setType(x,y,z,mat);
 		data.setType(x,y+1,z,mat);
-		//Bukkit.getLogger().info( data.getBlockData(x, y, z).getClass().getName());
 		Door door = (Door) Bukkit.createBlockData(mat);
 		door.setFacing(dir);
 		door.setHalf(Half.BOTTOM);

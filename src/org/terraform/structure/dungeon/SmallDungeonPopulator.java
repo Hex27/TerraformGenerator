@@ -28,6 +28,7 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
@@ -69,22 +70,14 @@ public class SmallDungeonPopulator extends StructurePopulator{
 		
 		if(numOceanic/banks.size() == 1){
 			//Only spawn these in full oceans
+			if(!TConfigOption.STRUCTURES_DROWNEDDUNGEON_ENABLED.getBoolean())
+				return;
 			new DrownedDungeonPopulator().populate(tw,random,data);
 		}else{
+			if(!TConfigOption.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED.getBoolean())
+				return;
 			new UndergroundDungeonPopulator().populate(tw, random, data);
 		}
-		
-		
-//		if(!banks.contains(BiomeBank.FOREST)
-//				&& !banks.contains(BiomeBank.PLAINS)
-//				&& !banks.contains(BiomeBank.TAIGA)
-//				&& !banks.contains(BiomeBank.SAVANNA)
-//				&& !banks.contains(BiomeBank.SNOWY_WASTELAND)
-//				&& !banks.contains(BiomeBank.SNOWY_TAIGA)){
-//			
-//		}else{
-//			new FarmhousePopulator().populate(tw, random, data);
-//		}
 	}
 	
 	@Override

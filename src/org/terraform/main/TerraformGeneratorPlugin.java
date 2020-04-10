@@ -3,12 +3,8 @@ package org.terraform.main;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
@@ -29,6 +25,8 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 	public void onEnable(){
 		super.onEnable();
 		i = this;
+		TConfigOption.loadValues(this.getDCConfig());
+		TerraformGenerator.updateSeaLevelFromConfig();
 		new TerraformCommandManager(this, "terraform","terra");
 //		new BukkitRunnable(){
 //			public void run(){

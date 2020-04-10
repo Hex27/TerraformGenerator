@@ -9,6 +9,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
@@ -103,7 +104,7 @@ public class StrongholdPopulator extends StructurePopulator{
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
 		//TerraformGeneratorPlugin.logger.debug("s-populate");
-		
+		if(!TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean()) return;
 		ArrayList<int[]> positions = strongholdPositions(tw);
 		for(int x = data.getChunkX()*16; x<data.getChunkX()*16+16;x++){
 			for(int z = data.getChunkZ()*16; z<data.getChunkZ()*16+16;z++){

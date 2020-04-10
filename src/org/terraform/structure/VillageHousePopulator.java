@@ -9,6 +9,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.structure.animalfarm.AnimalFarmPopulator;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 
@@ -53,12 +54,19 @@ public class VillageHousePopulator extends StructurePopulator {
 				|| banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
 				|| banks.contains(BiomeBank.SNOWY_WASTELAND)
 				|| banks.contains(BiomeBank.ICE_SPIKES)){
+			if(!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
+				return;
+			
 			new AnimalFarmPopulator().populate(tw,random,data);
 		}else if(banks.contains(BiomeBank.FOREST)
 				|| banks.contains(BiomeBank.PLAINS)
 				|| banks.contains(BiomeBank.TAIGA)
 				|| banks.contains(BiomeBank.SAVANNA)
 				|| banks.contains(BiomeBank.SNOWY_TAIGA)){
+
+			if(!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
+				return;
+			
 			new FarmhousePopulator().populate(tw, random, data);
 		}
 	}

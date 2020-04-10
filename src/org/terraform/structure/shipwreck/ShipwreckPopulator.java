@@ -28,6 +28,7 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
@@ -48,6 +49,9 @@ public class ShipwreckPopulator extends StructurePopulator{
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
+
+		if(!TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean())
+			return;
 		int seaLevel = TerraformGenerator.seaLevel;
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
@@ -123,7 +127,14 @@ public class ShipwreckPopulator extends StructurePopulator{
 	public boolean canSpawn(Random rand, TerraformWorld tw, int chunkX,
 			int chunkZ, ArrayList<BiomeBank> biomes) {
 		for(BiomeBank b:biomes){
-			if(b.toString().contains("OCEAN")) return true;
+			if(b.toString().contains("OCEAN")){
+				MegaChunk mc = new MegaChunk(chunkX,chunkZ);
+				int[] coords = getCoordsFromMegaChunk(tw,mc);
+				if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ){
+					return true;
+				}
+				
+			}
 		}
 		return false;
 	}

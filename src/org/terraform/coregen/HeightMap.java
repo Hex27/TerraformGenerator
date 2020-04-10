@@ -8,6 +8,8 @@ import org.terraform.utils.FastNoise.NoiseType;
 
 public class HeightMap {
 	
+	private final int defaultSeaLevel = 62;
+	
 	public double getCoreHeight(TerraformWorld tw, int x, int z){
 //		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(tw.getRand(1), 8);
 //		gen.setScale(0.007D);
@@ -19,13 +21,13 @@ public class HeightMap {
 		cubic.SetFractalOctaves(6);
 		cubic.SetFrequency(0.003f);
 		
-		double height = cubic.GetNoise(x, z)*2*50 + TerraformGenerator.seaLevel;
+		double height = cubic.GetNoise(x, z)*2*50 + defaultSeaLevel;
 		
-		if(height > TerraformGenerator.seaLevel + 10){
-			height = (height-TerraformGenerator.seaLevel-10)*0.1 + TerraformGenerator.seaLevel + 10;
+		if(height > defaultSeaLevel + 10){
+			height = (height-defaultSeaLevel-10)*0.1 + defaultSeaLevel + 10;
 		}
-		if(height < TerraformGenerator.seaLevel - 30){
-			height = -(TerraformGenerator.seaLevel-30-height)*0.1 + TerraformGenerator.seaLevel -30;
+		if(height < defaultSeaLevel - 30){
+			height = -(defaultSeaLevel-30-height)*0.1 + defaultSeaLevel -30;
 		}
 		
 		return height;
@@ -58,14 +60,14 @@ public class HeightMap {
 	public int getHeight(TerraformWorld tw, int x, int z){
 		double height = getCoreHeight(tw,x,z);
 		
-		if(height > TerraformGenerator.seaLevel + 4){
+		if(height > defaultSeaLevel + 4){
 			height += getAttritionHeight(tw,x,z);
 		}else{
 			height += getAttritionHeight(tw,x,z)*0.8;
 		}
 		
 		//double oldHeight = height;
-		if(height > TerraformGenerator.seaLevel + 4){
+		if(height > defaultSeaLevel + 4){
 			height += getMountainousHeight(tw,x,z);
 		}else{
 			float frac = (float) ((float)height / (float) (TerraformGenerator.seaLevel+4));

@@ -285,7 +285,8 @@ public class FractalTreeBuilder {
 									MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
 									dir.setFace(face.getOppositeFace(),true);
 									SimpleBlock vine = rel.getRelative(face);
-									if(vine.getType().isSolid()) continue;
+									if(vine.getType().isSolid() || 
+											vine.getType() == Material.WATER) continue;
 									
 									vine.setType(Material.VINE);
 									vine.setBlockData(dir);
