@@ -2,6 +2,7 @@ package org.terraform.command;
 
 import java.util.Stack;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
@@ -46,8 +47,23 @@ public class FractalTreeCommand extends DCCommand {
 		int x = p.getLocation().getBlockX();
 		int y = p.getLocation().getBlockY();
 		int z = p.getLocation().getBlockZ();
-		new FractalTreeBuilder((FractalTreeType) this.parseArguments(sender, args).get(0))
-		.build(tw, data, x, y, z);
+		try{
+			new FractalTreeBuilder((FractalTreeType) this.parseArguments(sender, args).get(0))
+			.build(tw, data, x, y, z);
+		}catch(IllegalArgumentException e){
+			sender.sendMessage(ChatColor.RED + "Invalid tree type.");
+			sender.sendMessage(ChatColor.RED + "Valid types:");
+			String types = "";
+			boolean b = true;
+			for(FractalTreeType type:FractalTreeType.values()){
+				ChatColor col = ChatColor.RED;
+				if(b) col = ChatColor.DARK_RED;
+				b = !b;
+				types += col + type.toString() + " ";
+			}
+			
+			sender.sendMessage(types);
+		}
 	}
 
 }

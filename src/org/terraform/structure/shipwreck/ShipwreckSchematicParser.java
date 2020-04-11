@@ -11,6 +11,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.coregen.TerraformGenerator;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
@@ -66,7 +67,12 @@ public class ShipwreckSchematicParser extends SchematicParser{
 
 		//Holes
 		if(GenUtils.chance(rand, 1,30)){
-			data = Bukkit.createBlockData(Material.WATER);
+			if(block.getY() <= TerraformGenerator.seaLevel)
+				data = Bukkit.createBlockData(Material.WATER);
+			else 
+				data = Bukkit.createBlockData(Material.AIR);
+			
+			super.applyData(block, data);
 			return;
 		}
 		
@@ -78,8 +84,13 @@ public class ShipwreckSchematicParser extends SchematicParser{
 		
 		if(data.getMaterial() == Material.CHEST){
 			if(GenUtils.chance(rand, 4, 5)){
-				block.setType(Material.WATER,true);
-				return; //Only a fifth of chests are placed.
+				if(block.getY() <= TerraformGenerator.seaLevel)
+					data = Bukkit.createBlockData(Material.WATER);
+				else 
+					data = Bukkit.createBlockData(Material.AIR);
+				
+				super.applyData(block, data);
+				return;
 			}
 			super.applyData(block, data);
 			if(GenUtils.chance(rand, 1,5)){

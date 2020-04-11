@@ -62,16 +62,20 @@ public class ValuesCommand extends DCCommand {
 		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(new Random(),4);
 		gen.setScale(0.003D);
 		
-		for(int i = 0; i<10000; i++){
-			int x = GenUtils.randInt(0,1000);
-			int y = GenUtils.randInt(0,100);
-			int z = GenUtils.randInt(0,1000);
+		for(int i = 0; i<20000; i++){
+			int x = GenUtils.randInt(-10000,10000);
+			//int y = GenUtils.randInt(0,100);
+			//int z = GenUtils.randInt(0,1000);
 			
-		
+			int x1 = x*16;
+			int x2 = x<<4;
+			if(x1 != x2){
+				sender.sendMessage("Critical difference: " + x);
+			}
 			
 //			double height = gen.noise(x, z, 0.1, 1.9, true)*500.0;
 			//sender.sendMessage(x + "," + z + ":" + height);
-			heightV.addValue(ridge(x,z));
+			//heightV.addValue(ridge(x,z));
 			
 //			PerlinOctaveGenerator mountainGenerator = new PerlinOctaveGenerator(new Random(),1);
 //			mountainGenerator.setScale(0.03D);
@@ -101,8 +105,8 @@ public class ValuesCommand extends DCCommand {
 		//sender.sendMessage("Mountain multiplier:"+mountainV.toString());
 		//sender.sendMessage("Perlin:"+perlinV.toString());
 		//sender.sendMessage("Simplex:"+simplexV.toString());
-		sender.sendMessage("Height:"+heightV.toString());
-		
+		//sender.sendMessage("Height:"+heightV.toString());
+		sender.sendMessage("Finished");
 	}
 	
 	private class MathValues{

@@ -9,7 +9,6 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.coregen.TerraformAnimalSpawner;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.StrongholdPopulator;
 import org.terraform.structure.animalfarm.AnimalFarmPopulator;
@@ -42,8 +41,8 @@ public class AnimalSpawnerCommand extends DCCommand {
 			throws InvalidArgumentException {
 		
 		Player p = (Player) sender;
-		new TerraformAnimalSpawner().populate(p.getWorld(), new Random(), p.getLocation().getChunk());		
-		p.sendMessage("Done.");
+		//new TerraformAnimalSpawner().populate(p.getWorld(), new Random(), p.getLocation().getChunk());		
+		p.sendMessage("Unsupported now.");
 	}
 
 }

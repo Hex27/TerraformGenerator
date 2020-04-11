@@ -98,7 +98,7 @@ public class FractalTreeBuilder {
 			.setCollapsed(true);
 			break;
 		case TAIGA_BIG: 
-			this.setBaseHeight(10).setBaseThickness(4).setThicknessDecrement(1f).setMaxDepth(3).setLeafRadiusX(7).setLeafRadiusZ(7).setLeafRadiusY(2).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.SPRUCE_LEAVES).setLengthDecrement(2).setHeightVar(3);
+			this.setBaseHeight(10).setBaseThickness(4).setThicknessDecrement(1f).setMaxDepth(3).setLeafRadiusX(6).setLeafRadiusZ(6).setLeafRadiusY(2).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.SPRUCE_LEAVES).setLengthDecrement(2).setHeightVar(3);
 			break;
 		case TAIGA_SMALL:
 			this.setBaseHeight(7).setBaseThickness(1).setMaxDepth(1).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(1).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.SPRUCE_LEAVES).setHeightVar(1);
@@ -163,11 +163,11 @@ public class FractalTreeBuilder {
 	
 	public void fractalBranch(Random rand,SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size){
 		if(depth >= maxDepth){
-			replaceSphere(rand.nextInt(9999), leafRadiusX, leafRadiusY, leafRadiusZ, base, Material.OAK_LEAVES);
+			replaceSphere(rand.nextInt(9999), leafRadiusX, leafRadiusY, leafRadiusZ, base, this.leafType);
 			return;  
 		}
 		if(size <= 0){
-			replaceSphere(rand.nextInt(9999), leafRadiusX, leafRadiusY, leafRadiusZ, base, Material.OAK_LEAVES);
+			replaceSphere(rand.nextInt(9999), leafRadiusX, leafRadiusY, leafRadiusZ, base, this.leafType);
 			return;
 		}
 			
@@ -183,7 +183,7 @@ public class FractalTreeBuilder {
 		}
 		SimpleBlock two = base.getRelative(x,y,z);
 		
-		drawLine(rand, base,two,(int) (size),thickness,Material.OAK_WOOD);
+		drawLine(rand, base,two,(int) (size),thickness,this.logType);
 		
 		if(!GenUtils.chance(rand,(int) gnarl,100) && gnarls < 2){
 			gnarls = 0;
@@ -259,10 +259,12 @@ public class FractalTreeBuilder {
 						//Leaves do not replace solid blocks.
 						if(type.toString().contains("LEAVES") && !rel.getType().isSolid()){
 							Leaves leaf = (Leaves) Bukkit.createBlockData(type);
-							if((int) Math.ceil(maxR) > 4)
+							
+							//Temporary fix: Big canopies dont decay now.
+							if(leafRadiusX > 5 || leafRadiusY > 5 || leafRadiusZ > 5)
 								leaf.setPersistent(true);
-							else
-								leaf.setDistance((int) Math.ceil(maxR));
+							
+							leaf.setDistance(7);
 							rel.setBlockData(leaf);
 						}else if(!type.toString().contains("LEAVES")){
 							rel.setType(type);
@@ -276,8 +278,9 @@ public class FractalTreeBuilder {
 						if(vines > 0 
 								&& Math.abs(x) >= rX-2
 								&& Math.abs(z) >= rZ-2){
-							if(GenUtils.chance(2, 10))
+							if(GenUtils.chance(2, 10)){
 								dangleLeavesDown(rel,(int) Math.ceil(maxR),vines/2, vines);
+							}
 							
 							//Vine blocks
 							if(GenUtils.chance(1,10)){
@@ -309,14 +312,11 @@ public class FractalTreeBuilder {
 		
 		for(int i = 1; i <= GenUtils.randInt(min, max); i++){
 			if(!block.getRelative(0,0-i,0).getType().isSolid()){
-//				Leaves leaf = (Leaves) Bukkit.createBlockData(leafType);
-//
-//				if(leafDist + i*2 > 5)
-//					leaf.setPersistent(true);
-//				else
-//					leaf.setDistance(leafDist + i*2);
+				Leaves leaf = (Leaves) Bukkit.createBlockData(leafType);
+
+				leaf.setPersistent(true);
 				
-				block.getRelative(0,0-i,0).setType(leafType);
+				block.getRelative(0,0-i,0).lsetBlockData(leaf);
 			}else
 				break;
 		}
