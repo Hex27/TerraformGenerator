@@ -146,6 +146,10 @@ public class BlockUtils {
 			return Material.valueOf("SPRUCE_" + wood);
 		case WARM_OCEAN:
 			return Material.valueOf("OAK_" + wood);
+		case JUNGLE:
+			return Material.valueOf("JUNGLE_" + wood);
+		default:
+			break;
 		}
 		return Material.valueOf("OAK_" + wood);
 	}
@@ -184,6 +188,14 @@ public class BlockUtils {
 				Material.CORNFLOWER,
 				Material.LILY_OF_THE_VALLEY,
 				Material.PINK_TULIP);
+	}
+	
+	public static Material pickTallFlower(){
+		return GenUtils.randMaterial(Material.LILAC,
+				Material.ROSE_BUSH,
+				Material.PEONY,
+				Material.LARGE_FERN,
+				Material.SUNFLOWER);
 	}
 	
 	public static void setVines(PopulatorDataAbstract data, TerraformWorld tw, int x, int y, int z, int maxLength){

@@ -44,7 +44,6 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 		//.setType(x, y, z, type);
 		Block b = w.getBlockAt(x, y, z);
 		b.setType(type,!isFragile);
-		b.setMetadata("terra-gen", new FixedMetadataValue(TerraformGeneratorPlugin.get(),""));
 	}
 
 	@Override
@@ -56,7 +55,6 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 		//.setBlockData(x, y, z, data);
 		Block b = w.getBlockAt(x, y, z);
 		b.setBlockData(data.clone(),!isFragile);
-		b.setMetadata("terra-gen", new FixedMetadataValue(TerraformGeneratorPlugin.get(),""));
 	}
 
 	@Override

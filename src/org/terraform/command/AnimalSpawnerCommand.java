@@ -10,9 +10,9 @@ import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.StrongholdPopulator;
 import org.terraform.structure.animalfarm.AnimalFarmPopulator;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
+import org.terraform.structure.stronghold.StrongholdPopulator;
 
 public class AnimalSpawnerCommand extends DCCommand {
 

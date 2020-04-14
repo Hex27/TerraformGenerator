@@ -1,4 +1,4 @@
-package org.terraform.structure;
+package org.terraform.structure.stronghold;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,19 +11,10 @@ import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.structure.stronghold.LibraryRoomPopulator;
-import org.terraform.structure.stronghold.NetherPortalRoomPopulator;
-import org.terraform.structure.stronghold.PortalRoomPopulator;
-import org.terraform.structure.stronghold.PrisonRoomPopulator;
-import org.terraform.structure.stronghold.SilverfishDenPopulator;
-import org.terraform.structure.stronghold.StairwayRoomPopulator;
-import org.terraform.structure.stronghold.StairwayTopPopulator;
-import org.terraform.structure.stronghold.StrongholdPathPopulator;
-import org.terraform.structure.stronghold.SupplyRoomPopulator;
-import org.terraform.structure.stronghold.TrapChestRoomPopulator;
 import org.terraform.utils.GenUtils;
 
 public class StrongholdPopulator extends StructurePopulator{

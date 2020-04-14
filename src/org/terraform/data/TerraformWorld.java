@@ -52,25 +52,22 @@ public class TerraformWorld{
 	private transient FastNoise moistureOctave;
 	
 	private FastNoise getTemperatureOctave(){
-		TickTimer timer = new TickTimer("gettemperatureoctave");
 		if(tempOctave == null){
 			tempOctave = new FastNoise((int) (getSeed()*2));
 			tempOctave.SetNoiseType(NoiseType.ValueFractal);
 			tempOctave.SetFractalOctaves(6);
-			tempOctave.SetFrequency(0.0006f); //Was 0.0008, Was 0.0004.
+			tempOctave.SetFrequency(0.001f); //Was 0.0006
 		}
-		timer.finish();
 		return tempOctave;
 	}
 	
 	private FastNoise getMoistureOctave(){
-		TickTimer timer = new TickTimer("getMoistureOctave");
 		if(moistureOctave == null){
 			moistureOctave = new FastNoise((int) (getSeed()*3));
-			tempOctave.SetNoiseType(NoiseType.ValueFractal);
+			moistureOctave.SetNoiseType(NoiseType.ValueFractal);
+			moistureOctave.SetFractalOctaves(6);
 			moistureOctave.SetFrequency(0.001f);
 		}
-		timer.finish();
 		return moistureOctave;
 	}
 	
@@ -112,19 +109,17 @@ public class TerraformWorld{
 //			banks.put(new int[]{x, z}, bank);
 //		}
 //		return bank;
-		return BiomeBank.calculateBiome(this, getTemperature(x,z), height);
+		return BiomeBank.calculateBiome(this, getTemperature(x,z), getMoisture(x,z), height);
 	}
 	
 	/**
 	 * 
 	 * @param x block x
 	 * @param z block z
-	 * @return a value from 0 to 3 inclusive.
+	 * @return a value from -5 to 5 inclusive.
 	 */
 	public double getTemperature(int x, int z){
-		TickTimer timer = new TickTimer("gettemperature");
 		double temp = (getTemperatureOctave().GetNoise(x, z)*2)*3;
-		timer.finish();
 		return temp;
 	}
 
@@ -132,12 +127,10 @@ public class TerraformWorld{
 	 * 
 	 * @param x block x
 	 * @param z block z
-	 * @return
+	 * @return a value from -5 to 5 inclusive.
 	 */
 	public double getMoisture(int x, int z){
-		TickTimer timer = new TickTimer("getmoisture");
-		double temp = Math.abs(getMoistureOctave().GetNoise(x, z)*2)*3;
-		timer.finish();
+		double temp = getMoistureOctave().GetNoise(x, z)*2*3;
 		return temp;
 	}
 	

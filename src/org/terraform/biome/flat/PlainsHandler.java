@@ -7,6 +7,8 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.tree.FractalTreeBuilder;
+import org.terraform.tree.FractalTreeType;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -75,7 +77,8 @@ public class PlainsHandler extends BiomeHandler {
 						}
 					}
 					if(GenUtils.chance(random,1,500)){
-						TreeDB.spawnSmallTree(random, data, x, y+1, z, Material.OAK_LOG, Material.OAK_LEAVES);
+						new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL).build(world, data, x, y+1, z);
+						//TreeDB.spawnSmallTree(random, data, x, y+1, z, Material.OAK_LOG, Material.OAK_LEAVES);
 					}
 					
 				}

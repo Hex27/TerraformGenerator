@@ -64,7 +64,7 @@ public class RockBeachHandler extends BiomeHandler {
 				case 3: nx--; break;
 				case 5: nz--; break;
 			}
-			y = GenUtils.getTrueHighestBlock(data, nx, nz);
+			y = GenUtils.getHighestGround(data, nx, nz);
 		}
 	
 	}

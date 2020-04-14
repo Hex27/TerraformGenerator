@@ -88,6 +88,32 @@ public class HeightMap {
 		return (int) height;
 	}
 	
+
+	public int getRiverlessHeight(TerraformWorld tw, int x, int z){
+		double height = getCoreHeight(tw,x,z);
+		
+		if(height > defaultSeaLevel + 4){
+			height += getAttritionHeight(tw,x,z);
+		}else{
+			height += getAttritionHeight(tw,x,z)*0.8;
+		}
+		
+		//double oldHeight = height;
+		if(height > defaultSeaLevel + 4){
+			height += getMountainousHeight(tw,x,z);
+		}else{
+			float frac = (float) ((float)height / (float) (TerraformGenerator.seaLevel+4));
+			height += getMountainousHeight(tw,x,z)*(frac);
+		}
+		
+		if(height > 200) height = 200 + (height-200)*0.5;
+		if(height > 230) height = 230 + (height-230)*0.3;
+		if(height > 240) height = 240 + (height-240)*0.1;
+		if(height > 250) height = 250 + (height-250)*0.05;
+		
+		return (int) height;
+	}
+	
 	private int getPetriDishWorld(TerraformWorld tw, int x, int z){
 		FastNoise myNoise = new FastNoise(); // Create a FastNoise object
 		myNoise.SetSeed((int) tw.getSeed());

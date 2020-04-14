@@ -95,6 +95,11 @@ public class SwampHandler extends BiomeHandler {
 							data.setType(x,y+i,z,getSurfaceCrust(random)[0]);
 					}
 					y+=att;
+					
+					if(y < TerraformGenerator.seaLevel){
+						if(GenUtils.chance(random, 1,30))
+							data.setType(x,TerraformGenerator.seaLevel+1,z,Material.LILY_PAD);
+					}
 				}
 				
 				if(GenUtils.chance(random, 1, 40)){

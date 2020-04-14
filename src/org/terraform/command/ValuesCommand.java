@@ -1,5 +1,6 @@
 package org.terraform.command;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
 
@@ -8,6 +9,9 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
+import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeGrid;
+import org.terraform.biome.BiomeType;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
@@ -62,20 +66,21 @@ public class ValuesCommand extends DCCommand {
 		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(new Random(),4);
 		gen.setScale(0.003D);
 		
+		HashMap<BiomeBank,Integer> weight = new HashMap<>();
+		
+		TerraformWorld tw = TerraformWorld.get("world-1232341234", new Random().nextInt(99999));
 		for(int i = 0; i<20000; i++){
 			int x = GenUtils.randInt(-10000,10000);
 			//int y = GenUtils.randInt(0,100);
-			//int z = GenUtils.randInt(0,1000);
-			
-			int x1 = x*16;
-			int x2 = x<<4;
-			if(x1 != x2){
-				sender.sendMessage("Critical difference: " + x);
-			}
-			
-//			double height = gen.noise(x, z, 0.1, 1.9, true)*500.0;
+			int z = GenUtils.randInt(-10000,10000);
+			double height = tw.getTemperature(x, z);
+			BiomeBank bank = BiomeGrid.calculateBiome(BiomeType.FLAT,tw.getTemperature(x,z), tw.getMoisture(x,z));
+			if(weight.containsKey(bank)){
+				weight.put(bank,weight.get(bank)+1);
+			}else
+				weight.put(bank, 1);
 			//sender.sendMessage(x + "," + z + ":" + height);
-			//heightV.addValue(ridge(x,z));
+			//heightV.addValue(num);
 			
 //			PerlinOctaveGenerator mountainGenerator = new PerlinOctaveGenerator(new Random(),1);
 //			mountainGenerator.setScale(0.03D);
@@ -106,6 +111,10 @@ public class ValuesCommand extends DCCommand {
 		//sender.sendMessage("Perlin:"+perlinV.toString());
 		//sender.sendMessage("Simplex:"+simplexV.toString());
 		//sender.sendMessage("Height:"+heightV.toString());
+		for(BiomeBank b:weight.keySet()){
+			sender.sendMessage(b.toString() + ": " + weight.get(b));
+		}
+		
 		sender.sendMessage("Finished");
 	}
 	

@@ -43,8 +43,6 @@ import org.terraform.utils.Temperature;
 
 public class FarmhousePopulator extends VillageHousePopulator{
 
-
-
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {

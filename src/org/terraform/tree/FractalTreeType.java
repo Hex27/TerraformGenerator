@@ -13,6 +13,8 @@ public enum FractalTreeType {
 	SWAMP_TOP,
 	SWAMP_BOTTOM, 
 	BIRCH_BIG, 
-	BIRCH_SMALL
+	BIRCH_SMALL,
+	JUNGLE_BIG,
+	JUNGLE_SMALL
 	;
 }

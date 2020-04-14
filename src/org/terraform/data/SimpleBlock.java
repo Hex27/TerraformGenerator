@@ -57,14 +57,14 @@ public class SimpleBlock {
 		}else
 			popData.setType(x, y, z, type);
 		
-		//Temporary fix. If distance is invalid, or too high, leaves are persistent
-//		if(type.toString().contains("LEAVES")){
-//			Leaves l = (Leaves) Bukkit.createBlockData(type);
-//			if(l.getDistance() != 7)
-//				l.setPersistent(true);
-//			
-//			setBlockData(l);
-//		}
+		//Leaves that have no distance set will be persistent.
+		if(type.toString().contains("LEAVES")){
+			Leaves l = (Leaves) Bukkit.createBlockData(type);
+			if(l.getDistance() != 7)
+				l.setPersistent(true);
+			
+			setBlockData(l);
+		}
 	}
 	
 	/**

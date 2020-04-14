@@ -12,6 +12,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.*;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
+import org.terraform.structure.stronghold.StrongholdPopulator;
 
 public class TerraformStructurePopulator extends BlockPopulator {
 	

@@ -48,6 +48,7 @@ public class CheckHeightCommand extends DCCommand {
 		p.sendMessage("Mountainous Height: " + map.getMountainousHeight(tw, x, z));
 		p.sendMessage("Attrition Height: " + map.getAttritionHeight(tw, x, z));
 		p.sendMessage("Temperature: " + tw.getTemperature(x, z));
+		p.sendMessage("Moisture: " + tw.getMoisture(x, z));
 		p.sendMessage("Result height: " + h);
 		p.sendMessage("River Depth: " + rd);
 		p.sendMessage("Result Biome: " + tw.getBiomeBank(x, h, z));

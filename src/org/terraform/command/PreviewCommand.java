@@ -59,21 +59,24 @@ public class PreviewCommand extends DCCommand {
 		
 		for(int nz = 0; nz < z; nz++){
 			for(int nx = 0; nx < x; nx++){
-				double ridge = TerraformWorld.get("world-"+seed, seed).getRiverDepth(nx, nz);
-				int noise = (int) (new HeightMap().getHeight(TerraformWorld.get("world-"+seed, seed), nx, nz)
-						);//(realRidge(seed,nx,nz)*2);
-				if(ridge > highest) highest = ridge;
-				if(ridge < lowest) lowest = ridge;
+//				double ridge = TerraformWorld.get("world-"+seed, seed).getRiverDepth(nx, nz);
+//				int noise = (int) (new HeightMap().getHeight(TerraformWorld.get("world-"+seed, seed), nx, nz)
+//						);//(realRidge(seed,nx,nz)*2);
+//				if(ridge > highest) highest = ridge;
+//				if(ridge < lowest) lowest = ridge;
+				double moisture = 3+TerraformWorld.get("world-"+seed, seed).getMoisture(nx, nz);
+				double temperature = 3+TerraformWorld.get("world-"+seed, seed).getTemperature(nx, nz);
 //				int r = (int) (perc*256.0); //red
 //				int g = (int) (perc*256.0); //green
 //				int b = (int) (perc*256.0); //blue
 //				
-
+				int b = (int) (moisture)*30;
+				int r = (int) (temperature)*30;
 				
 //				if(ridge > 0 && noise > 62) //River
 //					img.setRGB(nx,nz,new Color(50,150,(int) (50+25*ridge)).getRGB());
 //				else //Normal Gen
-					img.setRGB(nx, nz, getColorFromNoise(noise).getRGB());
+					img.setRGB(nx, nz, new Color(r,0,b).getRGB());
 				
 				//sender.sendMessage(new Color(r, g, b).getRGB() +"");
 			}

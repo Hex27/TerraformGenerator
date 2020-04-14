@@ -52,7 +52,6 @@ public class SandyBeachHandler extends BiomeHandler {
 					break;
 				}
 				
-				
 				//Spawn sugarcane
 				if(hasSugarcane){
 					boolean hasWater = false;
