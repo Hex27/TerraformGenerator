@@ -36,7 +36,8 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract{
 	public void populate(PopulatorDataAbstract data, CubeRoom room) {
 		int[] upperBounds = room.getUpperCorner();
 		int[] lowerBounds = room.getLowerCorner();
-		if(room.getHeight() < 7) return;
+		
+		//Fill with water
 		for(int x = lowerBounds[0]+1; x <= upperBounds[0]-1; x++){
 			for(int z = lowerBounds[1]+1; z <= upperBounds[1]-1; z++){
 				for(int y = room.getY()+1; y < room.getY()+room.getHeight(); y++){
@@ -44,7 +45,20 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract{
 				}
 			}
 		}
+
+		//Don't bother with tiny rooms
+		if(room.getHeight() < 7) return;
 		
+		//Corners are dark prismarine
+		for(int[] corner:room.getAllCorners()){
+			for(int i = 1; i < room.getHeight(); i++){
+				if(data.getType(corner[0],i+room.getY(),corner[1]).isSolid()){
+					data.setType(corner[0],i+room.getY(),corner[1],Material.DARK_PRISMARINE);
+				}
+			}
+		}
+		
+		//Stairs at the top
 		for(Entry<Wall,Integer> walls:room.getFourWalls(data, 0).entrySet()){
 			Wall w = walls.getKey().getRelative(0,room.getHeight()-1,0);
 			int length = walls.getValue();
@@ -52,27 +66,46 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract{
 				if(!w.getRelative(0,1,0).getType().isSolid()){
 					Stairs stair = (Stairs) Bukkit.createBlockData(design.stairs());
 					stair.setFacing(w.getDirection());
-					if(w.get().getType() == Material.WATER)
+					if(w.get().getY() < TerraformGenerator.seaLevel)
 						stair.setWaterlogged(true);
 					w.setBlockData(stair);
+				}
+				//Wall decor
+				if(j == length/2){
+					if(room.getHeight() >= 17 && room.getWidthX() >= 10 && room.getWidthZ() >= 10){
+							
+						MonumentWallPattern.values()[rand.nextInt(MonumentWallPattern.values().length)]
+									.apply(w.getRelative(0,-4,0));
+					}
 				}
 				w = w.getLeft();
 			}
 		}
+		
+		//Sea lanterns
 		for(int[] corner:room.getAllCorners()){
-			data.setType(corner[0],room.getY()+room.getHeight(),corner[1],Material.SEA_LANTERN);
+			if(!data.getType(corner[0],room.getY()+room.getHeight()+1,corner[1]).isSolid())
+				data.setType(corner[0],room.getY()+room.getHeight(),corner[1],Material.SEA_LANTERN);
 		}
+		
+
 		
 		//Spawn some designs on top if the top center is clear.
 		if(!data.getType(room.getX(), room.getY()+room.getHeight()+1, room.getZ()).isSolid()){
 			int i = GenUtils.randInt(1, 3);
 			if(i == 1){
-				//Spires
+				//Spires with dome thing
 				for(int[] pos:room.getAllCorners(1)){
 					int x = pos[0];
 					int z = pos[1];
 					design.spire(new Wall(new SimpleBlock(data,x,room.getY()+room.getHeight()+1,z),BlockFace.NORTH), rand);
 				}
+				
+				MonumentPopulator.arch(new Wall(new SimpleBlock(data,room.getX(),room.getY()+room.getHeight(),room.getZ()),BlockFace.NORTH), 
+						design, rand, (room.getWidthX()-4)/2,6);
+				MonumentPopulator.arch(new Wall(new SimpleBlock(data,room.getX(),room.getY()+room.getHeight(),room.getZ()),BlockFace.EAST), 
+						design, rand, (room.getWidthX()-4)/2,6);
+				
 			}else if(i == 2){
 				//Some abraham lincoln architecture thingy
 				for(Entry<Wall,Integer> walls:room.getFourWalls(data, 1).entrySet()){

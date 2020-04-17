@@ -101,8 +101,7 @@ public class CoralGenerator {
         if (fullSize == 1) {
             attemptReplace(data,x,y,z, Material.SEAGRASS);
         } else if (fullSize == 2) {
-            attemptReplace(data,x,y,z, Material.TALL_SEAGRASS);
-            attemptReplace(data,x,y+1,z, Material.TALL_SEAGRASS);
+        	BlockUtils.setDoublePlant(data, x, y, z, Material.TALL_SEAGRASS);
         } else {
             for (int size = 0; size < fullSize; size++) {
                 attemptReplace(data,x,y,z, Material.KELP_PLANT);

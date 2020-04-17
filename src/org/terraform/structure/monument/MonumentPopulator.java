@@ -6,6 +6,9 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.type.Slab;
+import org.bukkit.block.data.type.Stairs;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
@@ -24,6 +27,7 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 
 public class MonumentPopulator extends StructurePopulator{
@@ -91,11 +95,13 @@ public class MonumentPopulator extends StructurePopulator{
 		//gen.setPyramid(false);
 		//gen.setAllowOverlaps(false);
 		gen.registerRoomPopulator(new MonumentRoomPopulator(random, design, false, false));
+		gen.registerRoomPopulator(new CageRoomPopulator(random, design, false, false));
 		gen.generate(false);
 		gen.fill(data, tw, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE);
 		
 		carveBaseHallways(tw,random,data,x,y,z,range);
 		spawnMonumentEntrance(tw,design,random,data,x,y,z,range);
+		vegetateNearby(random,data,range,x,z);
 	}
 	
 	private void entranceSegment(Wall w, Random random, MonumentDesign design){
@@ -103,12 +109,62 @@ public class MonumentPopulator extends StructurePopulator{
 		for(int i = 0; i < 12; i++){
 			w.getRear(i).Pillar(6, random, Material.WATER);
 		}
+		Stairs stair = (Stairs) Bukkit.createBlockData(Material.PRISMARINE_BRICK_STAIRS);
+		stair.setWaterlogged(true);
+		stair.setHalf(Half.TOP);
+		stair.setFacing(w.getDirection().getOppositeFace());
+		w.getRear(11).getRelative(0,5,0).setBlockData(stair);
 		w.getFront().Pillar(6, random, Material.WATER);
-		//Ceiling
-		//w.getRelative(0,4,0).setType(design.mat(random));
-		//w.getRear().getRelative(0,4,0).setType(GenUtils.randMaterial(Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE));
-		//w.getRear(2).getRelative(0,4,0).setType(GenUtils.randMaterial(Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE));
-		//w.getRear(3).getRelative(0,4,0).setType(GenUtils.randMaterial(Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE));
+	}
+	
+	public static void arch(Wall w, MonumentDesign design, Random random, int archHalfLength, int height){
+
+		Wall arch = w.getRelative(0,height,0);
+		BlockFace left = BlockUtils.getAdjacentFaces(w.getDirection())[1];
+		BlockFace right = BlockUtils.getAdjacentFaces(w.getDirection())[0];
+
+		Stairs ls = (Stairs) Bukkit.createBlockData(design.stairs());
+		ls.setWaterlogged(true);
+		ls.setFacing(left);
+
+		Stairs rs = (Stairs) Bukkit.createBlockData(design.stairs());
+		rs.setWaterlogged(true);
+		rs.setFacing(right);
+		
+		//Top straight line
+		for(int i = 0; i < archHalfLength-1; i++){
+			if(i <= 1){
+				Slab slab = (Slab) Bukkit.createBlockData(design.slab());
+				arch.getLeft(i).setBlockData(slab);
+				arch.getRight(i).setBlockData(slab);
+			}
+			arch.getLeft(i).setType(design.mat(random));
+			arch.getRight(i).setType(design.mat(random));
+		}
+		
+		//Top decor
+		arch.getRelative(0,1,0).setType(Material.SEA_LANTERN);
+		arch.getRelative(0,2,0).setType(design.slab());
+		arch.getRelative(0,1,0).getLeft(1).setType(design.mat(random));
+		arch.getRelative(0,1,0).getRight(1).setType(design.mat(random));
+		arch.getRelative(0,1,0).getLeft(2).setBlockData(ls);
+		arch.getRelative(0,1,0).getRight(2).setBlockData(rs);
+		
+		//Bending sides
+		arch.getLeft(archHalfLength-2).setBlockData(ls);
+		arch.getRelative(0,-1,0).getLeft(archHalfLength).setBlockData(ls);
+
+		arch.getRight(archHalfLength-2).setBlockData(rs);
+		arch.getRelative(0,-1,0).getRight(archHalfLength).setBlockData(rs);
+		
+		arch.getLeft(archHalfLength-1).setType(design.slab());
+		arch.getRight(archHalfLength-1).setType(design.slab());
+		arch.getLeft(archHalfLength-1).getRelative(0,-1,0).setType(Material.SEA_LANTERN);
+		arch.getRight(archHalfLength-1).getRelative(0,-1,0).setType(Material.SEA_LANTERN);
+		
+		//Vertical area
+		arch.getLeft(archHalfLength).getRelative(0,-2,0).downUntilSolid(random, design.tileSet);
+		arch.getRight(archHalfLength).getRelative(0,-2,0).downUntilSolid(random, design.tileSet);
 	}
 	
 	/**
@@ -123,12 +179,18 @@ public class MonumentPopulator extends StructurePopulator{
 		Wall w = new Wall(base,dir);
 		Wall leftClone = w.clone();
 		Wall rightClone = w.clone();
-		for(int i = 0; i < 4 + random.nextInt(3); i++){
+		int halfLength = 4 + random.nextInt(3);
+		for(int i = 0; i < halfLength; i++){
 			entranceSegment(leftClone,random,design);
 			entranceSegment(rightClone,random,design);
 			
 			rightClone = rightClone.getRight();
 			leftClone = leftClone.getLeft();
+		}
+		
+		//Build entrance archs.
+		for(int i = 0; i < 12; i+= 3){
+			arch(w.getRear(i),design, random,halfLength+2,10);
 		}
 		
 //		for(int i = 0; i < 5; i++){
@@ -161,12 +223,7 @@ public class MonumentPopulator extends StructurePopulator{
 							}
 						}
 					
-
 					data.setType(nx, y+(6-i), nz,GenUtils.randMaterial(random,Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE));
-					
-					//data.setType(nx, y+(6-i), nz,Material.GLASS);
-					
-					
 				}
 			}
 		}
@@ -240,7 +297,27 @@ public class MonumentPopulator extends StructurePopulator{
 		return min;
 	}
 
-
+	private void vegetateNearby(Random rand, PopulatorDataAbstract data, int range, int x, int z){
+		int i = 5;
+		for(int nx = x - range/2 - i; nx <= x+range/2 + i; nx++){
+			for(int nz = z - range/2 - i; nz <= z+range/2 + i; nz++){
+				if(GenUtils.chance(rand,1,10)){
+					int y = GenUtils.getTrueHighestBlock(data, nx, nz);
+					//Don't place on weird blocks
+					if(data.getType(nx, y, nz).toString().contains("SLAB") ||
+							data.getType(nx, y, nz).toString().contains("STAIR") ||
+							data.getType(nx, y, nz).toString().contains("WALL"))
+						continue;
+					if(y < TerraformGenerator.seaLevel){
+						if(GenUtils.chance(rand,9,10))
+							CoralGenerator.generateKelpGrowth(data, nx, y+1, nz);
+						else
+							CoralGenerator.generateSeaPickles(data, nx, y+1, nz);
+					}
+				}
+			}
+		}
+	}
 	
 
 	

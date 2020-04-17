@@ -47,15 +47,15 @@ public enum MonumentDesign {
 	}
 	
 	public Material stairs(){
-		switch(this){
-		case DARK_LIGHTLESS:
-			return Material.DARK_PRISMARINE_STAIRS;
-		case DARK_PRISMARINE_CORNERS:
-			return GenUtils.randMaterial(Material.DARK_PRISMARINE_STAIRS,Material.PRISMARINE_BRICK_STAIRS);
-		case PRISMARINE_LANTERNS:
-			return GenUtils.randMaterial(Material.PRISMARINE_STAIRS,Material.PRISMARINE_BRICK_STAIRS);
-		}
-		return null;
+//		switch(this){
+//		case DARK_LIGHTLESS:
+//			return Material.DARK_PRISMARINE_STAIRS;
+//		case DARK_PRISMARINE_CORNERS:
+//			return GenUtils.randMaterial(Material.DARK_PRISMARINE_STAIRS,Material.DARK_PRISMARINE_STAIRS,Material.DARK_PRISMARINE_STAIRS,Material.PRISMARINE_BRICK_STAIRS);
+//		case PRISMARINE_LANTERNS:
+//			return GenUtils.randMaterial(Material.PRISMARINE_STAIRS,Material.PRISMARINE_BRICK_STAIRS);
+//		}
+		return Material.DARK_PRISMARINE_STAIRS;
 	}
 	
 	public Material mat(Random rand){
