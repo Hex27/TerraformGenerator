@@ -26,8 +26,21 @@ public class Wall {
 		return new Wall(block.getRelative(BlockUtils.getAdjacentFaces(direction)[0]), direction);
 	}
 	
+
+	public Wall getLeft(int it){
+		Wall w = this.clone();
+		for(int i = 0; i < it; i++) w = w.getLeft();
+		return w;
+	}
+	
 	public Wall getRight(){
 		return new Wall(block.getRelative(BlockUtils.getAdjacentFaces(direction)[1]), direction);
+	}
+	
+	public Wall getRight(int it){
+		Wall w = this.clone();
+		for(int i = 0; i < it; i++) w = w.getRight();
+		return w;
 	}
 	
 	public Wall getHighestSolidBlockFromAbove(){
@@ -119,8 +132,20 @@ public class Wall {
 		return new Wall(block.getRelative(direction.getOppositeFace()), direction);
 	}
 	
+	public Wall getRear(int it){
+		Wall w = this.clone();
+		for(int i = 0; i < it; i++) w = w.getRear();
+		return w;
+	}
+	
 	public Wall getFront(){
 		return new Wall(block.getRelative(direction), direction);
+	}
+	
+	public Wall getFront(int it){
+		Wall w = this.clone();
+		for(int i = 0; i < it; i++) w = w.getFront();
+		return w;
 	}
 
 	public BlockFace getDirection() {
@@ -129,6 +154,11 @@ public class Wall {
 	
 	public Wall getRelative(int x, int y, int z){
 		return new Wall(block.getRelative(x,y,z), direction);
+	}
+
+	public Wall getRelative(BlockFace face) {
+		// TODO Auto-generated method stub
+		return new Wall(block.getRelative(face),direction);
 	}
 
 }

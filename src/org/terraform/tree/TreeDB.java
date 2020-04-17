@@ -107,7 +107,8 @@ public class TreeDB {
 	
 	private static void setDistSevenLeaves(PopulatorDataAbstract data, int x, int y, int z){
 		Leaves leaves = (Leaves) Bukkit.createBlockData(Material.OAK_LEAVES);
-		leaves.setDistance(7);
+		//leaves.setDistance(7);
+		leaves.setPersistent(true);
 		data.setBlockData(x, y, z, leaves);
 	}
 	

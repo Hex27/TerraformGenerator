@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
 public class RoomLayoutGenerator {
@@ -25,6 +26,7 @@ public class RoomLayoutGenerator {
 	private int[] upperBound;
 	private int[] lowerBound;
 	private PathPopulatorAbstract pathPop;
+	private boolean pyramidish = false;
 	private ArrayList<RoomPopulatorAbstract> roomPops = new ArrayList<>();
 	private RoomLayout layout;
 	public RoomLayoutGenerator(Random random, RoomLayout layout, int numRooms, int centX, int centY, int centZ, int range){
@@ -61,6 +63,10 @@ public class RoomLayoutGenerator {
 	public void reset(){rooms.clear();}
 	
 	public void generate(){ generate(true); }
+	
+	public void setPyramid(boolean pyramidish){
+		this.pyramidish = pyramidish;
+	}
 	
 	/**
 	 * @param widthX
@@ -100,9 +106,11 @@ public class RoomLayoutGenerator {
 	
 	public void generate(boolean normalise){
 		for(int i = 0; i < numRooms; i++){
+			
 			int widthX = GenUtils.randInt(rand,roomMinX,roomMaxX);
 			int widthZ = GenUtils.randInt(rand,roomMinZ,roomMaxZ);
-			
+			int nx = GenUtils.randInt(rand,-range/2,range/2);
+			int nz = GenUtils.randInt(rand,-range/2,range/2);
 			//Normalise room sizes to prevent strange shapes (Like narrow & tall etc)
 			if(normalise){
 				if(widthX < widthZ/2) widthX = widthZ + GenUtils.randInt(rand,-2,2);
@@ -110,14 +118,23 @@ public class RoomLayoutGenerator {
 			}
 			int heightY = GenUtils.randInt(rand,roomMinHeight,roomMaxHeight);
 			
+			if(pyramidish){
+				double heightRange = 1-((Math.pow(nx, 2) + Math.pow(nz,2))/Math.pow(range/2, 2));
+				if(heightRange*roomMaxHeight < roomMinHeight) heightRange = roomMinHeight/roomMaxHeight;
+				//TerraformGeneratorPlugin.logger.info("Original h: " + heightY + "; heightRange: " + heightRange);
+				heightY = GenUtils.randInt(rand,
+						roomMinHeight,
+						(int) (roomMaxHeight*heightRange));
+			}
+			
 			if(normalise){
 				if(heightY > widthX) heightY = widthX + GenUtils.randInt(rand,-2,2);
 				if(heightY < widthX/3) heightY = widthX/3 + GenUtils.randInt(rand,-2,2);
 			}
 			CubeRoom room = new CubeRoom(widthX, widthZ,heightY,
-					centX+GenUtils.randInt(rand,-range/2,range/2),
+					nx+centX,
 					centY, 
-					centZ+GenUtils.randInt(rand,-range/2,range/2));
+					nz+centZ);
 			if(layout == RoomLayout.RANDOM_BRUTEFORCE){
 				boolean canAdd = true;
 				if(!allowOverlaps)

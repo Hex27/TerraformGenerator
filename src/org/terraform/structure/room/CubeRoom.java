@@ -199,12 +199,20 @@ public class CubeRoom {
 	 * @return 2d X,Z corners
 	 */
 	public int[][] getAllCorners(){
+		return getAllCorners(0);
+	}
+	
+	/**
+	 * 
+	 * @return 2d X,Z corners
+	 */
+	public int[][] getAllCorners(int padding){
 		int[][] corners = new int[8][3];
 		
-		corners[0] = new int[]{x+widthX/2,z+widthZ/2}; //++
-		corners[1] = new int[]{x-widthX/2,z+widthZ/2}; //-+
-		corners[2] = new int[]{x+widthX/2,z-widthZ/2}; //+-
-		corners[3] = new int[]{x-widthX/2,z-widthZ/2}; //--
+		corners[0] = new int[]{x+widthX/2-padding,z+widthZ/2-padding}; //++
+		corners[1] = new int[]{x-widthX/2+padding,z+widthZ/2-padding}; //-+
+		corners[2] = new int[]{x+widthX/2-padding,z-widthZ/2+padding}; //+-
+		corners[3] = new int[]{x-widthX/2+padding,z-widthZ/2+padding}; //--
 		
 		return corners;
 	}

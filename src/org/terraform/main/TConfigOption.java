@@ -15,6 +15,7 @@ public enum TConfigOption{
 
 	
 	SEA_LEVEL("sea-level",62),
+	DEEP_SEA_LEVEL("deep-sea-level",40),
 	
 	DEBUG_MODE("dev-stuff.debug-mode",false),
 	

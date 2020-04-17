@@ -37,6 +37,14 @@ public class BlockUtils {
 		add(BlockFace.NORTH_WEST);
 	}};
 	
+	
+	public static final ArrayList<BlockFace> xzDiagonalPlaneBlockFaces = new ArrayList<BlockFace>(){{
+		add(BlockFace.NORTH_EAST);
+		add(BlockFace.SOUTH_EAST);
+		add(BlockFace.SOUTH_WEST);
+		add(BlockFace.NORTH_WEST);
+	}};
+	
 	public static final Material[] stoneBricks = new Material[]{
 		Material.STONE_BRICKS,
 		Material.MOSSY_STONE_BRICKS,

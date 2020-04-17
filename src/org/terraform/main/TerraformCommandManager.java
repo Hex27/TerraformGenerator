@@ -18,6 +18,8 @@ public class TerraformCommandManager extends DCCommandManager {
 		this.registerCommand(new IceSpikeCommand(plugin, "icespike"));
 		this.registerCommand(new CoralCommand(plugin, "coral"));
 		this.registerCommand(new WitchHutCommand(plugin, "hut"));
+		this.registerCommand(new MonumentCommand(plugin, "monument","mon"));
+		this.registerCommand(new LargeMonumentLampCommand(plugin, "lml"));
 		this.registerCommand(new StrongholdCommand(plugin, "stronghold","sh"));
 		this.registerCommand(new AnimalFarmCommand(plugin, "animalfarm","af"));
 		this.registerCommand(new FarmhouseCommand(plugin, "farmhouse","fh"));

@@ -24,6 +24,26 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 		this.c = c;
 	}
 
+	
+	
+	/**
+	 * @return the w
+	 */
+	public World getWorld() {
+		return w;
+	}
+
+
+
+	/**
+	 * @return the c
+	 */
+	public Chunk getChunk() {
+		return c;
+	}
+
+
+
 	@Override
 	public Material getType(int x, int y, int z) {
 		return w.getBlockAt(x,y,z).getType();

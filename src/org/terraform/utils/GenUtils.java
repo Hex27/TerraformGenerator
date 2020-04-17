@@ -99,21 +99,21 @@ public class GenUtils {
 	    return randInt(new Random(),min,max);
 	}
 	
-	public static int randInt(Random rand,int min, int max) {
+	public static int randInt(Random rand,int d, int max) {
 		boolean negative = false;
-		if(min < 0 && max < 0){
+		if(d < 0 && max < 0){
 			negative = true;
-			min = -min;
+			d = -d;
 			max = -max;
 		}
 		
-		if(max < min){
-			int temp = min;
-			min = max;
+		if(max < d){
+			int temp = d;
+			d = max;
 			max = temp;
 		}
 		
-	    int randomNum = rand.nextInt((max - min) + 1) + min;
+	    int randomNum = rand.nextInt((max - d) + 1) + d;
 	    
 	    if(negative) randomNum = -randomNum;
 	    return randomNum;
@@ -230,4 +230,22 @@ public class GenUtils {
 		return y;
 	}
 
+	
+	public static Material[] mergeArr(Material[]... arrs){
+		int totalLength = 0;
+		int index = 0;
+		for(Material[] arr:arrs){
+			totalLength += arr.length;
+		}
+		Material[] res = new Material[totalLength];
+		for(Material[] arr:arrs){
+			for(Material mat:arr){
+				res[index] = mat;
+				index++;
+			}
+		}
+		
+		return res;
+	}
+	
 }

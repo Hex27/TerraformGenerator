@@ -30,6 +30,7 @@ import org.terraform.biome.ocean.WarmOceansHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
@@ -50,6 +51,14 @@ public enum BiomeBank {
 	LUKEWARM_OCEAN(new LukewarmOceansHandler(),BiomeType.OCEANIC),
 	SWAMP(new SwampHandler(),BiomeType.OCEANIC),
 	//RIVER(new RiverHandler(),BiomeType.OCEANIC), //Special case, handle later
+	
+	//DEEP OCEANIC
+
+	DEEP_OCEAN(new OceansHandler(),BiomeType.DEEP_OCEANIC),
+	DEEP_COLD_OCEAN(new ColdOceansHandler(),BiomeType.DEEP_OCEANIC),
+	DEEP_FROZEN_OCEAN(new FrozenOceansHandler(),BiomeType.DEEP_OCEANIC),
+	DEEP_WARM_OCEAN(new WarmOceansHandler(),BiomeType.DEEP_OCEANIC),
+	DEEP_LUKEWARM_OCEAN(new LukewarmOceansHandler(),BiomeType.DEEP_OCEANIC),
 	
 	//FLAT
 	PLAINS(new PlainsHandler(),BiomeType.FLAT),
@@ -97,14 +106,18 @@ public enum BiomeBank {
 					temperature + GenUtils.randDouble(random, -0.1, 0.1),
 					moisture + GenUtils.randDouble(random, -0.1, 0.1)
 			);
-
-			if(bank == SWAMP)
+			
+			if(bank == SWAMP){
 				if(height >= TerraformGenerator.seaLevel-GenUtils.randInt(random, 9,11)){
 					//Shallow and warm areas are swamps.
 					return SWAMP;
 				}else
-					return OCEAN;
-			
+					bank = OCEAN;
+			}
+			if(height <= TConfigOption.DEEP_SEA_LEVEL.getInt()){
+				bank = BiomeBank.valueOf("DEEP_"+bank.toString());
+			}
+				
 			return bank;
 		}
 		

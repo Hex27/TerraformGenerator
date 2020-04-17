@@ -57,7 +57,7 @@ public class ShipwreckPopulator extends StructurePopulator{
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
 		int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
-		int height = GenUtils.getHighestGround(data, x, z);
+		int height = GenUtils.getHighestGround(data, x, z) - 1 - random.nextInt(5);
 		spawnShipwreck(tw,tw.getHashedRand(x, height, z, 127127127),data,x,height+1,z);
 	}
 	
