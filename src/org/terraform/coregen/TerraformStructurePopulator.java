@@ -11,6 +11,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.*;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
+import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 
@@ -20,6 +21,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 		add(new StrongholdPopulator());
 		add(new VillageHousePopulator());
 		add(new SmallDungeonPopulator());
+		add(new MonumentPopulator());
 		add(new ShipwreckPopulator());
 	}};
 	

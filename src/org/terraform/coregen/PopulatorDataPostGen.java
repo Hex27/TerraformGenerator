@@ -93,9 +93,11 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 	}
 
 	@Override
-	public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-		Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),rawX,rawY,rawZ), type);
-		e.setPersistent(true);
+	public void addEntity(int x, int y, int z, EntityType type) {
+		//Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),rawX,rawY,rawZ), type);
+		//e.setPersistent(true);
+		TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())
+		.addEntity(x, y, z, type);
 	}
 
 	@Override

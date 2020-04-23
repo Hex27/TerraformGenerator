@@ -18,6 +18,7 @@ import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.ChunkCoordIntPair;
 import net.minecraft.server.v1_15_R1.ChunkGenerator;
 import net.minecraft.server.v1_15_R1.ChunkSection;
+import net.minecraft.server.v1_15_R1.EnumCreatureType;
 import net.minecraft.server.v1_15_R1.GeneratorAccess;
 import net.minecraft.server.v1_15_R1.GeneratorSettingsDefault;
 import net.minecraft.server.v1_15_R1.StructureGenerator;
@@ -303,6 +304,29 @@ public class NMSChunkGenerator extends ChunkGenerator {
 ////        }
 //	
 //	}
+    
+    @Override
+    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType type, BlockPosition pos) {
+        if (WorldGenerator.SWAMP_HUT.c(this.a, pos)) {
+            if (type == EnumCreatureType.MONSTER) {
+                return WorldGenerator.SWAMP_HUT.e();
+            }
+
+            if (type == EnumCreatureType.CREATURE) {
+                return WorldGenerator.SWAMP_HUT.f();
+            }
+        } else if (type == EnumCreatureType.MONSTER) {
+            if (WorldGenerator.PILLAGER_OUTPOST.a(this.a, pos)) {
+                return WorldGenerator.PILLAGER_OUTPOST.e();
+            }
+
+            if (WorldGenerator.OCEAN_MONUMENT.a(this.a, pos)) {
+                return WorldGenerator.OCEAN_MONUMENT.e();
+            }
+        }
+
+        return super.getMobsFor(type, pos);
+    }
 
 	@Override
 	public int getBaseHeight(int i, int j, Type heightmap_type) {

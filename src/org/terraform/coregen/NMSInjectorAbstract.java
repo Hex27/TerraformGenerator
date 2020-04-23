@@ -16,6 +16,6 @@ public abstract class NMSInjectorAbstract {
 	 * @param chunk
 	 * @return a populatorDataICA instance.
 	 */
-	public abstract PopulatorDataAbstract getICAData(Chunk chunk);
+	public abstract PopulatorDataICAAbstract getICAData(Chunk chunk);
 
 }

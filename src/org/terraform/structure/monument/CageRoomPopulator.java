@@ -5,7 +5,9 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Waterlogged;
+import org.bukkit.block.data.type.Stairs;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.Wall;
@@ -18,12 +20,18 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
 			boolean unique) {
 		super(rand, design, forceSpawn, unique);
 	}
-	
+
+	@Override
+	public boolean canPopulate(CubeRoom room) {
+		return room.getHeight() > 9;
+	}
 	@Override
 	public void populate(PopulatorDataAbstract data, CubeRoom room){
 		super.populate(data, room);
-		if(GenUtils.chance(rand, 1,5)) 
-			return;
+		
+		//Not always a cage room
+		if(GenUtils.chance(rand,3,5)) return;
+		
 		for(Entry<Wall,Integer> entry:room.getFourWalls(data, 0).entrySet()){
 			Wall w = entry.getKey().getRelative(0,7,0);
 			int length = entry.getValue();
@@ -38,7 +46,17 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
 					}
 					//w.Pillar(room.getHeight()-9, rand, Material.PRISMARINE_WALL);
 				}else{
-					w.Pillar(room.getHeight()-9, rand, Material.WATER);
+					w.Pillar(room.getHeight()-9, rand, Material.DARK_PRISMARINE_SLAB, Material.PRISMARINE_SLAB,Material.PRISMARINE_BRICK_SLAB);
+					Stairs s = (Stairs) Bukkit.createBlockData(design.stairs());
+					s.setFacing(w.getDirection());
+					if(w.get().getY() <= TerraformGenerator.seaLevel)
+						s.setWaterlogged(true);
+					else s.setWaterlogged(false);
+					
+					w.setBlockData(s);
+					s = (Stairs) s.clone();
+					s.setHalf(Half.TOP);
+					w.getRelative(0,room.getHeight()-9,0).setBlockData(s);
 				}
 				w = w.getLeft();
 			}

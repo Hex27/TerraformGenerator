@@ -1,10 +1,12 @@
 package org.terraform.coregen.v1_14_R1;
 
+import net.minecraft.server.v1_14_R1.BiomeBase;
 import net.minecraft.server.v1_14_R1.BlockPosition;
 import net.minecraft.server.v1_14_R1.Blocks;
 import net.minecraft.server.v1_14_R1.Entity;
 import net.minecraft.server.v1_14_R1.EntityInsentient;
 import net.minecraft.server.v1_14_R1.EntityTypes;
+import net.minecraft.server.v1_14_R1.EnumCreatureType;
 import net.minecraft.server.v1_14_R1.EnumMobSpawn;
 import net.minecraft.server.v1_14_R1.GroupDataEntity;
 import net.minecraft.server.v1_14_R1.IBlockData;
@@ -24,11 +26,12 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-public class PopulatorDataICA extends PopulatorDataAbstract{
+public class PopulatorDataICA extends PopulatorDataICAAbstract{
 	IChunkAccess ica;
 	int chunkX;
 	int chunkZ;
@@ -204,6 +207,14 @@ public class PopulatorDataICA extends PopulatorDataAbstract{
 		}
 		return null;
 	}
+
+	@Override
+	public void registerGuardians(int x0, int y0, int z0, int x1, int y1, int z1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	
 
 }

@@ -86,9 +86,22 @@ public class Wall {
 	 * @param types
 	 */
 	public void LPillar(int height, Random rand, Material... types){
+		LPillar(height,false,rand,types);
+	}
+	
+	/**
+	 * Replaces until a solid block is reached.
+	 * @param height
+	 * @param rand
+	 * @param types
+	 */
+	public void LPillar(int height, boolean pattern, Random rand, Material... types){
 		for(int i = 0; i < height; i++){
 			if(block.getRelative(0,i,0).getType().isSolid()) break;
-			block.getRelative(0,i,0).setType(GenUtils.randMaterial(rand, types));
+			if(!pattern)
+				block.getRelative(0,i,0).setType(GenUtils.randMaterial(rand, types));
+			else
+				block.getRelative(0,i,0).setType(types[i%types.length]);
 		}
 	}
 	

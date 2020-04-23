@@ -22,6 +22,8 @@ public enum TConfigOption{
 	//-=[STRUCTURES]=-
 		//Stronghold
 	STRUCTURES_STRONGHOLD_ENABLED("structures.stronghold.enabled",true),
+	STRUCTURES_MONUMENT_ENABLED("structures.monument.enabled",true),
+	STRUCTURES_MONUMENT_SPAWNRATIO("structures.monument.spawn-ratio",0.5),
 	STRUCTURES_FARMHOUSE_ENABLED("structures.farmhouse.enabled",true),
 	STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled",true),
 	STRUCTURES_SWAMPHUT_ENABLED("structures.swamphut.enabled",true),

@@ -227,6 +227,16 @@ public class CubeRoom {
 		return new int[]{x-widthX/2,z-widthZ/2};
 	}
 	
+	//Positive x,z corner
+	public int[] getUpperCorner(int pad){
+		return new int[]{x-pad+widthX/2,z-pad+widthZ/2};
+	}
+	
+	//Negative x,z corner
+	public int[] getLowerCorner(int pad){
+		return new int[]{x+pad-widthX/2,z+pad-widthZ/2};
+	}
+	
 	public boolean isBig(){
 		return widthX*widthZ*height >= 2000;
 	}

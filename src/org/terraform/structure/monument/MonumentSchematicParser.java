@@ -27,7 +27,7 @@ public class MonumentSchematicParser extends SchematicParser{
 	@Override
 	public void applyData(Block block, BlockData data){
 		if(data instanceof Waterlogged 
-				&& block.getType() == Material.WATER){
+				&& block.getY()<=TerraformGenerator.seaLevel){
 			((Waterlogged) data).setWaterlogged(true);
 		}
 		super.applyData(block, data);

@@ -145,6 +145,24 @@ public class CoralGenerator {
             middle = getRandomRelative(middle);
         }
     }
+    
+    /**
+     * Generates a sea sponge at the location, of a random
+     * length.
+     *
+     * @param middle it is
+     */
+    public static void generateSponge(PopulatorDataAbstract data, int x, int y, int z) {
+        int fullSize = GenUtils.randInt(15, 35);
+        int[] middle = new int[]{x,y,z};
+        for (int size = 0; size < fullSize; size++) {
+            if (attemptReplace(data,middle[0],middle[1],middle[2], Material.WET_SPONGE)) {
+                if (GenUtils.randInt(0, 100) < 20) generateSeaPickles(data,middle[0],middle[1]+1,middle[2]);
+            }
+            
+            middle = getRandomRelative(middle);
+        }
+    }
 
     /**
      * Gets a random connecting side of the block.

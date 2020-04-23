@@ -72,7 +72,7 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract{
 				}
 				//Wall decor
 				if(j == length/2){
-					if(room.getHeight() >= 17 && room.getWidthX() >= 10 && room.getWidthZ() >= 10){
+					if(room.getHeight() >= 16 && room.getWidthX() >= 10 && room.getWidthZ() >= 10){
 							
 						MonumentWallPattern.values()[rand.nextInt(MonumentWallPattern.values().length)]
 									.apply(w.getRelative(0,-4,0));

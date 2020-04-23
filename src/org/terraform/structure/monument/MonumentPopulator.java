@@ -1,6 +1,7 @@
 package org.terraform.structure.monument;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -13,6 +14,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
@@ -42,7 +44,15 @@ public class MonumentPopulator extends StructurePopulator{
 			if(biome.getType() != BiomeType.DEEP_OCEANIC)
 				return false;
 		}
-		return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ;
+		return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ &&
+				rollSpawnRatio(tw,chunkX,chunkZ);
+	}
+	
+	private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ){
+		return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 92992),
+				(int) (TConfigOption.STRUCTURES_MONUMENT_SPAWNRATIO
+						.getDouble()*1000),
+				1000);
 	}
 
 	@Override
@@ -84,6 +94,7 @@ public class MonumentPopulator extends StructurePopulator{
 		spawnMonumentBase(tw,design,random,data,x,y,z,range);
 		
 		Random hashedRand = tw.getHashedRand(x, y, z);
+		
 		RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand,RoomLayout.RANDOM_BRUTEFORCE,numRooms,x,y,z,range);
 		gen.setPathPopulator(new MonumentPathPopulator(design, tw.getHashedRand(x, y, z, 77)));
 		gen.setRoomMaxX(15);
@@ -94,14 +105,21 @@ public class MonumentPopulator extends StructurePopulator{
 		gen.setRoomMinHeight(9);
 		//gen.setPyramid(false);
 		//gen.setAllowOverlaps(false);
-		gen.registerRoomPopulator(new MonumentRoomPopulator(random, design, false, false));
-		gen.registerRoomPopulator(new CageRoomPopulator(random, design, false, false));
+		gen.registerRoomPopulator(new TreasureRoomPopulator(random, design, true, true));
+		gen.registerRoomPopulator(new LevelledElderRoomPopulator(random, design, true, true));
+		gen.registerRoomPopulator(new LevelledElderRoomPopulator(random, design, true, true));
+		gen.registerRoomPopulator(new MiniRoomNetworkPopulator(random, design, false, false));
+		gen.registerRoomPopulator(new CoralRoomPopulator(random, design, false, false));
+		gen.registerRoomPopulator(new FishCageRoomPopulator(random, design, false, false));
+		gen.registerRoomPopulator(new HollowPillarRoomPopulator(random, design, false, false));
+		gen.registerRoomPopulator(new LanternPillarRoomPopulator(random, design, false, false));
 		gen.generate(false);
 		gen.fill(data, tw, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE);
 		
 		carveBaseHallways(tw,random,data,x,y,z,range);
 		spawnMonumentEntrance(tw,design,random,data,x,y,z,range);
 		vegetateNearby(random,data,range,x,z);
+		setupGuardianSpawns(data,range,x,y,z);
 	}
 	
 	private void entranceSegment(Wall w, Random random, MonumentDesign design){
@@ -272,6 +290,17 @@ public class MonumentPopulator extends StructurePopulator{
 				}
 			}
 		}
+		
+		//Light the floor in the hallway
+		for(int nx = x - range/2+3; nx <= x+range/2-3; nx+=2){
+			data.setType(nx,y,z-range/2+3,Material.SEA_LANTERN);
+			data.setType(nx,y,z+range/2-3,Material.SEA_LANTERN);
+		}
+
+		for(int nz = z - range/2+3; nz <= z+range/2-3; nz+=2){
+			data.setType(x-range/2+3,y,nz,Material.SEA_LANTERN);
+			data.setType(x+range/2-3,y,nz,Material.SEA_LANTERN);
+		}
 	}
 
 	protected int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
@@ -286,9 +315,10 @@ public class MonumentPopulator extends StructurePopulator{
 		int[] min = null;
 		for(int nx = -1; nx <= 1; nx++){
 			for(int nz = -1; nz <= 1; nz++){
+				
 				int[] loc = getCoordsFromMegaChunk(tw,mc.getRelative(nx, nz));
 				double distSqr = Math.pow(loc[0]-rawX,2) + Math.pow(loc[1]-rawZ,2);
-				if(distSqr < minDistanceSquared){
+				if(distSqr < minDistanceSquared && rollSpawnRatio(tw,loc[0]>>4,loc[1]>>4)){
 					minDistanceSquared = distSqr;
 					min = loc;
 				}
@@ -298,10 +328,10 @@ public class MonumentPopulator extends StructurePopulator{
 	}
 
 	private void vegetateNearby(Random rand, PopulatorDataAbstract data, int range, int x, int z){
-		int i = 5;
+		int i = 25;
 		for(int nx = x - range/2 - i; nx <= x+range/2 + i; nx++){
 			for(int nz = z - range/2 - i; nz <= z+range/2 + i; nz++){
-				if(GenUtils.chance(rand,1,10)){
+				if(GenUtils.chance(rand,1,4)){
 					int y = GenUtils.getTrueHighestBlock(data, nx, nz);
 					//Don't place on weird blocks
 					if(data.getType(nx, y, nz).toString().contains("SLAB") ||
@@ -317,6 +347,28 @@ public class MonumentPopulator extends StructurePopulator{
 				}
 			}
 		}
+	}
+	
+	private void setupGuardianSpawns(PopulatorDataAbstract data, int range, int x, int y, int z){
+		int i = -5;
+		ArrayList<Integer> done = new ArrayList<>();
+		for(int nx = x - range/2 - i; nx <= x+range/2 + i; nx++){
+			for(int nz = z - range/2 - i; nz <= z+range/2 + i; nz++){
+				int chunkX = nx>>4;
+				int chunkZ = nz>>4;
+				int hash = Objects.hash(chunkX,chunkZ);
+				
+				if(done.contains(hash)) 
+					continue;
+				
+				done.add(hash);
+
+				TerraformGeneratorPlugin.injector.getICAData(((PopulatorDataPostGen) data).getWorld().getChunkAt(chunkX, chunkZ))
+				.registerGuardians(x - range/2,y,z - range/2,
+						x + range/2,TerraformGenerator.seaLevel,z + range/2);
+			}
+		}
+		
 	}
 	
 

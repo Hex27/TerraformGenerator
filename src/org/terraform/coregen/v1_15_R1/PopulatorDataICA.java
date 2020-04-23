@@ -1,5 +1,19 @@
 package org.terraform.coregen.v1_15_R1;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
+
+import net.minecraft.server.v1_15_R1.Chunk;
+import net.minecraft.server.v1_15_R1.ChunkCoordIntPair;
+import net.minecraft.server.v1_15_R1.GeneratorAccess;
+import net.minecraft.server.v1_15_R1.IStructureAccess;
+import net.minecraft.server.v1_15_R1.StructureAbstract;
+import net.minecraft.server.v1_15_R1.StructureGenerator;
+import net.minecraft.server.v1_15_R1.StructureStart;
+import net.minecraft.server.v1_15_R1.WorldGenerator;
+import net.minecraft.server.v1_15_R1.BiomeBase;
+import net.minecraft.server.v1_15_R1.EnumCreatureType;
 import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.Blocks;
 import net.minecraft.server.v1_15_R1.Entity;
@@ -24,11 +38,12 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-public class PopulatorDataICA extends PopulatorDataAbstract{
+public class PopulatorDataICA extends PopulatorDataICAAbstract{
 	IChunkAccess ica;
 	int chunkX;
 	int chunkZ;
@@ -204,6 +219,24 @@ public class PopulatorDataICA extends PopulatorDataAbstract{
 				return LootTables.K ;
 		}
 		return null;
+	}
+
+	@Override
+	public void registerGuardians(int x0, int y0, int z0, int x1, int y1, int z1) {
+//		BiomeBase base = ica.getBiomeIndex().getBiome(x,y,z);
+//		BiomeBase.BiomeMeta spawnMeta = new BiomeBase.BiomeMeta(EntityTypes.GUARDIAN, 1, 2, 4);
+//		base.getMobs(EnumCreatureType.WATER_CREATURE).add(spawnMeta);
+		
+		TerraStructureStart start = new TerraStructureStart("ocean_monument",
+				WorldGenerator.OCEAN_MONUMENT, chunkX, chunkZ, null, z1, z1);
+		start.setStructureBounds(x0, y0, z0, x1, y1, z1);
+		IStructureAccess sa = ((IStructureAccess) ica);
+		sa.a( //setStartForFeature
+				WorldGenerator.OCEAN_MONUMENT.b(), //Get ID 
+				start); 
+		
+		sa.a(WorldGenerator.OCEAN_MONUMENT.b(),new ChunkCoordIntPair(chunkX,chunkZ).pair());
+		
 	}
 	
 

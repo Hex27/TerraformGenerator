@@ -31,7 +31,7 @@ public class TerraformPopulator{
 	private ArrayList<OrePopulator> orePops = new ArrayList<OrePopulator>(){{
 		
 		//Ores
-		add(new OrePopulator(Material.IRON_ORE, TConfigOption.ORE_IRON_CHANCE.getInt(), TConfigOption.ORE_IRON_VEINSIZE.getInt(), TConfigOption.ORE_IRON_MAXVEINNUMBER.getInt(), TConfigOption.ORE_IRON_MINSPAWNHEIGHT.getInt(),TConfigOption.ORE_IRON_COMMONSPAWNHEIGHT.getInt(), TConfigOption.ORE_IRON_MAXSPAWNHEIGHT.getInt()));
+		add(new OrePopulator(Material.COAL_ORE, TConfigOption.ORE_COAL_CHANCE.getInt(), TConfigOption.ORE_COAL_VEINSIZE.getInt(), TConfigOption.ORE_COAL_MAXVEINNUMBER.getInt(), TConfigOption.ORE_COAL_MINSPAWNHEIGHT.getInt(),TConfigOption.ORE_COAL_COMMONSPAWNHEIGHT.getInt(), TConfigOption.ORE_COAL_MAXSPAWNHEIGHT.getInt()));
 		add(new OrePopulator(Material.IRON_ORE, TConfigOption.ORE_IRON_CHANCE.getInt(), TConfigOption.ORE_IRON_VEINSIZE.getInt(), TConfigOption.ORE_IRON_MAXVEINNUMBER.getInt(), TConfigOption.ORE_IRON_MINSPAWNHEIGHT.getInt(),TConfigOption.ORE_IRON_COMMONSPAWNHEIGHT.getInt(), TConfigOption.ORE_IRON_MAXSPAWNHEIGHT.getInt()));
 		add(new OrePopulator(Material.GOLD_ORE, TConfigOption.ORE_GOLD_CHANCE.getInt(), TConfigOption.ORE_GOLD_VEINSIZE.getInt(), TConfigOption.ORE_GOLD_MAXVEINNUMBER.getInt(), TConfigOption.ORE_GOLD_MINSPAWNHEIGHT.getInt(),TConfigOption.ORE_GOLD_COMMONSPAWNHEIGHT.getInt(), TConfigOption.ORE_GOLD_MAXSPAWNHEIGHT.getInt()));
 		add(new OrePopulator(Material.DIAMOND_ORE, TConfigOption.ORE_DIAMOND_CHANCE.getInt(), TConfigOption.ORE_DIAMOND_VEINSIZE.getInt(), TConfigOption.ORE_DIAMOND_MAXVEINNUMBER.getInt(), TConfigOption.ORE_DIAMOND_MINSPAWNHEIGHT.getInt(),TConfigOption.ORE_DIAMOND_COMMONSPAWNHEIGHT.getInt(), TConfigOption.ORE_DIAMOND_MAXSPAWNHEIGHT.getInt()));
