@@ -99,6 +99,7 @@ public enum BiomeBank {
 	public static BiomeBank calculateBiome(TerraformWorld tw, double temperature, double moisture, int height){
 		Random random = tw.getHashedRand((int) (temperature*10000), (int) (moisture*10000), height);
 		
+		
 		//GENERATE AN OCEAN
 		if(height < TerraformGenerator.seaLevel){
 			BiomeBank bank = BiomeGrid.calculateBiome(
@@ -114,8 +115,10 @@ public enum BiomeBank {
 				}else
 					bank = OCEAN;
 			}
+			
 			if(height <= TConfigOption.DEEP_SEA_LEVEL.getInt()){
 				bank = BiomeBank.valueOf("DEEP_"+bank.toString());
+				//TerraformGeneratorPlugin.logger.info("detected deep sea: " + bank.toString() + " at height " + height);
 			}
 				
 			return bank;
@@ -137,7 +140,7 @@ public enum BiomeBank {
 					temperature + GenUtils.randDouble(random, -0.1, 0.1),
 					moisture + GenUtils.randDouble(random, -0.1, 0.1)
 			);
-}
+		}
 		
 		//GENERATE LOW-ALTITUDE AREAS
 		return BiomeGrid.calculateBiome(

@@ -176,9 +176,8 @@ public class BlockUtils {
 		add(Material.EMERALD_ORE);
 		add(Material.REDSTONE_ORE);
 		add(Material.LAPIS_ORE);
-		add(Material.ICE);
-		add(Material.PACKED_ICE);
 		add(Material.SNOW_BLOCK);
+		add(Material.PACKED_ICE);
 		add(Material.BLUE_ICE);
 	}};
 	

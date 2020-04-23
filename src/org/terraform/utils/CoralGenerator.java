@@ -97,7 +97,7 @@ public class CoralGenerator {
      * @param base refers to the block ABOVE the floor (lowest block of the kelp plant)
      */
     public static void generateKelpGrowth(PopulatorDataAbstract data, int x, int y, int z) {
-        int fullSize = GenUtils.randInt(1, 5);
+        int fullSize = GenUtils.randInt(1, 10);
         if (fullSize == 1) {
             attemptReplace(data,x,y,z, Material.SEAGRASS);
         } else if (fullSize == 2) {

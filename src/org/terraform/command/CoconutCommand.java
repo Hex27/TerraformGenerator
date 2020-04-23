@@ -9,6 +9,7 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.data.TerraformWorld;
 import org.terraform.tree.TreeDB;
 
 public class CoconutCommand extends DCCommand {
@@ -42,7 +43,7 @@ public class CoconutCommand extends DCCommand {
 		int x = p.getLocation().getBlockX();
 		int y = p.getLocation().getBlockY();
 		int z = p.getLocation().getBlockZ();
-		TreeDB.spawnCoconutTree(new Random(), data, x,y,z);
+		TreeDB.spawnCoconutTree(TerraformWorld.get(p.getWorld()), data, x,y,z);
 		
 	}
 

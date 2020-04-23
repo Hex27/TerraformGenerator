@@ -27,9 +27,9 @@ public class IceSpikesHandler extends BiomeHandler {
 
 	@Override
 	public Material[] getSurfaceCrust(Random rand) {
-		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.ICE,5, Material.SNOW_BLOCK, 25),
-				Material.ICE,
-				GenUtils.randMaterial(rand, Material.ICE,Material.DIRT),
+		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.SNOW_BLOCK,5, Material.SNOW_BLOCK, 25),
+				Material.SNOW_BLOCK,
+				GenUtils.randMaterial(rand, Material.SNOW_BLOCK,Material.DIRT),
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE),
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE)};
 	}
@@ -63,12 +63,13 @@ public class IceSpikesHandler extends BiomeHandler {
 				}else //Small spike
 					genSpike(world,random,data,loc[0],loc[1],loc[2],
 							 GenUtils.randInt(3, 7), //radius
-							 GenUtils.randInt(3,10));
+							 GenUtils.randInt(5,10));
 			}
 		}
 	}
 	
 	public static void genSpike(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height){
+		y -= height/5;
 		//Vector one to two;
 		Vector base = new Vector(x,y,z);
 		Vector base2 = new Vector(x+GenUtils.randInt(random, -2*baseRadius, 2*baseRadius),y+height,z+GenUtils.randInt(random, -2*baseRadius, 2*baseRadius));

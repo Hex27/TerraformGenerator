@@ -48,7 +48,7 @@ public class SandyBeachHandler extends BiomeHandler {
 				
 				//Spawn coconut trees
 				if(GenUtils.chance(random,1, 200)){
-					TreeDB.spawnCoconutTree(random,data,x, y, z);
+					TreeDB.spawnCoconutTree(world,data,x, y, z);
 					break;
 				}
 				

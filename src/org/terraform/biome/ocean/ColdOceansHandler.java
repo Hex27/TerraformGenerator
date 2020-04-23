@@ -39,10 +39,10 @@ public class ColdOceansHandler extends BiomeHandler {
 				int y = GenUtils.getTrueHighestBlock(data, x, z);
 				if(data.getBiome(x,y,z) != getBiome()) continue;
 				
-				//Some ice-sheets
-				if(GenUtils.chance(random, 1, 5)) 
-					data.setType(x,TerraformGenerator.seaLevel, z, Material.ICE);
-				
+				//Cold oceans dont have ice sheets
+//				if(GenUtils.chance(random, 1, 5)) 
+//					data.setType(x,TerraformGenerator.seaLevel, z, Material.ICE);
+//				
 				if(!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
 				if(GenUtils.chance(random, 1, 200)){ //SEA GRASS/KELP
 					data.setType(x, y+1, z,Material.SEAGRASS);

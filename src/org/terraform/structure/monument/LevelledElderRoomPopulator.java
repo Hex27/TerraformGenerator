@@ -44,7 +44,7 @@ public class LevelledElderRoomPopulator extends LevelledRoomPopulator {
 					w.getRelative(0,3,0).Pillar(4, rand, Material.SEA_LANTERN);
 				}
 				w.setType(Material.DARK_PRISMARINE);
-				w.getRelative(0,room.getHeight()-2,0).setType(Material.DARK_PRISMARINE);
+				//w.getRelative(0,room.getHeight()-2-4,0).setType(Material.DARK_PRISMARINE);
 				
 				w = w.getLeft();
 			}

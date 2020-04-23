@@ -331,7 +331,7 @@ public class MonumentPopulator extends StructurePopulator{
 		int i = 25;
 		for(int nx = x - range/2 - i; nx <= x+range/2 + i; nx++){
 			for(int nz = z - range/2 - i; nz <= z+range/2 + i; nz++){
-				if(GenUtils.chance(rand,1,4)){
+				if(GenUtils.chance(rand,2,5)){
 					int y = GenUtils.getTrueHighestBlock(data, nx, nz);
 					//Don't place on weird blocks
 					if(data.getType(nx, y, nz).toString().contains("SLAB") ||
