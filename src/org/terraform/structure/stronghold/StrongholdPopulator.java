@@ -3,11 +3,9 @@ package org.terraform.structure.stronghold;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;

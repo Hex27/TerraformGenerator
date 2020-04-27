@@ -11,7 +11,6 @@ import org.bukkit.Material;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
 public class RoomLayoutGenerator {

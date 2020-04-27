@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.drycell.command.DCArgument;
-import org.terraform.tree.FractalTreeType;
 import org.terraform.schematic.TerraSchematic;
 public class SchematicArgument extends DCArgument<TerraSchematic> {
 

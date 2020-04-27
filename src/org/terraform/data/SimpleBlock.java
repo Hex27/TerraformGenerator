@@ -149,6 +149,10 @@ public class SimpleBlock {
 				(int) Math.round(z+v.getZ()));
 	}
 	
+	public String getCoords(){
+		return x + "," + y + "," + z;
+	}
+	
 	public SimpleBlock getRelative(BlockFace face){
 		return new SimpleBlock(popData, x+face.getModX(), y+face.getModY(), z+face.getModZ());
 	}

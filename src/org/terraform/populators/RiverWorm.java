@@ -5,16 +5,15 @@ import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.Temperature;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
-import org.terraform.coregen.HeightMap;
+import org.terraform.utils.Temperature;
 
 public class RiverWorm {
 	

@@ -7,13 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
-import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.schematic.SchematicParser;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 

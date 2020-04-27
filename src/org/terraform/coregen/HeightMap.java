@@ -21,7 +21,7 @@ public class HeightMap {
 		cubic.SetFractalOctaves(6);
 		cubic.SetFrequency(0.003f);
 		
-		double height = cubic.GetNoise(x, z)*2*50 + defaultSeaLevel;
+		double height = cubic.GetNoise(x, z)*2*60 + defaultSeaLevel;
 		
 		if(height > defaultSeaLevel + 10){
 			height = (height-defaultSeaLevel-10)*0.1 + defaultSeaLevel + 10;

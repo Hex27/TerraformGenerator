@@ -1,7 +1,6 @@
 package org.terraform.command;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.Stack;
 
 import org.bukkit.ChatColor;
@@ -15,9 +14,6 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.schematic.SchematicListener;
 import org.terraform.schematic.TerraRegion;
 import org.terraform.schematic.TerraSchematic;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.GenUtils;
 
 public class SchematicSaveCommand extends DCCommand {
 

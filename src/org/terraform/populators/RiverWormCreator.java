@@ -1,19 +1,9 @@
 package org.terraform.populators;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.generator.BlockPopulator;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 
 public class RiverWormCreator {

@@ -1,19 +1,13 @@
 package org.terraform.coregen;
 
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.loot.LootTable;
-import org.bukkit.loot.LootTables;
-import org.bukkit.loot.Lootable;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorDataPostGen extends PopulatorDataAbstract {

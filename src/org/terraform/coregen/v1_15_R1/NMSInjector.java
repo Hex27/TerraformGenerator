@@ -13,7 +13,6 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.terraform.coregen.NMSInjectorAbstract;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.data.TerraformWorld;
 

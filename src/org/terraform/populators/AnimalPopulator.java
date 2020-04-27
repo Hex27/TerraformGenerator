@@ -3,15 +3,12 @@ package org.terraform.populators;
 import java.util.Collection;
 import java.util.Random;
 
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.TickTimer;
 
 public class AnimalPopulator {
 	
@@ -59,7 +56,7 @@ public class AnimalPopulator {
 		for(int i = 0; i < GenUtils.randInt(random, minNum, maxNum); i++){
 			int x = (data.getChunkX()<<4)+GenUtils.randInt(random, 5,7);
 			int z = (data.getChunkZ()<<4)+GenUtils.randInt(random, 5,7);
-			int height = new HeightMap().getHeight(world, x, z)+1;//GenUtils.getHighestGround(data, x, z)+1;
+			int height = new HeightMap().getHeight(world, x, z)+2;//GenUtils.getHighestGround(data, x, z)+1;
 			//TerraformGeneratorPlugin.logger.info("Spawned " + animalType.toString() + " at " + x + "," + height + "," + z);
 			data.addEntity(x, height, z, animalType);
 		}

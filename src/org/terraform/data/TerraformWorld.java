@@ -9,7 +9,6 @@ import org.bukkit.World;
 import org.terraform.biome.BiomeBank;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.TickTimer;
 
 public class TerraformWorld{
 	

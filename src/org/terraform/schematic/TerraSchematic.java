@@ -2,7 +2,6 @@ package org.terraform.schematic;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,7 +15,6 @@ import java.util.Scanner;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;

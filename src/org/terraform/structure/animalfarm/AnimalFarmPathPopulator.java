@@ -1,20 +1,13 @@
 package org.terraform.structure.animalfarm;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.terraform.coregen.TerraLootTable;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 
 public class AnimalFarmPathPopulator extends PathPopulatorAbstract{

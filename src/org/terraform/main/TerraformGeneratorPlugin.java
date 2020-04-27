@@ -1,20 +1,23 @@
 package org.terraform.main;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
+import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformGenerator;
+import org.terraform.coregen.TerraformPopulator;
+import org.terraform.data.SimpleChunkLocation;
+import org.terraform.data.TerraformWorld;
 import org.terraform.schematic.SchematicListener;
+import org.terraform.utils.Version;
 
 public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 
@@ -43,7 +46,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 		Bukkit.getPluginManager().registerEvents(this, this);
 		//Bukkit.getPluginManager().registerEvents(new BlockPhysicsFixer(), this);
 		Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
-		String version = getVersionPackage();
+		String version = Version.getVersionPackage();
 		logger.info("Detected version: " + version);
 		try {
 			this.injector = (NMSInjectorAbstract) Class.forName("org.terraform.coregen." + version + ".NMSInjector").newInstance();
@@ -55,16 +58,9 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 			logger.error("&cSomething went wrong initiating the injector!");
 
 		}
-//		if(version.equals("v1_15_R1")){
-//			this.injector = new org.terraform.coregen.v1_15_R1.NMSInjector();
-//		}else{
-//			logger.error("&cNo support for this version has been made yet!");
-//		}
 	}
 	
-	private String getVersionPackage(){
-		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-	}
+	
 	
 	@EventHandler
 	public void onWorldInit(WorldInitEvent event){
@@ -73,15 +69,23 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 			if(injector.attemptInject(event.getWorld())){
 				injectedWorlds.add(event.getWorld().getName());
 				logger.info("&aInjection success! Proceeding with generation.");
+				if(TerraformGenerator.preWorldInitGen.size() > 0){
+					logger.info("&6Trying to decorate " 
+				+ TerraformGenerator.preWorldInitGen.size() 
+				+ " pre-maturely generated chunks.");
+					
+					TerraformWorld tw = TerraformWorld.get(event.getWorld());
+					for(SimpleChunkLocation sc:TerraformGenerator.preWorldInitGen){
+						PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
+						new TerraformPopulator(tw).populate(tw, new Random(), data);
+					}
+					logger.info("&aSuccessfully finished fixing pre-mature chunks!");
+					
+				}
 			}else{
 				logger.error("&cInjection failed.");
 			}
 		}
-	}
-	
-	@EventHandler
-	public void onWorldLoad(WorldLoadEvent event){
-		logger.info(event.getWorld().getName() + " loaded.");
 	}
 	
 	@Override

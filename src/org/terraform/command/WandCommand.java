@@ -1,6 +1,5 @@
 package org.terraform.command;
 
-import java.util.Random;
 import java.util.Stack;
 
 import org.bukkit.ChatColor;
@@ -10,9 +9,6 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.schematic.SchematicListener;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.GenUtils;
 
 public class WandCommand extends DCCommand {
 

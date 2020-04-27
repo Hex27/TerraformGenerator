@@ -13,8 +13,11 @@ import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
+import org.terraform.utils.Version;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 
@@ -38,6 +41,7 @@ public class FractalTreeBuilder {
 	boolean collapsed;
 	boolean snowy = false;
 	boolean alwaysOneStraight = false;
+	double beeChance = 0.0f;
 	int vines = 0;
 	int cocabeans = 0;
 	double gnarl = 0;
@@ -45,10 +49,10 @@ public class FractalTreeBuilder {
 	public FractalTreeBuilder(FractalTreeType ftt){
 		switch(ftt){
 		case FOREST:
-			this.setBaseHeight(10).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(4).setLeafRadius(3).setHeightVar(2);
+			this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble()).setBaseHeight(10).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(4).setLeafRadius(3).setHeightVar(2);
 			break;
 		case NORMAL_SMALL:
-			this.setBaseHeight(5).setBaseThickness(1).setThicknessDecrement(1f).setMaxDepth(1).setLeafRadius(3).setHeightVar(1);
+			this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble()).setBaseHeight(5).setBaseThickness(1).setThicknessDecrement(1f).setMaxDepth(1).setLeafRadius(3).setHeightVar(1);
 			break;
 		case BIRCH_BIG:
 			this.setBaseHeight(6).setBaseThickness(1).setThicknessDecrement(0f).setMaxDepth(4).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(2).setHeightVar(2).setMinBend(0.9*Math.PI/6).setMaxBend(1.1*Math.PI/6).setLengthDecrement(0.5f).setLeafType(Material.BIRCH_LEAVES).setLogType(Material.BIRCH_WOOD);
@@ -167,6 +171,8 @@ public class FractalTreeBuilder {
 	int oriY;
 	int oriZ;
 	
+	private boolean spawnedBees = false;
+	
 	public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z){
 		this.oriX = x;
 		this.oriY = y;
@@ -226,6 +232,20 @@ public class FractalTreeBuilder {
 		SimpleBlock two = base.getRelative(x,y,z);
 		
 		drawLine(rand, base,two,(int) (size),thickness,this.logType);
+		
+//		if(!spawnedBees 
+//				&& Version.isAtLeast("1_15_R1") 
+//				&& GenUtils.chance(rand,(int) (beeChance*100.0),100)){
+//			for(int i = 0; i < 3; i ++){
+//				if(!two.getRelative(0,-i,0).getType().isSolid()){
+//					spawnedBees = true;
+//					two.getRelative(0,-i,0).setType(Material.valueOf("BEE_NEST"));
+//					TerraformGeneratorPlugin.logger.info("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+//					break;
+//				}
+//			}
+//			
+//		}
 		
 		if(!GenUtils.chance(rand,(int) gnarl,100) && gnarls < 2){
 			gnarls = 0;
@@ -481,7 +501,15 @@ public class FractalTreeBuilder {
 		this.alwaysOneStraight = bool;
 		return this;
 	}
-	
+
+	/**
+	 * @param beeChance the beeChance to set
+	 */
+	public FractalTreeBuilder setBeeChance(double beeChance) {
+		this.beeChance = beeChance;
+		return this;
+	}
+
 	/**
 	 * @return the cocabeans
 	 */

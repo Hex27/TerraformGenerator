@@ -6,7 +6,6 @@ import java.util.Random;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;

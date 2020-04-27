@@ -1,21 +1,8 @@
 package org.terraform.coregen.v1_15_R1;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
-
-import net.minecraft.server.v1_15_R1.Chunk;
-import net.minecraft.server.v1_15_R1.ChunkCoordIntPair;
-import net.minecraft.server.v1_15_R1.GeneratorAccess;
-import net.minecraft.server.v1_15_R1.IStructureAccess;
-import net.minecraft.server.v1_15_R1.StructureAbstract;
-import net.minecraft.server.v1_15_R1.StructureGenerator;
-import net.minecraft.server.v1_15_R1.StructureStart;
-import net.minecraft.server.v1_15_R1.WorldGenerator;
-import net.minecraft.server.v1_15_R1.BiomeBase;
-import net.minecraft.server.v1_15_R1.EnumCreatureType;
 import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.Blocks;
+import net.minecraft.server.v1_15_R1.ChunkCoordIntPair;
 import net.minecraft.server.v1_15_R1.Entity;
 import net.minecraft.server.v1_15_R1.EntityInsentient;
 import net.minecraft.server.v1_15_R1.EntityTypes;
@@ -23,12 +10,14 @@ import net.minecraft.server.v1_15_R1.EnumMobSpawn;
 import net.minecraft.server.v1_15_R1.GroupDataEntity;
 import net.minecraft.server.v1_15_R1.IBlockData;
 import net.minecraft.server.v1_15_R1.IChunkAccess;
+import net.minecraft.server.v1_15_R1.IStructureAccess;
 import net.minecraft.server.v1_15_R1.LootTables;
 import net.minecraft.server.v1_15_R1.MinecraftKey;
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 import net.minecraft.server.v1_15_R1.TileEntity;
 import net.minecraft.server.v1_15_R1.TileEntityLootable;
 import net.minecraft.server.v1_15_R1.TileEntityMobSpawner;
+import net.minecraft.server.v1_15_R1.WorldGenerator;
 import net.minecraft.server.v1_15_R1.WorldServer;
 
 import org.bukkit.Bukkit;
@@ -37,7 +26,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;

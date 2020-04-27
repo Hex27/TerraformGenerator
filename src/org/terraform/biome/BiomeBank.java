@@ -2,6 +2,7 @@ package org.terraform.biome;
 
 import java.util.Random;
 
+import org.terraform.biome.beach.IcyBeachHandler;
 import org.terraform.biome.beach.MudflatsHandler;
 import org.terraform.biome.beach.RockBeachHandler;
 import org.terraform.biome.beach.SandyBeachHandler;
@@ -24,14 +25,11 @@ import org.terraform.biome.ocean.ColdOceansHandler;
 import org.terraform.biome.ocean.FrozenOceansHandler;
 import org.terraform.biome.ocean.LukewarmOceansHandler;
 import org.terraform.biome.ocean.OceansHandler;
-import org.terraform.biome.ocean.RiverHandler;
 import org.terraform.biome.ocean.SwampHandler;
 import org.terraform.biome.ocean.WarmOceansHandler;
-import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
 public enum BiomeBank {
@@ -75,6 +73,7 @@ public enum BiomeBank {
 	//BEACHES
 	SANDY_BEACH(new SandyBeachHandler(),BiomeType.BEACH),
 	ROCKY_BEACH(new RockBeachHandler(),BiomeType.BEACH),
+	ICY_BEACH(new IcyBeachHandler(),BiomeType.BEACH),
 	MUDFLATS(new MudflatsHandler(),BiomeType.BEACH), //Special case, handle later
 	;
 	private BiomeHandler handler;

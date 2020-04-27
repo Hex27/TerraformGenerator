@@ -1,7 +1,7 @@
 package org.terraform.structure.monument;
 
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

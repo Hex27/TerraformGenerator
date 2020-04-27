@@ -1,6 +1,5 @@
 package org.terraform.coregen.sqlite;
 
-import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;

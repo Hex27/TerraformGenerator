@@ -1,6 +1,5 @@
 package org.terraform.command;
 
-import java.util.Random;
 import java.util.Stack;
 
 import org.bukkit.command.CommandSender;
@@ -10,12 +9,7 @@ import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.dungeon.DrownedDungeonPopulator;
-import org.terraform.structure.dungeon.UndergroundDungeonPopulator;
-import org.terraform.structure.farmhouse.FarmhousePopulator;
-import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.monument.MonumentDesign;
-import org.terraform.structure.monument.MonumentPopulator;
 
 public class LargeMonumentLampCommand extends DCCommand {
 

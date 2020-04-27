@@ -1,48 +1,15 @@
 package org.terraform.structure.dungeon;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Axis;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Levelled;
-import org.bukkit.block.data.Orientable;
-import org.bukkit.block.data.type.Farmland;
-import org.bukkit.block.data.type.Slab;
-import org.bukkit.block.data.type.Slab.Type;
-import org.bukkit.block.data.type.Stairs;
-import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraLootTable;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.data.Wall;
 import org.terraform.main.TConfigOption;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.schematic.SchematicParser;
-import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.StructurePopulator;
-import org.terraform.structure.farmhouse.FarmhousePopulator;
-import org.terraform.structure.farmhouse.FarmhouseSchematicParser;
-import org.terraform.structure.room.RoomLayout;
-import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.structure.stronghold.StrongholdPathPopulator;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.GenUtils;
-import org.terraform.utils.Temperature;
 
 public class SmallDungeonPopulator extends StructurePopulator{
 

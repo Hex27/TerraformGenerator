@@ -2,18 +2,13 @@ package org.terraform.tree;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Leaves;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.GenUtils;
 
 public class TreeDB {
 	

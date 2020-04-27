@@ -1,13 +1,12 @@
 package org.terraform.coregen.sqlite;
 
 import java.io.File;
-import java.sql.Connection;  
-import java.sql.DriverManager;  
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;  
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.bukkit.block.data.BlockData;
 

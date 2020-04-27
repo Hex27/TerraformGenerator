@@ -1,25 +1,16 @@
 package org.terraform.command;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
-import org.terraform.schematic.SchematicListener;
-import org.terraform.schematic.TerraRegion;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.GenUtils;
 
 public class SchematicLoadCommand extends DCCommand {
 

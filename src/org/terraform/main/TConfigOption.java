@@ -1,15 +1,9 @@
 package org.terraform.main;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.drycell.config.DCConfig;
-import org.terraform.biome.BiomeBank;
-import org.terraform.populators.AnimalPopulator;
-import org.terraform.populators.OrePopulator;
 
 public enum TConfigOption{
 
@@ -32,6 +26,8 @@ public enum TConfigOption{
 	STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled",true),
 	
 	//-=[ANIMALS]=-
+		//BEES
+	ANIMALS_BEE_HIVEFREQUENCY("animals.bee.hive-frequency",0.02),
 		//PIG
 	ANIMALS_PIG_MINHERDSIZE("animals.pig.min-herd-size",3),
 	ANIMALS_PIG_MAXHERDSIZE("animals.pig.max-herd-size",4),
@@ -196,6 +192,16 @@ public enum TConfigOption{
 	
 	public List<String> getStringList(){
 		return (List<String>) value;
+	}
+	
+	public String[] getStringArray(){
+		String[] arr = new String[getStringList().size()];
+		int i = 0;
+		for(String item:getStringList()){
+			arr[i] = item;
+			i++;
+		}
+		return arr;
 	}
 	
 	

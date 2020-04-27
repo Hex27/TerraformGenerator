@@ -6,14 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import net.minecraft.server.v1_15_R1.WorldGenerator;
 import net.minecraft.server.v1_15_R1.BaseBlockPosition;
 import net.minecraft.server.v1_15_R1.BlockPosition;
-import net.minecraft.server.v1_15_R1.StructurePiece;
-import net.minecraft.server.v1_15_R1.StructureStart;
 import net.minecraft.server.v1_15_R1.GeneratorAccess;
 import net.minecraft.server.v1_15_R1.StructureAbstract;
 import net.minecraft.server.v1_15_R1.StructureGenerator;
+import net.minecraft.server.v1_15_R1.StructurePiece;
+import net.minecraft.server.v1_15_R1.StructureStart;
+import net.minecraft.server.v1_15_R1.WorldGenerator;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
@@ -21,10 +21,6 @@ import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
-import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataICAAbstract;
-import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 
 public class GuardianSpawnCheckCommand extends DCCommand {
 

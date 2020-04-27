@@ -4,23 +4,15 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.noise.PerlinOctaveGenerator;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
-import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 
 public class PreviewCommand extends DCCommand {

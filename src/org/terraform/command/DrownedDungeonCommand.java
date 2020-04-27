@@ -11,9 +11,6 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.dungeon.DrownedDungeonPopulator;
-import org.terraform.structure.dungeon.UndergroundDungeonPopulator;
-import org.terraform.structure.farmhouse.FarmhousePopulator;
-import org.terraform.structure.stronghold.StrongholdPopulator;
 
 public class DrownedDungeonCommand extends DCCommand {
 

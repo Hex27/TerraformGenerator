@@ -17,13 +17,10 @@ import net.minecraft.server.v1_15_R1.TileEntityLootable;
 import net.minecraft.server.v1_15_R1.TileEntityMobSpawner;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;

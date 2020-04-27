@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -18,6 +19,9 @@ public class TerraformGenerator extends ChunkGenerator{
 	
 	public static int seaLevel = 62;
 	private HeightMap map;
+	
+	public static ArrayList<SimpleChunkLocation> preWorldInitGen 
+	= new ArrayList<>();
 	
 	public static void updateSeaLevelFromConfig(){
 		seaLevel = TConfigOption.SEA_LEVEL.getInt();
@@ -29,6 +33,11 @@ public class TerraformGenerator extends ChunkGenerator{
         if(map == null) map = new HeightMap();
         TerraformWorld tw = TerraformWorld.get(world);
     	//Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
+        
+        //Patch for WorldInitEvent issues.
+        if(!TerraformGeneratorPlugin.injectedWorlds.contains(world.getName())){
+        	preWorldInitGen.add(new SimpleChunkLocation(world.getName(),chunkX,chunkZ));
+        }
         
     	for (int x = 0; x < 16; x++){
             for (int z = 0; z < 16; z++) {

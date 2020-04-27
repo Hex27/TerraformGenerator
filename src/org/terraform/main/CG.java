@@ -1,13 +1,9 @@
 package org.terraform.main;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
 public class CG extends ChunkGenerator{

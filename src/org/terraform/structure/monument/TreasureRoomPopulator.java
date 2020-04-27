@@ -2,7 +2,6 @@ package org.terraform.structure.monument;
 
 import java.io.FileNotFoundException;
 import java.util.Random;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,12 +11,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Stairs;
-import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.Wall;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;

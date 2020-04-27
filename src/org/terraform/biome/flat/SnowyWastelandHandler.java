@@ -8,8 +8,6 @@ import org.bukkit.block.data.Snowable;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 

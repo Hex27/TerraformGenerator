@@ -2,7 +2,30 @@ package org.terraform.main;
 
 import org.drycell.command.DCCommandManager;
 import org.drycell.main.DrycellPlugin;
-import org.terraform.command.*;
+import org.terraform.command.AnimalFarmCommand;
+import org.terraform.command.AnimalSpawnerCommand;
+import org.terraform.command.CaveCommand;
+import org.terraform.command.CheckHeightCommand;
+import org.terraform.command.CoconutCommand;
+import org.terraform.command.CoralCommand;
+import org.terraform.command.DrownedDungeonCommand;
+import org.terraform.command.FarmhouseCommand;
+import org.terraform.command.FractalTreeCommand;
+import org.terraform.command.GuardianSpawnCheckCommand;
+import org.terraform.command.IceSpikeCommand;
+import org.terraform.command.LargeMonumentLampCommand;
+import org.terraform.command.MonumentCommand;
+import org.terraform.command.PreviewCommand;
+import org.terraform.command.SchematicLoadCommand;
+import org.terraform.command.SchematicSaveCommand;
+import org.terraform.command.ShipwreckCommand;
+import org.terraform.command.SphereCommand;
+import org.terraform.command.StrongholdCommand;
+import org.terraform.command.TimingsCommand;
+import org.terraform.command.UndergroundDungeonCommand;
+import org.terraform.command.ValuesCommand;
+import org.terraform.command.WandCommand;
+import org.terraform.command.WitchHutCommand;
 
 public class TerraformCommandManager extends DCCommandManager {
 
