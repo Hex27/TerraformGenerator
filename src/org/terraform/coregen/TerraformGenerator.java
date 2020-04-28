@@ -24,7 +24,7 @@ public class TerraformGenerator extends ChunkGenerator{
 	= new ArrayList<>();
 	
 	public static void updateSeaLevelFromConfig(){
-		seaLevel = TConfigOption.SEA_LEVEL.getInt();
+		seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
 	}
 	
     @Override

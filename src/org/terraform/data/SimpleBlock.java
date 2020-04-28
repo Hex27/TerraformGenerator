@@ -66,6 +66,10 @@ public class SimpleBlock {
 		}
 	}
 	
+	public Vector toVector(){
+		return new Vector(x,y,z);
+	}
+	
 	/**
 	 * Lenient set. Only replaces non-solid blocks.
 	 * @param type
@@ -87,11 +91,11 @@ public class SimpleBlock {
 		return false;
 	}
 	
-	public SimpleBlock(Block b){
-		this.popData = new PopulatorDataPostGen(b.getChunk());
-		this.x = b.getX();
-		this.y = b.getY();
-		this.z = b.getZ();
+	public SimpleBlock(Location loc){
+		this.popData = new PopulatorDataPostGen(loc.getChunk());
+		this.x = loc.getBlockX();
+		this.y = loc.getBlockY();
+		this.z = loc.getBlockZ();
 	}
 	
 	public SimpleBlock(PopulatorDataAbstract data, int x, int y, int z){

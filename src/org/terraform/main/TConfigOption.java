@@ -7,9 +7,9 @@ import org.drycell.config.DCConfig;
 
 public enum TConfigOption{
 
-	
-	SEA_LEVEL("sea-level",62),
-	DEEP_SEA_LEVEL("deep-sea-level",40),
+	HEIGHT_MAP_MOUNTAIN_FREQUENCY("heightmap.mountain-frequency",0.002f),
+	HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level",62),
+	HEIGHT_MAP_DEEP_SEA_LEVEL("heightmap.deep-sea-level",35),
 	
 	DEBUG_MODE("dev-stuff.debug-mode",false),
 	
@@ -21,6 +21,7 @@ public enum TConfigOption{
 	STRUCTURES_FARMHOUSE_ENABLED("structures.farmhouse.enabled",true),
 	STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled",true),
 	STRUCTURES_SWAMPHUT_ENABLED("structures.swamphut.enabled",true),
+	STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND("structures.swamphut.chance-out-of-10000",100),
 	STRUCTURES_UNDERGROUNDDUNGEON_ENABLED("structures.underground-dungeon.enabled",true),
 	STRUCTURES_DROWNEDDUNGEON_ENABLED("structures.drowned-dungeon.enabled",true),
 	STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled",true),
@@ -188,6 +189,13 @@ public enum TConfigOption{
 			return ((Number) value).doubleValue();
 		}
 		return (double) value;
+	}
+	
+	public float getFloat(){
+		if(value instanceof Number){
+			return ((Number) value).floatValue();
+		}
+		return (float) value;
 	}
 	
 	public List<String> getStringList(){

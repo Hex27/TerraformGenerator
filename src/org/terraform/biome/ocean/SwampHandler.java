@@ -8,6 +8,8 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
+import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
@@ -120,12 +122,10 @@ public class SwampHandler extends BiomeHandler {
 			}	
 		}
 		
-//		WitchHutPopulator whp = new WitchHutPopulator();
-//		if(whp.canSpawn(random, tw, data.getChunkX(),data.getChunkZ(),new ArrayList<BiomeBank>(){{
-//			add(BiomeBank.SWAMP);
-//		}})){
-//			whp.populate(tw, random, data);
-//		}
+		WitchHutPopulator whp = new WitchHutPopulator();
+		if(GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666),TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(),10000)){
+			whp.populate(tw, random, data);
+		}
 	}
 	
 

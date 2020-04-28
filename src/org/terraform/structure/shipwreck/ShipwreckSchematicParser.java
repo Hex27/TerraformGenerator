@@ -4,13 +4,12 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.TerraformGenerator;
+import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
@@ -40,7 +39,7 @@ public class ShipwreckSchematicParser extends SchematicParser{
 	}
 
 	@Override
-	public void applyData(Block block, BlockData data){
+	public void applyData(SimpleBlock block, BlockData data){
 		
 		//Water logging
 		if(data instanceof Waterlogged){
@@ -100,12 +99,12 @@ public class ShipwreckSchematicParser extends SchematicParser{
 		
 		if(data.getMaterial().isBlock() && data.getMaterial().isSolid()){
 			if(GenUtils.chance(rand,1,60)){ //Corals
-				CoralGenerator.generateCoral(new PopulatorDataPostGen(block.getChunk()),
+				CoralGenerator.generateCoral(block.getPopData(),
 						block.getX(),
 						block.getY(),
 						block.getZ());
 			}else if(GenUtils.chance(rand,1,40)){ //kelp n stuff
-				CoralGenerator.generateKelpGrowth(new PopulatorDataPostGen(block.getChunk()),
+				CoralGenerator.generateKelpGrowth(block.getPopData(),
 						block.getX(),
 						block.getY()+1,
 						block.getZ());

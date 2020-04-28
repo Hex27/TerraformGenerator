@@ -115,7 +115,7 @@ public enum BiomeBank {
 					bank = OCEAN;
 			}
 			
-			if(height <= TConfigOption.DEEP_SEA_LEVEL.getInt()){
+			if(height <= TConfigOption.HEIGHT_MAP_DEEP_SEA_LEVEL.getInt()){
 				bank = BiomeBank.valueOf("DEEP_"+bank.toString());
 				//TerraformGeneratorPlugin.logger.info("detected deep sea: " + bank.toString() + " at height " + height);
 			}

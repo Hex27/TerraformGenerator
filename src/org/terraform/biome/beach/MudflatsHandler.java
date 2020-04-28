@@ -2,11 +2,15 @@ package org.terraform.biome.beach;
 
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.bukkit.block.data.Rotatable;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
+import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -40,8 +44,10 @@ public class MudflatsHandler extends BiomeHandler {
 	}
 
 	@Override
-	public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
+		boolean spawnHut = GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666),TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(),10000);
+		
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int y = GenUtils.getHighestGround(data, x, z);
@@ -54,7 +60,23 @@ public class MudflatsHandler extends BiomeHandler {
 					else
 						data.setType(x,y,z,Material.GRASS);
 				}
+				if(spawnHut && GenUtils.chance(10,100)){
+					if(BlockUtils.isDirtLike(data.getType(x, y-1, z))){
+						Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
+						skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
+						
+						data.setType(x,y,z,Material.OAK_FENCE);
+						data.setBlockData(x,y+1,z,skull);
+					}
+				}
+				
 			}
 		}
+		
+		WitchHutPopulator whp = new WitchHutPopulator();
+		if(spawnHut){
+			whp.populate(tw, random, data);
+		}
+		
 	}
 }

@@ -4,11 +4,11 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -28,7 +28,7 @@ public class FarmhouseSchematicParser extends SchematicParser{
 	}
 
 	@Override
-	public void applyData(Block block, BlockData data){
+	public void applyData(SimpleBlock block, BlockData data){
 		if(data.getMaterial().toString().contains("COBBLESTONE")){
 			data = Bukkit.createBlockData(
 					data.getAsString().replaceAll(
@@ -52,7 +52,7 @@ public class FarmhouseSchematicParser extends SchematicParser{
 			return;
 		}else if(data.getMaterial() == Material.CHEST){
 			if(GenUtils.chance(rand, 1, 5)){
-				block.setType(Material.AIR,true);
+				block.setType(Material.AIR);
 				return; //A fifth of chests are not placed.
 			}
 			super.applyData(block, data);

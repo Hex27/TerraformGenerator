@@ -30,13 +30,17 @@ import org.terraform.utils.BlockUtils;
 public class TerraSchematic {
 	
 	HashMap<Vector,BlockData> data = new HashMap<>();
-	Location refPoint;
+	SimpleBlock refPoint;
 	BlockFace face = BlockFace.NORTH;
 	public SchematicParser parser = new SchematicParser();
 	//North is always the default blockface.
 	//
-	public TerraSchematic(Location refPoint){
-		this.refPoint = refPoint;
+	public TerraSchematic(SimpleBlock vector){
+		this.refPoint = vector;
+	}
+	
+	public TerraSchematic(Location loc){
+		this.refPoint = new SimpleBlock(loc);
 	}
 	
 	public void registerBlock(Block b){
@@ -98,13 +102,13 @@ public class TerraSchematic {
 				}
 			
 			
-			parser.applyData(refPoint.getBlock().getRelative(pos.getBlockX(),pos.getBlockY(),pos.getBlockZ()),bd);
+			parser.applyData(refPoint.getRelative(pos.getBlockX(),pos.getBlockY(),pos.getBlockZ()),bd);
 		}
 		
 		//Multiple-facing blocks are just gonna be painful.
 		for(Vector pos:multiFace){
-			Block block = refPoint.getBlock().getRelative(pos.getBlockX(),pos.getBlockY(),pos.getBlockZ());
-			SimpleBlock b = new SimpleBlock(block);
+			SimpleBlock b = refPoint.getRelative(pos.getBlockX(),pos.getBlockY(),pos.getBlockZ());
+			
 			BlockUtils.correctSurroundingMultifacingData(b);
 		}
 	}
@@ -124,7 +128,7 @@ public class TerraSchematic {
 		bw.close();
 	}
 	
-	public static TerraSchematic load(String internalPath, Location refPoint) throws FileNotFoundException{
+	public static TerraSchematic load(String internalPath, SimpleBlock refPoint) throws FileNotFoundException{
 		TerraSchematic schem = new TerraSchematic(refPoint);
 		InputStream is= TerraformGeneratorPlugin.class.getResourceAsStream("/"+internalPath+".terra");   
 		Scanner sc=new Scanner(is);    //file to be scanned  
@@ -141,6 +145,12 @@ public class TerraSchematic {
 		}  
 		sc.close();  
 		return schem;
+	}
+	
+	public static TerraSchematic load(String internalPath, Location loc) throws FileNotFoundException{
+		SimpleBlock block = new SimpleBlock(loc);
+		
+		return load(internalPath,block);
 	}
 
 	/**

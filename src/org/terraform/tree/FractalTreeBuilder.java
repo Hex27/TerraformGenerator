@@ -11,15 +11,16 @@ import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.v1_15_R1.BeeHiveSpawner;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.Version;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.Version;
 
 public class FractalTreeBuilder {
 	
@@ -233,19 +234,19 @@ public class FractalTreeBuilder {
 		
 		drawLine(rand, base,two,(int) (size),thickness,this.logType);
 		
-//		if(!spawnedBees 
-//				&& Version.isAtLeast("1_15_R1") 
-//				&& GenUtils.chance(rand,(int) (beeChance*100.0),100)){
-//			for(int i = 0; i < 3; i ++){
-//				if(!two.getRelative(0,-i,0).getType().isSolid()){
-//					spawnedBees = true;
-//					two.getRelative(0,-i,0).setType(Material.valueOf("BEE_NEST"));
-//					TerraformGeneratorPlugin.logger.info("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
-//					break;
-//				}
-//			}
-//			
-//		}
+		if(!spawnedBees 
+				&& Version.isAtLeast("1_15_R1") 
+				&& GenUtils.chance(rand,(int) (beeChance*100.0),100)){
+			for(int i = 0; i < 3; i ++){
+				if(!two.getRelative(0,-i,0).getType().isSolid()){
+					spawnedBees = true;
+					BeeHiveSpawner.spawnFullBeeNest(two.getRelative(0,-i,0));
+					TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+					break;
+				}
+			}
+			
+		}
 		
 		if(!GenUtils.chance(rand,(int) gnarl,100) && gnarls < 2){
 			gnarls = 0;

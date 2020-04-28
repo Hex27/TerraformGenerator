@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
@@ -31,20 +30,13 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 	public void onEnable(){
 		super.onEnable();
 		i = this;
+		this.logger = new TLogger(this);
 		TConfigOption.loadValues(this.getDCConfig());
 		TerraformGenerator.updateSeaLevelFromConfig();
 		new TerraformCommandManager(this, "terraform","terra");
-//		new BukkitRunnable(){
-//			public void run(){
-//				Bukkit.getLogger().info("=====Avg Timings=====");
-//				HashMap<String,Long> c = (HashMap<String, Long>) TickTimer.timings.clone();
-//				for(String key:c.keySet()){
-//					Bukkit.getLogger().info("- " + key + ":" + c.get(key));
-//				}
-//			}
-//		}.runTaskTimerAsynchronously(this, 10*20, 10*20);
+		
 		Bukkit.getPluginManager().registerEvents(this, this);
-		//Bukkit.getPluginManager().registerEvents(new BlockPhysicsFixer(), this);
+		
 		Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
 		String version = Version.getVersionPackage();
 		logger.info("Detected version: " + version);

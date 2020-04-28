@@ -3,6 +3,7 @@ package org.terraform.coregen;
 import org.bukkit.util.noise.PerlinOctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 
@@ -47,7 +48,8 @@ public class HeightMap {
 		FastNoise cubic = new FastNoise((int) tw.getSeed()*7);
 		cubic.SetNoiseType(NoiseType.CubicFractal);
 		cubic.SetFractalOctaves(6);
-		cubic.SetFrequency(0.002f);
+		//Default value 0.002.
+		cubic.SetFrequency(TConfigOption.HEIGHT_MAP_MOUNTAIN_FREQUENCY.getFloat());
 		double height = cubic.GetNoise(x, z)*5;
 		if(height < 0) height = 0;
 		height = Math.pow(height, 5)*5; 
