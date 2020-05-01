@@ -20,6 +20,10 @@ public class GenUtils {
 		return generator;
 	}
 	
+	public static int getSign(Random rand){
+		return rand.nextBoolean() ? 1:-1;
+	}
+	
 	public static int getOctaveHeightAt(World world, int x, int z,int spreadHeight, int minHeight){
 
         return (int) (getGenerator(world).noise(x, z, 0.5D, 0.5D)

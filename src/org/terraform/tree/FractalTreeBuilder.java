@@ -46,6 +46,11 @@ public class FractalTreeBuilder {
 	int vines = 0;
 	int cocabeans = 0;
 	double gnarl = 0;
+	int fractalThreshold = 1;
+	int fractalsDone = 0;
+	double maxPitch = 9999;
+	double minPitch = -9999;
+	double maxYaw = 9999;
 	
 	public FractalTreeBuilder(FractalTreeType ftt){
 		switch(ftt){
@@ -161,7 +166,43 @@ public class FractalTreeBuilder {
 			.setVines(3)
 			.setLogType(Material.JUNGLE_WOOD);
 			break;
-		default:
+		case GIANT_PUMPKIN:
+			this.setBaseHeight(6)
+			.setBaseThickness(1)
+			.setThicknessDecrement(1f)
+			.setMaxDepth(0)
+			.setLeafRadius(4)
+			.setLengthDecrement(-0.5f)
+			.setHeightVar(0)
+			.setLogType(Material.OAK_LOG)
+			.setLeafType(Material.PUMPKIN);
+		case DARK_OAK_BIG_TOP:
+			this.setBaseHeight(6).setBaseThickness(10)
+			.setThicknessDecrement(2.5f)
+			.setMaxDepth(4).setLeafRadiusX(4)
+			.setLeafRadiusZ(4).setLeafRadiusY(2)
+			.setLogType(Material.DARK_OAK_WOOD)
+			.setLeafType(Material.DARK_OAK_LEAVES)
+			.setLengthDecrement(0)
+			.setHeightVar(1)
+			.setFractalThreshold(4)
+			.setMaxBend(1.4*Math.PI/6)
+			.setMinBend(1*Math.PI/6)
+			.setMaxPitch(Math.PI)
+			.setMinPitch(0);
+			break;
+		case DARK_OAK_BIG_BOTTOM:
+			this.setBaseHeight(5).setBaseThickness(4)
+			.setThicknessDecrement(0f)
+			.setMaxDepth(3).setLeafRadiusX(0)
+			.setLeafRadiusZ(0).setLeafRadiusY(0)
+			.setLogType(Material.DARK_OAK_WOOD)
+			.setLeafType(Material.DARK_OAK_LEAVES)
+			.setLengthDecrement(-1)
+			.setHeightVar(1)
+			.setFractalThreshold(5)
+			.setMaxBend(2.1*Math.PI/6)
+			.setMinBend(1.7*Math.PI/6);
 			break;
 		}
 	}
@@ -211,6 +252,14 @@ public class FractalTreeBuilder {
 	private int gnarls = 0;
 	
 	public void fractalBranch(Random rand,SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size){
+
+		if(pitch > maxPitch) {
+			//reset pitch
+			pitch = maxPitch-rta();
+		}else if(pitch < minPitch){
+			pitch = minPitch+rta();
+		}
+		
 		if(depth >= maxDepth){
 			replaceSphere(rand.nextInt(9999), leafRadiusX, leafRadiusY, leafRadiusZ, base, this.leafType);
 			return;  
@@ -246,6 +295,21 @@ public class FractalTreeBuilder {
 				}
 			}
 			
+		}
+		
+		fractalsDone++;
+		
+		if(fractalsDone % fractalThreshold != 0 
+				&& thickness >= 1
+				&& size >= 1){
+			//Make 1 branch
+			fractalBranch(rand, two, pitch - randomAngle(), 
+					yaw + GenUtils.randInt(rand, 1,5)
+						*GenUtils.getSign(rand)*rta(),
+					depth,
+					thickness,
+					size);
+			return;
 		}
 		
 		if(!GenUtils.chance(rand,(int) gnarl,100) && gnarls < 2){
@@ -538,6 +602,21 @@ public class FractalTreeBuilder {
 	
 	public FractalTreeBuilder setBaseHeight(int h){
 		this.baseHeight = h;
+		return this;
+	}
+	
+	public FractalTreeBuilder setFractalThreshold(int i){
+		this.fractalThreshold = i;
+		return this;
+	}
+	
+	public FractalTreeBuilder setMaxPitch(double max){
+		this.maxPitch = max;
+		return this;
+	}
+	
+	public FractalTreeBuilder setMinPitch(double min){
+		this.minPitch = min;
 		return this;
 	}
 	

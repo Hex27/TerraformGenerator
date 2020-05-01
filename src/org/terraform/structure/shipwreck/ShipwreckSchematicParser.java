@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
+import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.TerraformGenerator;
@@ -16,6 +17,7 @@ import org.terraform.utils.GenUtils;
 
 public class ShipwreckSchematicParser extends SchematicParser{
 	
+	private BiomeBank biome;
 	private Random rand;
 	private PopulatorDataAbstract pop;
 	String woodType;
@@ -28,16 +30,16 @@ public class ShipwreckSchematicParser extends SchematicParser{
 		"SPRUCE",
 		"JUNGLE"
 	};
-	
-	public ShipwreckSchematicParser(Random rand,
+
+	public ShipwreckSchematicParser(BiomeBank biome, Random rand,
 			PopulatorDataAbstract pop) {
 		super();
+		this.biome = biome;
 		this.rand = rand;
 		this.pop = pop;
 		this.woodType = woods[rand.nextInt(woods.length)];
-		
 	}
-
+	
 	@Override
 	public void applyData(SimpleBlock block, BlockData data){
 		
@@ -98,7 +100,9 @@ public class ShipwreckSchematicParser extends SchematicParser{
 		}
 		
 		if(data.getMaterial().isBlock() && data.getMaterial().isSolid()){
-			if(GenUtils.chance(rand,1,60)){ //Corals
+			if(GenUtils.chance(rand,1,60) 
+					&& !biome.toString().contains("COLD") //Dont spawn these in cold places.
+					&& !biome.toString().contains("FROZEN")){ //Corals
 				CoralGenerator.generateCoral(block.getPopData(),
 						block.getX(),
 						block.getY(),

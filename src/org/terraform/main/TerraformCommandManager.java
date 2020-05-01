@@ -11,6 +11,7 @@ import org.terraform.command.CoralCommand;
 import org.terraform.command.DrownedDungeonCommand;
 import org.terraform.command.FarmhouseCommand;
 import org.terraform.command.FractalTreeCommand;
+import org.terraform.command.GiantPumpkinCommand;
 import org.terraform.command.GuardianSpawnCheckCommand;
 import org.terraform.command.IceSpikeCommand;
 import org.terraform.command.LargeMonumentLampCommand;
@@ -41,6 +42,7 @@ public class TerraformCommandManager extends DCCommandManager {
 		this.registerCommand(new IceSpikeCommand(plugin, "icespike"));
 		this.registerCommand(new CoralCommand(plugin, "coral"));
 		this.registerCommand(new WitchHutCommand(plugin, "hut"));
+		this.registerCommand(new GiantPumpkinCommand(plugin, "giantpumpkin"));
 		this.registerCommand(new MonumentCommand(plugin, "monument","mon"));
 		this.registerCommand(new LargeMonumentLampCommand(plugin, "lml"));
 		this.registerCommand(new StrongholdCommand(plugin, "stronghold","sh"));
@@ -51,7 +53,7 @@ public class TerraformCommandManager extends DCCommandManager {
 		this.registerCommand(new UndergroundDungeonCommand(plugin, "ud","undergrounddungeon"));
 		this.registerCommand(new DrownedDungeonCommand(plugin, "dd","drowneddungeon"));
 		this.registerCommand(new CheckHeightCommand(plugin, "checkheight","ch"));
-		this.registerCommand(new GuardianSpawnCheckCommand(plugin, "gsc","guardianspawncheck"));
+		//this.registerCommand(new GuardianSpawnCheckCommand(plugin, "gsc","guardianspawncheck"));
 		this.registerCommand(new WandCommand(plugin, "wand"));
 		this.registerCommand(new SchematicSaveCommand(plugin, "save"));
 		this.registerCommand(new SchematicLoadCommand(plugin, "load"));
