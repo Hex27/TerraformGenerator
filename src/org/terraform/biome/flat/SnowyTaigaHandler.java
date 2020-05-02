@@ -10,6 +10,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 public class SnowyTaigaHandler extends BiomeHandler {
@@ -49,8 +50,8 @@ public class SnowyTaigaHandler extends BiomeHandler {
 			int treeZ = GenUtils.randInt(random, 2,12) + data.getChunkZ()*16;
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-			
-				new FractalTreeBuilder(FractalTreeType.TAIGA_BIG).setSnowy(true).build(world, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX,treeY,treeZ)))
+					new FractalTreeBuilder(FractalTreeType.TAIGA_BIG).setSnowy(true).build(world, data, treeX, treeY, treeZ);
 			}
 		}
 		
@@ -59,8 +60,8 @@ public class SnowyTaigaHandler extends BiomeHandler {
 			int treeZ = GenUtils.randInt(random, 0,15) + data.getChunkZ()*16;
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-				
-				new FractalTreeBuilder(FractalTreeType.TAIGA_SMALL).setSnowy(true).build(world, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX,treeY,treeZ)))
+					new FractalTreeBuilder(FractalTreeType.TAIGA_SMALL).setSnowy(true).build(world, data, treeX, treeY, treeZ);
 			}
 		}
 		

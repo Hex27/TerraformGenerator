@@ -7,6 +7,7 @@ import org.terraform.biome.beach.MudflatsHandler;
 import org.terraform.biome.beach.RockBeachHandler;
 import org.terraform.biome.beach.SandyBeachHandler;
 import org.terraform.biome.flat.BadlandsHandler;
+import org.terraform.biome.flat.DarkForestHandler;
 import org.terraform.biome.flat.DesertHandler;
 import org.terraform.biome.flat.ForestHandler;
 import org.terraform.biome.flat.IceSpikesHandler;
@@ -69,6 +70,7 @@ public enum BiomeBank {
 	SNOWY_TAIGA(new SnowyTaigaHandler(),BiomeType.FLAT),
 	SNOWY_WASTELAND(new SnowyWastelandHandler(),BiomeType.FLAT),
 	ICE_SPIKES(new IceSpikesHandler(),BiomeType.FLAT),
+	DARK_FOREST(new DarkForestHandler(),BiomeType.FLAT),
 	
 	//BEACHES
 	SANDY_BEACH(new SandyBeachHandler(),BiomeType.BEACH),
@@ -142,6 +144,7 @@ public enum BiomeBank {
 		}
 		
 		//GENERATE LOW-ALTITUDE AREAS
+		
 		return BiomeGrid.calculateBiome(
 				BiomeType.FLAT,
 				temperature + GenUtils.randDouble(random, -0.1, 0.1),

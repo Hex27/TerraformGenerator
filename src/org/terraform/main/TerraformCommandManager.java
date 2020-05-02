@@ -16,6 +16,7 @@ import org.terraform.command.GuardianSpawnCheckCommand;
 import org.terraform.command.IceSpikeCommand;
 import org.terraform.command.LargeMonumentLampCommand;
 import org.terraform.command.MonumentCommand;
+import org.terraform.command.MushroomCommand;
 import org.terraform.command.PreviewCommand;
 import org.terraform.command.SchematicLoadCommand;
 import org.terraform.command.SchematicSaveCommand;
@@ -55,6 +56,7 @@ public class TerraformCommandManager extends DCCommandManager {
 		this.registerCommand(new CheckHeightCommand(plugin, "checkheight","ch"));
 		//this.registerCommand(new GuardianSpawnCheckCommand(plugin, "gsc","guardianspawncheck"));
 		this.registerCommand(new WandCommand(plugin, "wand"));
+		this.registerCommand(new MushroomCommand(plugin, "mushroom"));
 		this.registerCommand(new SchematicSaveCommand(plugin, "save"));
 		this.registerCommand(new SchematicLoadCommand(plugin, "load"));
 	}

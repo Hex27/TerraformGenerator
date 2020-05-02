@@ -219,6 +219,7 @@ public class GenUtils {
 				if(data.getType(x, y, z).toString().contains("LEAVES")){
 				}else if(data.getType(x, y, z).toString().contains("LOG")){
 				}else if(data.getType(x, y, z).toString().contains("WOOD")){
+				}else if(data.getType(x, y, z).toString().contains("MUSHROOM")){
 				}else if(data.getType(x, y, z).toString().contains("FENCE")){
 				}else if(data.getType(x, y, z).toString().contains("WALL")){
 				}else if(data.getType(x, y, z) == Material.HAY_BLOCK){

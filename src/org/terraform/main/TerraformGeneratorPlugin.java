@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
@@ -52,7 +53,34 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 		}
 	}
 	
-	
+	@EventHandler
+	public void onWorldLoad(WorldLoadEvent event){
+		if(event.getWorld().getGenerator() instanceof TerraformGenerator){
+			if(TerraformGenerator.preWorldInitGen.size() > 0){
+				if(!TConfigOption.DEVSTUFF_ATTEMPT_FIXING_PREMATURE.getBoolean()){
+					logger.info("&cIgnoring " 
+							+ TerraformGenerator.preWorldInitGen.size() 
+							+ " pre-maturely generated chunks."
+							+ " You may see a patch of plain land.");
+					return;
+				}
+				logger.info("&6Trying to decorate " 
+			+ TerraformGenerator.preWorldInitGen.size() 
+			+ " pre-maturely generated chunks.");
+				int fixed = 0;
+				TerraformWorld tw = TerraformWorld.get(event.getWorld());
+				for(SimpleChunkLocation sc:TerraformGenerator.preWorldInitGen){
+					if(!sc.getWorld().equals(event.getWorld().getName())) continue;
+					logger.debug("Populating " + sc.toString());
+					PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
+					new TerraformPopulator(tw).populate(tw, new Random(), data);
+					fixed++;
+				}
+				logger.info("&aSuccessfully finished fixing " + fixed + " pre-mature chunks!");
+				
+			}
+		}
+	}
 	
 	@EventHandler
 	public void onWorldInit(WorldInitEvent event){
@@ -61,19 +89,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 			if(injector.attemptInject(event.getWorld())){
 				injectedWorlds.add(event.getWorld().getName());
 				logger.info("&aInjection success! Proceeding with generation.");
-				if(TerraformGenerator.preWorldInitGen.size() > 0){
-					logger.info("&6Trying to decorate " 
-				+ TerraformGenerator.preWorldInitGen.size() 
-				+ " pre-maturely generated chunks.");
-					
-					TerraformWorld tw = TerraformWorld.get(event.getWorld());
-					for(SimpleChunkLocation sc:TerraformGenerator.preWorldInitGen){
-						PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
-						new TerraformPopulator(tw).populate(tw, new Random(), data);
-					}
-					logger.info("&aSuccessfully finished fixing pre-mature chunks!");
-					
-				}
+				
 			}else{
 				logger.error("&cInjection failed.");
 			}

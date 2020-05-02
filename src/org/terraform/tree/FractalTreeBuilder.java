@@ -24,6 +24,9 @@ import org.terraform.utils.Version;
 
 public class FractalTreeBuilder {
 	
+	int height = 0;
+	SimpleBlock top;
+	
 	float baseThickness = 3;
 	int baseHeight = 7;
 	float thicknessDecrement = 0.5f;
@@ -133,19 +136,31 @@ public class FractalTreeBuilder {
 		case TAIGA_SMALL:
 			this.setBaseHeight(7).setBaseThickness(1).setMaxDepth(1).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(1).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.SPRUCE_LEAVES).setHeightVar(1);
 			break;
-		case BROWN_MUSHROOM: 
-			this.setBaseHeight(10)
-			.setBaseThickness(2)
-			.setThicknessDecrement(0.3f)
-			.setMaxDepth(3)
-			.setLeafRadiusX(7)
-			.setLeafRadiusZ(7)
-			.setLeafRadiusY(1)
+		case BROWN_MUSHROOM_BASE: 
+			this.setBaseHeight(3)
+			.setBaseThickness(3)
+			.setThicknessDecrement(0)
+			.setMaxDepth(2)
+			.setFractalThreshold(4)
+			.setLeafRadius(0)
 			.setLogType(Material.MUSHROOM_STEM)
-			.setLeafType(Material.BROWN_MUSHROOM_BLOCK)
-			.setLengthDecrement(1)
-			.setMinBend(0)
-			.setMaxBend(0);
+			.setLeafType(Material.AIR)
+			.setLengthDecrement(0)
+			.setMinBend(0.2*Math.PI/6)
+			.setMaxBend(0.4*Math.PI/6);
+			break;
+		case RED_MUSHROOM_BASE: 
+			this.setBaseHeight(3)
+			.setBaseThickness(3.5f)
+			.setThicknessDecrement(0)
+			.setMaxDepth(1)
+			.setFractalThreshold(4)
+			.setLeafRadius(0)
+			.setLogType(Material.MUSHROOM_STEM)
+			.setLeafType(Material.AIR)
+			.setLengthDecrement(0)
+			.setMinBend(0.4*Math.PI/6)
+			.setMaxBend(0.6*Math.PI/6);
 			break;
 		case SWAMP_BOTTOM:
 			this.setBaseHeight(1).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(3).setLeafRadius(0).setLogType(Material.OAK_WOOD).setLeafType(Material.OAK_LEAVES).setLengthDecrement(-2f).setMaxBend(-Math.PI/6).setMinBend(-Math.PI/3);
@@ -176,9 +191,24 @@ public class FractalTreeBuilder {
 			.setHeightVar(0)
 			.setLogType(Material.OAK_LOG)
 			.setLeafType(Material.PUMPKIN);
+		case DARK_OAK_SMALL:
+			this.setBaseHeight(1).setBaseThickness(2)
+			.setThicknessDecrement(0.5f)
+			.setMaxDepth(3).setLeafRadiusX(2)
+			.setLeafRadiusZ(2).setLeafRadiusY(1)
+			.setLogType(Material.DARK_OAK_WOOD)
+			.setLeafType(Material.DARK_OAK_LEAVES)
+			.setLengthDecrement(0)
+			.setHeightVar(0)
+			.setFractalThreshold(4)
+			.setMaxBend(1.4*Math.PI/6)
+			.setMinBend(1*Math.PI/6)
+			.setMaxPitch(Math.PI)
+			.setMinPitch(0);
+			break;
 		case DARK_OAK_BIG_TOP:
-			this.setBaseHeight(6).setBaseThickness(10)
-			.setThicknessDecrement(2.5f)
+			this.setBaseHeight(6).setBaseThickness(8)
+			.setThicknessDecrement(2f)
 			.setMaxDepth(4).setLeafRadiusX(4)
 			.setLeafRadiusZ(4).setLeafRadiusY(2)
 			.setLogType(Material.DARK_OAK_WOOD)
@@ -192,7 +222,7 @@ public class FractalTreeBuilder {
 			.setMinPitch(0);
 			break;
 		case DARK_OAK_BIG_BOTTOM:
-			this.setBaseHeight(5).setBaseThickness(4)
+			this.setBaseHeight(4).setBaseThickness(4)
 			.setThicknessDecrement(0f)
 			.setMaxDepth(3).setLeafRadiusX(0)
 			.setLeafRadiusZ(0).setLeafRadiusY(0)
@@ -201,9 +231,10 @@ public class FractalTreeBuilder {
 			.setLengthDecrement(-1)
 			.setHeightVar(1)
 			.setFractalThreshold(5)
-			.setMaxBend(2.1*Math.PI/6)
-			.setMinBend(1.7*Math.PI/6);
+			.setMaxBend(2.3*Math.PI/6)
+			.setMinBend(2.0*Math.PI/6);
 			break;
+			//Ice leaves tree. Will be good for wasteland
 		}
 	}
 	
@@ -221,6 +252,7 @@ public class FractalTreeBuilder {
 		this.oriZ = z;
 		this.rand = tw.getRand(16*16*x+16*y+z);
 		SimpleBlock base = new SimpleBlock(data,x,y,z);
+		if(this.top == null) top = base;
 		double angle = Math.PI/2+GenUtils.randDouble(rand, -initialTilt, initialTilt);
 		if(collapsed){
 			angle = 0;
@@ -280,6 +312,12 @@ public class FractalTreeBuilder {
 			z = (int) (Math.round(size*Math.cos(yaw)));
 		}
 		SimpleBlock two = base.getRelative(x,y,z);
+		if(two.getY() > top.getY()) top = two;
+		
+		//Set height
+		if(two.getY() - oriY > height)
+			height = two.getY() - oriY;
+		
 		
 		drawLine(rand, base,two,(int) (size),thickness,this.logType);
 		
@@ -615,6 +653,13 @@ public class FractalTreeBuilder {
 		return this;
 	}
 	
+	/**
+	 * @return the height
+	 */
+	public int getHeight() {
+		return height;
+	}
+
 	public FractalTreeBuilder setMinPitch(double min){
 		this.minPitch = min;
 		return this;
