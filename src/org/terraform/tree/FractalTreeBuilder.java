@@ -328,7 +328,7 @@ public class FractalTreeBuilder {
 				if(!two.getRelative(0,-i,0).getType().isSolid()){
 					spawnedBees = true;
 					BeeHiveSpawner.spawnFullBeeNest(two.getRelative(0,-i,0));
-					TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+					//TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
 					break;
 				}
 			}

@@ -8,6 +8,7 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.HeightMap;
+import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 
 public class CheckHeightCommand extends DCCommand {
@@ -51,6 +52,7 @@ public class CheckHeightCommand extends DCCommand {
 		p.sendMessage("Moisture: " + tw.getMoisture(x, z));
 		p.sendMessage("Result height: " + h);
 		p.sendMessage("River Depth: " + rd);
+		p.sendMessage("Mega Chunk: " + new MegaChunk(x,0,z).getX() + "," + new MegaChunk(x,0,z).getZ());
 		p.sendMessage("Result Biome: " + tw.getBiomeBank(x, h, z));
 		
 	}

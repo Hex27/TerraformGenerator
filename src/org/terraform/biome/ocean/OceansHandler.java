@@ -54,7 +54,9 @@ public class OceansHandler extends BiomeHandler {
 					data.setType(x, y+1, z,Material.SEAGRASS);
 					if(random.nextBoolean() && y < TerraformGenerator.seaLevel - 2)
 						BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_SEAGRASS);
-				}else if(GenUtils.chance(random, 3, 50) && growsKelp && y+1 < TerraformGenerator.seaLevel-10){
+				}else if(GenUtils.chance(random, 3, 50) 
+						&& growsKelp 
+						&& y+1 < TerraformGenerator.seaLevel-10){
 					generateKelp(x,y+1,z,data,random);
 				}
 				if(GenUtils.chance(random, 1, 200)){

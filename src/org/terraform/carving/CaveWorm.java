@@ -1,12 +1,14 @@
-package org.terraform.populators;
+package org.terraform.carving;
 
 import java.util.Random;
 import java.util.UUID;
 
+import org.bukkit.Material;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
@@ -41,7 +43,7 @@ public class CaveWorm {
 		this.base = new SimpleBlock(data,x,y,z);
 		//TerraformGeneratorPlugin.logger.info("Generating cave at " + x + "," + y + "," + z +"," + this.id.toString());
 		rand = new Random((long) (seed*0.3));
-		length = GenUtils.randInt(rand,50,200);
+		length = GenUtils.randInt(rand,40,50);
 		this.noise1 = new FastNoise(seed);
 		noise1.SetFrequency(0.09f);
 		noise1.SetNoiseType(NoiseType.Perlin);
@@ -63,7 +65,7 @@ public class CaveWorm {
 		return !dead;
 	}
 	
-	private void die(){
+	public void die(){
 		int x = base.getX();
 		int y = base.getY();
 		int z = base.getZ();
@@ -137,16 +139,13 @@ public class CaveWorm {
 					SimpleBlock rel = block.getRelative((int)Math.round(x),(int)Math.round(y),(int)Math.round(z));
 					double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
 					if(rel.distanceSquared(block) <= radiusSquared){
-						//replaced = true;
-//						rel.setReplaceType(ReplaceType.STONE_LIKE);
-//						if(liq == CaveLiquid.AIR){
-//							rel.setType(Material.CAVE_AIR);
-//						}else if(liq == CaveLiquid.WATER){
-//							rel.setReplaceType(ReplaceType.STONE_LIKE_ICELESS);
-//						}else if(liq == CaveLiquid.LAVA){
-//							rel.setType(Material.LAVA);
-//						}
-						//rel.attemptApply();
+						if(liq == CaveLiquid.AIR){
+							rel.setType(Material.CAVE_AIR);
+						}else if(liq == CaveLiquid.WATER){
+							rel.setType(Material.WATER);
+						}else if(liq == CaveLiquid.LAVA){
+							rel.setType(Material.LAVA);
+						}
 					}
 				}
 			}

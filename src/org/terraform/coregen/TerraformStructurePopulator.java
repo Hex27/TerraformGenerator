@@ -11,6 +11,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.VillageHousePopulator;
+import org.terraform.structure.caves.LargeCavePopulator;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
@@ -24,6 +25,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 		add(new SmallDungeonPopulator());
 		add(new MonumentPopulator());
 		add(new ShipwreckPopulator());
+		add(new LargeCavePopulator());
 	}};
 	
 	TerraformWorld tw;
@@ -54,6 +56,8 @@ public class TerraformStructurePopulator extends BlockPopulator {
 				}
 			}
 		}
+		
+		
 		//TerraformGeneratorPlugin.logger.debug("s-pop-2");
 		for(StructurePopulator spop:structurePops){
 			

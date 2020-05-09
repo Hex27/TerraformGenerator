@@ -47,7 +47,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator{
 		
 		if(y < 10) y = 10;
 		
-		while(data.getType(x, y, z) == Material.CAVE_AIR){
+		while(!data.getType(x, y, z).isSolid()){
 			y--;
 		}
 		

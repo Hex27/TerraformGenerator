@@ -8,11 +8,11 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
+import org.terraform.carving.CaveWormCreator;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.populators.AnimalPopulator;
-import org.terraform.populators.CaveWormCreator;
 import org.terraform.populators.OrePopulator;
 import org.terraform.populators.RiverWormCreator;
 
@@ -54,18 +54,16 @@ public class TerraformPopulator{
 	private CaveWormCreator cavePop;
 	
 	public TerraformPopulator(TerraformWorld tw){
-		this.cavePop = new CaveWormCreator(tw);
 		this.rwc = new RiverWormCreator(tw);
 	}
 	
 	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 		
-		//ores & caves
+		//ores
 		for(OrePopulator ore:orePops){
 			//TerraformGeneratorPlugin.logger.info("Generating ores...");
 			ore.populate(tw, random, data);
 		}
-		//cavePop.populate(tw, random, data);
 		
 		//Biome specific populators
 		ArrayList<BiomeBank> banks = new ArrayList<>();
