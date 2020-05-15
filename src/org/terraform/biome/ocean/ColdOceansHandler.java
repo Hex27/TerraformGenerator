@@ -37,7 +37,7 @@ public class ColdOceansHandler extends BiomeHandler {
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int y = GenUtils.getTrueHighestBlock(data, x, z);
-				if(data.getBiome(x,y,z) != getBiome()) continue;
+				if(data.getBiome(x,y+1,z) != getBiome()) continue;
 				
 				//Cold oceans dont have ice sheets
 //				if(GenUtils.chance(random, 1, 5)) 

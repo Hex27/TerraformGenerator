@@ -24,6 +24,32 @@ public class GenUtils {
 		return rand.nextBoolean() ? 1:-1;
 	}
 	
+	public static ArrayList<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z){
+		ArrayList<int[]> list = new ArrayList<>();
+		int y = getHighestGround(data,x,z);
+		int[] pair = new int[]{-1,-1};
+		
+		for(int ny = y; ny > 0; ny--){
+			Material type = data.getType(x, ny, z);
+			if((pair[0] == -1)){
+				if(!type.isSolid())
+					pair[0] = ny;
+			}else if(pair[1] == -1){
+				if(type.isSolid()){
+					pair[1] = ny;
+					list.add(pair);
+					pair = new int[]{-1,-1};
+				}
+			}
+		}
+		
+		if(pair[0] != -1 && pair[1] != -1){
+			list.add(pair);
+		}
+		
+		return list;
+	}
+	
 	public static int getOctaveHeightAt(World world, int x, int z,int spreadHeight, int minHeight){
 
         return (int) (getGenerator(world).noise(x, z, 0.5D, 0.5D)
@@ -225,6 +251,7 @@ public class GenUtils {
 				}else if(data.getType(x, y, z) == Material.HAY_BLOCK){
 				}else if(data.getType(x, y, z).toString().contains("BRICK")){
 				}else if(data.getType(x, y, z).isInteractable()){
+				}else if(data.getType(x, y, z) == Material.ICE){
 				}else
 					break;
 			}

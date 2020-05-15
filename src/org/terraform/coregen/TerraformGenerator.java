@@ -60,7 +60,10 @@ public class TerraformGenerator extends ChunkGenerator{
             	
             	for(int y = undergroundHeight;y > 0; y--){
             		//if(!attemptSimpleBlockUpdate(tw, chunk, chunkX, chunkZ, x,undergroundHeight,z)) 
-            		chunk.setBlock(x,y,z,Material.STONE);
+            		if(!TConfigOption.DEVSTUFF_GLASSSTONE.getBoolean())
+            			chunk.setBlock(x,y,z,Material.STONE);
+            		else
+            			chunk.setBlock(x,y,z,Material.GLASS);
             	}
             	
             	//Any low elevation is sea

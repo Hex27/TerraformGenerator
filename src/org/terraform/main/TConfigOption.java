@@ -12,11 +12,12 @@ public enum TConfigOption{
 	HEIGHT_MAP_DEEP_SEA_LEVEL("heightmap.deep-sea-level",35),
 	
 	DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode",false),
+	DEVSTUFF_GLASSSTONE("dev-stuff.stone-is-glass",false),
 	DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations",true),
 	
 	//-=[CAVES]=-
-	CAVES_ALLOW_FLOODED_CAVES("caves.allow-flooded-caves",true),
-	CAVES_ALLOW_FLOODED_RAVINES("caves.allow-flooded-ravines",true),
+	//CAVES_ALLOW_FLOODED_CAVES("caves.allow-flooded-caves",true),
+	//CAVES_ALLOW_FLOODED_RAVINES("caves.allow-flooded-ravines",true),
 	
 	//-=[STRUCTURES]=-
 		//Stronghold

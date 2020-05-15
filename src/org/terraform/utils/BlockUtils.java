@@ -240,6 +240,14 @@ public class BlockUtils {
 		}
 	}
 	
+	public static void downPillar(int x, int y, int z, int height, PopulatorDataAbstract data, Material... type){
+		while(!data.getType(x,y,z).isSolid() && height > 0){
+			height--;
+			data.setType(x,y,z,GenUtils.randMaterial(type));
+			y--;
+		}
+	}
+	
 
 	public static boolean isStoneLike(Material mat){
 		return isDirtLike(mat) || stoneLike.contains(mat);

@@ -48,7 +48,7 @@ public class OceansHandler extends BiomeHandler {
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int y = GenUtils.getTrueHighestBlock(data, x, z);
-				if(data.getBiome(x,y,z) != getBiome()) continue;
+				if(data.getBiome(x,y+1,z) != getBiome()) continue;
 				if(!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
 				if(GenUtils.chance(random, 10, 100)){ //SEA GRASS/KELP
 					data.setType(x, y+1, z,Material.SEAGRASS);

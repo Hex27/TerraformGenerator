@@ -108,7 +108,7 @@ public class TerraformWorld{
 //			banks.put(new int[]{x, z}, bank);
 //		}
 //		return bank;
-		return BiomeBank.calculateBiome(this, getTemperature(x,z), getMoisture(x,z), height);
+		return BiomeBank.calculateBiome(this, x,z, height);
 	}
 	
 	/**

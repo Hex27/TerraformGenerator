@@ -16,6 +16,7 @@ import net.minecraft.server.v1_14_R1.ITileEntity;
 import net.minecraft.server.v1_14_R1.RegionLimitedWorldAccess;
 import net.minecraft.server.v1_14_R1.TileEntity;
 import net.minecraft.server.v1_14_R1.WorldChunkManager;
+import net.minecraft.server.v1_14_R1.World;
 
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
@@ -27,6 +28,9 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.structure.farmhouse.FarmhousePopulator;
+import org.terraform.structure.monument.MonumentPopulator;
+import org.terraform.structure.stronghold.StrongholdPopulator;
 
 public class NMSChunkGenerator extends ChunkGenerator {
 	
@@ -169,6 +173,25 @@ public class NMSChunkGenerator extends ChunkGenerator {
 	public int getBaseHeight(int i, int j, Type heightmap_type) {
 		return new org.terraform.coregen.HeightMap().getHeight(tw,i,j);
 	}
+	
+	@Override
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i, boolean flag) {
+        //StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.ao.get(s.toLowerCase(Locale.ROOT));
+		int pX = blockposition.getX();
+		int pZ = blockposition.getZ();
+		if(s.equalsIgnoreCase("Stronghold")){
+			int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
+			return new BlockPosition(coords[0],20,coords[1]);
+		}else if(s.equalsIgnoreCase("Village")){
+			int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
+			return new BlockPosition(coords[0],100,coords[1]);
+		}else if(s.equalsIgnoreCase("Monument")){
+			int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
+			return new BlockPosition(coords[0],100,coords[1]);
+		}
+		
+        return null;
+    }
 	
     private static class CustomBiomeGrid implements BiomeGrid {
         BiomeBase[] biome;

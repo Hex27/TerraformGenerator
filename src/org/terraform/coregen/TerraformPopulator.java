@@ -65,6 +65,7 @@ public class TerraformPopulator{
 			ore.populate(tw, random, data);
 		}
 		
+		
 		//Biome specific populators
 		ArrayList<BiomeBank> banks = new ArrayList<>();
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
@@ -85,6 +86,9 @@ public class TerraformPopulator{
 		for(BiomeBank bank:banks){
 			//TerraformGeneratorPlugin.logger.info("Populating for biome: " + bank.toString());
 			bank.getHandler().populate(tw, random, data);
+
+			//Cave populators
+			bank.getCavePop().populate(tw, random, data);
 		}
 		
 		ArrayList<EntityType> spawned = new ArrayList<>();

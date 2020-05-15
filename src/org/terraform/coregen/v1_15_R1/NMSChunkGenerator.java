@@ -46,6 +46,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
+import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 
 public class NMSChunkGenerator extends ChunkGenerator {
@@ -113,6 +114,9 @@ public class NMSChunkGenerator extends ChunkGenerator {
 		}else if(s.equalsIgnoreCase("Village")){
 			int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
 			return new BlockPosition(coords[0],100,coords[1]);
+		}else if(s.equalsIgnoreCase("Monument")){
+			int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
+			return new BlockPosition(coords[0],100,coords[1]);
 		}
 		
         return null;
@@ -171,11 +175,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     int i1 = listiterator.nextIndex();
                     WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper) listiterator.next();
                     if(worldgencarverwrapper.a instanceof WorldGenCavesOcean){
-                    	if(!TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
+                    	//if(!TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
                     		continue;
                     }
                     if(worldgencarverwrapper.a instanceof WorldGenCanyonOcean){
-                    	if(!TConfigOption.CAVES_ALLOW_FLOODED_RAVINES.getBoolean())
+                    	//if(!TConfigOption.CAVES_ALLOW_FLOODED_RAVINES.getBoolean())
                     		continue;
                     }
                     seededrandom.c(this.seed + (long) i1, k, l);

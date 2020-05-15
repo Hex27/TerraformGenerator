@@ -3,8 +3,10 @@ package org.terraform.structure.caves;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.SeaPickle;
 import org.bukkit.util.Vector;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
@@ -85,6 +87,17 @@ public class LargeCavePopulator extends StructurePopulator{
 						}
 					}
 				}
+				
+				//Low luminosity sea pickles
+				if(GenUtils.chance(rand,4,100)){
+					int ground = getCaveFloor(data,nx,y,nz);
+						if(data.getType(nx, ground, nz).isSolid()
+								&& data.getType(nx, ground+1, nz) == Material.WATER){
+							SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
+							sp.setPickles(GenUtils.randInt(1,2));
+							data.setBlockData(nx, ground+1, nz, sp);
+						}
+				}
 			}
 		}
 	}
@@ -101,7 +114,7 @@ public class LargeCavePopulator extends StructurePopulator{
 	
 	public int getCaveFloor(PopulatorDataAbstract data, int x, int y, int z){
 		int ny = y;
-		while(ny > 2 && !data.getType(x,y,z).isSolid()){
+		while(ny > 2 && !data.getType(x,ny,z).isSolid()){
 			ny--;
 		}
 		if(ny <= 2) return 2;
@@ -176,8 +189,13 @@ public class LargeCavePopulator extends StructurePopulator{
 						double n = 0.7*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
 						if(n < 0) n = 0;
 					if(equationResult <= 1+n){
-						if(BlockUtils.isStoneLike(rel.getType()) && rel.getType() != Material.COBBLESTONE
-								||!rel.getType().isSolid()){
+						if((BlockUtils.isStoneLike(rel.getType()) 
+								&& rel.getType() != Material.COBBLESTONE)
+								||!rel.getType().isSolid()
+								|| rel.getType() == Material.STONE_SLAB
+								|| rel.getType() == Material.OBSIDIAN
+								|| rel.getType() == Material.MAGMA_BLOCK
+								|| rel.getType().toString().endsWith("WALL")){
 							
 							//Lower areas are water.
 							if(y < 0 && Math.abs(y) >= 0.8*rY){

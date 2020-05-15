@@ -141,6 +141,17 @@ public class Wall {
 		}
 	}
 	
+	public void downLPillar(Random rand, int h, Material... types){
+		int depth = 0;
+		for(int y = get().getY(); y > 0; y--){
+			if(depth >= h) break;
+			if(!block.getRelative(0,-depth,0).getType().isSolid()){
+				block.getRelative(0,-depth,0).setType(GenUtils.randMaterial(rand, types));
+			}else break;
+			depth++;
+		}
+	}
+	
 	public Wall getRear(){
 		return new Wall(block.getRelative(direction.getOppositeFace()), direction);
 	}
