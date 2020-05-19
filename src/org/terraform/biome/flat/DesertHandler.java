@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -22,15 +23,7 @@ public class DesertHandler extends BiomeHandler {
 	public Biome getBiome() {
 		return Biome.DESERT;
 	}
-
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
-//		gen.setScale(0.005);
-//		
-//		return (int) (gen.noise(x, z, 0.5, 0.5)*7D+50D);
-//	}
-
+	
 	@Override
 	public Material[] getSurfaceCrust(Random rand) {
 		return new Material[]{GenUtils.randMaterial(rand, Material.RED_SAND,Material.SAND,Material.SAND,Material.SAND,Material.SAND,Material.SAND,Material.SAND,Material.SAND,Material.SAND,Material.SAND,Material.SAND,Material.SAND),
@@ -58,7 +51,13 @@ public class DesertHandler extends BiomeHandler {
 				if(base == Material.SAND){
 					if(GenUtils.chance(random, 1, 100)||
 							(GenUtils.chance(random, 1, 20) && cactusGathering)){
-						BlockUtils.spawnPillar(random,data,x,y+1,z,Material.CACTUS,3,5);
+						boolean canSpawn = true;
+						for(BlockFace face:BlockUtils.directBlockFaces){
+							if(data.getType(x+face.getModX(),y+1,z+face.getModZ()) != Material.AIR)
+									canSpawn = false;
+						}
+						if(canSpawn)
+							BlockUtils.spawnPillar(random,data,x,y+1,z,Material.CACTUS,3,5);
 					}
 				}
 				

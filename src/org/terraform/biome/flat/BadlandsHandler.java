@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.bukkit.block.BlockFace;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -44,8 +45,16 @@ public class BadlandsHandler extends BiomeHandler {
 				Material base = data.getType(x,highest,z);
 				if(base == Material.SAND ||
 						base == Material.RED_SAND){
-					if(GenUtils.chance(random, 1, 200))
-						BlockUtils.spawnPillar(random,data,x,highest+1,z,Material.CACTUS,3,6);
+					if(GenUtils.chance(random, 1, 200)){
+
+						boolean canSpawn = true;
+						for(BlockFace face:BlockUtils.directBlockFaces){
+							if(data.getType(x+face.getModX(),highest+1,z+face.getModZ()) != Material.AIR)
+									canSpawn = false;
+						}
+						if(canSpawn)
+							BlockUtils.spawnPillar(random,data,x,highest+1,z,Material.CACTUS,3,6);
+					}
 				}
 			}
 		}

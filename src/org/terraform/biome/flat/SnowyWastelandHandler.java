@@ -8,6 +8,8 @@ import org.bukkit.block.data.Snowable;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.tree.FractalTreeBuilder;
+import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -50,15 +52,15 @@ public class SnowyWastelandHandler extends BiomeHandler {
 			if(data.getType(loc[0],loc[1],loc[2]) != Material.DIRT) continue;
 			
 			BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
-			//Ugly af.
-//			if(GenUtils.chance(1,3))
-//				new FractalTreeBuilder(FractalTreeType.WASTELAND_COLLAPSED)
-//				.setSnowy(true).build(world,data,loc[0],loc[1]+1,loc[2]);
-//				//BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
-//			
-//			if(GenUtils.chance(1,30))
-//				new FractalTreeBuilder(FractalTreeType.WASTELAND_BIG)
-//				.setSnowy(true).build(world,data,loc[0],loc[1]+1,loc[2]);
+			
+			if(GenUtils.chance(1,3))
+				new FractalTreeBuilder(FractalTreeType.FROZEN_TREE_SMALL)
+				.setSnowy(true).build(world,data,loc[0],loc[1]+1,loc[2]);
+				//BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
+			
+			if(GenUtils.chance(1,30))
+				new FractalTreeBuilder(FractalTreeType.FROZEN_TREE_BIG)
+			.build(world,data,loc[0],loc[1]+1,loc[2]);
 		}
 
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){

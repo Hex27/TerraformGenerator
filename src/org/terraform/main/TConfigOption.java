@@ -11,6 +11,9 @@ public enum TConfigOption{
 	HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level",62),
 	HEIGHT_MAP_DEEP_SEA_LEVEL("heightmap.deep-sea-level",35),
 	
+	BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency",0.001f),
+	BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency",0.001f),
+	
 	DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode",false),
 	DEVSTUFF_GLASSSTONE("dev-stuff.stone-is-glass",false),
 	DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations",true),

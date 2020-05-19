@@ -44,7 +44,10 @@ public class LargeCavePopulator extends StructurePopulator{
 		
 		int highest = GenUtils.getHighestGround(data,x,z);
 		int rY = (highest - 20)/2; //5 block padding bottom, 15 padding top.
-		createLargeCave(tw,rand,data,rY,x,rY+6,z);
+//		if(rand.nextBoolean())
+//			createLargeCave(tw,rand,data,rY,x,rY+6,z);
+//		else
+			new MushroomCavePopulator().createLargeCave(tw,rand,data,rY,x,rY+6,z);
 	}
 	
 	public void createLargeCave(TerraformWorld tw, Random rand, PopulatorDataAbstract data, int rY, int x, int y, int z){
@@ -193,6 +196,9 @@ public class LargeCavePopulator extends StructurePopulator{
 								&& rel.getType() != Material.COBBLESTONE)
 								||!rel.getType().isSolid()
 								|| rel.getType() == Material.STONE_SLAB
+								|| rel.getType() == Material.ICE
+								|| rel.getType() == Material.PACKED_ICE
+								|| rel.getType() == Material.BLUE_ICE
 								|| rel.getType() == Material.OBSIDIAN
 								|| rel.getType() == Material.MAGMA_BLOCK
 								|| rel.getType().toString().endsWith("WALL")){

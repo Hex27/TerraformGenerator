@@ -7,6 +7,7 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.terraform.biome.BiomeBank;
+import org.terraform.main.TConfigOption;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 
@@ -55,7 +56,7 @@ public class TerraformWorld{
 			tempOctave = new FastNoise((int) (getSeed()*2));
 			tempOctave.SetNoiseType(NoiseType.ValueFractal);
 			tempOctave.SetFractalOctaves(6);
-			tempOctave.SetFrequency(0.001f); //Was 0.0006
+			tempOctave.SetFrequency(TConfigOption.BIOME_TEMPERATURE_FREQUENCY.getFloat()); //Was 0.0006
 		}
 		return tempOctave;
 	}
@@ -65,7 +66,7 @@ public class TerraformWorld{
 			moistureOctave = new FastNoise((int) (getSeed()*3));
 			moistureOctave.SetNoiseType(NoiseType.ValueFractal);
 			moistureOctave.SetFractalOctaves(6);
-			moistureOctave.SetFrequency(0.001f);
+			moistureOctave.SetFrequency(TConfigOption.BIOME_MOISTURE_FREQUENCY.getFloat());
 		}
 		return moistureOctave;
 	}
