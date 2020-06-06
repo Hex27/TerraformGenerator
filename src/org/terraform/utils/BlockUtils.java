@@ -12,6 +12,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.MultipleFacing;
+import org.bukkit.block.data.Rail;
+import org.bukkit.block.data.Rail.Shape;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.biome.BiomeBank;
@@ -558,6 +560,68 @@ public class BlockUtils {
 		door.setFacing(dir);
 		door.setHalf(Half.TOP);
 		data.setBlockData(x,y+1,z,door);
+	}
+	
+	public static void placeRail(SimpleBlock block,Material mat){
+		Rail rail = (Rail) Bukkit.createBlockData(mat);
+		ArrayList<BlockFace> faces = new ArrayList<>();
+		BlockFace upperFace = null;
+		for(BlockFace face:BlockUtils.directBlockFaces){
+			if(block.getRelative(face).getType().toString().contains("RAIL")){
+				faces.add(face);
+			}
+			if(block.getRelative(face).getRelative(0,1,0).getType().toString().contains("RAIL")){
+				upperFace = face;
+			}
+		}
+		
+		if(upperFace != null){
+			switch(upperFace){
+			case NORTH:
+				rail.setShape(Shape.ASCENDING_NORTH);
+				break;
+			case SOUTH:
+				rail.setShape(Shape.ASCENDING_SOUTH);
+				break;
+			case EAST:
+				rail.setShape(Shape.ASCENDING_EAST);
+				break;
+			case WEST:
+				rail.setShape(Shape.ASCENDING_WEST);
+				break;
+			default:
+				break;
+			}
+		}else{
+			if(faces.contains(BlockFace.NORTH)&&faces.contains(BlockFace.EAST)){
+				rail.setShape(Shape.NORTH_EAST);
+			}else if(faces.contains(BlockFace.NORTH)&&faces.contains(BlockFace.WEST)){
+				rail.setShape(Shape.NORTH_WEST);
+			}else if(faces.contains(BlockFace.SOUTH)&&faces.contains(BlockFace.EAST)){
+				rail.setShape(Shape.SOUTH_EAST);
+			}else if(faces.contains(BlockFace.SOUTH)&&faces.contains(BlockFace.EAST)){
+				rail.setShape(Shape.SOUTH_EAST);
+			}else if(faces.contains(BlockFace.NORTH)||faces.contains(BlockFace.SOUTH)){
+				rail.setShape(Shape.NORTH_SOUTH);
+			}else if(faces.contains(BlockFace.EAST)||faces.contains(BlockFace.WEST)){
+				rail.setShape(Shape.EAST_WEST);
+			}
+			
+		}
+		
+		block.setBlockData(rail);
+	}
+	
+	public static void correctSurroundingRails(SimpleBlock target){
+		if(!(target.getBlockData() instanceof Rail)) return;
+		
+		placeRail(target,target.getType());
+		for(BlockFace face:BlockUtils.directBlockFaces){
+			if(target.getRelative(face).getBlockData() instanceof Rail)
+				placeRail(target.getRelative(face),target.getRelative(face).getType());
+			if(target.getRelative(face).getRelative(0,-1,0).getBlockData() instanceof Rail)
+				placeRail(target.getRelative(face).getRelative(0,-1,0),target.getRelative(0,-1,0).getRelative(face).getType());
+		}
 	}
 
 }

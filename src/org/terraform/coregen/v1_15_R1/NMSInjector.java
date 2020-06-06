@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.terraform.coregen.NMSInjectorAbstract;
+import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.data.TerraformWorld;
 
@@ -58,6 +59,18 @@ public class NMSInjector extends NMSInjectorAbstract {
 		TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
 		//return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
 		return new PopulatorDataICA(tw, ws, ica, chunk.getX(), chunk.getZ());
+	}
+
+	@Override
+	public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
+		if(data instanceof PopulatorData){
+			PopulatorData pdata = (PopulatorData) data;
+			IChunkAccess ica = pdata.rlwa.getChunkAt(data.getChunkX(),data.getChunkZ());
+			WorldServer ws = ((PopulatorData) data).rlwa.getMinecraftWorld();
+			TerraformWorld tw = TerraformWorld.get(pdata.rlwa.getWorldData().getName(),pdata.rlwa.getWorldData().getSeed());
+			return new PopulatorDataICA(tw, ws, ica, data.getChunkX(),data.getChunkZ());
+		}
+		return null;
 	}
 
 }

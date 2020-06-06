@@ -1,10 +1,13 @@
 package org.terraform.coregen.v1_15_R1;
 
+import java.util.Random;
+
 import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.Blocks;
 import net.minecraft.server.v1_15_R1.ChunkCoordIntPair;
 import net.minecraft.server.v1_15_R1.Entity;
 import net.minecraft.server.v1_15_R1.EntityInsentient;
+import net.minecraft.server.v1_15_R1.EntityMinecartChest;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 import net.minecraft.server.v1_15_R1.EnumMobSpawn;
 import net.minecraft.server.v1_15_R1.GroupDataEntity;
@@ -225,6 +228,19 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract{
 		
 		sa.a(WorldGenerator.OCEAN_MONUMENT.b(),new ChunkCoordIntPair(chunkX,chunkZ).pair());
 		
+	}
+
+	@Override
+	public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, Random random) {
+		
+		EntityMinecartChest entityminecartchest = new EntityMinecartChest(
+				ws.getMinecraftWorld(), 
+				(double) ((float) x + 0.5F), 
+				(double) ((float) y + 0.5F), 
+				(double) ((float) z + 0.5F));
+
+        entityminecartchest.setLootTable(getLootTable(table), random.nextLong());
+        ws.addEntity(entityminecartchest);
 	}
 	
 

@@ -52,7 +52,7 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
 						int h = caveHeight/4;
 						if(h < 1) h = 1;
 						Wall w = new Wall(new SimpleBlock(data,x,ceil-1,z),BlockFace.NORTH);
-						w.downLPillar(random, h, Material.ICE,Material.BLUE_ICE);
+						w.downLPillar(random, h, Material.ICE);
 						
 					}
 					
@@ -69,7 +69,7 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
 						if(h < 1) h = 1;
 						Wall w = new Wall(new SimpleBlock(data,x,floor+2,z),BlockFace.NORTH);
 						if(w.getType() == Material.CAVE_AIR)
-						w.LPillar(h, random, Material.ICE,Material.BLUE_ICE);
+						w.LPillar(h, random, Material.ICE);
 						
 					}
 				}

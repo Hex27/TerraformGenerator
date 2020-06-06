@@ -70,6 +70,14 @@ public class SimpleBlock {
 		return new Vector(x,y,z);
 	}
 	
+	public SimpleBlock untilSolid(BlockFace face){
+		SimpleBlock rel = this.getRelative(face);
+		while(!rel.getType().isSolid())
+			rel = rel.getRelative(face);
+		
+		return rel;
+	}
+	
 	/**
 	 * Lenient set. Only replaces non-solid blocks.
 	 * @param type

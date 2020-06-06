@@ -18,4 +18,10 @@ public abstract class NMSInjectorAbstract {
 	 */
 	public abstract PopulatorDataICAAbstract getICAData(Chunk chunk);
 
+	/**
+	 * 
+	 * @param data must be instance of Version-specific PopulatorData
+	 * @return a populatorDataICA instance.
+	 */
+	public abstract PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data);
 }

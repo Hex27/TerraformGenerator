@@ -24,7 +24,7 @@ import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
 
-public class MushroomCavePopulator extends LargeCavePopulator{
+public class MushroomCavePopulator extends GenericLargeCavePopulator{
 	
 	public void createLargeCave(TerraformWorld tw, Random rand, PopulatorDataAbstract data, int rY, int x, int y, int z){
 		TerraformGeneratorPlugin.logger.info("Generating Large Mushroom Cave at " + x + "," + y + "," +z);

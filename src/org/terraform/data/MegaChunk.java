@@ -3,6 +3,7 @@ package org.terraform.data;
 import java.util.Objects;
 import java.util.Random;
 
+import org.terraform.main.TConfigOption;
 import org.terraform.utils.GenUtils;
 
 public class MegaChunk {
@@ -23,10 +24,10 @@ public class MegaChunk {
 		this(x>>4,z>>4);
 	}
 	
-	//A megachunk is 64 chunks wide. (1024 blocks)
+	//A megachunk is (2^6) 64 chunks wide. (4096 chunks)
 	public MegaChunk(int chunkX, int chunkZ){
-		this.x = chunkX>>6;
-		this.z = chunkZ>>6;
+		this.x = chunkX>>TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+		this.z = chunkZ>>TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
 	}
 	
 	public MegaChunk getRelative(int nx, int nz){
@@ -42,10 +43,10 @@ public class MegaChunk {
 	 * @return A random pair of xz block coords within the mega chunk
 	 */
 	public int[] getRandomCoords(Random rand){
-		int lowChunkX = this.x << 6;
-		int lowChunkZ = this.z << 6;
-		int highChunkX = (this.x << 6) | 15;
-		int highChunkZ = (this.z << 6) | 15;
+		int lowChunkX = this.x << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+		int lowChunkZ = this.z << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+		int highChunkX = (this.x << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt()) | 15;
+		int highChunkZ = (this.z << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt()) | 15;
 
 		int lowX = lowChunkX << 4;
 		int lowZ = lowChunkZ << 4;
@@ -53,8 +54,8 @@ public class MegaChunk {
 		int highZ = (highChunkZ << 4) | 15;
 		
 		//Pad the sides. Never generate on the side of a mega chunk.
-		int x = GenUtils.randInt(rand,lowX+32,highX-32);
-		int z = GenUtils.randInt(rand,lowZ+32,highZ-32);
+		int x = GenUtils.randInt(rand,lowX+64,highX-64);
+		int z = GenUtils.randInt(rand,lowZ+64,highZ-64);
 		return new int[]{x,z};
 	}
 	

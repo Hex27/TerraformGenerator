@@ -14,6 +14,7 @@ public enum TConfigOption{
 	BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency",0.001f),
 	BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency",0.001f),
 	
+	
 	DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode",false),
 	DEVSTUFF_GLASSSTONE("dev-stuff.stone-is-glass",false),
 	DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations",true),
@@ -23,7 +24,7 @@ public enum TConfigOption{
 	//CAVES_ALLOW_FLOODED_RAVINES("caves.allow-flooded-ravines",true),
 	
 	//-=[STRUCTURES]=-
-		//Stronghold
+	STRUCTURES_MEGACHUNK_BITSHIFTS("structures.technical.megachunk.bitshifts",6),
 	STRUCTURES_STRONGHOLD_ENABLED("structures.stronghold.enabled",true),
 	STRUCTURES_MONUMENT_ENABLED("structures.monument.enabled",true),
 	STRUCTURES_MONUMENT_SPAWNRATIO("structures.monument.spawn-ratio",1.0),
@@ -34,6 +35,7 @@ public enum TConfigOption{
 	STRUCTURES_UNDERGROUNDDUNGEON_ENABLED("structures.underground-dungeon.enabled",true),
 	STRUCTURES_DROWNEDDUNGEON_ENABLED("structures.drowned-dungeon.enabled",true),
 	STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled",true),
+	STRUCTURES_MINESHAFT_CHANCE("structures.mineshaft.chance-out-of-100",10),
 	
 	//-=[ANIMALS]=-
 		//BEES

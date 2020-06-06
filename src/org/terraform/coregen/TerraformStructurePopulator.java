@@ -11,6 +11,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.VillageHousePopulator;
+import org.terraform.structure.caves.GenericLargeCavePopulator;
 import org.terraform.structure.caves.LargeCavePopulator;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
 import org.terraform.structure.monument.MonumentPopulator;
