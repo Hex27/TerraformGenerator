@@ -1,6 +1,8 @@
 package org.terraform.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Axis;
@@ -413,6 +415,44 @@ public class BlockUtils {
 		}
 	}
 	
+	public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, ArrayList<Material> toReplace){
+		if(rX <= 0 &&
+				rY <= 0 &&
+				rZ <= 0){
+			return;
+		}
+		if(rX <= 0.5 &&
+				rY <= 0.5 &&
+				rZ <= 0.5){
+			//block.setReplaceType(ReplaceType.ALL);
+			block.setType(Material.CAVE_AIR);
+			return;
+		}
+		Random rand = new Random(seed);
+		FastNoise noise = new FastNoise(seed);
+		noise.SetNoiseType(NoiseType.Simplex);
+		noise.SetFrequency(0.09f);
+		for(float x = -rX; x <= rX; x++){
+			for(float y = -rY; y <= rY; y++){
+				for(float z = -rZ; z <= rZ; z++){
+					
+					SimpleBlock rel = block.getRelative((int)Math.round(x),(int)Math.round(y),(int)Math.round(z));
+					//double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+					double equationResult = Math.pow(x,2)/Math.pow(rX,2)
+							+ Math.pow(y,2)/Math.pow(rY,2)
+							+ Math.pow(z,2)/Math.pow(rZ,2);
+					if(equationResult <= 1+0.7*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())){
+					//if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
+						if(!rel.getType().isSolid() 
+							|| toReplace.contains(rel.getType())){
+							rel.setType(Material.CAVE_AIR);
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public static void replaceSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean hardReplace,boolean snowy,Material... type){
 		if(rX <= 0 &&
 				rY <= 0 &&
@@ -592,7 +632,7 @@ public class BlockUtils {
 			default:
 				break;
 			}
-		}else{
+		}else if(faces.size() > 0){
 			if(faces.contains(BlockFace.NORTH)&&faces.contains(BlockFace.EAST)){
 				rail.setShape(Shape.NORTH_EAST);
 			}else if(faces.contains(BlockFace.NORTH)&&faces.contains(BlockFace.WEST)){

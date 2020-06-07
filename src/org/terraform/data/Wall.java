@@ -26,8 +26,76 @@ public class Wall {
 		return new Wall(block.getRelative(BlockUtils.getAdjacentFaces(direction)[0]), direction);
 	}
 	
+	/**
+	 * Gets the first solid block above this one
+	 * @param cutoff
+	 * @return
+	 */
+	public Wall findCeiling(int cutoff){
+		Wall ceil = this.clone().getRelative(0,1,0);
+		while(cutoff > 0){
+			if(ceil.getType().isSolid() && ceil.getType() != Material.LANTERN){
+				return ceil;
+			}
+			cutoff--;
+			ceil = ceil.getRelative(0,1,0);
+		}
+		return null;
+	}
+	
+	/**
+	 * Gets the first solid block below this one
+	 * @param cutoff
+	 * @return
+	 */
+	public Wall findFloor(int cutoff){
+		Wall floor = this.clone().getRelative(0,-1,0);
+		while(cutoff > 0 && floor.getY() >= 0){
+			if(floor.getType().isSolid() && floor.getType() != Material.LANTERN){
+				return floor;
+			}
+			cutoff--;
+			floor = floor.getRelative(0,-1,0);
+		}
+		return null;
+	}
+	
+	/**
+	 * Gets the first solid block right from this one
+	 * @param cutoff
+	 * @return
+	 */
+	public Wall findRight(int cutoff){
+		Wall ceil = this.getRight();
+		while(cutoff > 0){
+			if(ceil.getType().isSolid()){
+				return ceil;
+			}
+			cutoff--;
+			ceil = ceil.getRight();
+		}
+		return null;
+	}
+	
+	/**
+	 * Gets the first solid block above this one
+	 * @param cutoff
+	 * @return
+	 */
+	public Wall findLeft(int cutoff){
+		Wall ceil = this.getLeft();
+		while(cutoff > 0){
+			if(ceil.getType().isSolid()){
+				return ceil;
+			}
+			cutoff--;
+			ceil = ceil.getLeft();
+		}
+		return null;
+	}
 
 	public Wall getLeft(int it){
+		if(it < 0) return getRight(-it);
 		Wall w = this.clone();
 		for(int i = 0; i < it; i++) w = w.getLeft();
 		return w;
@@ -38,6 +106,7 @@ public class Wall {
 	}
 	
 	public Wall getRight(int it){
+		if(it < 0) return getLeft(-it);
 		Wall w = this.clone();
 		for(int i = 0; i < it; i++) w = w.getRight();
 		return w;
@@ -95,14 +164,15 @@ public class Wall {
 	 * @param rand
 	 * @param types
 	 */
-	public void LPillar(int height, boolean pattern, Random rand, Material... types){
+	public int LPillar(int height, boolean pattern, Random rand, Material... types){
 		for(int i = 0; i < height; i++){
-			if(block.getRelative(0,i,0).getType().isSolid()) break;
+			if(block.getRelative(0,i,0).getType().isSolid()) return i;
 			if(!pattern)
 				block.getRelative(0,i,0).setType(GenUtils.randMaterial(rand, types));
 			else
 				block.getRelative(0,i,0).setType(types[i%types.length]);
 		}
+		return height;
 	}
 	
 	/**
@@ -131,7 +201,7 @@ public class Wall {
 		}
 	}
 	
-	public void downUntilSolid(Random rand, Material... types){
+	public int downUntilSolid(Random rand, Material... types){
 		int depth = 0;
 		for(int y = get().getY(); y > 0; y--){
 			if(!block.getRelative(0,-depth,0).getType().isSolid()){
@@ -139,6 +209,8 @@ public class Wall {
 			}else break;
 			depth++;
 		}
+		
+		return depth;
 	}
 	
 	public void downLPillar(Random rand, int h, Material... types){
@@ -194,6 +266,18 @@ public class Wall {
 	public Wall getRelative(BlockFace face) {
 		// TODO Auto-generated method stub
 		return new Wall(block.getRelative(face),direction);
+	}
+	
+	public int getX(){
+		return get().getX();
+	}
+	
+	public int getY(){
+		return get().getY();
+	}
+	
+	public int getZ(){
+		return get().getZ();
 	}
 
 }

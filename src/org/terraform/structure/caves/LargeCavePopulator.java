@@ -17,8 +17,6 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.StructurePopulator;
-import org.terraform.structure.mineshaft.MineshaftLargeCavePopulator;
-import org.terraform.structure.mineshaft.MineshaftRegistry;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
@@ -46,11 +44,6 @@ public class LargeCavePopulator extends StructurePopulator{
 		
 		int highest = GenUtils.getHighestGround(data,x,z);
 		int rY = (highest - 20)/2; //5 block padding bottom, 15 padding top.
-		
-		if(MineshaftRegistry.isMineshaftMegachunk(mc, tw)){
-			new MineshaftLargeCavePopulator().createLargeCave(tw,rand,data,rY,x,rY+6,z);
-			return;
-		}
 		
 		if(rand.nextBoolean())
 			new GenericLargeCavePopulator().createLargeCave(tw,rand,data,rY,x,rY+6,z);

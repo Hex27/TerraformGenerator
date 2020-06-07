@@ -16,7 +16,6 @@ import org.terraform.main.TConfigOption;
 import org.terraform.populators.AnimalPopulator;
 import org.terraform.populators.OrePopulator;
 import org.terraform.populators.RiverWormCreator;
-import org.terraform.structure.mineshaft.MineshaftRegistry;
 
 public class TerraformPopulator{
     private static Set<SimpleChunkLocation> chunks = new HashSet<SimpleChunkLocation>();
@@ -92,9 +91,6 @@ public class TerraformPopulator{
 			//Cave populators
 			bank.getCavePop().populate(tw, random, data);
 
-			//Mineshaft cave
-			if(MineshaftRegistry.isMineshaftMegachunk(new MegaChunk(data.getChunkX(),data.getChunkZ()), tw))
-				MineshaftRegistry.cavePop.populate(tw, random, data);
 		}
 		
 		ArrayList<EntityType> spawned = new ArrayList<>();

@@ -15,6 +15,7 @@ import org.terraform.command.GiantPumpkinCommand;
 import org.terraform.command.GuardianSpawnCheckCommand;
 import org.terraform.command.IceSpikeCommand;
 import org.terraform.command.LargeMonumentLampCommand;
+import org.terraform.command.MineshaftCommand;
 import org.terraform.command.MonumentCommand;
 import org.terraform.command.MushroomCommand;
 import org.terraform.command.PreviewCommand;
@@ -50,6 +51,7 @@ public class TerraformCommandManager extends DCCommandManager {
 		this.registerCommand(new AnimalFarmCommand(plugin, "animalfarm","af"));
 		this.registerCommand(new FarmhouseCommand(plugin, "farmhouse","fh"));
 		this.registerCommand(new AnimalSpawnerCommand(plugin, "animalspawner","as"));
+		this.registerCommand(new MineshaftCommand(plugin, "mineshaft","ms"));
 		this.registerCommand(new ShipwreckCommand(plugin, "shipwreck","sw"));
 		this.registerCommand(new UndergroundDungeonCommand(plugin, "ud","undergrounddungeon"));
 		this.registerCommand(new DrownedDungeonCommand(plugin, "dd","drowneddungeon"));

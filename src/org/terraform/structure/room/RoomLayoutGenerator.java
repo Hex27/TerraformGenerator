@@ -25,6 +25,7 @@ public class RoomLayoutGenerator {
 	private int[] upperBound;
 	private int[] lowerBound;
 	private PathPopulatorAbstract pathPop;
+	private boolean carveRooms = false;
 	private boolean pyramidish = false;
 	private ArrayList<RoomPopulatorAbstract> roomPops = new ArrayList<>();
 	private RoomLayout layout;
@@ -46,6 +47,10 @@ public class RoomLayoutGenerator {
 	
 	public void setPathPopulator(PathPopulatorAbstract pop){
 		this.pathPop = pop;
+	}
+	
+	public void setCarveRooms(boolean carve){
+		this.carveRooms = carve;
 	}
 	
 	public void registerRoomPopulator(RoomPopulatorAbstract pop){
@@ -205,6 +210,8 @@ public class RoomLayoutGenerator {
 			}
 		
 		for(CubeRoom room:rooms){
+			if(carveRooms) room = new CarvedRoom(room);
+			
 			if(allowOverlaps)
 				room.fillRoom(data, mat, Material.CAVE_AIR);
 			else

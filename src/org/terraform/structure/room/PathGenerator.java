@@ -84,7 +84,9 @@ public class PathGenerator{
 		}
 		
 		//base.setType(mat);
-		setHall();
+		if(!populator.customCarve(base, dir, pathWidth)){
+			setHall();
+		}
 		path.add(new PathPopulatorData(base,dir,pathWidth));
 		base = base.getRelative(dir);
 		length++;
