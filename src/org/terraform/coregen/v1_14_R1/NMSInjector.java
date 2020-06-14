@@ -16,6 +16,7 @@ import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 public class NMSInjector extends NMSInjectorAbstract {
 
@@ -30,19 +31,23 @@ public class NMSInjector extends NMSInjectorAbstract {
 		PlayerChunkMap pcm = ws.getChunkProvider().playerChunkMap;
 		
 		try {
-			Field pcmGenField = pcm.getClass().getField("chunkGenerator");
-			Field cpGenField = ws.getChunkProvider().getClass().getField("chunkGenerator");
-			pcmGenField.setAccessible(true);
-			cpGenField.setAccessible(true);
-			// Remove final modifier
-			Field modifiersField = Field.class.getDeclaredField("modifiers");
-			modifiersField.setAccessible(true);
-			modifiersField.setInt(pcmGenField, pcmGenField.getModifiers() & ~Modifier.FINAL);
-			modifiersField.setInt(cpGenField, cpGenField.getModifiers() & ~Modifier.FINAL);
-			// Get and set field value		
-			pcmGenField.set(pcm,bpg);
-			cpGenField.set(ws.getChunkProvider(),bpg);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+//			Field pcmGenField = pcm.getClass().getField("chunkGenerator");
+//			Field cpGenField = ws.getChunkProvider().getClass().getField("chunkGenerator");
+//			pcmGenField.setAccessible(true);
+//			cpGenField.setAccessible(true);
+//			// Remove final modifier
+//			Field modifiersField = Field.class.getDeclaredField("modifiers");
+//			modifiersField.setAccessible(true);
+//			modifiersField.setInt(pcmGenField, pcmGenField.getModifiers() & ~Modifier.FINAL);
+//			modifiersField.setInt(cpGenField, cpGenField.getModifiers() & ~Modifier.FINAL);
+//			// Get and set field value		
+//			pcmGenField.set(pcm,bpg);
+//			cpGenField.set(ws.getChunkProvider(),bpg);
+			TerraformGeneratorPlugin.privateFieldHandler.injectField(
+					pcm, "chunkGenerator", bpg);
+			TerraformGeneratorPlugin.privateFieldHandler.injectField(
+					ws.getChunkProvider(), "chunkGenerator", bpg);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
