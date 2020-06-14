@@ -1,5 +1,6 @@
 package org.terraform.main;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,6 +17,9 @@ import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.reflection.Post14PrivateFieldHandler;
+import org.terraform.reflection.Pre14PrivateFieldHandler;
+import org.terraform.reflection.PrivateFieldHandler;
 import org.terraform.schematic.SchematicListener;
 import org.terraform.utils.Version;
 
@@ -24,20 +28,26 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 	private static TerraformGeneratorPlugin i;
 	public static NMSInjectorAbstract injector;
 	public static ArrayList<String> injectedWorlds = new ArrayList<>();
-	
+	public static PrivateFieldHandler privateFieldHandler;
 	public static TerraformGeneratorPlugin get(){ return i;}
 	
 	@Override
 	public void onEnable(){
 		super.onEnable();
 		i = this;
+		
+		try {
+			Field.class.getDeclaredField("modifiers");
+			privateFieldHandler = new Pre14PrivateFieldHandler();
+		} catch (NoSuchFieldException | SecurityException e1) {
+			privateFieldHandler = new Post14PrivateFieldHandler();
+		}
+		
 		this.logger = new TLogger(this);
 		TConfigOption.loadValues(this.getDCConfig());
 		TerraformGenerator.updateSeaLevelFromConfig();
 		new TerraformCommandManager(this, "terraform","terra");
-		
 		Bukkit.getPluginManager().registerEvents(this, this);
-		
 		Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
 		String version = Version.getVersionPackage();
 		logger.info("Detected version: " + version);

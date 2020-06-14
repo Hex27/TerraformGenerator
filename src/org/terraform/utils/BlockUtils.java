@@ -97,6 +97,15 @@ public class BlockUtils {
 		add(BlockFace.WEST);
 	}};
 	
+	public static final ArrayList<BlockFace> sixBlockFaces = new ArrayList<BlockFace>(){{
+		add(BlockFace.NORTH);
+		add(BlockFace.SOUTH);
+		add(BlockFace.EAST);
+		add(BlockFace.WEST);
+		add(BlockFace.UP);
+		add(BlockFace.DOWN);
+	}};
+	
 	public static BlockFace getDirectBlockFace(Random rand){
 		return directBlockFaces.get(rand.nextInt(4));
 	}
@@ -584,6 +593,30 @@ public class BlockUtils {
 		for(BlockFace face:data.getAllowedFaces()){
 			if(target.getRelative(face).getBlockData() instanceof MultipleFacing)
 				correctMultifacingData(target.getRelative(face));
+		}
+	}
+	
+	private static boolean isMushroom(SimpleBlock target){
+		return target.getType().toString().endsWith("MUSHROOM_BLOCK");
+	}
+	
+	public static void correctMushroomData(SimpleBlock target){
+		if(!isMushroom(target)) 
+			return;
+		MultipleFacing data = (MultipleFacing) target.getBlockData();
+		for(BlockFace face:data.getAllowedFaces()){
+			if(isMushroom(target.getRelative(face))){
+				data.setFace(face, false);
+			}else data.setFace(face,true);
+		}
+		
+		target.setBlockData(data);
+	}
+	
+	public static void correctSurroundingMushroomData(SimpleBlock target){
+		correctMushroomData(target);
+		for(BlockFace face:sixBlockFaces){
+			correctMushroomData(target.getRelative(face));
 		}
 	}
 	

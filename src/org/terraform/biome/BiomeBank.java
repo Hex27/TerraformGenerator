@@ -119,6 +119,7 @@ public enum BiomeBank {
 	 * @return a biome type
 	 */
 	public static BiomeBank calculateBiome(TerraformWorld tw, int x, int z, int height){
+		
 		double temperature = tw.getTemperature(x, z);
 		double moisture = tw.getMoisture(x, z);
 		Random random = tw.getHashedRand((int) (temperature*10000), (int) (moisture*10000), height);

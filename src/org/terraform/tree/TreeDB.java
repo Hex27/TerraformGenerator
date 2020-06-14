@@ -49,8 +49,10 @@ public class TreeDB {
 					if(equationResult <= 1+0.3*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())
 							&& equationResult >= 0.5){
 					//if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-						if(hardReplace || !rel.getType().isSolid())
-						rel.setType(GenUtils.randMaterial(rand,type));
+						if(hardReplace || !rel.getType().isSolid()){
+							rel.setType(GenUtils.randMaterial(rand,type));
+							BlockUtils.correctSurroundingMushroomData(rel);
+						}
 						//rel.setReplaceType(ReplaceType.ALL);
 					}
 				}
