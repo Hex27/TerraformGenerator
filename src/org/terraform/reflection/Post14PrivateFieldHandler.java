@@ -12,10 +12,6 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
 		Field targetField = obj.getClass().getField(field);
 		targetField.setAccessible(true);
 		
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(targetField, targetField.getModifiers() & ~Modifier.FINAL);
-		
 		Object lookup = MethodHandles.class
 				.getMethod("privateLookupIn", Class.class, Lookup.class)
 				.invoke(null, Field.class, MethodHandles.lookup());
@@ -27,8 +23,8 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
 
 		int mds = targetField.getModifiers();
 		
-		varHandleModifiers.getClass().getMethod("set", Field.class, int.class)
-		.invoke(varHandleModifiers, targetField,mds& ~Modifier.FINAL);
+		varHandleModifiers.getClass().getMethod("set", Object[].class)
+		.invoke(varHandleModifiers, new Object[]{targetField,mds& ~Modifier.FINAL});
 		
 		//modifiers.set(targetField, mds & ~Modifier.FINAL);
 		
