@@ -206,12 +206,10 @@ public class NMSChunkGenerator extends ChunkGenerator {
             biome[(z << 4) | x] = CraftBlock.biomeToBiomeBase(bio);
         }
 
-        @Override
         public Biome getBiome(int x, int y, int z) {
             return getBiome(x,z);
         }
 
-        @Override
         public void setBiome(int x, int y, int z, Biome bio) {
             setBiome(x,z,bio);
         }
