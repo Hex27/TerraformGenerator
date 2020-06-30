@@ -424,6 +424,15 @@ public class BlockUtils {
 		}
 	}
 	
+	/**
+	 * Put barrier in toReplace to hard replace all solid blocks.
+	 * @param seed
+	 * @param rX
+	 * @param rY
+	 * @param rZ
+	 * @param block
+	 * @param toReplace
+	 */
 	public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, ArrayList<Material> toReplace){
 		if(rX <= 0 &&
 				rY <= 0 &&
@@ -453,7 +462,8 @@ public class BlockUtils {
 					if(equationResult <= 1+0.7*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())){
 					//if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
 						if(!rel.getType().isSolid() 
-							|| toReplace.contains(rel.getType())){
+							|| toReplace.contains(rel.getType())
+							|| toReplace.contains(Material.BARRIER)){
 							rel.setType(Material.CAVE_AIR);
 						}
 					}

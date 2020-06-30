@@ -24,7 +24,6 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator{
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
-		int seaLevel = TerraformGenerator.seaLevel;
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 
 		int[] spawnCoords = new int[]{data.getChunkX()*16,data.getChunkZ()*16};

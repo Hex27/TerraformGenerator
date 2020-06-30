@@ -100,7 +100,8 @@ public class MineshaftPopulator extends StructurePopulator{
 				for(int[] pos:positions){
 					if(areCoordsEqual(pos,new int[]{x,z})){
 						int height = GenUtils.getHighestGround(data, x, z);
-						//Strongholds start underground. Burrow down
+						if(height > 60) height = 60;
+						//Mineshaft burrowed down
 						height -= 40;
 						if(height < 3) height = 5;
 						spawnMineshaft(tw,random,data,x,height,z);
@@ -130,9 +131,38 @@ public class MineshaftPopulator extends StructurePopulator{
 		
 		gen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
 		gen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
+		gen.registerRoomPopulator(new ShaftRoomPopulator(random, false, false));
 		gen.setCarveRooms(true);
+		
+		//Level Two
+		hashedRand = tw.getHashedRand(x, y+15, z);
+		RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand,RoomLayout.RANDOM_BRUTEFORCE,numRooms,x,y+15,z,range);
+		secondGen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y+15, z, 2)));
+		secondGen.setRoomMaxX(17);
+		secondGen.setRoomMaxZ(17);
+		secondGen.setRoomMinX(13);
+		secondGen.setRoomMinZ(13);
+		
+		for(CubeRoom room:gen.getRooms()) {
+			if(room.getPop() instanceof ShaftRoomPopulator) {
+				CubeRoom topShaft = new CubeRoom(
+						room.getWidthX(), 
+						room.getHeight(), 
+						room.getWidthZ(), 
+						room.getX(), room.getY()+15, room.getZ());
+				topShaft.setRoomPopulator(new ShaftTopPopulator(hashedRand, true, false));
+				secondGen.getRooms().add(topShaft);
+			}
+		}
+		
+		secondGen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
+		secondGen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
+		secondGen.setCarveRooms(true);
+		secondGen.generate();
+		secondGen.fill(data, tw, Material.CAVE_AIR);
+		
+		//Second floor before first floor.
 		gen.generate();
-		//gen.fillPathsOnly(data, tw, Material.CAVE_AIR);
 		gen.fill(data, tw, Material.CAVE_AIR);
 	}
 

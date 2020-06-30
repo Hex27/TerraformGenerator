@@ -266,6 +266,10 @@ public class CubeRoom {
 		return height;
 	}
 
+	public RoomPopulatorAbstract getPop() {
+		return pop;
+	}
+
 	/**
 	 * @return the x
 	 */

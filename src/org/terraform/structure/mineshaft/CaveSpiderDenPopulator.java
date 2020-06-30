@@ -44,17 +44,6 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract{
 			}
 		}
 		
-		//Mountain of Ores
-		BlockUtils.replaceUpperSphere(rand.nextInt(727281), 
-				3, 3, 3,
-				new SimpleBlock(data,room.getX(),room.getY()+1,room.getZ()), 
-				false, 
-				Material.COAL_ORE,Material.COAL_ORE,Material.COAL_ORE,Material.COAL_ORE,Material.COAL_ORE,
-				Material.IRON_ORE,Material.IRON_ORE,Material.IRON_ORE,
-				Material.GOLD_ORE,
-				Material.LAPIS_ORE,
-				Material.REDSTONE_ORE);
-		
 		//Cave-spider spawner & Webs
 		for(int x = lowerCorner[0]; x <= upperCorner[0]; x++){
 			for(int z = lowerCorner[1]; z <= upperCorner[1]; z++){
