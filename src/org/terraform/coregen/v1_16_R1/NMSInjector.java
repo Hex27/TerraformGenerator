@@ -8,6 +8,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_16_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataICAAbstract;
@@ -15,6 +16,11 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class NMSInjector extends NMSInjectorAbstract {
+	
+	@Override
+	public BlockDataFixerAbstract getBlockDataFixer() {
+		return new BlockDataFixer();
+	}
 
 	@Override
 	public boolean attemptInject(World world) {

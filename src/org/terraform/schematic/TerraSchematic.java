@@ -23,6 +23,7 @@ import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.util.Vector;
+import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
@@ -50,6 +51,7 @@ public class TerraSchematic {
 	}
 	
 	public void apply(){
+		BlockDataFixerAbstract bdfa = TerraformGeneratorPlugin.injector.getBlockDataFixer();
 		ArrayList<Vector> multiFace = new ArrayList<>();
 		
 		for(Vector key:data.keySet()){
@@ -68,7 +70,7 @@ public class TerraSchematic {
 				pos.setZ(x);
 			}
 			
-			if(face != BlockFace.NORTH)
+			if(face != BlockFace.NORTH) {
 				if(bd instanceof Orientable){
 					Orientable o = (Orientable) bd;
 					if(face == BlockFace.EAST || face == BlockFace.WEST){
@@ -100,7 +102,11 @@ public class TerraSchematic {
 				}else if(bd instanceof MultipleFacing){
 					multiFace.add(pos);
 				}
-			
+				
+				//Apply version-specific updates
+				if(bdfa != null) 
+					bdfa.correctFacing(pos, null, bd, face);
+			}
 			
 			parser.applyData(refPoint.getRelative(pos.getBlockX(),pos.getBlockY(),pos.getBlockZ()),bd);
 		}
@@ -111,6 +117,11 @@ public class TerraSchematic {
 			
 			BlockUtils.correctSurroundingMultifacingData(b);
 		}
+		if(bdfa != null && face != BlockFace.NORTH)
+			for(Vector pos:bdfa.flush()) {
+				SimpleBlock b = refPoint.getRelative(pos.getBlockX(),pos.getBlockY(),pos.getBlockZ());
+				bdfa.correctFacing(pos, b, null, face);
+			}
 	}
 	
 	public void export(String path) throws IOException{
@@ -140,7 +151,19 @@ public class TerraSchematic {
 			String[] cont = line.split(":@:");
 			String[] v = cont[0].split(",");
 			Vector key = new Vector(Integer.parseInt(v[0]),Integer.parseInt(v[1]),Integer.parseInt(v[2]));
-			BlockData value = Bukkit.createBlockData(cont[1]);
+			BlockData value;
+			try {
+				value = Bukkit.createBlockData(cont[1]);
+			}catch(IllegalArgumentException e) {
+				BlockDataFixerAbstract fixer = TerraformGeneratorPlugin.injector.getBlockDataFixer();
+				if(fixer != null) {
+					value = Bukkit.createBlockData(fixer.updateSchematic(cont[1]));
+				}else {
+					//GG
+					value = null;
+					throw e;
+				}
+			}
 			schem.data.put(key,value);
 		}  
 		sc.close();  

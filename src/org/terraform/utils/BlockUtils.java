@@ -19,10 +19,12 @@ import org.bukkit.block.data.Rail.Shape;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.FastNoise.NoiseType;
 
 public class BlockUtils {
@@ -583,7 +585,13 @@ public class BlockUtils {
 	}
 	
 	public static void correctMultifacingData(SimpleBlock target){
-		if(!(target.getBlockData() instanceof MultipleFacing)) return;
+		if(!(target.getBlockData() instanceof MultipleFacing)) {
+			if(target.getType().toString().endsWith(("_WALL")) && Version.isAtLeast("1_16_R1")){
+				org.terraform.coregen.v1_16_R1
+				.BlockDataFixer.correctSurroundingWallData(target);
+			}
+			return;
+		}
 		MultipleFacing data = (MultipleFacing) target.getBlockData();
 		for(BlockFace face:data.getAllowedFaces()){
 			if(target.getRelative(face).getType().isSolid() && 
@@ -596,7 +604,13 @@ public class BlockUtils {
 	}
 	
 	public static void correctSurroundingMultifacingData(SimpleBlock target){
-		if(!(target.getBlockData() instanceof MultipleFacing)) return;
+		if(!(target.getBlockData() instanceof MultipleFacing)) {
+			if(target.getType().toString().endsWith(("_WALL")) && Version.isAtLeast("1_16_R1")){
+				org.terraform.coregen.v1_16_R1
+				.BlockDataFixer.correctSurroundingWallData(target);
+			}
+			return;
+		}
 		
 		correctMultifacingData(target);
 		MultipleFacing data = (MultipleFacing) target.getBlockData();

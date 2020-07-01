@@ -5,6 +5,10 @@ import org.bukkit.World;
 
 public abstract class NMSInjectorAbstract {
 	
+	public BlockDataFixerAbstract getBlockDataFixer() {
+		return null;
+	}
+	
 	/**
 	 * @param world
 	 * @return whether or not the injection was a success

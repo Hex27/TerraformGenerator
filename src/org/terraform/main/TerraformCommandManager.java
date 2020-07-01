@@ -4,6 +4,7 @@ import org.drycell.command.DCCommandManager;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.command.AnimalFarmCommand;
 import org.terraform.command.AnimalSpawnerCommand;
+import org.terraform.command.BlockDataTestCommand;
 import org.terraform.command.CaveCommand;
 import org.terraform.command.CheckHeightCommand;
 import org.terraform.command.CoconutCommand;
@@ -61,6 +62,7 @@ public class TerraformCommandManager extends DCCommandManager {
 		this.registerCommand(new MushroomCommand(plugin, "mushroom"));
 		this.registerCommand(new SchematicSaveCommand(plugin, "save"));
 		this.registerCommand(new SchematicLoadCommand(plugin, "load"));
+		this.registerCommand(new BlockDataTestCommand(plugin, "blockdatatest","bdt"));
 	}
 
 }

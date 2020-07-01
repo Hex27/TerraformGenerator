@@ -15,6 +15,7 @@ import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
+import org.terraform.coregen.v1_16_R1.BlockDataFixer;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.reflection.Post14PrivateFieldHandler;
