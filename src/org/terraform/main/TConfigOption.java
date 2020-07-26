@@ -35,7 +35,7 @@ public enum TConfigOption{
 	STRUCTURES_UNDERGROUNDDUNGEON_ENABLED("structures.underground-dungeon.enabled",true),
 	STRUCTURES_DROWNEDDUNGEON_ENABLED("structures.drowned-dungeon.enabled",true),
 	STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled",true),
-	STRUCTURES_MINESHAFT_CHANCE("structures.mineshaft.chance-out-of-100",10),
+	STRUCTURES_MINESHAFT_ENABLED("structures.mineshaft.enabled",true),
 	
 	//-=[ANIMALS]=-
 		//BEES

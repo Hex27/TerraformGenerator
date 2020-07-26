@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
@@ -83,6 +84,16 @@ public class TerraformGenerator extends ChunkGenerator{
     	//Bukkit.getLogger().info("Finished: " + chunkX + "," + chunkZ);
     	
     	return chunk;
+    }
+    
+    @Override
+    public Location getFixedSpawnLocation(World world, Random random) {
+    	if(map == null) map = new HeightMap();
+        TerraformWorld tw = TerraformWorld.get(world);
+    	return new Location(world,
+    			0,
+    			map.getHeight(tw, 0,0),
+    			0);
     }
     
     @Override

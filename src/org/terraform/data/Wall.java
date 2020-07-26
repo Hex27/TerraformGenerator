@@ -18,6 +18,11 @@ public class Wall {
 		this.direction = dir;
 	}
 	
+	public Wall(SimpleBlock block){
+		this.block = block;
+		this.direction = BlockFace.NORTH;
+	}
+	
 	public Wall clone(){
 		return new Wall(block,direction);
 	}

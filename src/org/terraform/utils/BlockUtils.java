@@ -196,6 +196,16 @@ public class BlockUtils {
 		add(Material.BLUE_ICE);
 	}};
 	
+	public static final ArrayList<Material> ores = new ArrayList<Material>(){{
+		add(Material.COAL_ORE);
+		add(Material.IRON_ORE);
+		add(Material.GOLD_ORE);
+		add(Material.DIAMOND_ORE);
+		add(Material.EMERALD_ORE);
+		add(Material.REDSTONE_ORE);
+		add(Material.LAPIS_ORE);
+	}};
+	
 	public static Material pickFlower(){
 		return GenUtils.randMaterial(Material.DANDELION,
 				Material.POPPY,
@@ -463,9 +473,14 @@ public class BlockUtils {
 							+ Math.pow(z,2)/Math.pow(rZ,2);
 					if(equationResult <= 1+0.7*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())){
 					//if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-						if(!rel.getType().isSolid() 
-							|| toReplace.contains(rel.getType())
-							|| toReplace.contains(Material.BARRIER)){
+						if(toReplace.contains(Material.BARRIER)) { //Blacklist
+							if(!toReplace.contains(rel.getType()))
+								rel.setType(Material.CAVE_AIR);
+							
+						}else if(toReplace.contains(rel.getType())){ //Whitelist
+							rel.setType(Material.CAVE_AIR);
+							
+						}else if(!rel.getType().isSolid()) {
 							rel.setType(Material.CAVE_AIR);
 						}
 					}

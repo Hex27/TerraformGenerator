@@ -229,12 +229,26 @@ public class CubeRoom {
 	
 	//Positive x,z corner
 	public int[] getUpperCorner(int pad){
-		return new int[]{x-pad+widthX/2,z-pad+widthZ/2};
+		int Z = z-pad+widthZ/2;
+		int X = x-pad+widthX/2;
+		if(pad > widthZ/2) {
+			Z = getZ(); 
+		}if(pad > widthX/2) {
+			X = getX();
+		}
+		return new int[]{X,Z};
 	}
 	
 	//Negative x,z corner
 	public int[] getLowerCorner(int pad){
-		return new int[]{x+pad-widthX/2,z+pad-widthZ/2};
+		int Z = z+pad-widthZ/2;
+		int X = x+pad-widthX/2;
+		if(pad > widthZ/2) {
+			Z = getZ(); 
+		}if(pad > widthX/2) {
+			X = getX();
+		}
+		return new int[]{X,Z};
 	}
 	
 	public boolean isBig(){

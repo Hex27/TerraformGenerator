@@ -6,6 +6,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -17,101 +18,58 @@ import org.terraform.utils.GenUtils;
 
 public class MineshaftPopulator extends StructurePopulator{
 
-	private static ArrayList<int[]> positions;
-	
-	public static ArrayList<int[]> strongholdPositions(TerraformWorld tw){
-		if(positions != null) return positions;
-		Random rand = tw.getRand(3);
-		ArrayList<int[]> positions = new ArrayList<>();
-		int radius = 1408;
-		for(int i = 0; i < 3; i++){
-			int[] coords = randomCircleCoords(rand,radius);
-			TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + "," + coords[1]);
-
-			positions.add(coords);
-		}
-		radius += 3072;
-		//TerraformGeneratorPlugin.logger.debug("sp-1");
-		for(int i = 0; i < 6; i++) positions.add(randomCircleCoords(rand,radius));
-		radius += 3072;
-		//TerraformGeneratorPlugin.logger.debug("sp-2");
-		for(int i = 0; i < 10; i++) positions.add(randomCircleCoords(rand,radius));
-		radius += 3072;
-		//TerraformGeneratorPlugin.logger.debug("sp-3");
-		for(int i = 0; i < 15; i++) positions.add(randomCircleCoords(rand,radius));
-		radius += 3072;
-		//TerraformGeneratorPlugin.logger.debug("s-pop-4");
-		for(int i = 0; i < 21; i++) positions.add(randomCircleCoords(rand,radius));
-		radius += 3072;
-		//TerraformGeneratorPlugin.logger.debug("s-pop-5");
-		for(int i = 0; i < 28; i++) positions.add(randomCircleCoords(rand,radius));
-		radius += 3072;
-		//TerraformGeneratorPlugin.logger.debug("s-pop-6");
-		for(int i = 0; i < 36; i++) positions.add(randomCircleCoords(rand,radius));
-		radius += 3072;
-		//TerraformGeneratorPlugin.logger.debug("s-pop-7");
-		for(int i = 0; i < 9; i++) positions.add(randomCircleCoords(rand,radius));
-		//TerraformGeneratorPlugin.logger.debug("s-pop-8");
-		MineshaftPopulator.positions = positions;
-		return positions;
-	}
-	
-	/**
-	 * 
-	 * @param rand
-	 * @param radius
-	 * @return x,z coords on the circumference of 
-	 * a circle of the specified radius, center 0,0
-	 */
-	private static int[] randomCircleCoords(Random rand, int radius){
-		double angle = Math.random()*Math.PI*2;
-		int x = (int) (Math.cos(angle)*radius);
-		int y = (int) (Math.sin(angle)*radius);
-		return new int[]{x,y};
-	}
-	
-	private boolean areCoordsEqual(int[] a,int[] b){
-		return a[0] == b[0] && a[1] == b[1];
-	}
-	
 	@Override
 	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
-		ArrayList<int[]> positions = strongholdPositions(tw);
-		for(int x = chunkX*16; x<chunkX*16+16;x++){
-			for(int z = chunkZ*16; z<chunkZ*16+16;z++){
-				for(int[] pos:positions){
-					if(areCoordsEqual(pos,new int[]{x,z}))
-						return true;
+
+		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
+		int[] coords = getCoordsFromMegaChunk(tw,mc);
+		return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ;
+	}
+	
+	protected int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
+		return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1232412222));
+	}
+
+	@Override
+	public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+		MegaChunk mc = new MegaChunk(rawX,0,rawZ);
+		
+		double minDistanceSquared = Integer.MAX_VALUE;
+		int[] min = null;
+		for(int nx = -1; nx <= 1; nx++){
+			for(int nz = -1; nz <= 1; nz++){
+				int[] loc = getCoordsFromMegaChunk(tw,mc.getRelative(nx, nz));
+				double distSqr = Math.pow(loc[0]-rawX,2) + Math.pow(loc[1]-rawZ,2);
+				if(distSqr < minDistanceSquared){
+					minDistanceSquared = distSqr;
+					min = loc;
 				}
 			}
 		}
-		
-		return false;
+		return min;
 	}
 
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
-		//TerraformGeneratorPlugin.logger.debug("s-populate");
-		if(!TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean()) return;
-		ArrayList<int[]> positions = strongholdPositions(tw);
-		for(int x = data.getChunkX()*16; x<data.getChunkX()*16+16;x++){
-			for(int z = data.getChunkZ()*16; z<data.getChunkZ()*16+16;z++){
-				for(int[] pos:positions){
-					if(areCoordsEqual(pos,new int[]{x,z})){
-						int height = GenUtils.getHighestGround(data, x, z);
-						if(height > 60) height = 60;
-						//Mineshaft burrowed down
-						height -= 40;
-						if(height < 3) height = 5;
-						spawnMineshaft(tw,random,data,x,height,z);
-						break;
-					}
-				}
+
+		if(!TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean())
+			return;
+		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
+		int[] coords = getCoordsFromMegaChunk(tw,mc);
+		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
+		int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
+		int height = GenUtils.getHighestGround(data, x, z);
+		int y = height;
+		y -= GenUtils.randInt(35, 40);
+		if(y < 0) {
+			y = 10;
+			if(height-y < 25) {
+				//Way too little space. Abort generation.
+				return;
 			}
 		}
-		
-		
+		spawnMineshaft(tw,tw.getHashedRand(x, y, z, 82392812),data,x,y+1,z);
 	}
 	
 	public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
@@ -131,8 +89,11 @@ public class MineshaftPopulator extends StructurePopulator{
 		
 		gen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
 		gen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
-		gen.registerRoomPopulator(new ShaftRoomPopulator(random, false, false));
+		gen.registerRoomPopulator(new ShaftRoomPopulator(random, true, false));
 		gen.setCarveRooms(true);
+		gen.generate();
+		gen.fill(data, tw, Material.CAVE_AIR);
+		//TerraformGeneratorPlugin.logger.info("FIRSTGEN-1: " + gen.getRooms().size());
 		
 		//Level Two
 		hashedRand = tw.getHashedRand(x, y+15, z);
@@ -142,9 +103,12 @@ public class MineshaftPopulator extends StructurePopulator{
 		secondGen.setRoomMaxZ(17);
 		secondGen.setRoomMinX(13);
 		secondGen.setRoomMinZ(13);
-		
+		//TerraformGeneratorPlugin.logger.info("SECONDGEN-1: " + secondGen.getRooms().size());
 		for(CubeRoom room:gen.getRooms()) {
+			
+			//TerraformGeneratorPlugin.logger.info("FIRSTGEN-1: " + room.getPop().getClass().getName());
 			if(room.getPop() instanceof ShaftRoomPopulator) {
+				//TerraformGeneratorPlugin.logger.info("FIRSTGEN-1: Found shaftroom");
 				CubeRoom topShaft = new CubeRoom(
 						room.getWidthX(), 
 						room.getHeight(), 
@@ -154,6 +118,7 @@ public class MineshaftPopulator extends StructurePopulator{
 				secondGen.getRooms().add(topShaft);
 			}
 		}
+		//TerraformGeneratorPlugin.logger.info("SECONDGEN-2: " + secondGen.getRooms().size());
 		
 		secondGen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
 		secondGen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
@@ -161,27 +126,6 @@ public class MineshaftPopulator extends StructurePopulator{
 		secondGen.generate();
 		secondGen.fill(data, tw, Material.CAVE_AIR);
 		
-		//Second floor before first floor.
-		gen.generate();
-		gen.fill(data, tw, Material.CAVE_AIR);
 	}
-
-	@Override
-	public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
-
-		double minDistanceSquared = Integer.MAX_VALUE;
-		int[] min = null;
-		for(int[] loc:strongholdPositions(tw)){
-			double distSqr = Math.pow(loc[0]-rawX,2) + Math.pow(loc[1]-rawZ,2);
-			if(distSqr < minDistanceSquared){
-				minDistanceSquared = distSqr;
-				min = loc;
-			}
-		}
-		return new int[]{min[0],min[1]};
-	}
-	
-
-	
 
 }

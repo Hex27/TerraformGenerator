@@ -15,7 +15,6 @@ import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
-import org.terraform.coregen.v1_16_R1.BlockDataFixer;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.reflection.Post14PrivateFieldHandler;
@@ -44,7 +43,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 			privateFieldHandler = new Post14PrivateFieldHandler();
 		}
 		
-		this.logger = new TLogger(this);
+		logger = new TLogger(this);
 		TConfigOption.loadValues(this.getDCConfig());
 		TerraformGenerator.updateSeaLevelFromConfig();
 		new TerraformCommandManager(this, "terraform","terra");
@@ -53,7 +52,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 		String version = Version.getVersionPackage();
 		logger.info("Detected version: " + version);
 		try {
-			this.injector = (NMSInjectorAbstract) Class.forName("org.terraform.coregen." + version + ".NMSInjector").newInstance();
+			injector = (NMSInjectorAbstract) Class.forName("org.terraform.coregen." + version + ".NMSInjector").newInstance();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			logger.error("&cNo support for this version has been made yet!");
@@ -64,6 +63,11 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 		}
 	}
 	
+	/**
+	 * Legacy thing. Consider removal.
+	 * @param event
+	 * @deprecated
+	 */
 	@EventHandler
 	public void onWorldLoad(WorldLoadEvent event){
 		if(event.getWorld().getGenerator() instanceof TerraformGenerator){

@@ -70,6 +70,11 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 		Block b = w.getBlockAt(x, y, z);
 		b.setBlockData(data.clone(),!isFragile);
 	}
+	
+	public void noPhysicsUpdateForce(int x, int y, int z, BlockData data) {
+		Block b = w.getBlockAt(x, y, z);
+		b.setBlockData(data.clone(),false);
+	}
 
 	@Override
 	public Biome getBiome(int rawX, int rawY, int rawZ) {

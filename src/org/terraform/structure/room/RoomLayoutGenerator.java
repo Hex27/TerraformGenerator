@@ -196,6 +196,7 @@ public class RoomLayoutGenerator {
 		this.allowOverlaps = allowOverlaps;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void fill(PopulatorDataAbstract data, TerraformWorld tw, Material... mat){
 		ArrayList<PathGenerator> pathGens = new ArrayList<>();
 		if(genPaths)
