@@ -10,8 +10,8 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.utils.GenUtils;
 
 public class TreeDB {
 	

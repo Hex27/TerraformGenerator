@@ -1,22 +1,18 @@
 package org.terraform.structure.mineshaft;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rail;
-import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.Rail.Shape;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
-import org.terraform.biome.cave.GenericCavePopulator;
 import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraLootTable;
@@ -26,7 +22,6 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 
 public class MineshaftPathPopulator extends PathPopulatorAbstract{

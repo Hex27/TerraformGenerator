@@ -8,15 +8,19 @@ import org.drycell.config.DCConfig;
 public enum TConfigOption{
 
 	HEIGHT_MAP_MOUNTAIN_FREQUENCY("heightmap.mountain-frequency",0.002f),
+	HEIGHT_MAP_OCEANIC_FREQUENCY("heightmap.oceanic-frequency",0.001f),
 	HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level",62),
 	HEIGHT_MAP_DEEP_SEA_LEVEL("heightmap.deep-sea-level",35),
 	
 	BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency",0.001f),
 	BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency",0.001f),
+	BIOME_DITHER("biome.dithering",0.1d),
 	
+	//MISC_SMOOTH_DESIGN("misc.smooth-design",false),
+	MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled",false),
+	MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree",true),
 	
 	DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode",false),
-	DEVSTUFF_GLASSSTONE("dev-stuff.stone-is-glass",false),
 	DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations",true),
 	
 	//-=[CAVES]=-
@@ -36,6 +40,9 @@ public enum TConfigOption{
 	STRUCTURES_DROWNEDDUNGEON_ENABLED("structures.drowned-dungeon.enabled",true),
 	STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled",true),
 	STRUCTURES_MINESHAFT_ENABLED("structures.mineshaft.enabled",true),
+	STRUCTURES_MINESHAFT_CHANCE("structures.mineshaft.chance",75),
+	STRUCTURES_LARGECAVE_ENABLED("structures.largecave.enabled",true),
+	STRUCTURES_LARGECAVE_CHANCE("structures.largecave.chance",75),
 	
 	//-=[ANIMALS]=-
 		//BEES
@@ -209,6 +216,7 @@ public enum TConfigOption{
 		return (float) value;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<String> getStringList(){
 		return (List<String>) value;
 	}

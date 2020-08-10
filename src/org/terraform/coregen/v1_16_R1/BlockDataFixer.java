@@ -8,7 +8,6 @@ import org.bukkit.block.data.type.Wall.Height;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 
 public class BlockDataFixer extends BlockDataFixerAbstract {

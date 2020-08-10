@@ -21,6 +21,7 @@ import org.terraform.reflection.Post14PrivateFieldHandler;
 import org.terraform.reflection.Pre14PrivateFieldHandler;
 import org.terraform.reflection.PrivateFieldHandler;
 import org.terraform.schematic.SchematicListener;
+import org.terraform.tree.SaplingOverrider;
 import org.terraform.utils.Version;
 
 public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
@@ -60,6 +61,10 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
 			e.printStackTrace();
 			logger.error("&cSomething went wrong initiating the injector!");
 
+		}
+		
+		if(TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
+			Bukkit.getPluginManager().registerEvents(new SaplingOverrider(), this);
 		}
 	}
 	

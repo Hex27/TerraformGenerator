@@ -23,7 +23,13 @@ public class MineshaftPopulator extends StructurePopulator{
 
 		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
-		return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ;
+		if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+			return GenUtils
+					.chance(rand,
+							TConfigOption.STRUCTURES_MINESHAFT_CHANCE.getInt(),
+							100);
+		}
+		return false;
 	}
 	
 	protected int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
@@ -60,19 +66,26 @@ public class MineshaftPopulator extends StructurePopulator{
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
 		int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
 		int height = GenUtils.getHighestGround(data, x, z);
-		int y = height;
-		y -= GenUtils.randInt(35, 40);
-		if(y < 0) {
-			y = 10;
-			if(height-y < 25) {
-				//Way too little space. Abort generation.
-				return;
-			}
+		
+		if(height-20 < 15) {
+			//Way too little space. Abort generation.
+			TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y="+height +")");
+			return;
 		}
-		spawnMineshaft(tw,tw.getHashedRand(x, y, z, 82392812),data,x,y+1,z);
+		
+		int y = GenUtils.randInt(15, height-20);
+		
+		spawnMineshaft(tw,
+				tw.getHashedRand(x, y, z, 82392812),
+				data,x,y+1,z,
+				height-y > 25);
 	}
 	
-	public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
+	public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+		spawnMineshaft(tw,random,data,x,y,z,true);
+	}
+	
+	public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel){
 		TerraformGeneratorPlugin.logger.info("Spawning mineshaft at: " + x + "," + z);
 		
 		int numRooms = 10;
@@ -89,43 +102,43 @@ public class MineshaftPopulator extends StructurePopulator{
 		
 		gen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
 		gen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
-		gen.registerRoomPopulator(new ShaftRoomPopulator(random, true, false));
+		
+		if(doubleLevel) 
+			gen.registerRoomPopulator(new ShaftRoomPopulator(random, true, false));
+		
 		gen.setCarveRooms(true);
 		gen.generate();
 		gen.fill(data, tw, Material.CAVE_AIR);
-		//TerraformGeneratorPlugin.logger.info("FIRSTGEN-1: " + gen.getRooms().size());
 		
-		//Level Two
-		hashedRand = tw.getHashedRand(x, y+15, z);
-		RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand,RoomLayout.RANDOM_BRUTEFORCE,numRooms,x,y+15,z,range);
-		secondGen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y+15, z, 2)));
-		secondGen.setRoomMaxX(17);
-		secondGen.setRoomMaxZ(17);
-		secondGen.setRoomMinX(13);
-		secondGen.setRoomMinZ(13);
-		//TerraformGeneratorPlugin.logger.info("SECONDGEN-1: " + secondGen.getRooms().size());
-		for(CubeRoom room:gen.getRooms()) {
+		if(doubleLevel) {
+			//Level Two
+			hashedRand = tw.getHashedRand(x, y+15, z);
+			RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand,RoomLayout.RANDOM_BRUTEFORCE,numRooms,x,y+15,z,range);
+			secondGen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y+15, z, 2)));
+			secondGen.setRoomMaxX(17);
+			secondGen.setRoomMaxZ(17);
+			secondGen.setRoomMinX(13);
+			secondGen.setRoomMinZ(13);
 			
-			//TerraformGeneratorPlugin.logger.info("FIRSTGEN-1: " + room.getPop().getClass().getName());
-			if(room.getPop() instanceof ShaftRoomPopulator) {
-				//TerraformGeneratorPlugin.logger.info("FIRSTGEN-1: Found shaftroom");
-				CubeRoom topShaft = new CubeRoom(
-						room.getWidthX(), 
-						room.getHeight(), 
-						room.getWidthZ(), 
-						room.getX(), room.getY()+15, room.getZ());
-				topShaft.setRoomPopulator(new ShaftTopPopulator(hashedRand, true, false));
-				secondGen.getRooms().add(topShaft);
+			for(CubeRoom room:gen.getRooms()) {
+				
+				if(room.getPop() instanceof ShaftRoomPopulator) {
+					CubeRoom topShaft = new CubeRoom(
+							room.getWidthX(), 
+							room.getHeight(), 
+							room.getWidthZ(), 
+							room.getX(), room.getY()+15, room.getZ());
+					topShaft.setRoomPopulator(new ShaftTopPopulator(hashedRand, true, false));
+					secondGen.getRooms().add(topShaft);
+				}
 			}
+			
+			secondGen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
+			secondGen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
+			secondGen.setCarveRooms(true);
+			secondGen.generate();
+			secondGen.fill(data, tw, Material.CAVE_AIR);
 		}
-		//TerraformGeneratorPlugin.logger.info("SECONDGEN-2: " + secondGen.getRooms().size());
-		
-		secondGen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
-		secondGen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
-		secondGen.setCarveRooms(true);
-		secondGen.generate();
-		secondGen.fill(data, tw, Material.CAVE_AIR);
-		
 	}
 
 }

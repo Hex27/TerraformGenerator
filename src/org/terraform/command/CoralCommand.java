@@ -8,7 +8,6 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.data.TerraformWorld;
 import org.terraform.utils.CoralGenerator;
 
 public class CoralCommand extends DCCommand {
@@ -39,8 +38,6 @@ public class CoralCommand extends DCCommand {
 		
 		Player p = (Player) sender;
 		PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
-		//TreeDB.spawnFractalTree(new Random(), new SimpleBlock(data,p.getLocation().getBlock()));
-		TerraformWorld tw = TerraformWorld.get(p.getWorld());
 		int x = p.getLocation().getBlockX();
 		int y = p.getLocation().getBlockY();
 		int z = p.getLocation().getBlockZ();

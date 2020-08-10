@@ -39,25 +39,9 @@ public class ValuesCommand extends DCCommand {
 		return sender.isOp();
 	}
 	
-	private double ridge(int nx, int ny){
-		FastNoise noise = new FastNoise();
-		noise.SetNoiseType(NoiseType.PerlinFractal);
-		noise.SetFrequency(0.01f);
-		noise.SetFractalOctaves(3);
-		
-		return (Math.abs(noise.GetNoise(nx, ny)));
-	}
-
 	@Override
 	public void execute(CommandSender sender, Stack<String> args)
 			throws InvalidArgumentException {
-
-		MathValues mountainV = new MathValues();
-		MathValues heightMulV = new MathValues();
-		MathValues heightV = new MathValues();
-		MathValues simplexV = new MathValues();
-		MathValues perlinV = new MathValues();
-		
 		FastNoise caveNoise = new FastNoise(new Random().nextInt(9999));
 		caveNoise.SetNoiseType(NoiseType.PerlinFractal);
 		caveNoise.SetFractalOctaves(3);
@@ -73,7 +57,6 @@ public class ValuesCommand extends DCCommand {
 			int x = GenUtils.randInt(-10000,10000);
 			//int y = GenUtils.randInt(0,100);
 			int z = GenUtils.randInt(-10000,10000);
-			double height = tw.getTemperature(x, z);
 			BiomeBank bank = BiomeGrid.calculateBiome(BiomeType.FLAT,tw.getTemperature(x,z), tw.getMoisture(x,z));
 			if(weight.containsKey(bank)){
 				weight.put(bank,weight.get(bank)+1);
@@ -118,6 +101,7 @@ public class ValuesCommand extends DCCommand {
 		sender.sendMessage("Finished");
 	}
 	
+	@SuppressWarnings("unused")
 	private class MathValues{
 		private double total = 0;
 		private double lowest = 99999;

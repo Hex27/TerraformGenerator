@@ -1,23 +1,13 @@
 package org.terraform.structure.small;
 
-import java.io.FileNotFoundException;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.data.Wall;
 import org.terraform.main.TConfigOption;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.schematic.SchematicParser;
-import org.terraform.schematic.TerraSchematic;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;

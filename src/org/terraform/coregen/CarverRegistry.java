@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.terraform.carving.Carver;
-import org.terraform.carving.CaveWormCreator;
 import org.terraform.data.TerraformWorld;
 
 public class CarverRegistry {

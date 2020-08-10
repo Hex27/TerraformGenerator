@@ -8,7 +8,6 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.data.TerraformWorld;
 import org.terraform.structure.monument.MonumentDesign;
 
 public class LargeMonumentLampCommand extends DCCommand {
@@ -46,9 +45,7 @@ public class LargeMonumentLampCommand extends DCCommand {
 		int x = p.getLocation().getBlockX();
 		int y = p.getLocation().getBlockY();
 		int z = p.getLocation().getBlockZ();
-		TerraformWorld tw = TerraformWorld.get(p.getWorld());
-		
-//		RoomLayoutGenerator gen = new RoomLayoutGenerator(tw.getRand(8),50,x,y,z,100);
+		//		RoomLayoutGenerator gen = new RoomLayoutGenerator(tw.getRand(8),50,x,y,z,100);
 //		gen.setPathPopulator(new StrongholdPathPopulator(tw.getRand(13)));
 //		gen.generate();
 //		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);

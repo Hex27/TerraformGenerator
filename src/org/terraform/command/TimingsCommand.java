@@ -31,6 +31,7 @@ public class TimingsCommand extends DCCommand {
 		return sender.isOp();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(CommandSender sender, Stack<String> args)
 			throws InvalidArgumentException {

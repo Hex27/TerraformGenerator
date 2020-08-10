@@ -3,30 +3,21 @@ package org.terraform.structure.caves;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.SeaPickle;
-import org.bukkit.util.Vector;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.StructurePopulator;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.FastNoise.NoiseType;
 
 public class LargeCavePopulator extends StructurePopulator{
 
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
+		if(!TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean())
+			return;
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 
 		int[] spawnCoords = new int[]{data.getChunkX()*16,data.getChunkZ()*16};
@@ -53,12 +44,15 @@ public class LargeCavePopulator extends StructurePopulator{
 	
 	@Override
 	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
-
+		
 		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
 		int[][] allCoords = getCoordsFromMegaChunk(tw,mc);
 		for(int[] coords:allCoords){
 			if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ){
-				return true;
+				return GenUtils
+						.chance(rand,
+								TConfigOption.STRUCTURES_LARGECAVE_CHANCE.getInt(),
+								100);
 			}
 		}
 		return false;

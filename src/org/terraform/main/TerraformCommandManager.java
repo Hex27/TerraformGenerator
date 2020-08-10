@@ -13,7 +13,6 @@ import org.terraform.command.DrownedDungeonCommand;
 import org.terraform.command.FarmhouseCommand;
 import org.terraform.command.FractalTreeCommand;
 import org.terraform.command.GiantPumpkinCommand;
-import org.terraform.command.GuardianSpawnCheckCommand;
 import org.terraform.command.IceSpikeCommand;
 import org.terraform.command.LargeMonumentLampCommand;
 import org.terraform.command.MineshaftCommand;

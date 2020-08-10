@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -65,14 +64,6 @@ public class DesertHandler extends BiomeHandler {
 					data.setType(x,y+1,z,Material.DEAD_BUSH);
 				}
 			}
-		}
-	}
-	
-	private void spawnCactus(Random rand, Block cactusBottom){
-		int height = GenUtils.randInt(rand,3,6);
-		
-		for(int i = 0; i < height; i ++){
-			cactusBottom.getRelative(0,i,0).setType(Material.CACTUS,false);
 		}
 	}
 	

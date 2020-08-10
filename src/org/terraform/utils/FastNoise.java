@@ -2194,4 +2194,27 @@ public class FastNoise {
 		v2.y += Lerp(ly0x, ly1x, ys) * perturbAmp;
 	}
 
+	/**
+	 * Util singleton. All fastnoise is equal to other fastnoise
+	 * for the purpose of GC.
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + 42424242;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		return true;
+	}
+
 }

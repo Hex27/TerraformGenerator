@@ -1,15 +1,11 @@
 package org.terraform.structure.room;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.Wall;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.GenUtils;
 
 public class CarvedRoom extends CubeRoom{
 

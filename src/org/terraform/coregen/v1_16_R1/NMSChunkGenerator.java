@@ -7,14 +7,25 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
+import org.bukkit.block.Biome;
+import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_16_R1.generator.CraftChunkData;
+import org.bukkit.generator.ChunkGenerator.BiomeGrid;
+import org.bukkit.generator.ChunkGenerator.ChunkData;
+import org.terraform.coregen.TerraformGenerator;
+import org.terraform.coregen.TerraformPopulator;
+import org.terraform.data.TerraformWorld;
+import org.terraform.structure.farmhouse.FarmhousePopulator;
+import org.terraform.structure.monument.MonumentPopulator;
+import org.terraform.structure.stronghold.StrongholdPopulator;
+
+import com.mojang.serialization.Codec;
 
 import net.minecraft.server.v1_16_R1.BiomeBase;
 import net.minecraft.server.v1_16_R1.BiomeManager;
 import net.minecraft.server.v1_16_R1.BiomeStorage;
-import net.minecraft.server.v1_16_R1.BlockColumn;
 import net.minecraft.server.v1_16_R1.BlockPosition;
 import net.minecraft.server.v1_16_R1.ChunkCoordIntPair;
 import net.minecraft.server.v1_16_R1.ChunkGenerator;
@@ -25,10 +36,8 @@ import net.minecraft.server.v1_16_R1.EnumCreatureType;
 import net.minecraft.server.v1_16_R1.GeneratorAccess;
 import net.minecraft.server.v1_16_R1.HeightMap.Type;
 import net.minecraft.server.v1_16_R1.IBlockAccess;
-import net.minecraft.server.v1_16_R1.IBlockData;
 import net.minecraft.server.v1_16_R1.IChunkAccess;
 import net.minecraft.server.v1_16_R1.ITileEntity;
-import net.minecraft.server.v1_16_R1.MathHelper;
 import net.minecraft.server.v1_16_R1.ProtoChunk;
 import net.minecraft.server.v1_16_R1.RegionLimitedWorldAccess;
 import net.minecraft.server.v1_16_R1.SeededRandom;
@@ -36,32 +45,12 @@ import net.minecraft.server.v1_16_R1.StructureGenerator;
 import net.minecraft.server.v1_16_R1.StructureManager;
 import net.minecraft.server.v1_16_R1.StructureSettings;
 import net.minecraft.server.v1_16_R1.TileEntity;
-import net.minecraft.server.v1_16_R1.World;
 import net.minecraft.server.v1_16_R1.WorldChunkManager;
 import net.minecraft.server.v1_16_R1.WorldGenCanyonOcean;
 import net.minecraft.server.v1_16_R1.WorldGenCarverWrapper;
 import net.minecraft.server.v1_16_R1.WorldGenCavesOcean;
 import net.minecraft.server.v1_16_R1.WorldGenStage;
-import net.minecraft.server.v1_16_R1.WorldGenerator;
 import net.minecraft.server.v1_16_R1.WorldServer;
-
-import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R1.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_16_R1.generator.CraftChunkData;
-import org.bukkit.generator.ChunkGenerator.BiomeGrid;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
-import org.terraform.coregen.CarverRegistry;
-import org.terraform.coregen.TerraformGenerator;
-import org.terraform.coregen.TerraformPopulator;
-import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.farmhouse.FarmhousePopulator;
-import org.terraform.structure.monument.MonumentPopulator;
-import org.terraform.structure.stronghold.StrongholdPopulator;
-
-import com.mojang.serialization.Codec;
 
 public class NMSChunkGenerator extends ChunkGenerator {
 	
@@ -94,7 +83,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
         for(int x = chunkX*16; x < chunkX*16+16; x++){
         	for(int z = chunkZ*16; z < chunkZ*16+16; z++){
 
-        		int y = new org.terraform.coregen.HeightMap().getHeight(tw, x, z);
+        		int y = org.terraform.coregen.HeightMap.getHeight(tw, x, z);
         		BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, y, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler().getBiome()
 
         		//2D Biomes.
@@ -372,7 +361,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
 	@Override
 	public int getBaseHeight(int i, int j, Type heightmap_type) {
-		return new org.terraform.coregen.HeightMap().getHeight(tw,i,j);
+		return org.terraform.coregen.HeightMap.getHeight(tw,i,j);
 	}
 	
    private class CustomBiomeGrid implements BiomeGrid {

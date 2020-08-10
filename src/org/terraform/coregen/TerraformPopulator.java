@@ -1,26 +1,20 @@
 package org.terraform.coregen;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
-import org.terraform.carving.CaveWormCreator;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.populators.AnimalPopulator;
 import org.terraform.populators.OrePopulator;
-import org.terraform.populators.RiverWormCreator;
 
 public class TerraformPopulator{
-    private static Set<SimpleChunkLocation> chunks = new HashSet<SimpleChunkLocation>();
+    //private static Set<SimpleChunkLocation> chunks = new HashSet<SimpleChunkLocation>();
     
-    private RiverWormCreator rwc;
+    //private RiverWormCreator rwc;
     
 	private ArrayList<OrePopulator> orePops = new ArrayList<OrePopulator>(){{
 		
@@ -52,10 +46,10 @@ public class TerraformPopulator{
 	}};
 
 	
-	private CaveWormCreator cavePop;
+	//private CaveWormCreator cavePop;
 	
 	public TerraformPopulator(TerraformWorld tw){
-		this.rwc = new RiverWormCreator(tw);
+		//this.rwc = new RiverWormCreator(tw);
 	}
 	
 	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
@@ -71,7 +65,7 @@ public class TerraformPopulator{
 		ArrayList<BiomeBank> banks = new ArrayList<>();
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int height = new HeightMap().getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
+				int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
 				for(BiomeBank bank:BiomeBank.values()){
 					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
 					

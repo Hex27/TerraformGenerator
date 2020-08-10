@@ -1,13 +1,5 @@
 package org.terraform.coregen.v1_15_R1;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
-import net.minecraft.server.v1_15_R1.GeneratorSettingsFlat;
-import net.minecraft.server.v1_15_R1.IChunkAccess;
-import net.minecraft.server.v1_15_R1.PlayerChunkMap;
-import net.minecraft.server.v1_15_R1.WorldServer;
-
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
@@ -17,6 +9,11 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+
+import net.minecraft.server.v1_15_R1.GeneratorSettingsFlat;
+import net.minecraft.server.v1_15_R1.IChunkAccess;
+import net.minecraft.server.v1_15_R1.PlayerChunkMap;
+import net.minecraft.server.v1_15_R1.WorldServer;
 
 public class NMSInjector extends NMSInjectorAbstract {
 

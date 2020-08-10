@@ -1,8 +1,6 @@
 package org.terraform.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Axis;
@@ -19,12 +17,10 @@ import org.bukkit.block.data.Rail.Shape;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.FastNoise.NoiseType;
 
 public class BlockUtils {

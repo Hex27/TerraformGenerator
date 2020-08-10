@@ -2,17 +2,14 @@ package org.terraform.structure.mineshaft;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 public class CaveSpiderDenPopulator extends RoomPopulatorAbstract{

@@ -6,6 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.entity.Player;
+import org.drycell.command.DCCommand;
+import org.drycell.command.InvalidArgumentException;
+import org.drycell.main.DrycellPlugin;
+
 import net.minecraft.server.v1_15_R1.BaseBlockPosition;
 import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.GeneratorAccess;
@@ -14,13 +21,6 @@ import net.minecraft.server.v1_15_R1.StructureGenerator;
 import net.minecraft.server.v1_15_R1.StructurePiece;
 import net.minecraft.server.v1_15_R1.StructureStart;
 import net.minecraft.server.v1_15_R1.WorldGenerator;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
-import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
 
 public class GuardianSpawnCheckCommand extends DCCommand {
 
@@ -44,6 +44,7 @@ public class GuardianSpawnCheckCommand extends DCCommand {
 		return sender.isOp();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(CommandSender sender, Stack<String> args)
 			throws InvalidArgumentException {
@@ -66,7 +67,7 @@ public class GuardianSpawnCheckCommand extends DCCommand {
 			list = (List<StructureAbstract>) method
 					.invoke(WorldGenerator.OCEAN_MONUMENT, access, x>>4, z>>4);
 	
-			Iterator iterator = list.iterator();
+			Iterator<StructureAbstract> iterator = list.iterator();
 			p.sendMessage("Iterator size: " + list.size());
 	        while (iterator.hasNext()) {
 	            StructureStart structurestart = (StructureStart) iterator.next();
@@ -88,7 +89,7 @@ public class GuardianSpawnCheckCommand extends DCCommand {
 	                	return;
 	                }
 	                								//getPieces
-	                Iterator iterator1 = structurestart.d().iterator();
+	                Iterator<StructurePiece> iterator1 = structurestart.d().iterator();
 	
 	                while (iterator1.hasNext()) {
 	                    StructurePiece structurepiece = (StructurePiece) iterator1.next();

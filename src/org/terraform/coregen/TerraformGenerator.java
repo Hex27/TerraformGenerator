@@ -19,7 +19,6 @@ import org.terraform.utils.GenUtils;
 public class TerraformGenerator extends ChunkGenerator{
 	
 	public static int seaLevel = 62;
-	private HeightMap map;
 	
 	public static ArrayList<SimpleChunkLocation> preWorldInitGen 
 	= new ArrayList<>();
@@ -28,10 +27,10 @@ public class TerraformGenerator extends ChunkGenerator{
 		seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
 	}
 	
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);     
-        if(map == null) map = new HeightMap();
         TerraformWorld tw = TerraformWorld.get(world);
     	//Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
         
@@ -45,7 +44,7 @@ public class TerraformGenerator extends ChunkGenerator{
             	int rawX = chunkX*16+x;
             	int rawZ = chunkZ*16+z;
 
-            	int height = map.getHeight(tw, rawX, rawZ);
+            	int height = HeightMap.getHeight(tw, rawX, rawZ);
 
             	BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), height);
             	Material[] crust = bank.getHandler().getSurfaceCrust(random);
@@ -60,11 +59,7 @@ public class TerraformGenerator extends ChunkGenerator{
             	}
             	
             	for(int y = undergroundHeight;y > 0; y--){
-            		//if(!attemptSimpleBlockUpdate(tw, chunk, chunkX, chunkZ, x,undergroundHeight,z)) 
-            		if(!TConfigOption.DEVSTUFF_GLASSSTONE.getBoolean())
-            			chunk.setBlock(x,y,z,Material.STONE);
-            		else
-            			chunk.setBlock(x,y,z,Material.GLASS);
+            		chunk.setBlock(x,y,z,Material.STONE);
             	}
             	
             	//Any low elevation is sea
@@ -88,11 +83,10 @@ public class TerraformGenerator extends ChunkGenerator{
     
     @Override
     public Location getFixedSpawnLocation(World world, Random random) {
-    	if(map == null) map = new HeightMap();
         TerraformWorld tw = TerraformWorld.get(world);
     	return new Location(world,
     			0,
-    			map.getHeight(tw, 0,0),
+    			HeightMap.getHeight(tw, 0,0),
     			0);
     }
     

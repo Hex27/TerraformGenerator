@@ -74,7 +74,7 @@ public class IceSpikesHandler extends BiomeHandler {
 		Vector base = new Vector(x,y,z);
 		Vector base2 = new Vector(x+GenUtils.randInt(random, -2*baseRadius, 2*baseRadius),y+height,z+GenUtils.randInt(random, -2*baseRadius, 2*baseRadius));
 		Vector v = base2.subtract(base);
-		Vector unitV = v.clone().multiply(1/v.length());
+		
 		int segments = height;
 		SimpleBlock one = new SimpleBlock(data,x,y,z);
 		double radius = baseRadius;

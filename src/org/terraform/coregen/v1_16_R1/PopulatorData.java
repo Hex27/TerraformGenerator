@@ -1,5 +1,16 @@
 package org.terraform.coregen.v1_16_R1;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.craftbukkit.v1_16_R1.block.data.CraftBlockData;
+import org.bukkit.entity.EntityType;
+import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.TerraLootTable;
+import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
+
 import net.minecraft.server.v1_16_R1.BlockPosition;
 import net.minecraft.server.v1_16_R1.Blocks;
 import net.minecraft.server.v1_16_R1.Entity;
@@ -15,17 +26,6 @@ import net.minecraft.server.v1_16_R1.RegionLimitedWorldAccess;
 import net.minecraft.server.v1_16_R1.TileEntity;
 import net.minecraft.server.v1_16_R1.TileEntityLootable;
 import net.minecraft.server.v1_16_R1.TileEntityMobSpawner;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Biome;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_16_R1.block.data.CraftBlockData;
-import org.bukkit.entity.EntityType;
-import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraLootTable;
-import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorData extends PopulatorDataAbstract{
 	RegionLimitedWorldAccess rlwa;
@@ -63,7 +63,7 @@ public class PopulatorData extends PopulatorDataAbstract{
 
 	public Biome getBiome(int rawX, int rawY, int rawZ){
 		TerraformWorld tw = gen.getTerraformWorld();
-		int y = new org.terraform.coregen.HeightMap().getHeight(tw,rawX,rawZ);
+		int y = org.terraform.coregen.HeightMap.getHeight(tw,rawX,rawZ);
 		return tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf(rlwa.getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase());
 	}
 

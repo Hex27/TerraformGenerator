@@ -11,7 +11,6 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.small.GiantPumpkinPopulator;
-import org.terraform.structure.small.WitchHutPopulator;
 
 public class GiantPumpkinCommand extends DCCommand {
 

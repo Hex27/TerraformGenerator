@@ -45,7 +45,6 @@ public class DrownedDungeonCommand extends DCCommand {
 //						null,p.getLocation().getChunk().getX(),p.getLocation().getChunk().getZ());
 		PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
 		int x = p.getLocation().getBlockX();
-		int y = p.getLocation().getBlockY();
 		int z = p.getLocation().getBlockZ();
 		TerraformWorld tw = TerraformWorld.get(p.getWorld());
 		

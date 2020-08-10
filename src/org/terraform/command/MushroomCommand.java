@@ -10,8 +10,6 @@ import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.small.GiantPumpkinPopulator;
-import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.tree.TreeDB;
 

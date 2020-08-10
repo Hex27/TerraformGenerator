@@ -16,7 +16,6 @@ import org.terraform.coregen.v1_15_R1.BeeHiveSpawner;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
@@ -43,13 +42,11 @@ public class FractalTreeBuilder {
 	double maxBend = 1.2*Math.PI/6;
 	int heightVar = 0;
 	double initialTilt = 0;
-	boolean collapsed;
 	boolean snowy = false;
 	boolean alwaysOneStraight = false;
 	double beeChance = 0.0f;
 	int vines = 0;
 	int cocabeans = 0;
-	double gnarl = 0;
 	int fractalThreshold = 1;
 	int fractalsDone = 0;
 	double maxPitch = 9999;
@@ -106,20 +103,6 @@ public class FractalTreeBuilder {
 			//.setGnarl(5)
 			.setHeightVar(1);
 			//.setInitialTilt(Math.PI/6);
-			break;
-		case WASTELAND_COLLAPSED: 
-			this.setBaseHeight(12)
-			.setBaseThickness(3)
-			.setThicknessDecrement(0f)
-			.setMaxDepth(1)
-			.setLeafRadius(0)
-			.setLogType(Material.SPRUCE_WOOD)
-			.setLeafType(Material.AIR)
-			.setLengthDecrement(3f)
-			//.setGnarl(50)
-			.setHeightVar(4)
-			.setInitialTilt(Math.PI)
-			.setCollapsed(true);
 			break;
 		case TAIGA_BIG: 
 			this.setBaseHeight(10).setBaseThickness(4)
@@ -208,7 +191,7 @@ public class FractalTreeBuilder {
 			.setMinPitch(0);
 			break;
 		case DARK_OAK_BIG_TOP:
-			this.setBaseHeight(6).setBaseThickness(8).setThicknessDecrement(2f).setMaxDepth(4).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(2).setLogType(Material.DARK_OAK_WOOD).setLeafType(Material.DARK_OAK_LEAVES).setLengthDecrement(0).setHeightVar(1).setFractalThreshold(4).setMaxBend(1.4*Math.PI/6).setMinBend(1*Math.PI/6).setMaxPitch(Math.PI).setMinPitch(0);
+			this.setBaseHeight(6).setBaseThickness(8).setThicknessDecrement(2.5f).setMaxDepth(3).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(2).setLogType(Material.DARK_OAK_WOOD).setLeafType(Material.DARK_OAK_LEAVES).setLengthDecrement(0).setHeightVar(1).setFractalThreshold(4).setMaxBend(1.4*Math.PI/6).setMinBend(1*Math.PI/6).setMaxPitch(Math.PI).setMinPitch(0);
 			break;
 		case DARK_OAK_BIG_BOTTOM:
 			this.setBaseHeight(4).setBaseThickness(4).setThicknessDecrement(0f).setMaxDepth(3).setLeafRadiusX(0).setLeafRadiusZ(0).setLeafRadiusY(0).setLogType(Material.DARK_OAK_WOOD).setLeafType(Material.DARK_OAK_LEAVES).setLengthDecrement(-1).setHeightVar(1).setFractalThreshold(5).setMaxBend(2.3*Math.PI/6).setMinBend(2.0*Math.PI/6);
@@ -264,10 +247,6 @@ public class FractalTreeBuilder {
 		SimpleBlock base = new SimpleBlock(data,x,y,z);
 		if(this.top == null) top = base;
 		double angle = Math.PI/2+GenUtils.randDouble(rand, -initialTilt, initialTilt);
-		if(collapsed){
-			angle = 0;
-			if(rand.nextBoolean()) angle = Math.PI;
-		}
 		
 		fractalBranch(rand,base,
 				angle,
@@ -291,8 +270,6 @@ public class FractalTreeBuilder {
 		}
 	}
 	
-	private int gnarls = 0;
-	
 	public void fractalBranch(Random rand,SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size){
 
 		if(pitch > maxPitch) {
@@ -314,20 +291,16 @@ public class FractalTreeBuilder {
 		int y = (int) (Math.round(size*Math.sin(pitch))); //Pitch is vertical tilt
 		int x;
 		int z;
-		if(!collapsed){
-			x = (int) (Math.round(size*Math.cos(pitch)*Math.sin(yaw)));
-			z = (int) (Math.round(size*Math.cos(pitch)*Math.cos(yaw)));
-		}else{
-			x = (int) (Math.round(size*Math.sin(yaw)));
-			z = (int) (Math.round(size*Math.cos(yaw)));
-		}
+		
+		x = (int) (Math.round(size*Math.cos(pitch)*Math.sin(yaw)));
+		z = (int) (Math.round(size*Math.cos(pitch)*Math.cos(yaw)));
+		
 		SimpleBlock two = base.getRelative(x,y,z);
 		if(two.getY() > top.getY()) top = two;
 		
 		//Set height
 		if(two.getY() - oriY > height)
 			height = two.getY() - oriY;
-		
 		
 		drawLine(rand, base,two,(int) (size),thickness,this.logType);
 		
@@ -360,32 +333,21 @@ public class FractalTreeBuilder {
 			return;
 		}
 		
-		if(!GenUtils.chance(rand,(int) gnarl,100) && gnarls < 2){
-			gnarls = 0;
-			//Make 4 branches
-			fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
-			fractalBranch(rand, two, pitch + randomAngle(), yaw + rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
-			fractalBranch(rand, two, pitch + randomAngle(), yaw + 5*rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
-			fractalBranch(rand, two, pitch + randomAngle(), yaw - 5*rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
-			
-		}else{
-			//Continue the branch at a different angle, no depth cost
-			gnarls++;
-			fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(),depth,thickness,size-lengthDecrement*2);
-		}
+		//Make 4 branches
+		fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
+		fractalBranch(rand, two, pitch + randomAngle(), yaw + rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
+		fractalBranch(rand, two, pitch + randomAngle(), yaw + 5*rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
+		fractalBranch(rand, two, pitch + randomAngle(), yaw - 5*rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
 	}
 	
-	public void drawLine(Random rand, SimpleBlock one, SimpleBlock two, int segments, double thickness, Material type){
+	public void drawLine(Random rand, SimpleBlock one, SimpleBlock two, int segments, double thickness, Material type) {
 		//Vector one to two;
 		Vector v = two.getVector().subtract(one.getVector());
+		
 		for(int i=0; i<=segments; i++){
 			Vector seg = v.clone().multiply((float) ((float)i)/((float)segments));
 			SimpleBlock segment = one.getRelative(seg);
-//			segment.setHardReplace();
-//			segment.setType(type);
 			replaceSphere(rand.nextInt(9999), ((float)thickness)/2, segment, logType);
-//			Block segment = one.getLocation().add(seg).getBlock();
-//			segment.setType(type);
 		}
 	}
 	
@@ -402,6 +364,7 @@ public class FractalTreeBuilder {
 				rZ <= 0){
 			return;
 		}
+		
 		if(rX <= 0.5 &&
 				rY <= 0.5 &&
 				rZ <= 0.5){
@@ -409,6 +372,7 @@ public class FractalTreeBuilder {
 			block.setType(type);
 			return;
 		}
+		
 		FastNoise noise = new FastNoise(seed);
 		noise.SetNoiseType(NoiseType.Simplex);
 		noise.SetFrequency(0.09f);
@@ -543,27 +507,12 @@ public class FractalTreeBuilder {
 		return this;
 	}
 	
-	/**
-	 * @Deprecated some bloody problem that causes crashes when gnarling happens
-	 */
-	@Deprecated
-	public FractalTreeBuilder setGnarl(double gnarl){
-		this.gnarl = gnarl;
-		//TODO: make gnarl trees (Bending/kinking)
-		return this;
-	}
-	
 	public FractalTreeBuilder setMinBend(double bend){
 		this.minBend = bend;
 		return this;
 	}
 	public FractalTreeBuilder setMaxBend(double bend){
 		this.maxBend = bend;
-		return this;
-	}
-	
-	public FractalTreeBuilder setCollapsed(boolean collapsed){
-		this.collapsed = collapsed;
 		return this;
 	}
 	

@@ -2,7 +2,6 @@ package org.terraform.biome.ocean;
 
 import java.util.Random;
 
-import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
@@ -63,37 +62,6 @@ public class LukewarmOceansHandler extends BiomeHandler {
 				}
 			}
 		}
-	}
-	
-	private void generateClayDeposit(int x, int y, int z, Chunk chunk, Random random){
-		 //CLAY DEPOSIT
-		int length = GenUtils.randInt(4, 8);
-		int nx = x;
-		int ny = y;
-		int nz = z;
-		while(length > 0){
-			length--;
-			if(chunk.getBlock(nx,ny,nz).getType() == Material.SAND||
-					chunk.getBlock(nx,ny,nz).getType() == Material.GRAVEL)
-				chunk.getBlock(nx,ny,nz).setType(Material.CLAY,false);
-			
-			switch (random.nextInt(5)) {  // The direction chooser
-				case 0: nx++; break;
-				case 1: ny++; break;
-				case 2: nz++; break;
-				case 3: nx--; break;
-				case 4: ny--; break;
-				case 5: nz--; break;
-			}
-			
-			if(nx > 15) nx = 15;
-			if(nx < 0) nx = 0;
-			if(nz > 15) nz = 15;
-			if(nz < 0) nz = 0;
-			if(ny > y) ny = y;
-			if(ny < 2) ny = 2;
-		}
-	
 	}
 
 

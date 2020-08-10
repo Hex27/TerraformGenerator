@@ -4,20 +4,6 @@ import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.server.v1_14_R1.BiomeBase;
-import net.minecraft.server.v1_14_R1.BlockPosition;
-import net.minecraft.server.v1_14_R1.ChunkGenerator;
-import net.minecraft.server.v1_14_R1.ChunkSection;
-import net.minecraft.server.v1_14_R1.GeneratorAccess;
-import net.minecraft.server.v1_14_R1.GeneratorSettingsDefault;
-import net.minecraft.server.v1_14_R1.HeightMap.Type;
-import net.minecraft.server.v1_14_R1.IChunkAccess;
-import net.minecraft.server.v1_14_R1.ITileEntity;
-import net.minecraft.server.v1_14_R1.RegionLimitedWorldAccess;
-import net.minecraft.server.v1_14_R1.TileEntity;
-import net.minecraft.server.v1_14_R1.WorldChunkManager;
-import net.minecraft.server.v1_14_R1.World;
-
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.block.CraftBlock;
@@ -31,6 +17,20 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+
+import net.minecraft.server.v1_14_R1.BiomeBase;
+import net.minecraft.server.v1_14_R1.BlockPosition;
+import net.minecraft.server.v1_14_R1.ChunkGenerator;
+import net.minecraft.server.v1_14_R1.ChunkSection;
+import net.minecraft.server.v1_14_R1.GeneratorAccess;
+import net.minecraft.server.v1_14_R1.GeneratorSettingsDefault;
+import net.minecraft.server.v1_14_R1.HeightMap.Type;
+import net.minecraft.server.v1_14_R1.IChunkAccess;
+import net.minecraft.server.v1_14_R1.ITileEntity;
+import net.minecraft.server.v1_14_R1.RegionLimitedWorldAccess;
+import net.minecraft.server.v1_14_R1.TileEntity;
+import net.minecraft.server.v1_14_R1.World;
+import net.minecraft.server.v1_14_R1.WorldChunkManager;
 
 public class NMSChunkGenerator extends ChunkGenerator {
 	
@@ -55,7 +55,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 for (int z = 0; z < 16; z++) {
                 	int rawX = x+ichunkaccess.getPos().x*16;
                 	int rawZ = x+ichunkaccess.getPos().z*16;
-                	int y = new HeightMap().getHeight(tw, rawX, rawZ);
+                	int y = HeightMap.getHeight(tw, rawX, rawZ);
                 	BiomeBase biomeBase = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler().getBiome()
 
                     biomeBases[(x * 16) + z] = biomeBase;
@@ -171,7 +171,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
 	@Override
 	public int getBaseHeight(int i, int j, Type heightmap_type) {
-		return new org.terraform.coregen.HeightMap().getHeight(tw,i,j);
+		return org.terraform.coregen.HeightMap.getHeight(tw,i,j);
 	}
 	
 	@Override

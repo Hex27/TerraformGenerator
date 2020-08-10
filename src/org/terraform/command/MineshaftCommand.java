@@ -11,7 +11,6 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.mineshaft.MineshaftPopulator;
-import org.terraform.structure.monument.MonumentPopulator;
 
 public class MineshaftCommand extends DCCommand {
 

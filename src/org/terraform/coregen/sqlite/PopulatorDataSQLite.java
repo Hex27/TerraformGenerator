@@ -20,6 +20,7 @@ public class PopulatorDataSQLite extends PopulatorDataAbstract {
 		this.chunkZ = chunkZ;
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean isInBounds(int x, int z){
 		if(x < chunkX*16) return false;
 		if(x > (chunkX*16)+15) return false;

@@ -6,7 +6,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.Vector;
 import org.terraform.data.SimpleBlock;
-import org.terraform.main.TerraformGeneratorPlugin;
 
 public abstract class BlockDataFixerAbstract {
 	

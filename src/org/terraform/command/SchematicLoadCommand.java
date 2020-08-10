@@ -5,7 +5,6 @@ import java.util.Random;
 import java.util.Stack;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
@@ -38,7 +37,6 @@ public class SchematicLoadCommand extends DCCommand {
 	@Override
 	public void execute(CommandSender sender, Stack<String> args)
 			throws InvalidArgumentException {
-		Player p = (Player) sender;
 		ArrayList<Object> parsed = this.parseArguments(sender, args);
 		TerraSchematic schem = (TerraSchematic) parsed.get(0);
 		schem.setFace(BlockUtils.getDirectBlockFace(new Random()));

@@ -102,7 +102,7 @@ public class RiverWorm {
 		double noise1 = this.noise1.GetNoise(base.getX(), base.getY(), base.getZ());
 		double noise2 = this.noise2.GetNoise(base.getX(), base.getY(), base.getZ());
 		double noise3 = this.noise3.GetNoise(base.getX(), base.getY(), base.getZ());
-		double y = new HeightMap().getHeight(tw, base.getX(), base.getZ()) + GenUtils.randInt(rand, -12, -5);
+		double y = HeightMap.getHeight(tw, base.getX(), base.getZ()) + GenUtils.randInt(rand, -12, -5);
 
 		if(y <= TerraformGenerator.seaLevel) die();
 		

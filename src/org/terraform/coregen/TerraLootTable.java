@@ -38,6 +38,7 @@ public enum TerraLootTable {
     SHIPWRECK_TREASURE("chests/shipwreck_treasure"),
     PILLAGER_OUTPOST("chests/pillager_outpost");
 	
+	@SuppressWarnings("unused")
 	private String key;
 	TerraLootTable(String key){
 		this.key = key;

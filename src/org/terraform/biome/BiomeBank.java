@@ -120,6 +120,7 @@ public enum BiomeBank {
 	 */
 	public static BiomeBank calculateBiome(TerraformWorld tw, int x, int z, int height){
 		
+		double dither = TConfigOption.BIOME_DITHER.getDouble();
 		double temperature = tw.getTemperature(x, z);
 		double moisture = tw.getMoisture(x, z);
 		Random random = tw.getHashedRand((int) (temperature*10000), (int) (moisture*10000), height);
@@ -130,11 +131,11 @@ public enum BiomeBank {
 			
 			BiomeBank bank = BiomeGrid.calculateBiome(
 					BiomeType.OCEANIC,
-					temperature + GenUtils.randDouble(random, -0.1, 0.1),
-					moisture + GenUtils.randDouble(random, -0.1, 0.1)
+					temperature + GenUtils.randDouble(random, -dither, dither),
+					moisture + GenUtils.randDouble(random, -dither, dither)
 			);
 			
-			int trueHeight = new HeightMap().getRiverlessHeight(tw, x, z);
+			int trueHeight = HeightMap.getRiverlessHeight(tw, x, z);
 			
 			//This is a river.
 			if(trueHeight >= TerraformGenerator.seaLevel){
@@ -163,8 +164,8 @@ public enum BiomeBank {
 		if(height >= 80-GenUtils.randInt(random, 0,5)){
 			return BiomeGrid.calculateBiome(
 							BiomeType.MOUNTAINOUS,
-							temperature + GenUtils.randDouble(random, -0.1, 0.1),
-							moisture + GenUtils.randDouble(random, -0.1, 0.1)
+							temperature + GenUtils.randDouble(random, -dither, dither),
+							moisture + GenUtils.randDouble(random, -dither, dither)
 					);
 		}
 		
@@ -172,8 +173,8 @@ public enum BiomeBank {
 		if(height <= TerraformGenerator.seaLevel+GenUtils.randInt(random, 0,4)){
 			return BiomeGrid.calculateBiome(
 					BiomeType.BEACH,
-					temperature + GenUtils.randDouble(random, -0.1, 0.1),
-					moisture + GenUtils.randDouble(random, -0.1, 0.1)
+					temperature + GenUtils.randDouble(random, -dither, dither),
+					moisture + GenUtils.randDouble(random, -dither, dither)
 			);
 		}
 		
@@ -181,8 +182,8 @@ public enum BiomeBank {
 		
 		return BiomeGrid.calculateBiome(
 				BiomeType.FLAT,
-				temperature + GenUtils.randDouble(random, -0.1, 0.1),
-				moisture + GenUtils.randDouble(random, -0.1, 0.1)
+				temperature + GenUtils.randDouble(random, -dither, dither),
+				moisture + GenUtils.randDouble(random, -dither, dither)
 		);
 	}
 
