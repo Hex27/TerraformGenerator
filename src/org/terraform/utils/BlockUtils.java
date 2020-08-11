@@ -408,7 +408,6 @@ public class BlockUtils {
 			base.setType(Material.WATER);
 			return;
 		}
-		Random rand = new Random(seed);
 		FastNoise noise = new FastNoise(seed);
 		noise.SetNoiseType(NoiseType.Simplex);
 		noise.SetFrequency(0.09f);
@@ -454,7 +453,6 @@ public class BlockUtils {
 			block.setType(Material.CAVE_AIR);
 			return;
 		}
-		Random rand = new Random(seed);
 		FastNoise noise = new FastNoise(seed);
 		noise.SetNoiseType(NoiseType.Simplex);
 		noise.SetFrequency(0.09f);

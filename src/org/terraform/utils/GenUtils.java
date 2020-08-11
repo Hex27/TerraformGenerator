@@ -232,13 +232,6 @@ public class GenUtils {
 	 */
 	public static int getHighestGround(PopulatorDataAbstract data, int x, int z){
 		int y=255;
-//		while((!BlockUtils.isDirtLike(data.getType(x,y,z))&&
-//				!BlockUtils.isStoneLike(data.getType(x,y,z))) ||
-//				(data.getType(x,y,z).isSolid() &&
-//						data.getType(x,y,z).toString().contains("LEAVES") &&
-//						data.getType(x,y,z).toString().contains("LOG"))){
-//			y--;
-//		}
 		while(true){
 			if(BlockUtils.isStoneLike(data.getType(x,y,z))) break;
 			if(data.getType(x, y, z).isSolid()){
@@ -252,6 +245,7 @@ public class GenUtils {
 				}else if(data.getType(x, y, z).toString().contains("BRICK")){
 				}else if(data.getType(x, y, z).isInteractable()){
 				}else if(data.getType(x, y, z) == Material.ICE){
+				}else if(data.getType(x, y, z) == Material.CACTUS){
 				}else
 					break;
 			}

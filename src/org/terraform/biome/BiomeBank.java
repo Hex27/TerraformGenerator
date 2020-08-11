@@ -179,7 +179,6 @@ public enum BiomeBank {
 		}
 		
 		//GENERATE LOW-ALTITUDE AREAS
-		
 		return BiomeGrid.calculateBiome(
 				BiomeType.FLAT,
 				temperature + GenUtils.randDouble(random, -dither, dither),

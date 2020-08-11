@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
@@ -34,7 +35,7 @@ public class PlainsHandler extends BiomeHandler {
 
 	@Override
 	public Material[] getSurfaceCrust(Random rand) {
-		return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_BLOCK,Material.GRASS_PATH),
+		return new Material[]{Material.GRASS_BLOCK,
 				Material.DIRT,
 				Material.DIRT,
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE),
@@ -68,16 +69,29 @@ public class PlainsHandler extends BiomeHandler {
 				if(data.getType(x,y,z) == Material.GRASS_BLOCK){
 					
 					if(GenUtils.chance(random, 1, 10)){
-						data.setType(x, y+1, z,Material.GRASS);
-						if(random.nextBoolean()){
-							BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_GRASS);
-						}else{
-							data.setType(x,y+1,z,BlockUtils.pickFlower());
+						if(GenUtils.chance(random, 6,10)) {
+							data.setType(x, y+1, z,Material.GRASS);
+							if(random.nextBoolean()){
+								BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_GRASS);
+							}
+						}else {
+							if(GenUtils.chance(random, 7,10))
+								data.setType(x,y+1,z,BlockUtils.pickFlower());
+							else
+								BlockUtils.setDoublePlant(data, x, y+1, z, BlockUtils.pickTallFlower());
 						}
 					}
+					
+					//Small grass poffs
+					if(GenUtils.chance(random, 1,300)) {
+						BlockUtils.replaceSphere(
+								random.nextInt(424444), 
+								2, 2, 2, 
+								new SimpleBlock(data,x,y+1,z), false, Material.OAK_LEAVES);
+					}
 					if(GenUtils.chance(random,1,500)){
-						new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL).build(world, data, x, y+1, z);
-						//TreeDB.spawnSmallTree(random, data, x, y+1, z, Material.OAK_LOG, Material.OAK_LEAVES);
+						new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL)
+						.build(world, data, x, y+1, z);
 					}
 					
 				}

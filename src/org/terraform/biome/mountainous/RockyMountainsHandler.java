@@ -39,7 +39,7 @@ public class RockyMountainsHandler extends BiomeHandler {
 	}
 
 	@Override
-	public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int y = GenUtils.getHighestGround(data, x, z);
