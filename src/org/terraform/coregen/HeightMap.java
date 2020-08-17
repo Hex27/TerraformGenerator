@@ -9,13 +9,30 @@ public abstract class HeightMap {
 	
 	private static final int defaultSeaLevel = 62;
 	
+	public static double getRiverDepth(TerraformWorld tw, int x, int z){
+		double depth = 15-100*riverRidge(tw,x,z);
+		if(depth < 0) depth = 0;
+		return depth;
+	}
+	
+	private static double riverRidge(TerraformWorld tw, int nx, int ny){
+		FastNoise noise = new FastNoise();
+		noise.SetSeed((int) tw.getSeed());
+        noise.SetNoiseType(NoiseType.PerlinFractal);
+        noise.SetFrequency(0.005f);
+        noise.SetFractalOctaves(5);
+        double n = noise.GetNoise(nx, ny);
+        //if(n > 0) n = 0;
+        return (Math.abs(n));
+	}
+	
 	public static double getOceanicHeight(TerraformWorld tw, int x, int z) {
 		FastNoise cubic = new FastNoise((int) tw.getSeed()*12);
 		cubic.SetNoiseType(NoiseType.CubicFractal);
 		cubic.SetFractalOctaves(6);
 		
 		cubic.SetFrequency(TConfigOption.HEIGHT_MAP_OCEANIC_FREQUENCY.getFloat());
-		double height = cubic.GetNoise(x, z)*5;
+		double height = cubic.GetNoise(x, z)*2.5;
 		
 		//Only negative height (Downwards)
 		if(height > 0) height = 0;
@@ -94,16 +111,23 @@ public abstract class HeightMap {
 		//Oceans
 		height += getOceanicHeight(tw,x,z);
 		
-		if(height > TerraformGenerator.seaLevel-15){
-			double depth = tw.getRiverDepth(x,z);
+		//River Depth
+		double depth = getRiverDepth(tw,x,z);
+		
+		//Normal scenario: Shallow area
+		if(height - depth >= TerraformGenerator.seaLevel-15){
 			height -= depth;
 			
+	    //Fix for underwater river carving: Don't carve deeply
+		}else if(height > TerraformGenerator.seaLevel-15
+				&& height - depth < TerraformGenerator.seaLevel-15){
+			height = TerraformGenerator.seaLevel - 15;
 		}
 		
 		return (int) height;
 	}
 	
-
+	//Used for calculating biomes
 	public static int getRiverlessHeight(TerraformWorld tw, int x, int z){
 		double height = getCoreHeight(tw,x,z);
 		

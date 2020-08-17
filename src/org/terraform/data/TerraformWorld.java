@@ -71,22 +71,6 @@ public class TerraformWorld{
 		return moistureOctave;
 	}
 	
-	public double getRiverDepth(int x, int z){
-		double depth = 15-100*ridge(x,z);
-		if(depth < 0) depth = 0;
-		return depth;
-	}
-	
-	private double ridge(int nx, int ny){
-		FastNoise noise = new FastNoise();
-        noise.SetNoiseType(NoiseType.PerlinFractal);
-        noise.SetFrequency(0.005f);
-        noise.SetFractalOctaves(5);
-        double n = noise.GetNoise(nx, ny);
-        //if(n > 0) n = 0;
-        return (Math.abs(n));
-	}
-	
 	public Random getRand(long d){
 		return new Random(seed*d);
 	}

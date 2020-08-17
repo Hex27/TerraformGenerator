@@ -43,7 +43,7 @@ public class CheckHeightCommand extends DCCommand {
 		
 		TerraformWorld tw = TerraformWorld.get(p.getWorld());
 		int h = HeightMap.getHeight(tw, x, z);
-		double rd = tw.getRiverDepth(x, z);
+		double rd = HeightMap.getRiverDepth(tw, x, z);
 		p.sendMessage("Core Height: " + HeightMap.getCoreHeight(tw, x, z));
 		p.sendMessage("Mountainous Height: " + HeightMap.getMountainousHeight(tw, x, z));
 		p.sendMessage("Attrition Height: " + HeightMap.getAttritionHeight(tw, x, z));
