@@ -42,7 +42,7 @@ public class TerraformPopulator{
 		add(new AnimalPopulator(EntityType.DONKEY, TConfigOption.ANIMALS_DONKEY_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_DONKEY_MAXHERDSIZE.getInt(), TConfigOption.ANIMALS_DONKEY_CHANCE.getInt(), true, BiomeBank.PLAINS, BiomeBank.SAVANNA));
 		add(new AnimalPopulator(EntityType.RABBIT, TConfigOption.ANIMALS_RABBIT_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_RABBIT_MAXHERDSIZE.getInt(), TConfigOption.ANIMALS_RABBIT_CHANCE.getInt(), true, BiomeBank.DESERT, BiomeBank.FOREST, BiomeBank.TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.ROCKY_BEACH, BiomeBank.SNOWY_WASTELAND));
 		add(new AnimalPopulator(EntityType.POLAR_BEAR, TConfigOption.ANIMALS_POLAR_BEAR_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_POLAR_BEAR_MAXHERDSIZE.getInt(), TConfigOption.ANIMALS_POLAR_BEAR_CHANCE.getInt(), true, BiomeBank.ICE_SPIKES, BiomeBank.SNOWY_TAIGA, BiomeBank.ICY_BEACH, BiomeBank.SNOWY_WASTELAND));
-		//add(new AnimalPopulator(EntityType.PANDA, 2, 3, 100, true, BiomeBank.ICE_SPIKES, BiomeBank.FROZEN_OCEAN, BiomeBank.SNOWY_TAIGA, BiomeBank.ROCKY_BEACH, BiomeBank.SNOWY_WASTELAND));
+		add(new AnimalPopulator(EntityType.PANDA, TConfigOption.ANIMALS_PANDA_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_PANDA_MAXHERDSIZE.getInt(), TConfigOption.ANIMALS_PANDA_CHANCE.getInt(), true, BiomeBank.BAMBOO_FOREST));
 	}};
 
 	

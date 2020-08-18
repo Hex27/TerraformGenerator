@@ -241,11 +241,14 @@ public class GenUtils {
 				}else if(data.getType(x, y, z).toString().contains("MUSHROOM")){
 				}else if(data.getType(x, y, z).toString().contains("FENCE")){
 				}else if(data.getType(x, y, z).toString().contains("WALL")){
+				}else if(data.getType(x, y, z).toString().contains("POTTED")){
 				}else if(data.getType(x, y, z) == Material.HAY_BLOCK){
 				}else if(data.getType(x, y, z).toString().contains("BRICK")){
 				}else if(data.getType(x, y, z).isInteractable()){
 				}else if(data.getType(x, y, z) == Material.ICE){
 				}else if(data.getType(x, y, z) == Material.CACTUS){
+				}else if(data.getType(x, y, z) == Material.BAMBOO){
+				}else if(data.getType(x, y, z) == Material.BAMBOO_SAPLING){
 				}else
 					break;
 			}

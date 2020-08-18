@@ -15,6 +15,7 @@ public enum TConfigOption{
 	BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency",0.001f),
 	BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency",0.001f),
 	BIOME_DITHER("biome.dithering",0.1d),
+	BIOME_MOUNTAIN_HEIGHT("biome.min-mountain-height",85),
 	
 	//MISC_SMOOTH_DESIGN("misc.smooth-design",false),
 	MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled",false),
@@ -79,6 +80,10 @@ public enum TConfigOption{
 	ANIMALS_POLAR_BEAR_MINHERDSIZE("animals.polarbear.min-herd-size",2),
 	ANIMALS_POLAR_BEAR_MAXHERDSIZE("animals.polarbear.max-herd-size",3),
 	ANIMALS_POLAR_BEAR_CHANCE("animals.polarbear.chance",1),
+	//PANDA
+	ANIMALS_PANDA_MINHERDSIZE("animals.panda.min-herd-size",2),
+	ANIMALS_PANDA_MAXHERDSIZE("animals.panda.max-herd-size",3),
+	ANIMALS_PANDA_CHANCE("animals.panda.chance",1),
 	
 	//-=[ORES]=-
 		//COAL

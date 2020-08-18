@@ -333,12 +333,13 @@ public class BlockUtils {
 		}
 	}
 	
-	public static void spawnPillar(Random rand, PopulatorDataAbstract data, int x, int y, int z, Material type, int minHeight, int maxHeight){
+	public static int spawnPillar(Random rand, PopulatorDataAbstract data, int x, int y, int z, Material type, int minHeight, int maxHeight){
 		int height = GenUtils.randInt(rand,minHeight,maxHeight);
 		
 		for(int i = 0; i < height; i ++){
 			data.setType(x,y+i,z,type);
 		}
+		return height;
 	}
 	
 	public static void generateClayDeposit(int x, int y, int z, PopulatorDataAbstract data, Random random){

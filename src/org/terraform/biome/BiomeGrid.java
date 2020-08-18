@@ -12,8 +12,8 @@ public class BiomeGrid {
 		new BiomeBank[]{BiomeBank.SNOWY_TAIGA,BiomeBank.SNOWY_TAIGA,BiomeBank.TAIGA,BiomeBank.PLAINS,BiomeBank.PLAINS,BiomeBank.PLAINS,BiomeBank.PLAINS,BiomeBank.PLAINS,BiomeBank.PLAINS,BiomeBank.PLAINS,BiomeBank.PLAINS},
 		new BiomeBank[]{BiomeBank.SNOWY_TAIGA,BiomeBank.SNOWY_TAIGA,BiomeBank.TAIGA,BiomeBank.DARK_FOREST,BiomeBank.DARK_FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.JUNGLE,BiomeBank.JUNGLE,BiomeBank.JUNGLE,BiomeBank.JUNGLE},
 		new BiomeBank[]{BiomeBank.SNOWY_TAIGA,BiomeBank.SNOWY_TAIGA,BiomeBank.TAIGA,BiomeBank.DARK_FOREST,BiomeBank.DARK_FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.JUNGLE,BiomeBank.JUNGLE,BiomeBank.JUNGLE},
-		new BiomeBank[]{BiomeBank.ICE_SPIKES,BiomeBank.ICE_SPIKES,BiomeBank.TAIGA,BiomeBank.DARK_FOREST,BiomeBank.DARK_FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.JUNGLE,BiomeBank.JUNGLE,BiomeBank.JUNGLE},
-		new BiomeBank[]{BiomeBank.ICE_SPIKES,BiomeBank.ICE_SPIKES,BiomeBank.TAIGA,BiomeBank.DARK_FOREST,BiomeBank.DARK_FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.JUNGLE,BiomeBank.JUNGLE,BiomeBank.JUNGLE}
+		new BiomeBank[]{BiomeBank.ICE_SPIKES,BiomeBank.ICE_SPIKES,BiomeBank.TAIGA,BiomeBank.DARK_FOREST,BiomeBank.DARK_FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.BAMBOO_FOREST,BiomeBank.BAMBOO_FOREST,BiomeBank.JUNGLE,BiomeBank.JUNGLE},
+		new BiomeBank[]{BiomeBank.ICE_SPIKES,BiomeBank.ICE_SPIKES,BiomeBank.TAIGA,BiomeBank.DARK_FOREST,BiomeBank.DARK_FOREST,BiomeBank.FOREST,BiomeBank.FOREST,BiomeBank.BAMBOO_FOREST,BiomeBank.BAMBOO_FOREST,BiomeBank.JUNGLE,BiomeBank.JUNGLE}
 	};
 	
 	private static final BiomeBank[][] mountainousGrid = new BiomeBank[][]{

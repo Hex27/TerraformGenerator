@@ -38,7 +38,7 @@ public class JungleHandler extends BiomeHandler {
 
 	@Override
 	public Material[] getSurfaceCrust(Random rand) {
-		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.PODZOL, 5, Material.COARSE_DIRT, 1),
+		return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.PODZOL, 5),
 				Material.DIRT,
 				Material.DIRT,
 				GenUtils.randMaterial(rand, Material.DIRT,Material.STONE),

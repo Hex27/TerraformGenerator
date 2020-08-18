@@ -15,6 +15,7 @@ import org.terraform.biome.flat.DesertHandler;
 import org.terraform.biome.flat.ForestHandler;
 import org.terraform.biome.flat.IceSpikesHandler;
 import org.terraform.biome.flat.JungleHandler;
+import org.terraform.biome.flat.BambooForestHandler;
 import org.terraform.biome.flat.PlainsHandler;
 import org.terraform.biome.flat.SavannaHandler;
 import org.terraform.biome.flat.SnowyTaigaHandler;
@@ -73,6 +74,7 @@ public enum BiomeBank {
 	FOREST(new ForestHandler(),BiomeType.FLAT),
 	DESERT(new DesertHandler(),BiomeType.FLAT),
 	JUNGLE(new JungleHandler(),BiomeType.FLAT),
+	BAMBOO_FOREST(new BambooForestHandler(),BiomeType.FLAT),
 	BADLANDS(new BadlandsHandler(),BiomeType.FLAT),
 	TAIGA(new TaigaHandler(),BiomeType.FLAT),
 	SNOWY_TAIGA(new SnowyTaigaHandler(),BiomeType.FLAT,new FrozenCavePopulator()),
@@ -161,7 +163,7 @@ public enum BiomeBank {
 		}
 		
 		//GENERATE HIGH-ALTITUDE AREAS
-		if(height >= 80-GenUtils.randInt(random, 0,5)){
+		if(height >= TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt()-GenUtils.randInt(random, 0,5)){
 			return BiomeGrid.calculateBiome(
 							BiomeType.MOUNTAINOUS,
 							temperature + GenUtils.randDouble(random, -dither, dither),
