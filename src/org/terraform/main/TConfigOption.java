@@ -16,11 +16,14 @@ public enum TConfigOption{
 	BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency",0.001f),
 	BIOME_DITHER("biome.dithering",0.1d),
 	BIOME_MOUNTAIN_HEIGHT("biome.min-mountain-height",85),
+	BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE("biome.desert-mountains.place-yellow-concrete",true),
+	BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE_POWDER("biome.desert-mountains.place-yellow-concrete-powder",true),
 	
 	//MISC_SMOOTH_DESIGN("misc.smooth-design",false),
 	MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled",false),
 	MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree",true),
-	
+
+	DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement",false),
 	DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode",false),
 	DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations",true),
 	

@@ -14,7 +14,6 @@ import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -33,7 +32,6 @@ public class FarmhousePopulator extends VillageHousePopulator{
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
-		int seaLevel = TerraformGenerator.seaLevel;
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);

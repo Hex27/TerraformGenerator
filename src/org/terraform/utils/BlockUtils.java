@@ -25,6 +25,19 @@ import org.terraform.utils.FastNoise.NoiseType;
 
 public class BlockUtils {
 	
+
+	public static final ArrayList<Material> emitsLight = new ArrayList<Material>(){{
+		add(Material.TORCH);
+		add(Material.SEA_PICKLE);
+		add(Material.SEA_LANTERN);
+		add(Material.GLOWSTONE);
+		add(Material.LANTERN);
+		add(Material.LAVA);
+		add(Material.CAMPFIRE);
+		add(Material.REDSTONE_LAMP);
+		add(Material.FIRE);
+	}};
+	
 	// N
 	//W E
 	// S
@@ -729,6 +742,10 @@ public class BlockUtils {
 			if(target.getRelative(face).getRelative(0,-1,0).getBlockData() instanceof Rail)
 				placeRail(target.getRelative(face).getRelative(0,-1,0),target.getRelative(0,-1,0).getRelative(face).getType());
 		}
+	}
+	
+	public static boolean emitsLight(Material mat) {
+		return emitsLight.contains(mat);
 	}
 
 }

@@ -19,9 +19,9 @@ public class TickTimer {
 	public void finish(){
 		duration = System.currentTimeMillis() - this.start;
 		if(!timings.containsKey(key))
-			this.timings.put(key, duration);
+			TickTimer.timings.put(key, duration);
 		else
-			this.timings.put(key, duration + timings.get(key));
+			TickTimer.timings.put(key, duration + timings.get(key));
 	}
 
 }

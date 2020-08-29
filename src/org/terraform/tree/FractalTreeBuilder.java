@@ -43,7 +43,9 @@ public class FractalTreeBuilder {
 	int heightVar = 0;
 	double initialTilt = 0;
 	boolean snowy = false;
-	boolean alwaysOneStraight = false;
+	int alwaysOneStraight = 0;
+	int alwaysOneStraightBranchLength = 0;
+	boolean alwaysOneStraightExtendedBranches = false;
 	double beeChance = 0.0f;
 	int vines = 0;
 	int cocabeans = 0;
@@ -77,45 +79,25 @@ public class FractalTreeBuilder {
 			this.setBaseHeight(3).setBaseThickness(3).setThicknessDecrement(1f).setMaxDepth(3).setLeafRadiusX(3).setLeafRadiusY(2).setLeafRadiusZ(3).setHeightVar(1).setMaxBend(Math.PI / 6).setLengthDecrement(0.1f).setVines(3).setLogType(Material.JUNGLE_WOOD).setLeafType(Material.JUNGLE_LEAVES).setCocabeans(1);
 			break;
 		case SAVANNA_BIG: 
-			this.setBaseHeight(15)
-			.setBaseThickness(20)
-			.setThicknessDecrement(5.5f)
-			.setMaxDepth(4)
-			.setLeafRadiusX(4f)
-			.setLeafRadiusZ(4f)
-			.setLeafRadiusY(1.5f)
-			.setLogType(Material.ACACIA_LOG)
-			.setLeafType(Material.ACACIA_LEAVES)
-			//.setMinBend(0.5*Math.PI/2)
-			//.setMaxBend(0.8*Math.PI/2)
-			.setLengthDecrement(0.5f)
-			.setHeightVar(3);
+			this.setBaseHeight(15).setBaseThickness(20).setThicknessDecrement(5.5f).setMaxDepth(4).setLeafRadiusX(4f).setLeafRadiusZ(4f).setLeafRadiusY(1.5f).setLogType(Material.ACACIA_LOG).setLeafType(Material.ACACIA_LEAVES).setLengthDecrement(0.5f).setHeightVar(3);
 			break;
 		case WASTELAND_BIG: 
-			this.setBaseHeight(6)
-			.setBaseThickness(4)
-			.setThicknessDecrement(1f)
-			.setMaxDepth(4)
-			.setLeafRadius(0)
-			.setLogType(Material.SPRUCE_WOOD)
-			.setLeafType(Material.AIR)
-			.setLengthDecrement(0.5f)
-			//.setGnarl(5)
-			.setHeightVar(1);
-			//.setInitialTilt(Math.PI/6);
+			this.setBaseHeight(6).setBaseThickness(4).setThicknessDecrement(1f).setMaxDepth(4).setLeafRadius(0).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.AIR).setLengthDecrement(0.5f).setHeightVar(1);
 			break;
 		case TAIGA_BIG: 
-			this.setBaseHeight(10).setBaseThickness(4)
-					.setThicknessDecrement(0.5f)
-					.setMaxDepth(4).setLeafRadiusX(4)
-					.setLeafRadiusZ(4).setLeafRadiusY(2)
+			this.setBaseHeight(10).setBaseThickness(3.5f)
+					.setThicknessDecrement(0.3f)
+					.setMaxDepth(6).setLeafRadiusX(3)
+					.setLeafRadiusZ(3).setLeafRadiusY(5)
 					.setLogType(Material.SPRUCE_WOOD)
 					.setLeafType(Material.SPRUCE_LEAVES)
-					.setLengthDecrement(3)
-					.setHeightVar(3)
-					.setAlwaysOneStraight(true)
-					.setMinBend(1.4*Math.PI/6)
-					.setMaxBend(1.5*Math.PI/6);
+					.setLengthDecrement(2)
+					.setHeightVar(2)
+					.setAlwaysOneStraight(4)
+					.setAlwaysOneStraightExtendedBranches(true)
+					.setMinBend(Math.PI/2)
+					.setMaxBend(Math.PI/2)
+					;
 			break;
 		case TAIGA_SMALL:
 			this.setBaseHeight(7).setBaseThickness(1).setMaxDepth(1).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(1).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.SPRUCE_LEAVES).setHeightVar(1);
@@ -238,7 +220,7 @@ public class FractalTreeBuilder {
 	int oriZ;
 	
 	private boolean spawnedBees = false;
-	
+	private double initialAngle;
 	public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z){
 		this.oriX = x;
 		this.oriY = y;
@@ -246,27 +228,24 @@ public class FractalTreeBuilder {
 		this.rand = tw.getRand(16*16*x+16*y+z);
 		SimpleBlock base = new SimpleBlock(data,x,y,z);
 		if(this.top == null) top = base;
-		double angle = Math.PI/2+GenUtils.randDouble(rand, -initialTilt, initialTilt);
+		initialAngle = Math.PI/2+GenUtils.randDouble(rand, -initialTilt, initialTilt);
 		
-		fractalBranch(rand,base,
-				angle,
-				GenUtils.randDouble(rand, -initialTilt, initialTilt),
-				0,baseThickness,
-				baseHeight+GenUtils.randInt(-heightVar, heightVar));
+		alwaysOneStraightBranchLength = baseHeight;
 		
-		if(alwaysOneStraight){
-			for(int i = 1; i <= maxDepth; i++){
-
-//				double minBend = 0.8*Math.PI/6;
-//				double maxBend = 1.2*Math.PI/6;
-				//this.minBend -= 0.1*Math.PI/6;
-				//this.maxBend -= 0.1*Math.PI/6;
-				fractalBranch(rand,base.getRelative(0,baseHeight*i,0),
-						angle,
-						GenUtils.randDouble(rand, -initialTilt, initialTilt),
-						0,baseThickness,
-						baseHeight);
-			}
+		if(alwaysOneStraight > 0){
+			//Starting Trunk
+			fractalBranch(rand,base,
+					initialAngle,
+					GenUtils.randDouble(rand, -initialTilt, initialTilt),
+					0,
+					baseThickness,
+					baseHeight);
+		}else {
+			fractalBranch(rand,base,
+					initialAngle,
+					GenUtils.randDouble(rand, -initialTilt, initialTilt),
+					0,baseThickness,
+					baseHeight+GenUtils.randInt(-heightVar, heightVar));
 		}
 	}
 	
@@ -333,11 +312,43 @@ public class FractalTreeBuilder {
 			return;
 		}
 		
-		//Make 4 branches
-		fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
-		fractalBranch(rand, two, pitch + randomAngle(), yaw + rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
-		fractalBranch(rand, two, pitch + randomAngle(), yaw + 5*rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
-		fractalBranch(rand, two, pitch + randomAngle(), yaw - 5*rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
+		if(alwaysOneStraight > 0&& pitch != initialAngle) {
+			fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(),99,thickness-thicknessDecrement,size-lengthDecrement);
+			return;
+		}
+		
+		if(alwaysOneStraight > 0) {
+			alwaysOneStraightBranchLength -= this.lengthDecrement;
+			//Extend a central trunk and make more branches.
+			//this.logType = Material.GREEN_WOOL;
+			fractalBranch(rand, two, pitch + randomAngle(), -ra(Math.PI/4,0.9,1.1),depth+1,thickness-thicknessDecrement,alwaysOneStraightBranchLength);
+			//this.logType = Material.BLUE_WOOL;
+			fractalBranch(rand, two, pitch + randomAngle(), ra(Math.PI/4,0.9,1.1),depth+1,thickness-thicknessDecrement,alwaysOneStraightBranchLength);
+			//this.logType = Material.CYAN_WOOL;
+			fractalBranch(rand, two, pitch + randomAngle(), 5*ra(Math.PI/4,0.9,1.1),depth+1,thickness-thicknessDecrement,alwaysOneStraightBranchLength);
+			//this.logType = Material.PURPLE_WOOL;
+			fractalBranch(rand, two, pitch + randomAngle(), - 5*ra(Math.PI/4,0.9,1.1),depth+1,thickness-thicknessDecrement,alwaysOneStraightBranchLength);
+			
+			
+			//4 more static angle fractals.
+			if(alwaysOneStraightExtendedBranches) {
+				fractalBranch(rand, two, pitch + randomAngle(), ra(0,0.9,1.1),depth+1,thickness-thicknessDecrement,alwaysOneStraightBranchLength);
+				//this.logType = Material.PINK_WOOL;
+				fractalBranch(rand, two, pitch + randomAngle(), ra(Math.PI/2,0.9,1.1),depth+1,thickness-thicknessDecrement,alwaysOneStraightBranchLength);
+				//this.logType = Material.BLACK_WOOL;
+				fractalBranch(rand, two, pitch + randomAngle(), ra(Math.PI,0.9,1.1),depth+1,thickness-thicknessDecrement,alwaysOneStraightBranchLength);
+				//this.logType = Material.WHITE_WOOL;
+				fractalBranch(rand, two, pitch + randomAngle(), - ra(Math.PI/2,0.9,1.1),depth+1,thickness-thicknessDecrement,alwaysOneStraightBranchLength);
+			}
+			//this.logType = Material.SPRUCE_WOOD;
+			fractalBranch(rand, two, pitch, yaw,depth+1,thickness-thicknessDecrement,alwaysOneStraight);
+		}else {
+			//Make 4 branches
+			fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
+			fractalBranch(rand, two, pitch + randomAngle(), yaw + rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
+			fractalBranch(rand, two, pitch + randomAngle(), yaw + 5*rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
+			fractalBranch(rand, two, pitch + randomAngle(), yaw - 5*rta(),depth+1,thickness-thicknessDecrement,size-lengthDecrement);
+		}
 	}
 	
 	public void drawLine(Random rand, SimpleBlock one, SimpleBlock two, int segments, double thickness, Material type) {
@@ -563,8 +574,13 @@ public class FractalTreeBuilder {
 		return this;
 	}
 	
-	public FractalTreeBuilder setAlwaysOneStraight(boolean bool){
-		this.alwaysOneStraight = bool;
+	public FractalTreeBuilder setAlwaysOneStraight(int val){
+		this.alwaysOneStraight = val;
+		return this;
+	}
+	
+	public FractalTreeBuilder setAlwaysOneStraightExtendedBranches(boolean bool){
+		this.alwaysOneStraightExtendedBranches = bool;
 		return this;
 	}
 
@@ -641,7 +657,16 @@ public class FractalTreeBuilder {
 	 * @return An angle between 0.8*30 to 1.2*30 degrees in radians
 	 */
 	public double rta(){
-		return GenUtils.randDouble(rand, 0.8*Math.PI/6, 1.2*Math.PI/6);
+		return GenUtils.randDouble(new Random(), 0.8*Math.PI/6, 1.2*Math.PI/6);
+	}
+	
+	/**
+	 * Random-angle
+	 * @param rand
+	 * @return An angle between lowerBound*30 to upperBound*30 degrees in radians
+	 */
+	public double ra(double base, double lowerBound, double upperBound){
+		return GenUtils.randDouble(new Random(), lowerBound*base, upperBound*base);
 	}
 	
 

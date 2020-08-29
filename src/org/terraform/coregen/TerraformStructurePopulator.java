@@ -9,6 +9,7 @@ import org.bukkit.generator.BlockPopulator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.VillageHousePopulator;
@@ -48,7 +49,14 @@ public class TerraformStructurePopulator extends BlockPopulator {
 		}else {
 			populating.add(new SimpleChunkLocation(chunk));
 		}
+		
+		
 		PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
+		
+		//Use IChunkAccess to place blocks instead. Known to cause lighting problems.
+		if(TConfigOption.DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT.getBoolean())
+			data = new PopulatorDataRecursiveICA(chunk);
+		
 		//PopulatorDataAbstract data = TerraformGeneratorPlugin.injector.getICAData(chunk);
 		//TerraformGeneratorPlugin.logger.debug("s-pop-1");
 		ArrayList<BiomeBank> banks = new ArrayList<>();

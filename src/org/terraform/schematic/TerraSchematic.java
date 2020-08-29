@@ -142,6 +142,7 @@ public class TerraSchematic {
 	public static TerraSchematic load(String internalPath, SimpleBlock refPoint) throws FileNotFoundException{
 		TerraSchematic schem = new TerraSchematic(refPoint);
 		InputStream is= TerraformGeneratorPlugin.class.getResourceAsStream("/"+internalPath+".terra");   
+		@SuppressWarnings("resource")
 		Scanner sc=new Scanner(is);    //file to be scanned  
 		//returns true if there is another line to read  
 		while(sc.hasNextLine())  

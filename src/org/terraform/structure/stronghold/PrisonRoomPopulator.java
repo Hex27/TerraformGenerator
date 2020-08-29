@@ -22,6 +22,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract{
 		super(rand, forceSpawn, unique);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void populate(PopulatorDataAbstract data, CubeRoom room) {
 		int[] upperBounds = room.getUpperCorner();

@@ -32,8 +32,10 @@ import net.minecraft.server.v1_14_R1.TileEntity;
 import net.minecraft.server.v1_14_R1.World;
 import net.minecraft.server.v1_14_R1.WorldChunkManager;
 
+@SuppressWarnings("rawtypes")
 public class NMSChunkGenerator extends ChunkGenerator {
 	
+	@SuppressWarnings("unchecked")
 	public NMSChunkGenerator(GeneratorAccess generatoraccess,
 			WorldChunkManager worldchunkmanager, GeneratorSettingsDefault c0) {
 		super(generatoraccess, worldchunkmanager, c0);
@@ -148,7 +150,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 	        Method getTiles;
 			getTiles = CraftChunkData.class.getDeclaredMethod("getTiles");
 	        getTiles.setAccessible(true);
-	        Set<BlockPosition> tiles = (Set<BlockPosition>) getTiles.invoke(craftData);
+	        @SuppressWarnings("unchecked")
+			Set<BlockPosition> tiles = (Set<BlockPosition>) getTiles.invoke(craftData);
 	        
 	        if (tiles != null) {
 	            for (BlockPosition pos : tiles) {

@@ -69,7 +69,7 @@ public enum MonumentDesign {
 			y++;
 			World w = ((PopulatorDataPostGen) data).getWorld();
 			TerraSchematic schema = TerraSchematic.load(this.toString().toLowerCase() + "-largelight", new Location(w,x,y,z));
-			schema.parser = new MonumentSchematicParser(data);
+			schema.parser = new MonumentSchematicParser();
 			schema.setFace(BlockFace.NORTH);
 			schema.apply();
 		}catch(Throwable e){ e.printStackTrace();}

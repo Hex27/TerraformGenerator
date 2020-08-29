@@ -7,6 +7,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
@@ -36,6 +37,14 @@ public class DesertMountainHandler extends BiomeHandler {
 		return new Material[]{Material.SAND,
 				Material.SAND,
 				GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
+				GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
+				GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
+				Material.SANDSTONE,
+				Material.SANDSTONE,
+				Material.SANDSTONE,
+				Material.SANDSTONE,
+				Material.SANDSTONE,
+				Material.SANDSTONE,
 				GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.STONE),
 				GenUtils.randMaterial(rand, Material.SANDSTONE,Material.STONE)};
 	}
@@ -51,12 +60,16 @@ public class DesertMountainHandler extends BiomeHandler {
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int highest = GenUtils.getTrueHighestBlock(data, x, z);
 				
-				for(int y = highest; y > 60; y--){
+				for(int y = highest; y > TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt(); y--){
 					if(data.getBiome(x,y,z) != getBiome()) continue;
-					if(!data.getType(x,y,z).toString().contains("SAND"))
-						continue;
 					if(duneNoise.GetNoise(x,y,z) > 0)
-						data.setType(x,y,z,Material.YELLOW_CONCRETE);
+						if(data.getType(x,y,z).toString().endsWith("SAND")) {
+							if(TConfigOption.BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE_POWDER.getBoolean())
+								data.setType(x,y,z,Material.YELLOW_CONCRETE_POWDER);
+						}else if(data.getType(x,y,z).toString().endsWith("SANDSTONE")) {
+							if(TConfigOption.BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE.getBoolean())
+								data.setType(x,y,z,Material.YELLOW_CONCRETE);
+						}
 				}
 			}
 		}

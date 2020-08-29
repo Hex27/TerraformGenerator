@@ -100,10 +100,11 @@ public class TerraformWorld{
 	 * 
 	 * @param x block x
 	 * @param z block z
-	 * @return a value from -5 to 5 inclusive.
+	 * @return a value from -2.5 to 2.5 inclusive.
 	 */
 	public double getTemperature(int x, int z){
 		double temp = (getTemperatureOctave().GetNoise(x, z)*2)*3;
+		//double temp = 1.0;
 		return temp;
 	}
 
@@ -111,11 +112,12 @@ public class TerraformWorld{
 	 * 
 	 * @param x block x
 	 * @param z block z
-	 * @return a value from -5 to 5 inclusive.
+	 * @return a value from -2.5 to 2.5 inclusive.
 	 */
 	public double getMoisture(int x, int z){
-		double temp = getMoistureOctave().GetNoise(x, z)*2*3;
-		return temp;
+		double moisture = getMoistureOctave().GetNoise(x, z)*2*3;
+		//double moisture = -2.5;
+		return moisture;
 	}
 	
 	public String getName() {

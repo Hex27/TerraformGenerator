@@ -25,6 +25,7 @@ public class NMSInjector extends NMSInjectorAbstract {
 //			Bukkit.getLogger().info(f.getType().getName() + " " + f.getName());
 //		}
 		NMSChunkGenerator bpg = new NMSChunkGenerator(ws, ws.getChunkProvider().getChunkGenerator().getWorldChunkManager(), GeneratorSettingsFlat.z());
+		@SuppressWarnings("resource")
 		PlayerChunkMap pcm = ws.getChunkProvider().playerChunkMap;
 		
 		try {
@@ -61,6 +62,7 @@ public class NMSInjector extends NMSInjectorAbstract {
 		return new PopulatorDataICA(tw, ws, ica, chunk.getX(), chunk.getZ());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
 		if(data instanceof PopulatorData){

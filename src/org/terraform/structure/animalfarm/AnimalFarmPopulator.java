@@ -33,7 +33,6 @@ public class AnimalFarmPopulator extends VillageHousePopulator{
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
-		int seaLevel = TerraformGenerator.seaLevel;
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
@@ -73,27 +72,6 @@ public class AnimalFarmPopulator extends VillageHousePopulator{
 					}
 				}
 			
-			
-			
-//			//Spawn a stairway from the house.
-//			Wall w = new Wall(new SimpleBlock(data,x,y-1,z),winterCabin.getFace()).getRight();
-//			for(int i = 0; i < 7; i++) 
-//				w = w.getFront();
-//			//while(w.getType() != Material.DIRT){
-//			while(!w.getType().isSolid() || 
-//					w.getType().toString().contains("PLANKS")){
-//				Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(random, Material.COBBLESTONE_STAIRS,Material.COBBLESTONE_STAIRS,Material.COBBLESTONE_STAIRS,Material.MOSSY_COBBLESTONE_STAIRS));
-//				stairs.setFacing(w.getDirection().getOppositeFace());
-//				w.getRight().setBlockData(stairs);
-//				w.setBlockData(stairs);
-//				w.getLeft().setBlockData(stairs);
-//				w.getLeft().getLeft().getRelative(0,1,0).downUntilSolid(random,BlockUtils.getWoodForBiome(biome, "LOG"));
-//				w.getLeft().getLeft().getRelative(0,2,0).setType(GenUtils.randMaterial(random, Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL));
-//				w.getRight().getRight().getRelative(0,1,0).downUntilSolid(random,BlockUtils.getWoodForBiome(biome, "LOG"));
-//				w.getRight().getRight().getRelative(0,2,0).setType(GenUtils.randMaterial(random, Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL));
-//				w = w.getFront().getRelative(0,-1,0);
-//			}
-			
 			createSurroundingFences(tw,biome, random,data,x,y,z);
 			
 		} catch (Throwable e) {
@@ -119,10 +97,6 @@ public class AnimalFarmPopulator extends VillageHousePopulator{
 		gen.getRooms().add(new CubeRoom(20, 20, 30, x, y, z));
 		
 		gen.generate();
-		
-		//gen.fillPathsOnly(data, tw, Material.BARRIER);
-		
-		
 		
 		FastNoise fieldNoise = new FastNoise(tw.getHashedRand(x, y, z,23).nextInt(225));
 		fieldNoise.SetNoiseType(NoiseType.Simplex);
@@ -174,6 +148,9 @@ public class AnimalFarmPopulator extends VillageHousePopulator{
 		for(CubeRoom room:gen.getRooms()){
 			//Don't touch the center room
 			if(room.getWidthX() == 20 && room.getWidthZ() == 20) continue;
+			
+			//Don't generate pens inside water 
+			if(GenUtils.getHighestGround(data, room.getX(), room.getZ()) < TerraformGenerator.seaLevel) continue;
 			
 			//Create fences
 			for(int t = 0; t <= 360; t+=5){

@@ -25,6 +25,7 @@ public class NMSInjector extends NMSInjectorAbstract {
 		return new org.terraform.coregen.v1_16_R1.BlockDataFixer();
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public boolean attemptInject(World world) {
 		CraftWorld cw = (CraftWorld) world;

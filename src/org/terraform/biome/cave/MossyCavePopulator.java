@@ -12,7 +12,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-public class GenericCavePopulator extends AbstractCavePopulator {
+public class MossyCavePopulator extends AbstractCavePopulator {
 
 	private static boolean genned = false;
 	@Override
@@ -21,7 +21,7 @@ public class GenericCavePopulator extends AbstractCavePopulator {
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				if(!(tw.getBiomeBank(x, GenUtils.getHighestGround(data,x,z), z).getCavePop() 
-						instanceof GenericCavePopulator))
+						instanceof MossyCavePopulator))
 					continue;
 				for(int[] pair:GenUtils.getCaveCeilFloors(data, x, z)){
 					int ceil = pair[0]; //non-solid
@@ -29,7 +29,7 @@ public class GenericCavePopulator extends AbstractCavePopulator {
 					
 					if(!genned){
 						genned = true;
-						TerraformGeneratorPlugin.logger.info("Spawning generic cave at " + x + "," + floor + "," + z);
+						TerraformGeneratorPlugin.logger.info("Spawning mossy cave at " + x + "," + floor + "," + z);
 					}
 					int caveHeight = ceil-floor;
 					if(caveHeight <= 3) continue;

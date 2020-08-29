@@ -6,11 +6,13 @@ import java.util.Random;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.structure.animalfarm.AnimalFarmPopulator;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
+import org.terraform.utils.GenUtils;
 
 public class VillageHousePopulator extends StructurePopulator {
 
@@ -40,6 +42,8 @@ public class VillageHousePopulator extends StructurePopulator {
 			}
 		}
 		
+		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
+		
 		if(banks.contains(BiomeBank.LUKEWARM_OCEAN)
 				||banks.contains(BiomeBank.WARM_OCEAN)
 				||banks.contains(BiomeBank.OCEAN)
@@ -47,26 +51,33 @@ public class VillageHousePopulator extends StructurePopulator {
 				||banks.contains(BiomeBank.FROZEN_OCEAN)
 				||banks.contains(BiomeBank.SWAMP)){
 			//Ships
-		}else if(banks.contains(BiomeBank.DESERT)
-				|| banks.contains(BiomeBank.DESERT_MOUNTAINS)
-				|| banks.contains(BiomeBank.BADLANDS)
-				|| banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
-				|| banks.contains(BiomeBank.SNOWY_WASTELAND)
-				|| banks.contains(BiomeBank.ICE_SPIKES)){
-			if(!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
-				return;
+		}else{
 			
-			new AnimalFarmPopulator().populate(tw,random,data);
-		}else if(banks.contains(BiomeBank.FOREST)
-				|| banks.contains(BiomeBank.PLAINS)
-				|| banks.contains(BiomeBank.TAIGA)
-				|| banks.contains(BiomeBank.SAVANNA)
-				|| banks.contains(BiomeBank.SNOWY_TAIGA)){
+			//If it is below sea level, DON'T SPAWN IT.
+			int[] coords= getCoordsFromMegaChunk(tw,mc);
+			if(GenUtils.getHighestGround(data,coords[0],coords[1]) > TerraformGenerator.seaLevel) {
+				if(banks.contains(BiomeBank.DESERT)
+						|| banks.contains(BiomeBank.DESERT_MOUNTAINS)
+						|| banks.contains(BiomeBank.BADLANDS)
+						|| banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
+						|| banks.contains(BiomeBank.SNOWY_WASTELAND)
+						|| banks.contains(BiomeBank.ICE_SPIKES)){
+					if(!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
+						return;
+					
+					new AnimalFarmPopulator().populate(tw,random,data);
+				}else if(banks.contains(BiomeBank.FOREST)
+						|| banks.contains(BiomeBank.PLAINS)
+						|| banks.contains(BiomeBank.TAIGA)
+						|| banks.contains(BiomeBank.SAVANNA)
+						|| banks.contains(BiomeBank.SNOWY_TAIGA)){
 
-			if(!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
-				return;
-			
-			new FarmhousePopulator().populate(tw, random, data);
+					if(!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
+						return;
+					
+					new FarmhousePopulator().populate(tw, random, data);
+				}
+			}
 		}
 	}
 

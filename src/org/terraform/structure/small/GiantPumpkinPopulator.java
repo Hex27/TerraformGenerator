@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
@@ -18,7 +17,6 @@ public class GiantPumpkinPopulator{
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
 		if(!TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()) return;
-		int seaLevel = TerraformGenerator.seaLevel;
 		int x = data.getChunkX()*16 + random.nextInt(16);
 		int z = data.getChunkZ()*16 + random.nextInt(16);
 		int height = GenUtils.getHighestGround(data, x, z);

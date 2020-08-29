@@ -8,7 +8,7 @@ import org.terraform.biome.beach.RockBeachHandler;
 import org.terraform.biome.beach.SandyBeachHandler;
 import org.terraform.biome.cave.AbstractCavePopulator;
 import org.terraform.biome.cave.FrozenCavePopulator;
-import org.terraform.biome.cave.GenericCavePopulator;
+import org.terraform.biome.cave.MossyCavePopulator;
 import org.terraform.biome.flat.BadlandsHandler;
 import org.terraform.biome.flat.DarkForestHandler;
 import org.terraform.biome.flat.DesertHandler;
@@ -97,7 +97,7 @@ public enum BiomeBank {
 	BiomeBank(BiomeHandler handler, BiomeType type){
 		this.handler = handler;
 		this.type = type;
-		this.cavePop = new GenericCavePopulator();
+		this.cavePop = new MossyCavePopulator();
 	}
 	BiomeBank(BiomeHandler handler, BiomeType type, AbstractCavePopulator cavePop){
 		this.handler = handler;

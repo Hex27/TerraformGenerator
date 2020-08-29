@@ -96,7 +96,7 @@ public class GenericLargeCavePopulator{
 			return -1;
 		}
 		
-		Random rand = new Random(seed);
+		new Random(seed);
 		FastNoise noise = new FastNoise(seed);
 		noise.SetNoiseType(NoiseType.Simplex);
 		noise.SetFrequency(0.09f);
@@ -160,7 +160,7 @@ public class GenericLargeCavePopulator{
 		Vector base = new Vector(x,y,z);
 		Vector base2 = new Vector(x,y+height,z);
 		Vector v = base2.subtract(base);
-		Vector unitV = v.clone().multiply(1/v.length());
+		v.clone().multiply(1/v.length());
 		int segments = height;
 		SimpleBlock one = new SimpleBlock(data,x,y,z);
 		double radius = baseRadius;
@@ -179,7 +179,7 @@ public class GenericLargeCavePopulator{
 		Vector base = new Vector(x,y,z);
 		Vector base2 = new Vector(x,y-height,z);
 		Vector v = base2.subtract(base);
-		Vector unitV = v.clone().multiply(1/v.length());
+		v.clone().multiply(1/v.length());
 		int segments = height;
 		SimpleBlock one = new SimpleBlock(data,x,y,z);
 		double radius = baseRadius;

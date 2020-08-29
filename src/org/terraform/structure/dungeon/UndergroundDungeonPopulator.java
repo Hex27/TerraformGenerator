@@ -12,7 +12,6 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -27,7 +26,6 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator{
 	@Override
 	public void populate(TerraformWorld tw, Random random,
 			PopulatorDataAbstract data) {
-		int seaLevel = TerraformGenerator.seaLevel;
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 
 		int[] spawnCoords = new int[]{data.getChunkX()*16,data.getChunkZ()*16};

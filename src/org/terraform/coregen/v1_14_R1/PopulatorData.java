@@ -89,11 +89,12 @@ public class PopulatorData extends PopulatorDataAbstract{
 		return chunkZ;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-		EntityTypes et;
+		EntityTypes<?> et;
 		try {
-			et = (EntityTypes) EntityTypes.class.getDeclaredField(type.toString()).get(null);
+			et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(type.toString()).get(null);
 			Entity e = et.a(rlwa.getMinecraftWorld());
 			e.setPositionRotation((double) rawX + 0.5D, (double) rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
 			if(e instanceof EntityInsentient){

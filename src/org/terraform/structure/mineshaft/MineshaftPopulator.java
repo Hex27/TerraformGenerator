@@ -73,7 +73,7 @@ public class MineshaftPopulator extends StructurePopulator{
 			return;
 		}
 		
-		int y = GenUtils.randInt(15, height-20);
+		int y = GenUtils.randInt(15, height-25);
 		
 		spawnMineshaft(tw,
 				tw.getHashedRand(x, y, z, 82392812),

@@ -13,6 +13,7 @@ import net.minecraft.server.v1_16_R2.StructureGenerator;
 import net.minecraft.server.v1_16_R2.WorldGenFeatureConfiguration;
 import net.minecraft.server.v1_16_R2.WorldGenMonumentPieces;
 
+@SuppressWarnings("rawtypes")
 public class TerraStructureStart extends StructureAbstract {
 
 	private String tag;

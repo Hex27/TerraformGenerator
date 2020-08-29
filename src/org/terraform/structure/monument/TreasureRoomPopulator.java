@@ -39,7 +39,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
 			World w = ((PopulatorDataPostGen) data).getWorld();
 			//Add one to all to correct some weird aligning shit.
 			schema = TerraSchematic.load("monument-gold", new Location(w,x+1,y-5,z+1));
-			schema.parser = new MonumentSchematicParser(data);
+			schema.parser = new MonumentSchematicParser();
 			schema.setFace(BlockFace.NORTH);
 			schema.apply();
 		} catch (FileNotFoundException e) {

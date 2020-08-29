@@ -28,7 +28,6 @@ public class ShipwreckPopulator extends StructurePopulator{
 
 		if(!TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean())
 			return;
-		int seaLevel = TerraformGenerator.seaLevel;
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);

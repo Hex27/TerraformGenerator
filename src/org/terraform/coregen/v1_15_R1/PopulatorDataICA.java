@@ -12,6 +12,7 @@ import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.BlockUtils;
 
 import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.Blocks;
@@ -91,9 +92,9 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract{
 
 	@Override
 	public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-		EntityTypes et;
+		EntityTypes<?> et;
 		try {
-			et = (EntityTypes) EntityTypes.class.getDeclaredField(type.toString()).get(null);
+			et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(type.toString()).get(null);
 			Entity e = et.a(ws.getMinecraftWorld());
 			e.setPositionRotation((double) rawX + 0.5D, (double) rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
 			if(e instanceof EntityInsentient){

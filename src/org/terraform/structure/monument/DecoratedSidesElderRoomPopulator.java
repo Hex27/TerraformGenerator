@@ -11,7 +11,6 @@ import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.Wall;
-import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
 
 public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
@@ -25,10 +24,6 @@ public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
 	@Override
 	public void populate(PopulatorDataAbstract data, CubeRoom room) {
 		super.populate(data, room);
-		int x = room.getX();
-		int y = room.getY() + room.getHeight()/2;
-		int z = room.getZ();
-		TerraSchematic schema;
 		
 		//Stairs at the top
 		for(Entry<Wall,Integer> walls:room.getFourWalls(data, 2).entrySet()){

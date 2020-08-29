@@ -26,7 +26,10 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
 				for(int[] pair:GenUtils.getCaveCeilFloors(data, x, z)){
 					int ceil = pair[0]; //non-solid
 					int floor = pair[1]; //solid
-					
+					if(ceil < 15) {
+						DeepCavePopulator.decorate(data,random,x,z,ceil,floor);
+						continue;
+					}
 					if(!genned){
 						genned = true;
 						TerraformGeneratorPlugin.logger.info("Spawning frozen cave at " + x + "," + floor + "," + z);
