@@ -34,6 +34,7 @@ import org.terraform.biome.ocean.OceansHandler;
 import org.terraform.biome.ocean.RiverHandler;
 import org.terraform.biome.ocean.SwampHandler;
 import org.terraform.biome.ocean.WarmOceansHandler;
+import org.terraform.biome.ocean.BlackOceansHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
@@ -51,6 +52,7 @@ public enum BiomeBank {
 	
 	//OCEANIC
 	OCEAN(new OceansHandler(),BiomeType.OCEANIC),
+	BLACK_OCEAN(new BlackOceansHandler(),BiomeType.OCEANIC),
 	COLD_OCEAN(new ColdOceansHandler(),BiomeType.OCEANIC),
 	FROZEN_OCEAN(new FrozenOceansHandler(),BiomeType.OCEANIC,new FrozenCavePopulator()),
 	WARM_OCEAN(new WarmOceansHandler(),BiomeType.OCEANIC),
@@ -64,6 +66,7 @@ public enum BiomeBank {
 	//DEEP OCEANIC
 	DEEP_OCEAN(new OceansHandler(),BiomeType.DEEP_OCEANIC),
 	DEEP_COLD_OCEAN(new ColdOceansHandler(),BiomeType.DEEP_OCEANIC),
+	DEEP_BLACK_OCEAN(new BlackOceansHandler(),BiomeType.DEEP_OCEANIC),
 	DEEP_FROZEN_OCEAN(new FrozenOceansHandler(),BiomeType.DEEP_OCEANIC,new FrozenCavePopulator()),
 	DEEP_WARM_OCEAN(new WarmOceansHandler(),BiomeType.DEEP_OCEANIC),
 	DEEP_LUKEWARM_OCEAN(new LukewarmOceansHandler(),BiomeType.DEEP_OCEANIC),

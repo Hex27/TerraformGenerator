@@ -8,7 +8,6 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 public class FrozenOceansHandler extends BiomeHandler {
@@ -41,12 +40,9 @@ public class FrozenOceansHandler extends BiomeHandler {
 				if(data.getBiome(x,y+1,z) != getBiome()) continue;
 				
 				//Full ice-sheets
-				data.setType(x,TerraformGenerator.seaLevel, z, Material.ICE);
+				if(!data.getType(x,TerraformGenerator.seaLevel, z).isSolid())
+					data.setType(x,TerraformGenerator.seaLevel, z, Material.ICE);
 				
-				if(!data.getType(x, y, z).isSolid()) continue;
-				if(GenUtils.chance(random, 2, 100)){
-					BlockUtils.generateClayDeposit(x,y,z,data,random);
-				}
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package org.terraform.tree;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
@@ -43,9 +45,11 @@ public class FractalTreeBuilder {
 	int heightVar = 0;
 	double initialTilt = 0;
 	boolean snowy = false;
+	double hollowLeaves = 0.0;
 	int alwaysOneStraight = 0;
 	int alwaysOneStraightBranchLength = 0;
 	boolean alwaysOneStraightExtendedBranches = false;
+	boolean noMainStem = false;
 	double beeChance = 0.0f;
 	int vines = 0;
 	int cocabeans = 0;
@@ -103,30 +107,10 @@ public class FractalTreeBuilder {
 			this.setBaseHeight(7).setBaseThickness(1).setMaxDepth(1).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(1).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.SPRUCE_LEAVES).setHeightVar(1);
 			break;
 		case BROWN_MUSHROOM_BASE: 
-			this.setBaseHeight(3)
-			.setBaseThickness(3)
-			.setThicknessDecrement(0)
-			.setMaxDepth(2)
-			.setFractalThreshold(4)
-			.setLeafRadius(0)
-			.setLogType(Material.MUSHROOM_STEM)
-			.setLeafType(Material.AIR)
-			.setLengthDecrement(0)
-			.setMinBend(0.2*Math.PI/6)
-			.setMaxBend(0.4*Math.PI/6);
+			this.setBaseHeight(3).setBaseThickness(3).setThicknessDecrement(0).setMaxDepth(2).setFractalThreshold(4).setLeafRadius(0).setLogType(Material.MUSHROOM_STEM).setLeafType(Material.AIR).setLengthDecrement(0).setMinBend(0.2*Math.PI/6).setMaxBend(0.4*Math.PI/6);
 			break;
 		case RED_MUSHROOM_BASE: 
-			this.setBaseHeight(3)
-			.setBaseThickness(3.5f)
-			.setThicknessDecrement(0)
-			.setMaxDepth(1)
-			.setFractalThreshold(4)
-			.setLeafRadius(0)
-			.setLogType(Material.MUSHROOM_STEM)
-			.setLeafType(Material.AIR)
-			.setLengthDecrement(0)
-			.setMinBend(0.4*Math.PI/6)
-			.setMaxBend(0.6*Math.PI/6);
+			this.setBaseHeight(3).setBaseThickness(3.5f).setThicknessDecrement(0).setMaxDepth(1).setFractalThreshold(4).setLeafRadius(0).setLogType(Material.MUSHROOM_STEM).setLeafType(Material.AIR).setLengthDecrement(0).setMinBend(0.4*Math.PI/6).setMaxBend(0.6*Math.PI/6);
 			break;
 		case SWAMP_BOTTOM:
 			this.setBaseHeight(1).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(3).setLeafRadius(0).setLogType(Material.OAK_WOOD).setLeafType(Material.OAK_LEAVES).setLengthDecrement(-2f).setMaxBend(-Math.PI/6).setMinBend(-Math.PI/3);
@@ -135,17 +119,7 @@ public class FractalTreeBuilder {
 			this.setBaseHeight(8).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(4).setLengthDecrement(0f).setLeafRadiusX(6).setLeafRadiusZ(6).setLeafRadiusY(2).setHeightVar(2).setLogType(Material.OAK_WOOD).setVines(7);
 			break;
 		case COCONUT_TOP:
-			this.setBaseHeight(8)
-			.setInitialTilt(Math.PI/6)
-			.setBaseThickness(1)
-			.setThicknessDecrement(0f)
-			.setMaxDepth(1)
-			.setLeafRadius(3)
-			.setLeafRadiusY(1.2f)
-			.setLengthDecrement(2)
-			.setHeightVar(1)
-			.setVines(3)
-			.setLogType(Material.JUNGLE_WOOD);
+			this.setBaseHeight(8).setInitialTilt(Math.PI/6).setBaseThickness(1).setThicknessDecrement(0f).setMaxDepth(1).setLeafRadius(3).setLeafRadiusY(1.2f).setLengthDecrement(2).setHeightVar(1).setVines(3).setLogType(Material.JUNGLE_WOOD);
 			break;
 		case GIANT_PUMPKIN:
 			this.setBaseHeight(6)
@@ -158,19 +132,7 @@ public class FractalTreeBuilder {
 			.setLogType(Material.OAK_LOG)
 			.setLeafType(Material.PUMPKIN);
 		case DARK_OAK_SMALL:
-			this.setBaseHeight(1).setBaseThickness(2)
-			.setThicknessDecrement(0.5f)
-			.setMaxDepth(3).setLeafRadiusX(2)
-			.setLeafRadiusZ(2).setLeafRadiusY(1)
-			.setLogType(Material.DARK_OAK_WOOD)
-			.setLeafType(Material.DARK_OAK_LEAVES)
-			.setLengthDecrement(0)
-			.setHeightVar(0)
-			.setFractalThreshold(4)
-			.setMaxBend(1.4*Math.PI/6)
-			.setMinBend(1*Math.PI/6)
-			.setMaxPitch(Math.PI)
-			.setMinPitch(0);
+			this.setBaseHeight(1).setBaseThickness(2).setThicknessDecrement(0.5f).setMaxDepth(3).setLeafRadiusX(2).setLeafRadiusZ(2).setLeafRadiusY(1).setLogType(Material.DARK_OAK_WOOD).setLeafType(Material.DARK_OAK_LEAVES).setLengthDecrement(0).setHeightVar(0).setFractalThreshold(4).setMaxBend(1.4*Math.PI/6).setMinBend(1*Math.PI/6).setMaxPitch(Math.PI).setMinPitch(0);
 			break;
 		case DARK_OAK_BIG_TOP:
 			this.setBaseHeight(6).setBaseThickness(8).setThicknessDecrement(2.5f).setMaxDepth(3).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(2).setLogType(Material.DARK_OAK_WOOD).setLeafType(Material.DARK_OAK_LEAVES).setLengthDecrement(0).setHeightVar(1).setFractalThreshold(4).setMaxBend(1.4*Math.PI/6).setMinBend(1*Math.PI/6).setMaxPitch(Math.PI).setMinPitch(0);
@@ -179,36 +141,108 @@ public class FractalTreeBuilder {
 			this.setBaseHeight(4).setBaseThickness(4).setThicknessDecrement(0f).setMaxDepth(3).setLeafRadiusX(0).setLeafRadiusZ(0).setLeafRadiusY(0).setLogType(Material.DARK_OAK_WOOD).setLeafType(Material.DARK_OAK_LEAVES).setLengthDecrement(-1).setHeightVar(1).setFractalThreshold(5).setMaxBend(2.3*Math.PI/6).setMinBend(2.0*Math.PI/6);
 			break;
 		case FROZEN_TREE_BIG:
-			this.setBaseHeight(4).setBaseThickness(4)
-			.setThicknessDecrement(2f)
-			.setMaxDepth(4).setLeafRadiusX(4)
-			.setVines(4)
-			.setLeafRadiusZ(4).setLeafRadiusY(2)
-			.setLogType(Material.SPRUCE_WOOD)
-			.setLeafType(Material.ICE)
-			.setLengthDecrement(0)
-			.setHeightVar(1)
-			.setFractalThreshold(4)
-			.setMaxBend(1.6*Math.PI/6)
-			.setMinBend(1.2*Math.PI/6)
-			.setMaxPitch(Math.PI)
-			.setMinPitch(0);
+			this.setBaseHeight(4).setBaseThickness(4).setThicknessDecrement(2f).setMaxDepth(4).setLeafRadiusX(4).setVines(4).setLeafRadiusZ(4).setLeafRadiusY(2).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.ICE).setLengthDecrement(0).setHeightVar(1).setFractalThreshold(4).setMaxBend(1.6*Math.PI/6).setMinBend(1.2*Math.PI/6).setMaxPitch(Math.PI).setMinPitch(0);
 			break;
 		case FROZEN_TREE_SMALL:
-			this.setBaseHeight(1).setBaseThickness(2)
-			.setThicknessDecrement(0.2f)
-			.setMaxDepth(4).setLeafRadiusX(4)
-			.setVines(4)
-			.setLeafRadiusZ(4).setLeafRadiusY(1)
-			.setLogType(Material.SPRUCE_WOOD)
-			.setLeafType(Material.ICE)
+			this.setBaseHeight(1).setBaseThickness(2).setThicknessDecrement(0.2f).setMaxDepth(4).setLeafRadiusX(4).setVines(4).setLeafRadiusZ(4).setLeafRadiusY(1).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.ICE).setLengthDecrement(0).setHeightVar(0).setFractalThreshold(4).setMaxBend(1.6*Math.PI/6).setMinBend(1.2*Math.PI/6).setMaxPitch(Math.PI).setMinPitch(0);
+			break;
+		case FIRE_CORAL:
+			this.setBaseHeight(2)
+			.setInitialTilt(Math.PI/2)
+			.setBaseThickness(1)
+			.setThicknessDecrement(0)
+			.setMaxDepth(3)
+			.setLeafRadiusX(1)
+			.setLeafRadiusZ(1)
+			.setLeafRadiusY(4)
+			.setLogType(Material.FIRE_CORAL_BLOCK)
+			.setLeafType(Material.FIRE_CORAL_BLOCK)
+			.setLengthDecrement(-2f)
+			.setHeightVar(0)
+			.setMaxBend(Math.PI/2)
+			.setMinBend(Math.PI/2.5)
+			.setMaxPitch(Math.PI)
+			.setMinPitch(0)
+			.setCoralDecoration(true);
+			break;
+		case HORN_CORAL:
+			this.setBaseHeight(2)
+			.setBaseThickness(2)
+			.setThicknessDecrement(0)
+			.setMaxDepth(3)
+			.setLeafRadiusX(3)
+			.setLeafRadiusZ(3)
+			.setLeafRadiusY(1)
+			.setLogType(Material.HORN_CORAL_BLOCK)
+			.setLeafType(Material.HORN_CORAL_BLOCK)
+			.setLengthDecrement(-1)
+			.setHeightVar(0)
+			.setMaxBend(Math.PI/3)
+			.setMinBend(Math.PI/4)
+			.setMaxPitch(Math.PI)
+			.setMinPitch(0)
+			.setCoralDecoration(true)
+			.setNoMainStem(true);
+			break;
+		case BRAIN_CORAL:
+			this.setBaseHeight(1)
+			.setBaseThickness(1)
+			.setThicknessDecrement(0f)
+			.setMaxDepth(3)
+			.setLeafRadiusX(1)
+			.setLeafRadiusZ(2)
+			.setLeafRadiusY(1)
+			.setLogType(Material.BRAIN_CORAL_BLOCK)
+			.setLeafType(Material.BRAIN_CORAL_BLOCK)
 			.setLengthDecrement(0)
 			.setHeightVar(0)
-			.setFractalThreshold(4)
-			.setMaxBend(1.6*Math.PI/6)
-			.setMinBend(1.2*Math.PI/6)
+			.setFractalThreshold(3)
+			.setMaxBend(Math.PI/3)
+			.setMinBend(Math.PI/4)
 			.setMaxPitch(Math.PI)
-			.setMinPitch(0);
+			.setMinPitch(0)
+			.setCoralDecoration(true)
+			.setHollowLeaves(0.9);
+			break;
+		case TUBE_CORAL:
+			this.setBaseHeight(3)
+			.setAlwaysOneStraight(3)
+			.setBaseThickness(3)
+			.setThicknessDecrement(0f)
+			.setMaxDepth(3)
+			.setLeafRadiusX(1)
+			.setLeafRadiusZ(1)
+			.setLeafRadiusY(1)
+			.setLogType(Material.TUBE_CORAL_BLOCK)
+			.setLeafType(Material.TUBE_CORAL_BLOCK)
+			.setLengthDecrement(0)
+			.setHeightVar(1)
+			.setMaxBend(Math.PI/3)
+			.setMinBend(Math.PI/4)
+			.setMaxPitch(Math.PI)
+			.setMinPitch(0)
+			.setCoralDecoration(true)
+			.setHollowLeaves(0.9);
+			break;
+		case BUBBLE_CORAL:
+			this.setBaseHeight(3)
+			.setBaseThickness(1)
+			.setThicknessDecrement(0f)
+			.setMaxDepth(3)
+			.setLeafRadiusX(3)
+			.setLeafRadiusZ(3)
+			.setLeafRadiusY(3)
+			.setLogType(Material.BUBBLE_CORAL_BLOCK)
+			.setLeafType(Material.BUBBLE_CORAL_BLOCK)
+			.setLengthDecrement(-1)
+			.setHeightVar(1)
+			.setMaxBend(Math.PI/2)
+			.setMinBend(Math.PI/3)
+			.setMaxPitch(Math.PI)
+			.setMinPitch(0)
+			.setCoralDecoration(true)
+			.setHollowLeaves(0.9)
+			.setNoMainStem(true);
 			break;
 		}
 	}
@@ -219,8 +253,10 @@ public class FractalTreeBuilder {
 	int oriY;
 	int oriZ;
 	
+	private boolean coralDecoration = false;
 	private boolean spawnedBees = false;
 	private double initialAngle;
+	private int initialHeight;
 	public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z){
 		this.oriX = x;
 		this.oriY = y;
@@ -241,16 +277,17 @@ public class FractalTreeBuilder {
 					baseThickness,
 					baseHeight);
 		}else {
+			initialHeight = baseHeight+GenUtils.randInt(-heightVar, heightVar);
 			fractalBranch(rand,base,
 					initialAngle,
 					GenUtils.randDouble(rand, -initialTilt, initialTilt),
 					0,baseThickness,
-					baseHeight+GenUtils.randInt(-heightVar, heightVar));
+					initialHeight);
 		}
 	}
 	
 	public void fractalBranch(Random rand,SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size){
-
+		
 		if(pitch > maxPitch) {
 			//reset pitch
 			pitch = maxPitch-rta();
@@ -266,6 +303,12 @@ public class FractalTreeBuilder {
 			replaceSphere(rand.nextInt(9999), leafRadiusX, leafRadiusY, leafRadiusZ, base, this.leafType);
 			return;
 		}
+		
+		boolean restore = false;
+		if(noMainStem && size == initialHeight) {
+			restore = true;
+			size = 0;
+		}
 			
 		int y = (int) (Math.round(size*Math.sin(pitch))); //Pitch is vertical tilt
 		int x;
@@ -280,8 +323,14 @@ public class FractalTreeBuilder {
 		//Set height
 		if(two.getY() - oriY > height)
 			height = two.getY() - oriY;
+
+		if(restore) {
+			two = base;
+			size = baseHeight;
+		}
 		
 		drawLine(rand, base,two,(int) (size),thickness,this.logType);
+		
 		
 		if(!spawnedBees 
 				&& Version.isAtLeast("1_15_R1") 
@@ -352,9 +401,9 @@ public class FractalTreeBuilder {
 	}
 	
 	public void drawLine(Random rand, SimpleBlock one, SimpleBlock two, int segments, double thickness, Material type) {
+		if(one.equals(two)) return;
 		//Vector one to two;
 		Vector v = two.getVector().subtract(one.getVector());
-		
 		for(int i=0; i<=segments; i++){
 			Vector seg = v.clone().multiply((float) ((float)i)/((float)segments));
 			SimpleBlock segment = one.getRelative(seg);
@@ -392,20 +441,28 @@ public class FractalTreeBuilder {
 		if(rX < rY) maxR = rY;
 		if(rY < rZ) maxR = rZ;
 		
+		ArrayList<SimpleBlock> changed = new ArrayList<>();
+		
 		for(float x = -rX; x <= rX; x++){
 			for(float y = -rY; y <= rY; y++){
 				for(float z = -rZ; z <= rZ; z++){
-					
 					SimpleBlock rel = block.getRelative((int)Math.round(x),(int)Math.round(y),(int)Math.round(z));
 					double equationResult = Math.pow(x,2)/Math.pow(rX,2)
 							+ Math.pow(y,2)/Math.pow(rY,2)
 							+ Math.pow(z,2)/Math.pow(rZ,2);
 					if(equationResult <= 1+0.7*noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())){
+						if(equationResult < hollowLeaves)
+								continue;
+						
+						if(coralDecoration) {
+							if(!changed.contains(rel))
+								changed.add(rel);
+						}
 						
 						//Anti-dirt block glitch
-						if(BlockUtils.isDirtLike(rel.getRelative(0,-1,0).getType())){
-							rel.getRelative(0,-1,0).setType(Material.DIRT);
-						}
+//						if(BlockUtils.isDirtLike(rel.getRelative(0,-1,0).getType())){
+//							rel.getRelative(0,-1,0).setType(Material.DIRT);
+//						}
 						
 						//Leaves do not replace solid blocks.
 						if(type.toString().contains("LEAVES") && !rel.getType().isSolid()){
@@ -419,6 +476,11 @@ public class FractalTreeBuilder {
 							rel.setBlockData(leaf);
 						}else if(!type.toString().contains("LEAVES")){
 							rel.setType(type);
+						}
+						
+						//Decorate with fans
+						if(coralDecoration) {
+							CoralGenerator.generateSingleCoral(rel.getPopData(), rel.getX(), rel.getY(), rel.getZ(), this.leafType.toString());
 						}
 						
 						if(snowy){
@@ -476,6 +538,27 @@ public class FractalTreeBuilder {
 				}
 			}
 		}
+		
+		//Ensures that corals don't die
+		while(changed.size() > 0) {
+			SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));
+			if(!CoralGenerator.isSaturatedCoral(sb)) {
+				//No floating coral fans
+				for(BlockFace face:BlockUtils.nsew) {
+					if(sb.getRelative(face).getType().toString().endsWith("WALL_FAN"))
+						sb.getRelative(face).setType(Material.WATER);
+				}
+				
+				//No levitating sea pickles & fans
+				if(sb.getRelative(0,1,0).getType() == Material.SEA_PICKLE||
+						sb.getRelative(0,1,0).getType().toString().endsWith("CORAL_FAN")) {
+					sb.getRelative(0,1,0).setType(Material.WATER);
+				}
+				sb.setType(Material.WATER);
+			
+			}else
+				sb.setType(leafType);
+		}
 	}
 	
 	private void dangleLeavesDown(SimpleBlock block, int leafDist, int min, int max){
@@ -509,6 +592,11 @@ public class FractalTreeBuilder {
 		return this;
 	}
 
+	public FractalTreeBuilder setHollowLeaves(double hollow){
+		this.hollowLeaves = hollow;
+		return this;
+	}
+	
 	public FractalTreeBuilder setVines(int vines){
 		this.vines = vines;
 		return this;
@@ -581,6 +669,11 @@ public class FractalTreeBuilder {
 	
 	public FractalTreeBuilder setAlwaysOneStraightExtendedBranches(boolean bool){
 		this.alwaysOneStraightExtendedBranches = bool;
+		return this;
+	}
+	
+	public FractalTreeBuilder setNoMainStem(boolean bool) {
+		this.noMainStem = bool;
 		return this;
 	}
 
@@ -669,7 +762,10 @@ public class FractalTreeBuilder {
 		return GenUtils.randDouble(new Random(), lowerBound*base, upperBound*base);
 	}
 	
-
+	public FractalTreeBuilder setCoralDecoration(boolean d) {
+		this.coralDecoration = d;
+		return this;
+	}
 	
 
 }

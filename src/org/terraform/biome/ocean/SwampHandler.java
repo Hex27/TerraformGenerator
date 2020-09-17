@@ -13,6 +13,7 @@ import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
@@ -111,12 +112,10 @@ public class SwampHandler extends BiomeHandler {
 				}
 				
 				if(GenUtils.chance(random, 10, 100) && y < TerraformGenerator.seaLevel-3){ //SEA GRASS/KELP
-					data.setType(x, y+1, z,Material.SEAGRASS);
-					if(random.nextBoolean())
-						BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_SEAGRASS);
+					CoralGenerator.generateKelpGrowth(data, x, y+1, z);
+
 				}
-				
-				if(GenUtils.chance(random, 2, 100)){
+				if(GenUtils.chance(random, TConfigOption.BIOME_RIVER_CLAY_CHANCE.getInt(), 1000)){
 					BlockUtils.generateClayDeposit(x,y,z,data,random);
 				}
 			}	

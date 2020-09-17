@@ -9,7 +9,6 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 
 public class WarmOceansHandler extends BiomeHandler {
@@ -43,7 +42,7 @@ public class WarmOceansHandler extends BiomeHandler {
 
 	@Override
 	public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-		boolean growCorals = random.nextBoolean();
+		//boolean growCorals = random.nextBoolean();
 
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
@@ -54,12 +53,10 @@ public class WarmOceansHandler extends BiomeHandler {
 					data.setType(x, y+1, z,Material.SEAGRASS);
 					if(random.nextBoolean() && y < TerraformGenerator.seaLevel-3)
 						BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_SEAGRASS);
-				}else if(GenUtils.chance(random, 5, 100) && growCorals){
-					CoralGenerator.generateCoral(data,x,y+1,z);
 				}
-				if(GenUtils.chance(random, 2, 100)){
-					BlockUtils.generateClayDeposit(x,y,z,data,random);
-				}
+				//else if(GenUtils.chance(random, 5, 100) && growCorals){
+				//	CoralGenerator.generateCoral(data,x,y+1,z);
+				//}
 			}
 		}
 	}	 

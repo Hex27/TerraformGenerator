@@ -77,6 +77,25 @@ public class TreeDB {
 				capBase,true,cap);
 	}
 	
+	/**
+	 * Corals will always dig 2 blocks deeper first.
+	 * Grows a random giant coral (fire, tube, etc)
+	 * @param tw
+	 * @param data
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public static void spawnRandomGiantCoral(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+		FractalTreeType type = new FractalTreeType[] {
+			FractalTreeType.FIRE_CORAL,
+			FractalTreeType.BRAIN_CORAL,
+			FractalTreeType.TUBE_CORAL,
+			FractalTreeType.HORN_CORAL,
+			FractalTreeType.BUBBLE_CORAL,
+		}[tw.getHashedRand(x, y, z).nextInt(5)];
+		new FractalTreeBuilder(type).build(tw, data, x, y-2, z);
+	}
 	
 
 }

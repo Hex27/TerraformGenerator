@@ -60,6 +60,14 @@ public class BlockUtils {
 		add(BlockFace.NORTH_WEST);
 	}};
 	
+
+	public static final ArrayList<BlockFace> nsew = new ArrayList<BlockFace>(){{
+		add(BlockFace.NORTH);
+		add(BlockFace.SOUTH);
+		add(BlockFace.EAST);
+		add(BlockFace.WEST);
+	}};
+	
 	public static final Material[] stoneBricks = new Material[]{
 		Material.STONE_BRICKS,
 		Material.MOSSY_STONE_BRICKS,
@@ -364,7 +372,8 @@ public class BlockUtils {
 		while(length > 0){
 			length--;
 			if(data.getType(nx,ny,nz) == Material.SAND||
-					data.getType(nx,ny,nz) == Material.GRAVEL)
+					data.getType(nx,ny,nz) == Material.GRAVEL||
+					isDirtLike(data.getType(nx, ny, nz)))
 				data.setType(nx,ny,nz,Material.CLAY);
 			
 			switch (random.nextInt(5)) {  // The direction chooser

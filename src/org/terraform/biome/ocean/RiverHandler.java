@@ -8,6 +8,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -57,7 +58,7 @@ public class RiverHandler extends BiomeHandler {
 				}else if(GenUtils.chance(random, 3, 50) && growsKelp && y+1 < TerraformGenerator.seaLevel-10){
 					generateKelp(x,y+1,z,data,random);
 				}
-				if(GenUtils.chance(random, 1, 200)){
+				if(GenUtils.chance(random, TConfigOption.BIOME_RIVER_CLAY_CHANCE.getInt(), 1000)){
 					BlockUtils.generateClayDeposit(x,y,z,data,random);
 				}
 			}

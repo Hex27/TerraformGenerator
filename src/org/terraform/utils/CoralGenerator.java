@@ -2,6 +2,7 @@ package org.terraform.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -9,6 +10,7 @@ import org.bukkit.block.data.type.CoralWallFan;
 import org.bukkit.block.data.type.SeaPickle;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
+import org.terraform.data.SimpleBlock;
 
 public class CoralGenerator {
 
@@ -74,7 +76,43 @@ public class CoralGenerator {
             }
         }
     }
-
+    
+    public static boolean isSaturatedCoral(SimpleBlock block) {
+    	for(BlockFace face:BlockUtils.directBlockFaces) {
+    		if(block.getRelative(face).getType() == Material.WATER)
+    			return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * Generates a coral on a surface.
+     *
+     * @param base refers to the block the coral will grow ON.
+     */
+    public static void generateSingleCoral(PopulatorDataAbstract data, int x, int y, int z, String coralType) {
+        BlockFace face = getRandomBlockFace();
+        coralType = coralType.replace("_BLOCK", "");
+        if (face == BlockFace.DOWN) face = BlockFace.UP;
+        Material coral = Material.getMaterial(coralType + "_FAN");//coralFans().get(GenUtils.randInt(0, coralFans().size() - 1));
+       
+        
+        if (face != BlockFace.UP) 
+        	coral = Material.getMaterial(coralType + "_WALL_FAN");
+        else if(GenUtils.chance(1, 5)) {
+        	generateSeaPickles(data,x,y+1,z);
+        	return;
+        }
+        attemptReplace(data, x+face.getModX(),y+face.getModY(),z+face.getModZ(), coral);
+        if (face != BlockFace.UP) {
+            if (data.getBlockData(x+face.getModX(),y+face.getModY(),z+face.getModZ()) instanceof CoralWallFan) {
+                CoralWallFan bdata = (CoralWallFan) data.getBlockData(x+face.getModX(),y+face.getModY(),z+face.getModZ());
+                bdata.setFacing(face);
+                data.setBlockData(x+face.getModX(),y+face.getModY(),z+face.getModZ(),bdata);
+            }
+        }
+    }
+    
     /**
      * Creates a cluster of Sea Pickles.
      *
@@ -92,19 +130,21 @@ public class CoralGenerator {
     }
 
     /**
-     * Generates a Kelp plant 2-4 blocks tall.
+     * Generates a Kelp plant 3-10 blocks tall. Or sea grass.
      *
      * @param base refers to the block ABOVE the floor (lowest block of the kelp plant)
      */
     public static void generateKelpGrowth(PopulatorDataAbstract data, int x, int y, int z) {
-        int fullSize = GenUtils.randInt(1, 10);
+        int fullSize = GenUtils.randInt(1, 2);
+        if(new Random().nextBoolean()) fullSize += GenUtils.randInt(1, 20);
         if (fullSize == 1) {
             attemptReplace(data,x,y,z, Material.SEAGRASS);
-        } else if (fullSize == 2) {
+        } else if (fullSize == 2 && y < TerraformGenerator.seaLevel-3) {
         	BlockUtils.setDoublePlant(data, x, y, z, Material.TALL_SEAGRASS);
         } else {
             for (int size = 0; size < fullSize; size++) {
-                attemptReplace(data,x,y,z, Material.KELP_PLANT);
+                if(!attemptReplace(data,x,y,z, Material.KELP_PLANT))
+                	break;
                 y++;
             }
         }
@@ -179,7 +219,11 @@ public class CoralGenerator {
         BlockFace[] faces = new BlockFace[]{
                 BlockFace.EAST, BlockFace.WEST,
                 BlockFace.NORTH, BlockFace.SOUTH,
+                BlockFace.EAST, BlockFace.WEST,
+                BlockFace.NORTH, BlockFace.SOUTH,
+                BlockFace.EAST, BlockFace.WEST,
+                BlockFace.NORTH, BlockFace.SOUTH,
                 BlockFace.UP, BlockFace.DOWN};
-        return faces[GenUtils.randInt(0, 5)];
+        return faces[GenUtils.randInt(0, 13)];
     }
 }

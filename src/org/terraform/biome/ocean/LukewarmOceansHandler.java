@@ -8,6 +8,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
@@ -43,22 +44,25 @@ public class LukewarmOceansHandler extends BiomeHandler {
 
 	@Override
 	public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-		//boolean growCorals = random.nextBoolean();
+		
 
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int y = GenUtils.getTrueHighestBlock(data, x, z);
+				boolean growCorals = 
+						y < TerraformGenerator.seaLevel-10 
+						&& y > TerraformGenerator.seaLevel-20;
 				if(data.getBiome(x,y,z) != getBiome()) continue;
 				if(!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
 				if(GenUtils.chance(random, 10, 100)){ //SEA GRASS/KELP
-					data.setType(x, y+1, z,Material.SEAGRASS);
-					if(random.nextBoolean() && y < TerraformGenerator.seaLevel-3)
-						BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_SEAGRASS);
-				}else if(GenUtils.chance(random, 17, 100)){
-					CoralGenerator.generateCoral(data,x,y+1,z);
+					CoralGenerator.generateKelpGrowth(data, x, y+1, z);
 				}
-				if(GenUtils.chance(random, 2, 100)){
-					BlockUtils.generateClayDeposit(x,y,z,data,random);
+				if(growCorals){
+					if(GenUtils.chance(random, 15, 100))
+						CoralGenerator.generateCoral(data,x,y+1,z);
+					
+					if(GenUtils.chance(random, 1,100))
+						TreeDB.spawnRandomGiantCoral(world, data, x, y, z);
 				}
 			}
 		}

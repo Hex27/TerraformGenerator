@@ -6,9 +6,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 
 public class ColdOceansHandler extends BiomeHandler {
@@ -39,18 +39,9 @@ public class ColdOceansHandler extends BiomeHandler {
 				int y = GenUtils.getTrueHighestBlock(data, x, z);
 				if(data.getBiome(x,y+1,z) != getBiome()) continue;
 				
-				//Cold oceans dont have ice sheets
-//				if(GenUtils.chance(random, 1, 5)) 
-//					data.setType(x,TerraformGenerator.seaLevel, z, Material.ICE);
-//				
 				if(!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-				if(GenUtils.chance(random, 1, 200)){ //SEA GRASS/KELP
-					data.setType(x, y+1, z,Material.SEAGRASS);
-					if(random.nextBoolean() && y < TerraformGenerator.seaLevel-3)
-						BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_SEAGRASS);
-				}
-				if(GenUtils.chance(random, 2, 100)){
-					BlockUtils.generateClayDeposit(x,y,z,data,random);
+				if(GenUtils.chance(random, 1, 150)){ //SEA GRASS/KELP
+					CoralGenerator.generateKelpGrowth(data, x, y+1, z);
 				}
 			}
 		}
