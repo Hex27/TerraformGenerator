@@ -8,6 +8,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
@@ -50,8 +51,8 @@ public class LukewarmOceansHandler extends BiomeHandler {
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int y = GenUtils.getTrueHighestBlock(data, x, z);
 				boolean growCorals = 
-						y < TerraformGenerator.seaLevel-10 
-						&& y > TerraformGenerator.seaLevel-20;
+						y <= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT.getInt() 
+						&& y >= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT.getInt() ;
 				if(data.getBiome(x,y,z) != getBiome()) continue;
 				if(!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
 				if(GenUtils.chance(random, 10, 100)){ //SEA GRASS/KELP

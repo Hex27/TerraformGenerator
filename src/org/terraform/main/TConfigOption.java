@@ -20,6 +20,8 @@ public enum TConfigOption{
 	BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE_POWDER("biome.desert-mountains.place-yellow-concrete-powder",true),
 	BIOME_RIVER_CLAY_CHANCE("biome.river.clay.chance-out-of-thousand",20),
 	BIOME_SWAMP_CLAY_CHANCE("biome.swamp.clay.chance-out-of-thousand",20),
+	BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT("biome.lukewarm-ocean.coral.minheight",42),
+	BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT("biome.lukewarm-ocean.coral.maxheight",52),
 	
 	//MISC_SMOOTH_DESIGN("misc.smooth-design",false),
 	MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled",false),
