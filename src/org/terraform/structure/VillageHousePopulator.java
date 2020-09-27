@@ -14,33 +14,59 @@ import org.terraform.structure.animalfarm.AnimalFarmPopulator;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.utils.GenUtils;
 
-public class VillageHousePopulator extends StructurePopulator {
+public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
 	@Override
-	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
+	public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {
+		return tw.getHashedRand(2291282, chunkX, chunkZ);
+	}
+	
+	@Override
+	public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> banks) {
 
 		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
-		return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ;
-	}
-	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
-		ArrayList<BiomeBank> banks = new ArrayList<>();
-		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
-			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-				for(BiomeBank bank:BiomeBank.values()){
-					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
-					
-					if(bank == currentBiome){
-						if(!banks.contains(bank))
-							banks.add(bank);
-						break;
+		if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+			if(banks.contains(BiomeBank.LUKEWARM_OCEAN)
+					||banks.contains(BiomeBank.WARM_OCEAN)
+					||banks.contains(BiomeBank.OCEAN)
+					||banks.contains(BiomeBank.COLD_OCEAN)
+					||banks.contains(BiomeBank.FROZEN_OCEAN)
+					||banks.contains(BiomeBank.SWAMP)){
+				return false;
+			}else{
+				//If it is below sea level, DON'T SPAWN IT.
+				if(HeightMap.getHeight(tw,coords[0],coords[1]) > TerraformGenerator.seaLevel) {
+					if(banks.contains(BiomeBank.DESERT)
+							|| banks.contains(BiomeBank.DESERT_MOUNTAINS)
+							|| banks.contains(BiomeBank.BADLANDS)
+							|| banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
+							|| banks.contains(BiomeBank.SNOWY_WASTELAND)
+							|| banks.contains(BiomeBank.ICE_SPIKES)){
+						if(!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
+							return false;
+
+						return true;
+					}else if(banks.contains(BiomeBank.FOREST)
+							|| banks.contains(BiomeBank.PLAINS)
+							|| banks.contains(BiomeBank.TAIGA)
+							|| banks.contains(BiomeBank.SAVANNA)
+							|| banks.contains(BiomeBank.SNOWY_TAIGA)){
+
+						if(!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
+							return false;
+						
+						return true;
 					}
 				}
 			}
 		}
+		return false;
+	}
+	
+	@Override
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+		ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 		
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 		
@@ -65,7 +91,7 @@ public class VillageHousePopulator extends StructurePopulator {
 					if(!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
 						return;
 					
-					new AnimalFarmPopulator().populate(tw,random,data);
+					new AnimalFarmPopulator().populate(tw,data);
 				}else if(banks.contains(BiomeBank.FOREST)
 						|| banks.contains(BiomeBank.PLAINS)
 						|| banks.contains(BiomeBank.TAIGA)
@@ -75,13 +101,14 @@ public class VillageHousePopulator extends StructurePopulator {
 					if(!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
 						return;
 					
-					new FarmhousePopulator().populate(tw, random, data);
+					new FarmhousePopulator().populate(tw, data);
 				}
 			}
 		}
 	}
 
-	protected int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
+	@Override
+	public int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
 		return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),2392224));
 	}
 
@@ -102,6 +129,12 @@ public class VillageHousePopulator extends StructurePopulator {
 			}
 		}
 		return min;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean() || TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean();
 	}
 
 	

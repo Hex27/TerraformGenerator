@@ -46,6 +46,8 @@ public enum TConfigOption{
 	STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND("structures.swamphut.chance-out-of-10000",10),
 	STRUCTURES_UNDERGROUNDDUNGEON_ENABLED("structures.underground-dungeon.enabled",true),
 	STRUCTURES_DROWNEDDUNGEON_ENABLED("structures.drowned-dungeon.enabled",true),
+	STRUCTURES_DROWNEDDUNGEON_MIN_DEPTH("structures.drowned-dungeon.min-chunk-y",52),
+	STRUCTURES_DROWNEDDUNGEON_CHANCE("structures.drowned-dungeon.chance-out-of-1000",200),
 	STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled",true),
 	STRUCTURES_MINESHAFT_ENABLED("structures.mineshaft.enabled",true),
 	STRUCTURES_MINESHAFT_CHANCE("structures.mineshaft.chance",75),

@@ -24,8 +24,7 @@ import org.terraform.utils.GenUtils;
 public class UndergroundDungeonPopulator extends SmallDungeonPopulator{
 
 	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 
 		int[] spawnCoords = new int[]{data.getChunkX()*16,data.getChunkZ()*16};
@@ -39,7 +38,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator{
 		
 		int x = spawnCoords[0];//data.getChunkX()*16 + random.nextInt(16);
 		int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
-		Random rand = tw.getHashedRand(x, z, 9993);
+		Random rand = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 		
 		int y = GenUtils.getHighestGround(data, x, z) - GenUtils.randInt(rand, 15, 50);
 		

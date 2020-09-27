@@ -30,14 +30,13 @@ import org.terraform.utils.Temperature;
 public class FarmhousePopulator extends VillageHousePopulator{
 
 	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
 		int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
 		int height = GenUtils.getHighestGround(data, x, z);
-		spawnFarmHouse(tw,tw.getHashedRand(x, height, z, 4255762),data,x,height+1,z);
+		spawnFarmHouse(tw,this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()),data,x,height+1,z);
 	}
 	
 	public void spawnFarmHouse(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){

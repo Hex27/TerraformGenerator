@@ -5,34 +5,44 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.GenUtils;
 
-public class MineshaftPopulator extends StructurePopulator{
+public class MineshaftPopulator extends SingleMegaChunkStructurePopulator{
 
 	@Override
-	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
+	public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
 
 		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+			int height = HeightMap.getHeight(tw, coords[0], coords[1]);
+			if(height-20 < 15) {
+				//Way too little space. Abort generation.
+				TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y="+height +")");
+				return false;
+			}
+			
 			return GenUtils
-					.chance(rand,
+					.chance(this.getHashedRandom(tw, chunkX, chunkZ),
 							TConfigOption.STRUCTURES_MINESHAFT_CHANCE.getInt(),
 							100);
 		}
 		return false;
 	}
 	
-	protected int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
+	@Override
+	public int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
 		return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),1232412222));
 	}
 
@@ -56,8 +66,7 @@ public class MineshaftPopulator extends StructurePopulator{
 	}
 
 	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
 		if(!TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean())
 			return;
@@ -65,13 +74,7 @@ public class MineshaftPopulator extends StructurePopulator{
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
 		int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
-		int height = GenUtils.getHighestGround(data, x, z);
-		
-		if(height-20 < 15) {
-			//Way too little space. Abort generation.
-			TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y="+height +")");
-			return;
-		}
+		int height = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
 		
 		int y = GenUtils.randInt(15, height-25);
 		
@@ -139,6 +142,17 @@ public class MineshaftPopulator extends StructurePopulator{
 			secondGen.generate();
 			secondGen.fill(data, tw, Material.CAVE_AIR);
 		}
+	}
+
+	@Override
+	public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+		return world.getHashedRand(3929202, chunkX, chunkZ);
+	}	
+	
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean();
 	}
 
 }

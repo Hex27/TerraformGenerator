@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/Leonard/Desktop/renderer/plugins/Drycell.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Leonard/Desktop/renderer/plugins/Drycell.jar" sourcepath="C:/Users/Leonard/Desktop/PluginTools/eclipse/eclipse/Drycell"/>
 	<classpathentry kind="lib" path="C:/Users/Leonard/Desktop/renderer/spigot-1.16.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Leonard/Desktop/renderer/spigot-1.15.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Leonard/Desktop/renderer/spigot-1.14.4.jar"/>

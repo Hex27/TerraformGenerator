@@ -58,7 +58,7 @@ public class OrePopulator {
 				y = GenUtils.randInt(random,minRange, range);  // Get randomized coordinates
 				//Bukkit.getLogger().info("Generated ore at " + x +"," + y + "," + z);
 				
-				for(int s = maxOreSize; s > 0; s--){
+				for(int s = 0; s < maxOreSize; s++){
 					//Bukkit.getLogger().info("1");
 					Material type = data.getType(x, y, z);
 					if(type != Material.STONE) break;

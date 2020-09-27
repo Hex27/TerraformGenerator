@@ -9,10 +9,13 @@ import org.terraform.data.TerraformWorld;
 
 public abstract class StructurePopulator {
 	
-	public abstract boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes);
+	public abstract boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes);
 	
-	public abstract void populate(TerraformWorld world, Random random, PopulatorDataAbstract data);
+	public abstract boolean isEnabled();
+	
+	public abstract void populate(TerraformWorld world, PopulatorDataAbstract data);
 
 	public abstract int[] getNearestFeature(TerraformWorld world, int rawX, int rawZ);
 	
+	public abstract Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ);
 }

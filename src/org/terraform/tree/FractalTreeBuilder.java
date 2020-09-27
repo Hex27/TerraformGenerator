@@ -36,6 +36,7 @@ public class FractalTreeBuilder {
 	float leafRadiusX = 2;
 	float leafRadiusY = 2;
 	float leafRadiusZ = 2;
+	int maxHeight = 999;
 	float lengthDecrement = 1;
 	Material logType = Material.OAK_WOOD;
 	Material leafType = Material.OAK_LEAVES;
@@ -334,7 +335,7 @@ public class FractalTreeBuilder {
 		
 		if(!spawnedBees 
 				&& Version.isAtLeast("1_15_R1") 
-				&& GenUtils.chance(rand,(int) (beeChance*100.0),100)){
+				&& GenUtils.chance(rand,(int) (beeChance*1000.0),1000)){
 			for(int i = 0; i < 3; i ++){
 				if(!two.getRelative(0,-i,0).getType().isSolid()){
 					spawnedBees = true;
@@ -447,6 +448,13 @@ public class FractalTreeBuilder {
 			for(float y = -rY; y <= rY; y++){
 				for(float z = -rZ; z <= rZ; z++){
 					SimpleBlock rel = block.getRelative((int)Math.round(x),(int)Math.round(y),(int)Math.round(z));
+					if(rel.getY()-this.oriY > this.maxHeight) {
+						return;
+					}
+					if(rel.getY()-this.oriY == this.maxHeight) {
+						if(rand.nextBoolean()) //Fade off if too high
+							return;
+					}
 					double equationResult = Math.pow(x,2)/Math.pow(rX,2)
 							+ Math.pow(y,2)/Math.pow(rY,2)
 							+ Math.pow(z,2)/Math.pow(rZ,2);
@@ -459,10 +467,7 @@ public class FractalTreeBuilder {
 								changed.add(rel);
 						}
 						
-						//Anti-dirt block glitch
-//						if(BlockUtils.isDirtLike(rel.getRelative(0,-1,0).getType())){
-//							rel.getRelative(0,-1,0).setType(Material.DIRT);
-//						}
+						
 						
 						//Leaves do not replace solid blocks.
 						if(type.toString().contains("LEAVES") && !rel.getType().isSolid()){
@@ -725,6 +730,12 @@ public class FractalTreeBuilder {
 		return this;
 	}
 	
+
+	public FractalTreeBuilder setMaxHeight(int max){
+		this.maxHeight = max;
+		return this;
+	}
+	
 	/**
 	 * @return the height
 	 */
@@ -766,6 +777,8 @@ public class FractalTreeBuilder {
 		this.coralDecoration = d;
 		return this;
 	}
+	
+	
 	
 
 }

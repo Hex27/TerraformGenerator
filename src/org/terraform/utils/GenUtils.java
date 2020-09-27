@@ -9,7 +9,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
+import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.TerraformWorld;
 
 public class GenUtils {
 	
@@ -80,6 +83,25 @@ public class GenUtils {
 	
 	public static boolean chance(int chance,int outOf){
 		return randInt(new Random(),1,outOf) <= chance;
+	}
+	
+	public static ArrayList<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ){
+		ArrayList<BiomeBank> banks = new ArrayList<>();
+		for(int x = chunkX*16; x < chunkX*16+16; x++){
+			for(int z = chunkZ*16; z < chunkZ*16+16; z++){
+				int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
+				for(BiomeBank bank:BiomeBank.values()){
+					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
+					
+					if(bank == currentBiome){
+						if(!banks.contains(bank))
+							banks.add(bank);
+						break;
+					}
+				}
+			}
+		}
+		return banks;
 	}
 	
 	public static Material weightedRandomMaterial(Random rand, Object... candidates){
@@ -246,6 +268,8 @@ public class GenUtils {
 				}else if(data.getType(x, y, z).toString().contains("BRICK")){
 				}else if(data.getType(x, y, z).isInteractable()){
 				}else if(data.getType(x, y, z) == Material.ICE){
+				}else if(data.getType(x, y, z) == Material.PACKED_ICE){
+				}else if(data.getType(x, y, z) == Material.BLUE_ICE){
 				}else if(data.getType(x, y, z) == Material.CACTUS){
 				}else if(data.getType(x, y, z) == Material.BAMBOO){
 				}else if(data.getType(x, y, z) == Material.BAMBOO_SAPLING){

@@ -28,21 +28,25 @@ import org.terraform.utils.GenUtils;
 
 public class AnimalFarmPopulator extends VillageHousePopulator{
 
-
+	@Override
+	public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {
+		return tw.getHashedRand(425332, chunkX, chunkZ);
+	}
 
 	@Override
-	public void populate(TerraformWorld tw, Random random,
+	public void populate(TerraformWorld tw,
 			PopulatorDataAbstract data) {
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
 		int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
 		int height = GenUtils.getHighestGround(data, x, z);
-		spawnAnimalFarm(tw,tw.getHashedRand(x, height, z, 425332),data,x,height+1,z);
+		spawnAnimalFarm(tw,data,x,height+1,z);
 	}
 	
-	public void spawnAnimalFarm(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
+	public void spawnAnimalFarm(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z){
 		try {
+			Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 			BiomeBank biome = tw.getBiomeBank(x, y, z);
 			BlockFace dir = BlockUtils.getDirectBlockFace(random);
 			TerraSchematic animalFarm = TerraSchematic.load("animalfarm", new Location(tw.getWorld(),x,y,z));

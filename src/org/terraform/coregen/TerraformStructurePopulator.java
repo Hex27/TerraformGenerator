@@ -19,10 +19,11 @@ import org.terraform.structure.mineshaft.MineshaftPopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.utils.GenUtils;
 
 public class TerraformStructurePopulator extends BlockPopulator {
 	
-	private ArrayList<StructurePopulator> structurePops = new ArrayList<StructurePopulator>(){{
+	public static final ArrayList<StructurePopulator> structurePops = new ArrayList<StructurePopulator>(){{
 		add(new StrongholdPopulator());
 		add(new VillageHousePopulator());
 		add(new SmallDungeonPopulator());
@@ -41,6 +42,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 	
 	@Override
 	public void populate(World world, Random random, Chunk chunk) {
+		
 		//Don't attempt generation pre-injection.
 		if(!TerraformGeneratorPlugin.injectedWorlds.contains(world.getName())) 
 			return;
@@ -59,30 +61,15 @@ public class TerraformStructurePopulator extends BlockPopulator {
 		
 		//PopulatorDataAbstract data = TerraformGeneratorPlugin.injector.getICAData(chunk);
 		//TerraformGeneratorPlugin.logger.debug("s-pop-1");
-		ArrayList<BiomeBank> banks = new ArrayList<>();
-		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
-			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-				for(BiomeBank bank:BiomeBank.values()){
-					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
-					
-					if(bank == currentBiome){
-						if(!banks.contains(bank))
-							banks.add(bank);
-						break;
-					}
-				}
-			}
-		}
-		
+		ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 		
 		//TerraformGeneratorPlugin.logger.debug("s-pop-2");
 		for(StructurePopulator spop:structurePops){
 			
 			//TerraformGeneratorPlugin.logger.debug("s-pop-3");
-			if(spop.canSpawn(random,tw,data.getChunkX(),data.getChunkZ(),banks)){
+			if(spop.canSpawn(tw,data.getChunkX(),data.getChunkZ(),banks)){
 				TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
-				spop.populate(tw, random, data);
+				spop.populate(tw, data);
 			}
 		}
 		populating.remove(new SimpleChunkLocation(chunk));

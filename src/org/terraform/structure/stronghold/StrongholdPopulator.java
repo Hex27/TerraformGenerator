@@ -75,7 +75,7 @@ public class StrongholdPopulator extends StructurePopulator{
 	}
 	
 	@Override
-	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
+	public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
 		ArrayList<int[]> positions = strongholdPositions(tw);
 		for(int x = chunkX*16; x<chunkX*16+16;x++){
 			for(int z = chunkZ*16; z<chunkZ*16+16;z++){
@@ -90,8 +90,7 @@ public class StrongholdPopulator extends StructurePopulator{
 	}
 
 	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 		//TerraformGeneratorPlugin.logger.debug("s-populate");
 		if(!TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean()) return;
 		ArrayList<int[]> positions = strongholdPositions(tw);
@@ -103,7 +102,7 @@ public class StrongholdPopulator extends StructurePopulator{
 						//Strongholds start underground. Burrow down
 						height -= 40;
 						if(height < 3) height = 5;
-						spawnStronghold(tw,random,data,x,height,z);
+						spawnStronghold(tw,this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()),data,x,height,z);
 						break;
 					}
 				}
@@ -169,8 +168,17 @@ public class StrongholdPopulator extends StructurePopulator{
 		}
 		return new int[]{min[0],min[1]};
 	}
+
+	@Override
+	public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+		return world.getHashedRand(1999222, chunkX, chunkZ);
+	}
 	
 
-	
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean();
+	}
 
 }

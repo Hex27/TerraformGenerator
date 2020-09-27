@@ -54,7 +54,7 @@ public class AnimalFarmCommand extends DCCommand {
 //		gen.generate();
 //		gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 //		
-		new AnimalFarmPopulator().spawnAnimalFarm(tw, new Random(), data, x, y, z);
+		new AnimalFarmPopulator().spawnAnimalFarm(tw, data, x, y, z);
 	}
 
 }

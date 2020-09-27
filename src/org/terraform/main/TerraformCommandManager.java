@@ -15,6 +15,7 @@ import org.terraform.command.FractalTreeCommand;
 import org.terraform.command.GiantPumpkinCommand;
 import org.terraform.command.IceSpikeCommand;
 import org.terraform.command.LargeMonumentLampCommand;
+import org.terraform.command.LocateCommand;
 import org.terraform.command.MineshaftCommand;
 import org.terraform.command.MonumentCommand;
 import org.terraform.command.MushroomCommand;
@@ -59,6 +60,7 @@ public class TerraformCommandManager extends DCCommandManager {
 		//this.registerCommand(new GuardianSpawnCheckCommand(plugin, "gsc","guardianspawncheck"));
 		this.registerCommand(new WandCommand(plugin, "wand"));
 		this.registerCommand(new MushroomCommand(plugin, "mushroom"));
+		this.registerCommand(new LocateCommand(plugin, "locate"));
 		this.registerCommand(new SchematicSaveCommand(plugin, "save"));
 		this.registerCommand(new SchematicLoadCommand(plugin, "load"));
 		this.registerCommand(new BlockDataTestCommand(plugin, "blockdatatest","bdt"));

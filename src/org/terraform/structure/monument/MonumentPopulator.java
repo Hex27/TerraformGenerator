@@ -22,6 +22,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
@@ -29,10 +30,10 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 
-public class MonumentPopulator extends StructurePopulator{
+public class MonumentPopulator extends SingleMegaChunkStructurePopulator{
 
 	@Override
-	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
+	public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
 
 		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
@@ -53,8 +54,7 @@ public class MonumentPopulator extends StructurePopulator{
 	}
 
 	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
 		ArrayList<BiomeBank> banks = new ArrayList<>();
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
@@ -63,9 +63,9 @@ public class MonumentPopulator extends StructurePopulator{
 				for(BiomeBank bank:BiomeBank.values()){
 					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
 					
-					//Must be in deep ocean.
-					if(currentBiome.getType() != BiomeType.DEEP_OCEANIC) 
-						return;
+					//Must be in deep ocean. Check done in canSpawn
+					//if(currentBiome.getType() != BiomeType.DEEP_OCEANIC) 
+					//	return;
 					
 					if(bank == currentBiome){
 						if(!banks.contains(bank))
@@ -300,7 +300,8 @@ public class MonumentPopulator extends StructurePopulator{
 		}
 	}
 
-	protected int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
+	@Override
+	public int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
 		return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),17322223));
 	}
 
@@ -367,8 +368,17 @@ public class MonumentPopulator extends StructurePopulator{
 		}
 		
 	}
-	
 
+	@Override
+	public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+		return world.getHashedRand(888271981, chunkX, chunkZ);
+	}
+	
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return TConfigOption.STRUCTURES_MONUMENT_ENABLED.getBoolean();
+	}
 	
 
 }

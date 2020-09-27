@@ -15,25 +15,24 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
-import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-public class ShipwreckPopulator extends StructurePopulator{
-
+public class ShipwreckPopulator extends SingleMegaChunkStructurePopulator{
 
 	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
 		if(!TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean())
 			return;
+		Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
 		int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
 		int height = GenUtils.getHighestGround(data, x, z) - 1 - random.nextInt(5);
-		spawnShipwreck(tw,tw.getHashedRand(x, height, z, 127127127),data,x,height+1,z);
+		spawnShipwreck(tw,random,data,x,height+1,z);
 	}
 	
 	private String[] schematics = new String[]{"upright-shipwreck-1",
@@ -74,8 +73,9 @@ public class ShipwreckPopulator extends StructurePopulator{
 			e.printStackTrace();
 		}
 	}
-	
-	protected int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
+
+	@Override
+	public int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
 		return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),191921));
 	}
 
@@ -99,7 +99,7 @@ public class ShipwreckPopulator extends StructurePopulator{
 	}
 
 	@Override
-	public boolean canSpawn(Random rand, TerraformWorld tw, int chunkX,
+	public boolean canSpawn(TerraformWorld tw, int chunkX,
 			int chunkZ, ArrayList<BiomeBank> biomes) {
 		for(BiomeBank b:biomes){
 			if(b.toString().contains("OCEAN")){
@@ -129,7 +129,16 @@ public class ShipwreckPopulator extends StructurePopulator{
 			block.getRelative(0,1,0).setType(type);
 		}
 	}
-	
 
+	@Override
+	public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+		return world.getHashedRand(221819019, chunkX, chunkZ);
+	}
+	
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean();
+	}
 	
 }

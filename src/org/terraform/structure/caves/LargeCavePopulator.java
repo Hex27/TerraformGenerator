@@ -8,26 +8,19 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.utils.GenUtils;
 
-public class LargeCavePopulator extends StructurePopulator{
+public class LargeCavePopulator extends SingleMegaChunkStructurePopulator{
 
+	
 	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 		if(!TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean())
 			return;
 		MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
 
-		int[] spawnCoords = new int[]{data.getChunkX()*16,data.getChunkZ()*16};
-		int[][] allCoords = getCoordsFromMegaChunk(tw,mc);
-		for(int[] coords:allCoords){
-			if(coords[0] >> 4 == data.getChunkX() && coords[1] >> 4 == data.getChunkZ()){
-				spawnCoords = coords;
-				break;
-			}
-		}
+		int[] spawnCoords = getCoordsFromMegaChunk(tw,mc);
 		
 		int x = spawnCoords[0];//data.getChunkX()*16 + random.nextInt(16);
 		int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
@@ -43,27 +36,23 @@ public class LargeCavePopulator extends StructurePopulator{
 	}
 	
 	@Override
-	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
+	public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
 		
 		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
-		int[][] allCoords = getCoordsFromMegaChunk(tw,mc);
-		for(int[] coords:allCoords){
-			if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ){
-				return GenUtils
-						.chance(rand,
-								TConfigOption.STRUCTURES_LARGECAVE_CHANCE.getInt(),
-								100);
-			}
+		int[] coords = getCoordsFromMegaChunk(tw,mc);
+		if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ){
+			return GenUtils
+					.chance(this.getHashedRandom(tw, chunkX, chunkZ),
+							TConfigOption.STRUCTURES_LARGECAVE_CHANCE.getInt(),
+							100);
 		}
 		return false;
 	}
 	
 	//Each mega chunk has 1 large cave
-	protected int[][] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
-		return new int[][]{
-				mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),78889279)),
-				//mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),7245322)),
-		};
+	@Override
+	public int[] getCoordsFromMegaChunk(TerraformWorld tw,MegaChunk mc){
+		return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(),78889279));
 	}
 
 	@Override
@@ -74,16 +63,26 @@ public class LargeCavePopulator extends StructurePopulator{
 		int[] min = null;
 		for(int nx = -1; nx <= 1; nx++){
 			for(int nz = -1; nz <= 1; nz++){
-				for(int[] loc:getCoordsFromMegaChunk(tw,mc.getRelative(nx, nz))){
-					double distSqr = Math.pow(loc[0]-rawX,2) + Math.pow(loc[1]-rawZ,2);
-					if(distSqr < minDistanceSquared){
-						minDistanceSquared = distSqr;
-						min = loc;
-					}
+				int[] loc = getCoordsFromMegaChunk(tw,mc.getRelative(nx, nz));
+				double distSqr = Math.pow(loc[0]-rawX,2) + Math.pow(loc[1]-rawZ,2);
+				if(distSqr < minDistanceSquared){
+					minDistanceSquared = distSqr;
+					min = loc;
 				}
 			}
 		}
 		return min;
+	}
+
+	@Override
+	public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {
+		return tw.getHashedRand(123912, chunkX, chunkZ);
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean();
 	}
 	
 }

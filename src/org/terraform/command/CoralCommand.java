@@ -8,6 +8,8 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.data.TerraformWorld;
+import org.terraform.tree.TreeDB;
 import org.terraform.utils.CoralGenerator;
 
 public class CoralCommand extends DCCommand {
@@ -18,7 +20,7 @@ public class CoralCommand extends DCCommand {
 
 	@Override
 	public String getDefaultDescription() {
-		return "Spawns a coral";
+		return "Spawns a large fractal coral";
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class CoralCommand extends DCCommand {
 		int x = p.getLocation().getBlockX();
 		int y = p.getLocation().getBlockY();
 		int z = p.getLocation().getBlockZ();
-		CoralGenerator.generateCoral(data, x, y, z);
+		TreeDB.spawnRandomGiantCoral(TerraformWorld.get(p.getWorld()), data, x, y, z);
 	}
 
 }

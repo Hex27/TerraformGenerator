@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -94,7 +95,9 @@ public class TreeDB {
 			FractalTreeType.HORN_CORAL,
 			FractalTreeType.BUBBLE_CORAL,
 		}[tw.getHashedRand(x, y, z).nextInt(5)];
-		new FractalTreeBuilder(type).build(tw, data, x, y-2, z);
+		FractalTreeBuilder ftb = new FractalTreeBuilder(type);
+		ftb.setMaxHeight(TerraformGenerator.seaLevel-y-1); //Max height is one below sea level
+		ftb.build(tw, data, x, y-2, z);
 	}
 	
 

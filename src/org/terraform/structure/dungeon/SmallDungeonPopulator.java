@@ -10,45 +10,36 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.structure.StructurePopulator;
+import org.terraform.utils.GenUtils;
 
 public class SmallDungeonPopulator extends StructurePopulator{
 
 	@Override
-	public void populate(TerraformWorld tw, Random random,
-			PopulatorDataAbstract data) {
-		ArrayList<BiomeBank> banks = new ArrayList<>();
-		int numOceanic = 0;
+	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+//		ArrayList<BiomeBank> banks = new ArrayList<>();
+//		int numOceanic = 0;
+		int totalHeight = 0;
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-				for(BiomeBank bank:BiomeBank.values()){
-					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
-					
-					if(currentBiome.toString().contains("OCEAN")) numOceanic++;
-					
-					if(bank == currentBiome){
-						if(!banks.contains(bank))
-							banks.add(bank);
-						break;
-					}
-				}
+				totalHeight += HeightMap.getHeight(tw, x, z);
 			}
 		}
 		
-		if(numOceanic/banks.size() == 1){
+		if(totalHeight/256 <= TConfigOption.STRUCTURES_DROWNEDDUNGEON_MIN_DEPTH.getInt()
+				&& GenUtils.chance(tw.getHashedRand(1223, data.getChunkX(), data.getChunkZ()),TConfigOption.STRUCTURES_DROWNEDDUNGEON_CHANCE.getInt(),1000)){
 			//Only spawn these in full oceans
 			if(!TConfigOption.STRUCTURES_DROWNEDDUNGEON_ENABLED.getBoolean())
 				return;
-			new DrownedDungeonPopulator().populate(tw,random,data);
+			new DrownedDungeonPopulator().populate(tw,data);
 		}else{
 			if(!TConfigOption.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED.getBoolean())
 				return;
-			new UndergroundDungeonPopulator().populate(tw, random, data);
+			new UndergroundDungeonPopulator().populate(tw, data);
 		}
 	}
 	
 	@Override
-	public boolean canSpawn(Random rand,TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
+	public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ,ArrayList<BiomeBank> biomes) {
 
 		MegaChunk mc = new MegaChunk(chunkX,chunkZ);
 		int[][] allCoords = getCoordsFromMegaChunk(tw,mc);
@@ -89,6 +80,17 @@ public class SmallDungeonPopulator extends StructurePopulator{
 			}
 		}
 		return min;
+	}
+
+	@Override
+	public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+		return world.getHashedRand(48772719, chunkX, chunkZ);
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return TConfigOption.STRUCTURES_DROWNEDDUNGEON_ENABLED.getBoolean()||TConfigOption.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED.getBoolean();
 	}
 
 
