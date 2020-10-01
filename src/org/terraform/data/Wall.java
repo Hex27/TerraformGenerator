@@ -1,5 +1,6 @@
 package org.terraform.data;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -172,6 +173,7 @@ public class Wall {
 	public int LPillar(int height, boolean pattern, Random rand, Material... types){
 		for(int i = 0; i < height; i++){
 			if(block.getRelative(0,i,0).getType().isSolid()) return i;
+			if(Arrays.equals(new Material[] {Material.BARRIER}, types)) continue;
 			if(!pattern)
 				block.getRelative(0,i,0).setType(GenUtils.randMaterial(rand, types));
 			else

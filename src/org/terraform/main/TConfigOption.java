@@ -51,6 +51,8 @@ public enum TConfigOption{
 	STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled",true),
 	STRUCTURES_MINESHAFT_ENABLED("structures.mineshaft.enabled",true),
 	STRUCTURES_MINESHAFT_CHANCE("structures.mineshaft.chance",75),
+	STRUCTURES_MINESHAFT_MIN_Y("structures.mineshaft.min-y",15),
+	STRUCTURES_MINESHAFT_MAX_Y("structures.mineshaft.max-y",30),
 	STRUCTURES_LARGECAVE_ENABLED("structures.largecave.enabled",true),
 	STRUCTURES_LARGECAVE_CHANCE("structures.largecave.chance",75),
 	

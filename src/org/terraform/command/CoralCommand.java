@@ -10,7 +10,6 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.TreeDB;
-import org.terraform.utils.CoralGenerator;
 
 public class CoralCommand extends DCCommand {
 

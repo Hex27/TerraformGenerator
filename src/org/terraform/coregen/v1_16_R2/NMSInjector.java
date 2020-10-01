@@ -8,7 +8,6 @@ import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataICAAbstract;
-
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 

@@ -244,11 +244,14 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract{
 		//At least distance of 3
 		int dist = (int) left.get().getVector().distance(right.get().getVector());
 		if(dist >= 3){
-			left.LPillar(10, false, rand, Material.OAK_FENCE);
-			left.getRelative(0,-1,0).downUntilSolid(rand, Material.OAK_FENCE);
-		
-			right.LPillar(10, false, rand, Material.OAK_FENCE);
-			right.getRelative(0,-1,0).downUntilSolid(rand, Material.OAK_FENCE);
+			if(left.LPillar(10, false, rand, Material.BARRIER) != 10) {
+				left.LPillar(10, false, rand, Material.OAK_FENCE);
+				left.getRelative(0,-1,0).downUntilSolid(rand, Material.OAK_FENCE);
+			}
+			if(right.LPillar(10, false, rand, Material.BARRIER) != 10) {
+				right.LPillar(10, false, rand, Material.OAK_FENCE);
+				right.getRelative(0,-1,0).downUntilSolid(rand, Material.OAK_FENCE);
+			}
 		
 			
 			//Support
@@ -296,7 +299,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract{
 		Wall core = new Wall(base.getRelative(0,1,0),dir);
 		int seed = 55+core.getX()+core.getY()^2+core.getZ()^3;
 		BlockUtils.carveCaveAir(seed, 
-				pathWidth,pathWidth+1,pathWidth, core.get(), BlockUtils.stoneLike);
+				pathWidth,pathWidth+1,pathWidth, core.get(), false, BlockUtils.stoneLike);
 		
 		return true;
 	}

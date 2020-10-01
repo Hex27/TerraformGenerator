@@ -13,8 +13,8 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.utils.GenUtils;
 
 public class BambooForestHandler extends BiomeHandler {
 
@@ -93,7 +93,7 @@ public class BambooForestHandler extends BiomeHandler {
 					}
 					
 					//Bamboo
-					if(GenUtils.chance(random,1,3)){
+					if(GenUtils.chance(random,1,3) && BlockUtils.isDirtLike(data.getType(x, y, z))){
 						int h = BlockUtils.spawnPillar(random, data, x, y+1, z, Material.BAMBOO, 12, 16);
 						Bamboo bambooHead = (Bamboo) Bukkit.createBlockData(Material.BAMBOO);
 						bambooHead.setLeaves(Leaves.LARGE);

@@ -268,13 +268,6 @@ public class BlockUtils {
 		return Math.pow(x2-x1,2)+Math.pow(y2-y1,2)+Math.pow(z2-z1,2);
 	}
 	
-//	public static void setPersistentLeaves(PopulatorDataAbstract data, int x, int y, int z){
-//		c.getBlock(x, y, z).setType(Material.OAK_LEAVES,false);
-//		Leaves data = (Leaves) c.getBlock(x,y,z).getBlockData();
-//		data.setPersistent(true);
-//		c.getBlock(x,y,z).setBlockData(data,false);
-//	}
-	
 	public static void setDownUntilSolid(int x, int y, int z, PopulatorDataAbstract data, Material... type){
 		while(!data.getType(x,y,z).isSolid()){
 			data.setType(x,y,z,GenUtils.randMaterial(type));
@@ -289,7 +282,6 @@ public class BlockUtils {
 			y--;
 		}
 	}
-	
 
 	public static boolean isStoneLike(Material mat){
 		return isDirtLike(mat) || stoneLike.contains(mat);
@@ -339,19 +331,6 @@ public class BlockUtils {
 		}
 		
 		return true;
-	}
-	
-	public static void loadSurroundingChunks(Chunk middle){
-		SimpleChunkLocation sc = new SimpleChunkLocation(middle);
-		
-		for(int nx = -1; nx <= 1; nx++){
-			for(int nz = -1; nz <= 1; nz++){
-				int x = sc.getX() + nx;
-				int z = sc.getZ() + nz;
-				if(!middle.getWorld().isChunkLoaded(x, z)) 
-					middle.getWorld().loadChunk(x,z);
-			}
-		}
 	}
 	
 	public static int spawnPillar(Random rand, PopulatorDataAbstract data, int x, int y, int z, Material type, int minHeight, int maxHeight){
@@ -463,7 +442,7 @@ public class BlockUtils {
 	 * @param block
 	 * @param toReplace
 	 */
-	public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, ArrayList<Material> toReplace){
+	public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, ArrayList<Material> toReplace){
 		if(rX <= 0 &&
 				rY <= 0 &&
 				rZ <= 0){
@@ -473,7 +452,8 @@ public class BlockUtils {
 				rY <= 0.5 &&
 				rZ <= 0.5){
 			//block.setReplaceType(ReplaceType.ALL);
-			block.setType(Material.CAVE_AIR);
+			if(block.getType() != Material.WATER || waterToAir)
+				block.setType(Material.CAVE_AIR);
 			return;
 		}
 		FastNoise noise = new FastNoise(seed);
@@ -492,13 +472,16 @@ public class BlockUtils {
 					//if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
 						if(toReplace.contains(Material.BARRIER)) { //Blacklist
 							if(!toReplace.contains(rel.getType()))
-								rel.setType(Material.CAVE_AIR);
+								if(block.getType() != Material.WATER || waterToAir)
+									rel.setType(Material.CAVE_AIR);
 							
 						}else if(toReplace.contains(rel.getType())){ //Whitelist
-							rel.setType(Material.CAVE_AIR);
+							if(block.getType() != Material.WATER || waterToAir)
+								rel.setType(Material.CAVE_AIR);
 							
 						}else if(!rel.getType().isSolid()) {
-							rel.setType(Material.CAVE_AIR);
+							if(block.getType() != Material.WATER || waterToAir)
+								rel.setType(Material.CAVE_AIR);
 						}
 					}
 				}

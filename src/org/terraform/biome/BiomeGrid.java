@@ -36,12 +36,12 @@ public class BiomeGrid {
 		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
 		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
 		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
-		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.BLACK_OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
-		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.BLACK_OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
+		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
+		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.OCEAN,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
 		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.BLACK_OCEAN,BiomeBank.OCEAN,BiomeBank.SWAMP,BiomeBank.OCEAN,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
-		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.BLACK_OCEAN,BiomeBank.OCEAN,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
-		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.BLACK_OCEAN,BiomeBank.OCEAN,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN},
-		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.BLACK_OCEAN,BiomeBank.OCEAN,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN}
+		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.OCEAN,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN,BiomeBank.WARM_OCEAN},
+		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.OCEAN,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN},
+		new BiomeBank[]{BiomeBank.FROZEN_OCEAN,BiomeBank.FROZEN_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.COLD_OCEAN,BiomeBank.OCEAN,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.SWAMP,BiomeBank.LUKEWARM_OCEAN,BiomeBank.WARM_OCEAN}
 	};
 	
 	private static final BiomeBank[][] beachGrid = new BiomeBank[][]{

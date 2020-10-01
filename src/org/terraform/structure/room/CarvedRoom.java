@@ -25,7 +25,8 @@ public class CarvedRoom extends CubeRoom{
 		int heightOffset = height-(2*height/3);
 		BlockUtils.carveCaveAir(new Random().nextInt(9999291), 
 				widthX/2, 2*height/3, widthZ/2, 
-				new SimpleBlock(data,x,y+heightOffset,z), BlockUtils.stoneLike);
+				new SimpleBlock(data,x,y+heightOffset,z),
+				false,BlockUtils.stoneLike);
 		
 	}
 	

@@ -59,8 +59,8 @@ public class ForestHandler extends BiomeHandler {
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 		
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-			
-				new FractalTreeBuilder(FractalTreeType.FOREST).build(tw, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))			
+					new FractalTreeBuilder(FractalTreeType.FOREST).build(tw, data, treeX, treeY, treeZ);
 			}
 		}else{
 			//Clearing
@@ -72,7 +72,8 @@ public class ForestHandler extends BiomeHandler {
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
 			
-				new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL).build(tw, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))			
+					new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL).build(tw, data, treeX, treeY, treeZ);
 			}
 		}
 

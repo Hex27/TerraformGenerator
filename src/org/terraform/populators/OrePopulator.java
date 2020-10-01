@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.TickTimer;
 
 public class OrePopulator {
 	
@@ -42,13 +41,13 @@ public class OrePopulator {
 	}
 
 	public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-		TickTimer timer = new TickTimer("Ore-generation");
+		//TickTimer timer = new TickTimer("Ore-generation");
 		int x, y, z;
 		for (int i = 0; i < this.maxNumberOfVeins; i++) {
 			// Number of veins
-			
+
+			// The chance of spawning a vein
 		    if (GenUtils.chance(random,this.baseChance, 100)) { 
-				// The chance of spawning a vein
 				x = GenUtils.randInt(random,0, 15) + data.getChunkX()*16;
 				z = GenUtils.randInt(random,0, 15) + data.getChunkZ()*16;
 				
@@ -56,13 +55,10 @@ public class OrePopulator {
 				if(GenUtils.chance(random,1,50)) range = rareMaxRange;
 				
 				y = GenUtils.randInt(random,minRange, range);  // Get randomized coordinates
-				//Bukkit.getLogger().info("Generated ore at " + x +"," + y + "," + z);
 				
 				for(int s = 0; s < maxOreSize; s++){
-					//Bukkit.getLogger().info("1");
 					Material type = data.getType(x, y, z);
 					if(type != Material.STONE) break;
-					//Bukkit.getLogger().info("2");
 					
 					data.setType(x,y,z,this.type);
 					
@@ -77,7 +73,7 @@ public class OrePopulator {
 				}
 		    }
 		}
-		timer.finish();
+		//timer.finish();
 	}
 
 

@@ -12,7 +12,6 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
-import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
@@ -27,7 +26,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator{
 		int[] coords = getCoordsFromMegaChunk(tw,mc);
 		if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
 			int height = HeightMap.getHeight(tw, coords[0], coords[1]);
-			if(height-20 < 15) {
+			if(height<TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt()+15) {
 				//Way too little space. Abort generation.
 				TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y="+height +")");
 				return false;
@@ -76,7 +75,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator{
 		int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
 		int height = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
 		
-		int y = GenUtils.randInt(15, height-25);
+		int y = GenUtils.randInt(TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(), TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt());
 		
 		spawnMineshaft(tw,
 				tw.getHashedRand(x, y, z, 82392812),

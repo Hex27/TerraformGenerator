@@ -58,8 +58,9 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract{
 						3, 
 						5, 
 						3, 
-						new SimpleBlock(data,target.getX(),room.getY(),target.getZ())
-						, new ArrayList<Material>(){{
+						new SimpleBlock(data,target.getX(),room.getY(),target.getZ()),
+						false,
+						new ArrayList<Material>(){{
 							add(Material.BARRIER);
 						}});
 				

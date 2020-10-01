@@ -26,8 +26,9 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract{
 					(room.getWidthX()-4)/2, 
 					5, 
 					(room.getWidthZ()-4)/2, 
-					new SimpleBlock(data,room.getX(),room.getY()+i,room.getZ())
-					, new ArrayList<Material>(){{
+					new SimpleBlock(data,room.getX(),room.getY()+i,room.getZ()),
+					false,
+					new ArrayList<Material>(){{
 						add(Material.BARRIER);
 					}});
 		}

@@ -46,8 +46,8 @@ public class DarkForestHandler extends BiomeHandler {
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 		
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-			
-				TreeDB.spawnBigDarkOakTree(tw, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))			
+					TreeDB.spawnBigDarkOakTree(tw, data, treeX, treeY, treeZ);
 			}
 		}else if(GenUtils.chance(random,1,10)){ //Giant Shrooms
 			int treeX = GenUtils.randInt(random, 0,15) + data.getChunkX()*16;

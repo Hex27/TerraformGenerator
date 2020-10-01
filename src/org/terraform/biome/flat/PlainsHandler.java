@@ -90,8 +90,9 @@ public class PlainsHandler extends BiomeHandler {
 								new SimpleBlock(data,x,y+1,z), false, Material.OAK_LEAVES);
 					}
 					if(GenUtils.chance(random,1,500)){
-						new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL)
-						.build(world, data, x, y+1, z);
+						if(BlockUtils.isDirtLike(data.getType(x, y, z)))
+							new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL)
+							.build(world, data, x, y+1, z);
 					}
 					
 				}

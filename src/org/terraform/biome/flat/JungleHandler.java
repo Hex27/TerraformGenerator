@@ -60,8 +60,8 @@ public class JungleHandler extends BiomeHandler {
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 		
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-			
-				new FractalTreeBuilder(FractalTreeType.JUNGLE_BIG).build(tw, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))			
+					new FractalTreeBuilder(FractalTreeType.JUNGLE_BIG).build(tw, data, treeX, treeY, treeZ);
 			}
 		}else if(GenUtils.chance(random, 7,10)){
 			int treeX = GenUtils.randInt(random, 2,12) + data.getChunkX()*16;
@@ -69,8 +69,8 @@ public class JungleHandler extends BiomeHandler {
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 				
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-			
-				new FractalTreeBuilder(FractalTreeType.JUNGLE_SMALL).build(tw, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))			
+					new FractalTreeBuilder(FractalTreeType.JUNGLE_SMALL).build(tw, data, treeX, treeY, treeZ);
 			}
 		}
 		

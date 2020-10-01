@@ -50,8 +50,8 @@ public class TaigaHandler extends BiomeHandler {
 			int treeZ = GenUtils.randInt(random, 2,12) + data.getChunkZ()*16;
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-			
-				new FractalTreeBuilder(FractalTreeType.TAIGA_BIG).build(tw, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
+					new FractalTreeBuilder(FractalTreeType.TAIGA_BIG).build(tw, data, treeX, treeY, treeZ);
 			}
 		}
 		

@@ -59,8 +59,8 @@ public class SavannaHandler extends BiomeHandler {
 			int treeZ = GenUtils.randInt(random, 0,15) + data.getChunkZ()*16;
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-			
-				new FractalTreeBuilder(FractalTreeType.SAVANNA_BIG).build(world, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))			
+					new FractalTreeBuilder(FractalTreeType.SAVANNA_BIG).build(world, data, treeX, treeY, treeZ);
 			}
 		}
 		//Savanna trees are very spaced. low chance. Only spawned when no big tree in the same chunk
@@ -69,8 +69,8 @@ public class SavannaHandler extends BiomeHandler {
 			int treeZ = GenUtils.randInt(random, 0,15) + data.getChunkZ()*16;
 			if(data.getBiome(treeX, treeZ) == getBiome()){
 				int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-			
-				new FractalTreeBuilder(FractalTreeType.SAVANNA_SMALL).build(world, data, treeX, treeY, treeZ);
+				if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))			
+					new FractalTreeBuilder(FractalTreeType.SAVANNA_SMALL).build(world, data, treeX, treeY, treeZ);
 			}
 		}
 			
