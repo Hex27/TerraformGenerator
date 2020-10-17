@@ -10,6 +10,11 @@ public abstract class PathPopulatorAbstract {
 		return 3;
 	}
 	
+
+	public int getPathHeight(){
+		return 3;
+	}
+	
 	public abstract void populate(PathPopulatorData ppd);
 	
 	/**

@@ -20,6 +20,7 @@ import org.terraform.command.MineshaftCommand;
 import org.terraform.command.MonumentCommand;
 import org.terraform.command.MushroomCommand;
 import org.terraform.command.PreviewCommand;
+import org.terraform.command.PyramidCommand;
 import org.terraform.command.SchematicLoadCommand;
 import org.terraform.command.SchematicSaveCommand;
 import org.terraform.command.ShipwreckCommand;
@@ -63,6 +64,7 @@ public class TerraformCommandManager extends DCCommandManager {
 		this.registerCommand(new LocateCommand(plugin, "locate"));
 		this.registerCommand(new SchematicSaveCommand(plugin, "save"));
 		this.registerCommand(new SchematicLoadCommand(plugin, "load"));
+		//this.registerCommand(new PyramidCommand(plugin, "pyramid"));
 		this.registerCommand(new BlockDataTestCommand(plugin, "blockdatatest","bdt"));
 	}
 

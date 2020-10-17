@@ -59,7 +59,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator{
 				GenUtils.randInt(rand,5,7),
 				 x, y, z);
 		
-		room.fillRoom(data, new Material[]{
+		room.fillRoom(data, -1, new Material[]{
 				Material.COBBLESTONE,
 				Material.MOSSY_COBBLESTONE},
 				Material.CAVE_AIR);

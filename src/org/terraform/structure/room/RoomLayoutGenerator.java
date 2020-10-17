@@ -27,6 +27,7 @@ public class RoomLayoutGenerator {
 	private PathPopulatorAbstract pathPop;
 	private boolean carveRooms = false;
 	private boolean pyramidish = false;
+	private int tile = -1;
 	private ArrayList<RoomPopulatorAbstract> roomPops = new ArrayList<>();
 	private RoomLayout layout;
 	public RoomLayoutGenerator(Random random, RoomLayout layout, int numRooms, int centX, int centY, int centZ, int range){
@@ -214,9 +215,9 @@ public class RoomLayoutGenerator {
 			if(carveRooms) room = new CarvedRoom(room);
 			
 			if(allowOverlaps)
-				room.fillRoom(data, mat, Material.CAVE_AIR);
+				room.fillRoom(data, tile, mat, Material.CAVE_AIR);
 			else
-				room.fillRoom(data, mat, Material.AIR);
+				room.fillRoom(data, tile, mat, Material.AIR);
 		}
 		
 		//Populate pathways
@@ -470,6 +471,10 @@ public class RoomLayoutGenerator {
 	 */
 	public void setPathPop(PathPopulatorAbstract pathPop) {
 		this.pathPop = pathPop;
+	}
+
+	public void setTile(int tile) {
+		this.tile = tile;
 	}
 	
 

@@ -1,5 +1,6 @@
 package org.terraform.coregen.v1_16_R2;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.BitSet;
@@ -52,9 +53,7 @@ import net.minecraft.server.v1_16_R2.StructureManager;
 import net.minecraft.server.v1_16_R2.StructureSettings;
 import net.minecraft.server.v1_16_R2.TileEntity;
 import net.minecraft.server.v1_16_R2.WorldChunkManager;
-import net.minecraft.server.v1_16_R2.WorldGenCanyonOcean;
 import net.minecraft.server.v1_16_R2.WorldGenCarverWrapper;
-import net.minecraft.server.v1_16_R2.WorldGenCavesOcean;
 import net.minecraft.server.v1_16_R2.WorldGenStage;
 import net.minecraft.server.v1_16_R2.WorldServer;
 
@@ -125,7 +124,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //    private BiomeBase getBiome(BiomeManager biomemanager, BlockPosition bp) {
 //    	return CraftBlock.biomeToBiomeBase(this.b,tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
 //    }
-
     @Override
     public void doCarving(long i, BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
         BiomeManager biomemanager1 = biomemanager.a(this.b);
@@ -144,15 +142,19 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 while (listiterator.hasNext()) {
                     int j1 = listiterator.nextIndex();
                     WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper<?>) ((Supplier<?>) listiterator.next()).get();
-
-	                  if(WorldGenCarverWrapper.a instanceof WorldGenCavesOcean){
-	                	  //if(!TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
-	              		continue;
-		              }
-		              if(WorldGenCarverWrapper.a instanceof WorldGenCanyonOcean){
-		              		//if(!TConfigOption.CAVES_ALLOW_FLOODED_RAVINES.getBoolean())
-		              		continue;
-		              }
+                    //d field is the carver. Use reflection to get it.
+                    try {
+						Field field = WorldGenCarverWrapper.class.getDeclaredField("d");
+						if(!field.isAccessible())
+							field.setAccessible(true);
+						String carverType = field.get(worldgencarverwrapper).getClass().getSimpleName();
+						if(carverType.equals("WorldGenCanyonOcean")||
+								carverType.equals("WorldGenCavesOcean")){
+		                	continue;
+			            }
+                    } catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
                     
                     seededrandom.c(i + (long) j1, l, i1);
                     if (worldgencarverwrapper.a(seededrandom, l, i1)) {
@@ -164,43 +166,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     }
     
-//    @Override
-//    public void doCarving(long seed, BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
-//        SeededRandom seededrandom = new SeededRandom();
-//        BiomeManager biomemanager1 = biomemanager.a(this.b);
-//        
-//        ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
-//        int chunkX = chunkcoordintpair.x;
-//        int chunkZ = chunkcoordintpair.z;
-//        BiomeSettingsGeneration biomesettingsgeneration = this.b.getBiome(chunkcoordintpair.x << 2, 0, chunkcoordintpair.z << 2).e();
-//        BitSet bitset = ((ProtoChunk) ichunkaccess).b(worldgenstage_features);
-//        for (int k = chunkX - 8; k <= chunkX + 8; ++k) {
-//            for (int l = chunkZ - 8; l <= chunkZ + 8; ++l) {
-//            	List<Supplier<WorldGenCarverWrapper<?>>> list = biomesettingsgeneration.a(worldgenstage_features);
-//
-//                ListIterator<Supplier<WorldGenCarverWrapper<?>>> listiterator = list.listIterator();
-//
-//                while (listiterator.hasNext()) {
-//                    int i1 = listiterator.nextIndex();
-//                    WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper<?>) listiterator.next();
-//                    if(WorldGenCarverWrapper.a instanceof WorldGenCavesOcean){
-//                    	//if(!TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
-//                    		continue;
-//                    }
-//                    if(WorldGenCarverWrapper.a instanceof WorldGenCanyonOcean){
-//                    	//if(!TConfigOption.CAVES_ALLOW_FLOODED_RAVINES.getBoolean())
-//                    		continue;
-//                    }
-//                    seededrandom.c(seed + (long) i1, k, l);
-//                    if (worldgencarverwrapper.a(seededrandom, k, l)) {
-//                        worldgencarverwrapper.a(ichunkaccess, biomemanager1::a, seededrandom, this.getSeaLevel(), k, l, chunkX, chunkZ, bitset);
-//                    }
-//                }
-//            }
-//        }
-//
-//    }
-//    
     @Override
     public int getSeaLevel(){
     	return TerraformGenerator.seaLevel;
@@ -288,47 +253,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 		}
     }
 
-//	@Override
-//	public void buildNoise(GeneratorAccess generatoraccess, IChunkAccess ichunkaccess) {
-//		BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-//        TerraformGenerator gen = new TerraformGenerator();
-//        CustomBiomeGrid biomegrid = new CustomBiomeGrid(new BiomeStorage(ichunkaccess.getPos(), this.getWorldChunkManager()));
-//        
-//        ChunkData cd = gen.generateChunkData(tw.getWorld(), tw.getRand(3), ichunkaccess.getPos().x, ichunkaccess.getPos().z, biomegrid);
-//        
-//        for(int x = 0; x < 16; x++){
-//        	for(int z = 0; z < 16; z++){
-//        		for(int y = 0; y < 255; y++){
-//    				int rawX = ichunkaccess.getPos().x*16 + x;
-//    				int rawZ = ichunkaccess.getPos().z*16 + z;
-//                	ichunkaccess.getBiomeIndex().setBiome(x, y, z, CraftBlock.biomeToBiomeBase(biomegrid.getBiome(x,z)));
-//                	generatoraccess.setTypeAndData(blockposition_mutableblockposition.d(x,y,z), CraftBlockData.newData(cd.getType(x,y,z), "").getState(), 0);
-//                }
-//            }
-//        }
-////		for (int x = 0; x < 16; ++x) {
-////            for (int z = 0; z < 16; ++z) {
-////				int rawX = ichunkaccess.getPos().x*16 + x;
-////				int rawZ = ichunkaccess.getPos().z*16 + z;
-////            	//double n = noise.GetNoise(rawX, rawZ)*7 + currentHeight;
-////				for(int y = (int) n; y >= 0; y--){
-////					ichunkaccess.getBiomeIndex().setBiome(x, y, z, Biomes.PLAINS);
-////					//chunk.setBlock(x, y, z, Material.GRASS_BLOCK);
-////					IBlockData iblockdata = Blocks.GRASS_BLOCK.getBlockData();//Material.GRASS_BLOCK.createBlockData();
-////	                
-////					if(y < n-3){
-////	                	iblockdata = Blocks.STONE.getBlockData();
-////	                }
-////					ichunkaccess.setType(blockposition_mutableblockposition.d(x,y,z), iblockdata, false);
-////	                
-////				}
-//////                heightmap.a(j, i, k, iblockdata);
-//////                heightmap1.a(j, i, k, iblockdata);
-////            }
-////        }
-//	
-//	}
-    
     @Override
     public List<BiomeSettingsMobs.c> getMobsFor(BiomeBase biomebase, StructureManager structuremanager, EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         if (structuremanager.a(blockposition, true, StructureGenerator.SWAMP_HUT).e()) {

@@ -1,0 +1,54 @@
+package org.terraform.structure.pyramid;
+
+import java.util.Map.Entry;
+import java.util.Random;
+
+import org.bukkit.Material;
+import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.Wall;
+import org.terraform.structure.room.CubeRoom;
+import org.terraform.structure.room.RoomPopulatorAbstract;
+
+public class TerracottaRoom extends RoomPopulatorAbstract{
+
+	public TerracottaRoom(Random rand, boolean forceSpawn, boolean unique) {
+		super(rand, forceSpawn, unique);
+	}
+
+	@Override
+	public void populate(PopulatorDataAbstract data, CubeRoom room) {
+		for(Entry<Wall,Integer> entry:room.getFourWalls(data, 1).entrySet()) {
+			Wall w = entry.getKey();
+			for(int i = 0; i < entry.getValue(); i++) {
+				if(w.getRear().getType().isSolid()) {
+					if(!w.getRear().getLeft().getType().isSolid()||
+							!w.getRear().getRight().getType().isSolid()) {
+						w.Pillar(room.getHeight(), rand, Material.CHISELED_SANDSTONE);
+					}else {
+						if(i % 3 == 0) {
+							w.Pillar(room.getHeight(), true, rand, Material.BLUE_TERRACOTTA,Material.YELLOW_TERRACOTTA);
+							//w.getRear().Pillar(room.getHeight(), true, rand, Material.BLUE_TERRACOTTA,Material.BARRIER,Material.BLUE_TERRACOTTA,Material.BARRIER);
+						}else {
+							w.Pillar(room.getHeight(), true, rand, Material.YELLOW_TERRACOTTA,Material.BLUE_TERRACOTTA);
+							//w.getRear().Pillar(room.getHeight(), true, rand, Material.BARRIER,Material.BLUE_TERRACOTTA,Material.BARRIER,Material.BLUE_TERRACOTTA);
+						}
+					}
+				}else {
+					w.getRelative(0,3,0).Pillar(room.getHeight()-3, rand, Material.CHISELED_SANDSTONE);
+				}
+				
+				w = w.getLeft();
+			}
+		}
+		
+	}
+	
+
+	@Override
+	public boolean canPopulate(CubeRoom room) {
+		return room.getWidthX() >= 5 && room.getWidthZ() >= 5;
+	}
+	
+	
+
+}

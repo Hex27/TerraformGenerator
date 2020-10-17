@@ -68,24 +68,32 @@ public class CubeRoom {
 	}
 	
 	public void fillRoom(PopulatorDataAbstract data, Material[] mat){
-		fillRoom(data,mat,Material.AIR);
+		fillRoom(data,-1,mat,Material.AIR);
 	}
-	public void fillRoom(PopulatorDataAbstract data, Material[] mat, Material fillMat){
+	public void fillRoom(PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat){
+		int tileIndex = 0;
+		//Create a solid block with the specified width 
 		for(int nx = x-widthX/2; nx <= x+widthX/2; nx++){
-			
 			for(int ny = y; ny <= y+height; ny++){
-				for(int nz = z-widthZ/2; nz <= z+widthZ/2; nz++){					//Tis' a pathway
+				for(int nz = z-widthZ/2; nz <= z+widthZ/2; nz++){
 					if(data.getType(nx,ny,nz) == Material.CAVE_AIR)
 						continue;
-					//TODO: Set to fill ceiling later on. Now using barriers for easy sight
 //					if(ny == y+height){
 //						data.setType(nx, ny, nz, Material.BARRIER);
 //						continue;
 //					}
-					data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
+					if(tile == -1)
+						data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
+					else 
+					{
+						data.setType(nx, ny, nz, mat[(Math.abs(nz+widthZ/2+ny+nx+widthX/2-tileIndex))%mat.length]);
+						tileIndex += 1;
+						if(tileIndex == 2) tileIndex = 0;
+					}
 				}
 			}
 		}
+		//Hollow out the room
 		for(int nx = x-widthX/2 +1; nx <= x+widthX/2-1; nx++){
 			for(int ny = y+1; ny <= y+height-1; ny++){
 				for(int nz = z-widthZ/2+1; nz <= z+widthZ/2-1; nz++){

@@ -21,7 +21,7 @@ public class CarvedRoom extends CubeRoom{
 	 * Fillmat is always CAVE_AIR no matter what's being put lol.
 	 */
 	@Override
-	public void fillRoom(PopulatorDataAbstract data, Material[] mat, Material fillMat){
+	public void fillRoom(PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat){
 		int heightOffset = height-(2*height/3);
 		BlockUtils.carveCaveAir(new Random().nextInt(9999291), 
 				widthX/2, 2*height/3, widthZ/2, 

@@ -68,6 +68,26 @@ public class BlockUtils {
 		add(BlockFace.WEST);
 	}};
 	
+	/**
+	 * @param original
+	 * @param times
+	 * @return rotates original block face (NSEW only) clockwise the specified number of times
+	 */
+	public static BlockFace rotateFace(BlockFace original, int times) {
+		for(int i = 0; i < times; i++)
+			if(original == BlockFace.NORTH)
+				original = BlockFace.EAST;
+			else if(original == BlockFace.EAST)
+					original = BlockFace.SOUTH;
+			else if(original == BlockFace.SOUTH)
+				original = BlockFace.WEST;
+			else if(original == BlockFace.WEST)
+				original = BlockFace.NORTH;
+		
+		return original;
+	}
+	
+	
 	public static final Material[] stoneBricks = new Material[]{
 		Material.STONE_BRICKS,
 		Material.MOSSY_STONE_BRICKS,

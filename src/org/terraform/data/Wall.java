@@ -154,6 +154,17 @@ public class Wall {
 		}
 	}
 	
+	public void Pillar(int height, boolean pattern, Random rand, Material... types){
+		for(int i = 0; i < height; i++){
+			if(Arrays.equals(new Material[] {Material.BARRIER}, types)) continue;
+			if(!pattern)
+				block.getRelative(0,i,0).setType(GenUtils.randMaterial(rand, types));
+			else if(types[i%types.length] != Material.BARRIER)
+				block.getRelative(0,i,0).setType(types[i%types.length]);
+		}
+	}
+	
+	
 	/**
 	 * Replaces until a solid block is reached.
 	 * @param height

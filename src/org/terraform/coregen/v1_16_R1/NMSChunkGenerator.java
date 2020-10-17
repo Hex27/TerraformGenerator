@@ -1,5 +1,6 @@
 package org.terraform.coregen.v1_16_R1;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.BitSet;
@@ -46,9 +47,7 @@ import net.minecraft.server.v1_16_R1.StructureManager;
 import net.minecraft.server.v1_16_R1.StructureSettings;
 import net.minecraft.server.v1_16_R1.TileEntity;
 import net.minecraft.server.v1_16_R1.WorldChunkManager;
-import net.minecraft.server.v1_16_R1.WorldGenCanyonOcean;
 import net.minecraft.server.v1_16_R1.WorldGenCarverWrapper;
-import net.minecraft.server.v1_16_R1.WorldGenCavesOcean;
 import net.minecraft.server.v1_16_R1.WorldGenStage;
 import net.minecraft.server.v1_16_R1.WorldServer;
 
@@ -66,7 +65,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 		return tw;
 	}
 
-	private String worldName;
 	private TerraformPopulator pop;
 	private TerraformWorld tw;
 	
@@ -77,7 +75,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
         ((ProtoChunk) ichunkaccess).a(new BiomeStorage(chunkcoordintpair, this.c));
         
-        final BiomeBase[] biomeBases = new BiomeBase[16 * 16];
         int chunkX = ichunkaccess.getPos().x;
         int chunkZ = ichunkaccess.getPos().z;
         for(int x = chunkX*16; x < chunkX*16+16; x++){
@@ -182,14 +179,18 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 while (listiterator.hasNext()) {
                     int i1 = listiterator.nextIndex();
                     WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper<?>) listiterator.next();
-                    if(WorldGenCarverWrapper.a instanceof WorldGenCavesOcean){
-                    	//if(!TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
-                    		continue;
-                    }
-                    if(WorldGenCarverWrapper.a instanceof WorldGenCanyonOcean){
-                    	//if(!TConfigOption.CAVES_ALLOW_FLOODED_RAVINES.getBoolean())
-                    		continue;
-                    }
+                    try {
+						Field field = WorldGenCarverWrapper.class.getDeclaredField("d");
+						if(!field.isAccessible())
+							field.setAccessible(true);
+						String carverType = field.get(worldgencarverwrapper).getClass().getSimpleName();
+						if(carverType.equals("WorldGenCanyonOcean")||
+								carverType.equals("WorldGenCavesOcean")){
+		                	continue;
+			            }
+                    } catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
                     seededrandom.c(seed + (long) i1, k, l);
                     if (worldgencarverwrapper.a(seededrandom, k, l)) {
                         worldgencarverwrapper.a(ichunkaccess, (blockposition) -> {
