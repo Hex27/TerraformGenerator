@@ -1,6 +1,7 @@
 package org.terraform.structure.pyramid;
 
 import java.util.Map.Entry;
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -8,6 +9,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
+import org.terraform.utils.BlockUtils;
 
 public class TerracottaRoom extends RoomPopulatorAbstract{
 
@@ -17,6 +19,8 @@ public class TerracottaRoom extends RoomPopulatorAbstract{
 
 	@Override
 	public void populate(PopulatorDataAbstract data, CubeRoom room) {
+		//Decorate the walls with Terracotta
+		ArrayList<Wall> entrances = new ArrayList<>();
 		for(Entry<Wall,Integer> entry:room.getFourWalls(data, 1).entrySet()) {
 			Wall w = entry.getKey();
 			for(int i = 0; i < entry.getValue(); i++) {
@@ -34,6 +38,7 @@ public class TerracottaRoom extends RoomPopulatorAbstract{
 						}
 					}
 				}else {
+					entrances.add(w.clone());
 					w.getRelative(0,3,0).Pillar(room.getHeight()-3, rand, Material.CHISELED_SANDSTONE);
 				}
 				
@@ -41,6 +46,20 @@ public class TerracottaRoom extends RoomPopulatorAbstract{
 			}
 		}
 		
+		//Make sure entrances are not blocked
+		for(Wall w:entrances) {
+			w.Pillar(room.getHeight(),rand,Material.AIR);
+		}
+		entrances = null;
+		
+		//Decorate the floor with glazed terracotta
+		int[] lowerCorner = room.getLowerCorner(2);
+		int[] upperCorner = room.getUpperCorner(2);
+		for(int x = lowerCorner[0]; x <= upperCorner[0]; x += 2) {
+			for(int z = lowerCorner[1]; z <= upperCorner[1]; z += 2) {
+				BlockUtils.horizontalGlazedTerracotta(data, x, room.getY(), z, Material.YELLOW_GLAZED_TERRACOTTA);
+			}
+		}
 	}
 	
 

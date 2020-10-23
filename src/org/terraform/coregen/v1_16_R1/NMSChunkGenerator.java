@@ -180,7 +180,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     int i1 = listiterator.nextIndex();
                     WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper<?>) listiterator.next();
                     try {
-						Field field = WorldGenCarverWrapper.class.getDeclaredField("d");
+						Field field = WorldGenCarverWrapper.class.getDeclaredField("b");
 						if(!field.isAccessible())
 							field.setAccessible(true);
 						String carverType = field.get(worldgencarverwrapper).getClass().getSimpleName();

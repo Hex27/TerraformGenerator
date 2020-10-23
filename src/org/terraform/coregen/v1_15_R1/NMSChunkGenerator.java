@@ -65,7 +65,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
         ((ProtoChunk) ichunkaccess).a(new BiomeStorage(chunkcoordintpair, this.c));
         
-        final BiomeBase[] biomeBases = new BiomeBase[16 * 16];
         int chunkX = ichunkaccess.getPos().x;
         int chunkZ = ichunkaccess.getPos().z;
         for(int x = chunkX*16; x < chunkX*16+16; x++){
@@ -156,7 +155,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
     @Override
     public void doCarving(BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
         SeededRandom seededrandom = new SeededRandom();
-        boolean flag = true;
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
         int chunkX = chunkcoordintpair.x;
         int chunkZ = chunkcoordintpair.z;

@@ -48,25 +48,21 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator{
 	@Override
 	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
-		ArrayList<BiomeBank> banks = new ArrayList<>();
-		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
-			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-				for(BiomeBank bank:BiomeBank.values()){
-					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
-					
-					//Must be in deep ocean. Check done in canSpawn
-					//if(currentBiome.getType() != BiomeType.DEEP_OCEANIC) 
-					//	return;
-					
-					if(bank == currentBiome){
-						if(!banks.contains(bank))
-							banks.add(bank);
-						break;
-					}
-				}
-			}
-		}
+//		ArrayList<BiomeBank> banks = new ArrayList<>();
+//		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
+//			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
+//				int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
+//				for(BiomeBank bank:BiomeBank.values()){
+//					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
+//					
+//					if(bank == currentBiome){
+//						if(!banks.contains(bank))
+//							banks.add(bank);
+//						break;
+//					}
+//				}
+//			}
+//		}
 		int[] coords = getCoordsFromMegaChunk(tw,new MegaChunk(data.getChunkX(),data.getChunkZ()));
 		int x = coords[0];
 		int z = coords[1];
@@ -98,12 +94,10 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator{
 		entranceRoom.setRoomPopulator(entrancePopulator);
 		level0.getRooms().add(entranceRoom);
 		level0.registerRoomPopulator(new HuskTombPopulator(random,false,false));
-		level0.registerRoomPopulator(new TerracottaRoom(random,false,false));
+		level0.registerRoomPopulator(new CryptRoom(random,false,false));
 		level0.setPathPopulator(new PyramidDungeonPathPopulator(tw.getHashedRand(x, y-8, z, 2233)));
 		
 		range -= 20;
-		
-		//This is within the dome
 		
 		//Level 1
 		RoomLayoutGenerator level1 = new RoomLayoutGenerator(hashedRand,RoomLayout.RANDOM_BRUTEFORCE,numRooms,x,y,z,range);

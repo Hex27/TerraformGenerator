@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rail.Shape;
@@ -265,6 +266,24 @@ public class BlockUtils {
 				Material.PEONY,
 				Material.LARGE_FERN,
 				Material.SUNFLOWER);
+	}
+	
+	public static void horizontalGlazedTerracotta(PopulatorDataAbstract data, int x, int y, int z, Material glazedTerracotta) {
+		Directional terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+		terracotta.setFacing(BlockFace.NORTH);
+		data.setBlockData(x, y, z, terracotta);
+		
+		terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+		terracotta.setFacing(BlockFace.EAST);
+		data.setBlockData(x+1, y, z, terracotta);
+		
+		terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+		terracotta.setFacing(BlockFace.WEST);
+		data.setBlockData(x, y, z+1, terracotta);
+		
+		terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+		terracotta.setFacing(BlockFace.SOUTH);
+		data.setBlockData(x+1, y, z+1, terracotta);
 	}
 	
 	public static void setVines(PopulatorDataAbstract data, TerraformWorld tw, int x, int y, int z, int maxLength){
