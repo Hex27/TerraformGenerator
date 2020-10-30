@@ -16,7 +16,14 @@ import java.util.Collection;
 import java.util.Random;
 
 public class GenUtils {
-    
+
+    private static final Random RANDOMIZER = new Random();
+    private static final String[] BLACKLIST_HIGHEST_GROUND = {
+            "LEAVES", "LOG",
+            "WOOD", "MUSHROOM",
+            "FENCE", "WALL",
+            "POTTED", "BRICK"};
+
     public static SimplexOctaveGenerator getGenerator(World world) {
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), 8);
         generator.setScale(0.005D);
@@ -95,25 +102,14 @@ public class GenUtils {
 
     public static Material weightedRandomMaterial(Random rand, Object... candidates) {
         if (candidates.length % 2 != 0) throw new IllegalArgumentException();
-        ArrayList<Material> types = new ArrayList<>();
+        ArrayList<Material> types = new ArrayList<>(50);
         for (int i = 0; i < candidates.length; i++) {
-            Material type = (Material) candidates[i];
-            i++;
-            int freq = (Integer) candidates[i];
-            for (int z = 0; z < freq; z++) {
-                types.add(type);
-            }
+            Material type = (Material) candidates[i++];
+            int freq = (int) candidates[i];
+            for (int z = 0; z < freq; z++) types.add(type);
         }
 
         return types.get(randInt(rand, 0, types.size() - 1));
-    }
-
-    public static Material randMaterial(Random rand, Material... candidates) {
-        return candidates[randInt(rand, 0, candidates.length - 1)];
-    }
-
-    public static Material randMaterial(Material... candidates) {
-        return randMaterial(new Random(), candidates);
     }
 
 //	public static Location randomConfinedSurfaceCoordinates(Random rand, PopulatorDataAbstract c){
@@ -123,6 +119,14 @@ public class GenUtils {
 //		
 //		return data.getBlock(x, y, z).getLocation();
 //	}
+
+    public static Material randMaterial(Random rand, Material... candidates) {
+        return candidates[randInt(rand, 0, candidates.length - 1)];
+    }
+
+    public static Material randMaterial(Material... candidates) {
+        return randMaterial(new Random(), candidates);
+    }
 
     public static int[] randomSurfaceCoordinates(Random rand, PopulatorDataAbstract data) {
         int chunkX = data.getChunkX();
@@ -135,9 +139,7 @@ public class GenUtils {
     }
 
     public static int randInt(int min, int max) {
-
-
-        return randInt(new Random(), min, max);
+        return randInt(RANDOMIZER, min, max);
     }
 
     public static int randInt(Random rand, int d, int max) {
@@ -173,20 +175,6 @@ public class GenUtils {
         return rand.nextDouble() * (max - min) + min;
     }
 
-    public static boolean diceRoll(int sides) {
-        return diceRoll(new Random(), sides);
-    }
-
-    public static boolean diceRoll(Random rand, int sides) {
-        return randInt(rand, 1, sides) == sides;
-    }
-
-    public static Location getHighestBlock(World w, int x, int z) {
-        int y = w.getMaxHeight() - 1;
-        while (!w.getBlockAt(x, y, z).getType().isSolid()) y--;
-        return new Location(w, x, y, z);
-    }
-
 //	public static int getHighestSpawnableBlock(Chunk c, int x, int z){
 //		int y = getOctaveHeightAt(c,x,z);
 //		if(c.getBlock(x, y, z).getType().isSolid() &&
@@ -197,6 +185,12 @@ public class GenUtils {
 //		return getHighestBlock(c,x,z);
 //	}
 //	
+
+    public static Location getHighestBlock(World w, int x, int z) {
+        int y = w.getMaxHeight() - 1;
+        while (!w.getBlockAt(x, y, z).getType().isSolid()) y--;
+        return new Location(w, x, y, z);
+    }
 
     public static int getHighestBlock(Chunk c, int x, int z, Collection<Material> airs) {
         int y;
@@ -219,18 +213,13 @@ public class GenUtils {
 
         return y;
     }
-    
-    private static final String[] BLACKLIST_HIGHEST_GROUND = {
-    		"LEAVES", "LOG", 
-    		"WOOD", "MUSHROOM", 
-    		"FENCE", "WALL", 
-    		"POTTED", "BRICK"};
+
     /**
      * @return the highest solid ground. Is dirt-like or stone-like, and is
      * not leaves or logs
      */
     @SuppressWarnings("incomplete-switch")
-	public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
+    public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
         int y = 255;
         while (y > 0) {
             Material block = data.getType(x, y, z);
@@ -265,14 +254,14 @@ public class GenUtils {
                     y--;
                     continue;
                 }
-            }else {
+            } else {
                 y--;
-            	continue;
+                continue;
             }
             break;
         }
-        if(y == 0)
-        	TerraformGeneratorPlugin.logger.error("GetHighestGround returned 0!");
+        if (y == 0)
+            TerraformGeneratorPlugin.logger.error("GetHighestGround returned 0!");
         return y;
     }
 

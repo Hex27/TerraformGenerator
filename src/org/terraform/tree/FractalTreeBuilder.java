@@ -325,7 +325,7 @@ public class FractalTreeBuilder {
 
 
         if (!spawnedBees
-                && Version.isAtLeast("1_15_R1")
+                && Version.isAtLeast(15.1)
                 && GenUtils.chance(rand, (int) (beeChance * 1000.0), 1000)) {
             for (int i = 0; i < 3; i++) {
                 if (!two.getRelative(0, -i, 0).getType().isSolid()) {
@@ -488,7 +488,7 @@ public class FractalTreeBuilder {
                                 && Math.abs(z) >= rZ - 2) {
                             //Coca beans
                             if (GenUtils.chance(cocabeans, 100)) {
-                                for (BlockFace face : new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}) {
+                                for (BlockFace face : BlockUtils.directBlockFaces) {
                                     Directional dir = (Directional) Bukkit.createBlockData(Material.COCOA);
                                     dir.setFacing(face.getOppositeFace());
                                     ((Ageable) dir).setAge(GenUtils.randInt(rand, 0, ((Ageable) dir).getMaximumAge()));
@@ -511,7 +511,7 @@ public class FractalTreeBuilder {
                             //Vines set only if the leaftype is leaves.
                             if (leafType.toString().contains("LEAVES"))
                                 if (GenUtils.chance(1, 10)) {
-                                    for (BlockFace face : new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}) {
+                                    for (BlockFace face : BlockUtils.directBlockFaces) {
                                         MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
                                         dir.setFace(face.getOppositeFace(), true);
                                         SimpleBlock vine = rel.getRelative(face);
@@ -535,11 +535,11 @@ public class FractalTreeBuilder {
         }
 
         //Ensures that corals don't die
-        while (changed.size() > 0) {
+        while (!changed.isEmpty()) {
             SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));
             if (!CoralGenerator.isSaturatedCoral(sb)) {
                 //No floating coral fans
-                for (BlockFace face : BlockUtils.nsew) {
+                for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (sb.getRelative(face).getType().toString().endsWith("WALL_FAN"))
                         sb.getRelative(face).setType(Material.WATER);
                 }
@@ -563,12 +563,12 @@ public class FractalTreeBuilder {
             leaf.setDistance(1);
         }
         for (int i = 1; i <= GenUtils.randInt(min, max); i++) {
-            if (!block.getRelative(0, 0 - i, 0).getType().isSolid()) {
+            if (!block.getRelative(0, -i, 0).getType().isSolid()) {
 //				if(leafRadiusX > 5 || leafRadiusY > 5 || leafRadiusZ > 5)
 //					leaf.setPersistent(true);
 //				else
 
-                block.getRelative(0, 0 - i, 0).lsetBlockData(type);
+                block.getRelative(0, -i, 0).lsetBlockData(type);
             } else
                 break;
         }

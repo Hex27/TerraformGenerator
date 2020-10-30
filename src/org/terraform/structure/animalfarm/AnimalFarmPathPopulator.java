@@ -11,9 +11,8 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class AnimalFarmPathPopulator extends PathPopulatorAbstract {
-
-    Random rand;
-    RoomLayoutGenerator gen;
+    private final Random rand;
+    private final RoomLayoutGenerator gen;
 
     public AnimalFarmPathPopulator(RoomLayoutGenerator gen, Random rand) {
         this.gen = gen;
@@ -37,8 +36,5 @@ public class AnimalFarmPathPopulator extends PathPopulatorAbstract {
             w.getLeft().getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
         if (GenUtils.chance(rand, 2, 10))
             w.getRight().getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
-
     }
-
-
 }

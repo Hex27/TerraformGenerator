@@ -21,10 +21,7 @@ import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise.NoiseType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class BlockUtils {
     // N
@@ -33,18 +30,13 @@ public class BlockUtils {
     public static final List<BlockFace> xzPlaneBlockFaces = Arrays.asList(
             BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
     );
-
     public static final BlockFace[] BLOCK_FACES = BlockFace.values();
-
     public static final BlockFace[] xzDiagonalPlaneBlockFaces = {BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST};
-
-
-    public static final BlockFace[] nsew = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
     public static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
     public static final Material[] stoneBrickSlabs = {Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB};
-    public static final List<BlockFace> directBlockFaces = Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
+    public static final BlockFace[] directBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
     public static final BlockFace[] sixBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
-    public static final List<Material> stoneLike = Arrays.asList(
+    public static final Set<Material> stoneLike = EnumSet.of(
             Material.STONE, Material.COBBLESTONE, Material.GRANITE, Material.ANDESITE, Material.DIORITE, Material.GRAVEL, Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE,
             Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE, Material.SNOW_BLOCK, Material.PACKED_ICE, Material.BLUE_ICE
     );
@@ -52,19 +44,37 @@ public class BlockUtils {
             Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE,
     };
 
+    public static boolean isDirectBlockFace(BlockFace facing) {
+        switch (facing) {
+            case NORTH:
+            case SOUTH:
+            case EAST:
+            case WEST:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     /**
      * @return rotates original block face (NSEW only) clockwise the specified number of times
      */
     public static BlockFace rotateFace(BlockFace original, int times) {
         for (int i = 0; i < times; i++) {
-            if (original == BlockFace.NORTH)
-                original = BlockFace.EAST;
-            else if (original == BlockFace.EAST)
-                original = BlockFace.SOUTH;
-            else if (original == BlockFace.SOUTH)
-                original = BlockFace.WEST;
-            else if (original == BlockFace.WEST)
-                original = BlockFace.NORTH;
+            switch (original) {
+                case NORTH:
+                    original = BlockFace.EAST;
+                    break;
+                case EAST:
+                    original = BlockFace.SOUTH;
+                    break;
+                case SOUTH:
+                    original = BlockFace.WEST;
+                    break;
+                case WEST:
+                    original = BlockFace.NORTH;
+                    break;
+            }
         }
         return original;
     }
@@ -81,7 +91,7 @@ public class BlockUtils {
         return xzPlaneBlockFaces.get(rand.nextInt(8));
     }
 
-    public static Axis axisFromBlockFace(BlockFace face) {
+    public static Axis getAxisFromBlockFace(BlockFace face) {
         switch (face) {
             case NORTH:
             case SOUTH:
@@ -93,12 +103,12 @@ public class BlockUtils {
             case DOWN:
                 return Axis.Y;
             default:
-                return null;
+                throw new IllegalArgumentException("Invalid block facing for axis: " + face);
         }
     }
 
     public static BlockFace getDirectBlockFace(Random rand) {
-        return directBlockFaces.get(rand.nextInt(4));
+        return directBlockFaces[rand.nextInt(4)];
     }
 
     public static Material getWoodForBiome(BiomeBank biome, String wood) {
@@ -182,7 +192,7 @@ public class BlockUtils {
 
     public static void setVines(PopulatorDataAbstract data, TerraformWorld tw, int x, int y, int z, int maxLength) {
         SimpleBlock rel = new SimpleBlock(data, x, y, z);
-        for (BlockFace face : new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}) {
+        for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
             dir.setFace(face.getOppositeFace(), true);
             SimpleBlock vine = rel.getRelative(face);
@@ -210,8 +220,8 @@ public class BlockUtils {
 
     public static void downPillar(int x, int y, int z, int height, PopulatorDataAbstract data, Material... type) {
         while (!data.getType(x, y, z).isSolid() && height > 0) {
-            height--;
             data.setType(x, y, z, GenUtils.randMaterial(type));
+            height--;
             y--;
         }
     }
@@ -219,7 +229,6 @@ public class BlockUtils {
     public static boolean isStoneLike(Material mat) {
         return isDirtLike(mat) || stoneLike.contains(mat);
     }
-
 
     public static boolean isDirtLike(Material mat) {
         switch (mat) {
@@ -247,7 +256,6 @@ public class BlockUtils {
     }
 
     public static void setDoublePlant(PopulatorDataAbstract data, int x, int y, int z, Material doublePlant) {
-
         Bisected d = ((Bisected) Bukkit.createBlockData(doublePlant));
         d.setHalf(Half.BOTTOM);
         data.setBlockData(x, y, z, d);
@@ -274,10 +282,7 @@ public class BlockUtils {
 
     public static int spawnPillar(Random rand, PopulatorDataAbstract data, int x, int y, int z, Material type, int minHeight, int maxHeight) {
         int height = GenUtils.randInt(rand, minHeight, maxHeight);
-
-        for (int i = 0; i < height; i++) {
-            data.setType(x, y + i, z, type);
-        }
+        for (int i = 0; i < height; i++) data.setType(x, y + i, z, type);
         return height;
     }
 
@@ -287,8 +292,7 @@ public class BlockUtils {
         int nx = x;
         int ny = y;
         int nz = z;
-        while (length > 0) {
-            length--;
+        while (length-- > 0) {
             if (data.getType(nx, ny, nz) == Material.SAND ||
                     data.getType(nx, ny, nz) == Material.GRAVEL ||
                     isDirtLike(data.getType(nx, ny, nz)))
@@ -317,12 +321,10 @@ public class BlockUtils {
             if (ny > y) ny = y;
             if (ny < 2) ny = 2;
         }
-
     }
 
     public static void vineUp(SimpleBlock base, int maxLength) {
-
-        for (BlockFace face : new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}) {
+        for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
             dir.setFace(face.getOppositeFace(), true);
             SimpleBlock vine = base.getRelative(face);
@@ -331,19 +333,16 @@ public class BlockUtils {
             vine.setType(Material.VINE);
             vine.setBlockData(dir);
             for (int i = 1; i < GenUtils.randInt(1, maxLength); i++) {
-                if (vine.getRelative(0, -i, 0).getType() != Material.AIR) break;
-                vine.getRelative(0, -i, 0).setType(Material.VINE);
-                vine.getRelative(0, -i, 0).setBlockData(dir);
+                SimpleBlock relative = vine.getRelative(0, -i, 0);
+                if (relative.getType() != Material.AIR) break;
+                relative.setType(Material.VINE);
+                relative.setBlockData(dir);
             }
         }
-
     }
 
     public static void replaceSphere(int seed, float radius, SimpleBlock base, boolean hardReplace, Material... type) {
-        if (radius <= 0) {
-            return;
-        }
-        replaceSphere(seed, radius, radius, radius, base, hardReplace, type);
+        if (radius > 0) replaceSphere(seed, radius, radius, radius, base, hardReplace, type);
     }
 
     public static void replaceSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean hardReplace, Material... type) {
@@ -351,19 +350,18 @@ public class BlockUtils {
     }
 
     public static void replaceWaterSphere(int seed, float radius, SimpleBlock base) {
-        if (radius <= 0) {
-            return;
-        }
+        if (radius <= 0) return;
         if (radius <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            if (base.getType() == Material.AIR ||
-                    base.getType() == Material.CAVE_AIR) return;
+            if (base.getType() == Material.AIR || base.getType() == Material.CAVE_AIR) return;
             base.setType(Material.WATER);
             return;
         }
+
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(0.09f);
+
         for (float x = -radius; x <= radius; x++) {
             for (float y = -radius; y <= radius; y++) {
                 for (float z = -radius; z <= radius; z++) {
@@ -387,27 +385,21 @@ public class BlockUtils {
     /**
      * Put barrier in toReplace to hard replace all solid blocks.
      */
-    public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, List<Material> toReplace) {
-        if (rX <= 0 &&
-                rY <= 0 &&
-                rZ <= 0) {
-            return;
-        }
-        if (rX <= 0.5 &&
-                rY <= 0.5 &&
-                rZ <= 0.5) {
+    public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, Collection<Material> toReplace) {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+        if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            if (block.getType() != Material.WATER || waterToAir)
-                block.setType(Material.CAVE_AIR);
+            if (waterToAir || block.getType() != Material.WATER) block.setType(Material.CAVE_AIR);
             return;
         }
+
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(0.09f);
+
         for (float x = -rX; x <= rX; x++) {
             for (float y = -rY; y <= rY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
-
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
@@ -435,26 +427,21 @@ public class BlockUtils {
     }
 
     public static void replaceSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean hardReplace, boolean snowy, Material... type) {
-        if (rX <= 0 &&
-                rY <= 0 &&
-                rZ <= 0) {
-            return;
-        }
-        if (rX <= 0.5 &&
-                rY <= 0.5 &&
-                rZ <= 0.5) {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+        if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
             block.setType(GenUtils.randMaterial(new Random(seed), type));
             return;
         }
+
         Random rand = new Random(seed);
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(0.09f);
+
         for (float x = -rX; x <= rX; x++) {
             for (float y = -rY; y <= rY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
-
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
@@ -475,26 +462,21 @@ public class BlockUtils {
     }
 
     public static void replaceUpperSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean hardReplace, Material... type) {
-        if (rX <= 0 &&
-                rY <= 0 &&
-                rZ <= 0) {
-            return;
-        }
-        if (rX <= 0.5 &&
-                rY <= 0.5 &&
-                rZ <= 0.5) {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+        if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
             block.setType(GenUtils.randMaterial(new Random(seed), type));
             return;
         }
+
         Random rand = new Random(seed);
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(0.09f);
+
         for (float x = -rX; x <= rX; x++) {
             for (float y = 0; y <= rY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
-
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
@@ -502,8 +484,7 @@ public class BlockUtils {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.getType().isSolid())
-                            rel.setType(GenUtils.randMaterial(rand, type));
+                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randMaterial(rand, type));
                         //rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
@@ -531,33 +512,26 @@ public class BlockUtils {
         return getAdjacentFaces(original)[GenUtils.randInt(rand, 0, 1)];
     }
 
-    public static Axis getAxisFromFace(BlockFace face) {
-        if (face == BlockFace.EAST || face == BlockFace.WEST) return Axis.X;
-        else if (face == BlockFace.NORTH || face == BlockFace.SOUTH) return Axis.Z;
-        else return Axis.Y;
-    }
-
     public static void correctMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
-            if (target.getType().toString().endsWith(("_WALL")) && Version.isAtLeast("1_16_R1")) {
-                org.terraform.coregen.v1_16_R1
-                        .BlockDataFixer.correctSurroundingWallData(target);
+            if (Version.isAtLeast(16.1) && target.getType().name().endsWith(("_WALL"))) {
+                org.terraform.coregen.v1_16_R1.BlockDataFixer.correctSurroundingWallData(target);
             }
             return;
         }
+
         MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
-            data.setFace(face, target.getRelative(face).getType().isSolid() && !target.getRelative(face).getType().toString().contains("PRESSURE_PLATE"));
+            Material type = target.getRelative(face).getType();
+            data.setFace(face, type.isSolid() && !type.name().contains("PRESSURE_PLATE"));
         }
-
         target.setBlockData(data);
     }
 
     public static void correctSurroundingMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
-            if (target.getType().toString().endsWith(("_WALL")) && Version.isAtLeast("1_16_R1")) {
-                org.terraform.coregen.v1_16_R1
-                        .BlockDataFixer.correctSurroundingWallData(target);
+            if (Version.isAtLeast(16.1) && target.getType().name().endsWith(("_WALL"))) {
+                org.terraform.coregen.v1_16_R1.BlockDataFixer.correctSurroundingWallData(target);
             }
             return;
         }
@@ -565,13 +539,15 @@ public class BlockUtils {
         correctMultifacingData(target);
         MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
-            if (target.getRelative(face).getBlockData() instanceof MultipleFacing)
+            if (target.getRelative(face).getBlockData() instanceof MultipleFacing) {
                 correctMultifacingData(target.getRelative(face));
+            }
         }
     }
 
     private static boolean isMushroom(SimpleBlock target) {
-        return target.getType().toString().endsWith("MUSHROOM_BLOCK");
+        Material material = target.getType();
+        return material == Material.BROWN_MUSHROOM_BLOCK || material == Material.RED_MUSHROOM_BLOCK;
     }
 
     public static void correctMushroomData(SimpleBlock target) {
@@ -586,9 +562,7 @@ public class BlockUtils {
 
     public static void correctSurroundingMushroomData(SimpleBlock target) {
         correctMushroomData(target);
-        for (BlockFace face : sixBlockFaces) {
-            correctMushroomData(target.getRelative(face));
-        }
+        for (BlockFace face : sixBlockFaces) correctMushroomData(target.getRelative(face));
     }
 
     public static void placeDoor(PopulatorDataAbstract data, Material mat, int x, int y, int z, BlockFace dir) {
@@ -600,7 +574,6 @@ public class BlockUtils {
         data.setBlockData(x, y, z, door);
 
         door = (Door) Bukkit.createBlockData(mat);
-        ;
         door.setFacing(dir);
         door.setHalf(Half.TOP);
         data.setBlockData(x, y + 1, z, door);
@@ -608,15 +581,12 @@ public class BlockUtils {
 
     public static void placeRail(SimpleBlock block, Material mat) {
         Rail rail = (Rail) Bukkit.createBlockData(mat);
-        ArrayList<BlockFace> faces = new ArrayList<>();
+        Set<BlockFace> faces = EnumSet.noneOf(BlockFace.class);
         BlockFace upperFace = null;
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (block.getRelative(face).getType().toString().contains("RAIL")) {
-                faces.add(face);
-            }
-            if (block.getRelative(face).getRelative(0, 1, 0).getType().toString().contains("RAIL")) {
-                upperFace = face;
-            }
+            SimpleBlock relative = block.getRelative(face);
+            if (relative.getType().name().contains("RAIL")) faces.add(face);
+            if (relative.getRelative(0, 1, 0).getType().name().contains("RAIL")) upperFace = face;
         }
 
         if (upperFace != null) {
@@ -648,7 +618,6 @@ public class BlockUtils {
             } else if (faces.contains(BlockFace.EAST) || faces.contains(BlockFace.WEST)) {
                 rail.setShape(Shape.EAST_WEST);
             }
-
         }
 
         block.setBlockData(rail);
@@ -659,10 +628,11 @@ public class BlockUtils {
 
         placeRail(target, target.getType());
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (target.getRelative(face).getBlockData() instanceof Rail)
-                placeRail(target.getRelative(face), target.getRelative(face).getType());
+            SimpleBlock relative = target.getRelative(face);
+            if (relative.getBlockData() instanceof Rail)
+                placeRail(relative, relative.getType());
             if (target.getRelative(face).getRelative(0, -1, 0).getBlockData() instanceof Rail)
-                placeRail(target.getRelative(face).getRelative(0, -1, 0), target.getRelative(0, -1, 0).getRelative(face).getType());
+                placeRail(relative.getRelative(0, -1, 0), target.getRelative(0, -1, 0).getRelative(face).getType());
         }
     }
 

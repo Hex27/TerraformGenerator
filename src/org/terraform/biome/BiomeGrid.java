@@ -126,7 +126,6 @@ public class BiomeGrid {
             return beachGrid[normalise(moisture)][normalise(temperature)];
 
         return null;
-
     }
 
     //11x11 grids
@@ -143,10 +142,10 @@ public class BiomeGrid {
 
     public static int normalise(double i) {
         if (i > 2.5) i = 2.5;
-        if (i < -2.5) i = -2.5;
+        else if (i < -2.5) i = -2.5;
 
         i += 2.5;//Range 0 to 5
-        i = i * 2; //Range 0 to 10
+        i *= 2; //Range 0 to 10
 
         return (int) Math.round(i);
     }

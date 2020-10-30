@@ -18,12 +18,6 @@ public class StairwayTopPopulator extends RoomPopulatorAbstract {
         super(rand, forceSpawn, unique);
     }
 
-    private static int getNextIndex(int bfIndex) {
-        bfIndex++;
-        if (bfIndex >= 8) bfIndex = 0;
-        return bfIndex;
-    }
-
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         //Open up the floor

@@ -40,12 +40,6 @@ public class StairwayRoomPopulator extends RoomPopulatorAbstract {
         }
     }
 
-    private int getNextIndex(int bfIndex) {
-        bfIndex++;
-        if (bfIndex >= 8) bfIndex = 0;
-        return bfIndex;
-    }
-
     @Override
     public boolean canPopulate(CubeRoom room) {
         return false;

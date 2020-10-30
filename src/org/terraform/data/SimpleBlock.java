@@ -15,9 +15,7 @@ import org.terraform.coregen.PopulatorDataPostGen;
 
 public class SimpleBlock {
     @SerializedName("w")
-    private final int x;
-    private final int y;
-    private final int z;
+    private final int x, y, z;
     PopulatorDataAbstract popData;
 //	
 //	public Location getLocation(){
@@ -144,9 +142,9 @@ public class SimpleBlock {
     }
 
     public SimpleBlock getRelative(BlockFace face, int count) {
-        return new SimpleBlock(popData, x + face.getModX()*count, y + face.getModY()*count, z + face.getModZ()*count);
+        return new SimpleBlock(popData, x + face.getModX() * count, y + face.getModY() * count, z + face.getModZ() * count);
     }
-    
+
     public int getChunkX() {
         return x / 16;
     }
@@ -216,22 +214,9 @@ public class SimpleBlock {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (!(obj instanceof SimpleBlock)) return false;
         SimpleBlock other = (SimpleBlock) obj;
-        if (popData == null) {
-            if (other.popData != null)
-                return false;
-        } else if (!popData.equals(other.popData))
-            return false;
-        if (x != other.x)
-            return false;
-        if (y != other.y)
-            return false;
-        return z == other.z;
+        return popData == other.popData && x == other.x && z == other.z;
     }
 }

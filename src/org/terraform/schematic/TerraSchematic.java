@@ -118,7 +118,7 @@ public class TerraSchematic {
                     }
                 } else if (bd instanceof Directional) {
                     Directional r = (Directional) bd;
-                    if (BlockUtils.directBlockFaces.contains(r.getFacing()))
+                    if (BlockUtils.isDirectBlockFace(r.getFacing()))
                         if (face == BlockFace.SOUTH) {
                             r.setFacing(r.getFacing().getOppositeFace());
                         } else if (face == BlockFace.WEST) {

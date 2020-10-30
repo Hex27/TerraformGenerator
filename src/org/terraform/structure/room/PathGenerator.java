@@ -29,7 +29,7 @@ public class PathGenerator {
     public PathGenerator(SimpleBlock origin, Material[] mat, Random rand, int[] upperBound, int[] lowerBound) {
         this.base = origin;
         this.rand = rand;
-        this.dir = new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}[GenUtils.randInt(rand, 0, 3)];
+        this.dir = BlockUtils.directBlockFaces[GenUtils.randInt(rand, 0, 3)];
         this.upperBound = upperBound;
         this.lowerBound = lowerBound;
         this.mat = mat;

@@ -15,7 +15,6 @@ public class CubeRoom {
     int x, y, z;
 
     RoomPopulatorAbstract pop;
-
     boolean isActivated = false;
 
     public CubeRoom(int widthX, int widthZ, int height, int x, int y, int z) {
@@ -56,8 +55,7 @@ public class CubeRoom {
     }
 
     public void populate(PopulatorDataAbstract data) {
-        if (pop == null) return;
-        pop.populate(data, this);
+        if (pop != null) pop.populate(data, this);
     }
 
     public void fillRoom(PopulatorDataAbstract data, Material[] mat) {
@@ -76,8 +74,7 @@ public class CubeRoom {
 //						data.setType(nx, ny, nz, Material.BARRIER);
 //						continue;
 //					}
-                    if (tile == -1)
-                        data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
+                    if (tile == -1) data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
                     else {
                         data.setType(nx, ny, nz, mat[(Math.abs(nz + widthZ / 2 + ny + nx + widthX / 2 - tileIndex)) % mat.length]);
                         tileIndex += 1;
@@ -233,12 +230,8 @@ public class CubeRoom {
     public int[] getLowerCorner(int pad) {
         int Z = z + pad - widthZ / 2;
         int X = x + pad - widthX / 2;
-        if (pad > widthZ / 2) {
-            Z = z;
-        }
-        if (pad > widthX / 2) {
-            X = x;
-        }
+        if (pad > widthZ / 2) Z = z;
+        if (pad > widthX / 2) X = x;
         return new int[]{X, Z};
     }
 

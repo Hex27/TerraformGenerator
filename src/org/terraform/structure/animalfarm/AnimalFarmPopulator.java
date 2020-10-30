@@ -27,7 +27,6 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 public class AnimalFarmPopulator extends VillageHousePopulator {
-
     private static final EntityType[] farmAnimals = {
             EntityType.PIG,
             EntityType.SHEEP,
@@ -182,11 +181,10 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                 Wall w = entry.getKey();
                 int length = entry.getValue();
                 for (int i = 0; i < length; i++) {
-                    int highest = GenUtils.getHighestGround(data, w.get().getX(), w.get().getZ());
                     w = w.getLeft();
                     if (GenUtils.chance(random, 1, 50)) {
                         SimpleBlock rear = w.getRear().get();
-                        highest = GenUtils.getHighestGround(data, rear.getX(), rear.getZ());
+                        int highest = GenUtils.getHighestGround(data, rear.getX(), rear.getZ());
                         data.setType(rear.getX(), highest + 1, rear.getZ(), GenUtils.randMaterial(
                                 Material.CAULDRON,
                                 Material.SMOKER,
@@ -194,7 +192,6 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                         ));
                     }
                 }
-
             }
 
             EntityType animal = farmAnimals[random.nextInt(farmAnimals.length)];
@@ -233,10 +230,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                                 false, Material.HAY_BLOCK);
                     }
                 }
-
             }
-
         }
-
     }
 }

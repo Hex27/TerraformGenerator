@@ -22,7 +22,6 @@ import java.util.Set;
 
 @SuppressWarnings("rawtypes")
 public class NMSChunkGenerator extends ChunkGenerator {
-
     private final TerraformPopulator pop;
     private final TerraformWorld tw;
 
