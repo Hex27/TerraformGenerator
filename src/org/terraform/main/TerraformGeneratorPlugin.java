@@ -1,9 +1,5 @@
 package org.terraform.main;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,107 +20,116 @@ import org.terraform.schematic.SchematicListener;
 import org.terraform.tree.SaplingOverrider;
 import org.terraform.utils.Version;
 
-public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener{
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
-	private static TerraformGeneratorPlugin i;
-	public static NMSInjectorAbstract injector;
-	public static ArrayList<String> injectedWorlds = new ArrayList<>();
-	public static PrivateFieldHandler privateFieldHandler;
-	public static TerraformGeneratorPlugin get(){ return i;}
-	
-	@Override
-	public void onEnable(){
-		super.onEnable();
-		i = this;
-		
-		try {
-			Field.class.getDeclaredField("modifiers");
-			privateFieldHandler = new Pre14PrivateFieldHandler();
-		} catch (NoSuchFieldException | SecurityException e1) {
-			privateFieldHandler = new Post14PrivateFieldHandler();
-		}
-		
-		logger = new TLogger(this);
-		TConfigOption.loadValues(this.getDCConfig());
-		LangOpt.init(this);
-		TerraformGenerator.updateSeaLevelFromConfig();
-		new TerraformCommandManager(this, "terraform","terra");
-		Bukkit.getPluginManager().registerEvents(this, this);
-		Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
-		String version = Version.getVersionPackage();
-		logger.info("Detected version: " + version);
-		try {
-			injector = (NMSInjectorAbstract) Class.forName("org.terraform.coregen." + version + ".NMSInjector").newInstance();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			logger.error("&cNo support for this version has been made yet!");
-		} catch (InstantiationException | IllegalAccessException e){
-			e.printStackTrace();
-			logger.error("&cSomething went wrong initiating the injector!");
+public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener {
 
-		}
-		
-		if(TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
-			Bukkit.getPluginManager().registerEvents(new SaplingOverrider(), this);
-		}
-	}
-	
-	/**
-	 * Legacy thing. Consider removal.
-	 * @param event
-	 * @deprecated
-	 */
-	@EventHandler
-	public void onWorldLoad(WorldLoadEvent event){
-		if(event.getWorld().getGenerator() instanceof TerraformGenerator){
-			if(TerraformGenerator.preWorldInitGen.size() > 0){
-				if(!TConfigOption.DEVSTUFF_ATTEMPT_FIXING_PREMATURE.getBoolean()){
-					logger.info("&cIgnoring " 
-							+ TerraformGenerator.preWorldInitGen.size() 
-							+ " pre-maturely generated chunks."
-							+ " You may see a patch of plain land.");
-					return;
-				}
-				logger.info("&6Trying to decorate " 
-			+ TerraformGenerator.preWorldInitGen.size() 
-			+ " pre-maturely generated chunks.");
-				int fixed = 0;
-				TerraformWorld tw = TerraformWorld.get(event.getWorld());
-				for(SimpleChunkLocation sc:TerraformGenerator.preWorldInitGen){
-					if(!sc.getWorld().equals(event.getWorld().getName())) continue;
-					logger.debug("Populating " + sc.toString());
-					PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
-					new TerraformPopulator(tw).populate(tw, new Random(), data);
-					fixed++;
-				}
-				logger.info("&aSuccessfully finished fixing " + fixed + " pre-mature chunks!");
-				
-			}
-		}
-	}
-	
-	@EventHandler
-	public void onWorldInit(WorldInitEvent event){
-		if(event.getWorld().getGenerator() instanceof TerraformGenerator){
-			logger.info("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
-			if(injector.attemptInject(event.getWorld())){
-				injectedWorlds.add(event.getWorld().getName());
-				logger.info("&aInjection success! Proceeding with generation.");
-				
-			}else{
-				logger.error("&cInjection failed.");
-			}
-		}
-	}
-	
-	@Override
-	public void onDisable(){
-		super.onDisable();
-	}
-	
-	@Override
-	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
-	    return new TerraformGenerator();
-	}
-	
+    public static NMSInjectorAbstract injector;
+    public static Set<String> injectedWorlds = new HashSet<>();
+    public static PrivateFieldHandler privateFieldHandler;
+    private static TerraformGeneratorPlugin i;
+
+    public static TerraformGeneratorPlugin get() {
+        return i;
+    }
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        i = this;
+
+        try {
+            Field.class.getDeclaredField("modifiers");
+            privateFieldHandler = new Pre14PrivateFieldHandler();
+        } catch (NoSuchFieldException | SecurityException e1) {
+            privateFieldHandler = new Post14PrivateFieldHandler();
+        }
+
+        logger = new TLogger(this);
+        TConfigOption.loadValues(this.getDCConfig());
+        LangOpt.init(this);
+        TerraformGenerator.updateSeaLevelFromConfig();
+        new TerraformCommandManager(this, "terraform", "terra");
+        Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
+        String version = Version.getVersionPackage();
+        logger.info("Detected version: " + version);
+        try {
+            injector = (NMSInjectorAbstract) Class.forName("org.terraform.coregen." + version + ".NMSInjector").newInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            logger.error("&cNo support for this version has been made yet!");
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            logger.error("&cSomething went wrong initiating the injector!");
+
+        }
+
+        if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
+            Bukkit.getPluginManager().registerEvents(new SaplingOverrider(), this);
+        }
+    }
+
+    /**
+     * Legacy thing. Consider removal.
+     *
+     * @param event
+     * @deprecated
+     */
+    @EventHandler
+    public void onWorldLoad(WorldLoadEvent event) {
+        if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
+            if (!TerraformGenerator.preWorldInitGen.isEmpty()) {
+                if (!TConfigOption.DEVSTUFF_ATTEMPT_FIXING_PREMATURE.getBoolean()) {
+                    logger.info("&cIgnoring "
+                            + TerraformGenerator.preWorldInitGen.size()
+                            + " pre-maturely generated chunks."
+                            + " You may see a patch of plain land.");
+                    return;
+                }
+                logger.info("&6Trying to decorate "
+                        + TerraformGenerator.preWorldInitGen.size()
+                        + " pre-maturely generated chunks.");
+                int fixed = 0;
+                TerraformWorld tw = TerraformWorld.get(event.getWorld());
+                for (SimpleChunkLocation sc : TerraformGenerator.preWorldInitGen) {
+                    if (!sc.getWorld().equals(event.getWorld().getName())) continue;
+                    logger.debug("Populating " + sc);
+                    PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
+                    new TerraformPopulator(tw).populate(tw, new Random(), data);
+                    fixed++;
+                }
+                logger.info("&aSuccessfully finished fixing " + fixed + " pre-mature chunks!");
+
+            }
+        }
+    }
+
+    @EventHandler
+    public void onWorldInit(WorldInitEvent event) {
+        if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
+            logger.info("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
+            if (injector.attemptInject(event.getWorld())) {
+                injectedWorlds.add(event.getWorld().getName());
+                logger.info("&aInjection success! Proceeding with generation.");
+
+            } else {
+                logger.error("&cInjection failed.");
+            }
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+    }
+
+    @Override
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+        return new TerraformGenerator();
+    }
+
 }

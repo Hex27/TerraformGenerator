@@ -2,7 +2,7 @@ package org.terraform.structure;
 
 import org.terraform.coregen.PopulatorDataAbstract;
 
-public abstract class StructurePopulatorData extends PopulatorDataAbstract{
+public abstract class StructurePopulatorData extends PopulatorDataAbstract {
 //	
 //	HashMap<SimpleLocation, BlockData> changes = new HashMap<>();
 //	

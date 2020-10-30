@@ -30,7 +30,6 @@ package org.terraform.utils;
  * A 3-element vector that is represented by single-precision floating point
  * x,y,z coordinates.  If this value represents a normal, then it should
  * be normalized.
- *
  */
 public class Vector3f implements java.io.Serializable {
 
@@ -40,41 +39,42 @@ public class Vector3f implements java.io.Serializable {
     public float x;
     public float y;
     public float z;
+
     /**
      * Constructs and initializes a Vector3f from the specified xyz coordinates.
+     *
      * @param x the x coordinate
      * @param y the y coordinate
      * @param z the z coordinate
      */
-    public Vector3f(float x, float y, float z)
-    {
-    	this.x = x;
-    	this.y = y;
-    	this.z = z;
+    public Vector3f(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
 
     /**
      * Constructs and initializes a Vector3f from the array of length 3.
+     *
      * @param v the array of length 3 containing xyz in order
      */
-    public Vector3f(float[] v)
-    {
-    	this.x = v[0];
-    	this.y = v[1];
-    	this.z = v[2];
+    public Vector3f(float[] v) {
+        this.x = v[0];
+        this.y = v[1];
+        this.z = v[2];
     }
 
 
     /**
      * Constructs and initializes a Vector3f from the specified Vector3f.
+     *
      * @param v1 the Vector3f containing the initialization x y z data
      */
-    public Vector3f(Vector3f v1)
-    {
-    	this.x = v1.x;
-    	this.y = v1.y;
-    	this.z = v1.z;
+    public Vector3f(Vector3f v1) {
+        this.x = v1.x;
+        this.y = v1.y;
+        this.z = v1.z;
     }
 
 
@@ -109,99 +109,86 @@ public class Vector3f implements java.io.Serializable {
     /**
      * Constructs and initializes a Vector3f to (0,0,0).
      */
-    public Vector3f()
-    {
-        super();
+    public Vector3f() {
     }
 
 
-   /**
+    /**
      * Returns the squared length of this vector.
+     *
      * @return the squared length of this vector
      */
-    public final float lengthSquared()
-    {
-        return (this.x*this.x + this.y*this.y + this.z*this.z);
+    public final float lengthSquared() {
+        return (this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
     /**
      * Returns the length of this vector.
+     *
      * @return the length of this vector
      */
-    public final float length()
-    {
+    public final float length() {
         return (float)
-             Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+                Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
 
-  /**
+    /**
      * Sets this vector to be the vector cross product of vectors v1 and v2.
+     *
      * @param v1 the first vector
      * @param v2 the second vector
      */
-    public final void cross(Vector3f v1, Vector3f v2)
-    {
-        float x,y;
-
-        x = v1.y*v2.z - v1.z*v2.y;
-        y = v2.x*v1.z - v2.z*v1.x;
-        this.z = v1.x*v2.y - v1.y*v2.x;
-        this.x = x;
-        this.y = y;
+    public final void cross(Vector3f v1, Vector3f v2) {
+        this.x = v1.y * v2.z - v1.z * v2.y;
+        this.y = v2.x * v1.z - v2.z * v1.x;
+        this.z = v1.x * v2.y - v1.y * v2.x;
     }
 
- /**
-   * Computes the dot product of this vector and vector v1.
-   * @param v1 the other vector
-   * @return the dot product of this vector and v1
-   */
-  public final float dot(Vector3f v1)
-    {
-      return (this.x*v1.x + this.y*v1.y + this.z*v1.z);
+    /**
+     * Computes the dot product of this vector and vector v1.
+     *
+     * @param v1 the other vector
+     * @return the dot product of this vector and v1
+     */
+    public final float dot(Vector3f v1) {
+        return (this.x * v1.x + this.y * v1.y + this.z * v1.z);
     }
 
-   /**
+    /**
      * Sets the value of this vector to the normalization of vector v1.
+     *
      * @param v1 the un-normalized vector
      */
-    public final void normalize(Vector3f v1)
-    {
-        float norm;
-
-        norm = (float) (1.0/Math.sqrt(v1.x*v1.x + v1.y*v1.y + v1.z*v1.z));
-        this.x = v1.x*norm;
-        this.y = v1.y*norm;
-        this.z = v1.z*norm;
+    public final void normalize(Vector3f v1) {
+        float norm = (float) (1.0 / Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z));
+        this.x = v1.x * norm;
+        this.y = v1.y * norm;
+        this.z = v1.z * norm;
     }
 
     /**
      * Normalizes this vector in place.
      */
-    public final void normalize()
-    {
-        float norm;
-
-        norm = (float)
-               (1.0/Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z));
+    public final void normalize() {
+        float norm = (float) (1.0 / Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z));
         this.x *= norm;
         this.y *= norm;
         this.z *= norm;
     }
 
 
-  /**
-    *   Returns the angle in radians between this vector and the vector
-    *   parameter; the return value is constrained to the range [0,PI].
-    *   @param v1    the other vector
-    *   @return   the angle in radians in the range [0,PI]
-    */
-   public final float angle(Vector3f v1)
-   {
-      double vDot = this.dot(v1) / ( this.length()*v1.length() );
-      if( vDot < -1.0) vDot = -1.0;
-      if( vDot >  1.0) vDot =  1.0;
-      return((float) (Math.acos( vDot )));
-   }
-
+    /**
+     * Returns the angle in radians between this vector and the vector
+     * parameter; the return value is constrained to the range [0,PI].
+     *
+     * @param v1 the other vector
+     * @return the angle in radians in the range [0,PI]
+     */
+    public final float angle(Vector3f v1) {
+        double vDot = this.dot(v1) / (this.length() * v1.length());
+        if (vDot < -1.0) vDot = -1.0;
+        if (vDot > 1.0) vDot = 1.0;
+        return (float) Math.acos(vDot);
+    }
 }

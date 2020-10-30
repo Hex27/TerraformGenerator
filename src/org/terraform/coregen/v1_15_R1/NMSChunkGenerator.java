@@ -1,13 +1,7 @@
 package org.terraform.coregen.v1_15_R1;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.BitSet;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
-import java.util.Set;
-
+import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_15_R1.HeightMap.Type;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock;
@@ -21,66 +15,46 @@ import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 
-import net.minecraft.server.v1_15_R1.BiomeBase;
-import net.minecraft.server.v1_15_R1.BiomeManager;
-import net.minecraft.server.v1_15_R1.BiomeStorage;
-import net.minecraft.server.v1_15_R1.BlockPosition;
-import net.minecraft.server.v1_15_R1.ChunkCoordIntPair;
-import net.minecraft.server.v1_15_R1.ChunkGenerator;
-import net.minecraft.server.v1_15_R1.ChunkSection;
-import net.minecraft.server.v1_15_R1.EnumCreatureType;
-import net.minecraft.server.v1_15_R1.GeneratorAccess;
-import net.minecraft.server.v1_15_R1.GeneratorSettingsDefault;
-import net.minecraft.server.v1_15_R1.HeightMap.Type;
-import net.minecraft.server.v1_15_R1.IChunkAccess;
-import net.minecraft.server.v1_15_R1.ITileEntity;
-import net.minecraft.server.v1_15_R1.ProtoChunk;
-import net.minecraft.server.v1_15_R1.RegionLimitedWorldAccess;
-import net.minecraft.server.v1_15_R1.SeededRandom;
-import net.minecraft.server.v1_15_R1.TileEntity;
-import net.minecraft.server.v1_15_R1.World;
-import net.minecraft.server.v1_15_R1.WorldChunkManager;
-import net.minecraft.server.v1_15_R1.WorldGenCanyonOcean;
-import net.minecraft.server.v1_15_R1.WorldGenCarverWrapper;
-import net.minecraft.server.v1_15_R1.WorldGenCavesOcean;
-import net.minecraft.server.v1_15_R1.WorldGenStage;
-import net.minecraft.server.v1_15_R1.WorldGenerator;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class NMSChunkGenerator extends ChunkGenerator {
-	
-	public NMSChunkGenerator(GeneratorAccess generatoraccess,
-			WorldChunkManager worldchunkmanager, GeneratorSettingsDefault c0) {
-		super(generatoraccess, worldchunkmanager, c0);
+
+    private final TerraformPopulator pop;
+    private final TerraformWorld tw;
+
+    public NMSChunkGenerator(GeneratorAccess generatoraccess,
+                             WorldChunkManager worldchunkmanager, GeneratorSettingsDefault c0) {
+        super(generatoraccess, worldchunkmanager, c0);
         tw = TerraformWorld.get(generatoraccess.getWorldData().getName(), generatoraccess.getWorldData().getSeed());
         pop = new TerraformPopulator(tw);
-	}
+    }
 
-	private TerraformPopulator pop;
-	private TerraformWorld tw;
-	
-	@Override 
+    @Override
     public void createBiomes(IChunkAccess ichunkaccess) {
 
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
 
         ((ProtoChunk) ichunkaccess).a(new BiomeStorage(chunkcoordintpair, this.c));
-        
+
         int chunkX = ichunkaccess.getPos().x;
         int chunkZ = ichunkaccess.getPos().z;
-        for(int x = chunkX*16; x < chunkX*16+16; x++){
-        	for(int z = chunkZ*16; z < chunkZ*16+16; z++){
+        for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
+            for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
 
-        		int y = org.terraform.coregen.HeightMap.getHeight(tw, x, z);
-        		BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, y, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler().getBiome()
+                int y = org.terraform.coregen.HeightMap.getHeight(tw, x, z);
+                BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, y, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler
+                // ().getBiome()
 
-        		//2D Biomes.
-        		for(int h = 0; h < 256; h++){
-        			ichunkaccess.getBiomeIndex().setBiome(x, h, z, b);
-        		}
-        	}
+                //2D Biomes.
+                for (int h = 0; h < 256; h++) {
+                    ichunkaccess.getBiomeIndex().setBiome(x, h, z, b);
+                }
+            }
         }
-	}
-	
+    }
+
 //	@Override
 //	public void createStructures(BiomeManager biomemanager, IChunkAccess ica, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager) {
 //		int chunkX = ica.getPos().x;
@@ -89,13 +63,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //        PopulatorDataICA popDat = new PopulatorDataICA(tw,this.getWorld().getWorld().getHandle(),ica,this,chunkX,chunkZ);
 //        pop.populate(tw, this.getWorld().getWorld().getHandle().getRandom(), popDat);
 //	}
-	
-	@Override
+
+    @Override
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i, boolean flag) {
         //StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.ao.get(s.toLowerCase(Locale.ROOT));
-		int pX = blockposition.getX();
-		int pZ = blockposition.getZ();
-		if(s.equalsIgnoreCase("Stronghold")){
+        int pX = blockposition.getX();
+        int pZ = blockposition.getZ();
+        if (s.equalsIgnoreCase("Stronghold")) {
 //			double minDistanceSquared = Integer.MAX_VALUE;
 //			int[] min = null;
 //			for(int[] loc:StrongholdPopulator.strongholdPositions(tw)){
@@ -105,29 +79,29 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //					min = loc;
 //				}
 //			}
-			int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
-			return new BlockPosition(coords[0],20,coords[1]);
-		}else if(s.equalsIgnoreCase("Village")){
-			int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
-			return new BlockPosition(coords[0],100,coords[1]);
-		}else if(s.equalsIgnoreCase("Monument")){
-			int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
-			return new BlockPosition(coords[0],100,coords[1]);
-		}
-		
+            int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
+            return new BlockPosition(coords[0], 20, coords[1]);
+        } else if (s.equalsIgnoreCase("Village")) {
+            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
+            return new BlockPosition(coords[0], 100, coords[1]);
+        } else if (s.equalsIgnoreCase("Monument")) {
+            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
+            return new BlockPosition(coords[0], 100, coords[1]);
+        }
+
         return null;
     }
 
-	@Override 
+    @Override
     protected BiomeBase getBiome(BiomeManager biomemanager, BlockPosition bp) {
-    	return CraftBlock.biomeToBiomeBase(tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
+        return CraftBlock.biomeToBiomeBase(tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
     }
-	
+
     @Override
     public void addDecorations(RegionLimitedWorldAccess rlwa) {
-		int chunkX = rlwa.a();
+        int chunkX = rlwa.a();
         int chunkZ = rlwa.b();
-        PopulatorData popDat = new PopulatorData(rlwa,this,chunkX,chunkZ);
+        PopulatorData popDat = new PopulatorData(rlwa, this, chunkX, chunkZ);
         pop.populate(tw, rlwa.getRandom(), popDat);
 //        for(int relX = 0; relX < 16; relX++){
 //        	for(int relZ = 0; relZ < 16; relZ++){
@@ -151,7 +125,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //            }
 //        }
     }
-    
+
     @Override
     public void doCarving(BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
         SeededRandom seededrandom = new SeededRandom();
@@ -169,13 +143,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 while (listiterator.hasNext()) {
                     int i1 = listiterator.nextIndex();
                     WorldGenCarverWrapper<?> worldgencarverwrapper = listiterator.next();
-                    if(worldgencarverwrapper.a instanceof WorldGenCavesOcean){
-                    	//if(!TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
-                    		continue;
+                    if (worldgencarverwrapper.a instanceof WorldGenCavesOcean) {
+                        //if(!TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
+                        continue;
                     }
-                    if(worldgencarverwrapper.a instanceof WorldGenCanyonOcean){
-                    	//if(!TConfigOption.CAVES_ALLOW_FLOODED_RAVINES.getBoolean())
-                    		continue;
+                    if (worldgencarverwrapper.a instanceof WorldGenCanyonOcean) {
+                        //if(!TConfigOption.CAVES_ALLOW_FLOODED_RAVINES.getBoolean())
+                        continue;
                     }
                     seededrandom.c(this.seed + (long) i1, k, l);
                     if (worldgencarverwrapper.a(seededrandom, k, l)) {
@@ -188,86 +162,86 @@ public class NMSChunkGenerator extends ChunkGenerator {
         }
 
     }
-    
+
     @Override
-    public int getSeaLevel(){
-    	return TerraformGenerator.seaLevel;
+    public int getSeaLevel() {
+        return TerraformGenerator.seaLevel;
     }
 
-	@Override
-	public int getSpawnHeight() {
-		return getBaseHeight(0,0,null);
-	}
+    @Override
+    public int getSpawnHeight() {
+        return getBaseHeight(0, 0, null);
+    }
 
 
-	@Override
-	public void buildNoise(GeneratorAccess generatoraccess,
-			IChunkAccess ichunkaccess) {
-	}
-	
+    @Override
+    public void buildNoise(GeneratorAccess generatoraccess,
+                           IChunkAccess ichunkaccess) {
+    }
+
     @Override
     public void buildBase(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {
-		try {
-	        int x = ichunkaccess.getPos().x;
-	        int z = ichunkaccess.getPos().z;
-	        TerraformGenerator generator = new TerraformGenerator();
-	        Random random = tw.getRand(3);
-	        random.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
-	
-	        // Get default biome data for chunk
-	        CustomBiomeGrid biomegrid = new CustomBiomeGrid(new BiomeStorage(ichunkaccess.getPos(), this.getWorldChunkManager()));
-	
-	        ChunkData data;
-	        if (generator.isParallelCapable()) {
-	            data = generator.generateChunkData(tw.getWorld(), random, x, z, biomegrid);
-	        } else {
-	            synchronized (this) {
-	                data = generator.generateChunkData(tw.getWorld(), random, x, z, biomegrid);
-	            }
-	        }
-	
-	        CraftChunkData craftData = (CraftChunkData) data;
-	        Method getRawChunkData = CraftChunkData.class.getDeclaredMethod("getRawChunkData");
-	        getRawChunkData.setAccessible(true);
-	        ChunkSection[] sections = (ChunkSection[]) getRawChunkData.invoke(craftData);
-	
-	        ChunkSection[] csect = ichunkaccess.getSections();
-	        int scnt = Math.min(csect.length, sections.length);
-	
-	        // Loop through returned sections
-	        for (int sec = 0; sec < scnt; sec++) {
-	            if (sections[sec] == null) {
-	                continue;
-	            }
-	            ChunkSection section = sections[sec];
-	
-	            csect[sec] = section;
-	        }
-	
-	        // Set biome grid
-	        ((ProtoChunk) ichunkaccess).a(biomegrid.biome);
-	        
-	        Method getTiles;
-				getTiles = CraftChunkData.class.getDeclaredMethod("getTiles");
-	        getTiles.setAccessible(true);
-	        Set<BlockPosition> tiles = (Set<BlockPosition>) getTiles.invoke(craftData);
-	        if (tiles != null) {
-	            for (BlockPosition pos : tiles) {
-	                int tx = pos.getX();
-	                int ty = pos.getY();
-	                int tz = pos.getZ();
-	                net.minecraft.server.v1_15_R1.Block block = craftData.getTypeId(tx, ty, tz).getBlock();
-	
-	                if (block.isTileEntity()) {
-	                    TileEntity tile = ((ITileEntity) block).createTile(((CraftWorld) tw.getWorld()).getHandle());
-	                    ichunkaccess.setTileEntity(new BlockPosition((x << 4) + tx, ty, (z << 4) + tz), tile);
-	                }
-	            }
-	        }
+        try {
+            int x = ichunkaccess.getPos().x;
+            int z = ichunkaccess.getPos().z;
+            TerraformGenerator generator = new TerraformGenerator();
+            Random random = tw.getRand(3);
+            random.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
 
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
+            // Get default biome data for chunk
+            CustomBiomeGrid biomegrid = new CustomBiomeGrid(new BiomeStorage(ichunkaccess.getPos(), this.getWorldChunkManager()));
+
+            ChunkData data;
+            if (generator.isParallelCapable()) {
+                data = generator.generateChunkData(tw.getWorld(), random, x, z, biomegrid);
+            } else {
+                synchronized (this) {
+                    data = generator.generateChunkData(tw.getWorld(), random, x, z, biomegrid);
+                }
+            }
+
+            CraftChunkData craftData = (CraftChunkData) data;
+            Method getRawChunkData = CraftChunkData.class.getDeclaredMethod("getRawChunkData");
+            getRawChunkData.setAccessible(true);
+            ChunkSection[] sections = (ChunkSection[]) getRawChunkData.invoke(craftData);
+
+            ChunkSection[] csect = ichunkaccess.getSections();
+            int scnt = Math.min(csect.length, sections.length);
+
+            // Loop through returned sections
+            for (int sec = 0; sec < scnt; sec++) {
+                if (sections[sec] == null) {
+                    continue;
+                }
+                ChunkSection section = sections[sec];
+
+                csect[sec] = section;
+            }
+
+            // Set biome grid
+            ((ProtoChunk) ichunkaccess).a(biomegrid.biome);
+
+            Method getTiles;
+            getTiles = CraftChunkData.class.getDeclaredMethod("getTiles");
+            getTiles.setAccessible(true);
+            Set<BlockPosition> tiles = (Set<BlockPosition>) getTiles.invoke(craftData);
+            if (tiles != null) {
+                for (BlockPosition pos : tiles) {
+                    int tx = pos.getX();
+                    int ty = pos.getY();
+                    int tz = pos.getZ();
+                    net.minecraft.server.v1_15_R1.Block block = craftData.getTypeId(tx, ty, tz).getBlock();
+
+                    if (block.isTileEntity()) {
+                        TileEntity tile = ((ITileEntity) block).createTile(((CraftWorld) tw.getWorld()).getHandle());
+                        ichunkaccess.setTileEntity(new BlockPosition((x << 4) + tx, ty, (z << 4) + tz), tile);
+                    }
+                }
+            }
+
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
 //	@Override
@@ -310,7 +284,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 ////        }
 //	
 //	}
-    
+
     @Override
     public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType type, BlockPosition pos) {
         if (WorldGenerator.SWAMP_HUT.c(this.a, pos)) {
@@ -334,12 +308,12 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return super.getMobsFor(type, pos);
     }
 
-	@Override
-	public int getBaseHeight(int i, int j, Type heightmap_type) {
-		return org.terraform.coregen.HeightMap.getHeight(tw,i,j);
-	}
-	
-   private class CustomBiomeGrid implements BiomeGrid {
+    @Override
+    public int getBaseHeight(int i, int j, Type heightmap_type) {
+        return org.terraform.coregen.HeightMap.getHeight(tw, i, j);
+    }
+
+    private class CustomBiomeGrid implements BiomeGrid {
 
         private final BiomeStorage biome;
 

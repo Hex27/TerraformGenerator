@@ -1,5 +1,9 @@
 package org.terraform.coregen.v1_15_R1;
 
+import net.minecraft.server.v1_15_R1.GeneratorSettingsFlat;
+import net.minecraft.server.v1_15_R1.IChunkAccess;
+import net.minecraft.server.v1_15_R1.PlayerChunkMap;
+import net.minecraft.server.v1_15_R1.WorldServer;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
@@ -10,24 +14,19 @@ import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-import net.minecraft.server.v1_15_R1.GeneratorSettingsFlat;
-import net.minecraft.server.v1_15_R1.IChunkAccess;
-import net.minecraft.server.v1_15_R1.PlayerChunkMap;
-import net.minecraft.server.v1_15_R1.WorldServer;
-
 public class NMSInjector extends NMSInjectorAbstract {
 
-	@Override
-	public boolean attemptInject(World world) {
-		CraftWorld cw = (CraftWorld) world;
-		WorldServer ws = cw.getHandle();
+    @Override
+    public boolean attemptInject(World world) {
+        CraftWorld cw = (CraftWorld) world;
+        WorldServer ws = cw.getHandle();
 //		for(Field f:ws.getClass().getFields()){
 //			Bukkit.getLogger().info(f.getType().getName() + " " + f.getName());
 //		}
-		NMSChunkGenerator bpg = new NMSChunkGenerator(ws, ws.getChunkProvider().getChunkGenerator().getWorldChunkManager(), GeneratorSettingsFlat.z());
-		PlayerChunkMap pcm = ws.getChunkProvider().playerChunkMap;
-		
-		try {
+        NMSChunkGenerator bpg = new NMSChunkGenerator(ws, ws.getChunkProvider().getChunkGenerator().getWorldChunkManager(), GeneratorSettingsFlat.z());
+        PlayerChunkMap pcm = ws.getChunkProvider().playerChunkMap;
+
+        try {
 //			Field pcmGenField = pcm.getClass().getField("chunkGenerator");
 //			Field cpGenField = ws.getChunkProvider().getClass().getField("chunkGenerator");
 //			pcmGenField.setAccessible(true);
@@ -40,39 +39,39 @@ public class NMSInjector extends NMSInjectorAbstract {
 //			// Get and set field value		
 //			pcmGenField.set(pcm,bpg);
 //			cpGenField.set(ws.getChunkProvider(),bpg);
-			TerraformGeneratorPlugin.privateFieldHandler.injectField(
-					pcm, "chunkGenerator", bpg);
-			TerraformGeneratorPlugin.privateFieldHandler.injectField(
-					ws.getChunkProvider(), "chunkGenerator", bpg);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		return true;
-	}
+            TerraformGeneratorPlugin.privateFieldHandler.injectField(
+                    pcm, "chunkGenerator", bpg);
+            TerraformGeneratorPlugin.privateFieldHandler.injectField(
+                    ws.getChunkProvider(), "chunkGenerator", bpg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
-	@Override
-	public PopulatorDataICAAbstract getICAData(Chunk chunk) {
-		IChunkAccess ica = ((CraftChunk) chunk).getHandle();
-		CraftWorld cw = (CraftWorld) chunk.getWorld();
-		WorldServer ws = cw.getHandle();
+        return true;
+    }
 
-		TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
-		//return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
-		return new PopulatorDataICA(tw, ws, ica, chunk.getX(), chunk.getZ());
-	}
+    @Override
+    public PopulatorDataICAAbstract getICAData(Chunk chunk) {
+        IChunkAccess ica = ((CraftChunk) chunk).getHandle();
+        CraftWorld cw = (CraftWorld) chunk.getWorld();
+        WorldServer ws = cw.getHandle();
 
-	@Override
-	public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
-		if(data instanceof PopulatorData){
-			PopulatorData pdata = (PopulatorData) data;
-			IChunkAccess ica = pdata.rlwa.getChunkAt(data.getChunkX(),data.getChunkZ());
-			WorldServer ws = ((PopulatorData) data).rlwa.getMinecraftWorld();
-			TerraformWorld tw = TerraformWorld.get(pdata.rlwa.getWorldData().getName(),pdata.rlwa.getWorldData().getSeed());
-			return new PopulatorDataICA(tw, ws, ica, data.getChunkX(),data.getChunkZ());
-		}
-		return null;
-	}
+        TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
+        //return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
+        return new PopulatorDataICA(tw, ws, ica, chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
+        if (data instanceof PopulatorData) {
+            PopulatorData pdata = (PopulatorData) data;
+            IChunkAccess ica = pdata.rlwa.getChunkAt(data.getChunkX(), data.getChunkZ());
+            WorldServer ws = ((PopulatorData) data).rlwa.getMinecraftWorld();
+            TerraformWorld tw = TerraformWorld.get(pdata.rlwa.getWorldData().getName(), pdata.rlwa.getWorldData().getSeed());
+            return new PopulatorDataICA(tw, ws, ica, data.getChunkX(), data.getChunkZ());
+        }
+        return null;
+    }
 
 }

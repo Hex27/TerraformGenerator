@@ -1,43 +1,47 @@
 package org.terraform.structure.room;
 
-import java.util.Random;
-
 import org.terraform.coregen.PopulatorDataAbstract;
 
+import java.util.Random;
+
 public abstract class RoomPopulatorAbstract {
-	
-	public Random rand;
-	private boolean forceSpawn;
-	private boolean unique;
-	public RoomPopulatorAbstract(Random rand, boolean forceSpawn, boolean unique){
-		this.rand = rand;
-		this.forceSpawn = forceSpawn;
-		this.unique = unique;
-	}
-	
-	/**
-	 * @return the rand
-	 */
-	public Random getRand() {
-		return rand;
-	}
+    private final boolean forceSpawn;
+    private final boolean unique;
+    public Random rand;
 
-	/**
-	 * @return the forceSpawn
-	 */
-	public boolean isForceSpawn() {
-		return forceSpawn;
-	}
+    public RoomPopulatorAbstract(Random rand, boolean forceSpawn, boolean unique) {
+        this.rand = rand;
+        this.forceSpawn = forceSpawn;
+        this.unique = unique;
+    }
 
-	/**
-	 * @return the unique
-	 */
-	public boolean isUnique() {
-		return unique;
-	}
+    protected static int getNextIndex(int bfIndex) {
+        if (++bfIndex >= 8) bfIndex = 0;
+        return bfIndex;
+    }
 
-	public abstract void populate(PopulatorDataAbstract data, CubeRoom room);
+    /**
+     * @return the rand
+     */
+    public Random getRand() {
+        return rand;
+    }
 
-	public abstract boolean canPopulate(CubeRoom room);
-	
+    /**
+     * @return the forceSpawn
+     */
+    public boolean isForceSpawn() {
+        return forceSpawn;
+    }
+
+    /**
+     * @return the unique
+     */
+    public boolean isUnique() {
+        return unique;
+    }
+
+    public abstract void populate(PopulatorDataAbstract data, CubeRoom room);
+
+    public abstract boolean canPopulate(CubeRoom room);
 }
