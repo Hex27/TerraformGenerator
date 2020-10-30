@@ -143,6 +143,10 @@ public class SimpleBlock {
         return new SimpleBlock(popData, x + face.getModX(), y + face.getModY(), z + face.getModZ());
     }
 
+    public SimpleBlock getRelative(BlockFace face, int count) {
+        return new SimpleBlock(popData, x + face.getModX()*count, y + face.getModY()*count, z + face.getModZ()*count);
+    }
+    
     public int getChunkX() {
         return x / 16;
     }

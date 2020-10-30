@@ -54,6 +54,12 @@ public class PyramidStairwayTopPopulator extends RoomPopulatorAbstract {
         data.setBlockData(room.getX() + face.getModX(), room.getY(), room.getZ() + face.getModZ(), top);
     }
 
+    private int getNextIndex(int bfIndex) {
+        bfIndex++;
+        if (bfIndex >= 8) bfIndex = 0;
+        return bfIndex;
+    }
+    
     @Override
     public boolean canPopulate(CubeRoom room) {
         return false;

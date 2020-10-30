@@ -15,10 +15,6 @@ public abstract class RoomPopulatorAbstract {
         this.unique = unique;
     }
 
-    protected static int getNextIndex(int bfIndex) {
-        if (++bfIndex >= 8) bfIndex = 0;
-        return bfIndex;
-    }
 
     /**
      * @return the rand

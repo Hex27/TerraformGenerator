@@ -387,7 +387,7 @@ public class BlockUtils {
     /**
      * Put barrier in toReplace to hard replace all solid blocks.
      */
-    public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, ArrayList<Material> toReplace) {
+    public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, List<Material> toReplace) {
         if (rX <= 0 &&
                 rY <= 0 &&
                 rZ <= 0) {
