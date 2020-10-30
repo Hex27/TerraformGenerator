@@ -9,14 +9,14 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
 public class GenUtils {
-    private static final String[] BLACKLIST_HIGHEST_GROUND = {"LEAVES", "LOG", "WOOD", "MUSHROOM", "FENCE", "WALL", "POTTED", "BRICK"};
-
+    
     public static SimplexOctaveGenerator getGenerator(World world) {
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), 8);
         generator.setScale(0.005D);
@@ -219,14 +219,20 @@ public class GenUtils {
 
         return y;
     }
-
+    
+    private static final String[] BLACKLIST_HIGHEST_GROUND = {
+    		"LEAVES", "LOG", 
+    		"WOOD", "MUSHROOM", 
+    		"FENCE", "WALL", 
+    		"POTTED", "BRICK"};
     /**
      * @return the highest solid ground. Is dirt-like or stone-like, and is
      * not leaves or logs
      */
-    public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
+    @SuppressWarnings("incomplete-switch")
+	public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
         int y = 255;
-        while (true) {
+        while (y > 0) {
             Material block = data.getType(x, y, z);
             if (BlockUtils.isStoneLike(block)) break;
 
@@ -247,7 +253,7 @@ public class GenUtils {
                     continue;
                 }
 
-                String name = block.name();
+                String name = block.toString();
                 boolean continueMaster = false;
                 for (String contains : BLACKLIST_HIGHEST_GROUND) {
                     if (name.contains(contains)) {
@@ -259,11 +265,14 @@ public class GenUtils {
                     y--;
                     continue;
                 }
+            }else {
+                y--;
+            	continue;
             }
-
             break;
         }
-
+        if(y == 0)
+        	TerraformGeneratorPlugin.logger.error("GetHighestGround returned 0!");
         return y;
     }
 

@@ -145,11 +145,10 @@ public class TerraSchematic {
             BlockUtils.correctSurroundingMultifacingData(b);
         }
         if (bdfa != null && face != BlockFace.NORTH) {
-            for (Vector pos : bdfa.getMultifacing()) {
+            for (Vector pos : bdfa.flush()) {
                 SimpleBlock b = refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ());
                 bdfa.correctFacing(pos, b, null, face);
             }
-            bdfa.flush();
         }
     }
 
