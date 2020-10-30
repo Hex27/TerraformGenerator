@@ -1,30 +1,29 @@
 package org.terraform.structure.pyramid;
 
-import java.util.Random;
-
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 
-public class PyramidPathPopulator extends PathPopulatorAbstract{
-	
-	Random rand;
-	int height = 3;
-	public PyramidPathPopulator(Random rand) {
-		super();
-		this.rand = rand;
-	}
+import java.util.Random;
 
-	public PyramidPathPopulator(Random rand, int height) {
-		super();
-		this.rand = rand;
-		this.height = height;
-	}
+public class PyramidPathPopulator extends PathPopulatorAbstract {
+    private final Random rand;
+    private final int height;
 
-	@Override
-	public void populate(PathPopulatorData ppd) {
-		//Wall w = new Wall(ppd.base,ppd.dir);
-		
-		//Floor is Prismarine >:V
+    public PyramidPathPopulator(Random rand) {
+        this.rand = rand;
+        this.height = 3;
+    }
+
+    public PyramidPathPopulator(Random rand, int height) {
+        this.rand = rand;
+        this.height = height;
+    }
+
+    @Override
+    public void populate(PathPopulatorData ppd) {
+        //Wall w = new Wall(ppd.base,ppd.dir);
+
+        //Floor is Prismarine >:V
 //		for(int i = 0; i <= 1; i++){
 //			if(w.getLeft(i).getType() != Material.SEA_LANTERN)
 //				w.getLeft(i).setType(Material.PRISMARINE);
@@ -57,16 +56,16 @@ public class PyramidPathPopulator extends PathPopulatorAbstract{
 //					&& !w.getRelative(0,7,0).getType().isSolid())
 //				design.spire(w.getRelative(0,7,0), rand);
 //		}
-	}
-	
-	@Override
-	public int getPathWidth(){
-		return 1;
-	}
-	
-	@Override
-	public int getPathHeight() {
-		return height;
-	}
-	
+    }
+
+    @Override
+    public int getPathWidth() {
+        return 1;
+    }
+
+    @Override
+    public int getPathHeight() {
+        return height;
+    }
+
 }

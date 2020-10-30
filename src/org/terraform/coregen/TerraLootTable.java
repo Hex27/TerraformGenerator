@@ -1,7 +1,7 @@
 package org.terraform.coregen;
 
 public enum TerraLootTable {
-	SPAWN_BONUS_CHEST("chests/spawn_bonus_chest"),
+    SPAWN_BONUS_CHEST("chests/spawn_bonus_chest"),
     END_CITY_TREASURE("chests/end_city_treasure"),
     SIMPLE_DUNGEON("chests/simple_dungeon"),
     VILLAGE_WEAPONSMITH("chests/village/village_weaponsmith"),
@@ -37,10 +37,11 @@ public enum TerraLootTable {
     SHIPWRECK_SUPPLY("chests/shipwreck_supply"),
     SHIPWRECK_TREASURE("chests/shipwreck_treasure"),
     PILLAGER_OUTPOST("chests/pillager_outpost");
-	
-	@SuppressWarnings("unused")
-	private String key;
-	TerraLootTable(String key){
-		this.key = key;
-	}
+
+    @SuppressWarnings("unused")
+    private final String key;
+
+    TerraLootTable(String key) {
+        this.key = key;
+    }
 }
