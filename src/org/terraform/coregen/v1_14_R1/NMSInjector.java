@@ -15,7 +15,6 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class NMSInjector extends NMSInjectorAbstract {
-
     @Override
     public boolean attemptInject(World world) {
         CraftWorld cw = (CraftWorld) world;

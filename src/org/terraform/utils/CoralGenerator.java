@@ -9,15 +9,31 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class CoralGenerator {
-    private static final Material[] VALUES = Material.values();
-    private static final List<Material> coralBlocks = new ArrayList<>();
-    private static final List<Material> coralFans = new ArrayList<>();
-    private static final List<Material> coralWallFans = new ArrayList<>();
+    //    private static final Material[] VALUES = Material.values();
+    private static final Material[] CORAL_BLOCKS = {
+            Material.BRAIN_CORAL_BLOCK,
+            Material.BUBBLE_CORAL_BLOCK,
+            Material.FIRE_CORAL_BLOCK,
+            Material.HORN_CORAL_BLOCK,
+            Material.TUBE_CORAL_BLOCK,
+    };
+    private static final Material[] CORAL_FANS = {
+            Material.BRAIN_CORAL_FAN,
+            Material.BUBBLE_CORAL_FAN,
+            Material.FIRE_CORAL_FAN,
+            Material.HORN_CORAL_FAN,
+            Material.TUBE_CORAL_FAN,
+    };
+    private static final Material[] CORAL_WALL_FANS = {
+            Material.BRAIN_CORAL_WALL_FAN,
+            Material.BUBBLE_CORAL_WALL_FAN,
+            Material.FIRE_CORAL_WALL_FAN,
+            Material.HORN_CORAL_WALL_FAN,
+            Material.TUBE_CORAL_WALL_FAN,
+    };
     private static final BlockFace[] FACES = {
             BlockFace.EAST, BlockFace.WEST,
             BlockFace.NORTH, BlockFace.SOUTH,
@@ -25,44 +41,8 @@ public class CoralGenerator {
             BlockFace.NORTH, BlockFace.SOUTH,
             BlockFace.EAST, BlockFace.WEST,
             BlockFace.NORTH, BlockFace.SOUTH,
-            BlockFace.UP, BlockFace.DOWN};
-
-    /**
-     * @return a list of LIVE coral BLOCKS
-     */
-    public static List<Material> coralBlocks() {
-        if (coralBlocks.isEmpty())
-            for (Material coralMat : VALUES)
-                if (coralMat.name().contains("CORAL_BLOCK") &&
-                        !coralMat.name().contains("DEAD")) coralBlocks.add(coralMat);
-
-        return coralBlocks;
-    }
-
-    /**
-     * @return a list of LIVE corals (non-blocks)
-     */
-    public static List<Material> coralFans() {
-        if (coralFans.isEmpty())
-            for (Material coralMat : VALUES)
-                if (coralMat.name().contains("CORAL") &&
-                        !coralMat.name().contains("DEAD") &&
-                        !coralMat.name().contains("WALL")) coralFans.add(coralMat);
-
-        return coralFans;
-    }
-
-    /**
-     * @return a list of LIVE coral wall fans (non-blocks)
-     */
-    public static List<Material> coralWallFans() {
-        if (coralWallFans.isEmpty())
-            for (Material coralMat : VALUES)
-                if (coralMat.name().contains("CORAL_WALL_FAN") &&
-                        !coralMat.name().contains("DEAD")) coralWallFans.add(coralMat);
-
-        return coralWallFans;
-    }
+            BlockFace.UP, BlockFace.DOWN
+    };
 
     /**
      * Creates a random coral
@@ -73,8 +53,8 @@ public class CoralGenerator {
         BlockFace face = getRandomBlockFace();
 
         if (face == BlockFace.DOWN) face = BlockFace.UP;
-        Material coral = coralFans().get(GenUtils.randInt(0, coralFans().size() - 1));
-        if (face != BlockFace.UP) coral = coralWallFans().get(GenUtils.randInt(0, coralWallFans().size() - 1));
+        Material coral = CORAL_FANS[GenUtils.randInt(0, CORAL_FANS.length - 1)];
+        if (face != BlockFace.UP) coral = CORAL_WALL_FANS[GenUtils.randInt(0, CORAL_WALL_FANS.length - 1)];
 
         attemptReplace(data, x + face.getModX(), y + face.getModY(), z + face.getModZ(), coral);
         if (face != BlockFace.UP) {
@@ -88,8 +68,7 @@ public class CoralGenerator {
 
     public static boolean isSaturatedCoral(SimpleBlock block) {
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (block.getRelative(face).getType() == Material.WATER)
-                return true;
+            if (block.getRelative(face).getType() == Material.WATER) return true;
         }
         return false;
     }
@@ -178,7 +157,7 @@ public class CoralGenerator {
      * length.
      */
     public static void generateCoral(PopulatorDataAbstract data, int x, int y, int z) {
-        Material coral = coralBlocks().get(GenUtils.randInt(0, coralBlocks().size() - 1));
+        Material coral = CORAL_BLOCKS[GenUtils.randInt(0, CORAL_BLOCKS.length - 1)];
         int fullSize = GenUtils.randInt(15, 35);
         int[] middle = {x, y, z};
 

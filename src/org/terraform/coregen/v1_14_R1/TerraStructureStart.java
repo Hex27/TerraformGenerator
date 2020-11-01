@@ -5,7 +5,6 @@ import net.minecraft.server.v1_14_R1.*;
 import java.util.Random;
 
 public class TerraStructureStart extends StructureAbstract {
-
     private final String tag;
 
     public TerraStructureStart(String tag, StructureGenerator<?> var0, int var1, int var2,
@@ -37,8 +36,5 @@ public class TerraStructureStart extends StructureAbstract {
     public void a(ChunkGenerator<?> arg0, DefinedStructureManager arg1,
                   int arg2, int arg3, BiomeBase arg4) {
         // TODO Auto-generated method stub
-
     }
-
-
 }

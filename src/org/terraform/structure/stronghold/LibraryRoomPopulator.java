@@ -98,7 +98,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
                         SimpleBlock front = pWall.get();
                         if (front.lsetType(Material.OAK_LOG)) {
                             Orientable o = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
-                            o.setAxis(BlockUtils.getAxisFromFace(wall.getDirection()));
+                            o.setAxis(BlockUtils.getAxisFromBlockFace(wall.getDirection()));
                             front.setBlockData(o);
                         }
                     }

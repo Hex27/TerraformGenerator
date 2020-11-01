@@ -13,10 +13,10 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorData extends PopulatorDataAbstract {
+    private final int chunkX;
+    private final int chunkZ;
+    private final NMSChunkGenerator gen;
     RegionLimitedWorldAccess rlwa;
-    int chunkX;
-    int chunkZ;
-    NMSChunkGenerator gen;
 
     public PopulatorData(RegionLimitedWorldAccess rlwa, NMSChunkGenerator gen, int chunkX, int chunkZ) {
         this.rlwa = rlwa;
@@ -70,15 +70,13 @@ public class PopulatorData extends PopulatorDataAbstract {
     @SuppressWarnings("deprecation")
     @Override
     public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-        EntityTypes<?> et;
         try {
-            et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(type.toString()).get(null);
+            EntityTypes<?> et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(type.name()).get(null);
             Entity e = et.a(rlwa.getMinecraftWorld());
-            e.setPositionRotation((double) rawX + 0.5D, (double) rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
+            e.setPositionRotation((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
             if (e instanceof EntityInsentient) {
                 ((EntityInsentient) e).setPersistent();
-                ((EntityInsentient) e).prepare(rlwa, rlwa.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null,
-                        (NBTTagCompound) null);
+                ((EntityInsentient) e).prepare(rlwa, rlwa.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.STRUCTURE, null, null);
             }
 
             rlwa.addEntity(e);

@@ -24,7 +24,6 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class NMSChunkGenerator extends ChunkGenerator {
-
     private final WorldServer world;
     private final TerraformPopulator pop;
     private final TerraformWorld tw;

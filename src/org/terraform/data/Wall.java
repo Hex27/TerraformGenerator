@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Wall {
-
     private final SimpleBlock block;
     private final BlockFace direction;
 

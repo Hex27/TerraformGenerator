@@ -91,7 +91,7 @@ public class SimpleChunkLocation implements Cloneable {
 
     @Override
     public String toString() {
-        return world + " , " + x + " , " + z;
+        return world + ", " + x + ", " + z;
     }
 
     public Chunk toChunk() {

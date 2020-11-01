@@ -15,7 +15,6 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class NMSInjector extends NMSInjectorAbstract {
-
     @Override
     public BlockDataFixerAbstract getBlockDataFixer() {
         //Exact same stuff as the 1.16.1 changes.

@@ -13,10 +13,10 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorData extends PopulatorDataAbstract {
+    private final int chunkX;
+    private final int chunkZ;
+    private final NMSChunkGenerator gen;
     RegionLimitedWorldAccess rlwa;
-    int chunkX;
-    int chunkZ;
-    NMSChunkGenerator gen;
 
     public PopulatorData(RegionLimitedWorldAccess rlwa, NMSChunkGenerator gen, int chunkX, int chunkZ) {
         this.rlwa = rlwa;

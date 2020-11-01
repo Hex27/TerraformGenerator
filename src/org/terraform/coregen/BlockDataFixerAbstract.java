@@ -11,12 +11,11 @@ public abstract class BlockDataFixerAbstract {
     private final ArrayList<Vector> multifacing = new ArrayList<>();
     public boolean hasFlushed = false;
 
-    public ArrayList<Vector> flush() {
-		@SuppressWarnings("unchecked")
-		ArrayList<Vector> stuff =  (ArrayList<Vector>) multifacing.clone();
-		multifacing.clear();
-		hasFlushed = true;
-		return stuff;
+    public Vector[] flush() {
+        Vector[] stuff = multifacing.toArray(new Vector[0]);
+        multifacing.clear();
+        hasFlushed = true;
+        return stuff;
     }
 
     public void pushChanges(Vector e) {
