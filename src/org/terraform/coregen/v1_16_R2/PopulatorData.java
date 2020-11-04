@@ -9,6 +9,8 @@ import org.bukkit.craftbukkit.v1_16_R2.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
+import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -35,15 +37,21 @@ public class PopulatorData extends PopulatorDataAbstract {
         return CraftBlockData.fromData(ibd);
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void setType(int x, int y, int z, Material type) {
-        rlwa.setTypeAndData(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0);
+        if(!rlwa.setTypeAndData(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0)) {
+        	NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
+        }
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void setBlockData(int x, int y, int z, BlockData data) {
-        rlwa.setTypeAndData(new BlockPosition(x, y, z)
-                , ((CraftBlockData) data).getState(), 0);
+        if(!rlwa.setTypeAndData(new BlockPosition(x, y, z)
+                , ((CraftBlockData) data).getState(), 0)) {
+        	NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
+        }
     }
 
     public Biome getBiome(int rawX, int rawY, int rawZ) {

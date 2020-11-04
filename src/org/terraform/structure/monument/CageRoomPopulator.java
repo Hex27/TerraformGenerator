@@ -6,7 +6,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraformGenerator;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.GenUtils;

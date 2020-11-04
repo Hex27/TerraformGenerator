@@ -23,6 +23,19 @@ public class SimpleChunkLocation implements Cloneable {
         this.z = z;
     }
 
+    /**
+     * BLOCK COORD XYZ.
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     */
+    public SimpleChunkLocation(String world, int x, int y, int z) {
+        this.world = world;
+        this.x = x>>4;
+        this.z = z>>4;
+    }
+
     public SimpleChunkLocation(Chunk chunk) {
         this.world = chunk.getWorld().getName();
         this.x = chunk.getX();
@@ -65,7 +78,6 @@ public class SimpleChunkLocation implements Cloneable {
         return new SimpleChunkLocation(world, nx + x, nz + z);
     }
 
-    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public SimpleChunkLocation clone() {
         return new SimpleChunkLocation(world, x, z);

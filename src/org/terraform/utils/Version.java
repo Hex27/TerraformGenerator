@@ -1,11 +1,15 @@
 package org.terraform.utils;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 
 public class Version {
     private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-    private static final double DOUBLE = Double.parseDouble(StringUtils.remove(StringUtils.remove(VERSION, "1_"), "R").replace('_', '.'));
+    private static final double DOUBLE = toVersionDouble(VERSION);
+
+    public static boolean isAtLeast(String version) {
+        return DOUBLE >= toVersionDouble(version);
+    }
+    
 
     public static boolean isAtLeast(double version) {
         return DOUBLE >= version;
@@ -13,5 +17,9 @@ public class Version {
 
     public static String getVersionPackage() {
         return VERSION;
+    }
+
+    private static double toVersionDouble(String version) {
+        return Double.parseDouble(version.replace("1_", "").replace("_", ".").replace("R", "").replace("v", ""));
     }
 }

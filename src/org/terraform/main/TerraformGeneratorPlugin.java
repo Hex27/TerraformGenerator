@@ -9,8 +9,8 @@ import org.bukkit.generator.ChunkGenerator;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.coregen.TerraformGenerator;
 import org.terraform.coregen.TerraformPopulator;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.reflection.Post14PrivateFieldHandler;
@@ -82,6 +82,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
+            logger.info(event.getWorld().getName() + " loaded.");
             if (!TerraformGenerator.preWorldInitGen.isEmpty()) {
                 if (!TConfigOption.DEVSTUFF_ATTEMPT_FIXING_PREMATURE.getBoolean()) {
                     logger.info("&cIgnoring "

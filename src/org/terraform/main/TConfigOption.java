@@ -21,11 +21,11 @@ public enum TConfigOption {
     BIOME_SWAMP_CLAY_CHANCE("biome.swamp.clay.chance-out-of-thousand", 20),
     BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT("biome.lukewarm-ocean.coral.minheight", 42),
     BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT("biome.lukewarm-ocean.coral.maxheight", 52),
-
+    
     //MISC_SMOOTH_DESIGN("misc.smooth-design",false),
     MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", false),
     MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree", true),
-
+    MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood",false),
     DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
     DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations", true),

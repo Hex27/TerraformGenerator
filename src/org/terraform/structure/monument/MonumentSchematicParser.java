@@ -2,7 +2,7 @@ package org.terraform.structure.monument;
 
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
-import org.terraform.coregen.TerraformGenerator;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 

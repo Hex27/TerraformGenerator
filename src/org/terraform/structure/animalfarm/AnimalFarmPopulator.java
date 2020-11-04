@@ -6,7 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.TerraformGenerator;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -68,21 +68,21 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
             data.addEntity(x, y + 1, z, EntityType.CAT); //And a cat.
 
             //Spawn a base on the house to sit on
-            if (dir == BlockFace.NORTH || dir == BlockFace.SOUTH)
-                for (int nx = -4; nx <= 4; nx++) {
-                    for (int nz = -9; nz <= 9; nz++) {
+            if (dir == BlockFace.EAST || dir == BlockFace.WEST) {
+                for (int nx = -5; nx <= 5; nx++) {
+                    for (int nz = -10; nz <= 10; nz++) {
                         if (data.getType(x + nx, y - 1, z + nz).isSolid())
-                            BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, Material.SPRUCE_LOG);
+                            BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, BlockUtils.getWoodForBiome(biome, "LOG"));
                     }
                 }
-            else
-                for (int nx = -9; nx <= 9; nx++) {
-                    for (int nz = -4; nz <= 4; nz++) {
+            }else {
+                for (int nx = -10; nx <= 10; nx++) {
+                    for (int nz = -5; nz <= 5; nz++) {
                         if (data.getType(x + nx, y - 1, z + nz).isSolid())
-                            BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, Material.SPRUCE_LOG);
+                            BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, BlockUtils.getWoodForBiome(biome, "LOG"));
                     }
                 }
-
+            }
             createSurroundingFences(tw, biome, random, data, x, y, z);
 
         } catch (Throwable e) {

@@ -8,7 +8,7 @@ import org.bukkit.block.data.Waterlogged;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
-import org.terraform.coregen.TerraformGenerator;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.CoralGenerator;

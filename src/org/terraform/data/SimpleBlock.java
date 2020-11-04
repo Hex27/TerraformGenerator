@@ -217,6 +217,6 @@ public class SimpleBlock {
         if (this == obj) return true;
         if (!(obj instanceof SimpleBlock)) return false;
         SimpleBlock other = (SimpleBlock) obj;
-        return popData == other.popData && x == other.x && z == other.z;
+        return popData == other.popData && x == other.x && z == other.z && y == other.y;
     }
 }

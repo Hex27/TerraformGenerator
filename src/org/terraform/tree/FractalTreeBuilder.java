@@ -1,5 +1,6 @@
 package org.terraform.tree;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -86,8 +87,18 @@ public class FractalTreeBuilder {
                 this.setBaseHeight(3).setBaseThickness(3).setThicknessDecrement(1f).setMaxDepth(3).setLeafRadiusX(3).setLeafRadiusY(2).setLeafRadiusZ(3).setHeightVar(1).setMaxBend(Math.PI / 6).setLengthDecrement(0.1f).setVines(3).setLogType(Material.JUNGLE_WOOD).setLeafType(Material.JUNGLE_LEAVES).setCocabeans(1);
                 break;
             case SAVANNA_BIG:
-                this.setBaseHeight(15).setBaseThickness(20).setThicknessDecrement(5.5f).setMaxDepth(4).setLeafRadiusX(4f).setLeafRadiusZ(4f).setLeafRadiusY(1.5f).setLogType(Material.ACACIA_LOG).setLeafType(Material.ACACIA_LEAVES).setLengthDecrement(0.5f).setHeightVar(3);
-                break;
+            	this.setBaseHeight(10)
+            	.setBaseThickness(15)
+            	.setThicknessDecrement(4f)
+            	.setMaxDepth(4)
+            	.setLeafRadiusX(4f)
+            	.setLeafRadiusZ(4f)
+            	.setLeafRadiusY(1.5f)
+            	.setLogType(Material.ACACIA_LOG)
+            	.setLeafType(Material.ACACIA_LEAVES)
+            	.setLengthDecrement(0.4f)
+            	.setHeightVar(2);
+            	break;
             case WASTELAND_BIG:
                 this.setBaseHeight(6).setBaseThickness(4).setThicknessDecrement(1f).setMaxDepth(4).setLeafRadius(0).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.AIR).setLengthDecrement(0.5f).setHeightVar(1);
                 break;
@@ -254,7 +265,10 @@ public class FractalTreeBuilder {
     }
 
     public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        this.oriX = x;
+        if(TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
+        	this.logType = Material.getMaterial(StringUtils.replace(this.logType.toString(), "WOOD", "LOG"));
+        }
+    	this.oriX = x;
         this.oriY = y;
         this.oriZ = z;
         this.rand = tw.getRand(16 * 16 * x + 16 * y + z);
