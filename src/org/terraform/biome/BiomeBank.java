@@ -150,7 +150,7 @@ public enum BiomeBank {
                     moisture + GenUtils.randDouble(random, -dither, dither)
             );
         }
-
+        
         //GENERATE LOW-ALTITUDE AREAS
         return BiomeGrid.calculateBiome(
                 BiomeType.FLAT,

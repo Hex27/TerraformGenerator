@@ -47,21 +47,6 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
-//		ArrayList<BiomeBank> banks = new ArrayList<>();
-//		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
-//			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-//				int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-//				for(BiomeBank bank:BiomeBank.values()){
-//					BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
-//					
-//					if(bank == currentBiome){
-//						if(!banks.contains(bank))
-//							banks.add(bank);
-//						break;
-//					}
-//				}
-//			}
-//		}
         int[] coords = getCoordsFromMegaChunk(tw, new MegaChunk(data.getChunkX(), data.getChunkZ()));
         int x = coords[0];
         int z = coords[1];

@@ -1,5 +1,6 @@
 package org.terraform.coregen.v1_16_R3;
 
+import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import net.minecraft.server.v1_16_R3.*;
 import net.minecraft.server.v1_16_R3.HeightMap.Type;
@@ -13,6 +14,7 @@ import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
@@ -36,6 +38,17 @@ public class NMSChunkGenerator extends ChunkGenerator {
         tw = TerraformWorld.get(worldname, seed);
         pop = new TerraformPopulator(tw);
         world = ((CraftWorld) Bukkit.getWorld(worldname)).getHandle();
+        try {
+            modifyCaveCarverLists(WorldGenCarverAbstract.a);
+            modifyCaveCarverLists(WorldGenCarverAbstract.b);
+            modifyCaveCarverLists(WorldGenCarverAbstract.c);
+            modifyCaveCarverLists(WorldGenCarverAbstract.d);
+            modifyCaveCarverLists(WorldGenCarverAbstract.e);
+        }
+        catch(Exception e) {
+        	TerraformGeneratorPlugin.logger.error("Failed to modify vanilla cave carver lists. You may see floating blocks above caves.");
+        	e.printStackTrace();
+        }
     }
 
     public TerraformWorld getTerraformWorld() {
@@ -106,7 +119,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
                 while (listiterator.hasNext()) {
                     int j1 = listiterator.nextIndex();
-                    WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper<?>) ((Supplier<?>) listiterator.next()).get();
+                    WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper<?>) listiterator.next().get();
+                    
                     //d field is the carver. Use reflection to get it.
                     try {
                         Field field = WorldGenCarverWrapper.class.getDeclaredField("d");
@@ -129,6 +143,33 @@ public class NMSChunkGenerator extends ChunkGenerator {
             }
         }
 
+    }
+    
+    /**
+     * Used to modify cave carvers in vanilla to carve some other blocks.
+     * @param carverAbstract
+     * @throws NoSuchFieldException
+     * @throws SecurityException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     */
+    @SuppressWarnings("rawtypes")
+	private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    	Set<net.minecraft.server.v1_16_R3.Block> immutableCarverList = 
+    			ImmutableSet.of(
+    					//vanilla blocks
+    					Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE,
+    			        //Extra blocks
+    					Blocks.RED_SAND,
+    					Blocks.COBBLESTONE_SLAB,
+    					Blocks.COBBLESTONE,
+    					Blocks.GRASS_PATH,
+    					Blocks.SNOW_BLOCK
+    					);
+    	Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
+        if (!field.isAccessible())
+            field.setAccessible(true);
+        field.set(carverAbstract, immutableCarverList);
     }
 
     @Override
