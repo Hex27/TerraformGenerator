@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -16,8 +17,10 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
+import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
+import org.terraform.utils.FastNoise.NoiseType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,10 +33,20 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = getCoordsFromMegaChunk(tw, mc);
 
+        //Check biome
         for (BiomeBank biome : biomes) {
             if (biome != BiomeBank.DESERT)
                 return false;
         }
+        
+        //Check heightmap. Ensure that entire area isn't beach or sea.
+        //Ideally the entire area should be a desert.
+//        for(int nx = -50; nx <= 50; nx++)
+//	        for(int nz = -50; nz <= 50; nz++) {
+//	        	if(HeightMap.getHeight(tw, nx+coords[0], nz+coords[1]) < TerraformGenerator.seaLevel + 5) {
+//	        		return false;
+//	        	}
+//	        }
         return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ &&
                 rollSpawnRatio(tw, chunkX, chunkZ);
     }
@@ -51,15 +64,20 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         int[] coords = getCoordsFromMegaChunk(tw, new MegaChunk(data.getChunkX(), data.getChunkZ()));
         int x = coords[0];
         int z = coords[1];
+        
         int y = GenUtils.getHighestGround(data, x, z);
-
-        spawnPyramid(tw, tw.getHashedRand(x, y, z, 1111222), data, x, y, z);
+        try {
+        	spawnPyramid(tw, tw.getHashedRand(x, y, z, 1111222), data, x, y, z);
+        }catch(Throwable e) {
+        	e.printStackTrace();
+        }
     }
 
     public void spawnPyramid(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
         TerraformGeneratorPlugin.logger.info("Spawning Pyramid at: " + x + "," + z);
         int numRooms = 1000;
         int range = 70;
+        spawnSandBase(tw,data,x,y,z);
         spawnPyramidBase(data, x, y, z);
 
         Random hashedRand = tw.getHashedRand(x, y, z);
@@ -204,6 +222,72 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         level2.fill(data, tw, Material.SANDSTONE, Material.CUT_SANDSTONE);
     }
 
+    /**
+     * Used to ensure that the dungeon level never gets revealed above the surface by a river or something stupid.
+     * This will ensure that all ground levels around those coords are at least roughly at y blocks
+     * @param data
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void spawnSandBase(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    	int squareRadius = 65;
+    	FastNoise noiseGenerator = new FastNoise();
+    	noiseGenerator.SetNoiseType(NoiseType.PerlinFractal);
+    	noiseGenerator.SetFrequency(0.007f);
+    	noiseGenerator.SetFractalOctaves(6);
+
+    	FastNoise vertNoise = new FastNoise();
+    	vertNoise.SetNoiseType(NoiseType.PerlinFractal);
+    	vertNoise.SetFrequency(0.01f);
+    	vertNoise.SetFractalOctaves(8);
+    	
+    	for(int nx = x-squareRadius; nx <= x+squareRadius; nx++) {
+    		for(int nz = z-squareRadius; nz <= z+squareRadius; nz++) {
+    			int height = GenUtils.getHighestGround(data,nx,nz);
+    			Material[] crust = new Material[4];
+    			crust[0] = data.getType(nx, height, nz);
+    			Material mat = data.getType(nx, height, nz);
+    			int original = height;
+    			//int height = HeightMap.getHeight(tw, nx, nz);
+
+    			
+    			//Raise ground according to noise levels.
+    			int raiseDone = 0;
+    			int noise = Math.round(noiseGenerator.GetNoise(nx, nz)*5);
+    			while(height < y + noise - 1) {
+    				raiseDone++;
+    				if(!data.getType(nx, height+1, nz).isSolid())
+    					data.setType(nx, height+1, nz, mat);
+    				height++;
+    			}
+    			
+    			if(raiseDone > 0) {
+    				//Make the sides sink down naturally (lol. Or try to, anyway)
+        			int XdistanceFromCenter = (int) (Math.abs(nx-x)+ Math.abs(vertNoise.GetNoise(nx-80, nz-80)*25));
+        			int ZdistanceFromCenter = (int) (Math.abs(nz-z)+ Math.abs(vertNoise.GetNoise(nx-80, nz-80)*25));
+//        			
+        			if(XdistanceFromCenter > 55 || ZdistanceFromCenter > 55) {
+        				//Depress downwards
+        				
+        				int dist = XdistanceFromCenter > ZdistanceFromCenter ? XdistanceFromCenter : ZdistanceFromCenter ;
+        				//Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((50.0f-dist)/5.0f))));
+        				float comp = original+((raiseDone)*((60.0f-dist)/5.0f)) + Math.abs(vertNoise.GetNoise(nx, nz)*30);
+        				if(comp < original) comp = original;
+        				while(height > comp) {
+        					if(data.getType(nx, height, nz) == mat)
+	        					if(height > TerraformGenerator.seaLevel)
+	        						data.setType(nx, height, nz, Material.AIR);
+	        					else
+	        						data.setType(nx, height, nz, Material.WATER);
+            				height--;
+            			}
+        			}
+    			}
+        	}
+    	}
+    }
+    
     public void spawnPyramidBase(PopulatorDataAbstract data, int x, int y, int z) {
         for (int height = 0; height < 40; height++) {
             int radius = 40 - height;

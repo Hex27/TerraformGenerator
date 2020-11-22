@@ -7,12 +7,12 @@ import java.util.List;
 
 public enum TConfigOption {
     HEIGHT_MAP_MOUNTAIN_FREQUENCY("heightmap.mountain-frequency", 0.002f),
-    HEIGHT_MAP_OCEANIC_FREQUENCY("heightmap.oceanic-frequency", 0.001f),
+    HEIGHT_MAP_OCEANIC_FREQUENCY("heightmap.oceanic-frequency", 0.0007f),
     HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level", 62),
     HEIGHT_MAP_DEEP_SEA_LEVEL("heightmap.deep-sea-level", 35),
 
-    BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency", 0.001f),
-    BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.001f),
+    BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency", 0.0007f),
+    BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.0007f),
     BIOME_DITHER("biome.dithering", 0.1d),
     BIOME_MOUNTAIN_HEIGHT("biome.min-mountain-height", 85),
     BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE("biome.desert-mountains.place-yellow-concrete", true),
@@ -40,7 +40,7 @@ public enum TConfigOption {
     STRUCTURES_MONUMENT_ENABLED("structures.monument.enabled", true),
     STRUCTURES_MONUMENT_SPAWNRATIO("structures.monument.spawn-ratio", 1.0),
     STRUCTURES_PYRAMID_ENABLED("structures.pyramid.enabled", true),
-    STRUCTURES_PYRAMID_SPAWNRATIO("structures.pyramid.spawn-ratio", 0.25),
+    STRUCTURES_PYRAMID_SPAWNRATIO("structures.pyramid.spawn-ratio", 1.0),
     STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN("structures.pyramid.spawn-elder-guardian", true),
     STRUCTURES_FARMHOUSE_ENABLED("structures.farmhouse.enabled", true),
     STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled", true),
