@@ -45,7 +45,7 @@ public class GuardianChamberPopulator extends RoomPopulatorAbstract {
                 double heightMultiplierZ = ((double) (2 * Math.abs(room.getZ() - z))) / ((double) Math.abs(room.getWidthZ()));
                 double heightMultiplier = 1 - ((heightMultiplierX + heightMultiplierZ) / 2);
                 int poolDepth = (int) (1 + heightMultiplier * 4);
-                //Set water
+                //Set water and delete pressure plate deathpit traps
                 for (int y = room.getY(); y > room.getY() - poolDepth; y--) {
                     data.setType(x, y, z, Material.WATER);
                     if (data.getType(x, y + 1, z) == Material.STONE_PRESSURE_PLATE)
@@ -61,7 +61,9 @@ public class GuardianChamberPopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return room.getWidthX() >= 5 && room.getWidthZ() >= 5;
+    	//Don't compete with crypt rooms for space
+        return room.getWidthX() >= 5 && room.getWidthZ() >= 5
+        		&& room.getWidthX() < 13 && room.getWidthZ() < 13;
     }
 
 

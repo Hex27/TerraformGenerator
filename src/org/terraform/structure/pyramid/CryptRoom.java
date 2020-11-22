@@ -138,6 +138,6 @@ public class CryptRoom extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return room.getWidthX() >= 13 && room.getWidthZ() >= 13;
+        return room.getWidthX() >= 11 && room.getWidthZ() >= 11;
     }
 }

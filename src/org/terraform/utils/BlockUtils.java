@@ -59,7 +59,8 @@ public class BlockUtils {
     /**
      * @return rotates original block face (NSEW only) clockwise the specified number of times
      */
-    public static BlockFace rotateFace(BlockFace original, int times) {
+    @SuppressWarnings("incomplete-switch")
+	public static BlockFace rotateFace(BlockFace original, int times) {
         for (int i = 0; i < times; i++) {
             switch (original) {
                 case NORTH:
@@ -171,7 +172,21 @@ public class BlockUtils {
                 Material.LARGE_FERN,
                 Material.SUNFLOWER);
     }
-
+    
+    public static void dropDownBlock(SimpleBlock block) {
+        if (block.getType().isSolid()) {
+            Material type = block.getType();
+            block.setType(Material.CAVE_AIR);
+            int depth = 0;
+            while (!block.getType().isSolid()) {
+                block = block.getRelative(0, -1, 0);
+                depth++;
+                if (depth > 50) return;
+            }
+            block.getRelative(0,1,0).setType(type);
+        }
+    }
+    
     public static void horizontalGlazedTerracotta(PopulatorDataAbstract data, int x, int y, int z, Material glazedTerracotta) {
         Directional terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
         terracotta.setFacing(BlockFace.NORTH);

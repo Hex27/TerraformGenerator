@@ -139,6 +139,7 @@ public class GenUtils {
     }
 
     public static int randInt(int min, int max) {
+    	if(min == max) return min;
         return randInt(RANDOMIZER, min, max);
     }
 

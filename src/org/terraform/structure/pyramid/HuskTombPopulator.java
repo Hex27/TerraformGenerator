@@ -6,9 +6,11 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.util.Map.Entry;
@@ -61,12 +63,21 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
 
         //Place the spawner
         data.setSpawner(room.getX(), room.getY() + 1, room.getZ(), EntityType.HUSK);
-
+        
+        //Ceiling erosions
+        for(int i = 0; i < GenUtils.randInt(3, 10); i++) {
+        	int[] loc = room.randomCoords(rand, 1);
+        	if(data.getType(loc[0],room.getY()+room.getHeight()+1,loc[2]) == Material.SAND)
+        		data.setType(loc[0],room.getY()+room.getHeight()+1,loc[2], Material.SANDSTONE);
+        	BlockUtils.dropDownBlock(new SimpleBlock(data,loc[0],room.getY()+room.getHeight(),loc[2]));
+        }
     }
 
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return room.getWidthX() >= 5 && room.getWidthZ() >= 5;
+    	//Don't compete with Crypt rooms for space
+        return room.getWidthX() >= 5 && room.getWidthZ() >= 5
+        		&& room.getWidthX() < 13 && room.getWidthZ() < 13;
     }
 }

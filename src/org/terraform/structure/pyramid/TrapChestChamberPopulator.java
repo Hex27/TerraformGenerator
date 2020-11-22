@@ -21,6 +21,14 @@ public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
 
+    	//Delete all surface pressure plates in this room placed by the pyramid dungeon path populator
+    	//We don't want any mobs stepping on bombs here. The whole room explodes.
+    	int[] lowerCorner = room.getLowerCorner(1);
+    	int[] upperCorner = room.getUpperCorner(1);
+    	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+    		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++)
+    			data.setType(x, room.getY()+1, z, Material.AIR);
+    	
         //Classic Pyramid interior look
         SimpleBlock center = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
         center.setType(Material.BLUE_TERRACOTTA);

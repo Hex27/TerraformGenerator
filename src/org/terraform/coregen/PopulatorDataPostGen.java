@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
@@ -66,6 +67,19 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
         //.setBlockData(x, y, z, data);
         Block b = w.getBlockAt(x, y, z);
         b.setBlockData(data.clone(), !isFragile);
+    }
+    
+    /**
+     * Blockstates are mutable, so just edit them. There is no method to directly set them.
+     * @param x
+     * @param y
+     * @param z
+     * @param state
+     * @return 
+     */
+    public BlockState getBlockState(int x, int y, int z) {
+    	 Block b = w.getBlockAt(x, y, z);
+         return b.getState();
     }
 
     public void noPhysicsUpdateForce(int x, int y, int z, BlockData data) {

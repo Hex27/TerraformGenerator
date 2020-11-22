@@ -42,7 +42,7 @@ public class CubeRoom {
         Wall west = new Wall(
                 new SimpleBlock(data, upperBounds[0] - padding, y + 1, upperBounds[1] - padding)
                 , BlockFace.WEST);
-        //West wall minuses one, so as to not overlap.
+        
         walls.put(north, widthX - 2 * padding);
         walls.put(south, widthX - 2 * padding);
         walls.put(east, widthZ - 2 * padding);

@@ -14,6 +14,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
@@ -23,9 +24,9 @@ import org.terraform.utils.BlockUtils;
 import java.util.Map.Entry;
 import java.util.Random;
 
-public class PharoahsTombPopulator extends RoomPopulatorAbstract {
+public class ElderGuardianChamber extends RoomPopulatorAbstract {
 
-    public PharoahsTombPopulator(Random rand, boolean forceSpawn, boolean unique) {
+    public ElderGuardianChamber(Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
     }
 
@@ -42,7 +43,7 @@ public class PharoahsTombPopulator extends RoomPopulatorAbstract {
             placePillar(new Wall(base.getRelative(face, 6)), room.getHeight() - 1);
         }
 
-        //Classic Pyramid interior floor decoration
+        //Classic Pyramid interior floor decoration. On the ceiling as well.
         SimpleBlock center = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
         center.setType(Material.BLUE_TERRACOTTA);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
@@ -54,9 +55,21 @@ public class PharoahsTombPopulator extends RoomPopulatorAbstract {
             center.getRelative(face).getRelative(face)
                     .setType(Material.ORANGE_TERRACOTTA);
         
+        //On the ceiling as well
+        SimpleBlock ceiling = new SimpleBlock(data, room.getX(), room.getY()+room.getHeight(), room.getZ());
+        ceiling.setType(Material.BLUE_TERRACOTTA);
+        for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
+        	ceiling.getRelative(face).setType(Material.ORANGE_TERRACOTTA);
+        }
+        for (BlockFace face : BlockUtils.directBlockFaces)
+        	ceiling.getRelative(face).getRelative(face)
+                    .setType(Material.ORANGE_TERRACOTTA);
+        
         //Elder Guardian cage
-        SimpleBlock cageCenter = center.getRelative(0,11,0);
-        placeElderGuardianCage(cageCenter);
+        if(TConfigOption.STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN.getBoolean()) {
+        	SimpleBlock cageCenter = center.getRelative(0,11,0);
+        	placeElderGuardianCage(cageCenter);
+        }
         
         //Decorate the 4 walls to not be so plain
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
@@ -71,7 +84,7 @@ public class PharoahsTombPopulator extends RoomPopulatorAbstract {
         }
         
         //Stairs at the top
-        for (Entry<Wall, Integer> walls : room.getFourWalls(data, 2).entrySet()) {
+        for (Entry<Wall, Integer> walls : room.getFourWalls(data, 1).entrySet()) {
             Wall w = walls.getKey().getRelative(0, room.getHeight() - 2, 0);
             int length = walls.getValue();
             for (int j = 0; j < length; j++) {

@@ -58,12 +58,11 @@ public class DesertHandler extends BiomeHandler {
                         }
                         if (canSpawn)
                             BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.CACTUS, 3, 5);
+                    }else if (GenUtils.chance(random, 1, 80)) {
+                            data.setType(x, y + 1, z, Material.DEAD_BUSH);
                     }
                 }
 
-                if (GenUtils.chance(random, 1, 80)) {
-                    data.setType(x, y + 1, z, Material.DEAD_BUSH);
-                }
             }
         }
     }

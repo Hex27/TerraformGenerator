@@ -49,8 +49,10 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                         if (h < 1) h = 1;
                         if (h > 4) h = 4;
                         Wall w = new Wall(new SimpleBlock(data, x, ceil, z), BlockFace.NORTH);
-                        w.downLPillar(random, h, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
-
+                        if(w.getRelative(0,1,0).getType() == Material.SAND||w.getRelative(0,1,0).getType() == Material.SANDSTONE)
+                        	w.downLPillar(random, h, Material.SANDSTONE_WALL);
+                        else if(BlockUtils.isStoneLike(w.getRelative(0,1,0).getType()))
+                        	w.downLPillar(random, h, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
                     }
 
                     //=========================
@@ -63,8 +65,12 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                         if (h < 1) h = 1;
                         if (h > 4) h = 4;
                         Wall w = new Wall(new SimpleBlock(data, x, floor + 1, z), BlockFace.NORTH);
-                        if (w.getType() == Material.CAVE_AIR)
-                            w.LPillar(h, random, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
+                        if (w.getType() == Material.CAVE_AIR) {
+                        	if(w.getRelative(0,1,0).getType() == Material.SAND||w.getRelative(0,1,0).getType() == Material.SANDSTONE)
+                        		w.LPillar(h, random, Material.SANDSTONE_WALL);
+                        	else if(BlockUtils.isStoneLike(w.getRelative(0,1,0).getType()))
+                        		w.LPillar(h, random, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
+                        }
 
                     } else if (GenUtils.chance(random, 1, 25)) { //Slabbing
                         SimpleBlock base = new SimpleBlock(data, x, floor + 1, z);

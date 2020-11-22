@@ -21,7 +21,7 @@ public class PyramidStairwayTopPopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         int bfIndex = 6;
-
+        
         //Open up the floor
         for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
             data.setType(room.getX() + face.getModX(), room.getY(), room.getZ() + face.getModZ(), Material.CAVE_AIR);

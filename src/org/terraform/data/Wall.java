@@ -294,6 +294,12 @@ public class Wall {
         return new Wall(block.getRelative(face), direction);
     }
 
+
+    public Wall getRelative(BlockFace face, int depth) {
+        // TODO Auto-generated method stub
+        return new Wall(block.getRelative(face,depth), direction);
+    }
+    
     public int getX() {
         return get().getX();
     }

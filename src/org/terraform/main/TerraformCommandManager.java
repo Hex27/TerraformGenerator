@@ -37,6 +37,7 @@ public class TerraformCommandManager extends DCCommandManager {
         this.registerCommand(new SchematicSaveCommand(plugin, "save"));
         this.registerCommand(new SchematicLoadCommand(plugin, "load"));
         this.registerCommand(new PyramidCommand(plugin, "pyramid"));
+        this.registerCommand(new MazeCommand(plugin, "maze"));
         this.registerCommand(new BlockDataTestCommand(plugin, "blockdatatest", "bdt"));
     }
 
