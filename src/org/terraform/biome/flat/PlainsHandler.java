@@ -71,25 +71,13 @@ public class PlainsHandler extends BiomeHandler {
                     if (GenUtils.chance(random, 1, 10)) {
                         if (GenUtils.chance(random, 6, 10)) {
                             data.setType(x, y + 1, z, Material.GRASS);
-                            if (random.nextBoolean()) {
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                            }
                         } else {
-                            if (GenUtils.chance(random, 7, 10))
+                            if (GenUtils.chance(random, 7, 70))
                                 data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                            else
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, BlockUtils.pickTallFlower());
-                        }
+                       }
                     }
 
-                    //Small grass poffs
-                    if (GenUtils.chance(random, 1, 300)) {
-                        BlockUtils.replaceSphere(
-                                random.nextInt(424444),
-                                2, 2, 2,
-                                new SimpleBlock(data, x, y + 1, z), false, Material.OAK_LEAVES);
-                    }
-                    if (GenUtils.chance(random, 1, 500)) {
+                    if (GenUtils.chance(random, 1, 1000)) {
                         if (BlockUtils.isDirtLike(data.getType(x, y, z)))
                             new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL)
                                     .build(world, data, x, y + 1, z);

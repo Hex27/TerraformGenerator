@@ -18,6 +18,7 @@ import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pyramid.PyramidPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.structure.village.VillagePopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
     public static final StructurePopulator[] structurePops = {
             new StrongholdPopulator(), new VillageHousePopulator(), new SmallDungeonPopulator(), 
             new MonumentPopulator(), new ShipwreckPopulator(), new MineshaftPopulator(), 
-            new LargeCavePopulator(), new PyramidPopulator()
+            new LargeCavePopulator(), new PyramidPopulator(), new VillagePopulator()
     };
 
     private final TerraformWorld tw;

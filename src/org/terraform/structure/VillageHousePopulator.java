@@ -9,6 +9,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.structure.animalfarm.AnimalFarmPopulator;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
+import org.terraform.structure.village.villagehouses.SmallVillagehouse;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
                     if (!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
                         return;
 
-                    new FarmhousePopulator().populate(tw, data);
+                    new SmallVillagehouse().populate(tw, data);
                 }
             }
         }

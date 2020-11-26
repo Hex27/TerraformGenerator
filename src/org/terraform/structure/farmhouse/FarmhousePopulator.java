@@ -1,3 +1,4 @@
+
 package org.terraform.structure.farmhouse;
 
 import org.bukkit.Bukkit;
@@ -178,7 +179,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                 } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { //Grass hedges
                     BlockUtils.setPersistentLeaves(data, nx + x, height + 1, nz + z, BlockUtils.getWoodForBiome(biome, "LEAVES"));
 
-                    if (GenUtils.chance(random, 1, 100)) {
+                    if (GenUtils.chance(random, 1, 150)) {
                         placeLamp(tw, biome, random, data, nx + x, height + 1, z + nz);
                     }
                     //data.setType(nx+x, height+1, nz+z, Material.OAK_LEAVES);

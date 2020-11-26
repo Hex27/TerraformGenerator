@@ -338,6 +338,80 @@ public class BlockUtils {
         }
     }
 
+    
+    public static void generateOceanClay(int x, int y, int z, PopulatorDataAbstract data, Random random) {
+        //CLAY DEPOSIT
+        int length = GenUtils.randInt(18, 39);
+        int nx = x;
+        int ny = y;
+        int nz = z;
+        while (length-- > 0) {
+            if (data.getType(nx, ny, nz) == Material.SAND ||
+                    data.getType(nx, ny, nz) == Material.GRAVEL ||
+                    isDirtLike(data.getType(nx, ny, nz)))
+                data.setType(nx, ny, nz, Material.CLAY);
+
+            switch (random.nextInt(5)) {  // The direction chooser
+                case 0:
+                    nx++;
+                    break;
+                case 1:
+                    ny++;
+                    break;
+                case 2:
+                    nz++;
+                    break;
+                case 3:
+                    nx--;
+                    break;
+                case 4:
+                    ny--;
+                    break;
+                case 5:
+                    nz--;
+                    break;
+            }
+            if (ny > y) ny = y;
+            if (ny < 2) ny = 2;
+        }
+    }
+    
+    public static void generateSandOcean(int x, int y, int z, PopulatorDataAbstract data, Random random) {
+        //CLAY DEPOSIT
+        int length = GenUtils.randInt(18, 39);
+        int nx = x;
+        int ny = y;
+        int nz = z;
+        while (length-- > 0) {
+            if (data.getType(nx, ny, nz) == Material.GRAVEL ||
+                    data.getType(nx, ny, nz) == Material.GRAVEL ||
+                    isDirtLike(data.getType(nx, ny, nz)))
+                data.setType(nx, ny, nz, Material.SAND);
+
+            switch (random.nextInt(5)) {  // The direction chooser
+                case 0:
+                    nx++;
+                    break;
+                case 1:
+                    ny++;
+                    break;
+                case 2:
+                    nz++;
+                    break;
+                case 3:
+                    nx--;
+                    break;
+                case 4:
+                    ny--;
+                    break;
+                case 5:
+                    nz--;
+                    break;
+            }
+            if (ny > y) ny = y;
+            if (ny < 2) ny = 2;
+        }
+    }
     public static void vineUp(SimpleBlock base, int maxLength) {
         for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);

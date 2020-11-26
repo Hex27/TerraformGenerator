@@ -88,11 +88,6 @@ public class BlackOceansHandler extends BiomeHandler {
                 int coreHeight = HeightMap.getHeight(world, x, z);
                 if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
                 //black spike
-                if (GenUtils.chance(random, 1, 200)) {
-                    genSpike(world, random, data, x, coreHeight, z,
-                            GenUtils.randInt(5, 15), //radius
-                            GenUtils.randInt(50, 100));
-                }
 
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;

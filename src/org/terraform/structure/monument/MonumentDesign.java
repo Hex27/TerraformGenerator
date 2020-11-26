@@ -105,7 +105,7 @@ public enum MonumentDesign {
                             w.setBlockData(stairs);
                         }
 
-                    }
+                    }	
                     w = w.getRelative(0, 1, 0);
                 }
                 break;

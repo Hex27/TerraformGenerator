@@ -15,6 +15,11 @@ public class BadlandsMountainHandler extends BiomeHandler {
             Material.YELLOW_TERRACOTTA,
             Material.ORANGE_TERRACOTTA,
             Material.RED_TERRACOTTA,
+            Material.LIGHT_GRAY_TERRACOTTA,
+            Material.GRAY_TERRACOTTA,
+            Material.WHITE_TERRACOTTA,
+            Material.BLACK_TERRACOTTA,
+            Material.BLUE_TERRACOTTA,
     };
 
     @Override

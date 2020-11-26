@@ -57,6 +57,8 @@ public enum TConfigOption {
     STRUCTURES_MINESHAFT_MAX_Y("structures.mineshaft.max-y", 30),
     STRUCTURES_LARGECAVE_ENABLED("structures.largecave.enabled", true),
     STRUCTURES_LARGECAVE_CHANCE("structures.largecave.chance", 75),
+    STRUCTURES_VILLAGE_ENABLED("structures.village.enabled", true),
+    STRUCTURES_VILLAGE_CHANCE("structures.village.chance", 25),
 
     //-=[ANIMALS]=-
     //BEES

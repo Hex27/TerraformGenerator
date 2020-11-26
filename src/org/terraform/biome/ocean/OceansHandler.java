@@ -6,6 +6,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
@@ -34,7 +35,7 @@ public class OceansHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.DIRT, Material.GRAVEL, Material.SAND, Material.GRAVEL, Material.GRAVEL, Material.GRAVEL),
+        return new Material[]{GenUtils.randMaterial(rand, Material.GRAVEL, Material.GRAVEL, Material.GRAVEL, Material.GRAVEL),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.GRAVEL, Material.SAND, Material.GRAVEL, Material.GRAVEL, Material.GRAVEL),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.GRAVEL, Material.SAND),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -51,6 +52,11 @@ public class OceansHandler extends BiomeHandler {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (data.getBiome(x, y + 1, z) != getBiome()) continue;
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
+                if (GenUtils.chance(random, TConfigOption.BIOME_RIVER_CLAY_CHANCE.getInt(), 1000)) {
+                	BlockUtils.generateOceanClay(x, y, z, data, random);
+                }else if (GenUtils.chance(random, TConfigOption.BIOME_RIVER_CLAY_CHANCE.getInt() - GenUtils.randInt(1, 29), 1000)) {
+                	BlockUtils.generateSandOcean(x, y, z, data, random);
+                }
                 if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
                 } else if (GenUtils.chance(random, 3, 50)

@@ -34,7 +34,7 @@ public class RiverHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.DIRT, Material.SAND, Material.SAND, Material.DIRT, Material.DIRT, Material.DIRT),
+        return new Material[]{GenUtils.randMaterial(rand, Material.SAND, Material.SAND),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.SAND, Material.SAND, Material.DIRT, Material.DIRT, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.DIRT, Material.SAND),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
