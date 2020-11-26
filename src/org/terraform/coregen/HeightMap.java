@@ -9,6 +9,32 @@ import org.terraform.utils.FastNoise.NoiseType;
 public abstract class HeightMap {
     private static final int defaultSeaLevel = 62;
 
+    /**
+     * Returns the average increase or decrease in height for surrounding blocks compared to the provided height at those coords.
+     * 1.5 for a radius of 3 is considered steep.
+     * @param tw
+     * @param x
+     * @param z
+     * @param radius
+     * @return
+     */
+    public static double getNoiseGradient(TerraformWorld tw, int x, int z, int radius) {
+    	double totalChangeInGradient = 0;
+    	int count = 0;
+    	double centerNoise = getHeight(tw,x,z);
+    	for(int nx = -radius; nx <= radius; nx++)
+        	for(int nz = -radius; nz <= radius; nz++) {
+        		if(nx==0 && nz==0) continue;
+        		//Bukkit.getLogger().info(nx + "," + nz + ":"+(getHeight(tw,x+nx,z+nz)-centerNoise));
+        		totalChangeInGradient += Math.abs(getHeight(tw,x+nx,z+nz)-centerNoise);
+        		count++;
+        	}
+		//Bukkit.getLogger().info("Count: " + count);
+		//Bukkit.getLogger().info("Total: " + totalChangeInGradient);
+    	
+    	return totalChangeInGradient/count;
+    }
+    
     public static double getRiverDepth(TerraformWorld tw, int x, int z) {
         double depth = 15 - 100 * riverRidge(tw, x, z);
         return depth < 0 ? 0 : depth;

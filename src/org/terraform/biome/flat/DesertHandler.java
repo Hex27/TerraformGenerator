@@ -6,6 +6,8 @@ import org.bukkit.block.BlockFace;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
+import org.terraform.structure.small.DesertWellPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -62,8 +64,12 @@ public class DesertHandler extends BiomeHandler {
                             data.setType(x, y + 1, z, Material.DEAD_BUSH);
                     }
                 }
+                
 
             }
+        }
+        if(GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
+        	new DesertWellPopulator().populate(world, random, data, false);
         }
     }
 }

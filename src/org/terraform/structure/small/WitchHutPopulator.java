@@ -49,7 +49,7 @@ public class WitchHutPopulator {
         try {
             BlockFace face = BlockUtils.getDirectBlockFace(random);
             TerraSchematic swamphut = TerraSchematic.load("swamphut", core);
-            swamphut.parser = new WithHutSchematicParser(random, data);
+            swamphut.parser = new WitchHutSchematicParser(random, data);
             swamphut.setFace(face);
             swamphut.apply();
             Wall w = new Wall(core.getRelative(0, -2, 0), face).getRear();
@@ -70,11 +70,11 @@ public class WitchHutPopulator {
 
     }
 
-    private static class WithHutSchematicParser extends SchematicParser {
+    private static class WitchHutSchematicParser extends SchematicParser {
         private final Random rand;
         private final PopulatorDataAbstract pop;
 
-        public WithHutSchematicParser(Random rand,
+        public WitchHutSchematicParser(Random rand,
                                       PopulatorDataAbstract pop) {
             this.rand = rand;
             this.pop = pop;

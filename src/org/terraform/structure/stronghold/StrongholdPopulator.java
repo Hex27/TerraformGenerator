@@ -16,43 +16,44 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class StrongholdPopulator extends StructurePopulator {
-    private static final int[][] POSITIONS = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
+    private int[][] POSITIONS;
 
-    static {
-        Random rand = new Random(new Random().nextLong() * 3);
-        int pos = 0;
-        int radius = 1408;
+    public int[][] strongholdPositions(TerraformWorld tw) {
+    	if(POSITIONS == null) {
+    		POSITIONS = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
+            Random rand = tw.getHashedRand(1, 1, 1);
+            int pos = 0;
+            int radius = 1408;
 
-        for (int i = 0; i < 3; i++) {
-            int[] coords = randomCircleCoords(rand, radius);
-            TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + ", " + coords[1]);
-            POSITIONS[pos++] = coords;
-        }
-        radius += 3072;
-        //TerraformGeneratorPlugin.logger.debug("sp-1");
-        for (int i = 0; i < 6; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
-        radius += 3072;
-        //TerraformGeneratorPlugin.logger.debug("sp-2");
-        for (int i = 0; i < 10; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
-        radius += 3072;
-        //TerraformGeneratorPlugin.logger.debug("sp-3");
-        for (int i = 0; i < 15; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
-        radius += 3072;
-        //TerraformGeneratorPlugin.logger.debug("s-pop-4");
-        for (int i = 0; i < 21; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
-        radius += 3072;
-        //TerraformGeneratorPlugin.logger.debug("s-pop-5");
-        for (int i = 0; i < 28; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
-        radius += 3072;
-        //TerraformGeneratorPlugin.logger.debug("s-pop-6");
-        for (int i = 0; i < 36; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
-        radius += 3072;
-        //TerraformGeneratorPlugin.logger.debug("s-pop-7");
-        for (int i = 0; i < 9; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
-        //TerraformGeneratorPlugin.logger.debug("s-pop-8");
-    }
-
-    public static int[][] strongholdPositions(TerraformWorld tw) {
+            for (int i = 0; i < 3; i++) {
+                int[] coords = randomCircleCoords(rand, radius);
+                TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + ", " + coords[1]);
+                POSITIONS[pos++] = coords;
+            }
+            radius += 3072;
+            //TerraformGeneratorPlugin.logger.debug("sp-1");
+            for (int i = 0; i < 6; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            radius += 3072;
+            //TerraformGeneratorPlugin.logger.debug("sp-2");
+            for (int i = 0; i < 10; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            radius += 3072;
+            //TerraformGeneratorPlugin.logger.debug("sp-3");
+            for (int i = 0; i < 15; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            radius += 3072;
+            //TerraformGeneratorPlugin.logger.debug("s-pop-4");
+            for (int i = 0; i < 21; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            radius += 3072;
+            //TerraformGeneratorPlugin.logger.debug("s-pop-5");
+            for (int i = 0; i < 28; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            radius += 3072;
+            //TerraformGeneratorPlugin.logger.debug("s-pop-6");
+            for (int i = 0; i < 36; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            radius += 3072;
+            //TerraformGeneratorPlugin.logger.debug("s-pop-7");
+            for (int i = 0; i < 9; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            //TerraformGeneratorPlugin.logger.debug("s-pop-8");
+        
+    	}
         return POSITIONS;
     }
 

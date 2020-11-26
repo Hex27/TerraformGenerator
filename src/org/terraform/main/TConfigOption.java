@@ -46,6 +46,8 @@ public enum TConfigOption {
     STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled", true),
     STRUCTURES_SWAMPHUT_ENABLED("structures.swamphut.enabled", true),
     STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND("structures.swamphut.chance-out-of-10000", 10),
+    STRUCTURES_DESERTWELL_ENABLED("structures.desertwell.enabled", true),
+    STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND("structures.desertwell.chance-out-of-10000", 10),
     STRUCTURES_UNDERGROUNDDUNGEON_ENABLED("structures.underground-dungeon.enabled", true),
     STRUCTURES_DROWNEDDUNGEON_ENABLED("structures.drowned-dungeon.enabled", true),
     STRUCTURES_DROWNEDDUNGEON_MIN_DEPTH("structures.drowned-dungeon.min-chunk-y", 52),

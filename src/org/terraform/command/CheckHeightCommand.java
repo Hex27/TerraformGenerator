@@ -47,12 +47,14 @@ public class CheckHeightCommand extends DCCommand {
         p.sendMessage("Core Height: " + HeightMap.getCoreHeight(tw, x, z));
         p.sendMessage("Mountainous Height: " + HeightMap.getMountainousHeight(tw, x, z));
         p.sendMessage("Attrition Height: " + HeightMap.getAttritionHeight(tw, x, z));
-        p.sendMessage("Temperature: " + tw.getTemperature(x, z));
-        p.sendMessage("Moisture: " + tw.getMoisture(x, z));
+        p.sendMessage("Gradient (2,3,4): " + HeightMap.getNoiseGradient(tw, x, z, 2) + "," + HeightMap.getNoiseGradient(tw, x, z, 3) + "," + HeightMap.getNoiseGradient(tw, x, z, 4));
         p.sendMessage("Result height: " + h);
         p.sendMessage("River Depth: " + rd);
-        p.sendMessage("Mega Chunk: " + new MegaChunk(x, 0, z).getX() + "," + new MegaChunk(x, 0, z).getZ());
+        p.sendMessage("Mega Chunk: " + new MegaChunk(x, 0, z).getX() + "," + new MegaChunk(x, 0, z).getZ());        
+        p.sendMessage("Temperature: " + tw.getTemperature(x, z));
+        p.sendMessage("Moisture: " + tw.getMoisture(x, z));
         p.sendMessage("Result Biome: " + tw.getBiomeBank(x, h, z));
+        
 
     }
 

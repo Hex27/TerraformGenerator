@@ -4,8 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.mountainous.BadlandsMountainHandler;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
+import org.terraform.structure.small.DesertWellPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -25,9 +29,10 @@ public class BadlandsHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.RED_SAND, 35, Material.SAND, 5),
-                GenUtils.weightedRandomMaterial(rand, Material.RED_SAND, 35, Material.SAND, 5),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.RED_SANDSTONE, Material.RED_SAND),
+        return new Material[]{
+        		Material.RED_SAND,
+        		Material.RED_SAND,
+                GenUtils.randMaterial(rand, Material.RED_SAND, Material.RED_SANDSTONE),
                 GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
                 GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE)};
     }
@@ -37,8 +42,13 @@ public class BadlandsHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int highest = GenUtils.getTrueHighestBlock(data, x, z);
-
+                if(HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random,49,50)) {
+                	BadlandsMountainHandler.oneUnit(world, random, data, x, z, true);
+                	continue;
+                }
+            	
+            	int highest = GenUtils.getTrueHighestBlock(data, x, z);
+                
                 Material base = data.getType(x, highest, z);
                 if (base == Material.SAND ||
                         base == Material.RED_SAND) {
@@ -55,7 +65,11 @@ public class BadlandsHandler extends BiomeHandler {
                         data.setType(x, highest + 1, z, Material.DEAD_BUSH);
                     }
                 }
+                
             }
+        }
+        if(GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
+        	new DesertWellPopulator().populate(world, random, data, true);
         }
     }
 }

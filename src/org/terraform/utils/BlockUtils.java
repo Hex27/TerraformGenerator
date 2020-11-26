@@ -37,8 +37,14 @@ public class BlockUtils {
     public static final BlockFace[] directBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
     public static final BlockFace[] sixBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
     public static final Set<Material> stoneLike = EnumSet.of(
-            Material.STONE, Material.COBBLESTONE, Material.GRANITE, Material.ANDESITE, Material.DIORITE, Material.GRAVEL, Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE,
-            Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE, Material.SNOW_BLOCK, Material.PACKED_ICE, Material.BLUE_ICE
+            Material.STONE, Material.COBBLESTONE, 
+            Material.GRANITE, Material.ANDESITE, 
+            Material.DIORITE, Material.GRAVEL, 
+            Material.COAL_ORE, Material.IRON_ORE, 
+            Material.GOLD_ORE, Material.DIAMOND_ORE, 
+            Material.EMERALD_ORE, Material.REDSTONE_ORE, 
+            Material.LAPIS_ORE, Material.SNOW_BLOCK, 
+            Material.PACKED_ICE, Material.BLUE_ICE
     );
     public static final Material[] ores = {
             Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE,
