@@ -32,7 +32,7 @@ public enum TConfigOption {
 
     //-=[MISC]=-
     //MISC_SMOOTH_DESIGN("misc.smooth-design",false),
-    MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", false),
+    MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", true),
     MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree", true),
     MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood",false),
     DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
