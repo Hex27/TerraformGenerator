@@ -6,6 +6,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
@@ -54,7 +55,7 @@ public class JungleHandler extends BiomeHandler {
         groundWoodNoise.SetFrequency(0.07f);
 
         //Most jungle chunks have a big jungle tree
-        if (GenUtils.chance(random, 6, 10)) {
+        if (TConfigOption.TREES_JUNGLE_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 6, 10)) {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {
@@ -63,7 +64,9 @@ public class JungleHandler extends BiomeHandler {
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
                     new FractalTreeBuilder(FractalTreeType.JUNGLE_BIG).build(tw, data, treeX, treeY, treeZ);
             }
-        } else if (GenUtils.chance(random, 7, 10)) {
+        }
+        // Small jungle trees
+        else if (GenUtils.chance(random, 7, 10)) {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {
@@ -74,6 +77,7 @@ public class JungleHandler extends BiomeHandler {
             }
         }
 
+        // More small jungle trees
         for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
             int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
@@ -86,7 +90,8 @@ public class JungleHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                //Bukkit.broadcastMessage("1");
+
+                // Generate random wood, or "roots" on the ground
                 int y = GenUtils.getHighestGround(data, x, z);
                 if (groundWoodNoise.GetNoise(x, z) > 0.3) {
                     if (GenUtils.chance(random, 99, 100) &&
@@ -94,11 +99,10 @@ public class JungleHandler extends BiomeHandler {
                             BlockUtils.isDirtLike(data.getType(x, y, z)))
                         data.setType(x, y + 1, z, Material.JUNGLE_WOOD);
                 }
-                //y++;
-                //Bukkit.broadcastMessage("2");
+
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                    //Bukkit.broadcastMessage("3");
                     if (GenUtils.chance(random, 4, 10)) {
+                        // Generate small mushrooms
                         if (data.getType(x, y + 1, z) != Material.AIR) {
                             if (data.getType(x, y + 1, z) == Material.JUNGLE_WOOD &&
                                     data.getType(x, y + 2, z) == Material.AIR) {
@@ -121,8 +125,9 @@ public class JungleHandler extends BiomeHandler {
                         }
 
                     }
-                    if (GenUtils.chance(random, 1, 200)) {
 
+                    // Generate random small bushes
+                    if (GenUtils.chance(random, 1, 200)) {
                         if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
                             SimpleBlock base = new SimpleBlock(data, x, y + 1, z);
                             int rX = GenUtils.randInt(random, 2, 3);

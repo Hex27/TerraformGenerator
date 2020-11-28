@@ -6,6 +6,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
@@ -83,7 +84,7 @@ public class SavannaHandler extends BiomeHandler {
         }
 
         //Large savanna trees are very very rare
-        if (GenUtils.chance(1, 100)) {
+        if (TConfigOption.TREES_SAVANNA_BIG_ENABLED.getBoolean() && GenUtils.chance(1, 100)) {
             int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {

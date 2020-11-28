@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
@@ -44,7 +45,7 @@ public class TaigaHandler extends BiomeHandler {
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
         //Rarely spawn huge taiga trees
-        if (GenUtils.chance(random, 1, 10)) {
+        if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 10)) {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {
@@ -54,6 +55,7 @@ public class TaigaHandler extends BiomeHandler {
             }
         }
 
+        // Generate small trees
         for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
             int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
@@ -64,6 +66,7 @@ public class TaigaHandler extends BiomeHandler {
             }
         }
 
+        // Generate grass
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
