@@ -35,6 +35,13 @@ public class TreeDB {
         new FractalTreeBuilder(FractalTreeType.COCONUT_TOP).build(tw, data, x, y, z);
     }
 
+    public static void spawnSmallJungleTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+        if (GenUtils.chance(1, 8))
+            new FractalTreeBuilder(FractalTreeType.JUNGLE_EXTRA_SMALL).build(tw, data, x, y, z);
+        else
+            new FractalTreeBuilder(FractalTreeType.JUNGLE_SMALL).build(tw, data, x, y, z);
+    }
+
     public static void spawnBigDarkOakTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         new FractalTreeBuilder(FractalTreeType.DARK_OAK_BIG_TOP).build(tw, data, x, y, z);
         new FractalTreeBuilder(FractalTreeType.DARK_OAK_BIG_BOTTOM).build(tw, data, x, y - 5, z);

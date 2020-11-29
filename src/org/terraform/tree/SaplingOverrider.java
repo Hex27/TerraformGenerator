@@ -39,8 +39,7 @@ public class SaplingOverrider implements Listener {
                 break;
             case COCOA_TREE:
             case SMALL_JUNGLE:
-                new FractalTreeBuilder(FractalTreeType.JUNGLE_SMALL)
-                        .build(tw, data, x, y, z);
+                TreeDB.spawnSmallJungleTree(tw, data, x, y, z);
                 break;
             case DARK_OAK:
                 new FractalTreeBuilder(FractalTreeType.DARK_OAK_SMALL)
@@ -51,8 +50,7 @@ public class SaplingOverrider implements Listener {
                     new FractalTreeBuilder(FractalTreeType.JUNGLE_BIG)
                             .build(tw, data, x, y, z);
                 else
-                    new FractalTreeBuilder(FractalTreeType.JUNGLE_SMALL)
-                            .build(tw, data, x, y, z);
+                    TreeDB.spawnSmallJungleTree(tw, data, x, y, z);
                 break;
             case MEGA_REDWOOD:
             case REDWOOD:
