@@ -255,7 +255,10 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     			//Raise ground according to noise levels.
     			int raiseDone = 0;
     			int noise = Math.round(noiseGenerator.GetNoise(nx, nz)*5);
-    			while(height < y + noise - 1) {
+    			int newHeight = y + noise - 1;
+    			if(newHeight < y-1) newHeight = y-1;
+    			
+    			while(height < newHeight) {
     				raiseDone++;
     				if(!data.getType(nx, height+1, nz).isSolid())
     					data.setType(nx, height+1, nz, mat);

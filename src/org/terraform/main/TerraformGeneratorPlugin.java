@@ -17,6 +17,7 @@ import org.terraform.reflection.Post14PrivateFieldHandler;
 import org.terraform.reflection.Pre14PrivateFieldHandler;
 import org.terraform.reflection.PrivateFieldHandler;
 import org.terraform.schematic.SchematicListener;
+import org.terraform.structure.StructureRegistry;
 import org.terraform.tree.SaplingOverrider;
 import org.terraform.utils.Version;
 
@@ -54,7 +55,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         TerraformGenerator.updateSeaLevelFromConfig();
         new TerraformCommandManager(this, "terraform", "terra");
         Bukkit.getPluginManager().registerEvents(this, this);
-        Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);        
         String version = Version.getVersionPackage();
         logger.info("Detected version: " + version);
         try {
@@ -71,6 +72,8 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
             Bukkit.getPluginManager().registerEvents(new SaplingOverrider(), this);
         }
+        
+        StructureRegistry.init();
     }
 
     /**

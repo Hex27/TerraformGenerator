@@ -36,6 +36,7 @@ public enum TConfigOption {
 
     //-=[STRUCTURES]=-
     STRUCTURES_MEGACHUNK_BITSHIFTS("structures.technical.megachunk.bitshifts", 6),
+    STRUCTURES_MEGACHUNK_MAXSTRUCTURES("structures.technical.megachunk.max-structures-per-megachunk",3),
     STRUCTURES_STRONGHOLD_ENABLED("structures.stronghold.enabled", true),
     STRUCTURES_MONUMENT_ENABLED("structures.monument.enabled", true),
     STRUCTURES_MONUMENT_SPAWNRATIO("structures.monument.spawn-ratio", 1.0),
@@ -53,6 +54,7 @@ public enum TConfigOption {
     STRUCTURES_DROWNEDDUNGEON_MIN_DEPTH("structures.drowned-dungeon.min-chunk-y", 52),
     STRUCTURES_DROWNEDDUNGEON_CHANCE("structures.drowned-dungeon.chance-out-of-1000", 200),
     STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled", true),
+    STRUCTURES_SHIPWRECK_COUNT_PER_MEGACHUNK("structures.shipwreck.count-per-megachunk", 1),
     STRUCTURES_MINESHAFT_ENABLED("structures.mineshaft.enabled", true),
     STRUCTURES_MINESHAFT_CHANCE("structures.mineshaft.chance", 75),
     STRUCTURES_MINESHAFT_MIN_Y("structures.mineshaft.min-y", 15),

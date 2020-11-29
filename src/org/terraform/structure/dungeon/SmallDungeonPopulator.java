@@ -6,13 +6,13 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class SmallDungeonPopulator extends StructurePopulator {
+public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 //		ArrayList<BiomeBank> banks = new ArrayList<>();
@@ -50,8 +50,9 @@ public class SmallDungeonPopulator extends StructurePopulator {
         return false;
     }
 
-    //Each mega chunk has 10 dungeons
-    protected int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+    //Each mega chunk has 5 dungeons
+    @Override
+    public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
         return new int[][]{
                 mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324)),
                 mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 131732)),
