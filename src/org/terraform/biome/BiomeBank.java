@@ -99,7 +99,7 @@ public enum BiomeBank {
         Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
 
 
-        //GENERATE AN OCEAN
+        // Oceanic biomes
         if (height < TerraformGenerator.seaLevel) {
 
             BiomeBank bank = BiomeGrid.calculateBiome(

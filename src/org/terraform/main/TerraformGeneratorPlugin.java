@@ -52,6 +52,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         TConfigOption.loadValues(this.getDCConfig());
         LangOpt.init(this);
         TerraformGenerator.updateSeaLevelFromConfig();
+        TerraformGenerator.updateMinMountainLevelFromConfig();
         new TerraformCommandManager(this, "terraform", "terra");
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
