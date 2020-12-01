@@ -88,6 +88,20 @@ public class BiomeGrid {
             new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.SWAMP,
                     BiomeBank.SWAMP, BiomeBank.SWAMP, BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN}
     };
+    
+    private static final BiomeBank[][] riverGrid = {
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER}
+    };
 
     private static final BiomeBank[][] beachGrid = {
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
@@ -124,6 +138,8 @@ public class BiomeGrid {
             return mountainousGrid[normalise(moisture)][normalise(temperature)];
         else if (type == BiomeType.BEACH)
             return beachGrid[normalise(moisture)][normalise(temperature)];
+        else if (type == BiomeType.RIVER)
+            return riverGrid[normalise(moisture)][normalise(temperature)];
 
         return null;
     }

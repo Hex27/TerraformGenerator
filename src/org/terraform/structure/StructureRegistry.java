@@ -68,16 +68,21 @@ public class StructureRegistry {
 		int maxStructures = GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
 		SingleMegaChunkStructurePopulator[] pops = new SingleMegaChunkStructurePopulator[maxStructures];
 		int size = 0;
-		//First check if the megadungeons can spawn. Shuffle the array first.
-		shuffleArray(structRand,largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
-		for(SingleMegaChunkStructurePopulator pop:largeStructureRegistry.get(StructureType.MEGA_DUNGEON)) {
-			int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
-			if(coords == null) continue;
-			
-			if(pop.canSpawn(tw, coords[0]>>4, coords[1]>>4, biomes)) {
-				pops[size] = pop;
-				size++;
-				break; //ONLY ONE MEGA DUNGEON.
+		
+		//Check if there are any mega dungeons enabled
+		if(largeStructureRegistry.containsKey(StructureType.MEGA_DUNGEON)
+				&& largeStructureRegistry.get(StructureType.MEGA_DUNGEON).length > 0) {
+			//First check if the megadungeons can spawn. Shuffle the array first.
+			shuffleArray(structRand,largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
+			for(SingleMegaChunkStructurePopulator pop:largeStructureRegistry.get(StructureType.MEGA_DUNGEON)) {
+				int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
+				if(coords == null) continue;
+				
+				if(pop.canSpawn(tw, coords[0]>>4, coords[1]>>4, biomes)) {
+					pops[size] = pop;
+					size++;
+					break; //ONLY ONE MEGA DUNGEON.
+				}
 			}
 		}
 		
@@ -86,15 +91,15 @@ public class StructureRegistry {
 			StructureType[] types = new StructureType[] {StructureType.LARGE_CAVE,StructureType.VILLAGE,StructureType.LARGE_MISC};
 			shuffleArray(structRand,types);
 			for(StructureType type:types) {
-				
-				for(SingleMegaChunkStructurePopulator pop:largeStructureRegistry.get(type)) {
-					int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
-					if(pop.canSpawn(tw, coords[0]>>4, coords[1]>>4, biomes)) {
-						pops[size] = pop;
-						size++;
-						break; //ONLY ONE OF EACH TYPE. Do not try to spawn multiple.
+				if(largeStructureRegistry.containsKey(type))
+					for(SingleMegaChunkStructurePopulator pop:largeStructureRegistry.get(type)) {
+						int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
+						if(pop.canSpawn(tw, coords[0]>>4, coords[1]>>4, biomes)) {
+							pops[size] = pop;
+							size++;
+							break; //ONLY ONE OF EACH TYPE. Do not try to spawn multiple.
+						}
 					}
-				}
 				
 				//Stop trying if max structures is hit
 				if(size >= maxStructures) break;
@@ -110,8 +115,10 @@ public class StructureRegistry {
 	}
 	
 	  // Implementing Fisher–Yates shuffle
-	  private static void shuffleArray(Random rand, Object[] ar)
-	  {
+	private static void shuffleArray(Random rand, Object[] ar)
+	{
+		if(ar.length == 0) return;
+		  
 	    for (int i = ar.length - 1; i > 0; i--)
 	    {
 	      int index = rand.nextInt(i + 1);
@@ -120,7 +127,7 @@ public class StructureRegistry {
 	      ar[index] = ar[i];
 	      ar[i] = a;
 	    }
-	  }
+	}
 	
 	/**
 	 * Registers small or large structures. Must implement either SingleMegaChunkStructurePopulator or MultiMegaChunkStructurePopulator.

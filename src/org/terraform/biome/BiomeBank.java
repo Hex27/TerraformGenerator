@@ -10,6 +10,7 @@ import org.terraform.biome.cave.MossyCavePopulator;
 import org.terraform.biome.flat.*;
 import org.terraform.biome.mountainous.*;
 import org.terraform.biome.ocean.*;
+import org.terraform.biome.river.*;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
@@ -37,8 +38,9 @@ public enum BiomeBank {
     SWAMP(new SwampHandler(), BiomeType.OCEANIC),
 
     //RIVERS
-    RIVER(new RiverHandler(), BiomeType.OCEANIC), //Special case, handle later
-    FROZEN_RIVER(new FrozenRiverHandler(), BiomeType.OCEANIC, new FrozenCavePopulator()), //Special case, handle later
+    RIVER(new RiverHandler(), BiomeType.RIVER), //Special case, handle later
+    JUNGLE_RIVER(new JungleRiverHandler(), BiomeType.RIVER),
+    FROZEN_RIVER(new FrozenRiverHandler(), BiomeType.RIVER, new FrozenCavePopulator()), //Special case, handle later
 
     //DEEP OCEANIC
     DEEP_OCEAN(new OceansHandler(), BiomeType.DEEP_OCEANIC),
@@ -112,9 +114,9 @@ public enum BiomeBank {
 
             //This is a river.
             if (trueHeight >= TerraformGenerator.seaLevel) {
-                return bank == BiomeBank.FROZEN_OCEAN ?
-                        BiomeBank.FROZEN_RIVER :
-                        BiomeBank.RIVER;
+            	return BiomeGrid.calculateBiome(BiomeType.RIVER, 
+            			temperature + GenUtils.randDouble(random, -dither, dither), 
+            			moisture + GenUtils.randDouble(random, -dither, dither));
             }
 
             if (bank == SWAMP) {
