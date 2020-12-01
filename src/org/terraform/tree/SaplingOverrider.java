@@ -4,12 +4,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 
 public class SaplingOverrider implements Listener {
     @EventHandler
     public void onTreeGrow(StructureGrowEvent event) {
+        if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
+
         TerraformWorld tw = TerraformWorld.get(event.getWorld());
         PopulatorDataPostGen data = new PopulatorDataPostGen(event.getLocation().getChunk());
         int x = event.getLocation().getBlockX();
@@ -36,8 +39,7 @@ public class SaplingOverrider implements Listener {
                 break;
             case COCOA_TREE:
             case SMALL_JUNGLE:
-                new FractalTreeBuilder(FractalTreeType.JUNGLE_SMALL)
-                        .build(tw, data, x, y, z);
+                TreeDB.spawnSmallJungleTree(tw, data, x, y, z);
                 break;
             case DARK_OAK:
                 new FractalTreeBuilder(FractalTreeType.DARK_OAK_SMALL)
@@ -48,8 +50,7 @@ public class SaplingOverrider implements Listener {
                     new FractalTreeBuilder(FractalTreeType.JUNGLE_BIG)
                             .build(tw, data, x, y, z);
                 else
-                    new FractalTreeBuilder(FractalTreeType.JUNGLE_SMALL)
-                            .build(tw, data, x, y, z);
+                    TreeDB.spawnSmallJungleTree(tw, data, x, y, z);
                 break;
             case MEGA_REDWOOD:
             case REDWOOD:

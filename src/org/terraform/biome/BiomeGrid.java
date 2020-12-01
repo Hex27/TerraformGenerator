@@ -140,6 +140,7 @@ public class BiomeGrid {
         return grid;
     }
 
+    // Map input values from -2.5 to 2.5 to range from 0 to 10
     public static int normalise(double i) {
         if (i > 2.5) i = 2.5;
         else if (i < -2.5) i = -2.5;

@@ -99,7 +99,7 @@ public enum BiomeBank {
         Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
 
 
-        //GENERATE AN OCEAN
+        // Oceanic biomes
         if (height < TerraformGenerator.seaLevel) {
 
             BiomeBank bank = BiomeGrid.calculateBiome(
@@ -152,6 +152,19 @@ public enum BiomeBank {
         }
         
         //GENERATE LOW-ALTITUDE AREAS
+        return BiomeGrid.calculateBiome(
+                BiomeType.FLAT,
+                temperature + GenUtils.randDouble(random, -dither, dither),
+                moisture + GenUtils.randDouble(random, -dither, dither)
+        );
+    }
+
+    public static BiomeBank calculateFlatBiome(TerraformWorld tw, int x, int height, int z) {
+        double dither = TConfigOption.BIOME_DITHER.getDouble();
+        double temperature = tw.getTemperature(x, z);
+        double moisture = tw.getMoisture(x, z);
+        Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
+
         return BiomeGrid.calculateBiome(
                 BiomeType.FLAT,
                 temperature + GenUtils.randDouble(random, -dither, dither),

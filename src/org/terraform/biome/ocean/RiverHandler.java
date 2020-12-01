@@ -2,6 +2,7 @@ package org.terraform.biome.ocean;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -49,15 +50,27 @@ public class RiverHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
+
                 if (data.getBiome(x, y + 1, z) != getBiome()) continue;
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
+
+                // Generate random lily pads in jungle rivers
+                if (y >= TerraformGenerator.seaLevel - 2 && y < TerraformGenerator.seaLevel
+                        && BiomeBank.calculateFlatBiome(world, x, y, z) == BiomeBank.JUNGLE
+                        && GenUtils.chance(1, 25)) {
+                    data.setType(x, TerraformGenerator.seaLevel + 1, z, Material.LILY_PAD);
+                }
+
+                // SEA GRASS/KELP
+                if (GenUtils.chance(random, 10, 100)) {
                     data.setType(x, y + 1, z, Material.SEAGRASS);
                     if (random.nextBoolean() && y < TerraformGenerator.seaLevel - 2)
                         BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_SEAGRASS);
                 } else if (GenUtils.chance(random, 3, 50) && growsKelp && y + 1 < TerraformGenerator.seaLevel - 10) {
                     generateKelp(x, y + 1, z, data, random);
                 }
+
+                // Generate clay
                 if (GenUtils.chance(random, TConfigOption.BIOME_RIVER_CLAY_CHANCE.getInt(), 1000)) {
                     BlockUtils.generateClayDeposit(x, y, z, data, random);
                 }

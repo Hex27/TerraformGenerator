@@ -14,6 +14,7 @@ public enum FractalTreeType {
     BIRCH_SMALL,
     JUNGLE_BIG,
     JUNGLE_SMALL,
+    JUNGLE_EXTRA_SMALL,
     COCONUT_TOP,
     GIANT_PUMPKIN,
     DARK_OAK_SMALL,

@@ -6,6 +6,7 @@ import org.bukkit.block.data.Snowable;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.utils.BlockUtils;
@@ -45,7 +46,7 @@ public class SnowyTaigaHandler extends BiomeHandler {
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         //Rarely spawn huge taiga trees
-        if (GenUtils.chance(random, 1, 10)) {
+        if (TConfigOption.TREES_SNOWY_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 10)) {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {

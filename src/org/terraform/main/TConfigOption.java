@@ -21,9 +21,18 @@ public enum TConfigOption {
     BIOME_SWAMP_CLAY_CHANCE("biome.swamp.clay.chance-out-of-thousand", 20),
     BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT("biome.lukewarm-ocean.coral.minheight", 42),
     BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT("biome.lukewarm-ocean.coral.maxheight", 52),
-    
+
+    //-=[TREES]=-
+    TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),
+    TREES_TAIGA_BIG_ENABLED("trees.big-taiga-trees.enabled", true),
+    TREES_FOREST_BIG_ENABLED("trees.big-forest-trees.enabled", true),
+    TREES_SAVANNA_BIG_ENABLED("trees.big-savanna-trees.enabled", true),
+    TREES_SNOWY_TAIGA_BIG_ENABLED("trees.big-snowy-taiga-trees.enabled", true),
+    TREES_DARK_FOREST_BIG_ENABLED("trees.big-dark-forest-trees.enabled", true),
+
+    //-=[MISC]=-
     //MISC_SMOOTH_DESIGN("misc.smooth-design",false),
-    MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", false),
+    MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", true),
     MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree", true),
     MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood",false),
     DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),

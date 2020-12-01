@@ -7,6 +7,7 @@ import org.bukkit.block.data.Rotatable;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTreeType;
 import org.terraform.tree.TreeDB;
@@ -75,7 +76,8 @@ public class DarkForestHandler extends BiomeHandler {
     @Override
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
-        if (GenUtils.chance(random, 3, 10)) {
+        // Big trees
+        if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()  && GenUtils.chance(random, 3, 10)) {
             int treeX = GenUtils.randInt(random, 5, 7) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 5, 7) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {

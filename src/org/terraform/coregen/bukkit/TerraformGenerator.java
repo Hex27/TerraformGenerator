@@ -21,9 +21,14 @@ import java.util.Random;
 public class TerraformGenerator extends ChunkGenerator {
     public static final ArrayList<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
     public static int seaLevel = 62;
+    public static int minMountainLevel = 85;
 
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
+    }
+
+    public static void updateMinMountainLevelFromConfig() {
+        minMountainLevel = TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt();
     }
 
     @SuppressWarnings("deprecation")
