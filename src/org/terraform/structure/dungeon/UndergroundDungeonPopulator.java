@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
 import org.bukkit.entity.EntityType;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.MegaChunk;
@@ -55,7 +56,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
         Random rand = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 
-        int y = GenUtils.getHighestGround(data, x, z) - GenUtils.randInt(rand, 15, 50);
+        int y = HeightMap.getHeight(tw, x, z) - GenUtils.randInt(rand, 15, 50);//GenUtils.getHighestGround(data, x, z)
 
         if (y < 10) y = 10;
 

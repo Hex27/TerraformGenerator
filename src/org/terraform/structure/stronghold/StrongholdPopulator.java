@@ -2,6 +2,7 @@ package org.terraform.structure.stronghold;
 
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -11,7 +12,6 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -96,7 +96,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 for (int[] pos : positions) {
                     if (areCoordsEqual(pos, x, z)) {
-                        int height = GenUtils.getHighestGround(data, x, z);
+                        int height = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
                         //Strongholds start underground. Burrow down
                         height -= 40;
                         if (height < 3) height = 5;

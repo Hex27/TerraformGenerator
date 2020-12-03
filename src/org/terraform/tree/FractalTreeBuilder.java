@@ -55,6 +55,11 @@ public class FractalTreeBuilder {
     int fractalsDone = 0;
     double maxPitch = 9999;
     double minPitch = -9999;
+    float leafNoiseMultiplier = 0.7f;
+    float leafNoiseFrequency = 0.09f;
+    float branchNoiseMultiplier = 0.7f;
+    float branchNoiseFrequency = 0.09f;
+    boolean coneLeaves = false;
     int oriX;
     int oriY;
     int oriZ;
@@ -66,10 +71,27 @@ public class FractalTreeBuilder {
     public FractalTreeBuilder(FractalTreeType ftt) {
         switch (ftt) {
             case FOREST:
-                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble()).setBaseHeight(10).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(4).setLeafRadius(3).setHeightVariation(2);
+                this
+                .setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                .setBaseHeight(9)
+                .setBaseThickness(3.0f)
+                .setThicknessDecrement(0.3f)
+                .setLengthDecrement(1.3f)
+                .setMinBend(0.7*Math.PI/6)
+                .setMaxBend(0.85*Math.PI/6)
+                .setMaxDepth(4)
+                .setLeafRadiusX(3f)
+                .setLeafRadiusY(3f)
+                .setLeafRadiusZ(3f)
+                .setHeightVariation(2)
+                .setLeafNoiseFrequency(1.0f)
+                .setLeafNoiseMultiplier(1.0f)
+                .setLeafBranchFrequency(0.05f);
                 break;
             case NORMAL_SMALL:
-                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble()).setBaseHeight(5).setBaseThickness(1).setThicknessDecrement(1f).setMaxDepth(1).setLeafRadius(3).setHeightVariation(1);
+                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                .setLeafNoiseFrequency(1.0f)
+                .setLeafNoiseMultiplier(1.0f).setBaseHeight(5).setBaseThickness(1).setThicknessDecrement(1f).setMaxDepth(1).setLeafRadius(3).setHeightVariation(1);
                 break;
             case BIRCH_BIG:
                 this.setBaseHeight(6).setBaseThickness(1).setThicknessDecrement(0f).setMaxDepth(4).setLeafRadiusX(3).setLeafRadiusZ(3).setLeafRadiusY(2).setHeightVariation(2).setMinBend(0.9 * Math.PI / 6).setMaxBend(1.1 * Math.PI / 6).setLengthDecrement(0.5f).setLeafType(Material.BIRCH_LEAVES).setLogType(Material.BIRCH_WOOD);
@@ -84,68 +106,53 @@ public class FractalTreeBuilder {
                 this.setBaseHeight(15).setBaseThickness(5).setThicknessDecrement(1f).setMaxDepth(3).setLeafRadiusX(4).setLeafRadiusY(1).setLeafRadiusZ(4).setHeightVariation(6).setMaxBend(Math.PI / 6).setLengthDecrement(2).setVines(7).setLogType(Material.JUNGLE_WOOD).setLeafType(Material.JUNGLE_LEAVES).setCocabeans(3);
                 break;
             case JUNGLE_SMALL:
-                this.setBaseHeight(5)
-                        .setHeightVariation(1)
-                        .setLengthDecrement(1.5f)
-                        .setMaxDepth(2)
-                        .setBaseThickness(3)
-                        .setThicknessDecrement(1.5f)
-                        .setLeafRadiusX(4f)
-                        .setLeafRadiusY(2)
-                        .setLeafRadiusZ(4f)
-                        .setMaxBend(Math.PI / 3)
-                        .setVines(3)
-                        .setLogType(Material.JUNGLE_WOOD)
-                        .setLeafType(Material.JUNGLE_LEAVES)
-                        .setCocabeans(1);
+            	this.setBaseHeight(5).setHeightVariation(1).setLengthDecrement(1.5f).setMaxDepth(2).setBaseThickness(3).setThicknessDecrement(1.5f).setLeafRadiusX(4f).setLeafRadiusY(2).setLeafRadiusZ(4f).setMaxBend(Math.PI / 3).setVines(3).setLogType(Material.JUNGLE_WOOD).setLeafType(Material.JUNGLE_LEAVES).setCocabeans(1);
                 break;
             case JUNGLE_EXTRA_SMALL:
-                this.setBaseHeight(3)
-                        .setMaxDepth(1)
-                        .setBaseThickness(1.5f)
-                        .setThicknessDecrement(0f)
-                        .setLeafRadiusX(3)
-                        .setLeafRadiusY(2)
-                        .setLeafRadiusZ(3)
-                        .setVines(3)
-                        .setLogType(Material.JUNGLE_WOOD)
-                        .setLeafType(Material.JUNGLE_LEAVES)
-                        .setCocabeans(1);
+                this.setBaseHeight(3).setMaxDepth(1).setBaseThickness(1.5f).setThicknessDecrement(0f).setLeafRadiusX(3).setLeafRadiusY(2).setLeafRadiusZ(3).setVines(3).setLogType(Material.JUNGLE_WOOD).setLeafType(Material.JUNGLE_LEAVES).setCocabeans(1);
                 break;
             case SAVANNA_BIG:
             	this.setBaseHeight(10)
-            	.setBaseThickness(15)
-            	.setThicknessDecrement(4f)
-            	.setMaxDepth(4)
-            	.setLeafRadiusX(4f)
-            	.setLeafRadiusZ(4f)
-            	.setLeafRadiusY(1.5f)
-            	.setLogType(Material.ACACIA_LOG)
-            	.setLeafType(Material.ACACIA_LEAVES)
-            	.setLengthDecrement(0.4f)
-            	.setHeightVariation(2);
+                .setLeafNoiseFrequency(0.7f)
+                .setLeafNoiseMultiplier(0.8f).setBaseThickness(15).setThicknessDecrement(4f).setMaxDepth(4).setLeafRadiusX(4f).setLeafRadiusZ(4f).setLeafRadiusY(1.5f).setLogType(Material.ACACIA_LOG).setLeafType(Material.ACACIA_LEAVES).setLengthDecrement(0.4f).setHeightVariation(2);
             	break;
             case WASTELAND_BIG:
                 this.setBaseHeight(6).setBaseThickness(4).setThicknessDecrement(1f).setMaxDepth(4).setLeafRadius(0).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.AIR).setLengthDecrement(0.5f).setHeightVariation(1);
                 break;
             case TAIGA_BIG:
                 this.setBaseHeight(10).setBaseThickness(3.5f)
-                        .setThicknessDecrement(0.3f)
-                        .setMaxDepth(6).setLeafRadiusX(3)
+                        .setThicknessDecrement(0.5f)
+                        .setMaxDepth(5).setLeafRadiusX(3)
                         .setLeafRadiusZ(3).setLeafRadiusY(5)
                         .setLogType(Material.SPRUCE_WOOD)
                         .setLeafType(Material.SPRUCE_LEAVES)
                         .setLengthDecrement(2)
                         .setHeightVariation(2)
+                        .setLeafNoiseFrequency(0.3f)
+                        .setLeafNoiseMultiplier(0.7f)
                         .setAlwaysOneStraight(4)
                         .setAlwaysOneStraightExtendedBranches(true)
                         .setMinBend(Math.PI / 2)
                         .setMaxBend(Math.PI / 2)
-                ;
+                        .setConeLeaves(true);
                 break;
             case TAIGA_SMALL:
-                this.setBaseHeight(7).setBaseThickness(1).setMaxDepth(1).setLeafRadiusX(4).setLeafRadiusZ(4).setLeafRadiusY(1).setLogType(Material.SPRUCE_WOOD).setLeafType(Material.SPRUCE_LEAVES).setHeightVariation(1);
-                break;
+                this.setBaseHeight(5).setBaseThickness(1f)
+	                .setThicknessDecrement(0.3f)
+	                .setMaxDepth(4).setLeafRadiusX(2f)
+	                .setLeafRadiusZ(2f).setLeafRadiusY(2f)
+	                .setLogType(Material.SPRUCE_WOOD)
+	                .setLeafType(Material.SPRUCE_LEAVES)
+	                .setLengthDecrement(1)
+	                .setAlwaysOneStraight(4)
+	                .setAlwaysOneStraightExtendedBranches(true)
+	                .setMinBend(Math.PI / 2)
+	                .setMaxBend(Math.PI / 2)
+	                .setHeightVariation(2)
+                    .setConeLeaves(true)
+                    .setLeafNoiseFrequency(0.65f)
+                    .setLeafNoiseMultiplier(0.8f);
+            	break;
             case BROWN_MUSHROOM_BASE:
                 this.setBaseHeight(3).setBaseThickness(3).setThicknessDecrement(0).setMaxDepth(2).setFractalThreshold(4).setLeafRadius(0).setLogType(Material.MUSHROOM_STEM).setLeafType(Material.AIR).setLengthDecrement(0).setMinBend(0.2 * Math.PI / 6).setMaxBend(0.4 * Math.PI / 6);
                 break;
@@ -156,21 +163,13 @@ public class FractalTreeBuilder {
                 this.setBaseHeight(1).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(3).setLeafRadius(0).setLogType(Material.OAK_WOOD).setLeafType(Material.OAK_LEAVES).setLengthDecrement(-2f).setMaxBend(-Math.PI / 6).setMinBend(-Math.PI / 3);
                 break;
             case SWAMP_TOP:
-                this.setBaseHeight(8).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(4).setLengthDecrement(0f).setLeafRadiusX(6).setLeafRadiusZ(6).setLeafRadiusY(2).setHeightVariation(2).setLogType(Material.OAK_WOOD).setVines(7);
+                this.setBaseHeight(8).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(4).setLengthDecrement(0f).setLeafRadiusX(5).setLeafRadiusZ(5).setLeafRadiusY(2).setHeightVariation(2).setLogType(Material.OAK_WOOD).setVines(7);
                 break;
             case COCONUT_TOP:
                 this.setBaseHeight(8).setInitialTilt(Math.PI / 6).setBaseThickness(1).setThicknessDecrement(0f).setMaxDepth(1).setLeafRadius(3).setLeafRadiusY(1.2f).setLengthDecrement(2).setHeightVariation(1).setVines(3).setLogType(Material.JUNGLE_WOOD);
                 break;
             case GIANT_PUMPKIN:
-                this.setBaseHeight(6)
-                        .setBaseThickness(1)
-                        .setThicknessDecrement(1f)
-                        .setMaxDepth(0)
-                        .setLeafRadius(4)
-                        .setLengthDecrement(-0.5f)
-                        .setHeightVariation(0)
-                        .setLogType(Material.OAK_LOG)
-                        .setLeafType(Material.PUMPKIN);
+                this.setBaseHeight(6).setBaseThickness(1).setThicknessDecrement(1f).setMaxDepth(0).setLeafRadius(4).setLengthDecrement(-0.5f).setHeightVariation(0).setLogType(Material.OAK_LOG).setLeafType(Material.PUMPKIN);
             case DARK_OAK_SMALL:
                 this.setBaseHeight(1).setBaseThickness(2).setThicknessDecrement(0.5f).setMaxDepth(3).setLeafRadiusX(2).setLeafRadiusZ(2).setLeafRadiusY(1).setLogType(Material.DARK_OAK_WOOD).setLeafType(Material.DARK_OAK_LEAVES).setLengthDecrement(0).setHeightVariation(0).setFractalThreshold(4).setMaxBend(1.4 * Math.PI / 6).setMinBend(1 * Math.PI / 6).setMaxPitch(Math.PI).setMinPitch(0);
                 break;
@@ -333,10 +332,12 @@ public class FractalTreeBuilder {
 
         if (depth >= maxDepth) {
             replaceSphere(rand.nextInt(9999), leafRadiusX, leafRadiusY, leafRadiusZ, base, this.leafType);
+            base.setType(logType);
             return;
         }
         if (size <= 0) {
             replaceSphere(rand.nextInt(9999), leafRadiusX, leafRadiusY, leafRadiusZ, base, this.leafType);
+            base.setType(logType);
             return;
         }
 
@@ -449,14 +450,17 @@ public class FractalTreeBuilder {
         }
         replaceSphere(seed, radius, radius, radius, base, type);
     }
-
+    //private boolean debug = true;
     private void replaceSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, Material type) {
-        if (rX <= 0 &&
+        
+    	//Don't place anything if radius is nothing
+    	if (rX <= 0 &&
                 rY <= 0 &&
                 rZ <= 0) {
             return;
         }
 
+    	//Radius 0.5 is 1 block
         if (rX <= 0.5 &&
                 rY <= 0.5 &&
                 rZ <= 0.5) {
@@ -465,18 +469,28 @@ public class FractalTreeBuilder {
             return;
         }
 
+        //Initialise noise to be used in randomising the sphere
         FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
+        noise.SetNoiseType(NoiseType.SimplexFractal);
+        float noiseMultiplier = leafNoiseMultiplier;
+        noise.SetFrequency(leafNoiseFrequency);
+        if(Tag.LOGS.getValues().contains(type)) {
+            noise.SetFrequency(branchNoiseFrequency);
+            noiseMultiplier = branchNoiseMultiplier;
+        }
+        noise.SetFractalOctaves(5);
+        
 
         double maxR = rX;
         if (rX < rY) maxR = rY;
         if (rY < rZ) maxR = rZ;
 
         ArrayList<SimpleBlock> changed = new ArrayList<>();
-
-        for (float x = -rX; x <= rX; x++) {
-            for (float y = -rY; y <= rY; y++) {
+        
+        //Assumes that anything that isn't logs is leaves
+        boolean coneLeaves = this.coneLeaves && !Tag.LOGS.getValues().contains(type); 
+        for (float y = -rY; y <= rY; y++) {
+            for (float x = -rX; x <= rX; x++) {
                 for (float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     if (rel.getY() - this.oriY > this.maxHeight) {
@@ -486,10 +500,26 @@ public class FractalTreeBuilder {
                         if (rand.nextBoolean()) //Fade off if too high
                             return;
                     }
+                    float effectiveY = y;
+                    if(coneLeaves) {
+                    	effectiveY += rY/2; //Shift center area downwards
+                    	//Compress negative y
+                    	if(effectiveY < 0) effectiveY=effectiveY*2.0f;
+                    	
+                    	//Extend positive y and multiply it by a power to make it sharp
+                    	if(effectiveY > 0) { 
+                    		effectiveY=effectiveY*(2.0f/3.0f);
+                    		effectiveY = (float) Math.pow(effectiveY, 1.3);
+                    		if(effectiveY > rY) effectiveY = rY;
+                    	}
+                		rel = rel.getRelative(0,(int) (rY/2),0);
+                    	//if(debug) Bukkit.getLogger().info(y + " -> " + effectiveY);
+                    }
+                    
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
-                            + Math.pow(y, 2) / Math.pow(rY, 2)
+                            + Math.pow(effectiveY, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
-                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                    if (equationResult <= 1 + noiseMultiplier * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         if (equationResult < hollowLeaves)
                             continue;
 
@@ -500,16 +530,13 @@ public class FractalTreeBuilder {
 
 
                         //Leaves do not replace solid blocks.
-                        if (type.toString().contains("LEAVES") && !rel.getType().isSolid()) {
+                        if (Tag.LEAVES.getValues().contains(type) && !rel.getType().isSolid()) {
                             Leaves leaf = (Leaves) Bukkit.createBlockData(type);
-
-                            //Temporary fix: Big canopies dont decay now.
-//							if(leafRadiusX > 5 || leafRadiusY > 5 || leafRadiusZ > 5)
-//								leaf.setPersistent(true);
-//							
                             leaf.setDistance(1);
                             rel.setBlockData(leaf);
-                        } else if (!type.toString().contains("LEAVES")) {
+                        } 
+                        else if (!Tag.LEAVES.getValues().contains(type)) 
+                        {
                             rel.setType(type);
                         }
 
@@ -547,9 +574,9 @@ public class FractalTreeBuilder {
                             if (GenUtils.chance(2, 10)) {
                                 dangleLeavesDown(rel, (int) Math.ceil(maxR), vines / 2, vines);
                             }
-
+                            
                             // Vines set only if the leaf type is leaves.
-                            if (Tag.LEAVES.isTagged(leafType))
+                            if (Tag.LEAVES.getValues().contains(leafType))
                                 if (GenUtils.chance(1, 10)) {
                                     for (BlockFace face : BlockUtils.directBlockFaces) {
                                         MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
@@ -572,6 +599,8 @@ public class FractalTreeBuilder {
                 }
             }
         }
+        //if(Tag.LEAVES.isTagged(type))
+        //debug = false;
 
         //Ensures that corals don't die
         while (!changed.isEmpty()) {
@@ -579,13 +608,13 @@ public class FractalTreeBuilder {
             if (!CoralGenerator.isSaturatedCoral(sb)) {
                 //No floating coral fans
                 for (BlockFace face : BlockUtils.directBlockFaces) {
-                    if (sb.getRelative(face).getType().toString().endsWith("WALL_FAN"))
+                    if (Tag.WALL_CORALS.getValues().contains(sb.getRelative(face).getType()))
                         sb.getRelative(face).setType(Material.WATER);
                 }
 
                 //No levitating sea pickles & fans
                 if (sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
-                        sb.getRelative(0, 1, 0).getType().toString().endsWith("CORAL_FAN")) {
+                        Tag.CORAL_PLANTS.getValues().contains(sb.getRelative(0, 1, 0).getType())) {
                     sb.getRelative(0, 1, 0).setType(Material.WATER);
                 }
                 sb.setType(Material.WATER);
@@ -597,7 +626,7 @@ public class FractalTreeBuilder {
 
     private void dangleLeavesDown(SimpleBlock block, int leafDist, int min, int max) {
         BlockData type = Bukkit.createBlockData(leafType);
-        if (leafType.toString().contains("LEAVES")) {
+        if (Tag.LEAVES.getValues().contains(leafType)) {
             Leaves leaf = (Leaves) type;
             leaf.setDistance(1);
         }
@@ -613,7 +642,7 @@ public class FractalTreeBuilder {
         }
 
         //Log for good measure, as well as some surrounding leaves.
-        if (leafType.toString().contains("LEAVES"))
+        if (Tag.LEAVES.getValues().contains(leafType))
             block.setType(this.logType);
         for (BlockFace face : BlockUtils.directBlockFaces) {
             block.getRelative(face).lsetBlockData(type);
@@ -712,6 +741,10 @@ public class FractalTreeBuilder {
         this.noMainStem = bool;
         return this;
     }
+    public FractalTreeBuilder setConeLeaves(boolean bool) {
+        this.coneLeaves = bool;
+        return this;
+    }
 
     /**
      * @param beeChance the beeChance to set
@@ -761,7 +794,26 @@ public class FractalTreeBuilder {
         return this;
     }
 
+    public FractalTreeBuilder setLeafNoiseMultiplier(float multiplier) {
+        this.leafNoiseMultiplier = multiplier;
+        return this;
+    }
 
+    public FractalTreeBuilder setLeafNoiseFrequency(float freq) {
+        this.leafNoiseFrequency = freq;
+        return this;
+    }
+
+    public FractalTreeBuilder setBranchNoiseMultiplier(float multiplier) {
+        this.branchNoiseMultiplier = multiplier;
+        return this;
+    }
+
+    public FractalTreeBuilder setLeafBranchFrequency(float freq) {
+        this.branchNoiseFrequency = freq;
+        return this;
+    }
+    
     public FractalTreeBuilder setMaxHeight(int max) {
         this.maxHeight = max;
         return this;
