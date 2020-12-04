@@ -9,7 +9,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
@@ -66,7 +66,7 @@ public class JungleHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTreeType.JUNGLE_BIG).build(tw, data, treeX, treeY, treeZ);
+                    new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).build(tw, data, treeX, treeY, treeZ);
             }
         }
         // Small jungle trees

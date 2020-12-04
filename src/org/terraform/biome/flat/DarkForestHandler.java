@@ -9,7 +9,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -92,8 +92,8 @@ public class DarkForestHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ))) {
-                    FractalTreeType type = FractalTreeType.RED_MUSHROOM_BASE;
-                    if (random.nextBoolean()) type = FractalTreeType.BROWN_MUSHROOM_BASE;
+                    FractalTypes.Mushroom type = FractalTypes.Mushroom.RED_GIANT_MUSHROOM;
+                    if (random.nextBoolean()) type = FractalTypes.Mushroom.BROWN_GIANT_MUSHROOM;
                     TreeDB.spawnGiantMushroom(tw, data, treeX, treeY, treeZ, type);
                 }
             }
@@ -104,7 +104,7 @@ public class DarkForestHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ))) {
-                    new FractalTreeBuilder(FractalTreeType.DARK_OAK_SMALL)
+                    new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
                             .build(tw, data, treeX, treeY + 1, treeZ);
                 }
             }

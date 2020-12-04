@@ -57,10 +57,8 @@ public class FractalLeaves {
         if (radiusX < radiusY) maxR = radiusY;
         if (radiusY < radiusZ) maxR = radiusZ;
 
-        ArrayList<SimpleBlock> changed = new ArrayList<>();
-
         for (int x = -Math.round(radiusX); x <= radiusX; x++) {
-            for (int y = -Math.round(radiusY); y <= radiusY; y++) {
+            for (int y = halfSphere ? 0 : -Math.round(radiusY); y <= radiusY; y++) {
                 for (int z = -Math.round(radiusZ); z <= radiusZ; z++) {
 
                     SimpleBlock relativeBlock = block.getRelative(Math.round(x), Math.round(y) + offsetY, Math.round(z));

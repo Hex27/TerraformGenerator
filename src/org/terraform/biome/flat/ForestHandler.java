@@ -7,7 +7,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
@@ -98,7 +98,7 @@ public class ForestHandler extends BiomeHandler {
 
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTreeType.FOREST).build(tw, data, treeX, treeY, treeZ);
+                    new FractalTreeBuilder(FractalTypes.Tree.FOREST).build(tw, data, treeX, treeY, treeZ);
             }
         } else {
             // TODO Clearing
@@ -111,7 +111,7 @@ public class ForestHandler extends BiomeHandler {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
 
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL).build(tw, data, treeX, treeY, treeZ);
+                    new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, treeX, treeY, treeZ);
             }
         }
 

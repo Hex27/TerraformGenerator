@@ -8,7 +8,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -90,7 +90,7 @@ public class SavannaHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTreeType.SAVANNA_BIG).build(world, data, treeX, treeY, treeZ);
+                    new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_BIG).build(world, data, treeX, treeY, treeZ);
             }
         }
         //Savanna trees are very spaced. low chance. Only spawned when no big tree in the same chunk
@@ -100,7 +100,7 @@ public class SavannaHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTreeType.SAVANNA_SMALL).build(world, data, treeX, treeY, treeZ);
+                    new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).build(world, data, treeX, treeY, treeZ);
             }
         }
 

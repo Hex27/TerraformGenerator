@@ -2,9 +2,9 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.drycell.command.DCArgument;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 
-public class FractalTreeTypeArgument extends DCArgument<FractalTreeType> {
+public class FractalTreeTypeArgument extends DCArgument<FractalTypes.Tree> {
 
     public FractalTreeTypeArgument(String name, boolean isOptional) {
         super(name, isOptional);
@@ -12,9 +12,9 @@ public class FractalTreeTypeArgument extends DCArgument<FractalTreeType> {
     }
 
     @Override
-    public FractalTreeType parse(CommandSender sender, String value) {
+    public FractalTypes.Tree parse(CommandSender sender, String value) {
 
-        return FractalTreeType.valueOf(value.toUpperCase());
+        return FractalTypes.Tree.valueOf(value.toUpperCase());
     }
 
     @Override

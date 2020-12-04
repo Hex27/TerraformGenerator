@@ -7,7 +7,7 @@ import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
 
 import java.util.Random;
@@ -46,9 +46,9 @@ public class MushroomCommand extends DCCommand {
         int z = p.getLocation().getBlockZ();
 //		TreeDB.spawnCoconutTree(new Random(), data, x,y,z);
         if (new Random().nextBoolean())
-            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTreeType.RED_MUSHROOM_BASE);
+            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTypes.Mushroom.RED_GIANT_MUSHROOM);
         else
-            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTreeType.BROWN_MUSHROOM_BASE);
+            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTypes.Mushroom.BROWN_GIANT_MUSHROOM);
     }
 
 }

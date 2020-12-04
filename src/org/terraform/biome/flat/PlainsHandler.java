@@ -7,7 +7,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -91,7 +91,7 @@ public class PlainsHandler extends BiomeHandler {
                     }
                     if (GenUtils.chance(random, 1, 500)) {
                         if (BlockUtils.isDirtLike(data.getType(x, y, z)))
-                            new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL)
+                            new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL)
                                     .build(world, data, x, y + 1, z);
                     }
                 }

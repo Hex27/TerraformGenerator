@@ -57,8 +57,8 @@ public class FractalTreeBuilder {
     private double initialAngle;
     private int initialHeight;
 
-    public FractalTreeBuilder(FractalTreeType ftt) {
-        switch (ftt) {
+    public FractalTreeBuilder(FractalTypes.Tree type) {
+        switch (type) {
             case FOREST:
                 this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble()).setBaseHeight(10).setBaseThickness(3).setThicknessDecrement(0.5f).setMaxDepth(4).setHeightVariation(2)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(3));
@@ -492,7 +492,7 @@ public class FractalTreeBuilder {
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
 
                         //Leaves do not replace solid blocks.
-                        if (type.toString().contains("LEAVES") && !rel.getType().isSolid()) {
+                        if (Tag.LEAVES.isTagged(type) && !rel.getType().isSolid()) {
                             Leaves leaf = (Leaves) Bukkit.createBlockData(type);
 
                             //Temporary fix: Big canopies dont decay now.
@@ -501,7 +501,7 @@ public class FractalTreeBuilder {
 //							
                             leaf.setDistance(1);
                             rel.setBlockData(leaf);
-                        } else if (!type.toString().contains("LEAVES")) {
+                        } else if (!Tag.LEAVES.isTagged(type)) {
                             rel.setType(type);
                         }
 
