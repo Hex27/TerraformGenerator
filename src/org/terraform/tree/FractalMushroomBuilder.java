@@ -32,6 +32,9 @@ public class FractalMushroomBuilder {
     double thicknessIncrement = 1;
     float thicknessIncrementPower = 1.3f;
 
+    float capSize = 10;
+    int capYOffset = -5;
+
     double minTilt = Math.PI / 8;
     double maxTilt = Math.PI / 4;
 
@@ -39,10 +42,20 @@ public class FractalMushroomBuilder {
         this.type = type;
         switch (type) {
             case BROWN_GIANT_MUSHROOM:
-                this.setType(FractalTypes.Mushroom.BROWN_GIANT_MUSHROOM);
+                this.setType(FractalTypes.Mushroom.BROWN_GIANT_MUSHROOM)
+                        .setCapType(Material.BROWN_MUSHROOM_BLOCK);
                 break;
             case RED_GIANT_MUSHROOM:
-                this.setType(FractalTypes.Mushroom.RED_GIANT_MUSHROOM);
+                this.setType(FractalTypes.Mushroom.RED_GIANT_MUSHROOM)
+                        .setBaseThickness(6f)
+                        .setCurvature(10)
+                        .setCurvaturePower(8)
+                        .setThicknessIncrement(1.5f)
+                        .setThicknessIncrementPower(1.1f)
+                        .setMinTilt(Math.PI / 6f)
+                        .setMaxTilt(Math.PI / 5f)
+                        .setCapSize(15)
+                        .setCapYOffset(-9);
                 break;
         }
     }
@@ -60,18 +73,8 @@ public class FractalMushroomBuilder {
                 baseThickness,
                 initialHeight);
 
-        Material cap = Material.BROWN_MUSHROOM_BLOCK;
-        SimpleBlock capBase = topBlock.getRelative(0, -9, 0);
-
-        int size = 15;
-        if (type == FractalTypes.Mushroom.RED_GIANT_MUSHROOM) {
-            cap = Material.RED_MUSHROOM_BLOCK;
-            capBase = topBlock.getRelative(0, -5, 0);
-            size = 10;
-        }
-
-        //int seed, float r, SimpleBlock block, boolean hardReplace,Material... type
-        spawnMushroomCap(tw.getHashedRand(x, y, z).nextInt(94929297), size, capBase, true, cap);
+        spawnMushroomCap(tw.getHashedRand(x, y, z).nextInt(94929297),
+                capSize, topBlock.getRelative(0, capYOffset, 0), true, capType);
     }
 
     public void createStem(SimpleBlock base, double tilt, double yaw, double thickness, double length) {
@@ -245,6 +248,16 @@ public class FractalMushroomBuilder {
      */
     public FractalMushroomBuilder setThicknessIncrementPower(float thicknessIncrementPower) {
         this.thicknessIncrementPower = thicknessIncrementPower;
+        return this;
+    }
+
+    public FractalMushroomBuilder setCapSize(float capSize) {
+        this.capSize = capSize;
+        return this;
+    }
+
+    public FractalMushroomBuilder setCapYOffset(int capYOffset) {
+        this.capYOffset = capYOffset;
         return this;
     }
 }
