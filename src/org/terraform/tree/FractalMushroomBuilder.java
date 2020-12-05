@@ -5,16 +5,16 @@ import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.GenUtils;
+import org.terraform.utils.*;
 
 import java.util.Random;
 
+// A handy tool for creating mushroom stems with right curvature:
+// https://www.geogebra.org/classic/hg7ckgwz
 public class FractalMushroomBuilder {
     Random rand;
 
-    SimpleBlock topBlock;
+    SimpleBlock stemTop;
 
     FractalTypes.Mushroom type = FractalTypes.Mushroom.RED_GIANT_MUSHROOM;
     Material stemType = Material.MUSHROOM_STEM;
@@ -25,18 +25,19 @@ public class FractalMushroomBuilder {
     int heightVariation = 0;
     float baseThickness = 3.8f;
 
-    // Curvature and thickness increment are both calculated with a
-    // power function using the current height. See javadocs on setters
-    double curvature = 7;
-    float curvaturePower = 4;
+    float segmentFactor = 2;
+    Vector2f curvatureControlPoint1 = new Vector2f(-2, 0.5f);
+    Vector2f curvatureControlPoint2 = new Vector2f(1.6f, 0.4f);
+
     double thicknessIncrement = 1;
-    float thicknessIncrementPower = 1.3f;
+    Vector2f thicknessControlPoint1 = new Vector2f(0.5f, 0.5f);
+    Vector2f thicknessControlPoint2 = new Vector2f(0.5f, 0.5f);
 
     float capSize = 10;
     int capYOffset = -5;
 
-    double minTilt = Math.PI / 8;
-    double maxTilt = Math.PI / 4;
+    double minTilt = Math.PI / 48;
+    double maxTilt = Math.PI / 20;
 
     public FractalMushroomBuilder(FractalTypes.Mushroom type) {
         this.type = type;
@@ -48,12 +49,9 @@ public class FractalMushroomBuilder {
             case RED_GIANT_MUSHROOM:
                 this.setType(FractalTypes.Mushroom.RED_GIANT_MUSHROOM)
                         .setBaseThickness(6f)
-                        .setCurvature(10)
-                        .setCurvaturePower(8)
                         .setThicknessIncrement(1.5f)
-                        .setThicknessIncrementPower(1.1f)
-                        .setMinTilt(Math.PI / 6f)
-                        .setMaxTilt(Math.PI / 5f)
+//                        .setMinTilt(Math.PI / 6f)
+//                        .setMaxTilt(Math.PI / 5f)
                         .setCapSize(15)
                         .setCapYOffset(-9);
                 break;
@@ -63,7 +61,7 @@ public class FractalMushroomBuilder {
     public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
-        if (this.topBlock == null) topBlock = base;
+        if (this.stemTop == null) stemTop = base;
         double initialAngle = 2 * Math.PI * Math.random();
 
         int initialHeight = baseHeight + GenUtils.randInt(-heightVariation, heightVariation);
@@ -74,25 +72,36 @@ public class FractalMushroomBuilder {
                 initialHeight);
 
         spawnMushroomCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-                capSize, topBlock.getRelative(0, capYOffset, 0), true, capType);
+                capSize, stemTop.getRelative(0, capYOffset, 0), true, capType);
     }
 
     public void createStem(SimpleBlock base, double tilt, double yaw, double thickness, double length) {
-        int segments = (int) (length * curvature);
+        int totalSegments = (int) (length * segmentFactor);
 
-        tilt += Math.PI / 2f;
-        Vector v = new Vector(length * Math.cos(tilt) * Math.sin(yaw), length * Math.sin(tilt), length * Math.cos(yaw) * Math.cos(tilt));
+        // The straight stem represented in 2d (x,y)
+        Vector2f stem2d = new Vector2f((float) (length * Math.cos(Math.PI / 2 - tilt)), (float) (length * Math.sin(Math.PI / 2 - tilt)));
+
+        // 2d control points
+        Vector2f controlPoint1 = new Vector2f(curvatureControlPoint1.x * stem2d.x, curvatureControlPoint1.y * stem2d.y);
+        Vector2f controlPoint2 = new Vector2f(curvatureControlPoint2.x * stem2d.x, curvatureControlPoint2.y * stem2d.y);
+
+        BezierCurve curvature = new BezierCurve(new Vector2f(0, 0), controlPoint1, controlPoint2, stem2d);
+        BezierCurve thicknessIncrementCurve = new BezierCurve(thicknessControlPoint1, thicknessControlPoint2);
 
         SimpleBlock lastSegment = null;
-        for (int i = 0; i <= segments; i++) {
-            Vector seg = v.clone().multiply(i / ((float) segments));
-            seg.setY(seg.getY() + curvature * Math.pow(i / (float) segments, curvaturePower)); // Straighten the stem
-            lastSegment = base.getRelative(seg);
-            replaceSphere((float) (thickness / 2f + thicknessIncrement * Math.pow(1 - i / (float) segments, thicknessIncrementPower)),
+        for (int i = 0; i <= totalSegments; i++) {
+            float progress = i / (float) totalSegments;
+            Vector2f nextPos = curvature.calculate(progress);
+
+            // Rotate the stem2d vector in 3d space using provided yaw
+            Vector stem3d = new Vector(nextPos.x * Math.sin(yaw), nextPos.y, nextPos.x * Math.cos(yaw));
+
+            lastSegment = base.getRelative(stem3d);
+            replaceSphere((float) (thickness / 2f + thicknessIncrement * thicknessIncrementCurve.calculate(1 - progress).y),
                     lastSegment, stemType);
         }
 
-        topBlock = lastSegment;
+        stemTop = lastSegment;
     }
 
     private void replaceSphere(float radius, SimpleBlock base, Material type) {
@@ -116,28 +125,6 @@ public class FractalMushroomBuilder {
                 }
             }
         }
-    }
-
-    public double randomAngle() {
-        return GenUtils.randDouble(rand, minTilt, maxTilt);
-    }
-
-    /**
-     * Random-thirty-ish-angle
-     *
-     * @return An angle between 0.8*30 to 1.2*30 degrees in radians
-     */
-    public double rta() {
-        return GenUtils.randDouble(new Random(), 0.8 * Math.PI / 6, 1.2 * Math.PI / 6);
-    }
-
-    /**
-     * Random-angle
-     *
-     * @return An angle between lowerBound*30 to upperBound*30 degrees in radians
-     */
-    public double ra(double base, double lowerBound, double upperBound) {
-        return GenUtils.randDouble(new Random(), lowerBound * base, upperBound * base);
     }
 
     public static void spawnMushroomCap(int seed, float r, SimpleBlock block, boolean hardReplace, Material... type) {
@@ -208,33 +195,53 @@ public class FractalMushroomBuilder {
         return this;
     }
 
-    /**
-     * Curvature is added to the final length of the stem.
-     * The result will be more straight stems towards the top.
-     * A value to the current height is added with the following
-     * equation: height += curvature * (progresss^curvaturePower),
-     * where progress is value between 0 at ground level and 1 at stem top.
-     *
-     * @param curvature Curvature. Higher values mean higher and
-     *                  more straightened mushrooms towards the top.
-     */
-    public FractalMushroomBuilder setCurvature(double curvature) {
-        this.curvature = curvature;
+    public FractalMushroomBuilder setCapSize(float capSize) {
+        this.capSize = capSize;
+        return this;
+    }
+
+    public FractalMushroomBuilder setCapYOffset(int capYOffset) {
+        this.capYOffset = capYOffset;
         return this;
     }
 
     /**
-     * @see FractalMushroomBuilder#setCurvature(double)
+     * Defines how many segment points are used for drawing lines.
+     * Final number of segments will be (stem length * segmentFactor).
+     * Default value is 2.0. Generally you want to touch this only if
+     * your mushroom is **very** curvy.
      */
-    public FractalMushroomBuilder setCurvaturePower(float curvaturePower) {
-        this.curvaturePower = curvaturePower;
+    public FractalMushroomBuilder setSegmentFactor(float segmentFactor) {
+        this.segmentFactor = segmentFactor;
         return this;
     }
+
     /**
-     * Thickness increment is added to the final thickness (radius) of the stem
-     * using a power function, resulting more thick stems towards the ground.
-     * The following function is used: radius += thicknessIncrement * ((1 - progress)^thicknessIncrementPower),
-     * where progress is value between 0 at ground level and 1 at stem top.
+     * Curvature is calculated with cubic Bezier curve.
+     * Here you can set the control points to control the curve.
+     * I also created a handy tool for testing your curves:
+     * https://www.geogebra.org/classic/hg7ckgwz
+     *
+     * The start and end points of the curve will always
+     * be (0, 0) and (1, 1), so control points should be close by.
+     */
+    public FractalMushroomBuilder setStemCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
+        this.curvatureControlPoint1 = controlPoint1;
+        this.curvatureControlPoint2 = controlPoint2;
+        return this;
+    }
+
+    /**
+     * @see FractalMushroomBuilder#setStemCurve(Vector2f, Vector2f)
+     */
+    public FractalMushroomBuilder setStemCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+        return setStemCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
+    }
+
+    /**
+     * Thickness increment is added to the **radius** of the stem
+     * based on Bezier thickness increment curve. On the ground
+     * level the width of the stem will be (width + 2 * thicknessIncrement).
      *
      * @param thicknessIncrement Thickness increment towards the ground.
      */
@@ -244,20 +251,24 @@ public class FractalMushroomBuilder {
     }
 
     /**
-     * @see FractalMushroomBuilder#setThicknessIncrementPower(float)
+     * Thickness increment is calculated with cubic Bezier curve.
+     * Here you can set the control points to control the curve.
+     *
+     * The start and end points of the curve will always
+     * be (0, 0) and (1, 1), so control points should be close by.
+     *
+     * The curve is linear by default (=both control points are (0.5, 0.5))
      */
-    public FractalMushroomBuilder setThicknessIncrementPower(float thicknessIncrementPower) {
-        this.thicknessIncrementPower = thicknessIncrementPower;
+    public FractalMushroomBuilder setThicknessIncrementCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
+        this.thicknessControlPoint1 = controlPoint1;
+        this.thicknessControlPoint2 = controlPoint2;
         return this;
     }
 
-    public FractalMushroomBuilder setCapSize(float capSize) {
-        this.capSize = capSize;
-        return this;
-    }
-
-    public FractalMushroomBuilder setCapYOffset(int capYOffset) {
-        this.capYOffset = capYOffset;
-        return this;
+    /**
+     * @see FractalMushroomBuilder#setThicknessIncrementCurve(Vector2f, Vector2f)
+     */
+    public FractalMushroomBuilder setThicknessIncrementCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+        return setThicknessIncrementCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
     }
 }

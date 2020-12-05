@@ -10,11 +10,9 @@ import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class FractalLeaves {

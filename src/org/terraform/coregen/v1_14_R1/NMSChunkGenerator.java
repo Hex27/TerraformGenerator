@@ -1,10 +1,8 @@
 package org.terraform.coregen.v1_14_R1;
 
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.server.v1_14_R1.*;
 import net.minecraft.server.v1_14_R1.HeightMap.Type;
-import net.minecraft.server.v1_14_R1.Blocks;
-import net.minecraft.server.v1_14_R1.WorldGenCarverAbstract;
-
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.block.CraftBlock;
@@ -19,8 +17,6 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
-
-import com.google.common.collect.ImmutableSet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

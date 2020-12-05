@@ -1,16 +1,16 @@
 package org.terraform.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Stack;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.Stack;
 
 public class MazeSpawner {
 

@@ -4,9 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import net.minecraft.server.v1_16_R2.*;
 import net.minecraft.server.v1_16_R2.HeightMap.Type;
-import net.minecraft.server.v1_16_R2.Blocks;
-import net.minecraft.server.v1_16_R2.WorldGenCarverAbstract;
-
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
