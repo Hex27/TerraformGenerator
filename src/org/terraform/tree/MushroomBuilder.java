@@ -11,12 +11,13 @@ import java.util.Random;
 
 // A handy tool for creating mushroom stems with right curvature:
 // https://www.geogebra.org/classic/hg7ckgwz
-public class FractalMushroomBuilder {
+public class MushroomBuilder {
     Random rand;
 
     SimpleBlock stemTop;
 
-    FractalTypes.Mushroom type = FractalTypes.Mushroom.RED_GIANT_MUSHROOM;
+    FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
+    FractalTypes.MushroomCap capShape = FractalTypes.MushroomCap.ROUND;
     Material stemType = Material.MUSHROOM_STEM;
     Material capType = Material.RED_MUSHROOM_BLOCK;
     Material spotType = Material.MUSHROOM_STEM;
@@ -33,27 +34,68 @@ public class FractalMushroomBuilder {
     Vector2f thicknessControlPoint1 = new Vector2f(0.5f, 0.5f);
     Vector2f thicknessControlPoint2 = new Vector2f(0.5f, 0.5f);
 
-    float capSize = 10;
+    float capRadius = 10;
     int capYOffset = -5;
 
     double minTilt = Math.PI / 48;
     double maxTilt = Math.PI / 20;
+    boolean fourAxisRotationOnly = false;
 
-    public FractalMushroomBuilder(FractalTypes.Mushroom type) {
+    public MushroomBuilder(FractalTypes.Mushroom type) {
         this.type = type;
         switch (type) {
-            case BROWN_GIANT_MUSHROOM:
-                this.setType(FractalTypes.Mushroom.BROWN_GIANT_MUSHROOM)
+//            case BROWN_GIANT_MUSHROOM:
+//                this.setType(FractalTypes.Mushroom.BROWN_GIANT_MUSHROOM)
+//                        .setCapType(Material.BROWN_MUSHROOM_BLOCK);
+//                break;
+            case GIANT_BROWN_MUSHROOM:
+                this
+//                        .setCapShape(FractalTypes.MushroomCap.POINTY)
                         .setCapType(Material.BROWN_MUSHROOM_BLOCK);
                 break;
-            case RED_GIANT_MUSHROOM:
-                this.setType(FractalTypes.Mushroom.RED_GIANT_MUSHROOM)
-                        .setBaseThickness(6f)
+            case GIANT_RED_MUSHROOM:
+                this.setBaseThickness(6f)
                         .setThicknessIncrement(1.5f)
 //                        .setMinTilt(Math.PI / 6f)
 //                        .setMaxTilt(Math.PI / 5f)
-                        .setCapSize(15)
+                        .setCapRadius(15)
                         .setCapYOffset(-9);
+                break;
+            case SMALL_RED_MUSHROOM:
+                this.setBaseThickness(0)
+                        .setThicknessIncrement(0.5f)
+                        .setBaseHeight(4)
+                        .setMaxTilt(Math.PI / 8)
+                        .setMinTilt(0)
+                        .setStemCurve(0, 0.6f, 1, 0.4f)
+                        .setFourAxisRotationOnly(true)
+                        .setSegmentFactor(1)
+                        .setCapRadius(2.5f)
+                        .setCapYOffset(-1);
+                break;
+            case SMALL_POINTY_RED_MUSHROOM:
+                this.setBaseThickness(0)
+                        .setThicknessIncrement(0)
+                        .setBaseHeight(6)
+                        .setMaxTilt(Math.PI / 18)
+                        .setMinTilt(0)
+                        .setFourAxisRotationOnly(true)
+                        .setStemCurve(0.5f, 0.5f, 0.5f, 0.5f)
+                        .setSegmentFactor(1f)
+                        .setCapRadius(2.3f)
+                        .setCapYOffset(-2)
+                        .setCapShape(FractalTypes.MushroomCap.POINTY);
+                break;
+            case TINY_RED_MUSHROOM:
+                this.setBaseThickness(0)
+                        .setBaseHeight(4)
+                        .setMinTilt(0)
+                        .setMaxTilt(0)
+                        .setStemCurve(0.5f, 0.5f, 0.5f, 0.5f)
+                        .setSegmentFactor(1)
+                        .setCapRadius(1.2f)
+                        .setCapYOffset(-2)
+                        .setCapShape(FractalTypes.MushroomCap.POINTY);
                 break;
         }
     }
@@ -62,7 +104,13 @@ public class FractalMushroomBuilder {
         this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         if (this.stemTop == null) stemTop = base;
-        double initialAngle = 2 * Math.PI * Math.random();
+
+        double initialAngle;
+        if (fourAxisRotationOnly)
+            initialAngle = (Math.PI / 2.0) * Math.round(Math.random() * 4);
+        else initialAngle = 2 * Math.PI * Math.random();
+
+        System.out.println();
 
         int initialHeight = baseHeight + GenUtils.randInt(-heightVariation, heightVariation);
         createStem(base,
@@ -71,8 +119,16 @@ public class FractalMushroomBuilder {
                 baseThickness,
                 initialHeight);
 
-        spawnMushroomCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-                capSize, stemTop.getRelative(0, capYOffset, 0), true, capType);
+        switch (capShape) {
+            case ROUND:
+                MushroomCapMaker.spawnRoundCap(tw.getHashedRand(x, y, z).nextInt(94929297),
+                        capRadius, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                break;
+            case POINTY:
+                MushroomCapMaker.spawnSphericalCap(tw.getHashedRand(x, y, z).nextInt(94929297),
+                        capRadius, capRadius * 1.8f, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                break;
+        }
     }
 
     public void createStem(SimpleBlock base, double tilt, double yaw, double thickness, double length) {
@@ -105,6 +161,13 @@ public class FractalMushroomBuilder {
     }
 
     private void replaceSphere(float radius, SimpleBlock base, Material type) {
+        if (radius < 0.5) {
+            if (!base.getType().isSolid())
+                base.setType(type);
+
+            return;
+        }
+
         FastNoise noise = new FastNoise();
         noise.SetNoiseType(FastNoise.NoiseType.Simplex);
         noise.SetFrequency(0.09f);
@@ -127,80 +190,47 @@ public class FractalMushroomBuilder {
         }
     }
 
-    public static void spawnMushroomCap(int seed, float r, SimpleBlock block, boolean hardReplace, Material... type) {
-        Random rand = new Random(seed);
-        FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
-        for (float x = -r; x <= r; x++) {
-            for (float y = 0; y <= r; y++) {
-                for (float z = -r; z <= r; z++) {
-
-                    SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
-                    double equationResult = Math.pow(x, 2) / Math.pow(r, 2)
-                            + Math.pow(y, 2) / Math.pow(r, 2)
-                            + Math.pow(z, 2) / Math.pow(r, 2);
-                    if (equationResult <= 1 + 0.3 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())
-                            && equationResult >= 0.5) {
-                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.getType().isSolid()) {
-                            rel.setType(GenUtils.randMaterial(rand, type));
-                            BlockUtils.correctSurroundingMushroomData(rel);
-                        }
-                        //rel.setReplaceType(ReplaceType.ALL);
-                    }
-                }
-            }
-        }
-    }
-
-    public FractalMushroomBuilder setType(FractalTypes.Mushroom type) {
-        this.type = type;
-        return this;
-    }
-
-    public FractalMushroomBuilder setBaseThickness(float baseThickness) {
+    public MushroomBuilder setBaseThickness(float baseThickness) {
         this.baseThickness = baseThickness;
         return this;
     }
 
-    public FractalMushroomBuilder setBaseHeight(int h) {
+    public MushroomBuilder setBaseHeight(int h) {
         this.baseHeight = h;
         return this;
     }
 
-    public FractalMushroomBuilder setStemType(Material stemType) {
+    public MushroomBuilder setStemType(Material stemType) {
         this.stemType = stemType;
         return this;
     }
 
-    public FractalMushroomBuilder setCapType(Material capType) {
+    public MushroomBuilder setCapType(Material capType) {
         this.capType = capType;
         return this;
     }
 
-    public FractalMushroomBuilder setSpotType(Material spotType) {
+    public MushroomBuilder setSpotType(Material spotType) {
         this.spotType = spotType;
         return this;
     }
 
-    public FractalMushroomBuilder setMinTilt(double minTilt) {
+    public MushroomBuilder setMinTilt(double minTilt) {
         this.minTilt = minTilt;
         return this;
     }
 
-    public FractalMushroomBuilder setMaxTilt(double maxTilt) {
+    public MushroomBuilder setMaxTilt(double maxTilt) {
         this.maxTilt = maxTilt;
         return this;
     }
 
-    public FractalMushroomBuilder setCapSize(float capSize) {
-        this.capSize = capSize;
+    public MushroomBuilder setCapRadius(float capRadius) {
+        this.capRadius = capRadius;
         return this;
     }
 
-    public FractalMushroomBuilder setCapYOffset(int capYOffset) {
+    public MushroomBuilder setCapYOffset(int capYOffset) {
         this.capYOffset = capYOffset;
         return this;
     }
@@ -211,7 +241,7 @@ public class FractalMushroomBuilder {
      * Default value is 2.0. Generally you want to touch this only if
      * your mushroom is **very** curvy.
      */
-    public FractalMushroomBuilder setSegmentFactor(float segmentFactor) {
+    public MushroomBuilder setSegmentFactor(float segmentFactor) {
         this.segmentFactor = segmentFactor;
         return this;
     }
@@ -225,16 +255,16 @@ public class FractalMushroomBuilder {
      * The start and end points of the curve will always
      * be (0, 0) and (1, 1), so control points should be close by.
      */
-    public FractalMushroomBuilder setStemCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
+    public MushroomBuilder setStemCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
         this.curvatureControlPoint1 = controlPoint1;
         this.curvatureControlPoint2 = controlPoint2;
         return this;
     }
 
     /**
-     * @see FractalMushroomBuilder#setStemCurve(Vector2f, Vector2f)
+     * @see MushroomBuilder#setStemCurve(Vector2f, Vector2f)
      */
-    public FractalMushroomBuilder setStemCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+    public MushroomBuilder setStemCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
         return setStemCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
     }
 
@@ -245,7 +275,7 @@ public class FractalMushroomBuilder {
      *
      * @param thicknessIncrement Thickness increment towards the ground.
      */
-    public FractalMushroomBuilder setThicknessIncrement(double thicknessIncrement) {
+    public MushroomBuilder setThicknessIncrement(double thicknessIncrement) {
         this.thicknessIncrement = thicknessIncrement;
         return this;
     }
@@ -259,16 +289,26 @@ public class FractalMushroomBuilder {
      *
      * The curve is linear by default (=both control points are (0.5, 0.5))
      */
-    public FractalMushroomBuilder setThicknessIncrementCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
+    public MushroomBuilder setThicknessIncrementCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
         this.thicknessControlPoint1 = controlPoint1;
         this.thicknessControlPoint2 = controlPoint2;
         return this;
     }
 
     /**
-     * @see FractalMushroomBuilder#setThicknessIncrementCurve(Vector2f, Vector2f)
+     * @see MushroomBuilder#setThicknessIncrementCurve(Vector2f, Vector2f)
      */
-    public FractalMushroomBuilder setThicknessIncrementCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+    public MushroomBuilder setThicknessIncrementCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
         return setThicknessIncrementCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
+    }
+
+    public MushroomBuilder setCapShape(FractalTypes.MushroomCap capShape) {
+        this.capShape = capShape;
+        return this;
+    }
+
+    public MushroomBuilder setFourAxisRotationOnly(boolean fourAxisRotationOnly) {
+        this.fourAxisRotationOnly = fourAxisRotationOnly;
+        return this;
     }
 }

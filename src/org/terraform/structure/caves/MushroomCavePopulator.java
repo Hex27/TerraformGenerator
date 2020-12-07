@@ -72,8 +72,8 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
                     int ground = getCaveFloor(data, nx, y, nz);
                     if (data.getType(nx, ground, nz) == Material.MYCELIUM
                             && data.getType(nx, ground + 1, nz) == Material.CAVE_AIR) {
-                        FractalTypes.Mushroom type = FractalTypes.Mushroom.RED_GIANT_MUSHROOM;
-                        if (rand.nextBoolean()) type = FractalTypes.Mushroom.BROWN_GIANT_MUSHROOM;
+                        FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
+                        if (rand.nextBoolean()) type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
                         TreeDB.spawnGiantMushroom(tw, data, nx, ground, nz, type);
                     }
                 }

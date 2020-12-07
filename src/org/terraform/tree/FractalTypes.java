@@ -27,10 +27,19 @@ public class FractalTypes {
     }
 
     public enum Mushroom {
-        BROWN_GIANT_MUSHROOM,
-        RED_GIANT_MUSHROOM;
+        TINY_RED_MUSHROOM,
+        SMALL_RED_MUSHROOM,
+        SMALL_POINTY_RED_MUSHROOM,
+        GIANT_BROWN_MUSHROOM,
+        GIANT_RED_MUSHROOM;
 
         public static final Mushroom[] VALUES = Mushroom.values();
+    }
+
+    public enum MushroomCap {
+        ROUND,
+        POINTY;
+        public static final MushroomCap[] VALUES = MushroomCap.values();
     }
 
     public enum Other {

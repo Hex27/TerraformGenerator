@@ -45,7 +45,7 @@ public class TreeDB {
     }
 
     public static void spawnGiantMushroom(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z, FractalTypes.Mushroom type) {
-        new FractalMushroomBuilder(type).build(tw, data, x, y, z);
+        new MushroomBuilder(type).build(tw, data, x, y, z);
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.terraform.command;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
@@ -8,6 +9,7 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTypes;
+import org.terraform.tree.MushroomBuilder;
 import org.terraform.tree.TreeDB;
 
 import java.util.Random;
@@ -17,6 +19,7 @@ public class MushroomCommand extends DCCommand {
 
     public MushroomCommand(DrycellPlugin plugin, String... aliases) {
         super(plugin, aliases);
+        this.parameters.add(new MushroomTypeArgument("type", true));
     }
 
     @Override
@@ -45,10 +48,34 @@ public class MushroomCommand extends DCCommand {
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
 //		TreeDB.spawnCoconutTree(new Random(), data, x,y,z);
+        TerraformWorld tw = TerraformWorld.get(p.getWorld());
+
+        if (args.size() != 0) {
+            try {
+                new MushroomBuilder((FractalTypes.Mushroom) this.parseArguments(sender, args).get(0))
+                        .build(tw, data, x, y, z);
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage(ChatColor.RED + "Invalid tree type.");
+                sender.sendMessage(ChatColor.RED + "Valid types:");
+                StringBuilder types = new StringBuilder();
+                boolean b = true;
+                for (FractalTypes.Mushroom type : FractalTypes.Mushroom.VALUES) {
+                    ChatColor col = ChatColor.RED;
+                    if (b) col = ChatColor.DARK_RED;
+                    b = !b;
+                    types.append(col).append(type).append(' ');
+                }
+
+                sender.sendMessage(types.toString());
+            }
+
+            return;
+        }
+
         if (new Random().nextBoolean())
-            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTypes.Mushroom.RED_GIANT_MUSHROOM);
+            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTypes.Mushroom.GIANT_RED_MUSHROOM);
         else
-            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTypes.Mushroom.BROWN_GIANT_MUSHROOM);
+            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM);
     }
 
 }
