@@ -23,6 +23,11 @@ public class BezierCurve {
         this.control2 = control2;
     }
 
+    public BezierCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+        this.control1 = new Vector2f(controlP1x, controlP1y);
+        this.control2 = new Vector2f(controlP2x, controlP2y);
+    }
+
     public Vector2f calculate(float progress) {
         return cubic(progress, point1, control1, control2, point2);
     }
