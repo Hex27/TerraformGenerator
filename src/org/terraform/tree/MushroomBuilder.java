@@ -46,17 +46,25 @@ public class MushroomBuilder {
     public MushroomBuilder(FractalTypes.Mushroom type) {
         this.type = type;
         switch (type) {
-// Funnel mushrooms (implement algorithm)
-//            case SMALL_BROWN_MUSHROOM:
-//                this.setBaseThickness(3f)
-//                        .setThicknessIncrement(0f)
-//                        .setBaseHeight(12)
-//                        .setCapType(Material.BROWN_MUSHROOM_BLOCK)
-//                        .setStemCurve(0.5f, 0.5f, 0.5f, 0.5f)
-//                        .setCapShape(FractalTypes.MushroomCap.FUNNEL)
-//                        .setCapRadius(13)
-//                        .setCapYOffset(0);
-//                break;
+            // Funnel mushrooms (implement algorithm)
+            case GIANT_BROWN_FUNNEL_MUSHROOM:
+                this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
+                        .setCapRadius(13)
+                        .setCapShape(FractalTypes.MushroomCap.FUNNEL);
+                break;
+            case SMALL_BROWN_MUSHROOM:
+                this.setBaseThickness(0)
+                        .setThicknessIncrement(0)
+                        .setBaseHeight(5)
+                        .setCapType(Material.BROWN_MUSHROOM_BLOCK)
+                        .setMinTilt(0)
+                        .setMaxTilt(Math.PI / 8)
+                        .setStemCurve(0.8f, 0.2f, 0.8f, 0.4f)
+                        .setFourAxisRotationOnly(true)
+                        .setCapShape(FractalTypes.MushroomCap.FLAT)
+                        .setCapRadius(3f)
+                        .setCapYOffset(0);
+                break;
             case GIANT_BROWN_MUSHROOM:
                 this.setCapType(Material.BROWN_MUSHROOM_BLOCK);
                 break;
@@ -126,14 +134,18 @@ public class MushroomBuilder {
                 spawnSphericalCap(tw.getHashedRand(x, y, z).nextInt(94929297),
                         capRadius, capRadius, stemTop.getRelative(0, capYOffset, 0), true, capType);
                 break;
+            case FLAT:
+                spawnSphericalCap(tw.getHashedRand(x, y, z).nextInt(94929297),
+                        capRadius, 0.6f * capRadius, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                break;
             case POINTY:
                 spawnSphericalCap(tw.getHashedRand(x, y, z).nextInt(94929297),
                         capRadius, capRadius * 1.8f, stemTop.getRelative(0, capYOffset, 0), true, capType);
                 break;
-//            case FUNNEL: // Implement funnel algorithm
-//                MushroomCapMaker.spawnFlatCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-//                        capRadius, 0.7f, stemTop.getRelative(0, capYOffset, 0), true, capType);
-//                break;
+            case FUNNEL: // Implement funnel algorithm
+                spawnFunnelCap(tw.getHashedRand(x, y, z).nextInt(94929297),
+                        capRadius, 0.7f, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                break;
         }
     }
 
@@ -212,7 +224,7 @@ public class MushroomBuilder {
         noise.SetFrequency(1.4f);
 
         float belowY = -0.25f * 2 * ry;
-        float lowThreshold = Math.min((float) (0.6 / 5 * r), 0.6f); // When radius < 5 mushrooms less hollow
+        float lowThreshold = Math.min((float) (0.6 / 5 * Math.min(r, ry)), 0.6f); // When radius < 5 mushrooms less hollow
 
         for (int x = Math.round(-r); x <= Math.round(r); x++) {
             for (int y = Math.round(belowY); y <= Math.round(ry); y++) {
@@ -243,41 +255,72 @@ public class MushroomBuilder {
     }
 
 // Funnel mushrooms yet to be implemented
-//
-//    public static void spawnFlatCap(int seed, float r, float variable, SimpleBlock base, boolean hardReplace, Material... type) {
-//        float ry = 0.1f * r;
-//
-//        Random rand = new Random(seed);
-//        FastNoise noise = new FastNoise(seed);
-//        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
-//        noise.SetFrequency(0.09f);
-//
-//        base = base.getRelative(0,  Math.round(2 * ry), 0);
-//
-//        for (int x = Math.round(-r); x <= Math.round(r); x++) {
-//            for (int y = Math.round(-ry); y <= Math.round(ry); y++) {
-//                for (int z = Math.round(-r); z <= Math.round(r); z++) {
-//
-//                    double distToCenter = Math.sqrt(x * x + z * z) / r;
-//                    double factor = Math.pow(distToCenter, 1 / 2f);
-//                    int realY = y + (int) Math.round(factor * variable * r);
-//
-//                    SimpleBlock rel = base.getRelative(x, realY, z);
-//
-//                    double equationResult = Math.pow(x, 2) / Math.pow(r, 2)
-//                            + Math.pow(y, 2) / Math.pow(ry * (1 - factor), 2)
-//                            + Math.pow(z, 2) / Math.pow(r, 2);
-//
-//                    if (equationResult <= 1) {
-//                        if (hardReplace || !rel.getType().isSolid()) {
-//                            rel.setType(GenUtils.randMaterial(rand, type));
-//                            BlockUtils.correctSurroundingMushroomData(rel);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+
+    public static void spawnFunnelCap(int seed, float r, float variable, SimpleBlock base, boolean hardReplace, Material... type) {
+        float ry = 0.1f * r;
+
+        Random rand = new Random(seed);
+        FastNoise noise = new FastNoise(seed);
+        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
+        noise.SetFrequency(1.4f);
+
+        base = base.getRelative(0,  Math.round(2 * ry), 0);
+
+        for (int x = Math.round(-r); x <= Math.round(r); x++) {
+            for (int y = 0; y <= Math.round(1.4f * ry); y++) {
+                for (int z = Math.round(-r); z <= Math.round(r); z++) {
+
+                    double distToCenter = Math.sqrt(x * x + z * z) / r;
+                    double realY = y + 10 * (Math.pow(distToCenter, 0.5) - Math.pow(distToCenter - 0.15, 8));
+                    realY += ry * Math.abs(noise.GetNoise(x / r, z / r));
+
+                    SimpleBlock rel = base.getRelative(x, (int) Math.round(realY), z);
+
+                    double equationResult = Math.pow(x / r, 2)
+                            + Math.pow(Math.abs(y) / ry, 4)
+                            + Math.pow(z / r, 2);
+
+                    if (equationResult <= 1) {
+                        if (hardReplace || !rel.getType().isSolid()) {
+                            rel.setType(GenUtils.randMaterial(rand, type));
+                            BlockUtils.correctSurroundingMushroomData(rel);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Helmat
+        double angle = Math.random() * Math.PI * 2;
+        int heightLimit = base.getY() + (int) Math.round(10);
+
+        for (int i = 0; i < 16; i++) {
+            angle += Math.PI / 8; // Do full circle
+
+            List<Vector2f> points = new BresenhamLine(new Vector2f(0, 0),
+                    new Vector2f((float) ((r - 2) * Math.cos(angle)), (float) ((r - 2) * Math.sin(angle)))).getPoints();
+
+            points:
+            for (Vector2f point : points) {
+                SimpleBlock pointBase = base.getRelative(Math.round(point.x), 0, Math.round(point.y));
+
+                while (true) {
+                    if (pointBase.getType().isSolid()) {
+                        if (pointBase.getRelative(0, -1, 0).getType().isAir()) { // Alapuolella air
+                            pointBase.getRelative(0, -1, 0).setType(Material.MUSHROOM_STEM);
+                        }
+                        continue points;
+                    } else {
+                        pointBase = pointBase.getRelative(0, 1, 0);
+                    }
+
+                    if (pointBase.getY() > heightLimit) {
+                        continue points;
+                    }
+                }
+            }
+        }
+    }
 
     public MushroomBuilder setBaseThickness(float baseThickness) {
         this.baseThickness = baseThickness;
