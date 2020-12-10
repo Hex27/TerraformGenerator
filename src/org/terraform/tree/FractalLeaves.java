@@ -4,9 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.data.SimpleBlock;
@@ -27,10 +24,14 @@ public class FractalLeaves {
     public float radiusZ = 4;
     public int offsetY = 0;
 
+    float leafNoiseMultiplier = 0.7f;
+    float leafNoiseFrequency = 0.09f;
+
     public boolean halfSphere = false;
     double hollowLeaves = 0.0;
 
     boolean coneLeaves = false;
+    boolean snowy = false;
 
     public Material material = Material.OAK_LEAVES;
     public FractalTreeBuilder builder;
@@ -58,8 +59,8 @@ public class FractalLeaves {
         //Initialise noise to be used in randomising the sphere
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        float noiseMultiplier = builder.leafNoiseMultiplier;
-        noise.SetFrequency(builder.leafNoiseFrequency);
+        float noiseMultiplier = leafNoiseMultiplier;
+        noise.SetFrequency(leafNoiseFrequency);
         noise.SetFractalOctaves(5);
 
         double maxR = radiusX;
@@ -89,7 +90,7 @@ public class FractalLeaves {
                     	// Compress negative y
                     	if(effectiveY < 0) effectiveY = effectiveY * 2.0f;
 
-                    	//Extend positive y and multiply it by a power to make it sharp
+                    	// Extend positive y and multiply it by a power to make it sharp
                     	if(effectiveY > 0) {
                     		effectiveY=effectiveY*(2.0f/3.0f);
                     		effectiveY = (float) Math.pow(effectiveY, 1.3);
@@ -111,39 +112,22 @@ public class FractalLeaves {
                                 changed.add(relativeBlock);
                         }
 
-                        //Leaves do not replace solid blocks.
-                        if (Tag.LEAVES.isTagged(material) && !relativeBlock.getType().isSolid()) {
-                            Leaves leaf = (Leaves) Bukkit.createBlockData(material);
+                        // Leaves do not replace solid blocks.
+                        if (!relativeBlock.getType().isSolid()) {
+                            if (Tag.LEAVES.isTagged(material)) {
+                                Leaves leaf = (Leaves) Bukkit.createBlockData(material);
 //
-                            leaf.setDistance(1);
-                            relativeBlock.setBlockData(leaf);
-                        } else if (!Tag.LEAVES.isTagged(material)) {
-                            relativeBlock.setType(material);
+                                leaf.setDistance(1);
+                                relativeBlock.setBlockData(leaf);
+                            } else {
+                                relativeBlock.setType(material);
+                            }
                         }
 
-                        if (builder.snowy) {
+                        if (snowy) {
                             if (!relativeBlock.getRelative(0, 1, 0).getType().isSolid()) {
                                 relativeBlock.getRelative(0, 1, 0).setType(Material.SNOW);
                             }
-                        }
-
-                        if (builder.cocoaBeans > 0
-                                && Math.abs(x) >= radiusX - 2
-                                && Math.abs(z) >= radiusZ - 2) {
-                            //Coca beans
-                            if (GenUtils.chance(builder.cocoaBeans, 100)) {
-                                for (BlockFace face : BlockUtils.directBlockFaces) {
-                                    Directional dir = (Directional) Bukkit.createBlockData(Material.COCOA);
-                                    dir.setFacing(face.getOppositeFace());
-                                    ((Ageable) dir).setAge(GenUtils.randInt(rand, 0, ((Ageable) dir).getMaximumAge()));
-                                    SimpleBlock beans = relativeBlock.getRelative(face);
-                                    if (beans.getType().isSolid() ||
-                                            beans.getType() == Material.WATER) continue;
-
-                                    beans.setBlockData(dir);
-                                }
-                            }
-
                         }
 
                         if (builder.vines > 0
@@ -153,24 +137,22 @@ public class FractalLeaves {
                                 builder.dangleLeavesDown(relativeBlock, (int) Math.ceil(maxR), builder.vines / 2, builder.vines);
                             }
 
-                            // Vines set only if the leaf type is leaves.
-                            if (Tag.LEAVES.isTagged(material))
-                                if (GenUtils.chance(1, 10)) {
-                                    for (BlockFace face : BlockUtils.directBlockFaces) {
-                                        MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
-                                        dir.setFace(face.getOppositeFace(), true);
-                                        SimpleBlock vine = relativeBlock.getRelative(face);
-                                        if (vine.getType().isSolid() ||
-                                                vine.getType() == Material.WATER) continue;
+                            if (GenUtils.chance(1, 10)) {
+                                for (BlockFace face : BlockUtils.directBlockFaces) {
+                                    MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
+                                    dir.setFace(face.getOppositeFace(), true);
+                                    SimpleBlock vine = relativeBlock.getRelative(face);
+                                    if (vine.getType().isSolid() ||
+                                            vine.getType() == Material.WATER) continue;
 
-                                        vine.setBlockData(dir);
-                                        for (int i = 0; i < GenUtils.randInt(1, builder.vines); i++) {
-                                            if (vine.getRelative(0, -i, 0).getType().isSolid() ||
-                                                    vine.getRelative(0, -i, 0).getType() == Material.WATER) break;
-                                            vine.getRelative(0, -i, 0).setBlockData(dir);
-                                        }
+                                    vine.setBlockData(dir);
+                                    for (int i = 0; i < GenUtils.randInt(1, builder.vines); i++) {
+                                        if (vine.getRelative(0, -i, 0).getType().isSolid() ||
+                                                vine.getRelative(0, -i, 0).getType() == Material.WATER) break;
+                                        vine.getRelative(0, -i, 0).setBlockData(dir);
                                     }
                                 }
+                            }
                         }
                     }
                 }
@@ -194,8 +176,9 @@ public class FractalLeaves {
                 }
                 sb.setType(Material.WATER);
 
-            } else
+            } else {
                 sb.setType(material);
+            }
         }
     }
 
@@ -250,6 +233,21 @@ public class FractalLeaves {
 
     public FractalLeaves setConeLeaves(boolean coneLeaves) {
         this.coneLeaves = coneLeaves;
+        return this;
+    }
+
+    public FractalLeaves setLeafNoiseMultiplier(float multiplier) {
+        this.leafNoiseMultiplier = multiplier;
+        return this;
+    }
+
+    public FractalLeaves setLeafNoiseFrequency(float freq) {
+        this.leafNoiseFrequency = freq;
+        return this;
+    }
+
+    public FractalLeaves setSnowy(boolean snowy) {
+        this.snowy = snowy;
         return this;
     }
 }

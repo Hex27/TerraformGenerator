@@ -55,7 +55,7 @@ public class SnowyWastelandHandler extends BiomeHandler {
 
             if (GenUtils.chance(1, 3))
                 new FractalTreeBuilder(FractalTypes.Tree.FROZEN_TREE_SMALL)
-                        .setSnowy(true).build(world, data, loc[0], loc[1] + 1, loc[2]);
+                        .setSnowyLeaves(true).build(world, data, loc[0], loc[1] + 1, loc[2]);
             //BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
 
             if (GenUtils.chance(1, 30))
