@@ -50,6 +50,7 @@ public class MushroomBuilder {
             case GIANT_BROWN_FUNNEL_MUSHROOM:
                 this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
                         .setCapRadius(13)
+                        .setCapYOffset(-2)
                         .setCapShape(FractalTypes.MushroomCap.FUNNEL);
                 break;
             case SMALL_BROWN_MUSHROOM:
@@ -144,7 +145,7 @@ public class MushroomBuilder {
                 break;
             case FUNNEL: // Implement funnel algorithm
                 spawnFunnelCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-                        capRadius, 0.7f, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                        capRadius, capRadius * 0.7f, capRadius * 0.1f, stemTop.getRelative(0, capYOffset, 0), true, capType);
                 break;
         }
     }
@@ -256,28 +257,24 @@ public class MushroomBuilder {
 
 // Funnel mushrooms yet to be implemented
 
-    public static void spawnFunnelCap(int seed, float r, float variable, SimpleBlock base, boolean hardReplace, Material... type) {
-        float ry = 0.1f * r;
-
+    public static void spawnFunnelCap(int seed, float r, float height, float thickness, SimpleBlock base, boolean hardReplace, Material... type) {
         Random rand = new Random(seed);
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(FastNoise.NoiseType.Simplex);
         noise.SetFrequency(1.4f);
 
-        base = base.getRelative(0,  Math.round(2 * ry), 0);
-
         for (int x = Math.round(-r); x <= Math.round(r); x++) {
-            for (int y = 0; y <= Math.round(1.4f * ry); y++) {
+            for (int y = 0; y <= Math.round(3 * thickness); y++) {
                 for (int z = Math.round(-r); z <= Math.round(r); z++) {
 
                     double distToCenter = Math.sqrt(x * x + z * z) / r;
-                    double realY = y + 10 * (Math.pow(distToCenter, 0.5) - Math.pow(distToCenter - 0.15, 8));
-                    realY += ry * Math.abs(noise.GetNoise(x / r, z / r));
-
+                    double realY = y + height * (Math.pow(distToCenter + 0.02, 0.5) - Math.pow(distToCenter - 0.15, 8));
+                    realY += thickness * Math.abs(noise.GetNoise(x / r, z / r));
+// 1 + Math.pow(1 - distToCenter, 8)
                     SimpleBlock rel = base.getRelative(x, (int) Math.round(realY), z);
 
                     double equationResult = Math.pow(x / r, 2)
-                            + Math.pow(Math.abs(y) / ry, 4)
+                            + Math.pow(Math.abs(y) / (thickness / (1 - Math.pow(1 - (distToCenter + 0.1), 6))), 4)
                             + Math.pow(z / r, 2);
 
                     if (equationResult <= 1) {
@@ -290,15 +287,16 @@ public class MushroomBuilder {
             }
         }
 
-        // Helmat
+        // Mushroom gills
         double angle = Math.random() * Math.PI * 2;
-        int heightLimit = base.getY() + (int) Math.round(10);
+        int heightLimit = base.getY() + Math.round(height);
+        int gillAmount = 16;
 
-        for (int i = 0; i < 16; i++) {
-            angle += Math.PI / 8; // Do full circle
+        for (int i = 0; i < gillAmount; i++) {
+            angle += Math.PI / (gillAmount / 2.0); // Do full circle
 
             List<Vector2f> points = new BresenhamLine(new Vector2f(0, 0),
-                    new Vector2f((float) ((r - 2) * Math.cos(angle)), (float) ((r - 2) * Math.sin(angle)))).getPoints();
+                    new Vector2f((float) (0.9 * r * Math.cos(angle)), (float) (0.9 * r * Math.sin(angle)))).getPoints();
 
             points:
             for (Vector2f point : points) {
