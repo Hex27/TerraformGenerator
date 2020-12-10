@@ -587,6 +587,11 @@ public class FractalTreeBuilder {
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         rel.setType(type);
 
+                        if (coralDecoration) {
+                            if (!changed.contains(rel))
+                                changed.add(rel);
+                        }
+
                         //Decorate with fans
                         if (coralDecoration) {
                             CoralGenerator.generateSingleCoral(rel.getPopData(), rel.getX(), rel.getY(), rel.getZ(), this.fractalLeaves.material.toString());

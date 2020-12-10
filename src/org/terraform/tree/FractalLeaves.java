@@ -10,9 +10,11 @@ import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class FractalLeaves {
@@ -56,10 +58,11 @@ public class FractalLeaves {
         if (radiusX < radiusY) maxR = radiusY;
         if (radiusY < radiusZ) maxR = radiusZ;
 
+        ArrayList<SimpleBlock> changed = new ArrayList<>();
+
         for (int x = -Math.round(radiusX); x <= radiusX; x++) {
             for (int y = halfSphere ? 0 : -Math.round(radiusY); y <= radiusY; y++) {
                 for (int z = -Math.round(radiusZ); z <= radiusZ; z++) {
-
                     SimpleBlock relativeBlock = block.getRelative(Math.round(x), Math.round(y) + offsetY, Math.round(z));
 
                     if (relativeBlock.getY() - builder.oriY > builder.maxHeight) {
@@ -78,6 +81,12 @@ public class FractalLeaves {
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
                         if (equationResult < hollowLeaves)
                             continue;
+
+                        if (material.toString().contains("CORAL")) {
+                            if (!changed.contains(relativeBlock))
+                                changed.add(relativeBlock);
+                        }
+
 
                         //Leaves do not replace solid blocks.
                         if (Tag.LEAVES.isTagged(material) && !relativeBlock.getType().isSolid()) {
@@ -139,11 +148,31 @@ public class FractalLeaves {
                                         }
                                     }
                                 }
-
                         }
                     }
                 }
             }
+        }
+
+        //Ensures that corals don't die
+        while (!changed.isEmpty()) {
+            SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));
+            if (!CoralGenerator.isSaturatedCoral(sb)) {
+                //No floating coral fans
+                for (BlockFace face : BlockUtils.directBlockFaces) {
+                    if (sb.getRelative(face).getType().toString().endsWith("WALL_FAN"))
+                        sb.getRelative(face).setType(Material.WATER);
+                }
+
+                //No levitating sea pickles & fans
+                if (sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
+                        sb.getRelative(0, 1, 0).getType().toString().endsWith("CORAL_FAN")) {
+                    sb.getRelative(0, 1, 0).setType(Material.WATER);
+                }
+                sb.setType(Material.WATER);
+
+            } else
+                sb.setType(material);
         }
     }
 
