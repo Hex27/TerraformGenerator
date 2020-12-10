@@ -330,7 +330,10 @@ public class FractalTreeBuilder {
                         .setBaseThickness(1)
                         .setThicknessDecrement(0f)
                         .setMaxDepth(3)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(1, 2, 1).setMaterial(Material.BRAIN_CORAL_BLOCK))
+                        .setFractalLeaves(new FractalLeaves(this)
+                                .setRadius(1, 2, 1)
+                                .setHollowLeaves(0.9)
+                                .setMaterial(Material.BRAIN_CORAL_BLOCK))
                         .setLogType(Material.BRAIN_CORAL_BLOCK)
                         .setLengthDecrement(0)
                         .setHeightVariation(0)
@@ -339,8 +342,7 @@ public class FractalTreeBuilder {
                         .setMinBend(Math.PI / 4)
                         .setMaxPitch(Math.PI)
                         .setMinPitch(0)
-                        .setCoralDecoration(true)
-                        .setHollowLeaves(0.9);
+                        .setCoralDecoration(true);
                 break;
             case TUBE_CORAL:
                 this.setBaseHeight(3)
@@ -348,7 +350,10 @@ public class FractalTreeBuilder {
                         .setBaseThickness(3)
                         .setThicknessDecrement(0f)
                         .setMaxDepth(3)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(1, 1, 1).setMaterial(Material.TUBE_CORAL_BLOCK))
+                        .setFractalLeaves(new FractalLeaves(this)
+                                .setRadius(1, 1, 1)
+                                .setHollowLeaves(0.9)
+                                .setMaterial(Material.TUBE_CORAL_BLOCK))
                         .setLogType(Material.TUBE_CORAL_BLOCK)
                         .setLengthDecrement(0)
                         .setHeightVariation(1)
@@ -356,15 +361,17 @@ public class FractalTreeBuilder {
                         .setMinBend(Math.PI / 4)
                         .setMaxPitch(Math.PI)
                         .setMinPitch(0)
-                        .setCoralDecoration(true)
-                        .setHollowLeaves(0.9);
+                        .setCoralDecoration(true);
                 break;
             case BUBBLE_CORAL:
                 this.setBaseHeight(3)
                         .setBaseThickness(1)
                         .setThicknessDecrement(0f)
                         .setMaxDepth(3)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(3, 3, 3).setMaterial(Material.BUBBLE_CORAL_BLOCK))
+                        .setFractalLeaves(new FractalLeaves(this)
+                                .setRadius(3, 3, 3)
+                                .setHollowLeaves(0.9)
+                                .setMaterial(Material.BUBBLE_CORAL_BLOCK))
                         .setLogType(Material.BUBBLE_CORAL_BLOCK)
                         .setLengthDecrement(-1)
                         .setHeightVariation(1)
@@ -373,7 +380,6 @@ public class FractalTreeBuilder {
                         .setMaxPitch(Math.PI)
                         .setMinPitch(0)
                         .setCoralDecoration(true)
-                        .setHollowLeaves(0.9)
                         .setNoMainStem(true);
                 break;
         }
@@ -386,7 +392,7 @@ public class FractalTreeBuilder {
     	this.oriX = x;
         this.oriY = y;
         this.oriZ = z;
-        this.rand = tw.getRand(16 * 16 * x + 16 * y + z);
+        this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         if (this.top == null) top = base;
         initialAngle = Math.PI / 2 + GenUtils.randDouble(rand, -initialTilt, initialTilt);
@@ -579,20 +585,7 @@ public class FractalTreeBuilder {
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-
-                        //Leaves do not replace solid blocks.
-                        if (Tag.LEAVES.isTagged(type) && !rel.getType().isSolid()) {
-                            Leaves leaf = (Leaves) Bukkit.createBlockData(type);
-
-                            //Temporary fix: Big canopies dont decay now.
-//							if(leafRadiusX > 5 || leafRadiusY > 5 || leafRadiusZ > 5)
-//								leaf.setPersistent(true);
-//							
-                            leaf.setDistance(1);
-                            rel.setBlockData(leaf);
-                        } else if (!Tag.LEAVES.isTagged(type)) {
-                            rel.setType(type);
-                        }
+                        rel.setType(type);
 
                         //Decorate with fans
                         if (coralDecoration) {

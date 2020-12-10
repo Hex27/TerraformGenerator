@@ -25,6 +25,7 @@ public class FractalLeaves {
     public int offsetY = 0;
 
     public boolean halfSphere = false;
+    double hollowLeaves = 0.0;
 
     public Material material = Material.OAK_LEAVES;
     public FractalTreeBuilder builder;
@@ -75,6 +76,8 @@ public class FractalLeaves {
                             + Math.pow(z, 2) / Math.pow(radiusZ, 2);
 
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
+                        if (equationResult < hollowLeaves)
+                            continue;
 
                         //Leaves do not replace solid blocks.
                         if (Tag.LEAVES.isTagged(material) && !relativeBlock.getType().isSolid()) {
@@ -185,6 +188,11 @@ public class FractalLeaves {
         this.radiusX = x;
         this.radiusY = y;
         this.radiusZ = z;
+        return this;
+    }
+
+    public FractalLeaves setHollowLeaves(double hollow) {
+        this.hollowLeaves = hollow;
         return this;
     }
 }
