@@ -32,7 +32,7 @@ public class FractalTreeBuilder {
     int maxDepth = 4;
     int maxHeight = 999;
     float lengthDecrement = 1;
-    Material logType = Material.OAK_WOOD;
+    Material trunkType = Material.OAK_WOOD;
     FractalLeaves fractalLeaves = new FractalLeaves(this);
     Random rand;
     double minBend = 0.8 * Math.PI / 6;
@@ -96,7 +96,7 @@ public class FractalTreeBuilder {
                         .setMinBend(0.9 * Math.PI / 6)
                         .setMaxBend(1.1 * Math.PI / 6)
                         .setLengthDecrement(0.5f)
-                        .setLogType(Material.BIRCH_WOOD)
+                        .setTrunkType(Material.BIRCH_WOOD)
                         .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2, 3));
                 break;
             case BIRCH_SMALL:
@@ -108,7 +108,7 @@ public class FractalTreeBuilder {
                         .setMinBend(0.9 * Math.PI / 6)
                         .setMaxBend(1.1 * Math.PI / 6)
                         .setLengthDecrement(0.5f)
-                        .setLogType(Material.BIRCH_WOOD)
+                        .setTrunkType(Material.BIRCH_WOOD)
                         .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 1, 3));
                 break;
             case SAVANNA_SMALL:
@@ -116,7 +116,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(1)
                         .setThicknessDecrement(0)
                         .setMaxDepth(2)
-                        .setLogType(Material.ACACIA_LOG)
+                        .setTrunkType(Material.ACACIA_LOG)
                         .setMinBend(0.5 * Math.PI / 2)
                         .setMaxBend(0.8 * Math.PI / 2)
                         .setLengthDecrement(1)
@@ -132,7 +132,7 @@ public class FractalTreeBuilder {
                         .setMaxBend(Math.PI / 6)
                         .setLengthDecrement(2)
                         .setVines(7)
-                        .setLogType(Material.JUNGLE_WOOD)
+                        .setTrunkType(Material.JUNGLE_WOOD)
                         .setCocoaBeans(3)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(4, 1, 4)
                                 .setMaterial(Material.JUNGLE_LEAVES).setOffsetY(1));
@@ -146,7 +146,7 @@ public class FractalTreeBuilder {
                         .setThicknessDecrement(1.5f)
                         .setMaxBend(Math.PI / 3)
                         .setVines(3)
-                        .setLogType(Material.JUNGLE_WOOD)
+                        .setTrunkType(Material.JUNGLE_WOOD)
                         .setCocoaBeans(1)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2, 4).setMaterial(Material.JUNGLE_LEAVES));
                 break;
@@ -156,7 +156,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(1.5f)
                         .setThicknessDecrement(0f)
                         .setVines(3)
-                        .setLogType(Material.JUNGLE_WOOD)
+                        .setTrunkType(Material.JUNGLE_WOOD)
                         .setCocoaBeans(1)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(3, 2, 3).setMaterial(Material.JUNGLE_LEAVES));
                 break;
@@ -165,7 +165,7 @@ public class FractalTreeBuilder {
                     	.setBaseThickness(15)
                     	.setThicknessDecrement(4f)
                     	.setMaxDepth(4)
-                    	.setLogType(Material.ACACIA_LOG)
+                    	.setTrunkType(Material.ACACIA_LOG)
                     	.setLengthDecrement(0.4f)
                     	.setHeightVariation(2)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(4, 1.5f, 4)
@@ -176,7 +176,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(4)
                         .setThicknessDecrement(1f)
                         .setMaxDepth(4)
-                        .setLogType(Material.SPRUCE_WOOD)
+                        .setTrunkType(Material.SPRUCE_WOOD)
                         .setLengthDecrement(0.5f)
                         .setHeightVariation(1)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(0).setMaterial(Material.AIR));
@@ -185,7 +185,7 @@ public class FractalTreeBuilder {
                 this.setBaseHeight(10).setBaseThickness(3.5f)
                         .setThicknessDecrement(0.5f)
                         .setMaxDepth(5)
-                        .setLogType(Material.SPRUCE_WOOD)
+                        .setTrunkType(Material.SPRUCE_WOOD)
                         .setLengthDecrement(2)
                         .setHeightVariation(2)
                         .setAlwaysOneStraight(4)
@@ -199,7 +199,7 @@ public class FractalTreeBuilder {
                 this.setBaseHeight(5).setBaseThickness(1f)
 	                .setThicknessDecrement(0.3f)
 	                .setMaxDepth(4)
-	                .setLogType(Material.SPRUCE_WOOD)
+	                .setTrunkType(Material.SPRUCE_WOOD)
 	                .setFractalLeaves(new FractalLeaves(this).setLeafNoiseFrequency(0.65f).setLeafNoiseMultiplier(0.8f)
                             .setRadius(2).setMaterial(Material.SPRUCE_LEAVES).setConeLeaves(true))
 	                .setLengthDecrement(1)
@@ -214,7 +214,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(3)
                         .setThicknessDecrement(0.5f)
                         .setMaxDepth(3)
-                        .setLogType(Material.OAK_WOOD)
+                        .setTrunkType(Material.OAK_WOOD)
                         .setLengthDecrement(-2f)
                         .setMaxBend(-Math.PI / 6)
                         .setMinBend(-Math.PI / 3)
@@ -227,7 +227,7 @@ public class FractalTreeBuilder {
                         .setMaxDepth(4)
                         .setLengthDecrement(0f)
                         .setHeightVariation(2)
-                        .setLogType(Material.OAK_WOOD)
+                        .setTrunkType(Material.OAK_WOOD)
                         .setVines(7)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(5, 2, 5));
                 break;
@@ -240,7 +240,7 @@ public class FractalTreeBuilder {
                         .setLengthDecrement(2)
                         .setHeightVariation(1)
                         .setVines(3)
-                        .setLogType(Material.JUNGLE_WOOD)
+                        .setTrunkType(Material.JUNGLE_WOOD)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(3, 1.2f, 3));
                 break;
             case GIANT_PUMPKIN:
@@ -250,14 +250,14 @@ public class FractalTreeBuilder {
                 .setMaxDepth(0)
                 .setLengthDecrement(-0.5f)
                 .setHeightVariation(0)
-                .setLogType(Material.OAK_LOG)
+                .setTrunkType(Material.OAK_LOG)
                 .setFractalLeaves(new FractalLeaves(this).setRadius(4).setMaterial(Material.PUMPKIN));
             case DARK_OAK_SMALL:
                 this.setBaseHeight(1)
                         .setBaseThickness(2)
                         .setThicknessDecrement(0.5f)
                         .setMaxDepth(3)
-                        .setLogType(Material.DARK_OAK_WOOD)
+                        .setTrunkType(Material.DARK_OAK_WOOD)
                         .setLengthDecrement(0)
                         .setHeightVariation(0)
                         .setFractalThreshold(4)
@@ -272,7 +272,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(8)
                         .setThicknessDecrement(2.5f)
                         .setMaxDepth(3)
-                        .setLogType(Material.DARK_OAK_WOOD)
+                        .setTrunkType(Material.DARK_OAK_WOOD)
                         .setLengthDecrement(0)
                         .setHeightVariation(1)
                         .setFractalThreshold(4)
@@ -287,7 +287,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(4)
                         .setThicknessDecrement(0f)
                         .setMaxDepth(3)
-                        .setLogType(Material.DARK_OAK_WOOD)
+                        .setTrunkType(Material.DARK_OAK_WOOD)
                         .setLengthDecrement(-1)
                         .setHeightVariation(1)
                         .setFractalThreshold(5)
@@ -301,7 +301,7 @@ public class FractalTreeBuilder {
                         .setThicknessDecrement(2f)
                         .setMaxDepth(4)
                         .setVines(4)
-                        .setLogType(Material.SPRUCE_WOOD)
+                        .setTrunkType(Material.SPRUCE_WOOD)
                         .setLengthDecrement(0)
                         .setHeightVariation(1)
                         .setFractalThreshold(4)
@@ -317,7 +317,7 @@ public class FractalTreeBuilder {
                         .setThicknessDecrement(0.2f)
                         .setMaxDepth(4)
                         .setVines(4)
-                        .setLogType(Material.SPRUCE_WOOD)
+                        .setTrunkType(Material.SPRUCE_WOOD)
                         .setLengthDecrement(0)
                         .setHeightVariation(0)
                         .setFractalThreshold(4)
@@ -334,7 +334,7 @@ public class FractalTreeBuilder {
                         .setThicknessDecrement(0)
                         .setMaxDepth(3)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(1, 4, 1).setMaterial(Material.FIRE_CORAL_BLOCK))
-                        .setLogType(Material.FIRE_CORAL_BLOCK)
+                        .setTrunkType(Material.FIRE_CORAL_BLOCK)
                         .setLengthDecrement(-2f)
                         .setHeightVariation(0)
                         .setMaxBend(Math.PI / 2)
@@ -349,7 +349,7 @@ public class FractalTreeBuilder {
                         .setThicknessDecrement(0)
                         .setMaxDepth(3)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(3, 1, 3).setMaterial(Material.HORN_CORAL_BLOCK))
-                        .setLogType(Material.HORN_CORAL_BLOCK)
+                        .setTrunkType(Material.HORN_CORAL_BLOCK)
                         .setLengthDecrement(-1)
                         .setHeightVariation(0)
                         .setMaxBend(Math.PI / 3)
@@ -368,7 +368,7 @@ public class FractalTreeBuilder {
                                 .setRadius(1, 2, 1)
                                 .setHollowLeaves(0.9)
                                 .setMaterial(Material.BRAIN_CORAL_BLOCK))
-                        .setLogType(Material.BRAIN_CORAL_BLOCK)
+                        .setTrunkType(Material.BRAIN_CORAL_BLOCK)
                         .setLengthDecrement(0)
                         .setHeightVariation(0)
                         .setFractalThreshold(3)
@@ -388,7 +388,7 @@ public class FractalTreeBuilder {
                                 .setRadius(1, 1, 1)
                                 .setHollowLeaves(0.9)
                                 .setMaterial(Material.TUBE_CORAL_BLOCK))
-                        .setLogType(Material.TUBE_CORAL_BLOCK)
+                        .setTrunkType(Material.TUBE_CORAL_BLOCK)
                         .setLengthDecrement(0)
                         .setHeightVariation(1)
                         .setMaxBend(Math.PI / 3)
@@ -406,7 +406,7 @@ public class FractalTreeBuilder {
                                 .setRadius(3, 3, 3)
                                 .setHollowLeaves(0.9)
                                 .setMaterial(Material.BUBBLE_CORAL_BLOCK))
-                        .setLogType(Material.BUBBLE_CORAL_BLOCK)
+                        .setTrunkType(Material.BUBBLE_CORAL_BLOCK)
                         .setLengthDecrement(-1)
                         .setHeightVariation(1)
                         .setMaxBend(Math.PI / 2)
@@ -421,7 +421,7 @@ public class FractalTreeBuilder {
 
     public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         if(TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
-        	this.logType = Material.getMaterial(StringUtils.replace(this.logType.toString(), "WOOD", "LOG"));
+        	this.trunkType = Material.getMaterial(StringUtils.replace(this.trunkType.toString(), "WOOD", "LOG"));
         }
     	this.oriX = x;
         this.oriY = y;
@@ -462,12 +462,12 @@ public class FractalTreeBuilder {
 
         if (depth >= maxDepth) {
             fractalLeaves.placeLeaves(rand.nextInt(9999), base);
-            base.setType(logType);
+            base.setType(trunkType);
             return;
         }
         if (size <= 0) {
             fractalLeaves.placeLeaves(rand.nextInt(9999), base);
-            base.setType(logType);
+            base.setType(trunkType);
             return;
         }
 
@@ -570,7 +570,7 @@ public class FractalTreeBuilder {
         for (int i = 0; i <= segments; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) segments));
             SimpleBlock segment = one.getRelative(seg);
-            replaceSphere(rand.nextInt(9999), ((float) thickness) / 2, segment, logType);
+            replaceSphere(rand.nextInt(9999), ((float) thickness) / 2, segment, trunkType);
         }
     }
 
@@ -710,7 +710,7 @@ public class FractalTreeBuilder {
                 sb.setType(Material.WATER);
 
             } else
-                sb.setType(fractalLeaves.material);
+                sb.setType(trunkType);
         }
     }
 
@@ -733,7 +733,7 @@ public class FractalTreeBuilder {
 
         //Log for good measure, as well as some surrounding leaves.
         if (Tag.LEAVES.isTagged(fractalLeaves.material))
-            block.setType(this.logType);
+            block.setType(this.trunkType);
         for (BlockFace face : BlockUtils.directBlockFaces) {
             block.getRelative(face).lsetBlockData(type);
         }
@@ -775,8 +775,8 @@ public class FractalTreeBuilder {
         return this;
     }
 
-    public FractalTreeBuilder setLogType(Material log) {
-        this.logType = log;
+    public FractalTreeBuilder setTrunkType(Material log) {
+        this.trunkType = log;
         return this;
     }
 

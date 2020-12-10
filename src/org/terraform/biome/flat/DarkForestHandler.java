@@ -10,6 +10,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
+import org.terraform.tree.MushroomBuilder;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -99,7 +100,7 @@ public class DarkForestHandler extends BiomeHandler {
                         else
                             type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
                     }
-                    TreeDB.spawnGiantMushroom(tw, data, treeX, treeY, treeZ, type);
+                    new MushroomBuilder(type).build(tw, data, treeX, treeY, treeZ);
                 }
             }
         } else {

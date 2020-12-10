@@ -72,9 +72,9 @@ public class MushroomCommand extends DCCommand {
         }
 
         if (new Random().nextBoolean())
-            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTypes.Mushroom.GIANT_RED_MUSHROOM);
+            new MushroomBuilder(FractalTypes.Mushroom.GIANT_RED_MUSHROOM).build(TerraformWorld.get(p.getWorld()),data, x, y, z);
         else
-            TreeDB.spawnGiantMushroom(TerraformWorld.get(p.getWorld()), data, x, y, z, FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM);
+            new MushroomBuilder(FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM).build(TerraformWorld.get(p.getWorld()),data, x, y, z);
     }
 
 }

@@ -45,10 +45,6 @@ public class TreeDB {
         new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_BIG_BOTTOM).build(tw, data, x, y - 5, z);
     }
 
-    public static void spawnGiantMushroom(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z, FractalTypes.Mushroom type) {
-        new MushroomBuilder(type).build(tw, data, x, y, z);
-    }
-
     /**
      * Corals will always dig 2 blocks deeper first.
      * Grows a random giant coral (fire, tube, etc)
