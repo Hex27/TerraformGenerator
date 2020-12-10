@@ -3,6 +3,7 @@ package org.terraform.tree;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -13,12 +14,12 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class TreeDB {
-    private static final FractalTypes.Other[] FRACTAL_TREE_TYPES = {
-            FractalTypes.Other.FIRE_CORAL,
-            FractalTypes.Other.BRAIN_CORAL,
-            FractalTypes.Other.TUBE_CORAL,
-            FractalTypes.Other.HORN_CORAL,
-            FractalTypes.Other.BUBBLE_CORAL
+    private static final FractalTypes.Tree[] FRACTAL_TREE_TYPES = {
+            FractalTypes.Tree.FIRE_CORAL,
+            FractalTypes.Tree.BRAIN_CORAL,
+            FractalTypes.Tree.TUBE_CORAL,
+            FractalTypes.Tree.HORN_CORAL,
+            FractalTypes.Tree.BUBBLE_CORAL
     };
 
     public static void spawnCoconutTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
@@ -53,10 +54,9 @@ public class TreeDB {
      * Grows a random giant coral (fire, tube, etc)
      */
     public static void spawnRandomGiantCoral(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        // fixme
-//        FractalTypes.Other type = FRACTAL_TREE_TYPES[tw.getHashedRand(x, y, z).nextInt(5)];
-//        FractalTreeBuilder ftb = new FractalTreeBuilder(type);
-//        ftb.setMaxHeight(TerraformGenerator.seaLevel - y - 1); //Max height is one below sea level
-//        ftb.build(tw, data, x, y - 2, z);
+        FractalTypes.Tree type = FRACTAL_TREE_TYPES[tw.getHashedRand(x, y, z).nextInt(5)];
+        FractalTreeBuilder ftb = new FractalTreeBuilder(type);
+        ftb.setMaxHeight(TerraformGenerator.seaLevel - y - 1); //Max height is one below sea level
+        ftb.build(tw, data, x, y - 2, z);
     }
 }

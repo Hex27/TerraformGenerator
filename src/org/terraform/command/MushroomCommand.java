@@ -47,7 +47,6 @@ public class MushroomCommand extends DCCommand {
         int x = p.getLocation().getBlockX();
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
-//		TreeDB.spawnCoconutTree(new Random(), data, x,y,z);
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
 
         if (args.size() != 0) {

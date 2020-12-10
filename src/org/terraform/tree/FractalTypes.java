@@ -21,7 +21,13 @@ public class FractalTypes {
         DARK_OAK_BIG_TOP,
         DARK_OAK_BIG_BOTTOM,
         FROZEN_TREE_BIG,
-        FROZEN_TREE_SMALL;
+        FROZEN_TREE_SMALL,
+        FIRE_CORAL,
+        HORN_CORAL,
+        BRAIN_CORAL,
+        TUBE_CORAL,
+        BUBBLE_CORAL,
+        GIANT_PUMPKIN;
 
         public static final Tree[] VALUES = Tree.values();
     }
@@ -44,16 +50,5 @@ public class FractalTypes {
         FUNNEL,
         POINTY;
         public static final MushroomCap[] VALUES = MushroomCap.values();
-    }
-
-    public enum Other {
-        GIANT_PUMPKIN,
-        FIRE_CORAL,
-        BRAIN_CORAL,
-        HORN_CORAL,
-        TUBE_CORAL,
-        BUBBLE_CORAL;
-
-        public static final Other[] VALUES = Other.values();
     }
 }

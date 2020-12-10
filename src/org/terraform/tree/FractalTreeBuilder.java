@@ -43,6 +43,7 @@ public class FractalTreeBuilder {
     int alwaysOneStraight = 0;
     int alwaysOneStraightBranchLength = 0;
     boolean alwaysOneStraightExtendedBranches = false;
+    boolean noMainStem = false;
     double beeChance = 0.0f;
     int vines = 0;
     int cocoaBeans = 0;
@@ -54,6 +55,7 @@ public class FractalTreeBuilder {
     int oriY;
     int oriZ;
     private boolean spawnedBees = false;
+    private boolean coralDecoration = false;
     private double initialAngle;
     private int initialHeight;
 
@@ -291,6 +293,89 @@ public class FractalTreeBuilder {
                         .setMinPitch(0)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(4, 1, 4).setMaterial(Material.ICE));
                 break;
+            case FIRE_CORAL:
+                this.setBaseHeight(2)
+                        .setInitialTilt(Math.PI / 2)
+                        .setBaseThickness(1)
+                        .setThicknessDecrement(0)
+                        .setMaxDepth(3)
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(1, 4, 1).setMaterial(Material.FIRE_CORAL_BLOCK))
+                        .setLogType(Material.FIRE_CORAL_BLOCK)
+                        .setLengthDecrement(-2f)
+                        .setHeightVariation(0)
+                        .setMaxBend(Math.PI / 2)
+                        .setMinBend(Math.PI / 2.5)
+                        .setMaxPitch(Math.PI)
+                        .setMinPitch(0)
+                        .setCoralDecoration(true);
+                break;
+            case HORN_CORAL:
+                this.setBaseHeight(2)
+                        .setBaseThickness(2)
+                        .setThicknessDecrement(0)
+                        .setMaxDepth(3)
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(3, 1, 3).setMaterial(Material.HORN_CORAL_BLOCK))
+                        .setLogType(Material.HORN_CORAL_BLOCK)
+                        .setLengthDecrement(-1)
+                        .setHeightVariation(0)
+                        .setMaxBend(Math.PI / 3)
+                        .setMinBend(Math.PI / 4)
+                        .setMaxPitch(Math.PI)
+                        .setMinPitch(0)
+                        .setCoralDecoration(true)
+                        .setNoMainStem(true);
+                break;
+            case BRAIN_CORAL:
+                this.setBaseHeight(1)
+                        .setBaseThickness(1)
+                        .setThicknessDecrement(0f)
+                        .setMaxDepth(3)
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(1, 2, 1).setMaterial(Material.BRAIN_CORAL_BLOCK))
+                        .setLogType(Material.BRAIN_CORAL_BLOCK)
+                        .setLengthDecrement(0)
+                        .setHeightVariation(0)
+                        .setFractalThreshold(3)
+                        .setMaxBend(Math.PI / 3)
+                        .setMinBend(Math.PI / 4)
+                        .setMaxPitch(Math.PI)
+                        .setMinPitch(0)
+                        .setCoralDecoration(true)
+                        .setHollowLeaves(0.9);
+                break;
+            case TUBE_CORAL:
+                this.setBaseHeight(3)
+                        .setAlwaysOneStraight(3)
+                        .setBaseThickness(3)
+                        .setThicknessDecrement(0f)
+                        .setMaxDepth(3)
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(1, 1, 1).setMaterial(Material.TUBE_CORAL_BLOCK))
+                        .setLogType(Material.TUBE_CORAL_BLOCK)
+                        .setLengthDecrement(0)
+                        .setHeightVariation(1)
+                        .setMaxBend(Math.PI / 3)
+                        .setMinBend(Math.PI / 4)
+                        .setMaxPitch(Math.PI)
+                        .setMinPitch(0)
+                        .setCoralDecoration(true)
+                        .setHollowLeaves(0.9);
+                break;
+            case BUBBLE_CORAL:
+                this.setBaseHeight(3)
+                        .setBaseThickness(1)
+                        .setThicknessDecrement(0f)
+                        .setMaxDepth(3)
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(3, 3, 3).setMaterial(Material.BUBBLE_CORAL_BLOCK))
+                        .setLogType(Material.BUBBLE_CORAL_BLOCK)
+                        .setLengthDecrement(-1)
+                        .setHeightVariation(1)
+                        .setMaxBend(Math.PI / 2)
+                        .setMinBend(Math.PI / 3)
+                        .setMaxPitch(Math.PI)
+                        .setMinPitch(0)
+                        .setCoralDecoration(true)
+                        .setHollowLeaves(0.9)
+                        .setNoMainStem(true);
+                break;
         }
     }
 
@@ -345,6 +430,10 @@ public class FractalTreeBuilder {
         }
 
         boolean restore = false;
+        if (noMainStem && size == initialHeight) {
+            restore = true;
+            size = 0;
+        }
 
         int y = (int) (Math.round(size * Math.sin(pitch))); //Pitch is vertical tilt
         int x = (int) (Math.round(size * Math.cos(pitch) * Math.sin(yaw)));
@@ -503,6 +592,11 @@ public class FractalTreeBuilder {
                             rel.setBlockData(leaf);
                         } else if (!Tag.LEAVES.isTagged(type)) {
                             rel.setType(type);
+                        }
+
+                        //Decorate with fans
+                        if (coralDecoration) {
+                            CoralGenerator.generateSingleCoral(rel.getPopData(), rel.getX(), rel.getY(), rel.getZ(), this.fractalLeaves.material.toString());
                         }
 
                         if (snowy) {
@@ -668,6 +762,11 @@ public class FractalTreeBuilder {
         return this;
     }
 
+    public FractalTreeBuilder setNoMainStem(boolean bool) {
+        this.noMainStem = bool;
+        return this;
+    }
+
     /**
      * @param beeChance the beeChance to set
      */
@@ -757,5 +856,10 @@ public class FractalTreeBuilder {
      */
     public double ra(double base, double lowerBound, double upperBound) {
         return GenUtils.randDouble(new Random(), lowerBound * base, upperBound * base);
+    }
+
+    public FractalTreeBuilder setCoralDecoration(boolean d) {
+        this.coralDecoration = d;
+        return this;
     }
 }

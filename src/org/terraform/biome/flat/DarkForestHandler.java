@@ -93,7 +93,12 @@ public class DarkForestHandler extends BiomeHandler {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ))) {
                     FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
-                    if (random.nextBoolean()) type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                    if (random.nextDouble() > 0.3) {
+                        if (random.nextBoolean())
+                            type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                        else
+                            type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
+                    }
                     TreeDB.spawnGiantMushroom(tw, data, treeX, treeY, treeZ, type);
                 }
             }
