@@ -13,6 +13,8 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 public class GenUtils {
@@ -81,8 +83,14 @@ public class GenUtils {
         return randInt(new Random(), 1, outOf) <= chance;
     }
 
+    private static final HashMap<Integer, ArrayList<BiomeBank>> biomeQueryCache = new HashMap<>();
     public static ArrayList<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ) {
-        ArrayList<BiomeBank> banks = new ArrayList<>();
+        if(biomeQueryCache.size() > 30) biomeQueryCache.clear();
+        int hash = Objects.hash(tw, chunkX, chunkZ);
+    	if(biomeQueryCache.containsKey(hash))
+    		return biomeQueryCache.get(hash);
+        
+    	ArrayList<BiomeBank> banks = new ArrayList<>();
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
                 int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
@@ -97,6 +105,7 @@ public class GenUtils {
                 }
             }
         }
+        biomeQueryCache.put(hash, banks);
         return banks;
     }
 

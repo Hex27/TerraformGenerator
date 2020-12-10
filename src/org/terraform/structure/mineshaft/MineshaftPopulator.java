@@ -27,7 +27,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
             int height = HeightMap.getHeight(tw, coords[0], coords[1]);
             if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
                 //Way too little space. Abort generation.
-                TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
+                //TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
                 return false;
             }
 

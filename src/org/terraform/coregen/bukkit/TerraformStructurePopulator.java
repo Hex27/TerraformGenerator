@@ -6,29 +6,25 @@ import org.bukkit.generator.BlockPopulator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.PopulatorDataRecursiveICA;
+import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.StructurePopulator;
-import org.terraform.structure.VillageHousePopulator;
-import org.terraform.structure.caves.LargeCavePopulator;
-import org.terraform.structure.dungeon.SmallDungeonPopulator;
-import org.terraform.structure.mineshaft.MineshaftPopulator;
-import org.terraform.structure.monument.MonumentPopulator;
-import org.terraform.structure.pyramid.PyramidPopulator;
-import org.terraform.structure.shipwreck.ShipwreckPopulator;
-import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.structure.StructureRegistry;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class TerraformStructurePopulator extends BlockPopulator {
-    public static final StructurePopulator[] structurePops = {
-            new StrongholdPopulator(), new VillageHousePopulator(), new SmallDungeonPopulator(), 
-            new MonumentPopulator(), new ShipwreckPopulator(), new MineshaftPopulator(), 
-            new LargeCavePopulator(), new PyramidPopulator()
-    };
+	
+	//Structures now loaded in StructureRegistry
+//    public static final StructurePopulator[] structurePops = {
+//            new StrongholdPopulator(), new VillageHousePopulator(), new SmallDungeonPopulator(), 
+//            new MonumentPopulator(), new ShipwreckPopulator(), new MineshaftPopulator(), 
+//            new LargeCavePopulator(), new PyramidPopulator()
+//    };
 
     private final TerraformWorld tw;
 
@@ -47,12 +43,20 @@ public class TerraformStructurePopulator extends BlockPopulator {
             data = new PopulatorDataRecursiveICA(chunk);
 
         //PopulatorDataAbstract data = TerraformGeneratorPlugin.injector.getICAData(chunk);
-        //TerraformGeneratorPlugin.logger.debug("s-pop-1");
         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 
-        //TerraformGeneratorPlugin.logger.debug("s-pop-2");
-        for (StructurePopulator spop : structurePops) {
-            //TerraformGeneratorPlugin.logger.debug("s-pop-3");
+        
+        //Spawn large structures
+        MegaChunk mc = new MegaChunk(chunk.getX(),chunk.getZ());
+        for(StructurePopulator spop: StructureRegistry.getLargeStructureForMegaChunk(tw, mc, banks)) {
+        	if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), banks)) {
+                TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
+                spop.populate(tw, data);
+            }
+        }
+        
+        //Spawn small structures
+        for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {
             if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), banks)) {
                 TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
                 spop.populate(tw, data);

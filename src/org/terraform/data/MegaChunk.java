@@ -3,6 +3,7 @@ package org.terraform.data;
 import org.terraform.main.TConfigOption;
 import org.terraform.utils.GenUtils;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class MegaChunk {
@@ -56,6 +57,12 @@ public class MegaChunk {
         int z = GenUtils.randInt(rand, lowZ + 64, highZ - 64);
         return new int[]{x, z};
     }
+    
+    public boolean containsXZBlockCoords(int x, int z) {
+
+        MegaChunk mc = new MegaChunk(x,0,z);
+    	return mc.equals(this);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -68,7 +75,7 @@ public class MegaChunk {
 
     @Override
     public int hashCode() {
-        return 323522773 + x + z;
+        return Objects.hash(323522773,x,z);
     }
 
     /**

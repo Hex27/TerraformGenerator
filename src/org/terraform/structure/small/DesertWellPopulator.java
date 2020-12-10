@@ -18,7 +18,7 @@ import java.io.FileNotFoundException;
 import java.util.Locale;
 import java.util.Random;
 
-public class DesertWellPopulator {
+public class DesertWellPopulator{
 
     public void populate(TerraformWorld tw, Random random,
                          PopulatorDataAbstract data, boolean badlandsWell) {

@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
@@ -65,7 +66,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         int x = coords[0];
         int z = coords[1];
         
-        int y = GenUtils.getHighestGround(data, x, z);
+        int y = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
         try {
         	spawnPyramid(tw, tw.getHashedRand(x, y, z, 1111222), data, x, y, z);
         }catch(Throwable e) {
@@ -255,7 +256,10 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     			//Raise ground according to noise levels.
     			int raiseDone = 0;
     			int noise = Math.round(noiseGenerator.GetNoise(nx, nz)*5);
-    			while(height < y + noise - 1) {
+    			int newHeight = y + noise - 1;
+    			if(newHeight < y-1) newHeight = y-1;
+    			
+    			while(height < newHeight) {
     				raiseDone++;
     				if(!data.getType(nx, height+1, nz).isSolid())
     					data.setType(nx, height+1, nz, mat);

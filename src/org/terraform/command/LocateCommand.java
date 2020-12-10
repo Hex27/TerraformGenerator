@@ -14,13 +14,15 @@ import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.bukkit.TerraformGenerator;
-import org.terraform.coregen.bukkit.TerraformStructurePopulator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.LangOpt;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.StructureRegistry;
+import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -69,7 +71,7 @@ public class LocateCommand extends DCCommand implements Listener {
         ArrayList<Object> params = this.parseArguments(sender, args);
         if (params.size() == 0) {
             sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_HEADER.parse());
-            for (StructurePopulator spop : TerraformStructurePopulator.structurePops) {
+            for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
                 sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_ENTRY.parse("%entry%", spop.getClass().getSimpleName().replace("Populator", "")));
             }
             return;
@@ -90,13 +92,72 @@ public class LocateCommand extends DCCommand implements Listener {
             return;
         }
 
-        if (!(spop instanceof SingleMegaChunkStructurePopulator)) {
+        if (spop instanceof StrongholdPopulator || 
+        		(!(spop instanceof SingleMegaChunkStructurePopulator) && !(spop instanceof MultiMegaChunkStructurePopulator))) {
             int[] coords = spop.getNearestFeature(TerraformWorld.get(p.getWorld()), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
             syncSendMessage(p.getUniqueId(), LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", coords[0] + "", "%z%", coords[1] + ""));
             return;
         }
 
-        SingleMegaChunkStructurePopulator populator = (SingleMegaChunkStructurePopulator) spop;
+        if(spop instanceof SingleMegaChunkStructurePopulator) {
+        	locateSingleMegaChunkStructure(p, (SingleMegaChunkStructurePopulator)spop);
+        }else {
+        	locateMultiMegaChunkStructure(p, (MultiMegaChunkStructurePopulator)spop);
+        }
+    }
+    
+    private void locateMultiMegaChunkStructure(Player p, MultiMegaChunkStructurePopulator populator) {
+
+        MegaChunk center = new MegaChunk(
+                p.getLocation().getBlockX(),
+                p.getLocation().getBlockY(),
+                p.getLocation().getBlockZ());
+        TerraformWorld tw = TerraformWorld.get(p.getWorld());
+        p.sendMessage(LangOpt.COMMAND_LOCATE_SEARCHING.parse());
+        UUID uuid = p.getUniqueId();
+
+        long startTime = System.currentTimeMillis();
+
+        BukkitRunnable runnable = new BukkitRunnable() {
+            public void run() {
+                int blockX = -1;
+                int blockZ = -1;
+                int radius = 0;
+                boolean found = false;
+
+                while (!found) {
+                    for (MegaChunk mc : getSurroundingChunks(center, radius)) {
+                        for(int[] coords:populator.getCoordsFromMegaChunk(tw, mc)) {
+                        	if(coords == null) continue;
+                            
+                            ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
+
+                            if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
+                                found = true;
+                                blockX = coords[0];
+                                blockZ = coords[1];
+                                break;
+                            }
+                        }
+                        if(found) break;
+                    }
+                    radius++;
+                }
+                long timeTaken = System.currentTimeMillis() - startTime;
+
+                syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
+
+                if (found)
+                    syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
+                else
+                    syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
+
+            }
+        };
+        runnable.runTaskAsynchronously(plugin);
+    }
+
+    private void locateSingleMegaChunkStructure(Player p, SingleMegaChunkStructurePopulator populator) {
 
         MegaChunk center = new MegaChunk(
                 p.getLocation().getBlockX(),
@@ -118,6 +179,8 @@ public class LocateCommand extends DCCommand implements Listener {
                 while (!found) {
                     for (MegaChunk mc : getSurroundingChunks(center, radius)) {
                         int[] coords = populator.getCoordsFromMegaChunk(tw, mc);
+                        if(coords == null) continue;
+                        
                         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
                         if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
@@ -142,7 +205,6 @@ public class LocateCommand extends DCCommand implements Listener {
         };
         runnable.runTaskAsynchronously(plugin);
     }
-
 
     private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
         if (radius == 0) return new ArrayList<MegaChunk>() {{
@@ -186,7 +248,7 @@ public class LocateCommand extends DCCommand implements Listener {
         @Override
         public StructurePopulator parse(CommandSender arg0, String arg1) {
 
-            for (StructurePopulator spop : TerraformStructurePopulator.structurePops) {
+            for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
                 if (spop.getClass().getSimpleName().equalsIgnoreCase(arg1) ||
                         spop.getClass().getSimpleName().equalsIgnoreCase(arg1 + "populator"))
                     return spop;

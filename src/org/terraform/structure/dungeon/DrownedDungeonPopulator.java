@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
 import org.bukkit.entity.EntityType;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.MegaChunk;
@@ -62,7 +63,7 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
                 if (nx * nx + nz * nz > radius * radius + GenUtils.randInt(rand, -10, 10))
                     continue;
 
-                int y = GenUtils.getHighestGround(data, nx + x, nz + z);
+                int y = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, nx + x, nz + z);
 
                 //Spawner
                 if (nx == 0 && nz == 0) {

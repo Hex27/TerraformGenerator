@@ -2,20 +2,21 @@ package org.terraform.structure.stronghold;
 
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class StrongholdPopulator extends StructurePopulator {
+public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     private int[][] POSITIONS;
 
     public int[][] strongholdPositions(TerraformWorld tw) {
@@ -64,8 +65,8 @@ public class StrongholdPopulator extends StructurePopulator {
     private static int[] randomCircleCoords(Random rand, int radius) {
         double angle = Math.random() * Math.PI * 2;
         int x = (int) (Math.cos(angle) * radius);
-        int y = (int) (Math.sin(angle) * radius);
-        return new int[]{x, y};
+        int z = (int) (Math.sin(angle) * radius);
+        return new int[]{x, z};
     }
 
     private static boolean areCoordsEqual(int[] a, int x, int z) {
@@ -95,7 +96,7 @@ public class StrongholdPopulator extends StructurePopulator {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 for (int[] pos : positions) {
                     if (areCoordsEqual(pos, x, z)) {
-                        int height = GenUtils.getHighestGround(data, x, z);
+                        int height = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
                         //Strongholds start underground. Burrow down
                         height -= 40;
                         if (height < 3) height = 5;
@@ -164,6 +165,18 @@ public class StrongholdPopulator extends StructurePopulator {
         }
         return new int[]{min[0], min[1]};
     }
+    
+
+	@Override
+	public int[] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+		int[][] positions = strongholdPositions(tw);
+		for (int[] pos : positions) {
+            if (mc.containsXZBlockCoords(pos[0], pos[1])) 
+            	return pos;
+        }
+
+        return null;
+	}
 
     @Override
     public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
