@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
@@ -29,6 +30,8 @@ public class FractalLeaves {
     public boolean halfSphere = false;
     double hollowLeaves = 0.0;
 
+    boolean coneLeaves = false;
+
     public Material material = Material.OAK_LEAVES;
     public FractalTreeBuilder builder;
 
@@ -37,12 +40,14 @@ public class FractalLeaves {
     }
 
     public void placeLeaves(int seed, SimpleBlock block) {
+        // Don't place anything if radius is nothing
         if (radiusX <= 0 &&
                 radiusY <= 0 &&
                 radiusZ <= 0) {
             return;
         }
 
+        // Radius 0.5 is 1 block
         if (radiusX <= 0.5 &&
                 radiusY <= 0.5 &&
                 radiusZ <= 0.5) {
@@ -50,9 +55,12 @@ public class FractalLeaves {
             return;
         }
 
+        //Initialise noise to be used in randomising the sphere
         FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
+        noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        float noiseMultiplier = builder.leafNoiseMultiplier;
+        noise.SetFrequency(builder.leafNoiseFrequency);
+        noise.SetFractalOctaves(5);
 
         double maxR = radiusX;
         if (radiusX < radiusY) maxR = radiusY;
@@ -60,8 +68,8 @@ public class FractalLeaves {
 
         ArrayList<SimpleBlock> changed = new ArrayList<>();
 
-        for (int x = -Math.round(radiusX); x <= radiusX; x++) {
-            for (int y = halfSphere ? 0 : -Math.round(radiusY); y <= radiusY; y++) {
+        for (int y = halfSphere ? 0 : -Math.round(radiusY); y <= radiusY; y++) {
+            for (int x = -Math.round(radiusX); x <= radiusX; x++) {
                 for (int z = -Math.round(radiusZ); z <= radiusZ; z++) {
                     SimpleBlock relativeBlock = block.getRelative(Math.round(x), Math.round(y) + offsetY, Math.round(z));
 
@@ -74,19 +82,34 @@ public class FractalLeaves {
                             return;
                     }
 
+                    float effectiveY = y;
+
+                    if(coneLeaves) {
+                    	effectiveY += radiusY / 2; // Shift center area downwards
+                    	// Compress negative y
+                    	if(effectiveY < 0) effectiveY = effectiveY * 2.0f;
+
+                    	//Extend positive y and multiply it by a power to make it sharp
+                    	if(effectiveY > 0) {
+                    		effectiveY=effectiveY*(2.0f/3.0f);
+                    		effectiveY = (float) Math.pow(effectiveY, 1.3);
+                    		if(effectiveY > radiusY) effectiveY = radiusY;
+                    	}
+                		relativeBlock = relativeBlock.getRelative(0,(int) (radiusY/2),0);
+                    }
+
                     double equationResult = Math.pow(x, 2) / Math.pow(radiusX, 2)
-                            + Math.pow(y, 2) / Math.pow(radiusY, 2)
+                            + Math.pow(effectiveY, 2) / Math.pow(radiusY, 2)
                             + Math.pow(z, 2) / Math.pow(radiusZ, 2);
 
-                    if (equationResult <= 1 + 0.7 * noise.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
+                    if (equationResult <= 1 + noiseMultiplier * noise.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
                         if (equationResult < hollowLeaves)
                             continue;
 
-                        if (material.toString().contains("CORAL")) {
+                        if (Tag.CORALS.isTagged(material)) {
                             if (!changed.contains(relativeBlock))
                                 changed.add(relativeBlock);
                         }
-
 
                         //Leaves do not replace solid blocks.
                         if (Tag.LEAVES.isTagged(material) && !relativeBlock.getType().isSolid()) {
@@ -154,19 +177,19 @@ public class FractalLeaves {
             }
         }
 
-        //Ensures that corals don't die
+        // Ensures that corals don't die
         while (!changed.isEmpty()) {
             SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));
             if (!CoralGenerator.isSaturatedCoral(sb)) {
-                //No floating coral fans
+                // No floating coral fans
                 for (BlockFace face : BlockUtils.directBlockFaces) {
-                    if (sb.getRelative(face).getType().toString().endsWith("WALL_FAN"))
+                    if (Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType()))
                         sb.getRelative(face).setType(Material.WATER);
                 }
 
-                //No levitating sea pickles & fans
+                // No levitating sea pickles & fans
                 if (sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
-                        sb.getRelative(0, 1, 0).getType().toString().endsWith("CORAL_FAN")) {
+                        Tag.CORAL_PLANTS.isTagged(sb.getRelative(0, 1, 0).getType())) {
                     sb.getRelative(0, 1, 0).setType(Material.WATER);
                 }
                 sb.setType(Material.WATER);
@@ -222,6 +245,11 @@ public class FractalLeaves {
 
     public FractalLeaves setHollowLeaves(double hollow) {
         this.hollowLeaves = hollow;
+        return this;
+    }
+
+    public FractalLeaves setConeLeaves(boolean coneLeaves) {
+        this.coneLeaves = coneLeaves;
         return this;
     }
 }
