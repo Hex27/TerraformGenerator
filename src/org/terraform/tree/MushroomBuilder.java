@@ -46,7 +46,6 @@ public class MushroomBuilder {
     public MushroomBuilder(FractalTypes.Mushroom type) {
         this.type = type;
         switch (type) {
-            // Funnel mushrooms (implement algorithm)
             case GIANT_BROWN_FUNNEL_MUSHROOM:
                 this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
                         .setCapRadius(13)
@@ -255,9 +254,7 @@ public class MushroomBuilder {
         }
     }
 
-// Funnel mushrooms yet to be implemented
-
-    public static void spawnFunnelCap(int seed, float r, float height, float thickness, SimpleBlock base, boolean hardReplace, Material... type) {
+    private void spawnFunnelCap(int seed, float r, float height, float thickness, SimpleBlock base, boolean hardReplace, Material... type) {
         Random rand = new Random(seed);
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(FastNoise.NoiseType.Simplex);
@@ -266,14 +263,20 @@ public class MushroomBuilder {
         for (int x = Math.round(-r); x <= Math.round(r); x++) {
             for (int y = 0; y <= Math.round(3 * thickness); y++) {
                 for (int z = Math.round(-r); z <= Math.round(r); z++) {
+                    // Replace blocks in the middle
+                    if (stemTop.getRelative(0, y, 0).getType() == stemType)
+                        stemTop.getRelative(0, y, 0).setType(GenUtils.randMaterial(rand, type));
 
                     double distToCenter = Math.sqrt(x * x + z * z) / r;
+
+                    // Actual Y value calculated with mafs magic
+                    // https://www.geogebra.org/classic/x3xzkzwd < the curve
                     double realY = y + height * (Math.pow(distToCenter + 0.02, 0.5) - Math.pow(distToCenter - 0.15, 8));
-                    realY += thickness * Math.abs(noise.GetNoise(x / r, z / r));
-// 1 + Math.pow(1 - distToCenter, 8)
+                    realY += thickness * Math.abs(noise.GetNoise(x / r, z / r)); // Noise
                     SimpleBlock rel = base.getRelative(x, (int) Math.round(realY), z);
 
                     double equationResult = Math.pow(x / r, 2)
+                            // For height max height: https://www.geogebra.org/classic/k5nefypu
                             + Math.pow(Math.abs(y) / (thickness / (1 - Math.pow(1 - (distToCenter + 0.1), 6))), 4)
                             + Math.pow(z / r, 2);
 
@@ -295,6 +298,7 @@ public class MushroomBuilder {
         for (int i = 0; i < gillAmount; i++) {
             angle += Math.PI / (gillAmount / 2.0); // Do full circle
 
+            // Points from middle to a point on circle with radius of 0.9r
             List<Vector2f> points = new BresenhamLine(new Vector2f(0, 0),
                     new Vector2f((float) (0.9 * r * Math.cos(angle)), (float) (0.9 * r * Math.sin(angle)))).getPoints();
 
@@ -304,9 +308,8 @@ public class MushroomBuilder {
 
                 while (true) {
                     if (pointBase.getType().isSolid()) {
-                        if (pointBase.getRelative(0, -1, 0).getType().isAir()) { // Alapuolella air
+                        if (pointBase.getRelative(0, -1, 0).getType().isAir())
                             pointBase.getRelative(0, -1, 0).setType(Material.MUSHROOM_STEM);
-                        }
                         continue points;
                     } else {
                         pointBase = pointBase.getRelative(0, 1, 0);
