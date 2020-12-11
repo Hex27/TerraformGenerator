@@ -10,7 +10,6 @@ import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
-import org.terraform.tree.TreeDB;
 
 import java.util.Random;
 import java.util.Stack;

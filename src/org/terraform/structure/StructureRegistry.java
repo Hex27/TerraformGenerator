@@ -1,10 +1,5 @@
 package org.terraform.structure;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Random;
-
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -18,6 +13,11 @@ import org.terraform.structure.pyramid.PyramidPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.utils.GenUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.Random;
 
 public class StructureRegistry {
 
@@ -114,7 +114,7 @@ public class StructureRegistry {
 		return returnVal;
 	}
 	
-	  // Implementing Fisher–Yates shuffle
+	  // Implementing Fisherï¿½Yates shuffle
 	private static void shuffleArray(Random rand, Object[] ar)
 	{
 		if(ar.length == 0) return;

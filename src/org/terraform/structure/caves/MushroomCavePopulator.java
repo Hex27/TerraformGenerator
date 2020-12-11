@@ -9,7 +9,6 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
-import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;

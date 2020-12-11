@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.data.SimpleBlock;
@@ -32,6 +33,8 @@ public class FractalLeaves {
 
     boolean coneLeaves = false;
     boolean snowy = false;
+    float weepingLeavesChance = 0;
+    int weepingLeavesLength = 0;
 
     public Material material = Material.OAK_LEAVES;
     public FractalTreeBuilder builder;
@@ -154,6 +157,10 @@ public class FractalLeaves {
                                 }
                             }
                         }
+
+                        if (weepingLeavesChance > 0 && Math.random() < weepingLeavesChance) {
+                            weepingLeaves(relativeBlock, Math.round(weepingLeavesChance * weepingLeavesLength), weepingLeavesLength);
+                        }
                     }
                 }
             }
@@ -179,6 +186,21 @@ public class FractalLeaves {
             } else {
                 sb.setType(material);
             }
+        }
+    }
+
+    private void weepingLeaves(SimpleBlock base, int minDist, int maxDist) {
+        BlockData type = Bukkit.createBlockData(material);
+        if (Tag.LEAVES.isTagged(material)) {
+            Leaves leaf = (Leaves) type;
+            leaf.setDistance(1);
+        }
+
+        for (int i = 1; i <= GenUtils.randInt(minDist, maxDist); i++) {
+            if (base.getRelative(0, -i, 0).getType().isAir())
+                base.getRelative(0, -i, 0).lsetBlockData(type);
+            else
+                break;
         }
     }
 
@@ -248,6 +270,19 @@ public class FractalLeaves {
 
     public FractalLeaves setSnowy(boolean snowy) {
         this.snowy = snowy;
+        return this;
+    }
+
+    /**
+     * Creates dangling leaves without vines. Useful for
+     * creating types of weeping trees.
+     *
+     * @param chance chance of creating dangling leaves per block (0 - 1)
+     * @param maxLength maximum length of dangling leaves
+     */
+    public FractalLeaves setWeepingLeaves(float chance, int maxLength) {
+        this.weepingLeavesChance = chance;
+        this.weepingLeavesLength = maxLength;
         return this;
     }
 }

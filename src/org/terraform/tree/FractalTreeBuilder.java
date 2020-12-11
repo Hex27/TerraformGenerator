@@ -721,13 +721,9 @@ public class FractalTreeBuilder {
             leaf.setDistance(1);
         }
         for (int i = 1; i <= GenUtils.randInt(min, max); i++) {
-            if (!block.getRelative(0, -i, 0).getType().isSolid()) {
-//				if(leafRadiusX > 5 || leafRadiusY > 5 || leafRadiusZ > 5)
-//					leaf.setPersistent(true);
-//				else
-
+            if (!block.getRelative(0, -i, 0).getType().isSolid())
                 block.getRelative(0, -i, 0).lsetBlockData(type);
-            } else
+            else
                 break;
         }
 
