@@ -4,6 +4,7 @@ import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
@@ -553,7 +554,7 @@ public class BlockUtils {
         MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
             Material type = target.getRelative(face).getType();
-            data.setFace(face, type.isSolid() && !type.name().contains("PRESSURE_PLATE"));
+            data.setFace(face, type.isSolid() && !Tag.PRESSURE_PLATES.isTagged(type));
         }
         target.setBlockData(data);
     }

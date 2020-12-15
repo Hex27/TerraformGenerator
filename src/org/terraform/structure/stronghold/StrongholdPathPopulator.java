@@ -83,17 +83,17 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
     				.setHalf(Half.TOP)
     				.apply(wall.getRight());
 
-    				new StairBuilder(Material.ANDESITE_STAIRS,Material.POLISHED_ANDESITE_STAIRS,Material.MOSSY_STONE_BRICK_STAIRS)
+    				new StairBuilder(Material.STONE_BRICK_STAIRS,Material.POLISHED_ANDESITE_STAIRS,Material.MOSSY_STONE_BRICK_STAIRS)
     				.setFacing(BlockUtils.getRight(wall.getDirection()))
     				.setHalf(Half.TOP)
     				.apply(wall.getLeft());
     				
-    				new StairBuilder(Material.ANDESITE_STAIRS,Material.POLISHED_ANDESITE_STAIRS,Material.MOSSY_STONE_BRICK_STAIRS)
+    				new StairBuilder(Material.STONE_BRICK_STAIRS,Material.POLISHED_ANDESITE_STAIRS,Material.MOSSY_STONE_BRICK_STAIRS)
     				.setFacing(BlockUtils.getLeft(wall.getDirection()))
     				.setHalf(Half.BOTTOM)
     				.apply(wall.getRight().getRelative(0,2,0));
 
-    				new StairBuilder(Material.ANDESITE_STAIRS,Material.POLISHED_ANDESITE_STAIRS,Material.MOSSY_STONE_BRICK_STAIRS)
+    				new StairBuilder(Material.STONE_BRICK_STAIRS,Material.POLISHED_ANDESITE_STAIRS,Material.MOSSY_STONE_BRICK_STAIRS)
     				.setFacing(BlockUtils.getRight(wall.getDirection()))
     				.setHalf(Half.BOTTOM)
     				.apply(wall.getLeft().getRelative(0,2,0));
@@ -225,7 +225,9 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
 		for(BlockFace face:BlockUtils.directBlockFaces) {
 			
 			core.getRelative(face).RSolSetBlockData(
-					new StairBuilder(Material.STONE_BRICK_STAIRS,Material.COBBLESTONE_STAIRS,Material.MOSSY_STONE_BRICK_STAIRS,Material.ANDESITE_STAIRS)
+					new StairBuilder(
+							Material.STONE_BRICK_STAIRS,Material.COBBLESTONE_STAIRS,
+							Material.MOSSY_STONE_BRICK_STAIRS,Material.ANDESITE_STAIRS)
 						.setFacing(face)
 						.setHalf(isCeil)
 						.get()

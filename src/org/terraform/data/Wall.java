@@ -172,6 +172,17 @@ public class Wall {
         }
     }
 
+    /**
+     * Corrects all multiple facing block data in a pillar
+     *
+     * @param height
+     */
+    public void CorrectMultipleFacing(int height) {
+        for (int i = 0; i < height; i++) {
+            BlockUtils.correctSurroundingMultifacingData(block.getRelative(0,i,0));
+        }
+    }
+
 
     /**
      * Replaces until a solid block is reached.

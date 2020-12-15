@@ -53,7 +53,7 @@ public class MushroomCommand extends DCCommand {
                 new MushroomBuilder((FractalTypes.Mushroom) this.parseArguments(sender, args).get(0))
                         .build(tw, data, x, y, z);
             } catch (IllegalArgumentException e) {
-                sender.sendMessage(ChatColor.RED + "Invalid tree type.");
+                sender.sendMessage(ChatColor.RED + "Invalid mushroom type.");
                 sender.sendMessage(ChatColor.RED + "Valid types:");
                 StringBuilder types = new StringBuilder();
                 boolean b = true;

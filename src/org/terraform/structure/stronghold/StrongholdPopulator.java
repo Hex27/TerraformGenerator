@@ -143,6 +143,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new SilverfishDenPopulator(random, false, false));
         gen.registerRoomPopulator(new SupplyRoomPopulator(random, false, false));
         gen.registerRoomPopulator(new TrapChestRoomPopulator(random, false, false));
+        gen.registerRoomPopulator(new HallwayPopulator(random, false, false));
         gen.generate();
         gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 
