@@ -16,7 +16,6 @@ import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -36,31 +35,10 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         int[] lowerBounds = room.getLowerCorner();
         int[] upperBounds = room.getUpperCorner();
-
-        //Decorate the walls
-        //Wall object, to the length of the wall
-        HashMap<Wall, Integer> walls = new HashMap<>();
-        Wall north = new Wall(
-                new SimpleBlock(data, lowerBounds[0], room.getY() + 4, upperBounds[1])
-                , BlockFace.NORTH);
-        Wall south = new Wall(
-                new SimpleBlock(data, upperBounds[0], room.getY() + 4, lowerBounds[1])
-                , BlockFace.SOUTH);
-        Wall east = new Wall(
-                new SimpleBlock(data, lowerBounds[0], room.getY() + 4, lowerBounds[1])
-                , BlockFace.EAST);
-        Wall west = new Wall(
-                new SimpleBlock(data, upperBounds[0], room.getY() + 4, upperBounds[1])
-                , BlockFace.WEST);
-
-        walls.put(north, room.getWidthX());
-        walls.put(south, room.getWidthX());
-        walls.put(east, room.getWidthZ());
-        walls.put(west, room.getWidthZ());
-
+        
         //Bookshelves and entrance decor
-        for (Entry<Wall, Integer> entry : walls.entrySet()) {
-            Wall wall = entry.getKey();
+        for (Entry<Wall, Integer> entry : room.getFourWalls(data,0).entrySet()) {
+            Wall wall = entry.getKey().getRelative(0,3,0);
             for (int i = 1; i <= entry.getValue(); i++) {
                 wall.setType(Material.CHISELED_STONE_BRICKS);
                 if (i % 5 == 2 || i % 5 == 4)

@@ -12,6 +12,7 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
+import org.terraform.utils.MazeSpawner;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -119,6 +120,14 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         //Level One
         Random hashedRand = tw.getHashedRand(x, y, z);
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range);
+
+        MazeSpawner mazeSpawner = new MazeSpawner();
+        mazeSpawner.setMazePeriod(10);
+        mazeSpawner.setMazePathWidth(3);
+        mazeSpawner.setWidth(range+20);
+        mazeSpawner.setMazeHeight(4);
+        mazeSpawner.setCovered(true);
+        gen.setMazePathGenerator(mazeSpawner);
         gen.setPathPopulator(new StrongholdPathPopulator(tw.getHashedRand(x, y, z, 2)));
         gen.setRoomMaxX(30);
         gen.setRoomMaxZ(30);
@@ -138,11 +147,20 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 
         gen.reset();
+        mazeSpawner = new MazeSpawner();
+        mazeSpawner.setMazePeriod(10);
+        mazeSpawner.setMazePathWidth(3);
+        mazeSpawner.setCovered(true);
+        mazeSpawner.setMazeHeight(4);
+        mazeSpawner.setWidth(range+20);
+        gen.setMazePathGenerator(mazeSpawner);
 
         //Level Two
         y += 18;
         gen.setCentY(y);
         gen.setRand(tw.getHashedRand(x, y, z));
+        
+        
         gen.setPathPopulator(new StrongholdPathPopulator(tw.getHashedRand(x, y, z, 2)));
         CubeRoom stairwayTwo = new CubeRoom(5, 5, 5, stairwayOne.getX(), y, stairwayOne.getZ());
         stairwayTwo.setRoomPopulator(new StairwayTopPopulator(random, false, false));

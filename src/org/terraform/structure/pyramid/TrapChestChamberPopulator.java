@@ -1,5 +1,7 @@
 package org.terraform.structure.pyramid;
 
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -9,8 +11,6 @@ import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
-
-import java.util.Random;
 
 public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
 

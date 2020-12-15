@@ -12,12 +12,14 @@ import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-import java.util.AbstractMap;
+import java.util.Set;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
 public class PrisonRoomPopulator extends RoomPopulatorAbstract {
 
+	
     public PrisonRoomPopulator(Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
     }
@@ -30,32 +32,14 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         int[] upperBounds = room.getUpperCorner();
         int[] lowerBounds = room.getLowerCorner();
-
-        //Wall object, to the length of the wall
-        Entry<Wall, Integer>[] walls = new Entry[4];
-        Wall north = new Wall(
-                new SimpleBlock(data, lowerBounds[0] + 3, room.getY() + 1, upperBounds[1] - 3)
-                , BlockFace.NORTH);
-        Wall south = new Wall(
-                new SimpleBlock(data, upperBounds[0] - 3, room.getY() + 1, lowerBounds[1] + 3)
-                , BlockFace.SOUTH);
-        Wall east = new Wall(
-                new SimpleBlock(data, lowerBounds[0] + 3, room.getY() + 1, lowerBounds[1] + 3)
-                , BlockFace.EAST);
-        Wall west = new Wall(
-                new SimpleBlock(data, upperBounds[0] - 3, room.getY() + 1, upperBounds[1] - 3)
-                , BlockFace.WEST);
-
-        walls[0] = new AbstractMap.SimpleEntry(north, room.getWidthX() - 6);
-        walls[1] = new AbstractMap.SimpleEntry(south, room.getWidthX() - 6);
-        walls[2] = new AbstractMap.SimpleEntry(east, room.getWidthZ() - 6);
-        walls[3] = new AbstractMap.SimpleEntry(west, room.getWidthZ() - 6);
-
+        
+        Set<Entry<Wall,Integer>> entrySet = room.getFourWalls(data, 3).entrySet();
+        Entry<Wall,Integer>[] walls = entrySet.toArray(new Map.Entry[entrySet.size()]);
         //Initially, place a massive cell
         for (Entry<Wall, Integer> entry : walls) {
             Wall wall = entry.getKey().clone();

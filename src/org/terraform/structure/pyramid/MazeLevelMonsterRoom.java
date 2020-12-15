@@ -1,13 +1,13 @@
 package org.terraform.structure.pyramid;
 
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.GenUtils;
-
-import java.util.Random;
 
 public class MazeLevelMonsterRoom extends RoomPopulatorAbstract {
 

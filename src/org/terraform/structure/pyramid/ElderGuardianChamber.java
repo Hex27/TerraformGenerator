@@ -1,5 +1,8 @@
 package org.terraform.structure.pyramid;
 
+import java.util.Map.Entry;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,9 +23,6 @@ import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
-
-import java.util.Map.Entry;
-import java.util.Random;
 
 public class ElderGuardianChamber extends RoomPopulatorAbstract {
 

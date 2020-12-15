@@ -1,29 +1,37 @@
 package org.terraform.utils;
 
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleLocation;
-import org.terraform.data.Wall;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Stack;
 
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
+import org.terraform.data.Wall;
+import org.terraform.structure.room.PathPopulatorAbstract;
+import org.terraform.structure.room.PathPopulatorData;
+
 public class MazeSpawner {
 
 	private SimpleBlock core; //Maze center
-	private int widthX; //Maze x width
-	private int widthZ; //Maze z width
+	private int widthX = -1; //Maze x width
+	private int widthZ = -1; //Maze z width
 	private Random rand;
 	private int mazeHeight = 3;
-	private int mazePeriod = 1; //Number of blocks a cell's pathways extend 
 	private MazeCell center;
+	private int mazePathWidth = 1;
+	private int mazePeriod = 1;
+	private PathPopulatorAbstract pathPop;
+	public ArrayList<PathPopulatorData> pathPopDatas = new ArrayList<>();
+	private boolean covered = false;
 	
 	/**
 	 * A hashmap of raw location 2d x,z arrays to maze cells.
+	 * SIMPLE LOCATION HERE REFERS TO MAZECELL RELATIVE COORDINATES, 
+	 * NOT REAL IN-WORLD COORDS.
 	 */
 	private HashMap<SimpleLocation, MazeCell> cellGrid = new HashMap<>();
 	
@@ -52,8 +60,6 @@ public class MazeSpawner {
 		//Loop NSEW
 		for(BlockFace face:BlockUtils.directBlockFaces) {
 			MazeCell neighbour = getAdjacentCell(target,face);
-			//if(neighbour == null) Bukkit.getLogger().info("Null.");
-			//else if(neighbour.hasAllWalls()) Bukkit.getLogger().info("Not all walls");
 			if(neighbour != null && neighbour.hasAllWalls()) {
 				neighbours.put(face, neighbour);
 			}
@@ -63,28 +69,29 @@ public class MazeSpawner {
 	}
 	
 	/**
-	 * Call this function before carveMaze. This populates the object with relevant data to actually create the maze.
+	 * Call this function before carveMaze. 
+	 * This populates the object with relevant data to actually create the maze.
 	 */
 	public void prepareMaze() {
+		
 
 		//Initialise the cellGrid
-		int closest = 99999999;
-		for(int x = core.getX()-widthX/2; x <= core.getX()+widthX/2;x+=1+mazePeriod)
-			for(int z = core.getZ()-widthZ/2; z <= core.getZ()+widthZ/2;z+=1+mazePeriod) {
+		int mazeCellsWidthX = widthX/(mazePathWidth+mazePeriod);
+		int mazeCellsWidthZ = widthZ/(mazePathWidth+mazePeriod);
+		for(int x = -mazeCellsWidthX/2; x <= mazeCellsWidthX/2;x++)
+			for(int z = -mazeCellsWidthZ/2; z <= mazeCellsWidthZ/2;z++) {
 				MazeCell cell = new MazeCell(x,z);
 				cellGrid.put(new SimpleLocation(x,core.getY(),z), cell);
 				//Bukkit.getLogger().info("CELL " + x + "," + z);
-				int dist = (int) (Math.pow(x, 2) + Math.pow(z, 2));
-				if(dist < closest) {
+				if(x == 0 && z == 0) {
 					center = cell;
-					closest = dist;
 				}
 			}
 		
 		//Bukkit.getLogger().info("CENTER: " + center.x + "," + center.z);
 		
 		//Total number of cells
-		int n = widthX*widthZ;
+		int n = mazeCellsWidthX*mazeCellsWidthZ;
 		
 		Stack<MazeCell> cellStack = new Stack<>();
 		MazeCell currentCell = center;
@@ -107,13 +114,19 @@ public class MazeSpawner {
 			
 			//choose a random neighbouring cell and move into it.
 			@SuppressWarnings("unchecked")
-			Entry<BlockFace, MazeCell> entry = (Entry<BlockFace, MazeCell>) neighbours.entrySet().toArray()[rand.nextInt(neighbours.size())];
+			Entry<BlockFace, MazeCell> entry = (Entry<BlockFace, MazeCell>) 
+					neighbours.entrySet().toArray()[
+						rand.nextInt(neighbours.size())
+					];
+			
 			currentCell.knockDownWall(entry.getValue(), entry.getKey());
 			cellStack.push(currentCell);
 			currentCell = entry.getValue();
 			nv++;
 		}
+		//Bukkit.getLogger().info(nv+"/"+n);
 	}
+	
 	
 	/**
 	 * Carve a maze according to the provided parameters
@@ -121,35 +134,67 @@ public class MazeSpawner {
 	 * @materials if carveInSolid is false, supply a list of materials to use for walls.
 	 */
 	public void carveMaze(boolean carveInSolid, Material... materials) {
+		
+
+		int cellRadius = (mazePathWidth-1)/2;
+
+		
+		
 		for(MazeCell cell:cellGrid.values()) {
-			Wall unit = new Wall(new SimpleBlock(core.getPopData(), cell.x, core.getY(), cell.z));
-			unit.Pillar(mazeHeight, rand, Material.CAVE_AIR);
-			ArrayList<BlockFace> wallless = cell.getWalllessFaces();
+			int realWorldX = cell.x*(mazePathWidth+mazePeriod);
+			int realWorldZ = cell.z*(mazePathWidth+mazePeriod);
+			Wall cellCore = new Wall(core.getRelative(realWorldX,0,realWorldZ));
+			pathPopDatas.add(new PathPopulatorData(cellCore.getRelative(0,-1,0).get(),BlockFace.UP, mazePathWidth));
 			
-			if(!carveInSolid) {
-				unit.getRelative(0,mazeHeight,0).setType(GenUtils.randMaterial(materials));
-				unit.getRelative(0,-1,0).setType(GenUtils.randMaterial(materials));
-			}
-			//Carve pathways and walls if not carving in solid.
-			for(int depth = 1; depth <= mazePeriod; depth++) {
-				for(BlockFace face:BlockUtils.directBlockFaces) {
-					if(wallless.contains(face)) {
-						unit.getRelative(face,depth).Pillar(mazeHeight, rand, Material.CAVE_AIR);
-						if(!carveInSolid) {
-							//Ceiling and floor
-							unit.getRelative(face,depth).getRelative(0,mazeHeight,0).setType(GenUtils.randMaterial(materials));
-							unit.getRelative(face,depth).getRelative(0,-1,0).setType(GenUtils.randMaterial(materials));
-							
-							//Hallway Walls
-							if(depth > 1)
-								for(BlockFace side:BlockUtils.getAdjacentFaces(face))
-									unit.getRelative(face,depth).getRelative(side).Pillar(mazeHeight, rand, materials);
-						}
-					}else //Build blocking walls. Only do it at depth 1 because walls don't need thickness.
-						if(!carveInSolid && depth == 1)
-							unit.getRelative(face).Pillar(mazeHeight, rand, materials);
+			//Carve 1 cell
+			for(int nx = -cellRadius; nx <= cellRadius; nx++) {
+				for(int nz = -cellRadius; nz <= cellRadius; nz++) {
+					cellCore.getRelative(nx,0,nz).Pillar(mazeHeight, rand, Material.CAVE_AIR);
+					if(covered) {
+						cellCore.getRelative(nx,mazeHeight,nz).setType(GenUtils.randMaterial(materials));
+						cellCore.getRelative(nx,-1,nz).setType(GenUtils.randMaterial(materials));
+					}
 				}
+			}
+			
+			
+			//Connect
+			for(BlockFace dir:BlockUtils.directBlockFaces) {
+				Wall startPoint = new Wall(core.getRelative(realWorldX,0,realWorldZ),dir)
+						.getRelative(dir,cellRadius+1);
 				
+				//Carve Pathway
+				if(cell.getWalllessFaces().contains(dir)) {
+					
+					for(int i = 0; i < Math.ceil(((float)this.mazePeriod)/2.0f); i++) {
+						pathPopDatas.add(new PathPopulatorData(startPoint.getRelative(0,-1,0).get(),dir, mazePathWidth));
+						
+						startPoint.Pillar(mazeHeight, rand, Material.CAVE_AIR);
+						if(covered) {
+							startPoint.getRelative(0,mazeHeight,0).setType(GenUtils.randMaterial(materials));
+							startPoint.getRelative(0,-1,0).setType(GenUtils.randMaterial(materials));
+						}
+						for(int w = 1; w <= cellRadius; w++) {
+							startPoint.getLeft(w).Pillar(mazeHeight, rand, Material.CAVE_AIR);
+							startPoint.getRight(w).Pillar(mazeHeight, rand, Material.CAVE_AIR);
+							if(covered) {
+								startPoint.getLeft(w).getRelative(0,-1,0).setType(GenUtils.randMaterial(materials));
+								startPoint.getRight(w).getRelative(0,-1,0).setType(GenUtils.randMaterial(materials));
+								startPoint.getLeft(w).getRelative(0,mazeHeight,0).setType(GenUtils.randMaterial(materials));
+								startPoint.getRight(w).getRelative(0,mazeHeight,0).setType(GenUtils.randMaterial(materials));
+							}
+						}
+						startPoint.getLeft(cellRadius+1).Pillar(mazeHeight, rand, materials);
+						startPoint.getRight(cellRadius+1).Pillar(mazeHeight, rand, materials);
+						startPoint = startPoint.getRelative(dir);
+					}
+				}else { //Set Wall
+					startPoint.Pillar(mazeHeight, rand, materials);
+					for(int w = 1; w <= cellRadius; w++) {
+						startPoint.getLeft(w).Pillar(mazeHeight, rand, materials);
+						startPoint.getRight(w).Pillar(mazeHeight, rand, materials);
+					}
+				}
 			}
 		}
 	}
@@ -159,8 +204,8 @@ public class MazeSpawner {
 	 * Returns null if there is no maze cell at that location (border)
 	 */
 	private MazeCell getAdjacentCell(MazeCell target, BlockFace face) {
-		int neighbourX = target.x + face.getModX()*(1+mazePeriod);
-		int neighbourZ = target.z + face.getModZ()*(1+mazePeriod);
+		int neighbourX = target.x + face.getModX();
+		int neighbourZ = target.z + face.getModZ();
 		//Bukkit.getLogger().info("Face: " + face.toString() + " - REL(" + face.getModX() + "," + face.getModZ() + ") === (" + neighbourX + "," + neighbourZ + ")" );
 		MazeCell neighbour = cellGrid.get(new SimpleLocation(neighbourX, core.getY(), neighbourZ));
 		
@@ -171,9 +216,7 @@ public class MazeSpawner {
 	 * A maze cell refers to any one cell in the maze which can have 4 sides. 
 	 * Each of the 4 sides can or cannot have a wall.
 	 * 
-	 * In the game, this is denoted by one block with 4 adjacent blocks.
-	 * One mazecell must be separated by one mazePeriod from another maze cell.
-	 * This is why the above loop in MazeSpawner() increments by 2*mazePeriod.
+	 * In the game, this is denoted by a square of side mazePathWidth.
 	 */
 	private class MazeCell{
 		protected int x,z;
@@ -217,14 +260,6 @@ public class MazeSpawner {
 		this.mazeHeight = mazeHeight;
 	}
 
-	public int getMazePeriod() {
-		return mazePeriod;
-	}
-
-	public void setMazePeriod(int mazePeriod) {
-		this.mazePeriod = mazePeriod;
-	}
-
 	public int getWidthX() {
 		return widthX;
 	}
@@ -241,6 +276,10 @@ public class MazeSpawner {
 		this.widthZ = widthZ;
 	}
 
+	public void setWidth(int width) {
+		this.widthX = width;
+		this.widthZ = width;
+	}
 	public Random getRand() {
 		return rand;
 	}
@@ -255,6 +294,40 @@ public class MazeSpawner {
 
 	public void setCore(SimpleBlock core) {
 		this.core = core;
+	}
+
+	public int getMazePathWidth() {
+		return mazePathWidth;
+	}
+
+	public void setMazePathWidth(int mazePathWidth) {
+		if(mazePathWidth % 2 == 0)
+			throw new IllegalArgumentException("Maze Path Width must be odd!");
+		this.mazePathWidth = mazePathWidth;
+	}
+
+	public int getMazePeriod() {
+		return mazePeriod;
+	}
+
+	public void setMazePeriod(int mazePeriod) {
+		this.mazePeriod = mazePeriod;
+	}
+
+	public PathPopulatorAbstract getPathPop() {
+		return pathPop;
+	}
+
+	public void setPathPop(PathPopulatorAbstract pathPop) {
+		this.pathPop = pathPop;
+	}
+
+	public boolean isCovered() {
+		return covered;
+	}
+
+	public void setCovered(boolean covered) {
+		this.covered = covered;
 	}
 
 	

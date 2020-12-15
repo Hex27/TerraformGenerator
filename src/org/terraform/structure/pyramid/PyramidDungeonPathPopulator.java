@@ -1,5 +1,7 @@
 package org.terraform.structure.pyramid;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -8,8 +10,6 @@ import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-
-import java.util.Random;
 
 public class PyramidDungeonPathPopulator extends PathPopulatorAbstract {
     private final Random rand;

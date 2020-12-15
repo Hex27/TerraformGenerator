@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Rail;
@@ -533,6 +534,14 @@ public class BlockUtils {
         return getAdjacentFaces(original)[GenUtils.randInt(rand, 0, 1)];
     }
 
+    public static BlockFace getLeft(BlockFace original) {
+        return getAdjacentFaces(original)[0];
+    }
+
+    public static BlockFace getRight(BlockFace original) {
+        return getAdjacentFaces(original)[1];
+    }
+    
     public static void correctMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
             if (Version.isAtLeast(16.1) && target.getType().name().endsWith(("_WALL"))) {
@@ -672,5 +681,24 @@ public class BlockUtils {
             default:
                 return false;
         }
+    }
+    
+    public static BlockData infestStone(BlockData mat) {
+    	switch(mat.getMaterial()) {
+    	case STONE_BRICKS:
+    		return Bukkit.createBlockData(Material.INFESTED_STONE_BRICKS);
+    	case MOSSY_STONE_BRICKS:
+    		return Bukkit.createBlockData(Material.INFESTED_MOSSY_STONE_BRICKS);
+    	case CRACKED_STONE_BRICKS:
+    		return Bukkit.createBlockData(Material.INFESTED_CRACKED_STONE_BRICKS);
+    	case CHISELED_STONE_BRICKS:
+    		return Bukkit.createBlockData(Material.INFESTED_CHISELED_STONE_BRICKS);
+    	case COBBLESTONE:
+    		return Bukkit.createBlockData(Material.INFESTED_COBBLESTONE);
+    	case STONE:
+    		return Bukkit.createBlockData(Material.INFESTED_STONE);
+    	default:
+    		return mat;
+    	}
     }
 }

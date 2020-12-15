@@ -1,5 +1,9 @@
 package org.terraform.structure.pyramid;
 
+import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -19,10 +23,6 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BannerUtils;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-
-import java.util.ArrayList;
-import java.util.Map.Entry;
-import java.util.Random;
 
 
 public class WarAntechamber extends Antechamber {

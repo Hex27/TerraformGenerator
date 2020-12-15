@@ -145,6 +145,10 @@ public class Wall {
         block.setType(type);
     }
 
+    public void setType(Material... type) {
+        block.setType(GenUtils.randMaterial(type));
+    }
+
     /**
      * Replaces everything in its way
      *

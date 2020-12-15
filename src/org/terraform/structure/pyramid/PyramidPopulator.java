@@ -1,5 +1,8 @@
 package org.terraform.structure.pyramid;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -22,9 +25,6 @@ import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
