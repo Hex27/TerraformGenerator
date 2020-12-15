@@ -7,7 +7,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -51,7 +51,7 @@ public class TaigaHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTreeType.TAIGA_BIG).build(tw, data, treeX, treeY, treeZ);
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, treeX, treeY, treeZ);
             }
         }
 
@@ -62,7 +62,7 @@ public class TaigaHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
 
-                new FractalTreeBuilder(FractalTreeType.TAIGA_SMALL).build(tw, data, treeX, treeY, treeZ);
+                new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, treeX, treeY, treeZ);
             }
         }
 

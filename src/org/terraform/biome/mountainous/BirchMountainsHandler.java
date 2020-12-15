@@ -6,7 +6,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -51,7 +51,7 @@ public class BirchMountainsHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
 
-                new FractalTreeBuilder(FractalTreeType.BIRCH_BIG).build(tw, data, treeX, treeY, treeZ);
+                new FractalTreeBuilder(FractalTypes.Tree.BIRCH_BIG).build(tw, data, treeX, treeY, treeZ);
             }
         }
 
@@ -61,7 +61,7 @@ public class BirchMountainsHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
 
-                new FractalTreeBuilder(FractalTreeType.BIRCH_SMALL).build(tw, data, treeX, treeY, treeZ);
+                new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL).build(tw, data, treeX, treeY, treeZ);
             }
         }
 
