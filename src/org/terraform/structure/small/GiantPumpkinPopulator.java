@@ -6,7 +6,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -22,11 +22,9 @@ public class GiantPumpkinPopulator {
         spawnGiantPumpkin(tw, random, data, x, height, z);
     }
 
-    public void spawnGiantPumpkin(TerraformWorld tw, Random random,
-                                  PopulatorDataAbstract data, int x, int y, int z) {
-
+    public void spawnGiantPumpkin(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
         //Spawn the biggest pumpkin
-        new FractalTreeBuilder(FractalTreeType.GIANT_PUMPKIN)
+        new FractalTreeBuilder(FractalTypes.Tree.GIANT_PUMPKIN)
                 .build(tw, data, x, y + 1, z);
 
         //Spawn small pumpkins

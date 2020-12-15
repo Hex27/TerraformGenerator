@@ -1,8 +1,8 @@
 package org.terraform.utils;
 
-import java.util.Random;
-
 import org.bukkit.Material;
+
+import java.util.Random;
 
 public class BannerUtils {
 

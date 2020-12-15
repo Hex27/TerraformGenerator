@@ -22,19 +22,19 @@ public class SaplingOverrider implements Listener {
 
         switch (event.getSpecies()) {
             case ACACIA:
-                new FractalTreeBuilder(FractalTreeType.SAVANNA_SMALL)
+                new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL)
                         .build(tw, data, x, y, z);
                 break;
             case BIG_TREE:
             case TREE:
-                new FractalTreeBuilder(FractalTreeType.NORMAL_SMALL)
+                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL)
                         .build(tw, data, x, y, z);
                 break;
             case BIRCH:
 //		case SWAMP: //No small swamp tree :\
 //			break;
             case TALL_BIRCH:
-                new FractalTreeBuilder(FractalTreeType.BIRCH_SMALL)
+                new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL)
                         .build(tw, data, x, y, z);
                 break;
             case COCOA_TREE:
@@ -42,12 +42,12 @@ public class SaplingOverrider implements Listener {
                 TreeDB.spawnSmallJungleTree(tw, data, x, y, z);
                 break;
             case DARK_OAK:
-                new FractalTreeBuilder(FractalTreeType.DARK_OAK_SMALL)
+                new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
                         .build(tw, data, x, y, z);
                 break;
             case JUNGLE:
                 if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean())
-                    new FractalTreeBuilder(FractalTreeType.JUNGLE_BIG)
+                    new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG)
                             .build(tw, data, x, y, z);
                 else
                     TreeDB.spawnSmallJungleTree(tw, data, x, y, z);
@@ -55,7 +55,7 @@ public class SaplingOverrider implements Listener {
             case MEGA_REDWOOD:
             case REDWOOD:
             case TALL_REDWOOD:
-                new FractalTreeBuilder(FractalTreeType.TAIGA_SMALL)
+                new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL)
                         .build(tw, data, x, y, z);
                 break;
             default: //Not handled by TG

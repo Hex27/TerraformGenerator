@@ -19,9 +19,9 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.FastNoise;
+import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
-import org.terraform.utils.FastNoise.NoiseType;
 
 import java.util.ArrayList;
 import java.util.Random;

@@ -4,17 +4,17 @@ import org.bukkit.command.CommandSender;
 import org.drycell.command.DCArgument;
 import org.terraform.tree.FractalTypes;
 
-public class FractalTreeTypeArgument extends DCArgument<FractalTypes.Tree> {
+public class MushroomTypeArgument extends DCArgument<FractalTypes.Mushroom> {
 
-    public FractalTreeTypeArgument(String name, boolean isOptional) {
+    public MushroomTypeArgument(String name, boolean isOptional) {
         super(name, isOptional);
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public FractalTypes.Tree parse(CommandSender sender, String value) {
+    public FractalTypes.Mushroom parse(CommandSender sender, String value) {
 
-        return FractalTypes.Tree.valueOf(value.toUpperCase());
+        return FractalTypes.Mushroom.valueOf(value.toUpperCase());
     }
 
     @Override

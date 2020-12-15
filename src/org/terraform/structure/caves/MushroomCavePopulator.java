@@ -7,8 +7,8 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.tree.FractalTreeType;
-import org.terraform.tree.TreeDB;
+import org.terraform.tree.FractalTypes;
+import org.terraform.tree.MushroomBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
@@ -72,9 +72,9 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
                     int ground = getCaveFloor(data, nx, y, nz);
                     if (data.getType(nx, ground, nz) == Material.MYCELIUM
                             && data.getType(nx, ground + 1, nz) == Material.CAVE_AIR) {
-                        FractalTreeType type = FractalTreeType.RED_MUSHROOM_BASE;
-                        if (rand.nextBoolean()) type = FractalTreeType.BROWN_MUSHROOM_BASE;
-                        TreeDB.spawnGiantMushroom(tw, data, nx, ground, nz, type);
+                        FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
+                        if (rand.nextBoolean()) type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                        new MushroomBuilder(type).build(tw, data, nx, ground, nz);
                     }
                 }
 
