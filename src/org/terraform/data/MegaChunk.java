@@ -3,18 +3,14 @@ package org.terraform.data;
 import org.terraform.main.TConfigOption;
 import org.terraform.utils.GenUtils;
 
-import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Refers to a cluster of 64x64 chunks
+ * Used for spawning structures.
+ */
 public class MegaChunk {
-
-    /**
-     * Refers to a cluster of 64x64 chunks
-     * Used for spawning structures.
-     */
-
-    private int x;
-    private int z;
+    private final int x, z;
 
     public MegaChunk(SimpleChunkLocation sLoc) {
         this(sLoc.getX(), sLoc.getZ());
@@ -30,11 +26,8 @@ public class MegaChunk {
         this.z = chunkZ >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
     }
 
-    public MegaChunk getRelative(int nx, int nz) {
-        MegaChunk other = new MegaChunk(0, 0);
-        other.x = this.x + nx;
-        other.z = this.z + nz;
-        return other;
+    public MegaChunk getRelative(int x, int z) {
+        return new MegaChunk(this.x + x, this.z + z);
     }
 
     /**
@@ -57,37 +50,36 @@ public class MegaChunk {
         int z = GenUtils.randInt(rand, lowZ + 64, highZ - 64);
         return new int[]{x, z};
     }
-    
-    public boolean containsXZBlockCoords(int x, int z) {
 
-        MegaChunk mc = new MegaChunk(x,0,z);
-    	return mc.equals(this);
+    public boolean containsXZBlockCoords(int x, int z) {
+        MegaChunk mc = new MegaChunk(x, 0, z);
+        return mc.equals(this);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof MegaChunk) {
-            return ((MegaChunk) o).x == this.x
-                    && ((MegaChunk) o).z == this.z;
+    public boolean equals(Object obj) {
+        if (obj instanceof MegaChunk) {
+            MegaChunk megaChunk = (MegaChunk) obj;
+            return this.x == megaChunk.x && this.z == megaChunk.z;
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(323522773,x,z);
+        int prime = 31;
+        int result = 5;
+
+        result = prime * result + x;
+        result = prime * result + z;
+
+        return result;
     }
 
-    /**
-     * @return the x
-     */
     public int getX() {
         return x;
     }
 
-    /**
-     * @return the z
-     */
     public int getZ() {
         return z;
     }

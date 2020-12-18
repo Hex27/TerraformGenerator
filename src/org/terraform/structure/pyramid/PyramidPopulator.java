@@ -1,8 +1,5 @@
 package org.terraform.structure.pyramid;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -26,6 +23,9 @@ import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
@@ -39,7 +39,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
             if (biome != BiomeBank.DESERT)
                 return false;
         }
-        
+
         //Check heightmap. Ensure that entire area isn't beach or sea.
         //Ideally the entire area should be a desert.
 //        for(int nx = -50; nx <= 50; nx++)
@@ -65,12 +65,12 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         int[] coords = getCoordsFromMegaChunk(tw, new MegaChunk(data.getChunkX(), data.getChunkZ()));
         int x = coords[0];
         int z = coords[1];
-        
+
         int y = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
         try {
-        	spawnPyramid(tw, tw.getHashedRand(x, y, z, 1111222), data, x, y, z);
-        }catch(Throwable e) {
-        	e.printStackTrace();
+            spawnPyramid(tw, tw.getHashedRand(x, y, z, 1111222), data, x, y, z);
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
@@ -78,7 +78,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         TerraformGeneratorPlugin.logger.info("Spawning Pyramid at: " + x + "," + z);
         int numRooms = 1000;
         int range = 70;
-        spawnSandBase(tw,data,x,y,z);
+        spawnSandBase(tw, data, x, y, z);
         spawnPyramidBase(data, x, y, z);
 
         Random hashedRand = tw.getHashedRand(x, y, z);
@@ -107,8 +107,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         range -= 20;
 
         //Level 1 - Maze level (?)
-        
-        RoomLayoutGenerator level1 = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range+10);
+
+        RoomLayoutGenerator level1 = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range + 10);
         level1.setMazePathGenerator(new MazeSpawner());
         level1.setRoomMinX(5);
         level1.setRoomMaxX(6);
@@ -117,26 +117,26 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         level1.setNumRooms(15);
         level1.setPathPopulator(new PyramidPathPopulator(tw.getHashedRand(x, y, z, 2233)));
         level1.registerRoomPopulator(new MazeLevelMonsterRoom(random, false, false));
-        
+
         //Manually add a room for HuskTomb to work.
         CubeRoom room = level1.forceAddRoom(
-        		GenUtils.randInt(6, 12), 
-        		GenUtils.randInt(6, 12), //6 and 12 because these are the bounds for husk tombs. 
-        		GenUtils.randInt(level1.getRoomMinHeight(), level1.getRoomMaxHeight())
+                GenUtils.randInt(6, 12),
+                GenUtils.randInt(6, 12), //6 and 12 because these are the bounds for husk tombs.
+                GenUtils.randInt(level1.getRoomMinHeight(), level1.getRoomMaxHeight())
         );
         room.setRoomPopulator(new HuskTombPopulator(random, true, true));
-        
+
         //Placeholder room to prevent stairways spawning in the middle.
         CubeRoom placeholder = new CubeRoom(20, 20, 15, x, y, z);
         level1.getRooms().add(placeholder);
         //Stairways (Level 0 to 1)
         for (int i = 0; i < 4; i++) {
             CubeRoom stairway = level0.forceAddRoom(5, 5, 10);
-            
+
             //Don't generate stairways too far from the center.
-            while(stairway.centralDistanceSquared(level1.getCenter()) > Math.pow(level1.getRange()/2,2)) {
-            	level0.getRooms().remove(stairway);
-            	stairway = level0.forceAddRoom(5, 5, 10);
+            while (stairway.centralDistanceSquared(level1.getCenter()) > Math.pow(level1.getRange() / 2, 2)) {
+                level0.getRooms().remove(stairway);
+                stairway = level0.forceAddRoom(5, 5, 10);
             }
             stairway.setRoomPopulator(new PyramidStairwayRoomPopulator(random, false, false));
             CubeRoom stairwayTop = new CubeRoom(5, 5, 5, stairway.getX(), y, stairway.getZ());
@@ -162,7 +162,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         MazeSpawner mazeSpawner = new MazeSpawner();
         mazeSpawner.setMazePeriod(5);
         level2.setMazePathGenerator(mazeSpawner);
-        
+
         //Tomb room. 
         CubeRoom tomb = new CubeRoom(20, 20, 20, x, y + 8, z);
         tomb.setRoomPopulator(new ElderGuardianChamber(tw.getHashedRand(x, y + 8, z, 1121), true, true));
@@ -171,9 +171,9 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         //Stairways (Level 1 to 2)
         for (int i = 0; i < 3; i++) {
             CubeRoom stairway = level1.forceAddRoom(5, 5, 10);//Don't generate stairways too far from the center.
-            while(stairway.centralDistanceSquared(level2.getCenter()) > Math.pow(level2.getRange()/2,2)) {
-            	level1.getRooms().remove(stairway);
-            	stairway = level1.forceAddRoom(5, 5, 10);
+            while (stairway.centralDistanceSquared(level2.getCenter()) > Math.pow(level2.getRange() / 2, 2)) {
+                level1.getRooms().remove(stairway);
+                stairway = level1.forceAddRoom(5, 5, 10);
             }
             stairway.setRoomPopulator(new PyramidStairwayRoomPopulator(random, false, false));
             CubeRoom stairwayTop = new CubeRoom(5, 5, 5, stairway.getX(), y + 8, stairway.getZ());
@@ -204,10 +204,12 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                 //Dither. Include infested stone here.
                 if (random.nextBoolean()) {
                     if (toReplace.contains(data.getType(x + nx, y - 7, z + nz)))
-                        data.setType(x + nx, y - 7, z + nz, GenUtils.weightedRandomMaterial(random, Material.STONE,9,Material.INFESTED_STONE,5,Material.COBBLESTONE,3,Material.ANDESITE,3));
+                        data.setType(x + nx, y - 7, z + nz, GenUtils.weightedRandomMaterial(random, Material.STONE, 9, Material.INFESTED_STONE, 5, Material.COBBLESTONE, 3,
+                                Material.ANDESITE, 3));
                     if (random.nextBoolean()) {
                         if (toReplace.contains(data.getType(x + nx, y - 6, z + nz)))
-                            data.setType(x + nx, y - 6, z + nz, GenUtils.weightedRandomMaterial(random, Material.STONE,9,Material.INFESTED_STONE,5,Material.COBBLESTONE,3,Material.ANDESITE,3));
+                            data.setType(x + nx, y - 6, z + nz, GenUtils.weightedRandomMaterial(random, Material.STONE, 9, Material.INFESTED_STONE, 5, Material.COBBLESTONE, 3,
+                                    Material.ANDESITE, 3));
 
                     }
                 }
@@ -226,79 +228,80 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Used to ensure that the dungeon level never gets revealed above the surface by a river or something stupid.
      * This will ensure that all ground levels around those coords are at least roughly at y blocks
+     *
      * @param data
      * @param x
      * @param y
      * @param z
      */
     public void spawnSandBase(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-    	int squareRadius = 65;
-    	FastNoise noiseGenerator = new FastNoise();
-    	noiseGenerator.SetNoiseType(NoiseType.PerlinFractal);
-    	noiseGenerator.SetFrequency(0.007f);
-    	noiseGenerator.SetFractalOctaves(6);
+        int squareRadius = 65;
+        FastNoise noiseGenerator = new FastNoise();
+        noiseGenerator.SetNoiseType(NoiseType.PerlinFractal);
+        noiseGenerator.SetFrequency(0.007f);
+        noiseGenerator.SetFractalOctaves(6);
 
-    	FastNoise vertNoise = new FastNoise();
-    	vertNoise.SetNoiseType(NoiseType.PerlinFractal);
-    	vertNoise.SetFrequency(0.01f);
-    	vertNoise.SetFractalOctaves(8);
-    	
-    	for(int nx = x-squareRadius; nx <= x+squareRadius; nx++) {
-    		for(int nz = z-squareRadius; nz <= z+squareRadius; nz++) {
-    			int height = GenUtils.getHighestGround(data,nx,nz);
-    			Material[] crust = new Material[4];
-    			crust[0] = data.getType(nx, height, nz);
-    			Material mat = data.getType(nx, height, nz);
-    			int original = height;
-    			//int height = HeightMap.getHeight(tw, nx, nz);
+        FastNoise vertNoise = new FastNoise();
+        vertNoise.SetNoiseType(NoiseType.PerlinFractal);
+        vertNoise.SetFrequency(0.01f);
+        vertNoise.SetFractalOctaves(8);
 
-    			
-    			//Raise ground according to noise levels.
-    			int raiseDone = 0;
-    			int noise = Math.round(noiseGenerator.GetNoise(nx, nz)*5);
-    			int newHeight = y + noise - 1;
-    			if(newHeight < y-1) newHeight = y-1;
-    			
-    			while(height < newHeight) {
-    				raiseDone++;
-    				if(!data.getType(nx, height+1, nz).isSolid())
-    					data.setType(nx, height+1, nz, mat);
-    				height++;
-    			}
-    			
-    			if(raiseDone > 0) {
-    				//Make the sides sink down naturally (lol. Or try to, anyway)
-        			int XdistanceFromCenter = (int) (Math.abs(nx-x)+ Math.abs(vertNoise.GetNoise(nx-80, nz-80)*25));
-        			int ZdistanceFromCenter = (int) (Math.abs(nz-z)+ Math.abs(vertNoise.GetNoise(nx-80, nz-80)*25));
+        for (int nx = x - squareRadius; nx <= x + squareRadius; nx++) {
+            for (int nz = z - squareRadius; nz <= z + squareRadius; nz++) {
+                int height = GenUtils.getHighestGround(data, nx, nz);
+                Material[] crust = new Material[4];
+                crust[0] = data.getType(nx, height, nz);
+                Material mat = data.getType(nx, height, nz);
+                int original = height;
+                //int height = HeightMap.getHeight(tw, nx, nz);
+
+
+                //Raise ground according to noise levels.
+                int raiseDone = 0;
+                int noise = Math.round(noiseGenerator.GetNoise(nx, nz) * 5);
+                int newHeight = y + noise - 1;
+                if (newHeight < y - 1) newHeight = y - 1;
+
+                while (height < newHeight) {
+                    raiseDone++;
+                    if (!data.getType(nx, height + 1, nz).isSolid())
+                        data.setType(nx, height + 1, nz, mat);
+                    height++;
+                }
+
+                if (raiseDone > 0) {
+                    //Make the sides sink down naturally (lol. Or try to, anyway)
+                    int XdistanceFromCenter = (int) (Math.abs(nx - x) + Math.abs(vertNoise.GetNoise(nx - 80, nz - 80) * 25));
+                    int ZdistanceFromCenter = (int) (Math.abs(nz - z) + Math.abs(vertNoise.GetNoise(nx - 80, nz - 80) * 25));
 //        			
-        			if(XdistanceFromCenter > 55 || ZdistanceFromCenter > 55) {
-        				//Depress downwards
-        				
-        				int dist = XdistanceFromCenter > ZdistanceFromCenter ? XdistanceFromCenter : ZdistanceFromCenter ;
-        				//Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((50.0f-dist)/5.0f))));
-        				float comp = original+((raiseDone)*((60.0f-dist)/5.0f)) + Math.abs(vertNoise.GetNoise(nx, nz)*30);
-        				if(comp < original) comp = original;
-        				while(height > comp) {
-        					if(data.getType(nx, height, nz) == mat)
-	        					if(height > TerraformGenerator.seaLevel)
-	        						data.setType(nx, height, nz, Material.AIR);
-	        					else
-	        						data.setType(nx, height, nz, Material.WATER);
-            				height--;
-            			}
-        			}
-    			}
-        	}
-    	}
+                    if (XdistanceFromCenter > 55 || ZdistanceFromCenter > 55) {
+                        //Depress downwards
+
+                        int dist = XdistanceFromCenter > ZdistanceFromCenter ? XdistanceFromCenter : ZdistanceFromCenter;
+                        //Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((50.0f-dist)/5.0f))));
+                        float comp = original + ((raiseDone) * ((60.0f - dist) / 5.0f)) + Math.abs(vertNoise.GetNoise(nx, nz) * 30);
+                        if (comp < original) comp = original;
+                        while (height > comp) {
+                            if (data.getType(nx, height, nz) == mat)
+                                if (height > TerraformGenerator.seaLevel)
+                                    data.setType(nx, height, nz, Material.AIR);
+                                else
+                                    data.setType(nx, height, nz, Material.WATER);
+                            height--;
+                        }
+                    }
+                }
+            }
+        }
     }
-    
+
     public void spawnPyramidBase(PopulatorDataAbstract data, int x, int y, int z) {
         for (int height = 0; height < 40; height++) {
             int radius = 40 - height;
             for (int nx = -radius; nx <= +radius; nx++) {
                 for (int nz = -radius; nz <= +radius; nz++) {
                     data.setType(x + nx, y + height, z + nz, GenUtils.randMaterial(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
-                	//data.setType(x + nx, y + height, z + nz, Material.GLASS); //dEBUG.
+                    //data.setType(x + nx, y + height, z + nz, Material.GLASS); //dEBUG.
 
                     //Corners have special decorations
                     if (Math.abs(nx) == radius && Math.abs(nz) == radius) {
@@ -306,7 +309,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                             data.setType(x + nx, y + height + 1, z + nz, Material.SANDSTONE_WALL);
 
                         if (height == 38)
-                            data.setType(x + nx, y + height + 2, z + nz, Material.CAMPFIRE);
+                            data.setType(x + nx, y + 38 + 2, z + nz, Material.CAMPFIRE);
                     } else if (GenUtils.chance(1, 20)) {
                         //Side Decorations (Stairs)
                         BlockFace dir = null;

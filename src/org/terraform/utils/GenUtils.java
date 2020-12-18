@@ -14,13 +14,14 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import java.util.*;
 
 public class GenUtils {
-
     private static final Random RANDOMIZER = new Random();
     private static final String[] BLACKLIST_HIGHEST_GROUND = {
             "LEAVES", "LOG",
             "WOOD", "MUSHROOM",
             "FENCE", "WALL",
-            "POTTED", "BRICK"};
+            "POTTED", "BRICK"
+    };
+    private static final Map<Integer, ArrayList<BiomeBank>> biomeQueryCache = new HashMap<>(30);
 
     public static SimplexOctaveGenerator getGenerator(World world) {
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), 8);
@@ -32,19 +33,18 @@ public class GenUtils {
         return rand.nextBoolean() ? 1 : -1;
     }
 
-    public static ArrayList<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z) {
-        ArrayList<int[]> list = new ArrayList<>();
+    public static Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z) {
         int y = getHighestGround(data, x, z);
         int[] pair = {-1, -1};
+        List<int[]> list = new ArrayList<>(y);
 
         for (int ny = y; ny > 0; ny--) {
             Material type = data.getType(x, ny, z);
-            if (pair[0] == -1 && !type.isSolid()) pair[0] = ny;
-            else if (type.isSolid()) {
+            if (type.isSolid()) {
                 pair[1] = ny;
                 list.add(pair);
                 pair = new int[]{-1, -1};
-            }
+            } else if (pair[0] == -1) pair[0] = ny;
         }
 
         return list;
@@ -79,28 +79,29 @@ public class GenUtils {
         return randInt(new Random(), 1, outOf) <= chance;
     }
 
-    private static final HashMap<Integer, ArrayList<BiomeBank>> biomeQueryCache = new HashMap<>();
     public static ArrayList<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ) {
-        if(biomeQueryCache.size() > 30) biomeQueryCache.clear();
+        if (biomeQueryCache.size() > 30) biomeQueryCache.clear();
         int hash = Objects.hash(tw, chunkX, chunkZ);
-    	if(biomeQueryCache.containsKey(hash))
-    		return biomeQueryCache.get(hash);
-        
-    	ArrayList<BiomeBank> banks = new ArrayList<>();
-        for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
-            for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
+        if (biomeQueryCache.containsKey(hash)) return biomeQueryCache.get(hash);
+
+        ArrayList<BiomeBank> banks = new ArrayList<>();
+        int gridX = chunkZ * 16;
+        int gridZ = chunkZ * 16, maxGridZ = gridZ + 16;
+
+        for (int x = gridX; x < gridX + 16; x++) {
+            for (int z = gridZ; z < maxGridZ; z++) {
                 int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-                for (BiomeBank bank : BiomeBank.values()) {
+                for (BiomeBank bank : BiomeBank.VALUES) {
                     BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
 
                     if (bank == currentBiome) {
-                        if (!banks.contains(bank))
-                            banks.add(bank);
+                        if (!banks.contains(bank)) banks.add(bank);
                         break;
                     }
                 }
             }
         }
+
         biomeQueryCache.put(hash, banks);
         return banks;
     }
@@ -130,7 +131,7 @@ public class GenUtils {
     }
 
     public static Material randMaterial(Material... candidates) {
-        return randMaterial(new Random(), candidates);
+        return randMaterial(RANDOMIZER, candidates);
     }
 
     public static int[] randomSurfaceCoordinates(Random rand, PopulatorDataAbstract data) {
@@ -144,7 +145,7 @@ public class GenUtils {
     }
 
     public static int randInt(int min, int max) {
-    	if(min == max) return min;
+        if (min == max) return min;
         return randInt(RANDOMIZER, min, max);
     }
 
@@ -213,10 +214,7 @@ public class GenUtils {
      */
     public static int getTrueHighestBlock(PopulatorDataAbstract data, int x, int z) {
         int y = 255;
-        while (!data.getType(x, y, z).isSolid()) {
-            y--;
-        }
-
+        while (y > 0 && !data.getType(x, y, z).isSolid()) y--;
         return y;
     }
 

@@ -2,27 +2,35 @@ package org.terraform.reflection;
 
 import org.terraform.main.TerraformGeneratorPlugin;
 
+import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class Post14PrivateFieldHandler extends PrivateFieldHandler {
-    private static final Method LOOKUP;
-    private static final Method FIND_VAR_HANDLE;
+    private static final MethodHandle LOOKUP;
+    private static final MethodHandle VAR_HANDLE_SET;
+    private static final MethodHandle FIND_VAR_HANDLE;
 
     static {
-        Method lookup = null;
-        Method findVarHandle = null;
+        MethodHandle lookup = null;
+        MethodHandle varHandleSet = null;
+        MethodHandle findVarHandle = null;
+        MethodHandles.Lookup publicLookup = MethodHandles.lookup();
+
         try {
-            lookup = MethodHandles.class.getMethod("privateLookupIn", Class.class, Lookup.class);
-            findVarHandle = Lookup.class.getMethod("findVarHandle", Class.class, String.class, Class.class);
-        } catch (NoSuchMethodException e) {
+            Class<?> varHandle = Class.forName("java.lang.invoke.VarHandle");
+            lookup = publicLookup.findStatic(MethodHandles.class, "privateLookupIn", MethodType.methodType(MethodHandles.Lookup.class, Class.class, Lookup.class));
+            findVarHandle = publicLookup.findVirtual(MethodHandles.Lookup.class, "findVarHandle", MethodType.methodType(varHandle, Class.class, String.class, Class.class));
+            varHandleSet = publicLookup.findVirtual(varHandle, "set", MethodType.methodType(void.class, Object[].class));
+        } catch (NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         LOOKUP = lookup;
+        VAR_HANDLE_SET = varHandleSet;
         FIND_VAR_HANDLE = findVarHandle;
     }
 
@@ -30,24 +38,16 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
     public void injectField(Object obj, String field, Object value) throws Exception {
         Field targetField = obj.getClass().getField(field);
         targetField.setAccessible(true);
-
-        Object lookup = LOOKUP.invoke(null, Field.class, MethodHandles.lookup());
-        Object varHandleModifiers = FIND_VAR_HANDLE.invoke(lookup, Field.class, "modifiers", int.class);
-
-        //		Object lookup = MethodHandles.privateLookupIn(Field.class, MethodHandles.lookup());
-//		VarHandle modifiers = lookup.findVarHandle(Field.class, "modifiers", int.class);
-
         int mds = targetField.getModifiers();
 
-        Object params = new Object[]{targetField, mds & ~Modifier.FINAL};
         try {
-            varHandleModifiers.getClass().getMethod("set", Object[].class).invoke(varHandleModifiers, params);
-        } catch (Exception e) {
-            //e.printStackTrace();
+            Object lookup = LOOKUP.invoke(null, Field.class, MethodHandles.lookup());
+            Object varHandleModifiers = FIND_VAR_HANDLE.invoke(lookup, Field.class, "modifiers", int.class);
+            VAR_HANDLE_SET.invoke(varHandleModifiers, new Object[]{targetField, mds & ~Modifier.FINAL});
+        } catch (Throwable throwable) {
             TerraformGeneratorPlugin.logger.info("Java 14 detected. TerraformGenerator may or may not work, but if it does, good on you!");
         }
 
-        //modifiers.set(targetField, mds & ~Modifier.FINAL);
         targetField.set(obj, value);
     }
 }
