@@ -41,14 +41,14 @@ public class MazeCommand extends DCCommand {
 
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
-		int x = p.getLocation().getBlockX();
-		int y = p.getLocation().getBlockY();
-		int z = p.getLocation().getBlockZ();
+        int x = p.getLocation().getBlockX();
+        int y = p.getLocation().getBlockY();
+        int z = p.getLocation().getBlockZ();
 //		TreeDB.spawnCoconutTree(new Random(), data, x,y,z);
-        MazeSpawner spawner = new MazeSpawner(new Random(), new SimpleBlock(data,x,y,z), 30, 30);
+        MazeSpawner spawner = new MazeSpawner(new Random(), new SimpleBlock(data, x, y, z), 30, 30);
         spawner.setMazePeriod(5);
         spawner.prepareMaze();
-        spawner.carveMaze(false,Material.WHITE_WOOL);
+        spawner.carveMaze(false, Material.WHITE_WOOL);
         p.sendMessage("Complete");
     }
 }

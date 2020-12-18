@@ -56,14 +56,14 @@ public class FrozenRiverHandler extends BiomeHandler {
                     data.setType(x, TerraformGenerator.seaLevel, z, Material.ICE);
 
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if(y < TerraformGenerator.seaLevel)
-	                if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
-	                    data.setType(x, y + 1, z, Material.SEAGRASS);
-	                    if (random.nextBoolean() && y < TerraformGenerator.seaLevel - 2)
-	                        BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_SEAGRASS);
-	                } else if (GenUtils.chance(random, 3, 50) && growsKelp && y + 1 < TerraformGenerator.seaLevel - 10) {
-	                    generateKelp(x, y + 1, z, data, random);
-	                }
+                if (y < TerraformGenerator.seaLevel)
+                    if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
+                        data.setType(x, y + 1, z, Material.SEAGRASS);
+                        if (random.nextBoolean() && y < TerraformGenerator.seaLevel - 2)
+                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_SEAGRASS);
+                    } else if (GenUtils.chance(random, 3, 50) && growsKelp && y + 1 < TerraformGenerator.seaLevel - 10) {
+                        generateKelp(x, y + 1, z, data, random);
+                    }
                 if (GenUtils.chance(random, TConfigOption.BIOME_RIVER_CLAY_CHANCE.getInt(), 1000)) {
                     BlockUtils.generateClayDeposit(x, y, z, data, random);
                 }

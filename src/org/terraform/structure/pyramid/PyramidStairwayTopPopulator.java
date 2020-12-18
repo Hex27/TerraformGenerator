@@ -1,7 +1,5 @@
 package org.terraform.structure.pyramid;
 
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -12,6 +10,8 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 
+import java.util.Random;
+
 public class PyramidStairwayTopPopulator extends RoomPopulatorAbstract {
 
     public PyramidStairwayTopPopulator(Random rand, boolean forceSpawn, boolean unique) {
@@ -21,7 +21,7 @@ public class PyramidStairwayTopPopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         int bfIndex = 6;
-        
+
         //Open up the floor
         for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
             data.setType(room.getX() + face.getModX(), room.getY(), room.getZ() + face.getModZ(), Material.CAVE_AIR);

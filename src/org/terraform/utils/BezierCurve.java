@@ -28,17 +28,13 @@ public class BezierCurve {
         this.control2 = new Vector2f(controlP2x, controlP2y);
     }
 
-    public Vector2f calculate(float progress) {
-        return cubic(progress, point1, control1, control2, point2);
-    }
-
     /**
      * Quadratic Bezier curve with one control point.
      *
      * @param progress Value between 0 and 1
-     * @param point1 1st point
+     * @param point1   1st point
      * @param control1 1st control point
-     * @param point2 2nd point
+     * @param point2   2nd point
      */
     public static Vector2f quadratic(float progress, Vector2f point1, Vector2f control1, Vector2f point2) {
         float progressBw = 1 - progress;
@@ -50,17 +46,17 @@ public class BezierCurve {
                 progressBw * 2 * progress * control1.y +
                 progress * progress * point2.y;
 
-        return new Vector2f((float) x,(float) y);
+        return new Vector2f((float) x, (float) y);
     }
 
     /**
      * Cubic Bezier curve with two control points.
      *
      * @param progress Value between 0 and 1
-     * @param point1 1st point
+     * @param point1   1st point
      * @param control1 1st control point
      * @param control2 2nd control point
-     * @param point2 2nd point
+     * @param point2   2nd point
      */
     public static Vector2f cubic(float progress, Vector2f point1, Vector2f control1, Vector2f control2, Vector2f point2) {
         float progressBw = 1 - progress;
@@ -74,6 +70,10 @@ public class BezierCurve {
                 progressBw * 3 * progress * progress * control2.y +
                 progress * progress * progress * point2.y;
 
-        return new Vector2f((float) x,(float) y);
+        return new Vector2f((float) x, (float) y);
+    }
+
+    public Vector2f calculate(float progress) {
+        return cubic(progress, point1, control1, control2, point2);
     }
 }

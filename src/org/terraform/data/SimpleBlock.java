@@ -121,10 +121,10 @@ public class SimpleBlock {
         }
         popData.setBlockData(x, y, z, dat);
     }
-    
+
     public void RSolSetBlockData(BlockData data) {
-    	if(getType().isSolid())
-    		setBlockData(data);
+        if (getType().isSolid())
+            setBlockData(data);
     }
 
     public SimpleBlock getRelative(int nx, int ny, int nz) {
@@ -198,10 +198,10 @@ public class SimpleBlock {
             setBlockData(l);
         }
     }
-    
+
     public void RSolSetType(Material type) {
-    	if(getType().isSolid())
-    		setType(type);
+        if (getType().isSolid())
+            setType(type);
     }
 
     /**

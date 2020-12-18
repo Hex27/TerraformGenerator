@@ -23,6 +23,22 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     private static final String[] SCHEMATICS = {"upright-shipwreck-1",
             "tilted-shipwreck-1"};
 
+    private static void dropDownBlock(SimpleBlock block) {
+        if (block.getType().isSolid()) {
+            Material type = block.getType();
+            if (type == Material.CHEST) return;
+            block.setType(Material.WATER);
+            int depth = 0;
+            while (!block.getType().isSolid()) {
+                block = block.getRelative(0, -1, 0);
+                depth++;
+                if (depth > 50) return;
+            }
+
+            block.getRelative(0, 1, 0).setType(type);
+        }
+    }
+
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
@@ -30,7 +46,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
             return;
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        for(int[] coords:getCoordsFromMegaChunk(tw,mc)) {
+        for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
             int x = coords[0];
             int z = coords[1];
             int height = GenUtils.getHighestGround(data, x, z) - 1 - random.nextInt(5);
@@ -76,12 +92,12 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
-    	int num = TConfigOption.STRUCTURES_SHIPWRECK_COUNT_PER_MEGACHUNK.getInt();
-    	int[][] coords = new int[num][2];
-    	for(int i = 0; i < num; i++)
-    		coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 191921+i));
+        int num = TConfigOption.STRUCTURES_SHIPWRECK_COUNT_PER_MEGACHUNK.getInt();
+        int[][] coords = new int[num][2];
+        for (int i = 0; i < num; i++)
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 191921 + i));
         return coords;
-        
+
     }
 
     public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
@@ -91,7 +107,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         int[] min = null;
         for (int nx = -1; nx <= 1; nx++) {
             for (int nz = -1; nz <= 1; nz++) {
-                for(int[] loc:getCoordsFromMegaChunk(tw,mc)) {
+                for (int[] loc : getCoordsFromMegaChunk(tw, mc)) {
                     double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
                     if (distSqr < minDistanceSquared) {
                         minDistanceSquared = distSqr;
@@ -109,7 +125,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         for (BiomeBank b : biomes) {
             if (b.toString().contains("OCEAN")) {
                 MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-                for(int[] coords:getCoordsFromMegaChunk(tw,mc)) {
+                for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
                     if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
                         return true;
                     }
@@ -118,7 +134,6 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         }
         return false;
     }
-    
 
     @Override
     public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
@@ -128,22 +143,5 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public boolean isEnabled() {
         return TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean();
-    }
-    
-
-    private static void dropDownBlock(SimpleBlock block) {
-        if (block.getType().isSolid()) {
-            Material type = block.getType();
-            if (type == Material.CHEST) return;
-            block.setType(Material.WATER);
-            int depth = 0;
-            while (!block.getType().isSolid()) {
-                block = block.getRelative(0, -1, 0);
-                depth++;
-                if (depth > 50) return;
-            }
-
-            block.getRelative(0, 1, 0).setType(type);
-        }
     }
 }

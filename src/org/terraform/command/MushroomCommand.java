@@ -71,9 +71,9 @@ public class MushroomCommand extends DCCommand {
         }
 
         if (new Random().nextBoolean())
-            new MushroomBuilder(FractalTypes.Mushroom.GIANT_RED_MUSHROOM).build(TerraformWorld.get(p.getWorld()),data, x, y, z);
+            new MushroomBuilder(FractalTypes.Mushroom.GIANT_RED_MUSHROOM).build(TerraformWorld.get(p.getWorld()), data, x, y, z);
         else
-            new MushroomBuilder(FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM).build(TerraformWorld.get(p.getWorld()),data, x, y, z);
+            new MushroomBuilder(FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM).build(TerraformWorld.get(p.getWorld()), data, x, y, z);
     }
 
 }

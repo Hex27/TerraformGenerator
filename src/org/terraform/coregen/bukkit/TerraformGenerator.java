@@ -39,7 +39,7 @@ public class TerraformGenerator extends ChunkGenerator {
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 
         //Patch for WorldInitEvent issues.
-        if (!TerraformGeneratorPlugin.injectedWorlds.contains(world.getName())) {
+        if (!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) {
             preWorldInitGen.add(new SimpleChunkLocation(world.getName(), chunkX, chunkZ));
         }
 

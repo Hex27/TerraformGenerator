@@ -30,8 +30,8 @@ public class BadlandsHandler extends BiomeHandler {
     @Override
     public Material[] getSurfaceCrust(Random rand) {
         return new Material[]{
-        		Material.RED_SAND,
-        		Material.RED_SAND,
+                Material.RED_SAND,
+                Material.RED_SAND,
                 GenUtils.randMaterial(rand, Material.RED_SAND, Material.RED_SANDSTONE),
                 GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
                 GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE)};
@@ -42,13 +42,13 @@ public class BadlandsHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                if(HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random,49,50)) {
-                	BadlandsMountainHandler.oneUnit(world, random, data, x, z, true);
-                	continue;
+                if (HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
+                    BadlandsMountainHandler.oneUnit(world, random, data, x, z, true);
+                    continue;
                 }
-            	
-            	int highest = GenUtils.getTrueHighestBlock(data, x, z);
-                
+
+                int highest = GenUtils.getTrueHighestBlock(data, x, z);
+
                 Material base = data.getType(x, highest, z);
                 if (base == Material.SAND ||
                         base == Material.RED_SAND) {
@@ -61,15 +61,15 @@ public class BadlandsHandler extends BiomeHandler {
                         }
                         if (canSpawn)
                             BlockUtils.spawnPillar(random, data, x, highest + 1, z, Material.CACTUS, 3, 6);
-                    }else if (GenUtils.chance(random, 1, 80)) {
+                    } else if (GenUtils.chance(random, 1, 80)) {
                         data.setType(x, highest + 1, z, Material.DEAD_BUSH);
                     }
                 }
-                
+
             }
         }
-        if(GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
-        	new DesertWellPopulator().populate(world, random, data, true);
+        if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
+            new DesertWellPopulator().populate(world, random, data, true);
         }
     }
 }

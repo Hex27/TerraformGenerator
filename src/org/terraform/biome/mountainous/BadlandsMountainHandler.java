@@ -21,9 +21,32 @@ public class BadlandsMountainHandler extends BiomeHandler {
             Material.RED_TERRACOTTA,
     };
 
-    @Override
-    public boolean isOcean() {
-        return false;
+    /**
+     * Performs badlands plateau generation for one x/z coord.
+     *
+     * @param world
+     * @param random
+     * @param data
+     * @param x
+     * @param z
+     */
+    public static void oneUnit(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int z, boolean force) {
+        int highest = GenUtils.getTrueHighestBlock(data, x, z);
+        int threshold = TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt() - 20;
+        if (force)
+            threshold = highest - GenUtils.randInt(random, 3, 6);
+        for (int y = highest; y > threshold; y--) {
+            if (data.getBiome(x, y, z) != Biome.BADLANDS_PLATEAU && !force) continue;
+            if (!data.getType(x, y, z).toString().contains("SAND"))
+                continue;
+            //if (GenUtils.chance(1, 50)) continue;
+            int multiplier = 0;
+            if (GenUtils.chance(random, 1, 50)) multiplier++;
+            if (GenUtils.chance(random, 1, 100)) multiplier++;
+
+            Material terra = terracottas[(multiplier + y) % terracottas.length];
+            data.setType(x, y, z, terra);
+        }
     }
 //
 //	@Override
@@ -33,6 +56,11 @@ public class BadlandsMountainHandler extends BiomeHandler {
 //		
 //		return (int) ((gen.noise(x, z, 0.5, 0.5)*7D+50D)*1.5);
 //	}
+
+    @Override
+    public boolean isOcean() {
+        return false;
+    }
 
     @Override
     public Biome getBiome() {
@@ -52,35 +80,8 @@ public class BadlandsMountainHandler extends BiomeHandler {
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-            	oneUnit(world,random,data,x,z,false);
+                oneUnit(world, random, data, x, z, false);
             }
-        }
-    }
-    
-    /**
-     * Performs badlands plateau generation for one x/z coord.
-     * @param world
-     * @param random
-     * @param data
-     * @param x
-     * @param z
-     */
-    public static void oneUnit(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int z, boolean force) {
-        int highest = GenUtils.getTrueHighestBlock(data, x, z);
-        int threshold = TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt()-20;
-        if(force) 
-        	threshold = highest-GenUtils.randInt(random, 3,6);
-        for (int y = highest; y > threshold; y--) {
-            if (data.getBiome(x, y, z) != Biome.BADLANDS_PLATEAU && !force) continue;
-            if (!data.getType(x, y, z).toString().contains("SAND"))
-                continue;
-            //if (GenUtils.chance(1, 50)) continue;
-            int multiplier = 0;
-            if(GenUtils.chance(random, 1,50)) multiplier++;
-            if(GenUtils.chance(random, 1,100)) multiplier++;
-            
-            Material terra = terracottas[(multiplier+y) % terracottas.length];
-            data.setType(x, y, z, terra);
         }
     }
 }

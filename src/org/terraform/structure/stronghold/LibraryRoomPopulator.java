@@ -33,7 +33,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
         int[] upperBounds = room.getUpperCorner();
         int[] lowerBounds = room.getLowerCorner();
 
-        HashMap<Wall,Integer> walls = room.getFourWalls(data, 1);
+        HashMap<Wall, Integer> walls = room.getFourWalls(data, 1);
         //Bookshelves and entrance decor
         for (Entry<Wall, Integer> entry : walls.entrySet()) {
             Wall wall = entry.getKey().clone();
@@ -115,10 +115,10 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
 
         //Fences
         walls.clear();
-        walls =  room.getFourWalls(data, 4);
+        walls = room.getFourWalls(data, 4);
 
         for (Entry<Wall, Integer> entry : walls.entrySet()) {
-            Wall wall = entry.getKey().clone().getRelative(0,pHeight,0);
+            Wall wall = entry.getKey().clone().getRelative(0, pHeight, 0);
             for (int l = 0; l < entry.getValue(); l++) {
                 wall.setType(Material.OAK_FENCE);
                 BlockUtils.correctSurroundingMultifacingData(wall.get());

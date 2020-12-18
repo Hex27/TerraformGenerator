@@ -35,10 +35,10 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         int[] lowerBounds = room.getLowerCorner();
         int[] upperBounds = room.getUpperCorner();
-        
+
         //Bookshelves and entrance decor
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data,0).entrySet()) {
-            Wall wall = entry.getKey().getRelative(0,3,0);
+        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
+            Wall wall = entry.getKey().getRelative(0, 3, 0);
             for (int i = 1; i <= entry.getValue(); i++) {
                 wall.setType(Material.CHISELED_STONE_BRICKS);
                 if (i % 5 == 2 || i % 5 == 4)

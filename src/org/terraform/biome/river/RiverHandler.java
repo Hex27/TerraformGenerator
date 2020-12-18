@@ -52,7 +52,7 @@ public class RiverHandler extends BiomeHandler {
 
                 if (data.getBiome(x, y + 1, z) != getBiome()) continue;
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                
+
                 // SEA GRASS/KELP
                 if (GenUtils.chance(random, 10, 100)) {
                     data.setType(x, y + 1, z, Material.SEAGRASS);
