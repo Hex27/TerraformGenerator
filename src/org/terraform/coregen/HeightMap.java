@@ -1,5 +1,7 @@
 package org.terraform.coregen;
 
+import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeGrid;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
@@ -12,12 +14,6 @@ public abstract class HeightMap {
     /**
      * Returns the average increase or decrease in height for surrounding blocks compared to the provided height at those coords.
      * 1.5 for a radius of 3 is considered steep.
-     *
-     * @param tw
-     * @param x
-     * @param z
-     * @param radius
-     * @return
      */
     public static double getNoiseGradient(TerraformWorld tw, int x, int z, int radius) {
         double totalChangeInGradient = 0;
@@ -47,9 +43,8 @@ public abstract class HeightMap {
         noise.SetNoiseType(NoiseType.PerlinFractal);
         noise.SetFrequency(0.005f);
         noise.SetFractalOctaves(5);
-        double n = noise.GetNoise(nx, ny);
-        //if(n > 0) n = 0;
-        return Math.abs(n);
+
+        return Math.abs(noise.GetNoise(nx, ny));
     }
 
     public static double getOceanicHeight(TerraformWorld tw, int x, int z) {
@@ -142,6 +137,10 @@ public abstract class HeightMap {
                 && height - depth < TerraformGenerator.seaLevel - 15) {
             height = TerraformGenerator.seaLevel - 15;
         }
+
+        BiomeBank biome = BiomeBank.calculateBiome(tw, x, z, (int) height);
+
+        height *= BiomeGrid.getBiomeHeightFactor(biome, tw.getTemperature(x, z), tw.getMoisture(x, z), 15 - 100 * riverRidge(tw, x, z));
 
         return (int) height;
     }
