@@ -9,9 +9,11 @@ import org.bukkit.craftbukkit.v1_15_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_15_R1.generator.CraftChunkData;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
@@ -22,12 +24,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+@SuppressWarnings("rawtypes")
 public class NMSChunkGenerator extends ChunkGenerator {
 
     private final TerraformPopulator pop;
     private final TerraformWorld tw;
 
-    public NMSChunkGenerator(GeneratorAccess generatoraccess,
+    @SuppressWarnings("unchecked")
+	public NMSChunkGenerator(GeneratorAccess generatoraccess,
                              WorldChunkManager worldchunkmanager, GeneratorSettingsDefault c0) {
         super(generatoraccess, worldchunkmanager, c0);
         tw = TerraformWorld.get(generatoraccess.getWorldData().getName(), generatoraccess.getWorldData().getSeed());
@@ -156,12 +160,12 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 while (listiterator.hasNext()) {
                     int i1 = listiterator.nextIndex();
                     WorldGenCarverWrapper<?> worldgencarverwrapper = listiterator.next();
-                    if (worldgencarverwrapper.a instanceof WorldGenCavesOcean) {
-                        //if(!TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
-                        continue;
-                    }
-                    if (worldgencarverwrapper.a instanceof WorldGenCanyonOcean) {
-                        //if(!TConfigOption.CAVES_ALLOW_FLOODED_RAVINES.getBoolean())
+                    if (worldgencarverwrapper.a instanceof WorldGenCavesOcean 
+                    		|| worldgencarverwrapper.a instanceof WorldGenCanyonOcean) {
+                    	//Don't generate water caves if this isn't an ocean, or if flooded caves are disabled.
+                    	if((tw.getBiomeBank(chunkX<<4, chunkZ<<4).getType() != BiomeType.OCEANIC
+                    		&& tw.getBiomeBank(chunkX<<4, chunkZ<<4).getType() != BiomeType.DEEP_OCEANIC)
+                    		|| !TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
                         continue;
                     }
                     seededrandom.c(this.seed + (long) i1, k, l);
@@ -185,6 +189,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
+<<<<<<< Updated upstream
     @SuppressWarnings("rawtypes")
     private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         Set<net.minecraft.server.v1_15_R1.Block> immutableCarverList =
@@ -203,6 +208,21 @@ public class NMSChunkGenerator extends ChunkGenerator {
                         Blocks.SNOW_BLOCK
                 );
         Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
+=======
+    private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    	Set<net.minecraft.server.v1_15_R1.Block> immutableCarverList = 
+    			ImmutableSet.of(
+    					//vanilla blocks
+    					Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE,
+    			        //Extra blocks
+    					Blocks.RED_SAND,
+    					Blocks.COBBLESTONE_SLAB,
+    					Blocks.COBBLESTONE,
+    					Blocks.GRASS_PATH,
+    					Blocks.SNOW_BLOCK
+    					);
+    	Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
+>>>>>>> Stashed changes
         if (!field.isAccessible())
             field.setAccessible(true);
         field.set(carverAbstract, immutableCarverList);
@@ -224,7 +244,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
                            IChunkAccess ichunkaccess) {
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void buildBase(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {
         try {
             int x = ichunkaccess.getPos().x;
@@ -330,7 +351,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //	
 //	}
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType type, BlockPosition pos) {
         if (WorldGenerator.SWAMP_HUT.c(this.a, pos)) {
             if (type == EnumCreatureType.MONSTER) {

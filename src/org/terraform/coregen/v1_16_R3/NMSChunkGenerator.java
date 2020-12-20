@@ -11,9 +11,11 @@ import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_16_R3.generator.CraftChunkData;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
@@ -108,9 +110,10 @@ public class NMSChunkGenerator extends ChunkGenerator {
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
         int j = chunkcoordintpair.x;
         int k = chunkcoordintpair.z;
-        BiomeSettingsGeneration biomesettingsgeneration = this.b.getBiome(chunkcoordintpair.x << 2, 0, chunkcoordintpair.z << 2).e();
+        BiomeBase nmsBiomeBase =  this.b.getBiome(chunkcoordintpair.x << 2, 0, chunkcoordintpair.z << 2);
+        BiomeSettingsGeneration biomesettingsgeneration = nmsBiomeBase.e();
         BitSet bitset = ((ProtoChunk) ichunkaccess).b(worldgenstage_features);
-
+        
         for (int l = j - 8; l <= j + 8; ++l) {
             for (int i1 = k - 8; i1 <= k + 8; ++i1) {
                 List<Supplier<WorldGenCarverWrapper<?>>> list = biomesettingsgeneration.a(worldgenstage_features);
@@ -125,9 +128,14 @@ public class NMSChunkGenerator extends ChunkGenerator {
                         Field field = WorldGenCarverWrapper.class.getDeclaredField("d");
                         if (!field.isAccessible())
                             field.setAccessible(true);
-                        String carverType = field.get(worldgencarverwrapper).getClass().getSimpleName();
-                        if (carverType.equals("WorldGenCanyonOcean") ||
-                                carverType.equals("WorldGenCavesOcean")) {
+                        Class carverType = field.get(worldgencarverwrapper).getClass();
+                        if ((carverType == WorldGenCanyonOcean.class ||
+                                carverType == WorldGenCavesOcean.class)) {
+                        	
+                        	//Don't generate water caves if this isn't an ocean, or if flooded caves are disabled.
+                        	if((tw.getBiomeBank(j<<4, k<<4).getType() != BiomeType.OCEANIC
+                        		&& tw.getBiomeBank(j<<4, k<<4).getType() != BiomeType.DEEP_OCEANIC)
+                        		|| !TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
                             continue;
                         }
                     } catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {

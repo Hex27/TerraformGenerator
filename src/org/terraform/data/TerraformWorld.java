@@ -3,6 +3,7 @@ package org.terraform.data;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.HeightMap;
 import org.terraform.main.TConfigOption;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
@@ -83,6 +84,11 @@ public class TerraformWorld {
 //		}
 //		return bank;
         return BiomeBank.calculateBiome(this, x, z, height);
+    }
+    
+
+    public BiomeBank getBiomeBank(int x, int z) {
+        return BiomeBank.calculateBiome(this, x, z, HeightMap.getHeight(this, x, z));
     }
 
     /**

@@ -10,9 +10,11 @@ import org.bukkit.craftbukkit.v1_16_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_16_R1.generator.CraftChunkData;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
@@ -168,6 +170,10 @@ public class NMSChunkGenerator extends ChunkGenerator {
                         String carverType = field.get(worldgencarverwrapper).getClass().getSimpleName();
                         if (carverType.equals("WorldGenCanyonOcean") ||
                                 carverType.equals("WorldGenCavesOcean")) {
+                        	//Don't generate water caves if this isn't an ocean, or if flooded caves are disabled.
+                        	if((tw.getBiomeBank(chunkX<<4, chunkZ<<4).getType() != BiomeType.OCEANIC
+                        		&& tw.getBiomeBank(chunkX<<4, chunkZ<<4).getType() != BiomeType.DEEP_OCEANIC)
+                        		|| !TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
                             continue;
                         }
                     } catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
