@@ -1,4 +1,4 @@
-package org.terraform.village.plains;
+package org.terraform.structure.village.plains;
 
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleBlock;

@@ -189,26 +189,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-<<<<<<< Updated upstream
-    @SuppressWarnings("rawtypes")
-    private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-        Set<net.minecraft.server.v1_15_R1.Block> immutableCarverList =
-                ImmutableSet.of(
-                        //vanilla blocks
-                        Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA,
-                        Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA,
-                        Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA,
-                        Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE,
-                        Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE,
-                        //Extra blocks
-                        Blocks.RED_SAND,
-                        Blocks.COBBLESTONE_SLAB,
-                        Blocks.COBBLESTONE,
-                        Blocks.GRASS_PATH,
-                        Blocks.SNOW_BLOCK
-                );
-        Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
-=======
     private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
     	Set<net.minecraft.server.v1_15_R1.Block> immutableCarverList = 
     			ImmutableSet.of(
@@ -222,7 +202,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
     					Blocks.SNOW_BLOCK
     					);
     	Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
->>>>>>> Stashed changes
         if (!field.isAccessible())
             field.setAccessible(true);
         field.set(carverAbstract, immutableCarverList);

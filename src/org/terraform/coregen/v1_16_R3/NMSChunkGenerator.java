@@ -103,7 +103,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
     //    private BiomeBase getBiome(BiomeManager biomemanager, BlockPosition bp) {
 //    	return CraftBlock.biomeToBiomeBase(this.b,tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
 //    }
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     public void doCarving(long i, BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
         BiomeManager biomemanager1 = biomemanager.a(this.b);
         SeededRandom seededrandom = new SeededRandom();

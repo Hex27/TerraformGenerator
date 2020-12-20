@@ -545,7 +545,8 @@ public class BlockUtils {
         MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
             Material type = target.getRelative(face).getType();
-            data.setFace(face, type.isSolid() && !Tag.PRESSURE_PLATES.isTagged(type));
+            data.setFace(face, type.isSolid() 
+            		&& !type.toString().endsWith("PRESSURE_PLATE"));
         }
         target.setBlockData(data);
     }
