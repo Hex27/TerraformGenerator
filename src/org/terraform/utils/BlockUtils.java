@@ -1,18 +1,10 @@
 package org.terraform.utils;
 
-import org.bukkit.Axis;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.Tag;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.*;
 import org.bukkit.block.data.Bisected.Half;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.MultipleFacing;
-import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rail.Shape;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
@@ -39,17 +31,32 @@ public class BlockUtils {
     public static final BlockFace[] directBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
     public static final BlockFace[] sixBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
     public static final Set<Material> stoneLike = EnumSet.of(
-            Material.STONE, Material.COBBLESTONE, 
-            Material.GRANITE, Material.ANDESITE, 
-            Material.DIORITE, Material.GRAVEL, 
-            Material.COAL_ORE, Material.IRON_ORE, 
-            Material.GOLD_ORE, Material.DIAMOND_ORE, 
-            Material.EMERALD_ORE, Material.REDSTONE_ORE, 
-            Material.LAPIS_ORE, Material.SNOW_BLOCK, 
+            Material.STONE, Material.COBBLESTONE,
+            Material.GRANITE, Material.ANDESITE,
+            Material.DIORITE, Material.GRAVEL,
+            Material.COAL_ORE, Material.IRON_ORE,
+            Material.GOLD_ORE, Material.DIAMOND_ORE,
+            Material.EMERALD_ORE, Material.REDSTONE_ORE,
+            Material.LAPIS_ORE, Material.SNOW_BLOCK,
             Material.PACKED_ICE, Material.BLUE_ICE
     );
     public static final Material[] ores = {
             Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE,
+    };
+    private static final Material[] TALL_FLOWER = {Material.LILAC, Material.ROSE_BUSH, Material.PEONY, Material.LARGE_FERN, Material.SUNFLOWER};
+    private static final Material[] FLOWER = {Material.DANDELION,
+            Material.POPPY,
+            Material.WHITE_TULIP,
+            Material.ORANGE_TULIP,
+            Material.RED_TULIP,
+            Material.PINK_TULIP,
+            Material.BLUE_ORCHID,
+            Material.ALLIUM,
+            Material.AZURE_BLUET,
+            Material.OXEYE_DAISY,
+            Material.CORNFLOWER,
+            Material.LILY_OF_THE_VALLEY,
+            Material.PINK_TULIP
     };
 
     public static boolean isDirectBlockFace(BlockFace facing) {
@@ -68,7 +75,7 @@ public class BlockUtils {
      * @return rotates original block face (NSEW only) clockwise the specified number of times
      */
     @SuppressWarnings("incomplete-switch")
-	public static BlockFace rotateFace(BlockFace original, int times) {
+    public static BlockFace rotateFace(BlockFace original, int times) {
         for (int i = 0; i < times; i++) {
             switch (original) {
                 case NORTH:
@@ -158,29 +165,13 @@ public class BlockUtils {
     }
 
     public static Material pickFlower() {
-        return GenUtils.randMaterial(Material.DANDELION,
-                Material.POPPY,
-                Material.WHITE_TULIP,
-                Material.ORANGE_TULIP,
-                Material.RED_TULIP,
-                Material.PINK_TULIP,
-                Material.BLUE_ORCHID,
-                Material.ALLIUM,
-                Material.AZURE_BLUET,
-                Material.OXEYE_DAISY,
-                Material.CORNFLOWER,
-                Material.LILY_OF_THE_VALLEY,
-                Material.PINK_TULIP);
+        return GenUtils.randMaterial(FLOWER);
     }
 
     public static Material pickTallFlower() {
-        return GenUtils.randMaterial(Material.LILAC,
-                Material.ROSE_BUSH,
-                Material.PEONY,
-                Material.LARGE_FERN,
-                Material.SUNFLOWER);
+        return GenUtils.randMaterial(TALL_FLOWER);
     }
-    
+
     public static void dropDownBlock(SimpleBlock block) {
         if (block.getType().isSolid()) {
             Material type = block.getType();
@@ -191,10 +182,10 @@ public class BlockUtils {
                 depth++;
                 if (depth > 50) return;
             }
-            block.getRelative(0,1,0).setType(type);
+            block.getRelative(0, 1, 0).setType(type);
         }
     }
-    
+
     public static void horizontalGlazedTerracotta(PopulatorDataAbstract data, int x, int y, int z, Material glazedTerracotta) {
         Directional terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
         terracotta.setFacing(BlockFace.NORTH);
@@ -542,7 +533,7 @@ public class BlockUtils {
     public static BlockFace getRight(BlockFace original) {
         return getAdjacentFaces(original)[1];
     }
-    
+
     public static void correctMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
             if (Version.isAtLeast(16.1) && target.getType().name().endsWith(("_WALL"))) {
@@ -683,23 +674,23 @@ public class BlockUtils {
                 return false;
         }
     }
-    
+
     public static BlockData infestStone(BlockData mat) {
-    	switch(mat.getMaterial()) {
-    	case STONE_BRICKS:
-    		return Bukkit.createBlockData(Material.INFESTED_STONE_BRICKS);
-    	case MOSSY_STONE_BRICKS:
-    		return Bukkit.createBlockData(Material.INFESTED_MOSSY_STONE_BRICKS);
-    	case CRACKED_STONE_BRICKS:
-    		return Bukkit.createBlockData(Material.INFESTED_CRACKED_STONE_BRICKS);
-    	case CHISELED_STONE_BRICKS:
-    		return Bukkit.createBlockData(Material.INFESTED_CHISELED_STONE_BRICKS);
-    	case COBBLESTONE:
-    		return Bukkit.createBlockData(Material.INFESTED_COBBLESTONE);
-    	case STONE:
-    		return Bukkit.createBlockData(Material.INFESTED_STONE);
-    	default:
-    		return mat;
-    	}
+        switch (mat.getMaterial()) {
+            case STONE_BRICKS:
+                return Bukkit.createBlockData(Material.INFESTED_STONE_BRICKS);
+            case MOSSY_STONE_BRICKS:
+                return Bukkit.createBlockData(Material.INFESTED_MOSSY_STONE_BRICKS);
+            case CRACKED_STONE_BRICKS:
+                return Bukkit.createBlockData(Material.INFESTED_CRACKED_STONE_BRICKS);
+            case CHISELED_STONE_BRICKS:
+                return Bukkit.createBlockData(Material.INFESTED_CHISELED_STONE_BRICKS);
+            case COBBLESTONE:
+                return Bukkit.createBlockData(Material.INFESTED_COBBLESTONE);
+            case STONE:
+                return Bukkit.createBlockData(Material.INFESTED_STONE);
+            default:
+                return mat;
+        }
     }
 }

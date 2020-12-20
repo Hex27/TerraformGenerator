@@ -92,20 +92,20 @@ public class LocateCommand extends DCCommand implements Listener {
             return;
         }
 
-        if (spop instanceof StrongholdPopulator || 
-        		(!(spop instanceof SingleMegaChunkStructurePopulator) && !(spop instanceof MultiMegaChunkStructurePopulator))) {
+        if (spop instanceof StrongholdPopulator ||
+                (!(spop instanceof SingleMegaChunkStructurePopulator) && !(spop instanceof MultiMegaChunkStructurePopulator))) {
             int[] coords = spop.getNearestFeature(TerraformWorld.get(p.getWorld()), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
             syncSendMessage(p.getUniqueId(), LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", coords[0] + "", "%z%", coords[1] + ""));
             return;
         }
 
-        if(spop instanceof SingleMegaChunkStructurePopulator) {
-        	locateSingleMegaChunkStructure(p, (SingleMegaChunkStructurePopulator)spop);
-        }else {
-        	locateMultiMegaChunkStructure(p, (MultiMegaChunkStructurePopulator)spop);
+        if (spop instanceof SingleMegaChunkStructurePopulator) {
+            locateSingleMegaChunkStructure(p, (SingleMegaChunkStructurePopulator) spop);
+        } else {
+            locateMultiMegaChunkStructure(p, (MultiMegaChunkStructurePopulator) spop);
         }
     }
-    
+
     private void locateMultiMegaChunkStructure(Player p, MultiMegaChunkStructurePopulator populator) {
 
         MegaChunk center = new MegaChunk(
@@ -127,9 +127,9 @@ public class LocateCommand extends DCCommand implements Listener {
 
                 while (!found) {
                     for (MegaChunk mc : getSurroundingChunks(center, radius)) {
-                        for(int[] coords:populator.getCoordsFromMegaChunk(tw, mc)) {
-                        	if(coords == null) continue;
-                            
+                        for (int[] coords : populator.getCoordsFromMegaChunk(tw, mc)) {
+                            if (coords == null) continue;
+
                             ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
                             if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
@@ -139,7 +139,7 @@ public class LocateCommand extends DCCommand implements Listener {
                                 break;
                             }
                         }
-                        if(found) break;
+                        if (found) break;
                     }
                     radius++;
                 }
@@ -179,8 +179,8 @@ public class LocateCommand extends DCCommand implements Listener {
                 while (!found) {
                     for (MegaChunk mc : getSurroundingChunks(center, radius)) {
                         int[] coords = populator.getCoordsFromMegaChunk(tw, mc);
-                        if(coords == null) continue;
-                        
+                        if (coords == null) continue;
+
                         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
                         if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {

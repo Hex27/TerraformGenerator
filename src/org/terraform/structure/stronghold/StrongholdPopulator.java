@@ -20,9 +20,24 @@ import java.util.Random;
 public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     private int[][] POSITIONS;
 
+    /**
+     * @return x, z coords on the circumference of
+     * a circle of the specified radius, center 0,0
+     */
+    private static int[] randomCircleCoords(Random rand, int radius) {
+        double angle = Math.random() * Math.PI * 2;
+        int x = (int) (Math.cos(angle) * radius);
+        int z = (int) (Math.sin(angle) * radius);
+        return new int[]{x, z};
+    }
+
+    private static boolean areCoordsEqual(int[] a, int x, int z) {
+        return a[0] == x && a[1] == z;
+    }
+
     public int[][] strongholdPositions(TerraformWorld tw) {
-    	if(POSITIONS == null) {
-    		POSITIONS = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
+        if (POSITIONS == null) {
+            POSITIONS = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
             Random rand = tw.getHashedRand(1, 1, 1);
             int pos = 0;
             int radius = 1408;
@@ -54,24 +69,9 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
             //TerraformGeneratorPlugin.logger.debug("s-pop-7");
             for (int i = 0; i < 9; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
             //TerraformGeneratorPlugin.logger.debug("s-pop-8");
-        
-    	}
+
+        }
         return POSITIONS;
-    }
-
-    /**
-     * @return x, z coords on the circumference of
-     * a circle of the specified radius, center 0,0
-     */
-    private static int[] randomCircleCoords(Random rand, int radius) {
-        double angle = Math.random() * Math.PI * 2;
-        int x = (int) (Math.cos(angle) * radius);
-        int z = (int) (Math.sin(angle) * radius);
-        return new int[]{x, z};
-    }
-
-    private static boolean areCoordsEqual(int[] a, int x, int z) {
-        return a[0] == x && a[1] == z;
     }
 
     @Override
@@ -124,7 +124,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         MazeSpawner mazeSpawner = new MazeSpawner();
         mazeSpawner.setMazePeriod(10);
         mazeSpawner.setMazePathWidth(3);
-        mazeSpawner.setWidth(range+20);
+        mazeSpawner.setWidth(range + 20);
         mazeSpawner.setMazeHeight(4);
         mazeSpawner.setCovered(true);
         gen.setMazePathGenerator(mazeSpawner);
@@ -153,15 +153,15 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         mazeSpawner.setMazePathWidth(3);
         mazeSpawner.setCovered(true);
         mazeSpawner.setMazeHeight(4);
-        mazeSpawner.setWidth(range+20);
+        mazeSpawner.setWidth(range + 20);
         gen.setMazePathGenerator(mazeSpawner);
 
         //Level Two
         y += 18;
         gen.setCentY(y);
         gen.setRand(tw.getHashedRand(x, y, z));
-        
-        
+
+
         gen.setPathPopulator(new StrongholdPathPopulator(tw.getHashedRand(x, y, z, 2)));
         CubeRoom stairwayTwo = new CubeRoom(5, 5, 5, stairwayOne.getX(), y, stairwayOne.getZ());
         stairwayTwo.setRoomPopulator(new StairwayTopPopulator(random, false, false));
@@ -184,18 +184,18 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         }
         return new int[]{min[0], min[1]};
     }
-    
 
-	@Override
-	public int[] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
-		int[][] positions = strongholdPositions(tw);
-		for (int[] pos : positions) {
-            if (mc.containsXZBlockCoords(pos[0], pos[1])) 
-            	return pos;
+
+    @Override
+    public int[] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+        int[][] positions = strongholdPositions(tw);
+        for (int[] pos : positions) {
+            if (mc.containsXZBlockCoords(pos[0], pos[1]))
+                return pos;
         }
 
         return null;
-	}
+    }
 
     @Override
     public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {

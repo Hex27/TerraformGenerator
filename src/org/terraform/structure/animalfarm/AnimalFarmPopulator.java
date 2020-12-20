@@ -75,7 +75,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                             BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, BlockUtils.getWoodForBiome(biome, "LOG"));
                     }
                 }
-            }else {
+            } else {
                 for (int nx = -10; nx <= 10; nx++) {
                     for (int nz = -5; nz <= 5; nz++) {
                         if (data.getType(x + nx, y - 1, z + nz).isSolid())

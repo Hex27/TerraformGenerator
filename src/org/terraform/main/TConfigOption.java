@@ -34,7 +34,7 @@ public enum TConfigOption {
     //MISC_SMOOTH_DESIGN("misc.smooth-design",false),
     MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", true),
     MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree", true),
-    MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood",false),
+    MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood", false),
     DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
     DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations", true),
@@ -45,7 +45,7 @@ public enum TConfigOption {
 
     //-=[STRUCTURES]=-
     STRUCTURES_MEGACHUNK_BITSHIFTS("structures.technical.megachunk.bitshifts", 6),
-    STRUCTURES_MEGACHUNK_MAXSTRUCTURES("structures.technical.megachunk.max-structures-per-megachunk",3),
+    STRUCTURES_MEGACHUNK_MAXSTRUCTURES("structures.technical.megachunk.max-structures-per-megachunk", 3),
     STRUCTURES_STRONGHOLD_ENABLED("structures.stronghold.enabled", true),
     STRUCTURES_MONUMENT_ENABLED("structures.monument.enabled", true),
     STRUCTURES_MONUMENT_SPAWNRATIO("structures.monument.spawn-ratio", 1.0),

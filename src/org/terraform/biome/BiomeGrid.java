@@ -88,19 +88,30 @@ public class BiomeGrid {
             new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.SWAMP,
                     BiomeBank.SWAMP, BiomeBank.SWAMP, BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN}
     };
-    
+
     private static final BiomeBank[][] riverGrid = {
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER}
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
+            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+                    BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER}
     };
 
     private static final BiomeBank[][] beachGrid = {

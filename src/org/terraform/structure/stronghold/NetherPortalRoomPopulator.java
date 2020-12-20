@@ -20,7 +20,7 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         //Wall up all entrances with wooden planks
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data,0).entrySet()) {
+        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall wall = entry.getKey().clone();
             int length = entry.getValue();
             for (int i = 0; i < length; i++) {

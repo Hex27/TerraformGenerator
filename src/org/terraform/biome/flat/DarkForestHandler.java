@@ -78,7 +78,7 @@ public class DarkForestHandler extends BiomeHandler {
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
         // Big trees
-        if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()  && GenUtils.chance(random, 3, 10)) {
+        if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 3, 10)) {
             int treeX = GenUtils.randInt(random, 5, 7) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 5, 7) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {

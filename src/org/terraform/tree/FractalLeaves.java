@@ -18,26 +18,21 @@ import java.util.Random;
 
 public class FractalLeaves {
 
-    Random rand = new Random();
-
     public float radiusX = 4;
     public float radiusY = 2;
     public float radiusZ = 4;
     public int offsetY = 0;
-
+    public boolean halfSphere = false;
+    public Material material = Material.OAK_LEAVES;
+    public FractalTreeBuilder builder;
+    Random rand = new Random();
     float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;
-
-    public boolean halfSphere = false;
     double hollowLeaves = 0.0;
-
     boolean coneLeaves = false;
     boolean snowy = false;
     float weepingLeavesChance = 0;
     int weepingLeavesLength = 0;
-
-    public Material material = Material.OAK_LEAVES;
-    public FractalTreeBuilder builder;
 
     public FractalLeaves(FractalTreeBuilder builder) {
         this.builder = builder;
@@ -88,18 +83,18 @@ public class FractalLeaves {
 
                     float effectiveY = y;
 
-                    if(coneLeaves) {
-                    	effectiveY += radiusY / 2; // Shift center area downwards
-                    	// Compress negative y
-                    	if(effectiveY < 0) effectiveY = effectiveY * 2.0f;
+                    if (coneLeaves) {
+                        effectiveY += radiusY / 2; // Shift center area downwards
+                        // Compress negative y
+                        if (effectiveY < 0) effectiveY = effectiveY * 2.0f;
 
-                    	// Extend positive y and multiply it by a power to make it sharp
-                    	if(effectiveY > 0) {
-                    		effectiveY=effectiveY*(2.0f/3.0f);
-                    		effectiveY = (float) Math.pow(effectiveY, 1.3);
-                    		if(effectiveY > radiusY) effectiveY = radiusY;
-                    	}
-                		relativeBlock = relativeBlock.getRelative(0,(int) (radiusY/2),0);
+                        // Extend positive y and multiply it by a power to make it sharp
+                        if (effectiveY > 0) {
+                            effectiveY = effectiveY * (2.0f / 3.0f);
+                            effectiveY = (float) Math.pow(effectiveY, 1.3);
+                            if (effectiveY > radiusY) effectiveY = radiusY;
+                        }
+                        relativeBlock = relativeBlock.getRelative(0, (int) (radiusY / 2), 0);
                     }
 
                     double equationResult = Math.pow(x, 2) / Math.pow(radiusX, 2)
@@ -277,7 +272,7 @@ public class FractalLeaves {
      * Creates dangling leaves without vines. Useful for
      * creating types of weeping trees.
      *
-     * @param chance chance of creating dangling leaves per block (0 - 1)
+     * @param chance    chance of creating dangling leaves per block (0 - 1)
      * @param maxLength maximum length of dangling leaves
      */
     public FractalLeaves setWeepingLeaves(float chance, int maxLength) {

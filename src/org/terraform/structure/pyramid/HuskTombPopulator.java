@@ -1,8 +1,5 @@
 package org.terraform.structure.pyramid;
 
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.Directional;
@@ -15,6 +12,9 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class HuskTombPopulator extends RoomPopulatorAbstract {
 
@@ -63,21 +63,21 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
 
         //Place the spawner
         data.setSpawner(room.getX(), room.getY() + 1, room.getZ(), EntityType.HUSK);
-        
+
         //Ceiling erosions
-        for(int i = 0; i < GenUtils.randInt(3, 10); i++) {
-        	int[] loc = room.randomCoords(rand, 1);
-        	if(data.getType(loc[0],room.getY()+room.getHeight()+1,loc[2]) == Material.SAND)
-        		data.setType(loc[0],room.getY()+room.getHeight()+1,loc[2], Material.SANDSTONE);
-        	BlockUtils.dropDownBlock(new SimpleBlock(data,loc[0],room.getY()+room.getHeight(),loc[2]));
+        for (int i = 0; i < GenUtils.randInt(3, 10); i++) {
+            int[] loc = room.randomCoords(rand, 1);
+            if (data.getType(loc[0], room.getY() + room.getHeight() + 1, loc[2]) == Material.SAND)
+                data.setType(loc[0], room.getY() + room.getHeight() + 1, loc[2], Material.SANDSTONE);
+            BlockUtils.dropDownBlock(new SimpleBlock(data, loc[0], room.getY() + room.getHeight(), loc[2]));
         }
     }
 
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-    	//Don't compete with Crypt rooms for space
+        //Don't compete with Crypt rooms for space
         return room.getWidthX() >= 5 && room.getWidthZ() >= 5
-        		&& room.getWidthX() < 13 && room.getWidthZ() < 13;
+                && room.getWidthX() < 13 && room.getWidthZ() < 13;
     }
 }

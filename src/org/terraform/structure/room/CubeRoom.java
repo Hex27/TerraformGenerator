@@ -42,7 +42,7 @@ public class CubeRoom {
         Wall west = new Wall(
                 new SimpleBlock(data, upperBounds[0] - padding, y + 1, upperBounds[1] - padding)
                 , BlockFace.WEST);
-        
+
         walls.put(north, widthX - 2 * padding);
         walls.put(south, widthX - 2 * padding);
         walls.put(east, widthZ - 2 * padding);
@@ -214,23 +214,23 @@ public class CubeRoom {
     public int[][] getCornersAlongFace(BlockFace face, int padding) {
         int[][] corners = new int[2][2];
 
-        if(face == BlockFace.NORTH) {
+        if (face == BlockFace.NORTH) {
             corners[0] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; //+-
             corners[1] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; //--
-        } else if (face == BlockFace.SOUTH){
-       	 	corners[0] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; //++
+        } else if (face == BlockFace.SOUTH) {
+            corners[0] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; //++
             corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; //-+
-        } else if (face == BlockFace.WEST){
+        } else if (face == BlockFace.WEST) {
             corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; //--
             corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; //-+
-        } else if (face == BlockFace.EAST){
+        } else if (face == BlockFace.EAST) {
             corners[0] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; //--
             corners[1] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; //-+
         }
 
         return corners;
     }
-    
+
     //Positive x,z corner
     public int[] getUpperCorner() {
         return new int[]{x + widthX / 2, z + widthZ / 2};

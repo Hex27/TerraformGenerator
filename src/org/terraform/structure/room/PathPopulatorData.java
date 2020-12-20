@@ -20,19 +20,20 @@ public class PathPopulatorData {
         this.dir = base.getDirection();
         this.pathWidth = pathWidth;
     }
-    
+
     /**
      * This is mainly used for creating repeating patterns.
+     *
      * @param multiplier
      * @return
      */
     public int calcRemainder(int multiplier) {
-    	if(dir.getModX() != 0) {
-    		return base.getX() % multiplier;
-    	}else if(dir.getModZ() != 0) {
-    		return base.getZ()%multiplier;
-    	}else {
-    		return 0; //BlockFace was not NSEW
-    	}
+        if (dir.getModX() != 0) {
+            return base.getX() % multiplier;
+        } else if (dir.getModZ() != 0) {
+            return base.getZ() % multiplier;
+        } else {
+            return 0; //BlockFace was not NSEW
+        }
     }
 }

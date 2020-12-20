@@ -179,7 +179,7 @@ public class Wall {
      */
     public void CorrectMultipleFacing(int height) {
         for (int i = 0; i < height; i++) {
-            BlockUtils.correctSurroundingMultifacingData(block.getRelative(0,i,0));
+            BlockUtils.correctSurroundingMultifacingData(block.getRelative(0, i, 0));
         }
     }
 
@@ -312,9 +312,9 @@ public class Wall {
 
     public Wall getRelative(BlockFace face, int depth) {
         // TODO Auto-generated method stub
-        return new Wall(block.getRelative(face,depth), direction);
+        return new Wall(block.getRelative(face, depth), direction);
     }
-    
+
     public int getX() {
         return get().getX();
     }

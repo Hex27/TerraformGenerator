@@ -1,8 +1,5 @@
 package org.terraform.structure.pyramid;
 
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -22,6 +19,9 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class CryptRoom extends RoomPopulatorAbstract {
 

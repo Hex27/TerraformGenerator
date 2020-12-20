@@ -99,10 +99,7 @@ public class BlackOceansHandler extends BiomeHandler {
                 if (GenUtils.chance(random, 1, 80)) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
                 }
-
             }
         }
     }
-
-
 }

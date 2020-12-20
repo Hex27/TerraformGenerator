@@ -44,10 +44,9 @@ public class NMSChunkGenerator extends ChunkGenerator {
             modifyCaveCarverLists(WorldGenCarverAbstract.c);
             modifyCaveCarverLists(WorldGenCarverAbstract.d);
             modifyCaveCarverLists(WorldGenCarverAbstract.e);
-        }
-        catch(Exception e) {
-        	TerraformGeneratorPlugin.logger.error("Failed to modify vanilla cave carver lists. You may see floating blocks above caves.");
-        	e.printStackTrace();
+        } catch (Exception e) {
+            TerraformGeneratorPlugin.logger.error("Failed to modify vanilla cave carver lists. You may see floating blocks above caves.");
+            e.printStackTrace();
         }
     }
 
@@ -119,8 +118,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
                 while (listiterator.hasNext()) {
                     int j1 = listiterator.nextIndex();
-                    WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper<?>) listiterator.next().get();
-                    
+                    WorldGenCarverWrapper<?> worldgencarverwrapper = listiterator.next().get();
+
                     //d field is the carver. Use reflection to get it.
                     try {
                         Field field = WorldGenCarverWrapper.class.getDeclaredField("d");
@@ -144,9 +143,10 @@ public class NMSChunkGenerator extends ChunkGenerator {
         }
 
     }
-    
+
     /**
      * Used to modify cave carvers in vanilla to carve some other blocks.
+     *
      * @param carverAbstract
      * @throws NoSuchFieldException
      * @throws SecurityException
@@ -154,19 +154,23 @@ public class NMSChunkGenerator extends ChunkGenerator {
      * @throws IllegalAccessException
      */
     @SuppressWarnings("rawtypes")
-	private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-    	Set<net.minecraft.server.v1_16_R3.Block> immutableCarverList = 
-    			ImmutableSet.of(
-    					//vanilla blocks
-    					Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE,
-    			        //Extra blocks
-    					Blocks.RED_SAND,
-    					Blocks.COBBLESTONE_SLAB,
-    					Blocks.COBBLESTONE,
-    					Blocks.GRASS_PATH,
-    					Blocks.SNOW_BLOCK
-    					);
-    	Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
+    private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        Set<net.minecraft.server.v1_16_R3.Block> immutableCarverList =
+                ImmutableSet.of(
+                        //vanilla blocks
+                        Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA,
+                        Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA,
+                        Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA,
+                        Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE,
+                        Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE,
+                        //Extra blocks
+                        Blocks.RED_SAND,
+                        Blocks.COBBLESTONE_SLAB,
+                        Blocks.COBBLESTONE,
+                        Blocks.GRASS_PATH,
+                        Blocks.SNOW_BLOCK
+                );
+        Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
         if (!field.isAccessible())
             field.setAccessible(true);
         field.set(carverAbstract, immutableCarverList);

@@ -75,7 +75,7 @@ public class WitchHutPopulator {
         private final PopulatorDataAbstract pop;
 
         public WitchHutSchematicParser(Random rand,
-                                      PopulatorDataAbstract pop) {
+                                       PopulatorDataAbstract pop) {
             this.rand = rand;
             this.pop = pop;
         }

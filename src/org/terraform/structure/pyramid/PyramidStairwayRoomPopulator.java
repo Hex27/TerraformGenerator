@@ -1,7 +1,5 @@
 package org.terraform.structure.pyramid;
 
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -11,6 +9,8 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
+
+import java.util.Random;
 
 public class PyramidStairwayRoomPopulator extends RoomPopulatorAbstract {
 

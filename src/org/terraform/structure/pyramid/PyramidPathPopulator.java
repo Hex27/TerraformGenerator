@@ -1,13 +1,13 @@
 package org.terraform.structure.pyramid;
 
-import java.util.Random;
-
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 
+import java.util.Random;
+
 public class PyramidPathPopulator extends PathPopulatorAbstract {
     @SuppressWarnings("unused")
-	private final Random rand;
+    private final Random rand;
     private final int height;
 
     public PyramidPathPopulator(Random rand) {
@@ -22,7 +22,7 @@ public class PyramidPathPopulator extends PathPopulatorAbstract {
 
     @Override
     public void populate(PathPopulatorData ppd) {
-    	
+
     }
 
     @Override

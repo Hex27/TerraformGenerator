@@ -1,13 +1,13 @@
 package org.terraform.structure.pyramid;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.GenUtils;
+
+import java.util.Random;
 
 public class GuardianChamberPopulator extends RoomPopulatorAbstract {
 
@@ -61,9 +61,9 @@ public class GuardianChamberPopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-    	//Don't compete with crypt rooms for space
+        //Don't compete with crypt rooms for space
         return room.getWidthX() >= 5 && room.getWidthZ() >= 5
-        		&& room.getWidthX() < 13 && room.getWidthZ() < 13;
+                && room.getWidthX() < 13 && room.getWidthZ() < 13;
     }
 
 
