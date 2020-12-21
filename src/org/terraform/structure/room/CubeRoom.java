@@ -215,11 +215,11 @@ public class CubeRoom {
         int[][] corners = new int[2][2];
 
         if (face == BlockFace.NORTH) {
-            corners[0] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; //+-
-            corners[1] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; //--
+            corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; //--
+            corners[1] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; //+-
         } else if (face == BlockFace.SOUTH) {
-            corners[0] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; //++
-            corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; //-+
+            corners[0] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; //-+
+            corners[1] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; //++
         } else if (face == BlockFace.WEST) {
             corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; //--
             corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; //-+

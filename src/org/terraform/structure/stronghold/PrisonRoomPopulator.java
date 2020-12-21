@@ -30,7 +30,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
 
     private static void dangleIronBarsDown(Random rand, int length, SimpleBlock base) {
         for (int i = 0; i < length; i++) {
-            if (Version.isAtLeast(1.16)) {
+            if (Version.isAtLeast(16)) {
                 base.setType(OneOneSixBlockHandler.getChainMaterial());
             } else
                 base.setType(Material.IRON_BARS);

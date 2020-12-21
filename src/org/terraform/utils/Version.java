@@ -22,5 +22,5 @@ public class Version {
     @Deprecated
     private static double toVersionDouble(String version) {
         return Double.parseDouble(version.replace("1_", "").replace("_", ".").replace("R", "").replace("v", ""));
-    }
+    }//15.1
 }

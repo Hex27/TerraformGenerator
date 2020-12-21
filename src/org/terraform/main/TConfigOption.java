@@ -37,6 +37,7 @@ public enum TConfigOption {
     MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood", false),
     DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
+    DEVSTUFF_EXTENDED_COMMANDS("dev-stuff.extended-commands", false),
     DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations", true),
 
     //-=[CAVES]=-
