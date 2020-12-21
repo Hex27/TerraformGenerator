@@ -8,6 +8,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -54,8 +55,13 @@ public class JungleRiverHandler extends BiomeHandler {
                 if (data.getBiome(x, y + 1, z) != getBiome()) continue;
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
 
+                FastNoise lilypadNoise = new FastNoise((int) (world.getSeed() * 2));
+                lilypadNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+                lilypadNoise.SetFrequency(0.05f);
+
                 // Generate random lily pads in jungle rivers
-                if (GenUtils.chance(1, 25)) {
+                // Deeper waters -> less pads. Noise makes sure they are in groups
+                if (GenUtils.chance(1, (int) (lilypadNoise.GetNoise(x, z) * 7 + Math.pow(TerraformGenerator.seaLevel - y, 3) + 18))) {
                     data.setType(x, TerraformGenerator.seaLevel + 1, z, Material.LILY_PAD);
                 }
 
