@@ -1,6 +1,8 @@
 package org.terraform.biome;
 
 import org.drycell.command.InvalidArgumentException;
+import org.terraform.coregen.HeightMap;
+import org.terraform.data.TerraformWorld;
 
 public class BiomeGrid {
     private static final BiomeBank[][] terrestrialGrid = {
@@ -208,35 +210,57 @@ public class BiomeGrid {
         double tempDecimals = Math.abs(temp - (int) temp);
         double moistDecimals = Math.abs(moist - (int) moist);
 
+        // These tell if current point is near biome edge in biome grid
+        boolean tempIncrease = tempDecimals < 0.5 && tempDecimals > 0.5 - biomeThreshold;
+        boolean tempDecrease = tempDecimals > 0.5 && tempDecimals < 0.5 + biomeThreshold;
+        boolean moistIncrease = moistDecimals < 0.5 && moistDecimals > 0.5 - biomeThreshold;
+        boolean moistDecrease = moistDecimals > 0.5 && moistDecimals < 0.5 + biomeThreshold;
+
+        // Calculate biome that will be changed to
+        double nextTemp = temp;
+        if (tempIncrease) nextTemp = Math.min(10, temp + 1);
+        else if (tempDecrease) nextTemp = Math.max(0, temp - 1);
+
+        double nextMoist = moist;
+        if (moistIncrease) nextMoist = Math.min(10, moist + 1);
+        else if (moistDecrease) nextMoist = Math.max(0, moist - 1);
+
+        BiomeBank nextTempBiome = getBiome(currentBiome.getType(), (int) Math.round(nextTemp), (int) Math.round(moist));
+        BiomeBank nextMoistBiome = getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(nextMoist));
+        BiomeBank nextCornerBiome = getBiome(currentBiome.getType(), (int) Math.round(nextTemp), (int) Math.round(nextMoist));
+
+        // Calculate how near to the edge the point is
+        double tempFactor = Math.abs((0.5 - tempDecimals) / biomeThreshold);
+        double moistFactor = Math.abs((0.5 - moistDecimals) / biomeThreshold);
+
         double factor = 1;
-        // If biome is about to increase based on temperature
-        if (tempDecimals < 0.5 && tempDecimals > 0.5 - biomeThreshold) {
-            if (currentBiome != getBiome(currentBiome.getType(), (int) Math.round(temp + 1), (int) Math.round(moist)))
-                factor = (0.5 - tempDecimals) / biomeThreshold;
 
-        // If biome is about to decrease based on temperature
-        } else if (tempDecimals > 0.5 && tempDecimals > 0.5 + biomeThreshold) {
-            if (currentBiome != getBiome(currentBiome.getType(), (int) Math.round(temp - 1), (int) Math.round(moist)))
-                factor = (tempDecimals - 0.5) / biomeThreshold;
-        }
+        boolean cornerSituation = tempFactor < 1 && moistFactor < 1 && (
+                nextCornerBiome != currentBiome && nextTempBiome == currentBiome && nextMoistBiome == currentBiome
+        );
+        boolean tempSituation = tempFactor < 1 && nextTempBiome != currentBiome;
+        boolean moistSituation = moistFactor < 1 && nextMoistBiome != currentBiome;
 
-        // If biome is about to increase based on moisture
-        if (moistDecimals < 0.5 && moistDecimals > 0.5 - biomeThreshold) {
-            if (currentBiome != getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(moist + 1)))
-                factor = Math.min(factor, (0.5 - moistDecimals) / biomeThreshold);
+        // If in L shaped corner in BiomeGrid
+        if (cornerSituation) factor = Math.max(tempFactor, moistFactor);
+        else if (tempSituation) factor = tempFactor;
+        else if (moistSituation) factor = moistFactor;
 
-        // If biome is about to decrease based on moisture
-        } else if (moistDecimals > 0.5 && moistDecimals > 0.5 + biomeThreshold) {
-            if (currentBiome != getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(moist - 1)))
-                factor = Math.min(factor, (moistDecimals - 0.5) / biomeThreshold);
-        }
-
+        // Rivers
         double riverFactor = riverDepth / riverThreshold;
 
-        if (riverFactor < 1) {
+        if (riverFactor < factor) {
             factor = Math.max(0, riverFactor);
         }
 
         return factor;
+    }
+
+    public static double getEdgeFactor(TerraformWorld tw, double biomeThreshold, int riverThreshold, BiomeBank currentBiome, int x, int z) {
+        return getEdgeFactor(biomeThreshold, riverThreshold, currentBiome, normalise(tw.getTemperature(x, z)), normalise(tw.getMoisture(x, z)), HeightMap.getRiverDepth(tw, x, z));
+    }
+
+    public static double getEdgeFactor(TerraformWorld tw, BiomeBank currentBiome, int x, int z) {
+            return getEdgeFactor(0.25, -5, currentBiome, normalise(tw.getTemperature(x, z)), normalise(tw.getMoisture(x, z)), HeightMap.getRiverDepth(tw, x, z));
     }
 }
