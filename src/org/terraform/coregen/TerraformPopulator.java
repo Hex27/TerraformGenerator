@@ -94,29 +94,23 @@ public class TerraformPopulator {
             ore.populate(tw, random, data);
         }
 
-
-        //Biome specific populators
+        // Get all biomes in a chunk
         ArrayList<BiomeBank> banks = new ArrayList<>();
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-                for (BiomeBank bank : BiomeBank.values()) {
-                    BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
+                int height = HeightMap.getHeight(tw, x, z);
 
-                    if (bank == currentBiome) {
-                        if (!banks.contains(bank))
-                            banks.add(bank);
-                        break;
-                    }
-                }
+                BiomeBank currentBiome = tw.getBiomeBank(x, height, z);
+                if (!banks.contains(currentBiome))
+                    banks.add(currentBiome);
             }
         }
 
         for (BiomeBank bank : banks) {
-            //TerraformGeneratorPlugin.logger.info("Populating for biome: " + bank.toString());
+            // Biome specific populators
             bank.getHandler().populate(tw, random, data);
 
-            //Cave populators
+            // Cave populators
             bank.getCavePop().populate(tw, random, data);
         }
 

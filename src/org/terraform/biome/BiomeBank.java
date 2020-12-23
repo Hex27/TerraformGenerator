@@ -102,7 +102,6 @@ public enum BiomeBank {
         double moisture = tw.getMoisture(x, z);
         Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
 
-
         // Oceanic biomes
         if (height < TerraformGenerator.seaLevel) {
 
