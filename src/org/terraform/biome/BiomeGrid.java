@@ -184,14 +184,6 @@ public class BiomeGrid {
         return i;
     }
 
-    public static double getBiomeHeightFactor(BiomeBank biome, double temperature, double moisture, double riverDepth) {
-        if (biome == BiomeBank.BADLANDS || biome == BiomeBank.PLAINS) {
-            return 0.2 * getEdgeFactor(0.25, -5, biome, normalise(temperature), normalise(moisture), riverDepth) + 1;
-        }
-
-        return 1;
-    }
-
     /**
      * A value between 1 and 0 that gets closer to 0
      * when moving closer to the biome edge or water,
