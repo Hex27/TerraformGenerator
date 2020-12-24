@@ -38,9 +38,9 @@ public class Wall {
      * @return
      */
     public Wall findCeiling(int cutoff) {
-        Wall ceil = this.clone().getRelative(0, 1, 0);
+        Wall ceil = this.getRelative(0, 1, 0);
         while (cutoff > 0) {
-            if (ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
+        	if (ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
                 return ceil;
             }
             cutoff--;
@@ -281,6 +281,7 @@ public class Wall {
     }
 
     public Wall getRear(int it) {
+    	if(it < 0) return getFront(-it);
         Wall w = this.clone();
         for (int i = 0; i < it; i++) w = w.getRear();
         return w;
@@ -291,6 +292,7 @@ public class Wall {
     }
 
     public Wall getFront(int it) {
+    	if(it < 0) return getRear(-it);
         Wall w = this.clone();
         for (int i = 0; i < it; i++) w = w.getFront();
         return w;

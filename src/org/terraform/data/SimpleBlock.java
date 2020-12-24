@@ -12,6 +12,7 @@ import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.utils.GenUtils;
 
 public class SimpleBlock {
     @SerializedName("w")
@@ -197,6 +198,10 @@ public class SimpleBlock {
 
             setBlockData(l);
         }
+    }
+    
+    public void setType(Material... types) {
+    	setType(GenUtils.randMaterial(types));
     }
 
     public void RSolSetType(Material type) {

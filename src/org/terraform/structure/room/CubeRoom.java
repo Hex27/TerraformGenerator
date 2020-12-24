@@ -5,8 +5,10 @@ import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -24,6 +26,46 @@ public class CubeRoom {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+    
+    public SimpleEntry<Wall, Integer> getWall(PopulatorDataAbstract data, BlockFace face, int padding) {
+        int[] lowerBounds = getLowerCorner();
+        int[] upperBounds = getUpperCorner();
+        Wall wall;
+        int length = 0;
+        switch(face) {
+        case SOUTH:
+        	wall = new Wall(
+                    new SimpleBlock(data, lowerBounds[0] + padding, y + 1, upperBounds[1] - padding)
+                    , BlockFace.NORTH);
+        	length = widthX - 2 * padding;
+        	break;
+        case NORTH:
+        	wall = new Wall(
+                    new SimpleBlock(data, upperBounds[0] - padding, y + 1, lowerBounds[1] + padding)
+                    , BlockFace.SOUTH);
+        	length = widthX - 2 * padding;
+        	break;
+        case WEST:
+        	wall = new Wall(
+                    new SimpleBlock(data, lowerBounds[0] + padding, y + 1, lowerBounds[1] + padding)
+                    , BlockFace.EAST);
+        	length = widthZ - 2 * padding;
+        	break;
+        case EAST:
+        	wall = new Wall(
+                new SimpleBlock(data, upperBounds[0] - padding, y + 1, upperBounds[1] - padding)
+                , BlockFace.WEST);
+        	length = widthZ - 2 * padding;
+        	break;
+        default:
+        	wall = null;
+        	TerraformGeneratorPlugin.logger.error("Invalid wall direction requested!");
+        	break;
+        }
+        SimpleEntry<Wall, Integer> walls = new SimpleEntry<Wall, Integer>(wall,length);
+
+        return walls;
     }
 
     public HashMap<Wall, Integer> getFourWalls(PopulatorDataAbstract data, int padding) {
@@ -136,7 +178,7 @@ public class CubeRoom {
     }
 
     /**
-     * @return random coordinates from inside the room.
+     * @return random 3d (xyz) coordinates from inside the room.
      */
     public int[] randomCoords(Random rand, int pad) {
         return GenUtils.randomCoords(rand,

@@ -30,16 +30,19 @@ public class SlabBuilder {
         return this;
     }
 
-    public void apply(SimpleBlock block) {
+    public SlabBuilder apply(SimpleBlock block) {
         block.setBlockData(blockData);
+        return this;
     }
 
-    public void apply(Wall block) {
+    public SlabBuilder apply(Wall block) {
         block.setBlockData(blockData);
+        return this;
     }
 
-    public void apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public SlabBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
+        return this;
     }
 
     public Slab get() {

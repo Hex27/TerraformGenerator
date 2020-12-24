@@ -1,5 +1,7 @@
 package org.terraform.utils.blockdata;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -22,8 +24,8 @@ public class ChestBuilder {
         this.blockData = (Chest) Bukkit.createBlockData(GenUtils.randMaterial(mat));
     }
 
-    public ChestBuilder setLootTable(TerraLootTable loottable) {
-        this.lootTable = loottable;
+    public ChestBuilder setLootTable(TerraLootTable... loottable) {
+        this.lootTable = loottable[new Random().nextInt(loottable.length)];
         return this;
     }
 

@@ -1,9 +1,9 @@
 package org.terraform.coregen.v1_16_R1;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.block.data.type.Wall.Height;
 import org.bukkit.util.Vector;
@@ -13,7 +13,7 @@ import org.terraform.utils.BlockUtils;
 
 public class BlockDataFixer extends BlockDataFixerAbstract {
     public static void correctWallData(SimpleBlock target) {
-        if (!(target.getBlockData() instanceof MultipleFacing)) return;
+        if (!(target.getBlockData() instanceof Wall)) return;
         Wall data = (Wall) target.getBlockData();
         for (BlockFace face : BlockUtils.directBlockFaces) {
             if (target.getRelative(face).getType().isSolid() &&
@@ -38,7 +38,7 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
 
         correctWallData(target);
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (target.getRelative(face).getBlockData() instanceof Wall)
+            if (Tag.WALLS.isTagged(target.getRelative(face).getType()))
                 correctWallData(target.getRelative(face));
         }
     }

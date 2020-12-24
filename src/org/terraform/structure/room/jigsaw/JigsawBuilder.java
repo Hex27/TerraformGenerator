@@ -65,7 +65,7 @@ public class JigsawBuilder {
 		//TerraformGeneratorPlugin.logger.info("Traversal Index " + traversalIndex + ", on: " + current.toString());
 		traversalIndex++;
 		if(traversalIndex > 100) {
-			TerraformGeneratorPlugin.logger.info("Infinite loop detected! Breaking.");
+			TerraformGeneratorPlugin.logger.error("Infinite loop detected! Breaking.");
 			return false;
 		}
 		if(current.hasUnpopulatedDirections()) {
@@ -147,7 +147,19 @@ public class JigsawBuilder {
 		}
 		return true;
 	}
+	
+	
 
+	public SimpleBlock getCore() {
+		return core;
+	}
+
+	public HashMap<SimpleLocation, JigsawStructurePiece> getPieces() {
+		return pieces;
+	}
+
+	private boolean hasPlacedEntrance = false;
+	
 	public void build(Random random) {
 		for(JigsawStructurePiece piece:pieces.values()) {
 			
@@ -156,15 +168,51 @@ public class JigsawBuilder {
 			piece.build(core.getPopData(),random);
 		}
 		
+		ArrayList<JigsawStructurePiece> toRemove = new ArrayList<>();
+		//At least 4 sides. So, pick a random entrance piece out of first 4 indexes.
+		int passed = 0;
+		int toBeEntrance = random.nextInt(4);
 		//Overlapper pieces are stuff like walls and entrances.
 		for(JigsawStructurePiece piece:overlapperPieces) {
 			//Don't place overlapper objects where rooms have been placed.
-			if(pieces.containsKey(new SimpleLocation(piece.getRoom().getX(),piece.getRoom().getY(),piece.getRoom().getZ())))
+			SimpleLocation pieceLoc = new SimpleLocation(piece.getRoom().getX(),piece.getRoom().getY(),piece.getRoom().getZ());
+			if(pieces.containsKey(pieceLoc)) {
+				toRemove.add(piece);
 				continue;
-			
+			}
+			if(!hasPlacedEntrance) { 
+				if(passed == toBeEntrance) {
+					//Place an entrance if none was placed before.
+					hasPlacedEntrance = true;
+					JigsawStructurePiece temp = getPiece(pieceRegistry, JigsawType.ENTRANCE, random)
+							.getInstance(random, piece.getDepth());
+					temp.getRoom().setX(piece.getRoom().getX());
+					temp.getRoom().setY(piece.getRoom().getY());
+					temp.getRoom().setZ(piece.getRoom().getZ());
+					temp.setRotation(piece.getRotation());
+					
+					piece = temp;
+				}else
+					passed++;
+			}
+			JigsawStructurePiece host = getAdjacentPiece(pieceLoc,piece.getRotation().getOppositeFace());
+			if(host != null)
+				host.getWalledFaces().add(piece.getRotation());
 			TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
 			piece.build(core.getPopData(),random);
 		}
+		
+		//Remove pieces that weren't placed.
+		for(JigsawStructurePiece piece:toRemove)
+			overlapperPieces.remove(piece);
+	}
+	
+	public JigsawStructurePiece getAdjacentPiece(SimpleLocation loc,BlockFace face) {
+		SimpleLocation other = new SimpleLocation(
+				loc.getX()+face.getModX()*pieceWidth,
+				loc.getY()+face.getModY()*pieceWidth,
+				loc.getZ()+face.getModZ()*pieceWidth);
+		return pieces.get(other);
 	}
 	
 	public JigsawStructurePiece getPiece(JigsawStructurePiece[] registry, JigsawType type, Random rand) {
@@ -187,5 +235,9 @@ public class JigsawBuilder {
 		}else {
 			return getPiece(current.getAllowedPieces(),type,random);
 		}
+	}
+
+	public int getPieceWidth() {
+		return pieceWidth;
 	}
 }
