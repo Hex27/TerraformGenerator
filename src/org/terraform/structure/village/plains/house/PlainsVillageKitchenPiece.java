@@ -10,18 +10,16 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Bisected.Half;
-import org.bukkit.block.data.type.Ladder;
-import org.bukkit.block.data.type.Slab;
+import org.bukkit.block.data.FaceAttachable.AttachedFace;
+import org.bukkit.block.data.type.Switch;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
-import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 
 public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
@@ -63,11 +61,12 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 				switch(mat) {
 				case HOPPER:
 					w.setType(mat);
-
-					new DirectionalBuilder(Material.DROPPER,Material.DISPENSER)
-					.setFacing(BlockFace.DOWN)
-					.apply(w.getRelative(0,2,0));
-					w.getRelative(0,3,0).LPillar(25, random, BlockUtils.stoneBricks);
+					if(w.getRear().getRelative(0,1,0).getType() != Material.GLASS_PANE) {
+						Switch lever = (Switch) Bukkit.createBlockData(Material.LEVER);
+						lever.setAttachedFace(AttachedFace.WALL);
+						lever.setFacing(w.getDirection());
+						w.getRelative(0,1,0).setBlockData(lever);
+					}
 					break;
 				case FURNACE: //Furnace and smoker handled the same way
 				case SMOKER:
@@ -81,12 +80,14 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 					.apply(w.getRelative(0,2,0));
 					
 					Wall chimneyWall = w.getRelative(0,3,0);
+					boolean hitCeiling = false;
 					int chimneyHeight = 0;
 					while(chimneyHeight < 4) {
 						if(chimneyWall.getType().isSolid()) {
-						}else {
+							hitCeiling = true;
+						}else if(hitCeiling){
 							chimneyHeight++;
-							if(GenUtils.chance(random,1,4)) break;
+							if(GenUtils.chance(random,chimneyHeight,3)) break;
 						}
 						chimneyWall.setType(Material.BRICKS);
 						
@@ -127,7 +128,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 								Material.SMOOTH_STONE,
 								Material.POLISHED_ANDESITE,
 								Material.PUMPKIN,
-								Material.DRIED_KELP,
+								Material.DRIED_KELP_BLOCK,
 								Material.MELON);
 						break;
 					case 2: //Random loot

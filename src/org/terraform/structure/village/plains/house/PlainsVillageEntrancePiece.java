@@ -133,7 +133,7 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
 			else
 				log.setAxis(Axis.X);
 			
-			w.getRelative(0,2,0).setBlockData(log);
+			//w.getRelative(0,2,0).setBlockData(log);
 			
 			w = w.getFront();
 			w.getLeft().getRelative(0,-1,0).downUntilSolid(rand, Material.OAK_LOG);

@@ -94,5 +94,9 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
 		target.getRelative(one).downUntilSolid(random, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
 		target.getRelative(two).downUntilSolid(random, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
 	}
+
+	public PlainsVillageHouseVariant getVariant() {
+		return var;
+	}
 	
 }
