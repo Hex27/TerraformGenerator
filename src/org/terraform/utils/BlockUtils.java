@@ -294,6 +294,18 @@ public class BlockUtils {
         return true;
     }
 
+    public static Material getTerracotta(int height) {
+        int mapped = height % 35;
+
+        if (mapped % 5 == 0 || mapped % 6 == 0) return Material.TERRACOTTA;
+        if (mapped % 8 == 0) return Material.LIGHT_GRAY_TERRACOTTA;
+        if (mapped % 11 == 0) return Material.RED_TERRACOTTA;
+        if (mapped % 13 == 0) return Material.YELLOW_TERRACOTTA;
+        if (mapped % 14 == 0) return Material.BROWN_TERRACOTTA;
+
+        return Material.ORANGE_TERRACOTTA;
+    }
+
     public static int spawnPillar(Random rand, PopulatorDataAbstract data, int x, int y, int z, Material type, int minHeight, int maxHeight) {
         int height = GenUtils.randInt(rand, minHeight, maxHeight);
         for (int i = 0; i < height; i++) data.setType(x, y + i, z, type);

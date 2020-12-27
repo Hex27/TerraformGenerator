@@ -118,9 +118,9 @@ public class BiomeGrid {
 
     private static final BiomeBank[][] beachGrid = {
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
-                    BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
+                    BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH},
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
-                    BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
+                    BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH},
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,

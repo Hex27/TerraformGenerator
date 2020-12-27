@@ -1,9 +1,6 @@
 package org.terraform.biome;
 
-import org.terraform.biome.beach.IcyBeachHandler;
-import org.terraform.biome.beach.MudflatsHandler;
-import org.terraform.biome.beach.RockBeachHandler;
-import org.terraform.biome.beach.SandyBeachHandler;
+import org.terraform.biome.beach.*;
 import org.terraform.biome.cave.AbstractCavePopulator;
 import org.terraform.biome.cave.FrozenCavePopulator;
 import org.terraform.biome.cave.MossyCavePopulator;
@@ -67,6 +64,7 @@ public enum BiomeBank {
 
     //BEACHES
     SANDY_BEACH(new SandyBeachHandler(), BiomeType.BEACH),
+    BADLANDS_BEACH(new BadlandsBeachHandler(), BiomeType.BEACH),
     ROCKY_BEACH(new RockBeachHandler(), BiomeType.BEACH),
     ICY_BEACH(new IcyBeachHandler(), BiomeType.BEACH, new FrozenCavePopulator()),
     MUDFLATS(new MudflatsHandler(), BiomeType.BEACH), //Special case, handle later
@@ -111,7 +109,7 @@ public enum BiomeBank {
                     moisture + GenUtils.randDouble(random, -dither, dither)
             );
 
-            int trueHeight = HeightMap.getRiverlessHeight(tw, x, z);
+            int trueHeight = (int) HeightMap.getRiverlessHeight(tw, x, z);
 
             //This is a river.
             if (trueHeight >= TerraformGenerator.seaLevel) {
@@ -147,32 +145,35 @@ public enum BiomeBank {
 
         //GENERATE BEACHES
         if (height <= TerraformGenerator.seaLevel + GenUtils.randInt(random, 0, 4)) {
-            return BiomeGrid.calculateBiome(
-                    BiomeType.BEACH,
-                    temperature + GenUtils.randDouble(random, -dither, dither),
-                    moisture + GenUtils.randDouble(random, -dither, dither)
-            );
+            return BADLANDS_BEACH;
+//            return BiomeGrid.calculateBiome(
+//                    BiomeType.BEACH,
+//                    temperature + GenUtils.randDouble(random, -dither, dither),
+//                    moisture + GenUtils.randDouble(random, -dither, dither)
+//            );
         }
 
         //GENERATE LOW-ALTITUDE AREAS
-        return BiomeGrid.calculateBiome(
-                BiomeType.FLAT,
-                temperature + GenUtils.randDouble(random, -dither, dither),
-                moisture + GenUtils.randDouble(random, -dither, dither)
-        );
+        return BADLANDS;
+//        return BiomeGrid.calculateBiome(
+//                BiomeType.FLAT,
+//                temperature + GenUtils.randDouble(random, -dither, dither),
+//                moisture + GenUtils.randDouble(random, -dither, dither)
+//        );
     }
 
-    public static BiomeBank calculateFlatBiome(TerraformWorld tw, int x, int height, int z) {
+    public static BiomeBank calculateFlatBiome(TerraformWorld tw, int x, int z, int height) {
         double dither = TConfigOption.BIOME_DITHER.getDouble();
         double temperature = tw.getTemperature(x, z);
         double moisture = tw.getMoisture(x, z);
         Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
 
-        return BiomeGrid.calculateBiome(
-                BiomeType.FLAT,
-                temperature + GenUtils.randDouble(random, -dither, dither),
-                moisture + GenUtils.randDouble(random, -dither, dither)
-        );
+        return BADLANDS;
+//        return BiomeGrid.calculateBiome(
+//            BiomeType.FLAT,
+//            temperature + GenUtils.randDouble(random, -dither, dither),
+//            moisture + GenUtils.randDouble(random, -dither, dither)
+//        );
     }
 
     /**

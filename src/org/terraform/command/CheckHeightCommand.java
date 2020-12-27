@@ -9,6 +9,7 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeGrid;
 import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 
@@ -60,6 +61,7 @@ public class CheckHeightCommand extends DCCommand {
         p.sendMessage("Moisture: " + tw.getMoisture(x, z));
         p.sendMessage("Biome edge factor: " + BiomeGrid.getEdgeFactor(tw, biome, x, z));
         p.sendMessage("Result Biome: " + biome);
+        p.sendMessage("f: " + (HeightMap.getPreciseHeight(tw, x, z) - TerraformGenerator.seaLevel) / (HeightMap.getRiverlessHeight(tw, x, z) - TerraformGenerator.seaLevel));
     }
 
 }

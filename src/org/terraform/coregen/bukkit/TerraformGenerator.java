@@ -11,6 +11,8 @@ import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -48,7 +50,8 @@ public class TerraformGenerator extends ChunkGenerator {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
-                int height = HeightMap.getHeight(tw, rawX, rawZ);
+                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
+                int height = (int) preciseHeight;
 
                 BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), height);
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
@@ -70,6 +73,46 @@ public class TerraformGenerator extends ChunkGenerator {
                 for (int y = height + 1; y <= seaLevel; y++) {
                     //if(!attemptSimpleBlockUpdate(tw, chunk, chunkX, chunkZ, x,undergroundHeight,z))
                     chunk.setBlock(x, y, z, Material.WATER);
+                }
+
+                if (BiomeBank.calculateFlatBiome(tw, rawX, rawZ, height) == BiomeBank.BADLANDS && HeightMap.getRiverDepth(tw, rawX, rawZ) > 0) {
+                    FastNoise wallNoise = new FastNoise((int) (world.getSeed() * 2));
+                    wallNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+                    wallNoise.SetFrequency(0.07f);
+                    wallNoise.SetFractalOctaves(2);
+
+                    double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ);
+
+                    double maxDiff = riverlessHeight - seaLevel;
+                    double f = (preciseHeight - seaLevel) / maxDiff; // 0 at river level
+
+                    if (f > 0) {
+                        int buildHeight = (int) Math.round(Math.min(1, 10 * Math.pow(f, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5);
+
+                        for (int i = buildHeight; i >= 0; i--) {
+                            int lowerHeight = Math.min(seaLevel + i, (int) Math.round(riverlessHeight));
+                            boolean useSand = lowerHeight + 2 > (int) Math.round(riverlessHeight);
+                            Material hardSand = GenUtils.weightedRandomMaterial(random, Material.RED_SAND, 10, Material.SMOOTH_RED_SANDSTONE, 30);
+                            Material softSand = GenUtils.weightedRandomMaterial(random, Material.RED_SAND, 10, Material.SMOOTH_RED_SANDSTONE, 1);
+                            Material material = useSand ? i == buildHeight ? softSand : hardSand : BlockUtils.getTerracotta(lowerHeight);
+
+                            chunk.setBlock(x, lowerHeight, z, material);
+                        }
+
+                        if (f - 0.25 > 0) {
+                            int upperBuildHeight = (int) Math.round(Math.min(1, 50 * Math.pow(f - 0.25, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5);
+
+                            for (int i = 0; i <= upperBuildHeight; i++) {
+                                int upperHeight = (int) riverlessHeight - i;
+
+                                chunk.setBlock(x, upperHeight, z, Material.ORANGE_TERRACOTTA);
+                            }
+                        }
+                    }
+
+//                    if (riverlessHeight - riverDepth > seaLevel) {
+//                        chunk.setBlock(x, riverlessHeight, z, Material.ORANGE_CONCRETE);
+//                    }
                 }
 
                 //Bedrock Base
