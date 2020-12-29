@@ -61,7 +61,7 @@ public class CheckHeightCommand extends DCCommand {
         p.sendMessage("Moisture: " + tw.getMoisture(x, z));
         p.sendMessage("Biome edge factor: " + BiomeGrid.getEdgeFactor(tw, biome, x, z));
         p.sendMessage("Result Biome: " + biome);
-        p.sendMessage("f: " + (HeightMap.getPreciseHeight(tw, x, z) - TerraformGenerator.seaLevel) / (HeightMap.getRiverlessHeight(tw, x, z) - TerraformGenerator.seaLevel));
+        p.sendMessage("f: " + (HeightMap.getPreciseHeight(tw, x, z) - 2 - TerraformGenerator.seaLevel) / (HeightMap.getRiverlessHeight(tw, x, z) - 2 - TerraformGenerator.seaLevel));
     }
 
 }

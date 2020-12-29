@@ -81,33 +81,38 @@ public class TerraformGenerator extends ChunkGenerator {
                     wallNoise.SetFrequency(0.07f);
                     wallNoise.SetFractalOctaves(2);
 
-                    double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ);
+                    double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
 
                     double maxDiff = riverlessHeight - seaLevel;
-                    double f = (preciseHeight - seaLevel) / maxDiff; // 0 at river level
+                    double f = (preciseHeight - 2 - seaLevel) / maxDiff; // 0 at river level
 
                     if (f > 0) {
-                        int buildHeight = (int) Math.round(Math.min(1, 10 * Math.pow(f, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5);
+                        int buildHeight = (int) Math.round(Math.min(1, 4 * Math.pow(f, 4)) * maxDiff
+                                + wallNoise.GetNoise(rawX, rawZ) * 1.5
+                        );
 
                         for (int i = buildHeight; i >= 0; i--) {
                             int lowerHeight = Math.min(seaLevel + i, (int) Math.round(riverlessHeight));
-                            boolean useSand = lowerHeight + 2 > (int) Math.round(riverlessHeight);
-                            Material hardSand = GenUtils.weightedRandomMaterial(random, Material.RED_SAND, 10, Material.SMOOTH_RED_SANDSTONE, 30);
-                            Material softSand = GenUtils.weightedRandomMaterial(random, Material.RED_SAND, 10, Material.SMOOTH_RED_SANDSTONE, 1);
-                            Material material = useSand ? i == buildHeight ? softSand : hardSand : BlockUtils.getTerracotta(lowerHeight);
 
-                            chunk.setBlock(x, lowerHeight, z, material);
+                            chunk.setBlock(x, lowerHeight, z, BlockUtils.getTerracotta(lowerHeight));
                         }
 
-                        if (f - 0.25 > 0) {
-                            int upperBuildHeight = (int) Math.round(Math.min(1, 50 * Math.pow(f - 0.25, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5);
+                        // Todo:
+                        //  - no edges when riverless height is low
+
+                        if (f - 0.4 > 0) {
+                            int upperBuildHeight = (int) Math.round(Math.min(1, 50 * Math.pow(f - 0.4, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5);
 
                             for (int i = 0; i <= upperBuildHeight; i++) {
                                 int upperHeight = (int) riverlessHeight - i;
 
-                                chunk.setBlock(x, upperHeight, z, Material.ORANGE_TERRACOTTA);
+                                chunk.setBlock(x, upperHeight, z, BlockUtils.getTerracotta(upperHeight));
                             }
                         }
+
+                        // Coat with sand
+                        if (f > 0.52)
+                            chunk.setBlock(x, (int) riverlessHeight + 1, z, Material.RED_SAND);
                     }
 
 //                    if (riverlessHeight - riverDepth > seaLevel) {

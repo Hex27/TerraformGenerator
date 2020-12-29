@@ -95,7 +95,7 @@ public class BadlandsHandler extends BiomeHandler {
                                 canSpawn = false;
                         }
                         if (canSpawn)
-                            BlockUtils.spawnPillar(random, data, x, highest + 1, z, Material.CACTUS, 3, 6);
+                            BlockUtils.spawnPillar(random, data, x, highest + 1, z, Material.CACTUS, 2, 5);
                     } else if (GenUtils.chance(random, 1, 80)) {
                         data.setType(x, highest + 1, z, Material.DEAD_BUSH);
                     }
