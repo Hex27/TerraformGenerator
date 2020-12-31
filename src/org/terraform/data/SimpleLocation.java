@@ -2,6 +2,8 @@ package org.terraform.data;
 
 import java.util.Objects;
 
+import org.bukkit.block.BlockFace;
+
 public class SimpleLocation {
 
     private int x;
@@ -13,7 +15,30 @@ public class SimpleLocation {
         this.y = y;
         this.z = z;
     }
+    
 
+    public SimpleLocation(SimpleLocation other) {
+        this.x = other.x;
+        this.y = other.y;
+        this.z = other.z;
+    }
+    
+    public SimpleLocation getRelative(int x, int y, int z) {
+    	return new SimpleLocation(this.x+x,this.y+y,this.z+z);
+    }
+    
+    public SimpleLocation getRelative(BlockFace face) {
+    	return new SimpleLocation(this.x+face.getModX(),this.y+face.getModY(),this.z+face.getModZ());
+    }
+    
+    public int distanceSqr(SimpleLocation o) {
+    	return (int) (Math.pow(o.x-x, 2)+ Math.pow(o.y-y, 2)+ Math.pow(o.z-z, 2));
+    }
+
+    public int distanceSqr(int nx, int ny, int nz) {
+    	return (int) (Math.pow(nx-x, 2)+ Math.pow(ny-y, 2)+ Math.pow(nz-z, 2));
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z, 93929798);

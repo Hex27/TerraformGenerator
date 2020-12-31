@@ -26,7 +26,7 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
 		};
 		this.chanceToAddNewPiece = 30;
 	}
-
+	
 	@Override
 	public void build(Random random) {
 		super.build(random);

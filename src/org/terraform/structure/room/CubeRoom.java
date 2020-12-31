@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
@@ -106,25 +107,23 @@ public class CubeRoom {
 
     public void fillRoom(PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
         int tileIndex = 0;
-        //Create a solid block with the specified width
-        for (int nx = x - widthX / 2; nx <= x + widthX / 2; nx++) {
-            for (int ny = y; ny <= y + height; ny++) {
-                for (int nz = z - widthZ / 2; nz <= z + widthZ / 2; nz++) {
-                    if (data.getType(nx, ny, nz) == Material.CAVE_AIR)
-                        continue;
-//					if(ny == y+height){
-//						data.setType(nx, ny, nz, Material.BARRIER);
-//						continue;
-//					}
-                    if (tile == -1) data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
-                    else {
-                        data.setType(nx, ny, nz, mat[(Math.abs(nz + widthZ / 2 + ny + nx + widthX / 2 - tileIndex)) % mat.length]);
-                        tileIndex += 1;
-                        if (tileIndex == 2) tileIndex = 0;
-                    }
-                }
-            }
-        }
+        if(mat[0] != Material.BARRIER)
+	        //Create a solid block with the specified width
+	        for (int nx = x - widthX / 2; nx <= x + widthX / 2; nx++) {
+	            for (int ny = y; ny <= y + height; ny++) {
+	                for (int nz = z - widthZ / 2; nz <= z + widthZ / 2; nz++) {
+	                    if (data.getType(nx, ny, nz) == Material.CAVE_AIR)
+	                        continue;
+	                    if (tile == -1) data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
+	                    else {
+	                        data.setType(nx, ny, nz, mat[(Math.abs(nz + widthZ / 2 + ny + nx + widthX / 2 - tileIndex)) % mat.length]);
+	                        tileIndex += 1;
+	                        if (tileIndex == 2) tileIndex = 0;
+	                    }
+	                }
+	            }
+	        }
+        
         //Hollow out the room
         for (int nx = x - widthX / 2 + 1; nx <= x + widthX / 2 - 1; nx++) {
             for (int ny = y + 1; ny <= y + height - 1; ny++) {
@@ -197,6 +196,39 @@ public class CubeRoom {
                 && boundOne[1] >= point[1]) {
             return boundTwo[0] <= point[0]
                     && boundTwo[1] <= point[1];
+        }
+
+        return false;
+    }
+    
+    /**
+     * 2D comparison.
+     */
+    public boolean isPointInside(SimpleLocation loc) {
+        int[] boundOne = getUpperCorner();
+        int[] boundTwo = getLowerCorner();
+
+        if (boundOne[0] >= loc.getX()
+                && boundOne[1] >= loc.getZ()) {
+            return boundTwo[0] <= loc.getX()
+                    && boundTwo[1] <= loc.getZ();
+        }
+
+        return false;
+    }
+    
+    /**
+     * IGNORES Y AXIS.
+     * @param point 2d point (size 2 int array)
+     */
+    public boolean isPointInside(SimpleBlock point) {
+        int[] boundOne = getUpperCorner();
+        int[] boundTwo = getLowerCorner();
+
+        if (boundOne[0] >= point.getX()
+                && boundOne[1] >= point.getZ()) {
+            return boundTwo[0] <= point.getX()
+                    && boundTwo[1] <= point.getZ();
         }
 
         return false;

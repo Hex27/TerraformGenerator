@@ -63,6 +63,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 					w.setType(mat);
 					if(w.getRear().getRelative(0,1,0).getType() != Material.GLASS_PANE) {
 						Switch lever = (Switch) Bukkit.createBlockData(Material.LEVER);
+						lever.setPowered(true);
 						lever.setAttachedFace(AttachedFace.WALL);
 						lever.setFacing(w.getDirection());
 						w.getRelative(0,1,0).setBlockData(lever);

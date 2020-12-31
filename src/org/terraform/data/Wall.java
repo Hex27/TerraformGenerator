@@ -26,11 +26,23 @@ public class Wall {
     public Wall clone() {
         return new Wall(block, direction);
     }
+    
+    public Wall getAtY(int y) {
+    	return new Wall(new SimpleBlock(block.getPopData(),block.getX(),y,block.getY()),this.direction);
+    }
 
     public Wall getLeft() {
         return new Wall(block.getRelative(BlockUtils.getAdjacentFaces(direction)[0]), direction);
     }
 
+    public Wall getGround() {
+    	return new Wall(new SimpleBlock(
+    			block.getPopData(),
+    			block.getX(),
+    			GenUtils.getHighestGround(block.getPopData(), block.getX(), block.getZ()),
+    			block.getZ()),direction);
+    }
+    
     /**
      * Gets the first solid block above this one
      *

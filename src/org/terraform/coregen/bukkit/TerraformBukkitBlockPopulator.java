@@ -11,7 +11,7 @@ import java.util.Random;
  * This class is used to control the order in which the bukkit populator is used
  * to perform various actions.
  *
- * @author Leonard
+ * @author Hex_27
  */
 public class TerraformBukkitBlockPopulator extends BlockPopulator {
 

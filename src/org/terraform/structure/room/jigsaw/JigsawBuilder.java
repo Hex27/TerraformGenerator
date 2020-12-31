@@ -1,6 +1,7 @@
 package org.terraform.structure.room.jigsaw;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
@@ -9,6 +10,7 @@ import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
+import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -23,6 +25,7 @@ public class JigsawBuilder {
 	protected int pieceWidth = 5;
 	protected SimpleBlock core;
 	protected JigsawStructurePiece center;
+	protected Wall entranceBlock;
 	protected Stack<JigsawStructurePiece> traverseStack = new Stack<>();
 	//protected ArrayList<JigsawStructurePiece> pieces = new ArrayList<>();
 	//protected ArrayList<SimpleLocation> usedLocations = new ArrayList<>();
@@ -41,10 +44,19 @@ public class JigsawBuilder {
 		this.upperBounds[0] = x+widthX/2;
 		this.upperBounds[1] = z+widthZ/2;
 	}
+
+	BlockFace entranceDir = null;
+	public void forceEntranceDirection(BlockFace face) {
+		entranceDir = face;
+	}
+	
+	public JigsawStructurePiece getFirstPiece(Random random) {
+		return getPiece(pieceRegistry,JigsawType.STANDARD, random).getInstance(random, 0);
+	}
 	
 	public void generate(Random random) {
 		
-		center = getPiece(pieceRegistry,JigsawType.STANDARD, random).getInstance(random, 0);
+		center = getFirstPiece(random);
 		center.getRoom().setX(core.getX());
 		center.getRoom().setY(core.getY());
 		center.getRoom().setZ(core.getZ());
@@ -64,7 +76,7 @@ public class JigsawBuilder {
 		JigsawStructurePiece current = traverseStack.peek();
 		//TerraformGeneratorPlugin.logger.info("Traversal Index " + traversalIndex + ", on: " + current.toString());
 		traversalIndex++;
-		if(traversalIndex > 100) {
+		if(traversalIndex > 200) {
 			TerraformGeneratorPlugin.logger.error("Infinite loop detected! Breaking.");
 			return false;
 		}
@@ -91,8 +103,8 @@ public class JigsawBuilder {
 								.getInstance(random, current.getDepth()+1);
 						toAdd.setRotation(dir);
 					}else { 
-						if(toAddX < lowerBounds[0] || toAddX > upperBounds[0]
-						|| toAddZ < lowerBounds[1] || toAddZ > upperBounds[1]) { 
+						if(toAddX-pieceWidth/2 < lowerBounds[0] || toAddX+pieceWidth/2 > upperBounds[0]
+						|| toAddZ-pieceWidth/2< lowerBounds[1] || toAddZ+pieceWidth/2 > upperBounds[1]) { 
 							//If outside of bounding box, just force an end piece.
 							toAdd = getRelativePiece(current,JigsawType.END,random)
 									.getInstance(random, current.getDepth()+1);
@@ -164,15 +176,14 @@ public class JigsawBuilder {
 		for(JigsawStructurePiece piece:pieces.values()) {
 			
 			
-			TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
+			//TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
 			piece.build(core.getPopData(),random);
 		}
 		
 		ArrayList<JigsawStructurePiece> toRemove = new ArrayList<>();
-		//At least 4 sides. So, pick a random entrance piece out of first 4 indexes.
-		int passed = 0;
-		int toBeEntrance = random.nextInt(4);
+
 		//Overlapper pieces are stuff like walls and entrances.
+		Collections.shuffle(overlapperPieces);
 		for(JigsawStructurePiece piece:overlapperPieces) {
 			//Don't place overlapper objects where rooms have been placed.
 			SimpleLocation pieceLoc = new SimpleLocation(piece.getRoom().getX(),piece.getRoom().getY(),piece.getRoom().getZ());
@@ -181,7 +192,9 @@ public class JigsawBuilder {
 				continue;
 			}
 			if(!hasPlacedEntrance) { 
-				if(passed == toBeEntrance) {
+				if(entranceDir == null //Random block face direction
+						|| (piece.getRotation() == entranceDir))  //Forced entrance direction
+				{
 					//Place an entrance if none was placed before.
 					hasPlacedEntrance = true;
 					JigsawStructurePiece temp = getPiece(pieceRegistry, JigsawType.ENTRANCE, random)
@@ -190,15 +203,20 @@ public class JigsawBuilder {
 					temp.getRoom().setY(piece.getRoom().getY());
 					temp.getRoom().setZ(piece.getRoom().getZ());
 					temp.setRotation(piece.getRotation());
-					
+					entranceBlock = new Wall(
+							new SimpleBlock(
+									core.getPopData(),
+									piece.getRoom().getX(),
+									piece.getRoom().getY(),
+									piece.getRoom().getZ()),
+							piece.getRotation());
 					piece = temp;
-				}else
-					passed++;
+				}
 			}
 			JigsawStructurePiece host = getAdjacentPiece(pieceLoc,piece.getRotation().getOppositeFace());
 			if(host != null)
 				host.getWalledFaces().add(piece.getRotation());
-			TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
+			//TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
 			piece.build(core.getPopData(),random);
 		}
 		
@@ -239,5 +257,9 @@ public class JigsawBuilder {
 
 	public int getPieceWidth() {
 		return pieceWidth;
+	}
+
+	public Wall getEntranceBlock() {
+		return entranceBlock;
 	}
 }

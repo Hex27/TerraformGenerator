@@ -162,7 +162,8 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         data.setBlockData(nx + x, height, nz + z, fl);
                         Ageable crop = (Ageable) Bukkit.createBlockData(cropOne);
                         crop.setAge(GenUtils.randInt(random, 0, crop.getMaximumAge()));
-                        data.setBlockData(nx + x, height + 1, nz + z, crop);
+                        if(!data.getType(nx+x, height+1, nz+z).isSolid())
+                        	data.setBlockData(nx + x, height + 1, nz + z, crop);
                     }
                 } else if (noise > 0.2) { //Crop two
                     if (GenUtils.chance(random, 1, 15))
