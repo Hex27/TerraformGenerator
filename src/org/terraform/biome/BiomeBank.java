@@ -145,21 +145,19 @@ public enum BiomeBank {
 
         //GENERATE BEACHES
         if (height <= TerraformGenerator.seaLevel + GenUtils.randInt(random, 0, 4)) {
-            return BADLANDS_BEACH;
-//            return BiomeGrid.calculateBiome(
-//                    BiomeType.BEACH,
-//                    temperature + GenUtils.randDouble(random, -dither, dither),
-//                    moisture + GenUtils.randDouble(random, -dither, dither)
-//            );
+            return BiomeGrid.calculateBiome(
+                    BiomeType.BEACH,
+                    temperature + GenUtils.randDouble(random, -dither, dither),
+                    moisture + GenUtils.randDouble(random, -dither, dither)
+            );
         }
 
         //GENERATE LOW-ALTITUDE AREAS
-        return BADLANDS;
-//        return BiomeGrid.calculateBiome(
-//                BiomeType.FLAT,
-//                temperature + GenUtils.randDouble(random, -dither, dither),
-//                moisture + GenUtils.randDouble(random, -dither, dither)
-//        );
+        return BiomeGrid.calculateBiome(
+                BiomeType.FLAT,
+                temperature + GenUtils.randDouble(random, -dither, dither),
+                moisture + GenUtils.randDouble(random, -dither, dither)
+        );
     }
 
     public static BiomeBank calculateFlatBiome(TerraformWorld tw, int x, int z, int height) {
@@ -168,12 +166,11 @@ public enum BiomeBank {
         double moisture = tw.getMoisture(x, z);
         Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
 
-        return BADLANDS;
-//        return BiomeGrid.calculateBiome(
-//            BiomeType.FLAT,
-//            temperature + GenUtils.randDouble(random, -dither, dither),
-//            moisture + GenUtils.randDouble(random, -dither, dither)
-//        );
+        return BiomeGrid.calculateBiome(
+            BiomeType.FLAT,
+            temperature + GenUtils.randDouble(random, -dither, dither),
+            moisture + GenUtils.randDouble(random, -dither, dither)
+        );
     }
 
     /**

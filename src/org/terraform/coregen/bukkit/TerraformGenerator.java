@@ -11,8 +11,6 @@ import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -75,60 +73,14 @@ public class TerraformGenerator extends ChunkGenerator {
                     chunk.setBlock(x, y, z, Material.WATER);
                 }
 
-                if (BiomeBank.calculateFlatBiome(tw, rawX, rawZ, height) == BiomeBank.BADLANDS && HeightMap.getRiverDepth(tw, rawX, rawZ) > 0) {
-                    FastNoise wallNoise = new FastNoise((int) (world.getSeed() * 2));
-                    wallNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-                    wallNoise.SetFrequency(0.07f);
-                    wallNoise.SetFractalOctaves(2);
-
-                    double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
-
-                    double maxDiff = riverlessHeight - seaLevel;
-                    double f = (preciseHeight - 2 - seaLevel) / maxDiff; // 0 at river level
-
-                    if (f > 0) {
-                        int buildHeight = (int) Math.round(Math.min(1, 4 * Math.pow(f, 4)) * maxDiff
-                                + wallNoise.GetNoise(rawX, rawZ) * 1.5
-                        );
-
-                        for (int i = buildHeight; i >= 0; i--) {
-                            int lowerHeight = Math.min(seaLevel + i, (int) Math.round(riverlessHeight));
-
-                            chunk.setBlock(x, lowerHeight, z, BlockUtils.getTerracotta(lowerHeight));
-                        }
-
-                        // Todo:
-                        //  - no edges when riverless height is low
-
-                        if (f - 0.4 > 0) {
-                            int upperBuildHeight = (int) Math.round(Math.min(1, 50 * Math.pow(f - 0.4, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5);
-
-                            for (int i = 0; i <= upperBuildHeight; i++) {
-                                int upperHeight = (int) riverlessHeight - i;
-
-                                chunk.setBlock(x, upperHeight, z, BlockUtils.getTerracotta(upperHeight));
-                            }
-                        }
-
-                        // Coat with sand
-                        if (f > 0.52)
-                            chunk.setBlock(x, (int) riverlessHeight + 1, z, Material.RED_SAND);
-                    }
-
-//                    if (riverlessHeight - riverDepth > seaLevel) {
-//                        chunk.setBlock(x, riverlessHeight, z, Material.ORANGE_CONCRETE);
-//                    }
-                }
-
                 //Bedrock Base
                 chunk.setBlock(x, 2, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 chunk.setBlock(x, 1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 chunk.setBlock(x, 0, z, Material.BEDROCK);
 
+                tw.getBiomeBank(rawX, height, rawZ).getHandler().transformTerrain(tw, random, chunk, chunkX, chunkZ);
             }
         }
-
-        //Bukkit.getLogger().info("Finished: " + chunkX + "," + chunkZ);
 
         return chunk;
     }

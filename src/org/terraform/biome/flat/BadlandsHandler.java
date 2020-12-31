@@ -3,6 +3,7 @@ package org.terraform.biome.flat;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeGrid;
 import org.terraform.biome.BiomeHandler;
@@ -52,6 +53,11 @@ public class BadlandsHandler extends BiomeHandler {
         plateauNoise2.SetFrequency(0.18f);
         plateauNoise2.SetFractalOctaves(2);
 
+        FastNoise bigPlateauNoise = new FastNoise((int) (world.getSeed() * 2));
+        bigPlateauNoise.SetNoiseType(FastNoise.NoiseType.Cubic);
+        bigPlateauNoise.SetFrequency(0.03f);
+//        bigPlateauNoise.SetFractalOctaves(2);
+
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 if (HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
@@ -61,18 +67,8 @@ public class BadlandsHandler extends BiomeHandler {
 
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
-//                double riverDepth = HeightMap.getRiverDepth(world, x, z);
-//
-//                double normalHeight = highest + Math.max(0, riverDepth);
-//
-//                int terrainHeight = highest - TerraformGenerator.seaLevel;
-//
-//                if (normalHeight - riverDepth > TerraformGenerator.seaLevel) {
-//                    data.setType(x, (int) Math.round(normalHeight), z, Material.RED_CONCRETE);
-//                }
-
 //                double plateauStrength = plateauNoise.GetNoise(x, z);
-//
+
 //                if (plateauStrength > 0 && BiomeGrid.getEdgeFactor(world, 0.35, -9, BiomeBank.BADLANDS, x, z) > 0.3) {
 //                    double value = Math.abs(plateauNoise2.GetNoise(x, z)) * 1.2 * Math.pow(plateauStrength, 0.6);
 //
@@ -82,6 +78,14 @@ public class BadlandsHandler extends BiomeHandler {
 //
 //                        highest += height;
 //                    }
+//                }
+
+//                double plateauStrength = bigPlateauNoise.GetNoise(x, z);
+//
+//                if (plateauStrength > 0.2) {
+//                    double height = 20 * Math.pow(Math.min(1, (plateauStrength - 0.2) / 0.05d), 1 / 8d);
+//
+//                    for (int i = 1; i <= height; i++) data.setType(x, highest + i, z, Material.TERRACOTTA);
 //                }
 
                 Material base = data.getType(x, highest, z);
@@ -106,5 +110,73 @@ public class BadlandsHandler extends BiomeHandler {
         if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
             new DesertWellPopulator().populate(world, random, data, true);
         }
+    }
+
+    public static void generateRivers(TerraformWorld tw, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int rawX = chunkX * 16 + x;
+                int rawZ = chunkZ * 16 + z;
+
+                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
+                int height = (int) preciseHeight;
+
+                if (BiomeBank.calculateFlatBiome(tw, rawX, rawZ, height) == BiomeBank.BADLANDS && HeightMap.getRiverDepth(tw, rawX, rawZ) > 0) {
+                    FastNoise wallNoise = new FastNoise((int) (tw.getWorld().getSeed() * 2));
+                    wallNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+                    wallNoise.SetFrequency(0.07f);
+                    wallNoise.SetFractalOctaves(2);
+
+                    double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
+                    double edgeFactor = BiomeGrid.getLandEdgeFactor(tw, 0.45, BiomeBank.BADLANDS, rawX, rawZ);
+                    double downEdgeFactor = Math.min(2 * edgeFactor, 1);
+                    double topEdgeFactor = Math.max(2 * edgeFactor - 1, 0);
+
+                    double maxDiff = riverlessHeight - TerraformGenerator.seaLevel;
+                    double aboveSea = preciseHeight - 2 - TerraformGenerator.seaLevel;
+                    double f = aboveSea / maxDiff; // 0 at river level
+
+                    if (f > 0 && aboveSea > 0) {
+                        int buildHeight = (int) Math.round(downEdgeFactor *
+                                (Math.min(1, 4 * Math.pow(f, 4)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
+
+                        for (int i = buildHeight; i >= 0; i--) {
+                            int lowerHeight = Math.min(TerraformGenerator.seaLevel + i, (int) Math.round(riverlessHeight));
+
+                            chunk.setBlock(x, lowerHeight, z, BlockUtils.getTerracotta(lowerHeight));
+                        }
+
+                        double h = 0.4 - topEdgeFactor * 0.2;
+
+                        // Curved edges
+                        if (f > h) {
+                            int upperBuildHeight = (int) Math.round(topEdgeFactor *
+                                    (Math.min(1, 50 * Math.pow(f - h, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
+
+                            if (topEdgeFactor == 0) continue;
+
+                            for (int i = 0; i <= upperBuildHeight; i++) {
+                                int upperHeight = (int) riverlessHeight - i;
+
+                                chunk.setBlock(x, upperHeight, z, BlockUtils.getTerracotta(upperHeight));
+                            }
+                        }
+
+                        // Coat with sand
+                        if (f > h + 0.12)
+                            chunk.setBlock(x, (int) riverlessHeight + 1, z, Material.RED_SAND);
+                    }
+
+                    //                    if (riverlessHeight - riverDepth > seaLevel) {
+                    //                        chunk.setBlock(x, riverlessHeight, z, Material.ORANGE_CONCRETE);
+                    //                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+        generateRivers(tw, chunk, chunkX, chunkZ);
     }
 }
