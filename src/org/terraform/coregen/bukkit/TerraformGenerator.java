@@ -1,11 +1,13 @@
 package org.terraform.coregen.bukkit;
 
+import javafx.util.Pair;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
@@ -13,15 +15,14 @@ import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class TerraformGenerator extends ChunkGenerator {
     public static final ArrayList<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
     public static int seaLevel = 62;
     public static int minMountainLevel = 85;
+
+    public static HashMap<Pair<Integer, Integer>, ChunkCache> caches = new HashMap<>();
 
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
@@ -36,6 +37,9 @@ public class TerraformGenerator extends ChunkGenerator {
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
+        ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
+        caches.put(new Pair<>(chunkX, chunkZ), cache);
+
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 
         //Patch for WorldInitEvent issues.
@@ -48,8 +52,7 @@ public class TerraformGenerator extends ChunkGenerator {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
-                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
+                int height = HeightMap.getHeight(tw, rawX, rawZ);
 
                 BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), height);
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);

@@ -1,5 +1,6 @@
 package org.terraform.coregen;
 
+import javafx.util.Pair;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
@@ -99,6 +100,16 @@ public abstract class HeightMap {
     }
 
     public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
+        Pair<Integer, Integer> pair = new Pair<>(ChunkCache.getChunkCoordinate(x), ChunkCache.getChunkCoordinate(z));
+        ChunkCache cached;
+        if (!TerraformGenerator.caches.containsKey(pair)) {
+            cached = new ChunkCache(tw, x, z);
+        } else {
+            cached = TerraformGenerator.caches.get(pair);
+            double cachedValue = cached.getHeight(x, z);
+            if (cachedValue != 0) return cachedValue;
+        }
+
         double height = getCoreHeight(tw, x, z);
 
         if (height > defaultSeaLevel + 4) {
@@ -136,6 +147,7 @@ public abstract class HeightMap {
             height = TerraformGenerator.seaLevel - 15;
         }
 
+        cached.cacheHeight(x, z, height);
         return height;
     }
 
