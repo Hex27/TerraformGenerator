@@ -44,20 +44,6 @@ public class BadlandsHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        FastNoise plateauNoise = new FastNoise((int) (world.getSeed() * 2));
-        plateauNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        plateauNoise.SetFrequency(0.005f);
-
-        FastNoise plateauNoise2 = new FastNoise((int) (world.getSeed() * 2));
-        plateauNoise2.SetNoiseType(FastNoise.NoiseType.CubicFractal);
-        plateauNoise2.SetFrequency(0.18f);
-        plateauNoise2.SetFractalOctaves(2);
-
-        FastNoise bigPlateauNoise = new FastNoise((int) (world.getSeed() * 2));
-        bigPlateauNoise.SetNoiseType(FastNoise.NoiseType.Cubic);
-        bigPlateauNoise.SetFrequency(0.03f);
-//        bigPlateauNoise.SetFractalOctaves(2);
-
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 if (HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
@@ -66,27 +52,6 @@ public class BadlandsHandler extends BiomeHandler {
                 }
 
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
-
-//                double plateauStrength = plateauNoise.GetNoise(x, z);
-
-//                if (plateauStrength > 0 && BiomeGrid.getEdgeFactor(world, 0.35, -9, BiomeBank.BADLANDS, x, z) > 0.3) {
-//                    double value = Math.abs(plateauNoise2.GetNoise(x, z)) * 1.2 * Math.pow(plateauStrength, 0.6);
-//
-//                    if (value > 0.23) {
-//                        int height = (int) Math.round(Math.pow((value - 0.17) * 22, 1.2));
-//                        for (int i = 1; i <= height; i++) data.setType(x, highest + i, z, highest + i % 4 == 0 ? Material.RED_TERRACOTTA : Material.TERRACOTTA);
-//
-//                        highest += height;
-//                    }
-//                }
-
-//                double plateauStrength = bigPlateauNoise.GetNoise(x, z);
-//
-//                if (plateauStrength > 0.2) {
-//                    double height = 20 * Math.pow(Math.min(1, (plateauStrength - 0.2) / 0.05d), 1 / 8d);
-//
-//                    for (int i = 1; i <= height; i++) data.setType(x, highest + i, z, Material.TERRACOTTA);
-//                }
 
                 Material base = data.getType(x, highest, z);
                 if (base == Material.SAND ||
@@ -128,17 +93,20 @@ public class BadlandsHandler extends BiomeHandler {
                     wallNoise.SetFractalOctaves(2);
 
                     double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
+
+                    // These are for blending river effect with other biomes
                     double edgeFactor = BiomeGrid.getLandEdgeFactor(tw, 0.45, BiomeBank.BADLANDS, rawX, rawZ);
-                    double downEdgeFactor = Math.min(2 * edgeFactor, 1);
+                    double bottomEdgeFactor = Math.min(2 * edgeFactor, 1);
                     double topEdgeFactor = Math.max(2 * edgeFactor - 1, 0);
 
+                    // Max height difference between sea level and riverlessHeight
                     double maxDiff = riverlessHeight - TerraformGenerator.seaLevel;
-                    double aboveSea = preciseHeight - 2 - TerraformGenerator.seaLevel;
-                    double f = aboveSea / maxDiff; // 0 at river level
+                    double heightAboveSea = preciseHeight - 2 - TerraformGenerator.seaLevel;
+                    double riverFactor = heightAboveSea / maxDiff; // 0 at river level, 1 at riverlessHeight
 
-                    if (f > 0 && aboveSea > 0) {
-                        int buildHeight = (int) Math.round(downEdgeFactor *
-                                (Math.min(1, 4 * Math.pow(f, 4)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
+                    if (riverFactor > 0 && heightAboveSea > 0) {
+                        int buildHeight = (int) Math.round(bottomEdgeFactor *
+                                (Math.min(1, 4 * Math.pow(riverFactor, 4)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
 
                         for (int i = buildHeight; i >= 0; i--) {
                             int lowerHeight = Math.min(TerraformGenerator.seaLevel + i, (int) Math.round(riverlessHeight));
@@ -146,12 +114,13 @@ public class BadlandsHandler extends BiomeHandler {
                             chunk.setBlock(x, lowerHeight, z, BlockUtils.getTerracotta(lowerHeight));
                         }
 
-                        double h = 0.4 - topEdgeFactor * 0.2;
+                        double threshold = 0.4 + (1 - topEdgeFactor) * 0.6;
 
-                        // Curved edges
-                        if (f > h) {
-                            int upperBuildHeight = (int) Math.round(topEdgeFactor *
-                                    (Math.min(1, 50 * Math.pow(f - h, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
+                        // Curved top edges
+                        if (riverFactor > threshold) {
+                            int upperBuildHeight = (int) Math.round(
+                                    1*//topEdgeFactor *
+                                    (Math.min(1, 50 * Math.pow(riverFactor - threshold, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
 
                             if (topEdgeFactor == 0) continue;
 
@@ -162,14 +131,10 @@ public class BadlandsHandler extends BiomeHandler {
                             }
                         }
 
-                        // Coat with sand
-                        if (f > h + 0.12)
+                        // Coat with red sand
+                        if (riverFactor > threshold + 0.12)
                             chunk.setBlock(x, (int) riverlessHeight + 1, z, Material.RED_SAND);
                     }
-
-                    //                    if (riverlessHeight - riverDepth > seaLevel) {
-                    //                        chunk.setBlock(x, riverlessHeight, z, Material.ORANGE_CONCRETE);
-                    //                    }
                 }
             }
         }

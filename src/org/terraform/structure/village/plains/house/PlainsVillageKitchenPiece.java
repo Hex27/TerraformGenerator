@@ -1,12 +1,12 @@
 package org.terraform.structure.village.plains.house;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+
+import java.util.Random;
 
 public class PlainsVillageKitchenPiece extends JigsawStructurePiece {
 

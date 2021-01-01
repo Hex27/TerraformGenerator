@@ -1,7 +1,5 @@
 package org.terraform.coregen;
 
-import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeGrid;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;

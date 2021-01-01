@@ -167,9 +167,9 @@ public enum BiomeBank {
         Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
 
         return BiomeGrid.calculateBiome(
-            BiomeType.FLAT,
-            temperature + GenUtils.randDouble(random, -dither, dither),
-            moisture + GenUtils.randDouble(random, -dither, dither)
+                BiomeType.FLAT,
+                temperature + GenUtils.randDouble(random, -dither, dither),
+                moisture + GenUtils.randDouble(random, -dither, dither)
         );
     }
 

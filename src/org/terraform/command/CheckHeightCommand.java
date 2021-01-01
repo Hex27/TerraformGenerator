@@ -1,6 +1,5 @@
 package org.terraform.command;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
@@ -9,7 +8,6 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeGrid;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 
@@ -60,7 +58,6 @@ public class CheckHeightCommand extends DCCommand {
         p.sendMessage("Temperature: " + tw.getTemperature(x, z));
         p.sendMessage("Moisture: " + tw.getMoisture(x, z));
         p.sendMessage("Biome edge factor: " + BiomeGrid.getEdgeFactor(tw, biome, x, z));
-        p.sendMessage("Biome flat edge factor: " + BiomeGrid.getLandEdgeFactor(tw, 0.35,  BiomeBank.BADLANDS, x, z));
         p.sendMessage("Result Biome: " + biome);
     }
 }
