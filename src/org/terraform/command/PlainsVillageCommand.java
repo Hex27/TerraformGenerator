@@ -6,20 +6,21 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.structure.village.plains.temple.PlainsVillageTempleJigsawBuilder;
+import org.terraform.data.TerraformWorld;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 
 import java.util.Random;
 import java.util.Stack;
 
-public class JigsawBuilderTestCommand extends DCCommand {
+public class PlainsVillageCommand extends DCCommand {
 
-    public JigsawBuilderTestCommand(DrycellPlugin plugin, String... aliases) {
+    public PlainsVillageCommand(DrycellPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 
     @Override
     public String getDefaultDescription() {
-        return "Jigsaw Build Test";
+        return "Plains Village spawner";
     }
 
     @Override
@@ -39,14 +40,12 @@ public class JigsawBuilderTestCommand extends DCCommand {
 
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
-		int x = p.getLocation().getBlockX();
-		int y = p.getLocation().getBlockY();
-		int z = p.getLocation().getBlockZ();
-        PlainsVillageTempleJigsawBuilder builder = new PlainsVillageTempleJigsawBuilder(
-        		10, 10, data, x, y-1, z
-        	);
-        builder.generate(new Random());
-        builder.build(new Random());
+        int x = p.getLocation().getBlockX();
+        int y = p.getLocation().getBlockY();
+        int z = p.getLocation().getBlockZ();
+        TerraformWorld tw = TerraformWorld.get(p.getWorld());
+        Random random = new Random();
+        new PlainsVillagePopulator().spawnPlainsVillage(tw, random, data, x, y, z);
         p.sendMessage("Complete.");
     }
 

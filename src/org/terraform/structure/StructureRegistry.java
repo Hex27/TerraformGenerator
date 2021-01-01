@@ -15,6 +15,7 @@ import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class StructureRegistry {
 
@@ -45,6 +46,21 @@ public class StructureRegistry {
         //registerStructure(StructureType.SMALL, new DesertWellPopulator());
     }
 
+    /**
+     * Assumes that the supplied type is a singlemegachunkstructurepopulator.
+     * 
+     * @param populatorType
+     * @return
+     */
+    public static StructureType getStructureType(Class<? extends SingleMegaChunkStructurePopulator> populatorType) {
+    	for(Entry<StructureType, SingleMegaChunkStructurePopulator[]> entry:largeStructureRegistry.entrySet()) {
+    		for(SingleMegaChunkStructurePopulator pops:entry.getValue()) {
+    			if(populatorType.isInstance(pops))
+    				return entry.getKey();
+    		}
+    	}
+    	return null; //Invalid populator Type.
+    }
 
     /**
      * @param tw
@@ -110,7 +126,7 @@ public class StructureRegistry {
         return returnVal;
     }
 
-    // Implementing Fisher�Yates shuffle
+    // Implementing Fisher�Yates shuffle (I love unicode to ascii conversion)
     private static void shuffleArray(Random rand, Object[] ar) {
         if (ar.length == 0) return;
 

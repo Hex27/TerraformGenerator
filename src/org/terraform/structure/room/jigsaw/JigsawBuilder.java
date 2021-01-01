@@ -4,14 +4,12 @@ import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
+import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public class JigsawBuilder {
 	protected int widthX;
@@ -23,6 +21,7 @@ public class JigsawBuilder {
 	protected int pieceWidth = 5;
 	protected SimpleBlock core;
 	protected JigsawStructurePiece center;
+	protected Wall entranceBlock;
 	protected Stack<JigsawStructurePiece> traverseStack = new Stack<>();
 	//protected ArrayList<JigsawStructurePiece> pieces = new ArrayList<>();
 	//protected ArrayList<SimpleLocation> usedLocations = new ArrayList<>();
@@ -41,10 +40,19 @@ public class JigsawBuilder {
 		this.upperBounds[0] = x+widthX/2;
 		this.upperBounds[1] = z+widthZ/2;
 	}
+
+	BlockFace entranceDir = null;
+	public void forceEntranceDirection(BlockFace face) {
+		entranceDir = face;
+	}
+	
+	public JigsawStructurePiece getFirstPiece(Random random) {
+		return getPiece(pieceRegistry,JigsawType.STANDARD, random).getInstance(random, 0);
+	}
 	
 	public void generate(Random random) {
 		
-		center = getPiece(pieceRegistry,JigsawType.STANDARD, random).getInstance(random, 0);
+		center = getFirstPiece(random);
 		center.getRoom().setX(core.getX());
 		center.getRoom().setY(core.getY());
 		center.getRoom().setZ(core.getZ());
@@ -64,8 +72,8 @@ public class JigsawBuilder {
 		JigsawStructurePiece current = traverseStack.peek();
 		//TerraformGeneratorPlugin.logger.info("Traversal Index " + traversalIndex + ", on: " + current.toString());
 		traversalIndex++;
-		if(traversalIndex > 100) {
-			TerraformGeneratorPlugin.logger.info("Infinite loop detected! Breaking.");
+		if(traversalIndex > 200) {
+			TerraformGeneratorPlugin.logger.error("Infinite loop detected! Breaking.");
 			return false;
 		}
 		if(current.hasUnpopulatedDirections()) {
@@ -91,8 +99,8 @@ public class JigsawBuilder {
 								.getInstance(random, current.getDepth()+1);
 						toAdd.setRotation(dir);
 					}else { 
-						if(toAddX < lowerBounds[0] || toAddX > upperBounds[0]
-						|| toAddZ < lowerBounds[1] || toAddZ > upperBounds[1]) { 
+						if(toAddX-pieceWidth/2 < lowerBounds[0] || toAddX+pieceWidth/2 > upperBounds[0]
+						|| toAddZ-pieceWidth/2< lowerBounds[1] || toAddZ+pieceWidth/2 > upperBounds[1]) { 
 							//If outside of bounding box, just force an end piece.
 							toAdd = getRelativePiece(current,JigsawType.END,random)
 									.getInstance(random, current.getDepth()+1);
@@ -147,24 +155,78 @@ public class JigsawBuilder {
 		}
 		return true;
 	}
+	
+	
 
+	public SimpleBlock getCore() {
+		return core;
+	}
+
+	public HashMap<SimpleLocation, JigsawStructurePiece> getPieces() {
+		return pieces;
+	}
+
+	private boolean hasPlacedEntrance = false;
+	
 	public void build(Random random) {
 		for(JigsawStructurePiece piece:pieces.values()) {
 			
 			
-			TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
+			//TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
 			piece.build(core.getPopData(),random);
 		}
 		
+		ArrayList<JigsawStructurePiece> toRemove = new ArrayList<>();
+
 		//Overlapper pieces are stuff like walls and entrances.
+		Collections.shuffle(overlapperPieces);
 		for(JigsawStructurePiece piece:overlapperPieces) {
 			//Don't place overlapper objects where rooms have been placed.
-			if(pieces.containsKey(new SimpleLocation(piece.getRoom().getX(),piece.getRoom().getY(),piece.getRoom().getZ())))
+			SimpleLocation pieceLoc = new SimpleLocation(piece.getRoom().getX(),piece.getRoom().getY(),piece.getRoom().getZ());
+			if(pieces.containsKey(pieceLoc)) {
+				toRemove.add(piece);
 				continue;
-			
-			TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
+			}
+			if(!hasPlacedEntrance) { 
+				if(entranceDir == null //Random block face direction
+						|| (piece.getRotation() == entranceDir))  //Forced entrance direction
+				{
+					//Place an entrance if none was placed before.
+					hasPlacedEntrance = true;
+					JigsawStructurePiece temp = getPiece(pieceRegistry, JigsawType.ENTRANCE, random)
+							.getInstance(random, piece.getDepth());
+					temp.getRoom().setX(piece.getRoom().getX());
+					temp.getRoom().setY(piece.getRoom().getY());
+					temp.getRoom().setZ(piece.getRoom().getZ());
+					temp.setRotation(piece.getRotation());
+					entranceBlock = new Wall(
+							new SimpleBlock(
+									core.getPopData(),
+									piece.getRoom().getX(),
+									piece.getRoom().getY(),
+									piece.getRoom().getZ()),
+							piece.getRotation());
+					piece = temp;
+				}
+			}
+			JigsawStructurePiece host = getAdjacentPiece(pieceLoc,piece.getRotation().getOppositeFace());
+			if(host != null)
+				host.getWalledFaces().add(piece.getRotation());
+			//TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
 			piece.build(core.getPopData(),random);
 		}
+		
+		//Remove pieces that weren't placed.
+		for(JigsawStructurePiece piece:toRemove)
+			overlapperPieces.remove(piece);
+	}
+	
+	public JigsawStructurePiece getAdjacentPiece(SimpleLocation loc,BlockFace face) {
+		SimpleLocation other = new SimpleLocation(
+				loc.getX()+face.getModX()*pieceWidth,
+				loc.getY()+face.getModY()*pieceWidth,
+				loc.getZ()+face.getModZ()*pieceWidth);
+		return pieces.get(other);
 	}
 	
 	public JigsawStructurePiece getPiece(JigsawStructurePiece[] registry, JigsawType type, Random rand) {
@@ -187,5 +249,13 @@ public class JigsawBuilder {
 		}else {
 			return getPiece(current.getAllowedPieces(),type,random);
 		}
+	}
+
+	public int getPieceWidth() {
+		return pieceWidth;
+	}
+
+	public Wall getEntranceBlock() {
+		return entranceBlock;
 	}
 }

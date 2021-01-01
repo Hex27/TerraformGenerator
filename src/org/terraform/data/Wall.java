@@ -26,11 +26,23 @@ public class Wall {
     public Wall clone() {
         return new Wall(block, direction);
     }
+    
+    public Wall getAtY(int y) {
+    	return new Wall(new SimpleBlock(block.getPopData(),block.getX(),y,block.getY()),this.direction);
+    }
 
     public Wall getLeft() {
         return new Wall(block.getRelative(BlockUtils.getAdjacentFaces(direction)[0]), direction);
     }
 
+    public Wall getGround() {
+    	return new Wall(new SimpleBlock(
+    			block.getPopData(),
+    			block.getX(),
+    			GenUtils.getHighestGround(block.getPopData(), block.getX(), block.getZ()),
+    			block.getZ()),direction);
+    }
+    
     /**
      * Gets the first solid block above this one
      *
@@ -38,9 +50,9 @@ public class Wall {
      * @return
      */
     public Wall findCeiling(int cutoff) {
-        Wall ceil = this.clone().getRelative(0, 1, 0);
+        Wall ceil = this.getRelative(0, 1, 0);
         while (cutoff > 0) {
-            if (ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
+        	if (ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
                 return ceil;
             }
             cutoff--;
@@ -281,6 +293,7 @@ public class Wall {
     }
 
     public Wall getRear(int it) {
+    	if(it < 0) return getFront(-it);
         Wall w = this.clone();
         for (int i = 0; i < it; i++) w = w.getRear();
         return w;
@@ -291,6 +304,7 @@ public class Wall {
     }
 
     public Wall getFront(int it) {
+    	if(it < 0) return getRear(-it);
         Wall w = this.clone();
         for (int i = 0; i < it; i++) w = w.getFront();
         return w;

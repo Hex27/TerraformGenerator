@@ -43,16 +43,19 @@ public class StairBuilder {
         return this;
     }
 
-    public void apply(SimpleBlock block) {
+    public StairBuilder apply(SimpleBlock block) {
         block.setBlockData(blockData);
+        return this;
     }
 
-    public void apply(Wall block) {
+    public StairBuilder apply(Wall block) {
         block.setBlockData(blockData);
+        return this;
     }
 
-    public void apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public StairBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
+        return this;
     }
 
     public Stairs get() {

@@ -6,18 +6,21 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
 public abstract class JigsawStructurePiece implements Cloneable{
-	private CubeRoom room;
-	private HashMap<BlockFace,Boolean> validDirections = new HashMap<BlockFace,Boolean>();
-	private JigsawStructurePiece[] allowedPieces;
-	private JigsawType type;
-	private int depth = 0;
-	private BlockFace rotation = BlockFace.NORTH;
-	private int elevation = 0; //elevation of 0 is ground level.
+	protected CubeRoom room;
+	protected HashMap<BlockFace,Boolean> validDirections = new HashMap<BlockFace,Boolean>();
+	protected ArrayList<BlockFace> walledFaces = new ArrayList<>();
+	protected JigsawStructurePiece[] allowedPieces;
+	protected JigsawType type;
+	protected int depth = 0;
+	protected BlockFace rotation = BlockFace.NORTH;
+	protected boolean unique = false;
+	protected int elevation = 0; //elevation of 0 is ground level.
 	
 	public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, BlockFace... validDirs) {
 		this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
@@ -26,6 +29,8 @@ public abstract class JigsawStructurePiece implements Cloneable{
 			validDirections.put(face, false);
 		//TerraformGeneratorPlugin.logger.info("CONSTRUCTOR-validDirsSize: " + validDirections.size());
 	}
+	
+	public void postBuildDecoration(Random random,PopulatorDataAbstract data) {};
 	
 	@SuppressWarnings("unchecked")
 	public JigsawStructurePiece getInstance(Random rand, int depth) {
@@ -38,7 +43,7 @@ public abstract class JigsawStructurePiece implements Cloneable{
 				clone.validDirections.put(face, false);
 			}
 			//TerraformGeneratorPlugin.logger.info("CREATOR-validDirsSize: " + validDirections.size());
-
+			clone.walledFaces = new ArrayList<>();
 			clone.setRotation(BlockUtils.getDirectBlockFace(rand));
 			clone.elevation = 0;
 			clone.setDepth(depth);
@@ -128,4 +133,20 @@ public abstract class JigsawStructurePiece implements Cloneable{
     			+ "::" + room.getX() + "," + room.getY() + "," + room.getZ() 
     			+ "::" + this.hasUnpopulatedDirections() + "::"+directions;
     }
+
+	public boolean isUnique() {
+		return unique;
+	}
+
+	public void setUnique(boolean unique) {
+		this.unique = unique;
+	}
+
+	public ArrayList<BlockFace> getWalledFaces() {
+		return walledFaces;
+	}
+
+	public void setWalledFaces(ArrayList<BlockFace> walledFaces) {
+		this.walledFaces = walledFaces;
+	}
 }

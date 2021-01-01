@@ -19,7 +19,8 @@ public class GenUtils {
             "LEAVES", "LOG",
             "WOOD", "MUSHROOM",
             "FENCE", "WALL",
-            "POTTED", "BRICK"
+            "POTTED", "BRICK",
+            "CHAIN"
     };
     private static final Map<Integer, ArrayList<BiomeBank>> biomeQueryCache = new HashMap<>(30);
 
@@ -238,6 +239,8 @@ public class GenUtils {
                     case CACTUS:
                     case BAMBOO:
                     case BAMBOO_SAPLING:
+                    case IRON_BARS:
+                    case LANTERN:
                         y--;
                         continue;
                 }

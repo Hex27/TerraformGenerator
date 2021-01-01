@@ -1,4 +1,4 @@
-package org.terraform.structure.village.plains.house;
+package org.terraform.structure.village.plains.temple;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -8,9 +8,9 @@ import org.terraform.structure.room.jigsaw.JigsawType;
 
 import java.util.Random;
 
-public class PlainsVillageStairwayPiece extends JigsawStructurePiece {
+public class PlainsVillageTempleStairway extends JigsawStructurePiece {
 
-	public PlainsVillageStairwayPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+	public PlainsVillageTempleStairway(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
 		super(widthX, height, widthZ, type, validDirs);
 		
 	}

@@ -49,7 +49,7 @@ public class SnowyWastelandHandler extends BiomeHandler {
             int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
             //Block b = loc.getBlock().getRelative(0,1,0);
             if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
-            if (data.getType(loc[0], loc[1], loc[2]) != Material.DIRT) continue;
+            if (data.getType(loc[0], loc[1], loc[2]) != Material.SNOW_BLOCK) continue;
 
             BlockUtils.spawnPillar(random, data, loc[0], loc[1], loc[2], Material.SPRUCE_LOG, 3, 6);
 
@@ -68,11 +68,11 @@ public class SnowyWastelandHandler extends BiomeHandler {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (data.getBiome(x, y, z) != getBiome()) continue;
 
-                if (data.getType(x, y, z) == Material.DIRT) {
-                    if (GenUtils.chance(random, 1, 20)) {
-                        data.setType(x, y + 1, z, Material.DEAD_BUSH);
-                    }
-                }
+//                if (data.getType(x, y, z) == Material.DIRT) {
+//                    if (GenUtils.chance(random, 1, 20)) {
+//                        data.setType(x, y + 1, z, Material.DEAD_BUSH);
+//                    }
+//                }
                 if (data.getType(x, y + 1, z) == Material.AIR) {
                     data.setType(x, y + 1, z, Material.SNOW);
                     if (data.getBlockData(x, y, z) instanceof Snowable) {

@@ -61,7 +61,6 @@ public class LocateCommand extends DCCommand implements Listener {
 
     @Override
     public boolean hasPermission(CommandSender sender) {
-
         return sender.isOp() || sender.hasPermission("terraformgenerator.locate");
     }
 
@@ -184,10 +183,19 @@ public class LocateCommand extends DCCommand implements Listener {
                         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
                         if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
-                            found = true;
-                            blockX = coords[0];
-                            blockZ = coords[1];
-                            break;
+                        	
+                        	//Check structure registry.
+                    		for(SingleMegaChunkStructurePopulator availablePops:StructureRegistry.getLargeStructureForMegaChunk(tw, mc, banks)) {
+                    			if(availablePops == null) continue;
+                    			if(availablePops.getClass().equals(populator.getClass())) {
+                    				//Can spawn
+                                	found = true;
+                                    blockX = coords[0];
+                                    blockZ = coords[1];
+                                    break;
+                    			}
+                    		}
+                    		if(found) break;
                         }
                     }
                     radius++;
