@@ -1,15 +1,15 @@
 package org.terraform.structure.room.jigsaw;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public abstract class JigsawStructurePiece implements Cloneable{
 	protected CubeRoom room;

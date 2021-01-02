@@ -1,8 +1,8 @@
 package org.terraform.data;
 
-import java.util.Objects;
-
 import org.bukkit.block.BlockFace;
+
+import java.util.Objects;
 
 public class SimpleLocation {
 

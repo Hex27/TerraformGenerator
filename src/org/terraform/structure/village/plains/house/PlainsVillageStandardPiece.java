@@ -1,8 +1,5 @@
 package org.terraform.structure.village.plains.house;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -15,6 +12,9 @@ import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Version;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Random;
 
 public class PlainsVillageStandardPiece extends JigsawStructurePiece {
 	

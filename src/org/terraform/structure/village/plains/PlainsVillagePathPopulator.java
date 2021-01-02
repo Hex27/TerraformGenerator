@@ -1,8 +1,5 @@
 package org.terraform.structure.village.plains;
 
-import java.util.Collection;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -18,6 +15,9 @@ import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
+
+import java.util.Collection;
+import java.util.Random;
 
 public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
 	TerraformWorld tw;

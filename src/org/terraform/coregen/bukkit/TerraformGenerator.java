@@ -48,7 +48,8 @@ public class TerraformGenerator extends ChunkGenerator {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
-                int height = HeightMap.getHeight(tw, rawX, rawZ);
+                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
+                int height = (int) preciseHeight;
 
                 BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), height);
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
@@ -77,10 +78,9 @@ public class TerraformGenerator extends ChunkGenerator {
                 chunk.setBlock(x, 1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 chunk.setBlock(x, 0, z, Material.BEDROCK);
 
+                tw.getBiomeBank(rawX, height, rawZ).getHandler().transformTerrain(tw, random, chunk, chunkX, chunkZ);
             }
         }
-
-        //Bukkit.getLogger().info("Finished: " + chunkX + "," + chunkZ);
 
         return chunk;
     }

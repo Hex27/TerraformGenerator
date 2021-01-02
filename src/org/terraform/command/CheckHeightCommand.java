@@ -1,6 +1,5 @@
 package org.terraform.command;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
@@ -61,5 +60,4 @@ public class CheckHeightCommand extends DCCommand {
         p.sendMessage("Biome edge factor: " + BiomeGrid.getEdgeFactor(tw, biome, x, z));
         p.sendMessage("Result Biome: " + biome);
     }
-
 }

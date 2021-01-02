@@ -1,7 +1,5 @@
 package org.terraform.structure.village.plains.temple;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -11,6 +9,8 @@ import org.terraform.structure.room.jigsaw.JigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
+
+import java.util.Random;
 
 public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
 	

@@ -1,11 +1,5 @@
 package org.terraform.structure.room.jigsaw;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Stack;
-
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -14,6 +8,8 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
+import java.util.*;
 
 public class JigsawBuilder {
 	protected int widthX;

@@ -6,7 +6,6 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.structure.village.plains.house.PlainsVillageHouseJigsawBuilder;
 import org.terraform.structure.village.plains.temple.PlainsVillageTempleJigsawBuilder;
 
 import java.util.Random;

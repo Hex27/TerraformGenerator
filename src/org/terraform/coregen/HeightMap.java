@@ -1,7 +1,5 @@
 package org.terraform.coregen;
 
-import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeGrid;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
@@ -100,7 +98,7 @@ public abstract class HeightMap {
         return Math.pow(height, 5) * 5;
     }
 
-    public static int getHeight(TerraformWorld tw, int x, int z) {
+    public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
         double height = getCoreHeight(tw, x, z);
 
         if (height > defaultSeaLevel + 4) {
@@ -138,11 +136,18 @@ public abstract class HeightMap {
             height = TerraformGenerator.seaLevel - 15;
         }
 
-        return (int) height;
+        return height;
     }
 
-    //Used for calculating biomes
-    public static int getRiverlessHeight(TerraformWorld tw, int x, int z) {
+    public static int getHeight(TerraformWorld tw, int x, int z) {
+        return (int) getPreciseHeight(tw, x, z);
+    }
+
+    /**
+     * Used for calculating biomes and calculating terrain shapes.
+     * When used with biomes, output value should be type casted to int.
+     */
+    public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
         double height = getCoreHeight(tw, x, z);
 
         if (height > defaultSeaLevel + 4) {
@@ -164,6 +169,6 @@ public abstract class HeightMap {
         if (height > 240) height = 240 + (height - 240) * 0.1;
         if (height > 250) height = 250 + (height - 250) * 0.05;
 
-        return (int) (height + getOceanicHeight(tw, x, z));
+        return height + getOceanicHeight(tw, x, z);
     }
 }

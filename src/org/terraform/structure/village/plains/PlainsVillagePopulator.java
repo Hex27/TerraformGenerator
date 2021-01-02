@@ -9,6 +9,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.VillageHousePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
 import java.util.Random;
 
 public class PlainsVillagePopulator extends VillageHousePopulator {

@@ -1,7 +1,5 @@
 package org.terraform.structure.village.plains.house;
 
-import java.util.Random;
-
 import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -17,6 +15,8 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.TrapdoorBuilder;
+
+import java.util.Random;
 
 public class PlainsVillageRoofHandler {
 	

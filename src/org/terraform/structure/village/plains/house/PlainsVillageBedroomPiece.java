@@ -1,8 +1,5 @@
 package org.terraform.structure.village.plains.house;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
@@ -19,6 +16,9 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Random;
 
 public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
 

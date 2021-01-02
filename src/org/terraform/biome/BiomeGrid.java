@@ -118,9 +118,9 @@ public class BiomeGrid {
 
     private static final BiomeBank[][] beachGrid = {
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
-                    BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
+                    BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH},
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
-                    BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
+                    BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH},
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
             new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
@@ -199,6 +199,28 @@ public class BiomeGrid {
      * @param riverDepth Current river depth, has to have also negative values
      */
     public static double getEdgeFactor(double biomeThreshold, int riverThreshold, BiomeBank currentBiome, double temp, double moist, double riverDepth) {
+        double factor = getLandEdgeFactor(biomeThreshold, currentBiome, temp, moist);
+
+        // Rivers
+        double riverFactor = riverDepth / riverThreshold;
+
+        if (riverFactor < factor) {
+            factor = Math.max(0, riverFactor);
+        }
+
+        return factor;
+    }
+
+    public static double getLandEdgeFactor(TerraformWorld tw, double biomeThreshold, BiomeBank currentBiome, int x, int z) {
+        return getLandEdgeFactor(biomeThreshold, currentBiome, normalise(tw.getTemperature(x, z)), normalise(tw.getMoisture(x, z)));
+    }
+
+    /*
+        Get edge factor only based on land, ignore rivers
+     */
+    public static double getLandEdgeFactor(double biomeThreshold, BiomeBank currentBiome, double temp, double moist) {
+        if (getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(moist)) != currentBiome) return 0;
+
         double tempDecimals = Math.abs(temp - (int) temp);
         double moistDecimals = Math.abs(moist - (int) moist);
 
@@ -237,13 +259,6 @@ public class BiomeGrid {
         if (cornerSituation) factor = Math.max(tempFactor, moistFactor);
         else if (tempSituation) factor = tempFactor;
         else if (moistSituation) factor = moistFactor;
-
-        // Rivers
-        double riverFactor = riverDepth / riverThreshold;
-
-        if (riverFactor < factor) {
-            factor = Math.max(0, riverFactor);
-        }
 
         return factor;
     }
