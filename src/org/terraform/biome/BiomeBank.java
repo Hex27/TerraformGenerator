@@ -10,6 +10,7 @@ import org.terraform.biome.ocean.*;
 import org.terraform.biome.river.FrozenRiverHandler;
 import org.terraform.biome.river.JungleRiverHandler;
 import org.terraform.biome.river.RiverHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
@@ -94,6 +95,10 @@ public enum BiomeBank {
      * @return a biome type
      */
     public static BiomeBank calculateBiome(TerraformWorld tw, int x, int z, int height) {
+        ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
+
+        BiomeBank cachedValue = cache.getBiome(x, z);
+        if (cachedValue != null) return cachedValue;
 
         double dither = TConfigOption.BIOME_DITHER.getDouble();
         double temperature = tw.getTemperature(x, z);
@@ -113,15 +118,15 @@ public enum BiomeBank {
 
             //This is a river.
             if (trueHeight >= TerraformGenerator.seaLevel) {
-                return BiomeGrid.calculateBiome(BiomeType.RIVER,
+                return cache.cacheBiome(x, z, BiomeGrid.calculateBiome(BiomeType.RIVER,
                         temperature + GenUtils.randDouble(random, -dither, dither),
-                        moisture + GenUtils.randDouble(random, -dither, dither));
+                        moisture + GenUtils.randDouble(random, -dither, dither)));
             }
 
             if (bank == SWAMP) {
                 if (height >= TerraformGenerator.seaLevel - GenUtils.randInt(random, 9, 11)) {
                     //Shallow and warm areas are swamps.
-                    return SWAMP;
+                    return cache.cacheBiome(x, z, SWAMP);
                 } else
                     bank = OCEAN;
             }
@@ -131,33 +136,33 @@ public enum BiomeBank {
                 //TerraformGeneratorPlugin.logger.info("detected deep sea: " + bank.toString() + " at height " + height);
             }
 
-            return bank;
+            return cache.cacheBiome(x, z, bank);
         }
 
         //GENERATE HIGH-ALTITUDE AREAS
         if (height >= TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt() - GenUtils.randInt(random, 0, 5)) {
-            return BiomeGrid.calculateBiome(
+            return cache.cacheBiome(x, z, BiomeGrid.calculateBiome(
                     BiomeType.MOUNTAINOUS,
                     temperature + GenUtils.randDouble(random, -dither, dither),
                     moisture + GenUtils.randDouble(random, -dither, dither)
-            );
+            ));
         }
 
         //GENERATE BEACHES
         if (height <= TerraformGenerator.seaLevel + GenUtils.randInt(random, 0, 4)) {
-            return BiomeGrid.calculateBiome(
+            return cache.cacheBiome(x, z, BiomeGrid.calculateBiome(
                     BiomeType.BEACH,
                     temperature + GenUtils.randDouble(random, -dither, dither),
                     moisture + GenUtils.randDouble(random, -dither, dither)
-            );
+            ));
         }
 
         //GENERATE LOW-ALTITUDE AREAS
-        return BiomeGrid.calculateBiome(
+        return cache.cacheBiome(x, z, BiomeGrid.calculateBiome(
                 BiomeType.FLAT,
                 temperature + GenUtils.randDouble(random, -dither, dither),
                 moisture + GenUtils.randDouble(random, -dither, dither)
-        );
+        ));
     }
 
     public static BiomeBank calculateFlatBiome(TerraformWorld tw, int x, int z, int height) {

@@ -22,7 +22,7 @@ public class TerraformGenerator extends ChunkGenerator {
     public static int seaLevel = 62;
     public static int minMountainLevel = 85;
 
-    public static HashMap<Pair<Integer, Integer>, ChunkCache> caches = new HashMap<>();
+    public static HashMap<Pair<Integer, Integer>, ChunkCache> chunkCaches = new HashMap<>();
 
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
@@ -38,7 +38,7 @@ public class TerraformGenerator extends ChunkGenerator {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
         ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
-        caches.put(new Pair<>(chunkX, chunkZ), cache);
+        chunkCaches.put(new Pair<>(chunkX, chunkZ), cache);
 
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 
@@ -97,5 +97,12 @@ public class TerraformGenerator extends ChunkGenerator {
     public List<BlockPopulator> getDefaultPopulators(World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
+    }
+
+    public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
+        Pair<Integer, Integer> pair = new Pair<>(ChunkCache.getChunkCoordinate(x), ChunkCache.getChunkCoordinate(z));
+
+        if (!chunkCaches.containsKey(pair)) return new ChunkCache(tw, x, z);
+        return TerraformGenerator.chunkCaches.get(pair);
     }
 }
