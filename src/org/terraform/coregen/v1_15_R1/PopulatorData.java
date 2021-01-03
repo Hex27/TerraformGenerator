@@ -48,8 +48,7 @@ public class PopulatorData extends PopulatorDataAbstract {
 
     public Biome getBiome(int rawX, int rawY, int rawZ) {
         TerraformWorld tw = TerraformWorld.get(rlwa.getWorldData().getName(), rlwa.getWorldData().getSeed());
-        int y = org.terraform.coregen.HeightMap.getHeight(tw, rawX, rawZ);
-        return tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf
+        return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf
         // (rlwa.getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase());
     }
 
