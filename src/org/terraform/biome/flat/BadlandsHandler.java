@@ -65,7 +65,7 @@ public class BadlandsHandler extends BiomeHandler {
                         }
                         if (canSpawn)
                             BlockUtils.spawnPillar(random, data, x, highest + 1, z, Material.CACTUS, 2, 5);
-                    } else if (GenUtils.chance(random, 1, 80)) {
+                    } else if (GenUtils.chance(random, 1, 80) && highest > TerraformGenerator.seaLevel) {
                         data.setType(x, highest + 1, z, Material.DEAD_BUSH);
                     }
                 }

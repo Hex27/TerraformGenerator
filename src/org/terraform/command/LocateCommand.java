@@ -148,7 +148,7 @@ public class LocateCommand extends DCCommand implements Listener {
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
                 if (found)
-                    syncSendMessage(uuid, ChatColor.GREEN + " [" + populator.getClass().getSimpleName() + "]" +  LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
+                    syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " +  LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
                 else
                     syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
 
@@ -166,21 +166,32 @@ public class LocateCommand extends DCCommand implements Listener {
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
         p.sendMessage(LangOpt.COMMAND_LOCATE_SEARCHING.parse());
         UUID uuid = p.getUniqueId();
-
+        
+        
         long startTime = System.currentTimeMillis();
 
         BukkitRunnable runnable = new BukkitRunnable() {
             public void run() {
+                MegaChunk lowerBound = null;
+                MegaChunk upperBound = null;
                 int blockX = -1;
                 int blockZ = -1;
                 int radius = 0;
                 boolean found = false;
+                //syncSendMessage(uuid, ChatColor.YELLOW + "Using Location " + p.getLocation().getX() + "," + p.getLocation().getZ());
+                //syncSendMessage(uuid, ChatColor.YELLOW + "Using Center MC: " + center.getX() + "," + center.getZ());
 
                 while (!found) {
-                    for (MegaChunk mc : getSurroundingChunks(center, radius)) {
+                	for (MegaChunk mc : getSurroundingChunks(center, radius)) {
+                    	if(lowerBound == null) lowerBound = mc;
+                    	if(upperBound == null) upperBound = mc;
+                    	if(mc.getX() < lowerBound.getX()||mc.getZ() < lowerBound.getZ())
+                    		lowerBound = mc;
+                    	if(mc.getX() > upperBound.getX()||mc.getZ() > upperBound.getZ())
+                    		upperBound = mc;
                         int[] coords = populator.getCoordsFromMegaChunk(tw, mc);
                         if (coords == null) continue;
-
+                        //Right bitshift of 4 is conversion from block coords to chunk coords.
                         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
                         if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
@@ -193,7 +204,7 @@ public class LocateCommand extends DCCommand implements Listener {
                                 break;
                         	}else {
                         		//If it is not a mega dungeon, the structure registry must be checked.
-                        		for(SingleMegaChunkStructurePopulator availablePops:StructureRegistry.getLargeStructureForMegaChunk(tw, mc, banks)) {
+                        		for(SingleMegaChunkStructurePopulator availablePops:StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
                         			if(availablePops == null) continue;
                         			if(availablePops.getClass().equals(populator.getClass())) {
                         				//Can spawn
@@ -211,6 +222,8 @@ public class LocateCommand extends DCCommand implements Listener {
                     //syncSendMessage(uuid,ChatColor.YELLOW + "[" + populator.getClass().getSimpleName() + "] Searching MegaChunk Radius: " + radius);
 
                 }
+                //syncSendMessage(uuid,ChatColor.YELLOW + "[" + populator.getClass().getSimpleName() + "] UpperBound: " + upperBound.getX() + "," + upperBound.getZ());
+                //syncSendMessage(uuid,ChatColor.YELLOW + "[" + populator.getClass().getSimpleName() + "] LowerBound: " + lowerBound.getX() + "," + lowerBound.getZ());
                 long timeTaken = System.currentTimeMillis() - startTime;
 
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
@@ -240,6 +253,7 @@ public class LocateCommand extends DCCommand implements Listener {
 
                 //Check that this is a border coord
                 if (Math.abs(rx) == radius || Math.abs(rz) == radius) {
+                	//Bukkit.getLogger().info(center.getX() + "+" + rx + "," + center.getZ() + "+"+rz);
                     candidates.add(center.getRelative(rx, rz));
                 }
             }

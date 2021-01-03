@@ -39,17 +39,22 @@ public class PopulatorData extends PopulatorDataAbstract {
     @SuppressWarnings("deprecation")
     @Override
     public void setType(int x, int y, int z, Material type) {
-        if (!rlwa.setTypeAndData(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0)) {
+    	//Cannot place block outside 3x3 radius.
+        if (Math.abs((x >> 4) - chunkX) > 1 || Math.abs((z >> 4) - chunkZ) > 1) {
             NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
+        }else {
+        	rlwa.setTypeAndData(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0);
         }
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void setBlockData(int x, int y, int z, BlockData data) {
-        if (!rlwa.setTypeAndData(new BlockPosition(x, y, z)
-                , ((CraftBlockData) data).getState(), 0)) {
+        if (Math.abs((x >> 4) - chunkX) > 1 || Math.abs((z >> 4) - chunkZ) > 1) {
             NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
+        }else {
+        	rlwa.setTypeAndData(new BlockPosition(x, y, z)
+                    , ((CraftBlockData) data).getState(), 0);
         }
     }
 

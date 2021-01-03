@@ -10,7 +10,7 @@ import java.util.Random;
  * Used for spawning structures.
  */
 public class MegaChunk {
-    private final int x, z;
+    private int x, z;
 
     public MegaChunk(SimpleChunkLocation sLoc) {
         this(sLoc.getX(), sLoc.getZ());
@@ -27,7 +27,10 @@ public class MegaChunk {
     }
 
     public MegaChunk getRelative(int x, int z) {
-        return new MegaChunk(this.x + x, this.z + z);
+        MegaChunk mc = new MegaChunk(0,0);
+        mc.x = this.x + x;
+        mc.z = this.z + z;
+        return mc;
     }
 
     /**

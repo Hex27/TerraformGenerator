@@ -15,6 +15,7 @@ import java.util.Random;
 // https://www.geogebra.org/classic/hg7ckgwz
 public class MushroomBuilder {
     Random rand;
+    FastNoise noiseGen;
 
     SimpleBlock stemTop;
 
@@ -112,7 +113,7 @@ public class MushroomBuilder {
         }
     }
 
-    private static void replaceSphere(float radius, SimpleBlock base, Material type) {
+    private void replaceSphere(float radius, SimpleBlock base, Material type) {
         if (radius < 0.5) {
             if (!base.getType().isSolid())
                 base.setType(type);
@@ -120,9 +121,8 @@ public class MushroomBuilder {
             return;
         }
 
-        FastNoise noise = new FastNoise();
-        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
+        noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
+        noiseGen.SetFrequency(0.09f);
 
         for (int x = -Math.round(radius); x <= Math.round(radius); x++) {
             for (int y = -Math.round(radius); y <= Math.round(radius); y++) {
@@ -132,7 +132,7 @@ public class MushroomBuilder {
                     if (Math.pow(x, 2) / Math.pow(radius, 2) +
                             Math.pow(y, 2) / Math.pow(radius, 2) +
                             Math.pow(z, 2) / Math.pow(radius, 2)
-                            <= 1 + 0.7 * noise.GetNoise(block.getX(), block.getY(), block.getZ())) {
+                            <= 1 + 0.7 * noiseGen.GetNoise(block.getX(), block.getY(), block.getZ())) {
                         if (!block.getType().isSolid()) {
                             block.setType(type);
                         }
@@ -142,11 +142,11 @@ public class MushroomBuilder {
         }
     }
 
-    public static void spawnSphericalCap(int seed, float r, float ry, SimpleBlock base, boolean hardReplace, Material... type) {
+    public void spawnSphericalCap(int seed, float r, float ry, SimpleBlock base, boolean hardReplace, Material... type) {
         Random rand = new Random(seed);
-        FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        noise.SetFrequency(1.4f);
+        //FastNoise noise = new FastNoise(seed);
+        noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
+        noiseGen.SetFrequency(1.4f);
 
         float belowY = -0.25f * 2 * ry;
         float lowThreshold = Math.min((float) (0.6 / 5 * Math.min(r, ry)), 0.6f); // When radius < 5 mushrooms less hollow
@@ -157,7 +157,7 @@ public class MushroomBuilder {
                     float factor = y / belowY;
 
                     // Hems
-                    if (y < 0 && factor + Math.abs(noise.GetNoise(x / r, z / r)) > 0.6) {
+                    if (y < 0 && factor + Math.abs(noiseGen.GetNoise(x / r, z / r)) > 0.6) {
                         continue;
                     }
 
@@ -166,7 +166,7 @@ public class MushroomBuilder {
                             + Math.pow(y, 2) / Math.pow(ry, 2)
                             + Math.pow(z, 2) / Math.pow(r, 2);
 
-                    if (equationResult <= 1 + 0.25 * Math.abs(noise.GetNoise(x / r, y / ry, z / r))
+                    if (equationResult <= 1 + 0.25 * Math.abs(noiseGen.GetNoise(x / r, y / ry, z / r))
                             && equationResult >= lowThreshold) {
 
                         if (hardReplace || !rel.getType().isSolid()) {
@@ -180,7 +180,8 @@ public class MushroomBuilder {
     }
 
     public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
+    	this.noiseGen = new FastNoise((int)tw.getSeed());
+    	this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         if (this.stemTop == null) stemTop = base;
 
@@ -256,9 +257,9 @@ public class MushroomBuilder {
 
     private void spawnFunnelCap(int seed, float r, float height, float thickness, SimpleBlock base, boolean hardReplace, Material... type) {
         Random rand = new Random(seed);
-        FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        noise.SetFrequency(1.4f);
+        //FastNoise noise = new FastNoise(seed);
+        noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
+        noiseGen.SetFrequency(1.4f);
 
         for (int x = Math.round(-r); x <= Math.round(r); x++) {
             for (int y = 0; y <= Math.round(3 * thickness); y++) {
@@ -272,7 +273,7 @@ public class MushroomBuilder {
                     // Actual Y value calculated with mafs magic
                     // https://www.geogebra.org/classic/x3xzkzwd < the curve
                     double realY = y + height * (Math.pow(distToCenter + 0.02, 0.5) - Math.pow(distToCenter - 0.15, 8));
-                    realY += thickness * Math.abs(noise.GetNoise(x / r, z / r)); // Noise
+                    realY += thickness * Math.abs(noiseGen.GetNoise(x / r, z / r)); // Noise
                     SimpleBlock rel = base.getRelative(x, (int) Math.round(realY), z);
 
                     double equationResult = Math.pow(x / r, 2)
