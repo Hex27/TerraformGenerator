@@ -22,6 +22,7 @@ import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
+import org.terraform.structure.StructureType;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.utils.GenUtils;
 
@@ -147,7 +148,7 @@ public class LocateCommand extends DCCommand implements Listener {
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
                 if (found)
-                    syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
+                    syncSendMessage(uuid, ChatColor.GREEN + " [" + populator.getClass().getSimpleName() + "]" +  LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
                 else
                     syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
 
@@ -183,29 +184,39 @@ public class LocateCommand extends DCCommand implements Listener {
                         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
                         if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
-                        	
-                        	//Check structure registry.
-                    		for(SingleMegaChunkStructurePopulator availablePops:StructureRegistry.getLargeStructureForMegaChunk(tw, mc, banks)) {
-                    			if(availablePops == null) continue;
-                    			if(availablePops.getClass().equals(populator.getClass())) {
-                    				//Can spawn
-                                	found = true;
-                                    blockX = coords[0];
-                                    blockZ = coords[1];
-                                    break;
-                    			}
-                    		}
-                    		if(found) break;
+                    		 
+                        	//Mega Dungeons will always spawn if they can.
+                        	if(StructureRegistry.getStructureType(populator.getClass()) == StructureType.MEGA_DUNGEON) {
+                        		found = true;
+                                blockX = coords[0];
+                                blockZ = coords[1];
+                                break;
+                        	}else {
+                        		//If it is not a mega dungeon, the structure registry must be checked.
+                        		for(SingleMegaChunkStructurePopulator availablePops:StructureRegistry.getLargeStructureForMegaChunk(tw, mc, banks)) {
+                        			if(availablePops == null) continue;
+                        			if(availablePops.getClass().equals(populator.getClass())) {
+                        				//Can spawn
+                                    	found = true;
+                                        blockX = coords[0];
+                                        blockZ = coords[1];
+                                        break;
+                        			}
+                        		}
+                        		if(found) break;
+                        	}
                         }
                     }
                     radius++;
+                    //syncSendMessage(uuid,ChatColor.YELLOW + "[" + populator.getClass().getSimpleName() + "] Searching MegaChunk Radius: " + radius);
+
                 }
                 long timeTaken = System.currentTimeMillis() - startTime;
 
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
                 if (found)
-                    syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
+                    syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " +  LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
                 else
                     syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
 

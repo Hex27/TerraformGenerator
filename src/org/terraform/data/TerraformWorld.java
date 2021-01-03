@@ -22,11 +22,13 @@ public class TerraformWorld {
     private TerraformWorld(String name, long seed) {
         this.worldName = name;
         this.seed = seed;
+        Bukkit.getLogger().info("TW WORLD: " + name + ":" + seed);
     }
 
     private TerraformWorld(World world) {
         this.worldName = world.getName();
         this.seed = world.getSeed();
+        Bukkit.getLogger().info("TW WORLD: " + worldName + ":" + seed);
     }
 
     public static TerraformWorld get(World world) {

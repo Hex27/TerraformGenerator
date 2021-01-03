@@ -27,8 +27,7 @@ public class DesertHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.RED_SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND,
-                Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND),
+        return new Material[]{Material.SAND,
                 Material.SAND,
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE),
