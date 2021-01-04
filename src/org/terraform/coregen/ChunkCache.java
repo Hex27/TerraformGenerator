@@ -1,6 +1,5 @@
 package org.terraform.coregen;
 
-import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
 
 public class ChunkCache {
@@ -9,8 +8,7 @@ public class ChunkCache {
     public final int chunkX;
     public final int chunkZ;
 
-    double[][] heightCache = new double[16][16];
-    BiomeBank[][] biomeCache = new BiomeBank[16][16];
+    double[][] cache = new double[16][16];
 
     public ChunkCache(TerraformWorld tw, int x, int z) {
         this.tw = tw;
@@ -30,19 +28,10 @@ public class ChunkCache {
     }
 
     public double getHeight(int x, int z) {
-        return heightCache[transformBigCoordinate(z)][transformBigCoordinate(x)];
+        return cache[transformBigCoordinate(z)][transformBigCoordinate(x)];
     }
 
     public void cacheHeight(int x, int z, double value) {
-        heightCache[transformBigCoordinate(z)][transformBigCoordinate(x)] = value;
-    }
-
-    public BiomeBank getBiome(int x, int z) {
-        return biomeCache[transformBigCoordinate(z)][transformBigCoordinate(x)];
-    }
-
-    public BiomeBank cacheBiome(int x, int z, BiomeBank value) {
-        biomeCache[transformBigCoordinate(z)][transformBigCoordinate(x)] = value;
-        return value;
+        cache[transformBigCoordinate(z)][transformBigCoordinate(x)] = value;
     }
 }

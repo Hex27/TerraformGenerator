@@ -133,7 +133,8 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
 //	}
 
     public Biome getBiome(int rawX, int rawY, int rawZ) {
-        return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf(ica
+        int y = org.terraform.coregen.HeightMap.getHeight(tw, rawX, rawZ);
+        return tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf(ica
         // .getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase());
     }
 

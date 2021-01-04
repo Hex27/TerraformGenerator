@@ -91,8 +91,15 @@ public class GenUtils {
 
         for (int x = gridX; x < gridX + 16; x++) {
             for (int z = gridZ; z < maxGridZ; z++) {
-                BiomeBank bank = tw.getBiomeBank(x, z);
-                if (!banks.contains(bank)) banks.add(bank);
+                int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
+                for (BiomeBank bank : BiomeBank.VALUES) {
+                    BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
+
+                    if (bank == currentBiome) {
+                        if (!banks.contains(bank)) banks.add(bank);
+                        break;
+                    }
+                }
             }
         }
 

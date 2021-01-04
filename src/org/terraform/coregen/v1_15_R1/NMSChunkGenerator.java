@@ -60,7 +60,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
 
-                BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler
+                int y = org.terraform.coregen.HeightMap.getHeight(tw, x, z);
+                BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, y, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler
                 // ().getBiome()
 
                 //2D Biomes.

@@ -10,7 +10,6 @@ import org.terraform.biome.ocean.*;
 import org.terraform.biome.river.FrozenRiverHandler;
 import org.terraform.biome.river.JungleRiverHandler;
 import org.terraform.biome.river.RiverHandler;
-import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
@@ -95,6 +94,7 @@ public enum BiomeBank {
      * @return a biome type
      */
     public static BiomeBank calculateBiome(TerraformWorld tw, int x, int z, int height) {
+
         double dither = TConfigOption.BIOME_DITHER.getDouble();
         double temperature = tw.getTemperature(x, z);
         double moisture = tw.getMoisture(x, z);
@@ -115,14 +115,13 @@ public enum BiomeBank {
             if (trueHeight >= TerraformGenerator.seaLevel) {
                 return BiomeGrid.calculateBiome(BiomeType.RIVER,
                         temperature + GenUtils.randDouble(random, -dither, dither),
-                        moisture + GenUtils.randDouble(random, -dither, dither)
-                );
+                        moisture + GenUtils.randDouble(random, -dither, dither));
             }
 
             if (bank == SWAMP) {
                 if (height >= TerraformGenerator.seaLevel - GenUtils.randInt(random, 9, 11)) {
                     //Shallow and warm areas are swamps.
-                    return  SWAMP;
+                    return SWAMP;
                 } else
                     bank = OCEAN;
             }
