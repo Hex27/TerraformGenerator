@@ -1,6 +1,5 @@
 package org.terraform.structure;
 
-import org.terraform.biome.BiomeBank;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
@@ -67,14 +66,14 @@ public class StructureRegistry {
      * @param mc
      * @return the structure types that will spawn in this mega chunk
      */
-    public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(TerraformWorld tw, MegaChunk mc, ArrayList<BiomeBank> biomes) {
+    public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(TerraformWorld tw, MegaChunk mc) {
 
         //Clear the cache if it gets big.
         if (queryCache.size() > 50) queryCache.clear();
 
         //Don't re-calculate
-        if (queryCache.containsKey(Objects.hash(tw, mc, biomes)))
-            return queryCache.get(Objects.hash(tw, mc, biomes));
+        if (queryCache.containsKey(Objects.hash(tw, mc)))
+            return queryCache.get(Objects.hash(tw, mc));
 
         Random structRand = tw.getRand(9);
         int maxStructures = GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
@@ -85,28 +84,28 @@ public class StructureRegistry {
         if (largeStructureRegistry.containsKey(StructureType.MEGA_DUNGEON)
                 && largeStructureRegistry.get(StructureType.MEGA_DUNGEON).length > 0) {
             //First check if the megadungeons can spawn. Shuffle the array first.
-            shuffleArray(structRand, largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
-            for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(StructureType.MEGA_DUNGEON)) {
+        	SingleMegaChunkStructurePopulator[] available = (SingleMegaChunkStructurePopulator[]) shuffleArray(structRand, largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
+            for (SingleMegaChunkStructurePopulator pop : available) {
                 int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
                 if (coords == null) continue;
 
-                if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biomes)) {
+                if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4))) {
                     pops[size] = pop;
                     size++;
                     break; //ONLY ONE MEGA DUNGEON.
                 }
             }
         }
-
         //If a Mega Dungeon spawned, don't spawn other large structures.
         if (size == 0) {
+        	//TerraformGeneratorPlugin.logger.info(ChatColor.YELLOW + "MC: " + mc.getX() + "," + mc.getZ() + " - No Mega Dungeon");
             StructureType[] types = {StructureType.LARGE_CAVE, StructureType.VILLAGE, StructureType.LARGE_MISC};
-            shuffleArray(structRand, types);
+            types = (StructureType[]) shuffleArray(structRand, types);
             for (StructureType type : types) {
                 if (largeStructureRegistry.containsKey(type))
                     for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(type)) {
                         int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
-                        if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biomes)) {
+                        if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4))) {
                             pops[0] = pop;
                             size++;
                             break; //ONLY ONE OF EACH TYPE. Do not try to spawn multiple.
@@ -117,19 +116,22 @@ public class StructureRegistry {
                 if (size >= maxStructures) break;
             }
         }
+//        else {
+//        	TerraformGeneratorPlugin.logger.info(ChatColor.YELLOW + "MC: " + mc.getX() + "," + mc.getZ() + " - Has Mega Dungeon");
+//        }
 
         SingleMegaChunkStructurePopulator[] returnVal = new SingleMegaChunkStructurePopulator[size];
         System.arraycopy(pops, 0, returnVal, 0, size);
 
         //cache
-        queryCache.put(Objects.hash(tw, mc, biomes), returnVal);
+        queryCache.put(Objects.hash(tw, mc), returnVal);
         return returnVal;
     }
 
-    // Implementing Fisher�Yates shuffle (I love unicode to ascii conversion)
-    private static void shuffleArray(Random rand, Object[] ar) {
-        if (ar.length == 0) return;
-
+    // Implementing FisherYates shuffle
+    private static Object[] shuffleArray(Random rand, Object[] ar) {
+        ar = ar.clone();
+        if (ar.length == 0) return ar;
         for (int i = ar.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
             // Simple swap
@@ -137,6 +139,7 @@ public class StructureRegistry {
             ar[index] = ar[i];
             ar[i] = a;
         }
+        return ar;
     }
 
     /**

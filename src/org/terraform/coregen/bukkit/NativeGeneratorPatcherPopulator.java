@@ -5,7 +5,6 @@ import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.generator.BlockPopulator;
 import org.terraform.data.SimpleChunkLocation;
-import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,13 +37,12 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator {
         SimpleChunkLocation scl = new SimpleChunkLocation(chunk);
         Collection<Object[]> changes = cache.remove(scl);
         if (changes != null) {
-            TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Detected anomalous generation by NMS on " + scl + ". Running repairs. Check at those chunk coords " +
-                    "after generation to ensure that nothing strange happened.");
+            //TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Detected anomalous generation by NMS on " + scl + ". Running repairs on " + changes.size() + " blocks");
             for (Object[] entry : changes) {
                 int[] loc = (int[]) entry[0];
                 BlockData data = (BlockData) entry[1];
                 world.getBlockAt(loc[0], loc[1], loc[2])
-                        .setBlockData(data);
+                        .setBlockData(data, false);
             }
         }
     }

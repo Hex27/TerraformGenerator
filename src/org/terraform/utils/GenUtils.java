@@ -86,11 +86,11 @@ public class GenUtils {
         if (biomeQueryCache.containsKey(hash)) return biomeQueryCache.get(hash);
 
         ArrayList<BiomeBank> banks = new ArrayList<>();
-        int gridX = chunkZ * 16;
-        int gridZ = chunkZ * 16, maxGridZ = gridZ + 16;
-
+        int gridX = chunkX * 16;
+        int gridZ = chunkZ * 16;
+        
         for (int x = gridX; x < gridX + 16; x++) {
-            for (int z = gridZ; z < maxGridZ; z++) {
+            for (int z = gridZ; z < gridZ + 16; z++) {
                 BiomeBank bank = tw.getBiomeBank(x, HeightMap.getHeight(tw, x, z), z);
                 if (!banks.contains(bank)) banks.add(bank);
             }

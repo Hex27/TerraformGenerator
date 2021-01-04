@@ -25,7 +25,7 @@ import java.util.Random;
 public class FractalTreeBuilder {
     int height = 0;
     SimpleBlock top;
-
+    private FastNoise noiseGen;
     float baseThickness = 3;
     int baseHeight = 7;
     float thicknessDecrement = 0.5f;
@@ -426,6 +426,7 @@ public class FractalTreeBuilder {
         this.oriX = x;
         this.oriY = y;
         this.oriZ = z;
+        this.noiseGen = new FastNoise((int) tw.getSeed());
         this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         if (this.top == null) top = base;
@@ -599,12 +600,11 @@ public class FractalTreeBuilder {
             return;
         }
 
-        // Initialise noise to be used in randomising the sphere
-        FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(NoiseType.SimplexFractal);
+        // Setup noise to be used in randomising the sphere
+        noiseGen.SetNoiseType(NoiseType.SimplexFractal);
         float noiseMultiplier = branchNoiseMultiplier;
-        noise.SetFrequency(branchNoiseFrequency);
-        noise.SetFractalOctaves(5);
+        noiseGen.SetFrequency(branchNoiseFrequency);
+        noiseGen.SetFractalOctaves(5);
 
         double maxR = rX;
         if (rX < rY) maxR = rY;
@@ -628,7 +628,7 @@ public class FractalTreeBuilder {
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
 
-                    if (equationResult <= 1 + noiseMultiplier * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                    if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         rel.setType(type);
 
                         if (coralDecoration) {
