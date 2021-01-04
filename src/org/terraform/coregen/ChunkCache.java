@@ -1,5 +1,6 @@
 package org.terraform.coregen;
 
+import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
 
 public class ChunkCache {
@@ -8,7 +9,8 @@ public class ChunkCache {
     public final int chunkX;
     public final int chunkZ;
 
-    double[][] cache = new double[16][16];
+    double[][] heightCache = new double[16][16];
+    BiomeBank[][] biomeCache = new BiomeBank[16][16];
 
     public ChunkCache(TerraformWorld tw, int x, int z) {
         this.tw = tw;
@@ -18,20 +20,28 @@ public class ChunkCache {
     }
 
     public static int getChunkCoordinate(int coordinate) {
-        if (coordinate < 0) return (coordinate - 16) / 16;
-        return coordinate / 16;
+        return coordinate >> 4;
     }
 
-    private static int transformBigCoordinate(int x) {
-        if (x < 0) return Math.abs(x + 1) % 16;
-        else return x % 16;
+    // Coordinates from 0 to 15
+    private static int getCoordinateInsideChunk(int x) {
+        return (x < 0 ? Math.abs(x + 1) % 16 : x % 16);
     }
 
-    public double getHeight(int x, int z) {
-        return cache[transformBigCoordinate(z)][transformBigCoordinate(x)];
+    public double getHeight(int rawX, int rawZ) {
+        return heightCache[getCoordinateInsideChunk(rawZ)][getCoordinateInsideChunk(rawX)];
     }
 
-    public void cacheHeight(int x, int z, double value) {
-        cache[transformBigCoordinate(z)][transformBigCoordinate(x)] = value;
+    public void cacheHeight(int rawX, int rawZ, double value) {
+        heightCache[getCoordinateInsideChunk(rawZ)][getCoordinateInsideChunk(rawX)] = value;
+    }
+
+    public BiomeBank getBiome(int rawX, int rawZ) {
+        return biomeCache[getCoordinateInsideChunk(rawZ)][getCoordinateInsideChunk(rawX)];
+    }
+
+    public BiomeBank cacheBiome(int rawX, int rawZ, BiomeBank value) {
+        biomeCache[getCoordinateInsideChunk(rawZ)][getCoordinateInsideChunk(rawX)] = value;
+        return value;
     }
 }

@@ -22,7 +22,7 @@ public class TerraformGenerator extends ChunkGenerator {
     public static int seaLevel = 62;
     public static int minMountainLevel = 85;
 
-    public static HashMap<Pair<Integer, Integer>, ChunkCache> caches = new HashMap<>();
+    public static HashMap<Integer, ChunkCache> chunkCaches = new HashMap<>();
 
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
@@ -37,8 +37,7 @@ public class TerraformGenerator extends ChunkGenerator {
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
-        ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
-        caches.put(new Pair<>(chunkX, chunkZ), cache);
+        chunkCaches.put(Objects.hash(tw, chunkX, chunkZ), new ChunkCache(tw, chunkX, chunkZ));
 
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 
@@ -52,6 +51,7 @@ public class TerraformGenerator extends ChunkGenerator {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
+                // This will also cache the height
                 int height = HeightMap.getHeight(tw, rawX, rawZ);
 
                 BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), height);
@@ -81,7 +81,7 @@ public class TerraformGenerator extends ChunkGenerator {
                 chunk.setBlock(x, 1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 chunk.setBlock(x, 0, z, Material.BEDROCK);
 
-                tw.getBiomeBank(rawX, height, rawZ).getHandler().transformTerrain(tw, random, chunk, chunkX, chunkZ);
+                tw.getBiomeBank(rawX, rawZ).getHandler().transformTerrain(tw, random, chunk, chunkX, chunkZ);
             }
         }
 
@@ -97,5 +97,17 @@ public class TerraformGenerator extends ChunkGenerator {
     public List<BlockPopulator> getDefaultPopulators(World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
+    }
+
+    public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
+        int hash = Objects.hash(tw, ChunkCache.getChunkCoordinate(x), ChunkCache.getChunkCoordinate(z));
+
+        if (chunkCaches.get(hash) == null) {
+            ChunkCache cache = new ChunkCache(tw, x, z);
+            chunkCaches.put(hash, cache);
+            return cache;
+        } else {
+            return TerraformGenerator.chunkCaches.get(hash);
+        }
     }
 }
