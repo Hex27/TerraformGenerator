@@ -35,10 +35,38 @@ On another note, for 1.15.2, the version released on 23rd Feb 2020 is the recomm
 
 There is also support for Java 14, but be warned that it will spit some minor errors, because the plugin does some Java illegal magic to get things done.
 
-## Images <a name="images"></a>
+## Getting started <a name="getting-started"></a>
+
+### Method One
+- Turn off the server if it is running
+- Install Drycell
+- Place TerraformGenerator.jar in your plugins folder
+- Inside bukkit.yml, add this, where "world" is your world name:
+```YAML
+worlds:
+    world:
+        generator: TerraformGenerator
+```
+- Delete the old world folder (if present), and start the server
+
+### Method two
+- Install Drycell
+- Place TerraformGenerator.jar in your plugins folder
+- Inside bukkit.yml, add this, where "world" is your world name:
+```YAML
+worlds:
+    world:
+        generator: TerraformGenerator
+```
+- Delete the old world folder (if present), and start the server
+- Use the command "/mv create genworld normal -g TerraformGenerator" from Multiverse
+
+##### Probably works with multiworld, but I didn't try it.
+
+<a name="images"></a>
 ![Screenshot](images/images.png)
 
-Shader images captured by @PiggyPiglet, @ExxDee and @BecauseNyx 
+Shader images captured by [@PiggyPiglet](https://www.spigotmc.org/members/266605/), [@ExxDee](https://www.spigotmc.org/members/955124/) and [@BecauseNyx](https://www.spigotmc.org/members/929056/)
 
 All the non-shader vanilla images are all the way below.
 
