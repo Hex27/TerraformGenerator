@@ -66,11 +66,11 @@ All the non-shader vanilla images are all the way below.
 - When a world is first generated, the starting chunks may not be populated (e.g. no snow, no trees, no ores etc in these chunks). May or may not be a spigot bug that's being tracked here. It was indeed sort of a spigot side issue but since that's not going to be resolved anytime soon, screw it. I'll just bandaid it on my end.
 
 <!-- MARKDOWN LINKS -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/Hex27/terraformgenerator.svg?style=for-the-badge
 [contributors-url]: https://github.com/Hex27/terraformgenerator/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/Hex27/terraformgenerator.svg?style=for-the-badge
 [forks-url]: https://github.com/Hex27/terraformgenerator/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/Hex27/terraformgenerator.svg?style=for-the-badge
 [stars-url]: https://github.com/Hex27/terraformgenerator/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/Hex27/terraformgenerator.svg?style=for-the-badge
 [issues-url]: https://github.com/Hex27/terraformgenerator/issues
