@@ -4,10 +4,12 @@ import javafx.util.Pair;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
+import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
@@ -46,6 +48,8 @@ public class TerraformGenerator extends ChunkGenerator {
             preWorldInitGen.add(new SimpleChunkLocation(world.getName(), chunkX, chunkZ));
         }
 
+        ArrayList<BiomeHandler> biomesToTransform = new ArrayList<>();
+
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
@@ -54,13 +58,12 @@ public class TerraformGenerator extends ChunkGenerator {
                 // This will also cache the height
                 int height = HeightMap.getHeight(tw, rawX, rawZ);
 
-                BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), height);
+                BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
                 biome.setBiome(x, z, bank.getHandler().getBiome());
                 int undergroundHeight = height;
                 int index = 0;
                 while (index < crust.length) {
-                    //if(!attemptSimpleBlockUpdate(tw, chunk, chunkX, chunkZ, x,undergroundHeight,z))
                     chunk.setBlock(x, undergroundHeight, z, crust[index]);
                     index++;
                     undergroundHeight--;
@@ -72,7 +75,6 @@ public class TerraformGenerator extends ChunkGenerator {
 
                 //Any low elevation is sea
                 for (int y = height + 1; y <= seaLevel; y++) {
-                    //if(!attemptSimpleBlockUpdate(tw, chunk, chunkX, chunkZ, x,undergroundHeight,z))
                     chunk.setBlock(x, y, z, Material.WATER);
                 }
 
@@ -81,8 +83,13 @@ public class TerraformGenerator extends ChunkGenerator {
                 chunk.setBlock(x, 1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 chunk.setBlock(x, 0, z, Material.BEDROCK);
 
-                tw.getBiomeBank(rawX, rawZ).getHandler().transformTerrain(tw, random, chunk, chunkX, chunkZ);
+                BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
+                if (transformHandler != null && !biomesToTransform.contains(transformHandler)) biomesToTransform.add(transformHandler);
             }
+        }
+
+        for (BiomeHandler handler : biomesToTransform) {
+            handler.transformTerrain(tw, random, chunk, chunkX, chunkZ);
         }
 
         return chunk;

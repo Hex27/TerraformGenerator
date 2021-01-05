@@ -19,6 +19,17 @@ public abstract class BiomeHandler {
 
     public abstract void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data);
 
+    /**
+     * @return The used handler for transforming
+     *         the terrain. If handler uses another
+     *         handler's transform function, return that.
+     *         This is to ensure that same transform
+     *         function is called only once per chunk.
+     */
+    public BiomeHandler getTransformHandler() {
+        return null;
+    }
+
     // Populate event but for the terrain.
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) { /* Do nothing by default */ }
 }

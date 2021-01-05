@@ -6,6 +6,7 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeGrid;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.MegaChunk;
@@ -56,7 +57,8 @@ public class CheckHeightCommand extends DCCommand {
         p.sendMessage("Mega Chunk: " + new MegaChunk(x, 0, z).getX() + "," + new MegaChunk(x, 0, z).getZ());
         p.sendMessage("Temperature: " + tw.getTemperature(x, z));
         p.sendMessage("Moisture: " + tw.getMoisture(x, z));
-        p.sendMessage("Biome edge factor: " + BiomeGrid.getEdgeFactor(tw, biome, x, z));
+        p.sendMessage("Biome edge factor: " + new BiomeBlender(tw, true, false, false)
+                .setBiomeThreshold(0.45).getEdgeFactor(biome, x, z));
         p.sendMessage("Result Biome: " + biome);
     }
 }

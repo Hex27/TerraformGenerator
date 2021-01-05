@@ -2,33 +2,21 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.bukkit.generator.ChunkGenerator;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.flat.BadlandsHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
 public class BadlandsMountainHandler extends BiomeHandler {
-    public static final Material[] terracottas = {
-            Material.WHITE_TERRACOTTA,
-            Material.TERRACOTTA,
-            Material.LIGHT_GRAY_TERRACOTTA,
-            Material.YELLOW_TERRACOTTA,
-            Material.ORANGE_TERRACOTTA,
-            Material.BROWN_TERRACOTTA,
-            Material.RED_TERRACOTTA,
-    };
-
     /**
      * Performs badlands plateau generation for one x/z coord.
-     *
-     * @param world
-     * @param random
-     * @param data
-     * @param x
-     * @param z
      */
     public static void oneUnit(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int z, boolean force) {
         int highest = GenUtils.getTrueHighestBlock(data, x, z);
@@ -39,23 +27,13 @@ public class BadlandsMountainHandler extends BiomeHandler {
             if (data.getBiome(x, y, z) != Biome.BADLANDS_PLATEAU && !force) continue;
             if (!data.getType(x, y, z).toString().contains("SAND"))
                 continue;
-            //if (GenUtils.chance(1, 50)) continue;
             int multiplier = 0;
             if (GenUtils.chance(random, 1, 50)) multiplier++;
             if (GenUtils.chance(random, 1, 100)) multiplier++;
 
-            Material terra = terracottas[(multiplier + y) % terracottas.length];
-            data.setType(x, y, z, terra);
+            data.setType(x, y, z, BlockUtils.getTerracotta(y));
         }
     }
-//
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 8);
-//		gen.setScale(0.005);
-//		
-//		return (int) ((gen.noise(x, z, 0.5, 0.5)*7D+50D)*1.5);
-//	}
 
     @Override
     public boolean isOcean() {
@@ -83,5 +61,10 @@ public class BadlandsMountainHandler extends BiomeHandler {
                 oneUnit(world, random, data, x, z, false);
             }
         }
+    }
+
+    @Override
+    public BiomeHandler getTransformHandler() {
+        return BiomeBank.BADLANDS.getHandler();
     }
 }

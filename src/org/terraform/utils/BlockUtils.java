@@ -349,13 +349,15 @@ public class BlockUtils {
     }
 
     public static Material getTerracotta(int height) {
-        int mapped = height % 35;
+        int mapped = (height + 10) % 25;
 
-        if (mapped % 5 == 0 || mapped % 6 == 0) return Material.TERRACOTTA;
-        if (mapped % 8 == 0) return Material.LIGHT_GRAY_TERRACOTTA;
-        if (mapped % 11 == 0) return Material.RED_TERRACOTTA;
-        if (mapped % 13 == 0) return Material.YELLOW_TERRACOTTA;
-        if (mapped % 14 == 0) return Material.BROWN_TERRACOTTA;
+        if (mapped % 20 == 0) return Material.LIGHT_GRAY_TERRACOTTA;
+        if ((mapped + 1) % 20 == 0) return Material.WHITE_TERRACOTTA;
+        if ((mapped + 2) % 14 == 0) return Material.YELLOW_TERRACOTTA;
+        if (mapped % 14 == 0 || (mapped + 1) % 14 == 0) return Material.BROWN_TERRACOTTA;
+        if (mapped % 10 == 0 || (mapped + 1) % 10 == 0 || (mapped + 2) % 10 == 0)
+            return Material.TERRACOTTA;
+        if (mapped % 6 == 0 || (mapped + 1) % 6 == 0) return Material.RED_TERRACOTTA;
 
         return Material.ORANGE_TERRACOTTA;
     }
