@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeGrid;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.mountainous.BadlandsMountainHandler;
@@ -21,6 +22,7 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class BadlandsHandler extends BiomeHandler {
+    static BiomeBlender biomeBlender;
 
     @Override
     public boolean isOcean() {
@@ -77,7 +79,21 @@ public class BadlandsHandler extends BiomeHandler {
         }
     }
 
-    public static void generateRivers(TerraformWorld tw, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
+        // Only one blender needed!
+        if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, false, false)
+                .setBiomeThreshold(0.45);
+        return biomeBlender;
+    }
+
+    @Override
+    public BiomeHandler getTransformHandler() {
+        return this;
+    }
+
+    @Override
+    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+        BiomeBlender blender = getBiomeBlender(tw);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
@@ -85,8 +101,13 @@ public class BadlandsHandler extends BiomeHandler {
 
                 double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
                 int height = (int) preciseHeight;
+                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, rawZ, height);
 
-                if (BiomeBank.calculateFlatBiome(tw, rawX, rawZ, height) == BiomeBank.BADLANDS && HeightMap.getRiverDepth(tw, rawX, rawZ) > 0) {
+                if (currentBiome == BiomeBank.BADLANDS
+                        || currentBiome == BiomeBank.BADLANDS_MOUNTAINS
+                        || currentBiome == BiomeBank.BADLANDS_BEACH
+//                        && HeightMap.getRiverDepth(tw, rawX, rawZ) > 0
+                ) {
                     FastNoise wallNoise = new FastNoise((int) (tw.getWorld().getSeed() * 2));
                     wallNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
                     wallNoise.SetFrequency(0.07f);
@@ -95,7 +116,7 @@ public class BadlandsHandler extends BiomeHandler {
                     double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
 
                     // These are for blending river effect with other biomes
-                    double edgeFactor = BiomeGrid.getLandEdgeFactor(tw, 0.45, BiomeBank.BADLANDS, rawX, rawZ);
+                    double edgeFactor = blender.getEdgeFactor(BiomeBank.BADLANDS, rawX, rawZ);
                     double bottomEdgeFactor = Math.min(2 * edgeFactor, 1);
                     double topEdgeFactor = Math.max(2 * edgeFactor - 1, 0);
 
@@ -138,10 +159,5 @@ public class BadlandsHandler extends BiomeHandler {
                 }
             }
         }
-    }
-
-    @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
-        generateRivers(tw, chunk, chunkX, chunkZ);
     }
 }
