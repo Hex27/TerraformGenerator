@@ -15,7 +15,11 @@
     <li><a href="#about">About Project & Wiki</a></li>
     <li><a href="#getting-started">Getting started</a></li>
     <li><a href="#images">Images</a></li>
-    <li><a href="#known-bugs">Known-Bugs</a></li>
+    <li><a href="#known-bugs">Known-Bugs</a>
+    <ul>
+        <li><a href="#sort-of-resolved">Sort of resolved</a></li>
+      </ul>
+      </li>
   </ol>
 </details>
 
@@ -68,8 +72,6 @@ worlds:
 
 Shader images captured by [@PiggyPiglet](https://www.spigotmc.org/members/266605/), [@ExxDee](https://www.spigotmc.org/members/955124/) and [@BecauseNyx](https://www.spigotmc.org/members/929056/)
 
-All the non-shader vanilla images are all the way below.
-
 ![Screenshot](images/img1.png)
 ![Screenshot](images/img2.png)
 ![Screenshot](images/img3.png)
@@ -87,7 +89,7 @@ All the non-shader vanilla images are all the way below.
 - Mountains are extremely plain now, except birch mountains. Will be finding ways to spice them up
 - Some config options would be nice, perhaps for configuring some basics.
 
-### Sort of resolved:
+### Sort of resolved: <a name="sort-of-resolved"></a>
 
 - Sometimes, physics updates are wonky, and this leads to things like dirt appearing in trees, and farmlands causing dirt to appear in the sky. For now, the fix for this is to update to the latest version of 1.15.2 (or later), as it was tracked to be a minor spigot problem. If you are unable to do so, pre-generate your world, then immediately restart it. The bug does not occur on an already generated world
 - Some weird biomes spawn next to each other (like sandy beaches next to snowy taigas/cold oceans) Report any strange occurrences to me.
