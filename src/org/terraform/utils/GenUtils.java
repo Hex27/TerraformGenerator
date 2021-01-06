@@ -107,6 +107,36 @@ public class GenUtils {
         return banks;
     }
 
+    /**
+     * Locates the target biome in given area using brute force.
+     * Note that the function is blocking.
+     * @return Position for the biome or null if no biomes found.
+     */
+    public static Vector2f locateBiome(TerraformWorld tw, BiomeBank biome, Vector2f center, int radius, int blockSkip) {
+        if (tw.getBiomeBank(Math.round(center.x), Math.round(center.y)) == biome) return new Vector2f(center.x, center.y);
+        int iter = 2;
+
+        int x = (int) center.x;
+        int z = (int) center.y;
+
+        while (Math.abs(center.x - x) < radius
+                || Math.abs(center.y - z) < radius) {
+            for (int i = 0; i < iter / 2; i++) {
+                switch (iter  % 4) {
+                    case 0: x += blockSkip; break;
+                    case 1: z -= blockSkip; break;
+                    case 2: x -= blockSkip; break;
+                    case 3: z += blockSkip; break;
+                }
+            }
+
+            if (tw.getBiomeBank(x, z) == biome) return new Vector2f(x, z);
+            iter++;
+        }
+
+        return null;
+    }
+
     public static Material weightedRandomMaterial(Random rand, Object... candidates) {
         if (candidates.length % 2 != 0) throw new IllegalArgumentException();
         ArrayList<Material> types = new ArrayList<>(50);
