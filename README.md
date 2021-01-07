@@ -65,10 +65,9 @@ worlds:
 - Delete the old world folder (if present), and start the server
 - Use the command "/mv create genworld normal -g TerraformGenerator" from Multiverse
 
-##### Probably works with multiworld, but I didn't try it.
+Probably works with multiworld, but I didn't try it.
 
-<a name="images"></a>
-
+## Images
 Find images on the wiki 
 
 https://github.com/Hex27/TerraformGenerator/wiki/Biomes
