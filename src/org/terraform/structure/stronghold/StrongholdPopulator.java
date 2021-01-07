@@ -19,13 +19,13 @@ import java.util.Random;
 
 public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     private int[][] POSITIONS;
-
+    private static boolean debugSpawnMessage = false;
     /**
      * @return x, z coords on the circumference of
      * a circle of the specified radius, center 0,0
      */
     private static int[] randomCircleCoords(Random rand, int radius) {
-        double angle = Math.random() * Math.PI * 2;
+        double angle = rand.nextDouble() * Math.PI * 2;
         int x = (int) (Math.cos(angle) * radius);
         int z = (int) (Math.sin(angle) * radius);
         return new int[]{x, z};
@@ -38,13 +38,15 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     public int[][] strongholdPositions(TerraformWorld tw) {
         if (POSITIONS == null) {
             POSITIONS = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
-            Random rand = tw.getHashedRand(1, 1, 1);
             int pos = 0;
             int radius = 1408;
-
+            Random rand = tw.getHashedRand(1, 1, 1);
             for (int i = 0; i < 3; i++) {
                 int[] coords = randomCircleCoords(rand, radius);
-                TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + ", " + coords[1]);
+                if(!debugSpawnMessage) {
+                    TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + ", " + coords[1]);
+                    debugSpawnMessage = true;
+                }
                 POSITIONS[pos++] = coords;
             }
             radius += 3072;

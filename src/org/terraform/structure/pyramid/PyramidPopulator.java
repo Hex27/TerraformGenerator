@@ -264,7 +264,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
                 while (height < newHeight) {
                     raiseDone++;
-                    if (!data.getType(nx, height + 1, nz).isSolid())
+                    if (!data.getType(nx, height + 1, nz).isSolid() 
+                    		|| data.getType(nx, height + 1, nz) == Material.CACTUS)
                         data.setType(nx, height + 1, nz, mat);
                     height++;
                 }
