@@ -1,5 +1,6 @@
 package org.terraform.coregen.bukkit;
 
+import javafx.util.Pair;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -7,6 +8,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleChunkLocation;
@@ -15,15 +17,14 @@ import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class TerraformGenerator extends ChunkGenerator {
     public static final ArrayList<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
     public static int seaLevel = 62;
     public static int minMountainLevel = 85;
+
+    public static HashMap<Integer, ChunkCache> chunkCaches = new HashMap<>();
 
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
@@ -38,6 +39,8 @@ public class TerraformGenerator extends ChunkGenerator {
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
+        chunkCaches.put(Objects.hash(tw, chunkX, chunkZ), new ChunkCache(tw, chunkX, chunkZ));
+
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 
         //Patch for WorldInitEvent issues.
@@ -52,8 +55,8 @@ public class TerraformGenerator extends ChunkGenerator {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
-                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
+                // This will also cache the height
+                int height = HeightMap.getHeight(tw, rawX, rawZ);
 
                 BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
@@ -101,5 +104,17 @@ public class TerraformGenerator extends ChunkGenerator {
     public List<BlockPopulator> getDefaultPopulators(World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
+    }
+
+    public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
+        int hash = Objects.hash(tw, ChunkCache.getChunkCoordinate(x), ChunkCache.getChunkCoordinate(z));
+
+        if (chunkCaches.get(hash) == null) {
+            ChunkCache cache = new ChunkCache(tw, x, z);
+            chunkCaches.put(hash, cache);
+            return cache;
+        } else {
+            return TerraformGenerator.chunkCaches.get(hash);
+        }
     }
 }

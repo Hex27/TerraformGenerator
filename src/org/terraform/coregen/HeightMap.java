@@ -130,6 +130,11 @@ public abstract class HeightMap {
     }
 
     public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
+        ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
+
+        double cachedValue = cache.getHeight(x, z);
+        if (cachedValue != 0) return cachedValue;
+
         double height = getCoreHeight(tw, x, z);
 
         if (height > defaultSeaLevel + 4) {
@@ -167,6 +172,7 @@ public abstract class HeightMap {
             height = TerraformGenerator.seaLevel - 15;
         }
 
+        cache.cacheHeight(x, z, height);
         return height;
     }
 
