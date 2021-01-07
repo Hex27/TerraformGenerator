@@ -1,4 +1,4 @@
-![Screenshot](images/title.png)
+![Screenshot](https://imgur.com/R84KoN2.png)
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
