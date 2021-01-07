@@ -68,32 +68,12 @@ worlds:
 ##### Probably works with multiworld, but I didn't try it.
 
 <a name="images"></a>
-![Screenshot](images/images.png)
 
-Shader images captured by [@PiggyPiglet](https://www.spigotmc.org/members/266605/), [@ExxDee](https://www.spigotmc.org/members/955124/) and [@BecauseNyx](https://www.spigotmc.org/members/929056/)
+Find images on the wiki 
 
-![Screenshot](images/img1.png)
-![Screenshot](images/img2.png)
-![Screenshot](images/img3.png)
-![Screenshot](images/img4.png)
-![Screenshot](images/img5.png)
-![Screenshot](images/img6.png)
-![Screenshot](images/img7.png)
-![Screenshot](images/img8.png)
-![Screenshot](images/img9.png)
-![Screenshot](images/img10.png)
+https://github.com/Hex27/TerraformGenerator/wiki/Biomes
 
-## Known Bugs <a name="known-bugs"></a>
-
-- Snowy Wasteland is a bit too literally empty. I'll be trying to find ways to make it more interesting
-- Mountains are extremely plain now, except birch mountains. Will be finding ways to spice them up
-- Some config options would be nice, perhaps for configuring some basics.
-
-### Sort of resolved: <a name="sort-of-resolved"></a>
-
-- Sometimes, physics updates are wonky, and this leads to things like dirt appearing in trees, and farmlands causing dirt to appear in the sky. For now, the fix for this is to update to the latest version of 1.15.2 (or later), as it was tracked to be a minor spigot problem. If you are unable to do so, pre-generate your world, then immediately restart it. The bug does not occur on an already generated world
-- Some weird biomes spawn next to each other (like sandy beaches next to snowy taigas/cold oceans) Report any strange occurrences to me.
-- When a world is first generated, the starting chunks may not be populated (e.g. no snow, no trees, no ores etc in these chunks). May or may not be a spigot bug that's being tracked here. It was indeed sort of a spigot side issue but since that's not going to be resolved anytime soon, screw it. I'll just bandaid it on my end.
+https://github.com/Hex27/TerraformGenerator/wiki/Structures
 
 <!-- MARKDOWN LINKS -->
 [contributors-shield]: https://img.shields.io/github/contributors/Hex27/terraformgenerator.svg?style=for-the-badge
