@@ -1,10 +1,8 @@
 package org.terraform.coregen.bukkit;
 
-import javafx.util.Pair;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
@@ -24,7 +22,7 @@ public class TerraformGenerator extends ChunkGenerator {
     public static int seaLevel = 62;
     public static int minMountainLevel = 85;
 
-    public static HashMap<Integer, ChunkCache> chunkCaches = new HashMap<>();
+    private static HashMap<Integer, ChunkCache> chunkCaches = new HashMap<>();
 
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
@@ -39,8 +37,12 @@ public class TerraformGenerator extends ChunkGenerator {
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
-        chunkCaches.put(Objects.hash(tw, chunkX, chunkZ), new ChunkCache(tw, chunkX, chunkZ));
-
+        ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
+        chunkCaches.put(
+        		cache.getHash(),
+        		cache
+        );
+    	
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 
         //Patch for WorldInitEvent issues.
@@ -106,15 +108,57 @@ public class TerraformGenerator extends ChunkGenerator {
         return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
     }
 
+    /**
+     * Refers to raw X and raw Z. NOT chunk coords.
+     * @param tw
+     * @param x
+     * @param z
+     * @return
+     */
     public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
-        int hash = Objects.hash(tw, ChunkCache.getChunkCoordinate(x), ChunkCache.getChunkCoordinate(z));
-
-        if (chunkCaches.get(hash) == null) {
-            ChunkCache cache = new ChunkCache(tw, x, z);
-            chunkCaches.put(hash, cache);
+        int hash = ChunkCache.calculateHash(
+        		ChunkCache.getChunkCoordinate(x), 
+        		ChunkCache.getChunkCoordinate(z), 
+        		tw); 
+        
+        if (!chunkCaches.containsKey(hash)) {
+        	ChunkCache cache = new ChunkCache(tw, x, 0, z);
+            chunkCaches.put(cache.getHash(), cache);
             return cache;
         } else {
-            return TerraformGenerator.chunkCaches.get(hash);
+        	ChunkCache cache = chunkCaches.get(hash);
+        	if(cache.areCoordsInside(x, z))
+        		return chunkCaches.get(hash);
+        	else { //Hash Collision detected. Overwrite old value.
+            	cache = new ChunkCache(tw, x, 0, z);
+                chunkCaches.put(cache.getHash(), cache);
+                return cache;
+        	}
         }
     }
+    
+    
+//    private static boolean verifyCache(TerraformWorld tw, int x, int z, ChunkCache cache) {
+//    	if(x >> 4 != cache.chunkX || z >> 4 != cache.chunkZ) {
+//    	//if(x-cache.chunkX*16 > 15 || x-cache.chunkX*16 < 0 || z-cache.chunkZ*16 > 15 || z-cache.chunkZ*16 < 0) {
+//    		int hash = ChunkCache.calculateHash(ChunkCache.getChunkCoordinate(x), ChunkCache.getChunkCoordinate(z),cache.tw);
+//    		TerraformGeneratorPlugin.logger.info("BAD REQUEST DETECTED: " + x +","+z+":" + cache.tw.hashCode() + "," + cache.chunkX + "," + cache.chunkZ);
+//    		TerraformGeneratorPlugin.logger.info("BITSHIFTS: " + (x>>4) + "," + (z>>4) + ":" + tw.hashCode() + "," + ChunkCache.getChunkCoordinate(x) + "," + ChunkCache.getChunkCoordinate(z));
+//    		TerraformGeneratorPlugin.logger.info("HASHES: " + cache.getHash() + " - " + hash);
+//    		//dumpCache();
+//    		int throwMotherfucker = 5/0;
+//    		return false;
+//    	}
+//    	return true;
+//    }
+//just shoot me already
+//    public static void dumpCache() {
+//    	TerraformGeneratorPlugin.logger.info("==================================================");
+//    	for(Entry<Integer,ChunkCache> entry:chunkCaches.entrySet()) {
+//    		TerraformGeneratorPlugin.logger.info(
+//    				entry.getKey() + ":" + 
+//    		entry.getValue().tw.getSeed() + "," + entry.getValue().chunkX + "," + entry.getValue().chunkZ
+//    		+ " >>>> " + entry.getValue().getHash());
+//    	}
+//    }
 }

@@ -88,7 +88,7 @@ public class StructureRegistry {
             for (SingleMegaChunkStructurePopulator pop : available) {
                 int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
                 if (coords == null) continue;
-
+                
                 if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4))) {
                     pops[size] = pop;
                     size++;
