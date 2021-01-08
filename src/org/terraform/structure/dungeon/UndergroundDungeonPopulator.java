@@ -56,7 +56,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
         Random rand = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 
-        int y = HeightMap.getHeight(tw, x, z) - GenUtils.randInt(rand, 15, 50);//GenUtils.getHighestGround(data, x, z)
+        int y = HeightMap.getBlockHeight(tw, x, z) - GenUtils.randInt(rand, 15, 50);//GenUtils.getHighestGround(data, x, z)
 
         if (y < 10) y = 10;
 

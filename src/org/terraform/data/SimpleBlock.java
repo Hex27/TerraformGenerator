@@ -91,7 +91,6 @@ public class SimpleBlock {
 
     /**
      * Lenient set. Only replaces non-solid blocks.
-     *
      * @return if the set was a success.
      */
     public boolean lsetType(Material type) {
@@ -193,17 +192,17 @@ public class SimpleBlock {
             popData.setType(x, y, z, type);
 
         //Setting leaves with setType will be persistent
-        if(Tag.LEAVES.isTagged(type)) {
-        //if (type.toString().contains("LEAVES")) {
+        if (Tag.LEAVES.isTagged(type)) {
+            //if (type.toString().contains("LEAVES")) {
             Leaves l = (Leaves) Bukkit.createBlockData(type);
             l.setPersistent(true);
 
             setBlockData(l);
         }
     }
-    
+
     public void setType(Material... types) {
-    	setType(GenUtils.randMaterial(types));
+        setType(GenUtils.randMaterial(types));
     }
 
     public void RSolSetType(Material type) {
@@ -237,11 +236,11 @@ public class SimpleBlock {
         return popData == other.popData && x == other.x && z == other.z && y == other.y;
     }
 
-	public SimpleBlock getGround() {
-    	return new SimpleBlock(
-    			popData,
-    			x,
-    			GenUtils.getHighestGround(popData, x, z),
-    			z);
+    public SimpleBlock getGround() {
+        return new SimpleBlock(
+                popData,
+                x,
+                GenUtils.getHighestGround(popData, x, z),
+                z);
     }
 }

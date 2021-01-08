@@ -25,7 +25,6 @@ import java.util.Random;
 public class FractalTreeBuilder {
     int height = 0;
     SimpleBlock top;
-    private FastNoise noiseGen;
     float baseThickness = 3;
     int baseHeight = 7;
     float thicknessDecrement = 0.5f;
@@ -55,6 +54,7 @@ public class FractalTreeBuilder {
     int oriX;
     int oriY;
     int oriZ;
+    private FastNoise noiseGen;
     private boolean spawnedBees = false;
     private boolean coralDecoration = false;
     private double initialAngle;
@@ -886,7 +886,6 @@ public class FractalTreeBuilder {
 
     /**
      * Random-thirty-ish-angle
-     *
      * @return An angle between 0.8*30 to 1.2*30 degrees in radians
      */
     public double rta() {
@@ -895,7 +894,6 @@ public class FractalTreeBuilder {
 
     /**
      * Random-angle
-     *
      * @return An angle between lowerBound*30 to upperBound*30 degrees in radians
      */
     public double ra(double base, double lowerBound, double upperBound) {

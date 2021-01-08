@@ -46,7 +46,6 @@ public class CoralGenerator {
 
     /**
      * Creates a random coral
-     *
      * @param data refers to the block the coral will grow ON.
      */
     public static void generateSingleCoral(PopulatorDataAbstract data, int x, int y, int z) {
@@ -75,7 +74,6 @@ public class CoralGenerator {
 
     /**
      * Generates a coral on a surface.
-     *
      * @param data refers to the block the coral will grow ON.
      */
     public static void generateSingleCoral(PopulatorDataAbstract data, int x, int y, int z, String coralType) {
@@ -103,7 +101,6 @@ public class CoralGenerator {
 
     /**
      * Creates a cluster of Sea Pickles.
-     *
      * @param data refers to the block to replace with sea pickles
      */
     public static void generateSeaPickles(PopulatorDataAbstract data, int x, int y, int z) {
@@ -119,7 +116,6 @@ public class CoralGenerator {
 
     /**
      * Generates a Kelp plant 3-10 blocks tall. Or sea grass.
-     *
      * @param data refers to the block ABOVE the floor (lowest block of the kelp plant)
      */
     public static void generateKelpGrowth(PopulatorDataAbstract data, int x, int y, int z) {
@@ -140,7 +136,6 @@ public class CoralGenerator {
 
     /**
      * Will replace the block if it was previously water or air.
-     *
      * @param data    block to be replaced
      * @param newType type to replace with
      */

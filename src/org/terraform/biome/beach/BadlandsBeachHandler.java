@@ -2,11 +2,8 @@ package org.terraform.biome.beach;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeGrid;
 import org.terraform.biome.BiomeHandler;
-import org.terraform.biome.flat.BadlandsHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;

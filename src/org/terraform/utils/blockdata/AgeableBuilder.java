@@ -33,7 +33,7 @@ public class AgeableBuilder {
     }
 
     public AgeableBuilder setRandomAge(Random rand) {
-        this.blockData.setAge(rand.nextInt(this.blockData.getMaximumAge()+1));
+        this.blockData.setAge(rand.nextInt(this.blockData.getMaximumAge() + 1));
         return this;
     }
 

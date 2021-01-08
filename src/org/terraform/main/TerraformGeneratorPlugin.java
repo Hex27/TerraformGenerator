@@ -83,7 +83,6 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
 
     /**
      * Legacy thing. Consider removal.
-     *
      * @param event
      * @deprecated
      */

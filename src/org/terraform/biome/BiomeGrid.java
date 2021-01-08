@@ -1,8 +1,6 @@
 package org.terraform.biome;
 
 import org.drycell.command.InvalidArgumentException;
-import org.terraform.coregen.HeightMap;
-import org.terraform.data.TerraformWorld;
 
 public class BiomeGrid {
     private static final BiomeBank[][] terrestrialGrid = {
@@ -146,7 +144,7 @@ public class BiomeGrid {
         return getBiome(type, (int) Math.round(normalise(temperature)), (int) Math.round(normalise(moisture)));
     }
 
-    static BiomeBank getBiome(BiomeType type, int temperatureIndex, int moistureIndex)  {
+    static BiomeBank getBiome(BiomeType type, int temperatureIndex, int moistureIndex) {
         if (type == BiomeType.FLAT)
             return terrestrialGrid[moistureIndex][temperatureIndex];
         else if (type == BiomeType.OCEANIC)

@@ -18,8 +18,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
-    private int[][] POSITIONS;
     private static boolean debugSpawnMessage = false;
+    private int[][] POSITIONS;
+
     /**
      * @return x, z coords on the circumference of
      * a circle of the specified radius, center 0,0
@@ -43,7 +44,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
             Random rand = tw.getHashedRand(1, 1, 1);
             for (int i = 0; i < 3; i++) {
                 int[] coords = randomCircleCoords(rand, radius);
-                if(!debugSpawnMessage) {
+                if (!debugSpawnMessage) {
                     TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + ", " + coords[1]);
                     debugSpawnMessage = true;
                 }
@@ -99,7 +100,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 for (int[] pos : positions) {
                     if (areCoordsEqual(pos, x, z)) {
-                        int height = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
+                        int height = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
                         //Strongholds start underground. Burrow down
                         height -= 40;
                         if (height < 3) height = 5;

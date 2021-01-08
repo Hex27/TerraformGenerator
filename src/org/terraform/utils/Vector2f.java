@@ -9,7 +9,6 @@ public class Vector2f implements java.io.Serializable {
 
     /**
      * Constructs and initializes a Vector2f from the specified xy coordinates.
-     *
      * @param x the x coordinate
      * @param y the y coordinate
      */
@@ -21,7 +20,6 @@ public class Vector2f implements java.io.Serializable {
 
     /**
      * Constructs and initializes a Vector2f from the specified array.
-     *
      * @param v the array of length 2 containing xy in order
      */
     public Vector2f(float[] v) {
@@ -32,7 +30,6 @@ public class Vector2f implements java.io.Serializable {
 
     /**
      * Constructs and initializes a Vector2f from the specified Vector2f.
-     *
      * @param v1 the Vector2f containing the initialization x y data
      */
     public Vector2f(Vector2f v1) {
@@ -80,7 +77,6 @@ public class Vector2f implements java.io.Serializable {
 
     /**
      * Computes the dot product of the this vector and vector v1.
-     *
      * @param v1 the other vector
      */
     public final float dot(Vector2f v1) {
@@ -90,7 +86,6 @@ public class Vector2f implements java.io.Serializable {
 
     /**
      * Returns the length of this vector.
-     *
      * @return the length of this vector
      */
     public final float length() {
@@ -99,7 +94,6 @@ public class Vector2f implements java.io.Serializable {
 
     /**
      * Returns the squared length of this vector.
-     *
      * @return the squared length of this vector
      */
     public final float lengthSquared() {
@@ -108,7 +102,6 @@ public class Vector2f implements java.io.Serializable {
 
     /**
      * Sets the value of this vector to the normalization of vector v1.
-     *
      * @param v1 the un-normalized vector
      */
     public final void normalize(Vector2f v1) {
@@ -130,7 +123,6 @@ public class Vector2f implements java.io.Serializable {
     /**
      * Returns the angle in radians between this vector and the vector
      * parameter; the return value is constrained to the range [0,PI].
-     *
      * @param v1 the other vector
      * @return the angle in radians in the range [0,PI]
      */

@@ -10,7 +10,6 @@ import org.terraform.biome.ocean.*;
 import org.terraform.biome.river.FrozenRiverHandler;
 import org.terraform.biome.river.JungleRiverHandler;
 import org.terraform.biome.river.RiverHandler;
-import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;

@@ -109,7 +109,6 @@ public class RoomLayoutGenerator {
 
     /**
      * Populate with room data.
-     *
      * @param normalise
      */
     public void generate(boolean normalise) {
@@ -192,7 +191,6 @@ public class RoomLayoutGenerator {
 
     /**
      * Please supply 2d (x,z) coordinates
-     *
      * @param coords
      * @return
      */
@@ -214,7 +212,6 @@ public class RoomLayoutGenerator {
 
     /**
      * Links room populators to empty rooms and applies paths and room to the actual world.
-     *
      * @param data
      * @param tw
      * @param mat

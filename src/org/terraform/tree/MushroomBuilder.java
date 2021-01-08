@@ -180,8 +180,8 @@ public class MushroomBuilder {
     }
 
     public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-    	this.noiseGen = new FastNoise((int)tw.getSeed());
-    	this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
+        this.noiseGen = new FastNoise((int) tw.getSeed());
+        this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         if (this.stemTop == null) stemTop = base;
 
@@ -406,7 +406,6 @@ public class MushroomBuilder {
      * Thickness increment is added to the **radius** of the stem
      * based on Bezier thickness increment curve. On the ground
      * level the width of the stem will be (width + 2 * thicknessIncrement).
-     *
      * @param thicknessIncrement Thickness increment towards the ground.
      */
     public MushroomBuilder setThicknessIncrement(double thicknessIncrement) {

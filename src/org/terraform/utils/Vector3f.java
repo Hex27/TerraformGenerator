@@ -42,7 +42,6 @@ public class Vector3f implements java.io.Serializable {
 
     /**
      * Constructs and initializes a Vector3f from the specified xyz coordinates.
-     *
      * @param x the x coordinate
      * @param y the y coordinate
      * @param z the z coordinate
@@ -56,7 +55,6 @@ public class Vector3f implements java.io.Serializable {
 
     /**
      * Constructs and initializes a Vector3f from the array of length 3.
-     *
      * @param v the array of length 3 containing xyz in order
      */
     public Vector3f(float[] v) {
@@ -68,7 +66,6 @@ public class Vector3f implements java.io.Serializable {
 
     /**
      * Constructs and initializes a Vector3f from the specified Vector3f.
-     *
      * @param v1 the Vector3f containing the initialization x y z data
      */
     public Vector3f(Vector3f v1) {
@@ -115,7 +112,6 @@ public class Vector3f implements java.io.Serializable {
 
     /**
      * Returns the squared length of this vector.
-     *
      * @return the squared length of this vector
      */
     public final float lengthSquared() {
@@ -124,7 +120,6 @@ public class Vector3f implements java.io.Serializable {
 
     /**
      * Returns the length of this vector.
-     *
      * @return the length of this vector
      */
     public final float length() {
@@ -135,7 +130,6 @@ public class Vector3f implements java.io.Serializable {
 
     /**
      * Sets this vector to be the vector cross product of vectors v1 and v2.
-     *
      * @param v1 the first vector
      * @param v2 the second vector
      */
@@ -147,7 +141,6 @@ public class Vector3f implements java.io.Serializable {
 
     /**
      * Computes the dot product of this vector and vector v1.
-     *
      * @param v1 the other vector
      * @return the dot product of this vector and v1
      */
@@ -157,7 +150,6 @@ public class Vector3f implements java.io.Serializable {
 
     /**
      * Sets the value of this vector to the normalization of vector v1.
-     *
      * @param v1 the un-normalized vector
      */
     public final void normalize(Vector3f v1) {
@@ -181,7 +173,6 @@ public class Vector3f implements java.io.Serializable {
     /**
      * Returns the angle in radians between this vector and the vector
      * parameter; the return value is constrained to the range [0,PI].
-     *
      * @param v1 the other vector
      * @return the angle in radians in the range [0,PI]
      */

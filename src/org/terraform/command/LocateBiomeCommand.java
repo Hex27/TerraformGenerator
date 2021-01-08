@@ -50,12 +50,12 @@ public class LocateBiomeCommand extends DCCommand {
         if (args.size() != 0) {
             try {
                 new Task(
-                		p.getUniqueId(), 
-                		TerraformWorld.get(p.getWorld()),
-                		p.getLocation().getBlockX(),
-                		p.getLocation().getBlockZ(),
-                		(BiomeBank) this.parseArguments(sender, args).get(0))
-                .runTaskAsynchronously(TerraformGeneratorPlugin.get());
+                        p.getUniqueId(),
+                        TerraformWorld.get(p.getWorld()),
+                        p.getLocation().getBlockX(),
+                        p.getLocation().getBlockZ(),
+                        (BiomeBank) this.parseArguments(sender, args).get(0))
+                        .runTaskAsynchronously(TerraformGeneratorPlugin.get());
             } catch (IllegalArgumentException e) {
                 sender.sendMessage(LangOpt.COMMAND_LOCATEBIOME_INVALIDBIOME.parse());
 
@@ -74,31 +74,14 @@ public class LocateBiomeCommand extends DCCommand {
         }
     }
 
-    private class Task extends BukkitRunnable {
-        UUID p;
-        BiomeBank b;
-        TerraformWorld tw;
-        int x;
-        int z;
-
-        public Task(UUID player, TerraformWorld tw, int x, int z, BiomeBank targetBiome) {
-            this.p = player;
-            this.b = targetBiome;
-            this.tw = tw;
-            this.x = x;
-            this.z = z;
+    private void syncSendMessage(UUID uuid, String message) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.getUniqueId() == uuid) {
+                p.sendMessage(message);
+                break;
+            }
         }
-
-        @Override
-        public void run() {
-            Vector2f location = GenUtils.locateBiome(tw, b,
-                    new Vector2f(x, z), 5000, 25);
-
-            if (location == null) 
-            	syncSendMessage(p,LangOpt.COMMAND_LOCATEBIOME_NOT_IN_5000.parse());
-            else 
-            	syncSendMessage(p,LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", location.x + "", "%z%", location.y + ""));
-        }
+        TerraformGeneratorPlugin.logger.info("[Locate Command] " + message);
     }
 
     private static class LocateBiomeTypeArgument extends DCArgument<BiomeBank> {
@@ -124,15 +107,32 @@ public class LocateBiomeCommand extends DCCommand {
         }
 
     }
-    
-    private void syncSendMessage(UUID uuid, String message) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getUniqueId() == uuid) {
-                p.sendMessage(message);
-                break;
-            }
+
+    private class Task extends BukkitRunnable {
+        UUID p;
+        BiomeBank b;
+        TerraformWorld tw;
+        int x;
+        int z;
+
+        public Task(UUID player, TerraformWorld tw, int x, int z, BiomeBank targetBiome) {
+            this.p = player;
+            this.b = targetBiome;
+            this.tw = tw;
+            this.x = x;
+            this.z = z;
         }
-        TerraformGeneratorPlugin.logger.info("[Locate Command] " + message);
+
+        @Override
+        public void run() {
+            Vector2f location = GenUtils.locateBiome(tw, b,
+                    new Vector2f(x, z), 5000, 25);
+
+            if (location == null)
+                syncSendMessage(p, LangOpt.COMMAND_LOCATEBIOME_NOT_IN_5000.parse());
+            else
+                syncSendMessage(p, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", location.x + "", "%z%", location.y + ""));
+        }
     }
 
 }

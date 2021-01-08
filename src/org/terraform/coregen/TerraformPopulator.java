@@ -98,7 +98,7 @@ public class TerraformPopulator {
         ArrayList<BiomeBank> banks = new ArrayList<>();
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int height = HeightMap.getHeight(tw, x, z);
+                int height = HeightMap.getBlockHeight(tw, x, z);
 
                 BiomeBank currentBiome = tw.getBiomeBank(x, height, z);
                 if (!banks.contains(currentBiome))

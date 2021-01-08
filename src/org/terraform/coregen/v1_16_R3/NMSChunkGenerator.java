@@ -104,17 +104,17 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //    	return CraftBlock.biomeToBiomeBase(this.b,tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
 //    }
     @SuppressWarnings("rawtypes")
-	@Override
+    @Override
     public void doCarving(long i, BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
         BiomeManager biomemanager1 = biomemanager.a(this.b);
         SeededRandom seededrandom = new SeededRandom();
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
         int j = chunkcoordintpair.x;
         int k = chunkcoordintpair.z;
-        BiomeBase nmsBiomeBase =  this.b.getBiome(chunkcoordintpair.x << 2, 0, chunkcoordintpair.z << 2);
+        BiomeBase nmsBiomeBase = this.b.getBiome(chunkcoordintpair.x << 2, 0, chunkcoordintpair.z << 2);
         BiomeSettingsGeneration biomesettingsgeneration = nmsBiomeBase.e();
         BitSet bitset = ((ProtoChunk) ichunkaccess).b(worldgenstage_features);
-        
+
         for (int l = j - 8; l <= j + 8; ++l) {
             for (int i1 = k - 8; i1 <= k + 8; ++i1) {
                 List<Supplier<WorldGenCarverWrapper<?>>> list = biomesettingsgeneration.a(worldgenstage_features);
@@ -132,12 +132,12 @@ public class NMSChunkGenerator extends ChunkGenerator {
                         Class carverType = field.get(worldgencarverwrapper).getClass();
                         if ((carverType == WorldGenCanyonOcean.class ||
                                 carverType == WorldGenCavesOcean.class)) {
-                        	
-                        	//Don't generate water caves if this isn't an ocean, or if flooded caves are disabled.
-                        	if((tw.getBiomeBank(j<<4, k<<4).getType() != BiomeType.OCEANIC
-                        		&& tw.getBiomeBank(j<<4, k<<4).getType() != BiomeType.DEEP_OCEANIC)
-                        		|| !TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
-                            continue;
+
+                            //Don't generate water caves if this isn't an ocean, or if flooded caves are disabled.
+                            if ((tw.getBiomeBank(j << 4, k << 4).getType() != BiomeType.OCEANIC
+                                    && tw.getBiomeBank(j << 4, k << 4).getType() != BiomeType.DEEP_OCEANIC)
+                                    || !TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
+                                continue;
                         }
                     } catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
                         e.printStackTrace();
@@ -155,7 +155,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     /**
      * Used to modify cave carvers in vanilla to carve some other blocks.
-     *
      * @param carverAbstract
      * @throws NoSuchFieldException
      * @throws SecurityException
@@ -304,7 +303,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getBaseHeight(int i, int j, Type heightmap_type) {
-        return org.terraform.coregen.HeightMap.getHeight(tw, i, j);
+        return org.terraform.coregen.HeightMap.getBlockHeight(tw, i, j);
     }
 
     @Override

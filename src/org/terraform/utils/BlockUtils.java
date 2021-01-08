@@ -32,14 +32,14 @@ public class BlockUtils {
     public static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
     public static final Material[] stoneBrickSlabs = {Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB};
     public static final BlockFace[] directBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
-    
+
     public static final BlockFace[][] cornerBlockFaces = {
-    		{BlockFace.NORTH, BlockFace.EAST},
-    		{BlockFace.NORTH, BlockFace.WEST},
-    		{BlockFace.SOUTH, BlockFace.EAST},
-    		{BlockFace.SOUTH, BlockFace.WEST},
+            {BlockFace.NORTH, BlockFace.EAST},
+            {BlockFace.NORTH, BlockFace.WEST},
+            {BlockFace.SOUTH, BlockFace.EAST},
+            {BlockFace.SOUTH, BlockFace.WEST},
     };
-    
+
     public static final BlockFace[] sixBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
     public static final Set<Material> stoneLike = EnumSet.of(
             Material.STONE, Material.COBBLESTONE,
@@ -69,9 +69,9 @@ public class BlockUtils {
             Material.LILY_OF_THE_VALLEY,
             Material.PINK_TULIP
     };
-    
+
     private static final Material[] POTTED = {
-    		Material.POTTED_DANDELION,
+            Material.POTTED_DANDELION,
             Material.POTTED_POPPY,
             Material.POTTED_WHITE_TULIP,
             Material.POTTED_ORANGE_TULIP,
@@ -85,24 +85,24 @@ public class BlockUtils {
             Material.POTTED_LILY_OF_THE_VALLEY,
             Material.POTTED_PINK_TULIP
     };
-    
+
     private static final Material[] BED = {
-    		Material.WHITE_BED,
-    		Material.BLACK_BED,
-    		Material.BLUE_BED,
-    		Material.BROWN_BED,
-    		Material.CYAN_BED,
-    		Material.GRAY_BED,
-    		Material.GREEN_BED,
-    		Material.LIGHT_BLUE_BED,
-    		Material.LIGHT_GRAY_BED,
-    		Material.LIME_BED,
-    		Material.MAGENTA_BED,
-    		Material.ORANGE_BED,
-    		Material.PINK_BED,
-    		Material.PURPLE_BED,
-    		Material.RED_BED,
-    		Material.YELLOW_BED
+            Material.WHITE_BED,
+            Material.BLACK_BED,
+            Material.BLUE_BED,
+            Material.BROWN_BED,
+            Material.CYAN_BED,
+            Material.GRAY_BED,
+            Material.GREEN_BED,
+            Material.LIGHT_BLUE_BED,
+            Material.LIGHT_GRAY_BED,
+            Material.LIME_BED,
+            Material.MAGENTA_BED,
+            Material.ORANGE_BED,
+            Material.PINK_BED,
+            Material.PURPLE_BED,
+            Material.RED_BED,
+            Material.YELLOW_BED
     };
 
     public static boolean isDirectBlockFace(BlockFace facing) {
@@ -209,9 +209,9 @@ public class BlockUtils {
         }
         return Material.getMaterial("OAK_" + wood);
     }
-    
+
     public static Material pickBed() {
-    	return GenUtils.randMaterial(BED);
+        return GenUtils.randMaterial(BED);
     }
 
     public static Material pickFlower() {
@@ -221,7 +221,7 @@ public class BlockUtils {
     public static Material pickPottedPlant() {
         return GenUtils.randMaterial(POTTED);
     }
-    
+
     public static Material pickTallFlower() {
         return GenUtils.randMaterial(TALL_FLOWER);
     }
@@ -613,8 +613,8 @@ public class BlockUtils {
         MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
             Material type = target.getRelative(face).getType();
-            data.setFace(face, type.isSolid() 
-            		&& !type.toString().endsWith("PRESSURE_PLATE"));
+            data.setFace(face, type.isSolid()
+                    && !type.toString().endsWith("PRESSURE_PLATE"));
         }
         target.setBlockData(data);
     }
@@ -635,7 +635,7 @@ public class BlockUtils {
             }
         }
     }
-    
+
     public static void correctStairData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof Stairs)) {
             return;
@@ -644,58 +644,58 @@ public class BlockUtils {
         Stairs data = (Stairs) target.getBlockData();
         BlockFace left = BlockUtils.getLeft(data.getFacing());
         BlockFace right = BlockUtils.getRight(data.getFacing());
-        
+
         //Left is a stair and right isn't
-        if(Tag.STAIRS.isTagged(target.getRelative(left).getType())
-        		&&!Tag.STAIRS.isTagged(target.getRelative(right).getType())) {
-        	
-        	//Only adjust if the left side has the same facing.
-        	if(((Stairs) target.getRelative(left).getBlockData()).getFacing() == data.getFacing()) {
+        if (Tag.STAIRS.isTagged(target.getRelative(left).getType())
+                && !Tag.STAIRS.isTagged(target.getRelative(right).getType())) {
 
-            	//Back is a stair
-            	if(Tag.STAIRS.isTagged(target.getRelative(data.getFacing()).getType())) {
-            		
-            		//Only set if the back stair is facing a valid location
-            		if(((Stairs) target.getRelative(data.getFacing()).getBlockData()).getFacing() 
-            				== getLeft(data.getFacing()))
-            			data.setShape(Stairs.Shape.OUTER_RIGHT);
-            	
-            	//Front is a stair
-            	}else if(Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
-            		
-            		//Only set if the front stair is facing a valid location
-            		if(((Stairs) target.getRelative(data.getFacing().getOppositeFace()).getBlockData()).getFacing() 
-            				== getRight(data.getFacing()))
-            		data.setShape(Stairs.Shape.INNER_RIGHT);
-            	}
-        	}
-        
-        //Right is a stair and left isn't.
-        }else if(!Tag.STAIRS.isTagged(target.getRelative(left).getType())
-        		&&Tag.STAIRS.isTagged(target.getRelative(right).getType())) {
-        	
-        	//Only adjust if the right side has the same facing.
-        	if(((Stairs) target.getRelative(right).getBlockData()).getFacing() == data.getFacing()) {
+            //Only adjust if the left side has the same facing.
+            if (((Stairs) target.getRelative(left).getBlockData()).getFacing() == data.getFacing()) {
 
-            	//Back is a stair
-            	if(Tag.STAIRS.isTagged(target.getRelative(data.getFacing()).getType())) {
-            		
-            		//Only set if the back stair is facing a valid location
-            		if(((Stairs) target.getRelative(data.getFacing()).getBlockData()).getFacing() 
-            				== getRight(data.getFacing()))
-            			data.setShape(Stairs.Shape.OUTER_LEFT);
-            	
-            	//Front is a stair
-            	}else if(Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
-            		
-            		//Only set if the front stair is facing a valid location
-            		if(((Stairs) target.getRelative(data.getFacing().getOppositeFace()).getBlockData()).getFacing() 
-            				== getLeft(data.getFacing()))
-            		data.setShape(Stairs.Shape.INNER_LEFT);
-            	}
-        	}
-        
-        //Right is a stair and left isn't.
+                //Back is a stair
+                if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing()).getType())) {
+
+                    //Only set if the back stair is facing a valid location
+                    if (((Stairs) target.getRelative(data.getFacing()).getBlockData()).getFacing()
+                            == getLeft(data.getFacing()))
+                        data.setShape(Stairs.Shape.OUTER_RIGHT);
+
+                    //Front is a stair
+                } else if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
+
+                    //Only set if the front stair is facing a valid location
+                    if (((Stairs) target.getRelative(data.getFacing().getOppositeFace()).getBlockData()).getFacing()
+                            == getRight(data.getFacing()))
+                        data.setShape(Stairs.Shape.INNER_RIGHT);
+                }
+            }
+
+            //Right is a stair and left isn't.
+        } else if (!Tag.STAIRS.isTagged(target.getRelative(left).getType())
+                && Tag.STAIRS.isTagged(target.getRelative(right).getType())) {
+
+            //Only adjust if the right side has the same facing.
+            if (((Stairs) target.getRelative(right).getBlockData()).getFacing() == data.getFacing()) {
+
+                //Back is a stair
+                if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing()).getType())) {
+
+                    //Only set if the back stair is facing a valid location
+                    if (((Stairs) target.getRelative(data.getFacing()).getBlockData()).getFacing()
+                            == getRight(data.getFacing()))
+                        data.setShape(Stairs.Shape.OUTER_LEFT);
+
+                    //Front is a stair
+                } else if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
+
+                    //Only set if the front stair is facing a valid location
+                    if (((Stairs) target.getRelative(data.getFacing().getOppositeFace()).getBlockData()).getFacing()
+                            == getLeft(data.getFacing()))
+                        data.setShape(Stairs.Shape.INNER_LEFT);
+                }
+            }
+
+            //Right is a stair and left isn't.
         }
         target.setBlockData(data);
     }
@@ -709,7 +709,7 @@ public class BlockUtils {
         Stairs data = (Stairs) target.getBlockData();
         for (BlockFace face : getAdjacentFaces(data.getFacing())) {
             if (target.getRelative(face).getBlockData() instanceof Stairs) {
-            	correctStairData(target.getRelative(face));
+                correctStairData(target.getRelative(face));
             }
         }
     }
@@ -747,17 +747,17 @@ public class BlockUtils {
         door.setHalf(Half.TOP);
         data.setBlockData(x, y + 1, z, door);
     }
-    
+
     public static void placeBed(SimpleBlock block, Material mat, BlockFace dir) {
-    	Bed bed = (Bed) Bukkit.createBlockData(mat);
-    	bed.setFacing(dir.getOppositeFace());
-    	bed.setPart(Bed.Part.HEAD);
-    	block.setBlockData(bed);
-    	
-    	bed = (Bed) Bukkit.createBlockData(mat);
-    	bed.setFacing(dir.getOppositeFace());
-    	bed.setPart(Bed.Part.FOOT);
-    	block.getRelative(dir).setBlockData(bed);
+        Bed bed = (Bed) Bukkit.createBlockData(mat);
+        bed.setFacing(dir.getOppositeFace());
+        bed.setPart(Bed.Part.HEAD);
+        block.setBlockData(bed);
+
+        bed = (Bed) Bukkit.createBlockData(mat);
+        bed.setFacing(dir.getOppositeFace());
+        bed.setPart(Bed.Part.FOOT);
+        block.getRelative(dir).setBlockData(bed);
     }
 
     public static void placeRail(SimpleBlock block, Material mat) {
@@ -852,19 +852,19 @@ public class BlockUtils {
                 return mat;
         }
     }
-    
+
     public static void stairwayUntilSolid(SimpleBlock start, BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
-    	while(!start.getType().isSolid()) {
-    		new StairBuilder(stairTypes)
-    		.setFacing(extensionDir.getOppositeFace())
-    		.apply(start);
-    		BlockUtils.setDownUntilSolid(
-    				start.getX(), 
-    				start.getY()-1, 
-    				start.getZ(), 
-    				start.getPopData(), 
-    				downTypes);
-    		start=start.getRelative(extensionDir).getRelative(0,-1,0);
-    	}
+        while (!start.getType().isSolid()) {
+            new StairBuilder(stairTypes)
+                    .setFacing(extensionDir.getOppositeFace())
+                    .apply(start);
+            BlockUtils.setDownUntilSolid(
+                    start.getX(),
+                    start.getY() - 1,
+                    start.getZ(),
+                    start.getPopData(),
+                    downTypes);
+            start = start.getRelative(extensionDir).getRelative(0, -1, 0);
+        }
     }
 }

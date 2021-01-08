@@ -6,8 +6,8 @@ import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.ChunkCache;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
@@ -18,11 +18,10 @@ import org.terraform.utils.GenUtils;
 import java.util.*;
 
 public class TerraformGenerator extends ChunkGenerator {
-    public static final ArrayList<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
+    public static final List<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
+    private static final Map<ChunkCache, ChunkCache> CHUNK_CACHE = new HashMap<>();
     public static int seaLevel = 62;
     public static int minMountainLevel = 85;
-
-    private static HashMap<Integer, ChunkCache> chunkCaches = new HashMap<>();
 
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
@@ -32,17 +31,26 @@ public class TerraformGenerator extends ChunkGenerator {
         minMountainLevel = TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt();
     }
 
+    /**
+     * Refers to raw X and raw Z (block coords). NOT chunk coords.
+     */
+    public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
+        ChunkCache cache = new ChunkCache(tw, x, 0, z);
+        return CHUNK_CACHE.compute(cache, (k, v) -> {
+            if (v != null) return v;
+            cache.initInternalCache();
+            return cache;
+        });
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
         ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
-        chunkCaches.put(
-        		cache.getHash(),
-        		cache
-        );
-    	
+        CHUNK_CACHE.put(cache, cache);
+
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 
         //Patch for WorldInitEvent issues.
@@ -50,15 +58,14 @@ public class TerraformGenerator extends ChunkGenerator {
             preWorldInitGen.add(new SimpleChunkLocation(world.getName(), chunkX, chunkZ));
         }
 
-        ArrayList<BiomeHandler> biomesToTransform = new ArrayList<>();
-
+        List<BiomeHandler> biomesToTransform = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
                 // This will also cache the height
-                int height = HeightMap.getHeight(tw, rawX, rawZ);
+                int height = HeightMap.getBlockHeight(tw, rawX, rawZ);
 
                 BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
@@ -99,7 +106,7 @@ public class TerraformGenerator extends ChunkGenerator {
 
     @Override
     public Location getFixedSpawnLocation(World world, Random random) {
-        return new Location(world, 0, HeightMap.getHeight(TerraformWorld.get(world), 0, 0), 0);
+        return new Location(world, 0, HeightMap.getBlockHeight(TerraformWorld.get(world), 0, 0), 0);
     }
 
     @Override
@@ -108,42 +115,14 @@ public class TerraformGenerator extends ChunkGenerator {
         return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
     }
 
-    /**
-     * Refers to raw X and raw Z. NOT chunk coords.
-     * @param tw
-     * @param x
-     * @param z
-     * @return
-     */
-    public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
-        int hash = ChunkCache.calculateHash(
-        		ChunkCache.getChunkCoordinate(x), 
-        		ChunkCache.getChunkCoordinate(z), 
-        		tw); 
-        
-        if (!chunkCaches.containsKey(hash)) {
-        	ChunkCache cache = new ChunkCache(tw, x, 0, z);
-            chunkCaches.put(cache.getHash(), cache);
-            return cache;
-        } else {
-        	ChunkCache cache = chunkCaches.get(hash);
-        	if(cache.areCoordsInside(x, z))
-        		return chunkCaches.get(hash);
-        	else { //Hash Collision detected. Overwrite old value.
-            	cache = new ChunkCache(tw, x, 0, z);
-                chunkCaches.put(cache.getHash(), cache);
-                return cache;
-        	}
-        }
-    }
-    
-    
+
 //    private static boolean verifyCache(TerraformWorld tw, int x, int z, ChunkCache cache) {
 //    	if(x >> 4 != cache.chunkX || z >> 4 != cache.chunkZ) {
 //    	//if(x-cache.chunkX*16 > 15 || x-cache.chunkX*16 < 0 || z-cache.chunkZ*16 > 15 || z-cache.chunkZ*16 < 0) {
 //    		int hash = ChunkCache.calculateHash(ChunkCache.getChunkCoordinate(x), ChunkCache.getChunkCoordinate(z),cache.tw);
 //    		TerraformGeneratorPlugin.logger.info("BAD REQUEST DETECTED: " + x +","+z+":" + cache.tw.hashCode() + "," + cache.chunkX + "," + cache.chunkZ);
-//    		TerraformGeneratorPlugin.logger.info("BITSHIFTS: " + (x>>4) + "," + (z>>4) + ":" + tw.hashCode() + "," + ChunkCache.getChunkCoordinate(x) + "," + ChunkCache.getChunkCoordinate(z));
+//    		TerraformGeneratorPlugin.logger.info("BITSHIFTS: " + (x>>4) + "," + (z>>4) + ":" + tw.hashCode() + "," + ChunkCache.getChunkCoordinate(x) + "," + ChunkCache
+//    		.getChunkCoordinate(z));
 //    		TerraformGeneratorPlugin.logger.info("HASHES: " + cache.getHash() + " - " + hash);
 //    		//dumpCache();
 //    		int throwMotherfucker = 5/0;

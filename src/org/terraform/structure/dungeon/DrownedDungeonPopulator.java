@@ -63,7 +63,7 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
                 if (nx * nx + nz * nz > radius * radius + GenUtils.randInt(rand, -10, 10))
                     continue;
 
-                int y = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, nx + x, nz + z);
+                int y = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, nx + x, nz + z);
 
                 //Spawner
                 if (nx == 0 && nz == 0) {

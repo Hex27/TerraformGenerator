@@ -53,7 +53,7 @@ public class PreviewCommand extends DCCommand {
 
         for (int nz = 0; nz < z; nz++) {
             for (int nx = 0; nx < x; nx++) {
-                int noise = HeightMap.getHeight(TerraformWorld.get("world-" + seed, seed), nx, nz);//(realRidge(seed,nx,nz)*2);
+                int noise = HeightMap.getBlockHeight(TerraformWorld.get("world-" + seed, seed), nx, nz);//(realRidge(seed,nx,nz)*2);
 
                 img.setRGB(nx, nz, getColorFromNoise(noise).getRGB());
             }

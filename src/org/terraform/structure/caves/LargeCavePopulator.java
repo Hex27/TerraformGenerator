@@ -25,7 +25,7 @@ public class LargeCavePopulator extends SingleMegaChunkStructurePopulator {
         int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
         Random rand = tw.getHashedRand(x, z, 999323);
 
-        int highest = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
+        int highest = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
         int rY = (highest - 20) / 2; //5 block padding bottom, 15 padding top.
 
         if (rand.nextBoolean())

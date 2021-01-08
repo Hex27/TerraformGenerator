@@ -24,7 +24,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = getCoordsFromMegaChunk(tw, mc);
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-            int height = HeightMap.getHeight(tw, coords[0], coords[1]);
+            int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
             if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
                 //Way too little space. Abort generation.
                 //TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
@@ -72,7 +72,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
         int[] coords = getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
         int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
-        int height = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
+        int height = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
 
         int y = GenUtils.randInt(TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(), TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt());
 

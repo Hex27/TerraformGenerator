@@ -5,17 +5,14 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 
 public class BiomeBlender {
-    double biomeThreshold = 0.25;
-    boolean blendBiomeGrid;
-
-    int riverThreshold = 5;
-    boolean blendWater;
-
-    int mountainThreshold = 5;
-    boolean blendMountains;
-
     private final int mountainHeight = TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt();
     private final TerraformWorld tw;
+    double biomeThreshold = 0.25;
+    boolean blendBiomeGrid;
+    int riverThreshold = 5;
+    boolean blendWater;
+    int mountainThreshold = 5;
+    boolean blendMountains;
 
     public BiomeBlender(TerraformWorld tw, boolean blendBiomeGrid, boolean blendWater, boolean blendMountains) {
         this.tw = tw;
@@ -37,25 +34,25 @@ public class BiomeBlender {
      * can control how quickly blending happens. Blending is linear.
      */
     public double getEdgeFactor(BiomeBank currentBiome, int x, int z) {
-        return getEdgeFactor(currentBiome, x, z, HeightMap.getRiverDepth(tw, x, z));
+        return getEdgeFactor(currentBiome, x, z, HeightMap.RIVER.getHeight(tw, x, z));
     }
 
     /**
-     * @see BiomeBlender#getEdgeFactor(BiomeBank, int, int)
      * @param riverDepth Current river depth, has to have also negative values
+     * @see BiomeBlender#getEdgeFactor(BiomeBank, int, int)
      */
     public double getEdgeFactor(BiomeBank currentBiome, int x, int z, double riverDepth) {
         double factor = 1;
 
         if (blendWater) {
             // Linear blending when closer to water
-            double riverFactor = riverDepth / (- riverThreshold);
+            double riverFactor = riverDepth / (-riverThreshold);
             if (riverFactor < factor) factor = Math.max(0, riverFactor);
         }
 
         if (blendMountains) {
             // Linear blending when closer to mountains
-            double mountainFactor = (- HeightMap.getHeight(tw, x, z) - mountainHeight - 5) / (double) mountainThreshold;
+            double mountainFactor = (-HeightMap.getBlockHeight(tw, x, z) - mountainHeight - 5) / (double) mountainThreshold;
             if (mountainFactor < factor) factor = Math.max(0, mountainFactor);
         }
 

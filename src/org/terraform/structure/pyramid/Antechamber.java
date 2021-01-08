@@ -110,7 +110,6 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
 
     /**
      * To be called on a wall in front of the room's walls.
-     *
      * @param w
      * @param roomHeight
      * @param patternIndex

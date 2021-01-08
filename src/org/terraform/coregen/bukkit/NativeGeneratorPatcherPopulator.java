@@ -37,7 +37,8 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator {
         SimpleChunkLocation scl = new SimpleChunkLocation(chunk);
         Collection<Object[]> changes = cache.remove(scl);
         if (changes != null) {
-            //TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Detected anomalous generation by NMS on " + scl + ". Running repairs on " + changes.size() + " blocks");
+            //TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Detected anomalous generation by NMS on " + scl + ". Running repairs on " + changes.size() + "
+            // blocks");
             for (Object[] entry : changes) {
                 int[] loc = (int[]) entry[0];
                 BlockData data = (BlockData) entry[1];

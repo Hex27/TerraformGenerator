@@ -47,18 +47,17 @@ public class StructureRegistry {
 
     /**
      * Assumes that the supplied type is a singlemegachunkstructurepopulator.
-     * 
      * @param populatorType
      * @return
      */
     public static StructureType getStructureType(Class<? extends SingleMegaChunkStructurePopulator> populatorType) {
-    	for(Entry<StructureType, SingleMegaChunkStructurePopulator[]> entry:largeStructureRegistry.entrySet()) {
-    		for(SingleMegaChunkStructurePopulator pops:entry.getValue()) {
-    			if(populatorType.isInstance(pops))
-    				return entry.getKey();
-    		}
-    	}
-    	return null; //Invalid populator Type.
+        for (Entry<StructureType, SingleMegaChunkStructurePopulator[]> entry : largeStructureRegistry.entrySet()) {
+            for (SingleMegaChunkStructurePopulator pops : entry.getValue()) {
+                if (populatorType.isInstance(pops))
+                    return entry.getKey();
+            }
+        }
+        return null; //Invalid populator Type.
     }
 
     /**
@@ -84,11 +83,11 @@ public class StructureRegistry {
         if (largeStructureRegistry.containsKey(StructureType.MEGA_DUNGEON)
                 && largeStructureRegistry.get(StructureType.MEGA_DUNGEON).length > 0) {
             //First check if the megadungeons can spawn. Shuffle the array first.
-        	SingleMegaChunkStructurePopulator[] available = (SingleMegaChunkStructurePopulator[]) shuffleArray(structRand, largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
+            SingleMegaChunkStructurePopulator[] available = (SingleMegaChunkStructurePopulator[]) shuffleArray(structRand, largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
             for (SingleMegaChunkStructurePopulator pop : available) {
                 int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
                 if (coords == null) continue;
-                
+
                 if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4))) {
                     pops[size] = pop;
                     size++;
@@ -98,7 +97,7 @@ public class StructureRegistry {
         }
         //If a Mega Dungeon spawned, don't spawn other large structures.
         if (size == 0) {
-        	//TerraformGeneratorPlugin.logger.info(ChatColor.YELLOW + "MC: " + mc.getX() + "," + mc.getZ() + " - No Mega Dungeon");
+            //TerraformGeneratorPlugin.logger.info(ChatColor.YELLOW + "MC: " + mc.getX() + "," + mc.getZ() + " - No Mega Dungeon");
             StructureType[] types = {StructureType.LARGE_CAVE, StructureType.VILLAGE, StructureType.LARGE_MISC};
             types = (StructureType[]) shuffleArray(structRand, types);
             for (StructureType type : types) {
@@ -144,7 +143,6 @@ public class StructureRegistry {
 
     /**
      * Registers small or large structures. Must implement either SingleMegaChunkStructurePopulator or MultiMegaChunkStructurePopulator.
-     *
      * @param type
      * @param pop
      */

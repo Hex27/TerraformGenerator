@@ -18,11 +18,7 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.LangOpt;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.MultiMegaChunkStructurePopulator;
-import org.terraform.structure.SingleMegaChunkStructurePopulator;
-import org.terraform.structure.StructurePopulator;
-import org.terraform.structure.StructureRegistry;
-import org.terraform.structure.StructureType;
+import org.terraform.structure.*;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.utils.GenUtils;
 
@@ -148,7 +144,8 @@ public class LocateCommand extends DCCommand implements Listener {
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
                 if (found)
-                    syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " +  LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
+                    syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "",
+                            "%z%", blockZ + ""));
                 else
                     syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
 
@@ -166,8 +163,8 @@ public class LocateCommand extends DCCommand implements Listener {
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
         p.sendMessage(LangOpt.COMMAND_LOCATE_SEARCHING.parse());
         UUID uuid = p.getUniqueId();
-        
-        
+
+
         long startTime = System.currentTimeMillis();
 
         BukkitRunnable runnable = new BukkitRunnable() {
@@ -182,40 +179,40 @@ public class LocateCommand extends DCCommand implements Listener {
                 //syncSendMessage(uuid, ChatColor.YELLOW + "Using Center MC: " + center.getX() + "," + center.getZ());
 
                 while (!found) {
-                	for (MegaChunk mc : getSurroundingChunks(center, radius)) {
-                    	if(lowerBound == null) lowerBound = mc;
-                    	if(upperBound == null) upperBound = mc;
-                    	if(mc.getX() < lowerBound.getX()||mc.getZ() < lowerBound.getZ())
-                    		lowerBound = mc;
-                    	if(mc.getX() > upperBound.getX()||mc.getZ() > upperBound.getZ())
-                    		upperBound = mc;
+                    for (MegaChunk mc : getSurroundingChunks(center, radius)) {
+                        if (lowerBound == null) lowerBound = mc;
+                        if (upperBound == null) upperBound = mc;
+                        if (mc.getX() < lowerBound.getX() || mc.getZ() < lowerBound.getZ())
+                            lowerBound = mc;
+                        if (mc.getX() > upperBound.getX() || mc.getZ() > upperBound.getZ())
+                            upperBound = mc;
                         int[] coords = populator.getCoordsFromMegaChunk(tw, mc);
                         if (coords == null) continue;
                         //Right bitshift of 4 is conversion from block coords to chunk coords.
                         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
                         if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
-                    		 
-                        	//Mega Dungeons will always spawn if they can.
-                        	if(StructureRegistry.getStructureType(populator.getClass()) == StructureType.MEGA_DUNGEON) {
-                        		found = true;
+
+                            //Mega Dungeons will always spawn if they can.
+                            if (StructureRegistry.getStructureType(populator.getClass()) == StructureType.MEGA_DUNGEON) {
+                                found = true;
                                 blockX = coords[0];
                                 blockZ = coords[1];
                                 break;
-                        	}else {
-                        		//If it is not a mega dungeon, the structure registry must be checked.
-                        		for(SingleMegaChunkStructurePopulator availablePops:StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
-                        			if(availablePops == null) continue;
-                        			if(availablePops.getClass().equals(populator.getClass())) {
-                        				//Can spawn
-                                    	found = true;
+                            } else {
+                                //If it is not a mega dungeon, the structure registry must be checked.
+                                for (SingleMegaChunkStructurePopulator availablePops : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
+                                    if (availablePops == null) continue;
+                                    if (availablePops.getClass().equals(populator.getClass())) {
+                                        //Can spawn
+                                        found = true;
                                         blockX = coords[0];
                                         blockZ = coords[1];
                                         break;
-                        			}
-                        		}
-                        		if(found) break;
-                        	}
+                                    }
+                                }
+                                if (found) break;
+                            }
                         }
                     }
                     radius++;
@@ -229,7 +226,8 @@ public class LocateCommand extends DCCommand implements Listener {
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
                 if (found)
-                    syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " +  LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "", "%z%", blockZ + ""));
+                    syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "",
+                            "%z%", blockZ + ""));
                 else
                     syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
 
@@ -253,7 +251,7 @@ public class LocateCommand extends DCCommand implements Listener {
 
                 //Check that this is a border coord
                 if (Math.abs(rx) == radius || Math.abs(rz) == radius) {
-                	//Bukkit.getLogger().info(center.getX() + "+" + rx + "," + center.getZ() + "+"+rz);
+                    //Bukkit.getLogger().info(center.getX() + "+" + rx + "," + center.getZ() + "+"+rz);
                     candidates.add(center.getRelative(rx, rz));
                 }
             }
