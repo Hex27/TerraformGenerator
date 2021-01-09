@@ -21,28 +21,28 @@ public class TrapdoorBuilder {
     public TrapdoorBuilder(Material... mat) {
         this.blockData = (TrapDoor) Bukkit.createBlockData(GenUtils.randMaterial(mat));
     }
-    
+
 
     public TrapdoorBuilder setWaterlogged(boolean water) {
-    	this.blockData.setWaterlogged(water);
-    	return this;
+        this.blockData.setWaterlogged(water);
+        return this;
     }
 
     public TrapdoorBuilder setHalf(Half h) {
-    	this.blockData.setHalf(h);
-    	return this;
+        this.blockData.setHalf(h);
+        return this;
     }
-    
+
     public TrapdoorBuilder setPowered(boolean powered) {
-    	this.blockData.setPowered(powered);
-    	return this;
+        this.blockData.setPowered(powered);
+        return this;
     }
 
     public TrapdoorBuilder setOpen(boolean open) {
-    	this.blockData.setOpen(open);
-    	return this;
+        this.blockData.setOpen(open);
+        return this;
     }
-    
+
     public TrapdoorBuilder setFacing(BlockFace face) {
         this.blockData.setFacing(face);
         return this;

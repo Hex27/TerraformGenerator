@@ -27,7 +27,7 @@ public class MegaChunk {
     }
 
     public MegaChunk getRelative(int x, int z) {
-        MegaChunk mc = new MegaChunk(0,0);
+        MegaChunk mc = new MegaChunk(0, 0);
         mc.x = this.x + x;
         mc.z = this.z + z;
         return mc;

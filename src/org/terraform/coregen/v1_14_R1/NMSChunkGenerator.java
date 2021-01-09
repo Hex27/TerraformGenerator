@@ -57,7 +57,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 for (int z = 0; z < 16; z++) {
                     int rawX = x + ichunkaccess.getPos().x * 16;
                     int rawZ = x + ichunkaccess.getPos().z * 16;
-                    int y = HeightMap.getHeight(tw, rawX, rawZ);
+                    int y = HeightMap.getBlockHeight(tw, rawX, rawZ);
                     BiomeBase biomeBase = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,
                     // z), y).getHandler().getBiome()
 
@@ -176,7 +176,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     /**
      * Used to modify cave carvers in vanilla to carve some other blocks.
-     *
      * @param carverAbstract
      * @throws NoSuchFieldException
      * @throws SecurityException
@@ -207,7 +206,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getBaseHeight(int i, int j, Type heightmap_type) {
-        return org.terraform.coregen.HeightMap.getHeight(tw, i, j);
+        return org.terraform.coregen.HeightMap.getBlockHeight(tw, i, j);
     }
 
     @Override

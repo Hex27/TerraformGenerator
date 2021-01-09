@@ -44,7 +44,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         //Ideally the entire area should be a desert.
 //        for(int nx = -50; nx <= 50; nx++)
 //	        for(int nz = -50; nz <= 50; nz++) {
-//	        	if(HeightMap.getHeight(tw, nx+coords[0], nz+coords[1]) < TerraformGenerator.seaLevel + 5) {
+//	        	if(HeightMap.getBlockHeight(tw, nx+coords[0], nz+coords[1]) < TerraformGenerator.seaLevel + 5) {
 //	        		return false;
 //	        	}
 //	        }
@@ -66,7 +66,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         int x = coords[0];
         int z = coords[1];
 
-        int y = HeightMap.getHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
+        int y = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
         try {
             spawnPyramid(tw, tw.getHashedRand(x, y, z, 1111222), data, x, y, z);
         } catch (Throwable e) {
@@ -228,7 +228,6 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Used to ensure that the dungeon level never gets revealed above the surface by a river or something stupid.
      * This will ensure that all ground levels around those coords are at least roughly at y blocks
-     *
      * @param data
      * @param x
      * @param y
@@ -253,7 +252,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                 crust[0] = data.getType(nx, height, nz);
                 Material mat = data.getType(nx, height, nz);
                 int original = height;
-                //int height = HeightMap.getHeight(tw, nx, nz);
+                //int height = HeightMap.getBlockHeight(tw, nx, nz);
 
 
                 //Raise ground according to noise levels.
@@ -264,8 +263,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
                 while (height < newHeight) {
                     raiseDone++;
-                    if (!data.getType(nx, height + 1, nz).isSolid() 
-                    		|| data.getType(nx, height + 1, nz) == Material.CACTUS)
+                    if (!data.getType(nx, height + 1, nz).isSolid()
+                            || data.getType(nx, height + 1, nz) == Material.CACTUS)
                         data.setType(nx, height + 1, nz, mat);
                     height++;
                 }

@@ -24,23 +24,23 @@ public class PlainsVillagePopulator extends VillageHousePopulator {
     }
 
     public void spawnPlainsVillage(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
-    	BlockFace pathStart = BlockUtils.getDirectBlockFace(random);
-    	TerraformGeneratorPlugin.logger.info("Spawning plains village at " + x + "," + y + "," + z );
-	    DirectionalCubeRoom townHall = new DirectionalCubeRoom(pathStart,24, 24, 24, x, y, z);
-	    PlainsVillageTownhallPopulator townHallPop = new PlainsVillageTownhallPopulator(tw, random, false, false);
-	    townHall.setRoomPopulator(townHallPop);
-	    
-	    PlainsPathRecursiveSpawner spawner = new PlainsPathRecursiveSpawner(
-	    		new SimpleBlock(data,x+pathStart.getModX()*13,y,z+pathStart.getModZ()*13),
-	    		100,BlockUtils.getAdjacentFaces(pathStart));
-	    spawner.forceRegisterRoom(townHall);
-	    spawner.setVillageDensity(0.7);
-	    spawner.setPathPop(new PlainsVillagePathPopulator(tw,spawner.getRooms().values(),random));
-	    spawner.registerRoomPopulator(new PlainsVillageStandardHousePopulator(random,false,false));
-	    spawner.registerRoomPopulator(new PlainsVillageCropFarmPopulator(random,false,false));
-		   
-	    spawner.generate(random);
-	    spawner.build(random);
+        BlockFace pathStart = BlockUtils.getDirectBlockFace(random);
+        TerraformGeneratorPlugin.logger.info("Spawning plains village at " + x + "," + y + "," + z);
+        DirectionalCubeRoom townHall = new DirectionalCubeRoom(pathStart, 24, 24, 24, x, y, z);
+        PlainsVillageTownhallPopulator townHallPop = new PlainsVillageTownhallPopulator(tw, random, false, false);
+        townHall.setRoomPopulator(townHallPop);
+
+        PlainsPathRecursiveSpawner spawner = new PlainsPathRecursiveSpawner(
+                new SimpleBlock(data, x + pathStart.getModX() * 13, y, z + pathStart.getModZ() * 13),
+                100, BlockUtils.getAdjacentFaces(pathStart));
+        spawner.forceRegisterRoom(townHall);
+        spawner.setVillageDensity(0.7);
+        spawner.setPathPop(new PlainsVillagePathPopulator(tw, spawner.getRooms().values(), random));
+        spawner.registerRoomPopulator(new PlainsVillageStandardHousePopulator(random, false, false));
+        spawner.registerRoomPopulator(new PlainsVillageCropFarmPopulator(random, false, false));
+
+        spawner.generate(random);
+        spawner.build(random);
     }
 
 }

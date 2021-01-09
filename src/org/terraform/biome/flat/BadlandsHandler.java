@@ -6,7 +6,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
-import org.terraform.biome.BiomeGrid;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.mountainous.BadlandsMountainHandler;
 import org.terraform.coregen.HeightMap;
@@ -23,6 +22,13 @@ import java.util.Random;
 
 public class BadlandsHandler extends BiomeHandler {
     static BiomeBlender biomeBlender;
+
+    private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
+        // Only one blender needed!
+        if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, false, false)
+                .setBiomeThreshold(0.45);
+        return biomeBlender;
+    }
 
     @Override
     public boolean isOcean() {
@@ -79,13 +85,6 @@ public class BadlandsHandler extends BiomeHandler {
         }
     }
 
-    private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
-        // Only one blender needed!
-        if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, false, false)
-                .setBiomeThreshold(0.45);
-        return biomeBlender;
-    }
-
     @Override
     public BiomeHandler getTransformHandler() {
         return this;
@@ -140,8 +139,8 @@ public class BadlandsHandler extends BiomeHandler {
                         // Curved top edges
                         if (riverFactor > threshold) {
                             int upperBuildHeight = (int) Math.round(
-                                    1*//topEdgeFactor *
-                                    (Math.min(1, 50 * Math.pow(riverFactor - threshold, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
+                                    1 *//topEdgeFactor *
+                                            (Math.min(1, 50 * Math.pow(riverFactor - threshold, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
 
                             if (topEdgeFactor == 0) continue;
 

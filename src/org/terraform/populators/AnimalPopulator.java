@@ -55,7 +55,7 @@ public class AnimalPopulator {
         for (int i = 0; i < GenUtils.randInt(random, minNum, maxNum); i++) {
             int x = (data.getChunkX() << 4) + GenUtils.randInt(random, 5, 7);
             int z = (data.getChunkZ() << 4) + GenUtils.randInt(random, 5, 7);
-            int height = HeightMap.getHeight(world, x, z) + 2;//GenUtils.getHighestGround(data, x, z)+1;
+            int height = HeightMap.getBlockHeight(world, x, z) + 2;//GenUtils.getHighestGround(data, x, z)+1;
             //TerraformGeneratorPlugin.logger.info("Spawned " + animalType.toString() + " at " + x + "," + height + "," + z);
             data.addEntity(x, height, z, animalType);
         }

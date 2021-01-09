@@ -18,88 +18,89 @@ import java.util.Random;
 
 public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
-	PlainsVillageHouseVariant var;
-	public PlainsVillageWallPiece(PlainsVillageHouseVariant var,int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-		super(widthX, height, widthZ, type, validDirs);
-		this.var = var;
-		
-	}
+    PlainsVillageHouseVariant var;
 
-	@Override
-	public void build(PopulatorDataAbstract data, Random rand) {
-		
-		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
-		Wall w = entry.getKey().getRelative(0,-1,0);
-		for(int i = 0; i < entry.getValue(); i++) {
-			w.getRelative(0,-1,0).downUntilSolid(rand, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
-			w.Pillar(2,rand, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
-			
-			if(this.var == PlainsVillageHouseVariant.CLAY)
-				w.getRelative(0,2,0).Pillar(2, rand, Material.WHITE_TERRACOTTA);
-			else
-				w.getRelative(0,2,0).Pillar(2, rand, Material.OAK_PLANKS);
-			
-			w = w.getLeft();
-		}
-		w.getRight(2).getRelative(0,2,0).setType(Material.OAK_LOG);
-		w.getRight(3).getRelative(0,2,0).setType(Material.GLASS_PANE);
-		w.getRight(4).getRelative(0,2,0).setType(Material.OAK_LOG);
-		BlockUtils.correctSurroundingMultifacingData(w.getRight(3).getRelative(0,2,0).get());
+    public PlainsVillageWallPiece(PlainsVillageHouseVariant var, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+        super(widthX, height, widthZ, type, validDirs);
+        this.var = var;
 
-		w = w.getRight(3).getFront().getRelative(0,1,0);
-		
-		//Variant Wooden
-		Material[] slabType = new Material[] {Material.OAK_SLAB};
-		Material[] fenceType = new Material[] {Material.OAK_FENCE};
-		Material[] baseType = new Material[] {Material.STONE_BRICKS,Material.MOSSY_STONE_BRICKS,Material.CRACKED_STONE_BRICKS};
-		Material[] stairType = new Material[] {Material.COBBLESTONE_STAIRS,Material.MOSSY_COBBLESTONE_STAIRS};
-		
-		//Variant Cobblestone
-		if(var == PlainsVillageHouseVariant.COBBLESTONE) {
-			slabType = new Material[] {Material.COBBLESTONE_SLAB,Material.MOSSY_COBBLESTONE_SLAB};
-			fenceType = new Material[] {Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL};
-			baseType = new Material[] {Material.OAK_LOG};
-			stairType = new Material[] {Material.OAK_STAIRS};
-		}else if(var == PlainsVillageHouseVariant.CLAY) {
-			slabType = BlockUtils.stoneBrickSlabs;
-			fenceType = new Material[] {Material.STONE_BRICK_WALL,Material.MOSSY_STONE_BRICK_WALL};
-			baseType = new Material[] {Material.STRIPPED_OAK_LOG};
-			stairType = new Material[] {Material.OAK_STAIRS};
-		}
-		
-		new SlabBuilder(slabType)
-		.setType(Slab.Type.TOP)
-		.apply(w.getRelative(0,2,0));
+    }
 
-		new SlabBuilder(slabType)
-		.setType(Slab.Type.BOTTOM)
-		.apply(w.getRelative(0,2,0).getLeft())
-		.apply(w.getRelative(0,2,0).getRight());
-		
-		w.getRelative(0,1,0).getLeft().setType(fenceType);
-		w.getRelative(0,1,0).getLeft().CorrectMultipleFacing(1);
-		w.getRelative(0,1,0).getRight().setType(fenceType);
-		w.getRelative(0,1,0).getRight().CorrectMultipleFacing(1);
-		
-		w.getLeft().setType(baseType);
-		w.getRight().setType(baseType);
-		
-		if(new Random().nextBoolean()) { //Plants
-			w.setType(Material.GRASS_BLOCK);
-			TrapDoor trapdoor = (TrapDoor) Bukkit.createBlockData(Material.OAK_TRAPDOOR);
-			trapdoor.setFacing(w.getDirection());
-			trapdoor.setOpen(true);
-			w.getFront().setBlockData(trapdoor);
-			w.getRelative(0,1,0).setType(BlockUtils.pickFlower());
-		}else { //Stairs
-			new StairBuilder(stairType).setFacing(w.getDirection().getOppositeFace())
-			.apply(w);
-		}
-		
-		w.getLeft().getRelative(0,-1,0).downUntilSolid(rand, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
-		w.getRight().getRelative(0,-1,0).downUntilSolid(rand, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
-		w.getRelative(0,-1,0).downUntilSolid(rand, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
-		
-	}
+    @Override
+    public void build(PopulatorDataAbstract data, Random rand) {
+
+        SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
+        Wall w = entry.getKey().getRelative(0, -1, 0);
+        for (int i = 0; i < entry.getValue(); i++) {
+            w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+            w.Pillar(2, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+
+            if (this.var == PlainsVillageHouseVariant.CLAY)
+                w.getRelative(0, 2, 0).Pillar(2, rand, Material.WHITE_TERRACOTTA);
+            else
+                w.getRelative(0, 2, 0).Pillar(2, rand, Material.OAK_PLANKS);
+
+            w = w.getLeft();
+        }
+        w.getRight(2).getRelative(0, 2, 0).setType(Material.OAK_LOG);
+        w.getRight(3).getRelative(0, 2, 0).setType(Material.GLASS_PANE);
+        w.getRight(4).getRelative(0, 2, 0).setType(Material.OAK_LOG);
+        BlockUtils.correctSurroundingMultifacingData(w.getRight(3).getRelative(0, 2, 0).get());
+
+        w = w.getRight(3).getFront().getRelative(0, 1, 0);
+
+        //Variant Wooden
+        Material[] slabType = {Material.OAK_SLAB};
+        Material[] fenceType = {Material.OAK_FENCE};
+        Material[] baseType = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
+        Material[] stairType = {Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS};
+
+        //Variant Cobblestone
+        if (var == PlainsVillageHouseVariant.COBBLESTONE) {
+            slabType = new Material[]{Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
+            fenceType = new Material[]{Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
+            baseType = new Material[]{Material.OAK_LOG};
+            stairType = new Material[]{Material.OAK_STAIRS};
+        } else if (var == PlainsVillageHouseVariant.CLAY) {
+            slabType = BlockUtils.stoneBrickSlabs;
+            fenceType = new Material[]{Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
+            baseType = new Material[]{Material.STRIPPED_OAK_LOG};
+            stairType = new Material[]{Material.OAK_STAIRS};
+        }
+
+        new SlabBuilder(slabType)
+                .setType(Slab.Type.TOP)
+                .apply(w.getRelative(0, 2, 0));
+
+        new SlabBuilder(slabType)
+                .setType(Slab.Type.BOTTOM)
+                .apply(w.getRelative(0, 2, 0).getLeft())
+                .apply(w.getRelative(0, 2, 0).getRight());
+
+        w.getRelative(0, 1, 0).getLeft().setType(fenceType);
+        w.getRelative(0, 1, 0).getLeft().CorrectMultipleFacing(1);
+        w.getRelative(0, 1, 0).getRight().setType(fenceType);
+        w.getRelative(0, 1, 0).getRight().CorrectMultipleFacing(1);
+
+        w.getLeft().setType(baseType);
+        w.getRight().setType(baseType);
+
+        if (new Random().nextBoolean()) { //Plants
+            w.setType(Material.GRASS_BLOCK);
+            TrapDoor trapdoor = (TrapDoor) Bukkit.createBlockData(Material.OAK_TRAPDOOR);
+            trapdoor.setFacing(w.getDirection());
+            trapdoor.setOpen(true);
+            w.getFront().setBlockData(trapdoor);
+            w.getRelative(0, 1, 0).setType(BlockUtils.pickFlower());
+        } else { //Stairs
+            new StairBuilder(stairType).setFacing(w.getDirection().getOppositeFace())
+                    .apply(w);
+        }
+
+        w.getLeft().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+
+    }
 
 }

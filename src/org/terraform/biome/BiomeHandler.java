@@ -21,10 +21,10 @@ public abstract class BiomeHandler {
 
     /**
      * @return The used handler for transforming
-     *         the terrain. If handler uses another
-     *         handler's transform function, return that.
-     *         This is to ensure that same transform
-     *         function is called only once per chunk.
+     * the terrain. If handler uses another
+     * handler's transform function, return that.
+     * This is to ensure that same transform
+     * function is called only once per chunk.
      */
     public BiomeHandler getTransformHandler() {
         return null;

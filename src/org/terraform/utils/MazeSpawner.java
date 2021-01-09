@@ -124,7 +124,6 @@ public class MazeSpawner {
 
     /**
      * Carve a maze according to the provided parameters
-     *
      * @param carveInSolid whether or not the maze is to be carved into a solid, or if walls must be created.
      * @materials if carveInSolid is false, supply a list of materials to use for walls.
      */

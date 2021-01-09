@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 public class Version {
     private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     private static final double DOUBLE = toVersionDouble(VERSION);
-    
+
     @Deprecated
     public static boolean isAtLeast(String version) {
         return DOUBLE >= toVersionDouble(version);

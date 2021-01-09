@@ -30,7 +30,7 @@ public class TerraformWorld {
     private TerraformWorld(World world) {
         this.worldName = world.getName();
         this.seed = world.getSeed();
-       // Bukkit.getLogger().info("TW WORLD: " + worldName + ":" + seed);
+        // Bukkit.getLogger().info("TW WORLD: " + worldName + ":" + seed);
     }
 
     public static TerraformWorld get(World world) {
@@ -88,7 +88,7 @@ public class TerraformWorld {
         BiomeBank cachedValue = cache.getBiome(x, z);
         if (cachedValue != null) return cachedValue;
 
-        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, z, HeightMap.getHeight(this, x, z)));
+        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, z, HeightMap.getBlockHeight(this, x, z)));
     }
 
     /**

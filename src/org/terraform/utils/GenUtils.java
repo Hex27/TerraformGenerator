@@ -88,10 +88,10 @@ public class GenUtils {
         ArrayList<BiomeBank> banks = new ArrayList<>();
         int gridX = chunkX * 16;
         int gridZ = chunkZ * 16;
-        
+
         for (int x = gridX; x < gridX + 16; x++) {
             for (int z = gridZ; z < gridZ + 16; z++) {
-                BiomeBank bank = tw.getBiomeBank(x, HeightMap.getHeight(tw, x, z), z);
+                BiomeBank bank = tw.getBiomeBank(x, HeightMap.getBlockHeight(tw, x, z), z);
                 if (!banks.contains(bank)) banks.add(bank);
             }
         }
@@ -115,11 +115,19 @@ public class GenUtils {
         while (Math.abs(center.x - x) < radius
                 || Math.abs(center.y - z) < radius) {
             for (int i = 0; i < iter / 2; i++) {
-                switch (iter  % 4) {
-                    case 0: x += blockSkip; break;
-                    case 1: z -= blockSkip; break;
-                    case 2: x -= blockSkip; break;
-                    case 3: z += blockSkip; break;
+                switch (iter % 4) {
+                    case 0:
+                        x += blockSkip;
+                        break;
+                    case 1:
+                        z -= blockSkip;
+                        break;
+                    case 2:
+                        x -= blockSkip;
+                        break;
+                    case 3:
+                        z += blockSkip;
+                        break;
                 }
             }
 

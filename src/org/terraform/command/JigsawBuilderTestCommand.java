@@ -39,12 +39,12 @@ public class JigsawBuilderTestCommand extends DCCommand {
 
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
-		int x = p.getLocation().getBlockX();
-		int y = p.getLocation().getBlockY();
-		int z = p.getLocation().getBlockZ();
+        int x = p.getLocation().getBlockX();
+        int y = p.getLocation().getBlockY();
+        int z = p.getLocation().getBlockZ();
         PlainsVillageTempleJigsawBuilder builder = new PlainsVillageTempleJigsawBuilder(
-        		15, 15, data, x, y-1, z
-        	);
+                15, 15, data, x, y - 1, z
+        );
         builder.generate(new Random());
         builder.build(new Random());
         p.sendMessage("Complete.");

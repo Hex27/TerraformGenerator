@@ -129,11 +129,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
                         String carverType = field.get(worldgencarverwrapper).getClass().getSimpleName();
                         if (carverType.equals("WorldGenCanyonOcean") ||
                                 carverType.equals("WorldGenCavesOcean")) {
-                        	//Don't generate water caves if this isn't an ocean, or if flooded caves are disabled.
-                        	if((tw.getBiomeBank(j<<4, k<<4).getType() != BiomeType.OCEANIC
-                        		&& tw.getBiomeBank(j<<4, k<<4).getType() != BiomeType.DEEP_OCEANIC)
-                        		|| !TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
-                            continue;
+                            //Don't generate water caves if this isn't an ocean, or if flooded caves are disabled.
+                            if ((tw.getBiomeBank(j << 4, k << 4).getType() != BiomeType.OCEANIC
+                                    && tw.getBiomeBank(j << 4, k << 4).getType() != BiomeType.DEEP_OCEANIC)
+                                    || !TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
+                                continue;
                         }
                     } catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
                         e.printStackTrace();
@@ -151,7 +151,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     /**
      * Used to modify cave carvers in vanilla to carve some other blocks.
-     *
      * @param carverAbstract
      * @throws NoSuchFieldException
      * @throws SecurityException
@@ -300,7 +299,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getBaseHeight(int i, int j, Type heightmap_type) {
-        return org.terraform.coregen.HeightMap.getHeight(tw, i, j);
+        return org.terraform.coregen.HeightMap.getBlockHeight(tw, i, j);
     }
 
     @Override

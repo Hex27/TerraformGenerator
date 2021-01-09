@@ -271,7 +271,6 @@ public class FractalLeaves {
     /**
      * Creates dangling leaves without vines. Useful for
      * creating types of weeping trees.
-     *
      * @param chance    chance of creating dangling leaves per block (0 - 1)
      * @param maxLength maximum length of dangling leaves
      */

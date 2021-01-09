@@ -9,7 +9,6 @@ import java.util.Objects;
 
 /**
  * class represent chunk location in simple form
- *
  * @author wysohn
  */
 public class SimpleChunkLocation implements Cloneable {

@@ -20,7 +20,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
         int totalHeight = 0;
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                totalHeight += HeightMap.getHeight(tw, x, z);
+                totalHeight += HeightMap.getBlockHeight(tw, x, z);
             }
         }
 
