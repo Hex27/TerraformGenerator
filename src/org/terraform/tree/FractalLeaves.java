@@ -8,12 +8,14 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class FractalLeaves {
@@ -26,7 +28,9 @@ public class FractalLeaves {
     public Material material = Material.OAK_LEAVES;
     public FractalTreeBuilder builder;
     Random rand = new Random();
-    float leafNoiseMultiplier = 0.7f;
+    protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
+    private FastNoise noiseGen;
+   float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;
     double hollowLeaves = 0.0;
     boolean coneLeaves = false;
@@ -36,9 +40,22 @@ public class FractalLeaves {
 
     public FractalLeaves(FractalTreeBuilder builder) {
         this.builder = builder;
+        //this.noiseGen = new FastNoise((int) tw.getSeed());
+       
+        //noiseGen.SetFractalOctaves(5);
     }
 
-    public void placeLeaves(int seed, SimpleBlock block) {
+    public void placeLeaves(int seed, SimpleBlock block) { 
+    	// Setup noise to be used in randomising the sphere
+        if(!noiseCache.containsKey(builder.tw)) {
+        	FastNoise noise = new FastNoise((int) builder.tw.getSeed());
+        	noiseCache.put(builder.tw, noise);
+        	noise.SetFractalOctaves(5);
+        	noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        }
+        noiseGen = noiseCache.get(builder.tw);
+        noiseGen.SetFrequency(leafNoiseFrequency);
+        
         // Don't place anything if radius is nothing
         if (radiusX <= 0 &&
                 radiusY <= 0 &&
@@ -55,11 +72,7 @@ public class FractalLeaves {
         }
 
         //Initialise noise to be used in randomising the sphere
-        FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         float noiseMultiplier = leafNoiseMultiplier;
-        noise.SetFrequency(leafNoiseFrequency);
-        noise.SetFractalOctaves(5);
 
         double maxR = radiusX;
         if (radiusX < radiusY) maxR = radiusY;
@@ -101,7 +114,7 @@ public class FractalLeaves {
                             + Math.pow(effectiveY, 2) / Math.pow(radiusY, 2)
                             + Math.pow(z, 2) / Math.pow(radiusZ, 2);
 
-                    if (equationResult <= 1 + noiseMultiplier * noise.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
+                    if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
                         if (equationResult < hollowLeaves)
                             continue;
 
@@ -134,8 +147,8 @@ public class FractalLeaves {
                             if (GenUtils.chance(2, 10)) {
                                 builder.dangleLeavesDown(relativeBlock, (int) Math.ceil(maxR), builder.vines / 2, builder.vines);
                             }
-
-                            if (GenUtils.chance(1, 10)) {
+                            
+                            if (Tag.LEAVES.isTagged(material)&&GenUtils.chance(1, 10)) {
                                 for (BlockFace face : BlockUtils.directBlockFaces) {
                                     MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
                                     dir.setFace(face.getOppositeFace(), true);

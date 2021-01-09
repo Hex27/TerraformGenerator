@@ -20,6 +20,7 @@ import org.terraform.utils.*;
 import org.terraform.utils.FastNoise.NoiseType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class FractalTreeBuilder {
@@ -49,11 +50,13 @@ public class FractalTreeBuilder {
     int fractalsDone = 0;
     double maxPitch = 9999;
     double minPitch = -9999;
+    protected TerraformWorld tw;
     float branchNoiseMultiplier = 0.7f;
     float branchNoiseFrequency = 0.09f;
     int oriX;
     int oriY;
     int oriZ;
+    protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
     private FastNoise noiseGen;
     private boolean spawnedBees = false;
     private boolean coralDecoration = false;
@@ -426,7 +429,18 @@ public class FractalTreeBuilder {
         this.oriX = x;
         this.oriY = y;
         this.oriZ = z;
-        this.noiseGen = new FastNoise((int) tw.getSeed());
+        this.tw = tw;
+        //this.noiseGen = new FastNoise((int) tw.getSeed());
+        if(!noiseCache.containsKey(tw)) {
+        	FastNoise noise = new FastNoise((int) tw.getSeed());
+        	noise.SetNoiseType(NoiseType.SimplexFractal);
+        	noise.SetFractalOctaves(5);
+        	noiseCache.put(tw, noise);
+        }
+        noiseGen = noiseCache.get(tw);
+        // Setup noise to be used in randomising the sphere
+        noiseGen.SetFrequency(branchNoiseFrequency);
+        
         this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         if (this.top == null) top = base;
@@ -493,7 +507,7 @@ public class FractalTreeBuilder {
             size = baseHeight;
         }
 
-        drawLine(rand, base, two, (int) (size), thickness);
+        drawLine(base, two, (int) (size), thickness);
 
 
         if (!spawnedBees
@@ -564,26 +578,26 @@ public class FractalTreeBuilder {
         }
     }
 
-    public void drawLine(Random rand, SimpleBlock one, SimpleBlock two, int segments, double thickness) {
+    public void drawLine(SimpleBlock one, SimpleBlock two, int segments, double thickness) {
         if (one.equals(two)) return;
         //Vector one to two;
         Vector v = two.getVector().subtract(one.getVector());
         for (int i = 0; i <= segments; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) segments));
             SimpleBlock segment = one.getRelative(seg);
-            replaceSphere(rand.nextInt(9999), ((float) thickness) / 2, segment, trunkType);
+            replaceSphere(((float) thickness) / 2, segment, trunkType);
         }
     }
 
-    private void replaceSphere(int seed, float radius, SimpleBlock base, Material type) {
+    private void replaceSphere(float radius, SimpleBlock base, Material type) {
         if (radius <= 0) {
             return;
         }
-        replaceSphere(seed, radius, radius, radius, base, type);
+        replaceSphere(radius, radius, radius, base, type);
     }
 
     //private boolean debug = true;
-    private void replaceSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, Material type) {
+    private void replaceSphere(float rX, float rY, float rZ, SimpleBlock block, Material type) {
 
         // Don't place anything if radius is nothing
         if (rX <= 0 &&
@@ -600,11 +614,7 @@ public class FractalTreeBuilder {
             return;
         }
 
-        // Setup noise to be used in randomising the sphere
-        noiseGen.SetNoiseType(NoiseType.SimplexFractal);
         float noiseMultiplier = branchNoiseMultiplier;
-        noiseGen.SetFrequency(branchNoiseFrequency);
-        noiseGen.SetFractalOctaves(5);
 
         double maxR = rX;
         if (rX < rY) maxR = rY;
@@ -667,6 +677,7 @@ public class FractalTreeBuilder {
                             }
 
                             // Vines set only if the leaf type is leaves.
+                            //Consider removal since this is done in fractalleaves.java
                             if (Tag.LEAVES.isTagged(fractalLeaves.material))
                                 if (GenUtils.chance(1, 10)) {
                                     for (BlockFace face : BlockUtils.directBlockFaces) {

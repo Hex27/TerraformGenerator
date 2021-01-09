@@ -19,13 +19,6 @@ import java.util.Random;
 
 public class TerraformStructurePopulator extends BlockPopulator {
 
-    //Structures now loaded in StructureRegistry
-//    public static final StructurePopulator[] structurePops = {
-//            new StrongholdPopulator(), new VillageHousePopulator(), new SmallDungeonPopulator(), 
-//            new MonumentPopulator(), new ShipwreckPopulator(), new MineshaftPopulator(), 
-//            new LargeCavePopulator(), new PyramidPopulator()
-//    };
-
     private final TerraformWorld tw;
 
     public TerraformStructurePopulator(TerraformWorld tw) {

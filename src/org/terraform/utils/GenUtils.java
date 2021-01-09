@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -22,7 +23,7 @@ public class GenUtils {
             "POTTED", "BRICK",
             "CHAIN"
     };
-    private static final Map<Integer, ArrayList<BiomeBank>> biomeQueryCache = new HashMap<>(30);
+    private static final Map<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache = new HashMap<>(30);
 
     public static SimplexOctaveGenerator getGenerator(World world) {
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), 8);
@@ -82,8 +83,8 @@ public class GenUtils {
 
     public static ArrayList<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ) {
         if (biomeQueryCache.size() > 30) biomeQueryCache.clear();
-        int hash = Objects.hash(tw, chunkX, chunkZ);
-        if (biomeQueryCache.containsKey(hash)) return biomeQueryCache.get(hash);
+        ChunkCache key = new ChunkCache(tw, chunkX, chunkZ);
+        if (biomeQueryCache.containsKey(key)) return biomeQueryCache.get(key);
 
         ArrayList<BiomeBank> banks = new ArrayList<>();
         int gridX = chunkX * 16;
@@ -96,7 +97,7 @@ public class GenUtils {
             }
         }
 
-        biomeQueryCache.put(hash, banks);
+        biomeQueryCache.put(key, banks);
         return banks;
     }
 

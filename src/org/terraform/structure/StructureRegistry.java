@@ -25,7 +25,7 @@ public class StructureRegistry {
      */
     public static final Map<StructureType, SingleMegaChunkStructurePopulator[]> largeStructureRegistry = new EnumMap<>(StructureType.class);
     public static final Collection<MultiMegaChunkStructurePopulator> smallStructureRegistry = new ArrayList<>();
-    private static final HashMap<Integer, SingleMegaChunkStructurePopulator[]> queryCache = new HashMap<>();
+    private static final HashMap<MegaChunkKey, SingleMegaChunkStructurePopulator[]> queryCache = new HashMap<>();
 
 
     public static void init() {
@@ -69,10 +69,10 @@ public class StructureRegistry {
 
         //Clear the cache if it gets big.
         if (queryCache.size() > 50) queryCache.clear();
-
+        MegaChunkKey key = new MegaChunkKey(tw,mc);
         //Don't re-calculate
-        if (queryCache.containsKey(Objects.hash(tw, mc)))
-            return queryCache.get(Objects.hash(tw, mc));
+        if (queryCache.containsKey(key))
+            return queryCache.get(key);
 
         Random structRand = tw.getRand(9);
         int maxStructures = GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
@@ -123,7 +123,7 @@ public class StructureRegistry {
         System.arraycopy(pops, 0, returnVal, 0, size);
 
         //cache
-        queryCache.put(Objects.hash(tw, mc), returnVal);
+        queryCache.put(key, returnVal);
         return returnVal;
     }
 
@@ -189,5 +189,27 @@ public class StructureRegistry {
             }
         }
         return pops;
+    }
+    
+    private static class MegaChunkKey {
+    	private TerraformWorld tw;
+    	private MegaChunk mc;
+		public MegaChunkKey(TerraformWorld tw, MegaChunk mc) {
+			super();
+			this.tw = tw;
+			this.mc = mc;
+		}
+
+	    @Override
+	    public int hashCode() {
+	        return tw.hashCode() ^ (mc.getX() + mc.getZ() * 31);
+	    }
+
+	    @Override
+	    public boolean equals(Object obj) {
+	        if (!(obj instanceof MegaChunkKey)) return false;
+	        MegaChunkKey other = (MegaChunkKey) obj;
+	        return this.tw.equals(other.tw) && mc.getX() == other.mc.getX() && mc.getZ() == other.mc.getZ();
+	    }
     }
 }
