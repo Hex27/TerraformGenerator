@@ -25,9 +25,6 @@ public class BadlandsMountainHandler extends BiomeHandler {
             if (data.getBiome(x, y, z) != Biome.BADLANDS_PLATEAU && !force) continue;
             if (!data.getType(x, y, z).toString().contains("SAND"))
                 continue;
-            int multiplier = 0;
-            if (GenUtils.chance(random, 1, 50)) multiplier++;
-            if (GenUtils.chance(random, 1, 100)) multiplier++;
 
             data.setType(x, y, z, BlockUtils.getTerracotta(y));
         }

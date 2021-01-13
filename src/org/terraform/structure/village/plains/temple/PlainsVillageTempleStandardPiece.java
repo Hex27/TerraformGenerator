@@ -13,6 +13,8 @@ import java.util.Random;
 
 public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
 
+	private boolean isTower = false;
+	
     public PlainsVillageTempleStandardPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
     }
@@ -52,4 +54,12 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
     public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
 
     }
+
+	public boolean isTower() {
+		return isTower;
+	}
+
+	public void setTower(boolean isTower) {
+		this.isTower = isTower;
+	}
 }

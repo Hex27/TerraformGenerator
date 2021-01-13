@@ -216,6 +216,10 @@ public class CubeRoom {
 
         return false;
     }
+    
+    public SimpleLocation getSimpleLocation() {
+    	return new SimpleLocation(getX(),getY(),getZ());
+    }
 
     /**
      * IGNORES Y AXIS.

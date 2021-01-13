@@ -70,7 +70,6 @@ public class SimpleChunkLocation implements Cloneable {
         return new SimpleChunkLocation(world, nx + x, nz + z);
     }
 
-    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public SimpleChunkLocation clone() {
         return new SimpleChunkLocation(world, x, z);

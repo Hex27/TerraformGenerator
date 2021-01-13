@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
@@ -11,6 +12,7 @@ import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
@@ -59,7 +61,32 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST);
             }
         }
-
+        
+        //Declare one of the pieces a tower
+        int randIndex = random.nextInt(this.pieces.size());
+        int i = 0;
+        for(JigsawStructurePiece p:this.pieces.values()) {
+        	if(i == randIndex) {
+        		((PlainsVillageTempleStandardPiece) p).setTower(true);
+        		break;
+        	}
+        }
+        
+        HashMap<SimpleLocation,PlainsVillageTempleWallPiece> wallPieces = new HashMap<>();
+        for(JigsawStructurePiece wallPiece:this.overlapperPieces) {
+        	if(wallPiece instanceof PlainsVillageTempleWallPiece) {
+        		wallPieces.put(wallPiece.getRoom().getSimpleLocation(), (PlainsVillageTempleWallPiece) wallPiece);
+        	}
+        }
+        //Try to place large windows between pairs of walls
+        for(PlainsVillageTempleWallPiece wallPiece:wallPieces.values()) {
+    		for(BlockFace face:BlockUtils.getAdjacentFaces(wallPiece.getRotation())) {
+    			if(wallPieces.containsKey(wallPiece.getRoom().getSimpleLocation().getRelative(face,5))) {
+    				wallPiece.setLargeWindow(this.core.getPopData(),face);
+    			}
+    		}
+        }
+        
         //Place the roof
 //		if(!PlainsVillageTempleRoofHandler.isRectangle(this))
 //			PlainsVillageTempleRoofHandler.placeStandardRoof(this);

@@ -236,7 +236,8 @@ public class LocateCommand extends DCCommand implements Listener {
         runnable.runTaskAsynchronously(plugin);
     }
 
-    private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
+    @SuppressWarnings("serial")
+	private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
         if (radius == 0) return new ArrayList<MegaChunk>() {{
             add(center);
         }};

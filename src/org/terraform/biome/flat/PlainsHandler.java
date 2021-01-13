@@ -49,7 +49,8 @@ public class PlainsHandler extends BiomeHandler {
             for (int i = 0; i < GenUtils.randInt(5, 10); i++) {
                 int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
                 if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
-                data.setType(loc[0], loc[1] + 1, loc[2], Material.PUMPKIN);
+                if(!data.getType(loc[0], loc[1] + 1, loc[2]).isSolid())
+                	data.setType(loc[0], loc[1] + 1, loc[2], Material.PUMPKIN);
             }
         }
 
@@ -58,7 +59,8 @@ public class PlainsHandler extends BiomeHandler {
             for (int i = 0; i < GenUtils.randInt(5, 10); i++) {
                 int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
                 if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
-                data.setType(loc[0], loc[1] + 1, loc[2], Material.MELON);
+                if(!data.getType(loc[0], loc[1] + 1, loc[2]).isSolid())
+                	data.setType(loc[0], loc[1] + 1, loc[2], Material.MELON);
             }
         }
 
@@ -67,8 +69,8 @@ public class PlainsHandler extends BiomeHandler {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (data.getBiome(x, y, z) != getBiome()) continue;
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-
-                    if (GenUtils.chance(random, 1, 10)) {
+                	
+                    if (GenUtils.chance(random, 1, 10)) { //Grass
                         if (GenUtils.chance(random, 6, 10)) {
                             data.setType(x, y + 1, z, Material.GRASS);
                             if (random.nextBoolean()) {
@@ -80,16 +82,13 @@ public class PlainsHandler extends BiomeHandler {
                             else
                                 BlockUtils.setDoublePlant(data, x, y + 1, z, BlockUtils.pickTallFlower());
                         }
-                    }
-
-                    //Small grass poffs
-                    if (GenUtils.chance(random, 1, 300)) {
+                    }else if (GenUtils.chance(random, 1, 300)) { //Grass Poffs
                         BlockUtils.replaceSphere(
                                 random.nextInt(424444),
                                 2, 2, 2,
                                 new SimpleBlock(data, x, y + 1, z), false, Material.OAK_LEAVES);
-                    }
-                    if (GenUtils.chance(random, 1, 500)) {
+                        
+                    }else if (GenUtils.chance(random, 1, 500)) { //Trees
                         if (BlockUtils.isDirtLike(data.getType(x, y, z)))
                             new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL)
                                     .build(world, data, x, y + 1, z);

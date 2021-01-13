@@ -30,6 +30,9 @@ public class SimpleLocation {
     public SimpleLocation getRelative(BlockFace face) {
         return new SimpleLocation(this.x + face.getModX(), this.y + face.getModY(), this.z + face.getModZ());
     }
+    public SimpleLocation getRelative(BlockFace face,int i) {
+        return new SimpleLocation(this.x + face.getModX()*i, this.y + face.getModY()*i, this.z + face.getModZ()*i);
+    }
 
     public int distanceSqr(SimpleLocation o) {
         return (int) (Math.pow(o.x - x, 2) + Math.pow(o.y - y, 2) + Math.pow(o.z - z, 2));

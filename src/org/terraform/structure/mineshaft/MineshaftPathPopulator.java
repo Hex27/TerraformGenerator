@@ -240,11 +240,11 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         if (dist >= 3) {
             if (left.LPillar(10, false, rand, Material.BARRIER) != 10) {
                 left.LPillar(10, false, rand, Material.OAK_FENCE);
-                left.getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_FENCE);
+                placeSupportFences(left.getRelative(0, -1, 0));//.downUntilSolid(rand, Material.OAK_FENCE);
             }
             if (right.LPillar(10, false, rand, Material.BARRIER) != 10) {
                 right.LPillar(10, false, rand, Material.OAK_FENCE);
-                right.getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_FENCE);
+                placeSupportFences(right.getRelative(0, -1, 0));//.downUntilSolid(rand, Material.OAK_FENCE);
             }
 
 
@@ -286,6 +286,16 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
         }
         return true;
+    }
+    
+    private void placeSupportFences(Wall w) {
+    	while(!w.getType().isSolid()) {
+    		if(w.getType() == Material.LAVA)
+    			w.setType(Material.COBBLESTONE);
+    		else
+    			w.setType(Material.OAK_FENCE);
+    		w = w.getRelative(0,-1,0);
+    	}
     }
 
     @Override

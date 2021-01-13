@@ -2,8 +2,10 @@ package org.terraform.coregen.v1_16_R3;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
+
 import net.minecraft.server.v1_16_R3.*;
 import net.minecraft.server.v1_16_R3.HeightMap.Type;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
@@ -103,7 +105,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
     //    private BiomeBase getBiome(BiomeManager biomemanager, BlockPosition bp) {
 //    	return CraftBlock.biomeToBiomeBase(this.b,tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
 //    }
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "deprecation" })
     @Override
     public void doCarving(long i, BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
         BiomeManager biomemanager1 = biomemanager.a(this.b);
@@ -161,7 +163,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "deprecation" })
     private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         Set<net.minecraft.server.v1_16_R3.Block> immutableCarverList =
                 ImmutableSet.of(

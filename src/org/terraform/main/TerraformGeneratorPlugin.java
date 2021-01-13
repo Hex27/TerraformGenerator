@@ -48,7 +48,8 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         return instance;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onEnable() {
         super.onEnable();
         instance = this;
