@@ -21,7 +21,7 @@ public enum HeightMap {
                 noise = new FastNoise();
                 noise.SetSeed((int) tw.getSeed());
                 noise.SetNoiseType(NoiseType.PerlinFractal);
-                noise.SetFrequency(0.005f);
+                noise.SetFrequency(TConfigOption.HEIGHT_MAP_RIVER_FREQUENCY.getFloat());
                 noise.SetFractalOctaves(5);
                 noiseCache.put(tw, noise);
             }
@@ -53,7 +53,7 @@ public enum HeightMap {
                 cubic = new FastNoise((int) tw.getSeed());
                 cubic.SetNoiseType(NoiseType.CubicFractal);
                 cubic.SetFractalOctaves(6);
-                cubic.SetFrequency(0.003f);
+                cubic.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
                 noiseCache.put(tw, cubic);
             }
 
@@ -105,6 +105,7 @@ public enum HeightMap {
     };
 
     private static final int defaultSeaLevel = 62;
+    private static final float heightAmplifier = TConfigOption.HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER.getFloat();
     protected final Map<TerraformWorld, FastNoise> noiseCache = new IdentityHashMap<>(TerraformWorld.WORLDS.size());
 
     /**
@@ -198,6 +199,8 @@ public enum HeightMap {
         } else if (height > TerraformGenerator.seaLevel - 15 && height - depth < TerraformGenerator.seaLevel - 15) {
             height = TerraformGenerator.seaLevel - 15;
         }
+
+        if (heightAmplifier != 1f && height > TerraformGenerator.seaLevel) height += heightAmplifier * (height - TerraformGenerator.seaLevel);
 
         cache.cacheHeight(x, z, height);
         return height;

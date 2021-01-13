@@ -6,8 +6,12 @@ import org.drycell.config.DCConfig;
 import java.util.List;
 
 public enum TConfigOption {
+    //-=[HEIGHTMAP]=-
+    HEIGHT_MAP_CORE_FREQUENCY("heightmap.core-frequency", 0.003f),
+    HEIGHT_MAP_RIVER_FREQUENCY("heightmap.river-frequency", 0.005f),
     HEIGHT_MAP_MOUNTAIN_FREQUENCY("heightmap.mountain-frequency", 0.002f),
     HEIGHT_MAP_OCEANIC_FREQUENCY("heightmap.oceanic-frequency", 0.0007f),
+    HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER("heightmap.land-height-amplifier", 1f),
     HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level", 62),
     HEIGHT_MAP_DEEP_SEA_LEVEL("heightmap.deep-sea-level", 35),
 
