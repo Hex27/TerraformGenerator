@@ -45,7 +45,7 @@ public class FractalLeaves {
         //noiseGen.SetFractalOctaves(5);
     }
 
-    public void placeLeaves(int seed, SimpleBlock block) { 
+    public void placeLeaves(SimpleBlock block) { 
     	// Setup noise to be used in randomising the sphere
         if(!noiseCache.containsKey(builder.tw)) {
         	FastNoise noise = new FastNoise((int) builder.tw.getSeed());

@@ -61,6 +61,7 @@ public enum TConfigOption {
     STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled", true),
     STRUCTURES_SWAMPHUT_ENABLED("structures.swamphut.enabled", true),
     STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND("structures.swamphut.chance-out-of-10000", 10),
+    STRUCTURES_SWAMPHUT_SPAWN_MUDFLAT_HEADS("structures.swamphut.spawn-mudflat-heads",true),
     STRUCTURES_DESERTWELL_ENABLED("structures.desertwell.enabled", true),
     STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND("structures.desertwell.chance-out-of-10000", 10),
     STRUCTURES_UNDERGROUNDDUNGEON_ENABLED("structures.underground-dungeon.enabled", true),
@@ -115,6 +116,54 @@ public enum TConfigOption {
     ANIMALS_PANDA_MINHERDSIZE("animals.panda.min-herd-size", 2),
     ANIMALS_PANDA_MAXHERDSIZE("animals.panda.max-herd-size", 3),
     ANIMALS_PANDA_CHANCE("animals.panda.chance", 1),
+    //FOX
+    ANIMALS_FOX_MINHERDSIZE("animals.fox.min-herd-size", 1),
+    ANIMALS_FOX_MAXHERDSIZE("animals.fox.max-herd-size", 2),
+    ANIMALS_FOX_CHANCE("animals.fox.chance", 1),
+    //LLAMMA
+    ANIMALS_LLAMA_MINHERDSIZE("animals.llama.min-herd-size", 4),
+    ANIMALS_LLAMA_MAXHERDSIZE("animals.llama.max-herd-size", 6),
+    ANIMALS_LLAMA_CHANCE("animals.llama.chance", 2),
+    //PARROT
+    ANIMALS_PARROT_MINHERDSIZE("animals.parrot.min-herd-size", 1),
+    ANIMALS_PARROT_MAXHERDSIZE("animals.parrot.max-herd-size", 2),
+    ANIMALS_PARROT_CHANCE("animals.parrot.chance", 2),
+    //OCELOT
+    ANIMALS_OCELOT_MINHERDSIZE("animals.ocelot.min-herd-size", 1),
+    ANIMALS_OCELOT_MAXHERDSIZE("animals.ocelot.max-herd-size", 3),
+    ANIMALS_OCELOT_CHANCE("animals.ocelot.chance", 1),
+    //WOLF
+    ANIMALS_WOLF_MINHERDSIZE("animals.wolf.min-herd-size", 1),
+    ANIMALS_WOLF_MAXHERDSIZE("animals.wolf.max-herd-size", 4),
+    ANIMALS_WOLF_CHANCE("animals.wolf.chance", 2),
+    //TURTLE
+    ANIMALS_TURTLE_MINHERDSIZE("animals.turtle.min-herd-size", 2),
+    ANIMALS_TURTLE_MAXHERDSIZE("animals.turtle.max-herd-size", 5),
+    ANIMALS_TURTLE_CHANCE("animals.turtle.chance", 1),
+    //DOLPHIN
+    ANIMALS_DOLPHIN_MINHERDSIZE("animals.dolphin.min-herd-size", 1),
+    ANIMALS_DOLPHIN_MAXHERDSIZE("animals.dolphin.max-herd-size", 3),
+    ANIMALS_DOLPHIN_CHANCE("animals.dolphin.chance", 1),
+    //COD
+    ANIMALS_COD_MINHERDSIZE("animals.cod.min-herd-size", 3),
+    ANIMALS_COD_MAXHERDSIZE("animals.cod.max-herd-size", 6),
+    ANIMALS_COD_CHANCE("animals.cod.chance", 2),
+    //SQUID
+    ANIMALS_SQUID_MINHERDSIZE("animals.squid.min-herd-size", 1),
+    ANIMALS_SQUID_MAXHERDSIZE("animals.squid.max-herd-size", 4),
+    ANIMALS_SQUID_CHANCE("animals.squid.chance", 2),
+    //SALMON
+    ANIMALS_SALMON_MINHERDSIZE("animals.salmon.min-herd-size", 4),
+    ANIMALS_SALMON_MAXHERDSIZE("animals.salmon.max-herd-size", 4),
+    ANIMALS_SALMON_CHANCE("animals.salmon.chance", 2),
+    //PUFFERFISH
+    ANIMALS_PUFFERFISH_MINHERDSIZE("animals.pufferfish.min-herd-size", 1),
+    ANIMALS_PUFFERFISH_MAXHERDSIZE("animals.pufferfish.max-herd-size", 3),
+    ANIMALS_PUFFERFISH_CHANCE("animals.pufferfish.chance", 1),
+    //TROPICALFISH
+    ANIMALS_TROPICALFISH_MINHERDSIZE("animals.tropical-fish.min-herd-size", 4),
+    ANIMALS_TROPICALFISH_MAXHERDSIZE("animals.tropical-fish.max-herd-size", 8),
+    ANIMALS_TROPICALFISH_CHANCE("animals.tropical-fish.chance", 2),
 
     //-=[ORES]=-
     //COAL

@@ -58,7 +58,7 @@ public class FractalTreeBuilder {
     int oriZ;
     protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
     private FastNoise noiseGen;
-    private boolean spawnedBees = false;
+    private SimpleBlock beeHive;
     private boolean coralDecoration = false;
     private double initialAngle;
     private int initialHeight;
@@ -464,6 +464,17 @@ public class FractalTreeBuilder {
                     0, baseThickness,
                     initialHeight);
         }
+        
+        if(beeHive != null)
+	        for (int i = 0; i < 8; i++) {
+	            if (!beeHive.getType().isSolid()) {
+	                BeeHiveSpawner.spawnFullBeeNest(beeHive);
+	            	//TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+	                break;
+	            }else
+	            	beeHive = beeHive.getRelative(0,-1,0);
+	        }
+        
     }
 
     public void fractalBranch(Random rand, SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size) {
@@ -476,12 +487,12 @@ public class FractalTreeBuilder {
         }
 
         if (depth >= maxDepth) {
-            fractalLeaves.placeLeaves(rand.nextInt(9999), base);
+            fractalLeaves.placeLeaves(base);
             base.setType(trunkType);
             return;
         }
         if (size <= 0) {
-            fractalLeaves.placeLeaves(rand.nextInt(9999), base);
+            fractalLeaves.placeLeaves(base);
             base.setType(trunkType);
             return;
         }
@@ -510,15 +521,14 @@ public class FractalTreeBuilder {
         drawLine(base, two, (int) (size), thickness);
 
 
-        if (!spawnedBees
+        if (beeHive == null
                 && Version.isAtLeast(15.1)
                 && GenUtils.chance(rand, (int) (beeChance * 1000.0), 1000)) {
             for (int i = 0; i < 3; i++) {
                 if (!two.getRelative(0, -i, 0).getType().isSolid()) {
-                    spawnedBees = true;
-                    BeeHiveSpawner.spawnFullBeeNest(two.getRelative(0, -i, 0));
-                    //TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+                    beeHive = two.getRelative(0,-i,0);
                     break;
+                    //TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
                 }
             }
 

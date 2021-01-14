@@ -1,9 +1,10 @@
 package org.terraform.populators;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
 
@@ -17,6 +18,7 @@ public class AnimalPopulator {
     private final int maxNum;
     private BiomeBank[] whitelistedBiomes;
     private BiomeBank[] blacklistedBiomes;
+    private boolean aquatic = false;
 
     public AnimalPopulator(EntityType animalType, int minNum, int maxNum, int chance, boolean useWhitelist, BiomeBank... biomes) {
         this.animalType = animalType;
@@ -55,11 +57,18 @@ public class AnimalPopulator {
         for (int i = 0; i < GenUtils.randInt(random, minNum, maxNum); i++) {
             int x = (data.getChunkX() << 4) + GenUtils.randInt(random, 5, 7);
             int z = (data.getChunkZ() << 4) + GenUtils.randInt(random, 5, 7);
-            int height = HeightMap.getBlockHeight(world, x, z) + 2;//GenUtils.getHighestGround(data, x, z)+1;
-            //TerraformGeneratorPlugin.logger.info("Spawned " + animalType.toString() + " at " + x + "," + height + "," + z);
-            data.addEntity(x, height, z, animalType);
+            
+            //To account for solid ground that spawns above the noisemap (i.e. boulders/black spikes)
+            int height = GenUtils.getHighestGround(data,x,z)+1;//HeightMap.getBlockHeight(world, x, z) + 2;
+            
+            if(!this.isAquatic() && height > TerraformGenerator.seaLevel) {
+            	if(!data.getType(x, height, z).isSolid()) //Don't spawn in blocks
+            		data.addEntity(x, height, z, animalType);
+            }else if(this.isAquatic() && height <= TerraformGenerator.seaLevel) {
+            	if(data.getType(x, height, z) == Material.WATER) //Don't spawn in anything but water
+            		data.addEntity(x, height, z, animalType);
+            }
         }
-        //TerraformGeneratorPlugin.logger.debug("animal populator - finished.");
     }
 
     /**
@@ -68,4 +77,13 @@ public class AnimalPopulator {
     public EntityType getAnimalType() {
         return animalType;
     }
+
+	public boolean isAquatic() {
+		return aquatic;
+	}
+
+	public AnimalPopulator setAquatic(boolean aquatic) {
+		this.aquatic = aquatic;
+		return this;
+	}
 }
