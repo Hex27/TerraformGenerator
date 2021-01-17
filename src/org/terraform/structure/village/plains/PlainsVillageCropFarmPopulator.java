@@ -78,7 +78,7 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
                         w.getRelative(0, 1, 0).CorrectMultipleFacing(1);
 
                         //Chance to spawn overhanging lamp
-                        if (GenUtils.chance(rand, 1, 20)) {
+                        if (GenUtils.chance(rand, 1, 13)) {
                             int lampHeight = GenUtils.randInt(rand, 3, 5);
                             w.getRelative(0, 2, 0).Pillar(lampHeight, rand, Material.OAK_FENCE);
 

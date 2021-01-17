@@ -4,7 +4,6 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.terraform.data.TerraformWorld;
-
 import java.util.Random;
 
 /**
@@ -12,7 +11,7 @@ import java.util.Random;
  * to perform various actions.
  * @author Hex_27
  */
-public class TerraformBukkitBlockPopulator extends BlockPopulator {
+public class TerraformBukkitBlockPopulator extends BlockPopulator{
 
     protected final TerraformWorld tw;
     private final TerraformStructurePopulator structurePopulator;
@@ -22,6 +21,7 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator {
         this.tw = tw;
         this.nativePatcherPopulator = new NativeGeneratorPatcherPopulator();
         this.structurePopulator = new TerraformStructurePopulator(tw);
+        //Bukkit.getPluginManager().registerEvents(this,TerraformGeneratorPlugin.get());
     }
 
     @Override
@@ -32,5 +32,5 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator {
         //Populate structures next
         this.structurePopulator.populate(world, random, chunk);
     }
-
+    
 }

@@ -1,267 +1,158 @@
 package org.terraform.structure.village.plains.temple;
 
-import org.bukkit.Axis;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Random;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.type.Lantern;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.GenUtils;
+import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.blockdata.TrapdoorBuilder;
-
-import java.util.Random;
 
 public class PlainsVillageTempleRoofHandler {
+	//private static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
 
-    public static boolean isRectangle(PlainsVillageTempleJigsawBuilder builder) {
-        int[] lowestCoords = null;
-        int[] highestCoords = null;
-        int y = 0;
-        //SimpleLocation lowestCoords = new SimpleLocation();
-        //SimpleLocation highestCoords = new SimpleLocation();
-        for (JigsawStructurePiece piece : builder.getPieces().values()) {
-            if (lowestCoords == null) {
-                y = piece.getRoom().getY();
-                lowestCoords = new int[]{piece.getRoom().getX(), piece.getRoom().getZ()};
-            }
-            if (highestCoords == null) highestCoords = new int[]{piece.getRoom().getX(), piece.getRoom().getZ()};
-            if (piece.getRoom().getX() < lowestCoords[0])
-                lowestCoords[0] = piece.getRoom().getX();
-            if (piece.getRoom().getZ() < lowestCoords[1])
-                lowestCoords[1] = piece.getRoom().getZ();
+	public static void handleTempleRoof(PopulatorDataAbstract data, JigsawStructurePiece piece, ArrayList<JigsawStructurePiece> wallPieces) {
+		Wall base = new Wall(new SimpleBlock(data,
+    			piece.getRoom().getX(),
+    			piece.getRoom().getY()+5,
+    			piece.getRoom().getZ()),piece.getRotation());
+		for(BlockFace face:BlockUtils.getAdjacentFaces(piece.getRotation())) {
+			int multiplier = 0;
+			
+			if(PlainsVillageTempleJigsawBuilder.hasAdjacentWall(piece, face, wallPieces)) {
+				multiplier = 0;//Wall leads to another wall, so all segments are equal
+			}else if(PlainsVillageTempleJigsawBuilder.hasAdjacentInwardWall(piece, face, wallPieces)){
+				multiplier = 1; //Wall leads to inwards turn, so segments are increasing
+			}else {
+				multiplier = -1; //Wall leads to a corner, so segments are decreasing (slant up) 
+				
+			}
 
-            if (piece.getRoom().getX() > highestCoords[0])
-                highestCoords[0] = piece.getRoom().getX();
-            if (piece.getRoom().getZ() > highestCoords[1])
-                highestCoords[1] = piece.getRoom().getZ();
-        }
-
-        //Check and see if every piece is accounted for when looping through the coords.
-        int count = 0;
-        for (int x = lowestCoords[0]; x <= highestCoords[0]; x += builder.getPieceWidth()) {
-            for (int z = lowestCoords[1]; z <= highestCoords[1]; z += builder.getPieceWidth()) {
-                if (!builder.getPieces().containsKey(new SimpleLocation(x, y, z))) {
-                    TerraformGeneratorPlugin.logger.info("Failed rec check: " + x + "," + y + "," + z);
-                    return false;
-                } else
-                    count++;
-            }
-        }
-
-        //If all pieces accounted for by looping the coords, this is a rectangle.
-        return count == builder.getPieces().size();
+			for(int height = 0; height < 3; height++) {
+				for(int horDepth = 0; horDepth < 3+height*multiplier; horDepth++) {
+					Wall w = base.getRelative(face, horDepth);
+					new StairBuilder(Material.COBBLESTONE_STAIRS)
+			        .setFacing(w.getDirection().getOppositeFace())
+			        .apply(w.getRear(height+2).getRelative(0,height*2,0))
+			        .correct();
+					
+					//Add tiny spikes at the sides of corners
+					if(multiplier == -1 && horDepth == 2+height*multiplier) {
+						Wall pillar = w.getRelative(face).getRear(height+2).getRelative(0,height*2,0);
+						pillar.Pillar(3,new Random(),Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL);
+						pillar.setType(Material.CHISELED_STONE_BRICKS);
+						
+						//Add lantern decorations to the interior corners
+						//if(height != 0) {
+							pillar = w.getRear(height+3).getRelative(0,(height+1)*2,0);
+							pillar.getRelative(0,-2,0).setType(Material.OAK_LOG);
+							Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
+							l.setHanging(true);
+							pillar.getRelative(0,-3,0).setBlockData(l);
+						//}
+					}else if(multiplier == 1 && horDepth == 2+height*multiplier) {
+						Wall pillar = w.getRelative(face,1).getRear(height+3).getRelative(0,(height+1)*2,0);
+						//Add lantern decorations to the interior corners
+						pillar.getRelative(0,-1,0).get().lsetType(Material.OAK_LOG);
+						pillar.getRelative(0,-2,0).setType(Material.OAK_LOG);
+						Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
+						l.setHanging(true);
+						pillar.getRelative(0,-3,0).setBlockData(l);
+					}
+					
+					//Don't place stairs where the roof ends.
+					if(height != 2)
+				        new StairBuilder(Material.STONE_BRICK_STAIRS)
+				        .setFacing(w.getDirection())
+				        .setHalf(Half.TOP)
+				        .lapply(w.getRear(height+3).getRelative(0,height*2,0))
+				        .correct();
+					else
+						new OrientableBuilder(Material.OAK_LOG)
+						.setAxis(BlockUtils.getAxisFromBlockFace(face))
+						.lapply(w.getRear(height+3).getRelative(0,height*2,0));
+					
+					
+					
+					w.getRelative(0,height*2+1,0).getRear(height+3).setType(Material.COBBLESTONE);
+				}
+			}
+			
+			//Do more corner related cleaning and decorations
+			if(multiplier == -1) {
+				
+			}
+		
+		}
+	}
+	
+	public static void placeCeilingTerracotta(PopulatorDataAbstract data, Collection<JigsawStructurePiece> structurePieces) {
+		Material glazedTerracotta = BlockUtils.GLAZED_TERRACOTTA[new Random().nextInt(BlockUtils.GLAZED_TERRACOTTA.length)];
+		for(JigsawStructurePiece piece:structurePieces) {
+			int[] lowerCorner = piece.getRoom().getLowerCorner();
+			int[] upperCorner = piece.getRoom().getUpperCorner();
+			
+			for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) 
+				for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+					SimpleBlock b = new SimpleBlock(data, x, piece.getRoom().getY()+1,z);
+					int i = 0;
+					for(i = 0; i < 9; i++) {
+						if(!b.getType().isSolid()) {
+							b = b.getRelative(0,1,0);
+						}else {
+							break;
+						}
+					}
+					
+					if(i == 9 && !b.getType().isSolid()) {
+						placeGlazedTerracotta(b, glazedTerracotta);
+						b.getRelative(0,1,0).setType(Material.COBBLESTONE);
+					}
+				}
+		}
+	}
+	
+    private static void placeGlazedTerracotta(SimpleBlock target, Material glazedTerracotta) {
+//        Directional terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+//        terracotta.setFacing(BlockFace.NORTH);
+//        data.setBlockData(x, y, z, terracotta);
+//
+//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+//        terracotta.setFacing(BlockFace.EAST);
+//        data.setBlockData(x + 1, y, z, terracotta);
+//
+//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+//        terracotta.setFacing(BlockFace.WEST);
+//        data.setBlockData(x, y, z + 1, terracotta);
+//
+//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+//        terracotta.setFacing(BlockFace.SOUTH);
+//        data.setBlockData(x + 1, y, z + 1, terracotta);
+    	BlockFace dir = BlockFace.NORTH;
+    	if(target.getX() % 2 == 0) {
+    		if(target.getZ() % 2 == 0)
+    			dir = BlockFace.SOUTH;
+    		else
+    			dir = BlockFace.WEST;
+    	}else {
+    		if(target.getZ() % 2 == 0)
+    			dir = BlockFace.EAST;
+    		else
+    			dir = BlockFace.NORTH;
+    	}
+    	new DirectionalBuilder(glazedTerracotta)
+    	.setFacing(dir)
+    	.apply(target);
     }
-
-
-    public static void placeTentRoof(Random rand, PlainsVillageTempleJigsawBuilder builder) {
-        Axis superiorAxis = Axis.Z;
-        PopulatorDataAbstract data = builder.getCore().getPopData();
-        int[] lowestCoords = null;
-        int[] highestCoords = null;
-        int y = 0;
-
-        for (JigsawStructurePiece piece : builder.getPieces().values()) {
-            if (lowestCoords == null) {
-                y = piece.getRoom().getY();
-                lowestCoords = new int[]{piece.getRoom().getX(), piece.getRoom().getZ()};
-            }
-            if (highestCoords == null)
-                highestCoords = new int[]{piece.getRoom().getX(), piece.getRoom().getZ()};
-            if (piece.getRoom().getX() < lowestCoords[0])
-                lowestCoords[0] = piece.getRoom().getX();
-            if (piece.getRoom().getZ() < lowestCoords[1])
-                lowestCoords[1] = piece.getRoom().getZ();
-
-            if (piece.getRoom().getX() > highestCoords[0])
-                highestCoords[0] = piece.getRoom().getX();
-            if (piece.getRoom().getZ() > highestCoords[1])
-                highestCoords[1] = piece.getRoom().getZ();
-        }
-
-        //Longer axis is the superior one
-        if (highestCoords[0] - lowestCoords[0] > highestCoords[1] - lowestCoords[1])
-            superiorAxis = Axis.X;
-        else if (highestCoords[0] - lowestCoords[0] < highestCoords[1] - lowestCoords[1])
-            superiorAxis = Axis.Z;
-        else //Square house
-            superiorAxis = new Axis[]{Axis.X, Axis.Z}[rand.nextInt(1)];
-
-
-        lowestCoords[0] -= 3;
-        lowestCoords[1] -= 3;
-        highestCoords[0] += 3;
-        highestCoords[1] += 3;
-
-        Wall w;
-        int length;
-        int breadth;
-        if (superiorAxis == Axis.X) {
-            length = highestCoords[0] - lowestCoords[0] + 5;
-            breadth = (highestCoords[1] - lowestCoords[1]) + 3;
-            w = new Wall(new SimpleBlock(data, highestCoords[0] + 2, y + 4, lowestCoords[1] - 1), BlockFace.WEST);
-        } else {
-            length = highestCoords[1] - lowestCoords[1] + 5;
-            breadth = (highestCoords[0] - lowestCoords[0]) + 3;
-            w = new Wall(new SimpleBlock(data, lowestCoords[0] - 1, y + 4, lowestCoords[1] - 2), BlockFace.SOUTH);
-        }
-
-
-        for (int i = 0; i < length; i++) {
-            Wall target = w;
-            for (int right = 0; right < breadth; right++) {
-
-                //Cover the holes
-                if (i == 2 || i == length - 3) {
-                    Material bottom = getLowestMaterial(target);
-                    target.downUntilSolid(new Random(), bottom);
-                    //target.CorrectMultipleFacing(1);
-                }
-
-                //Place logs at the sides
-                if (right != 0 && right != breadth - 1) {
-                    //Sandwiched by trapdoors
-                    if (i == 0) {
-                        new TrapdoorBuilder(Material.OAK_TRAPDOOR)
-                                .setHalf(Half.TOP)
-                                .setOpen(true)
-                                .setFacing(target.getDirection().getOppositeFace())
-                                .apply(target.getRelative(0, -1, 0));
-                    } else if (i == length - 1) {
-                        new TrapdoorBuilder(Material.OAK_TRAPDOOR)
-                                .setHalf(Half.TOP)
-                                .setOpen(true)
-                                .setFacing(target.getDirection())
-                                .apply(target.getRelative(0, -1, 0));
-                    } else {
-                        new OrientableBuilder(Material.OAK_LOG)
-                                .setAxis(superiorAxis)
-                                .apply(target.getRelative(0, -1, 0).get());
-                    }
-                }
-
-                Material[] stairType = {Material.OAK_STAIRS};
-                Material[] slabType = {Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
-
-                if (right == 0 || right == breadth - 1 || i == 0 || i == length - 1) {
-                    stairType = new Material[]{Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS};
-                }
-
-                if (breadth % 2 == 1) { //For odd breadth.
-                    if (right > breadth / 2) {
-                        //Slope down
-                        new StairBuilder(stairType)
-                                .setFacing(BlockUtils.getLeft(target.getDirection()))
-                                .apply(target);
-                        target = target.getRight().getRelative(0, -1, 0);
-                    } else if (right < breadth / 2) {
-                        //Slope up
-                        new StairBuilder(stairType)
-                                .setFacing(BlockUtils.getRight(target.getDirection()))
-                                .apply(target);
-                        target = target.getRight().getRelative(0, 1, 0);
-                    } else {
-                        //Top (Only exists when the breadth is odd.
-                        target.setType(slabType);
-                        target = target.getRight().getRelative(0, -1, 0);
-                    }
-                } else { //For even breadth
-                    if (right == breadth / 2 - 1) {
-                        new StairBuilder(stairType)
-                                .setFacing(BlockUtils.getRight(target.getDirection()))
-                                .apply(target);
-                        target = target.getRight();
-                    } else if (right >= breadth / 2) {
-                        //Slope down
-                        new StairBuilder(stairType)
-                                .setFacing(BlockUtils.getLeft(target.getDirection()))
-                                .apply(target);
-                        target = target.getRight().getRelative(0, -1, 0);
-                    } else if (right < breadth / 2) {
-                        //Slope up
-                        new StairBuilder(stairType)
-                                .setFacing(BlockUtils.getRight(target.getDirection()))
-                                .apply(target);
-                        target = target.getRight().getRelative(0, 1, 0);
-                    }
-                }
-            }
-            w = w.getFront();
-        }
-
-
-    }
-
-    private static Material getLowestMaterial(Wall w) {
-        Wall other = w.findFloor(10);
-        if (other != null) return other.getType();
-        return null;
-    }
-
-    /**
-     * Essentially, this just moulds the same blunt pyramid on every room, then
-     * changes the sides to stairs. Doesn't look very sophisticated, so it will be
-     * used for the weirdly shaped houses that aren't rectangles.
-     * @param builder
-     */
-    public static void placeStandardRoof(PlainsVillageTempleJigsawBuilder builder) {
-        PopulatorDataAbstract data = builder.getCore().getPopData();
-
-        Material[] solidMat = {Material.OAK_PLANKS};
-        Material[] stairMat = {Material.OAK_STAIRS};
-
-        //Pass One, handle the general shape of the roof
-        for (JigsawStructurePiece piece : builder.getPieces().values()) {
-
-            for (int depth = -2; depth <= 0; depth++) {
-                int[] lowerCorner = piece.getRoom().getLowerCorner(depth);
-                int[] upperCorner = piece.getRoom().getUpperCorner(depth);
-                for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-                    for (int z = lowerCorner[1]; z <= upperCorner[1]; z++)
-                        data.setType(x, piece.getRoom().getY() + piece.getRoom().getHeight() + 3 + depth, z,
-                                GenUtils.randMaterial(solidMat));
-            }
-
-        }
-
-        //Pass Two, replace the exposed sides with stairs
-        for (JigsawStructurePiece piece : builder.getPieces().values()) {
-            for (int depth = -2; depth <= 0; depth++) {
-                int[] lowerCorner = piece.getRoom().getLowerCorner(depth);
-                int[] upperCorner = piece.getRoom().getUpperCorner(depth);
-                for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-                    for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-                        SimpleBlock target = new SimpleBlock(data, x, piece.getRoom().getY() + piece.getRoom().getHeight() + 3 + depth, z);
-                        if (target.getType() != Material.COBBLESTONE
-                                && target.getType() != Material.OAK_PLANKS
-                                && target.getType() != Material.MOSSY_COBBLESTONE) {
-                            //BlockUtils.correctSurroundingStairData(target);
-                            continue;
-                        }
-                        //ArrayList<BlockFace> exposedFaces = new ArrayList<BlockFace>();
-
-                        for (BlockFace face : BlockUtils.directBlockFaces) {
-                            if (!target.getRelative(face).getType().isSolid()) {
-                                //Material[] mats = new Material[] {Material.OAK_STAIRS};
-                                //if(depth == -2 || depth == 0)
-                                //	mats = new Material[] {Material.COBBLESTONE_STAIRS,Material.MOSSY_COBBLESTONE_STAIRS};
-                                new StairBuilder(stairMat)
-                                        .setFacing(face.getOppositeFace())
-                                        .apply(target);
-                                BlockUtils.correctSurroundingStairData(target);
-                                break;
-                                //exposedFaces.add(face);
-                            }
-                        }
-                    }
-            }
-        }
-    }
-
+	
 }

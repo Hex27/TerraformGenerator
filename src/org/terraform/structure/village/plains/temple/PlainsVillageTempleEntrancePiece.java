@@ -59,14 +59,14 @@ public class PlainsVillageTempleEntrancePiece extends JigsawStructurePiece {
         Wall doorAdj = core.getFront().getRight();
         new StairBuilder(Material.STONE_BRICK_STAIRS)
                 .setFacing(doorAdj.getDirection().getOppositeFace())
-                .apply(doorAdj.getRelative(0, 2, 0));
-        doorAdj.getRelative(0, 1, 0).downUntilSolid(rand, stoneBricks);
+                .apply(doorAdj.getRelative(0, 1, 0));
+        doorAdj.downUntilSolid(rand, stoneBricks);
 
         doorAdj = core.getFront().getLeft();
         new StairBuilder(Material.STONE_BRICK_STAIRS)
                 .setFacing(doorAdj.getDirection().getOppositeFace())
-                .apply(doorAdj.getRelative(0, 2, 0));
-        doorAdj.getRelative(0, 1, 0).downUntilSolid(rand, stoneBricks);
+                .apply(doorAdj.getRelative(0, 1, 0));
+        doorAdj.downUntilSolid(rand, stoneBricks);
 
 
     }

@@ -13,28 +13,28 @@ import java.util.Random;
 
 public class CoralGenerator {
     //    private static final Material[] VALUES = Material.values();
-    private static final Material[] CORAL_BLOCKS = {
+	public static final Material[] CORAL_BLOCKS = {
             Material.BRAIN_CORAL_BLOCK,
             Material.BUBBLE_CORAL_BLOCK,
             Material.FIRE_CORAL_BLOCK,
             Material.HORN_CORAL_BLOCK,
             Material.TUBE_CORAL_BLOCK,
     };
-    private static final Material[] CORAL_FANS = {
+    public static final Material[] CORAL_FANS = {
             Material.BRAIN_CORAL_FAN,
             Material.BUBBLE_CORAL_FAN,
             Material.FIRE_CORAL_FAN,
             Material.HORN_CORAL_FAN,
             Material.TUBE_CORAL_FAN,
     };
-    private static final Material[] CORAL_WALL_FANS = {
+    public static final Material[] CORAL_WALL_FANS = {
             Material.BRAIN_CORAL_WALL_FAN,
             Material.BUBBLE_CORAL_WALL_FAN,
             Material.FIRE_CORAL_WALL_FAN,
             Material.HORN_CORAL_WALL_FAN,
             Material.TUBE_CORAL_WALL_FAN,
     };
-    private static final BlockFace[] FACES = {
+    public static final BlockFace[] FACES = {
             BlockFace.EAST, BlockFace.WEST,
             BlockFace.NORTH, BlockFace.SOUTH,
             BlockFace.EAST, BlockFace.WEST,

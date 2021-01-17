@@ -1,5 +1,11 @@
 package org.terraform.structure.room.jigsaw;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Stack;
+
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -8,8 +14,6 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-
-import java.util.*;
 
 public class JigsawBuilder {
     protected int widthX;
@@ -28,7 +32,7 @@ public class JigsawBuilder {
     protected HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
     protected ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
     protected JigsawStructurePiece[] pieceRegistry;
-    BlockFace entranceDir;
+    private BlockFace entranceDir;
     int traversalIndex = 0;
     private boolean hasPlacedEntrance = false;
 
@@ -45,6 +49,10 @@ public class JigsawBuilder {
 
     public void forceEntranceDirection(BlockFace face) {
         entranceDir = face;
+    }
+    
+    public BlockFace getEntranceDirection() {
+    	return entranceDir;
     }
 
     public JigsawStructurePiece getFirstPiece(Random random) {
@@ -68,7 +76,7 @@ public class JigsawBuilder {
         if (traverseStack.size() == 0) {
             TerraformGeneratorPlugin.logger.info("Jigsaw stack size empty!");
             return false;
-        }
+        } 
         JigsawStructurePiece current = traverseStack.peek();
         //TerraformGeneratorPlugin.logger.info("Traversal Index " + traversalIndex + ", on: " + current.toString());
         traversalIndex++;
@@ -227,8 +235,20 @@ public class JigsawBuilder {
     public JigsawStructurePiece getPiece(JigsawStructurePiece[] registry, JigsawType type, Random rand) {
         ArrayList<JigsawStructurePiece> validPieces = new ArrayList<>();
         for (JigsawStructurePiece piece : pieceRegistry) {
-            if (piece.getType() == type)
-                validPieces.add(piece);
+        	boolean dontPlace = false;
+            if (piece.getType() == type) {
+            	if(piece.isUnique()) {
+            		for(JigsawStructurePiece present : this.pieces.values()) {
+        				
+            			if(present.getClass().equals(piece.getClass())) {
+            				dontPlace = true;
+            				break;
+            			}
+            		}
+            	}
+            	if(!dontPlace)
+            		validPieces.add(piece);
+            }
         }
         if (validPieces.size() == 0) {
             TerraformGeneratorPlugin.logger.error("Tried to query jigsaw type that doesn't exist: " + type);

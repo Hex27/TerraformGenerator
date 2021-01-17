@@ -57,7 +57,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                 ppd.base.getZ());
 
         //Path is on water. Place a solid wooden foundation, and then return.
-        if (ppd.base.getY() < TerraformGenerator.seaLevel) {
+        if (ppd.base.getRelative(0,1,0).getType() == Material.WATER) {
             Wall pathCore = new Wall(ppd.base, ppd.dir).getAtY(TerraformGenerator.seaLevel);
             new SlabBuilder(Material.OAK_SLAB)
                     .setWaterlogged(true).setType(Type.TOP)
@@ -70,7 +70,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
             return;
         }
 
-        if (GenUtils.chance(random, 1, 25)) {
+        if (GenUtils.chance(random, 1, 15)) {
             BlockFace side = BlockUtils.getTurnBlockFace(random, ppd.dir);
             SimpleBlock target = new SimpleBlock(
                     ppd.base.getPopData(),

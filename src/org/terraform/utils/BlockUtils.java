@@ -105,6 +105,25 @@ public class BlockUtils {
             Material.YELLOW_BED
     };
 
+    public static final Material[] GLAZED_TERRACOTTA = {
+            Material.WHITE_GLAZED_TERRACOTTA,
+            Material.BLACK_GLAZED_TERRACOTTA,
+            Material.BLUE_GLAZED_TERRACOTTA,
+            Material.BROWN_GLAZED_TERRACOTTA,
+            Material.CYAN_GLAZED_TERRACOTTA,
+            Material.GRAY_GLAZED_TERRACOTTA,
+            Material.GREEN_GLAZED_TERRACOTTA,
+            Material.LIGHT_BLUE_GLAZED_TERRACOTTA,
+            Material.LIGHT_GRAY_GLAZED_TERRACOTTA,
+            Material.LIME_GLAZED_TERRACOTTA,
+            Material.MAGENTA_GLAZED_TERRACOTTA,
+            Material.ORANGE_GLAZED_TERRACOTTA,
+            Material.PINK_GLAZED_TERRACOTTA,
+            Material.PURPLE_GLAZED_TERRACOTTA,
+            Material.RED_GLAZED_TERRACOTTA,
+            Material.YELLOW_GLAZED_TERRACOTTA
+    };
+
     public static boolean isDirectBlockFace(BlockFace facing) {
         switch (facing) {
             case NORTH:
@@ -139,6 +158,13 @@ public class BlockUtils {
             }
         }
         return original;
+    }
+    
+    public static BlockFace[] getRandomBlockfaceAxis(Random rand) {
+    	if(rand.nextInt(2) == 0)
+    		return new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH};
+    	else
+    		return new BlockFace[] {BlockFace.WEST, BlockFace.EAST};
     }
 
     public static Material stoneBrick(Random rand) {

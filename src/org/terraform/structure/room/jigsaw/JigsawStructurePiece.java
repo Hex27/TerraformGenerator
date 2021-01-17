@@ -22,6 +22,15 @@ public abstract class JigsawStructurePiece implements Cloneable {
     protected boolean unique = false;
     protected int elevation = 0; //elevation of 0 is ground level.
 
+    public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace... validDirs) {
+        this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
+        this.type = type;
+        this.unique = unique;
+        for (BlockFace face : validDirs)
+            validDirections.put(face, false);
+        //TerraformGeneratorPlugin.logger.info("CONSTRUCTOR-validDirsSize: " + validDirections.size());
+    }
+    
     public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, BlockFace... validDirs) {
         this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
         this.type = type;

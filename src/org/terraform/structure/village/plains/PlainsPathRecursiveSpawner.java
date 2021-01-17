@@ -3,7 +3,6 @@ package org.terraform.structure.village.plains;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
@@ -109,8 +108,7 @@ public class PlainsPathRecursiveSpawner {
 
     public boolean registerRoom(DirectionalCubeRoom room) {
         //Cannot be below sea level
-        if (GenUtils.getHighestGround(core.getPopData(), room.getX(), room.getZ())
-                < TerraformGenerator.seaLevel) {
+        if (core.getPopData().getType(room.getX(),GenUtils.getHighestGround(core.getPopData(), room.getX(), room.getZ())+1,room.getZ()) == Material.WATER) {
             return false;
         }
 
@@ -146,7 +144,7 @@ public class PlainsPathRecursiveSpawner {
         for (SimpleLocation loc : path.keySet()) {
             Wall w = new Wall(new SimpleBlock(core.getPopData(), loc.getX(), loc.getY(), loc.getZ()), path.get(loc));
             w = w.getGround();
-            if (w.getY() < TerraformGenerator.seaLevel) {
+            if (w.getRelative(0,1,0).getType() == Material.WATER) {
                 //Don't build paths underwater.
                 continue;
             }
