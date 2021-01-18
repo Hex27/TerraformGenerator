@@ -19,3 +19,8 @@ dependencies {
     implementation(project(":implementation:v1_16_R2"))
     implementation(project(":implementation:v1_16_R3"))
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
