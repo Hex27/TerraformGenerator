@@ -1,6 +1,7 @@
 package org.terraform.structure.caves;
 
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -24,7 +25,7 @@ public class LargeCavePopulator extends SingleMegaChunkStructurePopulator {
         int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
         Random rand = tw.getHashedRand(x, z, 999323);
 
-        int highest = GenUtils.getHighestGround(data, x, z);
+        int highest = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
         int rY = (highest - 20) / 2; //5 block padding bottom, 15 padding top.
 
         if (rand.nextBoolean())

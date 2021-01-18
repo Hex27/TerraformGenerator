@@ -1,0 +1,158 @@
+package org.terraform.structure.village.plains.temple;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Random;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.type.Lantern;
+import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
+import org.terraform.data.Wall;
+import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.blockdata.DirectionalBuilder;
+import org.terraform.utils.blockdata.OrientableBuilder;
+import org.terraform.utils.blockdata.StairBuilder;
+
+public class PlainsVillageTempleRoofHandler {
+	//private static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
+
+	public static void handleTempleRoof(PopulatorDataAbstract data, JigsawStructurePiece piece, ArrayList<JigsawStructurePiece> wallPieces) {
+		Wall base = new Wall(new SimpleBlock(data,
+    			piece.getRoom().getX(),
+    			piece.getRoom().getY()+5,
+    			piece.getRoom().getZ()),piece.getRotation());
+		for(BlockFace face:BlockUtils.getAdjacentFaces(piece.getRotation())) {
+			int multiplier = 0;
+			
+			if(PlainsVillageTempleJigsawBuilder.hasAdjacentWall(piece, face, wallPieces)) {
+				multiplier = 0;//Wall leads to another wall, so all segments are equal
+			}else if(PlainsVillageTempleJigsawBuilder.hasAdjacentInwardWall(piece, face, wallPieces)){
+				multiplier = 1; //Wall leads to inwards turn, so segments are increasing
+			}else {
+				multiplier = -1; //Wall leads to a corner, so segments are decreasing (slant up) 
+				
+			}
+
+			for(int height = 0; height < 3; height++) {
+				for(int horDepth = 0; horDepth < 3+height*multiplier; horDepth++) {
+					Wall w = base.getRelative(face, horDepth);
+					new StairBuilder(Material.COBBLESTONE_STAIRS)
+			        .setFacing(w.getDirection().getOppositeFace())
+			        .apply(w.getRear(height+2).getRelative(0,height*2,0))
+			        .correct();
+					
+					//Add tiny spikes at the sides of corners
+					if(multiplier == -1 && horDepth == 2+height*multiplier) {
+						Wall pillar = w.getRelative(face).getRear(height+2).getRelative(0,height*2,0);
+						pillar.Pillar(3,new Random(),Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL);
+						pillar.setType(Material.CHISELED_STONE_BRICKS);
+						
+						//Add lantern decorations to the interior corners
+						//if(height != 0) {
+							pillar = w.getRear(height+3).getRelative(0,(height+1)*2,0);
+							pillar.getRelative(0,-2,0).setType(Material.OAK_LOG);
+							Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
+							l.setHanging(true);
+							pillar.getRelative(0,-3,0).setBlockData(l);
+						//}
+					}else if(multiplier == 1 && horDepth == 2+height*multiplier) {
+						Wall pillar = w.getRelative(face,1).getRear(height+3).getRelative(0,(height+1)*2,0);
+						//Add lantern decorations to the interior corners
+						pillar.getRelative(0,-1,0).get().lsetType(Material.OAK_LOG);
+						pillar.getRelative(0,-2,0).setType(Material.OAK_LOG);
+						Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
+						l.setHanging(true);
+						pillar.getRelative(0,-3,0).setBlockData(l);
+					}
+					
+					//Don't place stairs where the roof ends.
+					if(height != 2)
+				        new StairBuilder(Material.STONE_BRICK_STAIRS)
+				        .setFacing(w.getDirection())
+				        .setHalf(Half.TOP)
+				        .lapply(w.getRear(height+3).getRelative(0,height*2,0))
+				        .correct();
+					else
+						new OrientableBuilder(Material.OAK_LOG)
+						.setAxis(BlockUtils.getAxisFromBlockFace(face))
+						.lapply(w.getRear(height+3).getRelative(0,height*2,0));
+					
+					
+					
+					w.getRelative(0,height*2+1,0).getRear(height+3).setType(Material.COBBLESTONE);
+				}
+			}
+			
+			//Do more corner related cleaning and decorations
+			if(multiplier == -1) {
+				
+			}
+		
+		}
+	}
+	
+	public static void placeCeilingTerracotta(PopulatorDataAbstract data, Collection<JigsawStructurePiece> structurePieces) {
+		Material glazedTerracotta = BlockUtils.GLAZED_TERRACOTTA[new Random().nextInt(BlockUtils.GLAZED_TERRACOTTA.length)];
+		for(JigsawStructurePiece piece:structurePieces) {
+			int[] lowerCorner = piece.getRoom().getLowerCorner();
+			int[] upperCorner = piece.getRoom().getUpperCorner();
+			
+			for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) 
+				for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+					SimpleBlock b = new SimpleBlock(data, x, piece.getRoom().getY()+1,z);
+					int i = 0;
+					for(i = 0; i < 9; i++) {
+						if(!b.getType().isSolid()) {
+							b = b.getRelative(0,1,0);
+						}else {
+							break;
+						}
+					}
+					
+					if(i == 9 && !b.getType().isSolid()) {
+						placeGlazedTerracotta(b, glazedTerracotta);
+						b.getRelative(0,1,0).setType(Material.COBBLESTONE);
+					}
+				}
+		}
+	}
+	
+    private static void placeGlazedTerracotta(SimpleBlock target, Material glazedTerracotta) {
+//        Directional terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+//        terracotta.setFacing(BlockFace.NORTH);
+//        data.setBlockData(x, y, z, terracotta);
+//
+//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+//        terracotta.setFacing(BlockFace.EAST);
+//        data.setBlockData(x + 1, y, z, terracotta);
+//
+//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+//        terracotta.setFacing(BlockFace.WEST);
+//        data.setBlockData(x, y, z + 1, terracotta);
+//
+//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
+//        terracotta.setFacing(BlockFace.SOUTH);
+//        data.setBlockData(x + 1, y, z + 1, terracotta);
+    	BlockFace dir = BlockFace.NORTH;
+    	if(target.getX() % 2 == 0) {
+    		if(target.getZ() % 2 == 0)
+    			dir = BlockFace.SOUTH;
+    		else
+    			dir = BlockFace.WEST;
+    	}else {
+    		if(target.getZ() % 2 == 0)
+    			dir = BlockFace.EAST;
+    		else
+    			dir = BlockFace.NORTH;
+    	}
+    	new DirectionalBuilder(glazedTerracotta)
+    	.setFacing(dir)
+    	.apply(target);
+    }
+	
+}

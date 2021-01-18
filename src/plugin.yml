@@ -1,12 +1,12 @@
 name: TerraformGenerator
 author: Hex_27
-version: 1.8.2
-depend: [Drycell]
+version: 2.0.2
+depend: [ Drycell ]
 api-version: 1.14
 description: World Generator
 main: org.terraform.main.TerraformGeneratorPlugin
 load: startup
 commands:
-   terraform:
+  terraform:
     description: Main command
     aliases: terra

@@ -9,7 +9,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.FastNoise;
@@ -70,9 +70,9 @@ public class SwampHandler extends BiomeHandler {
 
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                new FractalTreeBuilder(FractalTreeType.SWAMP_BOTTOM)
+                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
                         .build(tw, data, treeX, treeY - 3, treeZ);
-                new FractalTreeBuilder(FractalTreeType.SWAMP_TOP)
+                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
                         .build(tw, data, treeX, treeY - 2, treeZ);
             }
         }

@@ -27,8 +27,7 @@ public class DesertHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.RED_SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND,
-                Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND),
+        return new Material[]{Material.SAND,
                 Material.SAND,
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE),
@@ -60,16 +59,16 @@ public class DesertHandler extends BiomeHandler {
                         }
                         if (canSpawn)
                             BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.CACTUS, 3, 5);
-                    }else if (GenUtils.chance(random, 1, 80)) {
-                            data.setType(x, y + 1, z, Material.DEAD_BUSH);
+                    } else if (GenUtils.chance(random, 1, 80)) {
+                        data.setType(x, y + 1, z, Material.DEAD_BUSH);
                     }
                 }
-                
+
 
             }
         }
-        if(GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
-        	new DesertWellPopulator().populate(world, random, data, false);
+        if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
+            new DesertWellPopulator().populate(world, random, data, false);
         }
     }
 }

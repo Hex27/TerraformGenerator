@@ -27,7 +27,7 @@ public class RoomLayoutGenerator {
     private PathPopulatorAbstract pathPop;
     private boolean carveRooms = false;
     private boolean pyramidish = false;
-    private MazeSpawner mazePathGenerator = null;
+    private MazeSpawner mazePathGenerator;
     private int tile = -1;
     private int roomMaxHeight = 7;
     private int roomMinHeight = 5;
@@ -189,6 +189,19 @@ public class RoomLayoutGenerator {
         return false;
     }
 
+    /**
+     * Please supply 2d (x,z) coordinates
+     * @param coords
+     * @return
+     */
+    public boolean isInRoom(int[] coords) {
+        for (CubeRoom room : rooms) {
+            if (room.isPointInside(coords))
+                return true;
+        }
+        return false;
+    }
+
     public void setGenPaths(boolean genPaths) {
         this.genPaths = genPaths;
     }
@@ -208,27 +221,30 @@ public class RoomLayoutGenerator {
         ArrayList<PathGenerator> pathGens = new ArrayList<>();
         //Carve Pathways
         if (genPaths) {
-        	if(mazePathGenerator != null) {
-        		//MazeSpawner spawner = new MazeSpawner(new Random(), new SimpleBlock(data,this.getCentX(),this.getCentY()+1,this.getCentZ()), range, range);
-        		mazePathGenerator.setRand(rand);
-        		mazePathGenerator.setCore(new SimpleBlock(data,this.getCentX(),this.getCentY()+1,this.getCentZ()));
-        		mazePathGenerator.setWidthX(range);
-        		mazePathGenerator.setWidthZ(range);
-        		mazePathGenerator.prepareMaze();
-                mazePathGenerator.carveMaze(false,mat);
-        	}
-        	else
-	            for (CubeRoom room : rooms) {
-	                SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
-	                PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound);
-	                if (pathPop != null) gen.setPopulator(pathPop);
-	                while (!gen.isDead()) {
-	                    gen.next();
-	                }
-	                pathGens.add(gen);
-	            }
+            if (mazePathGenerator != null) {
+                //MazeSpawner spawner = new MazeSpawner(new Random(), new SimpleBlock(data,this.getCentX(),this.getCentY()+1,this.getCentZ()), range, range);
+                mazePathGenerator.setRand(rand);
+                mazePathGenerator.setCore(new SimpleBlock(data, this.getCentX(), this.getCentY() + 1, this.getCentZ()));
+                if (mazePathGenerator.getWidthX() == -1) {
+                    mazePathGenerator.setWidthX(range);
+                }
+                if (mazePathGenerator.getWidthZ() == -1) {
+                    mazePathGenerator.setWidthZ(range);
+                }
+                mazePathGenerator.prepareMaze();
+                mazePathGenerator.carveMaze(false, mat);
+            } else
+                for (CubeRoom room : rooms) {
+                    SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
+                    PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound);
+                    if (pathPop != null) gen.setPopulator(pathPop);
+                    while (!gen.isDead()) {
+                        gen.next();
+                    }
+                    pathGens.add(gen);
+                }
         }
-        
+
         //Create empty rooms
         for (CubeRoom room : rooms) {
             if (carveRooms) room = new CarvedRoom(room);
@@ -240,8 +256,15 @@ public class RoomLayoutGenerator {
         }
 
         //Populate pathways
-        for (PathGenerator pGen : pathGens) {
-            pGen.populate();
+        if (mazePathGenerator != null && this.pathPop != null) {
+            for (PathPopulatorData pPData : mazePathGenerator.pathPopDatas) {
+                if (!this.isInRoom(new int[]{pPData.base.getX(), pPData.base.getZ()}))
+                    this.pathPop.populate(pPData);
+            }
+        } else {
+            for (PathGenerator pGen : pathGens) {
+                pGen.populate();
+            }
         }
 
         if (roomPops.isEmpty()) return;
@@ -280,14 +303,14 @@ public class RoomLayoutGenerator {
                     }
                 }
             }
-            if(room.pop != null) {
+            if (room.pop != null) {
                 Bukkit.getLogger().info("Registered: " + room.pop.getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
                 room.populate(data);
-            }else {
+            } else {
                 Bukkit.getLogger().info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
             }
         }
-        
+
     }
 
     public void fillPathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
@@ -503,9 +526,9 @@ public class RoomLayoutGenerator {
     }
 
 
-	public void setMazePathGenerator(MazeSpawner mazePathGenerator) {
-		this.mazePathGenerator = mazePathGenerator;
-	}
+    public void setMazePathGenerator(MazeSpawner mazePathGenerator) {
+        this.mazePathGenerator = mazePathGenerator;
+    }
 
 
 }

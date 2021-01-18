@@ -61,9 +61,9 @@ public class GuardianChamberPopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-    	//Don't compete with crypt rooms for space
+        //Don't compete with crypt rooms for space
         return room.getWidthX() >= 5 && room.getWidthZ() >= 5
-        		&& room.getWidthX() < 13 && room.getWidthZ() < 13;
+                && room.getWidthX() < 13 && room.getWidthZ() < 13;
     }
 
 

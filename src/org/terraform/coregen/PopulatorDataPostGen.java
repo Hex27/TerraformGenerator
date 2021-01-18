@@ -68,18 +68,18 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
         Block b = w.getBlockAt(x, y, z);
         b.setBlockData(data.clone(), !isFragile);
     }
-    
+
     /**
      * Blockstates are mutable, so just edit them. There is no method to directly set them.
      * @param x
      * @param y
      * @param z
      * @param state
-     * @return 
+     * @return
      */
     public BlockState getBlockState(int x, int y, int z) {
-    	 Block b = w.getBlockAt(x, y, z);
-         return b.getState();
+        Block b = w.getBlockAt(x, y, z);
+        return b.getState();
     }
 
     public void noPhysicsUpdateForce(int x, int y, int z, BlockData data) {

@@ -61,7 +61,9 @@ public class MudflatsHandler extends BiomeHandler {
                     else
                         data.setType(x, y, z, Material.GRASS);
                 }
-                if (spawnHut && GenUtils.chance(10, 100)) {
+                if (spawnHut 
+                		&& TConfigOption.STRUCTURES_SWAMPHUT_SPAWN_MUDFLAT_HEADS.getBoolean() 
+                		&& GenUtils.chance(10, 100)) {
                     if (BlockUtils.isDirtLike(data.getType(x, y - 1, z))) {
                         Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
                         skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));

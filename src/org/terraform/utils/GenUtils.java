@@ -6,25 +6,24 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class GenUtils {
-
     private static final Random RANDOMIZER = new Random();
     private static final String[] BLACKLIST_HIGHEST_GROUND = {
             "LEAVES", "LOG",
             "WOOD", "MUSHROOM",
             "FENCE", "WALL",
-            "POTTED", "BRICK"};
+            "POTTED", "BRICK",
+            "CHAIN"
+    };
+    private static final Map<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache = new HashMap<>(30);
 
     public static SimplexOctaveGenerator getGenerator(World world) {
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), 8);
@@ -36,19 +35,18 @@ public class GenUtils {
         return rand.nextBoolean() ? 1 : -1;
     }
 
-    public static ArrayList<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z) {
-        ArrayList<int[]> list = new ArrayList<>();
+    public static Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z) {
         int y = getHighestGround(data, x, z);
         int[] pair = {-1, -1};
+        List<int[]> list = new ArrayList<>(y);
 
         for (int ny = y; ny > 0; ny--) {
             Material type = data.getType(x, ny, z);
-            if (pair[0] == -1 && !type.isSolid()) pair[0] = ny;
-            else if (type.isSolid()) {
+            if (type.isSolid()) {
                 pair[1] = ny;
                 list.add(pair);
                 pair = new int[]{-1, -1};
-            }
+            } else if (pair[0] == -1) pair[0] = ny;
         }
 
         return list;
@@ -83,30 +81,62 @@ public class GenUtils {
         return randInt(new Random(), 1, outOf) <= chance;
     }
 
-    private static final HashMap<Integer, ArrayList<BiomeBank>> biomeQueryCache = new HashMap<>();
     public static ArrayList<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ) {
-        if(biomeQueryCache.size() > 30) biomeQueryCache.clear();
-        int hash = Objects.hash(tw, chunkX, chunkZ);
-    	if(biomeQueryCache.containsKey(hash))
-    		return biomeQueryCache.get(hash);
-        
-    	ArrayList<BiomeBank> banks = new ArrayList<>();
-        for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
-            for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
-                int height = HeightMap.getHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-                for (BiomeBank bank : BiomeBank.values()) {
-                    BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
+        if (biomeQueryCache.size() > 30) biomeQueryCache.clear();
+        ChunkCache key = new ChunkCache(tw, chunkX, chunkZ);
+        if (biomeQueryCache.containsKey(key)) return biomeQueryCache.get(key);
 
-                    if (bank == currentBiome) {
-                        if (!banks.contains(bank))
-                            banks.add(bank);
-                        break;
-                    }
-                }
+        ArrayList<BiomeBank> banks = new ArrayList<>();
+        int gridX = chunkX * 16;
+        int gridZ = chunkZ * 16;
+
+        for (int x = gridX; x < gridX + 16; x++) {
+            for (int z = gridZ; z < gridZ + 16; z++) {
+                BiomeBank bank = tw.getBiomeBank(x, HeightMap.getBlockHeight(tw, x, z), z);
+                if (!banks.contains(bank)) banks.add(bank);
             }
         }
-        biomeQueryCache.put(hash, banks);
+
+        biomeQueryCache.put(key, banks);
         return banks;
+    }
+
+    /**
+     * Locates the target biome in given area using brute force.
+     * Note that the function is blocking.
+     * @return Position for the biome or null if no biomes found.
+     */
+    public static Vector2f locateBiome(TerraformWorld tw, BiomeBank biome, Vector2f center, int radius, int blockSkip) {
+        if (tw.getBiomeBank(Math.round(center.x), Math.round(center.y)) == biome) return new Vector2f(center.x, center.y);
+        int iter = 2;
+
+        int x = (int) center.x;
+        int z = (int) center.y;
+
+        while (Math.abs(center.x - x) < radius
+                || Math.abs(center.y - z) < radius) {
+            for (int i = 0; i < iter / 2; i++) {
+                switch (iter % 4) {
+                    case 0:
+                        x += blockSkip;
+                        break;
+                    case 1:
+                        z -= blockSkip;
+                        break;
+                    case 2:
+                        x -= blockSkip;
+                        break;
+                    case 3:
+                        z += blockSkip;
+                        break;
+                }
+            }
+
+            if (tw.getBiomeBank(x, z) == biome) return new Vector2f(x, z);
+            iter++;
+        }
+
+        return null;
     }
 
     public static Material weightedRandomMaterial(Random rand, Object... candidates) {
@@ -134,7 +164,7 @@ public class GenUtils {
     }
 
     public static Material randMaterial(Material... candidates) {
-        return randMaterial(new Random(), candidates);
+        return randMaterial(RANDOMIZER, candidates);
     }
 
     public static int[] randomSurfaceCoordinates(Random rand, PopulatorDataAbstract data) {
@@ -148,7 +178,7 @@ public class GenUtils {
     }
 
     public static int randInt(int min, int max) {
-    	if(min == max) return min;
+        if (min == max) return min;
         return randInt(RANDOMIZER, min, max);
     }
 
@@ -217,10 +247,7 @@ public class GenUtils {
      */
     public static int getTrueHighestBlock(PopulatorDataAbstract data, int x, int z) {
         int y = 255;
-        while (!data.getType(x, y, z).isSolid()) {
-            y--;
-        }
-
+        while (y > 0 && !data.getType(x, y, z).isSolid()) y--;
         return y;
     }
 
@@ -244,6 +271,8 @@ public class GenUtils {
                     case CACTUS:
                     case BAMBOO:
                     case BAMBOO_SAPLING:
+                    case IRON_BARS:
+                    case LANTERN:
                         y--;
                         continue;
                 }

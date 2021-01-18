@@ -4,18 +4,17 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import net.minecraft.server.v1_16_R1.*;
 import net.minecraft.server.v1_16_R1.HeightMap.Type;
-import net.minecraft.server.v1_16_R1.Blocks;
-import net.minecraft.server.v1_16_R1.WorldGenCarverAbstract;
-
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_16_R1.generator.CraftChunkData;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
@@ -42,10 +41,9 @@ public class NMSChunkGenerator extends ChunkGenerator {
             modifyCaveCarverLists(WorldGenCarverAbstract.c);
             modifyCaveCarverLists(WorldGenCarverAbstract.d);
             modifyCaveCarverLists(WorldGenCarverAbstract.e);
-        }
-        catch(Exception e) {
-        	TerraformGeneratorPlugin.logger.error("Failed to modify vanilla cave carver lists. You may see floating blocks above caves.");
-        	e.printStackTrace();
+        } catch (Exception e) {
+            TerraformGeneratorPlugin.logger.error("Failed to modify vanilla cave carver lists. You may see floating blocks above caves.");
+            e.printStackTrace();
         }
     }
 
@@ -65,7 +63,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
 
-                int y = org.terraform.coregen.HeightMap.getHeight(tw, x, z);
+                int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, x, z);
                 BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, y, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler
                 // ().getBiome()
 
@@ -172,7 +170,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
                         String carverType = field.get(worldgencarverwrapper).getClass().getSimpleName();
                         if (carverType.equals("WorldGenCanyonOcean") ||
                                 carverType.equals("WorldGenCavesOcean")) {
-                            continue;
+                            //Don't generate water caves if this isn't an ocean, or if flooded caves are disabled.
+                            if ((tw.getBiomeBank(chunkX << 4, chunkZ << 4).getType() != BiomeType.OCEANIC
+                                    && tw.getBiomeBank(chunkX << 4, chunkZ << 4).getType() != BiomeType.DEEP_OCEANIC)
+                                    || !TConfigOption.CAVES_ALLOW_FLOODED_CAVES.getBoolean())
+                                continue;
                         }
                     } catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
                         e.printStackTrace();
@@ -198,24 +200,28 @@ public class NMSChunkGenerator extends ChunkGenerator {
      * @throws IllegalAccessException
      */
     @SuppressWarnings("rawtypes")
-	private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-    	Set<net.minecraft.server.v1_16_R1.Block> immutableCarverList = 
-    			ImmutableSet.of(
-    					//vanilla blocks
-    					Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE,
-    			        //Extra blocks
-    					Blocks.RED_SAND,
-    					Blocks.COBBLESTONE_SLAB,
-    					Blocks.COBBLESTONE,
-    					Blocks.GRASS_PATH,
-    					Blocks.SNOW_BLOCK
-    					);
-    	Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
+    private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        Set<net.minecraft.server.v1_16_R1.Block> immutableCarverList =
+                ImmutableSet.of(
+                        //vanilla blocks
+                        Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA,
+                        Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA,
+                        Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA,
+                        Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE,
+                        Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE,
+                        //Extra blocks
+                        Blocks.RED_SAND,
+                        Blocks.COBBLESTONE_SLAB,
+                        Blocks.COBBLESTONE,
+                        Blocks.GRASS_PATH,
+                        Blocks.SNOW_BLOCK
+                );
+        Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
         if (!field.isAccessible())
             field.setAccessible(true);
         field.set(carverAbstract, immutableCarverList);
     }
-    
+
     @Override
     public int getSeaLevel() {
         return TerraformGenerator.seaLevel;
@@ -375,7 +381,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getBaseHeight(int i, int j, Type heightmap_type) {
-        return org.terraform.coregen.HeightMap.getHeight(tw, i, j);
+        return org.terraform.coregen.HeightMap.getBlockHeight(tw, i, j);
     }
 
     @Override

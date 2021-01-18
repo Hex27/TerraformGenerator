@@ -28,26 +28,31 @@ import java.util.Set;
 
 public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener {
 
+    public static final Set<String> INJECTED_WORLDS = new HashSet<>();
+    public static final PrivateFieldHandler privateFieldHandler;
     public static NMSInjectorAbstract injector;
-    public static Set<String> injectedWorlds = new HashSet<>();
-    public static PrivateFieldHandler privateFieldHandler;
-    private static TerraformGeneratorPlugin i;
+    private static TerraformGeneratorPlugin instance;
 
-    public static TerraformGeneratorPlugin get() {
-        return i;
-    }
-
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        i = this;
-
+    static {
+        PrivateFieldHandler handler;
         try {
             Field.class.getDeclaredField("modifiers");
-            privateFieldHandler = new Pre14PrivateFieldHandler();
-        } catch (NoSuchFieldException | SecurityException e1) {
-            privateFieldHandler = new Post14PrivateFieldHandler();
+            handler = new Pre14PrivateFieldHandler();
+        } catch (NoSuchFieldException | SecurityException ex) {
+            handler = new Post14PrivateFieldHandler();
         }
+        privateFieldHandler = handler;
+    }
+
+    public static TerraformGeneratorPlugin get() {
+        return instance;
+    }
+
+    @SuppressWarnings("deprecation")
+	@Override
+    public void onEnable() {
+        super.onEnable();
+        instance = this;
 
         logger = new TLogger(this);
         TConfigOption.loadValues(this.getDCConfig());
@@ -56,7 +61,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         TerraformGenerator.updateMinMountainLevelFromConfig();
         new TerraformCommandManager(this, "terraform", "terra");
         Bukkit.getPluginManager().registerEvents(this, this);
-        Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);        
+        Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
         String version = Version.getVersionPackage();
         logger.info("Detected version: " + version);
         try {
@@ -73,13 +78,12 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
             Bukkit.getPluginManager().registerEvents(new SaplingOverrider(), this);
         }
-        
+
         StructureRegistry.init();
     }
 
     /**
      * Legacy thing. Consider removal.
-     *
      * @param event
      * @deprecated
      */
@@ -118,18 +122,13 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
             logger.info("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
             if (injector.attemptInject(event.getWorld())) {
-                injectedWorlds.add(event.getWorld().getName());
+                INJECTED_WORLDS.add(event.getWorld().getName());
                 logger.info("&aInjection success! Proceeding with generation.");
 
             } else {
                 logger.error("&cInjection failed.");
             }
         }
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
     }
 
     @Override

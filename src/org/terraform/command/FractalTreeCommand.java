@@ -9,7 +9,7 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
 
 import java.util.Stack;
 
@@ -46,14 +46,14 @@ public class FractalTreeCommand extends DCCommand {
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
         try {
-            new FractalTreeBuilder((FractalTreeType) this.parseArguments(sender, args).get(0))
+            new FractalTreeBuilder((FractalTypes.Tree) this.parseArguments(sender, args).get(0))
                     .build(tw, data, x, y, z);
         } catch (IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + "Invalid tree type.");
             sender.sendMessage(ChatColor.RED + "Valid types:");
             StringBuilder types = new StringBuilder();
             boolean b = true;
-            for (FractalTreeType type : FractalTreeType.VALUES) {
+            for (FractalTypes.Tree type : FractalTypes.Tree.VALUES) {
                 ChatColor col = ChatColor.RED;
                 if (b) col = ChatColor.DARK_RED;
                 b = !b;

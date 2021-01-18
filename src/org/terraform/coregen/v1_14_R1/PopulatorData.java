@@ -15,14 +15,14 @@ import org.terraform.main.TerraformGeneratorPlugin;
 public class PopulatorData extends PopulatorDataAbstract {
     private final int chunkX;
     private final int chunkZ;
-    private final NMSChunkGenerator gen;
+    // private final NMSChunkGenerator gen;
     RegionLimitedWorldAccess rlwa;
 
     public PopulatorData(RegionLimitedWorldAccess rlwa, NMSChunkGenerator gen, int chunkX, int chunkZ) {
         this.rlwa = rlwa;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
-        this.gen = gen;
+        //this.gen = gen;
     }
 
     public Material getType(int x, int y, int z) {
@@ -56,7 +56,7 @@ public class PopulatorData extends PopulatorDataAbstract {
 
     public Biome getBiome(int rawX, int rawY, int rawZ) {
         TerraformWorld tw = TerraformWorld.get(rlwa.getWorldData().getName(), rlwa.getWorldData().getSeed());
-        int y = org.terraform.coregen.HeightMap.getHeight(tw, rawX, rawZ);
+        int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
         return tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf
         // (rlwa.getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase());
     }

@@ -27,18 +27,29 @@ public class Wall {
         return new Wall(block, direction);
     }
 
+    public Wall getAtY(int y) {
+        return new Wall(new SimpleBlock(block.getPopData(), block.getX(), y, block.getY()), this.direction);
+    }
+
     public Wall getLeft() {
         return new Wall(block.getRelative(BlockUtils.getAdjacentFaces(direction)[0]), direction);
     }
 
+    public Wall getGround() {
+        return new Wall(new SimpleBlock(
+                block.getPopData(),
+                block.getX(),
+                GenUtils.getHighestGround(block.getPopData(), block.getX(), block.getZ()),
+                block.getZ()), direction);
+    }
+
     /**
      * Gets the first solid block above this one
-     *
      * @param cutoff
      * @return
      */
     public Wall findCeiling(int cutoff) {
-        Wall ceil = this.clone().getRelative(0, 1, 0);
+        Wall ceil = this.getRelative(0, 1, 0);
         while (cutoff > 0) {
             if (ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
                 return ceil;
@@ -51,7 +62,6 @@ public class Wall {
 
     /**
      * Gets the first solid block below this one
-     *
      * @param cutoff
      * @return
      */
@@ -69,7 +79,6 @@ public class Wall {
 
     /**
      * Gets the first solid block right from this one
-     *
      * @param cutoff
      * @return
      */
@@ -87,7 +96,6 @@ public class Wall {
 
     /**
      * Gets the first solid block above this one
-     *
      * @param cutoff
      * @return
      */
@@ -145,9 +153,12 @@ public class Wall {
         block.setType(type);
     }
 
+    public void setType(Material... type) {
+        block.setType(GenUtils.randMaterial(type));
+    }
+
     /**
      * Replaces everything in its way
-     *
      * @param height
      * @param rand
      * @param types
@@ -168,10 +179,19 @@ public class Wall {
         }
     }
 
+    /**
+     * Corrects all multiple facing block data in a pillar
+     * @param height
+     */
+    public void CorrectMultipleFacing(int height) {
+        for (int i = 0; i < height; i++) {
+            BlockUtils.correctSurroundingMultifacingData(block.getRelative(0, i, 0));
+        }
+    }
+
 
     /**
      * Replaces until a solid block is reached.
-     *
      * @param height
      * @param rand
      * @param types
@@ -182,7 +202,6 @@ public class Wall {
 
     /**
      * Replaces until a solid block is reached.
-     *
      * @param height
      * @param rand
      * @param types
@@ -201,7 +220,6 @@ public class Wall {
 
     /**
      * Replaces non-solid blocks only
-     *
      * @param height
      * @param rand
      * @param types
@@ -215,7 +233,6 @@ public class Wall {
 
     /**
      * Replaces non-cave air only
-     *
      * @param height
      * @param rand
      * @param types
@@ -266,6 +283,7 @@ public class Wall {
     }
 
     public Wall getRear(int it) {
+        if (it < 0) return getFront(-it);
         Wall w = this.clone();
         for (int i = 0; i < it; i++) w = w.getRear();
         return w;
@@ -276,6 +294,7 @@ public class Wall {
     }
 
     public Wall getFront(int it) {
+        if (it < 0) return getRear(-it);
         Wall w = this.clone();
         for (int i = 0; i < it; i++) w = w.getFront();
         return w;
@@ -297,9 +316,9 @@ public class Wall {
 
     public Wall getRelative(BlockFace face, int depth) {
         // TODO Auto-generated method stub
-        return new Wall(block.getRelative(face,depth), direction);
+        return new Wall(block.getRelative(face, depth), direction);
     }
-    
+
     public int getX() {
         return get().getX();
     }

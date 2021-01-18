@@ -32,31 +32,31 @@ public class PyramidDungeonPathPopulator extends PathPopulatorAbstract {
         if (GenUtils.chance(this.rand, 1, 300)) {
             //TerraformGeneratorPlugin.logger.info("Pyramid trap at " + ppd.base.getX()+","+ppd.base.getY()+","+ppd.base.getZ());
             //To make the
-        	ppd.base.setType(Material.GRAVEL);
+            ppd.base.setType(Material.GRAVEL);
             ppd.base.getRelative(0, -1, 0).setType(Material.TNT);
             ppd.base.getRelative(0, 1, 0).setType(Material.STONE_PRESSURE_PLATE);
-            
+
             //Generate cross-shaped hole.
             for (int i = -2; i > -8; i--) {
-        		ppd.base.getRelative(0, i, 0).setType(Material.AIR);
-            	for(BlockFace face:BlockUtils.directBlockFaces)
-            		ppd.base.getRelative(face).getRelative(0, i, 0).setType(Material.AIR);
+                ppd.base.getRelative(0, i, 0).setType(Material.AIR);
+                for (BlockFace face : BlockUtils.directBlockFaces)
+                    ppd.base.getRelative(face).getRelative(0, i, 0).setType(Material.AIR);
             }
-            
+
             //Place torches against the tnt. This leads to a larger pit when the trap is triggered.
-        	for(BlockFace face:BlockUtils.directBlockFaces) {
-        		Directional torch = (Directional) Bukkit.createBlockData(Material.WALL_TORCH);
-        		torch.setFacing(face);
-        		ppd.base.getRelative(0,-1,0).getRelative(face).setBlockData(torch);
-        		ppd.base.getRelative(face).setType(Material.GRAVEL);
-        	}
+            for (BlockFace face : BlockUtils.directBlockFaces) {
+                Directional torch = (Directional) Bukkit.createBlockData(Material.WALL_TORCH);
+                torch.setFacing(face);
+                ppd.base.getRelative(0, -1, 0).getRelative(face).setBlockData(torch);
+                ppd.base.getRelative(face).setType(Material.GRAVEL);
+            }
         }
 
         //Cobwebs
         if (GenUtils.chance(this.rand, 1, 100)) {
-        	if(ppd.base.getRelative(0,height+1,0).getType().isSolid()) {
-        		ppd.base.getRelative(0,height,0).setType(Material.COBWEB);
-        	}
+            if (ppd.base.getRelative(0, height + 1, 0).getType().isSolid()) {
+                ppd.base.getRelative(0, height, 0).setType(Material.COBWEB);
+            }
         }
     }
 

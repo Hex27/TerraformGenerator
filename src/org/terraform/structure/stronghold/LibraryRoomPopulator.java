@@ -33,26 +33,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
         int[] upperBounds = room.getUpperCorner();
         int[] lowerBounds = room.getLowerCorner();
 
-        //Wall object, to the length of the wall
-        HashMap<Wall, Integer> walls = new HashMap<>();
-        Wall north = new Wall(
-                new SimpleBlock(data, lowerBounds[0] + 1, room.getY() + 1, upperBounds[1] - 1)
-                , BlockFace.NORTH);
-        Wall south = new Wall(
-                new SimpleBlock(data, upperBounds[0] - 1, room.getY() + 1, lowerBounds[1] + 1)
-                , BlockFace.SOUTH);
-        Wall east = new Wall(
-                new SimpleBlock(data, lowerBounds[0] + 1, room.getY() + 1, lowerBounds[1] + 1)
-                , BlockFace.EAST);
-        Wall west = new Wall(
-                new SimpleBlock(data, upperBounds[0] - 1, room.getY() + 1, upperBounds[1] - 2)
-                , BlockFace.WEST);
-
-        walls.put(north, room.getWidthX() - 2);
-        walls.put(south, room.getWidthX() - 2);
-        walls.put(east, room.getWidthZ() - 2);
-        walls.put(west, room.getWidthZ() - 2);
-
+        HashMap<Wall, Integer> walls = room.getFourWalls(data, 1);
         //Bookshelves and entrance decor
         for (Entry<Wall, Integer> entry : walls.entrySet()) {
             Wall wall = entry.getKey().clone();
@@ -134,31 +115,15 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
 
         //Fences
         walls.clear();
-        north = new Wall(
-                new SimpleBlock(data, lowerBounds[0] + 4, room.getY() + pHeight, upperBounds[1] - 4)
-                , BlockFace.NORTH);
-        south = new Wall(
-                new SimpleBlock(data, upperBounds[0] - 4, room.getY() + pHeight, lowerBounds[1] + 4)
-                , BlockFace.SOUTH);
-        east = new Wall(
-                new SimpleBlock(data, lowerBounds[0] + 4, room.getY() + pHeight, lowerBounds[1] + 4)
-                , BlockFace.EAST);
-        west = new Wall(
-                new SimpleBlock(data, upperBounds[0] - 4, room.getY() + pHeight, upperBounds[1] - 4)
-                , BlockFace.WEST);
-
-        walls.put(north, room.getWidthX() - 8);
-        walls.put(south, room.getWidthX() - 8);
-        walls.put(east, room.getWidthZ() - 8);
-        walls.put(west, room.getWidthZ() - 8);
+        walls = room.getFourWalls(data, 4);
 
         for (Entry<Wall, Integer> entry : walls.entrySet()) {
-            Wall wall = entry.getKey().clone();
+            Wall wall = entry.getKey().clone().getRelative(0, pHeight, 0);
             for (int l = 0; l < entry.getValue(); l++) {
-                wall.getRelative(0, 1, 0).setType(Material.OAK_FENCE);
-                BlockUtils.correctSurroundingMultifacingData(wall.getRelative(0, 1, 0).get());
+                wall.setType(Material.OAK_FENCE);
+                BlockUtils.correctSurroundingMultifacingData(wall.get());
                 if (GenUtils.chance(rand, 1, 10))
-                    wall.getRelative(0, 2, 0).setType(Material.TORCH);
+                    wall.getRelative(0, 1, 0).setType(Material.TORCH);
                 wall = wall.getLeft();
             }
         }

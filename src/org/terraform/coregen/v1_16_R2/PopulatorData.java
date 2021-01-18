@@ -10,7 +10,6 @@ import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
-import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -38,25 +37,25 @@ public class PopulatorData extends PopulatorDataAbstract {
     }
 
     @SuppressWarnings("deprecation")
-	@Override
+    @Override
     public void setType(int x, int y, int z, Material type) {
-        if(!rlwa.setTypeAndData(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0)) {
-        	NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
+        if (!rlwa.setTypeAndData(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0)) {
+            NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
         }
     }
 
     @SuppressWarnings("deprecation")
-	@Override
+    @Override
     public void setBlockData(int x, int y, int z, BlockData data) {
-        if(!rlwa.setTypeAndData(new BlockPosition(x, y, z)
+        if (!rlwa.setTypeAndData(new BlockPosition(x, y, z)
                 , ((CraftBlockData) data).getState(), 0)) {
-        	NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
+            NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
         }
     }
 
     public Biome getBiome(int rawX, int rawY, int rawZ) {
         TerraformWorld tw = gen.getTerraformWorld();
-        int y = org.terraform.coregen.HeightMap.getHeight(tw, rawX, rawZ);
+        int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
         return tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf
         // (rlwa.getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase());
     }

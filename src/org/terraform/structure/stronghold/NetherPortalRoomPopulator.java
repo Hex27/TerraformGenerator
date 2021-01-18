@@ -1,7 +1,6 @@
 package org.terraform.structure.stronghold;
 
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -9,7 +8,6 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -21,31 +19,8 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
-        int[] upperBounds = room.getUpperCorner();
-        int[] lowerBounds = room.getLowerCorner();
-
-        //Wall object, to the length of the wall
-        HashMap<Wall, Integer> walls = new HashMap<>();
-        Wall north = new Wall(
-                new SimpleBlock(data, lowerBounds[0], room.getY(), upperBounds[1])
-                , BlockFace.NORTH);
-        Wall south = new Wall(
-                new SimpleBlock(data, upperBounds[0], room.getY(), lowerBounds[1])
-                , BlockFace.SOUTH);
-        Wall east = new Wall(
-                new SimpleBlock(data, lowerBounds[0], room.getY(), lowerBounds[1])
-                , BlockFace.EAST);
-        Wall west = new Wall(
-                new SimpleBlock(data, upperBounds[0], room.getY(), upperBounds[1])
-                , BlockFace.WEST);
-
-        walls.put(north, room.getWidthX());
-        walls.put(south, room.getWidthX());
-        walls.put(east, room.getWidthZ());
-        walls.put(west, room.getWidthZ());
-
         //Wall up all entrances with wooden planks
-        for (Entry<Wall, Integer> entry : walls.entrySet()) {
+        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall wall = entry.getKey().clone();
             int length = entry.getValue();
             for (int i = 0; i < length; i++) {

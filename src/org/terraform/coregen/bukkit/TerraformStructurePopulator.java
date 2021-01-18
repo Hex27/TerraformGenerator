@@ -18,13 +18,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class TerraformStructurePopulator extends BlockPopulator {
-	
-	//Structures now loaded in StructureRegistry
-//    public static final StructurePopulator[] structurePops = {
-//            new StrongholdPopulator(), new VillageHousePopulator(), new SmallDungeonPopulator(), 
-//            new MonumentPopulator(), new ShipwreckPopulator(), new MineshaftPopulator(), 
-//            new LargeCavePopulator(), new PyramidPopulator()
-//    };
 
     private final TerraformWorld tw;
 
@@ -35,7 +28,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
     @Override
     public void populate(World world, Random random, Chunk chunk) {
         //Don't attempt generation pre-injection.
-        if (!TerraformGeneratorPlugin.injectedWorlds.contains(world.getName())) return;
+        if (!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) return;
         PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
 
         //Use IChunkAccess to place blocks instead. Known to cause lighting problems.
@@ -45,16 +38,17 @@ public class TerraformStructurePopulator extends BlockPopulator {
         //PopulatorDataAbstract data = TerraformGeneratorPlugin.injector.getICAData(chunk);
         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 
-        
+
         //Spawn large structures
-        MegaChunk mc = new MegaChunk(chunk.getX(),chunk.getZ());
-        for(StructurePopulator spop: StructureRegistry.getLargeStructureForMegaChunk(tw, mc, banks)) {
-        	if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), banks)) {
+        MegaChunk mc = new MegaChunk(chunk.getX(), chunk.getZ());
+        for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
+            if (spop == null) continue;
+            if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), banks)) {
                 TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
                 spop.populate(tw, data);
             }
         }
-        
+
         //Spawn small structures
         for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {
             if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), banks)) {

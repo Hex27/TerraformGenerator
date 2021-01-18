@@ -36,8 +36,9 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
                 return false;
             } else {
                 //If it is below sea level, DON'T SPAWN IT.
-                if (HeightMap.getHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-                    if (banks.contains(BiomeBank.DESERT_MOUNTAINS)
+                if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+                    if (banks.contains(BiomeBank.DESERT)
+                            || banks.contains(BiomeBank.DESERT_MOUNTAINS)
                             || banks.contains(BiomeBank.BADLANDS)
                             || banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
                             || banks.contains(BiomeBank.SNOWY_WASTELAND)

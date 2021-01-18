@@ -121,23 +121,14 @@ public class PathGenerator {
         for (int h = 1; h <= pathHeight; h++)
             if (base.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
                 base.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
-//		if(base.getRelative(0,2,0).getType() != Material.CAVE_AIR) 
-//			base.getRelative(0,2,0).setType(GenUtils.randMaterial(mat));
-//		if(base.getRelative(0,3,0).getType() != Material.CAVE_AIR) 
-//			base.getRelative(0,3,0).setType(GenUtils.randMaterial(mat));
 
         for (BlockFace f : BlockUtils.getAdjacentFaces(dir)) {
             SimpleBlock rel = base;
             for (int i = 0; i <= pathWidth / 2; i++) {
                 rel = rel.getRelative(f);
-                //Bukkit.getLogger().info(i + ":" + pathWidth/2);
                 for (int h = 1; h <= pathHeight; h++)
                     if (rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
                         rel.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
-//				if(rel.getRelative(0,2,0).getType() != Material.CAVE_AIR)
-//					rel.getRelative(0,2,0).setType(GenUtils.randMaterial(mat));
-//				if(rel.getRelative(0,2,0).getType() != Material.CAVE_AIR)
-//					rel.getRelative(0,3,0).setType(GenUtils.randMaterial(mat));
 
             }
         }

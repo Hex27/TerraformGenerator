@@ -3,6 +3,9 @@ package org.terraform.data;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.ChunkCache;
+import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.main.TConfigOption;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
@@ -72,17 +75,18 @@ public class TerraformWorld {
         return new Random(Objects.hash(seed, x, y, z) * multiplier);
     }
 
-    //HashMap<int[], BiomeBank> banks = new HashMap<>();
-
-
     public BiomeBank getBiomeBank(int x, int height, int z) {
-//		BiomeBank bank = banks.get(new int[]{x,z});
-//		if(bank == null){
-//			bank = BiomeBank.calculateBiome(this, getTemperature(x,z), height);
-//			banks.put(new int[]{x, z}, bank);
-//		}
-//		return bank;
-        return BiomeBank.calculateBiome(this, x, z, height);
+//        // If something is broken, uncomment this turn off caching biomes
+//        return BiomeBank.calculateBiome(this, x, z, height);
+        return getBiomeBank(x, z);
+    }
+
+    public BiomeBank getBiomeBank(int x, int z) {
+        ChunkCache cache = TerraformGenerator.getCache(this, x, z);
+        BiomeBank cachedValue = cache.getBiome(x, z);
+        if (cachedValue != null) return cachedValue;
+
+        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, z, HeightMap.getBlockHeight(this, x, z)));
     }
 
     /**
@@ -91,8 +95,7 @@ public class TerraformWorld {
      * @return a value from -2.5 to 2.5 inclusive.
      */
     public double getTemperature(int x, int z) {
-        //double temp = 1.0;
-        return (getTemperatureOctave().GetNoise(x, z) * 2) * 3;
+        return getTemperatureOctave().GetNoise(x, z) * 6;
     }
 
     /**
@@ -101,8 +104,7 @@ public class TerraformWorld {
      * @return a value from -2.5 to 2.5 inclusive.
      */
     public double getMoisture(int x, int z) {
-        //double moisture = -2.5;
-        return getMoistureOctave().GetNoise(x, z) * 2 * 3;
+        return getMoistureOctave().GetNoise(x, z) * 6;
     }
 
     public String getName() {

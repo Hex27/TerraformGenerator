@@ -42,7 +42,7 @@ public class ValuesCommand extends DCCommand {
             int x = GenUtils.randInt(-10000, 10000);
             //int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
-            int height = HeightMap.getHeight(tw, x, z);
+            int height = HeightMap.getBlockHeight(tw, x, z);
             vals.addValue(height);
         }
         sender.sendMessage("Finished");

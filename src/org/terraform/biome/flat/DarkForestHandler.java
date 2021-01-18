@@ -9,7 +9,8 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTreeType;
+import org.terraform.tree.FractalTypes;
+import org.terraform.tree.MushroomBuilder;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -77,7 +78,7 @@ public class DarkForestHandler extends BiomeHandler {
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
         // Big trees
-        if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()  && GenUtils.chance(random, 3, 10)) {
+        if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 3, 10)) {
             int treeX = GenUtils.randInt(random, 5, 7) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 5, 7) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {
@@ -92,9 +93,14 @@ public class DarkForestHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ))) {
-                    FractalTreeType type = FractalTreeType.RED_MUSHROOM_BASE;
-                    if (random.nextBoolean()) type = FractalTreeType.BROWN_MUSHROOM_BASE;
-                    TreeDB.spawnGiantMushroom(tw, data, treeX, treeY, treeZ, type);
+                    FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
+                    if (random.nextDouble() > 0.3) {
+                        if (random.nextBoolean())
+                            type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                        else
+                            type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
+                    }
+                    new MushroomBuilder(type).build(tw, data, treeX, treeY, treeZ);
                 }
             }
         } else {
@@ -104,7 +110,7 @@ public class DarkForestHandler extends BiomeHandler {
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ))) {
-                    new FractalTreeBuilder(FractalTreeType.DARK_OAK_SMALL)
+                    new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
                             .build(tw, data, treeX, treeY + 1, treeZ);
                 }
             }

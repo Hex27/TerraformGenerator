@@ -85,7 +85,7 @@ public class BlackOceansHandler extends BiomeHandler {
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int coreHeight = HeightMap.getHeight(world, x, z);
+                int coreHeight = HeightMap.getBlockHeight(world, x, z);
                 if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
                 //black spike
                 if (GenUtils.chance(random, 1, 200)) {
@@ -99,10 +99,7 @@ public class BlackOceansHandler extends BiomeHandler {
                 if (GenUtils.chance(random, 1, 80)) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
                 }
-
             }
         }
     }
-
-
 }

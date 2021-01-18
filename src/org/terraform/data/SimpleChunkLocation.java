@@ -9,7 +9,6 @@ import java.util.Objects;
 
 /**
  * class represent chunk location in simple form
- *
  * @author wysohn
  */
 public class SimpleChunkLocation implements Cloneable {
@@ -23,17 +22,10 @@ public class SimpleChunkLocation implements Cloneable {
         this.z = z;
     }
 
-    /**
-     * BLOCK COORD XYZ.
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     */
     public SimpleChunkLocation(String world, int x, int y, int z) {
         this.world = world;
-        this.x = x>>4;
-        this.z = z>>4;
+        this.x = x >> 4;
+        this.z = z >> 4;
     }
 
     public SimpleChunkLocation(Chunk chunk) {
@@ -87,9 +79,11 @@ public class SimpleChunkLocation implements Cloneable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * world.hashCode();
+
+        result = prime * result + world.hashCode();
         result = prime * result + x;
         result = prime * result + z;
+
         return result;
     }
 
@@ -98,7 +92,7 @@ public class SimpleChunkLocation implements Cloneable {
         if (this == obj) return true;
         if (!(obj instanceof SimpleChunkLocation)) return false;
         SimpleChunkLocation other = (SimpleChunkLocation) obj;
-        return x == other.x && z == other.z && Objects.equals(world, other.world);
+        return this.x == other.x && this.z == other.z && Objects.equals(world, other.world);
     }
 
     @Override

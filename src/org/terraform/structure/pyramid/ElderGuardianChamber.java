@@ -54,35 +54,35 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
         for (BlockFace face : BlockUtils.directBlockFaces)
             center.getRelative(face).getRelative(face)
                     .setType(Material.ORANGE_TERRACOTTA);
-        
+
         //On the ceiling as well
-        SimpleBlock ceiling = new SimpleBlock(data, room.getX(), room.getY()+room.getHeight(), room.getZ());
+        SimpleBlock ceiling = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ());
         ceiling.setType(Material.BLUE_TERRACOTTA);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
-        	ceiling.getRelative(face).setType(Material.ORANGE_TERRACOTTA);
+            ceiling.getRelative(face).setType(Material.ORANGE_TERRACOTTA);
         }
         for (BlockFace face : BlockUtils.directBlockFaces)
-        	ceiling.getRelative(face).getRelative(face)
+            ceiling.getRelative(face).getRelative(face)
                     .setType(Material.ORANGE_TERRACOTTA);
-        
+
         //Elder Guardian cage
-        if(TConfigOption.STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN.getBoolean()) {
-        	SimpleBlock cageCenter = center.getRelative(0,11,0);
-        	placeElderGuardianCage(cageCenter);
+        if (TConfigOption.STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN.getBoolean()) {
+            SimpleBlock cageCenter = center.getRelative(0, 11, 0);
+            placeElderGuardianCage(cageCenter);
         }
-        
+
         //Decorate the 4 walls to not be so plain
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
             //entry.getValue() == 20
             for (int i = 0; i < entry.getValue(); i++) {
-            	if(i % 2 == 0 && i != 0 && i != entry.getValue()-1) {
-            		w.getRelative(0,4,0).Pillar(10, rand, Material.CHISELED_RED_SANDSTONE );
-            	}
+                if (i % 2 == 0 && i != 0 && i != entry.getValue() - 1) {
+                    w.getRelative(0, 4, 0).Pillar(10, rand, Material.CHISELED_RED_SANDSTONE);
+                }
                 w = w.getLeft();
             }
         }
-        
+
         //Stairs at the top
         for (Entry<Wall, Integer> walls : room.getFourWalls(data, 1).entrySet()) {
             Wall w = walls.getKey().getRelative(0, room.getHeight() - 2, 0);
@@ -98,34 +98,34 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
             }
         }
     }
-    
+
     private void placeElderGuardianCage(SimpleBlock cageCenter) {
-    	cageCenter.getRelative(0,-2,0).setType(Material.CUT_SANDSTONE);
-    	cageCenter.getRelative(0,2,0).setType(Material.CUT_SANDSTONE);
-    	for(BlockFace face:BlockUtils.directBlockFaces) {
-    		Wall w = new Wall(cageCenter,face);
-    		w.getFront(2).setType(Material.CHISELED_SANDSTONE);
-    		w.getFront(2).getLeft().setType(Material.CHISELED_SANDSTONE);
-    		w.getFront(2).getRight().setType(Material.CHISELED_SANDSTONE);
-    		
-    		Stairs stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
-    		stair.setFacing(face.getOppositeFace());
-    		w.getFront(2).getRelative(0,1,0).setBlockData(stair);
-    		
-    		stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
-    		stair.setFacing(face.getOppositeFace());
-    		stair.setHalf(Half.TOP);
-    		w.getFront(2).getRelative(0,-1,0).setBlockData(stair);
-    		
-    		w.getFront().getRelative(0, 2, 0).setType(Material.CUT_SANDSTONE_SLAB);
-    		
-    		Slab slab = (Slab) Bukkit.createBlockData(Material.CUT_SANDSTONE_SLAB);
-    		slab.setType(Type.TOP);
-    		w.getFront().getRelative(0, -2, 0).setBlockData(slab);
-    		
-    	}
-    	
-    	cageCenter.getPopData().addEntity(cageCenter.getX(), cageCenter.getY(), cageCenter.getZ(), EntityType.ELDER_GUARDIAN);
+        cageCenter.getRelative(0, -2, 0).setType(Material.CUT_SANDSTONE);
+        cageCenter.getRelative(0, 2, 0).setType(Material.CUT_SANDSTONE);
+        for (BlockFace face : BlockUtils.directBlockFaces) {
+            Wall w = new Wall(cageCenter, face);
+            w.getFront(2).setType(Material.CHISELED_SANDSTONE);
+            w.getFront(2).getLeft().setType(Material.CHISELED_SANDSTONE);
+            w.getFront(2).getRight().setType(Material.CHISELED_SANDSTONE);
+
+            Stairs stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
+            stair.setFacing(face.getOppositeFace());
+            w.getFront(2).getRelative(0, 1, 0).setBlockData(stair);
+
+            stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
+            stair.setFacing(face.getOppositeFace());
+            stair.setHalf(Half.TOP);
+            w.getFront(2).getRelative(0, -1, 0).setBlockData(stair);
+
+            w.getFront().getRelative(0, 2, 0).setType(Material.CUT_SANDSTONE_SLAB);
+
+            Slab slab = (Slab) Bukkit.createBlockData(Material.CUT_SANDSTONE_SLAB);
+            slab.setType(Type.TOP);
+            w.getFront().getRelative(0, -2, 0).setBlockData(slab);
+
+        }
+
+        cageCenter.getPopData().addEntity(cageCenter.getX(), cageCenter.getY(), cageCenter.getZ(), EntityType.ELDER_GUARDIAN);
     }
 
     private void placePillar(Wall base, int height) {
