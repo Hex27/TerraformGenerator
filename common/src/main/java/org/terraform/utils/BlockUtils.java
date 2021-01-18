@@ -17,6 +17,7 @@ import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.blockdata.StairBuilder;
+import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 
 import java.util.*;
 
@@ -631,7 +632,7 @@ public class BlockUtils {
     public static void correctMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
             if (Version.isAtLeast(16.1) && target.getType().name().endsWith(("_WALL"))) {
-                org.terraform.coregen.v1_16_R1.BlockDataFixer.correctSurroundingWallData(target);
+                v1_16_R1_BlockDataFixer.correctSurroundingWallData(target);
             }
             return;
         }
@@ -648,7 +649,7 @@ public class BlockUtils {
     public static void correctSurroundingMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
             if (Version.isAtLeast(16.1) && Tag.WALLS.isTagged(target.getType())) {
-                org.terraform.coregen.v1_16_R1.BlockDataFixer.correctSurroundingWallData(target);
+                v1_16_R1_BlockDataFixer.correctSurroundingWallData(target);
             }
             return;
         }

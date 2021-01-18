@@ -65,7 +65,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         String version = Version.getVersionPackage();
         logger.info("Detected version: " + version);
         try {
-            injector = (NMSInjectorAbstract) Class.forName("org.terraform.coregen." + version + ".NMSInjector").newInstance();
+            injector = (NMSInjectorAbstract) Class.forName("org.terraform." + version + ".NMSInjector").newInstance();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             logger.error("&cNo support for this version has been made yet!");

@@ -1,6 +1,5 @@
 plugins {
     java
-    id("com.github.johnrengelman.shadow").version("6.1.0")
 }
 
 dependencies {
@@ -8,7 +7,7 @@ dependencies {
 }
 
 repositories {
-    maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots")}
+    maven{ url = uri("https://repo.codemc.io/repository/nms/") }
     mavenCentral()
 }
 

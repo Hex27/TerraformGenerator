@@ -1,7 +1,7 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
@@ -30,7 +30,6 @@ public class PopulateCommand extends DCCommand {
 
     @Override
     public boolean hasPermission(CommandSender sender) {
-
         return sender.isOp();
     }
 

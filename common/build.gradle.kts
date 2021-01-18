@@ -5,7 +5,7 @@ plugins {
 group = "org.terraform"
 
 repositories {
-    maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots")}
+    maven{ url = uri("https://repo.codemc.io/repository/nms/") }
     mavenCentral()
     flatDir {
         dirs("../libs")
@@ -14,6 +14,6 @@ repositories {
 
 dependencies {
     testCompile("junit", "junit", "4.12")
-    implementation("org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT")
+    implementation(group = "org.spigotmc", name = "spigot", version = "1.16.4-R0.1-SNAPSHOT")
     implementation(fileTree("../libs/"))
 }
