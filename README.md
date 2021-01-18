@@ -41,16 +41,14 @@ There is also support for Java 14, but be warned that it will spit some minor er
 
 <h2 name="getting-started">Getting started</h2>
 
-<h3>Installation</h3>
-
-<h4>Step one: Install TerraformGenerator</h4>
+<h3>Step one: Install TerraformGenerator</h3>
 Make sure that you have installed the latest version of [TerraformGenerator] and [Drycell].  
 To do that, stop your server and upload both jar files to your server's `plugins` directory. Afterwards can you start your server again.
 
-<h4>Step two: Create the world</h4>
+<h3>Step two: Create the world</h3>
 You can choose between two methods on how to generate the world with TerraformGenerator
 
-<h5>Method One</h5>
+<h4>Method One</h4>
 
 1. Turn off the server if it is running
 2. Open the `bukkit.yml` and add the following info to it.  
@@ -64,7 +62,7 @@ You can choose between two methods on how to generate the world with TerraformGe
 3. If present delete the folder of the world that you want TerraformGenerator to create.
 4. Start your Server again.
 
-<h5>Method two</h5>
+<h4>Method two</h4>
 This method requires the usage of a World Management plugin.  
 In this example are we using Multiverse-Core. TerraformGenerator *should* work with any other World Manager, but we won't guarantee it!
 
