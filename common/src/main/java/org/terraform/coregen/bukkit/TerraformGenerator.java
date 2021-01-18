@@ -8,6 +8,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.ChunkCache;
+import org.terraform.coregen.ChunkCacheLoader;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
@@ -15,14 +16,20 @@ import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.LoadingCache;
+
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class TerraformGenerator extends ChunkGenerator {
     public static final List<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
-    private static final Map<ChunkCache, ChunkCache> CHUNK_CACHE = new HashMap<>();
+    private static final LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE = 
+    		CacheBuilder.newBuilder()
+    		.maximumSize(1000).build(new ChunkCacheLoader());//new LoadingCache<ChunkCache, ChunkCache>();
     public static int seaLevel = 62;
     public static int minMountainLevel = 85;
-
+    
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
     }
@@ -36,11 +43,17 @@ public class TerraformGenerator extends ChunkGenerator {
      */
     public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
         ChunkCache cache = new ChunkCache(tw, x, 0, z);
-        return CHUNK_CACHE.compute(cache, (k, v) -> {
-            if (v != null) return v;
-            cache.initInternalCache();
-            return cache;
-        });
+		
+//		return CHUNK_CACHE.compute(cache, (k, v) -> { if (v != null) return v;
+//		cache.initInternalCache(); return cache; });
+        try {
+			return CHUNK_CACHE.get(cache);
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+			e.getCause().printStackTrace();
+			cache.initInternalCache();
+			return cache;
+		}
     }
 
     @SuppressWarnings("deprecation")
@@ -48,8 +61,9 @@ public class TerraformGenerator extends ChunkGenerator {
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
-        ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
-        CHUNK_CACHE.put(cache, cache);
+//        ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
+//        CHUNK_CACHE.put(cache, cache);
+        //putToCache(cache);
 
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 

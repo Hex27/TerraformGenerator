@@ -9,9 +9,9 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
-import org.terraform.structure.village.plains.v1_16.OneOneSixBlockHandler;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.Version;
+import org.terraform.utils.version.Version;
+import org.terraform.utils.version.OneOneSixBlockHandler;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;

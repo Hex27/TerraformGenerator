@@ -10,6 +10,7 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformPopulator;
+import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
@@ -19,7 +20,7 @@ import org.terraform.reflection.PrivateFieldHandler;
 import org.terraform.schematic.SchematicListener;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.tree.SaplingOverrider;
-import org.terraform.utils.Version;
+import org.terraform.utils.version.Version;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -47,7 +48,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
     public static TerraformGeneratorPlugin get() {
         return instance;
     }
-
+    
     @SuppressWarnings("deprecation")
 	@Override
     public void onEnable() {
@@ -65,7 +66,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         String version = Version.getVersionPackage();
         logger.info("Detected version: " + version);
         try {
-            injector = (NMSInjectorAbstract) Class.forName("org.terraform." + version + ".NMSInjector").newInstance();
+            injector = (NMSInjectorAbstract) Class.forName("org.terraform.coregen." + version + ".NMSInjector").newInstance();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             logger.error("&cNo support for this version has been made yet!");
@@ -82,6 +83,12 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         StructureRegistry.init();
     }
 
+    
+    @Override
+    public void onDisable() {
+    	NativeGeneratorPatcherPopulator.flushChanges();
+    }
+    
     /**
      * Legacy thing. Consider removal.
      * @param event

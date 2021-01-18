@@ -1,4 +1,4 @@
-package org.terraform.utils;
+package org.terraform.utils.version;
 
 import org.bukkit.Bukkit;
 
