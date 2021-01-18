@@ -42,7 +42,7 @@ There is also support for Java 14, but be warned that it will spit some minor er
 <h2 name="getting-started">Getting started</h2>
 
 <h3>Step one: Install TerraformGenerator</h3>
-Make sure that you have installed the latest version of [TerraformGenerator] and [Drycell].  
+Make sure that you have installed the latest version of [TerraformGenerator][spigot-tfg] and [Drycell][spigot-drycell].  
 To do that, stop your server and upload both jar files to your server's `plugins` directory. Afterwards can you start your server again.
 
 <h3>Step two: Create the world</h3>
@@ -94,5 +94,6 @@ Nothing to see here...
 [stars-url]: https://github.com/Hex27/terraformgenerator/stargazers
 [issues-shield]: https://img.shields.io/github/issues/Hex27/terraformgenerator.svg?style=for-the-badge
 [issues-url]: https://github.com/Hex27/terraformgenerator/issues
-[TerraformGenerator]: https://www.spigotmc.org/resources/75132/
-[Drycell]: https://www.spigotmc.org/resources/73386/
+
+[spigot-tfg]: https://www.spigotmc.org/resources/75132/
+[spigot-drycell]: https://www.spigotmc.org/resources/73386/
