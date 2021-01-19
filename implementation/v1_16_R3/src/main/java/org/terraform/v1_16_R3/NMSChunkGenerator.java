@@ -323,12 +323,24 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return null;
     }
 
+    private static Field biomeBaseRegistry = null;
     private class CustomBiomeGrid implements BiomeGrid {
 
         private final BiomeStorage biome;
 
         public CustomBiomeGrid(BiomeStorage biome) {
             this.biome = biome;
+            if(biomeBaseRegistry == null) {
+            	try {
+					biomeBaseRegistry = BiomeStorage.class.getField("registry");
+				} catch (NoSuchFieldException e) {
+					try {
+						biomeBaseRegistry = BiomeStorage.class.getField("g");
+					} catch (Throwable e1) {
+						e1.printStackTrace();
+					}
+				}
+            }
         }
 
         @Override
@@ -343,14 +355,25 @@ public class NMSChunkGenerator extends ChunkGenerator {
             }
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         public Biome getBiome(int x, int y, int z) {
-            return CraftBlock.biomeBaseToBiome((IRegistry<BiomeBase>) biome.g, biome.getBiome(x >> 2, y >> 2, z >> 2));
+            try {
+				return CraftBlock.biomeBaseToBiome((IRegistry<BiomeBase>) biomeBaseRegistry.get(biome), biome.getBiome(x >> 2, y >> 2, z >> 2));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+				return null;
+			}
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         public void setBiome(int x, int y, int z, Biome bio) {
-            biome.setBiome(x >> 2, y >> 2, z >> 2, CraftBlock.biomeToBiomeBase((IRegistry<BiomeBase>) biome.g, bio));
+            try {
+				biome.setBiome(x >> 2, y >> 2, z >> 2, CraftBlock.biomeToBiomeBase((IRegistry<BiomeBase>) biomeBaseRegistry.get(biome), bio));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
         }
     }
 }
