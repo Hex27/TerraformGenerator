@@ -107,7 +107,8 @@ public class TerraformGenerator extends ChunkGenerator {
                 chunk.setBlock(x, 0, z, Material.BEDROCK);
 
                 BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
-                if (transformHandler != null && !biomesToTransform.contains(transformHandler)) biomesToTransform.add(transformHandler);
+                if (transformHandler != null && !biomesToTransform.contains(transformHandler))
+                	biomesToTransform.add(transformHandler);
             }
         }
 
