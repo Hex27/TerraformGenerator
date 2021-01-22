@@ -82,9 +82,7 @@ https://github.com/Hex27/TerraformGenerator/wiki/Biomes
 https://github.com/Hex27/TerraformGenerator/wiki/Structures
 
 <h2 name="known-bugs">Known bugs</h2>
-Nothing to see here...
-
-<h3 name="sort-of-resolved">Sort of resolved</h3>
+Not maintained here. You can check the issue tracker. If you've found a bug, you can open an issue, or report it on discord
 
 <!-- MARKDOWN LINKS -->
 [contributors-shield]: https://img.shields.io/github/contributors/Hex27/terraformgenerator.svg?style=for-the-badge
