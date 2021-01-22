@@ -21,7 +21,7 @@ public class TerraformWorld {
     private transient FastNoise tempOctave;
     private transient FastNoise moistureOctave;
 
-    private TerraformWorld(String name, long seed) {
+    public TerraformWorld(String name, long seed) {
         this.worldName = name;
         this.seed = seed;
     }

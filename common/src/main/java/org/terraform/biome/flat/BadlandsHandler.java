@@ -54,12 +54,17 @@ public class BadlandsHandler extends BiomeHandler {
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int highest = GenUtils.getTrueHighestBlock(data, x, z);
+
+                BiomeBank currentBiome = BiomeBank.calculateBiome(world, x, z, highest);
+                if (currentBiome != BiomeBank.BADLANDS &&
+                        currentBiome != BiomeBank.BADLANDS_BEACH &&
+                        currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;
+
                 if (HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
                     BadlandsMountainHandler.oneUnit(world, random, data, x, z, true);
                     continue;
                 }
-
-                int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
                 Material base = data.getType(x, highest, z);
                 if (base == Material.SAND ||
