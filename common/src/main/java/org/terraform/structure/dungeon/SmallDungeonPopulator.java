@@ -50,16 +50,14 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
         return false;
     }
 
-    //Each mega chunk has 5 dungeons
+    //Each mega chunk has config option dungeons
     @Override
     public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
-        return new int[][]{
-                mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324)),
-                mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 131732)),
-                mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 13176)),
-                mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 131327)),
-                mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 17328))
-        };
+    	int num = TConfigOption.STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK.getInt();
+        int[][] coords = new int[num][2];
+        for (int i = 0; i < num; i++)
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324 + i));
+        return coords;
     }
 
     @Override

@@ -18,6 +18,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
+import org.terraform.utils.version.Version;
 
 import java.util.*;
 
