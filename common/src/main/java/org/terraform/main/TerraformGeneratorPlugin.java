@@ -1,5 +1,6 @@
 package org.terraform.main;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,10 +49,10 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         return instance;
     }
 
-    @SuppressWarnings("deprecation")
-	@Override
+    @Override
     public void onEnable() {
         super.onEnable();
+        PaperLib.suggestPaper(this); // for the love of god please use Paper
         instance = this;
 
         logger = new TLogger(this);

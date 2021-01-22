@@ -7,7 +7,6 @@ dependencies {
 }
 
 repositories {
-    maven{ url = uri("https://repo.codemc.io/repository/nms/") }
     mavenCentral()
 }
 
