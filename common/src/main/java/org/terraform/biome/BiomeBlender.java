@@ -44,23 +44,23 @@ public class BiomeBlender {
     public double getEdgeFactor(BiomeBank currentBiome, int x, int z, double riverDepth) {
         double factor = 1;
 
-        if (blendWater) {
+        if(blendWater) {
             // Linear blending when closer to water
             double riverFactor = riverDepth / (-riverThreshold);
-            if (riverFactor < factor) factor = Math.max(0, riverFactor);
+            if(riverFactor < factor) factor = Math.max(0, riverFactor);
         }
 
-        if (blendMountains) {
+        if(blendMountains) {
             // Linear blending when closer to mountains
             double mountainFactor = (-HeightMap.getBlockHeight(tw, x, z) - mountainHeight - 5) / (double) mountainThreshold;
-            if (mountainFactor < factor) factor = Math.max(0, mountainFactor);
+            if(mountainFactor < factor) factor = Math.max(0, mountainFactor);
         }
 
-        if (blendBiomeGrid) {
+        if(blendBiomeGrid) {
             // Same here when closer to biome edge
             double gridFactor = getGridEdgeFactor(currentBiome,
                     BiomeGrid.normalise(tw.getTemperature(x, z)), BiomeGrid.normalise(tw.getMoisture(x, z)));
-            if (gridFactor < factor) factor = gridFactor;
+            if(gridFactor < factor) factor = gridFactor;
         }
 
         return factor;
@@ -70,7 +70,8 @@ public class BiomeBlender {
         Get edge factor only based on land, ignore rivers
      */
     public double getGridEdgeFactor(BiomeBank currentBiome, double temp, double moist) {
-        if (BiomeGrid.getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(moist)) != currentBiome) return 0;
+        if(BiomeGrid.getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(moist)) != currentBiome)
+            return 0;
 
         double tempDecimals = Math.abs(temp - (int) temp);
         double moistDecimals = Math.abs(moist - (int) moist);
@@ -83,12 +84,12 @@ public class BiomeBlender {
 
         // Calculate biome that will be changed to
         double nextTemp = temp;
-        if (tempIncrease) nextTemp = Math.min(10, temp + 1);
-        else if (tempDecrease) nextTemp = Math.max(0, temp - 1);
+        if(tempIncrease) nextTemp = Math.min(10, temp + 1);
+        else if(tempDecrease) nextTemp = Math.max(0, temp - 1);
 
         double nextMoist = moist;
-        if (moistIncrease) nextMoist = Math.min(10, moist + 1);
-        else if (moistDecrease) nextMoist = Math.max(0, moist - 1);
+        if(moistIncrease) nextMoist = Math.min(10, moist + 1);
+        else if(moistDecrease) nextMoist = Math.max(0, moist - 1);
 
         BiomeBank nextTempBiome = BiomeGrid.getBiome(currentBiome.getType(), (int) Math.round(nextTemp), (int) Math.round(moist));
         BiomeBank nextMoistBiome = BiomeGrid.getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(nextMoist));
@@ -107,9 +108,9 @@ public class BiomeBlender {
         boolean moistSituation = moistFactor < 1 && nextMoistBiome != currentBiome;
 
         // If in L shaped corner in BiomeGrid
-        if (cornerSituation) factor = Math.max(tempFactor, moistFactor);
-        else if (tempSituation) factor = tempFactor;
-        else if (moistSituation) factor = moistFactor;
+        if(cornerSituation) factor = Math.max(tempFactor, moistFactor);
+        else if(tempSituation) factor = tempFactor;
+        else if(moistSituation) factor = moistFactor;
 
         return factor;
     }

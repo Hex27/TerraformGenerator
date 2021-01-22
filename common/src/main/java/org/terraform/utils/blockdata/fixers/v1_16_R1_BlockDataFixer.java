@@ -13,13 +13,13 @@ import org.terraform.utils.BlockUtils;
 
 public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
     public static void correctWallData(SimpleBlock target) {
-        if (!(target.getBlockData() instanceof Wall)) return;
+        if(!(target.getBlockData() instanceof Wall)) return;
         Wall data = (Wall) target.getBlockData();
-        for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (target.getRelative(face).getType().isSolid() &&
+        for(BlockFace face : BlockUtils.directBlockFaces) {
+            if(target.getRelative(face).getType().isSolid() &&
                     !target.getRelative(face).getType().toString().contains("PRESSURE_PLATE")) {
                 data.setHeight(face, Height.LOW);
-                if (target.getRelative(BlockFace.UP).getType().isSolid()) {
+                if(target.getRelative(BlockFace.UP).getType().isSolid()) {
                     data.setHeight(face, Height.TALL);
                 }
             } else data.setHeight(face, Height.NONE);
@@ -34,18 +34,18 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
     }
 
     public static void correctSurroundingWallData(SimpleBlock target) {
-        if (!(target.getBlockData() instanceof Wall)) return;
+        if(!(target.getBlockData() instanceof Wall)) return;
 
         correctWallData(target);
-        for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (Tag.WALLS.isTagged(target.getRelative(face).getType()))
+        for(BlockFace face : BlockUtils.directBlockFaces) {
+            if(Tag.WALLS.isTagged(target.getRelative(face).getType()))
                 correctWallData(target.getRelative(face));
         }
     }
 
     @Override
     public String updateSchematic(String schematic) {
-        if (schematic.contains("_wall[")) {
+        if(schematic.contains("_wall[")) {
             schematic = StringUtils.replace(schematic, "north=false", "north=none");
             schematic = StringUtils.replace(schematic, "south=false", "south=none");
             schematic = StringUtils.replace(schematic, "east=false", "east=none");
@@ -60,9 +60,9 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
 
     @Override
     public void correctFacing(Vector v, SimpleBlock b, BlockData data, BlockFace face) {
-        if (data == null && b != null) data = b.getBlockData();
+        if(data == null && b != null) data = b.getBlockData();
 
-        if (data.getMaterial().toString().endsWith("_WALL")) {
+        if(data.getMaterial().toString().endsWith("_WALL")) {
 //			TerraformGeneratorPlugin.logger.info("====================");
 //			TerraformGeneratorPlugin.logger.info("hasflushed: " + hasFlushed);
 //			TerraformGeneratorPlugin.logger.info("Has simpleblock: " + (b != null));
@@ -71,12 +71,12 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
 //			TerraformGeneratorPlugin.logger.info("Instanceof wall: " + (data instanceof Wall));
 //
         }
-        if (!hasFlushed && data instanceof Wall) {
+        if(!hasFlushed && data instanceof Wall) {
             this.pushChanges(v);
             return;
         }
 
-        if (data instanceof Wall && b != null) {
+        if(data instanceof Wall && b != null) {
             //TerraformGeneratorPlugin.logger.info("corrected");
             correctSurroundingWallData(b);
         }

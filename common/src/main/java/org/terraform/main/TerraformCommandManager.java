@@ -8,7 +8,7 @@ public class TerraformCommandManager extends DCCommandManager {
 
     public TerraformCommandManager(DrycellPlugin plugin, String... bases) {
         super(plugin, bases);
-        if (TConfigOption.DEVSTUFF_EXTENDED_COMMANDS.getBoolean()) {
+        if(TConfigOption.DEVSTUFF_EXTENDED_COMMANDS.getBoolean()) {
             this.registerCommand(new PreviewCommand(plugin, "preview"));
             this.registerCommand(new TimingsCommand(plugin, "timings", "lag"));
             this.registerCommand(new CoconutCommand(plugin, "coconut"));

@@ -23,7 +23,7 @@ public class BadlandsBeachHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{
+        return new Material[] {
                 Material.RED_SAND,
                 Material.RED_SAND,
                 GenUtils.randMaterial(rand, Material.RED_SAND, Material.RED_SANDSTONE),

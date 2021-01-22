@@ -26,20 +26,21 @@ public abstract class JigsawStructurePiece implements Cloneable {
         this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
         this.type = type;
         this.unique = unique;
-        for (BlockFace face : validDirs)
-            validDirections.put(face, false);
-        //TerraformGeneratorPlugin.logger.info("CONSTRUCTOR-validDirsSize: " + validDirections.size());
-    }
-    
-    public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, BlockFace... validDirs) {
-        this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
-        this.type = type;
-        for (BlockFace face : validDirs)
+        for(BlockFace face : validDirs)
             validDirections.put(face, false);
         //TerraformGeneratorPlugin.logger.info("CONSTRUCTOR-validDirsSize: " + validDirections.size());
     }
 
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {}
+    public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, BlockFace... validDirs) {
+        this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
+        this.type = type;
+        for(BlockFace face : validDirs)
+            validDirections.put(face, false);
+        //TerraformGeneratorPlugin.logger.info("CONSTRUCTOR-validDirsSize: " + validDirections.size());
+    }
+
+    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    }
 
     ;
 
@@ -50,7 +51,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
             clone = (JigsawStructurePiece) this.clone();
             clone.room = new CubeRoom(room.getWidthX(), room.getWidthZ(), room.getHeight(), 0, 0, 0);
             clone.validDirections = (HashMap<BlockFace, Boolean>) validDirections.clone();
-            for (BlockFace face : validDirections.keySet()) {
+            for(BlockFace face : validDirections.keySet()) {
                 clone.validDirections.put(face, false);
             }
             //TerraformGeneratorPlugin.logger.info("CREATOR-validDirsSize: " + validDirections.size());
@@ -59,7 +60,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
             clone.elevation = 0;
             clone.setDepth(depth);
             return clone;
-        } catch (CloneNotSupportedException e) {
+        } catch(CloneNotSupportedException e) {
             e.printStackTrace();
         }
         return null;
@@ -68,8 +69,8 @@ public abstract class JigsawStructurePiece implements Cloneable {
     public abstract void build(PopulatorDataAbstract data, Random rand);
 
     public BlockFace getNextUnpopulatedBlockFace() {
-        for (Entry<BlockFace, Boolean> entry : validDirections.entrySet()) {
-            if (!entry.getValue())
+        for(Entry<BlockFace, Boolean> entry : validDirections.entrySet()) {
+            if(!entry.getValue())
                 return entry.getKey();
         }
 
@@ -78,17 +79,17 @@ public abstract class JigsawStructurePiece implements Cloneable {
     }
 
     public void setPopulated(BlockFace face) {
-        if (this.type == JigsawType.END) return;
-        if (!validDirections.containsKey(face))
+        if(this.type == JigsawType.END) return;
+        if(!validDirections.containsKey(face))
             TerraformGeneratorPlugin.logger.error("Tried to set an invalid blockface as populated for a jigsaw piece.");
 
         validDirections.put(face, true);
     }
 
     public boolean hasUnpopulatedDirections() {
-        if (this.type == JigsawType.END) return false;
-        for (Boolean populated : validDirections.values()) {
-            if (!populated) return true;
+        if(this.type == JigsawType.END) return false;
+        for(Boolean populated : validDirections.values()) {
+            if(!populated) return true;
         }
         return false;
     }
@@ -98,7 +99,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
     }
 
     public HashMap<BlockFace, Boolean> getValidDirections() {
-        if (type == JigsawType.END) return new HashMap<BlockFace, Boolean>();
+        if(type == JigsawType.END) return new HashMap<BlockFace, Boolean>();
         return validDirections;
     }
 
@@ -137,7 +138,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
     @Override
     public String toString() {
         String directions = "";
-        for (BlockFace face : this.validDirections.keySet()) {
+        for(BlockFace face : this.validDirections.keySet()) {
             directions += face + ",";
         }
         return this.getClass().getSimpleName()

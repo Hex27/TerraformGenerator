@@ -1,6 +1,18 @@
 package org.terraform.v1_16_R1;
 
-import net.minecraft.server.v1_16_R1.*;
+import net.minecraft.server.v1_16_R1.BlockPosition;
+import net.minecraft.server.v1_16_R1.Blocks;
+import net.minecraft.server.v1_16_R1.Entity;
+import net.minecraft.server.v1_16_R1.EntityInsentient;
+import net.minecraft.server.v1_16_R1.EntityTypes;
+import net.minecraft.server.v1_16_R1.EnumMobSpawn;
+import net.minecraft.server.v1_16_R1.IBlockData;
+import net.minecraft.server.v1_16_R1.LootTables;
+import net.minecraft.server.v1_16_R1.MinecraftKey;
+import net.minecraft.server.v1_16_R1.RegionLimitedWorldAccess;
+import net.minecraft.server.v1_16_R1.TileEntity;
+import net.minecraft.server.v1_16_R1.TileEntityLootable;
+import net.minecraft.server.v1_16_R1.TileEntityMobSpawner;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -75,13 +87,13 @@ public class PopulatorData extends PopulatorDataAbstract {
             et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(type.toString()).get(null);
             Entity e = et.a(rlwa.getMinecraftWorld());
             e.setPositionRotation((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
-            if (e instanceof EntityInsentient) {
+            if(e instanceof EntityInsentient) {
                 ((EntityInsentient) e).setPersistent();
                 ((EntityInsentient) e).prepare(rlwa, rlwa.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.STRUCTURE, null, null);
             }
 
             rlwa.addEntity(e);
-        } catch (IllegalArgumentException | IllegalAccessException
+        } catch(IllegalArgumentException | IllegalAccessException
                 | NoSuchFieldException | SecurityException e1) {
             e1.printStackTrace();
         }
@@ -93,10 +105,10 @@ public class PopulatorData extends PopulatorDataAbstract {
         rlwa.setTypeAndData(pos, Blocks.SPAWNER.getBlockData(), 2);
         TileEntity tileentity = rlwa.getTileEntity(pos);
 
-        if (tileentity instanceof TileEntityMobSpawner) {
+        if(tileentity instanceof TileEntityMobSpawner) {
             try {
                 ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-            } catch (IllegalArgumentException | IllegalAccessException
+            } catch(IllegalArgumentException | IllegalAccessException
                     | NoSuchFieldException | SecurityException e) {
                 e.printStackTrace();
             }
@@ -113,7 +125,7 @@ public class PopulatorData extends PopulatorDataAbstract {
     }
 
     private MinecraftKey getLootTable(TerraLootTable table) {
-        switch (table) {
+        switch(table) {
             case SPAWN_BONUS_CHEST:
                 return LootTables.b;
             case END_CITY_TREASURE:

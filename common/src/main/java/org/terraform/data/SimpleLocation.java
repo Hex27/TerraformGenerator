@@ -30,8 +30,9 @@ public class SimpleLocation {
     public SimpleLocation getRelative(BlockFace face) {
         return new SimpleLocation(this.x + face.getModX(), this.y + face.getModY(), this.z + face.getModZ());
     }
-    public SimpleLocation getRelative(BlockFace face,int i) {
-        return new SimpleLocation(this.x + face.getModX()*i, this.y + face.getModY()*i, this.z + face.getModZ()*i);
+
+    public SimpleLocation getRelative(BlockFace face, int i) {
+        return new SimpleLocation(this.x + face.getModX() * i, this.y + face.getModY() * i, this.z + face.getModZ() * i);
     }
 
     public int distanceSqr(SimpleLocation o) {
@@ -49,7 +50,7 @@ public class SimpleLocation {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof SimpleLocation) {
+        if(obj instanceof SimpleLocation) {
             SimpleLocation sLoc = (SimpleLocation) obj;
             return sLoc.x == x && sLoc.y == y && sLoc.z == z;
         }

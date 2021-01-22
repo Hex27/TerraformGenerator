@@ -26,8 +26,8 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = getCoordsFromMegaChunk(tw, mc);
-        if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-            if (banks.contains(BiomeBank.LUKEWARM_OCEAN)
+        if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+            if(banks.contains(BiomeBank.LUKEWARM_OCEAN)
                     || banks.contains(BiomeBank.WARM_OCEAN)
                     || banks.contains(BiomeBank.OCEAN)
                     || banks.contains(BiomeBank.COLD_OCEAN)
@@ -36,15 +36,15 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
                 return false;
             } else {
                 //If it is below sea level, DON'T SPAWN IT.
-                if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-                    if (banks.contains(BiomeBank.DESERT)
+                if(HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+                    if(banks.contains(BiomeBank.DESERT)
                             || banks.contains(BiomeBank.DESERT_MOUNTAINS)
                             || banks.contains(BiomeBank.BADLANDS)
                             || banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
                             || banks.contains(BiomeBank.SNOWY_WASTELAND)
                             || banks.contains(BiomeBank.ICE_SPIKES)) {
                         return TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean();
-                    } else if (banks.contains(BiomeBank.FOREST)
+                    } else if(banks.contains(BiomeBank.FOREST)
                             || banks.contains(BiomeBank.PLAINS)
                             || banks.contains(BiomeBank.TAIGA)
                             || banks.contains(BiomeBank.SAVANNA)
@@ -64,7 +64,7 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
-        if (banks.contains(BiomeBank.LUKEWARM_OCEAN)
+        if(banks.contains(BiomeBank.LUKEWARM_OCEAN)
                 || banks.contains(BiomeBank.WARM_OCEAN)
                 || banks.contains(BiomeBank.OCEAN)
                 || banks.contains(BiomeBank.COLD_OCEAN)
@@ -75,24 +75,24 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
             //If it is below sea level, DON'T SPAWN IT.
             int[] coords = getCoordsFromMegaChunk(tw, mc);
-            if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-                if (banks.contains(BiomeBank.DESERT)
+            if(GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+                if(banks.contains(BiomeBank.DESERT)
                         || banks.contains(BiomeBank.DESERT_MOUNTAINS)
                         || banks.contains(BiomeBank.BADLANDS)
                         || banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
                         || banks.contains(BiomeBank.SNOWY_WASTELAND)
                         || banks.contains(BiomeBank.ICE_SPIKES)) {
-                    if (!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
+                    if(!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
                         return;
 
                     new AnimalFarmPopulator().populate(tw, data);
-                } else if (banks.contains(BiomeBank.FOREST)
+                } else if(banks.contains(BiomeBank.FOREST)
                         || banks.contains(BiomeBank.PLAINS)
                         || banks.contains(BiomeBank.TAIGA)
                         || banks.contains(BiomeBank.SAVANNA)
                         || banks.contains(BiomeBank.SNOWY_TAIGA)) {
 
-                    if (!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
+                    if(!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
                         return;
 
                     new FarmhousePopulator().populate(tw, data);
@@ -112,11 +112,11 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
         double minDistanceSquared = Integer.MAX_VALUE;
         int[] min = null;
-        for (int nx = -1; nx <= 1; nx++) {
-            for (int nz = -1; nz <= 1; nz++) {
+        for(int nx = -1; nx <= 1; nx++) {
+            for(int nz = -1; nz <= 1; nz++) {
                 int[] loc = getCoordsFromMegaChunk(tw, mc.getRelative(nx, nz));
                 double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
-                if (distSqr < minDistanceSquared) {
+                if(distSqr < minDistanceSquared) {
                     minDistanceSquared = distSqr;
                     min = loc;
                 }

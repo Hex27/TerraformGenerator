@@ -27,12 +27,12 @@ public class WitchHutPopulator {
 
     public void populate(TerraformWorld tw, Random random,
                          PopulatorDataAbstract data) {
-        if (!TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()) return;
+        if(!TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()) return;
         int seaLevel = TerraformGenerator.seaLevel;
         int x = data.getChunkX() * 16 + random.nextInt(16);
         int z = data.getChunkZ() * 16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
-        if (height < seaLevel) { //Assume. it's on water
+        if(height < seaLevel) { //Assume. it's on water
             height = seaLevel + GenUtils.randInt(random, 2, 3);
         } else
             height += GenUtils.randInt(random, 2, 3);
@@ -64,7 +64,7 @@ public class WitchHutPopulator {
             z = w.getRear(2).get().getZ();
             data.addEntity(x, y + 1, z, EntityType.WITCH);
             data.addEntity(x, y + 1, z, EntityType.CAT);
-        } catch (FileNotFoundException e) {
+        } catch(FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -82,21 +82,21 @@ public class WitchHutPopulator {
 
         @Override
         public void applyData(SimpleBlock block, BlockData data) {
-            if (data.getMaterial().toString().contains("COBBLESTONE")) {
+            if(data.getMaterial().toString().contains("COBBLESTONE")) {
                 data = Bukkit.createBlockData(
                         StringUtils.replace(data.getAsString(), "cobblestone", GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE,
                                 Material.MOSSY_COBBLESTONE).name().toLowerCase(Locale.ENGLISH))
                 );
                 super.applyData(block, data);
 
-                if (GenUtils.chance(1, 5)) BlockUtils.vineUp(block, 2);
-            } else if (data.getMaterial().toString().startsWith("OAK")) {
+                if(GenUtils.chance(1, 5)) BlockUtils.vineUp(block, 2);
+            } else if(data.getMaterial().toString().startsWith("OAK")) {
                 super.applyData(block, data);
-                if (data.getMaterial().toString().endsWith("LOG")) {
-                    if (GenUtils.chance(1, 5)) BlockUtils.vineUp(block, 2);
+                if(data.getMaterial().toString().endsWith("LOG")) {
+                    if(GenUtils.chance(1, 5)) BlockUtils.vineUp(block, 2);
                 }
                 super.applyData(block, data);
-            } else if (data.getMaterial() == Material.CHEST) {
+            } else if(data.getMaterial() == Material.CHEST) {
                 super.applyData(block, data);
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.VILLAGE_TEMPLE);
             } else {

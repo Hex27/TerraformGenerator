@@ -31,16 +31,16 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
         super.populate(data, room);
 
         //Not always a cage room
-        if (GenUtils.chance(rand, 3, 5)) return;
+        if(GenUtils.chance(rand, 3, 5)) return;
 
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey().getRelative(0, 7, 0);
             int length = entry.getValue();
-            for (int i = 0; i < length; i++) {
-                if (i % 2 == 0) {
+            for(int i = 0; i < length; i++) {
+                if(i % 2 == 0) {
                     Waterlogged wall = (Waterlogged) Bukkit.createBlockData(Material.PRISMARINE_WALL);
                     wall.setWaterlogged(w.get().getY() <= TerraformGenerator.seaLevel);
-                    for (int j = 0; j < room.getHeight() - 9; j++) {
+                    for(int j = 0; j < room.getHeight() - 9; j++) {
                         w.getRelative(0, j, 0).setBlockData(wall);
                     }
                     //w.Pillar(room.getHeight()-9, rand, Material.PRISMARINE_WALL);
@@ -60,9 +60,9 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
         }
 
         //Corners are dark prismarine
-        for (int[] corner : room.getAllCorners()) {
-            for (int i = 0; i < room.getHeight(); i++) {
-                if (data.getType(corner[0], i + room.getY(), corner[1]).isSolid()) {
+        for(int[] corner : room.getAllCorners()) {
+            for(int i = 0; i < room.getHeight(); i++) {
+                if(data.getType(corner[0], i + room.getY(), corner[1]).isSolid()) {
                     data.setType(corner[0], i + room.getY(), corner[1], Material.DARK_PRISMARINE);
                 }
             }

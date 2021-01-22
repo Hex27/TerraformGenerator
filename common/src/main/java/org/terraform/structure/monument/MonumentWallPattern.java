@@ -8,9 +8,9 @@ public enum MonumentWallPattern {
     CROSS;
 
     public void apply(Wall w) {
-        if (this == EYE) {
+        if(this == EYE) {
             //Eye brow
-            for (int i = 0; i <= 4; i++) {
+            for(int i = 0; i <= 4; i++) {
                 w.getRelative(0, 2, 0).getLeft(i).setType(Material.DARK_PRISMARINE);
                 w.getRelative(0, 2, 0).getRight(i).setType(Material.DARK_PRISMARINE);
             }
@@ -39,7 +39,7 @@ public enum MonumentWallPattern {
             //Pupil
             w.setType(Material.DARK_PRISMARINE);
             w.getRelative(0, 1, 0).setType(Material.DARK_PRISMARINE);
-        } else if (this == CROSS) {
+        } else if(this == CROSS) {
             //Sea lanterns
             w.setType(Material.SEA_LANTERN);
             w.getRelative(0, 2, 0).setType(Material.SEA_LANTERN);

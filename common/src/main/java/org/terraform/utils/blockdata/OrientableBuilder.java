@@ -43,20 +43,20 @@ public class OrientableBuilder {
     }
 
     public OrientableBuilder lapply(SimpleBlock block) {
-    	if(!block.getType().isSolid())
-    		block.setBlockData(blockData);
+        if(!block.getType().isSolid())
+            block.setBlockData(blockData);
         return this;
     }
 
     public OrientableBuilder lapply(Wall block) {
-    	if(!block.getType().isSolid())
-    		block.setBlockData(blockData);
+        if(!block.getType().isSolid())
+            block.setBlockData(blockData);
         return this;
     }
 
     public OrientableBuilder lapply(PopulatorDataAbstract data, int x, int y, int z) {
-    	if(!data.getType(x, y, z).isSolid())
-    		data.setBlockData(x, y, z, blockData);
+        if(!data.getType(x, y, z).isSolid())
+            data.setBlockData(x, y, z, blockData);
         return this;
     }
 

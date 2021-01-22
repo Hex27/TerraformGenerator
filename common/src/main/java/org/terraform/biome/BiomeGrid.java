@@ -4,138 +4,138 @@ import org.drycell.command.InvalidArgumentException;
 
 public class BiomeGrid {
     private static final BiomeBank[][] terrestrialGrid = {
-            new BiomeBank[]{BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
+            new BiomeBank[] {BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
                     BiomeBank.DESERT, BiomeBank.DESERT, BiomeBank.BADLANDS, BiomeBank.BADLANDS},
-            new BiomeBank[]{BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
+            new BiomeBank[] {BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
                     BiomeBank.DESERT, BiomeBank.DESERT, BiomeBank.BADLANDS, BiomeBank.BADLANDS},
-            new BiomeBank[]{BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
+            new BiomeBank[] {BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
                     BiomeBank.DESERT, BiomeBank.DESERT, BiomeBank.BADLANDS, BiomeBank.BADLANDS},
-            new BiomeBank[]{BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
+            new BiomeBank[] {BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
                     BiomeBank.DESERT, BiomeBank.DESERT, BiomeBank.DESERT, BiomeBank.DESERT},
-            new BiomeBank[]{BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
+            new BiomeBank[] {BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
                     BiomeBank.DESERT, BiomeBank.DESERT, BiomeBank.DESERT, BiomeBank.DESERT},
-            new BiomeBank[]{BiomeBank.SNOWY_TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS,
                     BiomeBank.SAVANNA, BiomeBank.SAVANNA, BiomeBank.SAVANNA, BiomeBank.SAVANNA},
-            new BiomeBank[]{BiomeBank.SNOWY_TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS,
                     BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.PLAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.TAIGA, BiomeBank.DARK_FOREST, BiomeBank.DARK_FOREST, BiomeBank.FOREST, BiomeBank.FOREST,
+            new BiomeBank[] {BiomeBank.SNOWY_TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.TAIGA, BiomeBank.DARK_FOREST, BiomeBank.DARK_FOREST, BiomeBank.FOREST, BiomeBank.FOREST,
                     BiomeBank.JUNGLE, BiomeBank.JUNGLE, BiomeBank.JUNGLE, BiomeBank.JUNGLE},
-            new BiomeBank[]{BiomeBank.SNOWY_TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.TAIGA, BiomeBank.DARK_FOREST, BiomeBank.DARK_FOREST, BiomeBank.FOREST, BiomeBank.FOREST,
+            new BiomeBank[] {BiomeBank.SNOWY_TAIGA, BiomeBank.SNOWY_TAIGA, BiomeBank.TAIGA, BiomeBank.DARK_FOREST, BiomeBank.DARK_FOREST, BiomeBank.FOREST, BiomeBank.FOREST,
                     BiomeBank.FOREST, BiomeBank.JUNGLE, BiomeBank.JUNGLE, BiomeBank.JUNGLE},
-            new BiomeBank[]{BiomeBank.ICE_SPIKES, BiomeBank.ICE_SPIKES, BiomeBank.TAIGA, BiomeBank.DARK_FOREST, BiomeBank.DARK_FOREST, BiomeBank.FOREST, BiomeBank.FOREST,
+            new BiomeBank[] {BiomeBank.ICE_SPIKES, BiomeBank.ICE_SPIKES, BiomeBank.TAIGA, BiomeBank.DARK_FOREST, BiomeBank.DARK_FOREST, BiomeBank.FOREST, BiomeBank.FOREST,
                     BiomeBank.BAMBOO_FOREST, BiomeBank.BAMBOO_FOREST, BiomeBank.JUNGLE, BiomeBank.JUNGLE},
-            new BiomeBank[]{BiomeBank.ICE_SPIKES, BiomeBank.ICE_SPIKES, BiomeBank.TAIGA, BiomeBank.DARK_FOREST, BiomeBank.DARK_FOREST, BiomeBank.FOREST, BiomeBank.FOREST,
+            new BiomeBank[] {BiomeBank.ICE_SPIKES, BiomeBank.ICE_SPIKES, BiomeBank.TAIGA, BiomeBank.DARK_FOREST, BiomeBank.DARK_FOREST, BiomeBank.FOREST, BiomeBank.FOREST,
                     BiomeBank.BAMBOO_FOREST, BiomeBank.BAMBOO_FOREST, BiomeBank.JUNGLE, BiomeBank.JUNGLE}
     };
 
     private static final BiomeBank[][] mountainousGrid = {
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.BADLANDS_MOUNTAINS,
                     BiomeBank.BADLANDS_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.BADLANDS_MOUNTAINS,
                     BiomeBank.BADLANDS_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.BADLANDS_MOUNTAINS,
                     BiomeBank.BADLANDS_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS,
                     BiomeBank.DESERT_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS, BiomeBank.DESERT_MOUNTAINS,
                     BiomeBank.DESERT_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS},
-            new BiomeBank[]{BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
+            new BiomeBank[] {BiomeBank.SNOWY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS, BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS,
                     BiomeBank.ROCKY_MOUNTAINS}
     };
 
     private static final BiomeBank[][] oceanicGrid = {
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
                     BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
                     BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
                     BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
                     BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
                     BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
                     BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN, BiomeBank.OCEAN,
                     BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.BLACK_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.OCEAN,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.BLACK_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.OCEAN,
                     BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.SWAMP,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.SWAMP,
                     BiomeBank.SWAMP, BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.SWAMP,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.SWAMP,
                     BiomeBank.SWAMP, BiomeBank.SWAMP, BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN},
-            new BiomeBank[]{BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.SWAMP,
+            new BiomeBank[] {BiomeBank.FROZEN_OCEAN, BiomeBank.FROZEN_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.OCEAN, BiomeBank.SWAMP, BiomeBank.SWAMP,
                     BiomeBank.SWAMP, BiomeBank.SWAMP, BiomeBank.LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN}
     };
 
     private static final BiomeBank[][] riverGrid = {
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER},
-            new BiomeBank[]{BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
+            new BiomeBank[] {BiomeBank.FROZEN_RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER, BiomeBank.RIVER,
                     BiomeBank.RIVER, BiomeBank.JUNGLE_RIVER, BiomeBank.JUNGLE_RIVER}
     };
 
     private static final BiomeBank[][] beachGrid = {
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH, BiomeBank.BADLANDS_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.MUDFLATS,
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.MUDFLATS,
                     BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.MUDFLATS, BiomeBank.MUDFLATS
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.MUDFLATS, BiomeBank.MUDFLATS
                     , BiomeBank.MUDFLATS, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.MUDFLATS, BiomeBank.MUDFLATS
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.MUDFLATS, BiomeBank.MUDFLATS
                     , BiomeBank.MUDFLATS, BiomeBank.MUDFLATS, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH},
-            new BiomeBank[]{BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.MUDFLATS, BiomeBank.MUDFLATS
+            new BiomeBank[] {BiomeBank.ICY_BEACH, BiomeBank.ICY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.ROCKY_BEACH, BiomeBank.SANDY_BEACH, BiomeBank.MUDFLATS, BiomeBank.MUDFLATS
                     , BiomeBank.MUDFLATS, BiomeBank.MUDFLATS, BiomeBank.SANDY_BEACH, BiomeBank.SANDY_BEACH}
     };
 
@@ -145,15 +145,15 @@ public class BiomeGrid {
     }
 
     static BiomeBank getBiome(BiomeType type, int temperatureIndex, int moistureIndex) {
-        if (type == BiomeType.FLAT)
+        if(type == BiomeType.FLAT)
             return terrestrialGrid[moistureIndex][temperatureIndex];
-        else if (type == BiomeType.OCEANIC)
+        else if(type == BiomeType.OCEANIC)
             return oceanicGrid[moistureIndex][temperatureIndex];
-        else if (type == BiomeType.MOUNTAINOUS)
+        else if(type == BiomeType.MOUNTAINOUS)
             return mountainousGrid[moistureIndex][temperatureIndex];
-        else if (type == BiomeType.BEACH)
+        else if(type == BiomeType.BEACH)
             return beachGrid[moistureIndex][temperatureIndex];
-        else if (type == BiomeType.RIVER)
+        else if(type == BiomeType.RIVER)
             return riverGrid[moistureIndex][temperatureIndex];
 
         return null;
@@ -163,9 +163,9 @@ public class BiomeGrid {
     public static BiomeBank[][] parseBiomeGrid(String gridString) throws InvalidArgumentException {
         BiomeBank[][] grid = new BiomeBank[11][11];
         String[] items = gridString.split(",");
-        if (items.length != 11 * 11)
+        if(items.length != 11 * 11)
             throw new InvalidArgumentException("Invalid grid length! Must be " + 11 * 11 + " units, but instead was " + items.length);
-        for (int i = 0; i < 11 * 11; i++) {
+        for(int i = 0; i < 11 * 11; i++) {
             grid[i / 11][i % 11] = BiomeBank.valueOf(items[i].toUpperCase());
         }
         return grid;
@@ -173,8 +173,8 @@ public class BiomeGrid {
 
     // Map input values from -2.5 to 2.5 to range from 0 to 10
     public static double normalise(double i) {
-        if (i > 2.5) i = 2.5;
-        else if (i < -2.5) i = -2.5;
+        if(i > 2.5) i = 2.5;
+        else if(i < -2.5) i = -2.5;
 
         i += 2.5;//Range 0 to 5
         i *= 2; //Range 0 to 10

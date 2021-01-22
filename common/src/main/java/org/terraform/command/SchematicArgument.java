@@ -19,7 +19,7 @@ public class SchematicArgument extends DCArgument<TerraSchematic> {
 
         try {
             return TerraSchematic.load(value, ((Player) sender).getLocation());
-        } catch (FileNotFoundException e) {
+        } catch(FileNotFoundException e) {
             e.printStackTrace();
         }
         return null;
@@ -29,7 +29,7 @@ public class SchematicArgument extends DCArgument<TerraSchematic> {
     public String validate(CommandSender sender, String value) {
         try {
             TerraSchematic.load(value, ((Player) sender).getLocation());
-        } catch (Throwable e) {
+        } catch(Throwable e) {
             e.printStackTrace();
             return "Problem loading schematic. Check console for error";
         }

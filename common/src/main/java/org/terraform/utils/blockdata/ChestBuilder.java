@@ -36,19 +36,19 @@ public class ChestBuilder {
 
     public void apply(SimpleBlock block) {
         block.setBlockData(blockData);
-        if (lootTable != null)
+        if(lootTable != null)
             block.getPopData().lootTableChest(block.getX(), block.getY(), block.getZ(), lootTable);
     }
 
     public void apply(Wall block) {
         block.setBlockData(blockData);
-        if (lootTable != null)
+        if(lootTable != null)
             block.get().getPopData().lootTableChest(block.getX(), block.getY(), block.getZ(), lootTable);
     }
 
     public void apply(PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
-        if (lootTable != null)
+        if(lootTable != null)
             data.lootTableChest(x, y, z, lootTable);
     }
 

@@ -30,7 +30,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
 
         SimpleBlock block = new SimpleBlock(data, x, y, z);
         block.setType(Material.SEA_LANTERN);
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             Stairs stair = (Stairs) Bukkit.createBlockData(Material.DARK_PRISMARINE_STAIRS);
             stair.setWaterlogged(true);
 
@@ -55,7 +55,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
 
         SimpleBlock block = new SimpleBlock(data, x, y, z);
         block.setType(Material.SEA_LANTERN);
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             Stairs stair = (Stairs) Bukkit.createBlockData(Material.DARK_PRISMARINE_STAIRS);
             stair.setHalf(Half.TOP);
             stair.setWaterlogged(true);
@@ -96,7 +96,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
             schema.parser = new MonumentSchematicParser();
             schema.setFace(BlockFace.NORTH);
             schema.apply();
-        } catch (FileNotFoundException e) {
+        } catch(FileNotFoundException e) {
             e.printStackTrace();
         }
 

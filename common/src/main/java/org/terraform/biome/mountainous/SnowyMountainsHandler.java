@@ -30,7 +30,7 @@ public class SnowyMountainsHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{Material.SNOW_BLOCK,
+        return new Material[] {Material.SNOW_BLOCK,
                 GenUtils.randMaterial(rand, Material.SNOW_BLOCK, Material.COBBLESTONE, Material.STONE, Material.STONE),
                 GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
                 GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),

@@ -27,17 +27,17 @@ public class SchematicListener implements Listener {
 
     @EventHandler
     public void onBlockClick(PlayerInteractEvent event) {
-        if (event.getHand() == EquipmentSlot.OFF_HAND) return;
-        if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if(event.getHand() == EquipmentSlot.OFF_HAND) return;
+        if(event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         ItemStack item = event.getPlayer().getEquipment().getItemInMainHand();
-        if (!item.hasItemMeta()) return;
-        if (!item.getItemMeta().getDisplayName().equals(WAND_NAME)) return;
+        if(!item.hasItemMeta()) return;
+        if(!item.getItemMeta().getDisplayName().equals(WAND_NAME)) return;
 
         event.setCancelled(true);
         Player player = event.getPlayer();
         TerraRegion terraRg = rgs.computeIfAbsent(player.getUniqueId(), k -> new TerraRegion());
 
-        if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+        if(event.getAction() == Action.LEFT_CLICK_BLOCK) {
             terraRg.setOne(event.getClickedBlock());
             player.sendMessage(ChatColor.GREEN + "Position one set.");
         } else {

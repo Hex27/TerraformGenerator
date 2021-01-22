@@ -31,11 +31,11 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
         Wall w = entry.getKey().getRelative(0, -1, 0);
-        for (int i = 0; i < entry.getValue(); i++) {
+        for(int i = 0; i < entry.getValue(); i++) {
             w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(2, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
-            if (this.var == PlainsVillageHouseVariant.CLAY)
+            if(this.var == PlainsVillageHouseVariant.CLAY)
                 w.getRelative(0, 2, 0).Pillar(2, rand, Material.WHITE_TERRACOTTA);
             else
                 w.getRelative(0, 2, 0).Pillar(2, rand, Material.OAK_PLANKS);
@@ -50,11 +50,11 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
 
         BlockUtils.stairwayUntilSolid(
                 w.getFront().getRelative(0, -1, 0).get(), w.getDirection(),
-                new Material[]{Material.COBBLESTONE, Material.MOSSY_COBBLESTONE},
+                new Material[] {Material.COBBLESTONE, Material.MOSSY_COBBLESTONE},
                 Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS);
 
         //Decorations depending on variant
-        if (this.var == PlainsVillageHouseVariant.COBBLESTONE) {
+        if(this.var == PlainsVillageHouseVariant.COBBLESTONE) {
             w = w.getFront();
 
             //Logs at the front
@@ -65,7 +65,7 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
             Orientable log = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
-            if (w.getDirection().getModZ() != 0)
+            if(w.getDirection().getModZ() != 0)
                 log.setAxis(Axis.X);
             else
                 log.setAxis(Axis.Z);
@@ -93,7 +93,7 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getLeft().CorrectMultipleFacing(2);
             w.getRight().CorrectMultipleFacing(2);
 
-        } else if (this.var == PlainsVillageHouseVariant.CLAY) {
+        } else if(this.var == PlainsVillageHouseVariant.CLAY) {
             w.getLeft().getRelative(0, 1, 0).setType(Material.OAK_LOG);
             w.getRight().getRelative(0, 1, 0).setType(Material.OAK_LOG);
             w = w.getFront();
@@ -101,7 +101,7 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
             Orientable log = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
-            if (w.getDirection().getModZ() != 0)
+            if(w.getDirection().getModZ() != 0)
                 log.setAxis(Axis.Z);
             else
                 log.setAxis(Axis.X);
@@ -127,9 +127,9 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getLeft().CorrectMultipleFacing(1);
             w.getRight().setType(Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL);
             w.getRight().CorrectMultipleFacing(1);
-        } else if (this.var == PlainsVillageHouseVariant.WOODEN) {
+        } else if(this.var == PlainsVillageHouseVariant.WOODEN) {
             Orientable log = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
-            if (w.getDirection().getModZ() != 0)
+            if(w.getDirection().getModZ() != 0)
                 log.setAxis(Axis.Z);
             else
                 log.setAxis(Axis.X);

@@ -42,23 +42,23 @@ public class SchematicSaveCommand extends DCCommand {
             throws InvalidArgumentException {
         Player p = (Player) sender;
         TerraRegion rg = SchematicListener.rgs.get(p.getUniqueId());
-        if (rg == null || !rg.isComplete()) {
+        if(rg == null || !rg.isComplete()) {
             p.sendMessage(ChatColor.RED + "Selection not ready.");
             return;
         }
 
         TerraSchematic s = new TerraSchematic(p.getLocation().clone().add(-1, 0, -1));
-        for (Block b : rg.getBlocks()) {
-            if (b.getType() == Material.AIR)
+        for(Block b : rg.getBlocks()) {
+            if(b.getType() == Material.AIR)
                 continue;
-            if (b.getType() == Material.BARRIER)
+            if(b.getType() == Material.BARRIER)
                 b.setType(Material.AIR);
             s.registerBlock(b);
         }
         try {
             s.export("new-schematic-" + System.currentTimeMillis() + ".terra");
             p.sendMessage(ChatColor.GREEN + "Saved.");
-        } catch (IOException e) {
+        } catch(IOException e) {
             p.sendMessage(ChatColor.RED + "A problem occurred.");
             e.printStackTrace();
         }

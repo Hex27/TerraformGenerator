@@ -4,14 +4,16 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.terraform.data.TerraformWorld;
+
 import java.util.Random;
 
 /**
  * This class is used to control the order in which the bukkit populator is used
  * to perform various actions.
+ *
  * @author Hex_27
  */
-public class TerraformBukkitBlockPopulator extends BlockPopulator{
+public class TerraformBukkitBlockPopulator extends BlockPopulator {
 
     protected final TerraformWorld tw;
     private final TerraformStructurePopulator structurePopulator;
@@ -32,5 +34,5 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
         //Populate structures next
         this.structurePopulator.populate(world, random, chunk);
     }
-    
+
 }

@@ -47,7 +47,7 @@ public class LocateBiomeCommand extends DCCommand {
             throws InvalidArgumentException {
         Player p = (Player) sender;
 
-        if (args.size() != 0) {
+        if(args.size() != 0) {
             try {
                 new Task(
                         p.getUniqueId(),
@@ -56,15 +56,15 @@ public class LocateBiomeCommand extends DCCommand {
                         p.getLocation().getBlockZ(),
                         (BiomeBank) this.parseArguments(sender, args).get(0))
                         .runTaskAsynchronously(TerraformGeneratorPlugin.get());
-            } catch (IllegalArgumentException e) {
+            } catch(IllegalArgumentException e) {
                 sender.sendMessage(LangOpt.COMMAND_LOCATEBIOME_INVALIDBIOME.parse());
 
                 StringBuilder types = new StringBuilder();
                 boolean b = true;
 
-                for (BiomeBank type : BiomeBank.VALUES) {
+                for(BiomeBank type : BiomeBank.VALUES) {
                     ChatColor col = ChatColor.RED;
-                    if (b) col = ChatColor.DARK_RED;
+                    if(b) col = ChatColor.DARK_RED;
                     b = !b;
                     types.append(col).append(type).append(' ');
                 }
@@ -75,8 +75,8 @@ public class LocateBiomeCommand extends DCCommand {
     }
 
     private void syncSendMessage(UUID uuid, String message) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getUniqueId() == uuid) {
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.getUniqueId() == uuid) {
                 p.sendMessage(message);
                 break;
             }
@@ -100,7 +100,7 @@ public class LocateBiomeCommand extends DCCommand {
         public String validate(CommandSender sender, String value) {
             try {
                 parse(sender, value);
-            } catch (IllegalArgumentException e) {
+            } catch(IllegalArgumentException e) {
                 return "That biome type does not exist!";
             }
             return "";
@@ -128,7 +128,7 @@ public class LocateBiomeCommand extends DCCommand {
             Vector2f location = GenUtils.locateBiome(tw, b,
                     new Vector2f(x, z), 5000, 25);
 
-            if (location == null)
+            if(location == null)
                 syncSendMessage(p, LangOpt.COMMAND_LOCATEBIOME_NOT_IN_5000.parse());
             else
                 syncSendMessage(p, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", location.x + "", "%z%", location.y + ""));

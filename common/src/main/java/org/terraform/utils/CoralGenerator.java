@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class CoralGenerator {
     //    private static final Material[] VALUES = Material.values();
-	public static final Material[] CORAL_BLOCKS = {
+    public static final Material[] CORAL_BLOCKS = {
             Material.BRAIN_CORAL_BLOCK,
             Material.BUBBLE_CORAL_BLOCK,
             Material.FIRE_CORAL_BLOCK,
@@ -46,18 +46,19 @@ public class CoralGenerator {
 
     /**
      * Creates a random coral
+     *
      * @param data refers to the block the coral will grow ON.
      */
     public static void generateSingleCoral(PopulatorDataAbstract data, int x, int y, int z) {
         BlockFace face = getRandomBlockFace();
 
-        if (face == BlockFace.DOWN) face = BlockFace.UP;
+        if(face == BlockFace.DOWN) face = BlockFace.UP;
         Material coral = CORAL_FANS[GenUtils.randInt(0, CORAL_FANS.length - 1)];
-        if (face != BlockFace.UP) coral = CORAL_WALL_FANS[GenUtils.randInt(0, CORAL_WALL_FANS.length - 1)];
+        if(face != BlockFace.UP) coral = CORAL_WALL_FANS[GenUtils.randInt(0, CORAL_WALL_FANS.length - 1)];
 
         attemptReplace(data, x + face.getModX(), y + face.getModY(), z + face.getModZ(), coral);
-        if (face != BlockFace.UP) {
-            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan) {
+        if(face != BlockFace.UP) {
+            if(data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan) {
                 CoralWallFan bdata = (CoralWallFan) data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ());
                 bdata.setFacing(face);
                 data.setBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ(), bdata);
@@ -66,32 +67,33 @@ public class CoralGenerator {
     }
 
     public static boolean isSaturatedCoral(SimpleBlock block) {
-        for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (block.getRelative(face).getType() == Material.WATER) return true;
+        for(BlockFace face : BlockUtils.directBlockFaces) {
+            if(block.getRelative(face).getType() == Material.WATER) return true;
         }
         return false;
     }
 
     /**
      * Generates a coral on a surface.
+     *
      * @param data refers to the block the coral will grow ON.
      */
     public static void generateSingleCoral(PopulatorDataAbstract data, int x, int y, int z, String coralType) {
         BlockFace face = getRandomBlockFace();
         coralType = StringUtils.remove(coralType, "_BLOCK");
-        if (face == BlockFace.DOWN) face = BlockFace.UP;
+        if(face == BlockFace.DOWN) face = BlockFace.UP;
         Material coral = Material.getMaterial(coralType + "_FAN");//coralFans().get(GenUtils.randInt(0, coralFans().size() - 1));
 
 
-        if (face != BlockFace.UP)
+        if(face != BlockFace.UP)
             coral = Material.getMaterial(coralType + "_WALL_FAN");
-        else if (GenUtils.chance(1, 5)) {
+        else if(GenUtils.chance(1, 5)) {
             generateSeaPickles(data, x, y + 1, z);
             return;
         }
         attemptReplace(data, x + face.getModX(), y + face.getModY(), z + face.getModZ(), coral);
-        if (face != BlockFace.UP) {
-            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan) {
+        if(face != BlockFace.UP) {
+            if(data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan) {
                 CoralWallFan bdata = (CoralWallFan) data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ());
                 bdata.setFacing(face);
                 data.setBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ(), bdata);
@@ -101,12 +103,13 @@ public class CoralGenerator {
 
     /**
      * Creates a cluster of Sea Pickles.
+     *
      * @param data refers to the block to replace with sea pickles
      */
     public static void generateSeaPickles(PopulatorDataAbstract data, int x, int y, int z) {
         int fullSize = GenUtils.randInt(1, 4);
-        if (attemptReplace(data, x, y, z, Material.SEA_PICKLE)) {
-            if (data.getBlockData(x, y, z) instanceof SeaPickle) {
+        if(attemptReplace(data, x, y, z, Material.SEA_PICKLE)) {
+            if(data.getBlockData(x, y, z) instanceof SeaPickle) {
                 SeaPickle state = (SeaPickle) data.getBlockData(x, y, z);
                 state.setPickles(fullSize);
                 data.setBlockData(x, y, z, state);
@@ -116,18 +119,19 @@ public class CoralGenerator {
 
     /**
      * Generates a Kelp plant 3-10 blocks tall. Or sea grass.
+     *
      * @param data refers to the block ABOVE the floor (lowest block of the kelp plant)
      */
     public static void generateKelpGrowth(PopulatorDataAbstract data, int x, int y, int z) {
         int fullSize = GenUtils.randInt(1, 2);
-        if (new Random().nextBoolean()) fullSize += GenUtils.randInt(1, 20);
-        if (fullSize == 1) {
+        if(new Random().nextBoolean()) fullSize += GenUtils.randInt(1, 20);
+        if(fullSize == 1) {
             attemptReplace(data, x, y, z, Material.SEAGRASS);
-        } else if (fullSize == 2 && y < TerraformGenerator.seaLevel - 3) {
+        } else if(fullSize == 2 && y < TerraformGenerator.seaLevel - 3) {
             BlockUtils.setDoublePlant(data, x, y, z, Material.TALL_SEAGRASS);
         } else {
-            for (int size = 0; size < fullSize; size++) {
-                if (!attemptReplace(data, x, y, z, Material.KELP_PLANT))
+            for(int size = 0; size < fullSize; size++) {
+                if(!attemptReplace(data, x, y, z, Material.KELP_PLANT))
                     break;
                 y++;
             }
@@ -136,13 +140,15 @@ public class CoralGenerator {
 
     /**
      * Will replace the block if it was previously water or air.
+     *
      * @param data    block to be replaced
      * @param newType type to replace with
      */
     public static boolean attemptReplace(PopulatorDataAbstract data, int x, int y, int z, Material newType) {
-        if (y >= TerraformGenerator.seaLevel) return false;
+        if(y >= TerraformGenerator.seaLevel) return false;
         Material type = data.getType(x, y, z);
-        if (type != Material.WATER && type != Material.SEAGRASS && type != Material.TALL_SEAGRASS && type != Material.KELP_PLANT) return false;
+        if(type != Material.WATER && type != Material.SEAGRASS && type != Material.TALL_SEAGRASS && type != Material.KELP_PLANT)
+            return false;
         data.setType(x, y, z, newType);
         return true;
     }
@@ -156,10 +162,10 @@ public class CoralGenerator {
         int fullSize = GenUtils.randInt(15, 35);
         int[] middle = {x, y, z};
 
-        for (int size = 0; size < fullSize; size++) {
-            if (attemptReplace(data, middle[0], middle[1], middle[2], coral)) {
-                if (GenUtils.randInt(0, 100) < 20) generateSeaPickles(data, middle[0], middle[1] + 1, middle[2]);
-                if (GenUtils.randInt(0, 100) < 40) generateSingleCoral(data, middle[0], middle[1], middle[2]);
+        for(int size = 0; size < fullSize; size++) {
+            if(attemptReplace(data, middle[0], middle[1], middle[2], coral)) {
+                if(GenUtils.randInt(0, 100) < 20) generateSeaPickles(data, middle[0], middle[1] + 1, middle[2]);
+                if(GenUtils.randInt(0, 100) < 40) generateSingleCoral(data, middle[0], middle[1], middle[2]);
             }
             getRandomRelative(middle);
         }
@@ -173,9 +179,9 @@ public class CoralGenerator {
         int fullSize = GenUtils.randInt(15, 35);
         int[] middle = {x, y, z};
 
-        for (int size = 0; size < fullSize; size++) {
-            if (attemptReplace(data, middle[0], middle[1], middle[2], Material.WET_SPONGE)) {
-                if (GenUtils.randInt(0, 100) < 20) generateSeaPickles(data, middle[0], middle[1] + 1, middle[2]);
+        for(int size = 0; size < fullSize; size++) {
+            if(attemptReplace(data, middle[0], middle[1], middle[2], Material.WET_SPONGE)) {
+                if(GenUtils.randInt(0, 100) < 20) generateSeaPickles(data, middle[0], middle[1] + 1, middle[2]);
             }
             getRandomRelative(middle);
         }

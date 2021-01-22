@@ -43,7 +43,7 @@ public class NMSInjector extends NMSInjectorAbstract {
                     pcm, "chunkGenerator", bpg);
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
                     ws.getChunkProvider(), "chunkGenerator", bpg);
-        } catch (Throwable e) {
+        } catch(Throwable e) {
             e.printStackTrace();
             return false;
         }
@@ -64,7 +64,7 @@ public class NMSInjector extends NMSInjectorAbstract {
 
     @Override
     public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
-        if (data instanceof PopulatorData) {
+        if(data instanceof PopulatorData) {
             PopulatorData pdata = (PopulatorData) data;
             IChunkAccess ica = pdata.rlwa.getChunkAt(data.getChunkX(), data.getChunkZ());
             WorldServer ws = ((PopulatorData) data).rlwa.getMinecraftWorld();

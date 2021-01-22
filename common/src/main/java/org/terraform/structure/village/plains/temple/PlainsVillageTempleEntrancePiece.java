@@ -29,7 +29,7 @@ public class PlainsVillageTempleEntrancePiece extends JigsawStructurePiece {
         Wall w = entry.getKey().getRelative(0, -1, 0);
 
         //Wall
-        for (int i = 0; i < entry.getValue(); i++) {
+        for(int i = 0; i < entry.getValue(); i++) {
             w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(5, rand, stoneBricks);
 
@@ -43,7 +43,7 @@ public class PlainsVillageTempleEntrancePiece extends JigsawStructurePiece {
 
         //Stairway down
         BlockUtils.stairwayUntilSolid(core.getFront().getRelative(0, -1, 0).get(), core.getDirection(),
-                new Material[]{
+                new Material[] {
                         Material.COBBLESTONE, Material.MOSSY_COBBLESTONE
                 },
                 Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS);

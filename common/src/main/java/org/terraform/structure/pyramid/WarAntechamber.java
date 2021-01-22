@@ -40,11 +40,11 @@ public class WarAntechamber extends Antechamber {
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         super.populate(data, room);
         //Decorate the walls with various banners
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
             Wall w = entry.getKey().getRelative(0, 2, 0);
-            for (int i = 0; i < entry.getValue(); i++) {
+            for(int i = 0; i < entry.getValue(); i++) {
 
-                if (w.getRear().getType().isSolid() && !w.getType().isSolid()
+                if(w.getRear().getType().isSolid() && !w.getType().isSolid()
                         && GenUtils.chance(rand, 3, 10)) {
                     generateBanner(w.get(), w.getDirection(), true);
                 }
@@ -59,7 +59,7 @@ public class WarAntechamber extends Antechamber {
         w.LPillar(room.getHeight(), rand, Material.CHISELED_SANDSTONE);
 
         //Stair base and ceiling
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             Stairs stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
             stair.setFacing(face.getOppositeFace());
             w.getRelative(face).setBlockData(stair);
@@ -84,12 +84,12 @@ public class WarAntechamber extends Antechamber {
     private Banner generateBanner(SimpleBlock base, BlockFace facing, boolean wallBanner) {
 
         Material type = null;
-        if (wallBanner)
+        if(wallBanner)
             type = BannerUtils.randomWallBannerMaterial(rand);
         else
             BannerUtils.randomBannerMaterial(rand);
         base.setType(type);
-        if (!wallBanner) {
+        if(!wallBanner) {
             Rotatable bd = ((Rotatable) base.getBlockData());
             bd.setRotation(facing);
             base.setBlockData(bd);
@@ -102,7 +102,7 @@ public class WarAntechamber extends Antechamber {
         Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
 
-        for (int i = 1 + rand.nextInt(3); i < 4 + rand.nextInt(3); i++) {
+        for(int i = 1 + rand.nextInt(3); i < 4 + rand.nextInt(3); i++) {
             patterns.add(new Pattern(
                     DyeColor.values()[rand.nextInt(DyeColor.values().length)],
                     PatternType.values()[rand.nextInt(PatternType.values().length)]

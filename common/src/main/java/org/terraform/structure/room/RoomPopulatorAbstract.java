@@ -17,7 +17,7 @@ public abstract class RoomPopulatorAbstract {
 
     protected static int getNextIndex(int bfIndex) {
         bfIndex++;
-        if (bfIndex >= 8) bfIndex = 0;
+        if(bfIndex >= 8) bfIndex = 0;
         return bfIndex;
     }
 

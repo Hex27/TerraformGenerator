@@ -15,13 +15,13 @@ public class IcyBeachHandler extends BiomeHandler {
         int length = GenUtils.randInt(6, 16);
         int nx = x;
         int nz = z;
-        while (length > 0) {
+        while(length > 0) {
             length--;
-            if (data.getType(nx, y, nz).isSolid() &&
+            if(data.getType(nx, y, nz).isSolid() &&
                     data.getType(nx, y + 1, nz) == Material.AIR)
                 data.setType(nx, y, nz, Material.ICE);
 
-            switch (random.nextInt(5)) {  // The direction chooser
+            switch(random.nextInt(5)) {  // The direction chooser
                 case 0:
                     nx++;
                     break;
@@ -51,7 +51,7 @@ public class IcyBeachHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
+        return new Material[] {GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
                 GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
                 GenUtils.randMaterial(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL),
                 GenUtils.randMaterial(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)};
@@ -60,17 +60,17 @@ public class IcyBeachHandler extends BiomeHandler {
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
+                if(data.getBiome(x, z) != getBiome()) continue;
 
-                if (GenUtils.chance(random, 7, 100)) {
+                if(GenUtils.chance(random, 7, 100)) {
                     makeIceSheet(x, y, z, data, random);
                     break;
                 }
 
-                if (GenUtils.chance(random, 1, 100))
+                if(GenUtils.chance(random, 1, 100))
                     data.setType(x, y + 1, z, Material.COBBLESTONE_SLAB);
             }
         }

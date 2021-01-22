@@ -35,7 +35,7 @@ public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
         PlainsVillageHouseJigsawBuilder builder = new PlainsVillageHouseJigsawBuilder(
                 room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height, room.getZ()
         );
-        if (room instanceof DirectionalCubeRoom)
+        if(room instanceof DirectionalCubeRoom)
             builder.forceEntranceDirection(((DirectionalCubeRoom) room).getDirection());
 
         builder.generate(this.rand);
@@ -46,17 +46,17 @@ public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
 
         boolean placedLamp = false;
         //Connect front to the nearest path.
-        while (entrance.getType() != Material.GRASS_PATH && maxDepth > 0) {
-            if (BlockUtils.isDirtLike(entrance.getType()))
+        while(entrance.getType() != Material.GRASS_PATH && maxDepth > 0) {
+            if(BlockUtils.isDirtLike(entrance.getType()))
                 entrance.setType(Material.GRASS_PATH);
 
-            if (!placedLamp && GenUtils.chance(this.rand, 3, 5)) {
+            if(!placedLamp && GenUtils.chance(this.rand, 3, 5)) {
                 SimpleBlock target;
-                if (this.rand.nextBoolean())
+                if(this.rand.nextBoolean())
                     target = entrance.getLeft(2).getGround().getRelative(0, 1, 0).get();
                 else
                     target = entrance.getRight(2).getGround().getRelative(0, 1, 0).get();
-                if (canPlaceLamp(target)) {
+                if(canPlaceLamp(target)) {
                     placedLamp = true;
                     PlainsVillagePathPopulator.placeLamp(rand, target);
                 }
@@ -70,9 +70,9 @@ public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
 
     private boolean canPlaceLamp(SimpleBlock target) {
 
-        for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
-            for (int i = 0; i < 6; i++)
-                if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
+        for(BlockFace face : BlockUtils.xzPlaneBlockFaces) {
+            for(int i = 0; i < 6; i++)
+                if(target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
                     return false;
         }
 

@@ -22,19 +22,19 @@ public class AnimalFarmPathPopulator extends PathPopulatorAbstract {
     @Override
     public void populate(PathPopulatorData ppd) {
         Wall w = new Wall(ppd.base, ppd.dir);
-        for (CubeRoom room : gen.getRooms()) {
-            if (room.isPointInside(new int[]{w.get().getX(), w.get().getZ()}))
+        for(CubeRoom room : gen.getRooms()) {
+            if(room.isPointInside(new int[] {w.get().getX(), w.get().getZ()}))
                 return;
         }
-        if (GenUtils.chance(rand, 1, 50)) {
+        if(GenUtils.chance(rand, 1, 50)) {
             w.getLeft().getHighestSolidBlockFromAbove().getRelative(0, 1, 0)
                     .setType(Material.CAMPFIRE);
         }
-        if (GenUtils.chance(rand, 2, 10))
+        if(GenUtils.chance(rand, 2, 10))
             w.getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
-        if (GenUtils.chance(rand, 2, 10))
+        if(GenUtils.chance(rand, 2, 10))
             w.getLeft().getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
-        if (GenUtils.chance(rand, 2, 10))
+        if(GenUtils.chance(rand, 2, 10))
             w.getRight().getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
     }
 }

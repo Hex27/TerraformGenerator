@@ -21,9 +21,9 @@ public class PopulatorDataSQLite extends PopulatorDataAbstract {
 
     @SuppressWarnings("unused")
     private boolean isInBounds(int x, int z) {
-        if (x < chunkX * 16) return false;
-        if (x > (chunkX * 16) + 15) return false;
-        if (z < chunkZ * 16) return false;
+        if(x < chunkX * 16) return false;
+        if(x > (chunkX * 16) + 15) return false;
+        if(z < chunkZ * 16) return false;
         return z <= (chunkZ * 16) + 15;
     }
 

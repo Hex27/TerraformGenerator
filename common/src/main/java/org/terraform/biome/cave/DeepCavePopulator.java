@@ -17,10 +17,10 @@ public class DeepCavePopulator extends AbstractCavePopulator {
 
     public static void decorate(PopulatorDataAbstract data, Random random, int x, int z, int ceil, int floor) {
         int caveHeight = ceil - floor;
-        if (caveHeight <= 3) return;
+        if(caveHeight <= 3) return;
 
         //Don't touch slabbed floors or stalagmites
-        if (data.getType(x, floor, z).toString().endsWith("SLAB") ||
+        if(data.getType(x, floor, z).toString().endsWith("SLAB") ||
                 data.getType(x, floor, z).toString().endsWith("WALL"))
             return;
 
@@ -29,10 +29,10 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Stalactites
-        if (GenUtils.chance(random, 1, 25)) {
+        if(GenUtils.chance(random, 1, 25)) {
             int h = caveHeight / 4;
-            if (h < 1) h = 1;
-            if (h > 4) h = 4;
+            if(h < 1) h = 1;
+            if(h > 4) h = 4;
             Wall w = new Wall(new SimpleBlock(data, x, ceil, z), BlockFace.NORTH);
             w.downLPillar(random, h, Material.COBBLESTONE_WALL);
 
@@ -43,26 +43,26 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Stalagmites
-        if (GenUtils.chance(random, 1, 25)) {
+        if(GenUtils.chance(random, 1, 25)) {
             int h = caveHeight / 4;
-            if (h < 1) h = 1;
-            if (h > 4) h = 4;
+            if(h < 1) h = 1;
+            if(h > 4) h = 4;
             Wall w = new Wall(new SimpleBlock(data, x, floor + 1, z), BlockFace.NORTH);
-            if (w.getType() == Material.CAVE_AIR)
+            if(w.getType() == Material.CAVE_AIR)
                 w.LPillar(h, random, Material.COBBLESTONE_WALL);
 
-        } else if (GenUtils.chance(random, 1, 25)) { //Slabbing
+        } else if(GenUtils.chance(random, 1, 25)) { //Slabbing
             SimpleBlock base = new SimpleBlock(data, x, floor + 1, z);
             //Only next to spots where there's some kind of solid block.
-            if (base.getType() == Material.CAVE_AIR)
-                for (BlockFace face : BlockUtils.directBlockFaces) {
-                    if (base.getRelative(face).getType().isSolid()) {
+            if(base.getType() == Material.CAVE_AIR)
+                for(BlockFace face : BlockUtils.directBlockFaces) {
+                    if(base.getRelative(face).getType().isSolid()) {
                         base.setType(Material.STONE_SLAB);
                         break;
                     }
                 }
-        } else if (GenUtils.chance(random, 1, 35)) { //Shrooms :3
-            if (data.getType(x, floor + 1, z) == Material.CAVE_AIR)
+        } else if(GenUtils.chance(random, 1, 35)) { //Shrooms :3
+            if(data.getType(x, floor + 1, z) == Material.CAVE_AIR)
                 data.setType(x, floor + 1, z, GenUtils.randMaterial(
                         Material.RED_MUSHROOM,
                         Material.BROWN_MUSHROOM));
@@ -72,16 +72,16 @@ public class DeepCavePopulator extends AbstractCavePopulator {
     @Override
     public void populate(TerraformWorld tw, Random random,
                          PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                if (!(tw.getBiomeBank(x, GenUtils.getHighestGround(data, x, z), z).getCavePop()
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                if(!(tw.getBiomeBank(x, GenUtils.getHighestGround(data, x, z), z).getCavePop()
                         instanceof DeepCavePopulator))
                     continue;
-                for (int[] pair : GenUtils.getCaveCeilFloors(data, x, z)) {
+                for(int[] pair : GenUtils.getCaveCeilFloors(data, x, z)) {
                     int ceil = pair[0]; //non-solid
                     int floor = pair[1]; //solid
-                    if (floor > 15) continue;
-                    if (!genned) {
+                    if(floor > 15) continue;
+                    if(!genned) {
                         genned = true;
                         TerraformGeneratorPlugin.logger.info("Spawning deep cave at " + x + "," + floor + "," + z);
                     }

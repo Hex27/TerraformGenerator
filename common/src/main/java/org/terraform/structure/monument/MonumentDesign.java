@@ -35,7 +35,7 @@ public enum MonumentDesign {
     }
 
     public Material slab() {
-        switch (this) {
+        switch(this) {
             case DARK_LIGHTLESS:
                 return Material.DARK_PRISMARINE_SLAB;
             case DARK_PRISMARINE_CORNERS:
@@ -72,15 +72,15 @@ public enum MonumentDesign {
             schema.parser = new MonumentSchematicParser();
             schema.setFace(BlockFace.NORTH);
             schema.apply();
-        } catch (Throwable e) {
+        } catch(Throwable e) {
             e.printStackTrace();
         }
     }
 
     public void upSpire(SimpleBlock base, Random rand) {
-        while (base.getType().isSolid() || base.getRelative(0, 1, 0).getType().isSolid()) {
+        while(base.getType().isSolid() || base.getRelative(0, 1, 0).getType().isSolid()) {
             base = base.getRelative(0, 1, 0);
-            if (base.getY() > TerraformGenerator.seaLevel)
+            if(base.getY() > TerraformGenerator.seaLevel)
                 return;
         }
         spire(new Wall(base, BlockFace.NORTH), rand);
@@ -91,14 +91,14 @@ public enum MonumentDesign {
     }
 
     public void spire(Wall w, Random rand, int height) {
-        switch (this) {
+        switch(this) {
             case DARK_LIGHTLESS:
-                for (int i = 0; i < height; i++) {
-                    if (i == 0) w.setType(Material.DARK_PRISMARINE);
-                    else if (i > height - 3) w.setType(Material.PRISMARINE_WALL);
+                for(int i = 0; i < height; i++) {
+                    if(i == 0) w.setType(Material.DARK_PRISMARINE);
+                    else if(i > height - 3) w.setType(Material.PRISMARINE_WALL);
                     else {
                         w.setType(GenUtils.randMaterial(Material.DARK_PRISMARINE, Material.PRISMARINE_WALL));
-                        if (rand.nextBoolean()) {
+                        if(rand.nextBoolean()) {
                             Stairs stairs = (Stairs) Bukkit.createBlockData(Material.DARK_PRISMARINE_STAIRS);
                             stairs.setFacing(BlockUtils.getDirectBlockFace(rand));
                             stairs.setHalf(rand.nextBoolean() ? Half.TOP : Half.BOTTOM);
@@ -110,12 +110,12 @@ public enum MonumentDesign {
                 }
                 break;
             case DARK_PRISMARINE_CORNERS:
-                for (int i = 0; i < height; i++) {
-                    if (i == 0) w.setType(Material.DARK_PRISMARINE);
-                    else if (i == 3) w.setType(Material.SEA_LANTERN);
+                for(int i = 0; i < height; i++) {
+                    if(i == 0) w.setType(Material.DARK_PRISMARINE);
+                    else if(i == 3) w.setType(Material.SEA_LANTERN);
                     else {
                         w.setType(GenUtils.randMaterial(Material.DARK_PRISMARINE, Material.PRISMARINE_WALL));
-                        if (rand.nextBoolean()) {
+                        if(rand.nextBoolean()) {
                             Stairs stairs = (Stairs) Bukkit.createBlockData(Material.DARK_PRISMARINE_STAIRS);
                             stairs.setFacing(BlockUtils.getDirectBlockFace(rand));
                             stairs.setHalf(rand.nextBoolean() ? Half.TOP : Half.BOTTOM);
@@ -126,13 +126,13 @@ public enum MonumentDesign {
                 }
                 break;
             case PRISMARINE_LANTERNS:
-                for (int i = 0; i < height; i++) {
-                    if (i == 0) w.setType(Material.PRISMARINE_BRICKS);
-                    else if (i > height - 2) w.setType(Material.PRISMARINE_WALL);
-                    else if (i == height - 2) w.setType(Material.PRISMARINE_BRICKS);
+                for(int i = 0; i < height; i++) {
+                    if(i == 0) w.setType(Material.PRISMARINE_BRICKS);
+                    else if(i > height - 2) w.setType(Material.PRISMARINE_WALL);
+                    else if(i == height - 2) w.setType(Material.PRISMARINE_BRICKS);
                     else {
                         w.setType(Material.PRISMARINE_WALL);
-                        if (i == 3) {
+                        if(i == 3) {
                             w.setType(Material.SEA_LANTERN);
                         }
                     }

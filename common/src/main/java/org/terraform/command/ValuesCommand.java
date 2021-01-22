@@ -38,7 +38,7 @@ public class ValuesCommand extends DCCommand {
             throws InvalidArgumentException {
         MathValues vals = new MathValues();
         TerraformWorld tw = TerraformWorld.get("world-1232341234", new Random().nextInt(99999));
-        for (int i = 0; i < 20000; i++) {
+        for(int i = 0; i < 20000; i++) {
             int x = GenUtils.randInt(-10000, 10000);
             //int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
@@ -63,8 +63,8 @@ public class ValuesCommand extends DCCommand {
         public void addValue(double value) {
             total += value;
             count++;
-            if (value < lowest) lowest = value;
-            if (value > highest) highest = value;
+            if(value < lowest) lowest = value;
+            if(value > highest) highest = value;
         }
 
         public double avg() {

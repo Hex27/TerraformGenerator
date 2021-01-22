@@ -1,5 +1,7 @@
 package org.terraform.coregen.bukkit;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.LoadingCache;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,20 +18,20 @@ import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.LoadingCache;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class TerraformGenerator extends ChunkGenerator {
     public static final List<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
-    private static final LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE = 
-    		CacheBuilder.newBuilder()
-    		.maximumSize(1000).build(new ChunkCacheLoader());//new LoadingCache<ChunkCache, ChunkCache>();
+    private static final LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE =
+            CacheBuilder.newBuilder()
+                    .maximumSize(1000).build(new ChunkCacheLoader());//new LoadingCache<ChunkCache, ChunkCache>();
     public static int seaLevel = 62;
     public static int minMountainLevel = 85;
-    
+
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
     }
@@ -43,17 +45,17 @@ public class TerraformGenerator extends ChunkGenerator {
      */
     public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
         ChunkCache cache = new ChunkCache(tw, x, 0, z);
-		
+
 //		return CHUNK_CACHE.compute(cache, (k, v) -> { if (v != null) return v;
 //		cache.initInternalCache(); return cache; });
         try {
-			return CHUNK_CACHE.get(cache);
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-			e.getCause().printStackTrace();
-			cache.initInternalCache();
-			return cache;
-		}
+            return CHUNK_CACHE.get(cache);
+        } catch(ExecutionException e) {
+            e.printStackTrace();
+            e.getCause().printStackTrace();
+            cache.initInternalCache();
+            return cache;
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -68,13 +70,13 @@ public class TerraformGenerator extends ChunkGenerator {
         //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
 
         //Patch for WorldInitEvent issues.
-        if (!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) {
+        if(!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) {
             preWorldInitGen.add(new SimpleChunkLocation(world.getName(), chunkX, chunkZ));
         }
 
         List<BiomeHandler> biomesToTransform = new ArrayList<>();
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
+        for(int x = 0; x < 16; x++) {
+            for(int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
@@ -86,18 +88,18 @@ public class TerraformGenerator extends ChunkGenerator {
                 biome.setBiome(x, z, bank.getHandler().getBiome());
                 int undergroundHeight = height;
                 int index = 0;
-                while (index < crust.length) {
+                while(index < crust.length) {
                     chunk.setBlock(x, undergroundHeight, z, crust[index]);
                     index++;
                     undergroundHeight--;
                 }
 
-                for (int y = undergroundHeight; y > 0; y--) {
+                for(int y = undergroundHeight; y > 0; y--) {
                     chunk.setBlock(x, y, z, Material.STONE);
                 }
 
                 //Any low elevation is sea
-                for (int y = height + 1; y <= seaLevel; y++) {
+                for(int y = height + 1; y <= seaLevel; y++) {
                     chunk.setBlock(x, y, z, Material.WATER);
                 }
 
@@ -107,12 +109,12 @@ public class TerraformGenerator extends ChunkGenerator {
                 chunk.setBlock(x, 0, z, Material.BEDROCK);
 
                 BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
-                if (transformHandler != null && !biomesToTransform.contains(transformHandler))
-                	biomesToTransform.add(transformHandler);
+                if(transformHandler != null && !biomesToTransform.contains(transformHandler))
+                    biomesToTransform.add(transformHandler);
             }
         }
 
-        for (BiomeHandler handler : biomesToTransform) {
+        for(BiomeHandler handler : biomesToTransform) {
             handler.transformTerrain(tw, random, chunk, chunkX, chunkZ);
         }
 

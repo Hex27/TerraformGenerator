@@ -36,7 +36,7 @@ public class MudflatsHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.PODZOL, 35, Material.GRASS_BLOCK, 10),
+        return new Material[] {GenUtils.weightedRandomMaterial(rand, Material.PODZOL, 35, Material.GRASS_BLOCK, 10),
                 GenUtils.randMaterial(rand, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -49,22 +49,22 @@ public class MudflatsHandler extends BiomeHandler {
         boolean spawnHut = GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666),
                 TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000);
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
+                if(data.getBiome(x, z) != getBiome()) continue;
                 y++;
-                if (data.getType(x, y, z) != Material.AIR) continue;
-                if (GenUtils.chance(5, 100)) {
-                    if (random.nextBoolean())
+                if(data.getType(x, y, z) != Material.AIR) continue;
+                if(GenUtils.chance(5, 100)) {
+                    if(random.nextBoolean())
                         BlockUtils.setDoublePlant(data, x, y, z, Material.TALL_GRASS);
                     else
                         data.setType(x, y, z, Material.GRASS);
                 }
-                if (spawnHut 
-                		&& TConfigOption.STRUCTURES_SWAMPHUT_SPAWN_MUDFLAT_HEADS.getBoolean() 
-                		&& GenUtils.chance(10, 100)) {
-                    if (BlockUtils.isDirtLike(data.getType(x, y - 1, z))) {
+                if(spawnHut
+                        && TConfigOption.STRUCTURES_SWAMPHUT_SPAWN_MUDFLAT_HEADS.getBoolean()
+                        && GenUtils.chance(10, 100)) {
+                    if(BlockUtils.isDirtLike(data.getType(x, y - 1, z))) {
                         Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
                         skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
 
@@ -75,7 +75,7 @@ public class MudflatsHandler extends BiomeHandler {
             }
         }
 
-        if (spawnHut) {
+        if(spawnHut) {
             WitchHutPopulator whp = new WitchHutPopulator();
             whp.populate(tw, random, data);
         }

@@ -20,7 +20,7 @@ public class StairwayRoomPopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         int bfIndex = 0;
-        for (int i = 1; i < room.getHeight(); i++) {
+        for(int i = 1; i < room.getHeight(); i++) {
             data.setType(room.getX(), room.getY() + i, room.getZ(), BlockUtils.stoneBrick(rand));
 
             //Two slab stairs

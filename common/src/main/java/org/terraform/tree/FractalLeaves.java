@@ -20,6 +20,7 @@ import java.util.Random;
 
 public class FractalLeaves {
 
+    protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
     public float radiusX = 4;
     public float radiusY = 2;
     public float radiusZ = 4;
@@ -28,43 +29,42 @@ public class FractalLeaves {
     public Material material = Material.OAK_LEAVES;
     public FractalTreeBuilder builder;
     Random rand = new Random();
-    protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
-    private FastNoise noiseGen;
-   float leafNoiseMultiplier = 0.7f;
+    float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;
     double hollowLeaves = 0.0;
     boolean coneLeaves = false;
     boolean snowy = false;
     float weepingLeavesChance = 0;
     int weepingLeavesLength = 0;
+    private FastNoise noiseGen;
 
     public FractalLeaves(FractalTreeBuilder builder) {
         this.builder = builder;
         //this.noiseGen = new FastNoise((int) tw.getSeed());
-       
+
         //noiseGen.SetFractalOctaves(5);
     }
 
-    public void placeLeaves(SimpleBlock block) { 
-    	// Setup noise to be used in randomising the sphere
+    public void placeLeaves(SimpleBlock block) {
+        // Setup noise to be used in randomising the sphere
         if(!noiseCache.containsKey(builder.tw)) {
-        	FastNoise noise = new FastNoise((int) builder.tw.getSeed());
-        	noiseCache.put(builder.tw, noise);
-        	noise.SetFractalOctaves(5);
-        	noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+            FastNoise noise = new FastNoise((int) builder.tw.getSeed());
+            noiseCache.put(builder.tw, noise);
+            noise.SetFractalOctaves(5);
+            noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         }
         noiseGen = noiseCache.get(builder.tw);
         noiseGen.SetFrequency(leafNoiseFrequency);
-        
+
         // Don't place anything if radius is nothing
-        if (radiusX <= 0 &&
+        if(radiusX <= 0 &&
                 radiusY <= 0 &&
                 radiusZ <= 0) {
             return;
         }
 
         // Radius 0.5 is 1 block
-        if (radiusX <= 0.5 &&
+        if(radiusX <= 0.5 &&
                 radiusY <= 0.5 &&
                 radiusZ <= 0.5) {
             block.setType(material);
@@ -75,37 +75,37 @@ public class FractalLeaves {
         float noiseMultiplier = leafNoiseMultiplier;
 
         double maxR = radiusX;
-        if (radiusX < radiusY) maxR = radiusY;
-        if (radiusY < radiusZ) maxR = radiusZ;
+        if(radiusX < radiusY) maxR = radiusY;
+        if(radiusY < radiusZ) maxR = radiusZ;
 
         ArrayList<SimpleBlock> changed = new ArrayList<>();
 
-        for (int y = halfSphere ? 0 : -Math.round(radiusY); y <= radiusY; y++) {
-            for (int x = -Math.round(radiusX); x <= radiusX; x++) {
-                for (int z = -Math.round(radiusZ); z <= radiusZ; z++) {
+        for(int y = halfSphere ? 0 : -Math.round(radiusY); y <= radiusY; y++) {
+            for(int x = -Math.round(radiusX); x <= radiusX; x++) {
+                for(int z = -Math.round(radiusZ); z <= radiusZ; z++) {
                     SimpleBlock relativeBlock = block.getRelative(Math.round(x), Math.round(y) + offsetY, Math.round(z));
 
-                    if (relativeBlock.getY() - builder.oriY > builder.maxHeight) {
+                    if(relativeBlock.getY() - builder.oriY > builder.maxHeight) {
                         return;
                     }
 
-                    if (relativeBlock.getY() - builder.oriY == builder.maxHeight) {
-                        if (rand.nextBoolean()) //Fade off if too high
+                    if(relativeBlock.getY() - builder.oriY == builder.maxHeight) {
+                        if(rand.nextBoolean()) //Fade off if too high
                             return;
                     }
 
                     float effectiveY = y;
 
-                    if (coneLeaves) {
+                    if(coneLeaves) {
                         effectiveY += radiusY / 2; // Shift center area downwards
                         // Compress negative y
-                        if (effectiveY < 0) effectiveY = effectiveY * 2.0f;
+                        if(effectiveY < 0) effectiveY = effectiveY * 2.0f;
 
                         // Extend positive y and multiply it by a power to make it sharp
-                        if (effectiveY > 0) {
+                        if(effectiveY > 0) {
                             effectiveY = effectiveY * (2.0f / 3.0f);
                             effectiveY = (float) Math.pow(effectiveY, 1.3);
-                            if (effectiveY > radiusY) effectiveY = radiusY;
+                            if(effectiveY > radiusY) effectiveY = radiusY;
                         }
                         relativeBlock = relativeBlock.getRelative(0, (int) (radiusY / 2), 0);
                     }
@@ -114,18 +114,18 @@ public class FractalLeaves {
                             + Math.pow(effectiveY, 2) / Math.pow(radiusY, 2)
                             + Math.pow(z, 2) / Math.pow(radiusZ, 2);
 
-                    if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
-                        if (equationResult < hollowLeaves)
+                    if(equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
+                        if(equationResult < hollowLeaves)
                             continue;
 
-                        if (Tag.CORALS.isTagged(material)) {
-                            if (!changed.contains(relativeBlock))
+                        if(Tag.CORALS.isTagged(material)) {
+                            if(!changed.contains(relativeBlock))
                                 changed.add(relativeBlock);
                         }
 
                         // Leaves do not replace solid blocks.
-                        if (!relativeBlock.getType().isSolid()) {
-                            if (Tag.LEAVES.isTagged(material)) {
+                        if(!relativeBlock.getType().isSolid()) {
+                            if(Tag.LEAVES.isTagged(material)) {
                                 Leaves leaf = (Leaves) Bukkit.createBlockData(material);
 //
                                 leaf.setDistance(1);
@@ -135,30 +135,30 @@ public class FractalLeaves {
                             }
                         }
 
-                        if (snowy) {
-                            if (!relativeBlock.getRelative(0, 1, 0).getType().isSolid()) {
+                        if(snowy) {
+                            if(!relativeBlock.getRelative(0, 1, 0).getType().isSolid()) {
                                 relativeBlock.getRelative(0, 1, 0).setType(Material.SNOW);
                             }
                         }
 
-                        if (builder.vines > 0
+                        if(builder.vines > 0
                                 && Math.abs(x) >= radiusX - 2
                                 && Math.abs(z) >= radiusZ - 2) {
-                            if (GenUtils.chance(2, 10)) {
+                            if(GenUtils.chance(2, 10)) {
                                 builder.dangleLeavesDown(relativeBlock, (int) Math.ceil(maxR), builder.vines / 2, builder.vines);
                             }
-                            
-                            if (Tag.LEAVES.isTagged(material)&&GenUtils.chance(1, 10)) {
-                                for (BlockFace face : BlockUtils.directBlockFaces) {
+
+                            if(Tag.LEAVES.isTagged(material) && GenUtils.chance(1, 10)) {
+                                for(BlockFace face : BlockUtils.directBlockFaces) {
                                     MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
                                     dir.setFace(face.getOppositeFace(), true);
                                     SimpleBlock vine = relativeBlock.getRelative(face);
-                                    if (vine.getType().isSolid() ||
+                                    if(vine.getType().isSolid() ||
                                             vine.getType() == Material.WATER) continue;
 
                                     vine.setBlockData(dir);
-                                    for (int i = 0; i < GenUtils.randInt(1, builder.vines); i++) {
-                                        if (vine.getRelative(0, -i, 0).getType().isSolid() ||
+                                    for(int i = 0; i < GenUtils.randInt(1, builder.vines); i++) {
+                                        if(vine.getRelative(0, -i, 0).getType().isSolid() ||
                                                 vine.getRelative(0, -i, 0).getType() == Material.WATER) break;
                                         vine.getRelative(0, -i, 0).setBlockData(dir);
                                     }
@@ -166,7 +166,7 @@ public class FractalLeaves {
                             }
                         }
 
-                        if (weepingLeavesChance > 0 && Math.random() < weepingLeavesChance) {
+                        if(weepingLeavesChance > 0 && Math.random() < weepingLeavesChance) {
                             weepingLeaves(relativeBlock, Math.round(weepingLeavesChance * weepingLeavesLength), weepingLeavesLength);
                         }
                     }
@@ -175,17 +175,17 @@ public class FractalLeaves {
         }
 
         // Ensures that corals don't die
-        while (!changed.isEmpty()) {
+        while(!changed.isEmpty()) {
             SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));
-            if (!CoralGenerator.isSaturatedCoral(sb)) {
+            if(!CoralGenerator.isSaturatedCoral(sb)) {
                 // No floating coral fans
-                for (BlockFace face : BlockUtils.directBlockFaces) {
-                    if (Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType()))
+                for(BlockFace face : BlockUtils.directBlockFaces) {
+                    if(Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType()))
                         sb.getRelative(face).setType(Material.WATER);
                 }
 
                 // No levitating sea pickles & fans
-                if (sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
+                if(sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
                         Tag.CORAL_PLANTS.isTagged(sb.getRelative(0, 1, 0).getType())) {
                     sb.getRelative(0, 1, 0).setType(Material.WATER);
                 }
@@ -199,13 +199,13 @@ public class FractalLeaves {
 
     private void weepingLeaves(SimpleBlock base, int minDist, int maxDist) {
         BlockData type = Bukkit.createBlockData(material);
-        if (Tag.LEAVES.isTagged(material)) {
+        if(Tag.LEAVES.isTagged(material)) {
             Leaves leaf = (Leaves) type;
             leaf.setDistance(1);
         }
 
-        for (int i = 1; i <= GenUtils.randInt(minDist, maxDist); i++) {
-            if (base.getRelative(0, -i, 0).getType().isAir())
+        for(int i = 1; i <= GenUtils.randInt(minDist, maxDist); i++) {
+            if(base.getRelative(0, -i, 0).getType().isAir())
                 base.getRelative(0, -i, 0).lsetBlockData(type);
             else
                 break;
@@ -284,6 +284,7 @@ public class FractalLeaves {
     /**
      * Creates dangling leaves without vines. Useful for
      * creating types of weeping trees.
+     *
      * @param chance    chance of creating dangling leaves per block (0 - 1)
      * @param maxLength maximum length of dangling leaves
      */

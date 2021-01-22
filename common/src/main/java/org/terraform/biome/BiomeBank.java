@@ -1,12 +1,37 @@
 package org.terraform.biome;
 
-import org.terraform.biome.beach.*;
+import org.terraform.biome.beach.BadlandsBeachHandler;
+import org.terraform.biome.beach.IcyBeachHandler;
+import org.terraform.biome.beach.MudflatsHandler;
+import org.terraform.biome.beach.RockBeachHandler;
+import org.terraform.biome.beach.SandyBeachHandler;
 import org.terraform.biome.cave.AbstractCavePopulator;
 import org.terraform.biome.cave.FrozenCavePopulator;
 import org.terraform.biome.cave.MossyCavePopulator;
-import org.terraform.biome.flat.*;
-import org.terraform.biome.mountainous.*;
-import org.terraform.biome.ocean.*;
+import org.terraform.biome.flat.BadlandsHandler;
+import org.terraform.biome.flat.BambooForestHandler;
+import org.terraform.biome.flat.DarkForestHandler;
+import org.terraform.biome.flat.DesertHandler;
+import org.terraform.biome.flat.ForestHandler;
+import org.terraform.biome.flat.IceSpikesHandler;
+import org.terraform.biome.flat.JungleHandler;
+import org.terraform.biome.flat.PlainsHandler;
+import org.terraform.biome.flat.SavannaHandler;
+import org.terraform.biome.flat.SnowyTaigaHandler;
+import org.terraform.biome.flat.SnowyWastelandHandler;
+import org.terraform.biome.flat.TaigaHandler;
+import org.terraform.biome.mountainous.BadlandsMountainHandler;
+import org.terraform.biome.mountainous.BirchMountainsHandler;
+import org.terraform.biome.mountainous.DesertMountainHandler;
+import org.terraform.biome.mountainous.RockyMountainsHandler;
+import org.terraform.biome.mountainous.SnowyMountainsHandler;
+import org.terraform.biome.ocean.BlackOceansHandler;
+import org.terraform.biome.ocean.ColdOceansHandler;
+import org.terraform.biome.ocean.FrozenOceansHandler;
+import org.terraform.biome.ocean.LukewarmOceansHandler;
+import org.terraform.biome.ocean.OceansHandler;
+import org.terraform.biome.ocean.SwampHandler;
+import org.terraform.biome.ocean.WarmOceansHandler;
 import org.terraform.biome.river.FrozenRiverHandler;
 import org.terraform.biome.river.JungleRiverHandler;
 import org.terraform.biome.river.RiverHandler;
@@ -100,7 +125,7 @@ public enum BiomeBank {
         Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
 
         // Oceanic biomes
-        if (height < TerraformGenerator.seaLevel) {
+        if(height < TerraformGenerator.seaLevel) {
 
             BiomeBank bank = BiomeGrid.calculateBiome(
                     BiomeType.OCEANIC,
@@ -111,22 +136,22 @@ public enum BiomeBank {
             int trueHeight = (int) HeightMap.getRiverlessHeight(tw, x, z);
 
             //This is a river.
-            if (trueHeight >= TerraformGenerator.seaLevel) {
+            if(trueHeight >= TerraformGenerator.seaLevel) {
                 return BiomeGrid.calculateBiome(BiomeType.RIVER,
                         temperature + GenUtils.randDouble(random, -dither, dither),
                         moisture + GenUtils.randDouble(random, -dither, dither)
                 );
             }
 
-            if (bank == SWAMP) {
-                if (height >= TerraformGenerator.seaLevel - GenUtils.randInt(random, 9, 11)) {
+            if(bank == SWAMP) {
+                if(height >= TerraformGenerator.seaLevel - GenUtils.randInt(random, 9, 11)) {
                     //Shallow and warm areas are swamps.
                     return SWAMP;
                 } else
                     bank = OCEAN;
             }
 
-            if (height <= TConfigOption.HEIGHT_MAP_DEEP_SEA_LEVEL.getInt()) {
+            if(height <= TConfigOption.HEIGHT_MAP_DEEP_SEA_LEVEL.getInt()) {
                 bank = BiomeBank.valueOf("DEEP_" + bank);
                 //TerraformGeneratorPlugin.logger.info("detected deep sea: " + bank.toString() + " at height " + height);
             }
@@ -135,7 +160,7 @@ public enum BiomeBank {
         }
 
         //GENERATE HIGH-ALTITUDE AREAS
-        if (height >= TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt() - GenUtils.randInt(random, 0, 5)) {
+        if(height >= TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt() - GenUtils.randInt(random, 0, 5)) {
             return BiomeGrid.calculateBiome(
                     BiomeType.MOUNTAINOUS,
                     temperature + GenUtils.randDouble(random, -dither, dither),
@@ -144,7 +169,7 @@ public enum BiomeBank {
         }
 
         //GENERATE BEACHES
-        if (height <= TerraformGenerator.seaLevel + GenUtils.randInt(random, 0, 4)) {
+        if(height <= TerraformGenerator.seaLevel + GenUtils.randInt(random, 0, 4)) {
             return BiomeGrid.calculateBiome(
                     BiomeType.BEACH,
                     temperature + GenUtils.randDouble(random, -dither, dither),

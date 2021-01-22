@@ -27,7 +27,7 @@ public enum LangOpt {
     }
 
     public static void init(TerraformGeneratorPlugin plugin) {
-        for (LangOpt lang : LangOpt.values()) {
+        for(LangOpt lang : LangOpt.values()) {
             lang.value = plugin.getLang().fetchLang(lang.path, lang.value);
         }
     }
@@ -53,8 +53,8 @@ public enum LangOpt {
         String parsed = this.value;
         String placeholder = "";
 
-        for (int i = 0; i < placeholders.length; i++) {
-            if (i % 2 == 0) {
+        for(int i = 0; i < placeholders.length; i++) {
+            if(i % 2 == 0) {
                 placeholder = placeholders[i];
             } else {
                 parsed = parsed.replaceAll(placeholder, placeholders[i]);

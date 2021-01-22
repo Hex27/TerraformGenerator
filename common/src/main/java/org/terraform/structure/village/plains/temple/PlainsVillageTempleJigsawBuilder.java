@@ -18,8 +18,8 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
 
     public PlainsVillageTempleJigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
-        this.pieceRegistry = new JigsawStructurePiece[]{
-        		new PlainsVillageTempleLoungePiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+        this.pieceRegistry = new JigsawStructurePiece[] {
+                new PlainsVillageTempleLoungePiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
                 new PlainsVillageTempleRelicPiece(5, 3, 5, JigsawType.STANDARD, true, BlockUtils.directBlockFaces),
                 new PlainsVillageTempleLootPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
                 new PlainsVillageTempleWallPiece(5, 3, 5, JigsawType.END, BlockUtils.directBlockFaces),
@@ -27,11 +27,52 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
         };
         this.chanceToAddNewPiece = 50;
     }
-    
+
+    /**
+     * Refers to walls that are parallel and directly connected are in the form:
+     * __
+     *
+     * @param piece
+     * @param face
+     * @param overlapperPieces
+     * @return
+     */
+    protected static boolean hasAdjacentWall(JigsawStructurePiece piece, BlockFace face, ArrayList<JigsawStructurePiece> overlapperPieces) {
+        for(JigsawStructurePiece other : overlapperPieces) {
+            if(other.getRoom().getSimpleLocation()
+                    .equals(piece.getRoom().getSimpleLocation().getRelative(face, 5))) {
+                if(other.getRotation() == piece.getRotation())
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Refers to walls that are directly connected and perpendicular on the same location.
+     * I.e. the wall must turn inwards instead of outwards (NORTH and WEST facing walls connected)
+     *
+     * @param piece
+     * @param face
+     * @param overlapperPieces
+     * @return
+     */
+    protected static boolean hasAdjacentInwardWall(JigsawStructurePiece piece, BlockFace face, ArrayList<JigsawStructurePiece> overlapperPieces) {
+
+        for(JigsawStructurePiece other : overlapperPieces) {
+            if(other.getRoom().getSimpleLocation()
+                    .equals(piece.getRoom().getSimpleLocation())) {
+                if(other.getRotation() == face.getOppositeFace())
+                    return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public JigsawStructurePiece getFirstPiece(Random random) {
         return new PlainsVillageTempleClericAltarPiece(5, 3, 5, JigsawType.STANDARD, true, this, BlockUtils.directBlockFaces);
-    	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
+        //return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
 
     @Override
@@ -39,7 +80,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
         super.build(random);
 
         //Make sure awkward corners are fixed
-        for (JigsawStructurePiece piece : this.pieces.values()) {
+        for(JigsawStructurePiece piece : this.pieces.values()) {
             SimpleBlock core = new SimpleBlock(
                     this.core.getPopData(),
                     piece.getRoom().getX(),
@@ -47,99 +88,60 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
                     piece.getRoom().getZ());
             Wall target;
 
-            if (piece.getWalledFaces().contains(BlockFace.NORTH)
+            if(piece.getWalledFaces().contains(BlockFace.NORTH)
                     && piece.getWalledFaces().contains(BlockFace.WEST)) { //nw
                 target = new Wall(core.getRelative(-3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.WEST);
             }
-            if (piece.getWalledFaces().contains(BlockFace.NORTH)
+            if(piece.getWalledFaces().contains(BlockFace.NORTH)
                     && piece.getWalledFaces().contains(BlockFace.EAST)) { //ne
                 target = new Wall(core.getRelative(3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.EAST);
             }
-            if (piece.getWalledFaces().contains(BlockFace.SOUTH)
+            if(piece.getWalledFaces().contains(BlockFace.SOUTH)
                     && piece.getWalledFaces().contains(BlockFace.WEST)) { //sw
                 target = new Wall(core.getRelative(-3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.WEST);
             }
-            if (piece.getWalledFaces().contains(BlockFace.SOUTH)
+            if(piece.getWalledFaces().contains(BlockFace.SOUTH)
                     && piece.getWalledFaces().contains(BlockFace.EAST)) { //se
                 target = new Wall(core.getRelative(3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST);
             }
         }
-        
+
         //Declare one of the pieces a tower
         int randIndex = random.nextInt(this.pieces.size());
         int i = 0;
-        for(JigsawStructurePiece p:this.pieces.values()) {
-        	if(i == randIndex) {
-        		((PlainsVillageTempleStandardPiece) p).setTower(true);
-        		//break;
-        	}
+        for(JigsawStructurePiece p : this.pieces.values()) {
+            if(i == randIndex) {
+                ((PlainsVillageTempleStandardPiece) p).setTower(true);
+                //break;
+            }
         }
-        
+
         //Place roofing
-        for(JigsawStructurePiece piece:overlapperPieces) {
-        	PlainsVillageTempleRoofHandler.handleTempleRoof(this.core.getPopData(), piece, overlapperPieces);
+        for(JigsawStructurePiece piece : overlapperPieces) {
+            PlainsVillageTempleRoofHandler.handleTempleRoof(this.core.getPopData(), piece, overlapperPieces);
         }
-        
+
         //Try to place large windows between pairs of walls
-        for(JigsawStructurePiece wallPiece:overlapperPieces) {
-    		for(BlockFace face:BlockUtils.getAdjacentFaces(wallPiece.getRotation())) {
-    			if(wallPiece instanceof PlainsVillageTempleWallPiece && hasAdjacentWall(wallPiece, face, overlapperPieces)) {
-    				((PlainsVillageTempleWallPiece)wallPiece)
-    					.setLargeWindow(this.core.getPopData(),face);
-    			}
-    		}
+        for(JigsawStructurePiece wallPiece : overlapperPieces) {
+            for(BlockFace face : BlockUtils.getAdjacentFaces(wallPiece.getRotation())) {
+                if(wallPiece instanceof PlainsVillageTempleWallPiece && hasAdjacentWall(wallPiece, face, overlapperPieces)) {
+                    ((PlainsVillageTempleWallPiece) wallPiece)
+                            .setLargeWindow(this.core.getPopData(), face);
+                }
+            }
         }
-        
+
         PlainsVillageTempleRoofHandler.placeCeilingTerracotta(this.core.getPopData(), this.pieces.values());
-        
+
         //Decorate rooms and walls
-        for (JigsawStructurePiece piece : this.pieces.values()) {
+        for(JigsawStructurePiece piece : this.pieces.values()) {
             piece.postBuildDecoration(random, this.core.getPopData());
         }
 
-    }
-    
-    /**
-     * Refers to walls that are parallel and directly connected are in the form:
-     * __
-     * @param piece
-     * @param face
-     * @param overlapperPieces
-     * @return
-     */
-    protected static boolean hasAdjacentWall(JigsawStructurePiece piece, BlockFace face, ArrayList<JigsawStructurePiece> overlapperPieces) {
-    	for(JigsawStructurePiece other:overlapperPieces) {
-    		if(other.getRoom().getSimpleLocation()
-    				.equals(piece.getRoom().getSimpleLocation().getRelative(face,5))) {
-    			if(other.getRotation() == piece.getRotation())
-    				return true;
-    		}
-    	}
-    	return false;
-    }
-
-    /**
-     * Refers to walls that are directly connected and perpendicular on the same location.
-     * I.e. the wall must turn inwards instead of outwards (NORTH and WEST facing walls connected)
-     * @param piece
-     * @param face
-     * @param overlapperPieces
-     * @return
-     */
-    protected static boolean hasAdjacentInwardWall(JigsawStructurePiece piece, BlockFace face, ArrayList<JigsawStructurePiece> overlapperPieces) {
-    	
-    	for(JigsawStructurePiece other:overlapperPieces) {
-    		if(other.getRoom().getSimpleLocation()
-    				.equals(piece.getRoom().getSimpleLocation())) {
-    			if(other.getRotation() == face.getOppositeFace())
-    				return true;
-    		}
-    	}
-    	return false;
     }
 
     public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two) {
@@ -148,7 +150,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
 
         //Corner and corner spires
         target.Pillar(5, random, BlockUtils.stoneBricks);
-        
+
         target.getRelative(0, -1, 0).downUntilSolid(random, cobblestone);
 
         target = target.getRelative(0, 1, 0);

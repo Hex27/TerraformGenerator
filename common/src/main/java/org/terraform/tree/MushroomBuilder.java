@@ -5,7 +5,12 @@ import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.*;
+import org.terraform.utils.BezierCurve;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.BresenhamLine;
+import org.terraform.utils.FastNoise;
+import org.terraform.utils.GenUtils;
+import org.terraform.utils.Vector2f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +51,7 @@ public class MushroomBuilder {
 
     public MushroomBuilder(FractalTypes.Mushroom type) {
         this.type = type;
-        switch (type) {
+        switch(type) {
             case GIANT_BROWN_FUNNEL_MUSHROOM:
                 this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
                         .setCapRadius(13)
@@ -114,8 +119,8 @@ public class MushroomBuilder {
     }
 
     private void replaceSphere(float radius, SimpleBlock base, Material type) {
-        if (radius < 0.5) {
-            if (!base.getType().isSolid())
+        if(radius < 0.5) {
+            if(!base.getType().isSolid())
                 base.setType(type);
 
             return;
@@ -124,16 +129,16 @@ public class MushroomBuilder {
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
         noiseGen.SetFrequency(0.09f);
 
-        for (int x = -Math.round(radius); x <= Math.round(radius); x++) {
-            for (int y = -Math.round(radius); y <= Math.round(radius); y++) {
-                for (int z = -Math.round(radius); z <= Math.round(radius); z++) {
+        for(int x = -Math.round(radius); x <= Math.round(radius); x++) {
+            for(int y = -Math.round(radius); y <= Math.round(radius); y++) {
+                for(int z = -Math.round(radius); z <= Math.round(radius); z++) {
                     SimpleBlock block = base.getRelative(x, y, z);
 
-                    if (Math.pow(x, 2) / Math.pow(radius, 2) +
+                    if(Math.pow(x, 2) / Math.pow(radius, 2) +
                             Math.pow(y, 2) / Math.pow(radius, 2) +
                             Math.pow(z, 2) / Math.pow(radius, 2)
                             <= 1 + 0.7 * noiseGen.GetNoise(block.getX(), block.getY(), block.getZ())) {
-                        if (!block.getType().isSolid()) {
+                        if(!block.getType().isSolid()) {
                             block.setType(type);
                         }
                     }
@@ -151,13 +156,13 @@ public class MushroomBuilder {
         float belowY = -0.25f * 2 * ry;
         float lowThreshold = Math.min((float) (0.6 / 5 * Math.min(r, ry)), 0.6f); // When radius < 5 mushrooms less hollow
 
-        for (int x = Math.round(-r); x <= Math.round(r); x++) {
-            for (int y = Math.round(belowY); y <= Math.round(ry); y++) {
-                for (int z = Math.round(-r); z <= Math.round(r); z++) {
+        for(int x = Math.round(-r); x <= Math.round(r); x++) {
+            for(int y = Math.round(belowY); y <= Math.round(ry); y++) {
+                for(int z = Math.round(-r); z <= Math.round(r); z++) {
                     float factor = y / belowY;
 
                     // Hems
-                    if (y < 0 && factor + Math.abs(noiseGen.GetNoise(x / r, z / r)) > 0.6) {
+                    if(y < 0 && factor + Math.abs(noiseGen.GetNoise(x / r, z / r)) > 0.6) {
                         continue;
                     }
 
@@ -166,10 +171,10 @@ public class MushroomBuilder {
                             + Math.pow(y, 2) / Math.pow(ry, 2)
                             + Math.pow(z, 2) / Math.pow(r, 2);
 
-                    if (equationResult <= 1 + 0.25 * Math.abs(noiseGen.GetNoise(x / r, y / ry, z / r))
+                    if(equationResult <= 1 + 0.25 * Math.abs(noiseGen.GetNoise(x / r, y / ry, z / r))
                             && equationResult >= lowThreshold) {
 
-                        if (hardReplace || !rel.getType().isSolid()) {
+                        if(hardReplace || !rel.getType().isSolid()) {
                             rel.setType(GenUtils.randMaterial(rand, type));
                             BlockUtils.correctSurroundingMushroomData(rel);
                         }
@@ -183,10 +188,10 @@ public class MushroomBuilder {
         this.noiseGen = new FastNoise((int) tw.getSeed());
         this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
-        if (this.stemTop == null) stemTop = base;
+        if(this.stemTop == null) stemTop = base;
 
         double initialAngle;
-        if (fourAxisRotationOnly)
+        if(fourAxisRotationOnly)
             initialAngle = (Math.PI / 2.0) * Math.round(Math.random() * 4);
         else initialAngle = 2 * Math.PI * Math.random();
 
@@ -197,7 +202,7 @@ public class MushroomBuilder {
                 baseThickness,
                 initialHeight);
 
-        switch (capShape) {
+        switch(capShape) {
             case ROUND:
                 spawnSphericalCap(tw.getHashedRand(x, y, z).nextInt(94929297),
                         capRadius, capRadius, stemTop.getRelative(0, capYOffset, 0), true, capType);
@@ -235,7 +240,7 @@ public class MushroomBuilder {
         List<Integer> changedYs = new ArrayList<>();
 
         SimpleBlock lastSegment = null;
-        for (int i = 0; i <= totalSegments; i++) {
+        for(int i = 0; i <= totalSegments; i++) {
             float progress = i / (float) totalSegments;
             Vector2f nextPos = curvature.calculate(progress);
 
@@ -244,7 +249,7 @@ public class MushroomBuilder {
 
             lastSegment = base.getRelative(stem3d);
 
-            if (!changedYs.contains(lastSegment.getY()) || !oneBlockWide) {
+            if(!changedYs.contains(lastSegment.getY()) || !oneBlockWide) {
                 replaceSphere((float) (thickness / 2f + thicknessIncrement * thicknessIncrementCurve.calculate(1 - progress).y),
                         lastSegment, stemType);
 
@@ -261,11 +266,11 @@ public class MushroomBuilder {
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
         noiseGen.SetFrequency(1.4f);
 
-        for (int x = Math.round(-r); x <= Math.round(r); x++) {
-            for (int y = 0; y <= Math.round(3 * thickness); y++) {
-                for (int z = Math.round(-r); z <= Math.round(r); z++) {
+        for(int x = Math.round(-r); x <= Math.round(r); x++) {
+            for(int y = 0; y <= Math.round(3 * thickness); y++) {
+                for(int z = Math.round(-r); z <= Math.round(r); z++) {
                     // Replace blocks in the middle
-                    if (stemTop.getRelative(0, y, 0).getType() == stemType)
+                    if(stemTop.getRelative(0, y, 0).getType() == stemType)
                         stemTop.getRelative(0, y, 0).setType(GenUtils.randMaterial(rand, type));
 
                     double distToCenter = Math.sqrt(x * x + z * z) / r;
@@ -281,8 +286,8 @@ public class MushroomBuilder {
                             + Math.pow(Math.abs(y) / (thickness / (1 - Math.pow(1 - (distToCenter + 0.1), 6))), 4)
                             + Math.pow(z / r, 2);
 
-                    if (equationResult <= 1) {
-                        if (hardReplace || !rel.getType().isSolid()) {
+                    if(equationResult <= 1) {
+                        if(hardReplace || !rel.getType().isSolid()) {
                             rel.setType(GenUtils.randMaterial(rand, type));
                             BlockUtils.correctSurroundingMushroomData(rel);
                         }
@@ -296,7 +301,7 @@ public class MushroomBuilder {
         int heightLimit = base.getY() + Math.round(height);
         int gillAmount = 16;
 
-        for (int i = 0; i < gillAmount; i++) {
+        for(int i = 0; i < gillAmount; i++) {
             angle += Math.PI / (gillAmount / 2.0); // Do full circle
 
             // Points from middle to a point on circle with radius of 0.9r
@@ -304,19 +309,19 @@ public class MushroomBuilder {
                     new Vector2f((float) (0.9 * r * Math.cos(angle)), (float) (0.9 * r * Math.sin(angle)))).getPoints();
 
             points:
-            for (Vector2f point : points) {
+            for(Vector2f point : points) {
                 SimpleBlock pointBase = base.getRelative(Math.round(point.x), 0, Math.round(point.y));
 
-                while (true) {
-                    if (pointBase.getType().isSolid()) {
-                        if (pointBase.getRelative(0, -1, 0).getType().isAir())
+                while(true) {
+                    if(pointBase.getType().isSolid()) {
+                        if(pointBase.getRelative(0, -1, 0).getType().isAir())
                             pointBase.getRelative(0, -1, 0).setType(Material.MUSHROOM_STEM);
                         continue points;
                     } else {
                         pointBase = pointBase.getRelative(0, 1, 0);
                     }
 
-                    if (pointBase.getY() > heightLimit) {
+                    if(pointBase.getY() > heightLimit) {
                         continue points;
                     }
                 }
@@ -406,6 +411,7 @@ public class MushroomBuilder {
      * Thickness increment is added to the **radius** of the stem
      * based on Bezier thickness increment curve. On the ground
      * level the width of the stem will be (width + 2 * thicknessIncrement).
+     *
      * @param thicknessIncrement Thickness increment towards the ground.
      */
     public MushroomBuilder setThicknessIncrement(double thicknessIncrement) {

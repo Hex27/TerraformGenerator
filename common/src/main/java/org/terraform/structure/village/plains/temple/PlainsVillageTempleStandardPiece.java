@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
 
-//    private static final ArrayList<Material> BRIGHT_CARPETS = new ArrayList<Material>(){{
+    //    private static final ArrayList<Material> BRIGHT_CARPETS = new ArrayList<Material>(){{
 //        add(Material.BLUE_CARPET);
 //        add(Material.CYAN_CARPET);
 //        add(Material.LIGHT_BLUE_CARPET);
@@ -25,13 +25,13 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
 //        add(Material.YELLOW_CARPET);
 //}};
 //	
-	private boolean isTower = false;
-	
+    private boolean isTower = false;
+
 
     public PlainsVillageTempleStandardPiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, unique, validDirs);
     }
-	
+
     public PlainsVillageTempleStandardPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
     }
@@ -42,8 +42,8 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
         //Place flooring.
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY(), z,
                         GenUtils.randMaterial(
                                 Material.STONE_BRICKS,
@@ -77,14 +77,14 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
 //        for (int i = 0; i < 3; i++) steps[i] = choices[random.nextInt(choices.length)];
 //        Material other = BRIGHT_CARPETS.get(random.nextInt(BRIGHT_CARPETS.size()));
         //Place carpets.
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-            	if(!data.getType(x, getRoom().getY()+1, z).isSolid())
-            		data.setType(x, getRoom().getY()+1, z, Material.WHITE_CARPET);
-            	if(x % 2 == 0 && z % 2 == 0)
-                	data.setType(x, getRoom().getY(), z, Material.TORCH);
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+                if(!data.getType(x, getRoom().getY() + 1, z).isSolid())
+                    data.setType(x, getRoom().getY() + 1, z, Material.WHITE_CARPET);
+                if(x % 2 == 0 && z % 2 == 0)
+                    data.setType(x, getRoom().getY(), z, Material.TORCH);
             }
-        
+
         //Commented out because it's ugly af
         //Random pattern on floor
 //        for(BlockFace dir:BlockUtils.directBlockFaces) {
@@ -94,11 +94,11 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
 //        }
     }
 
-	public boolean isTower() {
-		return isTower;
-	}
+    public boolean isTower() {
+        return isTower;
+    }
 
-	public void setTower(boolean isTower) {
-		this.isTower = isTower;
-	}
+    public void setTower(boolean isTower) {
+        this.isTower = isTower;
+    }
 }

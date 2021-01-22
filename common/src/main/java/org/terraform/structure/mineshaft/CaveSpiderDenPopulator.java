@@ -25,10 +25,10 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
 
         //Flooring - Have a stone brick platform.
         int y = room.getY();
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
-                if (b.getType() == Material.CAVE_AIR) {
+                if(b.getType() == Material.CAVE_AIR) {
                     b.setType(GenUtils.randMaterial(
                             Material.OAK_PLANKS,
                             Material.OAK_SLAB,
@@ -42,16 +42,16 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
         }
 
         //Cave-spider spawner & Webs
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 int limit = 10;
-                while (limit > 0 && b.getType() != Material.CAVE_AIR) {
+                while(limit > 0 && b.getType() != Material.CAVE_AIR) {
                     b = b.getRelative(0, 1, 0);
                     limit--;
                 }
-                if (limit < 0) continue; //No space above.
-                if (x == room.getX() && z == room.getZ()) {
+                if(limit < 0) continue; //No space above.
+                if(x == room.getX() && z == room.getZ()) {
                     data.setSpawner(x, b.getY(), z, EntityType.CAVE_SPIDER);
                 } else {
                     Wall w = new Wall(b, BlockFace.NORTH);

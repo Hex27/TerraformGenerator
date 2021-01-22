@@ -54,22 +54,22 @@ public class FarmhousePopulator extends VillageHousePopulator {
             data.addEntity(x, y + 1, z, EntityType.CAT); //And a cat.
 
             //Spawn a base on the house to sit on
-            for (int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
-                for (int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
-                    if (data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
+            for(int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
+                for(int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
+                    if(data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
                             data.getType(x + nx, y - 1, z + nz).toString().contains("STONE_BRICKS"))
                         BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-                    else if (data.getType(x + nx, y - 1, z + nz).toString().contains("LOG"))
+                    else if(data.getType(x + nx, y - 1, z + nz).toString().contains("LOG"))
                         BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, data.getType(x + nx, y - 1, z + nz));
                 }
             }
 
             //Spawn a stairway from the house.
             Wall w = new Wall(new SimpleBlock(data, x, y - 1, z), farmHouse.getFace()).getRight();
-            for (int i = 0; i < 7; i++)
+            for(int i = 0; i < 7; i++)
                 w = w.getFront();
             //while(w.getType() != Material.DIRT){
-            while (!w.getType().isSolid() ||
+            while(!w.getType().isSolid() ||
                     w.getType().toString().contains("PLANKS")) {
                 Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(random, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
                         Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS));
@@ -88,7 +88,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
 
             createFields(tw, biome, random, data, x, y, z);
 
-        } catch (Throwable e) {
+        } catch(Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place farmhouse at " + x + "," + y + "," + z + "!");
             e.printStackTrace();
         }
@@ -102,7 +102,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
         b.getRelative(0, 3, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
         b.getRelative(0, 4, 0).setType(Material.CAMPFIRE);
         b.getRelative(0, 5, 0).setType(GenUtils.randMaterial(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             Slab tSlab = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
             tSlab.setType(Type.TOP);
             b.getRelative(face).getRelative(0, 3, 0).setBlockData(tSlab);
@@ -123,15 +123,15 @@ public class FarmhousePopulator extends VillageHousePopulator {
         Material cropOne = Material.WHEAT;
         Material cropTwo = Material.CARROTS;
 
-        if (tw.getTemperature(x, z) <= Temperature.SNOWY) {
+        if(tw.getTemperature(x, z) <= Temperature.SNOWY) {
             cropOne = Material.POTATOES;
             cropTwo = Material.BEETROOTS;
         }
 
-        for (int nx = -50; nx <= 50; nx++) {
-            for (int nz = -50; nz <= 50; nz++) {
+        for(int nx = -50; nx <= 50; nx++) {
+            for(int nz = -50; nz <= 50; nz++) {
                 int height = GenUtils.getTrueHighestBlock(data, x + nx, z + nz);
-                if (!BlockUtils.isDirtLike(data.getType(x + nx, height, z + nz)) ||
+                if(!BlockUtils.isDirtLike(data.getType(x + nx, height, z + nz)) ||
                         data.getType(x + nx, height + 1, z + nz) != Material.AIR)
                     continue;
 
@@ -139,19 +139,19 @@ public class FarmhousePopulator extends VillageHousePopulator {
 
                 double dist = Math.pow(nx, 2) + Math.pow(nz, 2);
                 double multiplier = Math.pow((1 / (dist - 2500)) + 1, 255);
-                if (multiplier < 0 || dist > 2500 + (radiusNoise.GetNoise(nx, nz) * 500.0)) multiplier = 0;
+                if(multiplier < 0 || dist > 2500 + (radiusNoise.GetNoise(nx, nz) * 500.0)) multiplier = 0;
                 noise = noise * multiplier;
 
-                if (dist < 2500)
-                    if (GenUtils.chance(random, 1, 300)) {
+                if(dist < 2500)
+                    if(GenUtils.chance(random, 1, 300)) {
                         data.setType(x + nx, height + 1, z + nz, Material.COMPOSTER);
                         continue;
                     }
 
-                if (noise < -0.2) { //Crop one
-                    if (GenUtils.chance(random, 1, 15)) {
+                if(noise < -0.2) { //Crop one
+                    if(GenUtils.chance(random, 1, 15)) {
                         data.setType(nx + x, height, nz + z, Material.WATER);
-                        for (BlockFace face : BlockUtils.directBlockFaces) {
+                        for(BlockFace face : BlockUtils.directBlockFaces) {
                             BlockUtils.setDownUntilSolid(nx + x + face.getModX(), height, nz + z + face.getModZ(),
                                     data,
                                     Material.FARMLAND);
@@ -162,11 +162,11 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         data.setBlockData(nx + x, height, nz + z, fl);
                         Ageable crop = (Ageable) Bukkit.createBlockData(cropOne);
                         crop.setAge(GenUtils.randInt(random, 0, crop.getMaximumAge()));
-                        if (!data.getType(nx + x, height + 1, nz + z).isSolid())
+                        if(!data.getType(nx + x, height + 1, nz + z).isSolid())
                             data.setBlockData(nx + x, height + 1, nz + z, crop);
                     }
-                } else if (noise > 0.2) { //Crop two
-                    if (GenUtils.chance(random, 1, 15))
+                } else if(noise > 0.2) { //Crop two
+                    if(GenUtils.chance(random, 1, 15))
                         data.setType(nx + x, height, nz + z, Material.WATER);
                     else {
                         Farmland fl = (Farmland) Bukkit.createBlockData(Material.FARMLAND);
@@ -176,15 +176,15 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         crop.setAge(GenUtils.randInt(random, 0, crop.getMaximumAge()));
                         data.setBlockData(nx + x, height + 1, nz + z, crop);
                     }
-                } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { //Grass hedges
+                } else if(Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { //Grass hedges
                     BlockUtils.setPersistentLeaves(data, nx + x, height + 1, nz + z, BlockUtils.getWoodForBiome(biome, "LEAVES"));
 
-                    if (GenUtils.chance(random, 1, 100)) {
+                    if(GenUtils.chance(random, 1, 100)) {
                         placeLamp(tw, biome, random, data, nx + x, height + 1, z + nz);
                     }
                     //data.setType(nx+x, height+1, nz+z, Material.OAK_LEAVES);
                 } else {
-                    if (GenUtils.chance(random, (int) (100 * Math.pow(multiplier, 3)), 100)) {
+                    if(GenUtils.chance(random, (int) (100 * Math.pow(multiplier, 3)), 100)) {
                         data.setType(nx + x, height, nz + z, GenUtils.randMaterial(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
                     }
                 }

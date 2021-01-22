@@ -33,8 +33,8 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
 
         int[] spawnCoords = {data.getChunkX() * 16, data.getChunkZ() * 16};
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
-        for (int[] coords : allCoords) {
-            if (coords[0] >> 4 == data.getChunkX() && coords[1] >> 4 == data.getChunkZ()) {
+        for(int[] coords : allCoords) {
+            if(coords[0] >> 4 == data.getChunkX() && coords[1] >> 4 == data.getChunkZ()) {
                 spawnCoords = coords;
                 break;
             }
@@ -58,46 +58,46 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
         int radius = GenUtils.randInt(rand, 5, 10);
 
         //First Round
-        for (int nx = -radius; nx <= radius; nx++) {
-            for (int nz = -radius; nz <= radius; nz++) {
-                if (nx * nx + nz * nz > radius * radius + GenUtils.randInt(rand, -10, 10))
+        for(int nx = -radius; nx <= radius; nx++) {
+            for(int nz = -radius; nz <= radius; nz++) {
+                if(nx * nx + nz * nz > radius * radius + GenUtils.randInt(rand, -10, 10))
                     continue;
 
                 int y = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, nx + x, nz + z);
 
                 //Spawner
-                if (nx == 0 && nz == 0) {
+                if(nx == 0 && nz == 0) {
                     data.setSpawner(x, y + 1, z, EntityType.DROWNED);
                     continue;
                 }
 
                 //Spawn a dungeon Pillar
-                if (GenUtils.chance(rand, 1, 10)) {
+                if(GenUtils.chance(rand, 1, 10)) {
                     Wall w = new Wall(new SimpleBlock(data, nx + x, y + 1, nz + z), BlockFace.NORTH);
                     w.LPillar(GenUtils.randInt(1, 7), rand, set);
-                } else if (GenUtils.chance(rand, 1, 70)) {
+                } else if(GenUtils.chance(rand, 1, 70)) {
                     Directional dir = (Directional) Bukkit.createBlockData(Material.CHEST);
                     dir.setFacing(BlockUtils.getDirectBlockFace(rand));
                     data.setBlockData(x + nx, y + 1, z + nz, dir);
-                    if (radius < 7)
+                    if(radius < 7)
                         data.lootTableChest(x + nx, y + 1, z + nz, TerraLootTable.UNDERWATER_RUIN_SMALL);
                     else
                         data.lootTableChest(x + nx, y + 1, z + nz, TerraLootTable.UNDERWATER_RUIN_BIG);
-                } else if (GenUtils.chance(rand, 1, 10)) {
+                } else if(GenUtils.chance(rand, 1, 10)) {
                     CoralGenerator.generateKelpGrowth(data, nx + x, y + 1, nz + z);
-                } else if (GenUtils.chance(rand, 1, 10)) {
+                } else if(GenUtils.chance(rand, 1, 10)) {
                     data.setType(x + nx, y, z + nz, Material.MAGMA_BLOCK);
                 }
             }
         }
 
         //Second decorative round
-        for (int nx = -radius; nx <= radius; nx++) {
-            for (int nz = -radius; nz <= radius; nz++) {
+        for(int nx = -radius; nx <= radius; nx++) {
+            for(int nz = -radius; nz <= radius; nz++) {
                 int y = GenUtils.getHighestGround(data, nx + x, nz + z);
-                if (GenUtils.chance(rand, 1, 15)) {
+                if(GenUtils.chance(rand, 1, 15)) {
                     CoralGenerator.generateSingleCoral(data, nx, y, nz);
-                } else if (GenUtils.chance(rand, 1, 10)) {
+                } else if(GenUtils.chance(rand, 1, 10)) {
                     data.setType(x + nx, y + 1, z + nz, Material.SEAGRASS);
                 }
             }

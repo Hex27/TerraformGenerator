@@ -44,13 +44,13 @@ public class ShipwreckSchematicParser extends SchematicParser {
     public void applyData(SimpleBlock block, BlockData data) {
 
         //Water logging
-        if (data instanceof Waterlogged) {
+        if(data instanceof Waterlogged) {
             Waterlogged logged = (Waterlogged) data;
             logged.setWaterlogged(block.getType() != Material.AIR);
         }
 
         //Mossy cobble
-        if (data.getMaterial().toString().contains("COBBLESTONE")) {
+        if(data.getMaterial().toString().contains("COBBLESTONE")) {
             data = Bukkit.createBlockData(
                     StringUtils.replace(data.getAsString(), "cobblestone",
                             GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
@@ -60,8 +60,8 @@ public class ShipwreckSchematicParser extends SchematicParser {
         }
 
         //Holes
-        if (GenUtils.chance(rand, 1, 30)) {
-            if (block.getY() <= TerraformGenerator.seaLevel)
+        if(GenUtils.chance(rand, 1, 30)) {
+            if(block.getY() <= TerraformGenerator.seaLevel)
                 data = Bukkit.createBlockData(Material.WATER);
             else
                 data = Bukkit.createBlockData(Material.AIR);
@@ -70,15 +70,15 @@ public class ShipwreckSchematicParser extends SchematicParser {
             return;
         }
 
-        if (data.getMaterial().toString().startsWith("OAK") ||
+        if(data.getMaterial().toString().startsWith("OAK") ||
                 data.getMaterial().toString().startsWith("STRIPPED_OAK")) {
             data = Bukkit.createBlockData(data.getAsString().replace("OAK", woodType));
         }
 
 
-        if (data.getMaterial() == Material.CHEST) {
-            if (GenUtils.chance(rand, 4, 5)) {
-                if (block.getY() <= TerraformGenerator.seaLevel)
+        if(data.getMaterial() == Material.CHEST) {
+            if(GenUtils.chance(rand, 4, 5)) {
+                if(block.getY() <= TerraformGenerator.seaLevel)
                     data = Bukkit.createBlockData(Material.WATER);
                 else
                     data = Bukkit.createBlockData(Material.AIR);
@@ -87,22 +87,22 @@ public class ShipwreckSchematicParser extends SchematicParser {
                 return;
             }
             super.applyData(block, data);
-            if (GenUtils.chance(rand, 1, 5)) {
+            if(GenUtils.chance(rand, 1, 5)) {
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.SHIPWRECK_TREASURE);
             } else
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.SHIPWRECK_SUPPLY);
             return;
         }
 
-        if (data.getMaterial().isBlock() && data.getMaterial().isSolid()) {
-            if (GenUtils.chance(rand, 1, 60)
+        if(data.getMaterial().isBlock() && data.getMaterial().isSolid()) {
+            if(GenUtils.chance(rand, 1, 60)
                     && !biome.toString().contains("COLD") //Dont spawn these in cold places.
                     && !biome.toString().contains("FROZEN")) { //Corals
                 CoralGenerator.generateCoral(block.getPopData(),
                         block.getX(),
                         block.getY(),
                         block.getZ());
-            } else if (GenUtils.chance(rand, 1, 40)) { //kelp n stuff
+            } else if(GenUtils.chance(rand, 1, 40)) { //kelp n stuff
                 CoralGenerator.generateKelpGrowth(block.getPopData(),
                         block.getX(),
                         block.getY() + 1,

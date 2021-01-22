@@ -38,7 +38,7 @@ public class BambooForestHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{Material.GRASS_BLOCK,
+        return new Material[] {Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -52,31 +52,31 @@ public class BambooForestHandler extends BiomeHandler {
         pathNoise.SetFractalOctaves(3);
         pathNoise.SetFrequency(0.07f);
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
+                if(data.getBiome(x, y, z) != getBiome()) continue;
 
                 //Podzol Paths
-                if (pathNoise.GetNoise(x, z) > 0.27) {
-                    if (GenUtils.chance(random, 99, 100) &&
+                if(pathNoise.GetNoise(x, z) > 0.27) {
+                    if(GenUtils.chance(random, 99, 100) &&
                             data.getBiome(x, z) == getBiome() &&
                             BlockUtils.isDirtLike(data.getType(x, y, z)))
                         data.setType(x, y, z, Material.PODZOL);
                 }
 
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK ||
+                if(data.getType(x, y, z) == Material.GRASS_BLOCK ||
                         data.getType(x, y, z) == Material.PODZOL) {
 
                     //Grass and shrubbery
-                    if (GenUtils.chance(random, 1, 3)) {
-                        if (GenUtils.chance(random, 6, 10)) {
+                    if(GenUtils.chance(random, 1, 3)) {
+                        if(GenUtils.chance(random, 6, 10)) {
                             data.setType(x, y + 1, z, Material.GRASS);
-                            if (random.nextBoolean()) {
+                            if(random.nextBoolean()) {
                                 BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
                             }
                         } else {
-                            if (GenUtils.chance(random, 7, 10))
+                            if(GenUtils.chance(random, 7, 10))
                                 data.setType(x, y + 1, z, Material.FERN);
                             else
                                 BlockUtils.setDoublePlant(data, x, y + 1, z, Material.LARGE_FERN);
@@ -84,7 +84,7 @@ public class BambooForestHandler extends BiomeHandler {
                     }
 
                     //Small grass poffs
-                    if (GenUtils.chance(random, 1, 50)) {
+                    if(GenUtils.chance(random, 1, 50)) {
                         BlockUtils.replaceSphere(
                                 random.nextInt(424444),
                                 2, 3, 2,
@@ -92,7 +92,7 @@ public class BambooForestHandler extends BiomeHandler {
                     }
 
                     //Bamboo
-                    if (GenUtils.chance(random, 1, 3) && BlockUtils.isDirtLike(data.getType(x, y, z))) {
+                    if(GenUtils.chance(random, 1, 3) && BlockUtils.isDirtLike(data.getType(x, y, z))) {
                         int h = BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.BAMBOO, 12, 16);
                         Bamboo bambooHead = (Bamboo) Bukkit.createBlockData(Material.BAMBOO);
                         bambooHead.setLeaves(Leaves.LARGE);

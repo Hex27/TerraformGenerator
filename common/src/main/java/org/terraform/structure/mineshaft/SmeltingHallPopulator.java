@@ -29,10 +29,10 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
 
         //Flooring - Have a stone brick platform.
         int y = room.getY();
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
-                if (b.getType() == Material.CAVE_AIR
+                if(b.getType() == Material.CAVE_AIR
                         || b.getType() == Material.OAK_PLANKS
                         || b.getType() == Material.OAK_SLAB
                         || b.getType() == Material.GRAVEL) {
@@ -44,7 +44,7 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
                             Material.COBBLESTONE,
                             Material.CAVE_AIR));
                     //Small chance to set a lantern
-                    if (GenUtils.chance(rand, 1, 150)) {
+                    if(GenUtils.chance(rand, 1, 150)) {
                         b.getRelative(0, 1, 0).setType(Material.COBBLESTONE);
                         b.getRelative(0, 2, 0).setType(Material.LANTERN);
                     }
@@ -53,32 +53,32 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
         }
 
         //Support hooks or pillars
-        for (int[] corner : room.getAllCorners(3)) {
+        for(int[] corner : room.getAllCorners(3)) {
             int x = corner[0];
             int z = corner[1];
             Wall w = new Wall(new SimpleBlock(data, x, room.getY() + 1, z), BlockFace.NORTH);
-            if (w.findCeiling(50) != null)
+            if(w.findCeiling(50) != null)
                 w.LPillar(50, rand, Material.IRON_BARS);
             else
                 w.getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_LOG);
         }
 
         //Furnaces & Chests
-        for (Entry<Wall, Integer> walls : room.getFourWalls(data, 4).entrySet()) {
+        for(Entry<Wall, Integer> walls : room.getFourWalls(data, 4).entrySet()) {
             int type = rand.nextInt(3);
-            if (type == 0) continue;
+            if(type == 0) continue;
             Wall w = walls.getKey();
             int l = walls.getValue();
-            for (int i = 0; i < l; i++) {
+            for(int i = 0; i < l; i++) {
                 //Non-rail areas
-                if (w.getType() == Material.CAVE_AIR) {
-                    if (type == 1) { //Furnaces
+                if(w.getType() == Material.CAVE_AIR) {
+                    if(type == 1) { //Furnaces
                         Furnace furnace = (Furnace) Bukkit.createBlockData(Material.FURNACE);
                         furnace.setFacing(w.getDirection());
-                        for (int ny = 0; ny < room.getHeight() / 3; ny++) {
+                        for(int ny = 0; ny < room.getHeight() / 3; ny++) {
                             w.getRelative(0, ny, 0).setBlockData(furnace);
                         }
-                    } else if (GenUtils.chance(rand, 1, 5)) { //Chests
+                    } else if(GenUtils.chance(rand, 1, 5)) { //Chests
                         Chest chest = (Chest) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());
                         w.setBlockData(chest);

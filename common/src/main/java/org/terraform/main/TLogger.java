@@ -10,6 +10,6 @@ public class TLogger extends DCLogger {
 
     @Override
     public void debug(String message) {
-        if (TConfigOption.DEVSTUFF_DEBUG_MODE.getBoolean()) super.debug(message);
+        if(TConfigOption.DEVSTUFF_DEBUG_MODE.getBoolean()) super.debug(message);
     }
 }

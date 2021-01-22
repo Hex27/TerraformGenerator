@@ -25,19 +25,19 @@ public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
         //We don't want any mobs stepping on bombs here. The whole room explodes.
         int[] lowerCorner = room.getLowerCorner(1);
         int[] upperCorner = room.getUpperCorner(1);
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++)
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++)
                 data.setType(x, room.getY() + 1, z, Material.AIR);
 
         //Classic Pyramid interior look
         SimpleBlock center = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
         center.setType(Material.BLUE_TERRACOTTA);
-        for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
+        for(BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             center.getRelative(face).setType(Material.ORANGE_TERRACOTTA);
             new Wall(center.getRelative(face).getRelative(face).getRelative(0, 1, 0))
                     .Pillar(room.getHeight(), rand, Material.CUT_SANDSTONE);
         }
-        for (BlockFace face : BlockUtils.directBlockFaces)
+        for(BlockFace face : BlockUtils.directBlockFaces)
             center.getRelative(face).getRelative(face)
                     .setType(Material.ORANGE_TERRACOTTA);
 
@@ -47,8 +47,8 @@ public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
 
         //Underground tnt network
 
-        for (int nx = -1; nx <= 1; nx++) {
-            for (int nz = -1; nz <= 1; nz++) {
+        for(int nx = -1; nx <= 1; nx++) {
+            for(int nz = -1; nz <= 1; nz++) {
                 data.setType(nx + center.getX(), center.getY(), center.getZ() + nz, Material.REDSTONE_WIRE);
                 data.setType(nx + center.getX(), center.getY() - 1, center.getZ() + nz, Material.TNT);
             }

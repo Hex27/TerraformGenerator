@@ -1,6 +1,18 @@
 package org.terraform.v1_16_R2;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.BlockPosition;
+import net.minecraft.server.v1_16_R2.Blocks;
+import net.minecraft.server.v1_16_R2.Entity;
+import net.minecraft.server.v1_16_R2.EntityInsentient;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.EnumMobSpawn;
+import net.minecraft.server.v1_16_R2.IBlockData;
+import net.minecraft.server.v1_16_R2.LootTables;
+import net.minecraft.server.v1_16_R2.MinecraftKey;
+import net.minecraft.server.v1_16_R2.RegionLimitedWorldAccess;
+import net.minecraft.server.v1_16_R2.TileEntity;
+import net.minecraft.server.v1_16_R2.TileEntityLootable;
+import net.minecraft.server.v1_16_R2.TileEntityMobSpawner;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -39,7 +51,7 @@ public class PopulatorData extends PopulatorDataAbstract {
     @SuppressWarnings("deprecation")
     @Override
     public void setType(int x, int y, int z, Material type) {
-        if (!rlwa.setTypeAndData(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0)) {
+        if(!rlwa.setTypeAndData(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0)) {
             NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
         }
     }
@@ -47,7 +59,7 @@ public class PopulatorData extends PopulatorDataAbstract {
     @SuppressWarnings("deprecation")
     @Override
     public void setBlockData(int x, int y, int z, BlockData data) {
-        if (!rlwa.setTypeAndData(new BlockPosition(x, y, z)
+        if(!rlwa.setTypeAndData(new BlockPosition(x, y, z)
                 , ((CraftBlockData) data).getState(), 0)) {
             NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
         }
@@ -81,13 +93,13 @@ public class PopulatorData extends PopulatorDataAbstract {
             EntityTypes<?> et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(type.name()).get(null);
             Entity e = et.a(rlwa.getMinecraftWorld());
             e.setPositionRotation((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
-            if (e instanceof EntityInsentient) {
+            if(e instanceof EntityInsentient) {
                 ((EntityInsentient) e).setPersistent();
                 ((EntityInsentient) e).prepare(rlwa, rlwa.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.STRUCTURE, null, null);
             }
 
             rlwa.addEntity(e);
-        } catch (IllegalArgumentException | IllegalAccessException
+        } catch(IllegalArgumentException | IllegalAccessException
                 | NoSuchFieldException | SecurityException e1) {
             e1.printStackTrace();
         }
@@ -99,10 +111,10 @@ public class PopulatorData extends PopulatorDataAbstract {
         rlwa.setTypeAndData(pos, Blocks.SPAWNER.getBlockData(), 2);
         TileEntity tileentity = rlwa.getTileEntity(pos);
 
-        if (tileentity instanceof TileEntityMobSpawner) {
+        if(tileentity instanceof TileEntityMobSpawner) {
             try {
                 ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-            } catch (IllegalArgumentException | IllegalAccessException
+            } catch(IllegalArgumentException | IllegalAccessException
                     | NoSuchFieldException | SecurityException e) {
                 e.printStackTrace();
             }
@@ -119,7 +131,7 @@ public class PopulatorData extends PopulatorDataAbstract {
     }
 
     private MinecraftKey getLootTable(TerraLootTable table) {
-        switch (table) {
+        switch(table) {
             case SPAWN_BONUS_CHEST:
                 return LootTables.b;
             case END_CITY_TREASURE:

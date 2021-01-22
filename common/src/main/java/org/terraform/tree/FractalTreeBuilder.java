@@ -15,8 +15,11 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.utils.*;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.CoralGenerator;
+import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.BeeHiveSpawner;
 import org.terraform.utils.version.Version;
 
@@ -25,6 +28,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class FractalTreeBuilder {
+    protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
+    protected TerraformWorld tw;
     int height = 0;
     SimpleBlock top;
     float baseThickness = 3;
@@ -51,13 +56,11 @@ public class FractalTreeBuilder {
     int fractalsDone = 0;
     double maxPitch = 9999;
     double minPitch = -9999;
-    protected TerraformWorld tw;
     float branchNoiseMultiplier = 0.7f;
     float branchNoiseFrequency = 0.09f;
     int oriX;
     int oriY;
     int oriZ;
-    protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
     private FastNoise noiseGen;
     private SimpleBlock beeHive;
     private boolean coralDecoration = false;
@@ -65,7 +68,7 @@ public class FractalTreeBuilder {
     private int initialHeight;
 
     public FractalTreeBuilder(FractalTypes.Tree type) {
-        switch (type) {
+        switch(type) {
             case FOREST:
                 this
                         .setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
@@ -424,7 +427,7 @@ public class FractalTreeBuilder {
     }
 
     public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
+        if(TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
             this.trunkType = Material.getMaterial(StringUtils.replace(this.trunkType.toString(), "WOOD", "LOG"));
         }
         this.oriX = x;
@@ -433,23 +436,23 @@ public class FractalTreeBuilder {
         this.tw = tw;
         //this.noiseGen = new FastNoise((int) tw.getSeed());
         if(!noiseCache.containsKey(tw)) {
-        	FastNoise noise = new FastNoise((int) tw.getSeed());
-        	noise.SetNoiseType(NoiseType.SimplexFractal);
-        	noise.SetFractalOctaves(5);
-        	noiseCache.put(tw, noise);
+            FastNoise noise = new FastNoise((int) tw.getSeed());
+            noise.SetNoiseType(NoiseType.SimplexFractal);
+            noise.SetFractalOctaves(5);
+            noiseCache.put(tw, noise);
         }
         noiseGen = noiseCache.get(tw);
         // Setup noise to be used in randomising the sphere
         noiseGen.SetFrequency(branchNoiseFrequency);
-        
+
         this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
-        if (this.top == null) top = base;
+        if(this.top == null) top = base;
         initialAngle = Math.PI / 2 + GenUtils.randDouble(rand, -initialTilt, initialTilt);
 
         alwaysOneStraightBranchLength = baseHeight;
 
-        if (alwaysOneStraight > 0) {
+        if(alwaysOneStraight > 0) {
             //Starting Trunk
             fractalBranch(rand, base,
                     initialAngle,
@@ -465,41 +468,41 @@ public class FractalTreeBuilder {
                     0, baseThickness,
                     initialHeight);
         }
-        
+
         if(beeHive != null)
-	        for (int i = 0; i < 8; i++) {
-	            if (!beeHive.getType().isSolid()) {
-	                BeeHiveSpawner.spawnFullBeeNest(beeHive);
-	            	//TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
-	                break;
-	            }else
-	            	beeHive = beeHive.getRelative(0,-1,0);
-	        }
-        
+            for(int i = 0; i < 8; i++) {
+                if(!beeHive.getType().isSolid()) {
+                    BeeHiveSpawner.spawnFullBeeNest(beeHive);
+                    //TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+                    break;
+                } else
+                    beeHive = beeHive.getRelative(0, -1, 0);
+            }
+
     }
 
     public void fractalBranch(Random rand, SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size) {
 
-        if (pitch > maxPitch) {
+        if(pitch > maxPitch) {
             //reset pitch
             pitch = maxPitch - rta();
-        } else if (pitch < minPitch) {
+        } else if(pitch < minPitch) {
             pitch = minPitch + rta();
         }
 
-        if (depth >= maxDepth) {
+        if(depth >= maxDepth) {
             fractalLeaves.placeLeaves(base);
             base.setType(trunkType);
             return;
         }
-        if (size <= 0) {
+        if(size <= 0) {
             fractalLeaves.placeLeaves(base);
             base.setType(trunkType);
             return;
         }
 
         boolean restore = false;
-        if (noMainStem && size == initialHeight) {
+        if(noMainStem && size == initialHeight) {
             restore = true;
             size = 0;
         }
@@ -509,12 +512,12 @@ public class FractalTreeBuilder {
         int z = (int) (Math.round(size * Math.cos(pitch) * Math.cos(yaw)));
 
         SimpleBlock two = base.getRelative(x, y, z);
-        if (two.getY() > top.getY()) top = two;
+        if(two.getY() > top.getY()) top = two;
 
         //Set height
-        if (two.getY() - oriY > height) height = two.getY() - oriY;
+        if(two.getY() - oriY > height) height = two.getY() - oriY;
 
-        if (restore) {
+        if(restore) {
             two = base;
             size = baseHeight;
         }
@@ -522,12 +525,12 @@ public class FractalTreeBuilder {
         drawLine(base, two, (int) (size), thickness);
 
 
-        if (beeHive == null
+        if(beeHive == null
                 && Version.isAtLeast(15.1)
                 && GenUtils.chance(rand, (int) (beeChance * 1000.0), 1000)) {
-            for (int i = 0; i < 3; i++) {
-                if (!two.getRelative(0, -i, 0).getType().isSolid()) {
-                    beeHive = two.getRelative(0,-i,0);
+            for(int i = 0; i < 3; i++) {
+                if(!two.getRelative(0, -i, 0).getType().isSolid()) {
+                    beeHive = two.getRelative(0, -i, 0);
                     break;
                     //TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
                 }
@@ -537,7 +540,7 @@ public class FractalTreeBuilder {
 
         fractalsDone++;
 
-        if (fractalsDone % fractalThreshold != 0
+        if(fractalsDone % fractalThreshold != 0
                 && thickness >= 1
                 && size >= 1) {
             //Make 1 branch
@@ -550,12 +553,12 @@ public class FractalTreeBuilder {
             return;
         }
 
-        if (alwaysOneStraight > 0 && pitch != initialAngle) {
+        if(alwaysOneStraight > 0 && pitch != initialAngle) {
             fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(), 99, thickness - thicknessDecrement, size - lengthDecrement);
             return;
         }
 
-        if (alwaysOneStraight > 0) {
+        if(alwaysOneStraight > 0) {
             alwaysOneStraightBranchLength -= this.lengthDecrement;
             //Extend a central trunk and make more branches.
             //this.logType = Material.GREEN_WOOL;
@@ -569,7 +572,7 @@ public class FractalTreeBuilder {
 
 
             //4 more static angle fractals.
-            if (alwaysOneStraightExtendedBranches) {
+            if(alwaysOneStraightExtendedBranches) {
                 fractalBranch(rand, two, pitch + randomAngle(), ra(0, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
                 //this.logType = Material.PINK_WOOL;
                 fractalBranch(rand, two, pitch + randomAngle(), ra(Math.PI / 2, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
@@ -590,10 +593,10 @@ public class FractalTreeBuilder {
     }
 
     public void drawLine(SimpleBlock one, SimpleBlock two, int segments, double thickness) {
-        if (one.equals(two)) return;
+        if(one.equals(two)) return;
         //Vector one to two;
         Vector v = two.getVector().subtract(one.getVector());
-        for (int i = 0; i <= segments; i++) {
+        for(int i = 0; i <= segments; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) segments));
             SimpleBlock segment = one.getRelative(seg);
             replaceSphere(((float) thickness) / 2, segment, trunkType);
@@ -601,7 +604,7 @@ public class FractalTreeBuilder {
     }
 
     private void replaceSphere(float radius, SimpleBlock base, Material type) {
-        if (radius <= 0) {
+        if(radius <= 0) {
             return;
         }
         replaceSphere(radius, radius, radius, base, type);
@@ -611,14 +614,14 @@ public class FractalTreeBuilder {
     private void replaceSphere(float rX, float rY, float rZ, SimpleBlock block, Material type) {
 
         // Don't place anything if radius is nothing
-        if (rX <= 0 &&
+        if(rX <= 0 &&
                 rY <= 0 &&
                 rZ <= 0) {
             return;
         }
 
         // Radius 0.5 is 1 block
-        if (rX <= 0.5 &&
+        if(rX <= 0.5 &&
                 rY <= 0.5 &&
                 rZ <= 0.5) {
             block.setType(type);
@@ -628,20 +631,20 @@ public class FractalTreeBuilder {
         float noiseMultiplier = branchNoiseMultiplier;
 
         double maxR = rX;
-        if (rX < rY) maxR = rY;
-        if (rY < rZ) maxR = rZ;
+        if(rX < rY) maxR = rY;
+        if(rY < rZ) maxR = rZ;
 
         ArrayList<SimpleBlock> changed = new ArrayList<>();
 
-        for (float y = -rY; y <= rY; y++) {
-            for (float x = -rX; x <= rX; x++) {
-                for (float z = -rZ; z <= rZ; z++) {
+        for(float y = -rY; y <= rY; y++) {
+            for(float x = -rX; x <= rX; x++) {
+                for(float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    if (rel.getY() - this.oriY > this.maxHeight) {
+                    if(rel.getY() - this.oriY > this.maxHeight) {
                         return;
                     }
-                    if (rel.getY() - this.oriY == this.maxHeight) {
-                        if (rand.nextBoolean()) //Fade off if too high
+                    if(rel.getY() - this.oriY == this.maxHeight) {
+                        if(rand.nextBoolean()) //Fade off if too high
                             return;
                     }
 
@@ -649,30 +652,30 @@ public class FractalTreeBuilder {
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
 
-                    if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                    if(equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         rel.setType(type);
 
-                        if (coralDecoration) {
-                            if (!changed.contains(rel))
+                        if(coralDecoration) {
+                            if(!changed.contains(rel))
                                 changed.add(rel);
                         }
 
                         //Decorate with fans
-                        if (coralDecoration) {
+                        if(coralDecoration) {
                             CoralGenerator.generateSingleCoral(rel.getPopData(), rel.getX(), rel.getY(), rel.getZ(), this.fractalLeaves.material.toString());
                         }
 
-                        if (cocoaBeans > 0
+                        if(cocoaBeans > 0
                                 && Math.abs(x) >= rX - 2
                                 && Math.abs(z) >= rZ - 2) {
                             //Coca beans
-                            if (GenUtils.chance(cocoaBeans, 100)) {
-                                for (BlockFace face : BlockUtils.directBlockFaces) {
+                            if(GenUtils.chance(cocoaBeans, 100)) {
+                                for(BlockFace face : BlockUtils.directBlockFaces) {
                                     Directional dir = (Directional) Bukkit.createBlockData(Material.COCOA);
                                     dir.setFacing(face.getOppositeFace());
                                     ((Ageable) dir).setAge(GenUtils.randInt(rand, 0, ((Ageable) dir).getMaximumAge()));
                                     SimpleBlock beans = rel.getRelative(face);
-                                    if (beans.getType().isSolid() ||
+                                    if(beans.getType().isSolid() ||
                                             beans.getType() == Material.WATER) continue;
 
                                     beans.setBlockData(dir);
@@ -680,27 +683,27 @@ public class FractalTreeBuilder {
                             }
 
                         }
-                        if (vines > 0
+                        if(vines > 0
                                 && Math.abs(x) >= rX - 2
                                 && Math.abs(z) >= rZ - 2) {
-                            if (GenUtils.chance(2, 10)) {
+                            if(GenUtils.chance(2, 10)) {
                                 dangleLeavesDown(rel, (int) Math.ceil(maxR), vines / 2, vines);
                             }
 
                             // Vines set only if the leaf type is leaves.
                             //Consider removal since this is done in fractalleaves.java
-                            if (Tag.LEAVES.isTagged(fractalLeaves.material))
-                                if (GenUtils.chance(1, 10)) {
-                                    for (BlockFace face : BlockUtils.directBlockFaces) {
+                            if(Tag.LEAVES.isTagged(fractalLeaves.material))
+                                if(GenUtils.chance(1, 10)) {
+                                    for(BlockFace face : BlockUtils.directBlockFaces) {
                                         MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
                                         dir.setFace(face.getOppositeFace(), true);
                                         SimpleBlock vine = rel.getRelative(face);
-                                        if (vine.getType().isSolid() ||
+                                        if(vine.getType().isSolid() ||
                                                 vine.getType() == Material.WATER) continue;
 
                                         vine.setBlockData(dir);
-                                        for (int i = 0; i < GenUtils.randInt(1, vines); i++) {
-                                            if (vine.getRelative(0, -i, 0).getType().isSolid() ||
+                                        for(int i = 0; i < GenUtils.randInt(1, vines); i++) {
+                                            if(vine.getRelative(0, -i, 0).getType().isSolid() ||
                                                     vine.getRelative(0, -i, 0).getType() == Material.WATER) break;
                                             vine.getRelative(0, -i, 0).setBlockData(dir);
                                         }
@@ -716,17 +719,17 @@ public class FractalTreeBuilder {
         //debug = false;
 
         //Ensures that corals don't die
-        while (!changed.isEmpty()) {
+        while(!changed.isEmpty()) {
             SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));
-            if (!CoralGenerator.isSaturatedCoral(sb)) {
+            if(!CoralGenerator.isSaturatedCoral(sb)) {
                 //No floating coral fans
-                for (BlockFace face : BlockUtils.directBlockFaces) {
-                    if (Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType()))
+                for(BlockFace face : BlockUtils.directBlockFaces) {
+                    if(Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType()))
                         sb.getRelative(face).setType(Material.WATER);
                 }
 
                 //No levitating sea pickles & fans
-                if (sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
+                if(sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
                         Tag.CORAL_PLANTS.isTagged(sb.getRelative(0, 1, 0).getType())) {
                     sb.getRelative(0, 1, 0).setType(Material.WATER);
                 }
@@ -739,21 +742,21 @@ public class FractalTreeBuilder {
 
     void dangleLeavesDown(SimpleBlock block, int leafDist, int min, int max) {
         BlockData type = Bukkit.createBlockData(fractalLeaves.material);
-        if (Tag.LEAVES.isTagged(fractalLeaves.material)) {
+        if(Tag.LEAVES.isTagged(fractalLeaves.material)) {
             Leaves leaf = (Leaves) type;
             leaf.setDistance(1);
         }
-        for (int i = 1; i <= GenUtils.randInt(min, max); i++) {
-            if (!block.getRelative(0, -i, 0).getType().isSolid())
+        for(int i = 1; i <= GenUtils.randInt(min, max); i++) {
+            if(!block.getRelative(0, -i, 0).getType().isSolid())
                 block.getRelative(0, -i, 0).lsetBlockData(type);
             else
                 break;
         }
 
         //Log for good measure, as well as some surrounding leaves.
-        if (Tag.LEAVES.isTagged(fractalLeaves.material))
+        if(Tag.LEAVES.isTagged(fractalLeaves.material))
             block.setType(this.trunkType);
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             block.getRelative(face).lsetBlockData(type);
         }
         block.getRelative(0, 1, 0).lsetBlockData(type);
@@ -908,6 +911,7 @@ public class FractalTreeBuilder {
 
     /**
      * Random-thirty-ish-angle
+     *
      * @return An angle between 0.8*30 to 1.2*30 degrees in radians
      */
     public double rta() {
@@ -916,6 +920,7 @@ public class FractalTreeBuilder {
 
     /**
      * Random-angle
+     *
      * @return An angle between lowerBound*30 to upperBound*30 degrees in radians
      */
     public double ra(double base, double lowerBound, double upperBound) {

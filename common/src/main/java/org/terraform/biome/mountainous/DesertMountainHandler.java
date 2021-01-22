@@ -33,7 +33,7 @@ public class DesertMountainHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{Material.SAND,
+        return new Material[] {Material.SAND,
                 Material.SAND,
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
@@ -55,18 +55,18 @@ public class DesertMountainHandler extends BiomeHandler {
         duneNoise.SetFractalOctaves(3);
         duneNoise.SetFrequency(0.03f);
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
-                for (int y = highest; y > TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt(); y--) {
-                    if (data.getBiome(x, y, z) != getBiome()) continue;
-                    if (duneNoise.GetNoise(x, y, z) > 0)
-                        if (data.getType(x, y, z).toString().endsWith("SAND")) {
-                            if (TConfigOption.BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE_POWDER.getBoolean())
+                for(int y = highest; y > TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt(); y--) {
+                    if(data.getBiome(x, y, z) != getBiome()) continue;
+                    if(duneNoise.GetNoise(x, y, z) > 0)
+                        if(data.getType(x, y, z).toString().endsWith("SAND")) {
+                            if(TConfigOption.BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE_POWDER.getBoolean())
                                 data.setType(x, y, z, Material.YELLOW_CONCRETE_POWDER);
-                        } else if (data.getType(x, y, z).toString().endsWith("SANDSTONE")) {
-                            if (TConfigOption.BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE.getBoolean())
+                        } else if(data.getType(x, y, z).toString().endsWith("SANDSTONE")) {
+                            if(TConfigOption.BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE.getBoolean())
                                 data.setType(x, y, z, Material.YELLOW_CONCRETE);
                         }
                 }

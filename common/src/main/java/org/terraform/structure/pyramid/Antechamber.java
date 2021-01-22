@@ -47,27 +47,27 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
 
         //Ceiling Corner Decorations
         int[][] corners = room.getAllCorners(1);
-        for (int[] corner : corners) {
+        for(int[] corner : corners) {
             Wall w = new Wall(new SimpleBlock(data, corner[0], room.getY() + room.getHeight() - 1, corner[1]));
             w.downLPillar(rand, 2, Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE);
-            for (BlockFace face : BlockUtils.directBlockFaces)
+            for(BlockFace face : BlockUtils.directBlockFaces)
                 w.getRelative(face).setType(GenUtils.randMaterial(Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE));
         }
 
         //Create randomised patterns
         int[] choices = {-2, -1, 0, 1, 2};
         int[] steps = new int[15];
-        for (int i = 0; i < 15; i++) steps[i] = choices[rand.nextInt(choices.length)];
+        for(int i = 0; i < 15; i++) steps[i] = choices[rand.nextInt(choices.length)];
 
         //For the floor
         SimpleBlock center = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
 
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             int length = room.getWidthX() / 2;
-            if (face == BlockFace.NORTH || face == BlockFace.SOUTH)
+            if(face == BlockFace.NORTH || face == BlockFace.SOUTH)
                 length = room.getWidthZ() / 2;
-            for (int i = 0; i < length; i++) {
-                if (face == BlockFace.NORTH || face == BlockFace.SOUTH)
+            for(int i = 0; i < length; i++) {
+                if(face == BlockFace.NORTH || face == BlockFace.SOUTH)
                     center.getRelative(face, i).getRelative(steps[i] * face.getModZ(), 0, 0)
                             .setType(Material.ORANGE_TERRACOTTA);
                 else
@@ -78,12 +78,12 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
         center.setType(Material.BLUE_TERRACOTTA);
         //For the ceiling
         center = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ());
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             int length = room.getWidthX() / 2;
-            if (face == BlockFace.NORTH || face == BlockFace.SOUTH)
+            if(face == BlockFace.NORTH || face == BlockFace.SOUTH)
                 length = room.getWidthZ() / 2;
-            for (int i = 0; i < length; i++) {
-                if (face == BlockFace.NORTH || face == BlockFace.SOUTH)
+            for(int i = 0; i < length; i++) {
+                if(face == BlockFace.NORTH || face == BlockFace.SOUTH)
                     center.getRelative(face, i).getRelative(steps[i] * face.getModZ(), 0, 0)
                             .setType(Material.ORANGE_TERRACOTTA);
                 else
@@ -96,12 +96,12 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
 
     protected void randomRoomPlacement(PopulatorDataAbstract data, CubeRoom room, int lowerbound, int upperbound, Material... types) {
 
-        for (int i = 0; i < GenUtils.randInt(lowerbound, upperbound); i++) {
+        for(int i = 0; i < GenUtils.randInt(lowerbound, upperbound); i++) {
             int[] coords = room.randomCoords(rand, 1);
             BlockData bd = Bukkit.createBlockData(GenUtils.randMaterial(types));
-            if (bd instanceof Waterlogged)
+            if(bd instanceof Waterlogged)
                 ((Waterlogged) bd).setWaterlogged(false);
-            if (!data.getType(coords[0], room.getY() + 1, coords[2]).isSolid())
+            if(!data.getType(coords[0], room.getY() + 1, coords[2]).isSolid())
                 data.setBlockData(coords[0], room.getY() + 1, coords[2], bd);
             else
                 data.setBlockData(coords[0], room.getY() + 2, coords[2], bd);
@@ -110,12 +110,13 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
 
     /**
      * To be called on a wall in front of the room's walls.
+     *
      * @param w
      * @param roomHeight
      * @param patternIndex
      */
     protected void placeWallDecoration(Wall w, int roomHeight, int patternIndex) {
-        if (patternIndex == 0) { //Simple Chiselled Sandstone and stairs
+        if(patternIndex == 0) { //Simple Chiselled Sandstone and stairs
             w.LPillar(roomHeight, rand, Material.CHISELED_SANDSTONE);
 
             Stairs stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
@@ -126,7 +127,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
             stair.setHalf(Half.TOP);
             stair.setFacing(w.getDirection().getOppositeFace());
             w.getFront().getRelative(0, roomHeight - 2, 0).setBlockData(stair);
-        } else if (patternIndex == 1) { //Stairs inside the pillars.
+        } else if(patternIndex == 1) { //Stairs inside the pillars.
             w.LPillar(roomHeight, rand, Material.CHISELED_SANDSTONE);
 
             Stairs stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
@@ -137,9 +138,9 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
             stair.setHalf(Half.TOP);
             stair.setFacing(w.getDirection().getOppositeFace());
             w.getRelative(0, roomHeight - 2, 0).setBlockData(stair);
-        } else if (patternIndex == 2) { //Sandstone wall.
+        } else if(patternIndex == 2) { //Sandstone wall.
             w.LPillar(roomHeight, rand, Material.SANDSTONE_WALL);
-            for (int i = 0; i < roomHeight; i++) {
+            for(int i = 0; i < roomHeight; i++) {
                 //Make sure the walls are connected properly
                 BlockUtils.correctMultifacingData(w.getRelative(0, i, 0).get());
             }

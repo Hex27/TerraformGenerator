@@ -1,6 +1,23 @@
 package org.terraform.v1_16_R2;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.BlockPosition;
+import net.minecraft.server.v1_16_R2.Blocks;
+import net.minecraft.server.v1_16_R2.ChunkCoordIntPair;
+import net.minecraft.server.v1_16_R2.Entity;
+import net.minecraft.server.v1_16_R2.EntityInsentient;
+import net.minecraft.server.v1_16_R2.EntityMinecartChest;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.EnumMobSpawn;
+import net.minecraft.server.v1_16_R2.IBlockData;
+import net.minecraft.server.v1_16_R2.IChunkAccess;
+import net.minecraft.server.v1_16_R2.IStructureAccess;
+import net.minecraft.server.v1_16_R2.LootTables;
+import net.minecraft.server.v1_16_R2.MinecraftKey;
+import net.minecraft.server.v1_16_R2.StructureGenerator;
+import net.minecraft.server.v1_16_R2.TileEntity;
+import net.minecraft.server.v1_16_R2.TileEntityLootable;
+import net.minecraft.server.v1_16_R2.TileEntityMobSpawner;
+import net.minecraft.server.v1_16_R2.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -30,7 +47,7 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
     }
 
     private static MinecraftKey getLootTable(TerraLootTable table) {
-        switch (table) {
+        switch(table) {
             case SPAWN_BONUS_CHEST:
                 return LootTables.b;
             case END_CITY_TREASURE:
@@ -155,13 +172,13 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
             et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(type.toString()).get(null);
             Entity e = et.a(ws.getMinecraftWorld());
             e.setPositionRotation((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
-            if (e instanceof EntityInsentient) {
+            if(e instanceof EntityInsentient) {
                 ((EntityInsentient) e).setPersistent();
                 ((EntityInsentient) e).prepare(ws, ws.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.STRUCTURE, null, null);
             }
 
             ws.addEntity(e);
-        } catch (IllegalArgumentException | IllegalAccessException
+        } catch(IllegalArgumentException | IllegalAccessException
                 | NoSuchFieldException | SecurityException e1) {
             e1.printStackTrace();
         }
@@ -174,10 +191,10 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
         ica.setType(pos, Blocks.SPAWNER.getBlockData(), true);
         TileEntity tileentity = ica.getTileEntity(pos);
 
-        if (tileentity instanceof TileEntityMobSpawner) {
+        if(tileentity instanceof TileEntityMobSpawner) {
             try {
                 ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-            } catch (IllegalArgumentException | IllegalAccessException
+            } catch(IllegalArgumentException | IllegalAccessException
                     | NoSuchFieldException | SecurityException e) {
                 e.printStackTrace();
             }

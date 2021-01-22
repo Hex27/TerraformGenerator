@@ -1,6 +1,13 @@
 package org.terraform.v1_15_R1;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_15_R1.BiomeBase;
+import net.minecraft.server.v1_15_R1.ChunkGenerator;
+import net.minecraft.server.v1_15_R1.DefinedStructureManager;
+import net.minecraft.server.v1_15_R1.EnumDirection;
+import net.minecraft.server.v1_15_R1.StructureAbstract;
+import net.minecraft.server.v1_15_R1.StructureBoundingBox;
+import net.minecraft.server.v1_15_R1.StructureGenerator;
+import net.minecraft.server.v1_15_R1.WorldGenMonumentPieces;
 
 import java.util.Random;
 

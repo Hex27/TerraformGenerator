@@ -41,26 +41,26 @@ public class OrePopulator {
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         //TickTimer timer = new TickTimer("Ore-generation");
         int x, y, z;
-        for (int i = 0; i < this.maxNumberOfVeins; i++) {
+        for(int i = 0; i < this.maxNumberOfVeins; i++) {
             // Number of veins
 
             // The chance of spawning a vein
-            if (GenUtils.chance(random, this.baseChance, 100)) {
+            if(GenUtils.chance(random, this.baseChance, 100)) {
                 x = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
                 z = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
 
                 int range = maxRange;
-                if (GenUtils.chance(random, 1, 50)) range = rareMaxRange;
+                if(GenUtils.chance(random, 1, 50)) range = rareMaxRange;
 
                 y = GenUtils.randInt(random, minRange, range);  // Get randomized coordinates
 
-                for (int s = 0; s < maxOreSize; s++) {
+                for(int s = 0; s < maxOreSize; s++) {
                     Material type = data.getType(x, y, z);
-                    if (type != Material.STONE) break;
+                    if(type != Material.STONE) break;
 
                     data.setType(x, y, z, this.type);
 
-                    switch (random.nextInt(5)) {  // The direction chooser
+                    switch(random.nextInt(5)) {  // The direction chooser
                         case 0:
                             x++;
                             break;

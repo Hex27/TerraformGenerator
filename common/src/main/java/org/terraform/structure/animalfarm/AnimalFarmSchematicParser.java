@@ -28,11 +28,11 @@ public class AnimalFarmSchematicParser extends SchematicParser {
 
     @Override
     public void applyData(SimpleBlock block, BlockData data) {
-        if (data.getMaterial() == Material.COBBLESTONE) {
-            if (GenUtils.chance(rand, 1, 5)) data = Bukkit
+        if(data.getMaterial() == Material.COBBLESTONE) {
+            if(GenUtils.chance(rand, 1, 5)) data = Bukkit
                     .createBlockData(Material.STONE);
         }
-        if (data.getMaterial().toString().contains("COBBLESTONE")) {
+        if(data.getMaterial().toString().contains("COBBLESTONE")) {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "cobblestone",
@@ -42,8 +42,8 @@ public class AnimalFarmSchematicParser extends SchematicParser {
             );
             super.applyData(block, data);
             return;
-        } else if (data.getMaterial().toString().contains("STONE_BRICK")) {
-            if (GenUtils.chance(rand, 1, 5))
+        } else if(data.getMaterial().toString().contains("STONE_BRICK")) {
+            if(GenUtils.chance(rand, 1, 5))
                 data = Bukkit.createBlockData(
                         data.getAsString().replaceAll(
                                 "stone_brick",
@@ -52,7 +52,7 @@ public class AnimalFarmSchematicParser extends SchematicParser {
                 );
             super.applyData(block, data);
             return;
-        } else if (data.getMaterial().toString().contains("OAK")) {
+        } else if(data.getMaterial().toString().contains("OAK")) {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             data.getMaterial().toString().toLowerCase(),
@@ -63,20 +63,20 @@ public class AnimalFarmSchematicParser extends SchematicParser {
             );
             super.applyData(block, data);
             return;
-        } else if (data.getMaterial() == Material.CHEST) {
-            if (GenUtils.chance(rand, 1, 5)) {
+        } else if(data.getMaterial() == Material.CHEST) {
+            if(GenUtils.chance(rand, 1, 5)) {
                 block.setType(Material.AIR);
                 return; //A fifth of chests are not placed.
             }
             super.applyData(block, data);
             int i = rand.nextInt(3);
-            if (i == 0)
+            if(i == 0)
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(),
                         TerraLootTable.VILLAGE_BUTCHER);
-            else if (i == 1)
+            else if(i == 1)
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(),
                         TerraLootTable.VILLAGE_TANNERY);
-            else if (i == 2)
+            else if(i == 2)
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(),
                         TerraLootTable.VILLAGE_SHEPHERD);
             return;

@@ -24,15 +24,15 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
             "tilted-shipwreck-1"};
 
     private static void dropDownBlock(SimpleBlock block) {
-        if (block.getType().isSolid()) {
+        if(block.getType().isSolid()) {
             Material type = block.getType();
-            if (type == Material.CHEST) return;
+            if(type == Material.CHEST) return;
             block.setType(Material.WATER);
             int depth = 0;
-            while (!block.getType().isSolid()) {
+            while(!block.getType().isSolid()) {
                 block = block.getRelative(0, -1, 0);
                 depth++;
-                if (depth > 50) return;
+                if(depth > 50) return;
             }
 
             block.getRelative(0, 1, 0).setType(type);
@@ -42,11 +42,11 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
-        if (!TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean())
+        if(!TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean())
             return;
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
+        for(int[] coords : getCoordsFromMegaChunk(tw, mc)) {
             int x = coords[0];
             int z = coords[1];
             int height = GenUtils.getHighestGround(data, x, z) - 1 - random.nextInt(5);
@@ -65,7 +65,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
             TerraformGeneratorPlugin.logger.info("Spawning shipwreck at " + x + ", " + y + ", " + z + " with rotation of " + shipwreck.getFace());
 
             //Generate holds and damage
-            for (int i = 0; i < GenUtils.randInt(random, 0, 3); i++) {
+            for(int i = 0; i < GenUtils.randInt(random, 0, 3); i++) {
                 int nx = x + GenUtils.randInt(random, -8, 8);
                 int nz = z + GenUtils.randInt(random, -8, 8);
                 int ny = y + GenUtils.randInt(random, 0, 5);
@@ -73,7 +73,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
             }
 
             //Dropdown blocks
-            for (int i = 0; i < GenUtils.randInt(random, 5, 15); i++) {
+            for(int i = 0; i < GenUtils.randInt(random, 5, 15); i++) {
                 int nx = x + GenUtils.randInt(random, -8, 8);
                 int nz = z + GenUtils.randInt(random, -8, 8);
                 int ny = y + GenUtils.randInt(random, 0, 5);
@@ -84,7 +84,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
             data.addEntity(x, y + 15, z, EntityType.DROWNED);
 
 
-        } catch (Throwable e) {
+        } catch(Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place shipwreck at " + x + ", " + y + ", " + z);
             e.printStackTrace();
         }
@@ -94,7 +94,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
         int num = TConfigOption.STRUCTURES_SHIPWRECK_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
-        for (int i = 0; i < num; i++)
+        for(int i = 0; i < num; i++)
             coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 191921 + i));
         return coords;
 
@@ -105,11 +105,11 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
 
         double minDistanceSquared = Integer.MAX_VALUE;
         int[] min = null;
-        for (int nx = -1; nx <= 1; nx++) {
-            for (int nz = -1; nz <= 1; nz++) {
-                for (int[] loc : getCoordsFromMegaChunk(tw, mc)) {
+        for(int nx = -1; nx <= 1; nx++) {
+            for(int nz = -1; nz <= 1; nz++) {
+                for(int[] loc : getCoordsFromMegaChunk(tw, mc)) {
                     double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
-                    if (distSqr < minDistanceSquared) {
+                    if(distSqr < minDistanceSquared) {
                         minDistanceSquared = distSqr;
                         min = loc;
                     }
@@ -122,11 +122,11 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX,
                             int chunkZ, ArrayList<BiomeBank> biomes) {
-        for (BiomeBank b : biomes) {
-            if (b.toString().contains("OCEAN")) {
+        for(BiomeBank b : biomes) {
+            if(b.toString().contains("OCEAN")) {
                 MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-                for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
-                    if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+                for(int[] coords : getCoordsFromMegaChunk(tw, mc)) {
+                    if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
                         return true;
                     }
                 }

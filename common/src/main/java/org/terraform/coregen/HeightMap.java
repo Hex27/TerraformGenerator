@@ -17,7 +17,7 @@ public enum HeightMap {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
             FastNoise noise = noiseCache.get(tw);
-            if (noise == null) {
+            if(noise == null) {
                 noise = new FastNoise();
                 noise.SetSeed((int) tw.getSeed());
                 noise.SetNoiseType(NoiseType.PerlinFractal);
@@ -31,7 +31,7 @@ public enum HeightMap {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
             FastNoise cubic = noiseCache.get(tw);
-            if (cubic == null) {
+            if(cubic == null) {
                 cubic = new FastNoise((int) tw.getSeed() * 12);
                 cubic.SetNoiseType(NoiseType.CubicFractal);
                 cubic.SetFractalOctaves(6);
@@ -42,14 +42,14 @@ public enum HeightMap {
             double height = cubic.GetNoise(x, z) * 2.5;
 
             //Only negative height (Downwards)
-            if (height > 0) height = 0;
+            if(height > 0) height = 0;
             return height * 50; //Depth
         }
     }, CORE {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
             FastNoise cubic = noiseCache.get(tw);
-            if (cubic == null) {
+            if(cubic == null) {
                 cubic = new FastNoise((int) tw.getSeed());
                 cubic.SetNoiseType(NoiseType.CubicFractal);
                 cubic.SetFractalOctaves(6);
@@ -60,12 +60,12 @@ public enum HeightMap {
             double height = cubic.GetNoise(x, z) * 2 * 15 + 13 + defaultSeaLevel;
 
             //Ensure that height doesn't automatically go upwards sharply
-            if (height > defaultSeaLevel + 10) {
+            if(height > defaultSeaLevel + 10) {
                 height = (height - defaultSeaLevel - 10) * 0.1 + defaultSeaLevel + 10;
             }
 
             //Ensure that height doesn't automatically go too deep
-            if (height < defaultSeaLevel - 30) {
+            if(height < defaultSeaLevel - 30) {
                 height = -(defaultSeaLevel - 30 - height) * 0.1 + defaultSeaLevel - 30;
             }
 
@@ -75,7 +75,7 @@ public enum HeightMap {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
             FastNoise cubic = noiseCache.get(tw);
-            if (cubic == null) {
+            if(cubic == null) {
                 cubic = new FastNoise((int) tw.getSeed() * 7);
                 cubic.SetNoiseType(NoiseType.CubicFractal);
                 cubic.SetFractalOctaves(6);
@@ -84,14 +84,14 @@ public enum HeightMap {
             }
 
             double height = cubic.GetNoise(x, z) * 5;
-            if (height < 0) height = 0;
+            if(height < 0) height = 0;
             return Math.pow(height, 5) * 5;
         }
     }, ATTRITION {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
             FastNoise perlin = noiseCache.get(tw);
-            if (perlin == null) {
+            if(perlin == null) {
                 perlin = new FastNoise((int) tw.getSeed());
                 perlin.SetNoiseType(NoiseType.PerlinFractal);
                 perlin.SetFractalOctaves(4);
@@ -116,9 +116,9 @@ public enum HeightMap {
         double totalChangeInGradient = 0;
         int count = 0;
         double centerNoise = getBlockHeight(tw, x, z);
-        for (int nx = -radius; nx <= radius; nx++)
-            for (int nz = -radius; nz <= radius; nz++) {
-                if (nx == 0 && nz == 0) continue;
+        for(int nx = -radius; nx <= radius; nx++)
+            for(int nz = -radius; nz <= radius; nz++) {
+                if(nx == 0 && nz == 0) continue;
                 //Bukkit.getLogger().info(nx + "," + nz + ":"+(getHeight(tw,x+nx,z+nz)-centerNoise));
                 totalChangeInGradient += Math.abs(getBlockHeight(tw, x + nx, z + nz) - centerNoise);
                 count++;
@@ -136,24 +136,24 @@ public enum HeightMap {
     public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
         double height = HeightMap.CORE.getHeight(tw, x, z);
 
-        if (height > defaultSeaLevel + 4) {
+        if(height > defaultSeaLevel + 4) {
             height += HeightMap.ATTRITION.getHeight(tw, x, z);
         } else {
             height += HeightMap.ATTRITION.getHeight(tw, x, z) * 0.8;
         }
 
         //double oldHeight = height;
-        if (height > defaultSeaLevel + 4) {
+        if(height > defaultSeaLevel + 4) {
             height += HeightMap.MOUNTAIN.getHeight(tw, x, z);
         } else {
             float frac = (float) height / (float) (TerraformGenerator.seaLevel + 4);
             height += HeightMap.MOUNTAIN.getHeight(tw, x, z) * (frac);
         }
 
-        if (height > 200) height = 200 + (height - 200) * 0.5;
-        if (height > 230) height = 230 + (height - 230) * 0.3;
-        if (height > 240) height = 240 + (height - 240) * 0.1;
-        if (height > 250) height = 250 + (height - 250) * 0.05;
+        if(height > 200) height = 200 + (height - 200) * 0.5;
+        if(height > 230) height = 230 + (height - 230) * 0.3;
+        if(height > 240) height = 240 + (height - 240) * 0.1;
+        if(height > 250) height = 250 + (height - 250) * 0.05;
 
         return height + HeightMap.OCEANIC.getHeight(tw, x, z);
     }
@@ -162,27 +162,27 @@ public enum HeightMap {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
 
         double cachedValue = cache.getHeight(x, z);
-        if (cachedValue != 0) return cachedValue;
+        if(cachedValue != 0) return cachedValue;
 
         double height = HeightMap.CORE.getHeight(tw, x, z);
 
-        if (height > defaultSeaLevel + 4) {
+        if(height > defaultSeaLevel + 4) {
             height += HeightMap.ATTRITION.getHeight(tw, x, z);
         } else {
             height += HeightMap.ATTRITION.getHeight(tw, x, z) * 0.8;
         }
 
-        if (height > defaultSeaLevel + 4) {
+        if(height > defaultSeaLevel + 4) {
             height += HeightMap.MOUNTAIN.getHeight(tw, x, z);
         } else {
             float frac = (float) height / (float) (TerraformGenerator.seaLevel + 4);
             height += HeightMap.MOUNTAIN.getHeight(tw, x, z) * (frac);
         }
 
-        if (height > 200) height = 200 + (height - 200) * 0.5;
-        if (height > 230) height = 230 + (height - 230) * 0.3;
-        if (height > 240) height = 240 + (height - 240) * 0.1;
-        if (height > 250) height = 250 + (height - 250) * 0.05;
+        if(height > 200) height = 200 + (height - 200) * 0.5;
+        if(height > 230) height = 230 + (height - 230) * 0.3;
+        if(height > 240) height = 240 + (height - 240) * 0.1;
+        if(height > 250) height = 250 + (height - 250) * 0.05;
 
         //Oceans
         height += HeightMap.OCEANIC.getHeight(tw, x, z);
@@ -192,15 +192,16 @@ public enum HeightMap {
         depth = depth < 0 ? 0 : depth;
 
         //Normal scenario: Shallow area
-        if (height - depth >= TerraformGenerator.seaLevel - 15) {
+        if(height - depth >= TerraformGenerator.seaLevel - 15) {
             height -= depth;
 
             //Fix for underwater river carving: Don't carve deeply
-        } else if (height > TerraformGenerator.seaLevel - 15 && height - depth < TerraformGenerator.seaLevel - 15) {
+        } else if(height > TerraformGenerator.seaLevel - 15 && height - depth < TerraformGenerator.seaLevel - 15) {
             height = TerraformGenerator.seaLevel - 15;
         }
 
-        if (heightAmplifier != 1f && height > TerraformGenerator.seaLevel) height += heightAmplifier * (height - TerraformGenerator.seaLevel);
+        if(heightAmplifier != 1f && height > TerraformGenerator.seaLevel)
+            height += heightAmplifier * (height - TerraformGenerator.seaLevel);
 
         cache.cacheHeight(x, z, height);
         return height;

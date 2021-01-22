@@ -25,7 +25,7 @@ public class ColdOceansHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.COBBLESTONE, Material.STONE, Material.GRAVEL, Material.STONE),
+        return new Material[] {GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.COBBLESTONE, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.STONE, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -34,13 +34,13 @@ public class ColdOceansHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, y + 1, z) != getBiome()) continue;
+                if(data.getBiome(x, y + 1, z) != getBiome()) continue;
 
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if (GenUtils.chance(random, 1, 150)) { //SEA GRASS/KELP
+                if(!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
+                if(GenUtils.chance(random, 1, 150)) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
                 }
             }

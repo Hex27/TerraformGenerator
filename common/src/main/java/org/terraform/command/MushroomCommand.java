@@ -48,18 +48,18 @@ public class MushroomCommand extends DCCommand {
         int z = p.getLocation().getBlockZ();
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
 
-        if (args.size() != 0) {
+        if(args.size() != 0) {
             try {
                 new MushroomBuilder((FractalTypes.Mushroom) this.parseArguments(sender, args).get(0))
                         .build(tw, data, x, y, z);
-            } catch (IllegalArgumentException e) {
+            } catch(IllegalArgumentException e) {
                 sender.sendMessage(ChatColor.RED + "Invalid mushroom type.");
                 sender.sendMessage(ChatColor.RED + "Valid types:");
                 StringBuilder types = new StringBuilder();
                 boolean b = true;
-                for (FractalTypes.Mushroom type : FractalTypes.Mushroom.VALUES) {
+                for(FractalTypes.Mushroom type : FractalTypes.Mushroom.VALUES) {
                     ChatColor col = ChatColor.RED;
-                    if (b) col = ChatColor.DARK_RED;
+                    if(b) col = ChatColor.DARK_RED;
                     b = !b;
                     types.append(col).append(type).append(' ');
                 }
@@ -70,7 +70,7 @@ public class MushroomCommand extends DCCommand {
             return;
         }
 
-        if (new Random().nextBoolean())
+        if(new Random().nextBoolean())
             new MushroomBuilder(FractalTypes.Mushroom.GIANT_RED_MUSHROOM).build(TerraformWorld.get(p.getWorld()), data, x, y, z);
         else
             new MushroomBuilder(FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM).build(TerraformWorld.get(p.getWorld()), data, x, y, z);

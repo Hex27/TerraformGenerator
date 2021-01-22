@@ -8,6 +8,7 @@ import org.bukkit.entity.EntityType;
 public abstract class PopulatorDataAbstract {
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
+     *
      * @param x
      * @param y
      * @param z
@@ -17,6 +18,7 @@ public abstract class PopulatorDataAbstract {
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
+     *
      * @param x
      * @param y
      * @param z
@@ -26,6 +28,7 @@ public abstract class PopulatorDataAbstract {
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
+     *
      * @param x
      * @param y
      * @param z
@@ -35,6 +38,7 @@ public abstract class PopulatorDataAbstract {
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
+     *
      * @param x
      * @param y
      * @param z
@@ -44,6 +48,7 @@ public abstract class PopulatorDataAbstract {
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
+     *
      * @return
      */
     public Biome getBiome(int rawX, int rawZ) {
@@ -69,8 +74,8 @@ public abstract class PopulatorDataAbstract {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
+        if(this == obj) return true;
+        if(obj == null) return false;
         return obj instanceof PopulatorDataAbstract;
     }
 }

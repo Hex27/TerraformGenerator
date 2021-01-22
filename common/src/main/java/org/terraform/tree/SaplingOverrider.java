@@ -11,7 +11,7 @@ import org.terraform.main.TConfigOption;
 public class SaplingOverrider implements Listener {
     @EventHandler
     public void onTreeGrow(StructureGrowEvent event) {
-        if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
+        if(!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
 
         TerraformWorld tw = TerraformWorld.get(event.getWorld());
         PopulatorDataPostGen data = new PopulatorDataPostGen(event.getLocation().getChunk());
@@ -20,7 +20,7 @@ public class SaplingOverrider implements Listener {
         int z = event.getLocation().getBlockZ();
         event.setCancelled(true);
 
-        switch (event.getSpecies()) {
+        switch(event.getSpecies()) {
             case ACACIA:
                 new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL)
                         .build(tw, data, x, y, z);
@@ -46,7 +46,7 @@ public class SaplingOverrider implements Listener {
                         .build(tw, data, x, y, z);
                 break;
             case JUNGLE:
-                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean())
+                if(TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean())
                     new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG)
                             .build(tw, data, x, y, z);
                 else

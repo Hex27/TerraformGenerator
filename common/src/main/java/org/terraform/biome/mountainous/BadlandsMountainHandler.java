@@ -19,11 +19,11 @@ public class BadlandsMountainHandler extends BiomeHandler {
     public static void oneUnit(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int z, boolean force) {
         int highest = GenUtils.getTrueHighestBlock(data, x, z);
         int threshold = TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt() - 20;
-        if (force)
+        if(force)
             threshold = highest - GenUtils.randInt(random, 3, 6);
-        for (int y = highest; y > threshold; y--) {
-            if (data.getBiome(x, y, z) != Biome.BADLANDS_PLATEAU && !force) continue;
-            if (!data.getType(x, y, z).toString().contains("SAND"))
+        for(int y = highest; y > threshold; y--) {
+            if(data.getBiome(x, y, z) != Biome.BADLANDS_PLATEAU && !force) continue;
+            if(!data.getType(x, y, z).toString().contains("SAND"))
                 continue;
 
             data.setType(x, y, z, BlockUtils.getTerracotta(y));
@@ -42,7 +42,7 @@ public class BadlandsMountainHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.RED_SAND, 35, Material.SAND, 5),
+        return new Material[] {GenUtils.weightedRandomMaterial(rand, Material.RED_SAND, 35, Material.SAND, 5),
                 GenUtils.weightedRandomMaterial(rand, Material.RED_SAND, 35, Material.SAND, 5),
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.RED_SANDSTONE, Material.RED_SAND),
                 GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
@@ -51,8 +51,8 @@ public class BadlandsMountainHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 oneUnit(world, random, data, x, z, false);
             }
         }

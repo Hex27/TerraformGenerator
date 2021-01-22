@@ -23,12 +23,12 @@ public class PyramidStairwayTopPopulator extends RoomPopulatorAbstract {
         int bfIndex = 6;
 
         //Open up the floor
-        for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
+        for(BlockFace face : BlockUtils.xzPlaneBlockFaces) {
             data.setType(room.getX() + face.getModX(), room.getY(), room.getZ() + face.getModZ(), Material.CAVE_AIR);
         }
 
         //Have a pillar from the center to the ceiling
-        for (int i = 0; i < room.getHeight(); i++) {
+        for(int i = 0; i < room.getHeight(); i++) {
             data.setType(room.getX(), room.getY() + i, room.getZ(), Material.CHISELED_SANDSTONE);
         }
 

@@ -18,7 +18,11 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.LangOpt;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.*;
+import org.terraform.structure.MultiMegaChunkStructurePopulator;
+import org.terraform.structure.SingleMegaChunkStructurePopulator;
+import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.StructureRegistry;
+import org.terraform.structure.StructureType;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.utils.GenUtils;
 
@@ -38,8 +42,8 @@ public class LocateCommand extends DCCommand implements Listener {
 
     @EventHandler
     public void onLocateCommand(PlayerCommandPreprocessEvent event) {
-        if (event.getPlayer().getWorld().getGenerator() instanceof TerraformGenerator) {
-            if (event.getMessage().startsWith("/locate")) {
+        if(event.getPlayer().getWorld().getGenerator() instanceof TerraformGenerator) {
+            if(event.getMessage().startsWith("/locate")) {
                 event.getPlayer().sendMessage(LangOpt.COMMAND_LOCATE_NOVANILLA.parse());
                 event.getPlayer().sendMessage("");
             }
@@ -65,14 +69,14 @@ public class LocateCommand extends DCCommand implements Listener {
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
         ArrayList<Object> params = this.parseArguments(sender, args);
-        if (params.size() == 0) {
+        if(params.size() == 0) {
             sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_HEADER.parse());
-            for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
+            for(StructurePopulator spop : StructureRegistry.getAllPopulators()) {
                 sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_ENTRY.parse("%entry%", spop.getClass().getSimpleName().replace("Populator", "")));
             }
             return;
         }
-        if (!(sender instanceof Player)) {
+        if(!(sender instanceof Player)) {
             sender.sendMessage(LangOpt.fetchLang("permissions.console-cannot-exec"));
             return;
         }
@@ -83,19 +87,19 @@ public class LocateCommand extends DCCommand implements Listener {
 //			p.sendMessage(ChatColor.RED + "Can only be used in TerraformGenerator worlds!");
 //			return;
 //		}
-        if (!spop.isEnabled()) {
+        if(!spop.isEnabled()) {
             p.sendMessage(LangOpt.COMMAND_LOCATE_STRUCTURE_NOT_ENABLED.parse());
             return;
         }
 
-        if (spop instanceof StrongholdPopulator ||
+        if(spop instanceof StrongholdPopulator ||
                 (!(spop instanceof SingleMegaChunkStructurePopulator) && !(spop instanceof MultiMegaChunkStructurePopulator))) {
             int[] coords = spop.getNearestFeature(TerraformWorld.get(p.getWorld()), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
             syncSendMessage(p.getUniqueId(), LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", coords[0] + "", "%z%", coords[1] + ""));
             return;
         }
 
-        if (spop instanceof SingleMegaChunkStructurePopulator) {
+        if(spop instanceof SingleMegaChunkStructurePopulator) {
             locateSingleMegaChunkStructure(p, (SingleMegaChunkStructurePopulator) spop);
         } else {
             locateMultiMegaChunkStructure(p, (MultiMegaChunkStructurePopulator) spop);
@@ -121,21 +125,21 @@ public class LocateCommand extends DCCommand implements Listener {
                 int radius = 0;
                 boolean found = false;
 
-                while (!found) {
-                    for (MegaChunk mc : getSurroundingChunks(center, radius)) {
-                        for (int[] coords : populator.getCoordsFromMegaChunk(tw, mc)) {
-                            if (coords == null) continue;
+                while(!found) {
+                    for(MegaChunk mc : getSurroundingChunks(center, radius)) {
+                        for(int[] coords : populator.getCoordsFromMegaChunk(tw, mc)) {
+                            if(coords == null) continue;
 
                             ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
-                            if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
+                            if(populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
                                 found = true;
                                 blockX = coords[0];
                                 blockZ = coords[1];
                                 break;
                             }
                         }
-                        if (found) break;
+                        if(found) break;
                     }
                     radius++;
                 }
@@ -143,7 +147,7 @@ public class LocateCommand extends DCCommand implements Listener {
 
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
-                if (found)
+                if(found)
                     syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "",
                             "%z%", blockZ + ""));
                 else
@@ -178,32 +182,32 @@ public class LocateCommand extends DCCommand implements Listener {
                 //syncSendMessage(uuid, ChatColor.YELLOW + "Using Location " + p.getLocation().getX() + "," + p.getLocation().getZ());
                 //syncSendMessage(uuid, ChatColor.YELLOW + "Using Center MC: " + center.getX() + "," + center.getZ());
 
-                while (!found) {
-                    for (MegaChunk mc : getSurroundingChunks(center, radius)) {
-                        if (lowerBound == null) lowerBound = mc;
-                        if (upperBound == null) upperBound = mc;
-                        if (mc.getX() < lowerBound.getX() || mc.getZ() < lowerBound.getZ())
+                while(!found) {
+                    for(MegaChunk mc : getSurroundingChunks(center, radius)) {
+                        if(lowerBound == null) lowerBound = mc;
+                        if(upperBound == null) upperBound = mc;
+                        if(mc.getX() < lowerBound.getX() || mc.getZ() < lowerBound.getZ())
                             lowerBound = mc;
-                        if (mc.getX() > upperBound.getX() || mc.getZ() > upperBound.getZ())
+                        if(mc.getX() > upperBound.getX() || mc.getZ() > upperBound.getZ())
                             upperBound = mc;
                         int[] coords = populator.getCoordsFromMegaChunk(tw, mc);
-                        if (coords == null) continue;
+                        if(coords == null) continue;
                         //Right bitshift of 4 is conversion from block coords to chunk coords.
                         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
 
-                        if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
+                        if(populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
 
                             //Mega Dungeons will always spawn if they can.
-                            if (StructureRegistry.getStructureType(populator.getClass()) == StructureType.MEGA_DUNGEON) {
+                            if(StructureRegistry.getStructureType(populator.getClass()) == StructureType.MEGA_DUNGEON) {
                                 found = true;
                                 blockX = coords[0];
                                 blockZ = coords[1];
                                 break;
                             } else {
                                 //If it is not a mega dungeon, the structure registry must be checked.
-                                for (SingleMegaChunkStructurePopulator availablePops : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
-                                    if (availablePops == null) continue;
-                                    if (availablePops.getClass().equals(populator.getClass())) {
+                                for(SingleMegaChunkStructurePopulator availablePops : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
+                                    if(availablePops == null) continue;
+                                    if(availablePops.getClass().equals(populator.getClass())) {
                                         //Can spawn
                                         found = true;
                                         blockX = coords[0];
@@ -211,7 +215,7 @@ public class LocateCommand extends DCCommand implements Listener {
                                         break;
                                     }
                                 }
-                                if (found) break;
+                                if(found) break;
                             }
                         }
                     }
@@ -225,7 +229,7 @@ public class LocateCommand extends DCCommand implements Listener {
 
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
-                if (found)
+                if(found)
                     syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", blockX + "",
                             "%z%", blockZ + ""));
                 else
@@ -237,8 +241,8 @@ public class LocateCommand extends DCCommand implements Listener {
     }
 
     @SuppressWarnings("serial")
-	private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
-        if (radius == 0) return new ArrayList<MegaChunk>() {{
+    private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
+        if(radius == 0) return new ArrayList<MegaChunk>() {{
             add(center);
         }};
         //     xxxxx
@@ -247,11 +251,11 @@ public class LocateCommand extends DCCommand implements Listener {
         //xxx  x   x
         //     xxxxx
         ArrayList<MegaChunk> candidates = new ArrayList<MegaChunk>();
-        for (int rx = -radius; rx <= radius; rx++) {
-            for (int rz = -radius; rz <= radius; rz++) {
+        for(int rx = -radius; rx <= radius; rx++) {
+            for(int rz = -radius; rz <= radius; rz++) {
 
                 //Check that this is a border coord
-                if (Math.abs(rx) == radius || Math.abs(rz) == radius) {
+                if(Math.abs(rx) == radius || Math.abs(rz) == radius) {
                     //Bukkit.getLogger().info(center.getX() + "+" + rx + "," + center.getZ() + "+"+rz);
                     candidates.add(center.getRelative(rx, rz));
                 }
@@ -262,8 +266,8 @@ public class LocateCommand extends DCCommand implements Listener {
     }
 
     private void syncSendMessage(UUID uuid, String message) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getUniqueId() == uuid) {
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.getUniqueId() == uuid) {
                 p.sendMessage(message);
                 break;
             }
@@ -280,8 +284,8 @@ public class LocateCommand extends DCCommand implements Listener {
         @Override
         public StructurePopulator parse(CommandSender arg0, String arg1) {
 
-            for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
-                if (spop.getClass().getSimpleName().equalsIgnoreCase(arg1) ||
+            for(StructurePopulator spop : StructureRegistry.getAllPopulators()) {
+                if(spop.getClass().getSimpleName().equalsIgnoreCase(arg1) ||
                         spop.getClass().getSimpleName().equalsIgnoreCase(arg1 + "populator"))
                     return spop;
             }
@@ -290,7 +294,7 @@ public class LocateCommand extends DCCommand implements Listener {
 
         @Override
         public String validate(CommandSender arg0, String arg1) {
-            if (this.parse(arg0, arg1) != null)
+            if(this.parse(arg0, arg1) != null)
                 return "";
             else
                 return "Structure type does not exist";

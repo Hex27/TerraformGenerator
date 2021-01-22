@@ -21,7 +21,7 @@ public class TerraformWorld {
     private transient FastNoise tempOctave;
     private transient FastNoise moistureOctave;
 
-    private TerraformWorld(String name, long seed) {
+    public TerraformWorld(String name, long seed) {
         this.worldName = name;
         this.seed = seed;
     }
@@ -44,7 +44,7 @@ public class TerraformWorld {
     }
 
     private FastNoise getTemperatureOctave() {
-        if (tempOctave == null) {
+        if(tempOctave == null) {
             tempOctave = new FastNoise((int) (seed * 2));
             tempOctave.SetNoiseType(NoiseType.ValueFractal);
             tempOctave.SetFractalOctaves(6);
@@ -54,7 +54,7 @@ public class TerraformWorld {
     }
 
     private FastNoise getMoistureOctave() {
-        if (moistureOctave == null) {
+        if(moistureOctave == null) {
             moistureOctave = new FastNoise((int) (seed * 3));
             moistureOctave.SetNoiseType(NoiseType.ValueFractal);
             moistureOctave.SetFractalOctaves(6);
@@ -84,7 +84,7 @@ public class TerraformWorld {
     public BiomeBank getBiomeBank(int x, int z) {
         ChunkCache cache = TerraformGenerator.getCache(this, x, z);
         BiomeBank cachedValue = cache.getBiome(x, z);
-        if (cachedValue != null) return cachedValue;
+        if(cachedValue != null) return cachedValue;
 
         return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, z, HeightMap.getBlockHeight(this, x, z)));
     }

@@ -30,6 +30,7 @@ public class BezierCurve {
 
     /**
      * Quadratic Bezier curve with one control point.
+     *
      * @param progress Value between 0 and 1
      * @param point1   1st point
      * @param control1 1st control point
@@ -50,6 +51,7 @@ public class BezierCurve {
 
     /**
      * Cubic Bezier curve with two control points.
+     *
      * @param progress Value between 0 and 1
      * @param point1   1st point
      * @param control1 1st control point

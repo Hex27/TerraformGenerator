@@ -28,7 +28,7 @@ public class FarmhouseSchematicParser extends SchematicParser {
 
     @Override
     public void applyData(SimpleBlock block, BlockData data) {
-        if (data.getMaterial().toString().contains("COBBLESTONE")) {
+        if(data.getMaterial().toString().contains("COBBLESTONE")) {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "cobblestone",
@@ -37,7 +37,7 @@ public class FarmhouseSchematicParser extends SchematicParser {
                     )
             );
             super.applyData(block, data);
-        } else if (data.getMaterial().toString().contains("OAK")) {
+        } else if(data.getMaterial().toString().contains("OAK")) {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             data.getMaterial().toString().toLowerCase(),
@@ -47,8 +47,8 @@ public class FarmhouseSchematicParser extends SchematicParser {
                             ).toString().toLowerCase())
             );
             super.applyData(block, data);
-        } else if (data.getMaterial() == Material.CHEST) {
-            if (GenUtils.chance(rand, 1, 5)) {
+        } else if(data.getMaterial() == Material.CHEST) {
+            if(GenUtils.chance(rand, 1, 5)) {
                 block.setType(Material.AIR);
                 return; //A fifth of chests are not placed.
             }

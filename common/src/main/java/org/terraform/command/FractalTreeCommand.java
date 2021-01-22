@@ -48,14 +48,14 @@ public class FractalTreeCommand extends DCCommand {
         try {
             new FractalTreeBuilder((FractalTypes.Tree) this.parseArguments(sender, args).get(0))
                     .build(tw, data, x, y, z);
-        } catch (IllegalArgumentException e) {
+        } catch(IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + "Invalid tree type.");
             sender.sendMessage(ChatColor.RED + "Valid types:");
             StringBuilder types = new StringBuilder();
             boolean b = true;
-            for (FractalTypes.Tree type : FractalTypes.Tree.VALUES) {
+            for(FractalTypes.Tree type : FractalTypes.Tree.VALUES) {
                 ChatColor col = ChatColor.RED;
-                if (b) col = ChatColor.DARK_RED;
+                if(b) col = ChatColor.DARK_RED;
                 b = !b;
                 types.append(col).append(type).append(' ');
             }

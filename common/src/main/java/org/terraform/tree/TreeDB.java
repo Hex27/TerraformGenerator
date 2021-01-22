@@ -26,15 +26,15 @@ public class TreeDB {
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         //Spawn the base
         Material log = Material.JUNGLE_WOOD;
-        if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) log = Material.JUNGLE_LOG;
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        if(TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) log = Material.JUNGLE_LOG;
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             new Wall(base.getRelative(face), BlockFace.NORTH).downUntilSolid(new Random(), log);
         }
         new FractalTreeBuilder(FractalTypes.Tree.COCONUT_TOP).build(tw, data, x, y, z);
     }
 
     public static void spawnSmallJungleTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        if (GenUtils.chance(1, 8))
+        if(GenUtils.chance(1, 8))
             new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_EXTRA_SMALL).build(tw, data, x, y, z);
         else
             new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_SMALL).build(tw, data, x, y, z);

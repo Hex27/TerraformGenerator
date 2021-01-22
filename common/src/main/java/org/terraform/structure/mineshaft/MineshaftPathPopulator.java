@@ -36,11 +36,11 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         Wall core = new Wall(ppd.base, ppd.dir);
 
         //Was populated before.
-        if (core.getType() != Material.CAVE_AIR)
+        if(core.getType() != Material.CAVE_AIR)
             return;
 
         Wall ceiling = core.findCeiling(10);
-        if (ceiling != null) {
+        if(ceiling != null) {
             ceiling = ceiling.getRelative(0, -1, 0);
         }
         Wall left = core.findLeft(10);
@@ -66,39 +66,39 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         core.getLeft().setType(GenUtils.randMaterial(pathMat));
 
         //Pillars supporting the mineshaft area
-        if (GenUtils.chance(rand, 1, 5)) {
+        if(GenUtils.chance(rand, 1, 5)) {
             core.getRelative(0, -1, 0).getRight().downUntilSolid(rand, Material.OAK_FENCE);
             core.getRelative(0, -1, 0).getLeft().downUntilSolid(rand, Material.OAK_FENCE);
         }
 
         //Broken feel
-        if (rand.nextBoolean()) core.getRight(2)
+        if(rand.nextBoolean()) core.getRight(2)
                 .setType(GenUtils.randMaterial(pathMat));
-        if (rand.nextBoolean()) core.getLeft(2)
+        if(rand.nextBoolean()) core.getLeft(2)
                 .setType(GenUtils.randMaterial(pathMat));
 
         Directional pebble = (Directional) Material.STONE_BUTTON.createBlockData("[face=floor]");
         //Decorate with pebbles n shit lol
-        for (int i = -2; i <= 2; i++) {
-            if (i == 0) continue;
+        for(int i = -2; i <= 2; i++) {
+            if(i == 0) continue;
             Wall target = core.getLeft(i);
-            if (!target.getType().toString().contains("SLAB")
+            if(!target.getType().toString().contains("SLAB")
                     && target.getType().isSolid()
                     && target.getType() != Material.GRAVEL
                     && target.getRelative(0, 1, 0).getType() == Material.CAVE_AIR) {
-                if (GenUtils.chance(1, 10)) { //Pebble
+                if(GenUtils.chance(1, 10)) { //Pebble
                     pebble.setFacing(BlockUtils.getDirectBlockFace(rand));
                     target.getRelative(0, 1, 0).setBlockData(pebble);
-                } else if (GenUtils.chance(1, 10)) { //Mushroom
+                } else if(GenUtils.chance(1, 10)) { //Mushroom
                     target.getRelative(0, 1, 0).setType(GenUtils.randMaterial(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM));
                 }
             }
         }
 
         //Rails
-        if (core.getType().isSolid() && rand.nextBoolean()) {
+        if(core.getType().isSolid() && rand.nextBoolean()) {
             Rail rail = (Rail) Bukkit.createBlockData(Material.RAIL);
-            switch (ppd.dir) {
+            switch(ppd.dir) {
                 case NORTH:
                 case SOUTH:
                     rail.setShape(Shape.NORTH_SOUTH);
@@ -112,7 +112,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
             }
             core.getRelative(0, 1, 0).setBlockData(rail);
             BlockUtils.correctSurroundingRails(core.getRelative(0, 1, 0).get());
-            if (GenUtils.chance(rand, 1, 100)) {
+            if(GenUtils.chance(rand, 1, 100)) {
                 TerraformGeneratorPlugin.logger.info("Minecart with chest at: " + core.getX() + ", " + core.getY() + ", " + core.getZ());
                 PopulatorDataICAAbstract ica = TerraformGeneratorPlugin.injector.getICAData(((PopulatorDataPostGen) core.get().getPopData()).getChunk());
                 ica.spawnMinecartWithChest(
@@ -124,30 +124,30 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
         boolean hasSupports = setMineshaftSupport(left, right, ceiling);
 
-        if (hasSupports) return;
+        if(hasSupports) return;
 
         //Now for the stuff that we've put in normal caves
-        for (int i = -2; i <= 2; i++) {
+        for(int i = -2; i <= 2; i++) {
             Wall ceil = core.getLeft(i).findCeiling(10);
             Wall floor = core.getLeft(i).findFloor(10);
 
             //Decorations on the wall
-            if (ceil != null && floor != null)
-                for (int ny = 0; ny <= ceil.getY() - floor.getY(); ny++) {
+            if(ceil != null && floor != null)
+                for(int ny = 0; ny <= ceil.getY() - floor.getY(); ny++) {
                     Wall[] walls = {
                             floor.getRelative(0, ny, 0).findLeft(10),
                             floor.getRelative(0, ny, 0).findRight(10)
                     };
-                    for (Wall target : walls) {
-                        if (target != null) {
-                            if (target.getType() == Material.STONE) {
-                                if (GenUtils.chance(1, 10)) {
+                    for(Wall target : walls) {
+                        if(target != null) {
+                            if(target.getType() == Material.STONE) {
+                                if(GenUtils.chance(1, 10)) {
                                     target.setType(GenUtils.randMaterial(
                                             Material.COBBLESTONE,
                                             Material.MOSSY_COBBLESTONE
                                     ));
                                 }
-                                if (GenUtils.chance(1, 10)) {
+                                if(GenUtils.chance(1, 10)) {
                                     BlockUtils.vineUp(target.get(), 2);
                                 }
                             }
@@ -156,54 +156,54 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                 }
 
             //Vertical decorations
-            if (ceil != null && !ceil.getType().toString().contains("SLAB") && !ceil.getType().toString().contains("LOG")) {
+            if(ceil != null && !ceil.getType().toString().contains("SLAB") && !ceil.getType().toString().contains("LOG")) {
                 ceil = ceil.getRelative(0, -1, 0);
-                if (GenUtils.chance(rand, 1, 10)) {
+                if(GenUtils.chance(rand, 1, 10)) {
                     //Stalactites
                     boolean canSpawn = true;
-                    for (BlockFace face : BlockUtils.directBlockFaces) {
-                        if (ceil.getRelative(face).getType().toString().contains("WALL")) {
+                    for(BlockFace face : BlockUtils.directBlockFaces) {
+                        if(ceil.getRelative(face).getType().toString().contains("WALL")) {
                             canSpawn = false;
                             break;
                         }
                     }
-                    if (canSpawn)
+                    if(canSpawn)
                         ceil.downLPillar(rand, GenUtils.randInt(rand, 1, 3),
                                 Material.COBBLESTONE_WALL,
                                 Material.MOSSY_COBBLESTONE_WALL
                         );
 
-                } else if (GenUtils.chance(rand, 1, 6)) {
+                } else if(GenUtils.chance(rand, 1, 6)) {
                     //Cobweb
                     ceil.setType(Material.COBWEB);
-                } else if (GenUtils.chance(rand, 1, 10)) {
+                } else if(GenUtils.chance(rand, 1, 10)) {
                     //Slabbing
                     Slab slab = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(Material.COBBLESTONE_SLAB, Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB));
                     slab.setType(Type.TOP);
                     ceil.setBlockData(slab);
                 }
             }
-            if (floor != null && !floor.getType().toString().contains("SLAB") && !floor.getType().toString().contains("LOG")) {
+            if(floor != null && !floor.getType().toString().contains("SLAB") && !floor.getType().toString().contains("LOG")) {
                 floor = floor.getRelative(0, 1, 0);
-                if (GenUtils.chance(rand, 1, 10)) {
+                if(GenUtils.chance(rand, 1, 10)) {
                     //Stalagmites
                     boolean canSpawn = true;
-                    for (BlockFace face : BlockUtils.directBlockFaces) {
-                        if (floor.getRelative(face).getType().toString().contains("WALL")) {
+                    for(BlockFace face : BlockUtils.directBlockFaces) {
+                        if(floor.getRelative(face).getType().toString().contains("WALL")) {
                             canSpawn = false;
                             break;
                         }
                     }
-                    if (canSpawn)
+                    if(canSpawn)
                         floor.LPillar(GenUtils.randInt(rand, 1, 3), false, rand,
                                 Material.COBBLESTONE_WALL,
                                 Material.MOSSY_COBBLESTONE_WALL
                         );
 
-                } else if (GenUtils.chance(rand, 1, 10)) {
+                } else if(GenUtils.chance(rand, 1, 10)) {
                     //Slabbing
-                    for (BlockFace face : BlockUtils.directBlockFaces) {
-                        if (floor.getRelative(face).getType().isSolid()) {
+                    for(BlockFace face : BlockUtils.directBlockFaces) {
+                        if(floor.getRelative(face).getType().isSolid()) {
                             Slab slab = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(Material.COBBLESTONE_SLAB, Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB));
                             slab.setType(Type.BOTTOM);
                             floor.setBlockData(slab);
@@ -211,7 +211,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                         }
                     }
 
-                } else if (GenUtils.chance(1, 15)) { //Mushroom
+                } else if(GenUtils.chance(1, 15)) { //Mushroom
                     floor.setType(GenUtils.randMaterial(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM));
                 }
 
@@ -220,15 +220,15 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     }
 
     public boolean setMineshaftSupport(Wall left, Wall right, Wall ceil) {
-        if (left == null || right == null) {
+        if(left == null || right == null) {
             return false; //Lol wtf is this situation even
         }
 
         //Check interval
-        if (left.getDirection().getModX() != 0) {
-            if (left.getX() % 5 != 0) return false;
-        } else if (left.getDirection().getModZ() != 0) {
-            if (left.getZ() % 5 != 0) return false;
+        if(left.getDirection().getModX() != 0) {
+            if(left.getX() % 5 != 0) return false;
+        } else if(left.getDirection().getModZ() != 0) {
+            if(left.getZ() % 5 != 0) return false;
         }
 
         //Check if the support distance is too small
@@ -237,45 +237,45 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
         //At least distance of 3
         int dist = (int) left.get().getVector().distance(right.get().getVector());
-        if (dist >= 3) {
-            if (left.LPillar(10, false, rand, Material.BARRIER) != 10) {
+        if(dist >= 3) {
+            if(left.LPillar(10, false, rand, Material.BARRIER) != 10) {
                 left.LPillar(10, false, rand, Material.OAK_FENCE);
                 placeSupportFences(left.getRelative(0, -1, 0));//.downUntilSolid(rand, Material.OAK_FENCE);
             }
-            if (right.LPillar(10, false, rand, Material.BARRIER) != 10) {
+            if(right.LPillar(10, false, rand, Material.BARRIER) != 10) {
                 right.LPillar(10, false, rand, Material.OAK_FENCE);
                 placeSupportFences(right.getRelative(0, -1, 0));//.downUntilSolid(rand, Material.OAK_FENCE);
             }
 
 
             //Support
-            if (ceil != null) {
+            if(ceil != null) {
                 Orientable log = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
-                if (left.getDirection().getModX() != 0)
+                if(left.getDirection().getModX() != 0)
                     log.setAxis(Axis.Z);
-                if (left.getDirection().getModZ() != 0)
+                if(left.getDirection().getModZ() != 0)
                     log.setAxis(Axis.X);
                 ceil = left.clone().getRelative(0, ceil.getY() - left.getY(), 0).getLeft();
 
                 Lantern lantern = (Lantern) Bukkit.createBlockData(Material.LANTERN);
                 lantern.setHanging(true);
 
-                for (int i = 0; i < dist + 2; i++) {
+                for(int i = 0; i < dist + 2; i++) {
                     Wall support = ceil.getRight(i);
-                    if (!support.getType().isSolid() ||
+                    if(!support.getType().isSolid() ||
                             support.getType() == Material.OAK_FENCE) {
-                        if (support.getRelative(0, 1, 0).getType() != Material.OAK_LOG
+                        if(support.getRelative(0, 1, 0).getType() != Material.OAK_LOG
                                 && support.getRelative(0, -1, 0).getType() != Material.OAK_LOG) {
                             support.setBlockData(log);
 
                             //L A M P
-                            if (GenUtils.chance(rand, 1, 100)) {
+                            if(GenUtils.chance(rand, 1, 100)) {
                                 support.getRelative(0, -1, 0).get()
                                         .lsetBlockData(lantern);
                             }
 
                             //Vine
-                            if (GenUtils.chance(rand, 1, 10)) {
+                            if(GenUtils.chance(rand, 1, 10)) {
                                 BlockUtils.vineUp(support.get(), 3);
                             }
                         }
@@ -287,15 +287,15 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         }
         return true;
     }
-    
+
     private void placeSupportFences(Wall w) {
-    	while(!w.getType().isSolid()) {
-    		if(w.getType() == Material.LAVA)
-    			w.setType(Material.COBBLESTONE);
-    		else
-    			w.setType(Material.OAK_FENCE);
-    		w = w.getRelative(0,-1,0);
-    	}
+        while(!w.getType().isSolid()) {
+            if(w.getType() == Material.LAVA)
+                w.setType(Material.COBBLESTONE);
+            else
+                w.setType(Material.OAK_FENCE);
+            w = w.getRelative(0, -1, 0);
+        }
     }
 
     @Override

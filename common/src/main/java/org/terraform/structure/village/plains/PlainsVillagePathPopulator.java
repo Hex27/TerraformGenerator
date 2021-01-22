@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.Random;
 
 public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
-    TerraformWorld tw;
     private final Random random;
     private final Collection<DirectionalCubeRoom> knownRooms;
+    TerraformWorld tw;
 
     public PlainsVillagePathPopulator(TerraformWorld tw, Collection<DirectionalCubeRoom> collection, Random rand) {
         this.tw = tw;
@@ -37,7 +37,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
         b.getRelative(0, 3, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
         b.getRelative(0, 4, 0).setType(Material.CAMPFIRE);
         b.getRelative(0, 5, 0).setType(GenUtils.randMaterial(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             Slab tSlab = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
             tSlab.setType(Type.TOP);
             b.getRelative(face).getRelative(0, 3, 0).setBlockData(tSlab);
@@ -57,7 +57,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                 ppd.base.getZ());
 
         //Path is on water. Place a solid wooden foundation, and then return.
-        if (ppd.base.getRelative(0,1,0).getType() == Material.WATER) {
+        if(ppd.base.getRelative(0, 1, 0).getType() == Material.WATER) {
             Wall pathCore = new Wall(ppd.base, ppd.dir).getAtY(TerraformGenerator.seaLevel);
             new SlabBuilder(Material.OAK_SLAB)
                     .setWaterlogged(true).setType(Type.TOP)
@@ -70,7 +70,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
             return;
         }
 
-        if (GenUtils.chance(random, 1, 15)) {
+        if(GenUtils.chance(random, 1, 15)) {
             BlockFace side = BlockUtils.getTurnBlockFace(random, ppd.dir);
             SimpleBlock target = new SimpleBlock(
                     ppd.base.getPopData(),
@@ -80,14 +80,14 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                             ppd.base.getX() + side.getModX() * 3,
                             ppd.base.getZ() + side.getModZ() * 3),
                     ppd.base.getZ() + side.getModZ() * 3);
-            if (target.getType() == Material.GRASS_PATH) return;
-            for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
-                if (target.getRelative(face).getGround().getRelative(0, 1, 0).getType().isSolid())
+            if(target.getType() == Material.GRASS_PATH) return;
+            for(BlockFace face : BlockUtils.xzPlaneBlockFaces) {
+                if(target.getRelative(face).getGround().getRelative(0, 1, 0).getType().isSolid())
                     return;
             }
 
-            for (CubeRoom room : knownRooms) {
-                if (room.isPointInside(target))
+            for(CubeRoom room : knownRooms) {
+                if(room.isPointInside(target))
                     return;
             }
 

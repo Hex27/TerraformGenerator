@@ -61,7 +61,7 @@ public enum TConfigOption {
     STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled", true),
     STRUCTURES_SWAMPHUT_ENABLED("structures.swamphut.enabled", true),
     STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND("structures.swamphut.chance-out-of-10000", 10),
-    STRUCTURES_SWAMPHUT_SPAWN_MUDFLAT_HEADS("structures.swamphut.spawn-mudflat-heads",true),
+    STRUCTURES_SWAMPHUT_SPAWN_MUDFLAT_HEADS("structures.swamphut.spawn-mudflat-heads", true),
     STRUCTURES_DESERTWELL_ENABLED("structures.desertwell.enabled", true),
     STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND("structures.desertwell.chance-out-of-10000", 10),
     STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK("structures.small-dungeon.count-per-megachunk", 3),
@@ -257,11 +257,11 @@ public enum TConfigOption {
     }
 
     public static void loadValues(DCConfig conf) {
-        for (TConfigOption option : TConfigOption.values()) {
+        for(TConfigOption option : TConfigOption.values()) {
             conf.reg(option.path, option.value);
         }
         conf.load();
-        for (TConfigOption option : TConfigOption.values()) {
+        for(TConfigOption option : TConfigOption.values()) {
             option.value = conf.get(option.path);
         }
     }
@@ -275,8 +275,8 @@ public enum TConfigOption {
 
         String placeholder = "";
 
-        for (int i = 0; i < placeholders.length; i++) {
-            if (i % 2 == 0) {
+        for(int i = 0; i < placeholders.length; i++) {
+            if(i % 2 == 0) {
                 placeholder = placeholders[i];
             } else {
                 parsed = parsed.replaceAll(placeholder, placeholders[i]);
@@ -286,7 +286,7 @@ public enum TConfigOption {
     }
 
     public int getInt() {
-        if (value instanceof Number) {
+        if(value instanceof Number) {
             return ((Number) value).intValue();
         }
         return (int) value;
@@ -297,14 +297,14 @@ public enum TConfigOption {
     }
 
     public double getDouble() {
-        if (value instanceof Number) {
+        if(value instanceof Number) {
             return ((Number) value).doubleValue();
         }
         return (double) value;
     }
 
     public float getFloat() {
-        if (value instanceof Number) {
+        if(value instanceof Number) {
             return ((Number) value).floatValue();
         }
         return (float) value;
@@ -318,7 +318,7 @@ public enum TConfigOption {
     public String[] getStringArray() {
         String[] arr = new String[getStringList().size()];
         int i = 0;
-        for (String item : getStringList()) {
+        for(String item : getStringList()) {
             arr[i] = item;
             i++;
         }

@@ -27,17 +27,17 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
         int[] lowerCorner = room.getLowerCorner(1);
         int[] upperCorner = room.getUpperCorner(1);
         int y = room.getY();
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 //Use scaffolding instead of fences for top area
-                if (b.getRelative(0, -1, 0).getType() == Material.OAK_FENCE) {
+                if(b.getRelative(0, -1, 0).getType() == Material.OAK_FENCE) {
                     //Find lowest block
-                    while (b.getRelative(0, -1, 0).getType() == Material.OAK_FENCE) {
+                    while(b.getRelative(0, -1, 0).getType() == Material.OAK_FENCE) {
                         b = b.getRelative(0, -1, 0);
                     }
                     //Start replacing upwards
-                    while (b.getY() <= y) {
+                    while(b.getY() <= y) {
                         b.setType(Material.SCAFFOLDING);
                         b = b.getRelative(0, 1, 0);
                     }
@@ -48,7 +48,7 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
         //Generate Ore Lift
         Wall w = new Wall(new SimpleBlock(data, room.getX(), room.getY() + 3, room.getZ()));
         w = w.findCeiling(10);
-        if (w != null) {
+        if(w != null) {
             TerraSchematic schema;
             try {
                 Wall target = w.getRelative(0, -GenUtils.randInt(rand, 8, 10), 0);
@@ -69,7 +69,7 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
                 schema.setFace(BlockFace.NORTH);
                 schema.apply();
                 target.LPillar(w.getY() - target.getY(), rand, Material.OAK_FENCE);
-            } catch (FileNotFoundException e) {
+            } catch(FileNotFoundException e) {
                 e.printStackTrace();
             }
         }

@@ -18,7 +18,7 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
     public PlainsVillageHouseJigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
         this.var = PlainsVillageHouseVariant.roll(new Random());
-        this.pieceRegistry = new JigsawStructurePiece[]{
+        this.pieceRegistry = new JigsawStructurePiece[] {
                 new PlainsVillageBedroomPiece(var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
                 new PlainsVillageKitchenPiece(var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
                 new PlainsVillageLibraryPiece(var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
@@ -33,7 +33,7 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
         super.build(random);
 
         //Make sure awkward corners are fixed
-        for (JigsawStructurePiece piece : this.pieces.values()) {
+        for(JigsawStructurePiece piece : this.pieces.values()) {
             SimpleBlock core = new SimpleBlock(
                     this.core.getPopData(),
                     piece.getRoom().getX(),
@@ -42,28 +42,28 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
             Wall target;
             Material[] fenceType = {Material.OAK_FENCE};
             Material cornerType = Material.OAK_LOG;
-            if (this.var == PlainsVillageHouseVariant.COBBLESTONE)
-                fenceType = new Material[]{Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
-            else if (this.var == PlainsVillageHouseVariant.CLAY) {
-                fenceType = new Material[]{Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
+            if(this.var == PlainsVillageHouseVariant.COBBLESTONE)
+                fenceType = new Material[] {Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
+            else if(this.var == PlainsVillageHouseVariant.CLAY) {
+                fenceType = new Material[] {Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
                 cornerType = Material.STRIPPED_OAK_LOG;
             }
-            if (piece.getWalledFaces().contains(BlockFace.NORTH)
+            if(piece.getWalledFaces().contains(BlockFace.NORTH)
                     && piece.getWalledFaces().contains(BlockFace.WEST)) { //nw
                 target = new Wall(core.getRelative(-3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.WEST, cornerType, fenceType);
             }
-            if (piece.getWalledFaces().contains(BlockFace.NORTH)
+            if(piece.getWalledFaces().contains(BlockFace.NORTH)
                     && piece.getWalledFaces().contains(BlockFace.EAST)) { //ne
                 target = new Wall(core.getRelative(3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.EAST, cornerType, fenceType);
             }
-            if (piece.getWalledFaces().contains(BlockFace.SOUTH)
+            if(piece.getWalledFaces().contains(BlockFace.SOUTH)
                     && piece.getWalledFaces().contains(BlockFace.WEST)) { //sw
                 target = new Wall(core.getRelative(-3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.WEST, cornerType, fenceType);
             }
-            if (piece.getWalledFaces().contains(BlockFace.SOUTH)
+            if(piece.getWalledFaces().contains(BlockFace.SOUTH)
                     && piece.getWalledFaces().contains(BlockFace.EAST)) { //se
                 target = new Wall(core.getRelative(3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST, cornerType, fenceType);
@@ -71,13 +71,13 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
         }
 
         //Place the roof
-        if (!PlainsVillageRoofHandler.isRectangle(this))
+        if(!PlainsVillageRoofHandler.isRectangle(this))
             PlainsVillageRoofHandler.placeStandardRoof(this);
         else
             PlainsVillageRoofHandler.placeTentRoof(random, this);
 
         //Decorate rooms and walls
-        for (JigsawStructurePiece piece : this.pieces.values()) {
+        for(JigsawStructurePiece piece : this.pieces.values()) {
             piece.postBuildDecoration(random, this.core.getPopData());
         }
 

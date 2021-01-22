@@ -40,7 +40,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         try {
             Field.class.getDeclaredField("modifiers");
             handler = new Pre14PrivateFieldHandler();
-        } catch (NoSuchFieldException | SecurityException ex) {
+        } catch(NoSuchFieldException | SecurityException ex) {
             handler = new Post14PrivateFieldHandler();
         }
         privateFieldHandler = handler;
@@ -68,16 +68,16 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         logger.info("Detected version: " + version);
         try {
             injector = (NMSInjectorAbstract) Class.forName("org.terraform." + version + ".NMSInjector").newInstance();
-        } catch (ClassNotFoundException e) {
+        } catch(ClassNotFoundException e) {
             e.printStackTrace();
             logger.error("&cNo support for this version has been made yet!");
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch(InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             logger.error("&cSomething went wrong initiating the injector!");
 
         }
 
-        if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
+        if(TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
             Bukkit.getPluginManager().registerEvents(new SaplingOverrider(), this);
         }
 
@@ -87,20 +87,21 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
 
     @Override
     public void onDisable() {
-    	NativeGeneratorPatcherPopulator.flushChanges();
+        NativeGeneratorPatcherPopulator.flushChanges();
     }
 
     /**
      * Legacy thing. Consider removal.
+     *
      * @param event
      * @deprecated
      */
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
-        if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
+        if(event.getWorld().getGenerator() instanceof TerraformGenerator) {
             logger.info(event.getWorld().getName() + " loaded.");
-            if (!TerraformGenerator.preWorldInitGen.isEmpty()) {
-                if (!TConfigOption.DEVSTUFF_ATTEMPT_FIXING_PREMATURE.getBoolean()) {
+            if(!TerraformGenerator.preWorldInitGen.isEmpty()) {
+                if(!TConfigOption.DEVSTUFF_ATTEMPT_FIXING_PREMATURE.getBoolean()) {
                     logger.info("&cIgnoring "
                             + TerraformGenerator.preWorldInitGen.size()
                             + " pre-maturely generated chunks."
@@ -112,8 +113,8 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
                         + " pre-maturely generated chunks.");
                 int fixed = 0;
                 TerraformWorld tw = TerraformWorld.get(event.getWorld());
-                for (SimpleChunkLocation sc : TerraformGenerator.preWorldInitGen) {
-                    if (!sc.getWorld().equals(event.getWorld().getName())) continue;
+                for(SimpleChunkLocation sc : TerraformGenerator.preWorldInitGen) {
+                    if(!sc.getWorld().equals(event.getWorld().getName())) continue;
                     logger.debug("Populating " + sc);
                     PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
                     new TerraformPopulator(tw).populate(tw, new Random(), data);
@@ -127,9 +128,9 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
 
     @EventHandler
     public void onWorldInit(WorldInitEvent event) {
-        if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
+        if(event.getWorld().getGenerator() instanceof TerraformGenerator) {
             logger.info("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
-            if (injector.attemptInject(event.getWorld())) {
+            if(injector.attemptInject(event.getWorld())) {
                 INJECTED_WORLDS.add(event.getWorld().getName());
                 logger.info("&aInjection success! Proceeding with generation.");
 

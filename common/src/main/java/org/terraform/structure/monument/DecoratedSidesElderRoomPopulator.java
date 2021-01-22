@@ -25,10 +25,10 @@ public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
         super.populate(data, room);
 
         //Stairs at the top
-        for (Entry<Wall, Integer> walls : room.getFourWalls(data, 2).entrySet()) {
+        for(Entry<Wall, Integer> walls : room.getFourWalls(data, 2).entrySet()) {
             Wall w = walls.getKey().getRelative(0, room.getHeight() - 2, 0);
             int length = walls.getValue();
-            for (int j = 0; j < length; j++) {
+            for(int j = 0; j < length; j++) {
 
                 Stairs stair = (Stairs) Bukkit.createBlockData(design.stairs());
                 stair.setFacing(w.getDirection().getOppositeFace());
@@ -41,15 +41,15 @@ public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
         }
 
         //Decorated walls
-        for (Entry<Wall, Integer> walls : room.getFourWalls(data, 1).entrySet()) {
+        for(Entry<Wall, Integer> walls : room.getFourWalls(data, 1).entrySet()) {
             Wall w = walls.getKey();
             int length = walls.getValue();
-            for (int j = 0; j < length; j++) {
-                if (!w.getRear().getType().isSolid()) {
+            for(int j = 0; j < length; j++) {
+                if(!w.getRear().getType().isSolid()) {
                     Wall wall = w.getRelative(0, 4, 0);
                     wall.LPillar(room.getHeight() - 4, true, rand, Material.SEA_LANTERN, Material.DARK_PRISMARINE);
                 } else {
-                    if (j % 2 == 0)
+                    if(j % 2 == 0)
                         w.LPillar(room.getHeight() - 1, rand, Material.PRISMARINE_BRICKS);
                     else {
                         w.LPillar(room.getHeight() - 1, rand, Material.PRISMARINE);
@@ -72,7 +72,7 @@ public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
         Waterlogged wall = (Waterlogged) Bukkit.createBlockData(Material.PRISMARINE_WALL);
         wall.setWaterlogged(true);
 
-        for (int[] corner : room.getAllCorners(2)) {
+        for(int[] corner : room.getAllCorners(2)) {
             data.setType(corner[0], room.getY() + room.getHeight() - 1, corner[1], Material.SEA_LANTERN);
             data.setBlockData(corner[0], room.getY() + room.getHeight() - 2, corner[1], wall);
         }

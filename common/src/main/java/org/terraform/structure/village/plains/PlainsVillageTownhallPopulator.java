@@ -43,7 +43,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
             TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new Location(tw.getWorld(), x, y, z));
             farmHouse.parser = new FarmhouseSchematicParser(biome, this.rand, data);
             BlockFace face = BlockUtils.getDirectBlockFace(this.rand);
-            if (room instanceof DirectionalCubeRoom) {
+            if(room instanceof DirectionalCubeRoom) {
                 face = ((DirectionalCubeRoom) room).getDirection();
             }
 
@@ -57,22 +57,22 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
             data.addEntity(x, y + 1, z, EntityType.CAT); //And a cat.
 
             //Spawn a base on the house to sit on
-            for (int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
-                for (int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
-                    if (data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
+            for(int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
+                for(int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
+                    if(data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
                             data.getType(x + nx, y - 1, z + nz).toString().contains("STONE_BRICKS"))
                         BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-                    else if (data.getType(x + nx, y - 1, z + nz).toString().contains("LOG"))
+                    else if(data.getType(x + nx, y - 1, z + nz).toString().contains("LOG"))
                         BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, data.getType(x + nx, y - 1, z + nz));
                 }
             }
 
             //Spawn a stairway from the house.
             Wall w = new Wall(new SimpleBlock(data, x, y - 1, z), farmHouse.getFace()).getRight();
-            for (int i = 0; i < 7; i++)
+            for(int i = 0; i < 7; i++)
                 w = w.getFront();
             //while(w.getType() != Material.DIRT){
-            while (!w.getType().isSolid() ||
+            while(!w.getType().isSolid() ||
                     w.getType().toString().contains("PLANKS")) {
                 Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
                         Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS));
@@ -102,15 +102,15 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
             int maxDepth = 5;
 
             //Connect front to the nearest path.
-            while (entrance.getType() != Material.GRASS_PATH && maxDepth > 0) {
-                if (BlockUtils.isDirtLike(entrance.getType()))
+            while(entrance.getType() != Material.GRASS_PATH && maxDepth > 0) {
+                if(BlockUtils.isDirtLike(entrance.getType()))
                     entrance.setType(Material.GRASS_PATH);
 
                 Wall leftPath = entrance.getLeft().getGround();
                 Wall rightPath = entrance.getRight().getGround();
-                if (BlockUtils.isDirtLike(leftPath.getType()))
+                if(BlockUtils.isDirtLike(leftPath.getType()))
                     leftPath.setType(Material.GRASS_PATH);
-                if (BlockUtils.isDirtLike(rightPath.getType()))
+                if(BlockUtils.isDirtLike(rightPath.getType()))
                     rightPath.setType(Material.GRASS_PATH);
 
 
@@ -118,7 +118,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
                 maxDepth--;
             }
 
-        } catch (Throwable e) {
+        } catch(Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place farmhouse at " + x + "," + y + "," + z + "!");
             e.printStackTrace();
         }

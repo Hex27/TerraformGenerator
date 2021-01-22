@@ -27,7 +27,7 @@ public class DesertHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{Material.SAND,
+        return new Material[] {Material.SAND,
                 Material.SAND,
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE),
@@ -38,28 +38,28 @@ public class DesertHandler extends BiomeHandler {
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         boolean cactusGathering = GenUtils.chance(random, 1, 100);
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
+                if(data.getBiome(x, z) != getBiome()) continue;
                 Material base = data.getType(x, y, z);
 
-                if (cactusGathering) {
-                    if (GenUtils.chance(random, 5, 100))
+                if(cactusGathering) {
+                    if(GenUtils.chance(random, 5, 100))
                         data.setType(x, y, z, Material.GRASS_PATH);
                 }
 
-                if (base == Material.SAND) {
-                    if (GenUtils.chance(random, 1, 100) ||
+                if(base == Material.SAND) {
+                    if(GenUtils.chance(random, 1, 100) ||
                             (GenUtils.chance(random, 1, 20) && cactusGathering)) {
                         boolean canSpawn = true;
-                        for (BlockFace face : BlockUtils.directBlockFaces) {
-                            if (data.getType(x + face.getModX(), y + 1, z + face.getModZ()) != Material.AIR)
+                        for(BlockFace face : BlockUtils.directBlockFaces) {
+                            if(data.getType(x + face.getModX(), y + 1, z + face.getModZ()) != Material.AIR)
                                 canSpawn = false;
                         }
-                        if (canSpawn)
+                        if(canSpawn)
                             BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.CACTUS, 3, 5);
-                    } else if (GenUtils.chance(random, 1, 80)) {
+                    } else if(GenUtils.chance(random, 1, 80)) {
                         data.setType(x, y + 1, z, Material.DEAD_BUSH);
                     }
                 }
@@ -67,7 +67,7 @@ public class DesertHandler extends BiomeHandler {
 
             }
         }
-        if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
+        if(GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
             new DesertWellPopulator().populate(world, random, data, false);
         }
     }

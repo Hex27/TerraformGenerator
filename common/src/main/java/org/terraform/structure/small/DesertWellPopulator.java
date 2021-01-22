@@ -22,7 +22,7 @@ public class DesertWellPopulator {
 
     public void populate(TerraformWorld tw, Random random,
                          PopulatorDataAbstract data, boolean badlandsWell) {
-        if (!TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()) return;
+        if(!TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()) return;
         int x = data.getChunkX() * 16 + random.nextInt(16);
         int z = data.getChunkZ() * 16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
@@ -46,9 +46,9 @@ public class DesertWellPopulator {
             core = core.getRelative(1, 0, 1);
 
             //Make sure the well is standing on a stable base
-            for (int nx = -3; nx <= 3; nx++) {
-                for (int nz = -3; nz <= 3; nz++) {
-                    if (!badlandsWell)
+            for(int nx = -3; nx <= 3; nx++) {
+                for(int nz = -3; nz <= 3; nz++) {
+                    if(!badlandsWell)
                         new Wall(core.getRelative(nx, -1, nz)).downLPillar(random, 10, Material.SANDSTONE, Material.CHISELED_SANDSTONE, Material.CUT_SANDSTONE,
                                 Material.SMOOTH_SANDSTONE);
                     else
@@ -59,14 +59,14 @@ public class DesertWellPopulator {
 
             //Drill hole down
             int depth = GenUtils.randInt(random, 5, 30);
-            for (int i = 0; i < depth; i++) {
-                if (i < depth - 3)
+            for(int i = 0; i < depth; i++) {
+                if(i < depth - 3)
                     core.getRelative(0, -i, 0).setType(Material.CAVE_AIR);
                 else
                     core.getRelative(0, -i, 0).setType(Material.WATER);
             }
 
-        } catch (FileNotFoundException e) {
+        } catch(FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -85,7 +85,7 @@ public class DesertWellPopulator {
         @Override
         public void applyData(SimpleBlock block, BlockData data) {
 
-            if (this.badlandsWell) {
+            if(this.badlandsWell) {
                 data = Bukkit.createBlockData(
                         StringUtils.replace(
                                 data.getAsString(),
@@ -93,13 +93,13 @@ public class DesertWellPopulator {
                                 "red_sandstone"
                         )
                 );
-                if (data.getMaterial() == Material.RED_SANDSTONE && rand.nextInt(5) == 0) {
+                if(data.getMaterial() == Material.RED_SANDSTONE && rand.nextInt(5) == 0) {
                     data = Bukkit.createBlockData(Material.CHISELED_RED_SANDSTONE);
                     super.applyData(block, data);
                     return;
                 }
 
-                if (data.getMaterial() != Material.RED_SANDSTONE_STAIRS
+                if(data.getMaterial() != Material.RED_SANDSTONE_STAIRS
                         && data.getMaterial() != Material.RED_SANDSTONE_WALL
                         && data.getMaterial().toString().contains("RED_SANDSTONE")) {
                     data = Bukkit.createBlockData(
@@ -119,13 +119,13 @@ public class DesertWellPopulator {
                     super.applyData(block, data);
                 return;
             } else {
-                if (data.getMaterial() == Material.SANDSTONE && rand.nextInt(5) == 0) {
+                if(data.getMaterial() == Material.SANDSTONE && rand.nextInt(5) == 0) {
                     data = Bukkit.createBlockData(Material.CHISELED_SANDSTONE);
                     super.applyData(block, data);
                     return;
                 }
 
-                if (data.getMaterial() != Material.SANDSTONE_STAIRS
+                if(data.getMaterial() != Material.SANDSTONE_STAIRS
                         && data.getMaterial() != Material.SANDSTONE_WALL
                         && data.getMaterial().toString().contains("SANDSTONE")) {
                     data = Bukkit.createBlockData(

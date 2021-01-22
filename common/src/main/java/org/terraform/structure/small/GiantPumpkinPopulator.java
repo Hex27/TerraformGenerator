@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class GiantPumpkinPopulator {
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        if (!TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()) return;
+        if(!TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()) return;
         int x = data.getChunkX() * 16 + random.nextInt(16);
         int z = data.getChunkZ() * 16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
@@ -28,7 +28,7 @@ public class GiantPumpkinPopulator {
                 .build(tw, data, x, y + 1, z);
 
         //Spawn small pumpkins
-        for (int i = 0; i < GenUtils.randInt(random, 15, 30); i++) {
+        for(int i = 0; i < GenUtils.randInt(random, 15, 30); i++) {
             int nx = x + GenUtils.getSign(random) * GenUtils.randInt(5, 12);
             int nz = z + GenUtils.getSign(random) * GenUtils.randInt(5, 12);
             int ny = GenUtils.getHighestGround(data, nx, nz);
@@ -37,7 +37,7 @@ public class GiantPumpkinPopulator {
         }
 
         //Smol Bushes
-        for (int i = 0; i < GenUtils.randInt(random, 1, 5); i++) {
+        for(int i = 0; i < GenUtils.randInt(random, 1, 5); i++) {
             int nx = x + GenUtils.getSign(random) * GenUtils.randInt(4, 5);
             int nz = z + GenUtils.getSign(random) * GenUtils.randInt(4, 5);
             int ny = GenUtils.getHighestGround(data, nx, nz);
@@ -46,7 +46,7 @@ public class GiantPumpkinPopulator {
         }
 
         //Spawn big bushes
-        for (int i = 0; i < GenUtils.randInt(random, 4, 6); i++) {
+        for(int i = 0; i < GenUtils.randInt(random, 4, 6); i++) {
             int nx = x + GenUtils.getSign(random) * GenUtils.randInt(4, 6);
             int nz = z + GenUtils.getSign(random) * GenUtils.randInt(4, 6);
             int ny = GenUtils.getHighestGround(data, nx, nz);

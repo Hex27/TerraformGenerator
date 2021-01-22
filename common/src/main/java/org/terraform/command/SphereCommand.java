@@ -50,12 +50,12 @@ public class SphereCommand extends DCCommand {
         noise.SetFrequency(0.09f);
         SimpleBlock block = new SimpleBlock(data, p.getLocation().getBlock());
 
-        for (float x = -trueRadius; x <= trueRadius; x++) {
-            for (float y = -trueRadius; y <= trueRadius; y++) {
-                for (float z = -trueRadius; z <= trueRadius; z++) {
+        for(float x = -trueRadius; x <= trueRadius; x++) {
+            for(float y = -trueRadius; y <= trueRadius; y++) {
+                for(float z = -trueRadius; z <= trueRadius; z++) {
                     double radiusSquared = Math.pow(trueRadius + noise.GetNoise(x, y, z) * 2, 2);
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    if (rel.distanceSquared(block) <= radiusSquared) {
+                    if(rel.distanceSquared(block) <= radiusSquared) {
                         //replaced = true;
                         rel.setType(Material.STONE);
                     }

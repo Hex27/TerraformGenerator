@@ -33,7 +33,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
         super.postBuildDecoration(random, data);
 
         //No walls :V
-        if (this.getWalledFaces().size() == 0) {
+        if(this.getWalledFaces().size() == 0) {
             return;
         }
 
@@ -41,7 +41,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
         BlockFace primaryWall = this.getWalledFaces().get(random.nextInt(this.getWalledFaces().size()));
         SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
         int numUtilities = 5;
-        if (core.getRelative(primaryWall, 3).getType() == Material.OAK_DOOR) {
+        if(core.getRelative(primaryWall, 3).getType() == Material.OAK_DOOR) {
             numUtilities--;
         }
 
@@ -50,18 +50,18 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
         ArrayList<Material> utilities = new ArrayList<Material>() {{
             add(Material.SMOKER);
         }};
-        for (int i = 0; i < numUtilities; i++) {
+        for(int i = 0; i < numUtilities; i++) {
             utilities.add(GenUtils.randMaterial(random, Material.HOPPER, Material.FURNACE, Material.CRAFTING_TABLE));
         }
         Collections.shuffle(utilities);
-        for (int i = 0; i < entry.getValue(); i++) {
-            if (w.getRear().getType() != Material.OAK_DOOR) {
+        for(int i = 0; i < entry.getValue(); i++) {
+            if(w.getRear().getType() != Material.OAK_DOOR) {
                 numUtilities--;
                 Material mat = utilities.get(numUtilities);
-                switch (mat) {
+                switch(mat) {
                     case HOPPER:
                         w.setType(mat);
-                        if (w.getRear().getRelative(0, 1, 0).getType() != Material.GLASS_PANE) {
+                        if(w.getRear().getRelative(0, 1, 0).getType() != Material.GLASS_PANE) {
                             Switch lever = (Switch) Bukkit.createBlockData(Material.LEVER);
                             lever.setPowered(true);
                             lever.setAttachedFace(AttachedFace.WALL);
@@ -83,12 +83,12 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                         Wall chimneyWall = w.getRelative(0, 3, 0);
                         boolean hitCeiling = false;
                         int chimneyHeight = 0;
-                        while (chimneyHeight < 4) {
-                            if (chimneyWall.getType().isSolid()) {
+                        while(chimneyHeight < 4) {
+                            if(chimneyWall.getType().isSolid()) {
                                 hitCeiling = true;
-                            } else if (hitCeiling) {
+                            } else if(hitCeiling) {
                                 chimneyHeight++;
-                                if (GenUtils.chance(random, chimneyHeight, 3)) break;
+                                if(GenUtils.chance(random, chimneyHeight, 3)) break;
                             }
                             chimneyWall.setType(Material.BRICKS);
 
@@ -108,16 +108,16 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 
         //Other walls can be decorated with random and loot
         //Populate for walled areas
-        for (BlockFace face : this.getWalledFaces()) {
-            if (face == primaryWall) continue;
+        for(BlockFace face : this.getWalledFaces()) {
+            if(face == primaryWall) continue;
             entry = this.getRoom().getWall(data, face, 0);
             w = entry.getKey();
 
-            for (int i = 0; i < entry.getValue(); i++) {
-                if (w.getRear().getType() != Material.OAK_DOOR
+            for(int i = 0; i < entry.getValue(); i++) {
+                if(w.getRear().getType() != Material.OAK_DOOR
                         && !w.getType().isSolid()) {
                     int decor = random.nextInt(5);
-                    switch (decor) {
+                    switch(decor) {
                         case 0: //Counter
                             new StairBuilder(Material.STONE_BRICK_STAIRS, Material.POLISHED_ANDESITE_STAIRS, Material.OAK_STAIRS)
                                     .setFacing(w.getDirection().getOppositeFace())

@@ -51,7 +51,7 @@ public class MegaChunk {
         //Pad the sides. Never generate on the side of a mega chunk.
         int x = GenUtils.randInt(rand, lowX + 64, highX - 64);
         int z = GenUtils.randInt(rand, lowZ + 64, highZ - 64);
-        return new int[]{x, z};
+        return new int[] {x, z};
     }
 
     public boolean containsXZBlockCoords(int x, int z) {
@@ -61,7 +61,7 @@ public class MegaChunk {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof MegaChunk) {
+        if(obj instanceof MegaChunk) {
             MegaChunk megaChunk = (MegaChunk) obj;
             return this.x == megaChunk.x && this.z == megaChunk.z;
         }

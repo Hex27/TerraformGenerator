@@ -25,7 +25,7 @@ public class GenericAntechamber extends Antechamber {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         super.populate(data, room);
-        for (int i = 0; i < GenUtils.randInt(2, 5); i++) {
+        for(int i = 0; i < GenUtils.randInt(2, 5); i++) {
             int[] coords = room.randomCoords(rand, 2);
             data.setType(coords[0], room.getY() + 1, coords[2], GenUtils.randMaterial(Material.CHISELED_SANDSTONE, Material.CHISELED_SANDSTONE, Material.CHISELED_SANDSTONE,
                     Material.BONE_BLOCK));
@@ -48,15 +48,15 @@ public class GenericAntechamber extends Antechamber {
                 Material.DEAD_TUBE_CORAL_FAN
         };
 
-        if (GenUtils.chance(rand, 1, 2))
+        if(GenUtils.chance(rand, 1, 2))
             randomRoomPlacement(data, room, 1, 5, deadCorals);
 
         //Animal items
-        if (GenUtils.chance(rand, 1, 3))
+        if(GenUtils.chance(rand, 1, 3))
             randomRoomPlacement(data, room, 1, 1, Material.TURTLE_EGG);
 
         //Logs
-        if (GenUtils.chance(rand, 1, 2))
+        if(GenUtils.chance(rand, 1, 2))
             randomRoomPlacement(data, room, 1, 5, Material.ACACIA_LOG,
                     Material.BIRCH_LOG,
                     Material.DARK_OAK_LOG,
@@ -65,7 +65,7 @@ public class GenericAntechamber extends Antechamber {
                     Material.OAK_LOG);
 
         //Rare, monster head
-        if (GenUtils.chance(1, 3)) {
+        if(GenUtils.chance(1, 3)) {
             randomRoomPlacement(data, room, 1, 1, Material.CREEPER_HEAD,
                     Material.BIRCH_LOG,
                     Material.DARK_OAK_LOG,
@@ -75,9 +75,9 @@ public class GenericAntechamber extends Antechamber {
         }
 
         //Oceanic Treasure Chest
-        if (GenUtils.chance(1, 10)) {
+        if(GenUtils.chance(1, 10)) {
             int[] coords = room.randomCoords(rand, 2);
-            if (!data.getType(coords[0], room.getY() + 1, coords[2]).isSolid()) {
+            if(!data.getType(coords[0], room.getY() + 1, coords[2]).isSolid()) {
                 Chest chest = (Chest) Bukkit.createBlockData(Material.CHEST);
                 chest.setFacing(BlockUtils.getDirectBlockFace(rand));
                 data.setBlockData(coords[0], room.getY() + 1, coords[2], chest);

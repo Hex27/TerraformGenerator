@@ -6,7 +6,7 @@ group = "org.terraform"
 
 repositories {
     mavenCentral()
-    maven{ url = uri("https://repo.codemc.io/repository/nms/") }
+    maven { url = uri("https://repo.codemc.io/repository/nms/") }
 }
 
 dependencies {

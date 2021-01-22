@@ -1,6 +1,25 @@
 package org.terraform.v1_15_R1;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_15_R1.BlockPosition;
+import net.minecraft.server.v1_15_R1.Blocks;
+import net.minecraft.server.v1_15_R1.ChunkCoordIntPair;
+import net.minecraft.server.v1_15_R1.Entity;
+import net.minecraft.server.v1_15_R1.EntityInsentient;
+import net.minecraft.server.v1_15_R1.EntityMinecartChest;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import net.minecraft.server.v1_15_R1.EnumMobSpawn;
+import net.minecraft.server.v1_15_R1.GroupDataEntity;
+import net.minecraft.server.v1_15_R1.IBlockData;
+import net.minecraft.server.v1_15_R1.IChunkAccess;
+import net.minecraft.server.v1_15_R1.IStructureAccess;
+import net.minecraft.server.v1_15_R1.LootTables;
+import net.minecraft.server.v1_15_R1.MinecraftKey;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.TileEntity;
+import net.minecraft.server.v1_15_R1.TileEntityLootable;
+import net.minecraft.server.v1_15_R1.TileEntityMobSpawner;
+import net.minecraft.server.v1_15_R1.WorldGenerator;
+import net.minecraft.server.v1_15_R1.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -77,13 +96,13 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
             et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(type.toString()).get(null);
             Entity e = et.a(ws.getMinecraftWorld());
             e.setPositionRotation((double) rawX + 0.5D, (double) rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
-            if (e instanceof EntityInsentient) {
+            if(e instanceof EntityInsentient) {
                 ((EntityInsentient) e).setPersistent();
                 ((EntityInsentient) e).prepare(ws, ws.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
             }
 
             ws.addEntity(e);
-        } catch (IllegalArgumentException | IllegalAccessException
+        } catch(IllegalArgumentException | IllegalAccessException
                 | NoSuchFieldException | SecurityException e1) {
             e1.printStackTrace();
         }
@@ -96,10 +115,10 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
         ica.setType(pos, Blocks.SPAWNER.getBlockData(), true);
         TileEntity tileentity = ica.getTileEntity(pos);
 
-        if (tileentity instanceof TileEntityMobSpawner) {
+        if(tileentity instanceof TileEntityMobSpawner) {
             try {
                 ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-            } catch (IllegalArgumentException | IllegalAccessException
+            } catch(IllegalArgumentException | IllegalAccessException
                     | NoSuchFieldException | SecurityException e) {
                 e.printStackTrace();
             }
@@ -116,7 +135,7 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
     }
 
     private MinecraftKey getLootTable(TerraLootTable table) {
-        switch (table) {
+        switch(table) {
             case SPAWN_BONUS_CHEST:
                 return LootTables.b;
             case END_CITY_TREASURE:

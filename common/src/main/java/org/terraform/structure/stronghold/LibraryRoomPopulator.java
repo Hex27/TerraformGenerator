@@ -35,16 +35,16 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
 
         HashMap<Wall, Integer> walls = room.getFourWalls(data, 1);
         //Bookshelves and entrance decor
-        for (Entry<Wall, Integer> entry : walls.entrySet()) {
+        for(Entry<Wall, Integer> entry : walls.entrySet()) {
             Wall wall = entry.getKey().clone();
             int other = 0;
-            for (int i = 0; i < entry.getValue(); i++) {
+            for(int i = 0; i < entry.getValue(); i++) {
                 //Tis' an entrance. Don't cover. Decorate it a bit.
-                if (!wall.getRear().get().getType().toString().endsWith("STONE_BRICKS")) {
+                if(!wall.getRear().get().getType().toString().endsWith("STONE_BRICKS")) {
                     Wall temp = wall.getRelative(0, 1, 0);
-                    for (int t = 0; t < room.getHeight(); t++) {
+                    for(int t = 0; t < room.getHeight(); t++) {
                         temp = temp.getRelative(0, 1, 0);
-                        if (temp.getRear().get().getType().toString().endsWith("STONE_BRICKS"))
+                        if(temp.getRear().get().getType().toString().endsWith("STONE_BRICKS"))
                             break;
                     }
                     temp.setType(Material.CHISELED_STONE_BRICKS);
@@ -52,7 +52,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
 
 
                 } else { //If it isn't an entrance, make bookshelves
-                    if (other <= 2) {
+                    if(other <= 2) {
                         wall.LPillar(room.getHeight(), rand, Material.BOOKSHELF);
                         other++;
                     } else {
@@ -68,16 +68,16 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
         int pHeight = room.getHeight() / 2; //Platform height
 
         //Platforms for second level
-        for (Entry<Wall, Integer> entry : walls.entrySet()) {
+        for(Entry<Wall, Integer> entry : walls.entrySet()) {
             Wall wall = entry.getKey().clone();
-            for (int l = 0; l < entry.getValue(); l++) {
+            for(int l = 0; l < entry.getValue(); l++) {
                 Wall pWall = wall.getFront().getRelative(0, pHeight - 1, 0);
-                if (pWall.get().getType().toString().contains("COBBLE")) {
+                if(pWall.get().getType().toString().contains("COBBLE")) {
                     //Make a cobble prop
-                    for (int i = 0; i < 3; i++) {
+                    for(int i = 0; i < 3; i++) {
                         pWall = pWall.getFront();
                         SimpleBlock front = pWall.get();
-                        if (front.lsetType(Material.OAK_LOG)) {
+                        if(front.lsetType(Material.OAK_LOG)) {
                             Orientable o = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
                             o.setAxis(BlockUtils.getAxisFromBlockFace(wall.getDirection()));
                             front.setBlockData(o);
@@ -86,7 +86,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
                 } else {
 
                     //Spawn loot chest
-                    if (GenUtils.chance(rand, 5, 100)) {
+                    if(GenUtils.chance(rand, 5, 100)) {
                         SimpleBlock cBlock = pWall.getRelative(0, 1, 0).get();
                         cBlock.setType(Material.CHEST);
 
@@ -96,9 +96,9 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
                         data.lootTableChest(cBlock.getX(), cBlock.getY(), cBlock.getZ(), TerraLootTable.STRONGHOLD_LIBRARY);
                     }
                     //Place slabs
-                    for (int i = 0; i < 3; i++) {
+                    for(int i = 0; i < 3; i++) {
                         SimpleBlock front = pWall.get();
-                        if (!front.lsetType(Material.OAK_SLAB)) {
+                        if(!front.lsetType(Material.OAK_SLAB)) {
                             pWall = pWall.getFront();
                             continue;
                         }
@@ -117,12 +117,12 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
         walls.clear();
         walls = room.getFourWalls(data, 4);
 
-        for (Entry<Wall, Integer> entry : walls.entrySet()) {
+        for(Entry<Wall, Integer> entry : walls.entrySet()) {
             Wall wall = entry.getKey().clone().getRelative(0, pHeight, 0);
-            for (int l = 0; l < entry.getValue(); l++) {
+            for(int l = 0; l < entry.getValue(); l++) {
                 wall.setType(Material.OAK_FENCE);
                 BlockUtils.correctSurroundingMultifacingData(wall.get());
-                if (GenUtils.chance(rand, 1, 10))
+                if(GenUtils.chance(rand, 1, 10))
                     wall.getRelative(0, 1, 0).setType(Material.TORCH);
                 wall = wall.getLeft();
             }
@@ -151,14 +151,14 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
 
         Collections.shuffle(stairWalls, rand);
         int i = GenUtils.randInt(rand, 1, 4);
-        for (int s = 0; s < i; s++) {
+        for(int s = 0; s < i; s++) {
             Wall stairWall = stairWalls.get(s);
             //Remove the fences there
             stairWall.getRight().getRelative(0, 1, 0).setType(Material.AIR);
             stairWall.getFront().getRight().getRelative(0, 1, 0).setType(Material.AIR);
 
             //Place stairs
-            while (stairWall.get().getY() > room.getY()) {
+            while(stairWall.get().getY() > room.getY()) {
                 stairWall.setType(Material.OAK_STAIRS);
                 Stairs d = (Stairs) Bukkit.createBlockData(Material.OAK_STAIRS);
                 d.setFacing(BlockUtils.getAdjacentFaces(stairWall.getDirection())[1]);
@@ -174,10 +174,10 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
         SimpleBlock core = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
 
         //Generate central bookpillar
-        for (int nx = -1; nx <= 1; nx++)
-            for (int nz = -1; nz <= 1; nz++)
-                for (int ny = 0; ny < room.getHeight() - 1; ny++) {
-                    if (ny == pHeight ||
+        for(int nx = -1; nx <= 1; nx++)
+            for(int nz = -1; nz <= 1; nz++)
+                for(int ny = 0; ny < room.getHeight() - 1; ny++) {
+                    if(ny == pHeight ||
                             ny == 0 ||
                             ny == room.getHeight() - 2) {
                         core.getRelative(nx, ny, nz).setType(Material.CHISELED_STONE_BRICKS);

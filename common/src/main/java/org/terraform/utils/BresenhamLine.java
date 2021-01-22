@@ -28,18 +28,18 @@ public class BresenhamLine {
         int err = dx - dy;
         int e2;
 
-        while (true) {
+        while(true) {
             line.add(new Vector2f(x0, y0));
 
-            if (x0 == x1 && y0 == y1) break;
+            if(x0 == x1 && y0 == y1) break;
 
             e2 = 2 * err;
-            if (e2 > -dy) {
+            if(e2 > -dy) {
                 err = err - dy;
                 x0 = x0 + sx;
             }
 
-            if (e2 < dx) {
+            if(e2 < dx) {
                 err = err + dx;
                 y0 = y0 + sy;
             }

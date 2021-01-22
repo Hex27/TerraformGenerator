@@ -31,11 +31,11 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
         Wall w = entry.getKey().getRelative(0, -1, 0);
-        for (int i = 0; i < entry.getValue(); i++) {
+        for(int i = 0; i < entry.getValue(); i++) {
             w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(2, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
-            if (this.var == PlainsVillageHouseVariant.CLAY)
+            if(this.var == PlainsVillageHouseVariant.CLAY)
                 w.getRelative(0, 2, 0).Pillar(2, rand, Material.WHITE_TERRACOTTA);
             else
                 w.getRelative(0, 2, 0).Pillar(2, rand, Material.OAK_PLANKS);
@@ -56,16 +56,16 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
         Material[] stairType = {Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS};
 
         //Variant Cobblestone
-        if (var == PlainsVillageHouseVariant.COBBLESTONE) {
-            slabType = new Material[]{Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
-            fenceType = new Material[]{Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
-            baseType = new Material[]{Material.OAK_LOG};
-            stairType = new Material[]{Material.OAK_STAIRS};
-        } else if (var == PlainsVillageHouseVariant.CLAY) {
+        if(var == PlainsVillageHouseVariant.COBBLESTONE) {
+            slabType = new Material[] {Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
+            fenceType = new Material[] {Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
+            baseType = new Material[] {Material.OAK_LOG};
+            stairType = new Material[] {Material.OAK_STAIRS};
+        } else if(var == PlainsVillageHouseVariant.CLAY) {
             slabType = BlockUtils.stoneBrickSlabs;
-            fenceType = new Material[]{Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
-            baseType = new Material[]{Material.STRIPPED_OAK_LOG};
-            stairType = new Material[]{Material.OAK_STAIRS};
+            fenceType = new Material[] {Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
+            baseType = new Material[] {Material.STRIPPED_OAK_LOG};
+            stairType = new Material[] {Material.OAK_STAIRS};
         }
 
         new SlabBuilder(slabType)
@@ -85,7 +85,7 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
         w.getLeft().setType(baseType);
         w.getRight().setType(baseType);
 
-        if (new Random().nextBoolean()) { //Plants
+        if(new Random().nextBoolean()) { //Plants
             w.setType(Material.GRASS_BLOCK);
             TrapDoor trapdoor = (TrapDoor) Bukkit.createBlockData(Material.OAK_TRAPDOOR);
             trapdoor.setFacing(w.getDirection());

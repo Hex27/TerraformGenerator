@@ -36,7 +36,7 @@ public class SnowyTaigaHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.DIRT, 3, Material.PODZOL, 2),
+        return new Material[] {GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.DIRT, 3, Material.PODZOL, 2),
                 Material.DIRT,
                 Material.DIRT,
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -46,43 +46,43 @@ public class SnowyTaigaHandler extends BiomeHandler {
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         //Rarely spawn huge taiga trees
-        if (TConfigOption.TREES_SNOWY_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 10)) {
+        if(TConfigOption.TREES_SNOWY_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 10)) {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
+            if(data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
+                if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
                     new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).setSnowyLeaves(true).build(world, data, treeX, treeY, treeZ);
             }
         }
 
-        for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
+        for(int i = 0; i < GenUtils.randInt(1, 5); i++) {
             int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
+            if(data.getBiome(treeX, treeZ) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
+                if(BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
                     new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).setSnowyLeaves(true).build(world, data, treeX, treeY, treeZ);
             }
         }
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
+                if(data.getBiome(x, y, z) != getBiome()) continue;
 
-                if (data.getType(x, y, z) == Material.DIRT) {
-                    if (GenUtils.chance(random, 1, 20)) {
+                if(data.getType(x, y, z) == Material.DIRT) {
+                    if(GenUtils.chance(random, 1, 20)) {
                         data.setType(x, y + 1, z, Material.DEAD_BUSH);
-                        if (random.nextBoolean()) {
+                        if(random.nextBoolean()) {
                             data.setType(x, y + 1, z, Material.ALLIUM);
                         }
                     }
                 }
-                if (data.getType(x, y + 1, z) == Material.AIR
+                if(data.getType(x, y + 1, z) == Material.AIR
                         && data.getType(x, y, z).isSolid()) {
                     data.setType(x, y + 1, z, Material.SNOW);
-                    if (data.getBlockData(x, y, z) instanceof Snowable) {
+                    if(data.getBlockData(x, y, z) instanceof Snowable) {
                         Snowable snowable = (Snowable) data.getBlockData(x, y, z);
                         snowable.setSnowy(true);
                         data.setBlockData(x, y, z, snowable);

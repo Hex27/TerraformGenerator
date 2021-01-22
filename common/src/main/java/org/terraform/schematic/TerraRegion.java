@@ -19,9 +19,9 @@ public class TerraRegion {
         int topBlockZ = (Math.max(one.getZ(), two.getZ()));
         int bottomBlockZ = (Math.min(one.getZ(), two.getZ()));
 
-        for (int x = bottomBlockX; x <= topBlockX; x++) {
-            for (int z = bottomBlockZ; z <= topBlockZ; z++) {
-                for (int y = bottomBlockY; y <= topBlockY; y++) {
+        for(int x = bottomBlockX; x <= topBlockX; x++) {
+            for(int z = bottomBlockZ; z <= topBlockZ; z++) {
+                for(int y = bottomBlockY; y <= topBlockY; y++) {
                     Block block = one.getWorld().getBlockAt(x, y, z);
 
                     blocks.add(block);

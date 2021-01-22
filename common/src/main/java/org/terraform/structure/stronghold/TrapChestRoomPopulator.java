@@ -23,12 +23,12 @@ public class TrapChestRoomPopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         //Mines
-        for (int i = 0; i < GenUtils.randInt(rand, 0, 5); i++) {
+        for(int i = 0; i < GenUtils.randInt(rand, 0, 5); i++) {
             int x = room.getX() + GenUtils.randInt(rand, -room.getWidthX() / 2, room.getWidthX() / 2);
             int z = room.getZ() + GenUtils.randInt(rand, -room.getWidthZ() / 2, room.getWidthZ() / 2);
             data.setType(x, room.getY() + 1, z, Material.STONE_PRESSURE_PLATE);
 
-            if (GenUtils.chance(rand, 4, 5))
+            if(GenUtils.chance(rand, 4, 5))
                 data.setType(x, room.getY() - 1, z, Material.TNT);
         }
 
@@ -36,20 +36,20 @@ public class TrapChestRoomPopulator extends RoomPopulatorAbstract {
         int x = room.getX();
         int z = room.getZ();
 
-        if (GenUtils.chance(rand, 1, 2))
+        if(GenUtils.chance(rand, 1, 2))
             data.setType(x, y, z, Material.TNT);
         else
             data.setType(x, y, z, Material.SMOOTH_STONE);
 
         SimpleBlock core = new SimpleBlock(data, x, y, z);
-        for (BlockFace face : BlockUtils.directBlockFaces) {
+        for(BlockFace face : BlockUtils.directBlockFaces) {
             core.getRelative(face).setType(Material.SMOOTH_STONE);
             core.getRelative(face).getRelative(0, 1, 0).setType(Material.STONE_BRICK_STAIRS);
             Directional rot = (Directional) Bukkit.createBlockData(Material.STONE_BRICK_STAIRS);
             rot.setFacing(face.getOppositeFace());
             core.getRelative(face).getRelative(0, 1, 0).setBlockData(rot);
 
-            for (BlockFace f : BlockUtils.directBlockFaces) {
+            for(BlockFace f : BlockUtils.directBlockFaces) {
                 core.getRelative(face).getRelative(f).lsetType(Material.SMOOTH_STONE_SLAB);
             }
         }

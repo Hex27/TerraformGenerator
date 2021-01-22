@@ -20,10 +20,10 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         //Wall up all entrances with wooden planks
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall wall = entry.getKey().clone();
             int length = entry.getValue();
-            for (int i = 0; i < length; i++) {
+            for(int i = 0; i < length; i++) {
                 wall.RPillar(room.getHeight(), rand, Material.OAK_PLANKS);
                 wall = wall.getLeft();
             }
@@ -47,7 +47,7 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
                 Material.NETHERRACK,
                 Material.MAGMA_BLOCK);
 
-        while (data.getType(x, y, z).isSolid() && y < room.getY() + room.getHeight() - 5) {
+        while(data.getType(x, y, z).isSolid() && y < room.getY() + room.getHeight() - 5) {
             y++;
         }
         y--;

@@ -27,23 +27,23 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
         super.populate(data, room);
 
         //Make the hashtag room structure
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 4).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 4).entrySet()) {
             Wall w = entry.getKey();
             int l = entry.getValue();
-            for (int i = 0; i < l + 4; i++) {
+            for(int i = 0; i < l + 4; i++) {
                 w.RPillar(room.getHeight() - 1, rand, design.tileSet());
 
                 //Lighting
-                if (i % 2 == 0)
+                if(i % 2 == 0)
                     w.setType(Material.SEA_LANTERN);
 
                 //Center hole
-                if (i == l / 2) {
+                if(i == l / 2) {
                     w.getRelative(0, 2, 0).setType(Material.WATER);
                 }
 
                 //Side holes
-                if (i == l + 2) {
+                if(i == l + 2) {
                     w.getRelative(0, 2, 0).setType(Material.WATER);
                 }
                 w = w.getLeft();
@@ -55,8 +55,8 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
     }
 
     public void tetrapod(Wall w) {
-        for (int width = 0; width < 3; width++) {
-            if (width % 2 == 1) {
+        for(int width = 0; width < 3; width++) {
+            if(width % 2 == 1) {
                 w.getLeft(width).RPillar(5, rand, design.tileSet());
                 w.getRight(width).RPillar(5, rand, design.tileSet());
             } else {

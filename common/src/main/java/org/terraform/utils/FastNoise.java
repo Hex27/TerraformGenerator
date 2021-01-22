@@ -441,7 +441,7 @@ public class FastNoise {
 
         hash &= 31;
         float a = yd, b = zd, c = wd;            // X,Y,Z
-        switch (hash >> 3) {          // OR, DEPENDING ON HIGH ORDER 2 BITS:
+        switch(hash >> 3) {          // OR, DEPENDING ON HIGH ORDER 2 BITS:
             case 1:
                 a = wd;
                 b = xd;
@@ -480,15 +480,15 @@ public class FastNoise {
         int i1, j1, k1;
         int i2, j2, k2;
 
-        if (x0 >= y0) {
-            if (y0 >= z0) {
+        if(x0 >= y0) {
+            if(y0 >= z0) {
                 i1 = 1;
                 j1 = 0;
                 k1 = 0;
                 i2 = 1;
                 j2 = 1;
                 k2 = 0;
-            } else if (x0 >= z0) {
+            } else if(x0 >= z0) {
                 i1 = 1;
                 j1 = 0;
                 k1 = 0;
@@ -506,14 +506,14 @@ public class FastNoise {
             }
         } else // x0 < y0
         {
-            if (y0 < z0) {
+            if(y0 < z0) {
                 i1 = 0;
                 j1 = 0;
                 k1 = 1;
                 i2 = 0;
                 j2 = 1;
                 k2 = 1;
-            } else if (x0 < z0) {
+            } else if(x0 < z0) {
                 i1 = 0;
                 j1 = 1;
                 k1 = 0;
@@ -544,28 +544,28 @@ public class FastNoise {
         float n0, n1, n2, n3;
 
         t = (float) 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t < 0) n0 = 0;
+        if(t < 0) n0 = 0;
         else {
             t *= t;
             n0 = t * t * GradCoord3D(seed, i, j, k, x0, y0, z0);
         }
 
         t = (float) 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t < 0) n1 = 0;
+        if(t < 0) n1 = 0;
         else {
             t *= t;
             n1 = t * t * GradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
         }
 
         t = (float) 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t < 0) n2 = 0;
+        if(t < 0) n2 = 0;
         else {
             t *= t;
             n2 = t * t * GradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
         }
 
         t = (float) 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t < 0) n3 = 0;
+        if(t < 0) n3 = 0;
         else {
             t *= t;
             n3 = t * t * GradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
@@ -587,7 +587,7 @@ public class FastNoise {
         float y0 = y - Y0;
 
         int i1, j1;
-        if (x0 > y0) {
+        if(x0 > y0) {
             i1 = 1;
             j1 = 0;
         } else {
@@ -603,21 +603,21 @@ public class FastNoise {
         float n0, n1, n2;
 
         t = (float) 0.5 - x0 * x0 - y0 * y0;
-        if (t < 0) n0 = 0;
+        if(t < 0) n0 = 0;
         else {
             t *= t;
             n0 = t * t * GradCoord2D(seed, i, j, x0, y0);
         }
 
         t = (float) 0.5 - x1 * x1 - y1 * y1;
-        if (t < 0) n1 = 0;
+        if(t < 0) n1 = 0;
         else {
             t *= t;
             n1 = t * t * GradCoord2D(seed, i + i1, j + j1, x1, y1);
         }
 
         t = (float) 0.5 - x2 * x2 - y2 * y2;
-        if (t < 0) n2 = 0;
+        if(t < 0) n2 = 0;
         else {
             t *= t;
             n2 = t * t * GradCoord2D(seed, i + 1, j + 1, x2, y2);
@@ -682,31 +682,31 @@ public class FastNoise {
         float w4 = w0 - 1 + 4 * G4;
 
         t = (float) 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-        if (t < 0) n0 = 0;
+        if(t < 0) n0 = 0;
         else {
             t *= t;
             n0 = t * t * GradCoord4D(seed, i, j, k, l, x0, y0, z0, w0);
         }
         t = (float) 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
-        if (t < 0) n1 = 0;
+        if(t < 0) n1 = 0;
         else {
             t *= t;
             n1 = t * t * GradCoord4D(seed, i + i1, j + j1, k + k1, l + l1, x1, y1, z1, w1);
         }
         t = (float) 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
-        if (t < 0) n2 = 0;
+        if(t < 0) n2 = 0;
         else {
             t *= t;
             n2 = t * t * GradCoord4D(seed, i + i2, j + j2, k + k2, l + l2, x2, y2, z2, w2);
         }
         t = (float) 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
-        if (t < 0) n3 = 0;
+        if(t < 0) n3 = 0;
         else {
             t *= t;
             n3 = t * t * GradCoord4D(seed, i + i3, j + j3, k + k3, l + l3, x3, y3, z3, w3);
         }
         t = (float) 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
-        if (t < 0) n4 = 0;
+        if(t < 0) n4 = 0;
         else {
             t *= t;
             n4 = t * t * GradCoord4D(seed, i + 1, j + 1, k + 1, l + 1, x4, y4, z4, w4);
@@ -878,7 +878,7 @@ public class FastNoise {
     private void CalculateFractalBounding() {
         float amp = m_gain;
         float ampFractal = 1;
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             ampFractal += amp;
             amp *= m_gain;
         }
@@ -890,11 +890,11 @@ public class FastNoise {
         y *= m_frequency;
         z *= m_frequency;
 
-        switch (m_noiseType) {
+        switch(m_noiseType) {
             case Value:
                 return SingleValue(m_seed, x, y, z);
             case ValueFractal:
-                switch (m_fractalType) {
+                switch(m_fractalType) {
                     case FBM:
                         return SingleValueFractalFBM(x, y, z);
                     case Billow:
@@ -907,7 +907,7 @@ public class FastNoise {
             case Perlin:
                 return SinglePerlin(m_seed, x, y, z);
             case PerlinFractal:
-                switch (m_fractalType) {
+                switch(m_fractalType) {
                     case FBM:
                         return SinglePerlinFractalFBM(x, y, z);
                     case Billow:
@@ -920,7 +920,7 @@ public class FastNoise {
             case Simplex:
                 return SingleSimplex(m_seed, x, y, z);
             case SimplexFractal:
-                switch (m_fractalType) {
+                switch(m_fractalType) {
                     case FBM:
                         return SingleSimplexFractalFBM(x, y, z);
                     case Billow:
@@ -931,7 +931,7 @@ public class FastNoise {
                         return 0;
                 }
             case Cellular:
-                switch (m_cellularReturnType) {
+                switch(m_cellularReturnType) {
                     case CellValue:
                     case NoiseLookup:
                     case Distance:
@@ -944,7 +944,7 @@ public class FastNoise {
             case Cubic:
                 return SingleCubic(m_seed, x, y, z);
             case CubicFractal:
-                switch (m_fractalType) {
+                switch(m_fractalType) {
                     case FBM:
                         return SingleCubicFractalFBM(x, y, z);
                     case Billow:
@@ -963,11 +963,11 @@ public class FastNoise {
         x *= m_frequency;
         y *= m_frequency;
 
-        switch (m_noiseType) {
+        switch(m_noiseType) {
             case Value:
                 return SingleValue(m_seed, x, y);
             case ValueFractal:
-                switch (m_fractalType) {
+                switch(m_fractalType) {
                     case FBM:
                         return SingleValueFractalFBM(x, y);
                     case Billow:
@@ -980,7 +980,7 @@ public class FastNoise {
             case Perlin:
                 return SinglePerlin(m_seed, x, y);
             case PerlinFractal:
-                switch (m_fractalType) {
+                switch(m_fractalType) {
                     case FBM:
                         return SinglePerlinFractalFBM(x, y);
                     case Billow:
@@ -993,7 +993,7 @@ public class FastNoise {
             case Simplex:
                 return SingleSimplex(m_seed, x, y);
             case SimplexFractal:
-                switch (m_fractalType) {
+                switch(m_fractalType) {
                     case FBM:
                         return SingleSimplexFractalFBM(x, y);
                     case Billow:
@@ -1004,7 +1004,7 @@ public class FastNoise {
                         return 0;
                 }
             case Cellular:
-                switch (m_cellularReturnType) {
+                switch(m_cellularReturnType) {
                     case CellValue:
                     case NoiseLookup:
                     case Distance:
@@ -1017,7 +1017,7 @@ public class FastNoise {
             case Cubic:
                 return SingleCubic(m_seed, x, y);
             case CubicFractal:
-                switch (m_fractalType) {
+                switch(m_fractalType) {
                     case FBM:
                         return SingleCubicFractalFBM(x, y);
                     case Billow:
@@ -1074,7 +1074,7 @@ public class FastNoise {
         y *= m_frequency;
         z *= m_frequency;
 
-        switch (m_fractalType) {
+        switch(m_fractalType) {
             case FBM:
                 return SingleValueFractalFBM(x, y, z);
             case Billow:
@@ -1091,7 +1091,7 @@ public class FastNoise {
         float sum = SingleValue(seed, x, y, z);
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1108,7 +1108,7 @@ public class FastNoise {
         float sum = Math.abs(SingleValue(seed, x, y, z)) * 2 - 1;
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1125,7 +1125,7 @@ public class FastNoise {
         float sum = 1 - Math.abs(SingleValue(seed, x, y, z));
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1150,7 +1150,7 @@ public class FastNoise {
         int z1 = z0 + 1;
 
         float xs, ys, zs;
-        switch (m_interp) {
+        switch(m_interp) {
             default:
             case Linear:
                 xs = x - x0;
@@ -1184,7 +1184,7 @@ public class FastNoise {
         x *= m_frequency;
         y *= m_frequency;
 
-        switch (m_fractalType) {
+        switch(m_fractalType) {
             case FBM:
                 return SingleValueFractalFBM(x, y);
             case Billow:
@@ -1201,7 +1201,7 @@ public class FastNoise {
         float sum = SingleValue(seed, x, y);
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1217,7 +1217,7 @@ public class FastNoise {
         float sum = Math.abs(SingleValue(seed, x, y)) * 2 - 1;
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             amp *= m_gain;
@@ -1232,7 +1232,7 @@ public class FastNoise {
         float sum = 1 - Math.abs(SingleValue(seed, x, y));
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1254,7 +1254,7 @@ public class FastNoise {
         int y1 = y0 + 1;
 
         float xs, ys;
-        switch (m_interp) {
+        switch(m_interp) {
             default:
             case Linear:
                 xs = x - x0;
@@ -1282,7 +1282,7 @@ public class FastNoise {
         y *= m_frequency;
         z *= m_frequency;
 
-        switch (m_fractalType) {
+        switch(m_fractalType) {
             case FBM:
                 return SinglePerlinFractalFBM(x, y, z);
             case Billow:
@@ -1299,7 +1299,7 @@ public class FastNoise {
         float sum = SinglePerlin(seed, x, y, z);
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1316,7 +1316,7 @@ public class FastNoise {
         float sum = Math.abs(SinglePerlin(seed, x, y, z)) * 2 - 1;
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1333,7 +1333,7 @@ public class FastNoise {
         float sum = 1 - Math.abs(SinglePerlin(seed, x, y, z));
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1358,7 +1358,7 @@ public class FastNoise {
         int z1 = z0 + 1;
 
         float xs, ys, zs;
-        switch (m_interp) {
+        switch(m_interp) {
             default:
             case Linear:
                 xs = x - x0;
@@ -1399,7 +1399,7 @@ public class FastNoise {
         x *= m_frequency;
         y *= m_frequency;
 
-        switch (m_fractalType) {
+        switch(m_fractalType) {
             case FBM:
                 return SinglePerlinFractalFBM(x, y);
             case Billow:
@@ -1416,7 +1416,7 @@ public class FastNoise {
         float sum = SinglePerlin(seed, x, y);
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1432,7 +1432,7 @@ public class FastNoise {
         float sum = Math.abs(SinglePerlin(seed, x, y)) * 2 - 1;
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1448,7 +1448,7 @@ public class FastNoise {
         float sum = 1 - Math.abs(SinglePerlin(seed, x, y));
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1470,7 +1470,7 @@ public class FastNoise {
         int y1 = y0 + 1;
 
         float xs, ys;
-        switch (m_interp) {
+        switch(m_interp) {
             default:
             case Linear:
                 xs = x - x0;
@@ -1503,7 +1503,7 @@ public class FastNoise {
         y *= m_frequency;
         z *= m_frequency;
 
-        switch (m_fractalType) {
+        switch(m_fractalType) {
             case FBM:
                 return SingleSimplexFractalFBM(x, y, z);
             case Billow:
@@ -1520,7 +1520,7 @@ public class FastNoise {
         float sum = SingleSimplex(seed, x, y, z);
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1537,7 +1537,7 @@ public class FastNoise {
         float sum = Math.abs(SingleSimplex(seed, x, y, z)) * 2 - 1;
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1554,7 +1554,7 @@ public class FastNoise {
         float sum = 1 - Math.abs(SingleSimplex(seed, x, y, z));
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1574,7 +1574,7 @@ public class FastNoise {
         x *= m_frequency;
         y *= m_frequency;
 
-        switch (m_fractalType) {
+        switch(m_fractalType) {
             case FBM:
                 return SingleSimplexFractalFBM(x, y);
             case Billow:
@@ -1591,7 +1591,7 @@ public class FastNoise {
         float sum = SingleSimplex(seed, x, y);
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1607,7 +1607,7 @@ public class FastNoise {
         float sum = Math.abs(SingleSimplex(seed, x, y)) * 2 - 1;
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1623,7 +1623,7 @@ public class FastNoise {
         float sum = 1 - Math.abs(SingleSimplex(seed, x, y));
         float amp = 1;
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1648,7 +1648,7 @@ public class FastNoise {
         y *= m_frequency;
         z *= m_frequency;
 
-        switch (m_fractalType) {
+        switch(m_fractalType) {
             case FBM:
                 return SingleCubicFractalFBM(x, y, z);
             case Billow:
@@ -1666,7 +1666,7 @@ public class FastNoise {
         float amp = 1;
         int i = 0;
 
-        while (++i < m_octaves) {
+        while(++i < m_octaves) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1684,7 +1684,7 @@ public class FastNoise {
         float amp = 1;
         int i = 0;
 
-        while (++i < m_octaves) {
+        while(++i < m_octaves) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1702,7 +1702,7 @@ public class FastNoise {
         float amp = 1;
         int i = 0;
 
-        while (++i < m_octaves) {
+        while(++i < m_octaves) {
             x *= m_lacunarity;
             y *= m_lacunarity;
             z *= m_lacunarity;
@@ -1722,7 +1722,7 @@ public class FastNoise {
         x *= m_frequency;
         y *= m_frequency;
 
-        switch (m_fractalType) {
+        switch(m_fractalType) {
             case FBM:
                 return SingleCubicFractalFBM(x, y);
             case Billow:
@@ -1740,7 +1740,7 @@ public class FastNoise {
         float amp = 1;
         int i = 0;
 
-        while (++i < m_octaves) {
+        while(++i < m_octaves) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1757,7 +1757,7 @@ public class FastNoise {
         float amp = 1;
         int i = 0;
 
-        while (++i < m_octaves) {
+        while(++i < m_octaves) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1774,7 +1774,7 @@ public class FastNoise {
         float amp = 1;
         int i = 0;
 
-        while (++i < m_octaves) {
+        while(++i < m_octaves) {
             x *= m_lacunarity;
             y *= m_lacunarity;
 
@@ -1798,7 +1798,7 @@ public class FastNoise {
         y *= m_frequency;
         z *= m_frequency;
 
-        switch (m_cellularReturnType) {
+        switch(m_cellularReturnType) {
             case CellValue:
             case NoiseLookup:
             case Distance:
@@ -1816,11 +1816,11 @@ public class FastNoise {
         float distance = 999999;
         int xc = 0, yc = 0, zc = 0;
 
-        switch (m_cellularDistanceFunction) {
+        switch(m_cellularDistanceFunction) {
             case Euclidean:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
+                        for(int zi = zr - 1; zi <= zr + 1; zi++) {
                             Float3 vec = CELL_3D[Hash3D(m_seed, xi, yi, zi) & 255];
 
                             float vecX = xi - x + vec.x;
@@ -1829,7 +1829,7 @@ public class FastNoise {
 
                             float newDistance = vecX * vecX + vecY * vecY + vecZ * vecZ;
 
-                            if (newDistance < distance) {
+                            if(newDistance < distance) {
                                 distance = newDistance;
                                 xc = xi;
                                 yc = yi;
@@ -1840,9 +1840,9 @@ public class FastNoise {
                 }
                 break;
             case Manhattan:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
+                        for(int zi = zr - 1; zi <= zr + 1; zi++) {
                             Float3 vec = CELL_3D[Hash3D(m_seed, xi, yi, zi) & 255];
 
                             float vecX = xi - x + vec.x;
@@ -1851,7 +1851,7 @@ public class FastNoise {
 
                             float newDistance = Math.abs(vecX) + Math.abs(vecY) + Math.abs(vecZ);
 
-                            if (newDistance < distance) {
+                            if(newDistance < distance) {
                                 distance = newDistance;
                                 xc = xi;
                                 yc = yi;
@@ -1862,9 +1862,9 @@ public class FastNoise {
                 }
                 break;
             case Natural:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
+                        for(int zi = zr - 1; zi <= zr + 1; zi++) {
                             Float3 vec = CELL_3D[Hash3D(m_seed, xi, yi, zi) & 255];
 
                             float vecX = xi - x + vec.x;
@@ -1873,7 +1873,7 @@ public class FastNoise {
 
                             float newDistance = (Math.abs(vecX) + Math.abs(vecY) + Math.abs(vecZ)) + (vecX * vecX + vecY * vecY + vecZ * vecZ);
 
-                            if (newDistance < distance) {
+                            if(newDistance < distance) {
                                 distance = newDistance;
                                 xc = xi;
                                 yc = yi;
@@ -1885,7 +1885,7 @@ public class FastNoise {
                 break;
         }
 
-        switch (m_cellularReturnType) {
+        switch(m_cellularReturnType) {
             case CellValue:
                 return ValCoord3D(0, xc, yc, zc);
 
@@ -1908,11 +1908,11 @@ public class FastNoise {
         float distance = 999999;
         float distance2 = 999999;
 
-        switch (m_cellularDistanceFunction) {
+        switch(m_cellularDistanceFunction) {
             case Euclidean:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
+                        for(int zi = zr - 1; zi <= zr + 1; zi++) {
                             Float3 vec = CELL_3D[Hash3D(m_seed, xi, yi, zi) & 255];
 
                             float vecX = xi - x + vec.x;
@@ -1928,9 +1928,9 @@ public class FastNoise {
                 }
                 break;
             case Manhattan:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
+                        for(int zi = zr - 1; zi <= zr + 1; zi++) {
                             Float3 vec = CELL_3D[Hash3D(m_seed, xi, yi, zi) & 255];
 
                             float vecX = xi - x + vec.x;
@@ -1946,9 +1946,9 @@ public class FastNoise {
                 }
                 break;
             case Natural:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        for (int zi = zr - 1; zi <= zr + 1; zi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
+                        for(int zi = zr - 1; zi <= zr + 1; zi++) {
                             Float3 vec = CELL_3D[Hash3D(m_seed, xi, yi, zi) & 255];
 
                             float vecX = xi - x + vec.x;
@@ -1967,7 +1967,7 @@ public class FastNoise {
                 break;
         }
 
-        switch (m_cellularReturnType) {
+        switch(m_cellularReturnType) {
             case Distance2:
                 return distance2 - 1;
             case Distance2Add:
@@ -1987,7 +1987,7 @@ public class FastNoise {
         x *= m_frequency;
         y *= m_frequency;
 
-        switch (m_cellularReturnType) {
+        switch(m_cellularReturnType) {
             case CellValue:
             case NoiseLookup:
             case Distance:
@@ -2004,11 +2004,11 @@ public class FastNoise {
         float distance = 999999;
         int xc = 0, yc = 0;
 
-        switch (m_cellularDistanceFunction) {
+        switch(m_cellularDistanceFunction) {
             default:
             case Euclidean:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
                         Float2 vec = CELL_2D[Hash2D(m_seed, xi, yi) & 255];
 
                         float vecX = xi - x + vec.x;
@@ -2016,7 +2016,7 @@ public class FastNoise {
 
                         float newDistance = vecX * vecX + vecY * vecY;
 
-                        if (newDistance < distance) {
+                        if(newDistance < distance) {
                             distance = newDistance;
                             xc = xi;
                             yc = yi;
@@ -2025,8 +2025,8 @@ public class FastNoise {
                 }
                 break;
             case Manhattan:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
                         Float2 vec = CELL_2D[Hash2D(m_seed, xi, yi) & 255];
 
                         float vecX = xi - x + vec.x;
@@ -2034,7 +2034,7 @@ public class FastNoise {
 
                         float newDistance = (Math.abs(vecX) + Math.abs(vecY));
 
-                        if (newDistance < distance) {
+                        if(newDistance < distance) {
                             distance = newDistance;
                             xc = xi;
                             yc = yi;
@@ -2043,8 +2043,8 @@ public class FastNoise {
                 }
                 break;
             case Natural:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
                         Float2 vec = CELL_2D[Hash2D(m_seed, xi, yi) & 255];
 
                         float vecX = xi - x + vec.x;
@@ -2052,7 +2052,7 @@ public class FastNoise {
 
                         float newDistance = (Math.abs(vecX) + Math.abs(vecY)) + (vecX * vecX + vecY * vecY);
 
-                        if (newDistance < distance) {
+                        if(newDistance < distance) {
                             distance = newDistance;
                             xc = xi;
                             yc = yi;
@@ -2062,7 +2062,7 @@ public class FastNoise {
                 break;
         }
 
-        switch (m_cellularReturnType) {
+        switch(m_cellularReturnType) {
             case CellValue:
                 return ValCoord2D(0, xc, yc);
 
@@ -2084,11 +2084,11 @@ public class FastNoise {
         float distance = 999999;
         float distance2 = 999999;
 
-        switch (m_cellularDistanceFunction) {
+        switch(m_cellularDistanceFunction) {
             default:
             case Euclidean:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
                         Float2 vec = CELL_2D[Hash2D(m_seed, xi, yi) & 255];
 
                         float vecX = xi - x + vec.x;
@@ -2102,8 +2102,8 @@ public class FastNoise {
                 }
                 break;
             case Manhattan:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
                         Float2 vec = CELL_2D[Hash2D(m_seed, xi, yi) & 255];
 
                         float vecX = xi - x + vec.x;
@@ -2117,8 +2117,8 @@ public class FastNoise {
                 }
                 break;
             case Natural:
-                for (int xi = xr - 1; xi <= xr + 1; xi++) {
-                    for (int yi = yr - 1; yi <= yr + 1; yi++) {
+                for(int xi = xr - 1; xi <= xr + 1; xi++) {
+                    for(int yi = yr - 1; yi <= yr + 1; yi++) {
                         Float2 vec = CELL_2D[Hash2D(m_seed, xi, yi) & 255];
 
                         float vecX = xi - x + vec.x;
@@ -2133,7 +2133,7 @@ public class FastNoise {
                 break;
         }
 
-        switch (m_cellularReturnType) {
+        switch(m_cellularReturnType) {
             case Distance2:
                 return distance2 - 1;
             case Distance2Add:
@@ -2160,7 +2160,7 @@ public class FastNoise {
 
         SingleGradientPerturb(seed, amp, m_frequency, v3);
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             freq *= m_lacunarity;
             amp *= m_gain;
             SingleGradientPerturb(++seed, amp, freq, v3);
@@ -2180,7 +2180,7 @@ public class FastNoise {
         int z1 = z0 + 1;
 
         float xs, ys, zs;
-        switch (m_interp) {
+        switch(m_interp) {
             default:
             case Linear:
                 xs = xf - x0;
@@ -2247,7 +2247,7 @@ public class FastNoise {
 
         SingleGradientPerturb(seed, amp, m_frequency, v2);
 
-        for (int i = 1; i < m_octaves; i++) {
+        for(int i = 1; i < m_octaves; i++) {
             freq *= m_lacunarity;
             amp *= m_gain;
             SingleGradientPerturb(++seed, amp, freq, v2);
@@ -2264,7 +2264,7 @@ public class FastNoise {
         int y1 = y0 + 1;
 
         float xs, ys;
-        switch (m_interp) {
+        switch(m_interp) {
             default:
             case Linear:
                 xs = xf - x0;
@@ -2310,7 +2310,7 @@ public class FastNoise {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
+        if(this == obj) return true;
         return obj instanceof FastNoise;
     }
 

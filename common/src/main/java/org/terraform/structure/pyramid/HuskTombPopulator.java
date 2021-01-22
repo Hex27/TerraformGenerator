@@ -24,11 +24,11 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
-            for (int i = 0; i < entry.getValue(); i++) {
-                if (w.getType().isSolid()) { //Don't block off pathways
-                    if (w.getType().toString().contains("SAND"))
+            for(int i = 0; i < entry.getValue(); i++) {
+                if(w.getType().isSolid()) { //Don't block off pathways
+                    if(w.getType().toString().contains("SAND"))
                         w.Pillar(room.getHeight() - 1, rand,
                                 Material.SANDSTONE,
                                 Material.SANDSTONE_SLAB,
@@ -45,7 +45,7 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
                                 Material.CRACKED_STONE_BRICKS,
                                 Material.STONE_BRICKS);
                     //Spawn chests
-                    if (GenUtils.chance(this.rand, 1, 50) && i != 0 && i != entry.getValue() - 1) {
+                    if(GenUtils.chance(this.rand, 1, 50) && i != 0 && i != entry.getValue() - 1) {
                         Directional chest = (Directional) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());
                         w.getFront().setBlockData(chest);
@@ -65,9 +65,9 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
         data.setSpawner(room.getX(), room.getY() + 1, room.getZ(), EntityType.HUSK);
 
         //Ceiling erosions
-        for (int i = 0; i < GenUtils.randInt(3, 10); i++) {
+        for(int i = 0; i < GenUtils.randInt(3, 10); i++) {
             int[] loc = room.randomCoords(rand, 1);
-            if (data.getType(loc[0], room.getY() + room.getHeight() + 1, loc[2]) == Material.SAND)
+            if(data.getType(loc[0], room.getY() + room.getHeight() + 1, loc[2]) == Material.SAND)
                 data.setType(loc[0], room.getY() + room.getHeight() + 1, loc[2], Material.SANDSTONE);
             BlockUtils.dropDownBlock(new SimpleBlock(data, loc[0], room.getY() + room.getHeight(), loc[2]));
         }

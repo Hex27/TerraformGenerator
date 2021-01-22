@@ -36,18 +36,18 @@ public class CryptRoom extends RoomPopulatorAbstract {
         BlockFace face = BlockUtils.getDirectBlockFace(rand);
 
         //Create the Crypt itself
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 3).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 3).entrySet()) {
             Wall w = entry.getKey();
-            for (int i = 0; i < entry.getValue(); i++) {
+            for(int i = 0; i < entry.getValue(); i++) {
 
                 w.Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
 
-                if (w.getDirection() == face) {
+                if(w.getDirection() == face) {
                     //Thicker entryway
                     w.getFront().Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
 
 
-                    if (i == 1) { //Redstone wiring
+                    if(i == 1) { //Redstone wiring
                         RedstoneWire wire = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
                         wire.setFace(face, Connection.SIDE);
                         wire.setFace(face.getOppositeFace(), Connection.SIDE);
@@ -76,7 +76,7 @@ public class CryptRoom extends RoomPopulatorAbstract {
                         //Cover
                         w.getFront(3).Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
 
-                    } else if (i == 2) { //Redstone wiring
+                    } else if(i == 2) { //Redstone wiring
                         RedstoneWire wire = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
                         wire.setFace(BlockUtils.getAdjacentFaces(face)[1], Connection.SIDE);
                         wire.setFace(face.getOppositeFace(), Connection.SIDE);
@@ -96,7 +96,7 @@ public class CryptRoom extends RoomPopulatorAbstract {
                         w.getFront(3).Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
                         w.getFront(2).Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
 
-                    } else if (i == 3) { //Entry holes & pistons
+                    } else if(i == 3) { //Entry holes & pistons
                         //Drill hole
                         w.Pillar(2, rand, Material.AIR);
                         w.getFront().Pillar(2, rand, Material.AIR);
@@ -114,9 +114,9 @@ public class CryptRoom extends RoomPopulatorAbstract {
                     } else { //even thicker layer
                         w.getFront(2).Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
                     }
-                } else if (w.getDirection() == face.getOppositeFace()) {
+                } else if(w.getDirection() == face.getOppositeFace()) {
                     //Create treasure chest inside the crypt
-                    if (GenUtils.chance(rand, 1, 10)) {
+                    if(GenUtils.chance(rand, 1, 10)) {
                         SimpleBlock pos = w.getFront().get();
                         Directional chest = (Directional) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(face.getOppositeFace());
@@ -130,7 +130,7 @@ public class CryptRoom extends RoomPopulatorAbstract {
         }
 
         //Persistent Trap Zombies
-        for (int i = 0; i < GenUtils.randInt(rand, 1, 4); i++) {
+        for(int i = 0; i < GenUtils.randInt(rand, 1, 4); i++) {
             data.addEntity(room.getX(), room.getY(), room.getZ(), EntityType.HUSK);
         }
     }

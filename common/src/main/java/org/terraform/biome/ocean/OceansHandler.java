@@ -34,7 +34,7 @@ public class OceansHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.DIRT, Material.GRAVEL, Material.SAND, Material.GRAVEL, Material.GRAVEL, Material.GRAVEL),
+        return new Material[] {GenUtils.randMaterial(rand, Material.DIRT, Material.GRAVEL, Material.SAND, Material.GRAVEL, Material.GRAVEL, Material.GRAVEL),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.GRAVEL, Material.SAND, Material.GRAVEL, Material.GRAVEL, Material.GRAVEL),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.GRAVEL, Material.SAND),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -45,14 +45,14 @@ public class OceansHandler extends BiomeHandler {
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         boolean growsKelp = random.nextBoolean();
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, y + 1, z) != getBiome()) continue;
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
+                if(data.getBiome(x, y + 1, z) != getBiome()) continue;
+                if(!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
+                if(GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
-                } else if (GenUtils.chance(random, 3, 50)
+                } else if(GenUtils.chance(random, 3, 50)
                         && growsKelp
                         && y + 1 < TerraformGenerator.seaLevel - 10) {
                     generateKelp(x, y + 1, z, data, random);
@@ -62,7 +62,7 @@ public class OceansHandler extends BiomeHandler {
     }
 
     private void generateKelp(int x, int y, int z, PopulatorDataAbstract data, Random random) {
-        for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(5, 15); ny++) {
+        for(int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(5, 15); ny++) {
             data.setType(x, ny, z, Material.KELP_PLANT);
         }
     }

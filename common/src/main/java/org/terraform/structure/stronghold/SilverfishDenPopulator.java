@@ -33,14 +33,14 @@ public class SilverfishDenPopulator extends RoomPopulatorAbstract {
         int[] upperBounds = room.getUpperCorner();
         int[] lowerBounds = room.getLowerCorner();
 
-        for (int i = 0; i < GenUtils.randInt(rand, 1, 3); i++) {
+        for(int i = 0; i < GenUtils.randInt(rand, 1, 3); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);
             int ny = room.getY() + 1;
-            while (data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) {
+            while(data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) {
                 ny++;
             }
-            if (ny == room.getHeight() + room.getY()) continue;
+            if(ny == room.getHeight() + room.getY()) continue;
 
             data.setType(x, ny, z, Material.CHEST);
             org.bukkit.block.data.type.Chest chest = (org.bukkit.block.data.type.Chest) Bukkit.createBlockData(Material.CHEST);

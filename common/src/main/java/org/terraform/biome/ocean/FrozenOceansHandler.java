@@ -24,7 +24,7 @@ public class FrozenOceansHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.COBBLESTONE, Material.STONE, Material.GRAVEL, Material.STONE),
+        return new Material[] {GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.COBBLESTONE, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.STONE, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -34,13 +34,13 @@ public class FrozenOceansHandler extends BiomeHandler {
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, y + 1, z) != getBiome()) continue;
+                if(data.getBiome(x, y + 1, z) != getBiome()) continue;
 
                 //Full ice-sheets
-                if (!data.getType(x, TerraformGenerator.seaLevel, z).isSolid())
+                if(!data.getType(x, TerraformGenerator.seaLevel, z).isSolid())
                     data.setType(x, TerraformGenerator.seaLevel, z, Material.ICE);
 
             }

@@ -3,7 +3,11 @@ package org.terraform.coregen.sqlite;
 import org.bukkit.block.data.BlockData;
 
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +21,7 @@ public class SQLiteDB {
     private static SQLiteDB i;
 
     public static SQLiteDB get() {
-        if (i == null) i = new SQLiteDB();
+        if(i == null) i = new SQLiteDB();
         return i;
     }
 
@@ -25,7 +29,7 @@ public class SQLiteDB {
      * Ensures that the database and all relevant tables exist.
      */
     public static void createTableIfNotExists(String world) {
-        if (PREPARED_WORLDS.contains(world)) return;
+        if(PREPARED_WORLDS.contains(world)) return;
         Connection conn = null;
         String dir = "plugins"
                 + File.separator
@@ -56,7 +60,7 @@ public class SQLiteDB {
             stmt.executeUpdate(sql);
             stmt.close();
             PREPARED_WORLDS.add(world);
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             e.printStackTrace();
         } finally {
             closeConn(conn);
@@ -65,10 +69,10 @@ public class SQLiteDB {
 
     private static void closeConn(Connection conn) {
         try {
-            if (conn != null) {
+            if(conn != null) {
                 conn.close();
             }
-        } catch (SQLException ex) {
+        } catch(SQLException ex) {
             ex.printStackTrace();
         }
     }
@@ -105,7 +109,7 @@ public class SQLiteDB {
             stmt.close();
             c.commit();
             c.close();
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -130,15 +134,15 @@ public class SQLiteDB {
 
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM CHUNKS WHERE CHUNK='" + key + "';");
-            if (rs.next()) {
-                queryReply = new boolean[]{true, rs.getBoolean("POPULATED")};
+            if(rs.next()) {
+                queryReply = new boolean[] {true, rs.getBoolean("POPULATED")};
             } else {
-                queryReply = new boolean[]{false, false};
+                queryReply = new boolean[] {false, false};
             }
             rs.close();
             stmt.close();
             c.close();
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
             //Bukkit.getLogger().severe(e.getClass().getName() + "[" + e.getCause() +"]" + ":" + e.getMessage() );
         }
@@ -174,7 +178,7 @@ public class SQLiteDB {
             stmt.close();
             c.commit();
             c.close();
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }

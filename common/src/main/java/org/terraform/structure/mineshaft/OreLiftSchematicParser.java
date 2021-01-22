@@ -14,7 +14,7 @@ import java.util.Random;
 public class OreLiftSchematicParser extends SchematicParser {
     @Override
     public void applyData(SimpleBlock block, BlockData data) {
-        if (data.getMaterial().name().endsWith("ORE")) {
+        if(data.getMaterial().name().endsWith("ORE")) {
             data = Bukkit.createBlockData(BlockUtils.ores[new Random().nextInt(BlockUtils.ores.length)]);
         }
         //super.applyData(block, data);
@@ -22,7 +22,7 @@ public class OreLiftSchematicParser extends SchematicParser {
         //Don't update physics because rails are cancer.
 
         PopulatorDataAbstract pop = block.getPopData();
-        if (pop instanceof PopulatorDataPostGen) {
+        if(pop instanceof PopulatorDataPostGen) {
             PopulatorDataPostGen gen = (PopulatorDataPostGen) pop;
             gen.noPhysicsUpdateForce(block.getX(), block.getY(), block.getZ(), data);
         } else {

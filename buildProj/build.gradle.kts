@@ -6,7 +6,7 @@ plugins {
 group = "org.terraform"
 
 repositories {
-    maven{ url = uri("https://repo.codemc.io/repository/nms/") }
+    maven { url = uri("https://repo.codemc.io/repository/nms/") }
     maven { url = uri("https://papermc.io/repo/repository/maven-public/") }
     mavenCentral()
 }

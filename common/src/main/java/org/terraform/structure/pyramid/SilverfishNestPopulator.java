@@ -23,10 +23,10 @@ public class SilverfishNestPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
-            for (int i = 0; i < entry.getValue(); i++) {
-                if (w.getType().isSolid()) { //Don't block off pathways
+            for(int i = 0; i < entry.getValue(); i++) {
+                if(w.getType().isSolid()) { //Don't block off pathways
                     w.Pillar(room.getHeight() - 1, rand,
                             Material.ANDESITE,
                             Material.ANDESITE,
@@ -39,13 +39,13 @@ public class SilverfishNestPopulator extends RoomPopulatorAbstract {
                             Material.STONE_BRICKS);
 
                     //Make "lumps" on the walls
-                    if (i > 1 && i < entry.getValue() - 2) {
+                    if(i > 1 && i < entry.getValue() - 2) {
                         w.getFront().Pillar(room.getHeight() - 1, rand, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR,
                                 Material.STONE, Material.INFESTED_STONE, Material.INFESTED_STONE_BRICKS, Material.STONE_BRICKS, Material.ANDESITE);
                     }
 
                     //Spawn chests
-                    if (GenUtils.chance(this.rand, 1, 50) && i != 0 && i != entry.getValue() - 1) {
+                    if(GenUtils.chance(this.rand, 1, 50) && i != 0 && i != entry.getValue() - 1) {
                         Directional chest = (Directional) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());
                         w.getFront().setBlockData(chest);
@@ -64,15 +64,15 @@ public class SilverfishNestPopulator extends RoomPopulatorAbstract {
         //Ceiling of lumps
         int[] lowerCorner = room.getLowerCorner(3);
         int[] upperCorner = room.getUpperCorner(3);
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 Wall w = new Wall(new SimpleBlock(data, x, room.getY() + room.getHeight() - 1, z));
                 w.downLPillar(rand, GenUtils.randInt(0, 4), Material.STONE, Material.ANDESITE, Material.INFESTED_STONE);
             }
         }
 
         //Place a spawner if the nest is large
-        if (room.getWidthX() >= 10 && room.getWidthZ() >= 10)
+        if(room.getWidthX() >= 10 && room.getWidthZ() >= 10)
             data.setSpawner(room.getX(), room.getY() + 1, room.getZ(), EntityType.SILVERFISH);
     }
 

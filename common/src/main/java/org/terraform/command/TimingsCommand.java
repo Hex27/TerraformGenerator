@@ -33,7 +33,7 @@ public class TimingsCommand extends DCCommand {
     @Override
     public void execute(CommandSender sender, Stack<String> args) throws InvalidArgumentException {
         sender.sendMessage("=====Avg Timings=====");
-        for (Map.Entry<String, Long> entry : TickTimer.TIMINGS.entrySet()) {
+        for(Map.Entry<String, Long> entry : TickTimer.TIMINGS.entrySet()) {
             sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + entry.getKey() + ChatColor.DARK_GRAY + ": " + ChatColor.GOLD + entry.getValue());
         }
     }

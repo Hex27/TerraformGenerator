@@ -23,9 +23,9 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes) {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = getCoordsFromMegaChunk(tw, mc);
-        if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+        if(coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
             int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
-            if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
+            if(height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
                 //Way too little space. Abort generation.
                 //TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
                 return false;
@@ -50,11 +50,11 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
 
         double minDistanceSquared = Integer.MAX_VALUE;
         int[] min = null;
-        for (int nx = -1; nx <= 1; nx++) {
-            for (int nz = -1; nz <= 1; nz++) {
+        for(int nx = -1; nx <= 1; nx++) {
+            for(int nz = -1; nz <= 1; nz++) {
                 int[] loc = getCoordsFromMegaChunk(tw, mc.getRelative(nx, nz));
                 double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
-                if (distSqr < minDistanceSquared) {
+                if(distSqr < minDistanceSquared) {
                     minDistanceSquared = distSqr;
                     min = loc;
                 }
@@ -66,7 +66,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
-        if (!TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean())
+        if(!TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean())
             return;
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = getCoordsFromMegaChunk(tw, mc);
@@ -104,14 +104,14 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
         gen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
 
-        if (doubleLevel)
+        if(doubleLevel)
             gen.registerRoomPopulator(new ShaftRoomPopulator(random, true, false));
 
         gen.setCarveRooms(true);
         gen.generate();
         gen.fill(data, tw, Material.CAVE_AIR);
 
-        if (doubleLevel) {
+        if(doubleLevel) {
             //Level Two
             hashedRand = tw.getHashedRand(x, y + 15, z);
             RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y + 15, z, range);
@@ -121,9 +121,9 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
             secondGen.setRoomMinX(13);
             secondGen.setRoomMinZ(13);
 
-            for (CubeRoom room : gen.getRooms()) {
+            for(CubeRoom room : gen.getRooms()) {
 
-                if (room.getPop() instanceof ShaftRoomPopulator) {
+                if(room.getPop() instanceof ShaftRoomPopulator) {
                     CubeRoom topShaft = new CubeRoom(
                             room.getWidthX(),
                             room.getHeight(),

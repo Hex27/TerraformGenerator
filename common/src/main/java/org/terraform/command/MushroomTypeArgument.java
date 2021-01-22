@@ -21,7 +21,7 @@ public class MushroomTypeArgument extends DCArgument<FractalTypes.Mushroom> {
     public String validate(CommandSender sender, String value) {
         try {
             parse(sender, value);
-        } catch (IllegalArgumentException e) {
+        } catch(IllegalArgumentException e) {
             return "Tree type does not exist!";
         }
         return "";

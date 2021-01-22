@@ -45,13 +45,14 @@ public class Wall {
 
     /**
      * Gets the first solid block above this one
+     *
      * @param cutoff
      * @return
      */
     public Wall findCeiling(int cutoff) {
         Wall ceil = this.getRelative(0, 1, 0);
-        while (cutoff > 0) {
-            if (ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
+        while(cutoff > 0) {
+            if(ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
                 return ceil;
             }
             cutoff--;
@@ -62,13 +63,14 @@ public class Wall {
 
     /**
      * Gets the first solid block below this one
+     *
      * @param cutoff
      * @return
      */
     public Wall findFloor(int cutoff) {
         Wall floor = this.clone().getRelative(0, -1, 0);
-        while (cutoff > 0 && floor.getY() >= 0) {
-            if (floor.getType().isSolid() && floor.getType() != Material.LANTERN) {
+        while(cutoff > 0 && floor.getY() >= 0) {
+            if(floor.getType().isSolid() && floor.getType() != Material.LANTERN) {
                 return floor;
             }
             cutoff--;
@@ -79,13 +81,14 @@ public class Wall {
 
     /**
      * Gets the first solid block right from this one
+     *
      * @param cutoff
      * @return
      */
     public Wall findRight(int cutoff) {
         Wall ceil = this.getRight();
-        while (cutoff > 0) {
-            if (ceil.getType().isSolid()) {
+        while(cutoff > 0) {
+            if(ceil.getType().isSolid()) {
                 return ceil;
             }
             cutoff--;
@@ -96,13 +99,14 @@ public class Wall {
 
     /**
      * Gets the first solid block above this one
+     *
      * @param cutoff
      * @return
      */
     public Wall findLeft(int cutoff) {
         Wall ceil = this.getLeft();
-        while (cutoff > 0) {
-            if (ceil.getType().isSolid()) {
+        while(cutoff > 0) {
+            if(ceil.getType().isSolid()) {
                 return ceil;
             }
             cutoff--;
@@ -112,9 +116,9 @@ public class Wall {
     }
 
     public Wall getLeft(int it) {
-        if (it < 0) return getRight(-it);
+        if(it < 0) return getRight(-it);
         Wall w = this.clone();
-        for (int i = 0; i < it; i++) w = w.getLeft();
+        for(int i = 0; i < it; i++) w = w.getLeft();
         return w;
     }
 
@@ -123,9 +127,9 @@ public class Wall {
     }
 
     public Wall getRight(int it) {
-        if (it < 0) return getLeft(-it);
+        if(it < 0) return getLeft(-it);
         Wall w = this.clone();
-        for (int i = 0; i < it; i++) w = w.getRight();
+        for(int i = 0; i < it; i++) w = w.getRight();
         return w;
     }
 
@@ -159,32 +163,34 @@ public class Wall {
 
     /**
      * Replaces everything in its way
+     *
      * @param height
      * @param rand
      * @param types
      */
     public void Pillar(int height, Random rand, Material... types) {
-        for (int i = 0; i < height; i++) {
+        for(int i = 0; i < height; i++) {
             block.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
         }
     }
 
     public void Pillar(int height, boolean pattern, Random rand, Material... types) {
-        for (int i = 0; i < height; i++) {
-            if (Arrays.equals(new Material[]{Material.BARRIER}, types)) continue;
-            if (!pattern)
+        for(int i = 0; i < height; i++) {
+            if(Arrays.equals(new Material[] {Material.BARRIER}, types)) continue;
+            if(!pattern)
                 block.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
-            else if (types[i % types.length] != Material.BARRIER)
+            else if(types[i % types.length] != Material.BARRIER)
                 block.getRelative(0, i, 0).setType(types[i % types.length]);
         }
     }
 
     /**
      * Corrects all multiple facing block data in a pillar
+     *
      * @param height
      */
     public void CorrectMultipleFacing(int height) {
-        for (int i = 0; i < height; i++) {
+        for(int i = 0; i < height; i++) {
             BlockUtils.correctSurroundingMultifacingData(block.getRelative(0, i, 0));
         }
     }
@@ -192,6 +198,7 @@ public class Wall {
 
     /**
      * Replaces until a solid block is reached.
+     *
      * @param height
      * @param rand
      * @param types
@@ -202,15 +209,16 @@ public class Wall {
 
     /**
      * Replaces until a solid block is reached.
+     *
      * @param height
      * @param rand
      * @param types
      */
     public int LPillar(int height, boolean pattern, Random rand, Material... types) {
-        for (int i = 0; i < height; i++) {
-            if (block.getRelative(0, i, 0).getType().isSolid()) return i;
-            if (Arrays.equals(new Material[]{Material.BARRIER}, types)) continue;
-            if (!pattern)
+        for(int i = 0; i < height; i++) {
+            if(block.getRelative(0, i, 0).getType().isSolid()) return i;
+            if(Arrays.equals(new Material[] {Material.BARRIER}, types)) continue;
+            if(!pattern)
                 block.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
             else
                 block.getRelative(0, i, 0).setType(types[i % types.length]);
@@ -220,34 +228,36 @@ public class Wall {
 
     /**
      * Replaces non-solid blocks only
+     *
      * @param height
      * @param rand
      * @param types
      */
     public void RPillar(int height, Random rand, Material... types) {
-        for (int i = 0; i < height; i++) {
-            if (!block.getRelative(0, i, 0).getType().isSolid())
+        for(int i = 0; i < height; i++) {
+            if(!block.getRelative(0, i, 0).getType().isSolid())
                 block.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
         }
     }
 
     /**
      * Replaces non-cave air only
+     *
      * @param height
      * @param rand
      * @param types
      */
     public void CAPillar(int height, Random rand, Material... types) {
-        for (int i = 0; i < height; i++) {
-            if (block.getRelative(0, i, 0).getType() != Material.CAVE_AIR)
+        for(int i = 0; i < height; i++) {
+            if(block.getRelative(0, i, 0).getType() != Material.CAVE_AIR)
                 block.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
         }
     }
 
     public int downUntilSolid(Random rand, Material... types) {
         int depth = 0;
-        for (int y = get().getY(); y > 0; y--) {
-            if (!block.getRelative(0, -depth, 0).getType().isSolid()) {
+        for(int y = get().getY(); y > 0; y--) {
+            if(!block.getRelative(0, -depth, 0).getType().isSolid()) {
                 block.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
             } else break;
             depth++;
@@ -258,9 +268,9 @@ public class Wall {
 
     public void downLPillar(Random rand, int h, Material... types) {
         int depth = 0;
-        for (int y = get().getY(); y > 0; y--) {
-            if (depth >= h) break;
-            if (!block.getRelative(0, -depth, 0).getType().isSolid()) {
+        for(int y = get().getY(); y > 0; y--) {
+            if(depth >= h) break;
+            if(!block.getRelative(0, -depth, 0).getType().isSolid()) {
                 block.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
             } else break;
             depth++;
@@ -269,9 +279,9 @@ public class Wall {
 
     public void downRPillar(Random rand, int h, Material... types) {
         int depth = 0;
-        for (int y = get().getY(); y > 0; y--) {
-            if (depth >= h) break;
-            if (!block.getRelative(0, -depth, 0).getType().isSolid()) {
+        for(int y = get().getY(); y > 0; y--) {
+            if(depth >= h) break;
+            if(!block.getRelative(0, -depth, 0).getType().isSolid()) {
                 block.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
             }
             depth++;
@@ -283,9 +293,9 @@ public class Wall {
     }
 
     public Wall getRear(int it) {
-        if (it < 0) return getFront(-it);
+        if(it < 0) return getFront(-it);
         Wall w = this.clone();
-        for (int i = 0; i < it; i++) w = w.getRear();
+        for(int i = 0; i < it; i++) w = w.getRear();
         return w;
     }
 
@@ -294,9 +304,9 @@ public class Wall {
     }
 
     public Wall getFront(int it) {
-        if (it < 0) return getRear(-it);
+        if(it < 0) return getRear(-it);
         Wall w = this.clone();
-        for (int i = 0; i < it; i++) w = w.getFront();
+        for(int i = 0; i < it; i++) w = w.getFront();
         return w;
     }
 

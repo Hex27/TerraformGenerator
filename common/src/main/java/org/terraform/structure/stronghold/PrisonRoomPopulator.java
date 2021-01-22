@@ -15,8 +15,8 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.Version;
 import org.terraform.utils.version.OneOneSixBlockHandler;
+import org.terraform.utils.version.Version;
 
 import java.util.Map.Entry;
 import java.util.Random;
@@ -29,8 +29,8 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
     }
 
     private static void dangleIronBarsDown(Random rand, int length, SimpleBlock base) {
-        for (int i = 0; i < length; i++) {
-            if (Version.isAtLeast(16)) {
+        for(int i = 0; i < length; i++) {
+            if(Version.isAtLeast(16)) {
                 base.setType(OneOneSixBlockHandler.getChainMaterial());
             } else
                 base.setType(Material.IRON_BARS);
@@ -45,7 +45,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         int[] upperCorner = room.getUpperCorner(1);
 
         //Dangling chains
-        for (int i = 0; i < GenUtils.randInt(12, 25); i++)
+        for(int i = 0; i < GenUtils.randInt(12, 25); i++)
             dangleIronBarsDown(rand,
                     GenUtils.randInt(room.getHeight() / 4 - 1, room.getHeight() / 2),
                     new SimpleBlock(
@@ -62,8 +62,8 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
                 Material.SMOOTH_STONE_SLAB
         };
 
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setBlockData(x, room.getY() + room.getHeight() / 2, z,
                         new SlabBuilder(slabs)
                                 .setType(Type.TOP)
@@ -74,14 +74,14 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         lowerCorner = room.getLowerCorner(7);
         upperCorner = room.getUpperCorner(7);
 
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+        for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, room.getY() + room.getHeight() / 2, z, Material.AIR);
             }
         }
 
         //4 pillars
-        for (int[] coords : room.getAllCorners(6)) {
+        for(int[] coords : room.getAllCorners(6)) {
             new Wall(new SimpleBlock(data, coords[0], room.getY() + 1, coords[1]))
                     .Pillar(room.getHeight(),
                             this.rand,
@@ -91,13 +91,13 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         }
 
         //Walls
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 6).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 6).entrySet()) {
             Wall w = entry.getKey()
                     .getRelative(0, room.getHeight() / 2, 0);
-            for (int i = 0; i < entry.getValue(); i++) {
-                if (!w.getType().isSolid()) {
+            for(int i = 0; i < entry.getValue(); i++) {
+                if(!w.getType().isSolid()) {
 
-                    if (i != entry.getValue() / 2)
+                    if(i != entry.getValue() / 2)
                         w.setType(
                                 Material.COBBLESTONE_WALL,
                                 Material.MOSSY_COBBLESTONE_WALL
@@ -115,19 +115,19 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
 
         //Stairs leading to the second level
         BlockFace dir = BlockFace.NORTH;
-        if (room.getWidthX() > room.getWidthZ())
-            dir = new BlockFace[]{BlockFace.WEST, BlockFace.EAST}[rand.nextInt(1)];
+        if(room.getWidthX() > room.getWidthZ())
+            dir = new BlockFace[] {BlockFace.WEST, BlockFace.EAST}[rand.nextInt(1)];
         else
-            dir = new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH}[rand.nextInt(1)];
+            dir = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[rand.nextInt(1)];
 
-        for (int[] corner : room.getCornersAlongFace(dir, 7)) {
+        for(int[] corner : room.getCornersAlongFace(dir, 7)) {
             Wall w = new Wall(new SimpleBlock(data, corner[0], room.getY() + 1, corner[1]), dir.getOppositeFace());
 
             //Remove wall at that area.
             w.getRear().getRelative(0, room.getHeight() / 2, 0).setType(Material.AIR);
             BlockUtils.correctSurroundingMultifacingData(w.getRear().getRelative(0, 1, 0).get());
 
-            for (int i = 0; i < room.getHeight() / 2; i++) {
+            for(int i = 0; i < room.getHeight() / 2; i++) {
                 w.Pillar(room.getHeight() / 2 - i, rand, BlockUtils.stoneBricks);
                 new StairBuilder(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
                         .setFacing(dir)
@@ -137,13 +137,13 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         }
 
         //Prison Cells
-        for (int[] corner : room.getCornersAlongFace(BlockFace.NORTH, 2)) {
+        for(int[] corner : room.getCornersAlongFace(BlockFace.NORTH, 2)) {
             placePrisonCell(
                     new SimpleBlock(data, corner[0], room.getY() + 1 + room.getHeight() / 2, corner[1]),
                     BlockFace.SOUTH
             );
         }
-        for (int[] corner : room.getCornersAlongFace(BlockFace.SOUTH, 2)) {
+        for(int[] corner : room.getCornersAlongFace(BlockFace.SOUTH, 2)) {
             placePrisonCell(
                     new SimpleBlock(data, corner[0], room.getY() + 1 + room.getHeight() / 2, corner[1]),
                     BlockFace.NORTH
@@ -151,25 +151,25 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         }
 
         //Iron Bars and chests
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 4).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 4).entrySet()) {
             Wall w = entry.getKey().getRelative(0, room.getHeight() / 2, 0);
-            for (int i = 0; i < entry.getValue(); i++) {
+            for(int i = 0; i < entry.getValue(); i++) {
 
-                if (i == entry.getValue() / 2) { //Entrance
+                if(i == entry.getValue() / 2) { //Entrance
                     w.getRelative(0, 3, 0).LPillar(room.getHeight() / 2 - 2, rand, BlockUtils.stoneBricks);
 
                     //chance for skeletons
-                    if (rand.nextBoolean())
+                    if(rand.nextBoolean())
                         data.addEntity(w.getX(), w.getY(), w.getZ(), EntityType.SKELETON);
 
-                } else if (i == entry.getValue() / 2 + 1 || i == entry.getValue() / 2 - 1) {
+                } else if(i == entry.getValue() / 2 + 1 || i == entry.getValue() / 2 - 1) {
                     w.LPillar(room.getHeight() / 2, rand, BlockUtils.stoneBricks);
                 } else {
                     w.LPillar(room.getHeight() / 2, rand, Material.IRON_BARS);
                     w.CorrectMultipleFacing(room.getHeight() / 2);
                 }
 
-                if (GenUtils.chance(rand, 1, 35)) {
+                if(GenUtils.chance(rand, 1, 35)) {
                     new ChestBuilder(Material.CHEST)
                             .setFacing(w.getDirection())
                             .setLootTable(TerraLootTable.STRONGHOLD_CORRIDOR)
@@ -188,14 +188,14 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         int width = 2;
 
         //Walls
-        for (int nx : new int[]{-width, width}) {
-            for (int nz = -width; nz <= width; nz++) {
+        for(int nx : new int[] {-width, width}) {
+            for(int nz = -width; nz <= width; nz++) {
                 w.getRelative(nx, 0, nz).LPillar(15, rand, prisonMats);
             }
         }
 
-        for (int nz : new int[]{-width, width}) {
-            for (int nx = -width; nx <= width; nx++) {
+        for(int nz : new int[] {-width, width}) {
+            for(int nx = -width; nx <= width; nx++) {
                 w.getRelative(nx, 0, nz).LPillar(15, rand, prisonMats);
             }
         }

@@ -38,13 +38,13 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
 
         int lowestPoint = y - rY;
 
-        for (int nx = x - rX; nx <= x + rX; nx++) {
-            for (int nz = z - rZ; nz <= z + rZ; nz++) {
+        for(int nx = x - rX; nx <= x + rX; nx++) {
+            for(int nz = z - rZ; nz <= z + rZ; nz++) {
                 double noise = mycelNoise.GetNoise(nx, nz);
-                if (noise < 0) noise = 0;
-                if (noise > 0.5) noise = (noise - 0.5) * 0.5 + 0.5;
+                if(noise < 0) noise = 0;
+                if(noise > 0.5) noise = (noise - 0.5) * 0.5 + 0.5;
                 int h = (int) ((rY / 2) * noise) + 2;
-                if (h < 0) h = 0;
+                if(h < 0) h = 0;
                 BlockUtils.spawnPillar(rand, data, nx, lowestPoint, nz, Material.DIRT, h, h);
                 BlockUtils.downPillar(nx, lowestPoint - 1, nz, 20, data, Material.DIRT);
 
@@ -52,14 +52,14 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
             }
         }
 
-        for (int nx = x - rX; nx <= x + rX; nx++) {
-            for (int nz = z - rZ; nz <= z + rZ; nz++) {
+        for(int nx = x - rX; nx <= x + rX; nx++) {
+            for(int nz = z - rZ; nz <= z + rZ; nz++) {
 
 
                 //Low luminosity sea pickles
-                if (GenUtils.chance(rand, 4, 100)) {
+                if(GenUtils.chance(rand, 4, 100)) {
                     int ground = getCaveFloor(data, nx, y, nz);
-                    if (data.getType(nx, ground, nz).isSolid()
+                    if(data.getType(nx, ground, nz).isSolid()
                             && data.getType(nx, ground + 1, nz) == Material.WATER) {
                         SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
                         sp.setPickles(GenUtils.randInt(3, 4));
@@ -68,28 +68,28 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
                 }
 
                 //Giant shroom
-                if (GenUtils.chance(1, 400)) {
+                if(GenUtils.chance(1, 400)) {
                     int ground = getCaveFloor(data, nx, y, nz);
-                    if (data.getType(nx, ground, nz) == Material.MYCELIUM
+                    if(data.getType(nx, ground, nz) == Material.MYCELIUM
                             && data.getType(nx, ground + 1, nz) == Material.CAVE_AIR) {
                         FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
-                        if (rand.nextBoolean()) type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                        if(rand.nextBoolean()) type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
                         new MushroomBuilder(type).build(tw, data, nx, ground, nz);
                     }
                 }
 
                 //Stalagmites  &Stalactites
-                if (GenUtils.chance(rand, 3, 100)) {
-                    if (rand.nextBoolean()) {
+                if(GenUtils.chance(rand, 3, 100)) {
+                    if(rand.nextBoolean()) {
                         int ceil = getCaveCeiling(data, nx, y, nz);
-                        if (ceil != -1) {
+                        if(ceil != -1) {
                             int r = 2;
                             int h = GenUtils.randInt(rand, rY / 2, (int) ((3f / 2f) * rY));
                             stalactite(tw, rand, data, nx, ceil, nz, r, h);
                         }
                     } else {
                         int ground = getCaveFloor(data, nx, y, nz);
-                        if (ground != -1) {
+                        if(ground != -1) {
                             int r = 2;
                             int h = GenUtils.randInt(rand, rY / 2, (int) ((3f / 2f) * rY));
                             stalagmite(tw, rand, data, nx, ground, nz, r, h);

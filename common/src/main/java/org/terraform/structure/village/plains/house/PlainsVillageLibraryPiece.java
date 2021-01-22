@@ -36,23 +36,23 @@ public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
                 .apply(core);
 
         //Populate for walled areas
-        for (BlockFace face : this.getWalledFaces()) {
+        for(BlockFace face : this.getWalledFaces()) {
             SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, 0);
             Wall w = entry.getKey();
 
-            for (int i = 0; i < entry.getValue(); i++) {
-                if (i == 0 || i == 4) {
+            for(int i = 0; i < entry.getValue(); i++) {
+                if(i == 0 || i == 4) {
                     w.LPillar(25, random, Material.BOOKSHELF);
-                    if (GenUtils.chance(random, 1, 10)) {
+                    if(GenUtils.chance(random, 1, 10)) {
                         Ladder ladder = (Ladder) Bukkit.createBlockData(Material.LADDER);
                         ladder.setFacing(w.getDirection());
-                        for (int h = 0; h < 25; h++) {
-                            if (w.getFront().getRelative(0, h, 0).getType().isSolid())
+                        for(int h = 0; h < 25; h++) {
+                            if(w.getFront().getRelative(0, h, 0).getType().isSolid())
                                 break;
                             w.getFront().getRelative(0, h, 0).setBlockData(ladder);
                         }
                     }
-                } else if (i == 1 || i == 3) {
+                } else if(i == 1 || i == 3) {
                     new StairBuilder(Material.OAK_STAIRS)
                             .setFacing(w.getDirection().getOppositeFace())
                             .apply(w);
@@ -62,7 +62,7 @@ public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
                             .apply(w.getRelative(0, 2, 0));
                     w.getRelative(0, 3, 0).LPillar(25, random, Material.BOOKSHELF);
                 } else {
-                    if (w.getRear().getType() != Material.OAK_DOOR)
+                    if(w.getRear().getType() != Material.OAK_DOOR)
                         new SlabBuilder(Material.OAK_SLAB)
                                 .apply(w);
 

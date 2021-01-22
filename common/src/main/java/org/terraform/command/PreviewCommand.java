@@ -48,11 +48,11 @@ public class PreviewCommand extends DCCommand {
         BufferedImage img = new BufferedImage(x, z, BufferedImage.TYPE_INT_RGB);
         //file object
         File f = new File("terra-preview.png");
-        if (f.exists())
+        if(f.exists())
             f.delete();
 
-        for (int nz = 0; nz < z; nz++) {
-            for (int nx = 0; nx < x; nx++) {
+        for(int nz = 0; nz < z; nz++) {
+            for(int nx = 0; nx < x; nx++) {
                 int noise = HeightMap.getBlockHeight(TerraformWorld.get("world-" + seed, seed), nx, nz);//(realRidge(seed,nx,nz)*2);
 
                 img.setRGB(nx, nz, getColorFromNoise(noise).getRGB());
@@ -61,18 +61,18 @@ public class PreviewCommand extends DCCommand {
         try {
             f = new File("terra-preview.png");
             ImageIO.write(img, "png", f);
-        } catch (IOException e) {
+        } catch(IOException e) {
             System.out.println(e);
         }
         sender.sendMessage("Exported. H: " + highest + ", L: " + lowest);
     }
 
     private Color getColorFromNoise(int noise) {
-        if (noise <= 62) { //Sea level
+        if(noise <= 62) { //Sea level
             return new Color(50, 50, 100 + (noise * 2));//Blue
-        } else if (noise < 62 + 4) { //Beaches?
+        } else if(noise < 62 + 4) { //Beaches?
             return new Color(240, 238, 108);//Yellow
-        } else if (noise < 92) {
+        } else if(noise < 92) {
             return new Color(37, (70 + (noise * 2)), 2);//Green
         } else { //Mountainous
             return new Color(255, 255, 255);//White

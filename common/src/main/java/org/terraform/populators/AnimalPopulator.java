@@ -23,7 +23,7 @@ public class AnimalPopulator {
     public AnimalPopulator(EntityType animalType, int minNum, int maxNum, int chance, boolean useWhitelist, BiomeBank... biomes) {
         this.animalType = animalType;
         this.chance = chance;
-        if (useWhitelist) {
+        if(useWhitelist) {
             this.whitelistedBiomes = biomes;
         } else this.blacklistedBiomes = biomes;
 
@@ -33,18 +33,18 @@ public class AnimalPopulator {
 
     public boolean canSpawn(Collection<BiomeBank> b, Random rand) {
         //TerraformGeneratorPlugin.logger.info("Can-spawn for - " + animalType.toString());
-        if (GenUtils.chance(rand, 100 - chance, 100))
+        if(GenUtils.chance(rand, 100 - chance, 100))
             return false;
         //TerraformGeneratorPlugin.logger.info("Pass chance");
-        if (whitelistedBiomes != null) {
-            for (BiomeBank entr : whitelistedBiomes) {
-                if (b.contains(entr)) return true;
+        if(whitelistedBiomes != null) {
+            for(BiomeBank entr : whitelistedBiomes) {
+                if(b.contains(entr)) return true;
             }
             return false;
         }
-        if (blacklistedBiomes != null) {
-            for (BiomeBank entr : blacklistedBiomes) {
-                if (b.contains(entr)) return false;
+        if(blacklistedBiomes != null) {
+            for(BiomeBank entr : blacklistedBiomes) {
+                if(b.contains(entr)) return false;
             }
             return true;
         }
@@ -54,19 +54,19 @@ public class AnimalPopulator {
 
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
-        for (int i = 0; i < GenUtils.randInt(random, minNum, maxNum); i++) {
+        for(int i = 0; i < GenUtils.randInt(random, minNum, maxNum); i++) {
             int x = (data.getChunkX() << 4) + GenUtils.randInt(random, 5, 7);
             int z = (data.getChunkZ() << 4) + GenUtils.randInt(random, 5, 7);
-            
+
             //To account for solid ground that spawns above the noisemap (i.e. boulders/black spikes)
-            int height = GenUtils.getHighestGround(data,x,z)+1;//HeightMap.getBlockHeight(world, x, z) + 2;
-            
+            int height = GenUtils.getHighestGround(data, x, z) + 1;//HeightMap.getBlockHeight(world, x, z) + 2;
+
             if(!this.isAquatic() && height > TerraformGenerator.seaLevel) {
-            	if(!data.getType(x, height, z).isSolid()) //Don't spawn in blocks
-            		data.addEntity(x, height, z, animalType);
-            }else if(this.isAquatic() && height <= TerraformGenerator.seaLevel) {
-            	if(data.getType(x, height, z) == Material.WATER) //Don't spawn in anything but water
-            		data.addEntity(x, height, z, animalType);
+                if(!data.getType(x, height, z).isSolid()) //Don't spawn in blocks
+                    data.addEntity(x, height, z, animalType);
+            } else if(this.isAquatic() && height <= TerraformGenerator.seaLevel) {
+                if(data.getType(x, height, z) == Material.WATER) //Don't spawn in anything but water
+                    data.addEntity(x, height, z, animalType);
             }
         }
     }
@@ -78,12 +78,12 @@ public class AnimalPopulator {
         return animalType;
     }
 
-	public boolean isAquatic() {
-		return aquatic;
-	}
+    public boolean isAquatic() {
+        return aquatic;
+    }
 
-	public AnimalPopulator setAquatic(boolean aquatic) {
-		this.aquatic = aquatic;
-		return this;
-	}
+    public AnimalPopulator setAquatic(boolean aquatic) {
+        this.aquatic = aquatic;
+        return this;
+    }
 }

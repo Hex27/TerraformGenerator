@@ -1,16 +1,11 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
-import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
-import org.terraform.data.TerraformWorld;
-import org.terraform.structure.small.WitchHutPopulator;
 
-import java.util.Random;
 import java.util.Stack;
 
 public class FixerCacheFlushCommand extends DCCommand {
@@ -38,8 +33,8 @@ public class FixerCacheFlushCommand extends DCCommand {
     @Override
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
-    	NativeGeneratorPatcherPopulator.flushChanges();
-    	sender.sendMessage("Flushing changes.");
+        NativeGeneratorPatcherPopulator.flushChanges();
+        sender.sendMessage("Flushing changes.");
     }
 
 }

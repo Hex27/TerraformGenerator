@@ -69,7 +69,7 @@ public class ChunkCache {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof ChunkCache)) return false;
+        if(!(obj instanceof ChunkCache)) return false;
         ChunkCache chunk = (ChunkCache) obj;
         return this.tw == chunk.tw && this.chunkX == chunk.chunkX && this.chunkZ == chunk.chunkZ;
     }

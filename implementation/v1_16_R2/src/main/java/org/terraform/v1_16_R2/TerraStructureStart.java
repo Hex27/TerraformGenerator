@@ -1,6 +1,15 @@
 package org.terraform.v1_16_R2;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.BiomeBase;
+import net.minecraft.server.v1_16_R2.ChunkGenerator;
+import net.minecraft.server.v1_16_R2.DefinedStructureManager;
+import net.minecraft.server.v1_16_R2.EnumDirection;
+import net.minecraft.server.v1_16_R2.IRegistryCustom;
+import net.minecraft.server.v1_16_R2.StructureAbstract;
+import net.minecraft.server.v1_16_R2.StructureBoundingBox;
+import net.minecraft.server.v1_16_R2.StructureGenerator;
+import net.minecraft.server.v1_16_R2.WorldGenFeatureConfiguration;
+import net.minecraft.server.v1_16_R2.WorldGenMonumentPieces;
 
 import java.util.Random;
 

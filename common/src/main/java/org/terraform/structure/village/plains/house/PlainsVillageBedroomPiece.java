@@ -36,18 +36,18 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
         super.postBuildDecoration(random, data);
 
         //No walls :V
-        if (this.getWalledFaces().size() == 0) {
+        if(this.getWalledFaces().size() == 0) {
             //Place a dining table or smt, idk
 
             SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
             core.setType(Material.SMOOTH_STONE);
-            for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
+            for(BlockFace face : BlockUtils.xzPlaneBlockFaces) {
                 new SlabBuilder(Material.SMOOTH_STONE_SLAB)
                         .setType(Slab.Type.TOP)
                         .apply(core.getRelative(face));
             }
 
-            for (BlockFace face : BlockUtils.directBlockFaces) {
+            for(BlockFace face : BlockUtils.directBlockFaces) {
                 new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
                         .setFacing(face)
                         .apply(core.getRelative(face, 2));
@@ -59,16 +59,16 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
 
         int placedBeds = 0;
         //Populate for walled areas
-        for (BlockFace face : this.getWalledFaces()) {
+        for(BlockFace face : this.getWalledFaces()) {
             SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, 0);
             Wall w = entry.getKey();
 
             //First pass, place beds
-            for (int i = 0; i < entry.getValue(); i++) {
-                if (!w.getFront().getType().isSolid()
+            for(int i = 0; i < entry.getValue(); i++) {
+                if(!w.getFront().getType().isSolid()
                         && placedBeds < 2
                         && w.getRear().getType() != Material.OAK_DOOR) {
-                    if ((GenUtils.chance(random, 2, 5) && placedBeds == 0)
+                    if((GenUtils.chance(random, 2, 5) && placedBeds == 0)
                             || (GenUtils.chance(random, 1, 10) && placedBeds == 1)) {
                         BlockUtils.placeBed(w.get(), BlockUtils.pickBed(), w.getDirection());
                         placedBeds++;
@@ -82,15 +82,15 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
             //Second pass, decorate with misc things
             w = entry.getKey();
 
-            for (int i = 0; i < entry.getValue(); i++) {
+            for(int i = 0; i < entry.getValue(); i++) {
                 //Don't place stuff in front of doors
-                if (w.getRear().getType() != Material.OAK_DOOR) {
-                    if (!Tag.BEDS.isTagged(w.getType())) { //don't replace beds
-                        if (Tag.BEDS.isTagged(w.getRight().getType())
+                if(w.getRear().getType() != Material.OAK_DOOR) {
+                    if(!Tag.BEDS.isTagged(w.getType())) { //don't replace beds
+                        if(Tag.BEDS.isTagged(w.getRight().getType())
                                 || Tag.BEDS.isTagged(w.getLeft().getType())) {
                             //If next to bed,
 
-                            if (random.nextBoolean()) {
+                            if(random.nextBoolean()) {
                                 //Place Night stand
                                 new StairBuilder(Material.STONE_BRICK_STAIRS, Material.POLISHED_ANDESITE_STAIRS)
                                         .setFacing(w.getDirection().getOppositeFace())
@@ -104,15 +104,15 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
 
                         } else { //Not next to a bed
 
-                            if (GenUtils.chance(random, 1, 10)) {
+                            if(GenUtils.chance(random, 1, 10)) {
                                 //Chest
                                 new ChestBuilder(Material.CHEST)
                                         .setFacing(w.getDirection())
                                         .setLootTable(TerraLootTable.VILLAGE_PLAINS_HOUSE)
                                         .apply(w);
-                            } else if (GenUtils.chance(random, 1, 5)) {
+                            } else if(GenUtils.chance(random, 1, 5)) {
                                 //Study table, if there's enough space
-                                if (!w.getFront().getType().isSolid()) {
+                                if(!w.getFront().getType().isSolid()) {
                                     new SlabBuilder(Material.SMOOTH_STONE_SLAB, Material.POLISHED_ANDESITE_SLAB)
                                             .setType(Slab.Type.TOP)
                                             .apply(w);

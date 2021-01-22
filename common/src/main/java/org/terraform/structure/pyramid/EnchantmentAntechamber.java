@@ -39,13 +39,13 @@ public class EnchantmentAntechamber extends Antechamber {
             put(new Wall(core.getRelative(-2, 0, -2), BlockFace.EAST), 5);
         }};
 
-        for (Entry<Wall, Integer> entry : tableWalls.entrySet()) {
+        for(Entry<Wall, Integer> entry : tableWalls.entrySet()) {
             Wall w = entry.getKey();
-            for (int i = 0; i < entry.getValue(); i++) {
+            for(int i = 0; i < entry.getValue(); i++) {
 
-                if (i % 2 == 0) {
+                if(i % 2 == 0) {
                     int h = 1;
-                    if (i == 2) h = 2;
+                    if(i == 2) h = 2;
 
                     w.LPillar(h, rand, Material.BOOKSHELF);
                     w.getRelative(0, room.getHeight() - 2, 0).downLPillar(rand, h, Material.BOOKSHELF);

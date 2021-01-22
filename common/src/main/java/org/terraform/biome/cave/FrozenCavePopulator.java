@@ -17,19 +17,19 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
     @Override
     public void populate(TerraformWorld tw, Random random,
                          PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                if (!(tw.getBiomeBank(x, GenUtils.getHighestGround(data, x, z), z).getCavePop()
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                if(!(tw.getBiomeBank(x, GenUtils.getHighestGround(data, x, z), z).getCavePop()
                         instanceof FrozenCavePopulator))
                     continue;
-                for (int[] pair : GenUtils.getCaveCeilFloors(data, x, z)) {
+                for(int[] pair : GenUtils.getCaveCeilFloors(data, x, z)) {
                     int ceil = pair[0]; //non-solid
                     int floor = pair[1]; //solid
-                    if (ceil < 15) {
+                    if(ceil < 15) {
                         DeepCavePopulator.decorate(data, random, x, z, ceil, floor);
                         continue;
                     }
-                    if (!genned) {
+                    if(!genned) {
                         genned = true;
                         TerraformGeneratorPlugin.logger.info("Spawning frozen cave at " + x + "," + floor + "," + z);
                     }
@@ -37,7 +37,7 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
                     int caveHeight = ceil - floor;
 
                     //Don't touch slabbed floors or stalagmites
-                    if (data.getType(x, floor, z).toString().endsWith("SLAB") ||
+                    if(data.getType(x, floor, z).toString().endsWith("SLAB") ||
                             data.getType(x, floor, z).toString().endsWith("WALL"))
                         continue;
 
@@ -49,9 +49,9 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
                     data.setType(x, ceil, z, Material.ICE);
 
                     //Stalactites
-                    if (GenUtils.chance(random, 1, 24)) {
+                    if(GenUtils.chance(random, 1, 24)) {
                         int h = caveHeight / 4;
-                        if (h < 1) h = 1;
+                        if(h < 1) h = 1;
                         Wall w = new Wall(new SimpleBlock(data, x, ceil - 1, z), BlockFace.NORTH);
                         w.downLPillar(random, h, Material.ICE);
 
@@ -65,11 +65,11 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
                     data.setType(x, floor + 1, z, Material.ICE);
 
                     //Stalagmites
-                    if (GenUtils.chance(random, 1, 25)) {
+                    if(GenUtils.chance(random, 1, 25)) {
                         int h = caveHeight / 4;
-                        if (h < 1) h = 1;
+                        if(h < 1) h = 1;
                         Wall w = new Wall(new SimpleBlock(data, x, floor + 2, z), BlockFace.NORTH);
-                        if (w.getType() == Material.CAVE_AIR)
+                        if(w.getType() == Material.CAVE_AIR)
                             w.LPillar(h, random, Material.ICE);
 
                     }

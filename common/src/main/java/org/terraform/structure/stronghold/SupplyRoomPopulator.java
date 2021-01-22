@@ -30,17 +30,17 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
         int y = room.getY();
 
         //Spawn torches
-        for (int i = 0; i < GenUtils.randInt(rand, 1, 4); i++) {
+        for(int i = 0; i < GenUtils.randInt(rand, 1, 4); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);
             int ny = y + 1;
-            while (data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) ny++;
-            if (ny == room.getHeight() + room.getY()) continue;
+            while(data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) ny++;
+            if(ny == room.getHeight() + room.getY()) continue;
             data.setType(x, ny, z, Material.TORCH);
         }
 
         //Spawn piles of supply blocks.
-        for (int i = 0; i < GenUtils.randInt(rand, 1, 3); i++) {
+        for(int i = 0; i < GenUtils.randInt(rand, 1, 3); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);
             BlockUtils.replaceUpperSphere(rand.nextInt(992),
@@ -58,14 +58,14 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
         }
 
         //Spawn utilities
-        for (int i = 0; i < GenUtils.randInt(rand, 5, 20); i++) {
+        for(int i = 0; i < GenUtils.randInt(rand, 5, 20); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);
             int ny = y + 1;
-            while (data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) {
+            while(data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) {
                 ny++;
             }
-            if (ny == room.getHeight() + room.getY()) continue;
+            if(ny == room.getHeight() + room.getY()) continue;
 
             Material type = GenUtils.randMaterial(rand, Material.CRAFTING_TABLE,
                     Material.ANVIL,
@@ -77,25 +77,25 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
                     Material.OAK_LOG);
             BlockData typeData = Bukkit.createBlockData(type);
 
-            if (typeData instanceof Rotatable) {
+            if(typeData instanceof Rotatable) {
                 ((Rotatable) typeData).setRotation(BlockUtils.getDirectBlockFace(rand));
-            } else if (typeData instanceof Directional) {
+            } else if(typeData instanceof Directional) {
                 ((Directional) typeData).setFacing(BlockUtils.getDirectBlockFace(rand));
-            } else if (typeData instanceof Orientable) {
+            } else if(typeData instanceof Orientable) {
                 ((Orientable) typeData).setAxis(Axis.values()[GenUtils.randInt(rand, 0, 2)]);
             }
             data.setBlockData(x, ny, z, typeData);
         }
 
         //Spawn loot chests
-        for (int i = 0; i < GenUtils.randInt(rand, 5, 20); i++) {
+        for(int i = 0; i < GenUtils.randInt(rand, 5, 20); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);
             int ny = y + 1;
-            while (data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) {
+            while(data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) {
                 ny++;
             }
-            if (ny == room.getHeight() + room.getY()) continue;
+            if(ny == room.getHeight() + room.getY()) continue;
 
             data.setType(x, ny, z, Material.CHEST);
             org.bukkit.block.data.type.Chest chest = (org.bukkit.block.data.type.Chest) Bukkit.createBlockData(Material.CHEST);

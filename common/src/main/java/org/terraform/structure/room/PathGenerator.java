@@ -56,59 +56,59 @@ public class PathGenerator {
     }
 
     public void populate() {
-        if (populator != null) {
-            for (PathPopulatorData pathPopulatorData : path) {
+        if(populator != null) {
+            for(PathPopulatorData pathPopulatorData : path) {
                 populator.populate(pathPopulatorData);
             }
         }
     }
 
     public void next() {
-        if (length > (upperBound[0] - lowerBound[0])) {
+        if(length > (upperBound[0] - lowerBound[0])) {
             die();
             return;
         }
 
-        if (isOutOfBounds(base)) {
+        if(isOutOfBounds(base)) {
             die();
             return;
         }
 
-        while (isOutOfBounds(base.getRelative(dir))) {
+        while(isOutOfBounds(base.getRelative(dir))) {
             straightInARow = 0;
 
             //For ensuring that corners are covered.
             int cover = this.pathWidth - 1;
-            if (cover == 0) cover = 1;
-            for (int i = 0; i < cover; i++) {
+            if(cover == 0) cover = 1;
+            for(int i = 0; i < cover; i++) {
                 setHall();
                 base = base.getRelative(dir);
             }
-            for (int i = 0; i < cover; i++)
+            for(int i = 0; i < cover; i++)
                 base = base.getRelative(dir.getOppositeFace());
 
             dir = BlockUtils.getTurnBlockFace(rand, dir);
         }
 
         straightInARow++;
-        if (straightInARow > maxNoBend || GenUtils.chance(rand, 1, 500)) {
+        if(straightInARow > maxNoBend || GenUtils.chance(rand, 1, 500)) {
             straightInARow = 0;
 
             //For ensuring that corners are covered
             int cover = this.pathWidth - 1;
-            if (cover == 0) cover = 1;
-            for (int i = 0; i < cover; i++) {
+            if(cover == 0) cover = 1;
+            for(int i = 0; i < cover; i++) {
                 setHall();
                 base = base.getRelative(dir);
             }
-            for (int i = 0; i < cover; i++)
+            for(int i = 0; i < cover; i++)
                 base = base.getRelative(dir.getOppositeFace());
 
             dir = BlockUtils.getTurnBlockFace(rand, dir);
         }
 
         //base.setType(mat);
-        if (!populator.customCarve(base, dir, pathWidth)) {
+        if(!populator.customCarve(base, dir, pathWidth)) {
             setHall();
         }
         path.add(new PathPopulatorData(base, dir, pathWidth));
@@ -117,17 +117,17 @@ public class PathGenerator {
     }
 
     private void wall() {
-        if (mat[0] == Material.BARRIER) return;
-        for (int h = 1; h <= pathHeight; h++)
-            if (base.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
+        if(mat[0] == Material.BARRIER) return;
+        for(int h = 1; h <= pathHeight; h++)
+            if(base.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
                 base.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
 
-        for (BlockFace f : BlockUtils.getAdjacentFaces(dir)) {
+        for(BlockFace f : BlockUtils.getAdjacentFaces(dir)) {
             SimpleBlock rel = base;
-            for (int i = 0; i <= pathWidth / 2; i++) {
+            for(int i = 0; i <= pathWidth / 2; i++) {
                 rel = rel.getRelative(f);
-                for (int h = 1; h <= pathHeight; h++)
-                    if (rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
+                for(int h = 1; h <= pathHeight; h++)
+                    if(rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
                         rel.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
 
             }
@@ -135,27 +135,27 @@ public class PathGenerator {
     }
 
     private void setHall() {
-        if (mat[0] == Material.BARRIER) return;
+        if(mat[0] == Material.BARRIER) return;
 
-        if (base.getType() != Material.CAVE_AIR)
+        if(base.getType() != Material.CAVE_AIR)
             base.setType(GenUtils.randMaterial(mat));
 
         Wall w = new Wall(base).getRelative(0, 1, 0);
         w.Pillar(pathHeight, rand, Material.CAVE_AIR);
-        if (base.getRelative(0, pathHeight + 1, 0).getType() != Material.CAVE_AIR)
+        if(base.getRelative(0, pathHeight + 1, 0).getType() != Material.CAVE_AIR)
             base.getRelative(0, pathHeight + 1, 0).setType(GenUtils.randMaterial(mat));
 
-        for (BlockFace f : BlockUtils.getAdjacentFaces(dir)) {
+        for(BlockFace f : BlockUtils.getAdjacentFaces(dir)) {
             SimpleBlock rel = base;
-            for (int i = 0; i <= pathWidth / 2; i++) {
+            for(int i = 0; i <= pathWidth / 2; i++) {
                 rel = rel.getRelative(f);
                 //Bukkit.getLogger().info(i + ":" + pathWidth/2);
-                if (i == pathWidth / 2) { //Walls
-                    for (int h = 1; h <= pathHeight; h++)
-                        if (rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
+                if(i == pathWidth / 2) { //Walls
+                    for(int h = 1; h <= pathHeight; h++)
+                        if(rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
                             rel.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
                 } else { //Air in hallway (And floor and ceiling)
-                    if (rel.getType() != Material.CAVE_AIR)
+                    if(rel.getType() != Material.CAVE_AIR)
                         rel.setType(GenUtils.randMaterial(mat));
 //					rel.getRelative(0,1,0).setType(Material.CAVE_AIR);
 //					rel.getRelative(0,2,0).setType(Material.CAVE_AIR);
@@ -164,7 +164,7 @@ public class PathGenerator {
 //						rel.getRelative(0,4,0).setType(GenUtils.randMaterial(mat));
                     w = new Wall(rel).getRelative(0, 1, 0);
                     w.Pillar(pathHeight, rand, Material.CAVE_AIR);
-                    if (rel.getRelative(0, pathHeight + 1, 0).getType() != Material.CAVE_AIR)
+                    if(rel.getRelative(0, pathHeight + 1, 0).getType() != Material.CAVE_AIR)
                         rel.getRelative(0, pathHeight + 1, 0).setType(GenUtils.randMaterial(mat));
                 }
             }

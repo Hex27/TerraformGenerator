@@ -44,8 +44,8 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         rs.setFacing(right);
 
         //Top straight line
-        for (int i = 0; i < archHalfLength - 1; i++) {
-            if (i <= 1) {
+        for(int i = 0; i < archHalfLength - 1; i++) {
+            if(i <= 1) {
                 Slab slab = (Slab) Bukkit.createBlockData(design.slab());
                 arch.getLeft(i).setBlockData(slab);
                 arch.getRight(i).setBlockData(slab);
@@ -83,8 +83,8 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
      * Create a small platform.
      */
     private static void lightPlatform(PopulatorDataAbstract data, int x, int y, int z) {
-        for (int nx = -2; nx <= 2; nx++) {
-            for (int nz = -2; nz <= 2; nz++) {
+        for(int nx = -2; nx <= 2; nx++) {
+            for(int nz = -2; nz <= 2; nz++) {
                 data.setType(x + nx, y, z + nz, Material.PRISMARINE_BRICKS);
             }
         }
@@ -92,17 +92,17 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     private static void vegetateNearby(Random rand, PopulatorDataAbstract data, int range, int x, int z) {
         int i = 25;
-        for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
-            for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
-                if (GenUtils.chance(rand, 2, 5)) {
+        for(int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
+            for(int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
+                if(GenUtils.chance(rand, 2, 5)) {
                     int y = GenUtils.getTrueHighestBlock(data, nx, nz);
                     //Don't place on weird blocks
-                    if (data.getType(nx, y, nz).toString().contains("SLAB") ||
+                    if(data.getType(nx, y, nz).toString().contains("SLAB") ||
                             data.getType(nx, y, nz).toString().contains("STAIR") ||
                             data.getType(nx, y, nz).toString().contains("WALL"))
                         continue;
-                    if (y < TerraformGenerator.seaLevel) {
-                        if (GenUtils.chance(rand, 9, 10))
+                    if(y < TerraformGenerator.seaLevel) {
+                        if(GenUtils.chance(rand, 9, 10))
                             CoralGenerator.generateKelpGrowth(data, nx, y + 1, nz);
                         else
                             CoralGenerator.generateSeaPickles(data, nx, y + 1, nz);
@@ -115,13 +115,13 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     private static void setupGuardianSpawns(PopulatorDataAbstract data, int range, int x, int y, int z) {
         int i = -5;
         ArrayList<Integer> done = new ArrayList<>();
-        for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
-            for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
+        for(int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
+            for(int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
                 int chunkX = nx >> 4;
                 int chunkZ = nz >> 4;
                 int hash = Objects.hash(chunkX, chunkZ);
 
-                if (done.contains(hash))
+                if(done.contains(hash))
                     continue;
 
                 done.add(hash);
@@ -140,8 +140,8 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = getCoordsFromMegaChunk(tw, mc);
 
-        for (BiomeBank biome : biomes) {
-            if (biome.getType() != BiomeType.DEEP_OCEANIC)
+        for(BiomeBank biome : biomes) {
+            if(biome.getType() != BiomeType.DEEP_OCEANIC)
                 return false;
         }
         return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ &&
@@ -159,18 +159,18 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
         ArrayList<BiomeBank> banks = new ArrayList<>();
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int height = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-                for (BiomeBank bank : BiomeBank.values()) {
+                for(BiomeBank bank : BiomeBank.values()) {
                     BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
 
                     //Must be in deep ocean. Check done in canSpawn
                     //if(currentBiome.getType() != BiomeType.DEEP_OCEANIC)
                     //	return;
 
-                    if (bank == currentBiome) {
-                        if (!banks.contains(bank))
+                    if(bank == currentBiome) {
+                        if(!banks.contains(bank))
                             banks.add(bank);
                         break;
                     }
@@ -223,7 +223,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     private void entranceSegment(Wall w, Random random, MonumentDesign design) {
         //Entrance hole
-        for (int i = 0; i < 12; i++) {
+        for(int i = 0; i < 12; i++) {
             w.getRear(i).Pillar(6, random, Material.WATER);
         }
         Stairs stair = (Stairs) Bukkit.createBlockData(Material.PRISMARINE_BRICK_STAIRS);
@@ -241,13 +241,13 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         range += 38;
         BlockFace dir = BlockUtils.getDirectBlockFace(random);
         SimpleBlock base = new SimpleBlock(data, x, y + 1, z);
-        for (int i = 0; i < range / 2; i++)
+        for(int i = 0; i < range / 2; i++)
             base = base.getRelative(dir);
         Wall w = new Wall(base, dir);
         Wall leftClone = w.clone();
         Wall rightClone = w.clone();
         int halfLength = 4 + random.nextInt(3);
-        for (int i = 0; i < halfLength; i++) {
+        for(int i = 0; i < halfLength; i++) {
             entranceSegment(leftClone, random, design);
             entranceSegment(rightClone, random, design);
 
@@ -256,7 +256,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         }
 
         //Build entrance archs.
-        for (int i = 0; i < 12; i += 3) {
+        for(int i = 0; i < 12; i += 3) {
             arch(w.getRear(i), design, random, halfLength + 2, 10);
         }
 
@@ -278,14 +278,14 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
      */
     public void spawnMonumentBase(TerraformWorld tw, MonumentDesign design, Random random, PopulatorDataAbstract data, int x, int y, int z, int range) {
         range += 30;
-        for (int i = 6; i >= 0; i--) {
-            for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
-                for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
+        for(int i = 6; i >= 0; i--) {
+            for(int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
+                for(int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
 
                     //Spires on the corners
-                    if (i % 2 == 0)
-                        if (nx == x - range / 2 - i || nx == x + range / 2 + i) {
-                            if (nz == z - range / 2 - i || nz == z + range / 2 + i) {
+                    if(i % 2 == 0)
+                        if(nx == x - range / 2 - i || nx == x + range / 2 + i) {
+                            if(nz == z - range / 2 - i || nz == z + range / 2 + i) {
                                 design.spire(new Wall(new SimpleBlock(data, nx, y + (6 - i) + 1, nz), BlockFace.NORTH), random);
                             }
                         }
@@ -315,12 +315,12 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
      */
     public void carveBaseHallways(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int range) {
         range += 29;
-        for (int ny = y + 1; ny <= y + 4; ny++) {
-            for (int nx = x - range / 2; nx <= x + range / 2; nx++) {
-                for (int nz = z - range / 2; nz <= z + range / 2; nz++) {
+        for(int ny = y + 1; ny <= y + 4; ny++) {
+            for(int nx = x - range / 2; nx <= x + range / 2; nx++) {
+                for(int nz = z - range / 2; nz <= z + range / 2; nz++) {
 
                     //Don't touch the middle
-                    if (nx > x + 5 - range / 2
+                    if(nx > x + 5 - range / 2
                             && nx < x - 5 + range / 2
                             && nz > z + 5 - range / 2
                             && nz < z - 5 + range / 2)
@@ -331,12 +331,12 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         }
 
         //Light the floor in the hallway
-        for (int nx = x - range / 2 + 3; nx <= x + range / 2 - 3; nx += 2) {
+        for(int nx = x - range / 2 + 3; nx <= x + range / 2 - 3; nx += 2) {
             data.setType(nx, y, z - range / 2 + 3, Material.SEA_LANTERN);
             data.setType(nx, y, z + range / 2 - 3, Material.SEA_LANTERN);
         }
 
-        for (int nz = z - range / 2 + 3; nz <= z + range / 2 - 3; nz += 2) {
+        for(int nz = z - range / 2 + 3; nz <= z + range / 2 - 3; nz += 2) {
             data.setType(x - range / 2 + 3, y, nz, Material.SEA_LANTERN);
             data.setType(x + range / 2 - 3, y, nz, Material.SEA_LANTERN);
         }
@@ -353,12 +353,12 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
         double minDistanceSquared = Integer.MAX_VALUE;
         int[] min = null;
-        for (int nx = -1; nx <= 1; nx++) {
-            for (int nz = -1; nz <= 1; nz++) {
+        for(int nx = -1; nx <= 1; nx++) {
+            for(int nz = -1; nz <= 1; nz++) {
 
                 int[] loc = getCoordsFromMegaChunk(tw, mc.getRelative(nx, nz));
                 double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
-                if (distSqr < minDistanceSquared && rollSpawnRatio(tw, loc[0] >> 4, loc[1] >> 4)) {
+                if(distSqr < minDistanceSquared && rollSpawnRatio(tw, loc[0] >> 4, loc[1] >> 4)) {
                     minDistanceSquared = distSqr;
                     min = loc;
                 }

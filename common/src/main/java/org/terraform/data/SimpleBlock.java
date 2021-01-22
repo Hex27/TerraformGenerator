@@ -83,7 +83,7 @@ public class SimpleBlock {
 
     public SimpleBlock untilSolid(BlockFace face) {
         SimpleBlock rel = this.getRelative(face);
-        while (!rel.getType().isSolid())
+        while(!rel.getType().isSolid())
             rel = rel.getRelative(face);
 
         return rel;
@@ -91,10 +91,11 @@ public class SimpleBlock {
 
     /**
      * Lenient set. Only replaces non-solid blocks.
+     *
      * @return if the set was a success.
      */
     public boolean lsetType(Material type) {
-        if (!getType().isSolid()) {
+        if(!getType().isSolid()) {
             setType(type);
             return true;
         }
@@ -102,7 +103,7 @@ public class SimpleBlock {
     }
 
     public boolean lsetBlockData(BlockData data) {
-        if (!getType().isSolid()) {
+        if(!getType().isSolid()) {
             setBlockData(data);
             return true;
         }
@@ -114,8 +115,8 @@ public class SimpleBlock {
     }
 
     public void setBlockData(BlockData dat) {
-        if (popData.getType(x, y, z) == Material.WATER) {
-            if (dat instanceof Waterlogged) {
+        if(popData.getType(x, y, z) == Material.WATER) {
+            if(dat instanceof Waterlogged) {
                 Waterlogged wl = (Waterlogged) dat;
                 wl.setWaterlogged(true);
             }
@@ -124,7 +125,7 @@ public class SimpleBlock {
     }
 
     public void RSolSetBlockData(BlockData data) {
-        if (getType().isSolid())
+        if(getType().isSolid())
             setBlockData(data);
     }
 
@@ -180,9 +181,9 @@ public class SimpleBlock {
     }
 
     public void setType(Material type) {
-        if (popData.getType(x, y, z) == Material.WATER) {
+        if(popData.getType(x, y, z) == Material.WATER) {
             BlockData data = Bukkit.createBlockData(type);
-            if (data instanceof Waterlogged) {
+            if(data instanceof Waterlogged) {
                 Waterlogged wl = (Waterlogged) data;
                 wl.setWaterlogged(true);
                 data = wl;
@@ -192,7 +193,7 @@ public class SimpleBlock {
             popData.setType(x, y, z, type);
 
         //Setting leaves with setType will be persistent
-        if (Tag.LEAVES.isTagged(type)) {
+        if(Tag.LEAVES.isTagged(type)) {
             //if (type.toString().contains("LEAVES")) {
             Leaves l = (Leaves) Bukkit.createBlockData(type);
             l.setPersistent(true);
@@ -206,7 +207,7 @@ public class SimpleBlock {
     }
 
     public void RSolSetType(Material type) {
-        if (getType().isSolid())
+        if(getType().isSolid())
             setType(type);
     }
 
@@ -230,8 +231,8 @@ public class SimpleBlock {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof SimpleBlock)) return false;
+        if(this == obj) return true;
+        if(!(obj instanceof SimpleBlock)) return false;
         SimpleBlock other = (SimpleBlock) obj;
         return popData == other.popData && x == other.x && z == other.z && y == other.y;
     }

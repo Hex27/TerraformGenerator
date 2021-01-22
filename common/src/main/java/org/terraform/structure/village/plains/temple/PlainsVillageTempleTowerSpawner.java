@@ -4,11 +4,11 @@ import org.terraform.data.SimpleBlock;
 
 public class PlainsVillageTempleTowerSpawner {
 
-	SimpleBlock core;
-	public PlainsVillageTempleTowerSpawner(SimpleBlock core) {
-		this.core = core;
-	}
-	
-	
-	
+    SimpleBlock core;
+
+    public PlainsVillageTempleTowerSpawner(SimpleBlock core) {
+        this.core = core;
+    }
+
+
 }

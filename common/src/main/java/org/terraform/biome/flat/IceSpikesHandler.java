@@ -23,7 +23,7 @@ public class IceSpikesHandler extends BiomeHandler {
 
         SimpleBlock one = new SimpleBlock(data, x, y, z);
         double radius = baseRadius;
-        for (int i = 0; i <= height; i++) {
+        for(int i = 0; i <= height; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) height));
             SimpleBlock segment = one.getRelative(seg);
 //			segment.setHardReplace();
@@ -47,7 +47,7 @@ public class IceSpikesHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.SNOW_BLOCK, 5, Material.SNOW_BLOCK, 25),
+        return new Material[] {GenUtils.weightedRandomMaterial(rand, Material.SNOW_BLOCK, 5, Material.SNOW_BLOCK, 25),
                 Material.SNOW_BLOCK,
                 GenUtils.randMaterial(rand, Material.SNOW_BLOCK, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -57,14 +57,14 @@ public class IceSpikesHandler extends BiomeHandler {
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
+                if(data.getBiome(x, z) != getBiome()) continue;
 
-                if (data.getType(x, y + 1, z) == Material.AIR) {
+                if(data.getType(x, y + 1, z) == Material.AIR) {
                     data.setType(x, y + 1, z, Material.SNOW);
-                    if (data.getBlockData(x, y, z) instanceof Snowable) {
+                    if(data.getBlockData(x, y, z) instanceof Snowable) {
                         Snowable snowable = (Snowable) data.getBlockData(x, y, z);
                         snowable.setSnowy(true);
                         data.setBlockData(x, y, z, snowable);
@@ -73,10 +73,10 @@ public class IceSpikesHandler extends BiomeHandler {
             }
         }
 
-        for (int i = 0; i < GenUtils.randInt(random, 1, 3); i++) {
+        for(int i = 0; i < GenUtils.randInt(random, 1, 3); i++) {
             int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
-            if (data.getType(loc[0], loc[1], loc[2]) == Material.SNOW_BLOCK) {
-                if (GenUtils.chance(random, 1, 10)) { //big spike
+            if(data.getType(loc[0], loc[1], loc[2]) == Material.SNOW_BLOCK) {
+                if(GenUtils.chance(random, 1, 10)) { //big spike
                     genSpike(world, random, data, loc[0], loc[1], loc[2],
                             GenUtils.randInt(3, 10), //radius
                             GenUtils.randInt(30, 50));

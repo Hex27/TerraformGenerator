@@ -25,14 +25,14 @@ import java.util.Random;
 public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
 
     private static void dropDownBlock(SimpleBlock block) {
-        if (block.getType().isSolid()) {
+        if(block.getType().isSolid()) {
             Material type = block.getType();
             block.setType(Material.CAVE_AIR);
             int depth = 0;
-            while (!block.getType().isSolid()) {
+            while(!block.getType().isSolid()) {
                 block = block.getRelative(0, -1, 0);
                 depth++;
-                if (depth > 50) return;
+                if(depth > 50) return;
             }
 
             block.getRelative(0, 1, 0).setType(type);
@@ -45,8 +45,8 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
 
         int[] spawnCoords = {data.getChunkX() * 16, data.getChunkZ() * 16};
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
-        for (int[] coords : allCoords) {
-            if (coords[0] >> 4 == data.getChunkX() && coords[1] >> 4 == data.getChunkZ()) {
+        for(int[] coords : allCoords) {
+            if(coords[0] >> 4 == data.getChunkX() && coords[1] >> 4 == data.getChunkZ()) {
                 spawnCoords = coords;
                 break;
             }
@@ -58,9 +58,9 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
 
         int y = HeightMap.getBlockHeight(tw, x, z) - GenUtils.randInt(rand, 15, 50);//GenUtils.getHighestGround(data, x, z)
 
-        if (y < 10) y = 10;
+        if(y < 10) y = 10;
 
-        while (!data.getType(x, y, z).isSolid()) {
+        while(!data.getType(x, y, z).isSolid()) {
             y--;
         }
 
@@ -75,22 +75,22 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
                 GenUtils.randInt(rand, 5, 7),
                 x, y, z);
 
-        room.fillRoom(data, -1, new Material[]{
+        room.fillRoom(data, -1, new Material[] {
                         Material.COBBLESTONE,
                         Material.MOSSY_COBBLESTONE},
                 Material.CAVE_AIR);
 
         //Make some fence pattern.
-        for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
+        for(Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey().getRelative(0, 1, 0);
             int length = entry.getValue();
-            while (length >= 0) {
-                if (length % 2 == 0 || length == entry.getValue()) {
+            while(length >= 0) {
+                if(length % 2 == 0 || length == entry.getValue()) {
 
                 } else
                     w.CAPillar(room.getHeight() - 3, rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
 
-                for (int h = 0; h < room.getHeight() - 3; h++) {
+                for(int h = 0; h < room.getHeight() - 3; h++) {
                     BlockUtils.correctSurroundingMultifacingData(w.getRelative(0, h, 0).get());
                 }
 
@@ -100,7 +100,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         }
 
         //Holes
-        for (int i = 0; i < GenUtils.randInt(rand, 0, 3); i++) {
+        for(int i = 0; i < GenUtils.randInt(rand, 0, 3); i++) {
             int[] coords = room.randomCoords(rand);
             int nX = coords[0];
             int nY = coords[1];
@@ -109,20 +109,20 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         }
 
         //Dropdown blocks
-        for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
-            for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
+        for(int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
+            for(int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
                 int ny = room.getHeight();
-                if (GenUtils.chance(10, 13)) continue;
+                if(GenUtils.chance(10, 13)) continue;
                 dropDownBlock(new SimpleBlock(data, x + nx, y + ny, z + nz));
             }
         }
 
         //Make spikes from the ceiling
-        for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
-            for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
+        for(int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
+            for(int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
                 int ny = room.getHeight() - 1;
-                if (GenUtils.chance(9, 10)) continue;
-                for (int i = 0; i < GenUtils.randInt(rand, 1, room.getHeight() - 3); i++) {
+                if(GenUtils.chance(9, 10)) continue;
+                for(int i = 0; i < GenUtils.randInt(rand, 1, room.getHeight() - 3); i++) {
                     data.setType(x + nx, y + ny, z + nz, GenUtils.randMaterial(Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.COBBLESTONE_WALL,
                             Material.MOSSY_COBBLESTONE_WALL));
                     BlockUtils.correctSurroundingMultifacingData(new SimpleBlock(data, x + nx, y + ny, z + nz));
@@ -131,10 +131,10 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         }
 
         //Make spikes on the floor
-        for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
-            for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
-                if (GenUtils.chance(9, 10)) continue;
-                for (int i = 0; i < GenUtils.randInt(rand, 1, room.getHeight() - 3); i++) {
+        for(int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
+            for(int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
+                if(GenUtils.chance(9, 10)) continue;
+                for(int i = 0; i < GenUtils.randInt(rand, 1, room.getHeight() - 3); i++) {
                     Wall w = new Wall(new SimpleBlock(data, x + nx, y + 1, z + nz), BlockFace.NORTH);
                     w.LPillar(room.getHeight() - 2, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
                     BlockUtils.correctSurroundingMultifacingData(w.get());
@@ -144,7 +144,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
 
         //Place Spawner
         EntityType type = EntityType.ZOMBIE;
-        switch (rand.nextInt(3)) {
+        switch(rand.nextInt(3)) {
             case (0):
                 type = EntityType.ZOMBIE;
                 break;
@@ -160,18 +160,18 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         //Spawn chests
         ArrayList<Entry<Wall, Integer>> entries = new ArrayList<>();
         HashMap<Wall, Integer> walls = room.getFourWalls(data, 1);
-        for (Entry<Wall, Integer> entry : walls.entrySet()) {
-            if (rand.nextBoolean()) {
+        for(Entry<Wall, Integer> entry : walls.entrySet()) {
+            if(rand.nextBoolean()) {
                 entries.add(entry);
             }
         }
 
-        for (Entry<Wall, Integer> entry : entries) {
+        for(Entry<Wall, Integer> entry : entries) {
             Wall w = entry.getKey();
             int length = entry.getValue();
             int chest = GenUtils.randInt(1, length - 1);
-            while (length >= 0) {
-                if (length == chest) {
+            while(length >= 0) {
+                if(length == chest) {
                     Directional dir = (Directional) Bukkit.createBlockData(Material.CHEST);
                     dir.setFacing(w.getDirection());
                     w.setBlockData(dir);

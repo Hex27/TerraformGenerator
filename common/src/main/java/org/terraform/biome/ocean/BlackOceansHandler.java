@@ -26,7 +26,7 @@ public class BlackOceansHandler extends BiomeHandler {
         int segments = height;
         SimpleBlock one = new SimpleBlock(data, x, y, z);
         double radius = baseRadius;
-        for (int i = 0; i <= segments; i++) {
+        for(int i = 0; i <= segments; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) segments));
             SimpleBlock segment = one.getRelative(seg);
 //			segment.setHardReplace();
@@ -74,7 +74,7 @@ public class BlackOceansHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.COBBLESTONE, Material.STONE, Material.GRAVEL, Material.STONE),
+        return new Material[] {GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.COBBLESTONE, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.STONE, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.GRAVEL, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -83,20 +83,20 @@ public class BlackOceansHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+        for(int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for(int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int coreHeight = HeightMap.getBlockHeight(world, x, z);
-                if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
+                if(data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
                 //black spike
-                if (GenUtils.chance(random, 1, 200)) {
+                if(GenUtils.chance(random, 1, 200)) {
                     genSpike(world, random, data, x, coreHeight, z,
                             GenUtils.randInt(5, 15), //radius
                             GenUtils.randInt(50, 100));
                 }
 
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if (GenUtils.chance(random, 1, 80)) { //SEA GRASS/KELP
+                if(!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
+                if(GenUtils.chance(random, 1, 80)) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
                 }
             }
