@@ -29,7 +29,16 @@ target/
 out/
 META-INF/
 
-# Eclipe
+# Eclipse
 bin/
 .classpath
 .project
+/.gradle/
+org.eclipse.buildship.core.prefs
+*org.eclipse.*
+*/build/*
+*.bat
+*.jar
+*.MF
+*.class
+*-mapping.txt

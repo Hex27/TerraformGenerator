@@ -18,16 +18,16 @@
     <li><a href="#known-bugs">Known-Bugs</a>
     <ul>
         <li><a href="#sort-of-resolved">Sort of resolved</a></li>
-      </ul>
-      </li>
+    </ul>
+    </li>
   </ol>
 </details>
 
-## Support <a name="support"></a>
+<h2 name="support">Support</h2>
 
 Support Discord: https://discord.gg/yW7JcqM
 
-## About project & Wiki <a name="about"></a>
+<h2 name="about">About project & Wiki</h2>
 
 Wiki: https://github.com/Hex27/TerraformGenerator/wiki/Configuration
 
@@ -39,40 +39,52 @@ On another note, for 1.15.2, the version released on 23rd Feb 2020 is the recomm
 
 There is also support for Java 14, but be warned that it will spit some minor errors, because the plugin does some Java illegal magic to get things done.
 
-## Getting started <a name="getting-started"></a>
+<h2 name="getting-started">Getting started</h2>
 
-### Method One
-- Turn off the server if it is running
-- Install Drycell
-- Place TerraformGenerator.jar in your plugins folder
-- Inside bukkit.yml, add this, where "world" is your world name:
-```YAML
-worlds:
-    world:
-        generator: TerraformGenerator
-```
-- Delete the old world folder (if present), and start the server
+<h3>Step one: Install TerraformGenerator</h3>
 
-### Method two
-- Install Drycell
-- Place TerraformGenerator.jar in your plugins folder
-- Inside bukkit.yml, add this, where "world" is your world name:
-```YAML
-worlds:
-    world:
-        generator: TerraformGenerator
-```
-- Delete the old world folder (if present), and start the server
-- Use the command "/mv create genworld normal -g TerraformGenerator" from Multiverse
+Make sure that you have installed the latest version of [TerraformGenerator][spigot-tfg] and [Drycell][spigot-drycell].  
+To do that, stop your server and upload both jar files to your server's `plugins` directory. Afterwards can you start your server again.
 
-Probably works with multiworld, but I didn't try it.
+<h3>Step two: Create the world</h3>
+You can choose between two methods on how to generate the world with TerraformGenerator
 
-## Images
+<h4>Method One</h4>
+
+1. Turn off the server if it is running
+2. Open the `bukkit.yml` and add the following info to it.  
+   ```yaml
+   # By default does this section not exist within the bukkit.yml
+   # and you have to add it yourself.
+   worlds:
+       world: # Replace this with the World name you want to use.
+           generator: TerraformGenerator
+   ```
+3. If present delete the folder of the world that you want TerraformGenerator to create.
+4. Start your Server again.
+
+<h4>Method two</h4>
+This method requires the usage of a World Management plugin.  
+In this example are we using Multiverse-Core. TerraformGenerator *should* work with any other World Manager, but we won't guarantee it!
+
+Before creating the world, make sure it doesn't exist already. If it does will you need to delete it using `/mvdelete <world>` followed by `/mvconfirm`.  
+To create a world with TerraformGenerator, execute `/mvcreate <world> normal -g TerraformGenerator` where `<world>` is the name of the world to create.
+
+**Note:**  
+There is a rare chance that the world might not get loaded woth TerraformGenerator as the World Generator set. In those cases could newly loaded chunks break the look of the world by being normal vanilla chunks.  
+If this is the case for you, but you still want to use TerraformGenerator with a World Management plugin, follow the second step in the [first method](#method-one) to guarantee the world to be loaded with TerraformGenerator.
+
+<h2 name="images">Images</h2>
 Find images on the wiki 
 
 https://github.com/Hex27/TerraformGenerator/wiki/Biomes
 
 https://github.com/Hex27/TerraformGenerator/wiki/Structures
+
+<h2 name="known-bugs">Known bugs</h2>
+Nothing to see here...
+
+<h3 name="sort-of-resolved">Sort of resolved</h3>
 
 <!-- MARKDOWN LINKS -->
 [contributors-shield]: https://img.shields.io/github/contributors/Hex27/terraformgenerator.svg?style=for-the-badge
@@ -83,3 +95,5 @@ https://github.com/Hex27/TerraformGenerator/wiki/Structures
 [stars-url]: https://github.com/Hex27/terraformgenerator/stargazers
 [issues-shield]: https://img.shields.io/github/issues/Hex27/terraformgenerator.svg?style=for-the-badge
 [issues-url]: https://github.com/Hex27/terraformgenerator/issues
+[spigot-tfg]: https://www.spigotmc.org/resources/75132/
+[spigot-drycell]: https://www.spigotmc.org/resources/73386/

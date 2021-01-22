@@ -10,13 +10,13 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
-import org.terraform.structure.village.plains.v1_16.OneOneSixBlockHandler;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.Version;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
+import org.terraform.utils.version.Version;
+import org.terraform.utils.version.OneOneSixBlockHandler;
 
 import java.util.Map.Entry;
 import java.util.Random;

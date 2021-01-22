@@ -15,9 +15,10 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.tree.v1_15.BeeHiveSpawner;
 import org.terraform.utils.*;
 import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.utils.version.BeeHiveSpawner;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.HashMap;
