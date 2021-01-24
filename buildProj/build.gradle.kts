@@ -6,7 +6,7 @@ plugins {
 group = "org.terraform"
 
 repositories {
-    maven{ url = uri("https://repo.codemc.io/repository/nms/") }
+    maven { url = uri("https://repo.codemc.io/repository/nms/") }
     mavenCentral()
 }
 
@@ -18,6 +18,10 @@ dependencies {
     implementation(project(":implementation:v1_16_R1"))
     implementation(project(":implementation:v1_16_R2"))
     implementation(project(":implementation:v1_16_R3"))
+}
+
+tasks.shadowJar {
+    relocate("io.papermc.lib", "org.terraform.lib")
 }
 
 java {

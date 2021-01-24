@@ -21,11 +21,15 @@ public class BiomePainter extends JFrame {
     public BiomePainter() {
         super("Biome test");
         // You can set the content pane of the frame to your custom class.
-        if (seed == 0) seed = new Random().nextInt(269286925);
+        if(seed == 0) seed = new Random().nextInt(269286925);
         setContentPane(new DrawPane());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(windowWidth, windowWidth);
         setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new BiomePainter();
     }
 
     // Create a component that you can actually draw on.
@@ -45,14 +49,14 @@ public class BiomePainter extends JFrame {
         }
 
         void draw(Graphics g) {
-            TerraformWorld world = new TerraformWorld("world", seed);
+            TerraformWorld world = TerraformWorld.get("world", seed);
 
-            for (int x = 0; x < windowWidth; x++) {
-                for (int z = 0; z < windowWidth; z++) {
+            for(int x = 0; x < windowWidth; x++) {
+                for(int z = 0; z < windowWidth; z++) {
                     int realX = (int) Math.round((x / (double) windowWidth) * (double) inGameWidth + offsets);
                     int realZ = (int) Math.round((z / (double) windowWidth) * (double) inGameWidth + offsets);
                     BiomeBank biome = BiomeBank.calculateBiome(world, realX, realZ, (int) HeightMap.getPreciseHeight(world, realX, realZ));
-                    switch (biome) {
+                    switch(biome) {
                         case PLAINS:
                             g.setColor(new Color(100, 150, 100));
                             break;
@@ -91,11 +95,11 @@ public class BiomePainter extends JFrame {
                             break;
                     }
 
-                    if (biome.name().contains("OCEAN")) g.setColor(Color.blue);
-                    else if (biome.name().contains("MOUNTAIN")) g.setColor(Color.gray);
-                    else if (biome.name().contains("BEACH")) g.setColor(Color.yellow);
-                    else if (biome.name().contains("ICY") || biome.name().contains("SNOWY")) g.setColor(Color.white);
-                    else if (biome.name().contains("RIVER")) g.setColor(Color.blue);
+                    if(biome.name().contains("OCEAN")) g.setColor(Color.blue);
+                    else if(biome.name().contains("MOUNTAIN")) g.setColor(Color.gray);
+                    else if(biome.name().contains("BEACH")) g.setColor(Color.yellow);
+                    else if(biome.name().contains("ICY") || biome.name().contains("SNOWY")) g.setColor(Color.white);
+                    else if(biome.name().contains("RIVER")) g.setColor(Color.blue);
 
                     g.drawRect(x, z, 1, 1);
                 }
@@ -105,9 +109,5 @@ public class BiomePainter extends JFrame {
         public void paintComponent(Graphics g) {
             g.drawImage(i, 0, 0, null);
         }
-    }
-
-    public static void main(String[] args) {
-        new BiomePainter();
     }
 }
