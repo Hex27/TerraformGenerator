@@ -10,12 +10,13 @@ import org.terraform.data.SimpleChunkLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
 
     private final World w;
     private final Chunk c;
-    private final HashMap<SimpleChunkLocation, PopulatorDataICAAbstract> loadedChunks = new HashMap<>();
+    private final ConcurrentHashMap<SimpleChunkLocation, PopulatorDataICAAbstract> loadedChunks = new ConcurrentHashMap<>();
 
     public PopulatorDataRecursiveICA(Chunk c) {
         super(c);
@@ -30,14 +31,16 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
      */
     private PopulatorDataICAAbstract getData(int x, int z) {
         SimpleChunkLocation scl = new SimpleChunkLocation(w.getName(), x, z);
-        return loadedChunks.computeIfAbsent(scl, k -> {
-            int chunkX = x >> 4;
-            int chunkZ = z >> 4;
-            if (!w.isChunkLoaded(chunkX, chunkZ)) w.loadChunk(chunkX, chunkZ);
-            PopulatorDataICAAbstract data = TerraformGeneratorPlugin.injector.getICAData(w.getChunkAt(chunkX, chunkZ));
-            loadedChunks.put(scl, data);
-            return data;
-        });
+        synchronized(loadedChunks) {
+            return loadedChunks.computeIfAbsent(scl, k -> {
+                int chunkX = x >> 4;
+                int chunkZ = z >> 4;
+                if(!w.isChunkLoaded(chunkX, chunkZ)) w.loadChunk(chunkX, chunkZ);
+                PopulatorDataICAAbstract data = TerraformGeneratorPlugin.injector.getICAData(w.getChunkAt(chunkX, chunkZ));
+                loadedChunks.put(scl, data);
+                return data;
+            });
+        }
     }
 
     @Override

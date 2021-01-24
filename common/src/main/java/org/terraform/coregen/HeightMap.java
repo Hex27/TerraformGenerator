@@ -6,8 +6,10 @@ import org.terraform.main.TConfigOption;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public enum HeightMap {
     /**
@@ -16,28 +18,26 @@ public enum HeightMap {
     RIVER {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise noise = noiseCache.get(tw);
-            if (noise == null) {
-                noise = new FastNoise();
-                noise.SetSeed((int) tw.getSeed());
-                noise.SetNoiseType(NoiseType.PerlinFractal);
-                noise.SetFrequency(TConfigOption.HEIGHT_MAP_RIVER_FREQUENCY.getFloat());
-                noise.SetFractalOctaves(5);
-                noiseCache.put(tw, noise);
-            }
+            FastNoise noise = computeNoise(tw, world -> {
+                FastNoise n = new FastNoise();
+                n.SetSeed((int) tw.getSeed());
+                n.SetNoiseType(NoiseType.PerlinFractal);
+                n.SetFrequency(TConfigOption.HEIGHT_MAP_RIVER_FREQUENCY.getFloat());
+                n.SetFractalOctaves(5);
+                return n;
+            });
             return 15 - 100 * Math.abs(noise.GetNoise(x, z));
         }
     }, OCEANIC {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise cubic = noiseCache.get(tw);
-            if (cubic == null) {
-                cubic = new FastNoise((int) tw.getSeed() * 12);
-                cubic.SetNoiseType(NoiseType.CubicFractal);
-                cubic.SetFractalOctaves(6);
-                cubic.SetFrequency(TConfigOption.HEIGHT_MAP_OCEANIC_FREQUENCY.getFloat());
-                noiseCache.put(tw, cubic);
-            }
+            FastNoise cubic = computeNoise(tw, world -> {
+                FastNoise n = new FastNoise((int) tw.getSeed() * 12);
+                n.SetNoiseType(NoiseType.CubicFractal);
+                n.SetFractalOctaves(6);
+                n.SetFrequency(TConfigOption.HEIGHT_MAP_OCEANIC_FREQUENCY.getFloat());
+                return n;
+            });
 
             double height = cubic.GetNoise(x, z) * 2.5;
 
@@ -48,14 +48,13 @@ public enum HeightMap {
     }, CORE {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise cubic = noiseCache.get(tw);
-            if (cubic == null) {
-                cubic = new FastNoise((int) tw.getSeed());
-                cubic.SetNoiseType(NoiseType.CubicFractal);
-                cubic.SetFractalOctaves(6);
-                cubic.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
-                noiseCache.put(tw, cubic);
-            }
+            FastNoise cubic = computeNoise(tw, world -> {
+                FastNoise n = new FastNoise((int) tw.getSeed());
+                n.SetNoiseType(NoiseType.CubicFractal);
+                n.SetFractalOctaves(6);
+                n.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
+                return n;
+            });
 
             double height = cubic.GetNoise(x, z) * 2 * 15 + 13 + defaultSeaLevel;
 
@@ -74,14 +73,13 @@ public enum HeightMap {
     }, MOUNTAIN {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise cubic = noiseCache.get(tw);
-            if (cubic == null) {
-                cubic = new FastNoise((int) tw.getSeed() * 7);
-                cubic.SetNoiseType(NoiseType.CubicFractal);
-                cubic.SetFractalOctaves(6);
-                cubic.SetFrequency(TConfigOption.HEIGHT_MAP_MOUNTAIN_FREQUENCY.getFloat());
-                noiseCache.put(tw, cubic);
-            }
+            FastNoise cubic = computeNoise(tw, world -> {
+                FastNoise n = new FastNoise((int) tw.getSeed() * 7);
+                n.SetNoiseType(NoiseType.CubicFractal);
+                n.SetFractalOctaves(6);
+                n.SetFrequency(TConfigOption.HEIGHT_MAP_MOUNTAIN_FREQUENCY.getFloat());
+                return n;
+            });
 
             double height = cubic.GetNoise(x, z) * 5;
             if (height < 0) height = 0;
@@ -90,14 +88,13 @@ public enum HeightMap {
     }, ATTRITION {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise perlin = noiseCache.get(tw);
-            if (perlin == null) {
-                perlin = new FastNoise((int) tw.getSeed());
-                perlin.SetNoiseType(NoiseType.PerlinFractal);
-                perlin.SetFractalOctaves(4);
-                perlin.SetFrequency(0.02f);
-                noiseCache.put(tw, perlin);
-            }
+            FastNoise perlin = computeNoise(tw, world -> {
+                FastNoise n = new FastNoise((int) tw.getSeed());
+                n.SetNoiseType(NoiseType.PerlinFractal);
+                n.SetFractalOctaves(4);
+                n.SetFrequency(0.02f);
+                return n;
+            });
 
             double height = perlin.GetNoise(x, z) * 2 * 7;
             return height < 0 ? 0 : height;
@@ -106,7 +103,13 @@ public enum HeightMap {
 
     private static final int defaultSeaLevel = 62;
     private static final float heightAmplifier = TConfigOption.HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER.getFloat();
-    protected final Map<TerraformWorld, FastNoise> noiseCache = new IdentityHashMap<>(TerraformWorld.WORLDS.size());
+    protected final Map<TerraformWorld, FastNoise> noiseCache = Collections.synchronizedMap(new IdentityHashMap<>(TerraformWorld.WORLDS.size()));
+
+    protected FastNoise computeNoise(TerraformWorld world, Function<TerraformWorld, FastNoise> noiseFunction) {
+        synchronized(noiseCache) {
+            return noiseCache.computeIfAbsent(world, noiseFunction);
+        }
+    }
 
     /**
      * Returns the average increase or decrease in height for surrounding blocks compared to the provided height at those coords.
