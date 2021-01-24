@@ -13,9 +13,10 @@ import org.drycell.gui.ItemBuilder;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SchematicListener implements Listener {
-    public static final HashMap<UUID, TerraRegion> rgs = new HashMap<>();
+    public static final ConcurrentHashMap<UUID, TerraRegion> rgs = new ConcurrentHashMap<>();
     private static final String WAND_NAME = ChatColor.AQUA + "Terra Wand";
 
     public static ItemStack getWand() {

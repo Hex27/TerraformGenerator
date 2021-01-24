@@ -15,12 +15,14 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NativeGeneratorPatcherPopulator extends BlockPopulator implements Listener{
 
     //SimpleChunkLocation to a collection of location:blockdata entries marked for repair.
-    public static HashMap<SimpleChunkLocation, Collection<Object[]>> cache = new HashMap<SimpleChunkLocation, Collection<Object[]>>();
+    public static Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
     //private final TerraformWorld tw;
 
     public NativeGeneratorPatcherPopulator() {
@@ -32,7 +34,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     	
         SimpleChunkLocation scl = new SimpleChunkLocation(world, x, y, z);
         if (!cache.containsKey(scl))
-            cache.put(scl, new ArrayList<Object[]>());
+            cache.put(scl, new ArrayList<>());
 
         cache.get(scl).add(new Object[]{
                 new int[]{x, y, z},

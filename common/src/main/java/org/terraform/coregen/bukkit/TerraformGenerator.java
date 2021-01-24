@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.ChunkCache;
@@ -24,6 +25,9 @@ import java.util.concurrent.ExecutionException;
 
 public class TerraformGenerator extends ChunkGenerator {
     public static final List<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
+
+    private static final Object LOCK = new Object();
+
     private static final LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE = 
     		CacheBuilder.newBuilder()
     		.maximumSize(1000).build(new ChunkCacheLoader());//new LoadingCache<ChunkCache, ChunkCache>();
@@ -56,9 +60,14 @@ public class TerraformGenerator extends ChunkGenerator {
 		}
     }
 
+    @Override
+    public boolean isParallelCapable() {
+        return true;
+    }
+
     @SuppressWarnings("deprecation")
     @Override
-    public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
+    public @NotNull ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int chunkX, int chunkZ, @NotNull BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
 //        ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
@@ -87,24 +96,24 @@ public class TerraformGenerator extends ChunkGenerator {
                 int undergroundHeight = height;
                 int index = 0;
                 while (index < crust.length) {
-                    chunk.setBlock(x, undergroundHeight, z, crust[index]);
+                    setBlockSync(chunk, x, undergroundHeight, z, crust[index]);
                     index++;
                     undergroundHeight--;
                 }
 
                 for (int y = undergroundHeight; y > 0; y--) {
-                    chunk.setBlock(x, y, z, Material.STONE);
+                    setBlockSync(chunk, x, y, z, Material.STONE);
                 }
 
                 //Any low elevation is sea
                 for (int y = height + 1; y <= seaLevel; y++) {
-                    chunk.setBlock(x, y, z, Material.WATER);
+                    setBlockSync(chunk, x, y, z, Material.WATER);
                 }
 
                 //Bedrock Base
-                chunk.setBlock(x, 2, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
-                chunk.setBlock(x, 1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
-                chunk.setBlock(x, 0, z, Material.BEDROCK);
+                setBlockSync(chunk, x, 2, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
+                setBlockSync(chunk, x, 1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
+                setBlockSync(chunk, x, 0, z, Material.BEDROCK);
 
                 BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
                 if (transformHandler != null && !biomesToTransform.contains(transformHandler))
@@ -119,13 +128,19 @@ public class TerraformGenerator extends ChunkGenerator {
         return chunk;
     }
 
+    private void setBlockSync(ChunkData data, int x, int y, int z, Material material) {
+        synchronized(LOCK) {
+            data.setBlock(x, y, z, material);
+        }
+    }
+
     @Override
-    public Location getFixedSpawnLocation(World world, Random random) {
+    public Location getFixedSpawnLocation(@NotNull World world, @NotNull Random random) {
         return new Location(world, 0, HeightMap.getBlockHeight(TerraformWorld.get(world), 0, 0), 0);
     }
 
     @Override
-    public List<BlockPopulator> getDefaultPopulators(World world) {
+    public @NotNull List<BlockPopulator> getDefaultPopulators(@NotNull World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
     }

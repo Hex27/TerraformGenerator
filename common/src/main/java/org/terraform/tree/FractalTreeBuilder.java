@@ -22,7 +22,9 @@ import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FractalTreeBuilder {
     int height = 0;
@@ -57,7 +59,7 @@ public class FractalTreeBuilder {
     int oriX;
     int oriY;
     int oriZ;
-    protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
+    protected static final Map<TerraformWorld, FastNoise> noiseCache = new ConcurrentHashMap<>();
     private FastNoise noiseGen;
     private SimpleBlock beeHive;
     private boolean coralDecoration = false;
@@ -432,13 +434,15 @@ public class FractalTreeBuilder {
         this.oriZ = z;
         this.tw = tw;
         //this.noiseGen = new FastNoise((int) tw.getSeed());
-        if(!noiseCache.containsKey(tw)) {
-        	FastNoise noise = new FastNoise((int) tw.getSeed());
-        	noise.SetNoiseType(NoiseType.SimplexFractal);
-        	noise.SetFractalOctaves(5);
-        	noiseCache.put(tw, noise);
+        synchronized(noiseCache) {
+            if(!noiseCache.containsKey(tw)) {
+                FastNoise noise = new FastNoise((int) tw.getSeed());
+                noise.SetNoiseType(NoiseType.SimplexFractal);
+                noise.SetFractalOctaves(5);
+                noiseCache.put(tw, noise);
+            }
+            noiseGen = noiseCache.get(tw);
         }
-        noiseGen = noiseCache.get(tw);
         // Setup noise to be used in randomising the sphere
         noiseGen.SetFrequency(branchNoiseFrequency);
         

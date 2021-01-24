@@ -1,9 +1,10 @@
 package org.terraform.utils;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TickTimer {
-    public static final HashMap<String, Long> TIMINGS = new HashMap<>();
+    public static final ConcurrentHashMap<String, Long> TIMINGS = new ConcurrentHashMap<>();
 
     private final String key;
     private final long start = System.currentTimeMillis();
