@@ -23,7 +23,7 @@ public class PlainsPathRecursiveSpawner {
     private int minRoomWidth = 15;
     private int maxRoomWidth = 20;
 
-    /**
+    /** 
      * 1 for max room density, 0 for no rooms.
      */
     private double villageDensity = 1;
@@ -47,6 +47,7 @@ public class PlainsPathRecursiveSpawner {
 
         boolean cull = false;
         SimpleLocation loc = new SimpleLocation(target.loc).getRelative(direction);
+        int lastCrossroad = 0;
         while (!cull) {
 
             //Advance the path forward in this arbitrary direction.
@@ -66,13 +67,17 @@ public class PlainsPathRecursiveSpawner {
                                     loc.getY(),
                                     loc.getZ() + adjDir.getModZ() * 11);
                             if (!this.registerRoom(room)) { //Roll crossroads
-                                if (GenUtils.chance(random, 1, 10))
+                                if (GenUtils.chance(random, lastCrossroad, 20)) {
                                     crossRoads.put(loc, new CrossRoad(loc, BlockUtils.getAdjacentFaces(direction)));
+                                    lastCrossroad = 0;
+                                }
                             }
                         }
                     } else {
-                        if (GenUtils.chance(random, 1, 15))
+                        if (GenUtils.chance(random, lastCrossroad, 20)) {
                             crossRoads.put(loc, new CrossRoad(loc, BlockUtils.getAdjacentFaces(direction)));
+                            lastCrossroad = 0;
+                        }
                     }
                     loc = loc.getRelative(direction);
                 } else
@@ -91,6 +96,12 @@ public class PlainsPathRecursiveSpawner {
         validRooms.add(roomPop);
     }
 
+    
+    /**
+     * 
+     * @param loc
+     * @return whether or not a location can hold a cuberoom (no overlaps, not too far etc)
+     */
     private boolean isLocationValid(SimpleLocation loc) {
         for (DirectionalCubeRoom room : rooms.values()) {
             if (room.isPointInside(loc)) {

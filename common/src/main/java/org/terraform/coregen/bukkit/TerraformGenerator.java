@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
-import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.ChunkCache;
@@ -67,7 +66,7 @@ public class TerraformGenerator extends ChunkGenerator {
 
     @SuppressWarnings("deprecation")
     @Override
-    public @NotNull ChunkData generateChunkData(@NotNull World world, @NotNull Random random, int chunkX, int chunkZ, @NotNull BiomeGrid biome) {
+    public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
 //        ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
@@ -135,39 +134,13 @@ public class TerraformGenerator extends ChunkGenerator {
     }
 
     @Override
-    public Location getFixedSpawnLocation(@NotNull World world, @NotNull Random random) {
+    public Location getFixedSpawnLocation(World world, Random random) {
         return new Location(world, 0, HeightMap.getBlockHeight(TerraformWorld.get(world), 0, 0), 0);
     }
 
     @Override
-    public @NotNull List<BlockPopulator> getDefaultPopulators(@NotNull World world) {
+    public List<BlockPopulator> getDefaultPopulators(World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
     }
-
-
-//    private static boolean verifyCache(TerraformWorld tw, int x, int z, ChunkCache cache) {
-//    	if(x >> 4 != cache.chunkX || z >> 4 != cache.chunkZ) {
-//    	//if(x-cache.chunkX*16 > 15 || x-cache.chunkX*16 < 0 || z-cache.chunkZ*16 > 15 || z-cache.chunkZ*16 < 0) {
-//    		int hash = ChunkCache.calculateHash(ChunkCache.getChunkCoordinate(x), ChunkCache.getChunkCoordinate(z),cache.tw);
-//    		TerraformGeneratorPlugin.logger.info("BAD REQUEST DETECTED: " + x +","+z+":" + cache.tw.hashCode() + "," + cache.chunkX + "," + cache.chunkZ);
-//    		TerraformGeneratorPlugin.logger.info("BITSHIFTS: " + (x>>4) + "," + (z>>4) + ":" + tw.hashCode() + "," + ChunkCache.getChunkCoordinate(x) + "," + ChunkCache
-//    		.getChunkCoordinate(z));
-//    		TerraformGeneratorPlugin.logger.info("HASHES: " + cache.getHash() + " - " + hash);
-//    		//dumpCache();
-//    		int throwMotherfucker = 5/0;
-//    		return false;
-//    	}
-//    	return true;
-//    }
-//just shoot me already
-//    public static void dumpCache() {
-//    	TerraformGeneratorPlugin.logger.info("==================================================");
-//    	for(Entry<Integer,ChunkCache> entry:chunkCaches.entrySet()) {
-//    		TerraformGeneratorPlugin.logger.info(
-//    				entry.getKey() + ":" + 
-//    		entry.getValue().tw.getSeed() + "," + entry.getValue().chunkX + "," + entry.getValue().chunkZ
-//    		+ " >>>> " + entry.getValue().getHash());
-//    	}
-//    }
 }

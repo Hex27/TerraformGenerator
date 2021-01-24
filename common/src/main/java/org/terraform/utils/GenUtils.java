@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
-import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
@@ -34,7 +33,7 @@ public class GenUtils {
             .maximumSize(32)
             .build(new CacheLoader<ChunkCache, ArrayList<BiomeBank>>() {
                 @Override
-                public ArrayList<BiomeBank> load(@NotNull ChunkCache key) {
+                public ArrayList<BiomeBank> load(ChunkCache key) {
                     ArrayList<BiomeBank> banks = new ArrayList<>();
                     int gridX = key.chunkX * 16;
                     int gridZ = key.chunkZ * 16;
