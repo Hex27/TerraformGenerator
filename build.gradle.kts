@@ -30,6 +30,7 @@ val setupServer = tasks.create("setupServer") {
     doFirst {
         // clean
         file("${testDir}/").deleteRecursively()
+        file("WorldGenTestServer/").deleteRecursively()
         file("${testDir}/plugins").mkdirs()
 
         // Downloading latest paper jar.
@@ -44,11 +45,9 @@ val setupServer = tasks.create("setupServer") {
         gitClone("https://github.com/PolyhedralDev/WorldGenTestServer")
 
         // Copying plugins
-        Files.move(Paths.get("WorldGenTestServer/plugins"),
-                Paths.get("$testDir/plugins"),
-                StandardCopyOption.REPLACE_EXISTING)
+        file("WorldGenTestServer/plugins").copyRecursively(file("$testDir/plugins"), true)
         // Copy Drycell lib
-        Files.copy(Paths.get("libs/Drycell.jar"), Paths.get("$testDir/plugins/Drycell.jar"), StandardCopyOption.REPLACE_EXISTING)
+        file("libs/Drycell.jar").copyTo(file("$testDir/plugins/Drycell.jar"), true)
         // Copying config
         val serverText = URL("https://raw.githubusercontent.com/PolyhedralDev/WorldGenTestServer/master/server.properties").readText()
         file("${testDir}/server.properties").writeText(serverText)
@@ -77,7 +76,7 @@ val testWithPaper = tasks.create("testWithPaper") {
                     "-XX:InitiatingHeapOccupancyPercent=15", "-XX:G1MixedGCLiveThresholdPercent=90",
                     "-XX:G1RSetUpdatingPauseTimePercent=5", "-XX:SurvivorRatio=32", "-XX:+PerfDisableSharedMem",
                     "-XX:MaxTenuringThreshold=1", "-Dusing.aikars.flags=https://mcflags.emc.gs",
-                    "-Daikars.new.flags=true", "-DIReallyKnowWhatIAmDoingISwear", "-jar", "paper.jar")
+                    "-Daikars.new.flags=true", "-DIReallyKnowWhatIAmDoingISwear", "-jar", "paper.jar", "nogui") // Remove nogui for gui
             workingDir = file("${testDir}/")
             standardOutput = System.out
             standardInput = System.`in`

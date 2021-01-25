@@ -42,3 +42,4 @@ org.eclipse.buildship.core.prefs
 *.MF
 *.class
 *-mapping.txt
+WorldGenTestServer/
