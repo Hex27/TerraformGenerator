@@ -45,37 +45,19 @@ public class TaigaHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        ArrayList<Vector2f> normalTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
+        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
 
-        //Rarely spawn huge taiga trees
-        if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 10)) {
-            int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, treeX, treeY, treeZ);
-            }
-        }
-
-        for (Vector2f pos : normalTrees) {
+        for (Vector2f pos : trees) {
             if (data.getBiome((int) pos.x, (int) pos.y) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, (int) pos.x, (int) pos.y);
 
-                new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, (int) pos.x, treeY, (int) pos.y);
+                // Rarely spawn huge taiga trees
+                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20))
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, (int) pos.x, treeY, (int) pos.y);
+                else // Normal trees
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, (int) pos.x, treeY, (int) pos.y);
             }
         }
-
-        // Generate small trees
-//        for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
-//            int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
-//            int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-//            if (data.getBiome(treeX, treeZ) == getBiome()) {
-//                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-//
-//                new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, treeX, treeY, treeZ);
-//            }
-//        }
 
         // Generate grass
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {

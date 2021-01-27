@@ -14,6 +14,7 @@ import org.terraform.tree.MushroomBuilder;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.Vector2f;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -76,43 +77,38 @@ public class DarkForestHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        ArrayList<Vector2f> bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 2 * 16);
+        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25);
 
-        // Big trees
-        if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 3, 10)) {
-            int treeX = GenUtils.randInt(random, 5, 7) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 5, 7) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
+        // Big trees and giant mushrooms
+        for (Vector2f tree : bigTrees) {
+            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
 
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    TreeDB.spawnBigDarkOakTree(tw, data, treeX, treeY, treeZ);
-            }
-        } else if (GenUtils.chance(random, 1, 10)) { //Giant Shrooms
-            int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ))) {
+            if (data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
+                if (GenUtils.chance(random, 1, 10)) {
                     FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
-                    if (random.nextDouble() > 0.3) {
+                    if (GenUtils.chance(random, 1, 3)) {
                         if (random.nextBoolean())
                             type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
                         else
                             type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
                     }
-                    new MushroomBuilder(type).build(tw, data, treeX, treeY, treeZ);
+                    new MushroomBuilder(type).build(tw, data, (int) tree.x, treeY, (int) tree.y);
+                } else if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()) {
+                    TreeDB.spawnBigDarkOakTree(tw, data, (int) tree.x, treeY, (int) tree.y);
                 }
             }
-        } else {
-            //Small trees
-            int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ))) {
-                    new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
-                            .build(tw, data, treeX, treeY + 1, treeZ);
-                }
+        }
+
+        // Small trees
+        for (Vector2f tree : trees) {
+            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
+
+            if (data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
+                new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
+                        .build(tw, data, (int) tree.x, treeY + 1, (int) tree.y);
             }
         }
 

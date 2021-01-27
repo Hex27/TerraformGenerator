@@ -12,6 +12,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.Vector2f;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -95,8 +96,8 @@ public class ForestHandler extends BiomeHandler {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {
-
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
+
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
                     new FractalTreeBuilder(FractalTypes.Tree.FOREST).build(tw, data, treeX, treeY, treeZ);
             }
@@ -104,20 +105,20 @@ public class ForestHandler extends BiomeHandler {
             // TODO Clearing
         }
 
-        for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
-            int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
+        // Most forest chunks have a big tree
+        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
 
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, treeX, treeY, treeZ);
+        for (Vector2f tree : trees) {
+            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
+
+            if(data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
+                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, (int) tree.x, treeY, (int) tree.y);
             }
         }
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                //Bukkit.broadcastMessage("1");
                 int y = GenUtils.getHighestGround(data, x, z);
                 if (pathNoise.GetNoise(x, z) > 0.3) {
                     if (GenUtils.chance(random, 99, 100) &&
@@ -125,10 +126,7 @@ public class ForestHandler extends BiomeHandler {
                             BlockUtils.isDirtLike(data.getType(x, y, z)))
                         data.setType(x, y, z, Material.GRASS_PATH);
                 }
-                //y++;
-                //Bukkit.broadcastMessage("2");
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                    //Bukkit.broadcastMessage("3");
                     if (GenUtils.chance(random, 3, 10)) {
                         if (data.getType(x, y + 1, z) != Material.AIR) continue;
                         //Grass & Flowers

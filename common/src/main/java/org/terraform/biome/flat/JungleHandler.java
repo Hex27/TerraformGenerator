@@ -15,7 +15,9 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.Vector2f;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class JungleHandler extends BiomeHandler {
@@ -58,37 +60,25 @@ public class JungleHandler extends BiomeHandler {
         groundLeavesNoise.SetNoiseType(NoiseType.SimplexFractal);
         groundLeavesNoise.SetFrequency(0.07f);
 
-        //Most jungle chunks have a big jungle tree
-        if (TConfigOption.TREES_JUNGLE_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 6, 10)) {
-            int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
+        ArrayList<Vector2f> bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
 
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).build(tw, data, treeX, treeY, treeZ);
-            }
-        }
-        // Small jungle trees
-        else if (GenUtils.chance(random, 7, 10)) {
-            int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
+        for (Vector2f tree : bigTrees) {
+            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
 
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    TreeDB.spawnSmallJungleTree(tw, data, treeX, treeY, treeZ);
+            if(data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
+                new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).build(tw, data, (int) tree.x, treeY, (int) tree.y);
             }
         }
 
-        // More small jungle trees
-        for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
-            int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
+        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
 
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                TreeDB.spawnSmallJungleTree(tw, data, treeX, treeY, treeZ);
+        for (Vector2f tree : trees) {
+            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
+
+            if (data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
+                TreeDB.spawnSmallJungleTree(tw, data, (int) tree.x, treeY, (int) tree.y);
             }
         }
 
