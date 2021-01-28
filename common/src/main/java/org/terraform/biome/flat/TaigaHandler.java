@@ -12,7 +12,6 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class TaigaHandler extends BiomeHandler {
@@ -45,7 +44,7 @@ public class TaigaHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
+        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
 
         for (Vector2f pos : trees) {
             if (data.getBiome((int) pos.x, (int) pos.y) == getBiome()) {

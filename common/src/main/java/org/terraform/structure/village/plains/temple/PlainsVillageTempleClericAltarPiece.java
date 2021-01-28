@@ -1,8 +1,5 @@
 package org.terraform.structure.village.plains.temple;
 
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
@@ -14,6 +11,9 @@ import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStandardPiece {
 

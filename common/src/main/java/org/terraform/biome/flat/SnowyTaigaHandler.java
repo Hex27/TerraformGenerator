@@ -9,11 +9,9 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class SnowyTaigaHandler extends BiomeHandler {
@@ -47,7 +45,7 @@ public class SnowyTaigaHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(world, data.getChunkX(), data.getChunkZ(), 11);
+        Vector2f[] trees = GenUtils.randomObjectPositions(world, data.getChunkX(), data.getChunkZ(), 11);
 
         for (Vector2f pos : trees) {
             if (data.getBiome((int) pos.x, (int) pos.y) == getBiome()) {

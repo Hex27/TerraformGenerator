@@ -7,7 +7,6 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.util.noise.NoiseGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
@@ -340,7 +339,7 @@ public class GenUtils {
      * @param maxPerturbation Max amount a point can move in each axis
      * @return List of points
      */
-    public static ArrayList<Vector2f> randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
+    public static Vector2f[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
         FastNoise noise = new FastNoise();
         noise.SetFrequency(1);
         noise.SetGradientPerturbAmp(maxPerturbation);
@@ -373,10 +372,10 @@ public class GenUtils {
             }
         }
 
-        return positions;
+        return positions.toArray(new Vector2f[0]);
     }
 
-    public static ArrayList<Vector2f> randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween) {
+    public static Vector2f[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween) {
         return randomObjectPositions(world, chunkX, chunkZ, distanceBetween, 0.35f * distanceBetween);
     }
 

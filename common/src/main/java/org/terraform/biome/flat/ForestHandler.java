@@ -106,7 +106,7 @@ public class ForestHandler extends BiomeHandler {
         }
 
         // Most forest chunks have a big tree
-        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
+        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
 
         for (Vector2f tree : trees) {
             int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);

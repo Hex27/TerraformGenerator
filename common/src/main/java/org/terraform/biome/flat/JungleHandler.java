@@ -7,7 +7,6 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
@@ -17,7 +16,6 @@ import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class JungleHandler extends BiomeHandler {
@@ -60,7 +58,7 @@ public class JungleHandler extends BiomeHandler {
         groundLeavesNoise.SetNoiseType(NoiseType.SimplexFractal);
         groundLeavesNoise.SetFrequency(0.07f);
 
-        ArrayList<Vector2f> bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
+        Vector2f[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
 
         for (Vector2f tree : bigTrees) {
             int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
@@ -71,7 +69,7 @@ public class JungleHandler extends BiomeHandler {
             }
         }
 
-        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
+        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
 
         for (Vector2f tree : trees) {
             int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);

@@ -9,7 +9,6 @@ import org.bukkit.entity.EntityType;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {

@@ -77,8 +77,8 @@ public class DarkForestHandler extends BiomeHandler {
 
     @Override
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        ArrayList<Vector2f> bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 2 * 16);
-        ArrayList<Vector2f> trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25);
+        Vector2f[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 2 * 16);
+        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25);
 
         // Big trees and giant mushrooms
         for (Vector2f tree : bigTrees) {

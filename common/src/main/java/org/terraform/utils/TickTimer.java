@@ -1,6 +1,5 @@
 package org.terraform.utils;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TickTimer {
