@@ -9,6 +9,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 
@@ -17,6 +18,7 @@ import java.util.Random;
 public class ErodedPlainsHandler extends BiomeHandler {
     static BiomeBlender biomeBlender;
     static BiomeHandler plainsHandler = BiomeBank.PLAINS.getHandler();
+    static boolean slabs = TConfigOption.MISC_USE_SLABS_TO_SMOOTH.getBoolean();
 
     @Override
     public boolean isOcean() {
@@ -66,15 +68,18 @@ public class ErodedPlainsHandler extends BiomeHandler {
                 double detailsValue = details.GetNoise(rawX, rawZ);
 
                 double d = (noiseValue / threshold) - (int) (noiseValue / threshold) - 0.5;
-                int platformHeight = (int) Math.round(((int) (noiseValue / threshold) * heightFactor
+                double platformHeight = (int) (noiseValue / threshold) * heightFactor
                         + (64 * Math.pow(d, 7) * heightFactor)
-                        + detailsValue * heightFactor * 0.3) * 1);
+                        + detailsValue * heightFactor * 0.5;
 
-                for (int y = 1; y <= platformHeight; y++) {
-                    chunk.setBlock(x, height + y, z, GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
-                            Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE));
+                for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
+                    Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
+                            Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE);
+                    if (slabs && material != Material.GRASS_BLOCK && y == (int) Math.round(platformHeight) &&
+                            platformHeight - (int) platformHeight >= 0.5) material = Material.getMaterial(material.name() + "_SLAB");
+                    chunk.setBlock(x, height + y, z, material);
                 }
-                if (detailsValue < 0.2 && GenUtils.chance(3, 4)) chunk.setBlock(x, height + platformHeight, z, Material.GRASS_BLOCK);
+                if (detailsValue < 0.2 && GenUtils.chance(3, 4)) chunk.setBlock(x, height + (int) Math.round(platformHeight), z, Material.GRASS_BLOCK);
             }
         }
     }

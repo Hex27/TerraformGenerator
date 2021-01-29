@@ -172,7 +172,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
                         Blocks.COBBLESTONE_SLAB,
                         Blocks.COBBLESTONE,
                         Blocks.GRASS_PATH,
-                        Blocks.SNOW_BLOCK
+                        Blocks.SNOW_BLOCK,
+                        Blocks.MOSSY_COBBLESTONE
                 );
         Field field = WorldGenCarverAbstract.class.getDeclaredField("j");
         if (!field.isAccessible())
