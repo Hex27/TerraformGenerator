@@ -98,6 +98,12 @@ public class BadlandsHandler extends BiomeHandler {
     @Override
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
         BiomeBlender blender = getBiomeBlender(tw);
+
+        FastNoise wallNoise = new FastNoise((int) (tw.getWorld().getSeed() * 2));
+        wallNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        wallNoise.SetFrequency(0.07f);
+        wallNoise.SetFractalOctaves(2);
+
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
@@ -112,11 +118,6 @@ public class BadlandsHandler extends BiomeHandler {
                         || currentBiome == BiomeBank.BADLANDS_BEACH
 //                        && HeightMap.getRiverDepth(tw, rawX, rawZ) > 0
                 ) {
-                    FastNoise wallNoise = new FastNoise((int) (tw.getWorld().getSeed() * 2));
-                    wallNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-                    wallNoise.SetFrequency(0.07f);
-                    wallNoise.SetFractalOctaves(2);
-
                     double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
 
                     // These are for blending river effect with other biomes

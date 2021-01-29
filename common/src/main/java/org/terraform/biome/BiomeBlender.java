@@ -1,6 +1,7 @@
 package org.terraform.biome;
 
 import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 
@@ -13,6 +14,7 @@ public class BiomeBlender {
     boolean blendWater;
     int mountainThreshold = 5;
     boolean blendMountains;
+    boolean blendBeachesToo = true;
 
     public BiomeBlender(TerraformWorld tw, boolean blendBiomeGrid, boolean blendWater, boolean blendMountains) {
         this.tw = tw;
@@ -46,13 +48,16 @@ public class BiomeBlender {
 
         if (blendWater) {
             // Linear blending when closer to water
-            double riverFactor = riverDepth / (-riverThreshold);
+
+            double riverFactor = blendBeachesToo ? riverDepth / (-riverThreshold) :
+                    (HeightMap.getPreciseHeight(tw, x, z) - TerraformGenerator.seaLevel) / riverThreshold;
+
             if (riverFactor < factor) factor = Math.max(0, riverFactor);
         }
 
         if (blendMountains) {
             // Linear blending when closer to mountains
-            double mountainFactor = (-HeightMap.getBlockHeight(tw, x, z) - mountainHeight - 5) / (double) mountainThreshold;
+            double mountainFactor = ((mountainHeight - 5) - HeightMap.getPreciseHeight(tw, x, z)) / (double) mountainThreshold;
             if (mountainFactor < factor) factor = Math.max(0, mountainFactor);
         }
 
@@ -142,6 +147,16 @@ public class BiomeBlender {
      */
     public BiomeBlender setMountainThreshold(int mountainThreshold) {
         this.mountainThreshold = mountainThreshold;
+        return this;
+    }
+
+    /**
+     * @param blendBeachesToo If false, blending will happen *riverThreshold*
+     *                        away from sea level instead of beach level. In other words,
+     *                        controls if blending happens based on sea level or river depth.
+     */
+    public BiomeBlender setBlendBeaches(boolean blendBeachesToo) {
+        this.blendBeachesToo = blendBeachesToo;
         return this;
     }
 }

@@ -12,6 +12,7 @@ import org.terraform.biome.flat.BadlandsHandler;
 import org.terraform.biome.flat.BambooForestHandler;
 import org.terraform.biome.flat.DarkForestHandler;
 import org.terraform.biome.flat.DesertHandler;
+import org.terraform.biome.flat.ErodedPlainsHandler;
 import org.terraform.biome.flat.ForestHandler;
 import org.terraform.biome.flat.IceSpikesHandler;
 import org.terraform.biome.flat.JungleHandler;
@@ -75,6 +76,7 @@ public enum BiomeBank {
 
     //FLAT
     PLAINS(new PlainsHandler(), BiomeType.FLAT),
+    ERODED_PLAINS(new ErodedPlainsHandler(), BiomeType.FLAT),
     SAVANNA(new SavannaHandler(), BiomeType.FLAT),
     FOREST(new ForestHandler(), BiomeType.FLAT),
     DESERT(new DesertHandler(), BiomeType.FLAT),
