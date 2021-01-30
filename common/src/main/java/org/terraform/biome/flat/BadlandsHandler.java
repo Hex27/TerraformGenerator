@@ -18,6 +18,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BadlandsHandler extends BiomeHandler {
@@ -87,7 +88,9 @@ public class BadlandsHandler extends BiomeHandler {
                         }
                         // Prevent cactus from spawning on plateaus:
                         if (HeightMap.getBlockHeight(world, x, z) + 5 < highest) canSpawn = false;
-                        if (canSpawn)
+                        if (canSpawn && GenUtils.chance(1, 50))
+                            spawnDeadTree(data, x, highest, z);
+                        else if (canSpawn)
                             BlockUtils.spawnPillar(random, data, x, highest + 1, z, Material.CACTUS, 2, 5);
                     } else if (GenUtils.chance(random, 1, 80) && highest > TerraformGenerator.seaLevel) {
                         data.setType(x, highest + 1, z, Material.DEAD_BUSH);
@@ -223,7 +226,6 @@ public class BadlandsHandler extends BiomeHandler {
 
                 if (!placeSand) continue;
                 // Surround plateaus with sand
-//                surroundWithSand(tw, data, x, z, heightFactor, sandRadius, (int) graduated * heightFactor);
                 int level = (((int) graduated) - 1) * heightFactor;
                 for (int sx = x - sandRadius; sx <= x + sandRadius; sx++) {
                     for (int sz = z - sandRadius; sz <= z + sandRadius; sz++) {
@@ -242,23 +244,37 @@ public class BadlandsHandler extends BiomeHandler {
         }
     }
 
-    void surroundWithSand(TerraformWorld tw, PopulatorDataAbstract data, int x, int z, int heightFactor, int sandRadius, int level) {
-        FastNoise detailsNoise = new FastNoise((int) (tw.getSeed() * 7509));
-        detailsNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        detailsNoise.SetFrequency(0.08f);
+    void spawnDeadTree(PopulatorDataAbstract data, int x, int y, int z) {
+        int height = GenUtils.randInt(5, 7);
+        int branches = GenUtils.randInt(1, height == 5 ? 2 : 3);
 
-        for (int sx = x - sandRadius; sx <= x + sandRadius; sx++) {
-            for (int sz = z - sandRadius; sz <= z + sandRadius; sz++) {
-                double distance = Math.sqrt(Math.pow(sx - x, 2) + Math.pow(sz - z, 2));
+        for (int i = 1; i <= height; i++) data.setType(x, y + i, z, Material.DARK_OAK_WOOD);
 
-                if (distance < sandRadius) {
-                    int sandHeight = (int) Math.round(heightFactor * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
+        ArrayList<Integer> usedBranchHorizontals = new ArrayList<>();
+        ArrayList<Integer> usedBranchVerticals = new ArrayList<>();
+        for (int i = 0; i < branches; i++) {
+            int bHeight = GenUtils.randInt(2, height - 1);
+            int bDirection = GenUtils.randInt(1, 4);
 
-                    for (int y = 1; y <= sandHeight; y++)
-                        if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz).isAir()) data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
-
-                }
+            if (usedBranchHorizontals.contains(bDirection) || usedBranchVerticals.contains(bHeight)) {
+                i--;
+                continue;
             }
+
+            int bx = x;
+            int bz = z;
+
+            switch (bDirection) {
+                case 1: bz++; break;
+                case 2: bx++; break;
+                case 3: bz--; break;
+                default: bx--; break;
+            }
+
+            data.setType(bx, y + bHeight, bz, Material.DARK_OAK_WOOD);
+
+            usedBranchHorizontals.add(bDirection);
+            usedBranchVerticals.add(bHeight);
         }
     }
 }
