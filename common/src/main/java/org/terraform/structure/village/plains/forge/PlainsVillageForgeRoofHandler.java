@@ -8,6 +8,7 @@ import java.util.Random;
 import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
@@ -28,7 +29,6 @@ public class PlainsVillageForgeRoofHandler {
 		Material roofSlabCornerMaterial = Material.STONE_BRICK_SLAB;
 		if(roofCornerMaterial == Material.COBBLESTONE)
 			roofSlabCornerMaterial = Material.COBBLESTONE_SLAB;
-		
 		
 		for(SimpleLocation sLoc:rectangleLocations) {
 			if(lowerBound == null) lowerBound = sLoc;
@@ -65,6 +65,12 @@ public class PlainsVillageForgeRoofHandler {
 				if(height % 2 == 1) { //Use solid blocks for odd heights
 					if(x == lowerBound.getX() || x == upperBound.getX() || z == lowerBound.getZ() || z == upperBound.getZ()) {
 						target.setType(roofCornerMaterial);
+						
+						Wall adj = new Wall(target, BlockUtils.getBlockFaceFromAxis(roofAxis));
+						new SlabBuilder(roofSlabCornerMaterial)
+						.setType(Type.TOP)
+						.lapply(adj.getFront())
+						.lapply(adj.getRear());
 					}else {
 						target.setType(Material.OAK_PLANKS);
 					}
@@ -77,10 +83,10 @@ public class PlainsVillageForgeRoofHandler {
 						
 						if((roofAxis == Axis.X && (z == lowerBound.getZ()+1||z == upperBound.getZ()-1))
 								||(roofAxis == Axis.Z && (x == lowerBound.getX()+1||x == upperBound.getX()-1))) {
-							if(target.getRelative(0,-2,0).getType().isSolid())
+							
+							//Fill the holes between the walls and the roof
+							if(BlockUtils.isStoneLike(target.getRelative(0,-2,0).getType()) || target.getRelative(0,-2,0).getType() == Material.OAK_DOOR)
 								new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
-							else
-								new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.OAK_LOG);
 						}
 					}
 				
@@ -94,9 +100,9 @@ public class PlainsVillageForgeRoofHandler {
 					}
 				}
 				
-				if(core.getPopData().getType(x, core.getY()+3,z).isSolid()) {
-					new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
-				}
+//				if(BlockUtils.isStoneLike(core.getPopData().getType(x, core.getY()+3,z))) {
+//					new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
+//				}
 			}
 		}
 	}

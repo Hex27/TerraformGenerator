@@ -193,6 +193,23 @@ public class BlockUtils {
     public static BlockFace getXZPlaneBlockFace(Random rand) {
         return xzPlaneBlockFaces.get(rand.nextInt(8));
     }
+    
+    /**
+     * 
+     * @param ax
+     * @return
+     */
+    public static BlockFace getBlockFaceFromAxis(Axis ax) {
+    	switch(ax) {
+    	case X:
+    		return BlockFace.EAST;
+    	case Z:
+    		return BlockFace.SOUTH;
+    	case Y:
+    		return BlockFace.UP;
+    	}
+		return null;
+    }
 
     public static Axis getAxisFromBlockFace(BlockFace face) {
         switch (face) {
@@ -666,7 +683,8 @@ public class BlockUtils {
         for (BlockFace face : data.getAllowedFaces()) {
             Material type = target.getRelative(face).getType();
             data.setFace(face, type.isSolid()
-                    && !type.toString().endsWith("PRESSURE_PLATE"));
+                    && !type.toString().endsWith("PRESSURE_PLATE")
+                    && !Tag.SLABS.isTagged(type));
         }
         target.setBlockData(data);
     }

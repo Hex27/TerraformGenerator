@@ -52,9 +52,6 @@ public class PlainsVillageForgeStandardPiece extends PlainsVillageForgePiece {
             }
     }
 
-    @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
-    	
-    }
+
 
 }

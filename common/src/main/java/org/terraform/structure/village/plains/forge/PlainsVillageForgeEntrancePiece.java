@@ -48,12 +48,13 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
     		Wall w = entry.getKey().getRelative(0, -1, 0);
     		for (int i = 0; i < entry.getValue(); i++) {
     			w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-    			w.Pillar(4, rand, Material.COBBLESTONE, Material.ANDESITE, Material.STONE);
+    			w.RPillar(5, rand, Material.COBBLESTONE, Material.ANDESITE, Material.STONE);
     			w = w.getLeft();
     		}
     		 Wall core = new Wall(new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ()), this.getRotation());
 	         core = core.getRear(2);
-    	     BlockUtils.placeDoor(data, Material.OAK_DOOR, core.getX(), core.getY(), core.getZ(), core.getDirection());
+	         core.getRelative(0,-1,0).setType(Material.CHISELED_STONE_BRICKS);
+    	     BlockUtils.placeDoor(data, Material.OAK_DOOR, core.getX(), core.getY(), core.getZ(), core.getDirection().getOppositeFace());
     	}
     	else
     	{
@@ -64,7 +65,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
     			
     			if(i == 2) {
     				//Opening
-    				w.getRelative(0,-1,0).setType(Material.COBBLESTONE);
+    				w.getRelative(0,-1,0).setType(Material.CHISELED_STONE_BRICKS);
     			}
     			else if(i == 1 || i == 3) 
     			{

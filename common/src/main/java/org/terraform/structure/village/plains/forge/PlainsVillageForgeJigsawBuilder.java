@@ -26,11 +26,11 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
         this.chanceToAddNewPiece = 50;
     }
     
-//    @Override
-//    public JigsawStructurePiece getFirstPiece(Random random) {
-//        return new PlainsVillageTempleClericAltarPiece(5, 3, 5, JigsawType.STANDARD, true, this, BlockUtils.directBlockFaces);
-//    	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
-//    }
+    @Override
+    public JigsawStructurePiece getFirstPiece(Random random) {
+        return new PlainsVillageForgeChimneyPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
+    	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
+    }
 
     @Override
     public void build(Random random) {
@@ -88,15 +88,17 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
             }
         }
         
+        PlainsVillageForgeRoofHandler.placeRoof(core, rectanglePieces);
+        
         //Decorate rooms and walls
-        for (JigsawStructurePiece piece : this.pieces.values()) {
-            piece.postBuildDecoration(random, this.core.getPopData());
-        }
         for (JigsawStructurePiece piece : this.overlapperPieces) {
             piece.postBuildDecoration(random, this.core.getPopData());
         }
         
-        PlainsVillageForgeRoofHandler.placeRoof(core, rectanglePieces);
+        for (JigsawStructurePiece piece : this.pieces.values()) {
+            piece.postBuildDecoration(random, this.core.getPopData());
+        }
+        
 
     }
     
