@@ -33,7 +33,7 @@ public class BadlandsHandler extends BiomeHandler {
 
     private static BiomeBlender getPlateauBlender(TerraformWorld tw) {
         if (plateauBlender == null) plateauBlender = new BiomeBlender(tw, true, true, true)
-                .setBiomeThreshold(0.3).setMountainThreshold(6).setRiverThreshold(5);
+                .setBiomeThreshold(0.3).setMountainThreshold(6).setRiverThreshold(7);
         return plateauBlender;
     }
 
@@ -86,7 +86,7 @@ public class BadlandsHandler extends BiomeHandler {
                                 canSpawn = false;
                         }
                         // Prevent cactus from spawning on plateaus:
-                        if (data.getType(x, highest - 1, z).name().contains("TERRACOTTA")) canSpawn = false;
+                        if (HeightMap.getBlockHeight(world, x, z) + 5 < highest) canSpawn = false;
                         if (canSpawn)
                             BlockUtils.spawnPillar(random, data, x, highest + 1, z, Material.CACTUS, 2, 5);
                     } else if (GenUtils.chance(random, 1, 80) && highest > TerraformGenerator.seaLevel) {
@@ -179,27 +179,26 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     void generatePlateaus(TerraformWorld tw, PopulatorDataAbstract data) {
-//        FastNoise noise = new FastNoise((int) (tw.getSeed() * 7509));
-        FastNoise noise = new FastNoise();
-        noise.SetNoiseType(FastNoise.NoiseType.CubicFractal);
-        noise.SetFractalOctaves(2);
-        noise.SetFrequency(0.01f);
+//        FastNoise plateauNoise = new FastNoise((int) (tw.getSeed() * 7509));
+        FastNoise plateauNoise = new FastNoise();
+        plateauNoise.SetNoiseType(FastNoise.NoiseType.CubicFractal);
+        plateauNoise.SetFractalOctaves(2);
+        plateauNoise.SetFrequency(0.01f);
 
         FastNoise detailsNoise = new FastNoise((int) (tw.getSeed() * 7509));
         detailsNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         detailsNoise.SetFrequency(0.08f);
 
-        double threshold = 0.15;
-        int heightFactor = 13;
-        int sandRadius = 6;
+        double threshold = 0.2;
+        int heightFactor = 15;
+        int sandRadius = 7;
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
 
                 int height = HeightMap.getBlockHeight(tw, x, z);
-                double rawValue = Math.max(0, noise.GetNoise(x, z) - 0.15);
-                double blending = getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, x, z);
-                double noiseValue = rawValue * Math.max(blending, 0);
+                double rawValue = Math.max(0, plateauNoise.GetNoise(x, z));
+                double noiseValue = rawValue * getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, x, z);
 
                 double graduated = (noiseValue / threshold);
                 double platformHeight = (int) graduated * heightFactor
@@ -208,16 +207,24 @@ public class BadlandsHandler extends BiomeHandler {
                 boolean placeSand = false;
                 for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
                     placeSand = true;
-                    Material material = y != (int) Math.round(platformHeight) ?
-                            BlockUtils.getTerracotta(height + y) :
-                            GenUtils.randMaterial(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(height + y));
+                    Material material;
+                    if ((int) graduated * heightFactor == y)
+                        material = Material.RED_SAND;
+                    else if ((int) graduated * heightFactor == y + 1)
+                        material = GenUtils.randMaterial(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(height + y));
+                    else if ((int) graduated * heightFactor == y + 2)
+                        material = GenUtils.randMaterial(Material.RED_SAND, BlockUtils.getTerracotta(height + y), BlockUtils.getTerracotta(height + y));
+                    else
+                        material = BlockUtils.getTerracotta(height + y);
+
                     data.setType(x, height + y, z, material);
 
                 }
 
                 if (!placeSand) continue;
-
                 // Surround plateaus with sand
+//                surroundWithSand(tw, data, x, z, heightFactor, sandRadius, (int) graduated * heightFactor);
+                int level = (((int) graduated) - 1) * heightFactor;
                 for (int sx = x - sandRadius; sx <= x + sandRadius; sx++) {
                     for (int sz = z - sandRadius; sz <= z + sandRadius; sz++) {
                         double distance = Math.sqrt(Math.pow(sx - x, 2) + Math.pow(sz - z, 2));
@@ -225,11 +232,31 @@ public class BadlandsHandler extends BiomeHandler {
                         if (distance < sandRadius) {
                             int sandHeight = (int) Math.round(heightFactor * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
 
-                            for (int y = 1; y <= sandHeight; y++)
-                                if (data.getType(sx, height + y, sz).isAir()) data.setType(sx, height + y, sz, Material.RED_SAND);
+                            for (int y = 1 + level; y <= sandHeight + level; y++)
+                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz).isAir()) data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
 
                         }
                     }
+                }
+            }
+        }
+    }
+
+    void surroundWithSand(TerraformWorld tw, PopulatorDataAbstract data, int x, int z, int heightFactor, int sandRadius, int level) {
+        FastNoise detailsNoise = new FastNoise((int) (tw.getSeed() * 7509));
+        detailsNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        detailsNoise.SetFrequency(0.08f);
+
+        for (int sx = x - sandRadius; sx <= x + sandRadius; sx++) {
+            for (int sz = z - sandRadius; sz <= z + sandRadius; sz++) {
+                double distance = Math.sqrt(Math.pow(sx - x, 2) + Math.pow(sz - z, 2));
+
+                if (distance < sandRadius) {
+                    int sandHeight = (int) Math.round(heightFactor * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
+
+                    for (int y = 1; y <= sandHeight; y++)
+                        if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz).isAir()) data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
+
                 }
             }
         }
