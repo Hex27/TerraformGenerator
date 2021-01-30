@@ -36,7 +36,7 @@ public class BiomeBlender {
      * can control how quickly blending happens. Blending is linear.
      */
     public double getEdgeFactor(BiomeBank currentBiome, int x, int z) {
-        return getEdgeFactor(currentBiome, x, z, HeightMap.RIVER.getHeight(tw, x, z));
+        return getEdgeFactor(currentBiome, x, z, blendBeachesToo ? HeightMap.RIVER.getHeight(tw, x, z) : 0);
     }
 
     /**
