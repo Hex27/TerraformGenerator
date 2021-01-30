@@ -28,7 +28,6 @@ public abstract class JigsawStructurePiece implements Cloneable {
         this.unique = unique;
         for (BlockFace face : validDirs)
             validDirections.put(face, false);
-        //TerraformGeneratorPlugin.logger.info("CONSTRUCTOR-validDirsSize: " + validDirections.size());
     }
     
     public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, BlockFace... validDirs) {
@@ -36,7 +35,6 @@ public abstract class JigsawStructurePiece implements Cloneable {
         this.type = type;
         for (BlockFace face : validDirs)
             validDirections.put(face, false);
-        //TerraformGeneratorPlugin.logger.info("CONSTRUCTOR-validDirsSize: " + validDirections.size());
     }
 
     public void postBuildDecoration(Random random, PopulatorDataAbstract data) {}

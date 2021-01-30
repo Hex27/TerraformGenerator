@@ -255,6 +255,16 @@ public class Wall {
 
         return depth;
     }
+    
+
+    public void downPillar(Random rand, int h, Material... types) {
+        int depth = 0;
+        for (int y = get().getY(); y > 0; y--) {
+            if (depth >= h) break;
+            block.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
+            depth++;
+        }
+    }
 
     public void downLPillar(Random rand, int h, Material... types) {
         int depth = 0;

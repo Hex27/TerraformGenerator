@@ -196,6 +196,17 @@ public class BlockUtils {
                 throw new IllegalArgumentException("Invalid block facing for axis: " + face);
         }
     }
+    
+    public static Axis getPerpendicularHorizontalPlaneAxis(Axis x) {
+    	switch(x) {
+    	case X:
+    		return Axis.Z;
+    	case Z:
+    		return Axis.X;
+    	default:
+    		return x;
+    	}
+    }
 
     public static BlockFace getDirectBlockFace(Random rand) {
         return directBlockFaces[rand.nextInt(4)];

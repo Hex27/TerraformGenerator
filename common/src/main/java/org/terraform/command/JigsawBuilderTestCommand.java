@@ -6,7 +6,7 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.structure.village.plains.temple.PlainsVillageTempleJigsawBuilder;
+import org.terraform.structure.village.plains.forge.PlainsVillageForgeJigsawBuilder;
 
 import java.util.Random;
 import java.util.Stack;
@@ -42,7 +42,7 @@ public class JigsawBuilderTestCommand extends DCCommand {
         int x = p.getLocation().getBlockX();
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
-        PlainsVillageTempleJigsawBuilder builder = new PlainsVillageTempleJigsawBuilder(
+        PlainsVillageForgeJigsawBuilder builder = new PlainsVillageForgeJigsawBuilder(
                 15, 15, data, x, y - 1, z
         );
         builder.generate(new Random());
