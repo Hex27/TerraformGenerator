@@ -1,9 +1,5 @@
 package org.terraform.structure.village.plains.temple;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -17,6 +13,10 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Random;
 
 public class PlainsVillageTempleRoofHandler {
 	//private static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};

@@ -327,4 +327,56 @@ public class GenUtils {
 
         return res;
     }
+
+    /**
+     * Function that returns random positions inside chunk.
+     * An algorithm makes sure that objects are at least user-defined
+     * distance away from each others. Object density can also be
+     * configured precisely.
+     *
+     * @param distanceBetween Initial distance between objects in a grid.
+     *                        (aka. density)
+     * @param maxPerturbation Max amount a point can move in each axis
+     * @return List of points
+     */
+    public static Vector2f[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
+        FastNoise noise = new FastNoise();
+        noise.SetFrequency(1);
+        noise.SetGradientPerturbAmp(maxPerturbation);
+        noise.SetSeed((int) world.getSeed());
+
+        ArrayList<Vector2f> positions = new ArrayList<>();
+
+        // Calculate first grid element position in chunk
+        // Fixme come up with better algorithm for calculating next grid item inside chunk
+        int i;
+        int startX = (chunkX << 4) - 5;
+        i = (distanceBetween - (startX % distanceBetween));
+        startX += i != distanceBetween ? i : 0;
+        int startZ = (chunkZ << 4) - 5;
+        i = (distanceBetween - (startZ % distanceBetween));
+        startZ += i != distanceBetween ? i : 0;
+
+        // Also checks if points from chunks close by are perturbed to this chunk
+        for (int x = startX - distanceBetween; x < startX + 16 + distanceBetween; x += distanceBetween) {
+            for(int z = startZ - distanceBetween; z < startZ + 16 + distanceBetween; z += distanceBetween) {
+                Vector2f v = new Vector2f(x, z);
+                noise.GradientPerturb(v);
+                v.x = Math.round(v.x);
+                v.y = Math.round(v.y);
+
+                // If perturbed vector is inside chunk
+                if (v.x >= (chunkX << 4) && v.x < (chunkX << 4) + 16 &&
+                        v.y >= (chunkZ << 4) && v.y < (chunkZ << 4) + 16 )
+                    positions.add(v);
+            }
+        }
+
+        return positions.toArray(new Vector2f[0]);
+    }
+
+    public static Vector2f[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween) {
+        return randomObjectPositions(world, chunkX, chunkZ, distanceBetween, 0.35f * distanceBetween);
+    }
+
 }

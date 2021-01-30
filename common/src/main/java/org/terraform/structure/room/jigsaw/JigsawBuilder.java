@@ -1,12 +1,5 @@
 package org.terraform.structure.room.jigsaw;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Stack;
-
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -15,6 +8,12 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Stack;
 
 public class JigsawBuilder {
     protected int widthX;
@@ -181,7 +180,7 @@ public class JigsawBuilder {
         }
 
         ArrayList<JigsawStructurePiece> toRemove = new ArrayList<>();
-        JigsawStructurePiece entrance = null;
+
         //Overlapper pieces are stuff like walls and entrances.
         Collections.shuffle(overlapperPieces);
         for (JigsawStructurePiece piece : overlapperPieces) {
@@ -197,12 +196,12 @@ public class JigsawBuilder {
                 {
                     //Place an entrance if none was placed before.
                     hasPlacedEntrance = true;
-                    entrance = getPiece(pieceRegistry, JigsawType.ENTRANCE, random)
+                    JigsawStructurePiece temp = getPiece(pieceRegistry, JigsawType.ENTRANCE, random)
                             .getInstance(random, piece.getDepth());
-                    entrance.getRoom().setX(piece.getRoom().getX());
-                    entrance.getRoom().setY(piece.getRoom().getY());
-                    entrance.getRoom().setZ(piece.getRoom().getZ());
-                    entrance.setRotation(piece.getRotation());
+                    temp.getRoom().setX(piece.getRoom().getX());
+                    temp.getRoom().setY(piece.getRoom().getY());
+                    temp.getRoom().setZ(piece.getRoom().getZ());
+                    temp.setRotation(piece.getRotation());
                     entranceBlock = new Wall(
                             new SimpleBlock(
                                     core.getPopData(),
@@ -210,7 +209,7 @@ public class JigsawBuilder {
                                     piece.getRoom().getY(),
                                     piece.getRoom().getZ()),
                             piece.getRotation());
-                    piece = entrance;
+                    piece = temp;
                 }
             }
             JigsawStructurePiece host = getAdjacentPiece(pieceLoc, piece.getRotation().getOppositeFace());
@@ -220,17 +219,9 @@ public class JigsawBuilder {
             piece.build(core.getPopData(), random);
         }
 
-        //Remove pieces that weren't placed and replace the unused wall with the entrance.        
-        Iterator<JigsawStructurePiece> it = overlapperPieces.iterator();
-        while(it.hasNext()) {
-        	JigsawStructurePiece piece = it.next();
-        	if(toRemove.contains(piece))
-        		it.remove();
-        	else if(piece.getRoom().getSimpleLocation().equals(entrance.getRoom().getSimpleLocation())
-        			&& piece.getRotation() == entrance.getRotation())
-        		it.remove();
-        }
-        overlapperPieces.add(entrance);
+        //Remove pieces that weren't placed.
+        for (JigsawStructurePiece piece : toRemove)
+            overlapperPieces.remove(piece);
     }
 
     public JigsawStructurePiece getAdjacentPiece(SimpleLocation loc, BlockFace face) {
@@ -239,19 +230,6 @@ public class JigsawBuilder {
                 loc.getY() + face.getModY() * pieceWidth,
                 loc.getZ() + face.getModZ() * pieceWidth);
         return pieces.get(other);
-    }
-    
-    public JigsawStructurePiece getAdjacentWall(SimpleLocation loc, BlockFace face) {
-        SimpleLocation other = new SimpleLocation(
-                loc.getX() + face.getModX() * pieceWidth,
-                loc.getY() + face.getModY() * pieceWidth,
-                loc.getZ() + face.getModZ() * pieceWidth);
-        for(JigsawStructurePiece wall:overlapperPieces) {
-        	if(wall.getRotation() == face && wall.getRoom().getSimpleLocation().equals(other)) {
-        		return wall;
-        	}
-        }
-        return null;
     }
 
     public JigsawStructurePiece getPiece(JigsawStructurePiece[] registry, JigsawType type, Random rand) {

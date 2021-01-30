@@ -43,6 +43,7 @@ public enum TConfigOption {
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
     DEVSTUFF_EXTENDED_COMMANDS("dev-stuff.extended-commands", false),
     DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations", true),
+    MISC_USE_SLABS_TO_SMOOTH("misc.use-slabs-to-smooth-terrain", true),
 
     //-=[CAVES]=-
     CAVES_ALLOW_FLOODED_CAVES("caves.allow-flooded-caves", false),

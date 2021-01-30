@@ -1,7 +1,5 @@
 package org.terraform.structure.village.plains.temple;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -9,6 +7,8 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.Random;
 
 public class PlainsVillageTempleLoungePiece extends PlainsVillageTempleStandardPiece {
 
