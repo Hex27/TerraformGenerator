@@ -18,7 +18,11 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.LangOpt;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.*;
+import org.terraform.structure.MultiMegaChunkStructurePopulator;
+import org.terraform.structure.SingleMegaChunkStructurePopulator;
+import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.StructureRegistry;
+import org.terraform.structure.StructureType;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.utils.GenUtils;
 

@@ -8,7 +8,6 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Farmland;
 import org.bukkit.block.data.type.Lantern;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
@@ -18,6 +17,7 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.AgeableBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.TrapdoorBuilder;
+import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Map.Entry;

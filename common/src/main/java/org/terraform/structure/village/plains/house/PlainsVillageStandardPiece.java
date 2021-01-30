@@ -10,8 +10,8 @@ import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.Version;
 import org.terraform.utils.version.OneOneSixBlockHandler;
+import org.terraform.utils.version.Version;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;
