@@ -22,8 +22,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BadlandsHandler extends BiomeHandler {
-    static BiomeBlender riversBlender;
-    static BiomeBlender plateauBlender;
+    static private BiomeBlender riversBlender;
+    static private BiomeBlender plateauBlender;
+    static private FastNoise plateauNoise;
+
+    static int sandRadius = TConfigOption.BIOME_BADLANDS_PLATEAU_SAND_RADIUS.getInt();
+    static int plateauHeight = TConfigOption.BIOME_BADLANDS_PLATEAU_HEIGHT.getInt();
+    static float plateauFrequency = TConfigOption.BIOME_BADLANDS_PLATEAU_FREQUENCY.getFloat();
+    static double plateauThreshold = TConfigOption.BIOME_BADLANDS_PLATEAU_THRESHOLD.getDouble();
+    static double plateauCommonness = TConfigOption.BIOME_BADLANDS_PLATEAU_COMMONNESS.getDouble();
 
     private static BiomeBlender getRiversBlender(TerraformWorld tw) {
         // Only one blender needed!
@@ -34,8 +41,18 @@ public class BadlandsHandler extends BiomeHandler {
 
     private static BiomeBlender getPlateauBlender(TerraformWorld tw) {
         if (plateauBlender == null) plateauBlender = new BiomeBlender(tw, true, true, true)
-                .setBiomeThreshold(0.3).setMountainThreshold(6).setRiverThreshold(7);
+                .setBiomeThreshold(0.35).setMountainThreshold(8).setRiverThreshold(10);
         return plateauBlender;
+    }
+
+    public static FastNoise getPlateauNoise(TerraformWorld tw) {
+        if (plateauNoise == null) {
+            plateauNoise = new FastNoise((int) (tw.getSeed() * 7509));
+            plateauNoise.SetNoiseType(FastNoise.NoiseType.CubicFractal);
+            plateauNoise.SetFractalOctaves(2);
+            plateauNoise.SetFrequency(plateauFrequency);
+        }
+        return plateauNoise;
     }
 
     @Override
@@ -182,41 +199,33 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     void generatePlateaus(TerraformWorld tw, PopulatorDataAbstract data) {
-//        FastNoise plateauNoise = new FastNoise((int) (tw.getSeed() * 7509));
-        FastNoise plateauNoise = new FastNoise();
-        plateauNoise.SetNoiseType(FastNoise.NoiseType.CubicFractal);
-        plateauNoise.SetFractalOctaves(2);
-        plateauNoise.SetFrequency(0.01f);
-
         FastNoise detailsNoise = new FastNoise((int) (tw.getSeed() * 7509));
         detailsNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         detailsNoise.SetFrequency(0.08f);
 
-        double threshold = 0.2;
-        int heightFactor = 15;
-        int sandRadius = 7;
-
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-
                 int height = HeightMap.getBlockHeight(tw, x, z);
-                double rawValue = Math.max(0, plateauNoise.GetNoise(x, z));
-                double noiseValue = rawValue * getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, x, z);
 
-                double graduated = (noiseValue / threshold);
-                double platformHeight = (int) graduated * heightFactor
-                        + (10 * Math.pow(graduated - (int) graduated - 0.5 - 0.1, 7) * heightFactor);
+                // Calculate plateau height
+                double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(x, z) + plateauCommonness);
+                double noiseValue = rawValue * getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, x, z) * (1 - ((int) (rawValue / plateauThreshold) * 0.05));
+
+                double graduated = noiseValue / plateauThreshold;
+                double platformHeight = (int) graduated * plateauHeight
+                        + (10 * Math.pow(graduated - (int) graduated - 0.5 - 0.1, 7) * plateauHeight);
 
                 boolean placeSand = false;
                 for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
                     placeSand = true;
-                    Material material;
-                    if ((int) graduated * heightFactor == y)
+                    Material material; // Coat plateaus with sand
+                    if ((int) graduated * plateauHeight == y)
                         material = Material.RED_SAND;
-                    else if ((int) graduated * heightFactor == y + 1)
+                    else if ((int) graduated * plateauHeight == y + 1)
                         material = GenUtils.randMaterial(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(height + y));
-                    else if ((int) graduated * heightFactor == y + 2)
-                        material = GenUtils.randMaterial(Material.RED_SAND, BlockUtils.getTerracotta(height + y), BlockUtils.getTerracotta(height + y));
+                    else if ((int) graduated * plateauHeight == y + 2)
+                        material = GenUtils.randMaterial(Material.RED_SAND, BlockUtils.getTerracotta(height + y),
+                                BlockUtils.getTerracotta(height + y));
                     else
                         material = BlockUtils.getTerracotta(height + y);
 
@@ -224,24 +233,40 @@ public class BadlandsHandler extends BiomeHandler {
 
                 }
 
-                if (!placeSand) continue;
+                // Prevent inner parts of plateau from generating sand in vain
+                if (!placeSand || graduated - (int) graduated > 0.2) continue;
+
                 // Surround plateaus with sand
-                int level = (((int) graduated) - 1) * heightFactor;
+                int level = (((int) graduated) - 1) * plateauHeight; // handle second and third levels of plateau
                 for (int sx = x - sandRadius; sx <= x + sandRadius; sx++) {
                     for (int sz = z - sandRadius; sz <= z + sandRadius; sz++) {
                         double distance = Math.sqrt(Math.pow(sx - x, 2) + Math.pow(sz - z, 2));
 
                         if (distance < sandRadius) {
-                            int sandHeight = (int) Math.round(heightFactor * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
+                            // Skip if sand would levitate
+                            if ((int) graduated != 1 && getPlateauHeight(tw, sx, sz) != plateauHeight) continue;
 
+                            int sandHeight = (int) Math.round(plateauHeight * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
                             for (int y = 1 + level; y <= sandHeight + level; y++)
-                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz).isAir()) data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
-
+                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz).isAir())
+                                    data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
                         }
                     }
                 }
             }
         }
+    }
+
+    // This is for optimizing sand, ew
+    int getPlateauHeight(TerraformWorld tw, int x, int z) {
+        double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(x, z) + plateauCommonness);
+        double noiseValue = rawValue * getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, x, z) * (1 - ((int) (rawValue / plateauThreshold) * 0.1));
+
+        double graduated = noiseValue / plateauThreshold;
+        double platformHeight = (int) graduated * plateauHeight
+                + (10 * Math.pow(graduated - (int) graduated - 0.5 - 0.1, 7) * plateauHeight);
+
+        return (int) Math.round(platformHeight);
     }
 
     void spawnDeadTree(PopulatorDataAbstract data, int x, int y, int z) {

@@ -15,6 +15,7 @@ public enum TConfigOption {
     HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level", 62),
     HEIGHT_MAP_DEEP_SEA_LEVEL("heightmap.deep-sea-level", 35),
 
+    //-=[BIOMES]=-
     BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency", 0.0007f),
     BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.0007f),
     BIOME_DITHER("biome.dithering", 0.1d),
@@ -25,6 +26,11 @@ public enum TConfigOption {
     BIOME_SWAMP_CLAY_CHANCE("biome.swamp.clay.chance-out-of-thousand", 20),
     BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT("biome.lukewarm-ocean.coral.minheight", 42),
     BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT("biome.lukewarm-ocean.coral.maxheight", 52),
+    BIOME_BADLANDS_PLATEAU_HEIGHT("biome.badlands.plateaus.height", 15),
+    BIOME_BADLANDS_PLATEAU_SAND_RADIUS("biome.badlands.plateaus.sand-radius", 7),
+    BIOME_BADLANDS_PLATEAU_THRESHOLD("biome.badlands.plateaus.threshold", 0.23),
+    BIOME_BADLANDS_PLATEAU_FREQUENCY("biome.badlands.plateaus.frequency", 0.01),
+    BIOME_BADLANDS_PLATEAU_COMMONNESS("biome.badlands.plateaus.commonness", 0.18),
 
     //-=[TREES]=-
     TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),
