@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.forge;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected.Half;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -9,6 +10,8 @@ import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.structure.village.plains.forge.PlainsVillageForgeWallPiece.PlainsVillageForgeWallType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
+import org.terraform.utils.blockdata.StairBuilder;
+
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;
 
@@ -43,7 +46,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
     
     @Override
     public void postBuildDecoration(Random rand, PopulatorDataAbstract data) {    	
-    	if(getWallType() == PlainsVillageForgeWallType.SOLID) {
+    	if(getWallType() == PlainsVillageForgeWallType.SOLID) { //Door entrance
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
     		Wall w = entry.getKey().getRelative(0, -1, 0);
     		for (int i = 0; i < entry.getValue(); i++) {
@@ -55,8 +58,31 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
 	         core = core.getRear(2);
 	         core.getRelative(0,-1,0).setType(Material.CHISELED_STONE_BRICKS);
     	     BlockUtils.placeDoor(data, Material.OAK_DOOR, core.getX(), core.getY(), core.getZ(), core.getDirection().getOppositeFace());
+    	     
+    	     //Door decor
+    	     core.getRelative(0,2,0).getFront().setType(Material.STONE_BRICK_SLAB);
+    	     
+    	     core.getRelative(0,2,0).setType(Material.CHISELED_STONE_BRICKS);
+    	     core.getLeft().Pillar(2, rand, Material.CHISELED_STONE_BRICKS);
+    	     core.getRight().Pillar(2, rand, Material.CHISELED_STONE_BRICKS);
+    	     
+    	     core.getLeft().getFront().setType(Material.STONE_BRICK_WALL);
+    	     core.getRight().getFront().setType(Material.STONE_BRICK_WALL);
+
+    	     core.getLeft().getFront().getRelative(0,-1,0).setType(Material.STONE_BRICKS);
+    	     core.getRight().getFront().getRelative(0,-1,0).setType(Material.STONE_BRICKS);
+    	     
+    	     new StairBuilder(Material.STONE_BRICK_STAIRS)
+    	     .setFacing(BlockUtils.getLeft(core.getDirection()))
+    	     .apply(core.getRight().getFront().getRelative(0,1,0))
+    	     .setFacing(BlockUtils.getRight(core.getDirection()))
+    	     .apply(core.getLeft().getFront().getRelative(0,1,0))
+    	     .setHalf(Half.TOP)
+    	     .apply(core.getRight().getRelative(0,2,0))
+    	     .setFacing(BlockUtils.getLeft(core.getDirection()))
+    	     .apply(core.getLeft().getRelative(0,2,0));
     	}
-    	else
+    	else //Just a hole in a fence
     	{
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
     		Wall w = entry.getKey();

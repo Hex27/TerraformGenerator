@@ -38,6 +38,7 @@ public class PlainsVillagePopulator extends VillageHousePopulator {
         spawner.setPathPop(new PlainsVillagePathPopulator(tw, spawner.getRooms().values(), random));
         spawner.registerRoomPopulator(new PlainsVillageStandardHousePopulator(random, false, false));
         spawner.registerRoomPopulator(new PlainsVillageTemplePopulator(random, false, true));
+        spawner.registerRoomPopulator(new PlainsVillageForgePopulator(random, false, true));
         spawner.registerRoomPopulator(new PlainsVillageCropFarmPopulator(random, false, false));
 
         spawner.generate(random);

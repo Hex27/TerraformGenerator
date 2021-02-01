@@ -21,7 +21,7 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
 		super(widthX, height, widthZ, type, validDirs);
 	}
 	
-	//Use postBuildDecoration, as only now would we know that it has a roof or not.
+	//Use postBuildDecoration, as the walls are built after build()
     @Override
     public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
     	SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ());

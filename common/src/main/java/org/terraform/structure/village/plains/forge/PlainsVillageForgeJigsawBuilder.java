@@ -19,7 +19,8 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
     public PlainsVillageForgeJigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
         this.pieceRegistry = new JigsawStructurePiece[]{
-        		new PlainsVillageForgeStandardPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+        		new PlainsVillageForgeWeaponSmithPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+                new PlainsVillageForgeMasonPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
                 new PlainsVillageForgeWallPiece(5, 3, 5, JigsawType.END, BlockUtils.directBlockFaces),
                 new PlainsVillageForgeEntrancePiece(5, 3, 5, JigsawType.ENTRANCE, BlockUtils.directBlockFaces)
         };
