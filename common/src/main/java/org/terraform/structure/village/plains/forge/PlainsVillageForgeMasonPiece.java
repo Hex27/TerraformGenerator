@@ -93,7 +93,8 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     		while(target.getType().isSolid()) {
         		target = target.getRelative(0,1,0);
         	}
-    		target.setType(Material.LANTERN);
+    		if(target.getRelative(0,-1,0).getType() != Material.LANTERN)
+    			target.setType(Material.LANTERN);
     	}
     }
     

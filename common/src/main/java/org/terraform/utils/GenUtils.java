@@ -6,6 +6,7 @@ import com.google.common.cache.LoadingCache;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeBank;
@@ -289,7 +290,11 @@ public class GenUtils {
                     y--;
                     continue;
                 }
-
+                if(Tag.SLABS.isTagged(block)) {
+                	y--;
+                	continue;
+                }
+                
                 String name = block.toString();
                 boolean continueMaster = false;
                 for(String contains : BLACKLIST_HIGHEST_GROUND) {
