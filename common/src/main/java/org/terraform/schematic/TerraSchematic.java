@@ -15,6 +15,7 @@ import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.version.Version;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,6 +34,7 @@ public class TerraSchematic {
     HashMap<Vector, BlockData> data = new HashMap<>();
     SimpleBlock refPoint;
     BlockFace face = BlockFace.NORTH;
+    private double VERSION_VALUE;
 
     //North is always the default blockface.
     //
@@ -49,9 +51,12 @@ public class TerraSchematic {
         InputStream is = TerraformGeneratorPlugin.class.getResourceAsStream("/" + internalPath + ".terra");
         @SuppressWarnings("resource")
         Scanner sc = new Scanner(is);    //file to be scanned
-        //returns true if there is another line to read
+
+        String line = sc.nextLine(); //First line is the schematic's version.
+        schem.VERSION_VALUE = Version.toVersionDouble(line);
+        
         while (sc.hasNextLine()) {
-            String line = sc.nextLine();
+            line = sc.nextLine();
             if (line.isEmpty()) continue;
             String[] cont = line.split(":@:");
             String[] v = cont[0].split(",");
@@ -90,7 +95,12 @@ public class TerraSchematic {
     public void apply() {
         BlockDataFixerAbstract bdfa = TerraformGeneratorPlugin.injector.getBlockDataFixer();
         ArrayList<Vector> multiFace = new ArrayList<>();
-
+        
+//        if(this.VERSION_VALUE > 14.4) {
+//        	//Fix weird one block offset.
+//        	refPoint = refPoint.getRelative(1,0,1);
+//        }
+        
         for (Entry<Vector, BlockData> entry : data.entrySet()) {
             Vector pos = entry.getKey().clone();
             BlockData bd = entry.getValue();
@@ -144,7 +154,10 @@ public class TerraSchematic {
                 if (bdfa != null)
                     bdfa.correctFacing(pos, null, bd, face);
             }
-
+            
+//            if(pos.getBlockX() == 0 && pos.getBlockZ() == 0) {
+//            	Bukkit.getLogger().info("DEBUG SCHEMATIC: " + refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()).toVector().toString());
+//            }
             parser.applyData(refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()), bd);
         }
 
@@ -166,7 +179,11 @@ public class TerraSchematic {
         File fout = new File(path);
         FileOutputStream fos = new FileOutputStream(fout);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-
+        
+        //Append version header
+        bw.write(Version.DOUBLE+"");
+        bw.newLine();
+        
         for (Entry<Vector, BlockData> entry : data.entrySet()) {
             String v = entry.getKey().getBlockX() + "," + entry.getKey().getBlockY() + ',' + entry.getKey().getBlockZ();
             bw.write(v + ":@:" + entry.getValue().getAsString());
@@ -189,5 +206,9 @@ public class TerraSchematic {
     public void setFace(BlockFace face) {
         this.face = face;
     }
+
+	public double getVersionValue() {
+		return VERSION_VALUE;
+	}
 
 }

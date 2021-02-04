@@ -74,6 +74,6 @@ public class PlainsVillageTemplePopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return true;
+        return room.getWidthX() >= 15;
     }
 }

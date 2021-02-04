@@ -34,6 +34,7 @@ public class PlainsVillageAnimalPenPopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
     	SimpleBlock jobBlock = null;
+    	boolean spawnedWater = false;
     	//Place fence
     	for(Entry<Wall,Integer> entry:room.getFourWalls(data, 2).entrySet()) {
     		Wall w = entry.getKey().getGround().getRelative(0, 1, 0);
@@ -74,8 +75,8 @@ public class PlainsVillageAnimalPenPopulator extends RoomPopulatorAbstract {
     			}
     			
     			if(GenUtils.chance(rand, 1, 70)) {
-    				if(rand.nextBoolean()) { //Water 
-    					
+    				if(!spawnedWater && rand.nextBoolean()) { //Water 
+    					spawnedWater = true;
     					Wall core = new Wall(new SimpleBlock(data, x,0,z),BlockUtils.getDirectBlockFace(rand)).getGround().getRelative(0,1,0);
     					new StairBuilder(Material.COBBLESTONE_STAIRS)
     					.setHalf(Half.TOP)
@@ -111,8 +112,8 @@ public class PlainsVillageAnimalPenPopulator extends RoomPopulatorAbstract {
     	EntityType animal = farmAnimals[rand.nextInt(farmAnimals.length)];
         //Spawn animals
         for (int i = 0; i < GenUtils.randInt(3, 7); i++) {
-            int[] coords = room.randomCoords(rand, 4);
-            int highest = GenUtils.getHighestGround(data, coords[0], coords[2]);
+        	int[] coords = new int[] {room.getX(),0,room.getZ()};
+            int highest = GenUtils.getTrueHighestBlock(data, coords[0], coords[2]);
             data.addEntity(coords[0], highest + 1, coords[2], animal);
         }
         
@@ -137,6 +138,6 @@ public class PlainsVillageAnimalPenPopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return (room.getWidthX() < 18 || room.getWidthZ() < 18);
+        return room.getWidthX() >= 15 && (room.getWidthX() < 18 || room.getWidthZ() < 18);
     }
 }

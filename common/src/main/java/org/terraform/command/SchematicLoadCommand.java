@@ -39,6 +39,7 @@ public class SchematicLoadCommand extends DCCommand {
             throws InvalidArgumentException {
         ArrayList<Object> parsed = this.parseArguments(sender, args);
         TerraSchematic schem = (TerraSchematic) parsed.get(0);
+        sender.sendMessage("Schematic Version: " + schem.getVersionValue());
         schem.setFace(BlockUtils.getDirectBlockFace(new Random()));
         schem.apply();
     }

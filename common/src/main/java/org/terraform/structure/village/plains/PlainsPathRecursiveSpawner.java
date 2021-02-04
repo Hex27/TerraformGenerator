@@ -27,7 +27,10 @@ public class PlainsPathRecursiveSpawner {
     private final int range;
     private int minRoomWidth = 15;
     private int maxRoomWidth = 20;
-
+    private int smallRoomChance = 10;
+    private int minSmallRoomWidth = 5;
+    private int maxSmallRoomWidth = 10;
+    
     /** 
      * 1 for max room density, 0 for no rooms.
      */
@@ -66,6 +69,13 @@ public class PlainsPathRecursiveSpawner {
                         SimpleLocation adj = loc.getRelative(adjDir);
                         if (isLocationValid(adj)) {
                             BlockFace rF = adjDir.getOppositeFace();
+                            int minRoomWidth = this.minRoomWidth;
+                            int maxRoomWidth = this.maxRoomWidth;
+                            if(GenUtils.chance(random, smallRoomChance, 100)) {
+                            	minRoomWidth = this.minSmallRoomWidth;
+                            	maxRoomWidth = this.maxSmallRoomWidth;
+                            }
+                            
                             DirectionalCubeRoom room = new DirectionalCubeRoom(
                                     rF, GenUtils.randInt(minRoomWidth, maxRoomWidth), 20, GenUtils.randInt(minRoomWidth, maxRoomWidth),
                                     loc.getX() + adjDir.getModX() * 11,

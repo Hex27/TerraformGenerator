@@ -192,6 +192,6 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return (room.getWidthX() < 18 || room.getWidthZ() < 18);
+        return room.getWidthX() >= 15 && (room.getWidthX() < 18 || room.getWidthZ() < 18);
     }
 }

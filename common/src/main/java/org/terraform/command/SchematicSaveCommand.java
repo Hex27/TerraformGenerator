@@ -47,7 +47,7 @@ public class SchematicSaveCommand extends DCCommand {
             return;
         }
 
-        TerraSchematic s = new TerraSchematic(p.getLocation().clone().add(-1, 0, -1));
+        TerraSchematic s = new TerraSchematic(p.getLocation().clone());
         for (Block b : rg.getBlocks()) {
             if (b.getType() == Material.AIR)
                 continue;
