@@ -1,7 +1,6 @@
 package org.terraform.structure.village.plains;
 
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -56,7 +55,7 @@ public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
                     target = entrance.getLeft(2).getGround().getRelative(0, 1, 0).get();
                 else
                     target = entrance.getRight(2).getGround().getRelative(0, 1, 0).get();
-                if (canPlaceLamp(target)) {
+                if (PlainsVillagePathPopulator.canPlaceLamp(target)) {
                     placedLamp = true;
                     PlainsVillagePathPopulator.placeLamp(rand, target);
                 }
@@ -68,16 +67,6 @@ public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
         }
     }
 
-    private boolean canPlaceLamp(SimpleBlock target) {
-
-        for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
-            for (int i = 0; i < 6; i++)
-                if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
-                    return false;
-        }
-
-        return true;
-    }
 
     @Override
     public boolean canPopulate(CubeRoom room) {

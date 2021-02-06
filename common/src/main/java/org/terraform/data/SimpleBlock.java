@@ -57,6 +57,10 @@ public class SimpleBlock {
         this.z = b.getZ();
         //this.data = b.getBlockData().getAsString();
     }
+    
+    public SimpleBlock getAtY(int y) {
+    	return new SimpleBlock(popData,x,y,z);
+    }
 
     public Vector getVector() {
         return new Vector(x, y, z);

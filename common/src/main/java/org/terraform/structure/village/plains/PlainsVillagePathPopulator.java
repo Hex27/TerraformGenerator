@@ -45,7 +45,24 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
             b.getRelative(face).getRelative(0, 5, 0).setType(GenUtils.randMaterial(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
         }
     }
+    
+	/**
+	 * Only checks if the target location has enough space to place a lamp. Other
+	 * checks such as ground type etc must be done elsewhere
+	 * @param target the block where the base of the lamp is.
+	 * @return whether or not the lamp has enough space to be placed here.
+	 */
+    public static boolean canPlaceLamp(SimpleBlock target) {
 
+        for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
+            for (int i = 0; i < 6; i++)
+                if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
+                    return false;
+        }
+
+        return true;
+    }
+    
     @Override
     public void populate(PathPopulatorData ppd) {
 
@@ -69,7 +86,31 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
 
             return;
         }
-
+        
+        //Decorate the sides of the paths
+        Wall pathCore = new Wall(ppd.base, ppd.dir);
+    	for(BlockFace face:BlockUtils.getAdjacentFaces(ppd.dir)) {
+            for(int i = 0; i < 4; i++) {
+        		Wall target = pathCore.getRelative(face,i).getGround();
+            	if(!target.getRelative(0,1,0).getType().isSolid()
+            			&& target.getRelative(0,1,0).getType() != Material.WATER
+            			&& BlockUtils.isDirtLike(target.getType()) 
+            			&& target.getType() != Material.GRASS_PATH) {
+            		if(GenUtils.chance(2,5)) { //Leaves
+            			target.getRelative(0,1,0).setType(Material.OAK_LEAVES);
+            		}else if(GenUtils.chance(1, 5)) { //Flowers
+            			BlockUtils.setDoublePlant(target.get().getPopData(), target.getX(), target.getY()+1, target.getZ(), BlockUtils.pickTallFlower());
+            		}else if(GenUtils.chance(1, 10)) { //Small cobble walls with lanterns
+            			target.getRelative(0,1,0).setType(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
+            			target.getRelative(0,2,0).setType(Material.LANTERN);
+            		}
+            		
+            		break;
+            	}
+        	}
+        }
+        	
+        
         if (GenUtils.chance(random, 1, 15)) {
             BlockFace side = BlockUtils.getTurnBlockFace(random, ppd.dir);
             SimpleBlock target = new SimpleBlock(

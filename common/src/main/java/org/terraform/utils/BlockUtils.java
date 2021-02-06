@@ -639,6 +639,37 @@ public class BlockUtils {
             }
         }
     }
+    
+    public static void replaceLowerSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean hardReplace, Material... type) {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+        if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
+            //block.setReplaceType(ReplaceType.ALL);
+            block.setType(GenUtils.randMaterial(new Random(seed), type));
+            return;
+        }
+
+        Random rand = new Random(seed);
+        FastNoise noise = new FastNoise(seed);
+        noise.SetNoiseType(NoiseType.Simplex);
+        noise.SetFrequency(0.09f);
+
+        for (float x = -rX; x <= rX; x++) {
+            for (float y = -rY; y <= 0; y++) {
+                for (float z = -rZ; z <= rZ; z++) {
+                    SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
+                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
+                            + Math.pow(y, 2) / Math.pow(rY, 2)
+                            + Math.pow(z, 2) / Math.pow(rZ, 2);
+                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
+                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randMaterial(rand, type));
+                        //rel.setReplaceType(ReplaceType.ALL);
+                    }
+                }
+            }
+        }
+    }
 
     public static BlockFace[] getAdjacentFaces(BlockFace original) {
         //   N

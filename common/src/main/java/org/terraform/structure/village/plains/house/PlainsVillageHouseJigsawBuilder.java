@@ -29,6 +29,11 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
     }
 
     @Override
+    public JigsawStructurePiece getFirstPiece(Random random) {
+        return new PlainsVillageBedroomPiece(var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
+    }
+    
+    @Override
     public void build(Random random) {
         super.build(random);
 

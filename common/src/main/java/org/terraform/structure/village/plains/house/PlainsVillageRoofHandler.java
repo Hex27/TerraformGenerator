@@ -8,7 +8,6 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -48,7 +47,6 @@ public class PlainsVillageRoofHandler {
         for (int x = lowestCoords[0]; x <= highestCoords[0]; x += builder.getPieceWidth()) {
             for (int z = lowestCoords[1]; z <= highestCoords[1]; z += builder.getPieceWidth()) {
                 if (!builder.getPieces().containsKey(new SimpleLocation(x, y, z))) {
-                    TerraformGeneratorPlugin.logger.info("Failed rec check: " + x + "," + y + "," + z);
                     return false;
                 } else
                     count++;

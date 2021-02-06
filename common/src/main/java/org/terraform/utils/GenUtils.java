@@ -271,6 +271,10 @@ public class GenUtils {
         while(y > 0) {
             Material block = data.getType(x, y, z);
             if(BlockUtils.isStoneLike(block)) break;
+            if(block == Material.SAND 
+            	|| block == Material.RED_SAND
+            	|| block == Material.GRAVEL)
+            	break;
 
             if(block.isSolid()) {
                 switch(block) {

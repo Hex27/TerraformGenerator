@@ -87,9 +87,9 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
         //Try to place large windows between pairs of walls
         for(JigsawStructurePiece wallPiece:overlapperPieces) {
     		for(BlockFace face:BlockUtils.getAdjacentFaces(wallPiece.getRotation())) {
-    			if(wallPiece instanceof PlainsVillageTempleWallPiece && hasAdjacentWall(wallPiece, face, overlapperPieces)) {
-    				((PlainsVillageTempleWallPiece)wallPiece)
-    					.setLargeWindow(this.core.getPopData(),face);
+    			if(hasAdjacentWall(wallPiece, face, overlapperPieces)) {
+    				PlainsVillageTempleWallPiece
+    					.setLargeWindow(this.core.getPopData(),wallPiece.getRotation(), wallPiece.getRoom(), face);
     			}
     		}
         }

@@ -18,4 +18,14 @@ public abstract class StructurePopulator {
     public abstract int[] getNearestFeature(TerraformWorld world, int rawX, int rawZ);
 
     public abstract Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ);
+    
+    /**
+     * Refers to 6x6 chunks as a buffer distance for the structure to spawn 
+     * with the default value.
+     * This buffer will force biome populators to stop populating certain things for that chunk radius.
+     * @return
+     */
+    public int getChunkBufferDistance() {
+    	return 3;
+    }
 }

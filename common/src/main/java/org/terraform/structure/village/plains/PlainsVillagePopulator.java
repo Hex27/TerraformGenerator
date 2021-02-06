@@ -6,13 +6,13 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.VillageHousePopulator;
+import org.terraform.structure.village.VillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class PlainsVillagePopulator extends VillageHousePopulator {
+public class PlainsVillagePopulator extends VillagePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
@@ -42,6 +42,8 @@ public class PlainsVillagePopulator extends VillageHousePopulator {
         spawner.registerRoomPopulator(new PlainsVillageCropFarmPopulator(random, false, false));
         spawner.registerRoomPopulator(new PlainsVillageAnimalPenPopulator(random, false, false));
         spawner.registerRoomPopulator(new PlainsVillageWellPopulator(random, false, false));
+        spawner.registerRoomPopulator(new PlainsVillageFountainPopulator(random, false, true));
+        spawner.registerRoomPopulator(new PlainsVillagePondPopulator(random, false, false));
 
         spawner.generate(random);
         spawner.build(random);

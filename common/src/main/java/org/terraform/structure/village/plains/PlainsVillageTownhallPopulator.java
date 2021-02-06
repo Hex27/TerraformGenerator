@@ -38,7 +38,8 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
         int z = room.getZ();
         int y = GenUtils.getHighestGround(data, x, z);
         try {
-            BiomeBank biome = tw.getBiomeBank(x, y, z);
+        	//FORCE PLAINS FOR NOW.
+            BiomeBank biome = BiomeBank.PLAINS; //tw.getBiomeBank(x, y, z);
             y += GenUtils.randInt(this.rand, 2, 4);
             TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new Location(tw.getWorld(), x, y, z));
             farmHouse.parser = new FarmhouseSchematicParser(biome, this.rand, data);

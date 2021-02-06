@@ -42,7 +42,7 @@ public class PlainsVillageAnimalPenPopulator extends RoomPopulatorAbstract {
     		for(int i = 0; i < entry.getValue(); i++) {
     			if(w.getDirection().getOppositeFace() == ((DirectionalCubeRoom) room).getDirection()) {
     				if(i == entry.getValue()/2) {
-    					jobBlock = w.getRear(rand.nextInt(2)+1).get();
+    					jobBlock = w.getRear(2).get();
     				}
     			}
     			if(i % 2 == 0) {
@@ -58,10 +58,11 @@ public class PlainsVillageAnimalPenPopulator extends RoomPopulatorAbstract {
     		}
     	}
     	
-    	//Decorations, like water and hay
-    	int[] lowerCorner = room.getLowerCorner(4);
-    	int[] upperCorner = room.getUpperCorner(4);
+    	//Decorations
+    	int[] lowerCorner = room.getLowerCorner(3);
+    	int[] upperCorner = room.getUpperCorner(3);
     	
+    	//Change the floor
     	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
     		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
     			
@@ -73,6 +74,14 @@ public class PlainsVillageAnimalPenPopulator extends RoomPopulatorAbstract {
     				if(!data.getType(x, highest+1, z).isSolid())
 	    				BlockUtils.setDoublePlant(data, x, highest+1, z, Material.TALL_GRASS);
     			}
+    		}
+    	
+
+    	lowerCorner = room.getLowerCorner(5);
+    	upperCorner = room.getUpperCorner(5);
+    	//Place objects
+    	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+    		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
     			
     			if(GenUtils.chance(rand, 1, 70)) {
     				if(!spawnedWater && rand.nextBoolean()) { //Water 

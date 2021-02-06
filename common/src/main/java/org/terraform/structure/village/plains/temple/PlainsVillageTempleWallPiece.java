@@ -7,6 +7,7 @@ import org.bukkit.block.data.type.Slab;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.blockdata.SlabBuilder;
@@ -79,13 +80,13 @@ public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
 
     }
 
-    public void setLargeWindow(PopulatorDataAbstract data, BlockFace face) {
+    public static void setLargeWindow(PopulatorDataAbstract data, BlockFace rotation, CubeRoom room, BlockFace face) {
     	Material pane;
     	Wall w = new Wall(new SimpleBlock(data,
-    			getRoom().getX(),
-    			getRoom().getY()+2,
-    			getRoom().getZ()),getRotation());
-    	w = w.getRelative(getRotation().getOppositeFace(),2).getRelative(face,2);
+    			room.getX(),
+    			room.getY()+2,
+    			room.getZ()),rotation);
+    	w = w.getRelative(rotation.getOppositeFace(),2).getRelative(face,2);
     	
     	//Remove roof ledge for windows
     	w.getRear().getRelative(0,3,0).Pillar(3,new Random(),Material.AIR);

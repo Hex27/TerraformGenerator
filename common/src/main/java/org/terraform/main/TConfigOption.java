@@ -66,6 +66,7 @@ public enum TConfigOption {
     STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN("structures.pyramid.spawn-elder-guardian", true),
     STRUCTURES_FARMHOUSE_ENABLED("structures.farmhouse.enabled", true),
     STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled", true),
+    STRUCTURES_PLAINSVILLAGE_ENABLED("structures.plainsvillage.enabled", true),
     STRUCTURES_SWAMPHUT_ENABLED("structures.swamphut.enabled", true),
     STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND("structures.swamphut.chance-out-of-10000", 10),
     STRUCTURES_SWAMPHUT_SPAWN_MUDFLAT_HEADS("structures.swamphut.spawn-mudflat-heads",true),

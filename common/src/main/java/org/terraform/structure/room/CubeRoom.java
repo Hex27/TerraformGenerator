@@ -432,4 +432,14 @@ public class CubeRoom {
     public void setZ(int z) {
         this.z = z;
     }
+    
+    public void debugRedGround(PopulatorDataAbstract data) {
+    	int[] lowerCorner = getLowerCorner();
+    	int[] upperCorner = getUpperCorner();
+    	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+    		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+    			data.setType(x, GenUtils.getHighestGround(data, x, z), z, Material.RED_WOOL);
+    		}
+    	}
+    }
 }

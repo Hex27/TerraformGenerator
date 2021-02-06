@@ -11,6 +11,7 @@ import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pyramid.PyramidPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.structure.village.VillagePopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class StructureRegistry {
 
     public static void init() {
         registerStructure(StructureType.VILLAGE, new VillageHousePopulator());
+        //registerStructure(StructureType.VILLAGE, new VillagePopulator());
 
         registerStructure(StructureType.MEGA_DUNGEON, new PyramidPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new MonumentPopulator());

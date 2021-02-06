@@ -45,7 +45,6 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
                             || banks.contains(BiomeBank.ICE_SPIKES)) {
                         return TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean();
                     } else if (banks.contains(BiomeBank.FOREST)
-                            || banks.contains(BiomeBank.PLAINS)
                             || banks.contains(BiomeBank.TAIGA)
                             || banks.contains(BiomeBank.SAVANNA)
                             || banks.contains(BiomeBank.SNOWY_TAIGA)) {
@@ -87,7 +86,6 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
                     new AnimalFarmPopulator().populate(tw, data);
                 } else if (banks.contains(BiomeBank.FOREST)
-                        || banks.contains(BiomeBank.PLAINS)
                         || banks.contains(BiomeBank.TAIGA)
                         || banks.contains(BiomeBank.SAVANNA)
                         || banks.contains(BiomeBank.SNOWY_TAIGA)) {

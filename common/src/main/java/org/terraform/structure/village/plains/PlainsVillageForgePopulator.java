@@ -1,7 +1,6 @@
 package org.terraform.structure.village.plains;
 
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -34,8 +33,8 @@ public class PlainsVillageForgePopulator extends RoomPopulatorAbstract {
         builder.generate(this.rand);
         builder.build(this.rand);
 
-        Wall entrance = builder.getEntranceBlock().getRear().getGround();
-        int maxDepth = 6;
+        Wall entrance = builder.getEntranceBlock().getGround();
+        int maxDepth = 12;
 
         boolean placedLamp = false;
         //Connect front to the nearest path.
@@ -49,7 +48,7 @@ public class PlainsVillageForgePopulator extends RoomPopulatorAbstract {
                     target = entrance.getLeft(2).getGround().getRelative(0, 1, 0).get();
                 else
                     target = entrance.getRight(2).getGround().getRelative(0, 1, 0).get();
-                if (canPlaceLamp(target)) {
+                if (PlainsVillagePathPopulator.canPlaceLamp(target)) {
                     placedLamp = true;
                     PlainsVillagePathPopulator.placeLamp(rand, target);
                 }
@@ -59,17 +58,6 @@ public class PlainsVillageForgePopulator extends RoomPopulatorAbstract {
             entrance = entrance.getFront().getGround();
             maxDepth--;
         }
-    }
-
-    private boolean canPlaceLamp(SimpleBlock target) {
-
-        for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
-            for (int i = 0; i < 6; i++)
-                if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
-                    return false;
-        }
-
-        return true;
     }
 
     @Override
