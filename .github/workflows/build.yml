@@ -28,4 +28,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: TerraformGenerator-${{ matrix.java }}
-          path: TerraformGenerator.jar
+          path: \TerraformGenerator\build\libs\TerraformGenerator.jar
