@@ -27,5 +27,5 @@ jobs:
           ./gradlew build
       - uses: actions/upload-artifact@v2
         with:
-          name: TerraformGenerator-${{ matrix.java }}
-          path: \TerraformGenerator\build\libs\TerraformGenerator.jar
+          name: TerraformGenerator-${{ matrix.java }}  
+          path: jars/*.jar
