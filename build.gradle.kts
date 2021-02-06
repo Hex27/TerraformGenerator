@@ -84,6 +84,12 @@ val testWithPaper = tasks.create("testWithPaper") {
     }
 }
 
+}
+
+def outputTasks() {
+    ["shadowJar", ":Bukkit:shadowJar", ":Bungee:shadowJar"].stream().map({ tasks.findByPath(it) })
+}
+
 fun gitClone(name: String) {
     val stdout = ByteArrayOutputStream()
     exec {
