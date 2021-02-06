@@ -41,7 +41,7 @@ public class WarmOceansHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         //boolean growCorals = random.nextBoolean();
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
@@ -54,11 +54,14 @@ public class WarmOceansHandler extends BiomeHandler {
                     if (random.nextBoolean() && y < TerraformGenerator.seaLevel - 3)
                         BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_SEAGRASS);
                 }
-                //else if(GenUtils.chance(random, 5, 100) && growCorals){
-                //	CoralGenerator.generateCoral(data,x,y+1,z);
-                //}
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

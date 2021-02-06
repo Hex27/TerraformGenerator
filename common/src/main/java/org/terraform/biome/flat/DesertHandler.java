@@ -35,7 +35,7 @@ public class DesertHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         boolean cactusGathering = GenUtils.chance(random, 1, 100);
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
@@ -71,4 +71,10 @@ public class DesertHandler extends BiomeHandler {
             new DesertWellPopulator().populate(world, random, data, false);
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		// TODO Auto-generated method stub
+		
+	}
 }

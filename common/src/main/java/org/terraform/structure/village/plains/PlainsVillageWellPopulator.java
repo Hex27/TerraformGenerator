@@ -60,7 +60,7 @@ public class PlainsVillageWellPopulator extends RoomPopulatorAbstract {
 			
 			for(int nx = -3; nx <= 3; nx++) {
 				for(int nz = -3; nz <= 3; nz++) {
-					Wall target = new Wall(core.getRelative(nx,0,nz));
+					Wall target = new Wall(core.getRelative(nx,-1,nz));
 					if(target.getType() == Material.COBBLESTONE
 							||target.getType() == Material.MOSSY_COBBLESTONE) {
 						target.getRelative(0,-1,0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);

@@ -48,7 +48,67 @@ public class JungleHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    	//Almost everything about jungle population is highly disruptive.
+    	//Only grass spawning remains here. Mushrooms and everything else go to
+    	//populateLargeItems
+    	
+    	 for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                 int y = GenUtils.getHighestGround(data, x, z);
+
+                 // Generate grass
+                 if (data.getBiome(x, z) == getBiome() &&
+                         BlockUtils.isDirtLike(data.getType(x, y, z))) {
+                     if (data.getType(x, y + 1, z).isAir() && GenUtils.chance(2, 3)) {
+                         if (random.nextBoolean()) {
+                             data.setType(x, y + 1, z, GenUtils.weightedRandomMaterial(random, Material.GRASS, 5, BlockUtils.pickFlower(), 1));
+                         } else {
+                             if (data.getType(x, y + 2, z).isAir())
+                                 BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
+                         }
+                     }
+                 }
+             }
+    	 }
+    }
+
+    private void createBush(PopulatorDataAbstract data, float noiseIncrement, int oriX, int oriY, int oriZ) {
+        // noiseIncrement is always < 0.5 and > 0
+        float rX = 2.5f + (float) (noiseIncrement * Math.random());
+        float rY = 1.3f + (float) (noiseIncrement * Math.random());
+        float rZ = 2.5f + (float) (noiseIncrement * Math.random());
+
+        SimpleBlock base = new SimpleBlock(data, oriX, oriY, oriZ);
+
+        for (int x = -Math.round(rX); x <= rX; x++) {
+            for (int y = -Math.round(rY); y <= rY; y++) {
+                for (int z = -Math.round(rZ); z <= rZ; z++) {
+                    double equationResult = Math.pow(x, 2) / Math.pow(rX, 2) +
+                            Math.pow(y, 2) / Math.pow(rY, 2) +
+                            Math.pow(z, 2) / Math.pow(rZ, 2);
+
+                    if (equationResult <= 1) {
+                        SimpleBlock block = base.getRelative(x, y + 1, z);
+
+                        // Skip random leaves, less leaves when close to center.
+                        if (Math.random() < equationResult - 0.5)
+                            continue;
+
+                        if (!block.getType().isSolid()) {
+                            block.setType(Material.JUNGLE_LEAVES);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (Math.random() > 0.3)
+            base.setType(Material.JUNGLE_LOG);
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
         FastNoise groundWoodNoise = new FastNoise((int) (tw.getSeed() * 12));
         groundWoodNoise.SetNoiseType(NoiseType.SimplexFractal);
         groundWoodNoise.SetFractalOctaves(3);
@@ -110,17 +170,10 @@ public class JungleHandler extends BiomeHandler {
                         data.setType(x, y + 1, z, Material.JUNGLE_WOOD);
                 }
 
-                // Generate grass and mushrooms
+                // Generate mushrooms
                 if (data.getBiome(x, z) == getBiome() &&
                         BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                    if (data.getType(x, y + 1, z).isAir() && GenUtils.chance(2, 3)) {
-                        if (random.nextBoolean()) {
-                            data.setType(x, y + 1, z, GenUtils.weightedRandomMaterial(random, Material.GRASS, 5, BlockUtils.pickFlower(), 1));
-                        } else {
-                            if (data.getType(x, y + 2, z).isAir())
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                        }
-                    } else if (data.getType(x, y + 1, z) == Material.JUNGLE_WOOD
+                    if (data.getType(x, y + 1, z) == Material.JUNGLE_WOOD
                             && data.getType(x, y + 2, z).isAir()
                             && GenUtils.chance(2, 9)) {
                         data.setType(x, y + 2, z, GenUtils.randMaterial(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM));
@@ -128,39 +181,5 @@ public class JungleHandler extends BiomeHandler {
                 }
             }
         }
-    }
-
-    private void createBush(PopulatorDataAbstract data, float noiseIncrement, int oriX, int oriY, int oriZ) {
-        // noiseIncrement is always < 0.5 and > 0
-        float rX = 2.5f + (float) (noiseIncrement * Math.random());
-        float rY = 1.3f + (float) (noiseIncrement * Math.random());
-        float rZ = 2.5f + (float) (noiseIncrement * Math.random());
-
-        SimpleBlock base = new SimpleBlock(data, oriX, oriY, oriZ);
-
-        for (int x = -Math.round(rX); x <= rX; x++) {
-            for (int y = -Math.round(rY); y <= rY; y++) {
-                for (int z = -Math.round(rZ); z <= rZ; z++) {
-                    double equationResult = Math.pow(x, 2) / Math.pow(rX, 2) +
-                            Math.pow(y, 2) / Math.pow(rY, 2) +
-                            Math.pow(z, 2) / Math.pow(rZ, 2);
-
-                    if (equationResult <= 1) {
-                        SimpleBlock block = base.getRelative(x, y + 1, z);
-
-                        // Skip random leaves, less leaves when close to center.
-                        if (Math.random() < equationResult - 0.5)
-                            continue;
-
-                        if (!block.getType().isSolid()) {
-                            block.setType(Material.JUNGLE_LEAVES);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (Math.random() > 0.3)
-            base.setType(Material.JUNGLE_LOG);
     }
 }

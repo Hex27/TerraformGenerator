@@ -36,7 +36,7 @@ public class StructureRegistry {
 
     public static void init() {
         registerStructure(StructureType.VILLAGE, new VillageHousePopulator());
-        //registerStructure(StructureType.VILLAGE, new VillagePopulator());
+        registerStructure(StructureType.VILLAGE, new VillagePopulator());
 
         registerStructure(StructureType.MEGA_DUNGEON, new PyramidPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new MonumentPopulator());

@@ -76,11 +76,51 @@ public class DarkForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        Vector2f[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 2 * 16);
-        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25);
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+      
+        boolean spawnHeads = TConfigOption.BIOME_DARKFOREST_SPAWN_HEADS.getBoolean() 
+        		&& GenUtils.chance(random, 1, 100);
 
-        // Big trees and giant mushrooms
+        //Small decorations
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int y = GenUtils.getHighestGround(data, x, z);
+                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
+                    if (GenUtils.chance(random, 3, 10)) {
+                        if (data.getType(x, y + 1, z) != Material.AIR) continue;
+                        //Only grass and mushrooms
+                        data.setType(x, y + 1, z, Material.GRASS);
+                        if (random.nextBoolean()) {
+                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
+                        } else {
+                            Material mushroom = Material.RED_MUSHROOM;
+                            if (random.nextBoolean())
+                                mushroom = Material.BROWN_MUSHROOM;
+                            data.setType(x, y + 1, z, mushroom);
+                        }
+                    }
+                }
+
+                if (spawnHeads && GenUtils.chance(random, 1, 50)) {
+                    if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
+                        Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
+                        skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
+
+                        data.setBlockData(x, y + 1, z, skull);
+                    }
+                }
+            }
+        }
+
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		Vector2f[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 2 * 16);
+        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25);
+        Vector2f[] obelisks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 12);
+
+		// Big trees and giant mushrooms
         for (Vector2f tree : bigTrees) {
             int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
 
@@ -111,48 +151,18 @@ public class DarkForestHandler extends BiomeHandler {
                         .build(tw, data, (int) tree.x, treeY + 1, (int) tree.y);
             }
         }
+        
 
-        boolean spawnHeads = GenUtils.chance(random, 1, 100);
-
-        //Small decorations
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                    if (GenUtils.chance(random, 3, 10)) {
-                        if (data.getType(x, y + 1, z) != Material.AIR) continue;
-                        //Only grass and mushrooms
-                        data.setType(x, y + 1, z, Material.GRASS);
-                        if (random.nextBoolean()) {
-                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                        } else {
-                            Material mushroom = Material.RED_MUSHROOM;
-                            if (random.nextBoolean())
-                                mushroom = Material.BROWN_MUSHROOM;
-                            data.setType(x, y + 1, z, mushroom);
-                        }
-                    }
-
-                    //Obelisks
-                    if (GenUtils.chance(random, 1, 1000)) {
-                        if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                            for (int i = 0; i < GenUtils.randInt(3, 6); i++) {
-                                spawnRock(random, data, x, y + i + 1, z);
-                            }
-                        }
-                    }
+        //Obelisks
+        for (Vector2f tree : obelisks) {
+        	int x = (int) tree.x;
+        	int z = (int) tree.y;
+        	int y = GenUtils.getHighestGround(data, x, z);
+            if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
+                for (int i = 0; i < GenUtils.randInt(3, 6); i++) {
+                    spawnRock(random, data, x, y + i + 1, z);
                 }
-
-                if (spawnHeads && GenUtils.chance(random, 1, 50)) {
-                    if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                        Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
-                        skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
-
-                        data.setBlockData(x, y + 1, z, skull);
-                    }
-                }
-            }
+            }	
         }
-
-    }
+	}
 }

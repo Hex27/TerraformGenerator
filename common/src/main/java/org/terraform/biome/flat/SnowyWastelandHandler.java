@@ -43,25 +43,7 @@ public class SnowyWastelandHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-
-        for (int i = 0; i < GenUtils.randInt(0, 2); i++) {
-            int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
-            //Block b = loc.getBlock().getRelative(0,1,0);
-            if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
-            if (data.getType(loc[0], loc[1], loc[2]) != Material.SNOW_BLOCK) continue;
-
-            BlockUtils.spawnPillar(random, data, loc[0], loc[1], loc[2], Material.SPRUCE_LOG, 3, 6);
-
-            if (GenUtils.chance(1, 3))
-                new FractalTreeBuilder(FractalTypes.Tree.FROZEN_TREE_SMALL)
-                        .setSnowyLeaves(true).build(world, data, loc[0], loc[1] + 1, loc[2]);
-            //BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
-
-            if (GenUtils.chance(1, 30))
-                new FractalTreeBuilder(FractalTypes.Tree.FROZEN_TREE_BIG)
-                        .build(world, data, loc[0], loc[1] + 1, loc[2]);
-        }
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -84,4 +66,27 @@ public class SnowyWastelandHandler extends BiomeHandler {
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+
+        for (int i = 0; i < GenUtils.randInt(0, 2); i++) {
+            int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
+            //Block b = loc.getBlock().getRelative(0,1,0);
+            if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
+            if (data.getType(loc[0], loc[1], loc[2]) != Material.SNOW_BLOCK) continue;
+
+            BlockUtils.spawnPillar(random, data, loc[0], loc[1], loc[2], Material.SPRUCE_LOG, 3, 6);
+
+            if (GenUtils.chance(1, 3))
+                new FractalTreeBuilder(FractalTypes.Tree.FROZEN_TREE_SMALL)
+                        .setSnowyLeaves(true).build(world, data, loc[0], loc[1] + 1, loc[2]);
+            //BlockUtils.spawnPillar(random,data, loc[0],loc[1],loc[2],Material.SPRUCE_LOG,3,6);
+
+            if (GenUtils.chance(1, 30))
+                new FractalTreeBuilder(FractalTypes.Tree.FROZEN_TREE_BIG)
+                        .build(world, data, loc[0], loc[1] + 1, loc[2]);
+        }
+
+	}
 }

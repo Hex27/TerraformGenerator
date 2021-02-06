@@ -44,20 +44,8 @@ public class SnowyTaigaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        Vector2f[] trees = GenUtils.randomObjectPositions(world, data.getChunkX(), data.getChunkZ(), 11);
-
-        for (Vector2f pos : trees) {
-            if (data.getBiome((int) pos.x, (int) pos.y) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, (int) pos.x, (int) pos.y);
-
-                // Rarely spawn huge taiga trees
-                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20))
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).setSnowyLeaves(true).build(world, data, (int) pos.x, treeY, (int) pos.y);
-                else // Normal trees
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).setSnowyLeaves(true).build(world, data, (int) pos.x, treeY, (int) pos.y);
-            }
-        }
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+        
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -84,4 +72,21 @@ public class SnowyTaigaHandler extends BiomeHandler {
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+		Vector2f[] trees = GenUtils.randomObjectPositions(world, data.getChunkX(), data.getChunkZ(), 11);
+
+        for (Vector2f pos : trees) {
+            if (data.getBiome((int) pos.x, (int) pos.y) == getBiome()) {
+                int treeY = GenUtils.getHighestGround(data, (int) pos.x, (int) pos.y);
+
+                // Rarely spawn huge taiga trees
+                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20))
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).setSnowyLeaves(true).build(world, data, (int) pos.x, treeY, (int) pos.y);
+                else // Normal trees
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).setSnowyLeaves(true).build(world, data, (int) pos.x, treeY, (int) pos.y);
+            }
+        }
+	}
 }

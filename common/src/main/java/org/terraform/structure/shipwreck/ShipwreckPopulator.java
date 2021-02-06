@@ -144,4 +144,9 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     public boolean isEnabled() {
         return TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean();
     }
+    
+    @Override
+    public int getChunkBufferDistance() {
+    	return 1;
+    }
 }

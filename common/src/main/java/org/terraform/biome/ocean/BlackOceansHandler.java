@@ -82,17 +82,11 @@ public class BlackOceansHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int coreHeight = HeightMap.getBlockHeight(world, x, z);
                 if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
-                //black spike
-                if (GenUtils.chance(random, 1, 200)) {
-                    genSpike(world, random, data, x, coreHeight, z,
-                            GenUtils.randInt(5, 15), //radius
-                            GenUtils.randInt(50, 100));
-                }
 
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
@@ -102,4 +96,20 @@ public class BlackOceansHandler extends BiomeHandler {
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int coreHeight = HeightMap.getBlockHeight(tw, x, z);
+                if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
+                //black spike
+                if (GenUtils.chance(random, 1, 200)) {
+                    genSpike(tw, random, data, x, coreHeight, z,
+                            GenUtils.randInt(5, 15), //radius
+                            GenUtils.randInt(50, 100));
+                }
+            }
+        }
+	}
 }

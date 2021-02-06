@@ -210,4 +210,9 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     public boolean isEnabled() {
         return TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean();
     }
+    
+    @Override
+    public int getChunkBufferDistance() {
+    	return 0;
+    }
 }

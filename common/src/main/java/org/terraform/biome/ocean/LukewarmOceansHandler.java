@@ -43,9 +43,22 @@ public class LukewarmOceansHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                if (data.getBiome(x, y, z) != getBiome()) continue;
+                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
+                if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
+                    CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
+                }
+            }
+        }
+    }
 
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
@@ -54,19 +67,16 @@ public class LukewarmOceansHandler extends BiomeHandler {
                                 && y >= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT.getInt();
                 if (data.getBiome(x, y, z) != getBiome()) continue;
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
-                    CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
-                }
                 if (growCorals) {
                     if (GenUtils.chance(random, 15, 100))
                         CoralGenerator.generateCoral(data, x, y + 1, z);
 
                     if (GenUtils.chance(random, 1, 100))
-                        TreeDB.spawnRandomGiantCoral(world, data, x, y, z);
+                        TreeDB.spawnRandomGiantCoral(tw, data, x, y, z);
                 }
             }
         }
-    }
+	}
 
 
 }

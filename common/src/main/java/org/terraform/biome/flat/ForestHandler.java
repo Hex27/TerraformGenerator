@@ -61,14 +61,6 @@ public class ForestHandler extends BiomeHandler {
         return false;
     }
 
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
-//		gen.setScale(0.005);
-//		
-//		return (int) (gen.noise(x, z, 0.5, 0.5)*7D+50D);
-//	}
-
     @Override
     public Biome getBiome() {
         return Biome.FOREST;
@@ -84,38 +76,12 @@ public class ForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
         FastNoise pathNoise = new FastNoise((int) (tw.getSeed() * 12));
         pathNoise.SetNoiseType(NoiseType.SimplexFractal);
         pathNoise.SetFractalOctaves(3);
         pathNoise.SetFrequency(0.07f);
-
-        //Most forest chunks have a big tree
-        if (TConfigOption.TREES_FOREST_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 6, 10)) {
-            int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTypes.Tree.FOREST).build(tw, data, treeX, treeY, treeZ);
-            }
-        } else {
-            // TODO Clearing
-        }
-
-        // Most forest chunks have a big tree
-        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
-
-        for (Vector2f tree : trees) {
-            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
-
-            if(data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
-                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
-                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, (int) tree.x, treeY, (int) tree.y);
-            }
-        }
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -154,4 +120,54 @@ public class ForestHandler extends BiomeHandler {
         }
 
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        //Most forest chunks have a big tree
+        if (TConfigOption.TREES_FOREST_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 6, 10)) {
+            int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
+            int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
+            if (data.getBiome(treeX, treeZ) == getBiome()) {
+                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
+
+                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
+                    new FractalTreeBuilder(FractalTypes.Tree.FOREST).build(tw, data, treeX, treeY, treeZ);
+            }
+        } else {
+            // TODO Clearing
+        }
+
+        // Most forest chunks have a big tree
+        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
+
+        for (Vector2f tree : trees) {
+            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
+
+            if(data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
+                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, (int) tree.x, treeY, (int) tree.y);
+            }
+        }
+        
+
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                if (GenUtils.chance(random, 1, 90)) {
+                    int y = GenUtils.getHighestGround(data, x, z);
+                	if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
+                        if (BlockUtils.isDirtLike(data.getType(x, y, z)) ||
+                                data.getType(x, y, z) == Material.COBBLESTONE ||
+                                data.getType(x, y, z) == Material.MOSSY_COBBLESTONE ||
+                                data.getType(x, y, z) == Material.STONE) {
+                            int ny = GenUtils.randInt(random, -1, 1);
+                            spawnRock(random, data, x, y + ny, z);
+                            if (GenUtils.chance(random, 1, 3))
+                                spawnRock(random, data, GenUtils.randInt(random, -1, 1) + x, y + ny + 1, z + GenUtils.randInt(random, -1, 1));
+                        }
+                    }
+                }
+            }
+        }
+
+	}
 }

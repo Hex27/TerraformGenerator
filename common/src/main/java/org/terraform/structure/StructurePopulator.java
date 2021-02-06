@@ -22,7 +22,12 @@ public abstract class StructurePopulator {
     /**
      * Refers to 6x6 chunks as a buffer distance for the structure to spawn 
      * with the default value.
-     * This buffer will force biome populators to stop populating certain things for that chunk radius.
+     * This buffer will force biome populators to stop populating 
+     * certain things for that chunk radius.
+     * 
+     * For underground structures, this should be "0" to denote NO buffer
+     * 
+     * Only works for SingleMegaChunkStructurePopulators
      * @return
      */
     public int getChunkBufferDistance() {

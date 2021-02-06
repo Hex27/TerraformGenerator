@@ -43,7 +43,30 @@ public class TaigaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+
+        // Generate grass
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                if (data.getBiome(x, y, z) != getBiome()) continue;
+
+                if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
+                    if (GenUtils.chance(random, 1, 20)) {
+                        data.setType(x, y + 1, z, Material.GRASS);
+                        if (random.nextBoolean()) {
+                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
+                        } else {
+                            data.setType(x, y + 1, z, BlockUtils.pickFlower());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
         Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
 
         for (Vector2f pos : trees) {
@@ -58,31 +81,5 @@ public class TaigaHandler extends BiomeHandler {
             }
         }
 
-        // Generate grass
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
-
-                if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                    if (GenUtils.chance(random, 1, 10)) {
-                        //TODO: Trees
-//						Location loc = new Location(tw.getWorld(), x,y,z);
-//						if(GenUtils.chance(random, 1,3))
-//							tw.getWorld().generateTree(loc, TreeType.TALL_REDWOOD);
-//						else
-//							tw.getWorld().generateTree(loc, TreeType.REDWOOD);
-                        //data.setType(x,y+1,z,Material.PURPLE_WOOL);
-                    } else if (GenUtils.chance(random, 1, 20)) {
-                        data.setType(x, y + 1, z, Material.GRASS);
-                        if (random.nextBoolean()) {
-                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                        } else {
-                            data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                        }
-                    }
-                }
-            }
-        }
-    }
+	}
 }

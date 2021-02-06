@@ -371,6 +371,11 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(888271981, chunkX, chunkZ);
     }
+    
+    @Override
+    public int getChunkBufferDistance() {
+    	return 4;
+    }
 
     @Override
     public boolean isEnabled() {

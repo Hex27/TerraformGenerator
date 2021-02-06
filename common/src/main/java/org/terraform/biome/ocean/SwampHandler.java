@@ -61,21 +61,8 @@ public class SwampHandler extends BiomeHandler {
 
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
         int seaLevel = TerraformGenerator.seaLevel;
-        int treeX = 0, treeY, treeZ = 0;
-        if (GenUtils.chance(random, 3, 10)) {
-            treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
-            treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
-
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
-                        .build(tw, data, treeX, treeY - 3, treeZ);
-                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
-                        .build(tw, data, treeX, treeY - 2, treeZ);
-            }
-        }
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -102,15 +89,6 @@ public class SwampHandler extends BiomeHandler {
                     }
                 }
 
-                if (GenUtils.chance(random, 1, 40)) {
-                    int minHeight = 3;
-                    if (y < seaLevel) {
-                        minHeight = seaLevel - y;
-                    }
-
-                    BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.OAK_LOG, minHeight, minHeight + 3);
-                }
-
                 if (GenUtils.chance(random, 10, 100) && y < TerraformGenerator.seaLevel - 3) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
 
@@ -121,11 +99,48 @@ public class SwampHandler extends BiomeHandler {
             }
         }
 
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+
+        int treeX = 0, treeY, treeZ = 0;
+        if (GenUtils.chance(random, 3, 10)) {
+            treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
+            treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
+
+            if (data.getBiome(treeX, treeZ) == getBiome()) {
+                treeY = GenUtils.getHighestGround(data, treeX, treeZ);
+                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
+                        .build(tw, data, treeX, treeY - 3, treeZ);
+                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
+                        .build(tw, data, treeX, treeY - 2, treeZ);
+            }
+        }
+
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+            	int y = GenUtils.getTrueHighestBlock(data, x, z);
+                if (data.getBiome(x, y, z) != getBiome()) continue;
+                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
+
+                if (GenUtils.chance(random, 1, 40)) {
+                    int minHeight = 3;
+                    if (y < TerraformGenerator.seaLevel) {
+                        minHeight = TerraformGenerator.seaLevel - y;
+                    }
+
+                    BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.OAK_LOG, minHeight, minHeight + 3);
+                }
+                
+            }
+        }
+        
         WitchHutPopulator whp = new WitchHutPopulator();
         if (GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666), TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
             whp.populate(tw, random, data);
         }
-    }
+	}
 
 
 }

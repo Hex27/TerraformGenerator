@@ -26,6 +26,7 @@ public enum TConfigOption {
     BIOME_SWAMP_CLAY_CHANCE("biome.swamp.clay.chance-out-of-thousand", 20),
     BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT("biome.lukewarm-ocean.coral.minheight", 42),
     BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT("biome.lukewarm-ocean.coral.maxheight", 52),
+    BIOME_DARKFOREST_SPAWN_HEADS("biome.dark-forest.spawn-heads",true),
     BIOME_BADLANDS_PLATEAU_HEIGHT("biome.badlands.plateaus.height", 15),
     BIOME_BADLANDS_PLATEAU_SAND_RADIUS("biome.badlands.plateaus.sand-radius", 7),
     BIOME_BADLANDS_PLATEAU_THRESHOLD("biome.badlands.plateaus.threshold", 0.23),

@@ -82,6 +82,11 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
         }
         return min;
     }
+    
+    @Override
+    public int getChunkBufferDistance() {
+    	return 5;
+    }
 
     @Override
     public boolean isEnabled() {

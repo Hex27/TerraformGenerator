@@ -33,7 +33,7 @@ public class SandyBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         boolean hasSugarcane = GenUtils.chance(random, 1, 100);
 
@@ -45,11 +45,6 @@ public class SandyBeachHandler extends BiomeHandler {
                 if (base != Material.SAND && base != Material.GRASS_BLOCK) continue;
 
                 y++;
-                //Spawn coconut trees
-                if (GenUtils.chance(random, 1, 200)) {
-                    TreeDB.spawnCoconutTree(world, data, x, y, z);
-                    break;
-                }
 
                 //Spawn sugarcane
                 if (hasSugarcane) {
@@ -68,4 +63,23 @@ public class SandyBeachHandler extends BiomeHandler {
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                if (data.getBiome(x, z) != getBiome()) continue;
+                Material base = data.getType(x, y, z);
+                if (base != Material.SAND && base != Material.GRASS_BLOCK) continue;
+
+                y++;
+                //Spawn coconut trees
+                if (GenUtils.chance(random, 1, 200)) {
+                    TreeDB.spawnCoconutTree(tw, data, x, y, z);
+                    break;
+                }
+            }
+        }
+	}
 }

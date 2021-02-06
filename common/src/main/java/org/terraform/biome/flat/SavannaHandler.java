@@ -73,7 +73,7 @@ public class SavannaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         for (int i = 0; i < GenUtils.randInt(random, 1, 3); i++) {
             int x = data.getChunkX() * 16 + GenUtils.randInt(0, 15);
@@ -83,6 +83,28 @@ public class SavannaHandler extends BiomeHandler {
             makeYellowPatch(x, y, z, data, random);
         }
 
+
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                if (data.getBiome(x, y, z) != getBiome()) continue;
+
+                if (data.getType(x, y, z) == Material.GRASS_BLOCK
+                        && !data.getType(x, y + 1, z).isSolid()) {
+                    //Dense grass
+                    if (GenUtils.chance(random, 5, 10)) {
+                        BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
+                    }
+                }
+
+
+            }
+        }
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+		
         //Large savanna trees are very very rare
         if (TConfigOption.TREES_SAVANNA_BIG_ENABLED.getBoolean() && GenUtils.chance(1, 100)) {
             int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
@@ -103,7 +125,7 @@ public class SavannaHandler extends BiomeHandler {
                     new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).build(world, data, treeX, treeY, treeZ);
             }
         }
-
+        
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
@@ -111,10 +133,6 @@ public class SavannaHandler extends BiomeHandler {
 
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK
                         && !data.getType(x, y + 1, z).isSolid()) {
-                    //Dense grass
-                    if (GenUtils.chance(random, 5, 10)) {
-                        BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                    }
 
                     //Bushes
                     if (GenUtils.chance(random, 1, 200)) {
@@ -129,5 +147,5 @@ public class SavannaHandler extends BiomeHandler {
 
             }
         }
-    }
+	}
 }

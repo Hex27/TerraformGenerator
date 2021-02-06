@@ -42,28 +42,7 @@ public class BirchMountainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-
-        //Rarely spawn huge taiga trees
-        if (GenUtils.chance(random, 1, 10)) {
-            int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-
-                new FractalTreeBuilder(FractalTypes.Tree.BIRCH_BIG).build(tw, data, treeX, treeY, treeZ);
-            }
-        }
-
-        for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
-            int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-
-                new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL).build(tw, data, treeX, treeY, treeZ);
-            }
-        }
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -79,12 +58,32 @@ public class BirchMountainsHandler extends BiomeHandler {
                             data.setType(x, y + 1, z, BlockUtils.pickFlower());
                         }
                     }
-
-                    if (GenUtils.chance(random, 1, 500)) {
-
-                    }
                 }
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		//Rarely spawn huge taiga trees
+        if (GenUtils.chance(random, 1, 10)) {
+            int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
+            int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
+            if (data.getBiome(treeX, treeZ) == getBiome()) {
+                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
+
+                new FractalTreeBuilder(FractalTypes.Tree.BIRCH_BIG).build(tw, data, treeX, treeY, treeZ);
+            }
+        }
+    
+	    for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
+	        int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
+	        int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
+	        if (data.getBiome(treeX, treeZ) == getBiome()) {
+	            int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
+	
+	            new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL).build(tw, data, treeX, treeY, treeZ);
+	        }
+	    }
+	}
 }

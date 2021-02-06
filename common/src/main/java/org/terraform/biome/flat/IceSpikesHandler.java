@@ -55,7 +55,7 @@ public class IceSpikesHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -73,18 +73,23 @@ public class IceSpikesHandler extends BiomeHandler {
             }
         }
 
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+
         for (int i = 0; i < GenUtils.randInt(random, 1, 3); i++) {
             int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
             if (data.getType(loc[0], loc[1], loc[2]) == Material.SNOW_BLOCK) {
                 if (GenUtils.chance(random, 1, 10)) { //big spike
-                    genSpike(world, random, data, loc[0], loc[1], loc[2],
+                    genSpike(tw, random, data, loc[0], loc[1], loc[2],
                             GenUtils.randInt(3, 10), //radius
                             GenUtils.randInt(30, 50));
                 } else //Small spike
-                    genSpike(world, random, data, loc[0], loc[1], loc[2],
+                    genSpike(tw, random, data, loc[0], loc[1], loc[2],
                             GenUtils.randInt(3, 7), //radius
                             GenUtils.randInt(5, 10));
             }
         }
-    }
+	}
 }
