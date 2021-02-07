@@ -67,7 +67,7 @@ public class PlainsVillageAnimalPenPopulator extends RoomPopulatorAbstract {
     				w.downUntilSolid(new Random(), plainsVillagePopulator.woodFence);
     			}
     			int y = w.getGround().getY();
-				w.getAtY(y).CorrectMultipleFacing(w.getY()-y);
+				w.getAtY(y).CorrectMultipleFacing(1+w.getY()-y);
     			
     			w = w.getLeft().getGroundOrSeaLevel();
     		}

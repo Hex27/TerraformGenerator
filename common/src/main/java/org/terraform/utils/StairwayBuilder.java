@@ -97,7 +97,7 @@ public class StairwayBuilder {
 	    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
 	    		
 	    		//This space is required for movement
-	    		start.getRelative(0,1,0).Pillar(2, new Random(), Material.AIR);
+	    		start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
 	    		start.getRelative(0,2,0).getRelative(extensionDir).setType(Material.AIR);
 	    		
 	    		if(angled) 
