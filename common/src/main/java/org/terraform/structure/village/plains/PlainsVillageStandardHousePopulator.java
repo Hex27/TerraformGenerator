@@ -13,15 +13,17 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
-
-    public PlainsVillageStandardHousePopulator(Random rand, boolean forceSpawn, boolean unique) {
+	
+	private PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageStandardHousePopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
 
-        int height = GenUtils.getHighestGround(data, room.getX(), room.getZ());
+        int height = GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
 
         //Debug squares
 //    	int[] lowerCorner = room.getLowerCorner();
@@ -32,6 +34,7 @@ public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
 //    		}
 
         PlainsVillageHouseJigsawBuilder builder = new PlainsVillageHouseJigsawBuilder(
+        		plainsVillagePopulator,
                 room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height, room.getZ()
         );
         if (room instanceof DirectionalCubeRoom)

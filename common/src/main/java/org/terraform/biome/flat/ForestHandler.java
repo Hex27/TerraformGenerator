@@ -93,7 +93,7 @@ public class ForestHandler extends BiomeHandler {
                         data.setType(x, y, z, Material.GRASS_PATH);
                 }
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                    if (GenUtils.chance(random, 3, 10)) {
+                    if (GenUtils.chance(random, 1, 10)) {
                         if (data.getType(x, y + 1, z) != Material.AIR) continue;
                         //Grass & Flowers
                         data.setType(x, y + 1, z, Material.GRASS);
@@ -101,18 +101,6 @@ public class ForestHandler extends BiomeHandler {
                             BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
                         } else {
                             data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                        }
-                    }
-                    if (GenUtils.chance(random, 1, 95)) {
-
-                        if (BlockUtils.isDirtLike(data.getType(x, y, z)) ||
-                                data.getType(x, y, z) == Material.COBBLESTONE ||
-                                data.getType(x, y, z) == Material.MOSSY_COBBLESTONE ||
-                                data.getType(x, y, z) == Material.STONE) {
-                            int ny = GenUtils.randInt(random, -1, 1);
-                            spawnRock(random, data, x, y + ny, z);
-                            if (GenUtils.chance(random, 1, 3))
-                                spawnRock(random, data, GenUtils.randInt(random, -1, 1) + x, y + ny + 1, z + GenUtils.randInt(random, -1, 1));
                         }
                     }
                 }

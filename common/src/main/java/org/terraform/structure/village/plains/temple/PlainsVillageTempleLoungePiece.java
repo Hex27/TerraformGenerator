@@ -5,6 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
 
@@ -12,8 +13,8 @@ import java.util.Random;
 
 public class PlainsVillageTempleLoungePiece extends PlainsVillageTempleStandardPiece {
 
-	public PlainsVillageTempleLoungePiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-		super(widthX, height, widthZ, type, validDirs);
+	public PlainsVillageTempleLoungePiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+		super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
 	}
 	
 	private static final Material[] stairTypes = {
@@ -38,7 +39,7 @@ public class PlainsVillageTempleLoungePiece extends PlainsVillageTempleStandardP
         	.apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[1]));
         
         }
-        core.setType(Material.OAK_LOG,Material.CRAFTING_TABLE,Material.OAK_PLANKS);
+        core.setType(plainsVillagePopulator.woodLog,Material.CRAFTING_TABLE,plainsVillagePopulator.woodPlank);
         core.getRelative(0,1,0).setType(Material.LANTERN,BlockUtils.pickPottedPlant());
     }
 

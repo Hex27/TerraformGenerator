@@ -100,7 +100,7 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
     					placedJobBlock = true;
     				}
     			}
-    			else //Decorate pond surface and pond floor
+    			else if(target.getRelative(0,1,0).getType() == Material.WATER) //Decorate pond surface and pond floor
     			{
     				target = target.getRelative(0,1,0);
     				if(GenUtils.chance(1,5)) //Lily pads

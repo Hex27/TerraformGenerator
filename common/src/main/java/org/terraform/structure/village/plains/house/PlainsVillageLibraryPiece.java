@@ -10,6 +10,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
@@ -21,8 +22,8 @@ import java.util.Random;
 
 public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
 
-    public PlainsVillageLibraryPiece(PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-        super(variant, widthX, height, widthZ, type, validDirs);
+    public PlainsVillageLibraryPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+        super(plainsVillagePopulator, variant, widthX, height, widthZ, type, validDirs);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
                         }
                     }
                 } else if (i == 1 || i == 3) {
-                    new StairBuilder(Material.OAK_STAIRS)
+                    new StairBuilder(plainsVillagePopulator.woodStairs)
                             .setFacing(w.getDirection().getOppositeFace())
                             .apply(w);
                     new StairBuilder(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
@@ -62,8 +63,8 @@ public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
                             .apply(w.getRelative(0, 2, 0));
                     w.getRelative(0, 3, 0).LPillar(25, random, Material.BOOKSHELF);
                 } else {
-                    if (w.getRear().getType() != Material.OAK_DOOR)
-                        new SlabBuilder(Material.OAK_SLAB)
+                    if (w.getRear().getType() != plainsVillagePopulator.woodDoor)
+                        new SlabBuilder(plainsVillagePopulator.woodSlab)
                                 .apply(w);
 
                     new SlabBuilder(Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB)

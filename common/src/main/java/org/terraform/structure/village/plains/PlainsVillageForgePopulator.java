@@ -13,18 +13,21 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class PlainsVillageForgePopulator extends RoomPopulatorAbstract {
-
-    public PlainsVillageForgePopulator(Random rand, boolean forceSpawn, boolean unique) {
+	
+	private PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageForgePopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
 
-        int height = GenUtils.getHighestGround(data, room.getX(), room.getZ());
+        int height = GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
         
         //1 is added to height because temples need a small bit of elevation to look better
         PlainsVillageForgeJigsawBuilder builder = new PlainsVillageForgeJigsawBuilder(
+        		plainsVillagePopulator,
                 room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height+1, room.getZ()
         );
         if (room instanceof DirectionalCubeRoom)

@@ -29,7 +29,10 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
             //If it is below sea level, DON'T SPAWN IT.
             if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-                if(banks.contains(BiomeBank.PLAINS)) {
+                if(banks.contains(BiomeBank.PLAINS)
+                		|| banks.contains(BiomeBank.FOREST)
+                		|| banks.contains(BiomeBank.SAVANNA)
+                		|| banks.contains(BiomeBank.TAIGA)) {
 
                     return TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean();
                 }
@@ -48,7 +51,10 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
         //If it is below sea level, DON'T SPAWN IT.
         int[] coords = getCoordsFromMegaChunk(tw, mc);
         if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-           if (banks.contains(BiomeBank.PLAINS)) {
+           if (banks.contains(BiomeBank.PLAINS)
+           		|| banks.contains(BiomeBank.FOREST)
+           		|| banks.contains(BiomeBank.SAVANNA)
+           		|| banks.contains(BiomeBank.TAIGA)) {
 
                 if (!TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean())
                     return;
@@ -85,7 +91,7 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
     
     @Override
     public int getChunkBufferDistance() {
-    	return 5;
+    	return TConfigOption.STRUCTURES_VILLAGE_CHUNK_EXCLUSION_ZONE.getInt();
     }
 
     @Override

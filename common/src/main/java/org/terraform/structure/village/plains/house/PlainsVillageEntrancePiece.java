@@ -10,7 +10,9 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -19,10 +21,11 @@ import java.util.Random;
 public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
 
     PlainsVillageHouseVariant var;
-
-    public PlainsVillageEntrancePiece(PlainsVillageHouseVariant var, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+    PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageEntrancePiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant var, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
         this.var = var;
+        this.plainsVillagePopulator = plainsVillagePopulator;
 
     }
 
@@ -38,33 +41,49 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             if (this.var == PlainsVillageHouseVariant.CLAY)
                 w.getRelative(0, 2, 0).Pillar(2, rand, Material.WHITE_TERRACOTTA);
             else
-                w.getRelative(0, 2, 0).Pillar(2, rand, Material.OAK_PLANKS);
+                w.getRelative(0, 2, 0).Pillar(2, rand, plainsVillagePopulator.woodPlank);
 
             w = w.getLeft();
         }
 
         //The door
         w = w.getRight(3).getRelative(0, 1, 0);
-        BlockUtils.placeDoor(data, Material.OAK_DOOR,
+        BlockUtils.placeDoor(data, plainsVillagePopulator.woodDoor,
                 w.getX(), w.getY(), w.getZ(), w.getDirection().getOppositeFace());
 
-        BlockUtils.stairwayUntilSolid(
-                w.getFront().getRelative(0, -1, 0).get(), w.getDirection(),
-                new Material[]{Material.COBBLESTONE, Material.MOSSY_COBBLESTONE},
-                Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS);
+//        BlockUtils.angledStairwayUntilSolid(
+//                w.getFront().getRelative(0, -1, 0).get(), w.getDirection(),
+//                new Material[]{Material.COBBLESTONE, Material.MOSSY_COBBLESTONE},
+//                Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS);
+        
+
+        if(w.getFront().getType().isSolid()) {
+	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
+	        .setAngled(true)
+	        .setStopAtWater(true)
+	        .setStairwayDirection(BlockFace.UP)
+	        .build(w.getFront(4));
+	        w.getFront().Pillar(2, new Random(), Material.AIR);
+	        w.getFront(2).Pillar(2, new Random(), Material.AIR);
+	        w.getFront(3).Pillar(3, new Random(), Material.AIR);
+        }else
+	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
+	        .setAngled(true)
+	        .setStopAtWater(true)
+	        .build(w.getFront().getRelative(0, -1, 0));
 
         //Decorations depending on variant
         if (this.var == PlainsVillageHouseVariant.COBBLESTONE) {
             w = w.getFront();
 
             //Logs at the front
-            w.getLeft().Pillar(2, rand, Material.OAK_LOG);
-            w.getRight().Pillar(2, rand, Material.OAK_LOG);
+            w.getLeft().Pillar(2, rand, plainsVillagePopulator.woodLog);
+            w.getRight().Pillar(2, rand, plainsVillagePopulator.woodLog);
             w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getLeft().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
-            Orientable log = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
+            Orientable log = (Orientable) Bukkit.createBlockData(plainsVillagePopulator.woodLog);
             if (w.getDirection().getModZ() != 0)
                 log.setAxis(Axis.X);
             else
@@ -94,24 +113,24 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getRight().CorrectMultipleFacing(2);
 
         } else if (this.var == PlainsVillageHouseVariant.CLAY) {
-            w.getLeft().getRelative(0, 1, 0).setType(Material.OAK_LOG);
-            w.getRight().getRelative(0, 1, 0).setType(Material.OAK_LOG);
+            w.getLeft().getRelative(0, 1, 0).setType(plainsVillagePopulator.woodLog);
+            w.getRight().getRelative(0, 1, 0).setType(plainsVillagePopulator.woodLog);
             w = w.getFront();
             w.getLeft().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
-            Orientable log = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
+            Orientable log = (Orientable) Bukkit.createBlockData(plainsVillagePopulator.woodLog);
             if (w.getDirection().getModZ() != 0)
                 log.setAxis(Axis.Z);
             else
                 log.setAxis(Axis.X);
 
-            w.getLeft().setType(Material.OAK_LOG);
+            w.getLeft().setType(plainsVillagePopulator.woodLog);
             w.getLeft().getRelative(0, 1, 0).setType(Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL);
             w.getLeft().getRelative(0, 2, 0).setBlockData(log);
             w.getLeft().getRelative(0, 1, 0).CorrectMultipleFacing(1);
 
-            w.getRight().setType(Material.OAK_LOG);
+            w.getRight().setType(plainsVillagePopulator.woodLog);
             w.getRight().getRelative(0, 1, 0).setType(Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL);
             w.getRight().getRelative(0, 2, 0).setBlockData(log);
             w.getRight().getRelative(0, 1, 0).CorrectMultipleFacing(1);
@@ -128,7 +147,7 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getRight().setType(Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL);
             w.getRight().CorrectMultipleFacing(1);
         } else if (this.var == PlainsVillageHouseVariant.WOODEN) {
-            Orientable log = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
+            Orientable log = (Orientable) Bukkit.createBlockData(plainsVillagePopulator.woodLog);
             if (w.getDirection().getModZ() != 0)
                 log.setAxis(Axis.Z);
             else
@@ -137,8 +156,8 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             //w.getRelative(0,2,0).setBlockData(log);
 
             w = w.getFront();
-            w.getLeft().getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_LOG);
-            w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_LOG);
+            w.getLeft().getRelative(0, -1, 0).downUntilSolid(rand, plainsVillagePopulator.woodLog);
+            w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, plainsVillagePopulator.woodLog);
 
 
             w.getRelative(0, 2, 0).setBlockData(log);
@@ -154,8 +173,8 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getRight().getRelative(0, 1, 0).CorrectMultipleFacing(2);
 
             w = w.getFront();
-            w.getLeft().getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_LOG);
-            w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_LOG);
+            w.getLeft().getRelative(0, -1, 0).downUntilSolid(rand, plainsVillagePopulator.woodLog);
+            w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, plainsVillagePopulator.woodLog);
 
 
             w.getLeft().setType(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);

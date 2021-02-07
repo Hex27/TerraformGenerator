@@ -13,6 +13,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -261,6 +262,21 @@ public class GenUtils {
         return y;
     }
 
+    
+    /**
+     * 
+     * @param data
+     * @param x
+     * @param z
+     * @return the highest dry ground, or the sea level
+     */
+    public static int getHighestGroundOrSeaLevel(PopulatorDataAbstract data, int x, int z) {
+    	int y = getHighestGround(data,x,z);
+    	if(y < TerraformGenerator.seaLevel)
+    		return TerraformGenerator.seaLevel;
+    	return y;
+    }
+    
     /**
      * @return the highest solid ground. Is dirt-like or stone-like, and is
      * not leaves or logs

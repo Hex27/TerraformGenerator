@@ -11,14 +11,15 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 
 public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPiece {
 
-	public PlainsVillageForgeChimneyPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-		super(widthX, height, widthZ, type, validDirs);
+	public PlainsVillageForgeChimneyPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+		super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
 	}
 	
 	//Use postBuildDecoration, as the walls are built after build()

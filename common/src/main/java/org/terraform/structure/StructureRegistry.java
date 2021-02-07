@@ -12,6 +12,7 @@ import org.terraform.structure.pyramid.PyramidPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.village.VillagePopulator;
+import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;

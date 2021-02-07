@@ -13,6 +13,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Rail;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.Rail.Shape;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
@@ -42,6 +43,14 @@ public class BlockUtils {
     public static final List<BlockFace> xzPlaneBlockFaces = Arrays.asList(
             BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
     );
+    
+    public static final List<Material> wetMaterials = Arrays.asList(
+    		Material.WATER,
+    		Material.KELP_PLANT,
+    		Material.SEAGRASS,
+    		Material.TALL_SEAGRASS
+    );
+    
     public static final BlockFace[] BLOCK_FACES = BlockFace.values();
     public static final BlockFace[] xzDiagonalPlaneBlockFaces = {BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST};
     public static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
@@ -248,6 +257,7 @@ public class BlockUtils {
             case SAVANNA:
             case DESERT_MOUNTAINS:
             case DESERT:
+    		case BADLANDS_BEACH:
             case BADLANDS_MOUNTAINS:
                 return Material.getMaterial("ACACIA_" + wood);
             case BIRCH_MOUNTAINS:
@@ -259,6 +269,11 @@ public class BlockUtils {
             case OCEAN:
             case MUDFLATS:
             case LUKEWARM_OCEAN:
+    		case DEEP_LUKEWARM_OCEAN:
+    		case DEEP_OCEAN:
+    		case DEEP_WARM_OCEAN:
+    		case RIVER:
+    		case ERODED_PLAINS:
             case FOREST:
                 return Material.getMaterial("OAK_" + wood);
             case FROZEN_OCEAN:
@@ -268,13 +283,21 @@ public class BlockUtils {
             case SNOWY_MOUNTAINS:
             case ROCKY_MOUNTAINS:
             case ROCKY_BEACH:
+    		case FROZEN_RIVER:
+    		case DEEP_COLD_OCEAN:
+    		case DEEP_FROZEN_OCEAN:
+    		case ICY_BEACH:
             case ICE_SPIKES:
                 return Material.getMaterial("SPRUCE_" + wood);
             case SANDY_BEACH:
             case JUNGLE:
+    		case JUNGLE_RIVER:
+    		case BAMBOO_FOREST:
                 return Material.getMaterial("JUNGLE_" + wood);
-            default:
-                break;
+			case BLACK_OCEAN:
+			case DEEP_BLACK_OCEAN:
+			case DARK_FOREST:
+					return Material.getMaterial("DARK_OAK_" + wood);
         }
         return Material.getMaterial("OAK_" + wood);
     }
@@ -964,5 +987,38 @@ public class BlockUtils {
                     downTypes);
             start = start.getRelative(extensionDir).getRelative(0, -1, 0);
         }
+    }
+
+    public static void angledStairwayUntilSolid(SimpleBlock start, BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
+        int threshold = 5;
+    	while (!start.getType().isSolid()) {
+    		
+    		if(threshold == 0)
+    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
+            
+    		new StairBuilder(stairTypes)
+                    .setFacing(extensionDir.getOppositeFace())
+                    .apply(start);
+            BlockUtils.setDownUntilSolid(
+                    start.getX(),
+                    start.getY() - 1,
+                    start.getZ(),
+                    start.getPopData(),
+                    downTypes);
+            threshold--;
+            start = start.getRelative(extensionDir).getRelative(0, -1, 0);
+        }
+    }
+    
+    /**
+     * Checks if the target is in a wet material, or if the material it is
+     * in is waterlogged.
+     * @param target
+     * @return
+     */
+    public static boolean isWet(SimpleBlock target) {
+    	return BlockUtils.wetMaterials.contains(target.getType()) || 
+        		(target.getBlockData() instanceof Waterlogged
+            			&& ((Waterlogged) target.getBlockData()).isWaterlogged());
     }
 }

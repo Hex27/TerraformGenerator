@@ -13,6 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
@@ -21,7 +22,7 @@ import org.terraform.utils.blockdata.SlabBuilder;
 public class PlainsVillageForgeRoofHandler {
 
 	
-	public static void placeRoof(SimpleBlock core, ArrayList<SimpleLocation> rectangleLocations) {
+	public static void placeRoof(PlainsVillagePopulator plainsVillagePopulator, SimpleBlock core, ArrayList<SimpleLocation> rectangleLocations) {
 		SimpleLocation lowerBound = null;
 		SimpleLocation upperBound = null;
 		
@@ -72,12 +73,12 @@ public class PlainsVillageForgeRoofHandler {
 						.lapply(adj.getFront())
 						.lapply(adj.getRear());
 					}else {
-						target.setType(Material.OAK_PLANKS);
+						target.setType(plainsVillagePopulator.woodPlank);
 					}
 					
 					//Log center
 					if(height == 3) {
-						new OrientableBuilder(Material.OAK_LOG)
+						new OrientableBuilder(plainsVillagePopulator.woodLog)
 						.setAxis(BlockUtils.getPerpendicularHorizontalPlaneAxis(roofAxis))
 						.apply(target);
 						
@@ -85,7 +86,7 @@ public class PlainsVillageForgeRoofHandler {
 								||(roofAxis == Axis.Z && (x == lowerBound.getX()+1||x == upperBound.getX()-1))) {
 							
 							//Fill the holes between the walls and the roof
-							if(BlockUtils.isStoneLike(target.getRelative(0,-2,0).getType()) || target.getRelative(0,-2,0).getType() == Material.OAK_DOOR)
+							if(BlockUtils.isStoneLike(target.getRelative(0,-2,0).getType()) || target.getRelative(0,-2,0).getType() == plainsVillagePopulator.woodDoor)
 								new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
 						}
 					}
@@ -95,7 +96,7 @@ public class PlainsVillageForgeRoofHandler {
 						new SlabBuilder(roofSlabCornerMaterial)
 						.apply(target);
 					}else {
-						new SlabBuilder(Material.OAK_SLAB)
+						new SlabBuilder(plainsVillagePopulator.woodSlab)
 						.apply(target);
 					}
 				}

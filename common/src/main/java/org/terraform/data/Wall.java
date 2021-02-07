@@ -3,6 +3,7 @@ package org.terraform.data;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -28,7 +29,7 @@ public class Wall {
     }
 
     public Wall getAtY(int y) {
-        return new Wall(new SimpleBlock(block.getPopData(), block.getX(), y, block.getY()), this.direction);
+        return new Wall(new SimpleBlock(block.getPopData(), block.getX(), y, block.getZ()), this.direction);
     }
 
     public Wall getLeft() {
@@ -40,6 +41,17 @@ public class Wall {
                 block.getPopData(),
                 block.getX(),
                 GenUtils.getHighestGround(block.getPopData(), block.getX(), block.getZ()),
+                block.getZ()), direction);
+    }
+    
+
+    public Wall getGroundOrSeaLevel() {
+    	int y = GenUtils.getHighestGround(block.getPopData(), block.getX(), block.getZ());
+    	if(y < TerraformGenerator.seaLevel) y = TerraformGenerator.seaLevel;
+        return new Wall(new SimpleBlock(
+        		block.getPopData(),
+        		block.getX(),
+                y,
                 block.getZ()), direction);
     }
 

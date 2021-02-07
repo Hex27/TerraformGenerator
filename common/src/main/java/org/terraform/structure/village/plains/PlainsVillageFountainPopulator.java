@@ -24,8 +24,11 @@ public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
 			"plainsvillage-fountain1",
 			"plainsvillage-fountain2"
 	};
-    public PlainsVillageFountainPopulator(Random rand, boolean forceSpawn, boolean unique) {
+
+	private PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageFountainPopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 
     @Override
@@ -100,7 +103,15 @@ public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
                         )
                 );
                 super.applyData(block, data);
-            }else {
+            } else if(data.getMaterial().toString().startsWith("OAK_")) {
+            	data = Bukkit.createBlockData(
+                        data.getAsString().replaceAll(
+                                "oak_",
+                                plainsVillagePopulator.wood
+                        )
+                );
+                super.applyData(block, data);
+            } else {
                 super.applyData(block, data);
             }
         }

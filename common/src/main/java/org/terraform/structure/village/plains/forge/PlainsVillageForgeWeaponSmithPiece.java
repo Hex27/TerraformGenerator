@@ -11,6 +11,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
@@ -18,8 +19,8 @@ import org.terraform.utils.blockdata.DirectionalBuilder;
 
 public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStandardPiece {
 
-	public PlainsVillageForgeWeaponSmithPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-		super(widthX, height, widthZ, type, validDirs);
+	public PlainsVillageForgeWeaponSmithPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+		super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
 	}
 	
 	//Use postBuildDecoration.

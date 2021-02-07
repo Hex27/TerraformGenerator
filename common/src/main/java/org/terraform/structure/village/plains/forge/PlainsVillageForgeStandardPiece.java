@@ -6,19 +6,19 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
 public class PlainsVillageForgeStandardPiece extends PlainsVillageForgePiece {
-	
 
-    public PlainsVillageForgeStandardPiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
-        super(widthX, height, widthZ, type, unique, validDirs);
+    public PlainsVillageForgeStandardPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
+        super(plainsVillagePopulator, widthX, height, widthZ, type, unique, validDirs);
     }
 	
-    public PlainsVillageForgeStandardPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-        super(widthX, height, widthZ, type, validDirs);
+    public PlainsVillageForgeStandardPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+        super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
     }
 
     @Override

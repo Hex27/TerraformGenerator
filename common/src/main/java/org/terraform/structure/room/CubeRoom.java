@@ -337,6 +337,23 @@ public class CubeRoom {
         return new int[]{X, Z};
     }
 
+    /**
+     * Forces all 3D coords in the room with the specified padding to be air.
+     * @param data
+     * @param padding
+     */
+    public void purgeRoomContents(PopulatorDataAbstract data, int padding) {
+    	int[] lowerCorner = getLowerCorner(padding);
+    	int[] upperCorner = getUpperCorner(padding);
+    	int lowestY = y + padding;
+    	int upperY = y + height - padding;
+    	
+    	for(int x = lowerCorner[0]; x<= upperCorner[0]; x++)
+    		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++)
+    			for(int y = lowestY; y <= upperY; y++)
+    				data.setType(x, y, z, Material.AIR);
+    }
+    
     public boolean isBig() {
         return widthX * widthZ * height >= 2000;
     }

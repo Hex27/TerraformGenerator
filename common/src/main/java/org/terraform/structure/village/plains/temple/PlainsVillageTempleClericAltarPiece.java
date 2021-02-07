@@ -8,6 +8,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.blockdata.StairBuilder;
@@ -18,8 +19,8 @@ import java.util.Random;
 public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStandardPiece {
 
 	PlainsVillageTempleJigsawBuilder builder;
-	public PlainsVillageTempleClericAltarPiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, PlainsVillageTempleJigsawBuilder builder, BlockFace[] validDirs) {
-		super(widthX, height, widthZ, type, unique, validDirs);
+	public PlainsVillageTempleClericAltarPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, boolean unique, PlainsVillageTempleJigsawBuilder builder, BlockFace[] validDirs) {
+		super(plainsVillagePopulator, widthX, height, widthZ, type, unique, validDirs);
 		this.builder = builder;
 	}
 	

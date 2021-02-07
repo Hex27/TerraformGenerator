@@ -9,6 +9,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
@@ -21,7 +22,7 @@ import java.util.Random;
 public class PlainsVillageTempleRoofHandler {
 	//private static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
 
-	public static void handleTempleRoof(PopulatorDataAbstract data, JigsawStructurePiece piece, ArrayList<JigsawStructurePiece> wallPieces) {
+	public static void handleTempleRoof(PlainsVillagePopulator plainsVillagePopulator, PopulatorDataAbstract data, JigsawStructurePiece piece, ArrayList<JigsawStructurePiece> wallPieces) {
 		Wall base = new Wall(new SimpleBlock(data,
     			piece.getRoom().getX(),
     			piece.getRoom().getY()+5,
@@ -55,7 +56,7 @@ public class PlainsVillageTempleRoofHandler {
 						//Add lantern decorations to the interior corners
 						//if(height != 0) {
 							pillar = w.getRear(height+3).getRelative(0,(height+1)*2,0);
-							pillar.getRelative(0,-2,0).setType(Material.OAK_LOG);
+							pillar.getRelative(0,-2,0).setType(plainsVillagePopulator.woodLog);
 							Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
 							l.setHanging(true);
 							pillar.getRelative(0,-3,0).setBlockData(l);
@@ -63,8 +64,8 @@ public class PlainsVillageTempleRoofHandler {
 					}else if(multiplier == 1 && horDepth == 2+height*multiplier) {
 						Wall pillar = w.getRelative(face,1).getRear(height+3).getRelative(0,(height+1)*2,0);
 						//Add lantern decorations to the interior corners
-						pillar.getRelative(0,-1,0).get().lsetType(Material.OAK_LOG);
-						pillar.getRelative(0,-2,0).setType(Material.OAK_LOG);
+						pillar.getRelative(0,-1,0).get().lsetType(plainsVillagePopulator.woodLog);
+						pillar.getRelative(0,-2,0).setType(plainsVillagePopulator.woodLog);
 						Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
 						l.setHanging(true);
 						pillar.getRelative(0,-3,0).setBlockData(l);
@@ -78,20 +79,20 @@ public class PlainsVillageTempleRoofHandler {
 				        .lapply(w.getRear(height+3).getRelative(0,height*2,0))
 				        .correct();
 					else
-						new OrientableBuilder(Material.OAK_LOG)
+						new OrientableBuilder(plainsVillagePopulator.woodLog)
 						.setAxis(BlockUtils.getAxisFromBlockFace(face))
 						.lapply(w.getRear(height+3).getRelative(0,height*2,0));
 					
 					
 					
-					w.getRelative(0,height*2+1,0).getRear(height+3).setType(Material.COBBLESTONE);
+					w.getRelative(0,height*2+1,0).getRear(height+3).setType(Material.POLISHED_ANDESITE);
 				}
 			}
 			
 			//Do more corner related cleaning and decorations
-			if(multiplier == -1) {
-				
-			}
+//			if(multiplier == -1) {
+//				
+//			}
 		
 		}
 	}
@@ -116,7 +117,7 @@ public class PlainsVillageTempleRoofHandler {
 					
 					if(i == 9 && !b.getType().isSolid()) {
 						placeGlazedTerracotta(b, glazedTerracotta);
-						b.getRelative(0,1,0).setType(Material.COBBLESTONE);
+						b.getRelative(0,1,0).setType(Material.POLISHED_ANDESITE);
 					}
 				}
 		}

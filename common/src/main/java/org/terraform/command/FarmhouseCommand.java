@@ -7,7 +7,7 @@ import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.farmhouse.FarmhousePopulator;
+import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
 
 import java.util.Random;
 import java.util.Stack;

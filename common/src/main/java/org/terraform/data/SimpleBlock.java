@@ -13,6 +13,7 @@ import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.utils.GenUtils;
 
 public class SimpleBlock {
@@ -245,6 +246,16 @@ public class SimpleBlock {
                 popData,
                 x,
                 GenUtils.getHighestGround(popData, x, z),
+                z);
+    }
+
+    public SimpleBlock getGroundOrSeaLevel() {
+    	int y = GenUtils.getHighestGround(popData, x, z);
+    	if(y < TerraformGenerator.seaLevel) y = TerraformGenerator.seaLevel;
+        return new SimpleBlock(
+                popData,
+                x,
+                y,
                 z);
     }
 }

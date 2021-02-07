@@ -1,5 +1,6 @@
 package org.terraform.structure.village.plains;
 
+import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -14,8 +15,6 @@ import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.blockdata.SlabBuilder;
-
 import java.util.Collection;
 import java.util.Random;
 
@@ -47,13 +46,16 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
     }
     
 	/**
-	 * Only checks if the target location has enough space to place a lamp. Other
+	 * Only checks if the target location has enough space to place a lamp,
+	 * and if the lamp is in water. Other
 	 * checks such as ground type etc must be done elsewhere
 	 * @param target the block where the base of the lamp is.
 	 * @return whether or not the lamp has enough space to be placed here.
 	 */
     public static boolean canPlaceLamp(SimpleBlock target) {
-
+    	
+    	if(target.getType() == Material.WATER)
+    		return false;
         for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
             for (int i = 0; i < 6; i++)
                 if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
@@ -74,16 +76,15 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                 ppd.base.getZ());
 
         //Path is on water. Place a solid wooden foundation, and then return.
-        if (ppd.base.getRelative(0,1,0).getType() == Material.WATER) {
-            Wall pathCore = new Wall(ppd.base, ppd.dir).getAtY(TerraformGenerator.seaLevel);
-            new SlabBuilder(Material.OAK_SLAB)
-                    .setWaterlogged(true).setType(Type.TOP)
-                    .apply(pathCore)
-                    .apply(pathCore.getLeft())
-                    .apply(pathCore.getRight());
-
-            pathCore.getRelative(0, -1, 0).downLPillar(random, 50, Material.OAK_LOG);
-
+        if (BlockUtils.isWet(ppd.base.getRelative(0,1,0))) {
+            
+        	Wall pathCore = new Wall(ppd.base, ppd.dir).getAtY(TerraformGenerator.seaLevel);
+           
+        	if((BlockUtils.getAxisFromBlockFace(ppd.dir) == Axis.X && ppd.base.getX() % 2 == 0) 
+        		|| (BlockUtils.getAxisFromBlockFace(ppd.dir) == Axis.Z && ppd.base.getZ() % 2 == 0)) {
+        		pathCore.getRelative(0, -1, 0).downLPillar(random, 50, Material.OAK_LOG);
+        		pathCore.setType(Material.CHISELED_STONE_BRICKS);
+        	}
             return;
         }
         

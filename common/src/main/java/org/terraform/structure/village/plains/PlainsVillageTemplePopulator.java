@@ -14,18 +14,21 @@ import java.util.Random;
 
 public class PlainsVillageTemplePopulator extends RoomPopulatorAbstract {
 
-    public PlainsVillageTemplePopulator(Random rand, boolean forceSpawn, boolean unique) {
+	private PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageTemplePopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
 
-        int height = GenUtils.getHighestGround(data, room.getX(), room.getZ());
+        int height = GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
         
         //1 is added to height because temples need a small bit of elevation to look better
         PlainsVillageTempleJigsawBuilder builder = new PlainsVillageTempleJigsawBuilder(
-                room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height+1, room.getZ()
+        		plainsVillagePopulator,
+        		room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height+1, room.getZ()
         );
         if (room instanceof DirectionalCubeRoom)
             builder.forceEntranceDirection(((DirectionalCubeRoom) room).getDirection());

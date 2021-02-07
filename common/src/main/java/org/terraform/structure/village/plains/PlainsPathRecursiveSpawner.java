@@ -3,6 +3,8 @@ package org.terraform.structure.village.plains;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Slab.Type;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
@@ -12,6 +14,7 @@ import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.blockdata.SlabBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -175,8 +178,27 @@ public class PlainsPathRecursiveSpawner {
         for (SimpleLocation loc : path.keySet()) {
             Wall w = new Wall(new SimpleBlock(core.getPopData(), loc.getX(), loc.getY(), loc.getZ()), path.get(loc));
             w = w.getGround();
-            if (w.getRelative(0,1,0).getType() == Material.WATER) {
-                //Don't build paths underwater.
+            if (BlockUtils.isWet(w.getRelative(0,1,0).get())) {
+            	
+                //Paths underwater are wood planks.
+
+            	//TODO: This is the most optimised way now, 
+            	//but if local water levels are implemented, this must change.
+            	w = w.getAtY(TerraformGenerator.seaLevel);
+				new SlabBuilder(Material.OAK_SLAB)
+				 .setWaterlogged(true).setType(Type.TOP)
+				 .apply(w)
+				 .lapply(w.getRelative(0,0,1))
+				 .lapply(w.getRelative(0,0,-1))
+				 .lapply(w.getRelative(1,0,1))
+				 .lapply(w.getRelative(1,0,-1))
+				 .lapply(w.getRelative(-1,0,1))
+				 .lapply(w.getRelative(-1,0,-1))
+				 .lapply(w.getRelative(1,0,0))
+				 .lapply(w.getRelative(-1,0,0))
+				 ;
+				//Bukkit.getLogger().info("Underwater path at " + w.get().getVector() + " of type " + w.getType().toString());
+            	
                 continue;
             }
             //if (BlockUtils.isDirtLike(w.getType()))
