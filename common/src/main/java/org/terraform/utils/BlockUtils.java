@@ -22,7 +22,6 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
-import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
@@ -327,7 +326,7 @@ public class BlockUtils {
         data.setBlockData(x + 1, y, z + 1, terracotta);
     }
 
-    public static void setVines(PopulatorDataAbstract data, TerraformWorld tw, int x, int y, int z, int maxLength) {
+    public static void setVines(PopulatorDataAbstract data, int x, int y, int z, int maxLength) {
         SimpleBlock rel = new SimpleBlock(data, x, y, z);
         for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);

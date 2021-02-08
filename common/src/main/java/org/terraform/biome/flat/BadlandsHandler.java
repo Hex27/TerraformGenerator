@@ -248,13 +248,18 @@ public class BadlandsHandler extends BiomeHandler {
 
                             int sandHeight = (int) Math.round(plateauHeight * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
                             for (int y = 1 + level; y <= sandHeight + level; y++)
-                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz).isAir())
+                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz) == Material.AIR)
                                     data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
                         }
                     }
                 }
             }
         }
+    }
+
+    public boolean mineCanSpawn(TerraformWorld tw, int x, int z) {
+        int h = getPlateauHeight(tw, x, z);
+        return (h < plateauHeight && h > plateauHeight / 3);
     }
 
     // This is for optimizing sand, ew

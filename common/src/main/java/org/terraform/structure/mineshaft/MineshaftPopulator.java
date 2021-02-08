@@ -65,14 +65,14 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-
         if (!TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean())
             return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
-        int height = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
+        int x = coords[0];
+        int z = coords[1];
+        int height = HeightMap.getBlockHeight(tw, x, z);
 
         int y = GenUtils.randInt(TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(), TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt());
 

@@ -518,13 +518,6 @@ public class RoomLayoutGenerator {
         return pathPop;
     }
 
-    /**
-     * @param pathPop the pathPop to set
-     */
-    public void setPathPop(PathPopulatorAbstract pathPop) {
-        this.pathPop = pathPop;
-    }
-
     public void setTile(int tile) {
         this.tile = tile;
     }

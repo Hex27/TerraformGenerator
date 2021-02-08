@@ -31,6 +31,7 @@ public enum TConfigOption {
     BIOME_BADLANDS_PLATEAU_THRESHOLD("biome.badlands.plateaus.threshold", 0.23),
     BIOME_BADLANDS_PLATEAU_FREQUENCY("biome.badlands.plateaus.frequency", 0.01),
     BIOME_BADLANDS_PLATEAU_COMMONNESS("biome.badlands.plateaus.commonness", 0.18),
+    BIOME_BADLANDS_MINE_DISTANCE("biome.badlands.avg-distance-between-mines", 10),
 
     //-=[TREES]=-
     TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),
