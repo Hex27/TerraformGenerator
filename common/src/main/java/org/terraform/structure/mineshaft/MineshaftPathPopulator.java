@@ -3,6 +3,7 @@ package org.terraform.structure.mineshaft;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
@@ -22,7 +23,9 @@ import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
+import java.util.Arrays;
 import java.util.Random;
+import java.util.Set;
 
 public class MineshaftPathPopulator extends PathPopulatorAbstract {
     private final Random rand;
@@ -294,8 +297,10 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
         Wall core = new Wall(base.getRelative(0, 1, 0), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
+        Set<Material> set = BlockUtils.stoneLike;
+        set.addAll(Arrays.asList(Material.TERRACOTTA, Material.RED_TERRACOTTA, Material.YELLOW_TERRACOTTA, Material.BROWN_TERRACOTTA, Material.ORANGE_TERRACOTTA, Material.RED_SAND));
         BlockUtils.carveCaveAir(seed,
-                pathWidth, pathWidth + 1, pathWidth, core.get(), false, BlockUtils.stoneLike);
+                pathWidth, pathWidth + 1, pathWidth, core.get(), false, set);
 
         return true;
     }

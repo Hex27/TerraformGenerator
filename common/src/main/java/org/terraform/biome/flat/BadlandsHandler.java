@@ -257,13 +257,17 @@ public class BadlandsHandler extends BiomeHandler {
         }
     }
 
-    public boolean mineCanSpawn(TerraformWorld tw, int x, int z) {
+    public static boolean containsPlateau(TerraformWorld tw, int x, int z) {
+        return getPlateauHeight(tw, x, z) > 0;
+    }
+
+    public static boolean mineCanSpawn(TerraformWorld tw, int x, int z) {
         int h = getPlateauHeight(tw, x, z);
         return (h < plateauHeight && h > plateauHeight / 3);
     }
 
     // This is for optimizing sand, ew
-    int getPlateauHeight(TerraformWorld tw, int x, int z) {
+    static int getPlateauHeight(TerraformWorld tw, int x, int z) {
         double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(x, z) + plateauCommonness);
         double noiseValue = rawValue * getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, x, z) * (1 - ((int) (rawValue / plateauThreshold) * 0.1));
 

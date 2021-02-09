@@ -49,7 +49,7 @@ public class BadlandsMineEntranceParser extends SchematicParser {
             }
             case DARK_OAK_FENCE: {
                 if (willPlaceFence(block)) {
-                    super.applyData(block, Bukkit.createBlockData(Material.DARK_OAK_FENCE));
+                    block.lsetBlockData(data);
                 } else if (willPlaceFence(block.getRelative(0, 1, 0))
                         && !didPlaceLantern) {
                     Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
@@ -68,6 +68,17 @@ public class BadlandsMineEntranceParser extends SchematicParser {
                     }
                     b.lsetType(Material.RED_SAND);
                 }
+                break;
+            }
+            case DARK_OAK_SLAB: {
+                Slab s = (Slab) data;
+                if (s.getType() == Slab.Type.BOTTOM)
+                    block.lsetBlockData(data);
+                else super.applyData(block, data);
+                break;
+            }
+            case OAK_STAIRS: {
+                block.lsetBlockData(data);
                 break;
             }
             default: super.applyData(block, data);
