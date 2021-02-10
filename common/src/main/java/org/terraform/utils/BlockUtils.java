@@ -65,6 +65,20 @@ public class BlockUtils {
             Material.LAPIS_ORE, Material.SNOW_BLOCK,
             Material.PACKED_ICE, Material.BLUE_ICE
     );
+
+    public static final Set<Material> badlandsStoneLike = EnumSet.of(
+            Material.STONE, Material.COBBLESTONE,
+            Material.GRANITE, Material.ANDESITE,
+            Material.DIORITE, Material.GRAVEL,
+            Material.COAL_ORE, Material.IRON_ORE,
+            Material.GOLD_ORE, Material.DIAMOND_ORE,
+            Material.EMERALD_ORE, Material.REDSTONE_ORE,
+            Material.LAPIS_ORE, Material.SNOW_BLOCK,
+            Material.PACKED_ICE, Material.BLUE_ICE,
+            Material.TERRACOTTA, Material.ORANGE_TERRACOTTA,
+            Material.RED_TERRACOTTA, Material.BROWN_TERRACOTTA,
+            Material.YELLOW_TERRACOTTA, Material.RED_SAND
+    );
     public static final Material[] ores = {
             Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE,
     };
@@ -193,11 +207,6 @@ public class BlockUtils {
         return xzPlaneBlockFaces.get(rand.nextInt(8));
     }
     
-    /**
-     * 
-     * @param ax
-     * @return
-     */
     public static BlockFace getBlockFaceFromAxis(Axis ax) {
     	switch(ax) {
     	case X:
@@ -685,6 +694,9 @@ public class BlockUtils {
         target.setBlockData(data);
     }
 
+    /**
+     * Correct fencse for example
+     */
     public static void correctSurroundingMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
             if (Version.isAtLeast(16.1) && Tag.WALLS.isTagged(target.getType())) {
@@ -932,5 +944,11 @@ public class BlockUtils {
                     downTypes);
             start = start.getRelative(extensionDir).getRelative(0, -1, 0);
         }
+    }
+
+    public static BlockData getRandomBarrel() {
+        Directional barrel = (Directional) Bukkit.createBlockData(Material.BARREL);
+        barrel.setFacing(BlockUtils.sixBlockFaces[GenUtils.randInt(0, BlockUtils.sixBlockFaces.length - 1)]);
+        return barrel;
     }
 }

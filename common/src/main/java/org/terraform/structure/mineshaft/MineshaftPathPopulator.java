@@ -297,10 +297,8 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
         Wall core = new Wall(base.getRelative(0, 1, 0), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
-        Set<Material> set = BlockUtils.stoneLike;
-        set.addAll(Arrays.asList(Material.TERRACOTTA, Material.RED_TERRACOTTA, Material.YELLOW_TERRACOTTA, Material.BROWN_TERRACOTTA, Material.ORANGE_TERRACOTTA, Material.RED_SAND));
         BlockUtils.carveCaveAir(seed,
-                pathWidth, pathWidth + 1, pathWidth, core.get(), false, set);
+                pathWidth, pathWidth + 1, pathWidth, core.get(), false, BlockUtils.badlandsStoneLike);
 
         return true;
     }

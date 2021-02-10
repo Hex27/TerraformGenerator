@@ -2,15 +2,15 @@ package org.terraform.structure.mineshaft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.GenUtils;
 
 public class BadlandsMineEntranceParser extends SchematicParser {
     static FastNoise noise = null;
@@ -42,8 +42,17 @@ public class BadlandsMineEntranceParser extends SchematicParser {
                 break;
             }
             case GREEN_CONCRETE: {
-                if (noiseValue > 0.5 && block.getType().isAir())
-                    BlockUtils.setVines(block.getPopData(), block.getX(), block.getY(), block.getZ(), 2);
+                if (noiseValue > 0.5 && block.getType().isAir()) {
+                    for (BlockFace face : BlockUtils.directBlockFaces) {
+                        SimpleBlock b = block.getRelative(face);
+
+                        if (b.getType() == Material.OAK_LOG) {
+                            MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
+                            dir.setFace(face, true);
+                            super.applyData(block, dir);
+                        }
+                    }
+                }
 
                 break;
             }

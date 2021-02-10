@@ -13,6 +13,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -260,6 +261,21 @@ public class GenUtils {
         while(y > 0 && !data.getType(x, y, z).isSolid()) y--;
         return y;
     }
+
+    /**
+     * @return the highest solid block below y
+     */
+    public static int getTrueHighestBlockBelow(PopulatorDataAbstract data, int x, int y, int z) {
+        while(y > 0 && !data.getType(x, y, z).isSolid()) y--;
+        return y;
+    }
+
+    public static SimpleBlock getTrueHighestBlockBelow(SimpleBlock block) {
+        int y = block.getY();
+        while(y > 0 && !block.getPopData().getType(block.getX(), y, block.getZ()).isSolid()) y--;
+        return new SimpleBlock(block.getPopData(), block.getX(), y, block.getZ());
+    }
+
 
     /**
      * @return the highest solid ground. Is dirt-like or stone-like, and is
