@@ -263,7 +263,7 @@ public class BadlandsHandler extends BiomeHandler {
 
     public static boolean mineCanSpawn(TerraformWorld tw, int x, int z) {
         int h = getPlateauHeight(tw, x, z);
-        return (h < plateauHeight && h > plateauHeight / 3);
+        return (h < plateauHeight - 1 && h > plateauHeight / 3);
     }
 
     // This is for optimizing sand, ew

@@ -9,6 +9,7 @@ import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeGrid;
 import org.terraform.biome.flat.BadlandsHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -28,24 +29,22 @@ import org.terraform.utils.Vector2f;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
     static int sandRadius = TConfigOption.BIOME_BADLANDS_PLATEAU_SAND_RADIUS.getInt();
-    static int mineDistance = TConfigOption.BIOME_BADLANDS_MINE_DISTANCE.getInt();
-    static int shaftDepth = TConfigOption.BIOME_BADLANDS_MINE_DEPTH.getInt();
-    static int hallwayLen = 12;
-
-    // These gets overwritten every spawn
-    BlockFace outDir, inDir;
-    SimpleBlock entrance, gateStart, shaft;
+    static int mineDistance = TConfigOption.STRUCTURES_BADLANDS_MINE_DISTANCE.getInt();
+    static int shaftDepth = TConfigOption.STRUCTURES_BADLANDS_MINE_DEPTH.getInt();
+    static int hallwayLen = 14;
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes) {
         if (!biomes.contains(BiomeBank.BADLANDS)) return false;
 
+        // randomObjectPositions returns chunk positions here
         for (Vector2f pos : GenUtils.randomObjectPositions(tw, chunkX >> 4, chunkZ >> 4, mineDistance, mineDistance * 0.3f)) {
             if ((int) pos.x == chunkX && (int) pos.y == chunkZ) {
                 SimpleBlock s = getSpawnPosition(tw, chunkX, chunkZ);
@@ -58,7 +57,22 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public int[] getNearestFeature(TerraformWorld world, int rawX, int rawZ) {
-        return new int[0];
+        MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
+        int[][] coords = getCoordsFromMegaChunk(world, mc);
+
+        int[] smallest = null;
+        int smallestDist = Integer.MAX_VALUE;
+
+        for (int[] c : coords) {
+            double d = Math.sqrt(Math.pow(rawX - c[0], 2) + Math.pow(rawZ - c[1], 2));
+
+            if (d < smallestDist) {
+                smallestDist = (int) d;
+                smallest = c;
+            }
+        }
+
+        return smallest;
     }
 
     @Override
@@ -68,34 +82,65 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return TConfigOption.STRUCTURES_BADLANDS_MINE_ENABLED.getBoolean();
     }
 
     @Override
     public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
-        return new int[0][];
+        int chunkX = mc.getX() << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+        int chunkZ = mc.getZ() << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+        int megaChunkWidth = (int) Math.pow(2, TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt());
+
+        ArrayList<ArrayList<Integer>> coords = new ArrayList<>();
+        for (int x = chunkX; x < chunkX + megaChunkWidth; x++) {
+            for (int z = chunkZ; z < chunkZ + megaChunkWidth; z++) {
+                int sx = (x << 4) + 8;
+                int sz = (z << 4) + 8;
+                BiomeBank biome = BiomeBank.calculateBiome(tw, sx, sz, HeightMap.getBlockHeight(tw, sx, sz));
+
+                if (canSpawn(tw, x, z, new ArrayList<>(Collections.singleton(biome))))
+                    coords.add(new ArrayList<>(Arrays.asList(sx, sz)));
+            }
+        }
+
+        int[][] out = new int[coords.size()][2];
+
+        for (int i = 0; i < coords.size(); i++)
+            out[i] = new int[] {coords.get(i).get(0), coords.get(i).get(1)};
+
+        return out;
     }
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+        BlockFace outDir, inDir;
+        SimpleBlock entrance, gateStart, shaft;
+
         // Get all positions and faces
-        entrance = getSpawnPosition(tw, data.getChunkX(), data.getChunkZ());
-        if(entrance == null) return;
-        inDir = getSpawnDirection(tw, entrance.getX(), entrance.getZ());
-        if(inDir == null) return;
+        SimpleBlock spawnSpot = getSpawnPosition(tw, data.getChunkX(), data.getChunkZ());
+        if (spawnSpot == null) return;
+        inDir = getSpawnDirection(tw, spawnSpot.getX(), spawnSpot.getZ());
+        if (inDir == null) return;
         outDir = inDir.getOppositeFace();
-        entrance = entrance.getRelative(outDir, sandRadius);
-        gateStart = entrance.getRelative(inDir, 2 + 5);
-        shaft = entrance.getRelative(inDir, hallwayLen + 5);
+
+        entrance = new SimpleBlock(spawnSpot.getPopData(),
+                spawnSpot.getX() + outDir.getModX() * sandRadius,
+                spawnSpot.getY(),
+                spawnSpot.getZ() + outDir.getModZ() * sandRadius);
+        entrance.getRelative(0, HeightMap.getBlockHeight(tw, entrance.getX() + inDir.getModX(),
+                entrance.getZ() + inDir.getModZ()) + 1 - entrance.getY(), 0);
+
+        gateStart = entrance.getRelative(inDir, sandRadius + 2);
+        shaft = entrance.getRelative(inDir, hallwayLen + sandRadius - 1);
 
         Random random = tw.getHashedRand(entrance.getX(), entrance.getY(), entrance.getZ(), 4);
 
         // Spawning stuff
-        new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 4, 60, true);
+        new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
 
-        spawnShaft(random, shaft);
+        spawnShaft(random, shaft, inDir);
 
-        PathGenerator g = new PathGenerator(entrance.getRelative(inDir.getModX() * 2, -1, inDir.getModZ() * 2),
+        PathGenerator g = new PathGenerator(entrance.getRelative(inDir.getModX() * 3, -1, inDir.getModZ() * 3),
                 new Material[] {Material.CAVE_AIR}, new Random(), new int[]{0,0}, new int[]{0,0});
         g.setPopulator(new BadlandsMineshaftPathPopulator(random));
         g.generateStraightPath(null, inDir, hallwayLen);
@@ -103,9 +148,9 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
         spawnEntrance(gateStart, outDir);
         patchEntrance(entrance, inDir);
 
-        if (GenUtils.chance(4, 5)) {
+        if (GenUtils.chance(random, 4, 5)) {
             try {
-                TerraSchematic schema = TerraSchematic.load("ore-lift", new SimpleBlock(data, shaft.getX(), shaft.getY() - shaftDepth, shaft.getZ()));
+                TerraSchematic schema = TerraSchematic.load("ore-lift", new SimpleBlock(data, shaft.getX() - 1, shaft.getY() - shaftDepth, shaft.getZ() - 1));
                 schema.parser = new OreLiftSchematicParser();
                 schema.setFace(BlockFace.NORTH);
                 schema.apply();
@@ -115,9 +160,12 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
         }
     }
 
+    /**
+     * Get valid position that is on the edge of plateau
+     */
     SimpleBlock getSpawnPosition(TerraformWorld tw, int chunkX, int chunkZ) {
-        for (int x = chunkX << 4; x < chunkX << 4 + 15; x += 3) {
-            for (int z = chunkZ << 4; z < chunkZ << 4 + 15; z += 3) {
+        for (int x = chunkX << 4; x < (chunkX << 4) + 15; x += 3) {
+            for (int z = chunkZ << 4; z < (chunkZ << 4) + 15; z += 3) {
                 if (BadlandsHandler.mineCanSpawn(tw, x, z))
                     return new SimpleBlock(new Location(tw.getWorld(),x, HeightMap.getBlockHeight(tw, x, z), z));
             }
@@ -126,6 +174,9 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
         return null;
     }
 
+    /**
+     * Get valid mine spawn direction
+     */
     public static BlockFace getSpawnDirection(TerraformWorld tw, int x, int z) {
         SimpleBlock base = new SimpleBlock(new Location(tw.getWorld(), x, 0, z));
 
@@ -133,24 +184,30 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
             SimpleBlock right = base.getRelative(BlockUtils.getRight(face), 3);
             SimpleBlock left = base.getRelative(BlockUtils.getLeft(face), 3);
 
-            SimpleBlock b = right.getRelative(face, 20);
+            // Check if back right corner is covered with plateau
+            SimpleBlock b = right.getRelative(face, hallwayLen + 6);
             if (!BadlandsHandler.containsPlateau(tw, b.getX(), b.getZ()))
                 continue;
 
+            // Check if front right is not covered
             b = right.getRelative(face.getOppositeFace(), sandRadius + 2);
             if (BadlandsHandler.containsPlateau(tw, b.getX(), b.getZ()))
                 continue;
 
-            b = left.getRelative(face, 20);
+            // Back left
+            b = left.getRelative(face, hallwayLen + 6);
             if (!BadlandsHandler.containsPlateau(tw, b.getX(), b.getZ()))
                 continue;
 
+            // Front left
             b = left.getRelative(face.getOppositeFace(), sandRadius + 2);
             if (BadlandsHandler.containsPlateau(tw, b.getX(), b.getZ()))
                 continue;
 
-            if (!BadlandsHandler.containsPlateau(tw, base.getX() + face.getModX() * 10,
-                    base.getZ() + face.getModZ() * 10))
+            // Check if middle is covered
+            int i = (hallwayLen + 6) / 2;
+            if (!BadlandsHandler.containsPlateau(tw, base.getX() + face.getModX() * i,
+                    base.getZ() + face.getModZ() * i))
                 continue;
 
             return face;
@@ -177,7 +234,7 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
     void patchEntrance(SimpleBlock entrance, BlockFace direction) {
         BlockFace nextDir = BlockUtils.getRight(direction);
         fillWithBlock(entrance.getRelative(nextDir.getModX() * 2, -1, nextDir.getModZ() * 2),
-                entrance.getRelative(-nextDir.getModX() * 2, -4, -nextDir.getModZ() * 2).getRelative(direction, 2), Material.RED_SAND);
+                entrance.getRelative(-nextDir.getModX() * 2, -4, -nextDir.getModZ() * 2).getRelative(direction, 3), Material.RED_SAND);
     }
 
     void fillWithBlock(SimpleBlock start, SimpleBlock end, Material material) {
@@ -190,7 +247,8 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
         }
     }
 
-    private void spawnShaft(Random random, SimpleBlock shaft) {
+    private void spawnShaft(Random random, SimpleBlock shaft, BlockFace inDir) {
+        BlockFace outDir = inDir.getOppositeFace();
         int shaftStart = -5;
         int supportR = 3;
         Set<Material> toReplace = new HashSet<>(BlockUtils.badlandsStoneLike);
@@ -199,9 +257,9 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
 
         // Carving at ground level
         BlockUtils.carveCaveAir(random.nextInt(777123),
-                5 / 2f,
-                4,
-                5 / 2f,
+                5.5f / 2f,
+                4.5f,
+                5.5f / 2f,
                 shaft,
                 true,
                 toReplace);
@@ -221,7 +279,7 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
                     true,
                     toReplace);
 
-            if (i % 6 > 4 && i > 0) { // Add mineshaft platform positions
+            if (i % 6 > 4 && i < shaftDepth - 6) { // Add mineshaft platform positions
                 for (int b = 0; b < 1; b++) {
                     double angle = GenUtils.randDouble(random, 0, 2 * Math.PI);
                     int xAdd = (int) Math.round(Math.sin(angle) * 3);
