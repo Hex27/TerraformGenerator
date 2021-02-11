@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.structure.small.WitchHutPopulator;
@@ -117,21 +118,22 @@ public class SwampHandler extends BiomeHandler {
                         .build(tw, data, treeX, treeY - 2, treeZ);
             }
         }
-
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-            	int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-
-                if (GenUtils.chance(random, 1, 40)) {
-                    int minHeight = 3;
-                    if (y < TerraformGenerator.seaLevel) {
-                        minHeight = TerraformGenerator.seaLevel - y;
-                    }
-
-                    BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.OAK_LOG, minHeight, minHeight + 3);
+        
+        SimpleLocation[] roots = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 7, 0.6f);
+        
+        for (SimpleLocation sLoc : roots) {
+            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
+                int rootY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+                sLoc.setY(rootY);
+                if(!BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
+                		continue;
+                
+                int minHeight = 3;
+                if (sLoc.getY() < TerraformGenerator.seaLevel) {
+                    minHeight = TerraformGenerator.seaLevel - sLoc.getY();
                 }
+
+                BlockUtils.spawnPillar(random, data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ(), Material.OAK_LOG, minHeight, minHeight + 3);
                 
             }
         }

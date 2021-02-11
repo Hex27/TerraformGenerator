@@ -1,4 +1,4 @@
-1_14_R1
+14.1
 0,6,1:@:minecraft:oak_stairs[facing=south,half=bottom,shape=outer_left,waterlogged=false]
 1,6,2:@:minecraft:oak_planks
 0,6,2:@:minecraft:oak_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]

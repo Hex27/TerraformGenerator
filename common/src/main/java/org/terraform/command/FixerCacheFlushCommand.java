@@ -20,7 +20,7 @@ public class FixerCacheFlushCommand extends DCCommand {
 
     @Override
     public boolean canConsoleExec() {
-        return false;
+        return true;
     }
 
     @Override

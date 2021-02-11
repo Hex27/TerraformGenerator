@@ -2,7 +2,6 @@ package org.terraform.structure.stronghold;
 
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -12,6 +11,7 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
+import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
 import java.util.ArrayList;
@@ -100,11 +100,12 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 for (int[] pos : positions) {
                     if (areCoordsEqual(pos, x, z)) {
-                        int height = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
-                        //Strongholds start underground. Burrow down
-                        height -= 40;
-                        if (height < 3) height = 5;
-                        spawnStronghold(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, height, z);
+                        
+                    	//Strongholds no longer calculate from the surface.
+                    	//Just pick a directly underground location.
+                        int y = GenUtils.randInt(TConfigOption.STRUCTURES_STRONGHOLD_MIN_Y.getInt(), TConfigOption.STRUCTURES_STRONGHOLD_MAX_Y.getInt());
+
+                        spawnStronghold(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, y, z);
                         break;
                     }
                 }

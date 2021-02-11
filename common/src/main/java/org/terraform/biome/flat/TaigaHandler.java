@@ -4,13 +4,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.Vector2f;
 
 import java.util.Random;
 
@@ -67,17 +67,17 @@ public class TaigaHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
 
-        for (Vector2f pos : trees) {
-            if (data.getBiome((int) pos.x, (int) pos.y) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, (int) pos.x, (int) pos.y);
-
+        for (SimpleLocation sLoc : trees) {
+            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
+                int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+                sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
                 if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20))
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, (int) pos.x, treeY, (int) pos.y);
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
                 else // Normal trees
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, (int) pos.x, treeY, (int) pos.y);
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             }
         }
 

@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -90,25 +91,31 @@ public class PlainsHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		 for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-	            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-	                int y = GenUtils.getTrueHighestBlock(data, x, z);
-	                if (data.getBiome(x, y, z) != getBiome()) continue;
-	                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-	                	
-                    	if (GenUtils.chance(random, 1, 300)) { //Grass Poffs
-                            BlockUtils.replaceSphere(
-                                    random.nextInt(424444),
-                                    2, 2, 2,
-                                    new SimpleBlock(data, x, y + 1, z), false, Material.OAK_LEAVES);
-                            
-                        }else if (GenUtils.chance(random, 1, 500)) { //Trees
-                            if (BlockUtils.isDirtLike(data.getType(x, y, z)))
-                                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL)
-                                        .build(tw, data, x, y + 1, z);
-                        }
-	                }
-	            }
-		 }
+		
+		//Small trees or grass poffs
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
+        
+        for (SimpleLocation sLoc : trees) {
+        	if(random.nextBoolean()) { //trees
+        		int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+                sLoc.setY(treeY);
+                if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+                        BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+                    new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                }
+        	}else { //Poffs
+                int poffY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+                sLoc.setY(poffY);
+                if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+                        BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+                	BlockUtils.replaceSphere(
+                            random.nextInt(424444),
+                            2, 2, 2,
+                            new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ()), false, Material.OAK_LEAVES);
+                }
+            }
+            
+        }
+		
 	}
 }

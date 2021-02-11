@@ -20,6 +20,7 @@ public class Version {
     }
 
     public static double toVersionDouble(String version) {
+    	
         return Double.parseDouble(version.replace("1_", "").replace("_", ".").replace("R", "").replace("v", ""));
     }
 }

@@ -4,11 +4,11 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-
 import java.util.Random;
 
 public class SandyBeachHandler extends BiomeHandler {
@@ -66,20 +66,19 @@ public class SandyBeachHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                Material base = data.getType(x, y, z);
-                if (base != Material.SAND && base != Material.GRASS_BLOCK) continue;
+        
+		SimpleLocation[] coconutTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
 
-                y++;
-                //Spawn coconut trees
-                if (GenUtils.chance(random, 1, 200)) {
-                    TreeDB.spawnCoconutTree(tw, data, x, y, z);
-                    break;
-                }
+		// Big trees and giant mushrooms
+        for (SimpleLocation sLoc : coconutTrees) {
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            sLoc.setY(treeY);
+            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() &&
+                    (BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))
+                    || data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) == Material.SAND)) {
+                TreeDB.spawnCoconutTree(tw, data, sLoc.getX(), sLoc.getY()+1 ,sLoc.getZ());
             }
         }
+		
 	}
 }

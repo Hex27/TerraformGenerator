@@ -1,4 +1,4 @@
-1_14_R1
+14.1
 1,6,-3:@:minecraft:white_wool
 -6,0,1:@:minecraft:furnace[facing=east,lit=false]
 -6,2,1:@:minecraft:brick_stairs[facing=west,half=top,shape=straight,waterlogged=false]

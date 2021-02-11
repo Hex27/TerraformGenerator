@@ -6,7 +6,9 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
@@ -14,8 +16,8 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.Vector2f;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class JungleHandler extends BiomeHandler {
@@ -107,36 +109,49 @@ public class JungleHandler extends BiomeHandler {
             base.setType(Material.JUNGLE_LOG);
     }
 
+    private static HashMap<TerraformWorld, FastNoise> groundWoodNoiseCache = new HashMap<>();
+    private static HashMap<TerraformWorld, FastNoise> groundLeavesNoiseCache = new HashMap<>();
+    
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        FastNoise groundWoodNoise = new FastNoise((int) (tw.getSeed() * 12));
-        groundWoodNoise.SetNoiseType(NoiseType.SimplexFractal);
-        groundWoodNoise.SetFractalOctaves(3);
-        groundWoodNoise.SetFrequency(0.07f);
+        
+		if(!groundWoodNoiseCache.containsKey(tw)) {
+			FastNoise groundWoodNoise = new FastNoise((int) (tw.getSeed() * 12));
+	        groundWoodNoise.SetNoiseType(NoiseType.SimplexFractal);
+	        groundWoodNoise.SetFractalOctaves(3);
+	        groundWoodNoise.SetFrequency(0.07f);
+	        groundWoodNoiseCache.put(tw, groundWoodNoise);
 
-        FastNoise groundLeavesNoise = new FastNoise((int) (tw.getSeed() * 2));
-        groundLeavesNoise.SetNoiseType(NoiseType.SimplexFractal);
-        groundLeavesNoise.SetFrequency(0.07f);
+	        FastNoise groundLeavesNoise = new FastNoise((int) (tw.getSeed() * 2));
+	        groundLeavesNoise.SetNoiseType(NoiseType.SimplexFractal);
+	        groundLeavesNoise.SetFrequency(0.07f);
+	        groundLeavesNoiseCache.put(tw,groundLeavesNoise);
+		}
+		
+		FastNoise groundWoodNoise = groundWoodNoiseCache.get(tw);
+		FastNoise groundLeavesNoise = groundLeavesNoiseCache.get(tw);
 
-        Vector2f[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
+        SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
+        
+        if(TConfigOption.TREES_JUNGLE_BIG_ENABLED.getBoolean())
+	        for (SimpleLocation sLoc : bigTrees) {
+	            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+	            sLoc.setY(treeY);
+	            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+	                    BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+	                new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+	            }
+	        }
 
-        for (Vector2f tree : bigTrees) {
-            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
 
-            if(data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
-                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
-                new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).build(tw, data, (int) tree.x, treeY, (int) tree.y);
-            }
-        }
-
-        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
-
-        for (Vector2f tree : trees) {
-            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
-
-            if (data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
-                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
-                TreeDB.spawnSmallJungleTree(tw, data, (int) tree.x, treeY, (int) tree.y);
+        for (SimpleLocation sLoc : trees) {
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            sLoc.setY(treeY);
+            
+            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+                TreeDB.spawnSmallJungleTree(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             }
         }
 

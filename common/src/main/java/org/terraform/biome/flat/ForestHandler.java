@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
@@ -12,7 +13,6 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.Vector2f;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -121,41 +121,37 @@ public class ForestHandler extends BiomeHandler {
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
                     new FractalTreeBuilder(FractalTypes.Tree.FOREST).build(tw, data, treeX, treeY, treeZ);
             }
-        } else {
-            // TODO Clearing
         }
 
-        // Most forest chunks have a big tree
-        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
+        //Small trees
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
 
-        for (Vector2f tree : trees) {
-            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
-
-            if(data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
-                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
-                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, (int) tree.x, treeY, (int) tree.y);
+        for (SimpleLocation sLoc : trees) {
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            sLoc.setY(treeY);
+            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             }
         }
-        
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                if (GenUtils.chance(random, 1, 90)) {
-                    int y = GenUtils.getHighestGround(data, x, z);
-                	if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                        if (BlockUtils.isDirtLike(data.getType(x, y, z)) ||
-                                data.getType(x, y, z) == Material.COBBLESTONE ||
-                                data.getType(x, y, z) == Material.MOSSY_COBBLESTONE ||
-                                data.getType(x, y, z) == Material.STONE) {
-                            int ny = GenUtils.randInt(random, -1, 1);
-                            spawnRock(random, data, x, y + ny, z);
-                            if (GenUtils.chance(random, 1, 3))
-                                spawnRock(random, data, GenUtils.randInt(random, -1, 1) + x, y + ny + 1, z + GenUtils.randInt(random, -1, 1));
-                        }
-                    }
+        //Small rocks
+        SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 10);
+
+        for (SimpleLocation sLoc : rocks) {
+            sLoc.setY(GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ()));
+            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
+            	if (BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())) ||
+                        data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) == Material.COBBLESTONE ||
+                        data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) == Material.MOSSY_COBBLESTONE ||
+                        data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) == Material.STONE) {
+                    int ny = GenUtils.randInt(random, -1, 1);
+                    spawnRock(random, data, sLoc.getX(),sLoc.getY()+ny,sLoc.getZ());
+                    if (GenUtils.chance(random, 1, 3))
+                        spawnRock(random, data, GenUtils.randInt(random, -1, 1) + sLoc.getX(), sLoc.getY() + ny + 1, sLoc.getZ() + GenUtils.randInt(random, -1, 1));
                 }
+                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             }
         }
-
 	}
 }
