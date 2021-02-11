@@ -8,6 +8,7 @@ import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
 
@@ -16,21 +17,23 @@ import java.util.Random;
 
 public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
 
-    public PlainsVillageTempleJigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
+	PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageTempleJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
+        this.plainsVillagePopulator = plainsVillagePopulator;
         this.pieceRegistry = new JigsawStructurePiece[]{
-        		new PlainsVillageTempleLoungePiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
-                new PlainsVillageTempleRelicPiece(5, 3, 5, JigsawType.STANDARD, true, BlockUtils.directBlockFaces),
-                new PlainsVillageTempleLootPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+        		new PlainsVillageTempleLoungePiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+                new PlainsVillageTempleRelicPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, true, BlockUtils.directBlockFaces),
+                new PlainsVillageTempleLootPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
                 new PlainsVillageTempleWallPiece(5, 3, 5, JigsawType.END, BlockUtils.directBlockFaces),
-                new PlainsVillageTempleEntrancePiece(5, 3, 5, JigsawType.ENTRANCE, BlockUtils.directBlockFaces)
+                new PlainsVillageTempleEntrancePiece(plainsVillagePopulator, 5, 3, 5, JigsawType.ENTRANCE, BlockUtils.directBlockFaces)
         };
         this.chanceToAddNewPiece = 50;
     }
     
     @Override
     public JigsawStructurePiece getFirstPiece(Random random) {
-        return new PlainsVillageTempleClericAltarPiece(5, 3, 5, JigsawType.STANDARD, true, this, BlockUtils.directBlockFaces);
+        return new PlainsVillageTempleClericAltarPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, true, this, BlockUtils.directBlockFaces);
     	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
 
@@ -81,15 +84,15 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
         
         //Place roofing
         for(JigsawStructurePiece piece:overlapperPieces) {
-        	PlainsVillageTempleRoofHandler.handleTempleRoof(this.core.getPopData(), piece, overlapperPieces);
+        	PlainsVillageTempleRoofHandler.handleTempleRoof(plainsVillagePopulator, this.core.getPopData(), piece, overlapperPieces);
         }
         
         //Try to place large windows between pairs of walls
         for(JigsawStructurePiece wallPiece:overlapperPieces) {
     		for(BlockFace face:BlockUtils.getAdjacentFaces(wallPiece.getRotation())) {
-    			if(wallPiece instanceof PlainsVillageTempleWallPiece && hasAdjacentWall(wallPiece, face, overlapperPieces)) {
-    				((PlainsVillageTempleWallPiece)wallPiece)
-    					.setLargeWindow(this.core.getPopData(),face);
+    			if(hasAdjacentWall(wallPiece, face, overlapperPieces)) {
+    				PlainsVillageTempleWallPiece
+    					.setLargeWindow(this.core.getPopData(),wallPiece.getRotation(), wallPiece.getRoom(), face);
     			}
     		}
         }

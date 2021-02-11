@@ -9,6 +9,7 @@ import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.structure.village.plains.forge.PlainsVillageForgeWallPiece.PlainsVillageForgeWallType;
 import org.terraform.utils.BlockUtils;
 
@@ -17,20 +18,22 @@ import java.util.Random;
 
 public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
 
-    public PlainsVillageForgeJigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
+	private PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageForgeJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
+        this.plainsVillagePopulator = plainsVillagePopulator;
         this.pieceRegistry = new JigsawStructurePiece[]{
-        		new PlainsVillageForgeWeaponSmithPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
-                new PlainsVillageForgeMasonPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
-                new PlainsVillageForgeWallPiece(5, 3, 5, JigsawType.END, BlockUtils.directBlockFaces),
-                new PlainsVillageForgeEntrancePiece(5, 3, 5, JigsawType.ENTRANCE, BlockUtils.directBlockFaces)
+        		new PlainsVillageForgeWeaponSmithPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+                new PlainsVillageForgeMasonPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+                new PlainsVillageForgeWallPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.END, BlockUtils.directBlockFaces),
+                new PlainsVillageForgeEntrancePiece(plainsVillagePopulator, 5, 3, 5, JigsawType.ENTRANCE, BlockUtils.directBlockFaces)
         };
         this.chanceToAddNewPiece = 50;
     }
     
     @Override
     public JigsawStructurePiece getFirstPiece(Random random) {
-        return new PlainsVillageForgeChimneyPiece(5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
+        return new PlainsVillageForgeChimneyPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
     	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
 
@@ -90,7 +93,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
             }
         }
         
-        PlainsVillageForgeRoofHandler.placeRoof(core, rectanglePieces);
+        PlainsVillageForgeRoofHandler.placeRoof(this.plainsVillagePopulator, core, rectanglePieces);
         
         //Decorate rooms and walls
         for (JigsawStructurePiece piece : this.overlapperPieces) {
@@ -107,18 +110,18 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
     public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two, PlainsVillageForgeWallType wallType) {
         if(wallType == PlainsVillageForgeWallType.SOLID) {
         	//Corner logs
-            target.Pillar(4, random, Material.OAK_LOG);
+            target.Pillar(4, random, plainsVillagePopulator.woodLog);
             
-            target.getRelative(0, -1, 0).downUntilSolid(random, Material.OAK_LOG);
+            target.getRelative(0, -1, 0).downUntilSolid(random, plainsVillagePopulator.woodLog);
 
             target = target.getRelative(0, 1, 0);
         }
         else
         {
         	//Fence stubs
-            target.Pillar(2, random, Material.OAK_LOG);
+            target.Pillar(2, random, plainsVillagePopulator.woodLog);
             target.getRelative(0,2,0).setType(Material.STONE_SLAB,Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB);
-            target.getRelative(0, -1, 0).downUntilSolid(random, Material.OAK_LOG);
+            target.getRelative(0, -1, 0).downUntilSolid(random,plainsVillagePopulator.woodLog);
         }
         
     }

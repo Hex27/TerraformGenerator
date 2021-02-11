@@ -34,8 +34,10 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
             Material.MELON_STEM
     };
 
-    public PlainsVillageCropFarmPopulator(Random rand, boolean forceSpawn, boolean unique) {
+	private PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageCropFarmPopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 
     @Override
@@ -45,23 +47,27 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
         boolean hasScareCrow = false;
         int pad = GenUtils.randInt(1, 3);
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, pad).entrySet()) {
-            Wall w = entry.getKey().getGround().getRelative(0, 1, 0);
+            Wall w = entry.getKey().getGroundOrSeaLevel().getRelative(0, 1, 0);
             for (int i = 0; i < entry.getValue(); i++) {
                 if (w.getDirection().getOppositeFace() == dir) { //Entrance
 
                     if (i <= 1 || i >= entry.getValue() - 1) {
-                        w.setType(Material.OAK_LOG);
+                        w.setType(plainsVillagePopulator.woodLog);
+                        w.getRelative(0,-1,0).downUntilSolid(rand, plainsVillagePopulator.woodLog);
                         if (i == 1 || i == entry.getValue() - 1) {
-                            new TrapdoorBuilder(Material.OAK_TRAPDOOR)
+                            new TrapdoorBuilder(plainsVillagePopulator.woodTrapdoor)
                                     .setFacing(dir)
                                     .setOpen(true)
                                     .setHalf(Half.BOTTOM)
                                     .apply(w.getRear());
 
-                            w.getRelative(0, 1, 0).setType(Material.OAK_LEAVES);
+                            w.getRelative(0, 1, 0).setType(plainsVillagePopulator.woodLeaves);
                         }
                     } else if (i == 2 || i == entry.getValue() - 2) {
-                        w.setType(Material.OAK_FENCE);
+                        w.setType(plainsVillagePopulator.woodFence);
+                        
+                        w.getRelative(0,-1,0).downUntilSolid(rand, plainsVillagePopulator.woodLog);
+                        
                         w.CorrectMultipleFacing(1);
                         w.getRelative(0, 1, 0).setType(Material.TORCH);
 
@@ -70,22 +76,22 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
 
 
                 } else { //Farm Walls
-                    w.setType(Material.OAK_LOG);
+                    w.downUntilSolid(rand, plainsVillagePopulator.woodLog);
                     if (i % 3 == 0) {
-                        w.getRelative(0, 1, 0).setType(Material.OAK_LEAVES);
+                        w.getRelative(0, 1, 0).setType(plainsVillagePopulator.woodLeaves);
                     } else {
-                        w.getRelative(0, 1, 0).setType(Material.OAK_FENCE);
+                        w.getRelative(0, 1, 0).setType(plainsVillagePopulator.woodFence);
                         w.getRelative(0, 1, 0).CorrectMultipleFacing(1);
 
                         //Chance to spawn overhanging lamp
-                        if (GenUtils.chance(rand, 1, 13)) {
-                            int lampHeight = GenUtils.randInt(rand, 3, 5);
-                            w.getRelative(0, 2, 0).Pillar(lampHeight, rand, Material.OAK_FENCE);
+                        if (i > 1 && i < entry.getValue()-2 && GenUtils.chance(rand, 1, 13)) {
+                            int lampHeight = GenUtils.randInt(rand, 4, 6);
+                            w.getRelative(0, 2, 0).Pillar(lampHeight, rand, plainsVillagePopulator.woodFence);
 
                             Wall lampWall = w.getRelative(0, 1 + lampHeight, 0).getFront();
 
                             for (int j = 0; j < GenUtils.randInt(rand, 1, 2); j++) {
-                                lampWall.setType(Material.OAK_FENCE);
+                                lampWall.setType(plainsVillagePopulator.woodFence);
                                 lampWall.CorrectMultipleFacing(1);
                                 lampWall = lampWall.getFront();
                             }
@@ -95,7 +101,7 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
                             if (Version.isAtLeast(16.0))
                                 chain = OneOneSixBlockHandler.getChainMaterial();
 
-                            for (int j = 0; j < GenUtils.randInt(rand, 0, 2); j++) {
+                            for (int j = 0; j < GenUtils.randInt(rand, 0, 1); j++) {
                                 lampWall.setType(chain);
                                 lampWall = lampWall.getRelative(0, -1, 0);
                             }
@@ -106,7 +112,7 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
                     }
                 }
 
-                w = w.getLeft().getGround().getRelative(0, 1, 0);
+                w = w.getLeft().getGroundOrSeaLevel().getRelative(0, 1, 0);
             }
         }
 
@@ -119,11 +125,16 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
 
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-                int height = GenUtils.getHighestGround(data, x, z);
-
-                if (x % 4 == 0 && z % 4 == 0) //Water
+                int height = GenUtils.getHighestGroundOrSeaLevel(data, x, z);
+                BlockUtils.setDownUntilSolid(x, height-1, z, data, Material.DIRT);
+                
+                if (x % 4 == 0 && z % 4 == 0) { //Water
+                	for(BlockFace face:BlockUtils.directBlockFaces) {
+                		data.setType(x+face.getModX(), height, z+face.getModZ(), Material.FARMLAND);
+                		BlockUtils.setDownUntilSolid(x+face.getModX(), height-1, z+face.getModZ(), data, Material.DIRT);
+                	}
                     data.setType(x, height, z, Material.WATER);
-                else if ((crop != Material.PUMPKIN_STEM && crop != Material.MELON_STEM)
+                } else if ((crop != Material.PUMPKIN_STEM && crop != Material.MELON_STEM)
                         || GenUtils.chance(rand, 1, 3)) {
 
                     if (GenUtils.chance(rand, 1, 30) && !hasScareCrow) { //Scarecrows
@@ -178,10 +189,10 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
         BlockFace facing = BlockUtils.getDirectBlockFace(rand);
         Wall w = new Wall(new SimpleBlock(data, x, y, z), facing);
         w.setType(Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-        w.getRelative(0, 1, 0).setType(Material.OAK_FENCE);
-        w.getRelative(0, 2, 0).setType(Material.OAK_FENCE);
-        w.getLeft().getRelative(0, 2, 0).setType(Material.OAK_FENCE);
-        w.getRight().getRelative(0, 2, 0).setType(Material.OAK_FENCE);
+        w.getRelative(0, 1, 0).setType(plainsVillagePopulator.woodFence);
+        w.getRelative(0, 2, 0).setType(plainsVillagePopulator.woodFence);
+        w.getLeft().getRelative(0, 2, 0).setType(plainsVillagePopulator.woodFence);
+        w.getRight().getRelative(0, 2, 0).setType(plainsVillagePopulator.woodFence);
         w.getRelative(0, 2, 0).CorrectMultipleFacing(1);
 
         new DirectionalBuilder(Material.CARVED_PUMPKIN, Material.JACK_O_LANTERN)
@@ -192,6 +203,6 @@ public class PlainsVillageCropFarmPopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return (room.getWidthX() < 18 || room.getWidthZ() < 18);
+        return room.getWidthX() >= 15 && (room.getWidthX() < 18 || room.getWidthZ() < 18);
     }
 }

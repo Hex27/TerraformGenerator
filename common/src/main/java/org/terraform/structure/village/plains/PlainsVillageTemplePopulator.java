@@ -1,7 +1,6 @@
 package org.terraform.structure.village.plains;
 
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -15,18 +14,21 @@ import java.util.Random;
 
 public class PlainsVillageTemplePopulator extends RoomPopulatorAbstract {
 
-    public PlainsVillageTemplePopulator(Random rand, boolean forceSpawn, boolean unique) {
+	private PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageTemplePopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
 
-        int height = GenUtils.getHighestGround(data, room.getX(), room.getZ());
+        int height = GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
         
         //1 is added to height because temples need a small bit of elevation to look better
         PlainsVillageTempleJigsawBuilder builder = new PlainsVillageTempleJigsawBuilder(
-                room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height+1, room.getZ()
+        		plainsVillagePopulator,
+        		room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height+1, room.getZ()
         );
         if (room instanceof DirectionalCubeRoom)
             builder.forceEntranceDirection(((DirectionalCubeRoom) room).getDirection());
@@ -35,7 +37,7 @@ public class PlainsVillageTemplePopulator extends RoomPopulatorAbstract {
         builder.build(this.rand);
 
         Wall entrance = builder.getEntranceBlock().getRear().getGround();
-        int maxDepth = 6;
+        int maxDepth = 12;
 
         boolean placedLamp = false;
         //Connect front to the nearest path.
@@ -49,7 +51,7 @@ public class PlainsVillageTemplePopulator extends RoomPopulatorAbstract {
                     target = entrance.getLeft(2).getGround().getRelative(0, 1, 0).get();
                 else
                     target = entrance.getRight(2).getGround().getRelative(0, 1, 0).get();
-                if (canPlaceLamp(target)) {
+                if (PlainsVillagePathPopulator.canPlaceLamp(target)) {
                     placedLamp = true;
                     PlainsVillagePathPopulator.placeLamp(rand, target);
                 }
@@ -61,19 +63,8 @@ public class PlainsVillageTemplePopulator extends RoomPopulatorAbstract {
         }
     }
 
-    private boolean canPlaceLamp(SimpleBlock target) {
-
-        for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
-            for (int i = 0; i < 6; i++)
-                if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
-                    return false;
-        }
-
-        return true;
-    }
-
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return true;
+        return room.getWidthX() >= 15;
     }
 }

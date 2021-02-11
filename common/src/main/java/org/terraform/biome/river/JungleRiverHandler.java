@@ -45,7 +45,7 @@ public class JungleRiverHandler extends BiomeHandler {
 
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         boolean growsKelp = random.nextBoolean();
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
@@ -87,6 +87,12 @@ public class JungleRiverHandler extends BiomeHandler {
             data.setType(x, ny, z, Material.KELP_PLANT);
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

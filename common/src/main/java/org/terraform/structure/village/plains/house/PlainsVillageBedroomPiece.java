@@ -11,6 +11,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
@@ -22,8 +23,8 @@ import java.util.Random;
 
 public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
 
-    public PlainsVillageBedroomPiece(PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-        super(variant, widthX, height, widthZ, type, validDirs);
+    public PlainsVillageBedroomPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+        super(plainsVillagePopulator, variant, widthX, height, widthZ, type, validDirs);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
             for (int i = 0; i < entry.getValue(); i++) {
                 if (!w.getFront().getType().isSolid()
                         && placedBeds < 2
-                        && w.getRear().getType() != Material.OAK_DOOR) {
+                        && w.getRear().getType() != plainsVillagePopulator.woodDoor) {
                     if ((GenUtils.chance(random, 2, 5) && placedBeds == 0)
                             || (GenUtils.chance(random, 1, 10) && placedBeds == 1)) {
                         BlockUtils.placeBed(w.get(), BlockUtils.pickBed(), w.getDirection());
@@ -84,7 +85,7 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
 
             for (int i = 0; i < entry.getValue(); i++) {
                 //Don't place stuff in front of doors
-                if (w.getRear().getType() != Material.OAK_DOOR) {
+                if (w.getRear().getType() != plainsVillagePopulator.woodDoor) {
                     if (!Tag.BEDS.isTagged(w.getType())) { //don't replace beds
                         if (Tag.BEDS.isTagged(w.getRight().getType())
                                 || Tag.BEDS.isTagged(w.getLeft().getType())) {

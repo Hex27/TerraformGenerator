@@ -1,5 +1,6 @@
 package org.terraform.structure.village.plains;
 
+import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -14,8 +15,6 @@ import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.blockdata.SlabBuilder;
-
 import java.util.Collection;
 import java.util.Random;
 
@@ -45,7 +44,27 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
             b.getRelative(face).getRelative(0, 5, 0).setType(GenUtils.randMaterial(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
         }
     }
+    
+	/**
+	 * Only checks if the target location has enough space to place a lamp,
+	 * and if the lamp is in water. Other
+	 * checks such as ground type etc must be done elsewhere
+	 * @param target the block where the base of the lamp is.
+	 * @return whether or not the lamp has enough space to be placed here.
+	 */
+    public static boolean canPlaceLamp(SimpleBlock target) {
+    	
+    	if(target.getType() == Material.WATER)
+    		return false;
+        for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
+            for (int i = 0; i < 6; i++)
+                if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
+                    return false;
+        }
 
+        return true;
+    }
+    
     @Override
     public void populate(PathPopulatorData ppd) {
 
@@ -57,19 +76,42 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                 ppd.base.getZ());
 
         //Path is on water. Place a solid wooden foundation, and then return.
-        if (ppd.base.getRelative(0,1,0).getType() == Material.WATER) {
-            Wall pathCore = new Wall(ppd.base, ppd.dir).getAtY(TerraformGenerator.seaLevel);
-            new SlabBuilder(Material.OAK_SLAB)
-                    .setWaterlogged(true).setType(Type.TOP)
-                    .apply(pathCore)
-                    .apply(pathCore.getLeft())
-                    .apply(pathCore.getRight());
-
-            pathCore.getRelative(0, -1, 0).downLPillar(random, 50, Material.OAK_LOG);
-
+        if (BlockUtils.isWet(ppd.base.getRelative(0,1,0))) {
+            
+        	Wall pathCore = new Wall(ppd.base, ppd.dir).getAtY(TerraformGenerator.seaLevel);
+           
+        	if((BlockUtils.getAxisFromBlockFace(ppd.dir) == Axis.X && ppd.base.getX() % 2 == 0) 
+        		|| (BlockUtils.getAxisFromBlockFace(ppd.dir) == Axis.Z && ppd.base.getZ() % 2 == 0)) {
+        		pathCore.getRelative(0, -1, 0).downLPillar(random, 50, Material.OAK_LOG);
+        		pathCore.setType(Material.CHISELED_STONE_BRICKS);
+        	}
             return;
         }
-
+        
+        //Decorate the sides of the paths
+        Wall pathCore = new Wall(ppd.base, ppd.dir);
+    	for(BlockFace face:BlockUtils.getAdjacentFaces(ppd.dir)) {
+            for(int i = 0; i < 4; i++) {
+        		Wall target = pathCore.getRelative(face,i).getGround();
+            	if(!target.getRelative(0,1,0).getType().isSolid()
+            			&& target.getRelative(0,1,0).getType() != Material.WATER
+            			&& BlockUtils.isDirtLike(target.getType()) 
+            			&& target.getType() != Material.GRASS_PATH) {
+            		if(GenUtils.chance(2,5)) { //Leaves
+            			target.getRelative(0,1,0).setType(Material.OAK_LEAVES);
+            		}else if(GenUtils.chance(1, 5)) { //Flowers
+            			BlockUtils.setDoublePlant(target.get().getPopData(), target.getX(), target.getY()+1, target.getZ(), BlockUtils.pickTallFlower());
+            		}else if(GenUtils.chance(1, 10)) { //Small cobble walls with lanterns
+            			target.getRelative(0,1,0).setType(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
+            			target.getRelative(0,2,0).setType(Material.LANTERN);
+            		}
+            		
+            		break;
+            	}
+        	}
+        }
+        	
+        
         if (GenUtils.chance(random, 1, 15)) {
             BlockFace side = BlockUtils.getTurnBlockFace(random, ppd.dir);
             SimpleBlock target = new SimpleBlock(

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
@@ -33,7 +34,7 @@ public class SandyBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         boolean hasSugarcane = GenUtils.chance(random, 1, 100);
 
@@ -45,11 +46,6 @@ public class SandyBeachHandler extends BiomeHandler {
                 if (base != Material.SAND && base != Material.GRASS_BLOCK) continue;
 
                 y++;
-                //Spawn coconut trees
-                if (GenUtils.chance(random, 1, 200)) {
-                    TreeDB.spawnCoconutTree(world, data, x, y, z);
-                    break;
-                }
 
                 //Spawn sugarcane
                 if (hasSugarcane) {
@@ -68,4 +64,22 @@ public class SandyBeachHandler extends BiomeHandler {
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        
+		SimpleLocation[] coconutTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
+
+		// Big trees and giant mushrooms
+        for (SimpleLocation sLoc : coconutTrees) {
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            sLoc.setY(treeY);
+            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() &&
+                    (BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))
+                    || data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) == Material.SAND)) {
+                TreeDB.spawnCoconutTree(tw, data, sLoc.getX(), sLoc.getY()+1 ,sLoc.getZ());
+            }
+        }
+		
+	}
 }

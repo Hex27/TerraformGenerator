@@ -13,12 +13,15 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -262,6 +265,21 @@ public class GenUtils {
         return y;
     }
 
+    
+    /**
+     * 
+     * @param data
+     * @param x
+     * @param z
+     * @return the highest dry ground, or the sea level
+     */
+    public static int getHighestGroundOrSeaLevel(PopulatorDataAbstract data, int x, int z) {
+    	int y = getHighestGround(data,x,z);
+    	if(y < TerraformGenerator.seaLevel)
+    		return TerraformGenerator.seaLevel;
+    	return y;
+    }
+    
     /**
      * @return the highest solid block below y
      */
@@ -287,6 +305,10 @@ public class GenUtils {
         while(y > 0) {
             Material block = data.getType(x, y, z);
             if(BlockUtils.isStoneLike(block)) break;
+            if(block == Material.SAND 
+            	|| block == Material.RED_SAND
+            	|| block == Material.GRAVEL)
+            	break;
 
             if(block.isSolid()) {
                 switch(block) {
@@ -349,6 +371,8 @@ public class GenUtils {
         return res;
     }
 
+    private static final HashMap<TerraformWorld, FastNoise> randomObjectPositionNoiseCache = new HashMap<>();
+
     /**
      * Function that returns random positions inside chunk.
      * An algorithm makes sure that objects are at least user-defined
@@ -360,11 +384,17 @@ public class GenUtils {
      * @param maxPerturbation Max amount a point can move in each axis
      * @return List of points
      */
-    public static Vector2f[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
-        FastNoise noise = new FastNoise();
-        noise.SetFrequency(1);
-        noise.SetGradientPerturbAmp(maxPerturbation);
-        noise.SetSeed((int) world.getSeed());
+    public static Vector2f[] vectorRandomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
+        FastNoise noise;
+    	if(randomObjectPositionNoiseCache.containsKey(world)) {
+    		noise = randomObjectPositionNoiseCache.get(world);
+    	} else {
+        	noise = new FastNoise();
+            noise.SetFrequency(1);
+            noise.SetGradientPerturbAmp(maxPerturbation);
+            noise.SetSeed((int) world.getSeed());
+            randomObjectPositionNoiseCache.put(world, noise);
+    	}
 
         ArrayList<Vector2f> positions = new ArrayList<>();
 
@@ -396,8 +426,34 @@ public class GenUtils {
         return positions.toArray(new Vector2f[0]);
     }
 
-    public static Vector2f[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween) {
-        return randomObjectPositions(world, chunkX, chunkZ, distanceBetween, 0.35f * distanceBetween);
+    public static SimpleLocation[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween) {
+    	Vector2f[] vecs = vectorRandomObjectPositions(world, chunkX, chunkZ, distanceBetween, 0.35f * distanceBetween);
+        SimpleLocation[] locs = new SimpleLocation[vecs.length];
+    	
+    	for(int i = 0; i < vecs.length; i++) {
+    		locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
+    	}
+        
+        return locs;
     }
 
+    /**
+     * 
+     * @param world
+     * @param chunkX
+     * @param chunkZ
+     * @param distanceBetween
+     * @param pertubMultiplier is normally 0.35.
+     * @return
+     */
+    public static SimpleLocation[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float pertubMultiplier) {
+    	Vector2f[] vecs = vectorRandomObjectPositions(world, chunkX, chunkZ, distanceBetween, pertubMultiplier * distanceBetween);
+        SimpleLocation[] locs = new SimpleLocation[vecs.length];
+    	
+    	for(int i = 0; i < vecs.length; i++) {
+    		locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
+    	}
+        
+        return locs;
+    }
 }

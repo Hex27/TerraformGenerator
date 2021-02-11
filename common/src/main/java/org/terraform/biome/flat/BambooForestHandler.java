@@ -28,14 +28,6 @@ public class BambooForestHandler extends BiomeHandler {
         return Biome.BAMBOO_JUNGLE;
     }
 
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
-//		gen.setScale(0.005);
-//		
-//		return (int) (gen.noise(x, z, 0.5, 0.5)*7D+50D);
-//	}
-
     @Override
     public Material[] getSurfaceCrust(Random rand) {
         return new Material[]{Material.GRASS_BLOCK,
@@ -46,7 +38,7 @@ public class BambooForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         FastNoise pathNoise = new FastNoise((int) (world.getSeed() * 13));
         pathNoise.SetNoiseType(NoiseType.SimplexFractal);
         pathNoise.SetFractalOctaves(3);
@@ -82,7 +74,21 @@ public class BambooForestHandler extends BiomeHandler {
                                 BlockUtils.setDoublePlant(data, x, y + 1, z, Material.LARGE_FERN);
                         }
                     }
+                }
+            }
+        }
+    }
 
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                if (data.getBiome(x, y, z) != getBiome()) continue;
+
+                if (data.getType(x, y, z) == Material.GRASS_BLOCK ||
+                        data.getType(x, y, z) == Material.PODZOL) {
+                	
                     //Small grass poffs
                     if (GenUtils.chance(random, 1, 50)) {
                         BlockUtils.replaceSphere(
@@ -109,5 +115,5 @@ public class BambooForestHandler extends BiomeHandler {
                 }
             }
         }
-    }
+	}
 }

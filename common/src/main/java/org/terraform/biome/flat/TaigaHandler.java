@@ -4,13 +4,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.Vector2f;
 
 import java.util.Random;
 
@@ -43,20 +43,7 @@ public class TaigaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
-
-        for (Vector2f pos : trees) {
-            if (data.getBiome((int) pos.x, (int) pos.y) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, (int) pos.x, (int) pos.y);
-
-                // Rarely spawn huge taiga trees
-                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20))
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, (int) pos.x, treeY, (int) pos.y);
-                else // Normal trees
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, (int) pos.x, treeY, (int) pos.y);
-            }
-        }
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
         // Generate grass
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
@@ -65,15 +52,7 @@ public class TaigaHandler extends BiomeHandler {
                 if (data.getBiome(x, y, z) != getBiome()) continue;
 
                 if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                    if (GenUtils.chance(random, 1, 10)) {
-                        //TODO: Trees
-//						Location loc = new Location(tw.getWorld(), x,y,z);
-//						if(GenUtils.chance(random, 1,3))
-//							tw.getWorld().generateTree(loc, TreeType.TALL_REDWOOD);
-//						else
-//							tw.getWorld().generateTree(loc, TreeType.REDWOOD);
-                        //data.setType(x,y+1,z,Material.PURPLE_WOOL);
-                    } else if (GenUtils.chance(random, 1, 20)) {
+                    if (GenUtils.chance(random, 1, 20)) {
                         data.setType(x, y + 1, z, Material.GRASS);
                         if (random.nextBoolean()) {
                             BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
@@ -85,4 +64,22 @@ public class TaigaHandler extends BiomeHandler {
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
+
+        for (SimpleLocation sLoc : trees) {
+            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
+                int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+                sLoc.setY(treeY);
+                // Rarely spawn huge taiga trees
+                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20))
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                else // Normal trees
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+            }
+        }
+
+	}
 }

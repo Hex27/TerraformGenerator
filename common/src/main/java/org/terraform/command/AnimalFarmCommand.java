@@ -7,7 +7,7 @@ import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.animalfarm.AnimalFarmPopulator;
+import org.terraform.structure.villagehouse.animalfarm.AnimalFarmPopulator;
 
 import java.util.Stack;
 

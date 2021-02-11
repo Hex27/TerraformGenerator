@@ -8,8 +8,8 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
@@ -48,7 +48,6 @@ public class PlainsVillageRoofHandler {
         for (int x = lowestCoords[0]; x <= highestCoords[0]; x += builder.getPieceWidth()) {
             for (int z = lowestCoords[1]; z <= highestCoords[1]; z += builder.getPieceWidth()) {
                 if (!builder.getPieces().containsKey(new SimpleLocation(x, y, z))) {
-                    TerraformGeneratorPlugin.logger.info("Failed rec check: " + x + "," + y + "," + z);
                     return false;
                 } else
                     count++;
@@ -60,7 +59,7 @@ public class PlainsVillageRoofHandler {
     }
 
 
-    public static void placeTentRoof(Random rand, PlainsVillageHouseJigsawBuilder builder) {
+    public static void placeTentRoof(PlainsVillagePopulator plainsVillagePopulator, Random rand, PlainsVillageHouseJigsawBuilder builder) {
         Axis superiorAxis = Axis.Z;
         PopulatorDataAbstract data = builder.getCore().getPopData();
         int[] lowestCoords = null;
@@ -128,25 +127,25 @@ public class PlainsVillageRoofHandler {
                 if (right != 0 && right != breadth - 1) {
                     //Sandwiched by trapdoors
                     if (i == 0) {
-                        new TrapdoorBuilder(Material.OAK_TRAPDOOR)
+                        new TrapdoorBuilder(plainsVillagePopulator.woodTrapdoor)
                                 .setHalf(Half.TOP)
                                 .setOpen(true)
                                 .setFacing(target.getDirection().getOppositeFace())
                                 .apply(target.getRelative(0, -1, 0));
                     } else if (i == length - 1) {
-                        new TrapdoorBuilder(Material.OAK_TRAPDOOR)
+                        new TrapdoorBuilder(plainsVillagePopulator.woodTrapdoor)
                                 .setHalf(Half.TOP)
                                 .setOpen(true)
                                 .setFacing(target.getDirection())
                                 .apply(target.getRelative(0, -1, 0));
                     } else {
-                        new OrientableBuilder(Material.OAK_LOG)
+                        new OrientableBuilder(plainsVillagePopulator.woodLog)
                                 .setAxis(superiorAxis)
                                 .apply(target.getRelative(0, -1, 0).get());
                     }
                 }
 
-                Material[] stairType = {Material.OAK_STAIRS};
+                Material[] stairType = {plainsVillagePopulator.woodStairs};
                 Material[] slabType = {Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
 
                 if (right == 0 || right == breadth - 1 || i == 0 || i == length - 1) {
@@ -210,11 +209,11 @@ public class PlainsVillageRoofHandler {
      * used for the weirdly shaped houses that aren't rectangles.
      * @param builder
      */
-    public static void placeStandardRoof(PlainsVillageHouseJigsawBuilder builder) {
+    public static void placeStandardRoof(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseJigsawBuilder builder) {
         PopulatorDataAbstract data = builder.getCore().getPopData();
 
-        Material[] solidMat = {Material.OAK_PLANKS};
-        Material[] stairMat = {Material.OAK_STAIRS};
+        Material[] solidMat = {plainsVillagePopulator.woodPlank};
+        Material[] stairMat = {plainsVillagePopulator.woodStairs};
 
         if (builder.getVariant() == PlainsVillageHouseVariant.CLAY) {
             solidMat = new Material[]{Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE};
@@ -244,7 +243,7 @@ public class PlainsVillageRoofHandler {
                     for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                         SimpleBlock target = new SimpleBlock(data, x, piece.getRoom().getY() + piece.getRoom().getHeight() + 3 + depth, z);
                         if (target.getType() != Material.COBBLESTONE
-                                && target.getType() != Material.OAK_PLANKS
+                                && target.getType() != plainsVillagePopulator.woodPlank
                                 && target.getType() != Material.MOSSY_COBBLESTONE) {
                             //BlockUtils.correctSurroundingStairData(target);
                             continue;
@@ -253,7 +252,7 @@ public class PlainsVillageRoofHandler {
 
                         for (BlockFace face : BlockUtils.directBlockFaces) {
                             if (!target.getRelative(face).getType().isSolid()) {
-                                //Material[] mats = new Material[] {Material.OAK_STAIRS};
+                                //Material[] mats = new Material[] {plainsVillagePopulator.woodStairs};
                                 //if(depth == -2 || depth == 0)
                                 //	mats = new Material[] {Material.COBBLESTONE_STAIRS,Material.MOSSY_COBBLESTONE_STAIRS};
                                 new StairBuilder(stairMat)

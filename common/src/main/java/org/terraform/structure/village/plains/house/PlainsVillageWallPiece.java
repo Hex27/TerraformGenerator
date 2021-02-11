@@ -9,6 +9,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
@@ -19,10 +20,11 @@ import java.util.Random;
 public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
     PlainsVillageHouseVariant var;
-
-    public PlainsVillageWallPiece(PlainsVillageHouseVariant var, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+    PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageWallPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant var, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
         this.var = var;
+        this.plainsVillagePopulator = plainsVillagePopulator;
 
     }
 
@@ -38,20 +40,20 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
             if (this.var == PlainsVillageHouseVariant.CLAY)
                 w.getRelative(0, 2, 0).Pillar(2, rand, Material.WHITE_TERRACOTTA);
             else
-                w.getRelative(0, 2, 0).Pillar(2, rand, Material.OAK_PLANKS);
+                w.getRelative(0, 2, 0).Pillar(2, rand, plainsVillagePopulator.woodPlank);
 
             w = w.getLeft();
         }
-        w.getRight(2).getRelative(0, 2, 0).setType(Material.OAK_LOG);
+        w.getRight(2).getRelative(0, 2, 0).setType(plainsVillagePopulator.woodLog);
         w.getRight(3).getRelative(0, 2, 0).setType(Material.GLASS_PANE);
-        w.getRight(4).getRelative(0, 2, 0).setType(Material.OAK_LOG);
+        w.getRight(4).getRelative(0, 2, 0).setType(plainsVillagePopulator.woodLog);
         BlockUtils.correctSurroundingMultifacingData(w.getRight(3).getRelative(0, 2, 0).get());
 
         w = w.getRight(3).getFront().getRelative(0, 1, 0);
 
         //Variant Wooden
-        Material[] slabType = {Material.OAK_SLAB};
-        Material[] fenceType = {Material.OAK_FENCE};
+        Material[] slabType = {plainsVillagePopulator.woodSlab};
+        Material[] fenceType = {plainsVillagePopulator.woodFence};
         Material[] baseType = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
         Material[] stairType = {Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS};
 
@@ -59,13 +61,13 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
         if (var == PlainsVillageHouseVariant.COBBLESTONE) {
             slabType = new Material[]{Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
             fenceType = new Material[]{Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
-            baseType = new Material[]{Material.OAK_LOG};
-            stairType = new Material[]{Material.OAK_STAIRS};
+            baseType = new Material[]{plainsVillagePopulator.woodLog};
+            stairType = new Material[]{plainsVillagePopulator.woodStairs};
         } else if (var == PlainsVillageHouseVariant.CLAY) {
             slabType = BlockUtils.stoneBrickSlabs;
             fenceType = new Material[]{Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
-            baseType = new Material[]{Material.STRIPPED_OAK_LOG};
-            stairType = new Material[]{Material.OAK_STAIRS};
+            baseType = new Material[]{plainsVillagePopulator.woodStrippedLog};
+            stairType = new Material[]{plainsVillagePopulator.woodStairs};
         }
 
         new SlabBuilder(slabType)
@@ -87,7 +89,7 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
         if (new Random().nextBoolean()) { //Plants
             w.setType(Material.GRASS_BLOCK);
-            TrapDoor trapdoor = (TrapDoor) Bukkit.createBlockData(Material.OAK_TRAPDOOR);
+            TrapDoor trapdoor = (TrapDoor) Bukkit.createBlockData(plainsVillagePopulator.woodTrapdoor);
             trapdoor.setFacing(w.getDirection());
             trapdoor.setOpen(true);
             w.getFront().setBlockData(trapdoor);

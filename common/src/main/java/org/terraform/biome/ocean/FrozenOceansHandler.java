@@ -32,7 +32,7 @@ public class FrozenOceansHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -46,6 +46,12 @@ public class FrozenOceansHandler extends BiomeHandler {
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

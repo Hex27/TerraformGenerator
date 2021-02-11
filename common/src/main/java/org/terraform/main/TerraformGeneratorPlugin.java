@@ -10,7 +10,6 @@ import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformPopulator;
-import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
@@ -23,6 +22,7 @@ import org.terraform.tree.SaplingOverrider;
 import org.terraform.utils.version.Version;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -65,11 +65,14 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
         String version = Version.getVersionPackage();
         logger.info("Detected version: " + version);
         try {
-            injector = (NMSInjectorAbstract) Class.forName("org.terraform." + version + ".NMSInjector").newInstance();
+			injector = (NMSInjectorAbstract) Class.forName("org.terraform." + version + ".NMSInjector").getDeclaredConstructor().newInstance();
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             logger.error("&cNo support for this version has been made yet!");
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException 
+        		| IllegalArgumentException | InvocationTargetException 
+        		| NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
             logger.error("&cSomething went wrong initiating the injector!");
 
@@ -85,7 +88,7 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
     
     @Override
     public void onDisable() {
-    	NativeGeneratorPatcherPopulator.flushChanges();
+    	//NativeGeneratorPatcherPopulator.flushChanges();
     }
     
     /**

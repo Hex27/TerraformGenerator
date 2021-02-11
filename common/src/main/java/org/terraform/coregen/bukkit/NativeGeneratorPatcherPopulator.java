@@ -9,7 +9,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.BlockPopulator;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.terraform.data.SimpleChunkLocation;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.ArrayList;
@@ -19,7 +21,8 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NativeGeneratorPatcherPopulator extends BlockPopulator implements Listener{
-
+	
+	private static boolean flushIsQueued = false;
     //SimpleChunkLocation to a collection of location:blockdata entries marked for repair.
     public static Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
     //private final TerraformWorld tw;
@@ -30,6 +33,17 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     }
     
     public static void pushChange(String world, int x, int y, int z, BlockData data) {
+    	
+    	if(!flushIsQueued && cache.size() > TConfigOption.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY.getInt()) {
+			flushIsQueued = true;
+    		new BukkitRunnable() {
+	    		@Override
+				public void run() {
+		    		flushChanges();		
+		    		flushIsQueued = false;
+				}
+    		}.runTask(TerraformGeneratorPlugin.get());
+    	}
     	
         SimpleChunkLocation scl = new SimpleChunkLocation(world, x, y, z);
         if (!cache.containsKey(scl))
@@ -42,7 +56,9 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     }
     
     public static void flushChanges() {
-    	TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Flushing remaining repairs.");
+    	if(cache.size() == 0)
+    		return;
+    	TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Flushing repairs (" + cache.size() + " chunks)");
         ArrayList<SimpleChunkLocation> locs = new ArrayList<>();
     	for(SimpleChunkLocation scl:cache.keySet()) {
     		locs.add(scl);
@@ -53,15 +69,14 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     		if(w.isChunkLoaded(scl.getX(), scl.getZ())) {
     			Collection<Object[]> changes = cache.remove(scl);
     	        if (changes != null) {
-    	        	//TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Detected anomalous generation by NMS on " + scl + ". Running repairs on " + changes.size() + " blocks");
-    	            for (Object[] entry : changes) {
+    	        	for (Object[] entry : changes) {
     	                int[] loc = (int[]) entry[0];
     	                BlockData data = (BlockData) entry[1];
     	                w.getBlockAt(loc[0], loc[1], loc[2])
     	                        .setBlockData(data, false);
     	            }
     	        }
-    		}else {
+    		} else {
     			//Let the event handler do it
     			w.loadChunk(scl.getX(), scl.getZ());
     		}
@@ -100,8 +115,10 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     
     @EventHandler
     public void onWorldUnload(WorldUnloadEvent event) {
-    	TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Flushing repairs for " + event.getWorld().getName());
-        for(SimpleChunkLocation scl:cache.keySet()) {
+    	TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Flushing repairs for " + event.getWorld().getName() + " (" + cache.size() + " chunks in cache)");
+        
+    	int processed = 0;
+    	for(SimpleChunkLocation scl:cache.keySet()) {
         	if(!scl.getWorld().equals(event.getWorld().getName()))
         		continue;
         	Collection<Object[]> changes = cache.get(scl);
@@ -113,6 +130,10 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 	                        .setBlockData(data, false);
 	            }
 	        }
+	        
+	        processed++;
+	        if(processed % 20 == 0)
+	        	TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Processed " + processed + " more chunks");
     	}
     }
 

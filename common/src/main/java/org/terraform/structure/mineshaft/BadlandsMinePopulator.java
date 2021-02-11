@@ -44,7 +44,7 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
         if (!biomes.contains(BiomeBank.BADLANDS)) return false;
 
         // randomObjectPositions returns chunk positions here
-        for (Vector2f pos : GenUtils.randomObjectPositions(tw, chunkX >> 4, chunkZ >> 4, mineDistance, mineDistance * 0.3f)) {
+        for (Vector2f pos : GenUtils.vectorRandomObjectPositions(tw, chunkX >> 4, chunkZ >> 4, mineDistance, mineDistance * 0.3f)) {
             if ((int) pos.x == chunkX && (int) pos.y == chunkZ) {
                 SimpleBlock s = getSpawnPosition(tw, chunkX, chunkZ);
                 return s != null && getSpawnDirection(tw, s.getX(), s.getZ()) != null;

@@ -9,6 +9,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
@@ -19,10 +20,11 @@ import java.util.Random;
 public class PlainsVillageStandardPiece extends JigsawStructurePiece {
 
     PlainsVillageHouseVariant variant;
-
-    public PlainsVillageStandardPiece(PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+    PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageStandardPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
         this.variant = variant;
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 
     @Override
@@ -68,7 +70,7 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
             Wall w = entry.getKey().getRelative(0, 2, 0);
             for (int i = 0; i < entry.getValue(); i++) {
                 Material type = w.getType();
-                if (w.getRelative(0, 1, 0).getType() != Material.OAK_LOG) ;
+                if (w.getRelative(0, 1, 0).getType() != plainsVillagePopulator.woodLog) ;
                 w.getRelative(0, 1, 0).setType(type);
 
                 w = w.getLeft();

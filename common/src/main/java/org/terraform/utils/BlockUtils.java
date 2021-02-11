@@ -14,6 +14,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rail.Shape;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
@@ -41,6 +42,14 @@ public class BlockUtils {
     public static final List<BlockFace> xzPlaneBlockFaces = Arrays.asList(
             BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
     );
+    
+    public static final List<Material> wetMaterials = Arrays.asList(
+    		Material.WATER,
+    		Material.KELP_PLANT,
+    		Material.SEAGRASS,
+    		Material.TALL_SEAGRASS
+    );
+    
     public static final BlockFace[] BLOCK_FACES = BlockFace.values();
     public static final BlockFace[] xzDiagonalPlaneBlockFaces = {BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST};
     public static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
@@ -256,6 +265,7 @@ public class BlockUtils {
             case SAVANNA:
             case DESERT_MOUNTAINS:
             case DESERT:
+    		case BADLANDS_BEACH:
             case BADLANDS_MOUNTAINS:
                 return Material.getMaterial("ACACIA_" + wood);
             case BIRCH_MOUNTAINS:
@@ -267,6 +277,11 @@ public class BlockUtils {
             case OCEAN:
             case MUDFLATS:
             case LUKEWARM_OCEAN:
+    		case DEEP_LUKEWARM_OCEAN:
+    		case DEEP_OCEAN:
+    		case DEEP_WARM_OCEAN:
+    		case RIVER:
+    		case ERODED_PLAINS:
             case FOREST:
                 return Material.getMaterial("OAK_" + wood);
             case FROZEN_OCEAN:
@@ -276,13 +291,21 @@ public class BlockUtils {
             case SNOWY_MOUNTAINS:
             case ROCKY_MOUNTAINS:
             case ROCKY_BEACH:
+    		case FROZEN_RIVER:
+    		case DEEP_COLD_OCEAN:
+    		case DEEP_FROZEN_OCEAN:
+    		case ICY_BEACH:
             case ICE_SPIKES:
                 return Material.getMaterial("SPRUCE_" + wood);
             case SANDY_BEACH:
             case JUNGLE:
+    		case JUNGLE_RIVER:
+    		case BAMBOO_FOREST:
                 return Material.getMaterial("JUNGLE_" + wood);
-            default:
-                break;
+			case BLACK_OCEAN:
+			case DEEP_BLACK_OCEAN:
+			case DARK_FOREST:
+					return Material.getMaterial("DARK_OAK_" + wood);
         }
         return Material.getMaterial("OAK_" + wood);
     }
@@ -647,6 +670,37 @@ public class BlockUtils {
             }
         }
     }
+    
+    public static void replaceLowerSphere(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean hardReplace, Material... type) {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+        if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
+            //block.setReplaceType(ReplaceType.ALL);
+            block.setType(GenUtils.randMaterial(new Random(seed), type));
+            return;
+        }
+
+        Random rand = new Random(seed);
+        FastNoise noise = new FastNoise(seed);
+        noise.SetNoiseType(NoiseType.Simplex);
+        noise.SetFrequency(0.09f);
+
+        for (float x = -rX; x <= rX; x++) {
+            for (float y = -rY; y <= 0; y++) {
+                for (float z = -rZ; z <= rZ; z++) {
+                    SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
+                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
+                            + Math.pow(y, 2) / Math.pow(rY, 2)
+                            + Math.pow(z, 2) / Math.pow(rZ, 2);
+                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
+                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randMaterial(rand, type));
+                        //rel.setReplaceType(ReplaceType.ALL);
+                    }
+                }
+            }
+        }
+    }
 
     public static BlockFace[] getAdjacentFaces(BlockFace original) {
         //   N
@@ -950,5 +1004,38 @@ public class BlockUtils {
         Directional barrel = (Directional) Bukkit.createBlockData(Material.BARREL);
         barrel.setFacing(BlockUtils.sixBlockFaces[GenUtils.randInt(0, BlockUtils.sixBlockFaces.length - 1)]);
         return barrel;
+    }
+    
+    public static void angledStairwayUntilSolid(SimpleBlock start, BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
+        int threshold = 5;
+    	while (!start.getType().isSolid()) {
+    		
+    		if(threshold == 0)
+    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
+            
+    		new StairBuilder(stairTypes)
+                    .setFacing(extensionDir.getOppositeFace())
+                    .apply(start);
+            BlockUtils.setDownUntilSolid(
+                    start.getX(),
+                    start.getY() - 1,
+                    start.getZ(),
+                    start.getPopData(),
+                    downTypes);
+            threshold--;
+            start = start.getRelative(extensionDir).getRelative(0, -1, 0);
+        }
+    }
+    
+    /**
+     * Checks if the target is in a wet material, or if the material it is
+     * in is waterlogged.
+     * @param target
+     * @return
+     */
+    public static boolean isWet(SimpleBlock target) {
+    	return BlockUtils.wetMaterials.contains(target.getType()) || 
+        		(target.getBlockData() instanceof Waterlogged
+            			&& ((Waterlogged) target.getBlockData()).isWaterlogged());
     }
 }

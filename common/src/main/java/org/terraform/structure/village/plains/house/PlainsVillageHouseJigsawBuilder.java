@@ -8,26 +8,33 @@ import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 
 import java.util.Random;
 
 public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
     PlainsVillageHouseVariant var;
-
-    public PlainsVillageHouseJigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
+    PlainsVillagePopulator plainsVillagePopulator;
+    public PlainsVillageHouseJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
+        this.plainsVillagePopulator = plainsVillagePopulator;
         this.var = PlainsVillageHouseVariant.roll(new Random());
         this.pieceRegistry = new JigsawStructurePiece[]{
-                new PlainsVillageBedroomPiece(var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
-                new PlainsVillageKitchenPiece(var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
-                new PlainsVillageLibraryPiece(var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
-                new PlainsVillageWallPiece(var, 5, 3, 5, JigsawType.END, BlockUtils.directBlockFaces),
-                new PlainsVillageEntrancePiece(var, 5, 3, 5, JigsawType.ENTRANCE, BlockUtils.directBlockFaces)
+                new PlainsVillageBedroomPiece(plainsVillagePopulator, var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+                new PlainsVillageKitchenPiece(plainsVillagePopulator, var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+                new PlainsVillageLibraryPiece(plainsVillagePopulator, var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+                new PlainsVillageWallPiece(plainsVillagePopulator, var, 5, 3, 5, JigsawType.END, BlockUtils.directBlockFaces),
+                new PlainsVillageEntrancePiece(plainsVillagePopulator, var, 5, 3, 5, JigsawType.ENTRANCE, BlockUtils.directBlockFaces)
         };
         this.chanceToAddNewPiece = 30;
     }
 
+    @Override
+    public JigsawStructurePiece getFirstPiece(Random random) {
+        return new PlainsVillageBedroomPiece(plainsVillagePopulator, var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
+    }
+    
     @Override
     public void build(Random random) {
         super.build(random);
@@ -40,13 +47,13 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
                     piece.getRoom().getY(),
                     piece.getRoom().getZ());
             Wall target;
-            Material[] fenceType = {Material.OAK_FENCE};
-            Material cornerType = Material.OAK_LOG;
+            Material[] fenceType = {plainsVillagePopulator.woodFence};
+            Material cornerType = plainsVillagePopulator.woodLog;
             if (this.var == PlainsVillageHouseVariant.COBBLESTONE)
                 fenceType = new Material[]{Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
             else if (this.var == PlainsVillageHouseVariant.CLAY) {
                 fenceType = new Material[]{Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
-                cornerType = Material.STRIPPED_OAK_LOG;
+                cornerType = plainsVillagePopulator.woodStrippedLog;
             }
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
                     && piece.getWalledFaces().contains(BlockFace.WEST)) { //nw
@@ -72,9 +79,9 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
 
         //Place the roof
         if (!PlainsVillageRoofHandler.isRectangle(this))
-            PlainsVillageRoofHandler.placeStandardRoof(this);
+            PlainsVillageRoofHandler.placeStandardRoof(plainsVillagePopulator, this);
         else
-            PlainsVillageRoofHandler.placeTentRoof(random, this);
+            PlainsVillageRoofHandler.placeTentRoof(plainsVillagePopulator, random, this);
 
         //Decorate rooms and walls
         for (JigsawStructurePiece piece : this.pieces.values()) {

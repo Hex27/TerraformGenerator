@@ -12,6 +12,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
@@ -24,8 +25,8 @@ import java.util.Random;
 
 public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 
-    public PlainsVillageKitchenPiece(PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-        super(variant, widthX, height, widthZ, type, validDirs);
+    public PlainsVillageKitchenPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+        super(plainsVillagePopulator, variant, widthX, height, widthZ, type, validDirs);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
         BlockFace primaryWall = this.getWalledFaces().get(random.nextInt(this.getWalledFaces().size()));
         SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
         int numUtilities = 5;
-        if (core.getRelative(primaryWall, 3).getType() == Material.OAK_DOOR) {
+        if (core.getRelative(primaryWall, 3).getType() == plainsVillagePopulator.woodDoor) {
             numUtilities--;
         }
 
@@ -55,7 +56,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
         }
         Collections.shuffle(utilities);
         for (int i = 0; i < entry.getValue(); i++) {
-            if (w.getRear().getType() != Material.OAK_DOOR) {
+            if (w.getRear().getType() != plainsVillagePopulator.woodDoor) {
                 numUtilities--;
                 Material mat = utilities.get(numUtilities);
                 switch (mat) {
@@ -73,7 +74,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                     case SMOKER:
                         new DirectionalBuilder(mat)
                                 .setFacing(w.getDirection()).apply(w);
-                        w.getRelative(0, 1, 0).setType(Material.OAK_PRESSURE_PLATE);
+                        w.getRelative(0, 1, 0).setType(plainsVillagePopulator.woodPressurePlate);
 
                         new StairBuilder(Material.BRICK_STAIRS)
                                 .setFacing(w.getDirection().getOppositeFace())
@@ -114,12 +115,12 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
             w = entry.getKey();
 
             for (int i = 0; i < entry.getValue(); i++) {
-                if (w.getRear().getType() != Material.OAK_DOOR
+                if (w.getRear().getType() != plainsVillagePopulator.woodDoor
                         && !w.getType().isSolid()) {
                     int decor = random.nextInt(5);
                     switch (decor) {
                         case 0: //Counter
-                            new StairBuilder(Material.STONE_BRICK_STAIRS, Material.POLISHED_ANDESITE_STAIRS, Material.OAK_STAIRS)
+                            new StairBuilder(Material.STONE_BRICK_STAIRS, Material.POLISHED_ANDESITE_STAIRS, plainsVillagePopulator.woodStairs)
                                     .setFacing(w.getDirection().getOppositeFace())
                                     .setHalf(Half.TOP)
                                     .apply(w);

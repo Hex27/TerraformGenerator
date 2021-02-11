@@ -34,8 +34,8 @@ public class ErodedPlainsHandler extends BiomeHandler {
     public Material[] getSurfaceCrust(Random rand) { return plainsHandler.getSurfaceCrust(rand); }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        plainsHandler.populate(world, random, data);
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+        plainsHandler.populateSmallItems(world, random, data);
     }
 
     @Override
@@ -89,4 +89,9 @@ public class ErodedPlainsHandler extends BiomeHandler {
                 .setBiomeThreshold(0.3).setRiverThreshold(4).setMountainThreshold(4).setBlendBeaches(false);
         return biomeBlender;
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		plainsHandler.populateLargeItems(tw, random, data);
+	}
 }

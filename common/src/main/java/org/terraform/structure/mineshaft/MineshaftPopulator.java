@@ -167,4 +167,9 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
     public boolean isEnabled() {
         return TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean();
     }
+    
+    @Override
+    public int getChunkBufferDistance() {
+    	return 0;
+    }
 }

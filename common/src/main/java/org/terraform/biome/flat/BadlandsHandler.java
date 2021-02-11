@@ -76,8 +76,12 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        generatePlateaus(world, data);
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+        
+    	//While not a small item, generatePlateaus is left in, as it
+    	//transforms the terrain itself. Structures placed must account for
+    	//these terrain changes.
+    	generatePlateaus(world, data);
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -115,9 +119,6 @@ public class BadlandsHandler extends BiomeHandler {
                 }
 
             }
-        }
-        if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
-            new DesertWellPopulator().populate(world, random, data, true);
         }
     }
 
@@ -311,4 +312,49 @@ public class BadlandsHandler extends BiomeHandler {
             usedBranchVerticals.add(bHeight);
         }
     }
+
+    //TODO: Seems like a mass of excessive calculation just to spawn dead trees
+    //Look into optimisation here in future.
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+
+        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
+            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                int highest = GenUtils.getTrueHighestBlock(data, x, z);
+
+                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, x, z, highest);
+                if (currentBiome != BiomeBank.BADLANDS &&
+                        currentBiome != BiomeBank.BADLANDS_BEACH &&
+                        currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;
+
+                if (HeightMap.getNoiseGradient(tw, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
+                    BadlandsMountainHandler.oneUnit(tw, random, data, x, z, true);
+                    continue;
+                }
+
+                Material base = data.getType(x, highest, z);
+                if (base == Material.SAND ||
+                        base == Material.RED_SAND) {
+                    if (GenUtils.chance(random, 1, 200)) {
+
+                        boolean canSpawn = true;
+                        for (BlockFace face : BlockUtils.directBlockFaces) {
+                            if (data.getType(x + face.getModX(), highest + 1, z + face.getModZ()) != Material.AIR)
+                                canSpawn = false;
+                        }
+                        
+                        if (HeightMap.getBlockHeight(tw, x, z) + 5 < highest) canSpawn = false;
+                        if (canSpawn && GenUtils.chance(1, 50))
+                            spawnDeadTree(data, x, highest, z);
+                        
+                    }
+                }
+
+            }
+        }
+		
+        if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
+            new DesertWellPopulator().populate(tw, random, data, true);
+        }
+	}
 }

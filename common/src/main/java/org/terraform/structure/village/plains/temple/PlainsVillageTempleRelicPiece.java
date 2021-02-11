@@ -5,6 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
 
@@ -12,8 +13,8 @@ import java.util.Random;
 
 public class PlainsVillageTempleRelicPiece extends PlainsVillageTempleStandardPiece {
 
-	public PlainsVillageTempleRelicPiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
-		super(widthX, height, widthZ, type, unique, validDirs);
+	public PlainsVillageTempleRelicPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
+		super(plainsVillagePopulator, widthX, height, widthZ, type, unique, validDirs);
 	}
 	
 	private static final Material[] stairTypes = {

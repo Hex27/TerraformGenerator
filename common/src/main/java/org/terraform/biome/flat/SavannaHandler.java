@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
@@ -73,7 +74,7 @@ public class SavannaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
         for (int i = 0; i < GenUtils.randInt(random, 1, 3); i++) {
             int x = data.getChunkX() * 16 + GenUtils.randInt(0, 15);
@@ -83,26 +84,6 @@ public class SavannaHandler extends BiomeHandler {
             makeYellowPatch(x, y, z, data, random);
         }
 
-        //Large savanna trees are very very rare
-        if (TConfigOption.TREES_SAVANNA_BIG_ENABLED.getBoolean() && GenUtils.chance(1, 100)) {
-            int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_BIG).build(world, data, treeX, treeY, treeZ);
-            }
-        }
-        //Savanna trees are very spaced. low chance. Only spawned when no big tree in the same chunk
-        else if (GenUtils.chance(1, 10)) {
-            int treeX = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
-            int treeZ = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).build(world, data, treeX, treeY, treeZ);
-            }
-        }
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -115,19 +96,59 @@ public class SavannaHandler extends BiomeHandler {
                     if (GenUtils.chance(random, 5, 10)) {
                         BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
                     }
-
-                    //Bushes
-                    if (GenUtils.chance(random, 1, 200)) {
-                        SimpleBlock base = new SimpleBlock(data, x, y + 1, z);
-                        int rX = GenUtils.randInt(random, 2, 4);
-                        int rY = GenUtils.randInt(random, 2, 4);
-                        int rZ = GenUtils.randInt(random, 2, 4);
-                        BlockUtils.replaceSphere(random.nextInt(999), rX, rY, rZ, base, false, Material.ACACIA_LEAVES);
-                    }
                 }
 
 
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		
+        boolean spawnedLargeSavannaTree = false;
+        
+		//large trees
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 112, 0.6f);
+        
+        if(TConfigOption.TREES_SAVANNA_BIG_ENABLED.getBoolean())
+	        for (SimpleLocation sLoc : trees) {
+	            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+	            sLoc.setY(treeY);
+	            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+	                    BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+                    new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_BIG).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
+	                spawnedLargeSavannaTree = true;
+	            }
+	        }
+		
+        //Small trees
+        if (!spawnedLargeSavannaTree) {
+    	    trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 32);
+            for (SimpleLocation sLoc : trees) {
+         	    int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+			    sLoc.setY(treeY);
+			    if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+			           BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+			           new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
+			    }
+            }
+        }
+       
+        //Grass Poffs
+        SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 31);
+        for (SimpleLocation sLoc : poffs) {
+     	   int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+		   sLoc.setY(treeY);
+		   if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+		           BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())) &&
+		           !data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()).isSolid()) {
+               SimpleBlock base = new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());
+               int rX = GenUtils.randInt(random, 2, 4);
+               int rY = GenUtils.randInt(random, 2, 4);
+               int rZ = GenUtils.randInt(random, 2, 4);
+               BlockUtils.replaceSphere(random.nextInt(999), rX, rY, rZ, base, false, Material.ACACIA_LEAVES);
+		    } 
+        }
+	}
 }

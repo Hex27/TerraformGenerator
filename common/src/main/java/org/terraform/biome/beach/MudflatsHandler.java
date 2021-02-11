@@ -44,11 +44,10 @@ public class MudflatsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-
-        boolean spawnHut = GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666),
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    	boolean spawnHut = GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666),
                 TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000);
-
+        
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
@@ -75,9 +74,17 @@ public class MudflatsHandler extends BiomeHandler {
             }
         }
 
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		// TODO Auto-generated method stub
+		boolean spawnHut = GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666),
+                TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000);
+
         if (spawnHut) {
             WitchHutPopulator whp = new WitchHutPopulator();
             whp.populate(tw, random, data);
         }
-    }
+	}
 }

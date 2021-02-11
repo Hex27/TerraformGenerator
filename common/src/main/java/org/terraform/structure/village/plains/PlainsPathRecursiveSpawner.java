@@ -3,6 +3,8 @@ package org.terraform.structure.village.plains;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Slab.Type;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
@@ -12,6 +14,7 @@ import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.blockdata.SlabBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +30,10 @@ public class PlainsPathRecursiveSpawner {
     private final int range;
     private int minRoomWidth = 15;
     private int maxRoomWidth = 20;
-
+    private int smallRoomChance = 10;
+    private int minSmallRoomWidth = 7;
+    private int maxSmallRoomWidth = 10;
+    
     /** 
      * 1 for max room density, 0 for no rooms.
      */
@@ -66,11 +72,23 @@ public class PlainsPathRecursiveSpawner {
                         SimpleLocation adj = loc.getRelative(adjDir);
                         if (isLocationValid(adj)) {
                             BlockFace rF = adjDir.getOppositeFace();
+                            int minRoomWidth = this.minRoomWidth;
+                            int maxRoomWidth = this.maxRoomWidth;
+                            if(GenUtils.chance(random, smallRoomChance, 100)) {
+                            	minRoomWidth = this.minSmallRoomWidth;
+                            	maxRoomWidth = this.maxSmallRoomWidth;
+                            }
+                            
+                            int roomWidthX = GenUtils.randInt(minRoomWidth, maxRoomWidth);
+                            int roomWidthZ = GenUtils.randInt(minRoomWidth, maxRoomWidth);
+                            
                             DirectionalCubeRoom room = new DirectionalCubeRoom(
-                                    rF, GenUtils.randInt(minRoomWidth, maxRoomWidth), 20, GenUtils.randInt(minRoomWidth, maxRoomWidth),
-                                    loc.getX() + adjDir.getModX() * 11,
+                                    rF, roomWidthX, roomWidthZ, 20, 
+                                    loc.getX() + (adjDir.getModX() * (2 + roomWidthX/2)),
                                     loc.getY(),
-                                    loc.getZ() + adjDir.getModZ() * 11);
+                                    loc.getZ() + (adjDir.getModZ() * (2 + roomWidthZ/2)));
+                            //TerraformGeneratorPlugin.logger.info("ROOM: [" + (loc.getX() + adjDir.getModX()*11) + "] : [" + room.getX() + "], [" + (loc.getZ() + adjDir.getModZ()*11) + "] : [" + room.getZ() + "]");
+                            
                             if (!this.registerRoom(room)) { //Roll crossroads
                                 if (GenUtils.chance(random, lastCrossroad, 20)) {
                                     crossRoads.put(loc, new CrossRoad(loc, BlockUtils.getAdjacentFaces(direction)));
@@ -160,27 +178,38 @@ public class PlainsPathRecursiveSpawner {
         for (SimpleLocation loc : path.keySet()) {
             Wall w = new Wall(new SimpleBlock(core.getPopData(), loc.getX(), loc.getY(), loc.getZ()), path.get(loc));
             w = w.getGround();
-            if (w.getRelative(0,1,0).getType() == Material.WATER) {
-                //Don't build paths underwater.
+            if (BlockUtils.isWet(w.getRelative(0,1,0).get())) {
+            	
+                //Paths underwater are wood planks.
+
+            	//TODO: This is the most optimised way now, 
+            	//but if local water levels are implemented, this must change.
+            	w = w.getAtY(TerraformGenerator.seaLevel);
+				new SlabBuilder(Material.OAK_SLAB)
+				 .setWaterlogged(true).setType(Type.TOP)
+				 .apply(w)
+				 .lapply(w.getRelative(0,0,1))
+				 .lapply(w.getRelative(0,0,-1))
+				 .lapply(w.getRelative(1,0,1))
+				 .lapply(w.getRelative(1,0,-1))
+				 .lapply(w.getRelative(-1,0,1))
+				 .lapply(w.getRelative(-1,0,-1))
+				 .lapply(w.getRelative(1,0,0))
+				 .lapply(w.getRelative(-1,0,0))
+				 ;
+				//Bukkit.getLogger().info("Underwater path at " + w.get().getVector() + " of type " + w.getType().toString());
+            	
                 continue;
             }
-            if (BlockUtils.isDirtLike(w.getType()))
-                w.setType(Material.GRASS_PATH);
+            //if (BlockUtils.isDirtLike(w.getType()))
+            w.setType(Material.GRASS_PATH);
 
             for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
                 Wall target = w.getRelative(face).getGround();
-                if (BlockUtils.isDirtLike(target.getType()) && random.nextInt(3) != 0)
+                if (random.nextInt(3) != 0)
                     target.setType(Material.GRASS_PATH);
             }
         }
-
-        //Populate pathways
-        for (SimpleLocation loc : path.keySet()) {
-            if (pathPop != null) {
-                pathPop.populate(new PathPopulatorData(new SimpleBlock(core.getPopData(), loc.getX(), loc.getY(), loc.getZ()), path.get(loc), 3));
-            }
-        }
-
         if (validRooms.isEmpty()) return;
 
         //Allocate room populators
@@ -221,9 +250,17 @@ public class PlainsPathRecursiveSpawner {
                         + room.getWidthX() + "x" + room.getWidthZ());
                 room.populate(core.getPopData());
             } else {
-                Bukkit.getLogger().info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
+                //Bukkit.getLogger().info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
             }
         }
+
+        //Populate pathways
+        for (SimpleLocation loc : path.keySet()) {
+            if (pathPop != null) {
+                pathPop.populate(new PathPopulatorData(new SimpleBlock(core.getPopData(), loc.getX(), loc.getY(), loc.getZ()), path.get(loc), 3));
+            }
+        }
+
     }
 
     private CrossRoad getFirstUnsatisfiedCrossRoad() {

@@ -174,9 +174,10 @@ public class JigsawBuilder {
     public void build(Random random) {
         for (JigsawStructurePiece piece : pieces.values()) {
 
-
-            //TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," +
-            // piece.getRotation());
+        	//Force room to be air first
+            piece.getRoom().purgeRoomContents(core.getPopData(), 0);
+            
+            //Build room
             piece.build(core.getPopData(), random);
         }
 

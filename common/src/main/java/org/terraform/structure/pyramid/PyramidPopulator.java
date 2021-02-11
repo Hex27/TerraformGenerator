@@ -40,14 +40,6 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                 return false;
         }
 
-        //Check heightmap. Ensure that entire area isn't beach or sea.
-        //Ideally the entire area should be a desert.
-//        for(int nx = -50; nx <= 50; nx++)
-//	        for(int nz = -50; nz <= 50; nz++) {
-//	        	if(HeightMap.getBlockHeight(tw, nx+coords[0], nz+coords[1]) < TerraformGenerator.seaLevel + 5) {
-//	        		return false;
-//	        	}
-//	        }
         return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ &&
                 rollSpawnRatio(tw, chunkX, chunkZ);
     }

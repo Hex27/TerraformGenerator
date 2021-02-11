@@ -15,9 +15,9 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
-import org.terraform.structure.farmhouse.FarmhouseSchematicParser;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
+import org.terraform.structure.villagehouse.farmhouse.FarmhouseSchematicParser;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -26,10 +26,16 @@ import java.util.Random;
 public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
 
     private final TerraformWorld tw;
+    private int elevation;
 
     public PlainsVillageTownhallPopulator(TerraformWorld tw, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
         this.tw = tw;
+        this.elevation = GenUtils.randInt(this.rand, 2, 4);
+    }
+    
+    public void setElevation(int elevation) {
+    	this.elevation = elevation;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
         int y = GenUtils.getHighestGround(data, x, z);
         try {
             BiomeBank biome = tw.getBiomeBank(x, y, z);
-            y += GenUtils.randInt(this.rand, 2, 4);
+            y += elevation;
             TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new Location(tw.getWorld(), x, y, z));
             farmHouse.parser = new FarmhouseSchematicParser(biome, this.rand, data);
             BlockFace face = BlockUtils.getDirectBlockFace(this.rand);

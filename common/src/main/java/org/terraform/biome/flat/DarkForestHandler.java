@@ -6,6 +6,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.data.Rotatable;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
@@ -14,7 +15,6 @@ import org.terraform.tree.MushroomBuilder;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.Vector2f;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -76,43 +76,10 @@ public class DarkForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        Vector2f[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 2 * 16);
-        Vector2f[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25);
-
-        // Big trees and giant mushrooms
-        for (Vector2f tree : bigTrees) {
-            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
-
-            if (data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
-                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
-                if (GenUtils.chance(random, 1, 10)) {
-                    FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
-                    if (GenUtils.chance(random, 1, 3)) {
-                        if (random.nextBoolean())
-                            type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
-                        else
-                            type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
-                    }
-                    new MushroomBuilder(type).build(tw, data, (int) tree.x, treeY, (int) tree.y);
-                } else if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()) {
-                    TreeDB.spawnBigDarkOakTree(tw, data, (int) tree.x, treeY, (int) tree.y);
-                }
-            }
-        }
-
-        // Small trees
-        for (Vector2f tree : trees) {
-            int treeY = GenUtils.getHighestGround(data, (int) tree.x, (int) tree.y);
-
-            if (data.getBiome((int) tree.x, (int) tree.y) == getBiome() &&
-                    BlockUtils.isDirtLike(data.getType((int) tree.x, treeY, (int) tree.y))) {
-                new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
-                        .build(tw, data, (int) tree.x, treeY + 1, (int) tree.y);
-            }
-        }
-
-        boolean spawnHeads = GenUtils.chance(random, 1, 100);
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+      
+        boolean spawnHeads = TConfigOption.BIOME_DARKFOREST_SPAWN_HEADS.getBoolean() 
+        		&& GenUtils.chance(random, 1, 100);
 
         //Small decorations
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
@@ -132,15 +99,6 @@ public class DarkForestHandler extends BiomeHandler {
                             data.setType(x, y + 1, z, mushroom);
                         }
                     }
-
-                    //Obelisks
-                    if (GenUtils.chance(random, 1, 1000)) {
-                        if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                            for (int i = 0; i < GenUtils.randInt(3, 6); i++) {
-                                spawnRock(random, data, x, y + i + 1, z);
-                            }
-                        }
-                    }
                 }
 
                 if (spawnHeads && GenUtils.chance(random, 1, 50)) {
@@ -155,4 +113,56 @@ public class DarkForestHandler extends BiomeHandler {
         }
 
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 2 * 16);
+		SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25);
+		SimpleLocation[] obelisks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 12);
+
+		// Big trees and giant mushrooms
+        for (SimpleLocation sLoc : bigTrees) {
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            sLoc.setY(treeY);
+            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+                if (GenUtils.chance(random, 1, 10)) {
+                    FractalTypes.Mushroom type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
+                    if (GenUtils.chance(random, 1, 3)) {
+                        if (random.nextBoolean())
+                            type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                        else
+                            type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
+                    }
+                    new MushroomBuilder(type).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                } else if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()) {
+                    TreeDB.spawnBigDarkOakTree(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                }
+            }
+        }
+
+        // Small trees
+        for (SimpleLocation sLoc : trees) {
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
+            sLoc.setY(treeY);
+            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+                new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
+                        .build(tw, data, sLoc.getX(),sLoc.getY()+1,sLoc.getZ());
+            }
+        }
+        
+
+        //Obelisks
+        for (SimpleLocation sLoc : obelisks) {
+        	int x = sLoc.getX();
+        	int z = sLoc.getZ();
+        	int y = GenUtils.getHighestGround(data, x, z);
+            if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
+                for (int i = 0; i < GenUtils.randInt(3, 6); i++) {
+                    spawnRock(random, data, x, y + i + 1, z);
+                }
+            }	
+        }
+	}
 }

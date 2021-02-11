@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.structure.small.WitchHutPopulator;
@@ -61,21 +62,8 @@ public class SwampHandler extends BiomeHandler {
 
 
     @Override
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
         int seaLevel = TerraformGenerator.seaLevel;
-        int treeX = 0, treeY, treeZ = 0;
-        if (GenUtils.chance(random, 3, 10)) {
-            treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
-            treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
-
-            if (data.getBiome(treeX, treeZ) == getBiome()) {
-                treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
-                        .build(tw, data, treeX, treeY - 3, treeZ);
-                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
-                        .build(tw, data, treeX, treeY - 2, treeZ);
-            }
-        }
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -102,15 +90,6 @@ public class SwampHandler extends BiomeHandler {
                     }
                 }
 
-                if (GenUtils.chance(random, 1, 40)) {
-                    int minHeight = 3;
-                    if (y < seaLevel) {
-                        minHeight = seaLevel - y;
-                    }
-
-                    BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.OAK_LOG, minHeight, minHeight + 3);
-                }
-
                 if (GenUtils.chance(random, 10, 100) && y < TerraformGenerator.seaLevel - 3) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
 
@@ -121,11 +100,49 @@ public class SwampHandler extends BiomeHandler {
             }
         }
 
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+
+        int treeX = 0, treeY, treeZ = 0;
+        if (GenUtils.chance(random, 3, 10)) {
+            treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
+            treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
+
+            if (data.getBiome(treeX, treeZ) == getBiome()) {
+                treeY = GenUtils.getHighestGround(data, treeX, treeZ);
+                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
+                        .build(tw, data, treeX, treeY - 3, treeZ);
+                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
+                        .build(tw, data, treeX, treeY - 2, treeZ);
+            }
+        }
+        
+        SimpleLocation[] roots = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 7, 0.6f);
+        
+        for (SimpleLocation sLoc : roots) {
+            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
+                int rootY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+                sLoc.setY(rootY);
+                if(!BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
+                		continue;
+                
+                int minHeight = 3;
+                if (sLoc.getY() < TerraformGenerator.seaLevel) {
+                    minHeight = TerraformGenerator.seaLevel - sLoc.getY();
+                }
+
+                BlockUtils.spawnPillar(random, data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ(), Material.OAK_LOG, minHeight, minHeight + 3);
+                
+            }
+        }
+        
         WitchHutPopulator whp = new WitchHutPopulator();
         if (GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666), TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
             whp.populate(tw, random, data);
         }
-    }
+	}
 
 
 }

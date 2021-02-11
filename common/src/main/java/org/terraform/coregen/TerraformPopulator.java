@@ -7,6 +7,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.populators.AnimalPopulator;
 import org.terraform.populators.OrePopulator;
+import org.terraform.structure.StructureBufferDistanceHandler;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -165,10 +166,15 @@ public class TerraformPopulator {
                     banks.add(currentBiome);
             }
         }
-
+        
+        boolean canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
         for (BiomeBank bank : banks) {
             // Biome specific populators
-            bank.getHandler().populate(tw, random, data);
+            bank.getHandler().populateSmallItems(tw, random, data);
+            
+            //Only decorate disruptive features if the structures allow for them
+            if(canDecorate)
+            	bank.getHandler().populateLargeItems(tw, random, data);
 
             // Cave populators
             bank.getCavePop().populate(tw, random, data);

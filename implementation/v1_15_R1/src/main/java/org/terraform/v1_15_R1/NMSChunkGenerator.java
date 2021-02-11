@@ -15,9 +15,9 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.farmhouse.FarmhousePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

@@ -7,33 +7,25 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
 public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
 
-//    private static final ArrayList<Material> BRIGHT_CARPETS = new ArrayList<Material>(){{
-//        add(Material.BLUE_CARPET);
-//        add(Material.CYAN_CARPET);
-//        add(Material.LIGHT_BLUE_CARPET);
-//        add(Material.LIME_CARPET);
-//        add(Material.MAGENTA_CARPET);
-//        add(Material.PINK_CARPET);
-//        add(Material.PURPLE_CARPET);
-//        add(Material.RED_CARPET);
-//        add(Material.YELLOW_CARPET);
-//}};
-//	
 	private boolean isTower = false;
-	
+	PlainsVillagePopulator plainsVillagePopulator;
 
-    public PlainsVillageTempleStandardPiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
+    public PlainsVillageTempleStandardPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, unique, validDirs);
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 	
-    public PlainsVillageTempleStandardPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+    public PlainsVillageTempleStandardPiece(PlainsVillagePopulator plainsVillagePopulator,int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
+        this.plainsVillagePopulator = plainsVillagePopulator;
     }
 
     @Override
@@ -79,10 +71,23 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
         //Place carpets.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-            	if(!data.getType(x, getRoom().getY()+1, z).isSolid())
-            		data.setType(x, getRoom().getY()+1, z, Material.WHITE_CARPET);
             	if(x % 2 == 0 && z % 2 == 0)
                 	data.setType(x, getRoom().getY(), z, Material.TORCH);
+            	
+            	if(!data.getType(x, getRoom().getY()+1, z).isSolid()) {
+            		boolean canPlace = true;
+            		
+            		//VILLAGERS CAN'T WALK THROUGH CARPETS FOR SOME FUCK REASON
+            		//Don't place carpet if there's a door next to it.
+            		for(BlockFace face:BlockUtils.directBlockFaces) {
+            			if(data.getType(x+face.getModX(),getRoom().getY()+1,z+face.getModZ()) == plainsVillagePopulator.woodDoor) {
+            				canPlace = false;
+            				data.setType(x, getRoom().getY(), z, Material.WHITE_WOOL);
+            			}
+            		}
+            		if(canPlace)
+            			data.setType(x, getRoom().getY()+1, z, Material.WHITE_CARPET);
+            	}
             }
         
         //Commented out because it's ugly af

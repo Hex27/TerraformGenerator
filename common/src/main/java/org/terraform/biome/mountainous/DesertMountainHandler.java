@@ -49,7 +49,7 @@ public class DesertMountainHandler extends BiomeHandler {
     }
 
     @Override
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         FastNoise duneNoise = new FastNoise((int) world.getSeed());
         duneNoise.SetNoiseType(NoiseType.CubicFractal);
         duneNoise.SetFractalOctaves(3);
@@ -73,4 +73,10 @@ public class DesertMountainHandler extends BiomeHandler {
             }
         }
     }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		// TODO Auto-generated method stub
+		
+	}
 }

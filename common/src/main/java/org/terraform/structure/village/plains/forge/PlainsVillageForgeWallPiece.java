@@ -7,6 +7,7 @@ import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
+import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
@@ -17,10 +18,8 @@ import java.util.Random;
 
 public class PlainsVillageForgeWallPiece extends PlainsVillageForgePiece {
 
-
-	
-    public PlainsVillageForgeWallPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-        super(widthX, height, widthZ, type, validDirs);
+    public PlainsVillageForgeWallPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+        super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
     }
 
 
@@ -84,14 +83,14 @@ public class PlainsVillageForgeWallPiece extends PlainsVillageForgePiece {
     			w.getRelative(0,-2,0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     			
     			if(i == 2) {
-    				w.getRelative(0,-1,0).Pillar(2, rand, Material.OAK_LOG);
+    				w.getRelative(0,-1,0).Pillar(2, rand, plainsVillagePopulator.woodLog);
     				w.getRelative(0,1,0).setType(Material.STONE_SLAB,Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB);
     			}
     			else
     			{
-    				w.get().lsetType(Material.OAK_FENCE);
+    				w.get().lsetType(plainsVillagePopulator.woodFence);
         			w.CorrectMultipleFacing(1);
-        			new OrientableBuilder(Material.OAK_LOG)
+        			new OrientableBuilder(plainsVillagePopulator.woodLog)
         			.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())))
         			.apply(w.getRelative(0,-1,0));
     			}

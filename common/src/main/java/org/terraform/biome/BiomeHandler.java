@@ -17,7 +17,9 @@ public abstract class BiomeHandler {
 
     public abstract Material[] getSurfaceCrust(Random rand);
 
-    public abstract void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data);
+    public abstract void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data);
+    
+    public abstract void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data);
 
     /**
      * @return The used handler for transforming
