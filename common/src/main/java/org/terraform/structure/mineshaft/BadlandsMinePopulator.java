@@ -25,12 +25,17 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
     static int sandRadius = TConfigOption.BIOME_BADLANDS_PLATEAU_SAND_RADIUS.getInt();
     static int mineDistance = TConfigOption.BIOME_BADLANDS_MINE_DISTANCE.getInt();
+    static int shaftDepth = TConfigOption.BIOME_BADLANDS_MINE_DEPTH.getInt();
     static int hallwayLen = 12;
 
     // These gets overwritten every spawn
@@ -84,9 +89,10 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
         shaft = entrance.getRelative(inDir, hallwayLen + 5);
 
         Random random = tw.getHashedRand(entrance.getX(), entrance.getY(), entrance.getZ(), 4);
-        System.out.println("CARVIIIIIINNNNGGGGGGG " + entrance.getX() + " " + entrance.getY() + " " + entrance.getZ());
 
         // Spawning stuff
+        new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 4, 60, true);
+
         spawnShaft(random, shaft);
 
         PathGenerator g = new PathGenerator(entrance.getRelative(inDir.getModX() * 2, -1, inDir.getModZ() * 2),
@@ -97,7 +103,16 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
         spawnEntrance(gateStart, outDir);
         patchEntrance(entrance, inDir);
 
-
+        if (GenUtils.chance(4, 5)) {
+            try {
+                TerraSchematic schema = TerraSchematic.load("ore-lift", new SimpleBlock(data, shaft.getX(), shaft.getY() - shaftDepth, shaft.getZ()));
+                schema.parser = new OreLiftSchematicParser();
+                schema.setFace(BlockFace.NORTH);
+                schema.apply();
+            } catch(FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     SimpleBlock getSpawnPosition(TerraformWorld tw, int chunkX, int chunkZ) {
@@ -176,9 +191,11 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
     }
 
     private void spawnShaft(Random random, SimpleBlock shaft) {
-        int depth = 25;
-        int shaftStart = - 6;
+        int shaftStart = -5;
         int supportR = 3;
+        Set<Material> toReplace = new HashSet<>(BlockUtils.badlandsStoneLike);
+        toReplace.addAll(Arrays.asList(Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
+                Material.MOSSY_COBBLESTONE, Material.COBWEB, Material.MOSSY_COBBLESTONE_SLAB, Material.COBBLESTONE_SLAB));
 
         // Carving at ground level
         BlockUtils.carveCaveAir(random.nextInt(777123),
@@ -187,10 +204,10 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
                 5 / 2f,
                 shaft,
                 true,
-                BlockUtils.badlandsStoneLike);
+                toReplace);
 
         ArrayList<SimpleBlock> platforms = new ArrayList<>();
-        for (double i = 0; i < depth; i ++) { // Carve shaft
+        for (double i = 0; i < shaftDepth; i ++) { // Carve shaft
             double width = 6 + Math.pow((i % 6) * 0.2, 2);
 
             SimpleBlock centerBlock = shaft.getRelative(GenUtils.randInt(random, -1, 1),
@@ -202,7 +219,7 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
                     (float) width / 2f,
                     centerBlock,
                     true,
-                    BlockUtils.badlandsStoneLike);
+                    toReplace);
 
             if (i % 6 > 4 && i > 0) { // Add mineshaft platform positions
                 for (int b = 0; b < 1; b++) {
@@ -251,10 +268,10 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
 
         supportPillars.removeIf(n -> GenUtils.chance(random, 1, 5));
 
-        // Place vertical
+        // Place vertical support structure
         for (SimpleBlock pillar : supportPillars) {
-            for (int y = 0; y < depth + 5; y++) {
-                pillar.getRelative(0, - y, 0).lsetType(Material.DARK_OAK_FENCE);
+            for (int y = -4; y < shaftDepth + 5; y++) {
+                pillar.getRelative(0, -y, 0).lsetType(Material.DARK_OAK_FENCE);
             }
         }
 
