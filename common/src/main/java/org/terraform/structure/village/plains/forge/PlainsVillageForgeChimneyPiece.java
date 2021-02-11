@@ -1,9 +1,5 @@
 package org.terraform.structure.village.plains.forge;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
@@ -14,6 +10,10 @@ import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPiece {
 

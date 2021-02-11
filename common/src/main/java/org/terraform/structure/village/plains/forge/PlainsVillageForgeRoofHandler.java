@@ -1,10 +1,5 @@
 package org.terraform.structure.village.plains.forge;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -17,6 +12,11 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Random;
 
 public class PlainsVillageForgeRoofHandler {
 

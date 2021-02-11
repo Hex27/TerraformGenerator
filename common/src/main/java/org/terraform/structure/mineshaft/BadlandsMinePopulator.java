@@ -9,7 +9,6 @@ import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeGrid;
 import org.terraform.biome.flat.BadlandsHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;

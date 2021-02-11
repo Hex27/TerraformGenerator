@@ -12,7 +12,6 @@ import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
-import org.terraform.structure.mineshaft.BadlandsMinePopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -53,8 +52,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         //Spawn small structures
         for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {
             if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), banks)) {
-                if (!(spop instanceof BadlandsMinePopulator))
-                    TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
+                TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
                 spop.populate(tw, data);
             }
         }

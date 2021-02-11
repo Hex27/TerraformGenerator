@@ -11,6 +11,7 @@ import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.structure.village.plains.forge.PlainsVillageForgeWallPiece.PlainsVillageForgeWallType;
 import org.terraform.utils.BlockUtils;
+
 import java.util.ArrayList;
 import java.util.Random;
 

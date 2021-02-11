@@ -3,7 +3,6 @@ package org.terraform.structure.mineshaft;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
@@ -23,9 +22,7 @@ import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-import java.util.Arrays;
 import java.util.Random;
-import java.util.Set;
 
 public class MineshaftPathPopulator extends PathPopulatorAbstract {
     private final Random rand;
