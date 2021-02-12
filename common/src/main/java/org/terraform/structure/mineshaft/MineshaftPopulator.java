@@ -65,14 +65,14 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-
         if (!TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean())
             return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
-        int height = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
+        int x = coords[0];
+        int z = coords[1];
+        int height = HeightMap.getBlockHeight(tw, x, z);
 
         int y = GenUtils.randInt(TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(), TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt());
 
@@ -87,15 +87,19 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel) {
-        TerraformGeneratorPlugin.logger.info("Spawning mineshaft at: " + x + "," + z);
+        spawnMineshaft(tw, random, data, x, y, z, doubleLevel, 10, 150, false);
+    }
 
-        int numRooms = 10;
-        int range = 150;
+    public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel, int numRooms, int range, boolean badlandsMine) {
+        TerraformGeneratorPlugin.logger.info("Spawning mineshaft at: " + x + "," + z);
 
         //Level One
         Random hashedRand = tw.getHashedRand(x, y, z);
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range);
-        gen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y, z, 2)));
+        if (!badlandsMine)
+            gen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y, z, 2)));
+        else
+            gen.setPathPopulator(new BadlandsMineshaftPathPopulator(tw.getHashedRand(x, y, z, 2)));
         gen.setRoomMaxX(17);
         gen.setRoomMaxZ(17);
         gen.setRoomMinX(13);
@@ -108,6 +112,15 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
             gen.registerRoomPopulator(new ShaftRoomPopulator(random, true, false));
 
         gen.setCarveRooms(true);
+        if (badlandsMine) {
+            CubeRoom brokenShaft = new CubeRoom(
+                    15,
+                    15,
+                    7,
+                    gen.getCentX(), gen.getCentY(), gen.getCentZ());
+                    brokenShaft.setRoomPopulator(new BrokenShaftPopulator(hashedRand, true, false));
+                    gen.getRooms().add(brokenShaft);
+        }
         gen.generate();
         gen.fill(data, tw, Material.CAVE_AIR);
 
@@ -115,7 +128,10 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
             //Level Two
             hashedRand = tw.getHashedRand(x, y + 15, z);
             RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y + 15, z, range);
-            secondGen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y + 15, z, 2)));
+            if (!badlandsMine)
+                secondGen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y + 15, z, 2)));
+            else
+                secondGen.setPathPopulator(new BadlandsMineshaftPathPopulator(tw.getHashedRand(x, y + 15, z, 2)));
             secondGen.setRoomMaxX(17);
             secondGen.setRoomMaxZ(17);
             secondGen.setRoomMinX(13);

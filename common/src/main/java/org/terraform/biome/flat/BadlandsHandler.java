@@ -249,7 +249,7 @@ public class BadlandsHandler extends BiomeHandler {
 
                             int sandHeight = (int) Math.round(plateauHeight * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
                             for (int y = 1 + level; y <= sandHeight + level; y++)
-                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz).isAir())
+                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz) == Material.AIR)
                                     data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
                         }
                     }
@@ -258,8 +258,17 @@ public class BadlandsHandler extends BiomeHandler {
         }
     }
 
+    public static boolean containsPlateau(TerraformWorld tw, int x, int z) {
+        return getPlateauHeight(tw, x, z) > 0;
+    }
+
+    public static boolean mineCanSpawn(TerraformWorld tw, int x, int z) {
+        int h = getPlateauHeight(tw, x, z);
+        return (h < plateauHeight - 1 && h > plateauHeight / 3);
+    }
+
     // This is for optimizing sand, ew
-    int getPlateauHeight(TerraformWorld tw, int x, int z) {
+    static int getPlateauHeight(TerraformWorld tw, int x, int z) {
         double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(x, z) + plateauCommonness);
         double noiseValue = rawValue * getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, x, z) * (1 - ((int) (rawValue / plateauThreshold) * 0.1));
 

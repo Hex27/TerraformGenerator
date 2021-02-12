@@ -46,14 +46,6 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         Wall left = core.findLeft(10);
         Wall right = core.findRight(10);
 
-        Material[] pathMat = {
-                Material.OAK_PLANKS,
-                Material.OAK_SLAB,
-                Material.OAK_PLANKS,
-                Material.OAK_SLAB,
-                Material.GRAVEL
-        };
-
         //Central Pathway
         core.setType(GenUtils.randMaterial(
                 Material.COBBLESTONE,
@@ -62,20 +54,20 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                 Material.ANDESITE,
                 Material.DIORITE,
                 Material.MOSSY_COBBLESTONE));
-        core.getRight().setType(GenUtils.randMaterial(pathMat));
-        core.getLeft().setType(GenUtils.randMaterial(pathMat));
+        core.getRight().setType(GenUtils.randMaterial(getPathMaterial()));
+        core.getLeft().setType(GenUtils.randMaterial(getPathMaterial()));
 
         //Pillars supporting the mineshaft area
         if (GenUtils.chance(rand, 1, 5)) {
-            core.getRelative(0, -1, 0).getRight().downUntilSolid(rand, Material.OAK_FENCE);
-            core.getRelative(0, -1, 0).getLeft().downUntilSolid(rand, Material.OAK_FENCE);
+            core.getRelative(0, -1, 0).getRight().downUntilSolid(rand, getFenceMaterial());
+            core.getRelative(0, -1, 0).getLeft().downUntilSolid(rand, getFenceMaterial());
         }
 
         //Broken feel
         if (rand.nextBoolean()) core.getRight(2)
-                .setType(GenUtils.randMaterial(pathMat));
+                .setType(GenUtils.randMaterial(getPathMaterial()));
         if (rand.nextBoolean()) core.getLeft(2)
-                .setType(GenUtils.randMaterial(pathMat));
+                .setType(GenUtils.randMaterial(getPathMaterial()));
 
         Directional pebble = (Directional) Material.STONE_BUTTON.createBlockData("[face=floor]");
         //Decorate with pebbles n shit lol
@@ -239,12 +231,12 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         int dist = (int) left.get().getVector().distance(right.get().getVector());
         if (dist >= 3) {
             if (left.LPillar(10, false, rand, Material.BARRIER) != 10) {
-                left.LPillar(10, false, rand, Material.OAK_FENCE);
-                placeSupportFences(left.getRelative(0, -1, 0));//.downUntilSolid(rand, Material.OAK_FENCE);
+                left.LPillar(10, false, rand, getFenceMaterial());
+                placeSupportFences(left.getRelative(0, -1, 0));//.downUntilSolid(rand, getFenceMaterial());
             }
             if (right.LPillar(10, false, rand, Material.BARRIER) != 10) {
-                right.LPillar(10, false, rand, Material.OAK_FENCE);
-                placeSupportFences(right.getRelative(0, -1, 0));//.downUntilSolid(rand, Material.OAK_FENCE);
+                right.LPillar(10, false, rand, getFenceMaterial());
+                placeSupportFences(right.getRelative(0, -1, 0));//.downUntilSolid(rand, getFenceMaterial());
             }
 
 
@@ -263,7 +255,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                 for (int i = 0; i < dist + 2; i++) {
                     Wall support = ceil.getRight(i);
                     if (!support.getType().isSolid() ||
-                            support.getType() == Material.OAK_FENCE) {
+                            support.getType() == getFenceMaterial()) {
                         if (support.getRelative(0, 1, 0).getType() != Material.OAK_LOG
                                 && support.getRelative(0, -1, 0).getType() != Material.OAK_LOG) {
                             support.setBlockData(log);
@@ -293,7 +285,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     		if(w.getType() == Material.LAVA)
     			w.setType(Material.COBBLESTONE);
     		else
-    			w.setType(Material.OAK_FENCE);
+    			w.setType(getFenceMaterial());
     		w = w.getRelative(0,-1,0);
     	}
     }
@@ -303,7 +295,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         Wall core = new Wall(base.getRelative(0, 1, 0), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
-                pathWidth, pathWidth + 1, pathWidth, core.get(), false, BlockUtils.stoneLike);
+                pathWidth, pathWidth + 1, pathWidth, core.get(), false, BlockUtils.badlandsStoneLike);
 
         return true;
     }
@@ -313,4 +305,17 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         return 3;
     }
 
+    public Material[] getPathMaterial() {
+        return new Material[] {
+                Material.OAK_PLANKS,
+                Material.OAK_SLAB,
+                Material.OAK_PLANKS,
+                Material.OAK_SLAB,
+                Material.GRAVEL
+        };
+    }
+
+    public Material getFenceMaterial() {
+        return Material.OAK_FENCE;
+    }
 }

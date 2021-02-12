@@ -1,11 +1,11 @@
 package org.terraform.structure;
 
-import java.util.ArrayList;
-
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
+
+import java.util.ArrayList;
 
 public class StructureBufferDistanceHandler {
 	

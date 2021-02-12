@@ -74,6 +74,7 @@ public class PathGenerator {
             return;
         }
 
+        // Make a turn if out of bounds
         while (isOutOfBounds(base.getRelative(dir))) {
             straightInARow = 0;
 
@@ -90,6 +91,7 @@ public class PathGenerator {
             dir = BlockUtils.getTurnBlockFace(rand, dir);
         }
 
+        // Make a turn if too long
         straightInARow++;
         if (straightInARow > maxNoBend || GenUtils.chance(rand, 1, 500)) {
             straightInARow = 0;
@@ -107,10 +109,12 @@ public class PathGenerator {
             dir = BlockUtils.getTurnBlockFace(rand, dir);
         }
 
-        //base.setType(mat);
+        // Carve
         if (!populator.customCarve(base, dir, pathWidth)) {
             setHall();
         }
+
+        /// Handle populating the paths
         path.add(new PathPopulatorData(base, dir, pathWidth));
         base = base.getRelative(dir);
         length++;
@@ -167,6 +171,30 @@ public class PathGenerator {
                     if (rel.getRelative(0, pathHeight + 1, 0).getType() != Material.CAVE_AIR)
                         rel.getRelative(0, pathHeight + 1, 0).setType(GenUtils.randMaterial(mat));
                 }
+            }
+        }
+    }
+
+    /**
+     * Generate a straight path
+     * @param start Start block. Can be null, in which case base block of the instance is used.
+     * @param direction Start direction. Can be null, when random direction is used.
+     */
+
+    public void generateStraightPath(SimpleBlock start, BlockFace direction, int length) {
+        ArrayList<PathPopulatorData> pathPopulatorDatas = new ArrayList<>();
+        if (direction == null) direction = this.dir;
+        if (start == null) start = this.base;
+
+        for (int i = 0; i < length; i++) {
+            if (!populator.customCarve(start, direction, pathWidth)) setHall();
+            start = start.getRelative(direction);
+            pathPopulatorDatas.add(new PathPopulatorData(start, direction, pathWidth));
+        }
+
+        if (populator != null) {
+            for (PathPopulatorData pathPopulatorData : pathPopulatorDatas) {
+                populator.populate(pathPopulatorData);
             }
         }
     }

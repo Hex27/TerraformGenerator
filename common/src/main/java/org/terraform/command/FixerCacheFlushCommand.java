@@ -5,6 +5,7 @@ import org.drycell.command.DCCommand;
 import org.drycell.command.InvalidArgumentException;
 import org.drycell.main.DrycellPlugin;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
+
 import java.util.Stack;
 
 public class FixerCacheFlushCommand extends DCCommand {

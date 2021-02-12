@@ -117,11 +117,11 @@ public class RoomLayoutGenerator {
      */
     public void generate(boolean normalise) {
         for (int i = 0; i < numRooms; i++) {
-
             int widthX = GenUtils.randInt(rand, roomMinX, roomMaxX);
             int widthZ = GenUtils.randInt(rand, roomMinZ, roomMaxZ);
             int nx = GenUtils.randInt(rand, -range / 2, range / 2);
             int nz = GenUtils.randInt(rand, -range / 2, range / 2);
+
             //Normalise room sizes to prevent strange shapes (Like narrow & tall etc)
             if (normalise) {
                 if (widthX < widthZ / 2) widthX = widthZ + GenUtils.randInt(rand, -2, 2);
@@ -518,17 +518,9 @@ public class RoomLayoutGenerator {
         return pathPop;
     }
 
-    /**
-     * @param pathPop the pathPop to set
-     */
-    public void setPathPop(PathPopulatorAbstract pathPop) {
-        this.pathPop = pathPop;
-    }
-
     public void setTile(int tile) {
         this.tile = tile;
     }
-
 
     public void setMazePathGenerator(MazeSpawner mazePathGenerator) {
         this.mazePathGenerator = mazePathGenerator;

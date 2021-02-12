@@ -1,9 +1,5 @@
 package org.terraform.structure.village.plains.forge;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -13,6 +9,10 @@ import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiece {
 

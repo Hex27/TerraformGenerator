@@ -90,6 +90,9 @@ public enum TConfigOption {
     STRUCTURES_MINESHAFT_MAX_Y("structures.mineshaft.max-y", 30),
     STRUCTURES_LARGECAVE_ENABLED("structures.largecave.enabled", true),
     STRUCTURES_LARGECAVE_CHANCE("structures.largecave.chance", 75),
+    STRUCTURES_BADLANDS_MINE_ENABLED("structures.badlands-mine.enabled", true),
+    STRUCTURES_BADLANDS_MINE_DISTANCE("structures.badlands-mine.distance-between-mines", 8),
+    STRUCTURES_BADLANDS_MINE_DEPTH("structures.badlands-mine.depth", 25),
 
     //-=[ANIMALS]=-
     //BEES

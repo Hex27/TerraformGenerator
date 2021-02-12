@@ -14,6 +14,7 @@ import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -280,6 +281,21 @@ public class GenUtils {
     }
     
     /**
+     * @return the highest solid block below y
+     */
+    public static int getTrueHighestBlockBelow(PopulatorDataAbstract data, int x, int y, int z) {
+        while(y > 0 && !data.getType(x, y, z).isSolid()) y--;
+        return y;
+    }
+
+    public static SimpleBlock getTrueHighestBlockBelow(SimpleBlock block) {
+        int y = block.getY();
+        while(y > 0 && !block.getPopData().getType(block.getX(), y, block.getZ()).isSolid()) y--;
+        return new SimpleBlock(block.getPopData(), block.getX(), y, block.getZ());
+    }
+
+
+    /**
      * @return the highest solid ground. Is dirt-like or stone-like, and is
      * not leaves or logs
      */
@@ -355,9 +371,8 @@ public class GenUtils {
         return res;
     }
 
-    
-    private static final HashMap<TerraformWorld, FastNoise> randomObjectPositionNoiseCache
-    = new HashMap<>();
+    private static final HashMap<TerraformWorld, FastNoise> randomObjectPositionNoiseCache = new HashMap<>();
+
     /**
      * Function that returns random positions inside chunk.
      * An algorithm makes sure that objects are at least user-defined

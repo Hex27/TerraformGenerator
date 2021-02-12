@@ -13,8 +13,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Rail;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.Rail.Shape;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
@@ -23,7 +23,6 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
-import org.terraform.data.TerraformWorld;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
@@ -74,6 +73,20 @@ public class BlockUtils {
             Material.EMERALD_ORE, Material.REDSTONE_ORE,
             Material.LAPIS_ORE, Material.SNOW_BLOCK,
             Material.PACKED_ICE, Material.BLUE_ICE
+    );
+
+    public static final Set<Material> badlandsStoneLike = EnumSet.of(
+            Material.STONE, Material.COBBLESTONE,
+            Material.GRANITE, Material.ANDESITE,
+            Material.DIORITE, Material.GRAVEL,
+            Material.COAL_ORE, Material.IRON_ORE,
+            Material.GOLD_ORE, Material.DIAMOND_ORE,
+            Material.EMERALD_ORE, Material.REDSTONE_ORE,
+            Material.LAPIS_ORE, Material.SNOW_BLOCK,
+            Material.PACKED_ICE, Material.BLUE_ICE,
+            Material.TERRACOTTA, Material.ORANGE_TERRACOTTA,
+            Material.RED_TERRACOTTA, Material.BROWN_TERRACOTTA,
+            Material.YELLOW_TERRACOTTA, Material.RED_SAND
     );
     public static final Material[] ores = {
             Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE,
@@ -203,11 +216,6 @@ public class BlockUtils {
         return xzPlaneBlockFaces.get(rand.nextInt(8));
     }
     
-    /**
-     * 
-     * @param ax
-     * @return
-     */
     public static BlockFace getBlockFaceFromAxis(Axis ax) {
     	switch(ax) {
     	case X:
@@ -350,7 +358,7 @@ public class BlockUtils {
         data.setBlockData(x + 1, y, z + 1, terracotta);
     }
 
-    public static void setVines(PopulatorDataAbstract data, TerraformWorld tw, int x, int y, int z, int maxLength) {
+    public static void setVines(PopulatorDataAbstract data, int x, int y, int z, int maxLength) {
         SimpleBlock rel = new SimpleBlock(data, x, y, z);
         for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
@@ -740,6 +748,9 @@ public class BlockUtils {
         target.setBlockData(data);
     }
 
+    /**
+     * Correct fencse for example
+     */
     public static void correctSurroundingMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
             if (Version.isAtLeast(16.1) && Tag.WALLS.isTagged(target.getType())) {
@@ -989,6 +1000,12 @@ public class BlockUtils {
         }
     }
 
+    public static BlockData getRandomBarrel() {
+        Directional barrel = (Directional) Bukkit.createBlockData(Material.BARREL);
+        barrel.setFacing(BlockUtils.sixBlockFaces[GenUtils.randInt(0, BlockUtils.sixBlockFaces.length - 1)]);
+        return barrel;
+    }
+    
     public static void angledStairwayUntilSolid(SimpleBlock start, BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
         int threshold = 5;
     	while (!start.getType().isSolid()) {

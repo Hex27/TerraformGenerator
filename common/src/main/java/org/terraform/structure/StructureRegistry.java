@@ -6,6 +6,7 @@ import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.caves.LargeCavePopulator;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
+import org.terraform.structure.mineshaft.BadlandsMinePopulator;
 import org.terraform.structure.mineshaft.MineshaftPopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pyramid.PyramidPopulator;
@@ -49,6 +50,9 @@ public class StructureRegistry {
 
         registerStructure(StructureType.SMALL, new SmallDungeonPopulator());
         registerStructure(StructureType.SMALL, new ShipwreckPopulator());
+
+        registerStructure(StructureType.SMALL, new BadlandsMinePopulator());
+
         //registerStructure(StructureType.SMALL, new WitchHutPopulator());
         //registerStructure(StructureType.SMALL, new DesertWellPopulator());
     }
@@ -134,6 +138,7 @@ public class StructureRegistry {
         queryCache.put(key, returnVal);
         return returnVal;
     }
+
 
     // Implementing FisherYates shuffle
     private static Object[] shuffleArray(Random rand, Object[] ar) {

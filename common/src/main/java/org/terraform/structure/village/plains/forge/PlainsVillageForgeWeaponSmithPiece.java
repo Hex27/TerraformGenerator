@@ -1,10 +1,5 @@
 package org.terraform.structure.village.plains.forge;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -16,6 +11,11 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStandardPiece {
 

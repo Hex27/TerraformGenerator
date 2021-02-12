@@ -1,13 +1,13 @@
 package org.terraform.utils;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Used to generate 1-block wide stairways from a starting point
