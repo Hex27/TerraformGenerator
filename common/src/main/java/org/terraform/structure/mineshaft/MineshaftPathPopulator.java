@@ -242,7 +242,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
             //Support
             if (ceil != null) {
-                Orientable log = (Orientable) Bukkit.createBlockData(Material.OAK_LOG);
+                Orientable log = (Orientable) Bukkit.createBlockData(getSupportMaterial());
                 if (left.getDirection().getModX() != 0)
                     log.setAxis(Axis.Z);
                 if (left.getDirection().getModZ() != 0)
@@ -256,8 +256,8 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                     Wall support = ceil.getRight(i);
                     if (!support.getType().isSolid() ||
                             support.getType() == getFenceMaterial()) {
-                        if (support.getRelative(0, 1, 0).getType() != Material.OAK_LOG
-                                && support.getRelative(0, -1, 0).getType() != Material.OAK_LOG) {
+                        if (support.getRelative(0, 1, 0).getType() != getSupportMaterial()
+                                && support.getRelative(0, -1, 0).getType() != getSupportMaterial()) {
                             support.setBlockData(log);
 
                             //L A M P
@@ -317,5 +317,9 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
     public Material getFenceMaterial() {
         return Material.OAK_FENCE;
+    }
+    
+    public Material getSupportMaterial() {
+        return Material.OAK_LOG;
     }
 }

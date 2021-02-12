@@ -126,8 +126,10 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
                 spawnSpot.getX() + outDir.getModX() * sandRadius,
                 spawnSpot.getY(),
                 spawnSpot.getZ() + outDir.getModZ() * sandRadius);
-        entrance.getRelative(0, HeightMap.getBlockHeight(tw, entrance.getX() + inDir.getModX(),
-                entrance.getZ() + inDir.getModZ()) + 1 - entrance.getY(), 0);
+        
+        //Whats this for
+        //entrance.getRelative(0, HeightMap.getBlockHeight(tw, entrance.getX() + inDir.getModX(),
+        //        entrance.getZ() + inDir.getModZ()) + 1 - entrance.getY(), 0);
 
         gateStart = entrance.getRelative(inDir, sandRadius + 2);
         shaft = entrance.getRelative(inDir, hallwayLen + sandRadius - 1);
@@ -135,22 +137,29 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
         Random random = tw.getHashedRand(entrance.getX(), entrance.getY(), entrance.getZ(), 4);
 
         // Spawning stuff
+        
+        //Standard mineshaft below the badlands entrance
         new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
 
+        //Carve downwards hole into the mineshaft below
         spawnShaft(random, shaft, inDir);
-
+        
+        //Carve entrance out
         PathGenerator g = new PathGenerator(entrance.getRelative(inDir.getModX() * 3, -1, inDir.getModZ() * 3),
                 new Material[] {Material.CAVE_AIR}, new Random(), new int[]{0,0}, new int[]{0,0});
         g.setPopulator(new BadlandsMineshaftPathPopulator(random));
         g.generateStraightPath(null, inDir, hallwayLen);
-
+        
+        //Create the entrance
         spawnEntrance(gateStart, outDir);
         patchEntrance(entrance, inDir);
 
+        //Spawn an ore lift
         if (GenUtils.chance(random, 4, 5)) {
             try {
+            	//Ore lift schematic. Constructor has true to replace oak with dark oak
                 TerraSchematic schema = TerraSchematic.load("ore-lift", new SimpleBlock(data, shaft.getX() - 1, shaft.getY() - shaftDepth, shaft.getZ() - 1));
-                schema.parser = new OreLiftSchematicParser();
+                schema.parser = new OreLiftSchematicParser(true);
                 schema.setFace(BlockFace.NORTH);
                 schema.apply();
             } catch(FileNotFoundException e) {
@@ -225,8 +234,9 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
             entranceSchematic.parser = new BadlandsMineEntranceParser();
             entranceSchematic.setFace(direction);
             entranceSchematic.apply();
-        } catch(Exception ignored) {
+        } catch(Exception e) {
             TerraformGeneratorPlugin.logger.error("An error occurred reading Badlands Mine Entrance schematic file.");
+        	e.printStackTrace();
         }
     }
 

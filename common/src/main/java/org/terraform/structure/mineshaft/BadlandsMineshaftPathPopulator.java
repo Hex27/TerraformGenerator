@@ -24,4 +24,9 @@ public class BadlandsMineshaftPathPopulator extends MineshaftPathPopulator {
     public Material getFenceMaterial() {
         return Material.DARK_OAK_FENCE;
     }
+
+    @Override
+    public Material getSupportMaterial() {
+        return Material.DARK_OAK_LOG;
+    }
 }

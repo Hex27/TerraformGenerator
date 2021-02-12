@@ -84,6 +84,7 @@ public class StairwayBuilder {
 	    		
 	    		if(threshold == 0) {
 	    			start = start.getRelative(0,-1,0);
+		    		start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
 	    			start.setType(downTypes);
 		    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
 	    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
