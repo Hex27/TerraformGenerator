@@ -33,11 +33,12 @@ public class WarmOceansHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.DIRT, Material.SAND, Material.SAND, Material.SAND, Material.GRAVEL, Material.SAND),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.SAND, Material.SAND, Material.SAND, Material.GRAVEL, Material.SAND),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.GRAVEL, Material.SAND),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+        return new Material[]{
+        		Material.GRAVEL,
+        		Material.GRAVEL,
+                GenUtils.randMaterial(rand, Material.STONE, Material.GRAVEL, Material.STONE),
+                GenUtils.randMaterial(rand, Material.STONE),
+                GenUtils.randMaterial(rand, Material.STONE)};
     }
 
     @Override
@@ -48,6 +49,15 @@ public class WarmOceansHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (data.getBiome(x, y + 1, z) != getBiome()) continue;
+                
+                //Set ground near sea level to sand
+                if(y >= TerraformGenerator.seaLevel - 2) {
+                	data.setType(x, y, z, Material.SAND);
+                }else if(y >= TerraformGenerator.seaLevel - 4) {
+                	if(random.nextBoolean())
+                    	data.setType(x, y, z, Material.SAND);
+                }
+                
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
                 if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
                     data.setType(x, y + 1, z, Material.SEAGRASS);

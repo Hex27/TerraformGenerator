@@ -42,6 +42,7 @@ public class TerraformCommandManager extends DCCommandManager {
             this.registerCommand(new BlockDataTestCommand(plugin, "blockdatatest", "bdt"));
             this.registerCommand(new JigsawBuilderTestCommand(plugin, "jigsawbuildertest", "jbt"));
             this.registerCommand(new PlainsVillageCommand(plugin, "plainsvillage", "pv"));
+            this.registerCommand(new RibCageCommand(plugin, "ribcage"));
 
         }
         this.registerCommand(new LocateCommand(plugin, "locate"));

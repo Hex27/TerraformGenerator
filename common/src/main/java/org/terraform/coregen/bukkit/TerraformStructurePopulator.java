@@ -41,6 +41,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 
         //Spawn large structures
         MegaChunk mc = new MegaChunk(chunk.getX(), chunk.getZ());
+        
         for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if (spop == null) continue;
             if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), banks)) {

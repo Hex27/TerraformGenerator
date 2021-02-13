@@ -1,7 +1,9 @@
 package org.terraform.biome.flat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -9,6 +11,8 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
+import org.terraform.schematic.SchematicParser;
+import org.terraform.schematic.TerraSchematic;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
@@ -143,6 +147,8 @@ public class JungleHandler extends BiomeHandler {
 	            }
 	        }
 
+        
+        //Small jungle trees, OR jungle statues
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
 
         for (SimpleLocation sLoc : trees) {
@@ -151,7 +157,11 @@ public class JungleHandler extends BiomeHandler {
             
             if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
-                TreeDB.spawnSmallJungleTree(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+            	if(GenUtils.chance(random, 1000-TConfigOption.BIOME_JUNGLE_STATUE_CHANCE.getInt(), 1000)) {
+                    TreeDB.spawnSmallJungleTree(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+            	}else {
+            		spawnStatue(random, data, sLoc);
+            	}
             }
         }
 
@@ -182,7 +192,7 @@ public class JungleHandler extends BiomeHandler {
 
                     // Generate random wood, or "roots" on the ground
                     if (groundWoodNoiseValue > 0.3)
-                        data.setType(x, y + 1, z, Material.JUNGLE_WOOD);
+                        data.lsetType(x, y + 1, z, Material.JUNGLE_WOOD);
                 }
 
                 // Generate mushrooms
@@ -197,4 +207,51 @@ public class JungleHandler extends BiomeHandler {
             }
         }
     }
+	
+	private void spawnStatue(Random random, PopulatorDataAbstract data, SimpleLocation sLoc) {
+
+		try {
+            TerraSchematic schema = TerraSchematic.load("jungle-statue1", 
+            		new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ()));
+            schema.parser = new JungleStatueSchematicParser();
+            schema.setFace(BlockUtils.getDirectBlockFace(random));
+            schema.apply();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+	
+	}
+	
+	private class JungleStatueSchematicParser extends SchematicParser{
+		
+		public void applyData(SimpleBlock block, BlockData data) {
+			if (data.getMaterial().toString().contains("COBBLESTONE")) {
+	            data = Bukkit.createBlockData(
+	                    data.getAsString().replaceAll(
+	                            "cobblestone",
+	                            GenUtils.randMaterial(new Random(), 
+	                            		Material.COBBLESTONE, Material.ANDESITE, Material.STONE, Material.MOSSY_COBBLESTONE)
+	                                    .toString().toLowerCase()
+	                    )
+	            );
+	            super.applyData(block, data);
+	        }else if (data.getMaterial() == Material.STONE_BRICK_STAIRS) {
+	        	if(new Random().nextBoolean())
+		            data = Bukkit.createBlockData(
+		                    data.getAsString().replaceAll(
+		                            "stone_brick",
+		                            "mossy_stone_brick"
+		                    )
+		            );
+	            super.applyData(block, data);
+	        }else {
+		        block.setBlockData(data);
+		        super.applyData(block, data);
+	        }
+			
+			if(data.getMaterial().isBlock() && GenUtils.chance(1, 10)) {
+				BlockUtils.vineUp(block, 3);
+			}
+	    }
+	}
 }

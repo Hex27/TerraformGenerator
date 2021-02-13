@@ -12,6 +12,7 @@ import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.io.FileNotFoundException;
@@ -26,8 +27,8 @@ public class DesertWellPopulator {
         int x = data.getChunkX() * 16 + random.nextInt(16);
         int z = data.getChunkZ() * 16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
-
-        spawnDesertWell(tw, random, data, x, height, z, badlandsWell);
+        if(!BlockUtils.isWet(new SimpleBlock(data,x,height+1,z)))
+        	spawnDesertWell(tw, random, data, x, height, z, badlandsWell);
     }
 
     public void spawnDesertWell(TerraformWorld tw, Random random,

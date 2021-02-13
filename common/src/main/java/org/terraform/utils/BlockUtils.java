@@ -23,6 +23,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
+import org.terraform.main.TConfigOption;
 import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
@@ -467,39 +468,8 @@ public class BlockUtils {
 
     public static void generateClayDeposit(int x, int y, int z, PopulatorDataAbstract data, Random random) {
         //CLAY DEPOSIT
-        int length = GenUtils.randInt(4, 8);
-        int nx = x;
-        int ny = y;
-        int nz = z;
-        while (length-- > 0) {
-            if (data.getType(nx, ny, nz) == Material.SAND ||
-                    data.getType(nx, ny, nz) == Material.GRAVEL ||
-                    isDirtLike(data.getType(nx, ny, nz)))
-                data.setType(nx, ny, nz, Material.CLAY);
+    	replaceCircularPatch(random.nextInt(9999), TConfigOption.BIOME_CLAY_DEPOSIT_SIZE.getFloat(), new SimpleBlock(data,x,y,z), Material.CLAY);
 
-            switch (random.nextInt(5)) {  // The direction chooser
-                case 0:
-                    nx++;
-                    break;
-                case 1:
-                    ny++;
-                    break;
-                case 2:
-                    nz++;
-                    break;
-                case 3:
-                    nx--;
-                    break;
-                case 4:
-                    ny--;
-                    break;
-                case 5:
-                    nz--;
-                    break;
-            }
-            if (ny > y) ny = y;
-            if (ny < 2) ny = 2;
-        }
     }
 
     public static void vineUp(SimpleBlock base, int maxLength) {
@@ -520,6 +490,42 @@ public class BlockUtils {
         }
     }
 
+    /**
+     * Replaces the highest ground with a noise-fuzzed circle of the defined material
+     * @param seed
+     * @param radius
+     * @param base
+     * @param type
+     */
+    public static void replaceCircularPatch(int seed, float radius, SimpleBlock base, Material... type) {
+    	if (radius <= 0) return;
+        if (radius <= 0.5) {
+            //block.setReplaceType(ReplaceType.ALL);
+            base.setType(GenUtils.randMaterial(new Random(seed), type));
+            return;
+        }
+        
+        FastNoise noise = new FastNoise(seed);
+        noise.SetNoiseType(NoiseType.Simplex);
+        noise.SetFrequency(0.09f);
+        
+        for (float x = -radius; x <= radius; x++) {
+            for (float z = -radius; z <= radius; z++) {
+                SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
+                rel = rel.getGround();
+                
+                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
+                        + Math.pow(z, 2) / Math.pow(radius, 2);
+                if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
+                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    rel.setType(GenUtils.randMaterial(type));
+                }
+            }
+        }
+        
+    }
+    
     public static void replaceSphere(int seed, float radius, SimpleBlock base, boolean hardReplace, Material... type) {
         if (radius > 0) replaceSphere(seed, radius, radius, radius, base, hardReplace, type);
     }

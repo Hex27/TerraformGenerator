@@ -19,11 +19,11 @@ public enum TConfigOption {
     BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency", 0.0007f),
     BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.0007f),
     BIOME_DITHER("biome.dithering", 0.1d),
+    BIOME_CLAY_DEPOSIT_SIZE("biome.clay-deposit-radius", 3f),
+    BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND("biome.clay-deposit-chance-out-of-thousand", 3),
     BIOME_MOUNTAIN_HEIGHT("biome.min-mountain-height", 85),
     BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE("biome.desert-mountains.place-yellow-concrete", true),
     BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE_POWDER("biome.desert-mountains.place-yellow-concrete-powder", true),
-    BIOME_RIVER_CLAY_CHANCE("biome.river.clay.chance-out-of-thousand", 20),
-    BIOME_SWAMP_CLAY_CHANCE("biome.swamp.clay.chance-out-of-thousand", 20),
     BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT("biome.lukewarm-ocean.coral.minheight", 42),
     BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT("biome.lukewarm-ocean.coral.maxheight", 52),
     BIOME_DARKFOREST_SPAWN_HEADS("biome.dark-forest.spawn-heads",true),
@@ -32,6 +32,7 @@ public enum TConfigOption {
     BIOME_BADLANDS_PLATEAU_THRESHOLD("biome.badlands.plateaus.threshold", 0.23),
     BIOME_BADLANDS_PLATEAU_FREQUENCY("biome.badlands.plateaus.frequency", 0.01),
     BIOME_BADLANDS_PLATEAU_COMMONNESS("biome.badlands.plateaus.commonness", 0.18),
+    BIOME_JUNGLE_STATUE_CHANCE("biome.jungle.statue-chance-out-of-1000", 4),
 
     //-=[TREES]=-
     TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),

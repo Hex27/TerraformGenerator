@@ -79,7 +79,7 @@ public class TerraSchematic {
         sc.close();
         return schem;
     }
-
+    
     public static TerraSchematic load(String internalPath, Location loc) throws FileNotFoundException {
         SimpleBlock block = new SimpleBlock(loc);
 

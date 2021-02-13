@@ -6,6 +6,7 @@ import org.bukkit.util.Vector;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
@@ -74,11 +75,12 @@ public class BlackOceansHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.COBBLESTONE, Material.STONE, Material.GRAVEL, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.STONE, Material.STONE, Material.GRAVEL, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.GRAVEL, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+        return new Material[]{
+        		Material.GRAVEL,
+        		Material.GRAVEL,
+                GenUtils.randMaterial(rand, Material.STONE, Material.GRAVEL, Material.STONE),
+                GenUtils.randMaterial(rand, Material.STONE),
+                GenUtils.randMaterial(rand, Material.STONE)};
     }
 
     @Override
@@ -89,6 +91,15 @@ public class BlackOceansHandler extends BiomeHandler {
                 if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
 
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
+                
+                //Set ground near sea level to gravel
+                if(y >= TerraformGenerator.seaLevel - 2) {
+                	data.setType(x, y, z, Material.GRAVEL);
+                }else if(y >= TerraformGenerator.seaLevel - 4) {
+                	if(random.nextBoolean())
+                    	data.setType(x, y, z, Material.GRAVEL);
+                }
+
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
                 if (GenUtils.chance(random, 1, 80)) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);

@@ -43,19 +43,11 @@ public class SwampHandler extends BiomeHandler {
         return mudNoise;
     }
 
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
-//		gen.setScale(0.005);
-//		
-//		return (int) (gen.noise(x, z, 0.5, 0.5)*7D+50D);
-//	}
-
     @Override
     public Material[] getSurfaceCrust(Random rand) {
         return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
                 GenUtils.randMaterial(rand, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.GRAVEL, Material.SAND),
+                GenUtils.randMaterial(rand, Material.DIRT, Material.DIRT, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
     }
@@ -94,7 +86,7 @@ public class SwampHandler extends BiomeHandler {
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
 
                 }
-                if (GenUtils.chance(random, TConfigOption.BIOME_RIVER_CLAY_CHANCE.getInt(), 1000)) {
+                if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
                     BlockUtils.generateClayDeposit(x, y, z, data, random);
                 }
             }

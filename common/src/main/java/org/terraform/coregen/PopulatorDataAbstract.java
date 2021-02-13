@@ -32,7 +32,12 @@ public abstract class PopulatorDataAbstract {
      * @return
      */
     public abstract void setType(int x, int y, int z, Material type);
-
+    
+    public void lsetType(int x, int y, int z, Material type) {
+    	if(!getType(x,y,z).isSolid())
+    		setType(x,y,z,type);
+    }
+    
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      * @param x
