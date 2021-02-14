@@ -104,7 +104,13 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
                     	//Strongholds no longer calculate from the surface.
                     	//Just pick a directly underground location.
                         int y = GenUtils.randInt(TConfigOption.STRUCTURES_STRONGHOLD_MIN_Y.getInt(), TConfigOption.STRUCTURES_STRONGHOLD_MAX_Y.getInt());
-
+                        
+                        //Attempt to force strongholds further underground if
+                        //they're above the surface.
+                        if(y + 18 > GenUtils.getHighestGround(data, x, z)) {
+                        	if(y > TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt()) y = TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt();
+                        }
+                        
                         spawnStronghold(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, y, z);
                         break;
                     }

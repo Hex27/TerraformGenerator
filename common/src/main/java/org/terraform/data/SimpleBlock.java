@@ -40,6 +40,16 @@ public class SimpleBlock {
         this.z = z;
 
     }
+    
+
+    public SimpleBlock(PopulatorDataAbstract data, SimpleLocation sLoc) {
+        //this.world = world;
+        this.popData = data;
+        this.x = sLoc.getX();
+        this.y = sLoc.getY();
+        this.z = sLoc.getZ();
+
+    }
 
     public SimpleBlock(PopulatorDataAbstract data, Location loc) {
         //this.world = loc.getWorld().getName();

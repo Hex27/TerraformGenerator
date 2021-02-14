@@ -90,7 +90,7 @@ public class BlackOceansHandler extends BiomeHandler {
                 int coreHeight = HeightMap.getBlockHeight(world, x, z);
                 if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
 
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                int y = GenUtils.getHighestGround(data, x, z);
                 
                 //Set ground near sea level to gravel
                 if(y >= TerraformGenerator.seaLevel - 2) {

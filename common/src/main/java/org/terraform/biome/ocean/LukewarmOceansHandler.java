@@ -6,6 +6,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.tree.TreeDB;
@@ -50,7 +51,7 @@ public class LukewarmOceansHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                int y = GenUtils.getHighestGround(data, x, z);
                 if (data.getBiome(x, y, z) != getBiome()) continue;
 
                 //Set ground near sea level to sand
@@ -71,26 +72,64 @@ public class LukewarmOceansHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                boolean growCorals =
-                        y <= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT.getInt()
-                                && y >= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT.getInt();
-                if (data.getBiome(x, y, z) != getBiome()) continue;
-                
-                if (growCorals) {
-                	//Spawn corals, along with a circular patch beneath them.
-                    if (GenUtils.chance(random, 15, 100)) {
-                        CoralGenerator.generateCoral(data, x, y + 1, z);
-                        BlockUtils.replaceCircularPatch(random.nextInt(9999), 2, new SimpleBlock(data,x,y,z), Material.SAND);
-                    }else if (GenUtils.chance(random, 1, 100)) {
-                        TreeDB.spawnRandomGiantCoral(tw, data, x, y, z);
-                        BlockUtils.replaceCircularPatch(random.nextInt(9999), 4, new SimpleBlock(data,x,y,z), Material.SAND);
-                    }
+		//Large Corals
+		SimpleLocation[] largeCorals = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.4f);
+        
+        for (SimpleLocation sLoc : largeCorals) {
+        	int coralY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            sLoc.setY(coralY);
+            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
+            	boolean growCorals = coralY <= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT.getInt() && coralY >= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT.getInt();
+                if(growCorals) {
+                	TreeDB.spawnRandomGiantCoral(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
+                 	if(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) == Material.GRAVEL)
+                 		BlockUtils.replaceCircularPatch(random.nextInt(9999), 4, new SimpleBlock(data, sLoc), Material.SAND);
                 }
             }
         }
+        
+		SimpleLocation[] smallCorals = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 4, 0.5f);
+        
+        for (SimpleLocation sLoc : smallCorals) {
+        	int coralY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            sLoc.setY(coralY);
+            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()
+            		&& !data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()).isSolid()) {
+            	boolean growCorals = coralY <= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MAXHEIGHT.getInt() && coralY >= TConfigOption.BIOME_LUKEWARM_OCEAN_CORAL_MINHEIGHT.getInt();
+                if(growCorals) {
+                	CoralGenerator.generateCoral(data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
+                	if(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) == Material.GRAVEL)
+                 		BlockUtils.replaceCircularPatch(random.nextInt(9999), 2, new SimpleBlock(data, sLoc), Material.SAND);
+                }
+            }
+        }
+		
+		//Spawn rocks
+		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 30, 0.4f);
+        
+        for (SimpleLocation sLoc : rocks) {
+            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
+                int rockY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+                sLoc.setY(rockY);
+                if(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) != Material.GRAVEL)
+                		continue;
+                
+                BlockUtils.replaceSphere(
+                		random.nextInt(9987),
+                		(float) GenUtils.randDouble(random, 3, 7), 
+                		(float) GenUtils.randDouble(random, 2, 4), 
+                		(float) GenUtils.randDouble(random, 3, 7), 
+                		new SimpleBlock(data,sLoc), 
+                		true, 
+                		GenUtils.randMaterial(
+                				Material.STONE,
+                				Material.GRANITE,
+                				Material.ANDESITE,
+                				Material.DIORITE
+                		));
+            }
+        }
+	
 	}
 
 

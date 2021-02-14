@@ -32,7 +32,7 @@ public class GenUtils {
             "WOOD", "MUSHROOM",
             "FENCE", "WALL",
             "POTTED", "BRICK",
-            "CHAIN"
+            "CHAIN", "CORAL"
     };
     private static final LoadingCache<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache = CacheBuilder.newBuilder()
             .maximumSize(32)

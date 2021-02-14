@@ -14,7 +14,7 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class TreeDB {
-    private static final FractalTypes.Tree[] FRACTAL_TREE_TYPES = {
+    private static final FractalTypes.Tree[] FRACTAL_CORAL_TYPES = {
             FractalTypes.Tree.FIRE_CORAL,
             FractalTypes.Tree.BRAIN_CORAL,
             FractalTypes.Tree.TUBE_CORAL,
@@ -50,7 +50,7 @@ public class TreeDB {
      * Grows a random giant coral (fire, tube, etc)
      */
     public static void spawnRandomGiantCoral(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        FractalTypes.Tree type = FRACTAL_TREE_TYPES[tw.getHashedRand(x, y, z).nextInt(5)];
+        FractalTypes.Tree type = FRACTAL_CORAL_TYPES[tw.getHashedRand(x, y, z).nextInt(5)];
         FractalTreeBuilder ftb = new FractalTreeBuilder(type);
         ftb.setMaxHeight(TerraformGenerator.seaLevel - y - 1); //Max height is one below sea level
         ftb.build(tw, data, x, y - 2, z);

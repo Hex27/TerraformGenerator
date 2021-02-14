@@ -64,7 +64,7 @@ public class FractalTreeBuilder {
     protected static final Map<TerraformWorld, FastNoise> noiseCache = new ConcurrentHashMap<>();
     private FastNoise noiseGen;
     private SimpleBlock beeHive;
-    private boolean coralDecoration = false;
+    protected boolean coralDecoration = false;
     private double initialAngle;
     private int initialHeight;
 
@@ -657,17 +657,12 @@ public class FractalTreeBuilder {
 
                     if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         rel.setType(type);
-
+                        
                         if (coralDecoration) {
                             if (!changed.contains(rel))
                                 changed.add(rel);
                         }
-
-                        //Decorate with fans
-                        if (coralDecoration) {
-                            CoralGenerator.generateSingleCoral(rel.getPopData(), rel.getX(), rel.getY(), rel.getZ(), this.fractalLeaves.material.toString());
-                        }
-
+                        
                         if (cocoaBeans > 0
                                 && Math.abs(x) >= rX - 2
                                 && Math.abs(z) >= rZ - 2) {
@@ -930,6 +925,7 @@ public class FractalTreeBuilder {
 
     public FractalTreeBuilder setCoralDecoration(boolean d) {
         this.coralDecoration = d;
+        this.fractalLeaves.coralDecoration = d;
         return this;
     }
 }

@@ -1,6 +1,6 @@
 name: TerraformGenerator
 author: Hex_27
-version: 3.1.1
+version: 3.1.2
 depend: [ Drycell ]
 api-version: 1.14
 description: World Generator

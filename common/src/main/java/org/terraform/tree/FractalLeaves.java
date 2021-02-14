@@ -37,12 +37,10 @@ public class FractalLeaves {
     boolean snowy = false;
     float weepingLeavesChance = 0;
     int weepingLeavesLength = 0;
+    boolean coralDecoration = false;
 
     public FractalLeaves(FractalTreeBuilder builder) {
-        this.builder = builder;
-        //this.noiseGen = new FastNoise((int) tw.getSeed());
-       
-        //noiseGen.SetFractalOctaves(5);
+    	this.builder = builder;
     }
 
     public void placeLeaves(SimpleBlock block) { 
@@ -121,6 +119,11 @@ public class FractalLeaves {
                         if (Tag.CORALS.isTagged(material)) {
                             if (!changed.contains(relativeBlock))
                                 changed.add(relativeBlock);
+                        }
+
+                        //Decorate with fans
+                        if (coralDecoration) {
+                        	CoralGenerator.generateSingleCoral(relativeBlock.getPopData(), relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ(), this.material.toString());
                         }
 
                         // Leaves do not replace solid blocks.

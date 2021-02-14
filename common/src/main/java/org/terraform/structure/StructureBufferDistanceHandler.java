@@ -20,6 +20,8 @@ public class StructureBufferDistanceHandler {
         for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if (spop == null) continue;
             int chunkBufferRadius = spop.getChunkBufferDistance();
+            if(chunkBufferRadius <= 0)
+            	continue;
             for(int rcx = -chunkBufferRadius; rcx <= chunkBufferRadius; rcx++) {
             	for(int rcz = -chunkBufferRadius; rcz <= chunkBufferRadius; rcz++) {
                     if (spop.canSpawn(tw, chunkX+rcx, chunkZ+rcz, banks)) {
