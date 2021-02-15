@@ -21,7 +21,8 @@ dependencies {
 }
 
 tasks.shadowJar {
-    relocate("io.papermc.lib", "org.terraform.lib")
+    relocate("io.papermc.lib", "org.terraform.lib.paperlib")
+    relocate("org.drycell", "org.terraform.lib.drycell")
 }
 
 java {

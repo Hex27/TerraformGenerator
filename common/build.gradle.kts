@@ -15,7 +15,7 @@ repositories {
 dependencies {
     testCompile("junit", "junit", "4.12")
     compileOnly(group = "org.spigotmc", name = "spigot", version = "1.16.4-R0.1-SNAPSHOT")
-    compileOnly(fileTree("../libs/"))
+    implementation(fileTree("../libs/"))
     compileOnly("org.jetbrains:annotations:20.1.0")
 }
 java {

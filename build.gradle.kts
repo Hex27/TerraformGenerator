@@ -47,7 +47,8 @@ val setupServer = tasks.create("setupServer") {
         // Copying plugins
         file("WorldGenTestServer/plugins").copyRecursively(file("$testDir/plugins"), true)
         // Copy Drycell lib
-        file("libs/Drycell.jar").copyTo(file("$testDir/plugins/Drycell.jar"), true)
+        //file("libs/Drycell.jar").copyTo(file("$testDir/plugins/Drycell.jar"), true)
+
         // Copying config
         val serverText = URL("https://raw.githubusercontent.com/PolyhedralDev/WorldGenTestServer/master/server.properties").readText()
         file("${testDir}/server.properties").writeText(serverText)
