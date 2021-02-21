@@ -1,5 +1,7 @@
 package org.terraform.biome;
 
+import org.terraform.main.TConfigOption;
+
 public class BiomeGrid {
     private static final BiomeBank[][] terrestrialGrid = {
             new BiomeBank[]{BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
@@ -143,16 +145,23 @@ public class BiomeGrid {
     }
 
     static BiomeBank getBiome(BiomeType type, int temperatureIndex, int moistureIndex) {
-        if (type == BiomeType.FLAT)
-            return terrestrialGrid[moistureIndex][temperatureIndex];
-        else if (type == BiomeType.OCEANIC)
-            return oceanicGrid[moistureIndex][temperatureIndex];
-        else if (type == BiomeType.MOUNTAINOUS)
-            return mountainousGrid[moistureIndex][temperatureIndex];
-        else if (type == BiomeType.BEACH)
-            return beachGrid[moistureIndex][temperatureIndex];
-        else if (type == BiomeType.RIVER)
-            return riverGrid[moistureIndex][temperatureIndex];
+
+        if (type == BiomeType.FLAT) {
+            BiomeBank single = TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.get(BiomeBank.class);
+            return single == null ? terrestrialGrid[moistureIndex][temperatureIndex] : single;
+        } else if (type == BiomeType.OCEANIC) {
+            BiomeBank single = TConfigOption.BIOME_SINGLE_OCEAN_TYPE.get(BiomeBank.class);
+            return single == null ? oceanicGrid[moistureIndex][temperatureIndex] : single;
+        } else if (type == BiomeType.MOUNTAINOUS) {
+            BiomeBank single = TConfigOption.BIOME_SINGLE_MOUNTAIN_TYPE.get(BiomeBank.class);
+            return single == null ? mountainousGrid[moistureIndex][temperatureIndex] : single;
+        } else if (type == BiomeType.BEACH) {
+            BiomeBank single = TConfigOption.BIOME_SINGLE_BEACH_TYPE.get(BiomeBank.class);
+            return single == null ? beachGrid[moistureIndex][temperatureIndex] : single;
+        } else if (type == BiomeType.RIVER) {
+            BiomeBank single = TConfigOption.BIOME_SINGLE_RIVER_TYPE.get(BiomeBank.class);
+            return single == null ? riverGrid[moistureIndex][temperatureIndex] : single;
+        }
 
         return null;
     }
