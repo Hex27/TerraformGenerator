@@ -1,8 +1,10 @@
 package org.terraform.main;
 
 import org.bukkit.ChatColor;
+import org.terraform.biome.BiomeBank;
 
 import java.util.List;
+import java.util.function.Function;
 
 public enum TConfigOption {
     //-=[HEIGHTMAP]=-
@@ -32,6 +34,11 @@ public enum TConfigOption {
     BIOME_BADLANDS_PLATEAU_FREQUENCY("biome.badlands.plateaus.frequency", 0.01),
     BIOME_BADLANDS_PLATEAU_COMMONNESS("biome.badlands.plateaus.commonness", 0.18),
     BIOME_JUNGLE_STATUE_CHANCE("biome.jungle.statue-chance-out-of-1000", 4),
+    BIOME_SINGLE_TERRESTRIAL_TYPE("biome.single.land", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
+    BIOME_SINGLE_OCEAN_TYPE("biome.single.ocean", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
+    BIOME_SINGLE_MOUNTAIN_TYPE("biome.single.mountain", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
+    BIOME_SINGLE_RIVER_TYPE("biome.single.river", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
+    BIOME_SINGLE_BEACH_TYPE("biome.single.beach", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
 
     //-=[TREES]=-
     TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),
@@ -265,21 +272,29 @@ public enum TConfigOption {
     ORE_GRANITE_MINSPAWNHEIGHT("ore.granite.min-spawn-height", 5),
 
     ;
-    String path;
-    Object value;
+    private final String path;
+    private Object value;
+    private final Function<Object, Object> map;
 
-    TConfigOption(String path, Object value) {
+    TConfigOption(String path, Object defaultValue) {
         this.path = path;
-        this.value = value;
+        this.value = defaultValue;
+        this.map = o -> o;
+    }
+
+    TConfigOption(String path, Object defaultValue, Function<Object, Object> map) {
+        this.path = path;
+        this.value = defaultValue;
+        this.map = map;
     }
 
     public static void loadValues(ConfigLoader conf) {
         for (TConfigOption option : TConfigOption.values()) {
-            conf.reg(option.path, option.value);
+            conf.reg(option.path, option.map.apply(option.value));
         }
         conf.load();
         for (TConfigOption option : TConfigOption.values()) {
-            option.value = conf.get(option.path);
+            option.value = option.map.apply(conf.get(option.path));
         }
     }
 
@@ -310,7 +325,7 @@ public enum TConfigOption {
     }
 
     public boolean getBoolean() {
-        return ((Boolean) value).booleanValue();
+        return (Boolean) value;
     }
 
     public double getDouble() {
@@ -342,5 +357,8 @@ public enum TConfigOption {
         return arr;
     }
 
+    public <T> T get(Class<T> clazz) {
+        return clazz.cast(value);
+    }
 
 }
