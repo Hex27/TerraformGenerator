@@ -3,20 +3,21 @@ package org.terraform.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.MushroomTypeArgument;
+import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
 
 import java.util.Random;
 import java.util.Stack;
 
-public class MushroomCommand extends DCCommand {
+public class MushroomCommand extends TerraCommand {
 
-    public MushroomCommand(DrycellPlugin plugin, String... aliases) {
+    public MushroomCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
         this.parameters.add(new MushroomTypeArgument("type", true));
     }

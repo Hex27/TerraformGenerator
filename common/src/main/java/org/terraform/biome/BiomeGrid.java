@@ -1,7 +1,5 @@
 package org.terraform.biome;
 
-import org.drycell.command.InvalidArgumentException;
-
 public class BiomeGrid {
     private static final BiomeBank[][] terrestrialGrid = {
             new BiomeBank[]{BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,
@@ -160,11 +158,11 @@ public class BiomeGrid {
     }
 
     //11x11 grids
-    public static BiomeBank[][] parseBiomeGrid(String gridString) throws InvalidArgumentException {
+    public static BiomeBank[][] parseBiomeGrid(String gridString) throws IllegalArgumentException {
         BiomeBank[][] grid = new BiomeBank[11][11];
         String[] items = gridString.split(",");
         if (items.length != 11 * 11)
-            throw new InvalidArgumentException("Invalid grid length! Must be " + 11 * 11 + " units, but instead was " + items.length);
+            throw new IllegalArgumentException("Invalid grid length! Must be " + 11 * 11 + " units, but instead was " + items.length);
         for (int i = 0; i < 11 * 11; i++) {
             grid[i / 11][i % 11] = BiomeBank.valueOf(items[i].toUpperCase());
         }

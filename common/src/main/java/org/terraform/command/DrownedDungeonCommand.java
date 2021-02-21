@@ -2,19 +2,19 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.dungeon.DrownedDungeonPopulator;
 
 import java.util.Random;
 import java.util.Stack;
 
-public class DrownedDungeonCommand extends DCCommand {
+public class DrownedDungeonCommand extends TerraCommand {
 
-    public DrownedDungeonCommand(DrycellPlugin plugin, String... aliases) {
+    public DrownedDungeonCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

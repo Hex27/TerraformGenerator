@@ -43,3 +43,4 @@ org.eclipse.buildship.core.prefs
 *.class
 *-mapping.txt
 WorldGenTestServer/
+/build/

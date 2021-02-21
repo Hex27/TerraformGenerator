@@ -1,15 +1,15 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.Stack;
 
-public class CaveCommand extends DCCommand {
+public class CaveCommand extends TerraCommand {
 
-    public CaveCommand(DrycellPlugin plugin, String... aliases) {
+    public CaveCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

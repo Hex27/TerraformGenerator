@@ -1,7 +1,6 @@
 package org.terraform.main;
 
 import org.bukkit.ChatColor;
-import org.drycell.config.DCConfig;
 
 import java.util.List;
 
@@ -274,7 +273,7 @@ public enum TConfigOption {
         this.value = value;
     }
 
-    public static void loadValues(DCConfig conf) {
+    public static void loadValues(ConfigLoader conf) {
         for (TConfigOption option : TConfigOption.values()) {
             conf.reg(option.path, option.value);
         }

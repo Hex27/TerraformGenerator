@@ -2,17 +2,17 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.monument.MonumentDesign;
 
 import java.util.Stack;
 
-public class LargeMonumentLampCommand extends DCCommand {
+public class LargeMonumentLampCommand extends TerraCommand {
 
-    public LargeMonumentLampCommand(DrycellPlugin plugin, String... aliases) {
+    public LargeMonumentLampCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

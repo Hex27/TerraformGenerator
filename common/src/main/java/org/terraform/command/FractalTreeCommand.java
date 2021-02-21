@@ -3,18 +3,19 @@ package org.terraform.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.FractalTreeTypeArgument;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 
 import java.util.Stack;
 
-public class FractalTreeCommand extends DCCommand {
-    public FractalTreeCommand(DrycellPlugin plugin, String... aliases) {
+public class FractalTreeCommand extends TerraCommand {
+    public FractalTreeCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
         this.parameters.add(new FractalTreeTypeArgument("type", false));
     }

@@ -8,11 +8,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.drycell.command.DCArgument;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
 import org.terraform.biome.BiomeBank;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
+import org.terraform.command.contants.TerraCommandArgument;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -32,9 +31,9 @@ import java.util.Stack;
 import java.util.UUID;
 
 
-public class LocateCommand extends DCCommand implements Listener {
+public class LocateCommand extends TerraCommand implements Listener {
 
-    public LocateCommand(DrycellPlugin plugin, String... aliases) {
+    public LocateCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.parameters.add(new StructurePopulatorArgument("structureType", true));
@@ -275,7 +274,7 @@ public class LocateCommand extends DCCommand implements Listener {
         TerraformGeneratorPlugin.logger.info("[Locate Command] " + message);
     }
 
-    public static class StructurePopulatorArgument extends DCArgument<StructurePopulator> {
+    public static class StructurePopulatorArgument extends TerraCommandArgument<StructurePopulator> {
 
         public StructurePopulatorArgument(String name, boolean isOptional) {
             super(name, isOptional);

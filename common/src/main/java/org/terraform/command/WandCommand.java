@@ -3,16 +3,16 @@ package org.terraform.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicListener;
 
 import java.util.Stack;
 
-public class WandCommand extends DCCommand {
+public class WandCommand extends TerraCommand {
 
-    public WandCommand(DrycellPlugin plugin, String... aliases) {
+    public WandCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

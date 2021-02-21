@@ -2,16 +2,16 @@ package org.terraform.command;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.TickTimer;
 
 import java.util.Map;
 import java.util.Stack;
 
-public class TimingsCommand extends DCCommand {
-    public TimingsCommand(DrycellPlugin plugin, String... aliases) {
+public class TimingsCommand extends TerraCommand {
+    public TimingsCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

@@ -2,20 +2,20 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.Stack;
 
-public class CheckHeightCommand extends DCCommand {
+public class CheckHeightCommand extends TerraCommand {
 
-    public CheckHeightCommand(DrycellPlugin plugin, String... aliases) {
+    public CheckHeightCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

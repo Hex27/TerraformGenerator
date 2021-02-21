@@ -3,18 +3,18 @@ package org.terraform.command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.Stack;
 
-public class PopulateCommand extends DCCommand {
+public class PopulateCommand extends TerraCommand {
 
-    public PopulateCommand(DrycellPlugin plugin, String... aliases) {
+    public PopulateCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

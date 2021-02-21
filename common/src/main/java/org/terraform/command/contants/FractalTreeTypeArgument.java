@@ -1,10 +1,9 @@
-package org.terraform.command;
+package org.terraform.command.contants;
 
 import org.bukkit.command.CommandSender;
-import org.drycell.command.DCArgument;
 import org.terraform.tree.FractalTypes;
 
-public class FractalTreeTypeArgument extends DCArgument<FractalTypes.Tree> {
+public class FractalTreeTypeArgument extends TerraCommandArgument<FractalTypes.Tree> {
 
     public FractalTreeTypeArgument(String name, boolean isOptional) {
         super(name, isOptional);

@@ -1,9 +1,10 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.SchematicArgument;
+import org.terraform.command.contants.TerraCommand;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.utils.BlockUtils;
 
@@ -11,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class SchematicLoadCommand extends DCCommand {
+public class SchematicLoadCommand extends TerraCommand {
 
-    public SchematicLoadCommand(DrycellPlugin plugin, String... aliases) {
+    public SchematicLoadCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
         this.parameters.add(new SchematicArgument("schem-name", false));
     }

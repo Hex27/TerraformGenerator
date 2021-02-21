@@ -1,10 +1,9 @@
-package org.terraform.command;
+package org.terraform.command.contants;
 
 import org.bukkit.command.CommandSender;
-import org.drycell.command.DCArgument;
 import org.terraform.tree.FractalTypes;
 
-public class MushroomTypeArgument extends DCArgument<FractalTypes.Mushroom> {
+public class MushroomTypeArgument extends TerraCommandArgument<FractalTypes.Mushroom> {
 
     public MushroomTypeArgument(String name, boolean isOptional) {
         super(name, isOptional);

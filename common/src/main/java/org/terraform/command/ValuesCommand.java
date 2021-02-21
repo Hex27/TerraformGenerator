@@ -1,19 +1,19 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 import java.util.Stack;
 
-public class ValuesCommand extends DCCommand {
+public class ValuesCommand extends TerraCommand {
 
-    public ValuesCommand(DrycellPlugin plugin, String... aliases) {
+    public ValuesCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

@@ -5,11 +5,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.drycell.command.DCArgument;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
 import org.terraform.biome.BiomeBank;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
+import org.terraform.command.contants.TerraCommandArgument;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.LangOpt;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -19,9 +18,9 @@ import org.terraform.utils.Vector2f;
 import java.util.Stack;
 import java.util.UUID;
 
-public class LocateBiomeCommand extends DCCommand {
+public class LocateBiomeCommand extends TerraCommand {
 
-    public LocateBiomeCommand(DrycellPlugin plugin, String... aliases) {
+    public LocateBiomeCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
         this.parameters.add(new LocateBiomeTypeArgument("biomeType", false));
     }
@@ -84,7 +83,7 @@ public class LocateBiomeCommand extends DCCommand {
         TerraformGeneratorPlugin.logger.info("[Locate Command] " + message);
     }
 
-    private static class LocateBiomeTypeArgument extends DCArgument<BiomeBank> {
+    private static class LocateBiomeTypeArgument extends TerraCommandArgument<BiomeBank> {
         public LocateBiomeTypeArgument(String name, boolean isOptional) {
             super(name, isOptional);
             // TODO Auto-generated constructor stub

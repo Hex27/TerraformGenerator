@@ -4,15 +4,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.command.CommandSender;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.Stack;
 
-public class BlockDataTestCommand extends DCCommand {
+public class BlockDataTestCommand extends TerraCommand {
 
-    public BlockDataTestCommand(DrycellPlugin plugin, String... aliases) {
+    public BlockDataTestCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

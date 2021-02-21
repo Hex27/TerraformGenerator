@@ -1,13 +1,12 @@
-package org.terraform.command;
+package org.terraform.command.contants;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCArgument;
 import org.terraform.schematic.TerraSchematic;
 
 import java.io.FileNotFoundException;
 
-public class SchematicArgument extends DCArgument<TerraSchematic> {
+public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
 
     public SchematicArgument(String name, boolean isOptional) {
         super(name, isOptional);

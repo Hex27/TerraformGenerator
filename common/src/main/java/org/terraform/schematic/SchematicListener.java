@@ -9,8 +9,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.drycell.gui.ItemBuilder;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,10 +20,15 @@ public class SchematicListener implements Listener {
     private static final String WAND_NAME = ChatColor.AQUA + "Terra Wand";
 
     public static ItemStack getWand() {
-        return new ItemBuilder(Material.GOLDEN_AXE)
-                .setName(WAND_NAME)
-                .addLore(ChatColor.RED + "-=[Developer's Tool]=-")
-                .build();
+        ItemStack wand = new ItemStack(Material.GOLDEN_AXE);
+        ItemMeta meta = wand.getItemMeta();
+        meta.setDisplayName(WAND_NAME);
+        meta.setLore(new ArrayList<String>() {{
+        	add(ChatColor.RED + "-=[Developer's Tool]=-");
+        }});
+        wand.setItemMeta(meta);
+        
+        return wand;
     }
 
     @EventHandler

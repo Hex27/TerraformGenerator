@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.drycell.main.DrycellPlugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformPopulator;
@@ -27,12 +27,16 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener {
+public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
+	public static TLogger logger;
     public static final Set<String> INJECTED_WORLDS = new HashSet<>();
     public static final PrivateFieldHandler privateFieldHandler;
     public static NMSInjectorAbstract injector;
     private static TerraformGeneratorPlugin instance;
+    
+    private ConfigLoader config;
+    private LanguageManager lang;
 
     static {
         PrivateFieldHandler handler;
@@ -53,9 +57,10 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
     public void onEnable() {
         super.onEnable();
         instance = this;
-
         logger = new TLogger(this);
-        TConfigOption.loadValues(this.getDCConfig());
+		config = new ConfigLoader(this);
+		lang = new LanguageManager(this);
+        TConfigOption.loadValues(config);
         LangOpt.init(this);
         TerraformGenerator.updateSeaLevelFromConfig();
         TerraformGenerator.updateMinMountainLevelFromConfig();
@@ -144,5 +149,14 @@ public class TerraformGeneratorPlugin extends DrycellPlugin implements Listener 
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         return new TerraformGenerator();
     }
+
+	public ConfigLoader getConfigLoader() {
+		return config;
+	}
+
+	public LanguageManager getLang() {
+		// TODO Auto-generated method stub
+		return lang;
+	}
 
 }

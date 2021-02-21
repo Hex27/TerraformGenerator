@@ -2,18 +2,18 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.villagehouse.animalfarm.AnimalFarmPopulator;
 
 import java.util.Stack;
 
-public class AnimalFarmCommand extends DCCommand {
+public class AnimalFarmCommand extends TerraCommand {
 
-    public AnimalFarmCommand(DrycellPlugin plugin, String... aliases) {
+    public AnimalFarmCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 

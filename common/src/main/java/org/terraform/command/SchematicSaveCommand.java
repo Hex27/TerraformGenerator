@@ -5,9 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.drycell.command.DCCommand;
-import org.drycell.command.InvalidArgumentException;
-import org.drycell.main.DrycellPlugin;
+import org.terraform.command.contants.InvalidArgumentException;
+import org.terraform.command.contants.TerraCommand;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicListener;
 import org.terraform.schematic.TerraRegion;
 import org.terraform.schematic.TerraSchematic;
@@ -15,9 +15,9 @@ import org.terraform.schematic.TerraSchematic;
 import java.io.IOException;
 import java.util.Stack;
 
-public class SchematicSaveCommand extends DCCommand {
+public class SchematicSaveCommand extends TerraCommand {
 
-    public SchematicSaveCommand(DrycellPlugin plugin, String... aliases) {
+    public SchematicSaveCommand(TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
     }
 
