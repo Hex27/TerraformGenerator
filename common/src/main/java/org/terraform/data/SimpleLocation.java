@@ -1,6 +1,8 @@
 package org.terraform.data;
 
 import org.bukkit.block.BlockFace;
+import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.Vector3f;
 
 import java.util.Objects;
 
@@ -34,12 +36,90 @@ public class SimpleLocation {
         return new SimpleLocation(this.x + face.getModX()*i, this.y + face.getModY()*i, this.z + face.getModZ()*i);
     }
 
-    public int distanceSqr(SimpleLocation o) {
-        return (int) (Math.pow(o.x - x, 2) + Math.pow(o.y - y, 2) + Math.pow(o.z - z, 2));
+    public float distance(SimpleLocation o) {
+        return (float) Math.sqrt(Math.pow(o.x - x, 2) + Math.pow(o.y - y, 2) + Math.pow(o.z - z, 2));
     }
 
-    public int distanceSqr(int nx, int ny, int nz) {
-        return (int) (Math.pow(nx - x, 2) + Math.pow(ny - y, 2) + Math.pow(nz - z, 2));
+    public float distanceSqr(SimpleLocation o) {
+        return (float) (Math.pow(o.x - x, 2) + Math.pow(o.y - y, 2) + Math.pow(o.z - z, 2));
+    }
+
+    public float distanceQuad(SimpleLocation o) {
+        return (float) Math.pow(Math.pow(o.x - x, 2) + Math.pow(o.y - y, 2) + Math.pow(o.z - z, 2),4);
+       }
+
+    public float distanceSqr(int nx, int ny, int nz) {
+        return (float) (Math.pow(nx - x, 2) + Math.pow(ny - y, 2) + Math.pow(nz - z, 2));
+    }
+    
+    /**
+     * Returns a value between 0 and 2PI to represent a 360 degree angle
+     * offset of the other location "o" compared to this location.
+     */
+    public float twoDAngleTo(SimpleLocation o) {
+    	
+    	//Handle absolute cases first
+    	if(o.x == x && o.z == z) {
+    		return 0.0f;
+    	}else if(o.x == x && o.z > z){
+    		return 0.0f;
+    	}else if(o.x == x && o.z < z){
+    		return (float) Math.PI;
+    	}else if(o.x > x && o.z == z){
+    		return (float) Math.PI/2;
+    	}else if(o.x < x && o.z == z){
+    		return (float) (3*Math.PI/2);
+    	}
+    	//Handle CAST trigo calculations
+    	else if(o.x > x && o.z > z) { //A segment
+    		return (float) Math.atan((o.x-x)/(o.z-z));
+    	}else if(o.x > x && o.z < z) { //C segment
+    		return (float) (Math.atan((z-o.z)/(o.x-x)) + Math.PI/2);
+    	}else if(o.x < x && o.z < z) { //T segment
+    		return (float) (Math.atan((x-o.x)/(z-o.z)) + Math.PI);
+    	}else if(o.x < x && o.z > z) { //S segment
+    		return (float) (Math.atan((o.z-z)/(x-o.x))+3*Math.PI/2);
+    	}
+    	
+    	// no way something else happens?
+    	TerraformGeneratorPlugin.logger.error("2D Angle calculation failed! Input Values: " + o.x + "," + o.z + ":" + x + "," + z);
+    	return 0.0f;
+    }
+    
+    /**
+     * Returns a value between 0 and PI to represent a 180 degree angle
+     * offset of the other location "o" compared to this location.
+     * 
+     * Will return the same value for segment CA and ST (mirrored)
+     */
+    public float twoDAngleWrapTo(SimpleLocation o) {
+    	
+    	//Handle absolute cases first
+    	if(o.x == x && o.z == z) {
+    		return 0.0f;
+    	}else if(o.x == x && o.z > z){
+    		return 0;
+    	}else if(o.x == x && o.z < z){
+    		return (float) Math.PI;
+    	}else if(o.x > x && o.z == z){
+    		return (float) Math.PI/2;
+    	}else if(o.x < x && o.z == z){
+    		return (float) (Math.PI/2);
+    	}
+    	//Handle CAST trigo calculations
+    	else if(o.x > x && o.z > z) { //A segment
+    		return (float) Math.atan((o.x-x)/(o.z-z));
+    	}else if(o.x > x && o.z < z) { //C segment
+    		return (float) (Math.atan((z-o.z)/(o.x-x)) + Math.PI/2);
+    	}else if(o.x < x && o.z < z) { //T segment
+    		return (float) (Math.atan((z-o.z)/(x-o.x)) + Math.PI/2);
+    	}else if(o.x < x && o.z > z) { //S segment
+    		return (float) Math.atan((x-o.x)/(o.z-z));
+    	}
+    	
+    	// no way something else happens?
+    	TerraformGeneratorPlugin.logger.error("2D Angle calculation failed! Input Values: " + o.x + "," + o.z + ":" + x + "," + z);
+    	return 0.0f;
     }
 
     @Override
