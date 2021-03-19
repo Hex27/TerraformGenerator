@@ -95,7 +95,7 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
             for (int z = chunkZ; z < chunkZ + megaChunkWidth; z++) {
                 int sx = (x << 4) + 8;
                 int sz = (z << 4) + 8;
-                BiomeBank biome = BiomeBank.calculateBiome(tw, sx, sz, HeightMap.getBlockHeight(tw, sx, sz));
+                BiomeBank biome = BiomeBank.calculateBiome(tw, sx, sz);
 
                 if (canSpawn(tw, x, z, new ArrayList<>(Collections.singleton(biome))))
                     coords.add(new ArrayList<>(Arrays.asList(sx, sz)));

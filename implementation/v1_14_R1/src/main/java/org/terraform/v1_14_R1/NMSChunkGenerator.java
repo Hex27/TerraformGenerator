@@ -58,7 +58,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     int rawX = x + ichunkaccess.getPos().x * 16;
                     int rawZ = x + ichunkaccess.getPos().z * 16;
                     int y = HeightMap.getBlockHeight(tw, rawX, rawZ);
-                    BiomeBase biomeBase = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,
+                    BiomeBase biomeBase = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(rawX, rawZ).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,
                     // z), y).getHandler().getBiome()
 
                     biomeBases[(x * 16) + z] = biomeBase;
@@ -75,7 +75,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     protected BiomeBase getDecoratingBiome(RegionLimitedWorldAccess rlwa, BlockPosition bp) {
-        return CraftBlock.biomeToBiomeBase(tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
+        return CraftBlock.biomeToBiomeBase(tw.getBiomeBank(bp.getX(), bp.getZ()).getHandler().getBiome());
     }
 
     @Override

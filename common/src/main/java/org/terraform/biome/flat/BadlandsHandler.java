@@ -87,7 +87,7 @@ public class BadlandsHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
-                BiomeBank currentBiome = BiomeBank.calculateBiome(world, x, z, highest);
+                BiomeBank currentBiome = BiomeBank.calculateBiome(world, x, z);
                 if (currentBiome != BiomeBank.BADLANDS &&
                         currentBiome != BiomeBank.BADLANDS_BEACH &&
                         currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;
@@ -143,8 +143,8 @@ public class BadlandsHandler extends BiomeHandler {
                 int rawZ = chunkZ * 16 + z;
 
                 double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
-                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, rawZ, height);
+                //int height = (int) preciseHeight;
+                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, rawZ);
 
                 if (currentBiome == BiomeBank.BADLANDS
                         || currentBiome == BiomeBank.BADLANDS_MOUNTAINS
@@ -322,7 +322,7 @@ public class BadlandsHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
-                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, x, z, highest);
+                BiomeBank currentBiome = tw.getBiomeBank(x, z);
                 if (currentBiome != BiomeBank.BADLANDS &&
                         currentBiome != BiomeBank.BADLANDS_BEACH &&
                         currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;

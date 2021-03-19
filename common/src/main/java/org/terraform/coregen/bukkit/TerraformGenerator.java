@@ -89,9 +89,10 @@ public class TerraformGenerator extends ChunkGenerator {
                 int rawZ = chunkZ * 16 + z;
 
                 // This will also cache the height
-                int height = HeightMap.getBlockHeight(tw, rawX, rawZ);
 
-                BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);
+                BiomeBank bank = tw.getBiomeBank(rawX, rawZ);
+                int height = (int) bank.getHandler().calculateHeight(tw, rawX, rawZ);
+                
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
                 biome.setBiome(x, z, bank.getHandler().getBiome());
                 int undergroundHeight = height;

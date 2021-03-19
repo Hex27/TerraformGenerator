@@ -40,7 +40,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
 
     public void spawnFarmHouse(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
         try {
-            BiomeBank biome = tw.getBiomeBank(x, y, z);
+            BiomeBank biome = tw.getBiomeBank(x, z);
             y += GenUtils.randInt(random, 1, 3);
             TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new Location(tw.getWorld(), x, y, z));
             farmHouse.parser = new FarmhouseSchematicParser(biome, random, data);

@@ -44,7 +44,7 @@ public class GenUtils {
                     int gridZ = key.chunkZ * 16;
                     for(int x = gridX; x < gridX + 16; x++) {
                         for(int z = gridZ; z < gridZ + 16; z++) {
-                            BiomeBank bank = key.tw.getBiomeBank(x, HeightMap.getBlockHeight(key.tw, x, z), z);
+                            BiomeBank bank = key.tw.getBiomeBank(x, z);
                             if(!banks.contains(bank)) banks.add(bank);
                         }
                     }

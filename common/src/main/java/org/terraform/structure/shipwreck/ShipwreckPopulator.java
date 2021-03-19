@@ -58,7 +58,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         try {
             y += GenUtils.randInt(random, -1, 1);
             TerraSchematic shipwreck = TerraSchematic.load(SCHEMATICS[random.nextInt(SCHEMATICS.length)], new Location(tw.getWorld(), x, y, z));
-            shipwreck.parser = new ShipwreckSchematicParser(tw.getBiomeBank(x, TerraformGenerator.seaLevel - 5, z), random, data);
+            shipwreck.parser = new ShipwreckSchematicParser(tw.getBiomeBank(x, z), random, data);
             shipwreck.setFace(BlockUtils.getDirectBlockFace(random));
             shipwreck.apply();
 

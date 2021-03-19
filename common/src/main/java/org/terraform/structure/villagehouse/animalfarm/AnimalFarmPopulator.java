@@ -54,7 +54,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
     public void spawnAnimalFarm(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         try {
             Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
-            BiomeBank biome = tw.getBiomeBank(x, y, z);
+            BiomeBank biome = tw.getBiomeBank(x, z);
             BlockFace dir = BlockUtils.getDirectBlockFace(random);
             TerraSchematic animalFarm = TerraSchematic.load("animalfarm", new Location(tw.getWorld(), x, y, z));
             animalFarm.parser = new AnimalFarmSchematicParser(biome, random, data);

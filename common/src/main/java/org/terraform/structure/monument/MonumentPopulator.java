@@ -163,7 +163,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int height = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
                 for (BiomeBank bank : BiomeBank.values()) {
-                    BiomeBank currentBiome = tw.getBiomeBank(x, height, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
+                    BiomeBank currentBiome = tw.getBiomeBank(x, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
 
                     //Must be in deep ocean. Check done in canSpawn
                     //if(currentBiome.getType() != BiomeType.DEEP_OCEANIC)

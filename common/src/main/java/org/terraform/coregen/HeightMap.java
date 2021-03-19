@@ -1,14 +1,22 @@
 package org.terraform.coregen;
 
+import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.FastNoise;
+import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 import java.util.function.Function;
 
 public enum HeightMap {
@@ -101,8 +109,8 @@ public enum HeightMap {
         }
     };
 
-    private static final int defaultSeaLevel = 62;
-    private static final float heightAmplifier = TConfigOption.HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER.getFloat();
+    public static final int defaultSeaLevel = 62;
+    public static final float heightAmplifier = TConfigOption.HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER.getFloat();
     protected final Map<TerraformWorld, FastNoise> noiseCache = Collections.synchronizedMap(new IdentityHashMap<>(TerraformWorld.WORLDS.size()));
 
     protected FastNoise computeNoise(TerraformWorld world, Function<TerraformWorld, FastNoise> noiseFunction) {
@@ -132,33 +140,10 @@ public enum HeightMap {
         return totalChangeInGradient / count;
     }
 
-    /**
-     * Used for calculating biomes and calculating terrain shapes.
-     * When used with biomes, output value should be type casted to int.
-     */
-    public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
-        double height = HeightMap.CORE.getHeight(tw, x, z);
-
-        if (height > defaultSeaLevel + 4) {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z);
-        } else {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z) * 0.8;
-        }
-
-        //double oldHeight = height;
-        if (height > defaultSeaLevel + 4) {
-            height += HeightMap.MOUNTAIN.getHeight(tw, x, z);
-        } else {
-            float frac = (float) height / (float) (TerraformGenerator.seaLevel + 4);
-            height += HeightMap.MOUNTAIN.getHeight(tw, x, z) * (frac);
-        }
-
-        if (height > 200) height = 200 + (height - 200) * 0.5;
-        if (height > 230) height = 230 + (height - 230) * 0.3;
-        if (height > 240) height = 240 + (height - 240) * 0.1;
-        if (height > 250) height = 250 + (height - 250) * 0.05;
-
-        return height + HeightMap.OCEANIC.getHeight(tw, x, z);
+    public static double getRawRiverDepth(TerraformWorld tw, int x, int z) {
+    	double depth = HeightMap.RIVER.getHeight(tw, x, z);
+        depth = depth < 0 ? 0 : depth;
+        return depth;
     }
 
     public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
@@ -167,49 +152,74 @@ public enum HeightMap {
         double cachedValue = cache.getHeight(x, z);
         if (cachedValue != 0) return cachedValue;
 
-        double height = HeightMap.CORE.getHeight(tw, x, z);
-
-        if (height > defaultSeaLevel + 4) {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z);
-        } else {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z) * 0.8;
-        }
-
-        if (height > defaultSeaLevel + 4) {
-            height += HeightMap.MOUNTAIN.getHeight(tw, x, z);
-        } else {
-            float frac = (float) height / (float) (TerraformGenerator.seaLevel + 4);
-            height += HeightMap.MOUNTAIN.getHeight(tw, x, z) * (frac);
-        }
-
-        if (height > 200) height = 200 + (height - 200) * 0.5;
-        if (height > 230) height = 230 + (height - 230) * 0.3;
-        if (height > 240) height = 240 + (height - 240) * 0.1;
-        if (height > 250) height = 250 + (height - 250) * 0.05;
-
-        //Oceans
-        height += HeightMap.OCEANIC.getHeight(tw, x, z);
-
-        //River Depth
-        double depth = HeightMap.RIVER.getHeight(tw, x, z);
-        depth = depth < 0 ? 0 : depth;
+        double height = getRiverlessHeight(tw,x,z);
+    	
+    	//River Depth
+        double depth = getRawRiverDepth(tw,x,z);
 
         //Normal scenario: Shallow area
         if (height - depth >= TerraformGenerator.seaLevel - 15) {
             height -= depth;
 
             //Fix for underwater river carving: Don't carve deeply
-        } else if (height > TerraformGenerator.seaLevel - 15 && height - depth < TerraformGenerator.seaLevel - 15) {
+        } else if (height > TerraformGenerator.seaLevel - 15 
+        		&& height - depth < TerraformGenerator.seaLevel - 15) {
             height = TerraformGenerator.seaLevel - 15;
         }
 
-        if (heightAmplifier != 1f && height > TerraformGenerator.seaLevel) height += heightAmplifier * (height - TerraformGenerator.seaLevel);
+        if (heightAmplifier != 1f && height > TerraformGenerator.seaLevel) 
+        	height += heightAmplifier * (height - TerraformGenerator.seaLevel);
 
+    	
         cache.cacheHeight(x, z, height);
         return height;
     }
 
-    public static int getBlockHeight(TerraformWorld tw, int x, int z) {
+    public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
+        double dither = TConfigOption.BIOME_DITHER.getDouble();
+    	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
+    	SimpleLocation target  = new SimpleLocation(x,0,z);
+    	
+    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
+    	HashMap<BiomeSection, Double> dominanceMap = new HashMap<>();
+    	
+    	double height = 0;
+    	double totalDom = 0;
+    	double lowestDom = 0;
+    	for(BiomeSection sect:sections) {
+    		double dom = (sect.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
+    		if(dom < lowestDom) lowestDom = dom;
+    		dominanceMap.put(sect, dom);
+    	}
+    	
+    	//Make all dominance values positive
+    	if(lowestDom < 0) {
+        	for(BiomeSection sect:sections) {
+        		dominanceMap.put(sect, dominanceMap.get(sect)+Math.abs(lowestDom));
+        		totalDom += dominanceMap.get(sect);
+        	}
+    	}
+        
+    	//Calculate the height based on the percentage dominance
+    	for(BiomeSection sect:sections) {
+    		double multiplier = 0.25;
+    		if(totalDom > 0)
+    			multiplier = dominanceMap.get(sect)/totalDom;
+    		
+    		height += sect.getBiomeBank().getHandler()
+    				.calculateHeight(tw, x, z) 
+    				* multiplier;
+//    		if((dominanceMap.get(sect)/totalDom) > 1) {
+//    			TerraformGeneratorPlugin.logger.info("Weird percentage detected => " + (dominanceMap.get(sect)/totalDom));
+//				TerraformGeneratorPlugin.logger.info("=> Total Dom : " + totalDom);
+//    			for(BiomeSection s:sections)
+//    				TerraformGeneratorPlugin.logger.info("=> " + s + " : " + dominanceMap.get(sect) );
+//    		}
+    	}
+		return height;
+    }
+
+	public static int getBlockHeight(TerraformWorld tw, int x, int z) {
         return (int) getPreciseHeight(tw, x, z);
     }
 

@@ -38,10 +38,17 @@ import org.terraform.biome.river.JungleRiverHandler;
 import org.terraform.biome.river.RiverHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.utils.GenUtils;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.LoadingCache;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
 import java.util.Random;
 
 public enum BiomeBank {
@@ -97,6 +104,12 @@ public enum BiomeBank {
     MUDFLATS(new MudflatsHandler(), BiomeType.BEACH), //Special case, handle later
     ;
     public static final BiomeBank[] VALUES = values();
+    public static final ArrayList<BiomeBank> FLAT = new ArrayList<BiomeBank>() {{
+    	for(BiomeBank b:VALUES) {
+    		if(b.getType() == BiomeType.FLAT)
+    			add(b);
+    	}
+    }};
     private final BiomeHandler handler;
     private final BiomeType type;
     private final AbstractCavePopulator cavePop;
@@ -104,6 +117,10 @@ public enum BiomeBank {
     private float moisture;
     private float temperature;
 
+    private static final LoadingCache<BiomeSection, BiomeSection> BIOMESECTION_CACHE = 
+    		CacheBuilder.newBuilder()
+    		.maximumSize(250).build(new BiomeSectionCacheLoader());
+    
     BiomeBank(BiomeHandler handler, BiomeType type) {
         this.handler = handler;
         this.type = type;
@@ -115,89 +132,64 @@ public enum BiomeBank {
         this.type = type;
         this.cavePop = cavePop;
     }
+    
+    public static BiomeSection getBiomeSection(TerraformWorld tw, int x, int z) {
+    	BiomeSection sect = new BiomeSection(tw,x,z);
+    	try {
+    		sect = BIOMESECTION_CACHE.get(sect);
+    	}
+    	catch(Throwable e) 
+    	{
+    		e.printStackTrace();
+    		sect.doCalculations();
+    	}
+    	return sect;
+    }
+    public static BiomeSection getBiomeSection(TerraformWorld tw, int x, int z, boolean useSectionCoords) {
+    	BiomeSection sect = new BiomeSection(tw,x,z,useSectionCoords);
+    	try {
+    		sect = BIOMESECTION_CACHE.get(sect);
+    	}
+    	catch(Throwable e) 
+    	{
+    		e.printStackTrace();
+    		sect.doCalculations();
+    	}
+    	return sect;
+    }
 
     /**
      * @param height Ranges between 0-255
      * @return a biome type
      */
-    public static BiomeBank calculateBiome(TerraformWorld tw, int x, int z, int height) {
+    public static BiomeBank calculateBiome(TerraformWorld tw, int x, int z) {
+
         double dither = TConfigOption.BIOME_DITHER.getDouble();
-        double temperature = tw.getTemperature(x, z);
-        double moisture = tw.getMoisture(x, z);
-        Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
-
-        // Oceanic biomes
-        if (height < TerraformGenerator.seaLevel) {
-
-            BiomeBank bank = BiomeGrid.calculateBiome(
-                    BiomeType.OCEANIC,
-                    temperature + GenUtils.randDouble(random, -dither, dither),
-                    moisture + GenUtils.randDouble(random, -dither, dither)
-            );
-
-            int trueHeight = (int) HeightMap.getRiverlessHeight(tw, x, z);
-
-            //This is a river.
-            if (trueHeight >= TerraformGenerator.seaLevel) {
-                return BiomeGrid.calculateBiome(BiomeType.RIVER,
-                        temperature + GenUtils.randDouble(random, -dither, dither),
-                        moisture + GenUtils.randDouble(random, -dither, dither)
-                );
-            }
-
-            if (bank == SWAMP) {
-                if (height >= TerraformGenerator.seaLevel - GenUtils.randInt(random, 9, 11)) {
-                    //Shallow and warm areas are swamps.
-                    return SWAMP;
-                } else
-                    bank = OCEAN;
-            }
-
-            if (height <= TConfigOption.HEIGHT_MAP_DEEP_SEA_LEVEL.getInt()) {
-                bank = BiomeBank.valueOf("DEEP_" + bank);
-                //TerraformGeneratorPlugin.logger.info("detected deep sea: " + bank.toString() + " at height " + height);
-            }
-
-            return bank;
-        }
-
-        //GENERATE HIGH-ALTITUDE AREAS
-        if (height >= TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt() - GenUtils.randInt(random, 0, 5)) {
-            return BiomeGrid.calculateBiome(
-                    BiomeType.MOUNTAINOUS,
-                    temperature + GenUtils.randDouble(random, -dither, dither),
-                    moisture + GenUtils.randDouble(random, -dither, dither)
+    	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
+    	SimpleLocation target  = new SimpleLocation(x,0,z);
+    	BiomeSection homeSection = getBiomeSection(tw, x,z);
+    	
+        //This is a river.
+    	//Idk why 10 works, but it sort of does
+        if (HeightMap.getRawRiverDepth(tw, x, z) > 10) {
+            return BiomeGrid.calculateBiome(BiomeType.RIVER,
+            		homeSection.getTemperature() + GenUtils.randDouble(locationBasedRandom, -dither, dither),
+            		homeSection.getMoisture() + GenUtils.randDouble(locationBasedRandom, -dither, dither)
             );
         }
-
-        //GENERATE BEACHES
-        if (height <= TerraformGenerator.seaLevel + GenUtils.randInt(random, 0, 4)) {
-            return BiomeGrid.calculateBiome(
-                    BiomeType.BEACH,
-                    temperature + GenUtils.randDouble(random, -dither, dither),
-                    moisture + GenUtils.randDouble(random, -dither, dither)
-            );
-        }
-
-        //GENERATE LOW-ALTITUDE AREAS
-        return BiomeGrid.calculateBiome(
-                BiomeType.FLAT,
-                temperature + GenUtils.randDouble(random, -dither, dither),
-                moisture + GenUtils.randDouble(random, -dither, dither)
-        );
-    }
-
-    public static BiomeBank calculateFlatBiome(TerraformWorld tw, int x, int z, int height) {
-        double dither = TConfigOption.BIOME_DITHER.getDouble();
-        double temperature = tw.getTemperature(x, z);
-        double moisture = tw.getMoisture(x, z);
-        Random random = tw.getHashedRand((int) (temperature * 10000), (int) (moisture * 10000), height);
-
-        return BiomeGrid.calculateBiome(
-                BiomeType.FLAT,
-                temperature + GenUtils.randDouble(random, -dither, dither),
-                moisture + GenUtils.randDouble(random, -dither, dither)
-        );
+    	
+    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
+    	BiomeSection mostDominant = homeSection;
+    	
+    	for(BiomeSection sect:sections) {
+    		float dom = (float) (sect.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
+    		
+    		if(dom > mostDominant.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither))
+    			mostDominant = sect;
+    	}
+    	
+    	return mostDominant.getBiomeBank();
+    
     }
 
     /**

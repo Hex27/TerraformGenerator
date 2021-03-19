@@ -19,7 +19,7 @@ public enum TConfigOption {
     //-=[BIOMES]=-
     BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency", 0.0007f),
     BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.0007f),
-    BIOME_DITHER("biome.dithering", 0.1d),
+    BIOME_DITHER("biome.dithering", 0.04d),
     BIOME_CLAY_DEPOSIT_SIZE("biome.clay-deposit-radius", 3f),
     BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND("biome.clay-deposit-chance-out-of-thousand", 3),
     BIOME_MOUNTAIN_HEIGHT("biome.min-mountain-height", 85),

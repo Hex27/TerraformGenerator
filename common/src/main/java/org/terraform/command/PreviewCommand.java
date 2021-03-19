@@ -2,15 +2,12 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeGrid;
 import org.terraform.biome.BiomeSection;
-import org.terraform.biome.BiomeType;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.SimpleLocation;
+import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -53,6 +50,7 @@ public class PreviewCommand extends TerraCommand {
         double highest = -1;
         double lowest = 10000;
         boolean hasdebugged = true;
+        TerraformWorld tw = TerraformWorld.get("test-world", 11111);
         
         BufferedImage img = new BufferedImage(x, z, BufferedImage.TYPE_INT_RGB);
         //file object
@@ -66,28 +64,28 @@ public class PreviewCommand extends TerraCommand {
             for (int nx = -x/2; nx < x/2; nx++) {
             	Random locationBasedRandom  = new Random(Objects.hash(127,nx,nz));
             	SimpleLocation target  = new SimpleLocation(nx,0,nz);
-            	BiomeSection homeSection = new BiomeSection(nx,nz);
+            	BiomeSection homeSection = BiomeBank.getBiomeSection(tw, nx,nz);
             	boolean debugMe = !hasdebugged && homeSection.getX() == debugX && homeSection.getZ() == debugZ;
             	if(debugMe) {
             		hasdebugged = true;
             		TerraformGeneratorPlugin.logger.info("Debugging: "+homeSection.toString());
             		TerraformGeneratorPlugin.logger.info(nx + "," + nz);
             	}
-            	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(nx, nz);
+            	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, nx, nz);
             	BiomeSection mostDominant = homeSection;
-            	if(debugMe)TerraformGeneratorPlugin.logger.info(homeSection.toString() + " Dom: " + homeSection.getDominance(target,false));
+            	if(debugMe)TerraformGeneratorPlugin.logger.info(homeSection.toString() + " Dom: " + homeSection.getDominance(target));
             	for(BiomeSection sect:sections) {
-            		float dom = (float) (sect.getDominance(target,debugMe)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
+            		float dom = (float) (sect.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
             		if(debugMe)
             			TerraformGeneratorPlugin.logger.info(sect.toString() + " Dom: " + dom);
-            		if(dom > mostDominant.getDominance(target,debugMe)+GenUtils.randDouble(locationBasedRandom,-dither,dither))
+            		if(dom > mostDominant.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither))
             			mostDominant = sect;
             	}
             	
             	if(nx % BiomeSection.sectionWidth == 0 || nz % BiomeSection.sectionWidth == 0)
             		img.setRGB(nx+x/2, nz+z/2, new Color(255,0,0).getRGB());
             	else {
-            		Color col = getBiomeColor(mostDominant.parseBiomeBank());
+            		Color col = getBiomeColor(mostDominant.getBiomeBank());
 //            		if(homeSection.getX() % 2 == 0 && homeSection.getZ() % 2 == 0) {
 //            			col = col.darker();
 //            			if(homeSection.getDominanceBasedOnRadius(target.getX(), target.getZ()) > 0)
@@ -145,7 +143,9 @@ public class PreviewCommand extends TerraCommand {
     	}
     }
     
-    private Color getHeightColorFromNoise(int noise) {
+    
+    @SuppressWarnings("unused")
+	private Color getHeightColorFromNoise(int noise) {
         if (noise <= 62) { //Sea level
             return new Color(50, 50, 100 + (noise * 2));//Blue
         } else if (noise < 62 + 4) { //Beaches?
