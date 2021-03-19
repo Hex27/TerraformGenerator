@@ -45,6 +45,12 @@ public class ChunkCache {
         return heightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
     }
 
+    /**
+     *
+     * @param rawX BLOCK COORD x
+     * @param rawZ BLOCK COORD z
+     * @param value height to cache
+     */
     public void cacheHeight(int rawX, int rawZ, double value) {
         heightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
     }
@@ -53,6 +59,12 @@ public class ChunkCache {
         return biomeCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
     }
 
+    /**
+     *
+     * @param rawX BLOCK COORD x
+     * @param rawZ BLOCK COORD z
+     * @param value biome to cache
+     */
     public BiomeBank cacheBiome(int rawX, int rawZ, BiomeBank value) {
         biomeCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
         return value;

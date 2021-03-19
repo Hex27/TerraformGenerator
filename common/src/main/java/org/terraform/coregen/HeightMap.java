@@ -36,24 +36,8 @@ public enum HeightMap {
             });
             return 15 - 100 * Math.abs(noise.GetNoise(x, z));
         }
-    }, OCEANIC {
-        @Override
-        public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise cubic = computeNoise(tw, world -> {
-                FastNoise n = new FastNoise((int) tw.getSeed() * 12);
-                n.SetNoiseType(NoiseType.CubicFractal);
-                n.SetFractalOctaves(6);
-                n.SetFrequency(TConfigOption.HEIGHT_MAP_OCEANIC_FREQUENCY.getFloat());
-                return n;
-            });
-
-            double height = cubic.GetNoise(x, z) * 2.5;
-
-            //Only negative height (Downwards)
-            if (height > 0) height = 0;
-            return height * 50; //Depth
-        }
-    }, CORE {
+    },
+    CORE {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
             FastNoise cubic = computeNoise(tw, world -> {
@@ -77,21 +61,6 @@ public enum HeightMap {
             }
 
             return height;
-        }
-    }, MOUNTAIN {
-        @Override
-        public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise cubic = computeNoise(tw, world -> {
-                FastNoise n = new FastNoise((int) tw.getSeed() * 7);
-                n.SetNoiseType(NoiseType.CubicFractal);
-                n.SetFractalOctaves(6);
-                n.SetFrequency(TConfigOption.HEIGHT_MAP_MOUNTAIN_FREQUENCY.getFloat());
-                return n;
-            });
-
-            double height = cubic.GetNoise(x, z) * 5;
-            if (height < 0) height = 0;
-            return Math.pow(height, 5) * 5;
         }
     }, ATTRITION {
         @Override
@@ -175,6 +144,14 @@ public enum HeightMap {
         return height;
     }
 
+    static boolean debugged = false;
+    /**
+     * Biome calculations are done here as well.
+     * @param tw
+     * @param x
+     * @param z
+     * @return
+     */
     public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
         double dither = TConfigOption.BIOME_DITHER.getDouble();
     	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
@@ -215,6 +192,26 @@ public enum HeightMap {
 //    			for(BiomeSection s:sections)
 //    				TerraformGeneratorPlugin.logger.info("=> " + s + " : " + dominanceMap.get(sect) );
 //    		}
+    	}
+    	
+    	if(!debugged && height != sections.iterator().next().getBiomeBank().getHandler()
+				.calculateHeight(tw, x, z)) {
+    		debugged =  true;
+    		TerraformGeneratorPlugin.logger.info("-=[DEBUG HEIGHTMAP]=-");
+    		TerraformGeneratorPlugin.logger.info("Total dom: " + totalDom);
+    		TerraformGeneratorPlugin.logger.info("Result: " + height);
+    		TerraformGeneratorPlugin.logger.info("Lowest Dom: " + lowestDom);
+    		for(BiomeSection sect:sections) {
+        		double multiplier = 0.25;
+        		if(totalDom > 0)
+        			multiplier = dominanceMap.get(sect)/totalDom;
+    			TerraformGeneratorPlugin.logger.info("    " + sect);
+    			TerraformGeneratorPlugin.logger.info("    Dominance Map:  " + dominanceMap.get(sect));
+    			TerraformGeneratorPlugin.logger.info("    Multiplier: " + multiplier);
+    			TerraformGeneratorPlugin.logger.info("    Section Height: " + sect.getBiomeBank().getHandler()
+    					.calculateHeight(tw, x, z));
+    			TerraformGeneratorPlugin.logger.info("----------------------------------------");
+    		}
     	}
 		return height;
     }

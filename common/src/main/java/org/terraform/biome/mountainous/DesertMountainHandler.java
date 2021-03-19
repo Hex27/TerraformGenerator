@@ -2,7 +2,6 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
@@ -12,7 +11,7 @@ import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class DesertMountainHandler extends BiomeHandler {
+public class DesertMountainHandler extends AbstractMountainHandler {
     @Override
     public boolean isOcean() {
         return false;
@@ -60,7 +59,7 @@ public class DesertMountainHandler extends BiomeHandler {
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
                 for (int y = highest; y > TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt(); y--) {
-                    if (data.getBiome(x, y, z) != getBiome()) continue;
+                    if (data.getBiome(x, z) != getBiome()) continue;
                     if (duneNoise.GetNoise(x, y, z) > 0)
                         if (data.getType(x, y, z).toString().endsWith("SAND")) {
                             if (TConfigOption.BIOME_DESERTMOUNTAINS_YELLOW_CONCRETE_POWDER.getBoolean())

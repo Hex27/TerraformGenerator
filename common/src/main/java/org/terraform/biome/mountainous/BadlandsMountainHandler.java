@@ -12,7 +12,7 @@ import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class BadlandsMountainHandler extends BiomeHandler {
+public class BadlandsMountainHandler extends AbstractMountainHandler {
     /**
      * Performs badlands plateau generation for one x/z coord.
      */
@@ -22,7 +22,7 @@ public class BadlandsMountainHandler extends BiomeHandler {
         if (force)
             threshold = highest - GenUtils.randInt(random, 3, 6);
         for (int y = highest; y > threshold; y--) {
-            if (data.getBiome(x, y, z) != Biome.BADLANDS_PLATEAU && !force) continue;
+            if (data.getBiome(x, z) != Biome.BADLANDS_PLATEAU && !force) continue;
             if (!data.getType(x, y, z).toString().contains("SAND"))
                 continue;
 
@@ -67,5 +67,9 @@ public class BadlandsMountainHandler extends BiomeHandler {
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.BADLANDS_BEACH;
 	}
 }

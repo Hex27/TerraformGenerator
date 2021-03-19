@@ -123,7 +123,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
         Material cropOne = Material.WHEAT;
         Material cropTwo = Material.CARROTS;
 
-        if (tw.getTemperature(x, z) <= Temperature.SNOWY) {
+        if (BiomeBank.getBiomeSection(tw, x, z).getTemperature() <= Temperature.SNOWY) {
             cropOne = Material.POTATOES;
             cropTwo = Material.BEETROOTS;
         }

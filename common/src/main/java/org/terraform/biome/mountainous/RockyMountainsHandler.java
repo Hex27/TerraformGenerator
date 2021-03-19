@@ -2,14 +2,14 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class RockyMountainsHandler extends BiomeHandler {
+public class RockyMountainsHandler extends AbstractMountainHandler {
 
     private static void dirtStack(PopulatorDataAbstract data, Random rand, int x, int y, int z) {
         data.setType(x, y, z, Material.GRASS_BLOCK);
@@ -73,5 +73,9 @@ public class RockyMountainsHandler extends BiomeHandler {
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.ROCKY_BEACH;
 	}
 }

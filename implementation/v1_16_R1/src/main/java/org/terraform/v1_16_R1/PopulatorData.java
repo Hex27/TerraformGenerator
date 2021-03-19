@@ -46,7 +46,7 @@ public class PopulatorData extends PopulatorDataAbstract {
                 , ((CraftBlockData) data).getState(), 0);
     }
 
-    public Biome getBiome(int rawX, int rawY, int rawZ) {
+    public Biome getBiome(int rawX, int rawZ) {
         TerraformWorld tw = gen.getTerraformWorld();
         int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
         return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf

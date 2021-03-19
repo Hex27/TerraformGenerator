@@ -14,7 +14,7 @@ import org.terraform.utils.GenUtils;
 
 public class BiomeSection {
 	private int x, z;
-	// A BiomeSection is 128 blocks wide.
+	// A BiomeSection is 256 blocks wide.
 	private static final int bitshifts = 8;
 	private TerraformWorld tw;
 	public static final int sectionWidth = (int) (1 << bitshifts);
@@ -121,7 +121,7 @@ public class BiomeSection {
     	
     	moisture = 0.85f*Math.abs(moistRelX-3) + 0.85f*Math.abs(moistRelZ-3) - 2.5f;
 
-		return BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
+		return BiomeBank.selectBiome(this, temperature, moisture);//BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
 	}
 
 	/**

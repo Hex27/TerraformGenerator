@@ -2,6 +2,7 @@ package org.terraform.biome.cave;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -74,7 +75,7 @@ public class DeepCavePopulator extends AbstractCavePopulator {
                          PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                if (!(tw.getBiomeBank(x, z).getCavePop()
+                if (!(tw.getBiomeBank(x, HeightMap.getBlockHeight(tw, x, z), z).getCavePop()
                         instanceof DeepCavePopulator))
                     continue;
                 for (int[] pair : GenUtils.getCaveCeilFloors(data, x, z)) {

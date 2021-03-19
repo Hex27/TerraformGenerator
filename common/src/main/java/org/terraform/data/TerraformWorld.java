@@ -4,10 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
-import org.terraform.main.TConfigOption;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -17,8 +15,6 @@ public class TerraformWorld {
     public static final HashMap<String, TerraformWorld> WORLDS = new HashMap<>();
     private final String worldName;
     private final long seed;
-    private transient FastNoise tempOctave;
-    private transient FastNoise moistureOctave;
 
     public TerraformWorld(String name, long seed) {
         this.worldName = name;
@@ -42,26 +38,6 @@ public class TerraformWorld {
         return seed;
     }
 
-    private FastNoise getTemperatureOctave() {
-        if (tempOctave == null) {
-            tempOctave = new FastNoise((int) (seed * 2));
-            tempOctave.SetNoiseType(NoiseType.ValueFractal);
-            tempOctave.SetFractalOctaves(6);
-            tempOctave.SetFrequency(TConfigOption.BIOME_TEMPERATURE_FREQUENCY.getFloat()); //Was 0.0006
-        }
-        return tempOctave;
-    }
-
-    private FastNoise getMoistureOctave() {
-        if (moistureOctave == null) {
-            moistureOctave = new FastNoise((int) (seed * 3));
-            moistureOctave.SetNoiseType(NoiseType.ValueFractal);
-            moistureOctave.SetFractalOctaves(6);
-            moistureOctave.SetFrequency(TConfigOption.BIOME_MOISTURE_FREQUENCY.getFloat());
-        }
-        return moistureOctave;
-    }
-
     public Random getRand(long d) {
         return new Random(seed * d);
     }
@@ -74,31 +50,30 @@ public class TerraformWorld {
         return new Random(Objects.hash(seed, x, y, z) * multiplier);
     }
 
+    /**
+     * Same as getBiomeBank(x,y,z), except y is autofilled to be HeightMap.getBlockHeight
+     * @param x
+     * @param z
+     * @return
+     */
     public BiomeBank getBiomeBank(int x, int z) {
+    	int y = HeightMap.getBlockHeight(this, x, z);
+    	
         ChunkCache cache = TerraformGenerator.getCache(this, x, z);
         BiomeBank cachedValue = cache.getBiome(x, z);
         if (cachedValue != null) return cachedValue;
 
-        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, z));
+        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, y, z));
+    }
+    
+    public BiomeBank getBiomeBank(int x, int y, int z) {
+        ChunkCache cache = TerraformGenerator.getCache(this, x, z);
+        BiomeBank cachedValue = cache.getBiome(x, z);
+        if (cachedValue != null) return cachedValue;
+
+        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, y, z));
     }
 
-    /**
-     * @param x block x
-     * @param z block z
-     * @return a value from -2.5 to 2.5 inclusive.
-     */
-    public double getTemperature(int x, int z) {
-        return getTemperatureOctave().GetNoise(x, z) * 6;
-    }
-
-    /**
-     * @param x block x
-     * @param z block z
-     * @return a value from -2.5 to 2.5 inclusive.
-     */
-    public double getMoisture(int x, int z) {
-        return getMoistureOctave().GetNoise(x, z) * 6;
-    }
 
     public String getName() {
         return worldName;

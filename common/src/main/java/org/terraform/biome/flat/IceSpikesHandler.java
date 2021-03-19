@@ -5,6 +5,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.Snowable;
 import org.bukkit.util.Vector;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -104,5 +105,11 @@ public class IceSpikesHandler extends BiomeHandler {
             	
             }
         }
+	}
+	
+
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.ICY_BEACH;
 	}
 }

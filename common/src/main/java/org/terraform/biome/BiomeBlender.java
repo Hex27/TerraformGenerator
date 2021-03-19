@@ -63,8 +63,9 @@ public class BiomeBlender {
 
         if (blendBiomeGrid) {
             // Same here when closer to biome edge
-            double gridFactor = getGridEdgeFactor(currentBiome,
-                    BiomeGrid.normalise(tw.getTemperature(x, z)), BiomeGrid.normalise(tw.getMoisture(x, z)));
+            double gridFactor = getGridEdgeFactor(BiomeBank.getBiomeSection(tw, x, z),
+            		currentBiome,
+                    BiomeBank.getBiomeSection(tw, x, z).getTemperature(), BiomeBank.getBiomeSection(tw, x, z).getMoisture());
             if (gridFactor < factor) factor = gridFactor;
         }
 
@@ -74,8 +75,9 @@ public class BiomeBlender {
     /*
         Get edge factor only based on land, ignore rivers
      */
-    public double getGridEdgeFactor(BiomeBank currentBiome, double temp, double moist) {
-        if (BiomeGrid.getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(moist)) != currentBiome) return 0;
+    @Deprecated /*NEEDS UPDATE WITH NEW SYSTEM. TEMPERATURE AND MOISTURE DON'T VARY BY BLOCK COORDS ANYMORE.*/
+    public double getGridEdgeFactor(BiomeSection section, BiomeBank currentBiome, double temp, double moist) {
+        if (BiomeBank.selectBiome(section, (int) Math.round(temp), (int) Math.round(moist)) != currentBiome) return 0;
 
         double tempDecimals = Math.abs(temp - (int) temp);
         double moistDecimals = Math.abs(moist - (int) moist);
@@ -95,9 +97,9 @@ public class BiomeBlender {
         if (moistIncrease) nextMoist = Math.min(10, moist + 1);
         else if (moistDecrease) nextMoist = Math.max(0, moist - 1);
 
-        BiomeBank nextTempBiome = BiomeGrid.getBiome(currentBiome.getType(), (int) Math.round(nextTemp), (int) Math.round(moist));
-        BiomeBank nextMoistBiome = BiomeGrid.getBiome(currentBiome.getType(), (int) Math.round(temp), (int) Math.round(nextMoist));
-        BiomeBank nextCornerBiome = BiomeGrid.getBiome(currentBiome.getType(), (int) Math.round(nextTemp), (int) Math.round(nextMoist));
+        BiomeBank nextTempBiome = BiomeBank.selectBiome(section, (int) Math.round(nextTemp), (int) Math.round(moist));
+        BiomeBank nextMoistBiome = BiomeBank.selectBiome(section, (int) Math.round(temp), (int) Math.round(nextMoist));
+        BiomeBank nextCornerBiome = BiomeBank.selectBiome(section, (int) Math.round(nextTemp), (int) Math.round(nextMoist));
 
         // Calculate how near to the edge the point is
         double tempFactor = Math.abs((0.5 - tempDecimals) / biomeThreshold);

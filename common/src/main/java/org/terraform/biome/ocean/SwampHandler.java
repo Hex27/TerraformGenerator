@@ -2,7 +2,7 @@ package org.terraform.biome.ocean;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleLocation;
@@ -19,7 +19,7 @@ import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class SwampHandler extends BiomeHandler {
+public class SwampHandler extends AbstractOceanHandler {
 
     private FastNoise mudNoise;
 
@@ -60,7 +60,7 @@ public class SwampHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
                 if (y < seaLevel) {
                     double noise = getMudNoise(tw).GetNoise(x, z);
@@ -136,5 +136,9 @@ public class SwampHandler extends BiomeHandler {
         }
 	}
 
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.MUDFLATS;
+	}
 
 }

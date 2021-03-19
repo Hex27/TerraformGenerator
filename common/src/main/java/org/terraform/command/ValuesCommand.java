@@ -42,7 +42,7 @@ public class ValuesCommand extends TerraCommand {
             int x = GenUtils.randInt(-10000, 10000);
             //int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
-            int height = HeightMap.getBlockHeight(tw, x, z);
+            double height = HeightMap.getRawRiverDepth(tw, x, z);
             vals.addValue(height);
         }
         sender.sendMessage("Finished");

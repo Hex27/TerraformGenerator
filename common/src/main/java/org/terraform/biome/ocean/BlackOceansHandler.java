@@ -3,7 +3,7 @@ package org.terraform.biome.ocean;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.util.Vector;
-import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -15,7 +15,7 @@ import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class BlackOceansHandler extends BiomeHandler {
+public class BlackOceansHandler extends AbstractOceanHandler {
 
     public static void genSpike(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
         y -= height / 5;
@@ -87,8 +87,7 @@ public class BlackOceansHandler extends BiomeHandler {
     public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int coreHeight = HeightMap.getBlockHeight(world, x, z);
-                if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
 
                 int y = GenUtils.getHighestGround(data, x, z);
                 
@@ -113,7 +112,7 @@ public class BlackOceansHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int coreHeight = HeightMap.getBlockHeight(tw, x, z);
-                if (data.getBiome(x, coreHeight + 1, z) != getBiome()) continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
                 //black spike
                 if (GenUtils.chance(random, 1, 200)) {
                     genSpike(tw, random, data, x, coreHeight, z,
@@ -122,5 +121,9 @@ public class BlackOceansHandler extends BiomeHandler {
                 }
             }
         }
+	}
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.ROCKY_BEACH;
 	}
 }

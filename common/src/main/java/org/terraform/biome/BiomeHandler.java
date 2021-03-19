@@ -5,7 +5,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 
 import java.util.Random;
@@ -37,6 +36,15 @@ public abstract class BiomeHandler {
     // Populate event but for the terrain.
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) { /* Do nothing by default */ }
     
+    //Beach type. This will be used instead if the height is too close to sea level.
+    public BiomeBank getBeachType() {
+    	return BiomeBank.SANDY_BEACH;
+    }
+    
+    //Beach type. This will be used instead if the heightmap got carved into a river.
+    public BiomeBank getRiverType() {
+    	return BiomeBank.RIVER;
+    }
     
     //By default, use the normal height map.
     //Omit mountain and sea calculations - they're not necessary.
@@ -51,29 +59,12 @@ public abstract class BiomeHandler {
         }
 
         //If the height is too high, just force it to smooth out
-        if (height > 200) height = 200 + (height - 200) * 0.5;
-        if (height > 230) height = 230 + (height - 230) * 0.3;
-        if (height > 240) height = 240 + (height - 240) * 0.1;
-        if (height > 250) height = 250 + (height - 250) * 0.05;
-
-        //River Depth
-        double depth = HeightMap.RIVER.getHeight(tw, x, z);
+        //Unused, this height will never hit above 200.
+//        if (height > 200) height = 200 + (height - 200) * 0.5;
+//        if (height > 230) height = 230 + (height - 230) * 0.3;
+//        if (height > 240) height = 240 + (height - 240) * 0.1;
+//        if (height > 250) height = 250 + (height - 250) * 0.05;
         
-        //Cut off negative values
-        depth = depth < 0 ? 0 : depth;
-
-        //Normal scenario: Shallow area
-        if (height - depth >= TerraformGenerator.seaLevel - 15) {
-            height -= depth;
-
-            //Fix for underwater river carving: Don't carve deeply
-        } else if (height > TerraformGenerator.seaLevel - 15 && height - depth < TerraformGenerator.seaLevel - 15) {
-            height = TerraformGenerator.seaLevel - 15;
-        }
-
-        if (HeightMap.heightAmplifier != 1f && height > TerraformGenerator.seaLevel)
-        	height += HeightMap.heightAmplifier * (height - TerraformGenerator.seaLevel);
-
         return height;
     }
 }

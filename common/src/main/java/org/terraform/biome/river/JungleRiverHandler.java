@@ -52,7 +52,7 @@ public class JungleRiverHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
 
-                if (data.getBiome(x, y + 1, z) != getBiome()) continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
 
                 //Set ground near sea level to sand
                 if(y >= TerraformGenerator.seaLevel - 2) {

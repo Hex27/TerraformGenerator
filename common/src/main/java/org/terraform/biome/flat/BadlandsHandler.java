@@ -87,7 +87,7 @@ public class BadlandsHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
-                BiomeBank currentBiome = BiomeBank.calculateBiome(world, x, z);
+                BiomeBank currentBiome = BiomeBank.calculateBiome(world, x, TerraformGenerator.seaLevel, z);
                 if (currentBiome != BiomeBank.BADLANDS &&
                         currentBiome != BiomeBank.BADLANDS_BEACH &&
                         currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;
@@ -144,7 +144,7 @@ public class BadlandsHandler extends BiomeHandler {
 
                 double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
                 //int height = (int) preciseHeight;
-                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, rawZ);
+                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, TerraformGenerator.seaLevel, rawZ);
 
                 if (currentBiome == BiomeBank.BADLANDS
                         || currentBiome == BiomeBank.BADLANDS_MOUNTAINS
@@ -356,5 +356,10 @@ public class BadlandsHandler extends BiomeHandler {
         if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
             new DesertWellPopulator().populate(tw, random, data, true);
         }
+	}
+	
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.BADLANDS_BEACH;
 	}
 }

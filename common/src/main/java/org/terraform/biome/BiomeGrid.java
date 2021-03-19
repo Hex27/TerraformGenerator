@@ -2,6 +2,10 @@ package org.terraform.biome;
 
 import org.terraform.main.TConfigOption;
 
+/*
+ * Phasing to be handled in BiomeBank
+ */
+@Deprecated
 public class BiomeGrid {
     private static final BiomeBank[][] terrestrialGrid = {
             new BiomeBank[]{BiomeBank.SNOWY_WASTELAND, BiomeBank.SNOWY_WASTELAND, BiomeBank.TAIGA, BiomeBank.PLAINS, BiomeBank.PLAINS, BiomeBank.SAVANNA, BiomeBank.SAVANNA,

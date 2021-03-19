@@ -9,6 +9,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorDataPostGen extends PopulatorDataAbstract {
@@ -88,8 +89,8 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
     }
 
     @Override
-    public Biome getBiome(int rawX, int rawY, int rawZ) {
-        return w.getBlockAt(rawX, rawY, rawZ).getBiome();
+    public Biome getBiome(int rawX, int rawZ) {
+        return w.getBlockAt(rawX, TerraformGenerator.seaLevel, rawZ).getBiome();
     }
 
     @Override

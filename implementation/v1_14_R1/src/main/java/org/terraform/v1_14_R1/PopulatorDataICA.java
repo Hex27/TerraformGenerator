@@ -132,7 +132,7 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
 //		return CraftBlock.biomeBaseToBiome(gen.getBiome(ica.d(), new BlockPosition(rawX,rawY,rawZ)));
 //	}
 
-    public Biome getBiome(int rawX, int rawY, int rawZ) {
+    public Biome getBiome(int rawX, int rawZ) {
         int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
         return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf(ica
         // .getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase());

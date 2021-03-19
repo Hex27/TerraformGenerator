@@ -2,14 +2,14 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class SnowyMountainsHandler extends BiomeHandler {
+public class SnowyMountainsHandler extends AbstractMountainHandler {
     @Override
     public boolean isOcean() {
         return false;
@@ -62,5 +62,9 @@ public class SnowyMountainsHandler extends BiomeHandler {
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.ICY_BEACH;
 	}
 }

@@ -67,7 +67,6 @@ public class TerraformPopulator {
         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 //        		new ArrayList<>();
 
-        
         boolean canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
         for (BiomeBank bank : banks) {
             // Biome specific populators

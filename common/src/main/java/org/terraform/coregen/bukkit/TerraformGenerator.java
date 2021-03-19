@@ -71,12 +71,7 @@ public class TerraformGenerator extends ChunkGenerator {
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
         ChunkData chunk = createChunkData(world);
         TerraformWorld tw = TerraformWorld.get(world);
-//        ChunkCache cache = new ChunkCache(tw, chunkX, chunkZ);
-//        CHUNK_CACHE.put(cache, cache);
-        //putToCache(cache);
-
-        //Bukkit.getLogger().info("Attempting gen: " + chunkX + "," + chunkZ);
-
+        
         //Patch for WorldInitEvent issues.
         if (!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) {
             preWorldInitGen.add(new SimpleChunkLocation(world.getName(), chunkX, chunkZ));
@@ -88,12 +83,13 @@ public class TerraformGenerator extends ChunkGenerator {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
-                // This will also cache the height
+                //tw.getBiomeBank(rawX, rawZ);
+                int height = (int) HeightMap.getBlockHeight(tw, rawX, rawZ); //bank.getHandler().calculateHeight(tw, rawX, rawZ);
 
-                BiomeBank bank = tw.getBiomeBank(rawX, rawZ);
-                int height = (int) bank.getHandler().calculateHeight(tw, rawX, rawZ);
+                BiomeBank bank = BiomeBank.calculateBiome(tw, rawX, height, rawZ);
                 
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
+                
                 biome.setBiome(x, z, bank.getHandler().getBiome());
                 int undergroundHeight = height;
                 int index = 0;
