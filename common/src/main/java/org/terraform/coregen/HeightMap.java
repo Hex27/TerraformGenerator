@@ -1,5 +1,6 @@
 package org.terraform.coregen;
 
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleLocation;
@@ -9,6 +10,8 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.utils.GaussianBlur;
+import org.terraform.utils.GaussianBlur.HeightMapBlurSource;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -153,67 +156,10 @@ public enum HeightMap {
      * @return
      */
     public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
-        double dither = TConfigOption.BIOME_DITHER.getDouble();
-    	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
-    	SimpleLocation target  = new SimpleLocation(x,0,z);
-    	
-    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
-    	HashMap<BiomeSection, Double> dominanceMap = new HashMap<>();
-    	
-    	double height = 0;
-    	double totalDom = 0;
-    	double lowestDom = 0;
-    	for(BiomeSection sect:sections) {
-    		double dom = (sect.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
-    		if(dom < lowestDom) lowestDom = dom;
-    		dominanceMap.put(sect, dom);
-    	}
-    	
-    	//Make all dominance values positive
-    	if(lowestDom < 0) {
-        	for(BiomeSection sect:sections) {
-        		dominanceMap.put(sect, dominanceMap.get(sect)+Math.abs(lowestDom));
-        		totalDom += dominanceMap.get(sect);
-        	}
-    	}
-        
-    	//Calculate the height based on the percentage dominance
-    	for(BiomeSection sect:sections) {
-    		double multiplier = 0.25;
-    		if(totalDom > 0)
-    			multiplier = dominanceMap.get(sect)/totalDom;
-    		
-    		height += sect.getBiomeBank().getHandler()
-    				.calculateHeight(tw, x, z) 
-    				* multiplier;
-//    		if((dominanceMap.get(sect)/totalDom) > 1) {
-//    			TerraformGeneratorPlugin.logger.info("Weird percentage detected => " + (dominanceMap.get(sect)/totalDom));
-//				TerraformGeneratorPlugin.logger.info("=> Total Dom : " + totalDom);
-//    			for(BiomeSection s:sections)
-//    				TerraformGeneratorPlugin.logger.info("=> " + s + " : " + dominanceMap.get(sect) );
-//    		}
-    	}
-    	
-    	if(!debugged && height != sections.iterator().next().getBiomeBank().getHandler()
-				.calculateHeight(tw, x, z)) {
-    		debugged =  true;
-    		TerraformGeneratorPlugin.logger.info("-=[DEBUG HEIGHTMAP]=-");
-    		TerraformGeneratorPlugin.logger.info("Total dom: " + totalDom);
-    		TerraformGeneratorPlugin.logger.info("Result: " + height);
-    		TerraformGeneratorPlugin.logger.info("Lowest Dom: " + lowestDom);
-    		for(BiomeSection sect:sections) {
-        		double multiplier = 0.25;
-        		if(totalDom > 0)
-        			multiplier = dominanceMap.get(sect)/totalDom;
-    			TerraformGeneratorPlugin.logger.info("    " + sect);
-    			TerraformGeneratorPlugin.logger.info("    Dominance Map:  " + dominanceMap.get(sect));
-    			TerraformGeneratorPlugin.logger.info("    Multiplier: " + multiplier);
-    			TerraformGeneratorPlugin.logger.info("    Section Height: " + sect.getBiomeBank().getHandler()
-    					.calculateHeight(tw, x, z));
-    			TerraformGeneratorPlugin.logger.info("----------------------------------------");
-    		}
-    	}
-		return height;
+    	//double height = BiomeBank.calculateHeightIndependentBiome(tw, x, z).getHandler().calculateHeight(tw,x,z);
+    	HeightMapBlurSource source = new HeightMapBlurSource(tw,x,z);
+    	GaussianBlur.applyBlur(source, x, z);
+    	return source.getResult();
     }
 
 	public static int getBlockHeight(TerraformWorld tw, int x, int z) {
