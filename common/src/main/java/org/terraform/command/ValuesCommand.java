@@ -63,16 +63,7 @@ public class ValuesCommand extends TerraCommand {
             int x = i;
             //int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
-    		int sineSegmentHash = (x/period)+11*(z/period);
-    		
-            double unwarpedSineX = Math.sin((2.0*Math.PI/((double)period))*((double)x));
-            double unwarpedSineZ = Math.sin((2.0*Math.PI/((double)period))*((double)z));
-            unwarped.addValue(unwarpedSineX);
-    		double temperatureX = warpSine(unwarpedSineX, period, 71+sineSegmentHash);
-    		double temperatureZ = warpSine(unwarpedSineZ, period, 71+sineSegmentHash);
-            
-    		warped.addValue(temperatureX);
-    		vals.addValue(2.5*temperatureX*temperatureZ);
+    		vals.addValue(50.0*tw.getOceanOctave().GetNoise(x,z));
         }
         sender.sendMessage("Finished");
         sender.sendMessage("Highest: " + vals.getHighest());

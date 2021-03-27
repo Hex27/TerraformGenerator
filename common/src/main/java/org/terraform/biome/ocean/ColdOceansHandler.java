@@ -3,6 +3,7 @@ package org.terraform.biome.ocean;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
@@ -16,7 +17,12 @@ import java.util.Random;
 
 public class ColdOceansHandler extends AbstractOceanHandler {
 
-    @Override
+    public ColdOceansHandler(BiomeType oceanType) {
+		super(oceanType);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
     public boolean isOcean() {
         return true;
     }

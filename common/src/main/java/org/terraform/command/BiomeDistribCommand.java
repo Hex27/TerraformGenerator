@@ -43,12 +43,15 @@ public class BiomeDistribCommand extends TerraCommand {
     	HashMap<BiomeClimate, Integer> climates = new HashMap<>();
         MathValues temperature = new MathValues();
         MathValues moisture = new MathValues();
+        double numOceans = 0;
     	double total = 0;
         TerraformWorld tw = TerraformWorld.get("world-" + new Random().nextInt(99999), new Random().nextInt(99999));
         for(int nx = -25; nx < 25; nx++)
 	        for(int nz = -25; nz < 25; nz++) {
 	        	BiomeSection sect = BiomeBank.getBiomeSection(tw, nx, nz, true);
-	        	
+	        	if(sect.getBiomeBank().getType() == BiomeType.OCEANIC || sect.getBiomeBank().getType() == BiomeType.DEEP_OCEANIC) {
+	        		numOceans++;
+	        	}
 	            temperature.addValue(sect.getTemperature());
 	            moisture.addValue(sect.getMoisture());
 	        	
@@ -85,6 +88,8 @@ public class BiomeDistribCommand extends TerraCommand {
         	}
         }
         
+        sender.sendMessage("=====================");
+        sender.sendMessage("Percent ocean: " + (100.0*numOceans/total) + "%");
         sender.sendMessage("=====================");
         total = 0;
 

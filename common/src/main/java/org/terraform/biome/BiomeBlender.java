@@ -77,7 +77,7 @@ public class BiomeBlender {
      */
     @Deprecated /*NEEDS UPDATE WITH NEW SYSTEM. TEMPERATURE AND MOISTURE DON'T VARY BY BLOCK COORDS ANYMORE.*/
     public double getGridEdgeFactor(BiomeSection section, BiomeBank currentBiome, double temp, double moist) {
-        if (BiomeBank.selectBiome(section, (int) Math.round(temp), (int) Math.round(moist)) != currentBiome) return 0;
+        if (BiomeBank.selectBiome(section, temp, moist) != currentBiome) return 0;
 
         double tempDecimals = Math.abs(temp - (int) temp);
         double moistDecimals = Math.abs(moist - (int) moist);
@@ -97,9 +97,10 @@ public class BiomeBlender {
         if (moistIncrease) nextMoist = Math.min(10, moist + 1);
         else if (moistDecrease) nextMoist = Math.max(0, moist - 1);
 
-        BiomeBank nextTempBiome = BiomeBank.selectBiome(section, (int) Math.round(nextTemp), (int) Math.round(moist));
-        BiomeBank nextMoistBiome = BiomeBank.selectBiome(section, (int) Math.round(temp), (int) Math.round(nextMoist));
-        BiomeBank nextCornerBiome = BiomeBank.selectBiome(section, (int) Math.round(nextTemp), (int) Math.round(nextMoist));
+        //Rounds removed from here, not sure why they were being used.
+        BiomeBank nextTempBiome = BiomeBank.selectBiome(section,(nextTemp), (moist));
+        BiomeBank nextMoistBiome = BiomeBank.selectBiome(section, (temp), (nextMoist));
+        BiomeBank nextCornerBiome = BiomeBank.selectBiome(section, (nextTemp), (nextMoist));
 
         // Calculate how near to the edge the point is
         double tempFactor = Math.abs((0.5 - tempDecimals) / biomeThreshold);

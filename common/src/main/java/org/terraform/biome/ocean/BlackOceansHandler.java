@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.util.Vector;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -17,7 +18,12 @@ import java.util.Random;
 
 public class BlackOceansHandler extends AbstractOceanHandler {
 
-    public static void genSpike(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
+    public BlackOceansHandler(BiomeType oceanType) {
+		super(oceanType);
+		// TODO Auto-generated constructor stub
+	}
+
+	public static void genSpike(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
         y -= height / 5;
         //Vector one to two;
         Vector base = new Vector(x, y, z);

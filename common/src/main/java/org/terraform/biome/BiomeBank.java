@@ -45,7 +45,6 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TWSimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import com.google.common.cache.CacheBuilder;
@@ -54,55 +53,59 @@ import com.google.common.cache.LoadingCache;
 public enum BiomeBank {
     //MOUNTAINOUS
     ROCKY_MOUNTAINS(new RockyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.TRANSITION ,1),
-    BADLANDS_MOUNTAINS(new BadlandsMountainHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.DRY, 1),
-    SNOWY_MOUNTAINS(new SnowyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.POLAR, 1, new FrozenCavePopulator()),
-    BIRCH_MOUNTAINS(new BirchMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.CONTINENTAL, 1),
-    DESERT_MOUNTAINS(new DesertMountainHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.DRY, 1),
+    BADLANDS_MOUNTAINS(new BadlandsMountainHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, 1),
+    SNOWY_MOUNTAINS(new SnowyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.SNOWY, 1, new FrozenCavePopulator()),
+    BIRCH_MOUNTAINS(new BirchMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.COLD, 1),
+    DESERT_MOUNTAINS(new DesertMountainHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, 1),
 
     //OCEANIC
-    OCEAN(new OceansHandler(), BiomeType.OCEANIC, BiomeClimate.TRANSITION, 5),
-    BLACK_OCEAN(new BlackOceansHandler(), BiomeType.OCEANIC, BiomeClimate.TRANSITION, 1),
-    COLD_OCEAN(new ColdOceansHandler(), BiomeType.OCEANIC, BiomeClimate.CONTINENTAL, 5),
-    FROZEN_OCEAN(new FrozenOceansHandler(), BiomeType.OCEANIC, BiomeClimate.POLAR, 5, new FrozenCavePopulator()),
-    WARM_OCEAN(new WarmOceansHandler(), BiomeType.OCEANIC, BiomeClimate.DRY, 5),
-    LUKEWARM_OCEAN(new LukewarmOceansHandler(), BiomeType.OCEANIC, BiomeClimate.TROPICAL, 5),
+    OCEAN(new OceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, 5),
+    BLACK_OCEAN(new BlackOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, 1),
+    COLD_OCEAN(new ColdOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.COLD, 5),
+    FROZEN_OCEAN(new FrozenOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.SNOWY, 5, new FrozenCavePopulator()),
+    WARM_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.HOT_BARREN, 5),
+    HUMID_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.HUMID_VEGETATION, 5),
+    DRY_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.DRY_VEGETATION, 5),
+    LUKEWARM_OCEAN(new LukewarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.WARM_VEGETATION, 5),
     
     //RIVERS (Don't include in selectBiome)
     //Rivers are handled specially and will not be allocated in selectBiome
-    RIVER(new RiverHandler(), BiomeType.RIVER, BiomeClimate.CONTINENTAL), 
-    JUNGLE_RIVER(new JungleRiverHandler(), BiomeType.RIVER, BiomeClimate.TROPICAL),
-    FROZEN_RIVER(new FrozenRiverHandler(), BiomeType.RIVER, BiomeClimate.POLAR, new FrozenCavePopulator()), //Special case, handle later
+    RIVER(new RiverHandler(), BiomeType.RIVER, BiomeClimate.TRANSITION), 
+    JUNGLE_RIVER(new JungleRiverHandler(), BiomeType.RIVER, BiomeClimate.HUMID_VEGETATION),
+    FROZEN_RIVER(new FrozenRiverHandler(), BiomeType.RIVER, BiomeClimate.SNOWY, new FrozenCavePopulator()), //Special case, handle later
 
     //DEEP OCEANIC
-    DEEP_OCEAN(new OceansHandler(), BiomeType.DEEP_OCEANIC, BiomeClimate.CONTINENTAL, 5),
-    DEEP_COLD_OCEAN(new ColdOceansHandler(), BiomeType.DEEP_OCEANIC, BiomeClimate.POLAR, 5),
-    DEEP_BLACK_OCEAN(new BlackOceansHandler(), BiomeType.DEEP_OCEANIC, BiomeClimate.POLAR, 1),
-    DEEP_FROZEN_OCEAN(new FrozenOceansHandler(), BiomeType.DEEP_OCEANIC, BiomeClimate.POLAR, 5, new FrozenCavePopulator()),
-    DEEP_WARM_OCEAN(new WarmOceansHandler(), BiomeType.DEEP_OCEANIC, BiomeClimate.DRY, 5),
-    DEEP_LUKEWARM_OCEAN(new LukewarmOceansHandler(), BiomeType.DEEP_OCEANIC, BiomeClimate.TROPICAL, 5),
+    DEEP_OCEAN(new OceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, 5),
+    DEEP_COLD_OCEAN(new ColdOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.COLD, 5),
+    DEEP_BLACK_OCEAN(new BlackOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, 1),
+    DEEP_FROZEN_OCEAN(new FrozenOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.SNOWY, 5, new FrozenCavePopulator()),
+    DEEP_WARM_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HOT_BARREN, 5),
+    DEEP_HUMID_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HUMID_VEGETATION, 5),
+    DEEP_DRY_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.DRY_VEGETATION, 5),
+    DEEP_LUKEWARM_OCEAN(new LukewarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.WARM_VEGETATION, 5),
 
     //FLAT
     PLAINS(new PlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, 3),
-    ERODED_PLAINS(new ErodedPlainsHandler(), BiomeType.FLAT, BiomeClimate.CONTINENTAL, 3),
-    SAVANNA(new SavannaHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, 3),
-    FOREST(new ForestHandler(), BiomeType.FLAT, BiomeClimate.CONTINENTAL, 3),
-    DESERT(new DesertHandler(), BiomeType.FLAT, BiomeClimate.DRY, 3),
-    JUNGLE(new JungleHandler(), BiomeType.FLAT, BiomeClimate.TROPICAL, 3),
-    BAMBOO_FOREST(new BambooForestHandler(), BiomeType.FLAT, BiomeClimate.TROPICAL, 1),
-    BADLANDS(new BadlandsHandler(), BiomeType.FLAT, BiomeClimate.DRY, 1),
-    TAIGA(new TaigaHandler(), BiomeType.FLAT, BiomeClimate.CONTINENTAL, 3),
-    SNOWY_TAIGA(new SnowyTaigaHandler(), BiomeType.FLAT, BiomeClimate.POLAR, 3, new FrozenCavePopulator()),
-    SNOWY_WASTELAND(new SnowyWastelandHandler(), BiomeType.FLAT, BiomeClimate.POLAR, 3, new FrozenCavePopulator()),
-    ICE_SPIKES(new IceSpikesHandler(), BiomeType.FLAT, BiomeClimate.POLAR, 3, new FrozenCavePopulator()),
-    DARK_FOREST(new DarkForestHandler(), BiomeType.FLAT, BiomeClimate.TROPICAL, 3),
-    SWAMP(new SwampHandler(), BiomeType.FLAT, BiomeClimate.TROPICAL, 3),
+    ERODED_PLAINS(new ErodedPlainsHandler(), BiomeType.FLAT, BiomeClimate.COLD, 3),
+    SAVANNA(new SavannaHandler(), BiomeType.FLAT, BiomeClimate.DRY_VEGETATION, 3),
+    FOREST(new ForestHandler(), BiomeType.FLAT, BiomeClimate.WARM_VEGETATION, 3),
+    DESERT(new DesertHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, 3),
+    JUNGLE(new JungleHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, 3),
+    BAMBOO_FOREST(new BambooForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, 1),
+    BADLANDS(new BadlandsHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, 1),
+    TAIGA(new TaigaHandler(), BiomeType.FLAT, BiomeClimate.COLD, 3),
+    SNOWY_TAIGA(new SnowyTaigaHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, 3, new FrozenCavePopulator()),
+    SNOWY_WASTELAND(new SnowyWastelandHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, 3, new FrozenCavePopulator()),
+    ICE_SPIKES(new IceSpikesHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, 3, new FrozenCavePopulator()),
+    DARK_FOREST(new DarkForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, 3),
+    SWAMP(new SwampHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, 3),
 
     //BEACHES (Don't include in selectBiome)
     SANDY_BEACH(new SandyBeachHandler(), BiomeType.BEACH, BiomeClimate.TRANSITION),
-    BADLANDS_BEACH(new BadlandsBeachHandler(), BiomeType.BEACH, BiomeClimate.DRY),
-    ROCKY_BEACH(new RockBeachHandler(), BiomeType.BEACH, BiomeClimate.CONTINENTAL),
-    ICY_BEACH(new IcyBeachHandler(), BiomeType.BEACH, BiomeClimate.POLAR, new FrozenCavePopulator()),
-    MUDFLATS(new MudflatsHandler(), BiomeType.BEACH, BiomeClimate.TROPICAL), //Special case, handle later
+    BADLANDS_BEACH(new BadlandsBeachHandler(), BiomeType.BEACH, BiomeClimate.HOT_BARREN),
+    ROCKY_BEACH(new RockBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
+    ICY_BEACH(new IcyBeachHandler(), BiomeType.BEACH, BiomeClimate.SNOWY, new FrozenCavePopulator()),
+    MUDFLATS(new MudflatsHandler(), BiomeType.BEACH, BiomeClimate.HUMID_VEGETATION), //Special case, handle later
     ;
     public static final BiomeBank[] VALUES = values();
     public static final ArrayList<BiomeBank> FLAT = new ArrayList<BiomeBank>() {{
@@ -280,20 +283,28 @@ public enum BiomeBank {
     	BiomeClimate climate = BiomeClimate.selectClimate(temperature, moisture);
     	
     	double oceanNoise = section.getTw().getOceanOctave().GetNoise(section.getX(),section.getZ());
-    	oceanNoise = oceanNoise*50;
+    	oceanNoise = oceanNoise*50.0;
     	if(oceanNoise < 0) oceanNoise = 0;
     	
-    	if(oceanNoise >= TConfigOption.HEIGHT_MAP_DEEP_OCEANIC_THRESHOLD.getInt()) {
+    	if(oceanNoise >= 22f){//TConfigOption.HEIGHT_MAP_DEEP_OCEANIC_THRESHOLD.getFloat()) {
     		targetType = BiomeType.DEEP_OCEANIC;
-    	}else if(oceanNoise >= TConfigOption.HEIGHT_MAP_OCEANIC_THRESHOLD.getInt()) {
+    	}else if(oceanNoise >= 20f){//TConfigOption.HEIGHT_MAP_OCEANIC_THRESHOLD.getFloat()) {
     		targetType = BiomeType.OCEANIC;
     	}
     	
     	ArrayList<BiomeBank> contenders = new ArrayList<>();
     	for(BiomeBank biome:BiomeBank.values()) {
     		if(biome.biomeWeight <= 0) continue;
-    		if(targetType != null && biome.getType() != targetType)
+    		if(targetType != null) {
+    			if(targetType != biome.getType())
+    				continue;
+    			
+    			//Oceans only spawn with biome noise.
+    		}else if(biome.getType() == BiomeType.DEEP_OCEANIC 
+    				|| biome.getType() == BiomeType.OCEANIC) {
     			continue;
+    		}
+    		
     		if(biome.climate == climate) {
     			for(int i = 0; i < biome.biomeWeight; i++)
     				contenders.add(biome);
@@ -310,7 +321,7 @@ public enum BiomeBank {
 //    	}
     	
     	if(contenders.size() == 0) {
-    		TerraformGeneratorPlugin.logger.info("Defaulted to plains: " + temperature + " : " + moisture);
+    		TerraformGeneratorPlugin.logger.info("Defaulted to plains: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
     		return defaultBiome;
     	}else
     		return contenders.get(0);

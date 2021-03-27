@@ -4,29 +4,35 @@ import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Range;
 
 public enum BiomeClimate {
 
-	//Tree-Dense forests
-	TROPICAL(Range.between(1.1, 2.5),Range.between(1.1, 2.5)), 
+	//Tree-Dense Jungles
+	HUMID_VEGETATION(Range.between(2.45, 2.5),Range.between(2.45, 2.5),2), 
+	
+	//Forests
+	WARM_VEGETATION(Range.between(0.7, 2.5),Range.between(1.2, 2.5),1),
+	
+	//Savannas
+	DRY_VEGETATION(Range.between(0.7, 2.5),Range.between(-2.5, -0.7),1),
 	
 	//Deserts
-	DRY(Range.between(1.1, 2.5),Range.between(-2.5, -0.9)), 
+	HOT_BARREN(Range.between(2.45, 2.5),Range.between(-2.5, -2.45),2), 
 	
-	//Normal tree forests and birch mountains
-	CONTINENTAL(Range.between(-2.5, -0.9),Range.between(-2.5, -0.9)), 
+	//Cold biomes - taigas, maybe eroded plains
+	COLD(Range.between(-2.5, -0.7),Range.between(-2.5, 2.5),1), 
 	
-	//Snowy
-	POLAR(Range.between(-2.5, -0.9),Range.between(1.1, 2.5)), 	
+	//Any snowy biomes. 
+	SNOWY(Range.between(-2.5, -2.45),Range.between(-2.5, 2.5),2), 	
 	
-	//Used between different climates. 
-	//This normally includes flat areas like plains and savannas
-	TRANSITION(Range.between(-1.0,1.0),Range.between(-1.0,1.0)), 
+	//Default climate.
+	TRANSITION(Range.between(-2.5,2.5),Range.between(-2.5,2.5),0), 
 	; 
 	
 	Range<Double> temperatureRange;
 	Range<Double> moistureRange;
-	
-	BiomeClimate(Range<Double> temperatureRange, Range<Double> moistureRange){
+	int priority; //Higher priority means override.
+	BiomeClimate(Range<Double> temperatureRange, Range<Double> moistureRange, int priority){
 		this.temperatureRange = temperatureRange;
 		this.moistureRange = moistureRange;
+		this.priority = priority;
 	}
 
 	public Range<Double> getTemperatureRange() {
@@ -37,13 +43,27 @@ public enum BiomeClimate {
 		return moistureRange;
 	}
 	
+	private static boolean isInRange(double val, Range<Double> r) {
+		return r.contains(val) || r.getMaximum() == val || r.getMinimum() == val;
+	}
+	
 	public static BiomeClimate selectClimate(double temp, double moist) {
 		
+		BiomeClimate candidate = BiomeClimate.TRANSITION;
+		
 		for(BiomeClimate climate:BiomeClimate.values())
-			if(climate.getTemperatureRange().contains(temp)
-					&& climate.getMoistureRange().contains(moist))
-				return climate;
-		return BiomeClimate.TRANSITION;
+			if(isInRange(temp,climate.getTemperatureRange())
+					&& isInRange(moist,climate.getMoistureRange())) {
+				
+				//Candidate with most specific moisture AND temperature range wins.
+				//No tie breaking is done - don't include closely overlapping climates.
+				if(candidate == null)
+					candidate = climate;
+				else if(candidate.priority < climate.priority)
+					candidate = climate;
+			}
+		
+		return candidate;
 	}
 	
 }

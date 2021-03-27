@@ -63,7 +63,7 @@ public class PreviewCommand extends TerraCommand {
         int debugZ = 0;
         for (int nz = -z/2; nz < z/2; nz++) {
             for (int nx = -x/2; nx < x/2; nx++) {
-            	Random locationBasedRandom  = new Random(Objects.hash(127,nx,nz));
+            	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),nx,nz));
             	SimpleLocation target  = new SimpleLocation(nx,0,nz);
             	BiomeSection homeSection = BiomeBank.getBiomeSection(tw, nx,nz);
             	boolean debugMe = !hasdebugged && homeSection.getX() == debugX && homeSection.getZ() == debugZ;
@@ -86,7 +86,7 @@ public class PreviewCommand extends TerraCommand {
             	if(nx % BiomeSection.sectionWidth == 0 || nz % BiomeSection.sectionWidth == 0)
             		img.setRGB(nx+x/2, nz+z/2, new Color(255,0,0).getRGB());
             	else {
-            		Color col = getBiomeColor(mostDominant.getBiomeBank());
+            		Color col = getClimateColor(mostDominant.getBiomeBank());
 //            		if(homeSection.getX() % 2 == 0 && homeSection.getZ() % 2 == 0) {
 //            			col = col.darker();
 //            			if(homeSection.getDominanceBasedOnRadius(target.getX(), target.getZ()) > 0)
@@ -111,6 +111,30 @@ public class PreviewCommand extends TerraCommand {
         sender.sendMessage("Exported. H: " + highest + ", L: " + lowest);
     }
 
+    
+	private Color getClimateColor(BiomeBank bank) {
+    	if(bank.getType() == BiomeType.OCEANIC||bank.getType() == BiomeType.DEEP_OCEANIC)
+    		return Color.blue;
+    	switch(bank.getClimate()) {
+    	case HUMID_VEGETATION:
+    		return new Color(118,163,3);
+    	case WARM_VEGETATION:
+    		return new Color(106,168,79);
+    	case DRY_VEGETATION:
+    		return new Color(172,187,2);
+    	case HOT_BARREN:
+    		return Color.red;
+    	case COLD:
+    		return new Color(59, 255, 150);
+    	case SNOWY:
+    		return Color.white;
+		case TRANSITION:
+    		return new Color(59, 255, 59);
+    	}
+    	return Color.pink;
+    }
+
+    @SuppressWarnings("unused")
     private Color getBiomeColor(BiomeBank bank) {
     	switch(bank) {
     	case SNOWY_WASTELAND:
@@ -140,7 +164,7 @@ public class PreviewCommand extends TerraCommand {
     	case BADLANDS:
     		return Color.red;
     	default:
-    		if(bank.getType() == BiomeType.OCEANIC)
+    		if(bank.getType() == BiomeType.OCEANIC || bank.getType() == BiomeType.DEEP_OCEANIC)
     			return Color.blue;
     		else
     			return Color.pink;

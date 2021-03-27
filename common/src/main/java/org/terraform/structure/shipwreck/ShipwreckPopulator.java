@@ -64,7 +64,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
 
             TerraformGeneratorPlugin.logger.info("Spawning shipwreck at " + x + ", " + y + ", " + z + " with rotation of " + shipwreck.getFace());
 
-            //Generate holds and damage
+            //Generate holes and damage
             for (int i = 0; i < GenUtils.randInt(random, 0, 3); i++) {
                 int nx = x + GenUtils.randInt(random, -8, 8);
                 int nz = z + GenUtils.randInt(random, -8, 8);
