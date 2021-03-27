@@ -1,25 +1,14 @@
 package org.terraform.coregen;
 
 import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;
-import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.FastNoise;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.FastNoise.NoiseType;
-import org.terraform.utils.GaussianBlur;
-import org.terraform.utils.GaussianBlur.HeightMapBlurSource;
-
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 import java.util.function.Function;
 
 public enum HeightMap {
@@ -65,7 +54,24 @@ public enum HeightMap {
 
             return height;
         }
-    }, ATTRITION {
+    },
+    MOUNTAINOUS {
+        @Override
+        public double getHeight(TerraformWorld tw, int x, int z) {
+            FastNoise cubic = computeNoise(tw, world -> {
+                FastNoise n = new FastNoise((int) tw.getSeed());
+                n.SetNoiseType(NoiseType.CubicFractal);
+                n.SetFractalOctaves(6);
+                n.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
+                return n;
+            });
+
+            double height = Math.abs(cubic.GetNoise(x, z) * 2 * 50) + 13 + defaultSeaLevel;
+
+            return height;
+        }
+    }, 
+    ATTRITION {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
             FastNoise perlin = computeNoise(tw, world -> {
@@ -83,7 +89,7 @@ public enum HeightMap {
 
     public static final int defaultSeaLevel = 62;
     public static final float heightAmplifier = TConfigOption.HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER.getFloat();
-    protected final Map<TerraformWorld, FastNoise> noiseCache = Collections.synchronizedMap(new IdentityHashMap<>(TerraformWorld.WORLDS.size()));
+    private final Map<TerraformWorld, FastNoise> noiseCache = Collections.synchronizedMap(new IdentityHashMap<>(TerraformWorld.WORLDS.size()));
 
     protected FastNoise computeNoise(TerraformWorld world, Function<TerraformWorld, FastNoise> noiseFunction) {
         synchronized(noiseCache) {
@@ -147,7 +153,6 @@ public enum HeightMap {
         return height;
     }
 
-    static boolean debugged = false;
     /**
      * Biome calculations are done here as well.
      * @param tw
@@ -156,13 +161,25 @@ public enum HeightMap {
      * @return
      */
     public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
-    	//double height = BiomeBank.calculateHeightIndependentBiome(tw, x, z).getHandler().calculateHeight(tw,x,z);
-    	HeightMapBlurSource source = new HeightMapBlurSource(tw,x,z);
-    	GaussianBlur.applyBlur(source, x, z);
-    	return source.getResult();
+    	//HeightMapBlurSource source = new HeightMapBlurSource(tw,x,z);
+    	
+    	int maskRadius = 5;
+    	int candidateCount = (int) Math.pow(1+2*maskRadius, 2);
+    	double totalHeight = 0;
+    	for(int nx = x-maskRadius; nx <= x+maskRadius; nx++) {
+    		for(int nz = z-maskRadius; nz <= z+maskRadius; nz++) {
+    			totalHeight += BiomeBank.calculateHeightIndependentBiome(tw, nx, nz)
+    					.getHandler().calculateHeight(tw,nx,nz);
+        	}
+    	}
+    	
+    	double coreHeight = totalHeight/candidateCount;
+    	coreHeight += HeightMap.ATTRITION.getHeight(tw, x, z);
+    	
+    	return coreHeight;
     }
 
-	public static int getBlockHeight(TerraformWorld tw, int x, int z) {
+    public static int getBlockHeight(TerraformWorld tw, int x, int z) {
         return (int) getPreciseHeight(tw, x, z);
     }
 

@@ -52,12 +52,6 @@ public abstract class BiomeHandler {
     	
         double height = HeightMap.CORE.getHeight(tw, x, z);
 
-        if (height > HeightMap.defaultSeaLevel + 4) {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z);
-        } else {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z) * 0.8;
-        }
-
         //If the height is too high, just force it to smooth out
         //Unused, this height will never hit above 200.
 //        if (height > 200) height = 200 + (height - 200) * 0.5;

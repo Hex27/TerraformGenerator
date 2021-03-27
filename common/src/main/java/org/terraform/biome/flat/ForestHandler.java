@@ -150,7 +150,6 @@ public class ForestHandler extends BiomeHandler {
                     if (GenUtils.chance(random, 1, 3))
                         spawnRock(random, data, GenUtils.randInt(random, -1, 1) + sLoc.getX(), sLoc.getY() + ny + 1, sLoc.getZ() + GenUtils.randInt(random, -1, 1));
                 }
-                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             }
         }
 	}

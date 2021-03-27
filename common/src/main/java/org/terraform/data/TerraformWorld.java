@@ -6,6 +6,9 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.main.TConfigOption;
+import org.terraform.utils.FastNoise;
+import org.terraform.utils.FastNoise.NoiseType;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -15,6 +18,10 @@ public class TerraformWorld {
     public static final HashMap<String, TerraformWorld> WORLDS = new HashMap<>();
     private final String worldName;
     private final long seed;
+
+    private transient FastNoise tempOctave;
+    private transient FastNoise moistureOctave;
+    private transient FastNoise oceanOctave;
 
     public TerraformWorld(String name, long seed) {
         this.worldName = name;
@@ -34,6 +41,35 @@ public class TerraformWorld {
         return WORLDS.computeIfAbsent(name, (k) -> new TerraformWorld(name, seed));
     }
 
+    public FastNoise getTemperatureOctave() {
+        if (tempOctave == null) {
+            tempOctave = new FastNoise((int) (seed * 2));
+            tempOctave.SetNoiseType(NoiseType.Cubic);
+            //tempOctave.SetFractalOctaves(3);
+            tempOctave.SetFrequency(0.1f); //Was 0.0006
+        }
+        return tempOctave;
+    }
+
+    public FastNoise getMoistureOctave() {
+        if (moistureOctave == null) {
+            moistureOctave = new FastNoise((int) (seed/4));
+            moistureOctave.SetNoiseType(NoiseType.Cubic);
+            //moistureOctave.SetFractalOctaves(3);
+            moistureOctave.SetFrequency(0.1f);
+        }
+        return moistureOctave;
+    }
+
+    public FastNoise getOceanOctave() {
+        if (oceanOctave == null) {
+        	oceanOctave = new FastNoise((int) getSeed() * 12);
+        	oceanOctave.SetNoiseType(NoiseType.Cubic);
+        	oceanOctave.SetFrequency(TConfigOption.HEIGHT_MAP_OCEANIC_FREQUENCY.getFloat());
+        }
+        return oceanOctave;
+    }
+    
     public long getSeed() {
         return seed;
     }

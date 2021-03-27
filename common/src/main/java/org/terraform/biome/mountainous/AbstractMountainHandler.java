@@ -9,13 +9,7 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
 	@Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
     	
-        double height = HeightMap.CORE.getHeight(tw, x, z) + 50; //Added here
-
-        if (height > HeightMap.defaultSeaLevel + 4) {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z);
-        } else {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z) * 0.8;
-        }
+        double height = HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
 
         //If the height is too high, just force it to smooth out
         if (height > 200) height = 200 + (height - 200) * 0.5;

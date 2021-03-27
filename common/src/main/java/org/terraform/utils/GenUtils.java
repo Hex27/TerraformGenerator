@@ -240,6 +240,13 @@ public class GenUtils {
 //	}
 //	
 
+
+    public static int getHighestX(PopulatorDataAbstract data, int x, int z, Material X) {
+        int y = 256 - 1;
+        while(data.getType(x, y, z) != X) y--;
+        return y;
+    }
+    
     public static Location getHighestBlock(World w, int x, int z) {
         int y = w.getMaxHeight() - 1;
         while(!w.getBlockAt(x, y, z).getType().isSolid()) y--;

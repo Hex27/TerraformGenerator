@@ -3,6 +3,7 @@ package org.terraform.command;
 import org.bukkit.command.CommandSender;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
+import org.terraform.biome.BiomeType;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.SimpleLocation;
@@ -45,12 +46,12 @@ public class PreviewCommand extends TerraCommand {
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
         //int seed = GenUtils.randInt(1, 1000000);
-        int x = 1000;
-        int z = 1000;
+        int x = 3000;
+        int z = 3000;
         double highest = -1;
         double lowest = 10000;
         boolean hasdebugged = true;
-        TerraformWorld tw = TerraformWorld.get("test-world", 11111);
+        TerraformWorld tw = TerraformWorld.get("test-world-"+new Random().nextInt(99999), new Random().nextInt(99999));//TerraformWorld.get("test-world", 11111);
         
         BufferedImage img = new BufferedImage(x, z, BufferedImage.TYPE_INT_RGB);
         //file object
@@ -139,7 +140,10 @@ public class PreviewCommand extends TerraCommand {
     	case BADLANDS:
     		return Color.red;
     	default:
-    		return Color.pink;
+    		if(bank.getType() == BiomeType.OCEANIC)
+    			return Color.blue;
+    		else
+    			return Color.pink;
     	}
     }
     

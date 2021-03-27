@@ -108,7 +108,7 @@ public class BadlandsHandler extends BiomeHandler {
                                 canSpawn = false;
                         }
                         // Prevent cactus from spawning on plateaus:
-                        if (HeightMap.getBlockHeight(world, x, z) + 5 < highest) canSpawn = false;
+                        if (GenUtils.getHighestGround(data, x, z) + 5 < highest) canSpawn = false;
                         if (canSpawn && GenUtils.chance(1, 50))
                             spawnDeadTree(data, x, highest, z);
                         else if (canSpawn)
@@ -206,7 +206,7 @@ public class BadlandsHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int height = HeightMap.getBlockHeight(tw, x, z);
+                int height = GenUtils.getHighestGround(data, x, z); //HeightMap.getBlockHeight(tw, x, z);
 
                 // Calculate plateau height
                 double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(x, z) + plateauCommonness);
@@ -249,8 +249,8 @@ public class BadlandsHandler extends BiomeHandler {
 
                             int sandHeight = (int) Math.round(plateauHeight * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
                             for (int y = 1 + level; y <= sandHeight + level; y++)
-                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz) == Material.AIR)
-                                    data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
+                                if (data.getType(sx, GenUtils.getHighestGround(data, sx, sz) + y, sz) == Material.AIR)
+                                    data.setType(sx, GenUtils.getHighestGround(data, sx, sz) + y, sz, Material.RED_SAND);
                         }
                     }
                 }
@@ -343,7 +343,7 @@ public class BadlandsHandler extends BiomeHandler {
                                 canSpawn = false;
                         }
                         
-                        if (HeightMap.getBlockHeight(tw, x, z) + 5 < highest) canSpawn = false;
+                        if (GenUtils.getHighestGround(data, x, z) + 5 < highest) canSpawn = false;
                         if (canSpawn && GenUtils.chance(1, 50))
                             spawnDeadTree(data, x, highest, z);
                         

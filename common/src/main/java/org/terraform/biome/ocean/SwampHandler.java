@@ -3,6 +3,8 @@ package org.terraform.biome.ocean;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeHandler;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleLocation;
@@ -19,7 +21,7 @@ import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class SwampHandler extends AbstractOceanHandler {
+public class SwampHandler extends BiomeHandler {
 
     private FastNoise mudNoise;
 
@@ -140,5 +142,17 @@ public class SwampHandler extends AbstractOceanHandler {
 	public BiomeBank getBeachType() {
 		return BiomeBank.MUDFLATS;
 	}
+	
+
+	@Override
+    public double calculateHeight(TerraformWorld tw, int x, int z) {
+    	
+        double height = HeightMap.CORE.getHeight(tw, x, z) - 15;
+
+        //If the height is too low, force it back to 3.
+        if (height <= 0) height = 3;
+        
+        return height;
+    }
 
 }

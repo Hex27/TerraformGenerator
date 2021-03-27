@@ -11,12 +11,6 @@ public abstract class AbstractOceanHandler extends BiomeHandler {
     	
         double height = HeightMap.CORE.getHeight(tw, x, z) - 35;
 
-        if (height > HeightMap.defaultSeaLevel + 4) {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z);
-        } else {
-            height += HeightMap.ATTRITION.getHeight(tw, x, z) * 0.8;
-        }
-
         //If the height is too low, force it back to 3.
         if (height <= 0) height = 3;
         

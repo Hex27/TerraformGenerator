@@ -2,15 +2,14 @@ package org.terraform.data;
 
 import org.bukkit.block.BlockFace;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.Vector3f;
 
 import java.util.Objects;
 
 public class SimpleLocation {
 
-    private int x;
-    private int y;
-    private int z;
+    protected int x;
+    protected int y;
+    protected int z;
 
     public SimpleLocation(int x, int y, int z) {
         this.x = x;

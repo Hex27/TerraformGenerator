@@ -26,9 +26,10 @@ public class SandyBeachHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.GRAVEL),
-                GenUtils.randMaterial(rand, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.GRAVEL),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.GRAVEL),
+        return new Material[]{
+        		Material.SAND,
+                Material.SAND,
+                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND),
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE),
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE)};
     }

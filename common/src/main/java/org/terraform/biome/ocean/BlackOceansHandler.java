@@ -111,7 +111,7 @@ public class BlackOceansHandler extends AbstractOceanHandler {
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int coreHeight = HeightMap.getBlockHeight(tw, x, z);
+                int coreHeight = GenUtils.getHighestX(data, x, z,Material.GRAVEL);//HeightMap.getBlockHeight(tw, x, z);
                 if (data.getBiome(x, z) != getBiome()) continue;
                 //black spike
                 if (GenUtils.chance(random, 1, 200)) {

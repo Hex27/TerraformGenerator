@@ -23,6 +23,7 @@ public class BiomeSection {
 	private float moisture;
 	private int radius;
 	private BiomeBank biome;
+	private FastNoise shapeNoise;
 	
 	/**
 	 * Block x and z
@@ -45,6 +46,10 @@ public class BiomeSection {
 	protected void doCalculations() {
 		this.biome = this.parseBiomeBank();
 		this.radius = GenUtils.randInt(getSectionRandom(), minSize / 2, 5 * minSize / 4);
+		this.shapeNoise = new FastNoise(Objects.hash(tw.getSeed(), x, z));
+		shapeNoise.SetNoiseType(NoiseType.SimplexFractal);
+		shapeNoise.SetFractalOctaves(3);
+		shapeNoise.SetFrequency(0.01f);
 	}
 
 	/**
@@ -101,26 +106,70 @@ public class BiomeSection {
 		return biome;
 	}
 	
-	private BiomeBank parseBiomeBank() {
+	private double warpSine(double tempUnwarpedSine, int period, int seed) {
+		//double warp = GenUtils.randInt(tw.getRand(seed),-7, 1);
+		//if(warp == 0) warp = 1;
+		//if(warp < 0) {
+		//	warp = (15.0-2.0*warp)/10.0;
+		//}
+		double warp = 0.1;
+		
+		double warpedValue;
+		if(tempUnwarpedSine == 0 && warp == 0) { //Prevent math error
+			warpedValue = 0;
+		}else {
+			warpedValue = Math.pow(Math.abs(tempUnwarpedSine),warp);
+		}
+		if(tempUnwarpedSine < 0) {
+			warpedValue = -warpedValue; //Preserve sign
+		}
+		return warpedValue;
+	}
 	
+	private BiomeBank parseBiomeBank() {
+		int period = 8;
 		// Get starting offset with world seed
-    	Random worldSeedRand = tw.getHashedRand(12, 0, 0);//new Random(12);
-
-    	int tempOffsetX = worldSeedRand.nextInt(6);
-    	int tempOffsetZ = worldSeedRand.nextInt(6);
-    	int moistOffsetX = worldSeedRand.nextInt(6);
-    	int moistOffsetZ = worldSeedRand.nextInt(6);
+    	int xTempOffset = GenUtils.randInt(tw.getRand(3), 1,period/2);
+    	int zTempOffset = GenUtils.randInt(tw.getRand(92), -period/2,period/2);
+    	int xMoistOffset = xTempOffset + GenUtils.randInt(tw.getRand(11), 1,period/2);
+    	int zMoistOffset = zTempOffset + GenUtils.randInt(tw.getRand(117), 1,period/2);
+		
+    	int effectiveTempX = x + xTempOffset;
+    	int effectiveTempZ = z + zTempOffset;
+    	int effectiveMoistX = x + xMoistOffset;
+    	int effectiveMoistZ = z + zMoistOffset;
+		//Temperature Calculation
+		/**
+		 * This works by having an original sine curve, then warping the value
+		 * by bringing it to the power of a random value every period.
+		 * This makes every segment vary differently.
+		 */
+		double unwarpedTSineX = Math.sin((2.0*Math.PI/((double)period))*((double)effectiveTempX));
+		double unwarpedTSineZ = Math.sin((2.0*Math.PI/((double)period))*((double)effectiveTempZ));
+		double unwarpedMSineX = Math.sin((2.0*Math.PI/((double)period))*((double)effectiveMoistX));
+		double unwarpedMSineZ = Math.sin((2.0*Math.PI/((double)period))*((double)effectiveMoistZ));
+		
+		//A simple hash that reflects the number of sine periods in x and z
+		int tempSineSegmentHash = (effectiveTempX/period)+11*(effectiveTempZ/period);
+		int moistSineSegmentHash = (effectiveMoistX/period)+11*(effectiveMoistZ/period);
+		
+		//Warp the values accordingly
+		double temperatureX = warpSine(unwarpedTSineX, period, 71+tempSineSegmentHash);
+		double temperatureZ = warpSine(unwarpedTSineZ, period, 71+tempSineSegmentHash);
+		double moistureX = warpSine(unwarpedMSineX, period, 111+moistSineSegmentHash);
+		double moistureZ = warpSine(unwarpedMSineZ, period, 111+moistSineSegmentHash);
+		
+		//Cache
+		this.temperature = (float) (2.5*(temperatureX*temperatureZ));
+		this.moisture = (float) (2.5*(moistureX*moistureZ));
+		
+		//temperature = (2f)*2.5f*tw.getTemperatureOctave().GetNoise(this.x, this.z);
+    	//moisture = (2f)*2.5f*tw.getMoistureOctave().GetNoise(this.x, this.z);
+    	//if(temperature > 2.5f) temperature = 2.5f;
+    	//if(temperature < -2.5f) temperature = -2.5f;
+    	//if(moisture > 2.5f) moisture = 2.5f;
+    	//if(moisture < -2.5f) moisture = -2.5f;
     	
-    	int tempRelX = ((Math.abs(x+tempOffsetX)%6));
-    	int tempRelZ = ((Math.abs(z+tempOffsetZ)%6));
-    	
-    	temperature = 0.85f*Math.abs(tempRelX-3) + 0.85f*Math.abs(tempRelZ-3) - 2.5f;
-    	
-    	int moistRelX = ((Math.abs(x+moistOffsetX)%6));
-    	int moistRelZ = ((Math.abs(z+moistOffsetZ)%6));
-    	
-    	moisture = 0.85f*Math.abs(moistRelX-3) + 0.85f*Math.abs(moistRelZ-3) - 2.5f;
-
 		return BiomeBank.selectBiome(this, temperature, moisture);//BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
 	}
 
@@ -135,17 +184,14 @@ public class BiomeSection {
 	}
 
 	public float getDominanceBasedOnRadius(int blockX, int blockZ) {
-		FastNoise noise = new FastNoise(Objects.hash(tw.getSeed(), x, z));
-		noise.SetNoiseType(NoiseType.SimplexFractal);
-		noise.SetFractalOctaves(5);
-		noise.SetFrequency(0.01f);
 		SimpleLocation center = this.getCenter();
 
 		int xOffset = center.getX() - blockX;
 		int zOffset = center.getZ() - blockZ;
 
-		double equationResult = Math.pow(xOffset, 2) / Math.pow(radius, 2) + Math.pow(zOffset, 2) / Math.pow(radius, 2)
-				+ 0.7 * noise.GetNoise(xOffset, zOffset);
+		double equationResult = Math.pow(xOffset, 2) / Math.pow(radius, 2) 
+				+ Math.pow(zOffset, 2) / Math.pow(radius, 2)
+				+ 0.7 * shapeNoise.GetNoise(xOffset, zOffset);
 
 		// if(1 -1*(equationResult) < 0)
 		// TerraformGeneratorPlugin.logger.info("Radius Dominance: (" + blockX + "," +
@@ -204,5 +250,9 @@ public class BiomeSection {
 
 	public float getMoisture() {
 		return moisture;
+	}
+
+	public TerraformWorld getTw() {
+		return tw;
 	}
 }
