@@ -52,7 +52,7 @@ public class BasicSmoother {
     	
 		@Override
 		public double getValue(int x, int z) {
-			return BiomeBank.getBiomeSection(tw, x, z).getBiomeBank().getHandler().calculateHeight(tw, x, z);
+			return BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getBiomeBank().getHandler().calculateHeight(tw, x, z);
 		}
 
 		@Override

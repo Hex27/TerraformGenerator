@@ -16,7 +16,6 @@ public class StructureBufferDistanceHandler {
 	 */
 	public static boolean canDecorateChunk(TerraformWorld tw, int chunkX, int chunkZ) {
 		MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
         for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if (spop == null) continue;
             int chunkBufferRadius = spop.getChunkBufferDistance();
@@ -24,7 +23,10 @@ public class StructureBufferDistanceHandler {
             	continue;
             for(int rcx = -chunkBufferRadius; rcx <= chunkBufferRadius; rcx++) {
             	for(int rcz = -chunkBufferRadius; rcz <= chunkBufferRadius; rcz++) {
-                    if (spop.canSpawn(tw, chunkX+rcx, chunkZ+rcz, banks)) {
+                    ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, chunkX+rcx, chunkZ+rcz);
+                    //BiomeSection homeSection = BiomeBank.getBiomeSectionFromChunk(tw, chunkX+rcx, chunkZ+rcz);
+                    //banks = new ArrayList<BiomeBank>() {{ add(homeSection.getBiomeBank()); }};
+            		if (spop.canSpawn(tw, chunkX+rcx, chunkZ+rcz, banks)) {
                     	return false;
                     }
                 }

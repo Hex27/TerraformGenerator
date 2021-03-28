@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class StructurePopulator {
-
+	
     public abstract boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes);
 
     public abstract boolean isEnabled();

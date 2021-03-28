@@ -23,7 +23,7 @@ public class HeightIndependentBiomeCacheLoader extends CacheLoader<TWSimpleLocat
         double dither = TConfigOption.BIOME_DITHER.getDouble();
     	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
     	SimpleLocation target  = new SimpleLocation(x,0,z);
-    	BiomeSection homeSection = BiomeBank.getBiomeSection(tw, x,z);
+    	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x,z);
     	
     	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
     	BiomeSection mostDominant = homeSection;

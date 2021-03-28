@@ -174,7 +174,7 @@ public enum BiomeBank {
      * @param z
      * @return
      */
-    public static BiomeSection getBiomeSection(TerraformWorld tw, int x, int z) {
+    public static BiomeSection getBiomeSectionFromBlockCoords(TerraformWorld tw, int x, int z) {
     	BiomeSection sect = new BiomeSection(tw,x,z);
     	try {
     		sect = BIOMESECTION_CACHE.get(sect);
@@ -186,7 +186,28 @@ public enum BiomeBank {
     	}
     	return sect;
     }
-    public static BiomeSection getBiomeSection(TerraformWorld tw, int x, int z, boolean useSectionCoords) {
+
+    /**
+     * ChunkX, ChunkZ
+     * @param tw
+     * @param x
+     * @param z
+     * @return the biome section that this chunk belongs to.
+     */
+    public static BiomeSection getBiomeSectionFromChunk(TerraformWorld tw, int chunkX, int chunkZ) {
+    	BiomeSection sect = new BiomeSection(tw,chunkX << 4, chunkZ << 4);
+    	try {
+    		sect = BIOMESECTION_CACHE.get(sect);
+    	}
+    	catch(Throwable e) 
+    	{
+    		e.printStackTrace();
+    		sect.doCalculations();
+    	}
+    	return sect;
+    }
+    
+    public static BiomeSection getBiomeSectionFromSectionCoords(TerraformWorld tw, int x, int z, boolean useSectionCoords) {
     	BiomeSection sect = new BiomeSection(tw,x,z,useSectionCoords);
     	try {
     		sect = BIOMESECTION_CACHE.get(sect);

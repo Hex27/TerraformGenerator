@@ -61,7 +61,7 @@ public class BiomeSection {
 	public static Collection<BiomeSection> getSurroundingSections(TerraformWorld tw, int blockX, int blockZ) {
 		Collection<BiomeSection> sections = new ArrayList<>();
 
-		BiomeSection homeBiome = BiomeBank.getBiomeSection(tw, blockX, blockZ);
+		BiomeSection homeBiome = BiomeBank.getBiomeSectionFromBlockCoords(tw, blockX, blockZ);
 		sections.add(homeBiome);
 
 		SimpleLocation center = homeBiome.getCenter();
@@ -98,7 +98,7 @@ public class BiomeSection {
 	}
 
 	public BiomeSection getRelative(int x, int z) {
-		BiomeSection mc = BiomeBank.getBiomeSection(this.tw, this.x + x, this.z + z, true);
+		BiomeSection mc = BiomeBank.getBiomeSectionFromSectionCoords(this.tw, this.x + x, this.z + z, true);
 		return mc;
 	}
 
@@ -150,6 +150,27 @@ public class BiomeSection {
 		int z = ((this.z << bitshifts)) + sectionWidth / 2;
 		// TerraformGeneratorPlugin.logger.info("Center " + toString() + ": " + x + ","
 		// + z);
+		return new SimpleLocation(x, 0, z);
+	}
+	
+	
+	/**
+	 * 
+	 * @return Block coords of lowest coord pair in the section's square
+	 */
+	public SimpleLocation getLowerBounds() {
+		int x = ((this.x << bitshifts));
+		int z = ((this.z << bitshifts));
+		return new SimpleLocation(x, 0, z);
+	}
+
+	/**
+	 * 
+	 * @return Block coords of highest coord pair in the section's square
+	 */
+	public SimpleLocation getUpperBounds() {
+		int x = ((this.x << bitshifts)) + sectionWidth;
+		int z = ((this.z << bitshifts)) + sectionWidth;
 		return new SimpleLocation(x, 0, z);
 	}
 

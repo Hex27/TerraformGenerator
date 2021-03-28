@@ -105,7 +105,7 @@ public class FractalTreeBuilder {
                         .setMaxBend(1.1 * Math.PI / 6)
                         .setLengthDecrement(0.5f)
                         .setTrunkType(Material.BIRCH_WOOD)
-                        .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2, 3));
+                        .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2.3f, 3));
                 break;
             case BIRCH_SMALL:
                 this.setBaseHeight(3)
@@ -117,7 +117,7 @@ public class FractalTreeBuilder {
                         .setMaxBend(1.1 * Math.PI / 6)
                         .setLengthDecrement(0.5f)
                         .setTrunkType(Material.BIRCH_WOOD)
-                        .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 1, 3));
+                        .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2.3f, 3));
                 break;
             case SAVANNA_SMALL:
                 this.setBaseHeight(7)
@@ -129,7 +129,7 @@ public class FractalTreeBuilder {
                         .setMaxBend(0.8 * Math.PI / 2)
                         .setLengthDecrement(1)
                         .setHeightVariation(1)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 1, 4).setMaterial(Material.ACACIA_LEAVES));
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2.3f, 4).setMaterial(Material.ACACIA_LEAVES));
                 break;
             case JUNGLE_BIG:
                 this.setBaseHeight(15)
@@ -176,7 +176,7 @@ public class FractalTreeBuilder {
                         .setTrunkType(Material.ACACIA_LOG)
                         .setLengthDecrement(0.4f)
                         .setHeightVariation(2)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 1.5f, 4)
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2.5f, 4)
                                 .setMaterial(Material.ACACIA_LEAVES).setLeafNoiseFrequency(0.7f).setLeafNoiseMultiplier(0.8f));
                 break;
             case WASTELAND_BIG:

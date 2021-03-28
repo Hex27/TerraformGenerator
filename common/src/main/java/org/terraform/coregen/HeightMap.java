@@ -65,8 +65,17 @@ public enum HeightMap {
                 n.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
                 return n;
             });
+            FastNoise attrition = computeNoise(tw, world -> {
+                FastNoise n = new FastNoise((int) tw.getSeed()/4);
+                n.SetNoiseType(NoiseType.CubicFractal);
+                n.SetFractalOctaves(6);
+                n.SetFrequency(0.3f);
+                return n;
+            });
 
-            double height = Math.abs(cubic.GetNoise(x, z) * 2 * 50) + 13 + defaultSeaLevel;
+            double attritionHeight = attrition.GetNoise(x,z) * 2 * 100;
+            if(attritionHeight < 0) attritionHeight = 0;
+            double height = attritionHeight + Math.abs(cubic.GetNoise(x, z) * 2 * 40) + 13 + defaultSeaLevel;
 
             return height;
         }

@@ -93,11 +93,12 @@ public class TerraformWorld {
      * @return
      */
     public BiomeBank getBiomeBank(int x, int z) {
-    	int y = HeightMap.getBlockHeight(this, x, z);
     	
         ChunkCache cache = TerraformGenerator.getCache(this, x, z);
         BiomeBank cachedValue = cache.getBiome(x, z);
         if (cachedValue != null) return cachedValue;
+        
+    	int y = HeightMap.getBlockHeight(this, x, z);
 
         return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, y, z));
     }

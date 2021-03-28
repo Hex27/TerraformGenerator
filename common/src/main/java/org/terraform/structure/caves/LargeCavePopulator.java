@@ -82,4 +82,9 @@ public class LargeCavePopulator extends SingleMegaChunkStructurePopulator {
     public boolean isEnabled() {
         return TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean();
     }
+
+    @Override
+    public int getChunkBufferDistance() {
+    	return 0;
+    }
 }

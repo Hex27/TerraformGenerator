@@ -96,4 +96,9 @@ public class SnowyTaigaHandler extends BiomeHandler {
 	public BiomeBank getBeachType() {
 		return BiomeBank.ICY_BEACH;
 	}
+	
+	@Override
+    public BiomeBank getRiverType() {
+    	return BiomeBank.FROZEN_RIVER;
+    }
 }

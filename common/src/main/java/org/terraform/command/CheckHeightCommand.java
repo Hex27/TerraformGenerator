@@ -10,6 +10,9 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.SingleMegaChunkStructurePopulator;
+import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.StructureRegistry;
 
 import java.util.Stack;
 
@@ -44,7 +47,7 @@ public class CheckHeightCommand extends TerraCommand {
         int z = p.getLocation().getBlockZ();
 
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
-        
+        MegaChunk mc = new MegaChunk(x, 0, z);
         BiomeBank biome = tw.getBiomeBank(x, z);
         p.sendMessage("Core Height: " + HeightMap.CORE.getHeight(tw, x, z));
         //p.sendMessage("Mountainous Height: " + HeightMap.MOUNTAIN.getHeight(tw, x, z));
@@ -53,9 +56,17 @@ public class CheckHeightCommand extends TerraCommand {
                 4));
         p.sendMessage("Result height: " + HeightMap.getBlockHeight(tw, x, z));
         p.sendMessage("River Depth: " + HeightMap.getRawRiverDepth(tw, x, z));
-        p.sendMessage("Mega Chunk: " + new MegaChunk(x, 0, z).getX() + "," + new MegaChunk(x, 0, z).getZ());
-        p.sendMessage("Temperature: " + BiomeBank.getBiomeSection(tw, x, z).getTemperature());
-        p.sendMessage("Moisture: " + BiomeBank.getBiomeSection(tw, x, z).getMoisture());
+        p.sendMessage("Mega Chunk: " + mc.getX() + "," + mc.getZ());
+        
+        for(SingleMegaChunkStructurePopulator spop:StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
+        	if (spop == null) continue;
+        	int[] coords = spop.getCoordsFromMegaChunk(tw, mc);
+        	int dist = (int) Math.sqrt(Math.pow(x-coords[0], 2) + Math.pow(z-coords[1], 2));
+        	p.sendMessage(" - Structure Registered: " + spop.getClass().getSimpleName() + "(" + coords[0] + "," + coords[1] + ") " + dist + " blocks away");
+        }
+        
+        p.sendMessage("Temperature: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature());
+        p.sendMessage("Moisture: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
         p.sendMessage("Biome edge factor: " + new BiomeBlender(tw, true, false, false)
                 .setBiomeThreshold(0.45).getEdgeFactor(biome, x, z));
         p.sendMessage("Result Biome: " + biome);

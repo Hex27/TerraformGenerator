@@ -35,7 +35,7 @@ public class GenUtils {
             "CHAIN", "CORAL"
     };
     private static final LoadingCache<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache = CacheBuilder.newBuilder()
-            .maximumSize(32)
+            .maximumSize(64)
             .build(new CacheLoader<ChunkCache, ArrayList<BiomeBank>>() {
                 @Override
                 public ArrayList<BiomeBank> load(ChunkCache key) {

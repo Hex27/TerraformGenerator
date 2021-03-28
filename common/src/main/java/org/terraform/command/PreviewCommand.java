@@ -65,7 +65,7 @@ public class PreviewCommand extends TerraCommand {
             for (int nx = -x/2; nx < x/2; nx++) {
             	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),nx,nz));
             	SimpleLocation target  = new SimpleLocation(nx,0,nz);
-            	BiomeSection homeSection = BiomeBank.getBiomeSection(tw, nx,nz);
+            	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, nx,nz);
             	boolean debugMe = !hasdebugged && homeSection.getX() == debugX && homeSection.getZ() == debugZ;
             	if(debugMe) {
             		hasdebugged = true;

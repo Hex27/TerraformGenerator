@@ -48,7 +48,7 @@ public class BiomeDistribCommand extends TerraCommand {
         TerraformWorld tw = TerraformWorld.get("world-" + new Random().nextInt(99999), new Random().nextInt(99999));
         for(int nx = -25; nx < 25; nx++)
 	        for(int nz = -25; nz < 25; nz++) {
-	        	BiomeSection sect = BiomeBank.getBiomeSection(tw, nx, nz, true);
+	        	BiomeSection sect = BiomeBank.getBiomeSectionFromSectionCoords(tw, nx, nz, true);
 	        	if(sect.getBiomeBank().getType() == BiomeType.OCEANIC || sect.getBiomeBank().getType() == BiomeType.DEEP_OCEANIC) {
 	        		numOceans++;
 	        	}

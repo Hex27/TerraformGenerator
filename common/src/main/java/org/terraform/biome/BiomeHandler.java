@@ -41,7 +41,7 @@ public abstract class BiomeHandler {
     	return BiomeBank.SANDY_BEACH;
     }
     
-    //Beach type. This will be used instead if the heightmap got carved into a river.
+    //River type. This will be used instead if the heightmap got carved into a river.
     public BiomeBank getRiverType() {
     	return BiomeBank.RIVER;
     }

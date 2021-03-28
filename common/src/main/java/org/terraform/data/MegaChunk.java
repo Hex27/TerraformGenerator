@@ -7,6 +7,7 @@ import java.util.Random;
 
 /**
  * Refers to a cluster of 64x64 chunks
+ * 1024 blocks wide.
  * Used for spawning structures.
  */
 public class MegaChunk {
