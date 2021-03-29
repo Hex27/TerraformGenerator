@@ -5,12 +5,14 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
 
+import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.FastNoise.NoiseType;
 
 public class BiomeSection {
 	private int x, z;
@@ -44,12 +46,12 @@ public class BiomeSection {
 	}
 	
 	protected void doCalculations() {
-		this.biome = this.parseBiomeBank();
 		this.radius = GenUtils.randInt(getSectionRandom(), minSize / 2, 5 * minSize / 4);
 		this.shapeNoise = new FastNoise(Objects.hash(tw.getSeed(), x, z));
 		shapeNoise.SetNoiseType(NoiseType.SimplexFractal);
 		shapeNoise.SetFractalOctaves(3);
 		shapeNoise.SetFrequency(0.01f);
+		this.biome = this.parseBiomeBank();
 	}
 
 	/**
@@ -92,7 +94,7 @@ public class BiomeSection {
 		}
 		return sections;
 	}
-
+	
 	public Random getSectionRandom() {
 		return new Random(Objects.hash(tw.getSeed(), x, z));
 	}
@@ -173,6 +175,63 @@ public class BiomeSection {
 		int z = ((this.z << bitshifts)) + sectionWidth;
 		return new SimpleLocation(x, 0, z);
 	}
+	
+	public static BiomeSection getMostDominantSection(TerraformWorld tw, int x, int z) {
+
+        double dither = TConfigOption.BIOME_DITHER.getDouble();
+    	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
+    	SimpleLocation target  = new SimpleLocation(x,0,z);
+    	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x,z);
+    	
+    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
+    	BiomeSection mostDominant = homeSection;
+    	
+    	for(BiomeSection sect:sections) {
+    		float dom = (float) (sect.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
+    		
+    		if(dom > mostDominant.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither))
+    			mostDominant = sect;
+    	}
+    	
+    	return mostDominant;
+	
+	}
+	
+	/**
+	 * 
+	 * @param radius in biomesection coords
+	 * @return surrounding biome sections at radius distance away 
+	 */
+    public Collection<BiomeSection> getRelativeSurroundingSections(int radius) {
+        if (radius == 0) {
+        	BiomeSection target = this;
+        	return new ArrayList<BiomeSection>() {{
+            	add(target);
+            }};
+        }
+        //     xxxxx
+        //xxx  x   x
+        //xox  x o x
+        //xxx  x   x
+        //     xxxxx
+        ArrayList<BiomeSection> candidates = new ArrayList<BiomeSection>();
+        
+        //Lock rX, iterate rZ
+        for(int rx:new int[] {-radius,radius}) {
+        	 for (int rz = -radius; rz <= radius; rz++) {
+        		 candidates.add(this.getRelative(rx, rz));
+             }
+        }
+        
+        //Lock rZ, iterate rX
+        for(int rz:new int[] {-radius,radius}) {
+       	 for (int rx = 1-radius; rx <= radius-1; rx++) {
+       		 candidates.add(this.getRelative(rx, rz));
+            }
+       }
+
+        return candidates;
+    }
 
 	@Override
 	public int hashCode() {

@@ -15,15 +15,16 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
 public class SwampHandler extends BiomeHandler {
 
-    private FastNoise mudNoise;
 
     @Override
     public boolean isOcean() {
@@ -34,17 +35,6 @@ public class SwampHandler extends BiomeHandler {
     public Biome getBiome() {
         return Biome.SWAMP;
     }
-
-    public FastNoise getMudNoise(TerraformWorld tw) {
-        if (mudNoise == null) {
-            mudNoise = new FastNoise((int) (tw.getSeed() * 4));
-            mudNoise.SetNoiseType(NoiseType.SimplexFractal);
-            mudNoise.SetFrequency(0.05f);
-            mudNoise.SetFractalOctaves(4);
-        }
-        return mudNoise;
-    }
-
     @Override
     public Material[] getSurfaceCrust(Random rand) {
         return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
@@ -65,8 +55,22 @@ public class SwampHandler extends BiomeHandler {
                 if (data.getBiome(x, z) != getBiome()) continue;
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
                 if (y < seaLevel) {
-                    double noise = getMudNoise(tw).GetNoise(x, z);
-                    if (noise < 0) noise = 0;
+                    
+                    FastNoise mudNoise = NoiseCacheHandler.getNoise(
+                    		tw, 
+                    		NoiseCacheEntry.BIOME_SWAMP_MUDNOISE, 
+                    		world -> {
+                                FastNoise n = new FastNoise((int) (world.getSeed() * 4));
+                                n.SetNoiseType(NoiseType.SimplexFractal);
+                                n.SetFrequency(0.05f);
+                                n.SetFractalOctaves(4);
+                            
+                    	        return n;
+                    		});
+                    
+                    double noise = mudNoise.GetNoise(x,z);
+                	
+                	if (noise < 0) noise = 0;
                     int att = (int) Math.round(noise * 10);
                     if (att + y > seaLevel)
                         att = seaLevel - y;
@@ -106,10 +110,15 @@ public class SwampHandler extends BiomeHandler {
 
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
-                        .build(tw, data, treeX, treeY - 3, treeZ);
-                new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
-                        .build(tw, data, treeX, treeY - 2, treeZ);
+                
+                if(treeY < TerraformGenerator.seaLevel) {
+                	 //Don't do gradient checks for swamp trees, the mud is uneven.
+                	//just make sure it's submerged
+                    new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
+                            .skipGradientCheck().build(tw, data, treeX, treeY - 3, treeZ);
+                    new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
+                    		.skipGradientCheck().build(tw, data, treeX, treeY - 2, treeZ);
+                }
             }
         }
         

@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeType;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
@@ -124,13 +125,18 @@ public class LocateBiomeCommand extends TerraCommand {
 
         @Override
         public void run() {
-            Vector2f location = GenUtils.locateBiome(tw, b,
-                    new Vector2f(x, z), 5000, 25);
-
-            if (location == null)
-                syncSendMessage(p, LangOpt.COMMAND_LOCATEBIOME_NOT_IN_5000.parse());
-            else
-                syncSendMessage(p, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", location.x + "", "%z%", location.y + ""));
+        	Vector2f location;
+        	if(b.getType() == BiomeType.BEACH || b.getType() == BiomeType.RIVER) {
+                location = GenUtils.locateHeightDependentBiome(tw, b,
+                        new Vector2f(x, z), 5000, 25);
+                if (location == null)
+                    syncSendMessage(p, LangOpt.COMMAND_LOCATEBIOME_NOT_IN_5000.parse());
+        	}else {
+        		location = GenUtils.locateHeightIndependentBiome(tw, b, new Vector2f(x, z));
+        	}
+        	
+        	if(location != null)
+        		syncSendMessage(p, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", location.x + "", "%z%", location.y + ""));
         }
     }
 

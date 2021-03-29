@@ -1,6 +1,7 @@
 package org.terraform.structure.caves;
 
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -17,6 +18,7 @@ public class LargeCavePopulator extends SingleMegaChunkStructurePopulator {
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
         if (!TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean())
             return;
+        
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
         int[] spawnCoords = getCoordsFromMegaChunk(tw, mc);
@@ -36,10 +38,15 @@ public class LargeCavePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes) {
-
+    	
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = getCoordsFromMegaChunk(tw, mc);
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+        	for(BiomeBank b:biomes) {
+        		//Do not spawn large caves under deep oceans, there's no space.
+        		if(b.getType() == BiomeType.DEEP_OCEANIC)
+        			return false;
+        	}
             return GenUtils
                     .chance(this.getHashedRandom(tw, chunkX, chunkZ),
                             TConfigOption.STRUCTURES_LARGECAVE_CHANCE.getInt(),

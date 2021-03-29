@@ -1,10 +1,24 @@
 package org.terraform.biome;
 
 public enum BiomeType {
-    OCEANIC,
+    OCEANIC(false),
     FLAT,
     MOUNTAINOUS,
     BEACH,
-    DEEP_OCEANIC,
-    RIVER
+    DEEP_OCEANIC(false),
+    RIVER(false);
+	
+	boolean isDry = true;
+	
+	BiomeType(){
+		
+	}
+	
+	BiomeType(boolean isDry){
+		this.isDry = isDry;
+	}
+
+	public boolean isDry() {
+		return isDry;
+	}
 }

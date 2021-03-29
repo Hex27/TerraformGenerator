@@ -2,7 +2,6 @@ package org.terraform.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +12,7 @@ import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -20,6 +20,9 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -116,10 +119,15 @@ public class GenUtils {
     /**
      * Locates the target biome in given area using brute force.
      * Note that the function is blocking.
+     * <br><br>
+     * This should not be used for first phase biomes (i.e. height-independent biomes like oceans, mountains etc)
+     * This should be used for stuff like beaches and rivers, which cannot be broadly searched for with biome sections.
+     * <br><br>
+     * If for whatever reason you still use this for height-independent biomes, it will still work. It's just slower.
      *
      * @return Position for the biome or null if no biomes found.
      */
-    public static Vector2f locateBiome(TerraformWorld tw, BiomeBank biome, Vector2f center, int radius, int blockSkip) {
+    public static Vector2f locateHeightDependentBiome(TerraformWorld tw, BiomeBank biome, Vector2f center, int radius, int blockSkip) {
         if(tw.getBiomeBank(Math.round(center.x), Math.round(center.y)) == biome)
             return new Vector2f(center.x, center.y);
         int iter = 2;
@@ -149,6 +157,35 @@ public class GenUtils {
             if(tw.getBiomeBank(x, z) == biome) return new Vector2f(x, z);
             iter++;
         }
+
+        return null;
+    }
+    
+    /**
+     * Locates a biome with BiomeSection.
+     * WILL NOT FIND RIVERS AND BEACHES.
+     * Does not stop until biome is found, much like structure locate, because it should work.
+     * @param tw
+     * @param biome
+     * @param center
+     * @param radius
+     * @param blockSkip
+     * @return
+     */
+    public static Vector2f locateHeightIndependentBiome(TerraformWorld tw, BiomeBank biome, Vector2f centerBlockLocation) {
+    	BiomeSection center = BiomeBank.getBiomeSectionFromBlockCoords(tw, (int) centerBlockLocation.x, (int) centerBlockLocation.y);
+    	boolean found = false;
+    	int radius = 0;
+    	
+    	while(!found) {
+    		for(BiomeSection sect:center.getRelativeSurroundingSections(radius)) {
+    			if(sect.getBiomeBank() == biome) {
+    				SimpleLocation sectionCenter = sect.getCenter();
+    				return new Vector2f(sectionCenter.getX(),sectionCenter.getZ());
+    			}
+    			radius++;
+    		}
+    	}
 
         return null;
     }
@@ -243,13 +280,19 @@ public class GenUtils {
 
     public static int getHighestX(PopulatorDataAbstract data, int x, int z, Material X) {
         int y = 256 - 1;
-        while(data.getType(x, y, z) != X) y--;
+        while(y > 0 && data.getType(x, y, z) != X) y--;
         return y;
     }
     
     public static Location getHighestBlock(World w, int x, int z) {
         int y = w.getMaxHeight() - 1;
-        while(!w.getBlockAt(x, y, z).getType().isSolid()) y--;
+        while(y > 0 && !w.getBlockAt(x, y, z).getType().isSolid()) y--;
+        if(y == 0) {
+            TerraformGeneratorPlugin.logger.error("getHighestBlock(w,x,z) returned 0!");
+            try { throw new Exception("getHighestBlock(w,x,z) returned 0!"); }
+            catch (Exception e) 
+            {e.printStackTrace();}
+        }
         return new Location(w, x, y, z);
     }
 
@@ -358,8 +401,12 @@ public class GenUtils {
             }
             break;
         }
-        if(y == 0)
+        if(y == 0) {
             TerraformGeneratorPlugin.logger.error("GetHighestGround returned 0!");
+            try { throw new Exception("GetHighestGround returned 0!"); }
+            catch (Exception e) 
+            {e.printStackTrace();}
+        }
         return y;
     }
 
@@ -378,8 +425,6 @@ public class GenUtils {
         return res;
     }
 
-    private static final HashMap<TerraformWorld, FastNoise> randomObjectPositionNoiseCache = new HashMap<>();
-
     /**
      * Function that returns random positions inside chunk.
      * An algorithm makes sure that objects are at least user-defined
@@ -392,16 +437,17 @@ public class GenUtils {
      * @return List of points
      */
     public static Vector2f[] vectorRandomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
-        FastNoise noise;
-    	if(randomObjectPositionNoiseCache.containsKey(world)) {
-    		noise = randomObjectPositionNoiseCache.get(world);
-    	} else {
-        	noise = new FastNoise();
-            noise.SetFrequency(1);
-            noise.SetGradientPerturbAmp(maxPerturbation);
-            noise.SetSeed((int) world.getSeed());
-            randomObjectPositionNoiseCache.put(world, noise);
-    	}
+
+        FastNoise noise = NoiseCacheHandler.getNoise(
+        		world, 
+        		NoiseCacheEntry.GENUTILS_RANDOMOBJ_NOISE, 
+        		tw -> {
+                    FastNoise n = new FastNoise((int) tw.getSeed());
+                    n.SetFrequency(1);
+                    n.SetGradientPerturbAmp(maxPerturbation);
+                
+        	        return n;
+        		});
 
         ArrayList<Vector2f> positions = new ArrayList<>();
 

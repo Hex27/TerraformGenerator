@@ -10,9 +10,11 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
@@ -20,17 +22,24 @@ public class GenericLargeCavePopulator {
     /**
      * @return water level.
      */
-    public static int carveCaveSphere(int seed, float rX, float rY, float rZ, SimpleBlock block) {
+    public static int carveCaveSphere(TerraformWorld tw, float rX, float rY, float rZ, SimpleBlock block) {
         if (rX <= 0.5 &&
                 rY <= 0.5 &&
                 rZ <= 0.5) {
             return -1;
         }
+        
 
-        new Random(seed);
-        FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
+        FastNoise noise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.STRUCTURE_LARGECAVE_CARVER, 
+        		world -> {
+        	        FastNoise n = new FastNoise((int) (world.getSeed()*8726));
+        	        n.SetNoiseType(NoiseType.Simplex);
+        	        n.SetFrequency(0.09f);
+                
+        	        return n;
+        		});
         for (float x = -rX; x <= rX; x++) {
             for (float y = -rY; y <= rY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
@@ -127,7 +136,7 @@ public class GenericLargeCavePopulator {
         int rZ = GenUtils.randInt(rand, 30, 50);
 
         //Create main cave hole
-        carveCaveSphere(rand.nextInt(876283), rX, rY, rZ, new SimpleBlock(data, x, y, z));
+        carveCaveSphere(tw, rX, rY, rZ, new SimpleBlock(data, x, y, z));
 
         //Decrease radius to only spawn spikes away from corners
         rX -= 10;

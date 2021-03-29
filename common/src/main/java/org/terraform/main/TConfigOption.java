@@ -55,6 +55,7 @@ public enum TConfigOption {
     MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", true),
     MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree", true),
     MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood", false),
+    MISC_TREES_GRADIENT_LIMIT("misc.trees.ground-gradient-limit", 1.3d),
     DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
     DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY("dev-stuff.patcher-cache-max-size", 100),

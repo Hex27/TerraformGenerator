@@ -10,8 +10,10 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
@@ -45,14 +47,28 @@ public class ErodedPlainsHandler extends BiomeHandler {
 
     @Override
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
-        FastNoise noise = new FastNoise();
-        noise.SetNoiseType(FastNoise.NoiseType.CubicFractal);
-        noise.SetFractalOctaves(3);
-        noise.SetFrequency(0.02f);
+        
+        FastNoise noise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_ERODEDPLAINS_CLIFFNOISE, 
+        		world -> {
+        	    	FastNoise n = new FastNoise();
+        	        n.SetNoiseType(FastNoise.NoiseType.CubicFractal);
+        	        n.SetFractalOctaves(3);
+        	        n.SetFrequency(0.02f);
+        	        return n;
+        		});
 
-        FastNoise details = new FastNoise();
-        details.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        details.SetFrequency(0.03f);
+        FastNoise details = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_ERODEDPLAINS_DETAILS, 
+        		world -> {
+        	        FastNoise n = new FastNoise();
+        	        n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        	        n.SetFrequency(0.03f);
+        	        return n;
+        		});
+
 
         double threshold = 0.1;
         int heightFactor = 10;

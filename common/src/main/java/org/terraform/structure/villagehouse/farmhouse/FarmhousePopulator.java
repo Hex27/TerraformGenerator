@@ -20,10 +20,10 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Temperature;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.FastNoise.NoiseType;
 
 import java.util.Random;
 

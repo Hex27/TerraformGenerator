@@ -10,9 +10,11 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
@@ -22,19 +24,26 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
         TerraformGeneratorPlugin.logger.info("Generating Large Mushroom Cave at " + x + "," + y + "," + z);
         int rX = GenUtils.randInt(rand, 30, 50);
         int rZ = GenUtils.randInt(rand, 30, 50);
-        int seed = rand.nextInt(876283);
 
         //Create main cave hole
-        carveCaveSphere(seed, rX, rY, rZ, new SimpleBlock(data, x, y, z));
+        carveCaveSphere(tw, rX, rY, rZ, new SimpleBlock(data, x, y, z));
 
         //Decrease radius to only spawn spikes away from corners
         rX -= 10;
         rZ -= 10;
 
-        FastNoise mycelNoise = new FastNoise(seed * 5);
-        mycelNoise.SetNoiseType(NoiseType.SimplexFractal);
-        mycelNoise.SetFractalOctaves(3);
-        mycelNoise.SetFrequency(0.05f);
+
+        FastNoise mycelNoise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.STRUCTURE_MUSHROOMCAVE_MYCELNOISE, 
+        		world -> {
+        	        FastNoise n = new FastNoise((int) (world.getSeed() * 5));
+        	        n.SetNoiseType(NoiseType.SimplexFractal);
+        	        n.SetFractalOctaves(3);
+        	        n.SetFrequency(0.05f);
+        	        return n;
+        		});
+        
 
         int lowestPoint = y - rY;
 

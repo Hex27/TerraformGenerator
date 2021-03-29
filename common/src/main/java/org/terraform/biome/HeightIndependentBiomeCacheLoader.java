@@ -20,21 +20,22 @@ public class HeightIndependentBiomeCacheLoader extends CacheLoader<TWSimpleLocat
 		int z = loc.getZ();
 		TerraformWorld tw = loc.getTerraformWorld();
 
-        double dither = TConfigOption.BIOME_DITHER.getDouble();
-    	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
-    	SimpleLocation target  = new SimpleLocation(x,0,z);
-    	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x,z);
-    	
-    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
-    	BiomeSection mostDominant = homeSection;
-    	
-    	for(BiomeSection sect:sections) {
-    		float dom = (float) (sect.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
-    		
-    		if(dom > mostDominant.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither))
-    			mostDominant = sect;
-    	}
-    	
+//        double dither = TConfigOption.BIOME_DITHER.getDouble();
+//    	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
+//    	SimpleLocation target  = new SimpleLocation(x,0,z);
+//    	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x,z);
+//    	
+//    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
+//    	BiomeSection mostDominant = homeSection;
+//    	
+//    	for(BiomeSection sect:sections) {
+//    		float dom = (float) (sect.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
+//    		
+//    		if(dom > mostDominant.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither))
+//    			mostDominant = sect;
+//    	}
+		
+    	BiomeSection mostDominant = BiomeSection.getMostDominantSection(tw,x,z);
     	return mostDominant.getBiomeBank();
 	}
 

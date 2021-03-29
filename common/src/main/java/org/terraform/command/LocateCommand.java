@@ -239,8 +239,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         runnable.runTaskAsynchronously(plugin);
     }
 
-    @SuppressWarnings("serial")
-	private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
+    private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
         if (radius == 0) return new ArrayList<MegaChunk>() {{
             add(center);
         }};
@@ -250,16 +249,19 @@ public class LocateCommand extends TerraCommand implements Listener {
         //xxx  x   x
         //     xxxxx
         ArrayList<MegaChunk> candidates = new ArrayList<MegaChunk>();
-        for (int rx = -radius; rx <= radius; rx++) {
-            for (int rz = -radius; rz <= radius; rz++) {
-
-                //Check that this is a border coord
-                if (Math.abs(rx) == radius || Math.abs(rz) == radius) {
-                    //Bukkit.getLogger().info(center.getX() + "+" + rx + "," + center.getZ() + "+"+rz);
-                    candidates.add(center.getRelative(rx, rz));
-                }
-            }
+      //Lock rX, iterate rZ
+        for(int rx:new int[] {-radius,radius}) {
+        	 for (int rz = -radius; rz <= radius; rz++) {
+        		 candidates.add(center.getRelative(rx, rz));
+             }
         }
+        
+        //Lock rZ, iterate rX
+        for(int rz:new int[] {-radius,radius}) {
+       	 for (int rx = 1-radius; rx <= radius-1; rx++) {
+       		 candidates.add(center.getRelative(rx, rz));
+            }
+       }
 
         return candidates;
     }

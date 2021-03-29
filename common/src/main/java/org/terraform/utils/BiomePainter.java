@@ -1,7 +1,6 @@
 package org.terraform.utils;
 
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.HeightMap;
 import org.terraform.data.TerraformWorld;
 
 import javax.swing.*;

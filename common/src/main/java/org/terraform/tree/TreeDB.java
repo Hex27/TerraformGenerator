@@ -24,13 +24,19 @@ public class TreeDB {
 
     public static void spawnCoconutTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         SimpleBlock base = new SimpleBlock(data, x, y, z);
+        FractalTreeBuilder builder = new FractalTreeBuilder(FractalTypes.Tree.COCONUT_TOP);
+        
+        //If gradient too steep, don't try spawning
+        if(!builder.checkGradient(data, x, z))
+        	return;
+        
         //Spawn the base
         Material log = Material.JUNGLE_WOOD;
         if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) log = Material.JUNGLE_LOG;
         for (BlockFace face : BlockUtils.directBlockFaces) {
             new Wall(base.getRelative(face), BlockFace.NORTH).downUntilSolid(new Random(), log);
         }
-        new FractalTreeBuilder(FractalTypes.Tree.COCONUT_TOP).build(tw, data, x, y, z);
+        builder.build(tw, data, x, y, z);
     }
 
     public static void spawnSmallJungleTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
@@ -41,8 +47,14 @@ public class TreeDB {
     }
 
     public static void spawnBigDarkOakTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_BIG_TOP).build(tw, data, x, y, z);
-        new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_BIG_BOTTOM).build(tw, data, x, y - 5, z);
+        
+    	FractalTreeBuilder bottomBuilder = new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_BIG_BOTTOM);
+    	
+    	//Don't spawn a tree if the terrain is too steep.
+    	if(!bottomBuilder.checkGradient(data, x, z)) return;
+    	
+    	new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_BIG_TOP).skipGradientCheck().build(tw, data, x, y, z);
+        bottomBuilder.build(tw, data, x, y - 5, z);
     }
 
     /**

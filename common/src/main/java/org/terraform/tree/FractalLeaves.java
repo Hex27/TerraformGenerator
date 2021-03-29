@@ -8,14 +8,14 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class FractalLeaves {
@@ -28,9 +28,7 @@ public class FractalLeaves {
     public Material material = Material.OAK_LEAVES;
     public FractalTreeBuilder builder;
     Random rand = new Random();
-    protected static HashMap<TerraformWorld, FastNoise> noiseCache = new HashMap<>();
-    private FastNoise noiseGen;
-   float leafNoiseMultiplier = 0.7f;
+    float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;
     double hollowLeaves = 0.0;
     boolean coneLeaves = false;
@@ -45,13 +43,17 @@ public class FractalLeaves {
 
     public void placeLeaves(SimpleBlock block) { 
     	// Setup noise to be used in randomising the sphere
-        if(!noiseCache.containsKey(builder.tw)) {
-        	FastNoise noise = new FastNoise((int) builder.tw.getSeed());
-        	noiseCache.put(builder.tw, noise);
-        	noise.SetFractalOctaves(5);
-        	noise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        }
-        noiseGen = noiseCache.get(builder.tw);
+
+        FastNoise noiseGen = NoiseCacheHandler.getNoise(
+        		builder.tw, 
+        		NoiseCacheEntry.FRACTALTREES_LEAVES_NOISE, 
+        		world -> {
+                    FastNoise n = new FastNoise((int) world.getSeed());
+                	n.SetFractalOctaves(5);
+                	n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+                
+        	        return n;
+        		});
         noiseGen.SetFrequency(leafNoiseFrequency);
         
         // Don't place anything if radius is nothing

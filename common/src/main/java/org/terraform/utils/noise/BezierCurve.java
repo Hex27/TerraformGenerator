@@ -1,4 +1,6 @@
-package org.terraform.utils;
+package org.terraform.utils.noise;
+
+import org.terraform.utils.Vector2f;
 
 // https://www.youtube.com/watch?v=dXECQRlmIaE :)
 public class BezierCurve {

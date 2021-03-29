@@ -1,4 +1,4 @@
-package org.terraform.utils;
+package org.terraform.utils.noise;
 
 import java.util.HashMap;
 

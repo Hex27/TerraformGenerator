@@ -28,6 +28,8 @@ public class FrozenOceansHandler extends AbstractOceanHandler {
 
     @Override
     public Biome getBiome() {
+    	if(this.oceanType == BiomeType.DEEP_OCEANIC)
+    		return Biome.DEEP_FROZEN_OCEAN;
         return Biome.FROZEN_OCEAN;
     }
 

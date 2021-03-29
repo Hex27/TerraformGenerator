@@ -96,10 +96,10 @@ public class BiomeBlender {
     	if(Math.abs(upperBound.getZ() - z) < lowestDiff) 
     		lowestDiff = Math.abs(upperBound.getZ() - z);
     	
-    	double factor = lowestDiff/((double) sectionWidth);
+    	double factor = lowestDiff/(((double) sectionWidth)*biomeThreshold);
     	
     	//Considered far from edge if it is 25% within the biomesection
-    	if(factor >= biomeThreshold) {
+    	if(factor > 1) {
     		factor = 1;
     	}
     	

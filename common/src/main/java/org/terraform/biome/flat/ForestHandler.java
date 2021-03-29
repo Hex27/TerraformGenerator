@@ -10,9 +10,11 @@ import org.terraform.main.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -77,11 +79,17 @@ public class ForestHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-
-        FastNoise pathNoise = new FastNoise((int) (tw.getSeed() * 12));
-        pathNoise.SetNoiseType(NoiseType.SimplexFractal);
-        pathNoise.SetFractalOctaves(3);
-        pathNoise.SetFrequency(0.07f);
+        FastNoise pathNoise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_FOREST_PATHNOISE, 
+        		world -> {
+        	        FastNoise n = new FastNoise((int) (world.getSeed() * 12));
+        	        n.SetNoiseType(NoiseType.SimplexFractal);
+        	        n.SetFractalOctaves(3);
+        	        n.SetFrequency(0.07f);
+        	        return n;
+        		});
+    	
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {

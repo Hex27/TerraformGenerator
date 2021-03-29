@@ -8,19 +8,19 @@ public enum BiomeClimate {
 	HUMID_VEGETATION(Range.between(2.45, 2.5),Range.between(2.45, 2.5),2), 
 	
 	//Forests
-	WARM_VEGETATION(Range.between(0.7, 2.5),Range.between(1.2, 2.5),1),
+	WARM_VEGETATION(Range.between(1.0, 2.5),Range.between(1.0, 2.5),1),
 	
 	//Savannas
-	DRY_VEGETATION(Range.between(0.7, 2.5),Range.between(-2.5, -0.7),1),
+	DRY_VEGETATION(Range.between(1.0, 2.5),Range.between(-2.5, -1.0),1),
 	
 	//Deserts
 	HOT_BARREN(Range.between(2.45, 2.5),Range.between(-2.5, -2.45),2), 
 	
 	//Cold biomes - taigas, maybe eroded plains
-	COLD(Range.between(-2.5, -0.7),Range.between(-2.5, 2.5),1), 
+	COLD(Range.between(-2.5, -1.0),Range.between(-2.5, 2.5),1), 
 	
 	//Any snowy biomes. 
-	SNOWY(Range.between(-2.5, -2.45),Range.between(-2.5, 2.5),2), 	
+	SNOWY(Range.between(-2.5, -2.47),Range.between(-2.5, 2.5),2), 	
 	
 	//Default climate.
 	TRANSITION(Range.between(-2.5,2.5),Range.between(-2.5,2.5),0), 
@@ -44,7 +44,7 @@ public enum BiomeClimate {
 	}
 	
 	private static boolean isInRange(double val, Range<Double> r) {
-		return r.contains(val) || r.getMaximum() == val || r.getMinimum() == val;
+		return r.getMaximum() >= val && r.getMinimum() <= val;
 	}
 	
 	public static BiomeClimate selectClimate(double temp, double moist) {

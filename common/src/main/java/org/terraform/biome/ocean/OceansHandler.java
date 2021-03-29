@@ -28,6 +28,8 @@ public class OceansHandler extends AbstractOceanHandler {
 
     @Override
     public Biome getBiome() {
+    	if(this.oceanType == BiomeType.DEEP_OCEANIC)
+    		return Biome.DEEP_OCEAN;
         return Biome.OCEAN;
     }
 

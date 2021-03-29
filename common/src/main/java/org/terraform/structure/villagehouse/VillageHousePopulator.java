@@ -28,29 +28,26 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = getCoordsFromMegaChunk(tw, mc);
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-            if (banks.contains(BiomeBank.LUKEWARM_OCEAN)
-                    || banks.contains(BiomeBank.WARM_OCEAN)
-                    || banks.contains(BiomeBank.OCEAN)
-                    || banks.contains(BiomeBank.COLD_OCEAN)
-                    || banks.contains(BiomeBank.FROZEN_OCEAN)
-                    || banks.contains(BiomeBank.SWAMP)) {
-                return false;
-            } else {
-                //If it is below sea level, DON'T SPAWN IT.
-                if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-                    if (banks.contains(BiomeBank.DESERT)
-                            || banks.contains(BiomeBank.DESERT_MOUNTAINS)
-                            || banks.contains(BiomeBank.BADLANDS)
-                            || banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
-                            || banks.contains(BiomeBank.ICE_SPIKES)) {
-                        return TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean();
-                    } else if (banks.contains(BiomeBank.SNOWY_TAIGA)
-                            || banks.contains(BiomeBank.SNOWY_WASTELAND)
-                            || banks.contains(BiomeBank.ROCKY_MOUNTAINS)
-                            || banks.contains(BiomeBank.JUNGLE)) {
+            
+        	for(BiomeBank b:banks) {
+        		if(!b.getType().isDry())
+        			return false;
+        	}
+        	
+            //If it is below sea level, DON'T SPAWN IT.
+            if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+                if (banks.contains(BiomeBank.DESERT)
+                        || banks.contains(BiomeBank.DESERT_MOUNTAINS)
+                        || banks.contains(BiomeBank.BADLANDS)
+                        || banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
+                        || banks.contains(BiomeBank.ICE_SPIKES)) {
+                    return TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean();
+                } else if (banks.contains(BiomeBank.SNOWY_TAIGA)
+                        || banks.contains(BiomeBank.SNOWY_WASTELAND)
+                        || banks.contains(BiomeBank.ROCKY_MOUNTAINS)
+                        || banks.contains(BiomeBank.JUNGLE)) {
 
-                        return TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean();
-                    }
+                    return TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean();
                 }
             }
         }
@@ -62,38 +59,35 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
+    	
+        for(BiomeBank b:banks) {
+    		if(!b.getType().isDry()) {
+    			//Below water level, spawn ships
+    			return;
+    		}
+    	}
 
-        if (banks.contains(BiomeBank.LUKEWARM_OCEAN)
-                || banks.contains(BiomeBank.WARM_OCEAN)
-                || banks.contains(BiomeBank.OCEAN)
-                || banks.contains(BiomeBank.COLD_OCEAN)
-                || banks.contains(BiomeBank.FROZEN_OCEAN)
-                || banks.contains(BiomeBank.SWAMP)) {
-            //Ships
-        } else {
+        //On ground, spawn dry village houses
+        int[] coords = getCoordsFromMegaChunk(tw, mc);
+        if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+            if (banks.contains(BiomeBank.DESERT)
+                    || banks.contains(BiomeBank.DESERT_MOUNTAINS)
+                    || banks.contains(BiomeBank.BADLANDS)
+                    || banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
+                    || banks.contains(BiomeBank.ICE_SPIKES)) {
+                if (!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
+                    return;
 
-            //If it is below sea level, DON'T SPAWN IT.
-            int[] coords = getCoordsFromMegaChunk(tw, mc);
-            if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-                if (banks.contains(BiomeBank.DESERT)
-                        || banks.contains(BiomeBank.DESERT_MOUNTAINS)
-                        || banks.contains(BiomeBank.BADLANDS)
-                        || banks.contains(BiomeBank.BADLANDS_MOUNTAINS)
-                        || banks.contains(BiomeBank.ICE_SPIKES)) {
-                    if (!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
-                        return;
+                new AnimalFarmPopulator().populate(tw, data);
+            } else if (banks.contains(BiomeBank.SNOWY_TAIGA)
+                    || banks.contains(BiomeBank.SNOWY_WASTELAND)
+                    || banks.contains(BiomeBank.ROCKY_MOUNTAINS)
+                    || banks.contains(BiomeBank.JUNGLE)) {
 
-                    new AnimalFarmPopulator().populate(tw, data);
-                } else if (banks.contains(BiomeBank.SNOWY_TAIGA)
-                        || banks.contains(BiomeBank.SNOWY_WASTELAND)
-                        || banks.contains(BiomeBank.ROCKY_MOUNTAINS)
-                        || banks.contains(BiomeBank.JUNGLE)) {
+                if (!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
+                    return;
 
-                    if (!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
-                        return;
-
-                    new FarmhousePopulator().populate(tw, data);
-                }
+                new FarmhousePopulator().populate(tw, data);
             }
         }
     }

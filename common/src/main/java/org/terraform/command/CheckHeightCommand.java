@@ -4,14 +4,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
+import org.terraform.biome.BiomeSection;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
-import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
 
 import java.util.Stack;
@@ -49,15 +50,22 @@ public class CheckHeightCommand extends TerraCommand {
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
         MegaChunk mc = new MegaChunk(x, 0, z);
         BiomeBank biome = tw.getBiomeBank(x, z);
+        BiomeSection section = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
+        PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
         p.sendMessage("Core Height: " + HeightMap.CORE.getHeight(tw, x, z));
         //p.sendMessage("Mountainous Height: " + HeightMap.MOUNTAIN.getHeight(tw, x, z));
         p.sendMessage("Attrition Height: " + HeightMap.ATTRITION.getHeight(tw, x, z));
-        p.sendMessage("Gradient (2,3,4): " + HeightMap.getNoiseGradient(tw, x, z, 2) + "," + HeightMap.getNoiseGradient(tw, x, z, 3) + "," + HeightMap.getNoiseGradient(tw, x, z,
-                4));
+        p.sendMessage("Gradient (2,3,4): " + HeightMap.getNoiseGradient(tw, x, z, 2) + "," + HeightMap.getNoiseGradient(tw, x, z, 3) + "," + HeightMap.getNoiseGradient(tw, x, z,4)); 
+        p.sendMessage("True Gradient (2,3,4): " + HeightMap.getTrueHeightGradient(data, x, z, 2) + "," + HeightMap.getTrueHeightGradient(data, x, z, 3) + "," + HeightMap.getTrueHeightGradient(data, x, z,4));
         p.sendMessage("Result height: " + HeightMap.getBlockHeight(tw, x, z));
         p.sendMessage("River Depth: " + HeightMap.getRawRiverDepth(tw, x, z));
         p.sendMessage("Mega Chunk: " + mc.getX() + "," + mc.getZ());
         
+        p.sendMessage("Biome Section: " + section.toString());
+        p.sendMessage("Surrounding Sections:");
+        for(BiomeSection sect:BiomeSection.getSurroundingSections(tw, x, z)) {
+            p.sendMessage("    - " + sect.toString() + "(" + sect.getBiomeBank() + ")");
+        }
         for(SingleMegaChunkStructurePopulator spop:StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
         	if (spop == null) continue;
         	int[] coords = spop.getCoordsFromMegaChunk(tw, mc);

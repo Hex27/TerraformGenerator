@@ -17,9 +17,11 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -113,27 +115,29 @@ public class JungleHandler extends BiomeHandler {
             base.setType(Material.JUNGLE_LOG);
     }
 
-    private static HashMap<TerraformWorld, FastNoise> groundWoodNoiseCache = new HashMap<>();
-    private static HashMap<TerraformWorld, FastNoise> groundLeavesNoiseCache = new HashMap<>();
-    
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
         
-		if(!groundWoodNoiseCache.containsKey(tw)) {
-			FastNoise groundWoodNoise = new FastNoise((int) (tw.getSeed() * 12));
-	        groundWoodNoise.SetNoiseType(NoiseType.SimplexFractal);
-	        groundWoodNoise.SetFractalOctaves(3);
-	        groundWoodNoise.SetFrequency(0.07f);
-	        groundWoodNoiseCache.put(tw, groundWoodNoise);
+        FastNoise groundWoodNoise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_JUNGLE_GROUNDWOOD, 
+        		world -> {
+        			FastNoise n = new FastNoise((int) (world.getSeed() * 12));
+        	        n.SetNoiseType(NoiseType.SimplexFractal);
+        	        n.SetFractalOctaves(3);
+        	        n.SetFrequency(0.07f);
+        	        return n;
+        		});
 
-	        FastNoise groundLeavesNoise = new FastNoise((int) (tw.getSeed() * 2));
-	        groundLeavesNoise.SetNoiseType(NoiseType.SimplexFractal);
-	        groundLeavesNoise.SetFrequency(0.07f);
-	        groundLeavesNoiseCache.put(tw,groundLeavesNoise);
-		}
-		
-		FastNoise groundWoodNoise = groundWoodNoiseCache.get(tw);
-		FastNoise groundLeavesNoise = groundLeavesNoiseCache.get(tw);
+        FastNoise groundLeavesNoise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_JUNGLE_GROUNDLEAVES, 
+        		world -> {
+        	        FastNoise n = new FastNoise((int) (world.getSeed() * 2));
+        	        n.SetNoiseType(NoiseType.SimplexFractal);
+        	        n.SetFrequency(0.07f);
+        	        return n;
+        		});
 
         SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
         

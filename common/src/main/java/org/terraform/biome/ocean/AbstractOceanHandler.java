@@ -7,7 +7,7 @@ import org.terraform.data.TerraformWorld;
 
 public abstract class AbstractOceanHandler extends BiomeHandler {
 
-	private BiomeType oceanType;
+	protected BiomeType oceanType;
 	public AbstractOceanHandler(BiomeType oceanType) {
 		this.oceanType = oceanType;
 	}

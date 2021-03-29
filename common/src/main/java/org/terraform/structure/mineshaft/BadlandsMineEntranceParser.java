@@ -10,11 +10,13 @@ import org.bukkit.block.data.type.Slab;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
+import org.terraform.utils.noise.FastNoise;
 
 public class BadlandsMineEntranceParser extends SchematicParser {
     static FastNoise noise = null;
     private boolean didPlaceLantern = false;
+    
+    //Don't cache, as it does not change based on terraformworld.
     static double getNoise(int x, int y, int z) {
         if (noise == null) {
             noise = new FastNoise();

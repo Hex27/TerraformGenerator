@@ -2,6 +2,7 @@ package org.terraform.structure.mineshaft;
 
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -24,6 +25,12 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = getCoordsFromMegaChunk(tw, mc);
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+        	for(BiomeBank b:biomes) {
+        		//Do not spawn mineshafts under deep oceans, there's no space.
+        		if(b.getType() == BiomeType.DEEP_OCEANIC)
+        			return false;
+        	}
+        	
             int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
             if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
                 //Way too little space. Abort generation.

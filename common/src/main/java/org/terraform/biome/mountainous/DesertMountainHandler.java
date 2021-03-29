@@ -5,9 +5,11 @@ import org.bukkit.block.Biome;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
@@ -49,10 +51,18 @@ public class DesertMountainHandler extends AbstractMountainHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        FastNoise duneNoise = new FastNoise((int) world.getSeed());
-        duneNoise.SetNoiseType(NoiseType.CubicFractal);
-        duneNoise.SetFractalOctaves(3);
-        duneNoise.SetFrequency(0.03f);
+        
+        FastNoise duneNoise = NoiseCacheHandler.getNoise(
+        		world, 
+        		NoiseCacheEntry.BIOME_DESERT_DUNENOISE, 
+        		tw -> {
+        	    	FastNoise n = new FastNoise((int) tw.getSeed());
+        	        n.SetNoiseType(NoiseType.CubicFractal);
+        	        n.SetFractalOctaves(3);
+        	        n.SetFrequency(0.03f);
+        	        return n;
+        		});
+    	
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {

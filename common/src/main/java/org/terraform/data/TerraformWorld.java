@@ -6,8 +6,10 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -17,10 +19,6 @@ public class TerraformWorld {
     public static final HashMap<String, TerraformWorld> WORLDS = new HashMap<>();
     private final String worldName;
     private final long seed;
-
-    private transient FastNoise tempOctave;
-    private transient FastNoise moistureOctave;
-    private transient FastNoise oceanOctave;
 
     public TerraformWorld(String name, long seed) {
         this.worldName = name;
@@ -41,33 +39,42 @@ public class TerraformWorld {
     }
 
     public FastNoise getTemperatureOctave() {
-        if (tempOctave == null) {
-            tempOctave = new FastNoise((int) (seed * 2));
-            tempOctave.SetNoiseType(NoiseType.Simplex);
-            //tempOctave.SetFractalOctaves(3);
-            tempOctave.SetFrequency(0.1f); //Was 0.0006
-        }
-        return tempOctave;
+
+        return NoiseCacheHandler.getNoise(
+        		this, 
+        		NoiseCacheEntry.TW_TEMPERATURE, 
+        		tw -> {
+                    FastNoise n = new FastNoise((int) (tw.getSeed() * 2));
+                    n.SetNoiseType(NoiseType.Simplex);
+                    //tempOctave.SetFractalOctaves(3);
+                    n.SetFrequency(0.03f); //Was 0.0006
+        	        return n;
+        		});
     }
 
     public FastNoise getMoistureOctave() {
-        if (moistureOctave == null) {
-            moistureOctave = new FastNoise((int) (seed/4));
-            moistureOctave.SetNoiseType(NoiseType.Simplex);
-            //moistureOctave.SetFractalOctaves(3);
-            moistureOctave.SetFrequency(0.1f);
-        }
-        return moistureOctave;
+        return NoiseCacheHandler.getNoise(
+        		this, 
+        		NoiseCacheEntry.TW_MOISTURE, 
+        		tw -> {
+                    FastNoise n = new FastNoise((int) (tw.getSeed()/4));
+                    n.SetNoiseType(NoiseType.Simplex);
+                    //tempOctave.SetFractalOctaves(3);
+                    n.SetFrequency(0.03f); //Was 0.0006
+        	        return n;
+        		});
     }
 
     public FastNoise getOceanOctave() {
-        if (oceanOctave == null) {
-        	oceanOctave = new FastNoise((int) getSeed() * 12);
-        	oceanOctave.SetNoiseType(NoiseType.Simplex);
-        	oceanOctave.SetFrequency(0.11f);
-        	//oceanOctave.SetFrequency(TConfigOption.HEIGHT_MAP_OCEANIC_FREQUENCY.getFloat());
-        }
-        return oceanOctave;
+        return NoiseCacheHandler.getNoise(
+        		this, 
+        		NoiseCacheEntry.TW_OCEAN, 
+        		tw -> {
+                	FastNoise n = new FastNoise((int) tw.getSeed() * 12);
+                	n.SetNoiseType(NoiseType.Simplex);
+                	n.SetFrequency(0.11f);
+        	        return n;
+        		});
     }
     
     public long getSeed() {
@@ -75,7 +82,7 @@ public class TerraformWorld {
     }
 
     public Random getRand(long d) {
-        return new Random(seed * d);
+        return new Random(seed + 11*d);
     }
 
     public Random getHashedRand(long x, int y, int z) {

@@ -18,10 +18,12 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -227,15 +229,30 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
      */
     public void spawnSandBase(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         int squareRadius = 65;
-        FastNoise noiseGenerator = new FastNoise();
-        noiseGenerator.SetNoiseType(NoiseType.PerlinFractal);
-        noiseGenerator.SetFrequency(0.007f);
-        noiseGenerator.SetFractalOctaves(6);
 
-        FastNoise vertNoise = new FastNoise();
-        vertNoise.SetNoiseType(NoiseType.PerlinFractal);
-        vertNoise.SetFrequency(0.01f);
-        vertNoise.SetFractalOctaves(8);
+        FastNoise noiseGenerator = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.STRUCTURE_PYRAMID_BASEELEVATOR, 
+        		world -> {
+                    FastNoise n = new FastNoise((int)world.getSeed());
+                    n.SetNoiseType(NoiseType.PerlinFractal);
+                    n.SetFrequency(0.007f);
+                    n.SetFractalOctaves(6);
+                
+        	        return n;
+        		});
+
+        FastNoise vertNoise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.STRUCTURE_PYRAMID_BASEFUZZER, 
+        		world -> {
+                    FastNoise n = new FastNoise((int)world.getSeed());
+                    n.SetNoiseType(NoiseType.PerlinFractal);
+                    n.SetFrequency(0.01f);
+                    n.SetFractalOctaves(8);
+                
+        	        return n;
+        		});
 
         for (int nx = x - squareRadius; nx <= x + squareRadius; nx++) {
             for (int nz = z - squareRadius; nz <= z + squareRadius; nz++) {

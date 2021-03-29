@@ -11,22 +11,23 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.BeeHiveSpawner;
 import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class FractalTreeBuilder {
     int height = 0;
@@ -61,12 +62,11 @@ public class FractalTreeBuilder {
     int oriX;
     int oriY;
     int oriZ;
-    protected static final Map<TerraformWorld, FastNoise> noiseCache = new ConcurrentHashMap<>();
-    private FastNoise noiseGen;
     private SimpleBlock beeHive;
     protected boolean coralDecoration = false;
     private double initialAngle;
     private int initialHeight;
+    private boolean heightGradientChecked = false;
 
     public FractalTreeBuilder(FractalTypes.Tree type) {
         switch (type) {
@@ -129,7 +129,7 @@ public class FractalTreeBuilder {
                         .setMaxBend(0.8 * Math.PI / 2)
                         .setLengthDecrement(1)
                         .setHeightVariation(1)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2.3f, 4).setMaterial(Material.ACACIA_LEAVES));
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2f, 4).setMaterial(Material.ACACIA_LEAVES));
                 break;
             case JUNGLE_BIG:
                 this.setBaseHeight(15)
@@ -427,8 +427,22 @@ public class FractalTreeBuilder {
         }
     }
 
+    
+    public boolean checkGradient(PopulatorDataAbstract data, int x, int z) {
+    	heightGradientChecked = true;
+    	return (HeightMap.getTrueHeightGradient(data, x, z, 3) 
+    			<= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
+    }
+    
     public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
+        
+    	//Terrain too steep, don't attempt tree generation, 
+    	//lest it gets stuck in a wall.
+    	if(!heightGradientChecked) {
+    		if(!checkGradient(data,x,z)) return;
+    	}
+    	
+    	if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
             this.trunkType = Material.getMaterial(StringUtils.replace(this.trunkType.toString(), "WOOD", "LOG"));
         }
         this.oriX = x;
@@ -436,15 +450,17 @@ public class FractalTreeBuilder {
         this.oriZ = z;
         this.tw = tw;
         //this.noiseGen = new FastNoise((int) tw.getSeed());
-        synchronized(noiseCache) {
-            if(!noiseCache.containsKey(tw)) {
-                FastNoise noise = new FastNoise((int) tw.getSeed());
-                noise.SetNoiseType(NoiseType.SimplexFractal);
-                noise.SetFractalOctaves(5);
-                noiseCache.put(tw, noise);
-            }
-            noiseGen = noiseCache.get(tw);
-        }
+
+        FastNoise noiseGen = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.FRACTALTREES_BASE_NOISE, 
+        		world -> {
+                    FastNoise n = new FastNoise((int) world.getSeed());
+                    n.SetNoiseType(NoiseType.SimplexFractal);
+                    n.SetFractalOctaves(5);
+        	        return n;
+        		});
+        
         // Setup noise to be used in randomising the sphere
         noiseGen.SetFrequency(branchNoiseFrequency);
         
@@ -636,6 +652,20 @@ public class FractalTreeBuilder {
         double maxR = rX;
         if (rX < rY) maxR = rY;
         if (rY < rZ) maxR = rZ;
+        
+
+        FastNoise noiseGen = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.FRACTALTREES_BASE_NOISE, 
+        		world -> {
+                    FastNoise n = new FastNoise((int) world.getSeed());
+                    n.SetNoiseType(NoiseType.SimplexFractal);
+                    n.SetFractalOctaves(5);
+        	        return n;
+        		});
+        
+        // Setup noise to be used in randomising the sphere
+        noiseGen.SetFrequency(branchNoiseFrequency);
 
         ArrayList<SimpleBlock> changed = new ArrayList<>();
 
@@ -886,6 +916,11 @@ public class FractalTreeBuilder {
     public FractalTreeBuilder setMaxHeight(int max) {
         this.maxHeight = max;
         return this;
+    }
+    
+    public FractalTreeBuilder skipGradientCheck() {
+    	this.heightGradientChecked = true;
+    	return this;
     }
 
     /**

@@ -23,7 +23,7 @@ public class BadlandsMountainHandler extends AbstractMountainHandler {
             threshold = highest - GenUtils.randInt(random, 3, 6);
         for (int y = highest; y > threshold; y--) {
             if (data.getBiome(x, z) != Biome.BADLANDS_PLATEAU && !force) continue;
-            if (!data.getType(x, y, z).toString().contains("SAND"))
+            if (!data.getType(x, y, z).toString().endsWith("SAND"))
                 continue;
 
             data.setType(x, y, z, BlockUtils.getTerracotta(y));
@@ -42,9 +42,10 @@ public class BadlandsMountainHandler extends AbstractMountainHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.RED_SAND, 35, Material.SAND, 5),
-                GenUtils.weightedRandomMaterial(rand, Material.RED_SAND, 35, Material.SAND, 5),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.RED_SANDSTONE, Material.RED_SAND),
+        return new Material[]{
+        		Material.RED_SAND,
+        		Material.RED_SAND,
+                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.RED_SAND),
                 GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
                 GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE)};
     }
