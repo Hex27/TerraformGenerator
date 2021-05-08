@@ -13,6 +13,17 @@ import org.terraform.utils.GenUtils;
 
 public abstract class AbstractMountainHandler extends BiomeHandler {
 
+	protected double getPeakMultiplier(Random sectionRandom) {
+		return GenUtils.randDouble(sectionRandom, 1.4, 1.7);
+	}
+	
+	/**
+	 * Mountain height calculation works by identifying an offset from the BiomeSection
+	 * midpoint, then multiplying current height to peak at that offset.
+	 * <br><br>
+	 * This may lead to weird areas where blurring takes over, as the peak of the
+	 * mountain is too close to the side, or a part of the mountain is too high
+	 */
 	@Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
     	
@@ -29,14 +40,15 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
         }
         
         Random sectionRand = sect.getSectionRandom();
-        double maxPeak = GenUtils.randDouble(sectionRand, 1.5, 2.0);
+        double maxPeak = getPeakMultiplier(sectionRand);
         
-        //Offset mountain peak
-        SimpleLocation mountainPeak = sect.getCenter().getRelative(
-        		GenUtils.randInt(sectionRand,-BiomeSection.sectionWidth/3,BiomeSection.sectionWidth/3),
-        		0,
-        		GenUtils.randInt(sectionRand,-BiomeSection.sectionWidth/3,BiomeSection.sectionWidth/3)
-        		);
+        //Let's just not offset the peak. This seems to give a better result.
+        SimpleLocation mountainPeak = sect.getCenter();
+        		//.getRelative(
+        		//GenUtils.randInt(sectionRand,-BiomeSection.sectionWidth/3,BiomeSection.sectionWidth/3),
+        		//0,
+        		//GenUtils.randInt(sectionRand,-BiomeSection.sectionWidth/3,BiomeSection.sectionWidth/3)
+        		//);
         
         //SimpleLocation sectionCenter = sect.getCenter();
         

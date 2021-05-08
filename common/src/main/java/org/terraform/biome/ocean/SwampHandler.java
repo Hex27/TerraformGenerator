@@ -9,7 +9,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;

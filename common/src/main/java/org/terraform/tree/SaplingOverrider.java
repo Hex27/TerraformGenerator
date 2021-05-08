@@ -6,7 +6,7 @@ import org.bukkit.event.world.StructureGrowEvent;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 
 public class SaplingOverrider implements Listener {
     @EventHandler

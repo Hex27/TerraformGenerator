@@ -14,8 +14,8 @@ import org.terraform.coregen.ChunkCacheLoader;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -33,14 +33,9 @@ public class TerraformGenerator extends ChunkGenerator {
     		CacheBuilder.newBuilder()
     		.maximumSize(1000).build(new ChunkCacheLoader());//new LoadingCache<ChunkCache, ChunkCache>();
     public static int seaLevel = 62;
-    public static int minMountainLevel = 85;
     
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
-    }
-
-    public static void updateMinMountainLevelFromConfig() {
-        minMountainLevel = TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt();
     }
 
     /**

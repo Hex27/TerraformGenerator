@@ -5,19 +5,18 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
 
-import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 
 public class BiomeSection {
 	private int x, z;
-	// A BiomeSection is 128 blocks wide.
-	private static final int bitshifts = 7;
+	// A BiomeSection is 128 blocks wide (Default of bitshift 7).
+	private static final int bitshifts = TConfigOption.BIOME_SECTION_BITSHIFTS.getInt();
 	private TerraformWorld tw;
 	public static final int sectionWidth = (int) (1 << bitshifts);
 	private static final int minSize = sectionWidth;

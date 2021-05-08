@@ -5,8 +5,8 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
@@ -14,7 +14,6 @@ import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
@@ -78,7 +77,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes) {
+    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         int[][] positions = strongholdPositions(tw);
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
@@ -181,7 +180,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     }
 
-    @Override
+    //This has to be kept. It is used to locate strongholds
     public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
         double minDistanceSquared = Integer.MAX_VALUE;
         int[] min = null;
@@ -196,7 +195,6 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
 
-    @Override
     public int[] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
         int[][] positions = strongholdPositions(tw);
         for (int[] pos : positions) {

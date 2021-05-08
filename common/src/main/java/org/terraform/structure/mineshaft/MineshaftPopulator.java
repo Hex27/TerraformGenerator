@@ -7,67 +7,42 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes) {
+    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = getCoordsFromMegaChunk(tw, mc);
-        if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-        	for(BiomeBank b:biomes) {
-        		//Do not spawn mineshafts under deep oceans, there's no space.
-        		if(b.getType() == BiomeType.DEEP_OCEANIC)
-        			return false;
-        	}
+        int[] coords = mc.getCenterBlockCoords();
         	
-            int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
-            if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
-                //Way too little space. Abort generation.
-                //TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
-                return false;
-            }
-
-            return GenUtils
-                    .chance(this.getHashedRandom(tw, chunkX, chunkZ),
-                            TConfigOption.STRUCTURES_MINESHAFT_CHANCE.getInt(),
-                            100);
+		//Do not spawn mineshafts under deep oceans, there's no space.
+		if(biome.getType() == BiomeType.DEEP_OCEANIC)
+			return false;
+		
+		//Do height and space checks
+        int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
+        if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
+            //Way too little space. Abort generation.
+            //TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
+            return false;
         }
-        return false;
+
+        return rollSpawnRatio(tw,chunkX,chunkZ);
     }
-
-    @Override
-    public int[] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
-        return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1232412222));
-    }
-
-    @Override
-    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
-        MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
-
-        double minDistanceSquared = Integer.MAX_VALUE;
-        int[] min = null;
-        for (int nx = -1; nx <= 1; nx++) {
-            for (int nz = -1; nz <= 1; nz++) {
-                int[] loc = getCoordsFromMegaChunk(tw, mc.getRelative(nx, nz));
-                double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
-                if (distSqr < minDistanceSquared) {
-                    minDistanceSquared = distSqr;
-                    min = loc;
-                }
-            }
-        }
-        return min;
+    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
+                (int) (TConfigOption.STRUCTURES_MINESHAFT_SPAWNRATIO
+                        .getDouble() * 10000),
+                10000);
     }
 
     @Override
@@ -76,7 +51,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
             return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBlockCoords();
         int x = coords[0];
         int z = coords[1];
         int height = HeightMap.getBlockHeight(tw, x, z);

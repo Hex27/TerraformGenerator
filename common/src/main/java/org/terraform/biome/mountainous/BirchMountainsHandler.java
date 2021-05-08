@@ -13,6 +13,13 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class BirchMountainsHandler extends AbstractMountainHandler {
+	
+	//Birch Mountains must be shorter to allow trees to populate.
+	@Override
+	protected double getPeakMultiplier(Random sectionRandom) {
+		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
+	}
+	
     @Override
     public boolean isOcean() {
         return false;

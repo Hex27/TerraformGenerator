@@ -5,8 +5,10 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.PhysicsUpdaterPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -71,6 +73,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                 //Don't touch submerged blocks
                 if(y < TerraformGenerator.seaLevel)
                 	continue;
+                
                 //Make patches of dirt that extend on the mountain sides
                 if (GenUtils.chance(random, 1, 25)) {
                     dirtStack(data, random, x, y, z);
@@ -78,19 +81,25 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                         for (int nz = -2; nz <= 2; nz++) {
                             if (GenUtils.chance(random, 1, 5)) continue;
                             y = GenUtils.getHighestGround(data, x + nx, z + nz);
+                            
+                            //Another check, make sure relative position isn't underwater.
+                            if(y < TerraformGenerator.seaLevel)
+                            	continue;
                             dirtStack(data, random, x + nx, y, z + nz);
                         }
                 }
                 
                 //This area is steep and could have been a river
+                //Waterfalls only spawn 1 in 30 times (rolled after checking position.).
                 if(!spawnedWaterfall)
 	                if(HeightMap.getTrueHeightGradient(data, x, z, 3) > 1.5)
 		                if(HeightMap.CORE.getHeight(tw, x, z) - HeightMap.getRawRiverDepth(tw, x, z) < TerraformGenerator.seaLevel) {
 		                	//If this face is at least 4 blocks wide, carve a waterfall opening
 		                	SimpleBlock block = new SimpleBlock(data,x,y,z);
-		                	if(checkWaterfallSpace(block)) {
+		                	if(checkWaterfallSpace(block) 
+		                			&& GenUtils.chance(tw.getHashedRand(x, y, z), 1, 30)) {
 		                		block = block.getRelative(0,-4,0);
-		                		placeWaterFall(x + 11*z + 31*y, block);
+		                		placeWaterFall(tw, x + 11*z + 31*y, block);
 		                		spawnedWaterfall = true;
 		                	}
 		                }
@@ -98,7 +107,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
         }
     }
     
-    public static void placeWaterFall(int seed, SimpleBlock base) {
+    public static void placeWaterFall(TerraformWorld tw, int seed, SimpleBlock base) {
     	float radius = 4.0f;
 
         FastNoise noise = new FastNoise(seed);
@@ -121,6 +130,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                         }else if(rel.getType().isSolid()) {
                         	//Lower half is water, if replaced block was solid.
                         	rel.setType(Material.WATER);
+                        	PhysicsUpdaterPopulator.pushChange(tw.getName(), new SimpleLocation(rel.getX(),rel.getY(),rel.getZ()));;
                         }
                     }
                 }
@@ -129,6 +139,9 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
     }
     
     public boolean checkWaterfallSpace(SimpleBlock b) {
+    	//Only bother if the waterfall is at least 15 blocks up
+    	if(b.getY() < TerraformGenerator.seaLevel + 15)
+    		return false;
     	for(int i = 0; i < 5; i++) {
     		if(!b.getRelative(0,-i,0).getType().isSolid())
     			return false;

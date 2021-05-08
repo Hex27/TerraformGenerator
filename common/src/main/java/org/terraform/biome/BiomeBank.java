@@ -25,7 +25,7 @@ import org.terraform.biome.flat.SavannaHandler;
 import org.terraform.biome.flat.SnowyTaigaHandler;
 import org.terraform.biome.flat.SnowyWastelandHandler;
 import org.terraform.biome.flat.TaigaHandler;
-import org.terraform.biome.mountainous.BadlandsMountainHandler;
+import org.terraform.biome.mountainous.BadlandsCanyonHandler;
 import org.terraform.biome.mountainous.BirchMountainsHandler;
 import org.terraform.biome.mountainous.DesertMountainHandler;
 import org.terraform.biome.mountainous.RockyMountainsHandler;
@@ -46,27 +46,32 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TWSimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 
 public enum BiomeBank {
     //MOUNTAINOUS
-    ROCKY_MOUNTAINS(new RockyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.TRANSITION ,1),
-    BADLANDS_MOUNTAINS(new BadlandsMountainHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, 1),
-    SNOWY_MOUNTAINS(new SnowyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.SNOWY, 1, new FrozenCavePopulator()),
-    BIRCH_MOUNTAINS(new BirchMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.COLD, 1),
-    DESERT_MOUNTAINS(new DesertMountainHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, 1),
+    ROCKY_MOUNTAINS(new RockyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.TRANSITION, TConfigOption.BIOME_ROCKY_MOUNTAINS_WEIGHT.getInt()),
+    BADLANDS_CANYON(new BadlandsCanyonHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_BADLANDS_MOUNTAINS_WEIGHT.getInt()),
+    SNOWY_MOUNTAINS(new SnowyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.SNOWY, TConfigOption.BIOME_SNOWY_MOUNTAINS_WEIGHT.getInt(), new FrozenCavePopulator()),
+    BIRCH_MOUNTAINS(new BirchMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.COLD, TConfigOption.BIOME_BIRCH_MOUNTAINS_WEIGHT.getInt()),
+    DESERT_MOUNTAINS(new DesertMountainHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_DESERT_MOUNTAINS_WEIGHT.getInt()),
 
     //OCEANIC
-    OCEAN(new OceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, 5),
-    BLACK_OCEAN(new BlackOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, 2),
-    COLD_OCEAN(new ColdOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.COLD, 5),
-    FROZEN_OCEAN(new FrozenOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.SNOWY, 5, new FrozenCavePopulator()),
-    WARM_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.HOT_BARREN, 5),
-    HUMID_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.HUMID_VEGETATION, 5),
-    DRY_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.DRY_VEGETATION, 5),
-    CORALREEF_OCEAN(new CoralReefOceanHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.WARM_VEGETATION, 4),
+    OCEAN(new OceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_OCEAN_WEIGHT.getInt()),
+    BLACK_OCEAN(new BlackOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_BLACK_OCEAN_WEIGHT.getInt()),
+    COLD_OCEAN(new ColdOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.COLD, TConfigOption.BIOME_COLD_OCEAN_WEIGHT.getInt()),
+    FROZEN_OCEAN(new FrozenOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.SNOWY, TConfigOption.BIOME_FROZEN_OCEAN_WEIGHT.getInt(), new FrozenCavePopulator()),
+    WARM_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_WARM_OCEAN_WEIGHT.getInt()),
+    HUMID_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_HUMID_OCEAN_WEIGHT.getInt()),
+    DRY_OCEAN(new WarmOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_DRY_OCEAN_WEIGHT.getInt()),
+    CORALREEF_OCEAN(new CoralReefOceanHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_CORALREEF_OCEAN_WEIGHT.getInt()),
     
     //RIVERS (Don't include in selectBiome)
     //Rivers are handled specially and will not be allocated in selectBiome
@@ -75,30 +80,30 @@ public enum BiomeBank {
     FROZEN_RIVER(new FrozenRiverHandler(), BiomeType.RIVER, BiomeClimate.SNOWY, new FrozenCavePopulator()), //Special case, handle later
 
     //DEEP OCEANIC
-    DEEP_OCEAN(new OceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, 5),
-    DEEP_COLD_OCEAN(new ColdOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.COLD, 5),
-    DEEP_BLACK_OCEAN(new BlackOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, 1),
-    DEEP_FROZEN_OCEAN(new FrozenOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.SNOWY, 5, new FrozenCavePopulator()),
-    DEEP_WARM_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HOT_BARREN, 5),
-    DEEP_HUMID_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HUMID_VEGETATION, 5),
-    DEEP_DRY_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.DRY_VEGETATION, 5),
-    DEEP_LUKEWARM_OCEAN(new LukewarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.WARM_VEGETATION, 5),
+    DEEP_OCEAN(new OceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_DEEP_OCEAN_WEIGHT.getInt()),
+    DEEP_COLD_OCEAN(new ColdOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.COLD, TConfigOption.BIOME_DEEP_COLD_OCEAN_WEIGHT.getInt()),
+    DEEP_BLACK_OCEAN(new BlackOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_DEEP_BLACK_OCEAN_WEIGHT.getInt()),
+    DEEP_FROZEN_OCEAN(new FrozenOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.SNOWY, TConfigOption.BIOME_DEEP_FROZEN_OCEAN_WEIGHT.getInt(), new FrozenCavePopulator()),
+    DEEP_WARM_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_DEEP_WARM_OCEAN_WEIGHT.getInt()),
+    DEEP_HUMID_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_DEEP_HUMID_OCEAN_WEIGHT.getInt()),
+    DEEP_DRY_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_DEEP_DRY_OCEAN_WEIGHT.getInt()),
+    DEEP_LUKEWARM_OCEAN(new LukewarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_DEEP_LUKEWARM_OCEAN_WEIGHT.getInt()),
 
     //FLAT
-    PLAINS(new PlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, 10),
-    ERODED_PLAINS(new ErodedPlainsHandler(), BiomeType.FLAT, BiomeClimate.COLD, 6),
-    SAVANNA(new SavannaHandler(), BiomeType.FLAT, BiomeClimate.DRY_VEGETATION, 6),
-    FOREST(new ForestHandler(), BiomeType.FLAT, BiomeClimate.WARM_VEGETATION, 6),
-    DESERT(new DesertHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, 6),
-    JUNGLE(new JungleHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, 6),
-    BAMBOO_FOREST(new BambooForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, 2),
-    BADLANDS(new BadlandsHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, 1),
-    TAIGA(new TaigaHandler(), BiomeType.FLAT, BiomeClimate.COLD, 6),
-    SNOWY_TAIGA(new SnowyTaigaHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, 6, new FrozenCavePopulator()),
-    SNOWY_WASTELAND(new SnowyWastelandHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, 4, new FrozenCavePopulator()),
-    ICE_SPIKES(new IceSpikesHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, 2, new FrozenCavePopulator()),
-    DARK_FOREST(new DarkForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, 6),
-    SWAMP(new SwampHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, 6),
+    PLAINS(new PlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PLAINS_WEIGHT.getInt()),
+    ERODED_PLAINS(new ErodedPlainsHandler(), BiomeType.FLAT, BiomeClimate.COLD, TConfigOption.BIOME_ERODED_PLAINS_WEIGHT.getInt()),
+    SAVANNA(new SavannaHandler(), BiomeType.FLAT, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_SAVANNA_WEIGHT.getInt()),
+    FOREST(new ForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_FOREST_WEIGHT.getInt()),
+    DESERT(new DesertHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_DESERT_WEIGHT.getInt()),
+    JUNGLE(new JungleHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_JUNGLE_WEIGHT.getInt()),
+    BAMBOO_FOREST(new BambooForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_BAMBOO_FOREST_WEIGHT.getInt()),
+    BADLANDS(new BadlandsHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_BADLANDS_WEIGHT.getInt()),
+    TAIGA(new TaigaHandler(), BiomeType.FLAT, BiomeClimate.COLD, TConfigOption.BIOME_TAIGA_WEIGHT.getInt()),
+    SNOWY_TAIGA(new SnowyTaigaHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, TConfigOption.BIOME_SNOWY_TAIGA_WEIGHT.getInt(), new FrozenCavePopulator()),
+    SNOWY_WASTELAND(new SnowyWastelandHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, TConfigOption.BIOME_SNOWY_WASTELAND_WEIGHT.getInt(), new FrozenCavePopulator()),
+    ICE_SPIKES(new IceSpikesHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, TConfigOption.BIOME_ICE_SPIKES_WEIGHT.getInt(), new FrozenCavePopulator()),
+    DARK_FOREST(new DarkForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_DARK_FOREST_WEIGHT.getInt()),
+    SWAMP(new SwampHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_SWAMP_WEIGHT.getInt()),
 
     //BEACHES (Don't include in selectBiome)
     SANDY_BEACH(new SandyBeachHandler(), BiomeType.BEACH, BiomeClimate.TRANSITION),
@@ -108,6 +113,7 @@ public enum BiomeBank {
     MUDFLATS(new MudflatsHandler(), BiomeType.BEACH, BiomeClimate.HUMID_VEGETATION), //Special case, handle later
     ;
     public static final BiomeBank[] VALUES = values();
+    public static boolean debugPrint = false;
     public static final ArrayList<BiomeBank> FLAT = new ArrayList<BiomeBank>() {{
     	for(BiomeBank b:VALUES) {
     		if(b.getType() == BiomeType.FLAT)
@@ -235,9 +241,18 @@ public enum BiomeBank {
      * @return exact biome that will appear at these coordinates
      */
     public static BiomeBank calculateBiome(TerraformWorld tw, int rawX, int height, int rawZ) {
+    	if(debugPrint) 
+    		TerraformGeneratorPlugin.logger.info("calculateBiome called with args: " + tw.getName() + "," + rawX + "," + height + "," + rawZ);
     	BiomeBank bank = calculateHeightIndependentBiome(tw, rawX, rawZ);
-    	Random locationBasedRandom  = tw.getRand(rawX + 31*rawZ);
-    	
+    	//locationBasedRandom  = tw.getHashedRand(rawX, 0, rawZ);
+    	FastNoise beachNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_BEACH_HEIGHT, (world)->{
+    		FastNoise n = new FastNoise((int) world.getSeed());
+    		n.SetNoiseType(NoiseType.PerlinFractal);
+    		n.SetFrequency(0.01f);
+    		n.SetFractalOctaves(4);
+    		
+    		return n;
+    	});
     	//If calculated height is less than sea level, but more than sea level after
     	//adding back river height, it means that the river height
     	//carved dry land into the sea level.
@@ -245,12 +260,15 @@ public enum BiomeBank {
         if(height < TerraformGenerator.seaLevel 
         		&& height + HeightMap.getRawRiverDepth(tw, rawX, rawZ) >= TerraformGenerator.seaLevel) {
         	bank = bank.getHandler().getRiverType();
-        
+        	if(debugPrint) 
+        		TerraformGeneratorPlugin.logger.info("calculateBiome -> River Detected");
     	//If the height is at, or slightly higher than, sea level,
     	//it is a beach.
         }else if(height >= TerraformGenerator.seaLevel 
-        		&& height <= TerraformGenerator.seaLevel + locationBasedRandom.nextInt(4)) {
+        		&& height <= TerraformGenerator.seaLevel + 4*2*Math.abs(beachNoise.GetNoise(rawX, rawZ))) {
         	bank = bank.getHandler().getBeachType();
+        	if(debugPrint) 
+        		TerraformGeneratorPlugin.logger.info("calculateBiome -> Beach calculated");
         }
         
         //Correct submerged biomes. They'll be rivers.
@@ -259,16 +277,24 @@ public enum BiomeBank {
         		&& height < TerraformGenerator.seaLevel 
         		&& bank.getType().isDry()){
         	bank = bank.getHandler().getRiverType();
+        	if(debugPrint) 
+        		TerraformGeneratorPlugin.logger.info("calculateBiome -> Biome is submerged, defaulting to river");
         }
         
         //Oceanic biomes that are above water level 
         //should be handled as the closest, most dominant dry biome, or be a beach
         if(!bank.getType().isDry() && height >= TerraformGenerator.seaLevel) {
+        	if(debugPrint) 
+        		TerraformGeneratorPlugin.logger.info("calculateBiome -> Submerged biome above ground detected");
         	BiomeBank replacement = null;
         	int highestDom = Integer.MIN_VALUE;
         	for(BiomeSection sect:BiomeSection.getSurroundingSections(tw, rawX, rawZ)) {
+            	if(debugPrint) 
+            		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> Comparison Section: " + sect.toString());
         		if(sect.getBiomeBank().getType().isDry()) {
         			int compDist = (int) sect.getDominanceBasedOnRadius(rawX, rawZ);
+                	if(debugPrint) 
+                		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> -> Dominance: " + compDist);
         			if(compDist > highestDom) {
         				replacement = sect.getBiomeBank();
         				highestDom = compDist;
@@ -276,10 +302,16 @@ public enum BiomeBank {
         		}
         	}
         	//Fallback to beach if surrounding biomes are dry
-        	if(replacement == null) bank = bank.getHandler().getBeachType();
+        	if(replacement == null) {
+        		bank = bank.getHandler().getBeachType();
+        	}
+        	if(debugPrint) 
+        		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> Submerged biome defaulted to: " + replacement);
         	
         	bank = replacement;
         }
+    	if(debugPrint) 
+    		TerraformGeneratorPlugin.logger.info("calculateBiome -> Evaluated: " + bank);
         
     	return bank;
     }
@@ -336,10 +368,23 @@ public enum BiomeBank {
     	oceanNoise = oceanNoise*50.0;
     	if(oceanNoise < 0) oceanNoise = 0;
     	
-    	if(oceanNoise >= 25f){//TConfigOption.HEIGHT_MAP_DEEP_OCEANIC_THRESHOLD.getFloat()) {
+    	if(oceanNoise >= TConfigOption.BIOME_DEEP_OCEANIC_THRESHOLD.getFloat()){//TConfigOption.HEIGHT_MAP_DEEP_OCEANIC_THRESHOLD.getFloat()) {
     		targetType = BiomeType.DEEP_OCEANIC;
-    	}else if(oceanNoise >= 22f){//TConfigOption.HEIGHT_MAP_OCEANIC_THRESHOLD.getFloat()) {
+    	}else if(oceanNoise >= TConfigOption.BIOME_OCEANIC_THRESHOLD.getFloat()){//TConfigOption.HEIGHT_MAP_OCEANIC_THRESHOLD.getFloat()) {
     		targetType = BiomeType.OCEANIC;
+    	}
+    	
+    	//Force types if they're set.
+    	if(targetType == BiomeType.OCEANIC && TConfigOption.BIOME_SINGLE_OCEAN_TYPE.get(BiomeBank.class) != null) {
+    		return TConfigOption.BIOME_SINGLE_OCEAN_TYPE.get(BiomeBank.class);
+    	}else if(targetType == BiomeType.DEEP_OCEANIC && TConfigOption.BIOME_SINGLE_DEEPOCEAN_TYPE.get(BiomeBank.class) != null) {
+    		return TConfigOption.BIOME_SINGLE_DEEPOCEAN_TYPE.get(BiomeBank.class);
+    	}else if(targetType == BiomeType.FLAT && TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.get(BiomeBank.class) != null) {
+    		return TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.get(BiomeBank.class);
+    	}else if(targetType == BiomeType.MOUNTAINOUS && TConfigOption.BIOME_SINGLE_MOUNTAIN_TYPE.get(BiomeBank.class) != null) {
+    		return TConfigOption.BIOME_SINGLE_MOUNTAIN_TYPE.get(BiomeBank.class);
+    	}else if(targetType == BiomeType.RIVER && TConfigOption.BIOME_SINGLE_RIVER_TYPE.get(BiomeBank.class) != null) {
+    		return TConfigOption.BIOME_SINGLE_RIVER_TYPE.get(BiomeBank.class);
     	}
     	
     	ArrayList<BiomeBank> contenders = new ArrayList<>();
@@ -398,6 +443,10 @@ public enum BiomeBank {
 	public BiomeClimate getClimate() {
 		// TODO Auto-generated method stub
 		return climate;
+	}
+
+	public int getBiomeWeight() {
+		return biomeWeight;
 	}
 
 }

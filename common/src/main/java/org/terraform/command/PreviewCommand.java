@@ -46,8 +46,8 @@ public class PreviewCommand extends TerraCommand {
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
         //int seed = GenUtils.randInt(1, 1000000);
-        int x = 3000;
-        int z = 3000;
+        int x = 5000;
+        int z = 5000;
         double highest = -1;
         double lowest = 10000;
         boolean hasdebugged = true;
@@ -118,8 +118,6 @@ public class PreviewCommand extends TerraCommand {
     	switch(bank.getClimate()) {
     	case HUMID_VEGETATION:
     		return new Color(118,163,3);
-    	case WARM_VEGETATION:
-    		return new Color(106,168,79);
     	case DRY_VEGETATION:
     		return new Color(172,187,2);
     	case HOT_BARREN:

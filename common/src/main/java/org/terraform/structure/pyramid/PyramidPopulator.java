@@ -12,8 +12,8 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
@@ -31,32 +31,26 @@ import java.util.Random;
 public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes) {
-
-        MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = getCoordsFromMegaChunk(tw, mc);
+    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
 
         //Check biome
-        for (BiomeBank biome : biomes) {
-            if (biome != BiomeBank.DESERT)
-                return false;
-        }
+        if (biome != BiomeBank.DESERT)
+            return false;
 
-        return coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ &&
-                rollSpawnRatio(tw, chunkX, chunkZ);
+        return rollSpawnRatio(tw, chunkX, chunkZ);
     }
 
     private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 872618),
                 (int) (TConfigOption.STRUCTURES_PYRAMID_SPAWNRATIO
-                        .getDouble() * 1000),
-                1000);
+                        .getDouble() * 10000),
+                10000);
     }
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
-        int[] coords = getCoordsFromMegaChunk(tw, new MegaChunk(data.getChunkX(), data.getChunkZ()));
+        int[] coords = new MegaChunk(data.getChunkX(), data.getChunkZ()).getCenterBlockCoords();
         int x = coords[0];
         int z = coords[1];
 
@@ -390,31 +384,6 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                 }
             }
         }
-    }
-
-    @Override
-    public int[] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
-        return mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 2078891));
-    }
-
-    @Override
-    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
-        MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
-
-        double minDistanceSquared = Integer.MAX_VALUE;
-        int[] min = null;
-        for (int nx = -1; nx <= 1; nx++) {
-            for (int nz = -1; nz <= 1; nz++) {
-
-                int[] loc = getCoordsFromMegaChunk(tw, mc.getRelative(nx, nz));
-                double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
-                if (distSqr < minDistanceSquared && rollSpawnRatio(tw, loc[0] >> 4, loc[1] >> 4)) {
-                    minDistanceSquared = distSqr;
-                    min = loc;
-                }
-            }
-        }
-        return min;
     }
 
     @Override

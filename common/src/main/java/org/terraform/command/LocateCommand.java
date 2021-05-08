@@ -90,10 +90,11 @@ public class LocateCommand extends TerraCommand implements Listener {
             p.sendMessage(LangOpt.COMMAND_LOCATE_STRUCTURE_NOT_ENABLED.parse());
             return;
         }
-
+        
+        //Stronghold Special Case
         if (spop instanceof StrongholdPopulator ||
                 (!(spop instanceof SingleMegaChunkStructurePopulator) && !(spop instanceof MultiMegaChunkStructurePopulator))) {
-            int[] coords = spop.getNearestFeature(TerraformWorld.get(p.getWorld()), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
+            int[] coords = ((StrongholdPopulator)spop).getNearestFeature(TerraformWorld.get(p.getWorld()), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
             syncSendMessage(p.getUniqueId(), LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", coords[0] + "", "%z%", coords[1] + ""));
             return;
         }
@@ -189,12 +190,13 @@ public class LocateCommand extends TerraCommand implements Listener {
                             lowerBound = mc;
                         if (mc.getX() > upperBound.getX() || mc.getZ() > upperBound.getZ())
                             upperBound = mc;
-                        int[] coords = populator.getCoordsFromMegaChunk(tw, mc);
+                        int[] coords = mc.getCenterBlockCoords(); //populator.getCoordsFromMegaChunk(tw, mc);
                         if (coords == null) continue;
+                        BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
                         //Right bitshift of 4 is conversion from block coords to chunk coords.
-                        ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
-
-                        if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
+                        //ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
+                        
+                        if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
 
                             //Mega Dungeons will always spawn if they can.
                             if (StructureRegistry.getStructureType(populator.getClass()) == StructureType.MEGA_DUNGEON) {

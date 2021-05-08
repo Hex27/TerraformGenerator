@@ -3,7 +3,7 @@ package org.terraform.coregen;
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.OrePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.utils.GenUtils;

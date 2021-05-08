@@ -49,7 +49,10 @@ public class CheckHeightCommand extends TerraCommand {
 
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
         MegaChunk mc = new MegaChunk(x, 0, z);
+        BiomeBank.debugPrint = true;
         BiomeBank biome = tw.getBiomeBank(x, z);
+        BiomeBank.debugPrint = false;
+        
         BiomeSection section = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
         p.sendMessage("Core Height: " + HeightMap.CORE.getHeight(tw, x, z));
@@ -60,6 +63,7 @@ public class CheckHeightCommand extends TerraCommand {
         p.sendMessage("Result height: " + HeightMap.getBlockHeight(tw, x, z));
         p.sendMessage("River Depth: " + HeightMap.getRawRiverDepth(tw, x, z));
         p.sendMessage("Mega Chunk: " + mc.getX() + "," + mc.getZ());
+        p.sendMessage("Mega Chunk Center: " + mc.getCenterBlockCoords()[0] + "," + mc.getCenterBlockCoords()[1]);
         
         p.sendMessage("Biome Section: " + section.toString());
         p.sendMessage("Surrounding Sections:");
@@ -68,7 +72,7 @@ public class CheckHeightCommand extends TerraCommand {
         }
         for(SingleMegaChunkStructurePopulator spop:StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
         	if (spop == null) continue;
-        	int[] coords = spop.getCoordsFromMegaChunk(tw, mc);
+        	int[] coords = mc.getCenterBlockCoords(); //spop.getCoordsFromMegaChunk(tw, mc);
         	int dist = (int) Math.sqrt(Math.pow(x-coords[0], 2) + Math.pow(z-coords[1], 2));
         	p.sendMessage(" - Structure Registered: " + spop.getClass().getSimpleName() + "(" + coords[0] + "," + coords[1] + ") " + dist + " blocks away");
         }
@@ -78,5 +82,6 @@ public class CheckHeightCommand extends TerraCommand {
         p.sendMessage("Biome edge factor: " + new BiomeBlender(tw, true, false, false)
                 .setBiomeThreshold(0.45).getEdgeFactor(biome, x, z));
         p.sendMessage("Result Biome: " + biome);
+        
     }
 }

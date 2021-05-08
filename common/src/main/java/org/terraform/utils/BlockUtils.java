@@ -23,7 +23,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
@@ -268,7 +268,7 @@ public class BlockUtils {
             case DESERT_MOUNTAINS:
             case DESERT:
     		case BADLANDS_BEACH:
-            case BADLANDS_MOUNTAINS:
+            case BADLANDS_CANYON:
                 return Material.getMaterial("ACACIA_" + wood);
             case BIRCH_MOUNTAINS:
                 return Material.getMaterial("BIRCH_" + wood);

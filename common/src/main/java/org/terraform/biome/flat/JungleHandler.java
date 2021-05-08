@@ -10,7 +10,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.tree.FractalTreeBuilder;
@@ -23,7 +23,6 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
-import java.util.HashMap;
 import java.util.Random;
 
 public class JungleHandler extends BiomeHandler {
@@ -174,7 +173,7 @@ public class JungleHandler extends BiomeHandler {
                 int y = GenUtils.getHighestGround(data, x, z);
 
                 // Fades noise, see below
-                int distanceToSeaOrMountain = Math.min(y - TerraformGenerator.seaLevel, TerraformGenerator.minMountainLevel - y);
+                int distanceToSeaOrMountain = Math.min(y - TerraformGenerator.seaLevel, 80 - y);
 
                 if (distanceToSeaOrMountain > 0) {
                     float leavesNoiseValue = groundLeavesNoise.GetNoise(x, z);

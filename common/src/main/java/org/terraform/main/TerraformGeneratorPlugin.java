@@ -13,6 +13,8 @@ import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.ConfigLoader;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.reflection.Post14PrivateFieldHandler;
 import org.terraform.reflection.Pre14PrivateFieldHandler;
 import org.terraform.reflection.PrivateFieldHandler;
@@ -57,29 +59,28 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         super.onEnable();
         instance = this;
-        logger = new TLogger(this);
 		config = new ConfigLoader(this);
+        logger = new TLogger();
 		lang = new LanguageManager(this);
         TConfigOption.loadValues(config);
         LangOpt.init(this);
         TerraformGenerator.updateSeaLevelFromConfig();
-        TerraformGenerator.updateMinMountainLevelFromConfig();
         new TerraformCommandManager(this, "terraform", "terra");
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
         String version = Version.getVersionPackage();
-        logger.info("Detected version: " + version);
+        logger.stdout("Detected version: " + version);
         try {
 			injector = (NMSInjectorAbstract) Class.forName("org.terraform." + version + ".NMSInjector").getDeclaredConstructor().newInstance();
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            logger.error("&cNo support for this version has been made yet!");
+            logger.stdout("&cNo support for this version has been made yet!");
         } catch (InstantiationException | IllegalAccessException 
         		| IllegalArgumentException | InvocationTargetException 
         		| NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
-            logger.error("&cSomething went wrong initiating the injector!");
+            logger.stdout("&cSomething went wrong initiating the injector!");
 
         }
 
@@ -104,28 +105,28 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
-            logger.info(event.getWorld().getName() + " loaded.");
+            logger.stdout(event.getWorld().getName() + " loaded.");
             if (!TerraformGenerator.preWorldInitGen.isEmpty()) {
                 if (!TConfigOption.DEVSTUFF_ATTEMPT_FIXING_PREMATURE.getBoolean()) {
-                    logger.info("&cIgnoring "
+                    logger.stdout("&cIgnoring "
                             + TerraformGenerator.preWorldInitGen.size()
                             + " pre-maturely generated chunks."
                             + " You may see a patch of plain land.");
                     return;
                 }
-                logger.info("&6Trying to decorate "
+                logger.stdout("&6Trying to decorate "
                         + TerraformGenerator.preWorldInitGen.size()
                         + " pre-maturely generated chunks.");
                 int fixed = 0;
                 TerraformWorld tw = TerraformWorld.get(event.getWorld());
                 for (SimpleChunkLocation sc : TerraformGenerator.preWorldInitGen) {
                     if (!sc.getWorld().equals(event.getWorld().getName())) continue;
-                    logger.debug("Populating " + sc);
+                    logger.stdout("Populating " + sc);
                     PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
                     new TerraformPopulator(tw).populate(tw, new Random(), data);
                     fixed++;
                 }
-                logger.info("&aSuccessfully finished fixing " + fixed + " pre-mature chunks!");
+                logger.stdout("&aSuccessfully finished fixing " + fixed + " pre-mature chunks!");
 
             }
         }
@@ -134,13 +135,13 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onWorldInit(WorldInitEvent event) {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
-            logger.info("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
+            logger.stdout("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
             if (injector.attemptInject(event.getWorld())) {
                 INJECTED_WORLDS.add(event.getWorld().getName());
-                logger.info("&aInjection success! Proceeding with generation.");
+                logger.stdout("&aInjection success! Proceeding with generation.");
 
             } else {
-                logger.error("&cInjection failed.");
+                logger.stdout("&cInjection failed.");
             }
         }
     }

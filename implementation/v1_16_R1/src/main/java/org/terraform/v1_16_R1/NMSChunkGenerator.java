@@ -14,8 +14,8 @@ import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
@@ -101,13 +101,14 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //			}
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
             return new BlockPosition(coords[0], 20, coords[1]);
-        } else if (structuregenerator == StructureGenerator.VILLAGE) {
-            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
-            return new BlockPosition(coords[0], 100, coords[1]);
-        } else if (structuregenerator == StructureGenerator.MONUMENT) {
-            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
-            return new BlockPosition(coords[0], 100, coords[1]);
-        }
+        } 
+//        else if (structuregenerator == StructureGenerator.VILLAGE) {
+//            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
+//            return new BlockPosition(coords[0], 100, coords[1]);
+//        } else if (structuregenerator == StructureGenerator.MONUMENT) {
+//            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
+//            return new BlockPosition(coords[0], 100, coords[1]);
+//        }
 
         return null;
     }

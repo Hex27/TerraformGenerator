@@ -5,7 +5,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.GenUtils;
 
@@ -36,6 +36,13 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
             new UndergroundDungeonPopulator().populate(tw, data);
         }
     }
+    
+    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
+                (int) (TConfigOption.STRUCTURES_DUNGEONS_SPAWNRATIO
+                        .getDouble() * 10000),
+                10000);
+    }
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes) {
@@ -44,7 +51,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
             if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-                return true;
+                return rollSpawnRatio(tw,chunkX,chunkZ);
             }
         }
         return false;

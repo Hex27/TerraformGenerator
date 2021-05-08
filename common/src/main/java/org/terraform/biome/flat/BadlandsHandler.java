@@ -7,12 +7,12 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
-import org.terraform.biome.mountainous.BadlandsMountainHandler;
+import org.terraform.biome.mountainous.BadlandsCanyonHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.small.DesertWellPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -94,10 +94,10 @@ public class BadlandsHandler extends BiomeHandler {
                 BiomeBank currentBiome = world.getBiomeBank(x, highest, z);//BiomeBank.calculateBiome(world, x, TerraformGenerator.seaLevel, z);
                 if (currentBiome != BiomeBank.BADLANDS &&
                         currentBiome != BiomeBank.BADLANDS_BEACH &&
-                        currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;
+                        currentBiome != BiomeBank.BADLANDS_CANYON) continue;
 
                 if (HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
-                    BadlandsMountainHandler.oneUnit(world, random, data, x, z, true);
+                    BadlandsCanyonHandler.oneUnit(world, random, data, x, z, true);
                     continue;
                 }
 
@@ -112,7 +112,7 @@ public class BadlandsHandler extends BiomeHandler {
                                 canSpawn = false;
                         }
                         // Prevent cactus from spawning on plateaus:
-                        if (GenUtils.getHighestGround(data, x, z) + 5 < highest) canSpawn = false;
+                        if (HeightMap.getBlockHeight(world, x, z) + 5 < highest) canSpawn = false;
                         if (canSpawn && GenUtils.chance(1, 50))
                             spawnDeadTree(data, x, highest, z);
                         else if (canSpawn)
@@ -157,9 +157,9 @@ public class BadlandsHandler extends BiomeHandler {
                 BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, TerraformGenerator.seaLevel, rawZ);
 
                 if (currentBiome == BiomeBank.BADLANDS
-                        || currentBiome == BiomeBank.BADLANDS_MOUNTAINS
+                        || currentBiome == BiomeBank.BADLANDS_CANYON
                         || currentBiome == BiomeBank.BADLANDS_BEACH
-//                        && HeightMap.getRiverDepth(tw, rawX, rawZ) > 0
+                        && HeightMap.getRawRiverDepth(tw, rawX, rawZ) > 0
                 ) {
                     double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
 
@@ -222,7 +222,7 @@ public class BadlandsHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int height = GenUtils.getHighestGround(data, x, z); //HeightMap.getBlockHeight(tw, x, z);
+                int height = HeightMap.getBlockHeight(tw, x, z);
 
                 // Calculate plateau height
                 double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(x, z) + plateauCommonness);
@@ -265,8 +265,8 @@ public class BadlandsHandler extends BiomeHandler {
 
                             int sandHeight = (int) Math.round(plateauHeight * 0.55 * Math.pow(1 - distance / sandRadius, 1.7) + detailsNoise.GetNoise(sx, sz));
                             for (int y = 1 + level; y <= sandHeight + level; y++)
-                                if (data.getType(sx, GenUtils.getHighestGround(data, sx, sz) + y, sz) == Material.AIR)
-                                    data.setType(sx, GenUtils.getHighestGround(data, sx, sz) + y, sz, Material.RED_SAND);
+                                if (data.getType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz) == Material.AIR)
+                                    data.setType(sx, HeightMap.getBlockHeight(tw, sx, sz) + y, sz, Material.RED_SAND);
                         }
                     }
                 }
@@ -341,10 +341,10 @@ public class BadlandsHandler extends BiomeHandler {
                 BiomeBank currentBiome = tw.getBiomeBank(x, z);
                 if (currentBiome != BiomeBank.BADLANDS &&
                         currentBiome != BiomeBank.BADLANDS_BEACH &&
-                        currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;
+                        currentBiome != BiomeBank.BADLANDS_CANYON) continue;
 
                 if (HeightMap.getNoiseGradient(tw, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
-                    BadlandsMountainHandler.oneUnit(tw, random, data, x, z, true);
+                    BadlandsCanyonHandler.oneUnit(tw, random, data, x, z, true);
                     continue;
                 }
 

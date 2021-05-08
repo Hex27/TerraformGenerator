@@ -4,14 +4,14 @@ import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Range;
 
 public enum BiomeClimate {
 
-	//Tree-Dense Jungles
-	HUMID_VEGETATION(Range.between(2.45, 2.5),Range.between(2.45, 2.5),2), 
+	//Tree-Dense areas
+	HUMID_VEGETATION(Range.between(1.0, 2.5),Range.between(0.0, 2.5),2), 
 	
 	//Forests
-	WARM_VEGETATION(Range.between(1.0, 2.5),Range.between(1.0, 2.5),1),
+	//WARM_VEGETATION(Range.between(1.0, 2.5),Range.between(1.0, 2.5),1),
 	
 	//Savannas
-	DRY_VEGETATION(Range.between(1.0, 2.5),Range.between(-2.5, -1.0),1),
+	DRY_VEGETATION(Range.between(1.0, 2.5),Range.between(-2.5, 0.0),1),
 	
 	//Deserts
 	HOT_BARREN(Range.between(2.45, 2.5),Range.between(-2.5, -2.45),2), 

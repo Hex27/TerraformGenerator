@@ -167,9 +167,7 @@ public class GenUtils {
      * Does not stop until biome is found, much like structure locate, because it should work.
      * @param tw
      * @param biome
-     * @param center
-     * @param radius
-     * @param blockSkip
+     * @param centerBlockLocation
      * @return
      */
     public static Vector2f locateHeightIndependentBiome(TerraformWorld tw, BiomeBank biome, Vector2f centerBlockLocation) {
@@ -181,6 +179,7 @@ public class GenUtils {
     		for(BiomeSection sect:center.getRelativeSurroundingSections(radius)) {
     			if(sect.getBiomeBank() == biome) {
     				SimpleLocation sectionCenter = sect.getCenter();
+    				found = true;
     				return new Vector2f(sectionCenter.getX(),sectionCenter.getZ());
     			}
     			radius++;

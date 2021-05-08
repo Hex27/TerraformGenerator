@@ -3,7 +3,7 @@ package org.terraform.coregen;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
@@ -53,28 +53,28 @@ public enum HeightMap {
             return height;
         }
     },
-    MOUNTAINOUS {
-        @Override
-        public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise attrition = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_MOUNTAINOUS, world -> {
-                FastNoise n = new FastNoise((int) world.getSeed()/4);
-                n.SetNoiseType(NoiseType.SimplexFractal);
-                n.SetFractalOctaves(6);
-                n.SetFrequency(0.002f);
-                return n;
-            });
-
-            double attritionHeight = Math.pow(Math.abs(attrition.GetNoise(x,z) * 31),1.5);
-            
-            double height = HeightMap.CORE.getHeight(tw, x, z) + attritionHeight;
-            
-            //Remove river carving
-            //I am the pinnacle of efficiency
-            height += getRawRiverDepth(tw,x,z);
-            
-            return height;
-        }
-    }, 
+//    MOUNTAINOUS {
+//        @Override
+//        public double getHeight(TerraformWorld tw, int x, int z) {
+//            FastNoise attrition = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_MOUNTAINOUS, world -> {
+//                FastNoise n = new FastNoise((int) world.getSeed()/4);
+//                n.SetNoiseType(NoiseType.SimplexFractal);
+//                n.SetFractalOctaves(6);
+//                n.SetFrequency(0.002f);
+//                return n;
+//            });
+//
+//            double attritionHeight = Math.pow(Math.abs(attrition.GetNoise(x,z) * 31),1.5);
+//            
+//            double height = HeightMap.CORE.getHeight(tw, x, z) + attritionHeight;
+//            
+//            //Remove river carving
+//            //I am the pinnacle of efficiency
+//            height += getRawRiverDepth(tw,x,z);
+//            
+//            return height;
+//        }
+//    }, 
     ATTRITION {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
@@ -173,6 +173,16 @@ public enum HeightMap {
         return height;
     }
 
+    
+    private static double getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
+    	ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
+    	double h = cache.getDominantBiomeHeight(x, z);
+    	if(h == 0)
+    		h = BiomeBank.calculateHeightIndependentBiome(tw, x, z)
+			.getHandler().calculateHeight(tw,x,z);
+    	cache.cacheDominantBiomeHeight(x, z, h);
+    	return h;
+    }
     /**
      * Biome calculations are done here as well.
      * @param tw
@@ -184,23 +194,20 @@ public enum HeightMap {
     	
     	int maskRadius = 10;
     	int candidateCount = 81; //20*4 + 1
-    	double totalHeight = BiomeBank.calculateHeightIndependentBiome(tw, x, z)
-				.getHandler().calculateHeight(tw,x,z);
+    	double totalHeight = getDominantBiomeHeight(tw,x,z);
     	
 		//First, blur by averaging horizontally, vertically and diagonally by maskRadius.
     	
     	//X dir
     	for(int nx = x-maskRadius; nx <= x+maskRadius; nx++) {
     		if(nx == x) continue;
-			totalHeight += BiomeBank.calculateHeightIndependentBiome(tw, nx, z)
-					.getHandler().calculateHeight(tw,nx,z);
+			totalHeight += getDominantBiomeHeight(tw,nx,z);
     	}
     	
     	//Z dir
     	for(int nz = z-maskRadius; nz <= z+maskRadius; nz++) {
     		if(nz == z) continue;
-			totalHeight += BiomeBank.calculateHeightIndependentBiome(tw, x, nz)
-					.getHandler().calculateHeight(tw,x,nz);
+			totalHeight += getDominantBiomeHeight(tw,x,nz);
     	}
     	
     	//-x to +x, -z to +z Diagonal
@@ -208,16 +215,14 @@ public enum HeightMap {
     		int nx = x + rel;
     		int nz = z + rel;
     		if(nz == z && nx == x) continue;
-			totalHeight += BiomeBank.calculateHeightIndependentBiome(tw, nx, nz)
-					.getHandler().calculateHeight(tw,nx,nz);
+			totalHeight += getDominantBiomeHeight(tw,nx,nz);
     	}
     	//-x to +x, +z to -z Diagonal
     	for(int rel = -maskRadius; rel <= maskRadius; rel++) {
     		int nx = x + rel;
     		int nz = z - rel;
     		if(nz == z && nx == x) continue;
-			totalHeight += BiomeBank.calculateHeightIndependentBiome(tw, nx, nz)
-					.getHandler().calculateHeight(tw,nx,nz);
+			totalHeight += getDominantBiomeHeight(tw,nx,nz);
     	}
     	
     	double coreHeight = totalHeight/candidateCount;
@@ -231,8 +236,7 @@ public enum HeightMap {
     			if(nx == x&& nz == z)
     				totalHeight += coreHeight;
     			else
-    				totalHeight += BiomeBank.calculateHeightIndependentBiome(tw, nx, nz)
-    					.getHandler().calculateHeight(tw,nx,nz);
+    				totalHeight += getDominantBiomeHeight(tw,nx,nz);
         	}
     	}
     	

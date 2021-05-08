@@ -4,10 +4,9 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 
 public class BiomeBlender {
-    private final int mountainHeight = TConfigOption.BIOME_MOUNTAIN_HEIGHT.getInt();
+    private final int mountainHeight = 80;
     private final TerraformWorld tw;
     double biomeThreshold = 0.25;
     boolean blendBiomeGrid;
@@ -95,7 +94,8 @@ public class BiomeBlender {
     		lowestDiff = Math.abs(lowerBound.getZ() - z);
     	if(Math.abs(upperBound.getZ() - z) < lowestDiff) 
     		lowestDiff = Math.abs(upperBound.getZ() - z);
-    	
+
+    	//Questionable equation here.
     	double factor = lowestDiff/(((double) sectionWidth)*biomeThreshold);
     	
     	//Considered far from edge if it is 25% within the biomesection

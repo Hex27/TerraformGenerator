@@ -8,8 +8,8 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.BlockUtils;
@@ -118,6 +118,14 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         return min;
     }
 
+
+    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12422),
+                (int) (TConfigOption.STRUCTURES_SHIPWRECK_SPAWNRATIO
+                        .getDouble() * 10000),
+                10000);
+    }
+    
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX,
                             int chunkZ, ArrayList<BiomeBank> biomes) {
@@ -126,7 +134,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
                 MegaChunk mc = new MegaChunk(chunkX, chunkZ);
                 for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
                     if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-                        return true;
+                        return rollSpawnRatio(tw,chunkX,chunkZ);
                     }
                 }
             }
