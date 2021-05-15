@@ -2,10 +2,12 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.bukkit.block.BlockFace;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
@@ -27,7 +29,11 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         if (force)
             threshold = highest - GenUtils.randInt(random, 3, 6);
         for (int y = highest; y > threshold; y--) {
-            if (data.getBiome(x, z) != Biome.BADLANDS_PLATEAU && !force) continue;
+            if (data.getBiome(x, z) != Biome.BADLANDS_PLATEAU && !force) {
+            	if(data.getBiome(x, z) == Biome.DESERT) {
+            		continue;
+            	}
+            }
             if (data.getType(x, y, z) != Material.RED_SANDSTONE
             		&& data.getType(x, y, z) != Material.SANDSTONE
             		&& data.getType(x, y, z) != Material.RED_SAND
@@ -80,10 +86,10 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
     public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                
             	if(GenUtils.getHighestGround(data, x, z) > 
-                	10+HeightMap.CORE.getHeight(world, x, z))
+                	10+HeightMap.CORE.getHeight(world, x, z)) {
                 	oneUnit(world, random, data, x, z, false);
+            	}
             }
         }
     }
@@ -102,7 +108,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
 	public BiomeBank getBeachType() {
 		return BiomeBank.BADLANDS_BEACH;
 	}
-	
+    
 	/**
 	 * Badlands Canyons will have a distorted circle resting in the middle of the
 	 * biome section, with sand padding at the sides.

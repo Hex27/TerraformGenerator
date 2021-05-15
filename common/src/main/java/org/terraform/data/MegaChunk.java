@@ -13,7 +13,7 @@ import java.util.Random;
  * Used for spawning structures.
  */
 public class MegaChunk {
-	private static final int megaChunkBlockWidth = BiomeSection.sectionWidth*TConfigOption.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS.getInt(); 
+	public static final int megaChunkBlockWidth = BiomeSection.sectionWidth*TConfigOption.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS.getInt(); 
     private int x, z;
 
     public MegaChunk(SimpleChunkLocation sLoc) {
@@ -28,7 +28,8 @@ public class MegaChunk {
     //A megachunk consists of a bunch of biome sections.
     //The big structures spawn right in the middle of them.
     public MegaChunk(int chunkX, int chunkZ) {
-        this((chunkX << 4) | 15, 0, (chunkZ << 4) | 15);
+        this(chunkX*16,0,chunkZ*16);
+    	//this((chunkX << 4) | 15, 0, (chunkZ << 4) | 15);
     	
     	//this.x = chunkX >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
         //this.z = chunkZ >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
@@ -66,8 +67,20 @@ public class MegaChunk {
         return new int[]{lowX + megaChunkBlockWidth/2, lowZ + megaChunkBlockWidth/2};
     }
     
+    public int[] getLowerCornerBlockCoords() {
+        
+        int lowX = megaToBlockCoords(this.x);
+        int lowZ = megaToBlockCoords(this.z);
+        return new int[]{lowX, lowZ};
+    }
+    
     public int[] getCenterChunkCoords() {
     	int[] coords = getCenterBlockCoords();
+    	
+    	return new int[] { coords[0] >> 4, coords[1] >> 4 };
+    }
+    public int[] getLowerCornerChunkCoords() {
+    	int[] coords = getLowerCornerBlockCoords();
     	
     	return new int[] { coords[0] >> 4, coords[1] >> 4 };
     }
@@ -116,7 +129,7 @@ public class MegaChunk {
     	}
     	else
     	{
-    		return (int) (-1*(Math.ceil(Math.abs(coord)/megaChunkBlockWidth)));
+    		return (int) (-1.0*(Math.ceil(((double)Math.abs(coord))/((double)megaChunkBlockWidth))));
     	}
     }
 

@@ -13,6 +13,7 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
+import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.structure.StructureRegistry;
 
 import java.util.Stack;
@@ -76,7 +77,7 @@ public class CheckHeightCommand extends TerraCommand {
         	int dist = (int) Math.sqrt(Math.pow(x-coords[0], 2) + Math.pow(z-coords[1], 2));
         	p.sendMessage(" - Structure Registered: " + spop.getClass().getSimpleName() + "(" + coords[0] + "," + coords[1] + ") " + dist + " blocks away");
         }
-        
+        p.sendMessage("Can decorate chunk: " + StructureBufferDistanceHandler.canDecorateChunk(tw, x>>4, z>>4));
         p.sendMessage("Temperature: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature());
         p.sendMessage("Moisture: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
         p.sendMessage("Biome edge factor: " + new BiomeBlender(tw, true, false, false)

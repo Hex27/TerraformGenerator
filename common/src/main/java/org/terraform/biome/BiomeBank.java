@@ -362,7 +362,6 @@ public enum BiomeBank {
     public static BiomeBank selectBiome(BiomeSection section, double temperature, double moisture) {
     	Random sectionRand = section.getSectionRandom();
     	
-    	BiomeBank defaultBiome = BiomeBank.PLAINS;
     	BiomeType targetType = null;
     	BiomeClimate climate = BiomeClimate.selectClimate(temperature, moisture);
     	
@@ -418,8 +417,28 @@ public enum BiomeBank {
 //    	}
     	
     	if(contenders.size() == 0) {
-    		TerraformGeneratorPlugin.logger.info("Defaulted to plains: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-    		return defaultBiome;
+    		switch(targetType) {
+			case BEACH:
+	    		TerraformGeneratorPlugin.logger.info("Defaulted for beach: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_BEACH.getString());
+			case DEEP_OCEANIC:
+	    		TerraformGeneratorPlugin.logger.info("Defaulted for deep oceanic: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_DEEPOCEANIC.getString());
+			case FLAT:
+	    		TerraformGeneratorPlugin.logger.info("Defaulted for flat: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
+			case MOUNTAINOUS:
+	    		TerraformGeneratorPlugin.logger.info("Defaulted for mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_MOUNTAINOUS.getString());
+			case OCEANIC:
+	    		TerraformGeneratorPlugin.logger.info("Defaulted for ocean: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_OCEANIC.getString());
+			case RIVER:
+	    		TerraformGeneratorPlugin.logger.info("Defaulted for river: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_RIVER.getString());
+			default:
+				return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
+    		}
     	}else
     		return contenders.get(0);
     }

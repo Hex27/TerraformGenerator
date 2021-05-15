@@ -25,8 +25,8 @@ import java.util.Random;
 
 public class PlainsPathRecursiveSpawner {
 
-    private static final int minPathLength = 15;
-    private static final int maxPathLength = 25;
+    private static final int minPathLength = 25;
+    private static final int maxPathLength = 35;
     private final int range;
     private int minRoomWidth = 15;
     private int maxRoomWidth = 20;

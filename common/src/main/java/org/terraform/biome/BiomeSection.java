@@ -111,10 +111,10 @@ public class BiomeSection {
 		temperature = 3.0f*2.5f*tw.getTemperatureOctave().GetNoise(this.x, this.z);
     	moisture = 3.0f*2.5f*tw.getMoistureOctave().GetNoise(this.x, this.z);
     	
-    	if(temperature > 2.5f) temperature = 2.5f;
-    	if(temperature < -2.5f) temperature = -2.5f;
-    	if(moisture > 2.5f) moisture = 2.5f;
-    	if(moisture < -2.5f) moisture = -2.5f;
+    	//if(temperature > 2.5f) temperature = 2.5f;
+    	//if(temperature < -2.5f) temperature = -2.5f;
+    	//if(moisture > 2.5f) moisture = 2.5f;
+    	//if(moisture < -2.5f) moisture = -2.5f;
     	
 		return BiomeBank.selectBiome(this, temperature, moisture);//BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
 	}

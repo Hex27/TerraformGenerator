@@ -54,13 +54,15 @@ public class TerraformStructurePopulator extends BlockPopulator {
         
         //Only check singlemegachunkstructures if this chunk is a central chunk.
         int[] chunkCoords = mc.getCenterChunkCoords();
-        //TerraformGeneratorPlugin.logger.info("[v] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + coords[0] + "," + coords[1]);
+        //TerraformGeneratorPlugin.logger.info("[v] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
         if(chunkCoords[0] == data.getChunkX() 
         		&& chunkCoords[1] == data.getChunkZ()) {
-        	for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
+        	//TerraformGeneratorPlugin.logger.info("[!] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
+            for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
 	            if (spop == null) continue;
 	            if (!spop.isEnabled()) continue;
 	            if (spop instanceof StrongholdPopulator) continue;
+	            //TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
 	            if (((SingleMegaChunkStructurePopulator)spop).canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
 	                TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
 	                spop.populate(tw, data);

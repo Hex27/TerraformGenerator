@@ -19,7 +19,7 @@ public enum TConfigOption {
     BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.03f),
     BIOME_OCEANIC_FREQUENCY("biome.oceanic-frequency", 0.11f),
     BIOME_OCEANIC_THRESHOLD("biome.oceanic-threshold", 22f),
-    BIOME_DEEP_OCEANIC_THRESHOLD("biome.deep-oceanic-threshold", 25f),
+    BIOME_DEEP_OCEANIC_THRESHOLD("biome.deep-oceanic-threshold", 27f),
     BIOME_DITHER("biome.dithering", 0.04d),
     BIOME_SECTION_BITSHIFTS("biome.biomesection-bitshifts", 7),
     BIOME_CLAY_DEPOSIT_SIZE("biome.clay-deposit-radius", 3f),
@@ -30,7 +30,13 @@ public enum TConfigOption {
     BIOME_SINGLE_MOUNTAIN_TYPE("biome.single.mountain", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
     BIOME_SINGLE_RIVER_TYPE("biome.single.river", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
     BIOME_SINGLE_BEACH_TYPE("biome.single.beach", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
-
+    BIOME_DEFAULT_FLAT("biome.defaults.flat","PLAINS"),
+    BIOME_DEFAULT_OCEANIC("biome.defaults.oceanic","OCEAN"),
+    BIOME_DEFAULT_DEEPOCEANIC("biome.defaults.deepoceanic","DEEP_OCEAN"),
+    BIOME_DEFAULT_MOUNTAINOUS("biome.defaults.mountainous","ROCKY_MOUNTAINS"),
+    BIOME_DEFAULT_RIVER("biome.defaults.river","RIVER"),
+    BIOME_DEFAULT_BEACH("biome.defaults.beach","SANDY_BEACH"),
+    
     //Biome specific
     BIOME_ROCKY_MOUNTAINS_WEIGHT("biome.rockymountains.weight", 1),
     BIOME_BADLANDS_MOUNTAINS_WEIGHT("biome.badlandsmountains.weight", 1),

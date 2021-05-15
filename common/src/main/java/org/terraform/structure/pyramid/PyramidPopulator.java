@@ -41,7 +41,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
-        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 872618),
+        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 163456),
                 (int) (TConfigOption.STRUCTURES_PYRAMID_SPAWNRATIO
                         .getDouble() * 10000),
                 10000);
@@ -56,17 +56,24 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
         int y = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
         try {
-            spawnPyramid(tw, tw.getHashedRand(x, y, z, 1111222), data, x, y, z);
+            spawnPyramid(tw, tw.getHashedRand(x, y, z, 1211222), data, x, y, z);
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
     public void spawnPyramid(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
-        TerraformGeneratorPlugin.logger.info("Spawning Pyramid at: " + x + "," + z);
+        y -= 10;
+    	TerraformGeneratorPlugin.logger.info("Spawning Pyramid at: " + x + "," + z);
         int numRooms = 1000;
         int range = 70;
-        spawnSandBase(tw, data, x, y, z);
+        if(y >= TerraformGenerator.seaLevel+3) {
+            spawnSandBase(tw, data, x, y, z);
+        } else {
+            spawnSandBase(tw, data, x, TerraformGenerator.seaLevel+3, z);
+            y = TerraformGenerator.seaLevel-7;
+        }
+        
         spawnPyramidBase(data, x, y, z);
 
         Random hashedRand = tw.getHashedRand(x, y, z);
@@ -80,7 +87,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 //		private int roomMaxZ = 15;
 //		private int roomMinZ = 10;
         //Add pyramid entrance at the pyramid corner
-        CubeRoom entranceRoom = new CubeRoom(9, 9, 8 + 5, x, y - 8, z + 5 + range / 2);
+        int entranceRoomHeight = 4 + GenUtils.getHighestGround(data, x, z + 5 + range / 2) - (y-8);
+        CubeRoom entranceRoom = new CubeRoom(9, 9, entranceRoomHeight, x, y - 8, z + 5 + range / 2);
         MainEntrancePopulator entrancePopulator = new MainEntrancePopulator(hashedRand, false, false, BlockFace.NORTH);
         entranceRoom.setRoomPopulator(entrancePopulator);
         level0.getRooms().add(entranceRoom);
@@ -222,7 +230,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
      * @param z
      */
     public void spawnSandBase(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        int squareRadius = 65;
+        int squareRadius = 45;
 
         FastNoise noiseGenerator = NoiseCacheHandler.getNoise(
         		tw, 
@@ -277,12 +285,12 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                     int XdistanceFromCenter = (int) (Math.abs(nx - x) + Math.abs(vertNoise.GetNoise(nx - 80, nz - 80) * 25));
                     int ZdistanceFromCenter = (int) (Math.abs(nz - z) + Math.abs(vertNoise.GetNoise(nx - 80, nz - 80) * 25));
 //        			
-                    if (XdistanceFromCenter > 55 || ZdistanceFromCenter > 55) {
+                    if (XdistanceFromCenter > squareRadius-10 || ZdistanceFromCenter > squareRadius-10) {
                         //Depress downwards
 
                         int dist = XdistanceFromCenter > ZdistanceFromCenter ? XdistanceFromCenter : ZdistanceFromCenter;
                         //Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((50.0f-dist)/5.0f))));
-                        float comp = original + ((raiseDone) * ((60.0f - dist) / 5.0f)) + Math.abs(vertNoise.GetNoise(nx, nz) * 30);
+                        float comp = original + ((raiseDone) * ((((float) squareRadius-5) - dist) / 5.0f)) + Math.abs(vertNoise.GetNoise(nx, nz) * 30);
                         if (comp < original) comp = original;
                         while (height > comp) {
                             if (data.getType(nx, height, nz) == mat)
@@ -308,7 +316,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
                     //Corners have special decorations
                     if (Math.abs(nx) == radius && Math.abs(nz) == radius) {
-                        if (height < 40)
+                        if (height < 40 && !data.getType(x + nx, y + height + 1, z + nz).isSolid())
                             data.setType(x + nx, y + height + 1, z + nz, Material.SANDSTONE_WALL);
 
                         if (height == 38)

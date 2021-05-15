@@ -5,25 +5,22 @@ import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Range;
 public enum BiomeClimate {
 
 	//Tree-Dense areas
-	HUMID_VEGETATION(Range.between(1.0, 2.5),Range.between(0.0, 2.5),2), 
-	
-	//Forests
-	//WARM_VEGETATION(Range.between(1.0, 2.5),Range.between(1.0, 2.5),1),
+	HUMID_VEGETATION(Range.between(-0.35, 4.0),Range.between(0.0, 4.0),2), 
 	
 	//Savannas
-	DRY_VEGETATION(Range.between(1.0, 2.5),Range.between(-2.5, 0.0),1),
+	DRY_VEGETATION(Range.between(-0.35, 4.0),Range.between(-4.0, 0.0),1),
 	
 	//Deserts
-	HOT_BARREN(Range.between(2.45, 2.5),Range.between(-2.5, -2.45),2), 
+	HOT_BARREN(Range.between(2.0, 4.0),Range.between(-4.0, -2.0),2), 
 	
 	//Cold biomes - taigas, maybe eroded plains
-	COLD(Range.between(-2.5, -1.0),Range.between(-2.5, 2.5),1), 
+	COLD(Range.between(-4.0, -0.8),Range.between(-4.0, 4.0),1), 
 	
 	//Any snowy biomes. 
-	SNOWY(Range.between(-2.5, -2.47),Range.between(-2.5, 2.5),2), 	
+	SNOWY(Range.between(-4.0, -2.7),Range.between(-4.0, 4.0),2), 	
 	
 	//Default climate.
-	TRANSITION(Range.between(-2.5,2.5),Range.between(-2.5,2.5),0), 
+	TRANSITION(Range.between(-4.0,4.0),Range.between(-4.0,4.0),0), 
 	; 
 	
 	Range<Double> temperatureRange;
@@ -55,8 +52,8 @@ public enum BiomeClimate {
 			if(isInRange(temp,climate.getTemperatureRange())
 					&& isInRange(moist,climate.getMoistureRange())) {
 				
-				//Candidate with most specific moisture AND temperature range wins.
-				//No tie breaking is done - don't include closely overlapping climates.
+				//If there are multiple climate ranges that apply to this, then
+				//the climate with the highest priority will win.
 				if(candidate == null)
 					candidate = climate;
 				else if(candidate.priority < climate.priority)

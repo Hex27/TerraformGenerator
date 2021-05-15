@@ -97,6 +97,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
         townHall.setRoomPopulator(townHallPop);
 
         ensureFarmHouseEntrance(random, townHall, data);
+        pathStart = townHall.getDirection();
         
         BiomeBank biome = tw.getBiomeBank(townHall.getX(), townHall.getZ());
         woodSlab = BlockUtils.getWoodForBiome(biome, "SLAB");

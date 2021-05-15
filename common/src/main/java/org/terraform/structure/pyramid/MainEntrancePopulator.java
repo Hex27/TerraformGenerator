@@ -24,6 +24,7 @@ public class MainEntrancePopulator extends RoomPopulatorAbstract {
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
 
+    	int entranceHeightOffsetFromBase = room.getHeight() - 5;
         //Make the entrance pyramid shaped
         int[] upperRoomCorner = room.getUpperCorner();
         int[] lowerRoomCorner = room.getLowerCorner();
@@ -40,15 +41,20 @@ public class MainEntrancePopulator extends RoomPopulatorAbstract {
                             || h == 6) continue;
 
                     if (h == 2)
-                        data.setType(x, room.getY() + 7 + 2, z, Material.CHISELED_RED_SANDSTONE);
+                        data.setType(x, room.getY() + entranceHeightOffsetFromBase + 2, z, Material.CHISELED_RED_SANDSTONE);
                     else
-                        data.setType(x, room.getY() + 7 + h, z, GenUtils.randMaterial(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
-
+                        data.setType(x, room.getY() + entranceHeightOffsetFromBase + h, z, GenUtils.randMaterial(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
+                    
+                    //Down until solid to cover potential gaps
+                    if (h == 0) {
+                    	BlockUtils.setDownUntilSolid(x, room.getY() + entranceHeightOffsetFromBase - 1, z, data, Material.SANDSTONE);
+                    }
+                    
                     //Sand Wall Corner Decor
                     if ((x == lowerCorner[0] + 1 || x == upperCorner[0] - 1)
                             && (z == lowerCorner[1] + 1 || z == upperCorner[1] - 1)) {
-                        if (data.getType(x, room.getY() + 7 + h + 2, z) == Material.AIR) {
-                            data.setType(x, room.getY() + 7 + h + 2, z, Material.SANDSTONE_WALL);
+                        if (data.getType(x, room.getY() + entranceHeightOffsetFromBase + h + 1, z) == Material.AIR) {
+                            data.setType(x, room.getY() + entranceHeightOffsetFromBase + h + 1, z, Material.SANDSTONE_WALL);
                         }
                     }
                 }
@@ -67,7 +73,7 @@ public class MainEntrancePopulator extends RoomPopulatorAbstract {
                 b.getRelative(nx, 0, nz).setType(Material.ORANGE_TERRACOTTA);
 
         //Carve entrance
-        Wall w = new Wall(new SimpleBlock(data, room.getX(), room.getY() + 8, room.getZ()),
+        Wall w = new Wall(new SimpleBlock(data, room.getX(), room.getY() + entranceHeightOffsetFromBase+1, room.getZ()),
                 entranceFace.getOppositeFace());
         w = w.getFront(3);
         for (int depth = 0; depth <= 6; depth++) {
@@ -78,10 +84,10 @@ public class MainEntrancePopulator extends RoomPopulatorAbstract {
         }
 
         //Pillar Stairs
-        for (int h = 7; h > 0; h--) {
+        for (int h = entranceHeightOffsetFromBase; h > 0; h--) {
             w = new Wall(
                     new SimpleBlock(data, room.getX(), room.getY() + h, room.getZ()),
-                    BlockUtils.rotateFace(entranceFace.getOppositeFace(), 7 - h)
+                    BlockUtils.rotateFace(entranceFace.getOppositeFace(), entranceHeightOffsetFromBase - h)
             );
 
             if (h > 3)

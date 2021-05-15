@@ -152,11 +152,10 @@ public class SwampHandler extends BiomeHandler {
 		return BiomeBank.MUDFLATS;
 	}
 	
-
 	@Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
     	
-        double height = HeightMap.CORE.getHeight(tw, x, z) - 15;
+        double height = HeightMap.CORE.getHeight(tw, x, z) - 10;
 
         //If the height is too low, force it back to 3.
         if (height <= 0) height = 3;

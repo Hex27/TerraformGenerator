@@ -86,7 +86,7 @@ public class IceSpikesHandler extends BiomeHandler {
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
 		//Ice Spikes
-        SimpleLocation[] spikes = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.5f);
+        SimpleLocation[] spikes = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16, 0.5f);
         
         for (SimpleLocation sLoc : spikes) {
             int spikeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
@@ -101,7 +101,7 @@ public class IceSpikesHandler extends BiomeHandler {
                 } else //Small spike
                     genSpike(tw, random, data, sLoc.getX(), sLoc.getY(), sLoc.getZ(),
                             GenUtils.randInt(3, 5), //radius
-                            GenUtils.randInt(10, 20)); //height
+                            GenUtils.randInt(13, 24)); //height
             	
             }
         }
