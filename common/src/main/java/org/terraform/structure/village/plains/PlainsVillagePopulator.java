@@ -112,8 +112,10 @@ public class PlainsVillagePopulator extends VillagePopulator {
         woodLeaves = BlockUtils.getWoodForBiome(biome, "LEAVES");
         wood = woodLeaves.toString().toLowerCase().replace("leaves","");
         
+        //Re-get x and z because they change after ensureFarmHouseEntrance.
+        //13 because that's the width of the townhall.
         PlainsPathRecursiveSpawner spawner = new PlainsPathRecursiveSpawner(
-                new SimpleBlock(data, x + pathStart.getModX() * 13, y, z + pathStart.getModZ() * 13),
+                new SimpleBlock(data, townHall.getX() + pathStart.getModX() * 13, y, townHall.getZ() + pathStart.getModZ() * 13),
                 100, BlockUtils.getAdjacentFaces(pathStart));
         spawner.forceRegisterRoom(townHall);
         spawner.setVillageDensity(0.7);

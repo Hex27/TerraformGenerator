@@ -2,7 +2,6 @@ package org.terraform.data;
 
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 
@@ -67,6 +66,12 @@ public class MegaChunk {
         return new int[]{lowX + megaChunkBlockWidth/2, lowZ + megaChunkBlockWidth/2};
     }
     
+    public int[] getCenterChunkCoords() {
+    	int[] coords = getCenterBlockCoords();
+    	
+    	return new int[] { coords[0] >> 4, coords[1] >> 4 };
+    }
+    
     public BiomeSection getCenterBiomeSection(TerraformWorld tw) {
     	int[] coords = getCenterBlockCoords();
     	return BiomeBank.getBiomeSectionFromBlockCoords(tw,coords[0],coords[1]);
@@ -111,7 +116,7 @@ public class MegaChunk {
     	}
     	else
     	{
-    		return -1*((int) Math.ceil(Math.abs(coord)/megaChunkBlockWidth));
+    		return (int) (-1*(Math.ceil(Math.abs(coord)/megaChunkBlockWidth)));
     	}
     }
 

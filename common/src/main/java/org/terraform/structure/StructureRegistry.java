@@ -1,10 +1,8 @@
 package org.terraform.structure;
 
-import org.bukkit.ChatColor;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.caves.LargeCavePopulator;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
 import org.terraform.structure.mineshaft.BadlandsMinePopulator;
@@ -15,8 +13,6 @@ import org.terraform.structure.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.village.VillagePopulator;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
-import org.terraform.utils.GenUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;

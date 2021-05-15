@@ -3,6 +3,7 @@ package org.terraform.structure;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
+import org.terraform.structure.stronghold.StrongholdPopulator;
 public class StructureBufferDistanceHandler {
 	
 	/**
@@ -15,20 +16,23 @@ public class StructureBufferDistanceHandler {
 		BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
         for (StructurePopulator structPop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if (structPop == null) continue;
+            
             if(!(structPop instanceof SingleMegaChunkStructurePopulator)) continue;
             SingleMegaChunkStructurePopulator spop = (SingleMegaChunkStructurePopulator) structPop;
             int chunkBufferRadius = spop.getChunkBufferDistance();
             if(chunkBufferRadius <= 0)
             	continue;
-            for(int rcx = -chunkBufferRadius; rcx <= chunkBufferRadius; rcx++) {
-            	for(int rcz = -chunkBufferRadius; rcz <= chunkBufferRadius; rcz++) {
-                    //ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, chunkX+rcx, chunkZ+rcz);
-                    //BiomeSection homeSection = BiomeBank.getBiomeSectionFromChunk(tw, chunkX+rcx, chunkZ+rcz);
-                    //banks = new ArrayList<BiomeBank>() {{ add(homeSection.getBiomeBank()); }};
-            		if (spop.canSpawn(tw, chunkX+rcx, chunkZ+rcz, biome)) {
-                    	return false;
-                    }
-                }
+            //No need to account for strongholds, which have a different way of
+            //checking spawn locations.
+            
+            //Grab the center chunk, where the structure will spawn
+        	int[] chunkCoords = mc.getCenterChunkCoords();
+            if (spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
+            	//If the structure will spawn, calculate distance to it.
+            	int dist = (int) (Math.pow(chunkCoords[0] - chunkX,2) + Math.pow(chunkCoords[1] - chunkZ,2));
+            	if(Math.sqrt(dist) <= chunkBufferRadius) {
+            		return false;
+            	}
             }
         }
         

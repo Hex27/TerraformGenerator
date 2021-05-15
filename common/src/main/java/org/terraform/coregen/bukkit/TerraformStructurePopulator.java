@@ -53,10 +53,11 @@ public class TerraformStructurePopulator extends BlockPopulator {
         }
         
         //Only check singlemegachunkstructures if this chunk is a central chunk.
-        int[] coords = mc.getCenterBlockCoords();
-        if(coords[0] >> 4 == data.getChunkX() 
-        		&& coords[1] >> 4 == data.getChunkZ())
-	        for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
+        int[] chunkCoords = mc.getCenterChunkCoords();
+        //TerraformGeneratorPlugin.logger.info("[v] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + coords[0] + "," + coords[1]);
+        if(chunkCoords[0] == data.getChunkX() 
+        		&& chunkCoords[1] == data.getChunkZ()) {
+        	for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
 	            if (spop == null) continue;
 	            if (!spop.isEnabled()) continue;
 	            if (spop instanceof StrongholdPopulator) continue;
@@ -65,6 +66,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 	                spop.populate(tw, data);
 	            }
 	        }
+        }
 
         //Spawn small structures
         for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {

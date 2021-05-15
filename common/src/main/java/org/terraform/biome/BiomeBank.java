@@ -27,7 +27,7 @@ import org.terraform.biome.flat.SnowyWastelandHandler;
 import org.terraform.biome.flat.TaigaHandler;
 import org.terraform.biome.mountainous.BadlandsCanyonHandler;
 import org.terraform.biome.mountainous.BirchMountainsHandler;
-import org.terraform.biome.mountainous.DesertMountainHandler;
+import org.terraform.biome.mountainous.DesertHillsHandler;
 import org.terraform.biome.mountainous.RockyMountainsHandler;
 import org.terraform.biome.mountainous.SnowyMountainsHandler;
 import org.terraform.biome.ocean.BlackOceansHandler;
@@ -61,7 +61,9 @@ public enum BiomeBank {
     BADLANDS_CANYON(new BadlandsCanyonHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_BADLANDS_MOUNTAINS_WEIGHT.getInt()),
     SNOWY_MOUNTAINS(new SnowyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.SNOWY, TConfigOption.BIOME_SNOWY_MOUNTAINS_WEIGHT.getInt(), new FrozenCavePopulator()),
     BIRCH_MOUNTAINS(new BirchMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.COLD, TConfigOption.BIOME_BIRCH_MOUNTAINS_WEIGHT.getInt()),
-    DESERT_MOUNTAINS(new DesertMountainHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_DESERT_MOUNTAINS_WEIGHT.getInt()),
+    
+    //For now, disabled by default.
+    DESERT_MOUNTAINS(new DesertHillsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_DESERT_MOUNTAINS_WEIGHT.getInt()),
 
     //OCEANIC
     OCEAN(new OceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_OCEAN_WEIGHT.getInt()),

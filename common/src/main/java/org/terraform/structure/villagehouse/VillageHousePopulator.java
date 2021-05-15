@@ -42,13 +42,11 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
             //If it is below sea level, DON'T SPAWN IT.
             if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
                 if (biome == (BiomeBank.DESERT)
-                        || biome == (BiomeBank.DESERT_MOUNTAINS)
                         || biome == (BiomeBank.BADLANDS)
                         || biome == (BiomeBank.ICE_SPIKES)) {
                     return TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean() && rollSpawnRatio(tw,chunkX,chunkZ);
                 } else if (biome == (BiomeBank.SNOWY_TAIGA)
                         || biome == (BiomeBank.SNOWY_WASTELAND)
-                        || biome == (BiomeBank.ROCKY_MOUNTAINS)
                         || biome == (BiomeBank.JUNGLE)) {
 
                     return TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean() && rollSpawnRatio(tw,chunkX,chunkZ);

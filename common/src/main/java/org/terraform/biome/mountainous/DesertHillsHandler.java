@@ -14,11 +14,17 @@ import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
-public class DesertMountainHandler extends AbstractMountainHandler {
+public class DesertHillsHandler extends AbstractMountainHandler {
     @Override
     public boolean isOcean() {
         return false;
     }
+
+	//Make these resemble dunes more, not massive mountains.
+	@Override
+	protected double getPeakMultiplier(Random sectionRandom) {
+		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
+	}
 
     @Override
     public Biome getBiome() {

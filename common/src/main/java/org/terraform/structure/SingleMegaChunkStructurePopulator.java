@@ -15,6 +15,9 @@ public abstract class SingleMegaChunkStructurePopulator extends StructurePopulat
 	/**
 	 * Do special checks here, including biome white/blacklisting and coordinate
 	 * calculations. Also check for config spawnrates here.
+	 * <br>
+	 * THIS METHOD IS NO LONGER USED TO CHECK IF THE STRUCTURE WILL SPAWN IN THE
+	 * SPECIFIED CHUNK COORDS. THIS MUST BE HANDLED SEPARATELY.
 	 * @param tw
 	 * @param chunkX
 	 * @param chunkZ
