@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
+import org.terraform.coregen.bukkit.PhysicsUpdaterPopulator;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.Stack;
@@ -34,6 +35,7 @@ public class FixerCacheFlushCommand extends TerraCommand {
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
     	NativeGeneratorPatcherPopulator.flushChanges();
+    	PhysicsUpdaterPopulator.flushChanges();
     	sender.sendMessage("Flushing changes.");
     }
 

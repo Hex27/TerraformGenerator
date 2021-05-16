@@ -5,12 +5,12 @@ import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.BezierCurve;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.BresenhamLine;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
+import org.terraform.utils.noise.BezierCurve;
+import org.terraform.utils.noise.BresenhamLine;
+import org.terraform.utils.noise.FastNoise;
 
 import java.util.ArrayList;
 import java.util.List;

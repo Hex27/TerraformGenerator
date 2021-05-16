@@ -13,8 +13,8 @@ import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
@@ -61,7 +61,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
 
                 int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, x, z);
-                BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, y, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler
+                BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler
                 // ().getBiome()
 
                 //2D Biomes.
@@ -98,20 +98,21 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //			}
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
             return new BlockPosition(coords[0], 20, coords[1]);
-        } else if (s.equalsIgnoreCase("Village")) {
-            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
-            return new BlockPosition(coords[0], 100, coords[1]);
-        } else if (s.equalsIgnoreCase("Monument")) {
-            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
-            return new BlockPosition(coords[0], 100, coords[1]);
-        }
+        } 
+//        else if (s.equalsIgnoreCase("Village")) {
+//            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
+//            return new BlockPosition(coords[0], 100, coords[1]);
+//        } else if (s.equalsIgnoreCase("Monument")) {
+//            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
+//            return new BlockPosition(coords[0], 100, coords[1]);
+//        }
 
         return null;
     }
 
     @Override
     protected BiomeBase getBiome(BiomeManager biomemanager, BlockPosition bp) {
-        return CraftBlock.biomeToBiomeBase(tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
+        return CraftBlock.biomeToBiomeBase(tw.getBiomeBank(bp.getX(), bp.getZ()).getHandler().getBiome());
     }
 
     @Override

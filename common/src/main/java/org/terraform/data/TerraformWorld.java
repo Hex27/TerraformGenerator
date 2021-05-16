@@ -6,9 +6,11 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
-import org.terraform.main.TConfigOption;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -18,8 +20,6 @@ public class TerraformWorld {
     public static final HashMap<String, TerraformWorld> WORLDS = new HashMap<>();
     private final String worldName;
     private final long seed;
-    private transient FastNoise tempOctave;
-    private transient FastNoise moistureOctave;
 
     public TerraformWorld(String name, long seed) {
         this.worldName = name;
@@ -39,32 +39,49 @@ public class TerraformWorld {
         return WORLDS.computeIfAbsent(name, (k) -> new TerraformWorld(name, seed));
     }
 
+    public FastNoise getTemperatureOctave() {
+
+        return NoiseCacheHandler.getNoise(
+        		this, 
+        		NoiseCacheEntry.TW_TEMPERATURE, 
+        		tw -> {
+                    FastNoise n = new FastNoise((int) (tw.getSeed() * 2));
+                    n.SetNoiseType(NoiseType.Simplex);
+                    n.SetFrequency(TConfigOption.BIOME_TEMPERATURE_FREQUENCY.getFloat()); //Default 0.03f
+        	        return n;
+        		});
+    }
+
+    public FastNoise getMoistureOctave() {
+        return NoiseCacheHandler.getNoise(
+        		this, 
+        		NoiseCacheEntry.TW_MOISTURE, 
+        		tw -> {
+                    FastNoise n = new FastNoise((int) (tw.getSeed()/4));
+                    n.SetNoiseType(NoiseType.Simplex);
+                    n.SetFrequency(TConfigOption.BIOME_MOISTURE_FREQUENCY.getFloat()); //Default 0.03f
+        	        return n;
+        		});
+    }
+
+    public FastNoise getOceanOctave() {
+        return NoiseCacheHandler.getNoise(
+        		this, 
+        		NoiseCacheEntry.TW_OCEAN, 
+        		tw -> {
+                	FastNoise n = new FastNoise((int) tw.getSeed() * 12);
+                	n.SetNoiseType(NoiseType.Simplex);
+                	n.SetFrequency(TConfigOption.BIOME_OCEANIC_FREQUENCY.getFloat());
+        	        return n;
+        		});
+    }
+    
     public long getSeed() {
         return seed;
     }
 
-    private FastNoise getTemperatureOctave() {
-        if (tempOctave == null) {
-            tempOctave = new FastNoise((int) (seed * 2));
-            tempOctave.SetNoiseType(NoiseType.ValueFractal);
-            tempOctave.SetFractalOctaves(6);
-            tempOctave.SetFrequency(TConfigOption.BIOME_TEMPERATURE_FREQUENCY.getFloat()); //Was 0.0006
-        }
-        return tempOctave;
-    }
-
-    private FastNoise getMoistureOctave() {
-        if (moistureOctave == null) {
-            moistureOctave = new FastNoise((int) (seed * 3));
-            moistureOctave.SetNoiseType(NoiseType.ValueFractal);
-            moistureOctave.SetFractalOctaves(6);
-            moistureOctave.SetFrequency(TConfigOption.BIOME_MOISTURE_FREQUENCY.getFloat());
-        }
-        return moistureOctave;
-    }
-
     public Random getRand(long d) {
-        return new Random(seed * d);
+        return new Random(seed/4 + 25981*d);
     }
 
     public Random getHashedRand(long x, int y, int z) {
@@ -75,37 +92,31 @@ public class TerraformWorld {
         return new Random(Objects.hash(seed, x, y, z) * multiplier);
     }
 
-    public BiomeBank getBiomeBank(int x, int height, int z) {
-//        // If something is broken, uncomment this turn off caching biomes
-//        return BiomeBank.calculateBiome(this, x, z, height);
-        return getBiomeBank(x, z);
-    }
-
+    /**
+     * Same as getBiomeBank(x,y,z), except y is autofilled to be HeightMap.getBlockHeight
+     * @param x blockX
+     * @param z blockZ
+     * @return
+     */
     public BiomeBank getBiomeBank(int x, int z) {
+    	
+        ChunkCache cache = TerraformGenerator.getCache(this, x, z);
+        BiomeBank cachedValue = cache.getBiome(x, z);
+        if (!BiomeBank.debugPrint && cachedValue != null) return cachedValue;
+        
+    	int y = HeightMap.getBlockHeight(this, x, z);
+
+        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, y, z));
+    }
+    
+    public BiomeBank getBiomeBank(int x, int y, int z) {
         ChunkCache cache = TerraformGenerator.getCache(this, x, z);
         BiomeBank cachedValue = cache.getBiome(x, z);
         if (cachedValue != null) return cachedValue;
 
-        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, z, HeightMap.getBlockHeight(this, x, z)));
+        return cache.cacheBiome(x, z, BiomeBank.calculateBiome(this, x, y, z));
     }
 
-    /**
-     * @param x block x
-     * @param z block z
-     * @return a value from -2.5 to 2.5 inclusive.
-     */
-    public double getTemperature(int x, int z) {
-        return getTemperatureOctave().GetNoise(x, z) * 6;
-    }
-
-    /**
-     * @param x block x
-     * @param z block z
-     * @return a value from -2.5 to 2.5 inclusive.
-     */
-    public double getMoisture(int x, int z) {
-        return getMoistureOctave().GetNoise(x, z) * 6;
-    }
 
     public String getName() {
         return worldName;

@@ -23,10 +23,11 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
-import org.terraform.main.TConfigOption;
-import org.terraform.utils.FastNoise.NoiseType;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.version.Version;
 
 import java.util.Arrays;
@@ -267,7 +268,7 @@ public class BlockUtils {
             case DESERT_MOUNTAINS:
             case DESERT:
     		case BADLANDS_BEACH:
-            case BADLANDS_MOUNTAINS:
+            case BADLANDS_CANYON:
                 return Material.getMaterial("ACACIA_" + wood);
             case BIRCH_MOUNTAINS:
                 return Material.getMaterial("BIRCH_" + wood);
@@ -277,10 +278,14 @@ public class BlockUtils {
             case PLAINS:
             case OCEAN:
             case MUDFLATS:
-            case LUKEWARM_OCEAN:
+            case CORALREEF_OCEAN:
     		case DEEP_LUKEWARM_OCEAN:
     		case DEEP_OCEAN:
     		case DEEP_WARM_OCEAN:
+    		case DEEP_DRY_OCEAN:
+    		case DEEP_HUMID_OCEAN:
+    		case DRY_OCEAN:
+    		case HUMID_OCEAN:
     		case RIVER:
     		case ERODED_PLAINS:
             case FOREST:
@@ -306,7 +311,7 @@ public class BlockUtils {
 			case BLACK_OCEAN:
 			case DEEP_BLACK_OCEAN:
 			case DARK_FOREST:
-					return Material.getMaterial("DARK_OAK_" + wood);
+				return Material.getMaterial("DARK_OAK_" + wood);
         }
         return Material.getMaterial("OAK_" + wood);
     }
@@ -752,6 +757,14 @@ public class BlockUtils {
                     && !Tag.SLABS.isTagged(type));
         }
         target.setBlockData(data);
+    }
+    
+    public static boolean isExposedToNonSolid(SimpleBlock target) {
+    	for(BlockFace face:directBlockFaces) {
+    		if(!target.getRelative(face).getType().isSolid())
+    			return true;
+    	}
+    	return false;
     }
 
     /**

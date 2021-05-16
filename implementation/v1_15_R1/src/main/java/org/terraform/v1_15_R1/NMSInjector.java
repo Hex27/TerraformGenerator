@@ -4,6 +4,8 @@ import net.minecraft.server.v1_15_R1.GeneratorSettingsFlat;
 import net.minecraft.server.v1_15_R1.IChunkAccess;
 import net.minecraft.server.v1_15_R1.PlayerChunkMap;
 import net.minecraft.server.v1_15_R1.WorldServer;
+import net.minecraft.server.v1_15_R1.BlockPosition;
+
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftChunk;
@@ -73,5 +75,14 @@ public class NMSInjector extends NMSInjectorAbstract {
         }
         return null;
     }
+    
+
+	@Override
+	public void updatePhysics(World world, org.bukkit.block.Block block) {
+		BlockPosition pos = new BlockPosition(block.getX(),block.getY(),block.getZ());
+		((CraftWorld) world).getHandle().applyPhysics(
+				pos,
+				((CraftChunk) block.getChunk()).getHandle().getType(pos).getBlock());
+	}
 
 }

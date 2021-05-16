@@ -1,7 +1,9 @@
-package org.terraform.utils;
+package org.terraform.utils.noise;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.terraform.utils.Vector2f;
 
 public class BresenhamLine {
     Vector2f point1;

@@ -18,9 +18,9 @@ import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.FastNoise.NoiseType;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -44,7 +44,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
     public void populate(TerraformWorld tw,
                          PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
         int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
@@ -54,7 +54,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
     public void spawnAnimalFarm(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         try {
             Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
-            BiomeBank biome = tw.getBiomeBank(x, y, z);
+            BiomeBank biome = tw.getBiomeBank(x, z);
             BlockFace dir = BlockUtils.getDirectBlockFace(random);
             TerraSchematic animalFarm = TerraSchematic.load("animalfarm", new Location(tw.getWorld(), x, y, z));
             animalFarm.parser = new AnimalFarmSchematicParser(biome, random, data);

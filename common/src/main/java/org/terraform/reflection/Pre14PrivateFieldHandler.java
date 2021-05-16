@@ -5,6 +5,8 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import org.terraform.main.TerraformGeneratorPlugin;
+
 public class Pre14PrivateFieldHandler extends PrivateFieldHandler {
     private static final MethodHandle FIELD_MODIFIERS;
 
@@ -29,5 +31,6 @@ public class Pre14PrivateFieldHandler extends PrivateFieldHandler {
         targetField.setAccessible(true);
         FIELD_MODIFIERS.invoke(targetField, targetField.getModifiers() & ~Modifier.FINAL);
         targetField.set(obj, value);
+        TerraformGeneratorPlugin.logger.info("Pre Java 14 detected.");
     }
 }

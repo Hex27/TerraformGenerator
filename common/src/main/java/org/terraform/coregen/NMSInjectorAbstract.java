@@ -25,4 +25,9 @@ public abstract class NMSInjectorAbstract {
      * @return a populatorDataICA instance.
      */
     public abstract PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data);
+    
+    /**
+     * Force an NMS physics update at the location.
+     */
+    public abstract void updatePhysics(World world, org.bukkit.block.Block block);
 }

@@ -19,7 +19,7 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
                          PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                if (!(tw.getBiomeBank(x, GenUtils.getHighestGround(data, x, z), z).getCavePop()
+                if (!(tw.getBiomeBank(x, z).getCavePop()
                         instanceof FrozenCavePopulator))
                     continue;
                 for (int[] pair : GenUtils.getCaveCeilFloors(data, x, z)) {

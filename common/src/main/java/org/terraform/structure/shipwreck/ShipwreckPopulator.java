@@ -5,12 +5,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.BlockUtils;
@@ -58,13 +57,13 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         try {
             y += GenUtils.randInt(random, -1, 1);
             TerraSchematic shipwreck = TerraSchematic.load(SCHEMATICS[random.nextInt(SCHEMATICS.length)], new Location(tw.getWorld(), x, y, z));
-            shipwreck.parser = new ShipwreckSchematicParser(tw.getBiomeBank(x, TerraformGenerator.seaLevel - 5, z), random, data);
+            shipwreck.parser = new ShipwreckSchematicParser(tw.getBiomeBank(x, z), random, data);
             shipwreck.setFace(BlockUtils.getDirectBlockFace(random));
             shipwreck.apply();
 
             TerraformGeneratorPlugin.logger.info("Spawning shipwreck at " + x + ", " + y + ", " + z + " with rotation of " + shipwreck.getFace());
 
-            //Generate holds and damage
+            //Generate holes and damage
             for (int i = 0; i < GenUtils.randInt(random, 0, 3); i++) {
                 int nx = x + GenUtils.randInt(random, -8, 8);
                 int nz = z + GenUtils.randInt(random, -8, 8);
@@ -119,6 +118,14 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         return min;
     }
 
+
+    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12422),
+                (int) (TConfigOption.STRUCTURES_SHIPWRECK_SPAWNRATIO
+                        .getDouble() * 10000),
+                10000);
+    }
+    
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX,
                             int chunkZ, ArrayList<BiomeBank> biomes) {
@@ -127,7 +134,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
                 MegaChunk mc = new MegaChunk(chunkX, chunkZ);
                 for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
                     if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-                        return true;
+                        return rollSpawnRatio(tw,chunkX,chunkZ);
                     }
                 }
             }

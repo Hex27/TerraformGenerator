@@ -17,21 +17,24 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
     protected final TerraformWorld tw;
     private final TerraformStructurePopulator structurePopulator;
     private final NativeGeneratorPatcherPopulator nativePatcherPopulator;
+    private final PhysicsUpdaterPopulator physicsUpdaterPopulator;
     private final TerraformAnimalPopulator animalPopulator;
 
     public TerraformBukkitBlockPopulator(TerraformWorld tw) {
         this.tw = tw;
         this.nativePatcherPopulator = new NativeGeneratorPatcherPopulator();
         this.structurePopulator = new TerraformStructurePopulator(tw);
+        this.physicsUpdaterPopulator = new PhysicsUpdaterPopulator();
         this.animalPopulator = new TerraformAnimalPopulator(tw);
         //Bukkit.getPluginManager().registerEvents(this,TerraformGeneratorPlugin.get());
     }
 
     @Override
     public void populate(World world, Random random, Chunk chunk) {
-        //Run the fixer first
+        //Run the fixers first
         this.nativePatcherPopulator.populate(world, random, chunk);
-
+        this.physicsUpdaterPopulator.populate(world, random, chunk);
+        
         //Populate structures next
         this.structurePopulator.populate(world, random, chunk);
 

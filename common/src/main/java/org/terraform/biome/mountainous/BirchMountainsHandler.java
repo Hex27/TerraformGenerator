@@ -2,7 +2,7 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
@@ -12,7 +12,14 @@ import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class BirchMountainsHandler extends BiomeHandler {
+public class BirchMountainsHandler extends AbstractMountainHandler {
+	
+	//Birch Mountains must be shorter to allow trees to populate.
+	@Override
+	protected double getPeakMultiplier(Random sectionRandom) {
+		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
+	}
+	
     @Override
     public boolean isOcean() {
         return false;
@@ -46,8 +53,8 @@ public class BirchMountainsHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
+                int y = GenUtils.getHighestGround(data, x, z);
+                if (data.getBiome(x, z) != getBiome()) continue;
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
 
                     if (GenUtils.chance(random, 1, 10)) {
@@ -85,5 +92,9 @@ public class BirchMountainsHandler extends BiomeHandler {
 	            new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL).build(tw, data, treeX, treeY, treeZ);
 	        }
 	    }
+	}
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.ROCKY_BEACH;
 	}
 }

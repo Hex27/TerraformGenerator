@@ -1,15 +1,19 @@
 package org.terraform.data;
 
-import org.terraform.main.TConfigOption;
+import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeSection;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
 /**
  * Refers to a cluster of 64x64 chunks
+ * 1024 blocks wide.
  * Used for spawning structures.
  */
 public class MegaChunk {
+	public static final int megaChunkBlockWidth = BiomeSection.sectionWidth*TConfigOption.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS.getInt(); 
     private int x, z;
 
     public MegaChunk(SimpleChunkLocation sLoc) {
@@ -17,13 +21,18 @@ public class MegaChunk {
     }
 
     public MegaChunk(int x, int y, int z) {
-        this(x >> 4, z >> 4);
+        this.x = blockCoordsToMega(x);
+        this.z = blockCoordsToMega(z);
     }
-
-    //A megachunk is (2^6) 64 chunks wide. (4096 chunks)
+    
+    //A megachunk consists of a bunch of biome sections.
+    //The big structures spawn right in the middle of them.
     public MegaChunk(int chunkX, int chunkZ) {
-        this.x = chunkX >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
-        this.z = chunkZ >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+        this(chunkX*16,0,chunkZ*16);
+    	//this((chunkX << 4) | 15, 0, (chunkZ << 4) | 15);
+    	
+    	//this.x = chunkX >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+        //this.z = chunkZ >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
     }
 
     public MegaChunk getRelative(int x, int z) {
@@ -38,20 +47,47 @@ public class MegaChunk {
      * @return A random pair of xz block coords within the mega chunk
      */
     public int[] getRandomCoords(Random rand) {
-        int lowChunkX = this.x << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
-        int lowChunkZ = this.z << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
-        int highChunkX = (this.x << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt()) | 15;
-        int highChunkZ = (this.z << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt()) | 15;
-
-        int lowX = lowChunkX << 4;
-        int lowZ = lowChunkZ << 4;
-        int highX = (highChunkX << 4) | 15;
-        int highZ = (highChunkZ << 4) | 15;
+        
+        int lowX = megaToBlockCoords(this.x);
+        int lowZ = megaToBlockCoords(this.z);
+        int highX = lowX + megaChunkBlockWidth-1;
+        int highZ = lowZ + megaChunkBlockWidth-1;
 
         //Pad the sides. Never generate on the side of a mega chunk.
-        int x = GenUtils.randInt(rand, lowX + 64, highX - 64);
-        int z = GenUtils.randInt(rand, lowZ + 64, highZ - 64);
+        int x = GenUtils.randInt(rand, lowX + megaChunkBlockWidth/5, highX - megaChunkBlockWidth/5);
+        int z = GenUtils.randInt(rand, lowZ + megaChunkBlockWidth/5, highZ - megaChunkBlockWidth/5);
         return new int[]{x, z};
+    }
+    
+    public int[] getCenterBlockCoords() {
+        
+        int lowX = megaToBlockCoords(this.x);
+        int lowZ = megaToBlockCoords(this.z);
+        //TerraformGeneratorPlugin.logger.info("MC(" + this.x + "," + this.z + "):(" + (lowX + megaChunkBlockWidth/2) + "," + (lowZ + megaChunkBlockWidth/2) + ")");
+        return new int[]{lowX + megaChunkBlockWidth/2, lowZ + megaChunkBlockWidth/2};
+    }
+    
+    public int[] getLowerCornerBlockCoords() {
+        
+        int lowX = megaToBlockCoords(this.x);
+        int lowZ = megaToBlockCoords(this.z);
+        return new int[]{lowX, lowZ};
+    }
+    
+    public int[] getCenterChunkCoords() {
+    	int[] coords = getCenterBlockCoords();
+    	
+    	return new int[] { coords[0] >> 4, coords[1] >> 4 };
+    }
+    public int[] getLowerCornerChunkCoords() {
+    	int[] coords = getLowerCornerBlockCoords();
+    	
+    	return new int[] { coords[0] >> 4, coords[1] >> 4 };
+    }
+    
+    public BiomeSection getCenterBiomeSection(TerraformWorld tw) {
+    	int[] coords = getCenterBlockCoords();
+    	return BiomeBank.getBiomeSectionFromBlockCoords(tw,coords[0],coords[1]);
     }
 
     public boolean containsXZBlockCoords(int x, int z) {
@@ -85,5 +121,23 @@ public class MegaChunk {
 
     public int getZ() {
         return z;
+    }
+    
+    private static int blockCoordsToMega(int coord) {
+    	if(coord >= 0) {
+    		return (int) Math.floor(coord/megaChunkBlockWidth);
+    	}
+    	else
+    	{
+    		return (int) (-1.0*(Math.ceil(((double)Math.abs(coord))/((double)megaChunkBlockWidth))));
+    	}
+    }
+
+    /**
+     * @param coord
+     * @return lower bounds of block coords within the megachunk.
+     */
+    private static int megaToBlockCoords(int coord) {
+		return coord*(megaChunkBlockWidth);
     }
 }

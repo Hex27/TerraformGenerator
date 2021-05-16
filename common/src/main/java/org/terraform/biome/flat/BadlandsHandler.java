@@ -7,16 +7,18 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
-import org.terraform.biome.mountainous.BadlandsMountainHandler;
+import org.terraform.biome.mountainous.BadlandsCanyonHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.small.DesertWellPopulator;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,7 +26,6 @@ import java.util.Random;
 public class BadlandsHandler extends BiomeHandler {
     static private BiomeBlender riversBlender;
     static private BiomeBlender plateauBlender;
-    static private FastNoise plateauNoise;
 
     static int sandRadius = TConfigOption.BIOME_BADLANDS_PLATEAU_SAND_RADIUS.getInt();
     static int plateauHeight = TConfigOption.BIOME_BADLANDS_PLATEAU_HEIGHT.getInt();
@@ -46,13 +47,16 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     public static FastNoise getPlateauNoise(TerraformWorld tw) {
-        if (plateauNoise == null) {
-            plateauNoise = new FastNoise((int) (tw.getSeed() * 7509));
-            plateauNoise.SetNoiseType(FastNoise.NoiseType.CubicFractal);
-            plateauNoise.SetFractalOctaves(2);
-            plateauNoise.SetFrequency(plateauFrequency);
-        }
-        return plateauNoise;
+    	return NoiseCacheHandler.getNoise(
+    			tw, 
+    			NoiseCacheEntry.BIOME_BADLANDS_PLATEAUNOISE, 
+    			world -> {
+    	            FastNoise n = new FastNoise((int) (world.getSeed() * 7509));
+    	            n.SetNoiseType(FastNoise.NoiseType.CubicFractal);
+    	            n.SetFractalOctaves(2);
+    	            n.SetFrequency(plateauFrequency);
+    	            return n;
+    			});
     }
 
     @Override
@@ -87,13 +91,13 @@ public class BadlandsHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
-                BiomeBank currentBiome = BiomeBank.calculateBiome(world, x, z, highest);
+                BiomeBank currentBiome = world.getBiomeBank(x, highest, z);//BiomeBank.calculateBiome(world, x, TerraformGenerator.seaLevel, z);
                 if (currentBiome != BiomeBank.BADLANDS &&
                         currentBiome != BiomeBank.BADLANDS_BEACH &&
-                        currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;
+                        currentBiome != BiomeBank.BADLANDS_CANYON) continue;
 
                 if (HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
-                    BadlandsMountainHandler.oneUnit(world, random, data, x, z, true);
+                    BadlandsCanyonHandler.oneUnit(world, random, data, x, z, true);
                     continue;
                 }
 
@@ -131,10 +135,16 @@ public class BadlandsHandler extends BiomeHandler {
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
         BiomeBlender blender = getRiversBlender(tw);
 
-        FastNoise wallNoise = new FastNoise((int) (tw.getWorld().getSeed() * 2));
-        wallNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        wallNoise.SetFrequency(0.07f);
-        wallNoise.SetFractalOctaves(2);
+        FastNoise wallNoise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_BADLANDS_WALLNOISE, 
+        		world -> {
+        	        FastNoise n = new FastNoise((int) (tw.getWorld().getSeed() * 2));
+        	        n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        	        n.SetFrequency(0.07f);
+        	        n.SetFractalOctaves(2);
+        	        return n;
+        		});
 
         // Rivers
         for (int x = 0; x < 16; x++) {
@@ -143,13 +153,13 @@ public class BadlandsHandler extends BiomeHandler {
                 int rawZ = chunkZ * 16 + z;
 
                 double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
-                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, rawZ, height);
+                //int height = (int) preciseHeight;
+                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, TerraformGenerator.seaLevel, rawZ);
 
                 if (currentBiome == BiomeBank.BADLANDS
-                        || currentBiome == BiomeBank.BADLANDS_MOUNTAINS
+                        || currentBiome == BiomeBank.BADLANDS_CANYON
                         || currentBiome == BiomeBank.BADLANDS_BEACH
-//                        && HeightMap.getRiverDepth(tw, rawX, rawZ) > 0
+                        && HeightMap.getRawRiverDepth(tw, rawX, rawZ) > 0
                 ) {
                     double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
 
@@ -200,9 +210,15 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     void generatePlateaus(TerraformWorld tw, PopulatorDataAbstract data) {
-        FastNoise detailsNoise = new FastNoise((int) (tw.getSeed() * 7509));
-        detailsNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        detailsNoise.SetFrequency(0.08f);
+        FastNoise detailsNoise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_BADLANDS_WALLNOISE, 
+        		world -> {
+        	        FastNoise n = new FastNoise((int) (tw.getSeed() * 7509));
+        	        n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        	        n.SetFrequency(0.08f);
+        	        return n;
+        		});
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -322,13 +338,13 @@ public class BadlandsHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
-                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, x, z, highest);
+                BiomeBank currentBiome = tw.getBiomeBank(x, z);
                 if (currentBiome != BiomeBank.BADLANDS &&
                         currentBiome != BiomeBank.BADLANDS_BEACH &&
-                        currentBiome != BiomeBank.BADLANDS_MOUNTAINS) continue;
+                        currentBiome != BiomeBank.BADLANDS_CANYON) continue;
 
                 if (HeightMap.getNoiseGradient(tw, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
-                    BadlandsMountainHandler.oneUnit(tw, random, data, x, z, true);
+                    BadlandsCanyonHandler.oneUnit(tw, random, data, x, z, true);
                     continue;
                 }
 
@@ -343,7 +359,7 @@ public class BadlandsHandler extends BiomeHandler {
                                 canSpawn = false;
                         }
                         
-                        if (HeightMap.getBlockHeight(tw, x, z) + 5 < highest) canSpawn = false;
+                        if (GenUtils.getHighestGround(data, x, z) + 5 < highest) canSpawn = false;
                         if (canSpawn && GenUtils.chance(1, 50))
                             spawnDeadTree(data, x, highest, z);
                         
@@ -356,5 +372,10 @@ public class BadlandsHandler extends BiomeHandler {
         if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
             new DesertWellPopulator().populate(tw, random, data, true);
         }
+	}
+	
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.BADLANDS_BEACH;
 	}
 }

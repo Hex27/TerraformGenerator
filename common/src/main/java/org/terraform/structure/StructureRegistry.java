@@ -2,7 +2,6 @@ package org.terraform.structure;
 
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.caves.LargeCavePopulator;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
@@ -14,8 +13,6 @@ import org.terraform.structure.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.village.VillagePopulator;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
-import org.terraform.utils.GenUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -78,7 +75,7 @@ public class StructureRegistry {
      * @return the structure types that will spawn in this mega chunk
      */
     public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(TerraformWorld tw, MegaChunk mc) {
-
+    	//TerraformGeneratorPlugin.logger.info("getLargeStructureForMegaChunkQuery: " + mc.getX() + "," + mc.getZ());
         //Clear the cache if it gets big.
         if (queryCache.size() > 50) queryCache.clear();
         MegaChunkKey key = new MegaChunkKey(tw,mc);
@@ -87,7 +84,7 @@ public class StructureRegistry {
             return queryCache.get(key);
 
         Random structRand = tw.getRand(9);
-        int maxStructures = GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
+        int maxStructures = 1; //GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
         SingleMegaChunkStructurePopulator[] pops = new SingleMegaChunkStructurePopulator[maxStructures];
         int size = 0;
 
@@ -97,10 +94,10 @@ public class StructureRegistry {
             //First check if the megadungeons can spawn. Shuffle the array first.
             SingleMegaChunkStructurePopulator[] available = (SingleMegaChunkStructurePopulator[]) shuffleArray(structRand, largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
             for (SingleMegaChunkStructurePopulator pop : available) {
-                int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
+                int[] coords = mc.getCenterBlockCoords(); //pop.getCoordsFromMegaChunk(tw, mc);
                 if (coords == null) continue;
 
-                if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4))) {
+                if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
                     pops[size] = pop;
                     size++;
                     break; //ONLY ONE MEGA DUNGEON.
@@ -115,8 +112,8 @@ public class StructureRegistry {
             for (StructureType type : types) {
                 if (largeStructureRegistry.containsKey(type))
                     for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(type)) {
-                        int[] coords = pop.getCoordsFromMegaChunk(tw, mc);
-                        if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4))) {
+                        int[] coords = mc.getCenterBlockCoords();
+                        if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
                             pops[0] = pop;
                             size++;
                             break; //ONLY ONE OF EACH TYPE. Do not try to spawn multiple.
@@ -127,9 +124,6 @@ public class StructureRegistry {
                 if (size >= maxStructures) break;
             }
         }
-//        else {
-//        	TerraformGeneratorPlugin.logger.info(ChatColor.YELLOW + "MC: " + mc.getX() + "," + mc.getZ() + " - Has Mega Dungeon");
-//        }
 
         SingleMegaChunkStructurePopulator[] returnVal = new SingleMegaChunkStructurePopulator[size];
         System.arraycopy(pops, 0, returnVal, 0, size);

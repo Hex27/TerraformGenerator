@@ -8,7 +8,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
@@ -78,7 +78,7 @@ public class DarkForestHandler extends BiomeHandler {
     @Override
     public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
       
-        boolean spawnHeads = TConfigOption.BIOME_DARKFOREST_SPAWN_HEADS.getBoolean() 
+        boolean spawnHeads = TConfigOption.BIOME_DARK_FOREST_SPAWN_HEADS.getBoolean() 
         		&& GenUtils.chance(random, 1, 100);
 
         //Small decorations

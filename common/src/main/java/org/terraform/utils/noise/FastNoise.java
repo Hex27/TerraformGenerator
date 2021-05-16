@@ -1,4 +1,4 @@
-package org.terraform.utils;
+package org.terraform.utils.noise;
 //FastNoise.java
 //
 //MIT License
@@ -26,6 +26,9 @@ package org.terraform.utils;
 //The developer's email is jorzixdan.me2@gzixmail.com (for great email, take
 //off every 'zix'.)
 //
+
+import org.terraform.utils.Vector2f;
+import org.terraform.utils.Vector3f;
 
 public class FastNoise {
     private static final Float2[] GRAD_2D = {

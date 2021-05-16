@@ -51,11 +51,7 @@ public abstract class PopulatorDataAbstract {
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      * @return
      */
-    public Biome getBiome(int rawX, int rawZ) {
-        return getBiome(rawX, 50, rawZ);
-    }
-
-    public abstract Biome getBiome(int rawX, int rawY, int rawZ);
+    public abstract Biome getBiome(int rawX, int rawZ);
 
     public abstract void addEntity(int rawX, int rawY, int rawZ, EntityType type);
 

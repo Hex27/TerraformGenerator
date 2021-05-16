@@ -1,7 +1,6 @@
 package org.terraform.utils;
 
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.HeightMap;
 import org.terraform.data.TerraformWorld;
 
 import javax.swing.*;
@@ -55,7 +54,7 @@ public class BiomePainter extends JFrame {
                 for(int z = 0; z < windowWidth; z++) {
                     int realX = (int) Math.round((x / (double) windowWidth) * (double) inGameWidth + offsets);
                     int realZ = (int) Math.round((z / (double) windowWidth) * (double) inGameWidth + offsets);
-                    BiomeBank biome = BiomeBank.calculateBiome(world, realX, realZ, (int) HeightMap.getPreciseHeight(world, realX, realZ));
+                    BiomeBank biome = world.getBiomeBank(realX, realZ);
                     switch(biome) {
                         case PLAINS:
                             g.setColor(new Color(100, 150, 100));

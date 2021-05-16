@@ -57,8 +57,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 for (int z = 0; z < 16; z++) {
                     int rawX = x + ichunkaccess.getPos().x * 16;
                     int rawZ = x + ichunkaccess.getPos().z * 16;
-                    int y = HeightMap.getBlockHeight(tw, rawX, rawZ);
-                    BiomeBase biomeBase = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(rawX, y, rawZ).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,
+                    //int y = HeightMap.getBlockHeight(tw, rawX, rawZ);
+                    BiomeBase biomeBase = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(rawX, rawZ).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,
                     // z), y).getHandler().getBiome()
 
                     biomeBases[(x * 16) + z] = biomeBase;
@@ -75,7 +75,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     protected BiomeBase getDecoratingBiome(RegionLimitedWorldAccess rlwa, BlockPosition bp) {
-        return CraftBlock.biomeToBiomeBase(tw.getBiomeBank(bp.getX(), bp.getY(), bp.getZ()).getHandler().getBiome());
+        return CraftBlock.biomeToBiomeBase(tw.getBiomeBank(bp.getX(), bp.getZ()).getHandler().getBiome());
     }
 
     @Override
@@ -218,13 +218,14 @@ public class NMSChunkGenerator extends ChunkGenerator {
         if (s.equalsIgnoreCase("Stronghold")) {
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
             return new BlockPosition(coords[0], 20, coords[1]);
-        } else if (s.equalsIgnoreCase("Village")) {
-            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
-            return new BlockPosition(coords[0], 100, coords[1]);
-        } else if (s.equalsIgnoreCase("Monument")) {
-            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
-            return new BlockPosition(coords[0], 100, coords[1]);
-        }
+        } 
+//        else if (s.equalsIgnoreCase("Village")) {
+//            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
+//            return new BlockPosition(coords[0], 100, coords[1]);
+//        } else if (s.equalsIgnoreCase("Monument")) {
+//            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
+//            return new BlockPosition(coords[0], 100, coords[1]);
+//        }
 
         return null;
     }

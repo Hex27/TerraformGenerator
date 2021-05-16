@@ -48,7 +48,7 @@ public class PopulatorDataSQLite extends PopulatorDataAbstract {
     }
 
     @Override
-    public Biome getBiome(int rawX, int rawY, int rawZ) {
+    public Biome getBiome(int rawX, int rawZ) {
         // TODO Auto-generated method stub
         return null;
     }

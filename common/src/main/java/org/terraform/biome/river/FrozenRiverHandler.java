@@ -6,7 +6,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -49,7 +49,9 @@ public class FrozenRiverHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
+                if(y >= TerraformGenerator.seaLevel) //Don't apply to dry land
+                	continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
 
                 //Ice
                 if (!data.getType(x, TerraformGenerator.seaLevel, z).isSolid())

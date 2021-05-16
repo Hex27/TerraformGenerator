@@ -1,5 +1,6 @@
 package org.terraform.v1_16_R3;
 
+import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.IChunkAccess;
 import net.minecraft.server.v1_16_R3.PlayerChunkMap;
 import net.minecraft.server.v1_16_R3.WorldServer;
@@ -7,10 +8,13 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_16_R3.CraftChunk;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_16_R3.util.CraftMagicNumbers;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataICAAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -89,4 +93,12 @@ public class NMSInjector extends NMSInjectorAbstract {
         }
         return null;
     }
+
+	@Override
+	public void updatePhysics(World world, org.bukkit.block.Block block) {
+		BlockPosition pos = new BlockPosition(block.getX(),block.getY(),block.getZ());
+		((CraftWorld) world).getHandle().applyPhysics(
+				pos,
+				((CraftChunk) block.getChunk()).getHandle().getType(pos).getBlock());
+	}
 }

@@ -3,6 +3,7 @@ package org.terraform.biome;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 
@@ -34,4 +35,23 @@ public abstract class BiomeHandler {
 
     // Populate event but for the terrain.
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) { /* Do nothing by default */ }
+    
+    //Beach type. This will be used instead if the height is too close to sea level.
+    public BiomeBank getBeachType() {
+    	return BiomeBank.SANDY_BEACH;
+    }
+    
+    //River type. This will be used instead if the heightmap got carved into a river.
+    public BiomeBank getRiverType() {
+    	return BiomeBank.RIVER;
+    }
+    
+    //By default, use the normal height map.
+    //Omit mountain and sea calculations - they're not necessary.
+    public double calculateHeight(TerraformWorld tw, int x, int z) {
+    	
+        double height = HeightMap.CORE.getHeight(tw, x, z);
+
+        return height;
+    }
 }

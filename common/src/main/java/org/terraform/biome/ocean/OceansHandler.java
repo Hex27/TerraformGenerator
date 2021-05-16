@@ -2,7 +2,7 @@ package org.terraform.biome.ocean;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
@@ -14,15 +14,22 @@ import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class OceansHandler extends BiomeHandler {
+public class OceansHandler extends AbstractOceanHandler {
 
-    @Override
+    public OceansHandler(BiomeType oceanType) {
+		super(oceanType);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
     public boolean isOcean() {
         return true;
     }
 
     @Override
     public Biome getBiome() {
+    	if(this.oceanType == BiomeType.DEEP_OCEANIC)
+    		return Biome.DEEP_OCEAN;
         return Biome.OCEAN;
     }
 
@@ -51,7 +58,7 @@ public class OceansHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, y + 1, z) != getBiome()) continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
                 
                 //Set ground near sea level to sand
                 if(y >= TerraformGenerator.seaLevel - 2) {

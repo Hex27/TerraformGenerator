@@ -3,7 +3,7 @@ package org.terraform.coregen;
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.OrePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.utils.GenUtils;
@@ -67,7 +67,6 @@ public class TerraformPopulator {
         ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 //        		new ArrayList<>();
 
-        
         boolean canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
         for (BiomeBank bank : banks) {
             // Biome specific populators

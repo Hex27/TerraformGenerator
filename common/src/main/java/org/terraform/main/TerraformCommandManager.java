@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.terraform.command.*;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
+import org.terraform.main.config.TConfigOption;
 
 public class TerraformCommandManager implements CommandExecutor {
 
@@ -29,6 +30,7 @@ public class TerraformCommandManager implements CommandExecutor {
             this.registerCommand(new TimingsCommand(plugin, "timings", "lag"));
             this.registerCommand(new CoconutCommand(plugin, "coconut"));
             this.registerCommand(new ValuesCommand(plugin, "values"));
+            this.registerCommand(new BiomeDistribCommand(plugin, "biomedistrib"));
             this.registerCommand(new SphereCommand(plugin, "sphere"));
             this.registerCommand(new FractalTreeCommand(plugin, "fractal", "fractaltree", "ftree"));
             this.registerCommand(new CaveCommand(plugin, "cave"));
@@ -59,6 +61,7 @@ public class TerraformCommandManager implements CommandExecutor {
             this.registerCommand(new JigsawBuilderTestCommand(plugin, "jigsawbuildertest", "jbt"));
             this.registerCommand(new PlainsVillageCommand(plugin, "plainsvillage", "pv"));
             this.registerCommand(new RibCageCommand(plugin, "ribcage"));
+            this.registerCommand(new OreDitCommand(plugin, "oredit"));
 
         }
         this.registerCommand(new LocateCommand(plugin, "locate"));

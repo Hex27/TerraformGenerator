@@ -19,7 +19,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
         int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
         //Height set to 50 as plains village will settle its own height.
@@ -97,6 +97,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
         townHall.setRoomPopulator(townHallPop);
 
         ensureFarmHouseEntrance(random, townHall, data);
+        pathStart = townHall.getDirection();
         
         BiomeBank biome = tw.getBiomeBank(townHall.getX(), townHall.getZ());
         woodSlab = BlockUtils.getWoodForBiome(biome, "SLAB");
@@ -112,8 +113,10 @@ public class PlainsVillagePopulator extends VillagePopulator {
         woodLeaves = BlockUtils.getWoodForBiome(biome, "LEAVES");
         wood = woodLeaves.toString().toLowerCase().replace("leaves","");
         
+        //Re-get x and z because they change after ensureFarmHouseEntrance.
+        //13 because that's the width of the townhall.
         PlainsPathRecursiveSpawner spawner = new PlainsPathRecursiveSpawner(
-                new SimpleBlock(data, x + pathStart.getModX() * 13, y, z + pathStart.getModZ() * 13),
+                new SimpleBlock(data, townHall.getX() + pathStart.getModX() * 13, y, townHall.getZ() + pathStart.getModZ() * 13),
                 100, BlockUtils.getAdjacentFaces(pathStart));
         spawner.forceRegisterRoom(townHall);
         spawner.setVillageDensity(0.7);

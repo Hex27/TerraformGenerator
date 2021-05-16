@@ -10,7 +10,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.small.DesertWellPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -30,11 +30,16 @@ public class DesertHandler extends BiomeHandler {
         return Biome.DESERT;
     }
 
+    //Pad more sandstone so that mountains don't get stone exposed vertically
     @Override
     public Material[] getSurfaceCrust(Random rand) {
         return new Material[]{Material.SAND,
                 Material.SAND,
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
+                Material.SANDSTONE,
+                Material.SANDSTONE,
+                Material.SANDSTONE,
+                Material.SANDSTONE,
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE),
                 GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE)};
     }

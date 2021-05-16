@@ -10,14 +10,13 @@ import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.flat.BadlandsHandler;
-import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.room.PathGenerator;
@@ -51,27 +50,14 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
             }
         }
 
-        return false;
+        return rollSpawnRatio(tw,chunkX,chunkZ);
     }
-
-    @Override
-    public int[] getNearestFeature(TerraformWorld world, int rawX, int rawZ) {
-        MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
-        int[][] coords = getCoordsFromMegaChunk(world, mc);
-
-        int[] smallest = null;
-        int smallestDist = Integer.MAX_VALUE;
-
-        for (int[] c : coords) {
-            double d = Math.sqrt(Math.pow(rawX - c[0], 2) + Math.pow(rawZ - c[1], 2));
-
-            if (d < smallestDist) {
-                smallestDist = (int) d;
-                smallest = c;
-            }
-        }
-
-        return smallest;
+    
+    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
+                (int) (TConfigOption.STRUCTURES_MINESHAFT_SPAWNRATIO
+                        .getDouble() * 10000),
+                10000);
     }
 
     @Override
@@ -86,16 +72,19 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
-        int chunkX = mc.getX() << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
-        int chunkZ = mc.getZ() << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
-        int megaChunkWidth = (int) Math.pow(2, TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt());
+        int[] mcEdge = mc.getLowerCornerChunkCoords();
+        int chunkX = mcEdge[0];
+        int chunkZ = mcEdge[1];
+    	//int chunkX = mc.getX() << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+        //int chunkZ = mc.getZ() << TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+        int megaChunkWidth = MegaChunk.megaChunkBlockWidth/16; //(int) Math.pow(2, TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt());
 
         ArrayList<ArrayList<Integer>> coords = new ArrayList<>();
         for (int x = chunkX; x < chunkX + megaChunkWidth; x++) {
             for (int z = chunkZ; z < chunkZ + megaChunkWidth; z++) {
                 int sx = (x << 4) + 8;
                 int sz = (z << 4) + 8;
-                BiomeBank biome = BiomeBank.calculateBiome(tw, sx, sz, HeightMap.getBlockHeight(tw, sx, sz));
+                BiomeBank biome = tw.getBiomeBank(sx, sz);
 
                 if (canSpawn(tw, x, z, new ArrayList<>(Collections.singleton(biome))))
                     coords.add(new ArrayList<>(Arrays.asList(sx, sz)));
@@ -172,14 +161,15 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
      * Get valid position that is on the edge of plateau
      */
     SimpleBlock getSpawnPosition(TerraformWorld tw, int chunkX, int chunkZ) {
-        for (int x = chunkX << 4; x < (chunkX << 4) + 15; x += 3) {
-            for (int z = chunkZ << 4; z < (chunkZ << 4) + 15; z += 3) {
-                if (BadlandsHandler.mineCanSpawn(tw, x, z))
-                    return new SimpleBlock(new Location(tw.getWorld(),x, HeightMap.getBlockHeight(tw, x, z), z));
-            }
-        }
-
-        return null;
+//        for (int x = chunkX << 4; x < (chunkX << 4) + 15; x += 3) {
+//            for (int z = chunkZ << 4; z < (chunkZ << 4) + 15; z += 3) {
+//                if (BadlandsHandler.mineCanSpawn(tw, x, z))
+//                    return new SimpleBlock(new Location(tw.getWorld(),x, HeightMap.getBlockHeight(tw, x, z), z));
+//            }
+//        }
+//
+//        return null;
+    	return null;
     }
 
     /**
@@ -426,4 +416,24 @@ public class BadlandsMinePopulator extends MultiMegaChunkStructurePopulator {
             lootBlock.lsetType(GenUtils.randMaterial(BlockUtils.ores));
         }
     }
+
+	@Override
+	public int[] getNearestFeature(TerraformWorld world, int rawX, int rawZ) {
+        MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
+        int[][] coords = getCoordsFromMegaChunk(world, mc);
+
+        int[] smallest = null;
+        int smallestDist = Integer.MAX_VALUE;
+
+        for (int[] c : coords) {
+            double d = Math.sqrt(Math.pow(rawX - c[0], 2) + Math.pow(rawZ - c[1], 2));
+
+            if (d < smallestDist) {
+                smallestDist = (int) d;
+                smallest = c;
+            }
+        }
+
+        return smallest;
+	}
 }

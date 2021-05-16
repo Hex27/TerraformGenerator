@@ -63,8 +63,8 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
     }
 
     @Override
-    public Biome getBiome(int rawX, int rawY, int rawZ) {
-        return getData(rawX, rawZ).getBiome(rawX, rawY, rawZ);
+    public Biome getBiome(int rawX, int rawZ) {
+        return getData(rawX, rawZ).getBiome(rawX, rawZ);
     }
 
     @Override

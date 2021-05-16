@@ -6,10 +6,12 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
@@ -51,8 +53,10 @@ public class JungleRiverHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
+                if(y >= TerraformGenerator.seaLevel) //Don't apply to dry land
+                	continue;
 
-                if (data.getBiome(x, y + 1, z) != getBiome()) continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
 
                 //Set ground near sea level to sand
                 if(y >= TerraformGenerator.seaLevel - 2) {
@@ -64,10 +68,17 @@ public class JungleRiverHandler extends BiomeHandler {
                 
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
 
-                FastNoise lilypadNoise = new FastNoise((int) (world.getSeed() * 2));
-                lilypadNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-                lilypadNoise.SetFrequency(0.05f);
-
+                FastNoise lilypadNoise = NoiseCacheHandler.getNoise(
+                		world, 
+                		NoiseCacheEntry.BIOME_JUNGLE_LILYPADS, 
+                		tw -> {
+                            FastNoise n = new FastNoise((int) (tw.getSeed() * 2));
+                            n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+                            n.SetFrequency(0.05f);
+                        
+                	        return n;
+                		});
+                
                 // Generate random lily pads in jungle rivers
                 // Deeper waters -> less pads. Noise makes sure they are in groups
                 if (GenUtils.chance(1, (int) (lilypadNoise.GetNoise(x, z) * 7 + Math.pow(TerraformGenerator.seaLevel - y, 3) + 18))) {

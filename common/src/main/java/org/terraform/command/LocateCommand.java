@@ -90,10 +90,11 @@ public class LocateCommand extends TerraCommand implements Listener {
             p.sendMessage(LangOpt.COMMAND_LOCATE_STRUCTURE_NOT_ENABLED.parse());
             return;
         }
-
+        
+        //Stronghold Special Case
         if (spop instanceof StrongholdPopulator ||
                 (!(spop instanceof SingleMegaChunkStructurePopulator) && !(spop instanceof MultiMegaChunkStructurePopulator))) {
-            int[] coords = spop.getNearestFeature(TerraformWorld.get(p.getWorld()), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
+            int[] coords = ((StrongholdPopulator)spop).getNearestFeature(TerraformWorld.get(p.getWorld()), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
             syncSendMessage(p.getUniqueId(), LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", coords[0] + "", "%z%", coords[1] + ""));
             return;
         }
@@ -189,12 +190,13 @@ public class LocateCommand extends TerraCommand implements Listener {
                             lowerBound = mc;
                         if (mc.getX() > upperBound.getX() || mc.getZ() > upperBound.getZ())
                             upperBound = mc;
-                        int[] coords = populator.getCoordsFromMegaChunk(tw, mc);
+                        int[] coords = mc.getCenterBlockCoords(); //populator.getCoordsFromMegaChunk(tw, mc);
                         if (coords == null) continue;
+                        BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
                         //Right bitshift of 4 is conversion from block coords to chunk coords.
-                        ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
-
-                        if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, banks)) {
+                        //ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, coords[0] >> 4, coords[1] >> 4);
+                        
+                        if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
 
                             //Mega Dungeons will always spawn if they can.
                             if (StructureRegistry.getStructureType(populator.getClass()) == StructureType.MEGA_DUNGEON) {
@@ -239,8 +241,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         runnable.runTaskAsynchronously(plugin);
     }
 
-    @SuppressWarnings("serial")
-	private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
+    private Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
         if (radius == 0) return new ArrayList<MegaChunk>() {{
             add(center);
         }};
@@ -250,16 +251,19 @@ public class LocateCommand extends TerraCommand implements Listener {
         //xxx  x   x
         //     xxxxx
         ArrayList<MegaChunk> candidates = new ArrayList<MegaChunk>();
-        for (int rx = -radius; rx <= radius; rx++) {
-            for (int rz = -radius; rz <= radius; rz++) {
-
-                //Check that this is a border coord
-                if (Math.abs(rx) == radius || Math.abs(rz) == radius) {
-                    //Bukkit.getLogger().info(center.getX() + "+" + rx + "," + center.getZ() + "+"+rz);
-                    candidates.add(center.getRelative(rx, rz));
-                }
-            }
+      //Lock rX, iterate rZ
+        for(int rx:new int[] {-radius,radius}) {
+        	 for (int rz = -radius; rz <= radius; rz++) {
+        		 candidates.add(center.getRelative(rx, rz));
+             }
         }
+        
+        //Lock rZ, iterate rX
+        for(int rz:new int[] {-radius,radius}) {
+       	 for (int rx = 1-radius; rx <= radius-1; rx++) {
+       		 candidates.add(center.getRelative(rx, rz));
+            }
+       }
 
         return candidates;
     }

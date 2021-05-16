@@ -7,7 +7,7 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -80,7 +80,7 @@ public class SavannaHandler extends BiomeHandler {
             int x = data.getChunkX() * 16 + GenUtils.randInt(0, 15);
             int z = data.getChunkZ() * 16 + GenUtils.randInt(0, 15);
             int y = GenUtils.getHighestGround(data, x, z);
-            if (data.getBiome(x, y, z) != getBiome()) continue;
+            if (data.getBiome(x, z) != getBiome()) continue;
             makeYellowPatch(x, y, z, data, random);
         }
 
@@ -88,7 +88,7 @@ public class SavannaHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
 
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK
                         && !data.getType(x, y + 1, z).isSolid()) {

@@ -3,11 +3,12 @@ package org.terraform.biome.flat;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.Snowable;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TConfigOption;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.GenUtils;
@@ -50,7 +51,7 @@ public class SnowyTaigaHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, y, z) != getBiome()) continue;
+                if (data.getBiome(x, z) != getBiome()) continue;
 
                 if (data.getType(x, y, z) == Material.DIRT) {
                     if (GenUtils.chance(random, 1, 20)) {
@@ -89,4 +90,15 @@ public class SnowyTaigaHandler extends BiomeHandler {
             }
         }
 	}
+	
+
+	@Override
+	public BiomeBank getBeachType() {
+		return BiomeBank.ICY_BEACH;
+	}
+	
+	@Override
+    public BiomeBank getRiverType() {
+    	return BiomeBank.FROZEN_RIVER;
+    }
 }

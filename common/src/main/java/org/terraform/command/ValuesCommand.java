@@ -1,9 +1,9 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
+import org.terraform.biome.BiomeBank;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
-import org.terraform.coregen.HeightMap;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
@@ -32,25 +32,49 @@ public class ValuesCommand extends TerraCommand {
 
         return sender.isOp();
     }
+    
+    private double warpSine(double tempUnwarpedSineX, int period, int seed) {
+		double warp = GenUtils.randInt(new Random(3*seed),-3, 3);
+		if(warp == 0) warp = 1;
+		if(warp < 0) {
+			warp = (10-2*warp)/10.0;
+		}
+		
+		double warpedValue;
+		if(tempUnwarpedSineX == 0 && warp == 0) { //Prevent math error
+			warpedValue = 0;
+		}else {
+			warpedValue = Math.pow(Math.abs(tempUnwarpedSineX),warp);
+		}
+		if(tempUnwarpedSineX < 0) {
+			warpedValue = -warpedValue; //Preserve sign
+		}
+		return warpedValue;
+	}
 
     @Override
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
+    	
         MathValues vals = new MathValues();
+        MathValues unwarped = new MathValues();
+        MathValues warped = new MathValues();
         TerraformWorld tw = TerraformWorld.get("world-1232341234", new Random().nextInt(99999));
-        for (int i = 0; i < 20000; i++) {
-            int x = GenUtils.randInt(-10000, 10000);
+        int period = 4;
+        for (int i = 0; i < 9000000; i++) {
+            int x = i;
             //int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
-            int height = HeightMap.getBlockHeight(tw, x, z);
-            vals.addValue(height);
+    		vals.addValue(50.0*tw.getOceanOctave().GetNoise(x,z));
         }
         sender.sendMessage("Finished");
         sender.sendMessage("Highest: " + vals.getHighest());
         sender.sendMessage("Lowest: " + vals.getLowest());
+        sender.sendMessage("Mean: " + vals.avg());
+        sender.sendMessage("Warped: " + warped);
+        sender.sendMessage("Unwarped" + unwarped);
     }
 
-    @SuppressWarnings("unused")
     private class MathValues {
         private double total = 0;
         private double lowest = 99999;

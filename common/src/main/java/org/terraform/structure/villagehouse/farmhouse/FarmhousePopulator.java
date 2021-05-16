@@ -20,10 +20,10 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.FastNoise;
-import org.terraform.utils.FastNoise.NoiseType;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Temperature;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.FastNoise.NoiseType;
 
 import java.util.Random;
 
@@ -31,7 +31,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
         int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
@@ -40,7 +40,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
 
     public void spawnFarmHouse(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
         try {
-            BiomeBank biome = tw.getBiomeBank(x, y, z);
+            BiomeBank biome = tw.getBiomeBank(x, z);
             y += GenUtils.randInt(random, 1, 3);
             TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new Location(tw.getWorld(), x, y, z));
             farmHouse.parser = new FarmhouseSchematicParser(biome, random, data);
@@ -123,7 +123,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
         Material cropOne = Material.WHEAT;
         Material cropTwo = Material.CARROTS;
 
-        if (tw.getTemperature(x, z) <= Temperature.SNOWY) {
+        if (BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature() <= Temperature.SNOWY) {
             cropOne = Material.POTATOES;
             cropTwo = Material.BEETROOTS;
         }
