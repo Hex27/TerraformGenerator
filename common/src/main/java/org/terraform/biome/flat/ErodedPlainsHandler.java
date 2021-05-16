@@ -6,6 +6,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -48,6 +49,11 @@ public class ErodedPlainsHandler extends BiomeHandler {
     @Override
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
         
+    	BiomeSection section = BiomeBank.getBiomeSectionFromChunk(tw, chunkX, chunkZ);
+    	
+    	//Don't touch sections which aren't eroded plains
+    	if(section.getBiomeBank() != BiomeBank.ERODED_PLAINS) return;
+    	
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_ERODEDPLAINS_CLIFFNOISE, 

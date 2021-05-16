@@ -10,6 +10,8 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.tree.FractalTreeBuilder;
+import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
@@ -151,9 +153,22 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		// TODO Auto-generated method stub
-		
+		//Small trees
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 14);
+        
+        //Trees on shallow areas
+        for (SimpleLocation sLoc : trees) {
+        	if(HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3) < 1.4) { //trees
+        		int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+                sLoc.setY(treeY);
+                if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+                        BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
+                    new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                }
+        	}
+        }
 	}
+	
 	@Override
 	public BiomeBank getBeachType() {
 		return BiomeBank.ROCKY_BEACH;

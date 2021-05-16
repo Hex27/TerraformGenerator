@@ -142,7 +142,7 @@ public class SwampHandler extends BiomeHandler {
         }
         
         WitchHutPopulator whp = new WitchHutPopulator();
-        if (GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666), TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
+        if (GenUtils.chance(tw.getHashedRand(66*data.getChunkX(), 666*data.getChunkZ(), 66666), TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
             whp.populate(tw, random, data);
         }
 	}

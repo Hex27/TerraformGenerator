@@ -60,10 +60,10 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         super.onEnable();
         instance = this;
 		config = new ConfigLoader(this);
-        logger = new TLogger();
 		lang = new LanguageManager(this);
         TConfigOption.loadValues(config);
         LangOpt.init(this);
+        logger = new TLogger();
         TerraformGenerator.updateSeaLevelFromConfig();
         new TerraformCommandManager(this, "terraform", "terra");
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -94,6 +94,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     
     @Override
     public void onDisable() {
+    	//This is already done in NativeGeneratorPatcherPopulator World Unload Event.
     	//NativeGeneratorPatcherPopulator.flushChanges();
     }
     

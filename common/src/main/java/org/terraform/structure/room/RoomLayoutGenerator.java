@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
@@ -280,7 +281,7 @@ public class RoomLayoutGenerator {
             if (pops.isForceSpawn()) {
                 for (CubeRoom room : rooms) {
                     if (room.pop == null && pops.canPopulate(room)) {
-                        //Bukkit.getLogger().info("Set down forced populator of " + pops.getClass().getName());
+                        //TerraformGeneratorPlugin.logger.info("Set down forced populator of " + pops.getClass().getName());
                         room.setRoomPopulator(pops);
                         if (pops.isUnique()) it.remove();
                         break;
@@ -308,10 +309,10 @@ public class RoomLayoutGenerator {
                 }
             }
             if (room.pop != null) {
-                Bukkit.getLogger().info("Registered: " + room.pop.getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
+            	TerraformGeneratorPlugin.logger.info("Registered: " + room.pop.getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
                 room.populate(data);
             } else {
-                Bukkit.getLogger().info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
+            	TerraformGeneratorPlugin.logger.info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
             }
         }
 

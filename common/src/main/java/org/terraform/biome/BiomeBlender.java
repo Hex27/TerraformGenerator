@@ -8,7 +8,7 @@ import org.terraform.data.TerraformWorld;
 public class BiomeBlender {
     private final int mountainHeight = 80;
     private final TerraformWorld tw;
-    double biomeThreshold = 0.25;
+    double biomeThreshold = 0.4;
     boolean blendBiomeGrid;
     int riverThreshold = 5;
     boolean blendWater;
@@ -74,8 +74,8 @@ public class BiomeBlender {
 
     /*
         Get edge factor only based on land, ignore rivers
+        Updated to reflect new changes to heightmap and biomes
      */
-    @Deprecated /*NEEDS UPDATE WITH NEW SYSTEM. TEMPERATURE AND MOISTURE DON'T VARY BY BLOCK COORDS ANYMORE.*/
     public double getGridEdgeFactor(TerraformWorld tw, int x, int z) {
     	BiomeSection section = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
     	
@@ -96,59 +96,14 @@ public class BiomeBlender {
     		lowestDiff = Math.abs(upperBound.getZ() - z);
 
     	//Questionable equation here.
-    	double factor = lowestDiff/(((double) sectionWidth)*biomeThreshold);
+    	double factor = (lowestDiff/(2.0*biomeThreshold*((double) sectionWidth)));
     	
-    	//Considered far from edge if it is 25% within the biomesection
+    	//Biome Edge is considered to be 60% close to the biomesection square border.
     	if(factor > 1) {
     		factor = 1;
-    	}
+    	}else if(factor < 0) factor = 0;
     	
     	return factor;
-    	
-    	
-//        if (BiomeBank.selectBiome(section, temp, moist) != currentBiome) return 0;
-//
-//        double tempDecimals = Math.abs(temp - (int) temp);
-//        double moistDecimals = Math.abs(moist - (int) moist);
-//
-//        // These tell if current point is near biome edge in biome grid
-//        boolean tempIncrease = tempDecimals < 0.5 && tempDecimals > 0.5 - biomeThreshold;
-//        boolean tempDecrease = tempDecimals > 0.5 && tempDecimals < 0.5 + biomeThreshold;
-//        boolean moistIncrease = moistDecimals < 0.5 && moistDecimals > 0.5 - biomeThreshold;
-//        boolean moistDecrease = moistDecimals > 0.5 && moistDecimals < 0.5 + biomeThreshold;
-//
-//        // Calculate biome that will be changed to
-//        double nextTemp = temp;
-//        if (tempIncrease) nextTemp = Math.min(10, temp + 1);
-//        else if (tempDecrease) nextTemp = Math.max(0, temp - 1);
-//
-//        double nextMoist = moist;
-//        if (moistIncrease) nextMoist = Math.min(10, moist + 1);
-//        else if (moistDecrease) nextMoist = Math.max(0, moist - 1);
-//
-//        //Rounds removed from here, not sure why they were being used.
-//        BiomeBank nextTempBiome = BiomeBank.selectBiome(section,(nextTemp), (moist));
-//        BiomeBank nextMoistBiome = BiomeBank.selectBiome(section, (temp), (nextMoist));
-//        BiomeBank nextCornerBiome = BiomeBank.selectBiome(section, (nextTemp), (nextMoist));
-//
-//        // Calculate how near to the edge the point is
-//        double tempFactor = Math.abs((0.5 - tempDecimals) / biomeThreshold);
-//        double moistFactor = Math.abs((0.5 - moistDecimals) / biomeThreshold);
-//
-//        double factor = 1;
-//
-//        boolean cornerSituation = tempFactor < 1 && moistFactor < 1 && (
-//                nextCornerBiome != currentBiome && nextTempBiome == currentBiome && nextMoistBiome == currentBiome
-//        );
-//        boolean tempSituation = tempFactor < 1 && nextTempBiome != currentBiome;
-//        boolean moistSituation = moistFactor < 1 && nextMoistBiome != currentBiome;
-//
-//        // If in L shaped corner in BiomeGrid
-//        if (cornerSituation) factor = Math.max(tempFactor, moistFactor);
-//        else if (tempSituation) factor = tempFactor;
-//        else if (moistSituation) factor = moistFactor;
-//
-//        return factor;
     }
 
     /**

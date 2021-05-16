@@ -45,7 +45,7 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
             Object varHandleModifiers = FIND_VAR_HANDLE.invoke(lookup, Field.class, "modifiers", int.class);
             VAR_HANDLE_SET.invoke(varHandleModifiers, new Object[]{targetField, mds & ~Modifier.FINAL});
         } catch (Throwable throwable) {
-            TerraformGeneratorPlugin.logger.info("Java 14 detected. TerraformGenerator may or may not work, but if it does, good on you!");
+            TerraformGeneratorPlugin.logger.info("Java 14+ detected.");
         }
 
         targetField.set(obj, value);
