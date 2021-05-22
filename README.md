@@ -64,15 +64,14 @@ You can choose between two methods on how to generate the world with TerraformGe
 4. Start your Server again.
 
 <h4>Method two</h4>
-This method requires the usage of a World Management plugin.  
+This method requires the usage of a World Management plugin. *DO METHOD ONE FIRST.*
 In this example are we using Multiverse-Core. TerraformGenerator *should* work with any other World Manager, but we won't guarantee it!
 
 Before creating the world, make sure it doesn't exist already. If it does will you need to delete it using `/mvdelete <world>` followed by `/mvconfirm`.  
 To create a world with TerraformGenerator, execute `/mvcreate <world> normal -g TerraformGenerator` where `<world>` is the name of the world to create.
 
 **Note:**  
-There is a rare chance that the world might not get loaded woth TerraformGenerator as the World Generator set. In those cases could newly loaded chunks break the look of the world by being normal vanilla chunks.  
-If this is the case for you, but you still want to use TerraformGenerator with a World Management plugin, follow the second step in the [first method](#method-one) to guarantee the world to be loaded with TerraformGenerator.
+There is a rare chance that the world might not get loaded woth TerraformGenerator as the World Generator set. In those cases could newly loaded chunks break the look of the world by being normal vanilla chunks. That may mean that you haven't done method one. If you have, try doing method one alone without the world management plugin. If the problem persists, report it on github or discord.
 
 <h2 name="images">Images</h2>
 Find images on the wiki 
