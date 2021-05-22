@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
@@ -36,7 +37,8 @@ public class TaigaHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.DIRT, 3, Material.PODZOL, 10),
+        return new Material[]{
+        		Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -75,14 +77,26 @@ public class TaigaHandler extends BiomeHandler {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
                 sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
-                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20))
+                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20)) {
                     new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
-                else // Normal trees
+                    BlockUtils.replaceCircularPatch(
+                    		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
+                    		5f,
+                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()), 
+                    		Material.PODZOL);
+                }else { // Normal trees
                     new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    BlockUtils.replaceCircularPatch(
+                    		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
+                    		3.5f,
+                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()), 
+                    		Material.PODZOL);
+                }
             }
         }
 
 	}
+	
 	@Override
 	public BiomeBank getBeachType() {
 		return BiomeBank.ROCKY_BEACH;

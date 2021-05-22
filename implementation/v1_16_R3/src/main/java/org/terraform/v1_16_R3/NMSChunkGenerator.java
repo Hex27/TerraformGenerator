@@ -19,10 +19,9 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.structure.StructureLocator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
-import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -71,25 +70,19 @@ public class NMSChunkGenerator extends ChunkGenerator {
         int pX = blockposition.getX();
         int pZ = blockposition.getZ();
         if (structuregenerator == StructureGenerator.STRONGHOLD) {
-//			double minDistanceSquared = Integer.MAX_VALUE;
-//			int[] min = null;
-//			for(int[] loc:StrongholdPopulator.strongholdPositions(tw)){
-//				double distSqr = Math.pow(loc[0]-pX,2) + Math.pow(loc[1]-pZ,2);
-//				if(distSqr < minDistanceSquared){
-//					minDistanceSquared = distSqr;
-//					min = loc;
-//				}
-//			}
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
             return new BlockPosition(coords[0], 20, coords[1]);
         } 
 //        else if (structuregenerator == StructureGenerator.VILLAGE) {
 //            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
 //            return new BlockPosition(coords[0], 100, coords[1]);
-//        } else if (structuregenerator == StructureGenerator.MONUMENT) {
-//            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
-//            return new BlockPosition(coords[0], 100, coords[1]);
-//        }
+//        } 
+    	else if (structuregenerator == StructureGenerator.MONUMENT) {
+            if(TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
+            	return null;
+    		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+            return new BlockPosition(coords[0], 50, coords[1]);
+        }
 
         return null;
     }

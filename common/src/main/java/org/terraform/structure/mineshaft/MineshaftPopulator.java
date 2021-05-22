@@ -27,6 +27,10 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
 		//Do not spawn mineshafts under deep oceans, there's no space.
 		if(biome.getType() == BiomeType.DEEP_OCEANIC)
 			return false;
+
+		//Don't compete with badlandsmine for space
+		if(biome == BiomeBank.BADLANDS_CANYON)
+			return false;
 		
 		//Do height and space checks
         int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);

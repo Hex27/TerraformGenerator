@@ -106,6 +106,8 @@ public enum TConfigOption {
     DEVSTUFF_EXTENDED_COMMANDS("dev-stuff.extended-commands", false),
     DEVSTUFF_SUPPRESS_CONSOLE_LOGS("dev-stuff.suppress-terraform-console-logs", true),
     DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations", true),
+    DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS("dev-stuff.vanilla-structure-locate-timeoutmillis", 5000),
+    DEVSTUFF_VANILLA_LOCATE_DISABLE("dev-stuff.vanilla-disable-locate", false),
     
     //-=[CAVES]=-
     CAVES_ALLOW_FLOODED_CAVES("caves.allow-flooded-caves", false),

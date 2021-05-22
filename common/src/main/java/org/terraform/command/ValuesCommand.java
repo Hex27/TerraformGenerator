@@ -1,7 +1,6 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
-import org.terraform.biome.BiomeBank;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
@@ -33,7 +32,8 @@ public class ValuesCommand extends TerraCommand {
         return sender.isOp();
     }
     
-    private double warpSine(double tempUnwarpedSineX, int period, int seed) {
+    @SuppressWarnings("unused")
+	private double warpSine(double tempUnwarpedSineX, int period, int seed) {
 		double warp = GenUtils.randInt(new Random(3*seed),-3, 3);
 		if(warp == 0) warp = 1;
 		if(warp < 0) {
@@ -52,7 +52,8 @@ public class ValuesCommand extends TerraCommand {
 		return warpedValue;
 	}
 
-    @Override
+    @SuppressWarnings("unused")
+	@Override
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
     	

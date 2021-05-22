@@ -2,12 +2,10 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.block.BlockFace;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;

@@ -1,6 +1,11 @@
 package org.terraform.structure.room;
 
-import org.bukkit.Bukkit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -8,12 +13,6 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 public class RoomLayoutGenerator {
     private final ArrayList<CubeRoom> rooms = new ArrayList<>();

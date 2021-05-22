@@ -4,20 +4,9 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeBlender;
-import org.terraform.biome.BiomeSection;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
-import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataPostGen;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.SingleMegaChunkStructurePopulator;
-import org.terraform.structure.StructureBufferDistanceHandler;
-import org.terraform.structure.StructureRegistry;
-
 import java.util.HashMap;
 import java.util.Stack;
 

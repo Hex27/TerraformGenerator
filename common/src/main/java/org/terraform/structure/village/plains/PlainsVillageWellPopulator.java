@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.schematic.SchematicParser;
@@ -38,6 +39,8 @@ public class PlainsVillageWellPopulator extends RoomPopulatorAbstract {
     	int x = room.getX();
         int z = room.getZ();
         int y = GenUtils.getHighestGround(data, x, z);
+        if(y < TerraformGenerator.seaLevel) 
+        	y = TerraformGenerator.seaLevel; //Force wells to not be submerged.
         BlockFace roomDir = ((DirectionalCubeRoom) room).getDirection();
         
         try {

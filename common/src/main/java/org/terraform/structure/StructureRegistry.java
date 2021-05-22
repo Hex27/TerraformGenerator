@@ -44,11 +44,11 @@ public class StructureRegistry {
         registerStructure(StructureType.LARGE_CAVE, new LargeCavePopulator());
 
         registerStructure(StructureType.LARGE_MISC, new MineshaftPopulator());
+        registerStructure(StructureType.LARGE_MISC, new BadlandsMinePopulator());
 
         registerStructure(StructureType.SMALL, new SmallDungeonPopulator());
         registerStructure(StructureType.SMALL, new ShipwreckPopulator());
 
-        registerStructure(StructureType.SMALL, new BadlandsMinePopulator());
 
         //registerStructure(StructureType.SMALL, new WitchHutPopulator());
         //registerStructure(StructureType.SMALL, new DesertWellPopulator());

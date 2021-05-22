@@ -9,7 +9,8 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 
 public class PopulatorDataSQLite extends PopulatorDataAbstract {
-    private final ChunkData c;
+    @SuppressWarnings("unused")
+	private final ChunkData c;
     private final int chunkX;
     private final int chunkZ;
 

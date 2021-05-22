@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import net.minecraft.server.v1_16_R1.*;
 import net.minecraft.server.v1_16_R1.HeightMap.Type;
+
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R1.block.CraftBlock;
@@ -16,6 +17,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.structure.StructureLocator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
@@ -101,14 +103,12 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //			}
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
             return new BlockPosition(coords[0], 20, coords[1]);
-        } 
-//        else if (structuregenerator == StructureGenerator.VILLAGE) {
-//            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
-//            return new BlockPosition(coords[0], 100, coords[1]);
-//        } else if (structuregenerator == StructureGenerator.MONUMENT) {
-//            int[] coords = new MonumentPopulator().getNearestFeature(tw, pX, pZ);
-//            return new BlockPosition(coords[0], 100, coords[1]);
-//        }
+        }  else if (structuregenerator == StructureGenerator.MONUMENT) {
+          if(TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
+	          	return null;
+	  		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+	          return new BlockPosition(coords[0], 50, coords[1]);
+	  	}
 
         return null;
     }

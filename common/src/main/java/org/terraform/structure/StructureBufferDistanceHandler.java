@@ -3,7 +3,6 @@ package org.terraform.structure;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.stronghold.StrongholdPopulator;
 public class StructureBufferDistanceHandler {
 	
 	/**

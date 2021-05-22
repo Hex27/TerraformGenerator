@@ -268,4 +268,8 @@ public class SimpleBlock {
                 y,
                 z);
     }
+    
+    public String toString() {
+    	return x + "," + y + "," + z;
+    }
 }

@@ -6,11 +6,13 @@ import org.bukkit.block.data.Snowable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -75,18 +77,29 @@ public class SnowyTaigaHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-		SimpleLocation[] trees = GenUtils.randomObjectPositions(world, data.getChunkX(), data.getChunkZ(), 11);
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 11);
 
         for (SimpleLocation sLoc : trees) {
             if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
                 sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
-                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20))
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).setSnowyLeaves(true).build(world, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
-                else // Normal trees
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).setSnowyLeaves(true).build(world, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20)) {
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    BlockUtils.replaceCircularPatch(
+                    		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
+                    		2.5f,
+                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()), 
+                    		Material.PODZOL);
+                }else { // Normal trees
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    BlockUtils.replaceCircularPatch(
+                    		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
+                    		1.5f,
+                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()), 
+                    		Material.PODZOL);
+                }
             }
         }
 	}
