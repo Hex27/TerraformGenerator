@@ -24,7 +24,7 @@ public enum HeightMap {
                 n.SetFractalOctaves(5);
                 return n;
             });
-            return 15 - 100 * Math.abs(noise.GetNoise(x, z));
+            return 15 - 200 * Math.abs(noise.GetNoise(x, z));
         }
     },
     CORE {

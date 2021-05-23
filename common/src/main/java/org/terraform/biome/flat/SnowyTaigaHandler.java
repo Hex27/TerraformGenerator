@@ -14,6 +14,8 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.FastNoise.NoiseType;
 
 import java.util.Random;
 
@@ -86,24 +88,65 @@ public class SnowyTaigaHandler extends BiomeHandler {
                 sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
                 if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20)) {
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
-                    BlockUtils.replaceCircularPatch(
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).setSnowyLeaves(true).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    defrostAndReplacePodzol(
                     		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
                     		2.5f,
-                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()), 
-                    		Material.PODZOL);
+                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()));
                 }else { // Normal trees
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
-                    BlockUtils.replaceCircularPatch(
+                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).setSnowyLeaves(true).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    defrostAndReplacePodzol(
                     		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
                     		1.5f,
-                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()), 
-                    		Material.PODZOL);
+                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()));
                 }
             }
         }
 	}
-	
+    /**
+     * Replaces the highest dirt-like blocks with a noise-fuzzed 
+     * circle of Podzol. Fuzzes the edges.
+     * @param seed
+     * @param radius
+     * @param base
+     * @param type
+     */
+    public static void defrostAndReplacePodzol(int seed, float radius, SimpleBlock base) {
+    	if (radius <= 0) return;
+        if (radius <= 0.5) {
+            //block.setReplaceType(ReplaceType.ALL);
+            base.setType(GenUtils.randMaterial(new Random(seed), Material.PODZOL));
+            return;
+        }
+        
+        FastNoise noise = new FastNoise(seed);
+        noise.SetNoiseType(NoiseType.Simplex);
+        noise.SetFrequency(0.13f);
+        Random rand = new Random(seed);
+        for (float x = -radius; x <= radius; x++) {
+            for (float z = -radius; z <= radius; z++) {
+                SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
+                rel = rel.getGround();
+                if(!BlockUtils.isDirtLike(rel.getType()))
+                	continue;
+                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
+                        + Math.pow(z, 2) / Math.pow(radius, 2);
+                double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getZ()));
+                if (equationResult <= 1.0+noiseVal) {
+                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    if(equationResult * 4 > 0.7+noiseVal) {
+                    	if(rand.nextBoolean()) {
+                    		rel.setType(Material.PODZOL);
+                    		rel.getRelative(0,1,0).lsetType(Material.AIR);
+                    	}
+                    }else {
+                    	rel.setType(Material.PODZOL);
+                		rel.getRelative(0,1,0).lsetType(Material.AIR);
+                    }
+                }
+            }
+        }
+    }
 
 	@Override
 	public BiomeBank getBeachType() {

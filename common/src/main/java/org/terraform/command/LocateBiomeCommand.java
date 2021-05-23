@@ -39,7 +39,7 @@ public class LocateBiomeCommand extends TerraCommand {
     @Override
     public boolean hasPermission(CommandSender sender) {
 
-        return sender.isOp();
+        return sender.isOp() || sender.hasPermission("terraformgenerator.locatebiome");
     }
 
     @Override

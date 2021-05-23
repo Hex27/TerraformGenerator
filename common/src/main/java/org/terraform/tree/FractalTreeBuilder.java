@@ -261,8 +261,8 @@ public class FractalTreeBuilder {
                         .setTrunkType(Material.OAK_LOG)
                         .setFractalLeaves(new FractalLeaves(this).setRadius(4).setMaterial(Material.PUMPKIN));
             case DARK_OAK_SMALL:
-                this.setBaseHeight(1)
-                        .setBaseThickness(2)
+                this.setBaseHeight(3)
+                        .setBaseThickness(3)
                         .setThicknessDecrement(0.5f)
                         .setMaxDepth(3)
                         .setTrunkType(Material.DARK_OAK_WOOD)
@@ -271,9 +271,9 @@ public class FractalTreeBuilder {
                         .setFractalThreshold(4)
                         .setMaxBend(1.4 * Math.PI / 6)
                         .setMinBend(1 * Math.PI / 6)
-                        .setMaxPitch(Math.PI)
+                        .setMaxPitch(Math.PI/1.5)
                         .setMinPitch(0)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(2, 1, 2).setMaterial(Material.DARK_OAK_LEAVES));
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(5, 1, 5).setMaterial(Material.DARK_OAK_LEAVES));
                 break;
             case DARK_OAK_BIG_TOP:
                 this.setBaseHeight(6)
@@ -286,9 +286,9 @@ public class FractalTreeBuilder {
                         .setFractalThreshold(4)
                         .setMaxBend(1.4 * Math.PI / 6)
                         .setMinBend(1 * Math.PI / 6)
-                        .setMaxPitch(Math.PI)
+                        .setMaxPitch(Math.PI/1.5)
                         .setMinPitch(0)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2, 4).setMaterial(Material.DARK_OAK_LEAVES).setOffsetY(1));
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(6, 2, 6).setMaterial(Material.DARK_OAK_LEAVES).setOffsetY(1));
                 break;
             case DARK_OAK_BIG_BOTTOM:
                 this.setBaseHeight(4)
@@ -434,12 +434,12 @@ public class FractalTreeBuilder {
     			<= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
     }
     
-    public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public boolean build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         
     	//Terrain too steep, don't attempt tree generation, 
     	//lest it gets stuck in a wall.
     	if(!heightGradientChecked) {
-    		if(!checkGradient(data,x,z)) return;
+    		if(!checkGradient(data,x,z)) return false;
     	}
     	
     	if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
@@ -497,6 +497,8 @@ public class FractalTreeBuilder {
 	            }else
 	            	beeHive = beeHive.getRelative(0,-1,0);
 	        }
+        
+        return true;
         
     }
 

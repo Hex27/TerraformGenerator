@@ -4,43 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import org.terraform.biome.beach.BadlandsBeachHandler;
-import org.terraform.biome.beach.IcyBeachHandler;
-import org.terraform.biome.beach.MudflatsHandler;
-import org.terraform.biome.beach.RockBeachHandler;
-import org.terraform.biome.beach.SandyBeachHandler;
-import org.terraform.biome.cave.AbstractCavePopulator;
-import org.terraform.biome.cave.FrozenCavePopulator;
-import org.terraform.biome.cave.MossyCavePopulator;
-import org.terraform.biome.flat.BadlandsHandler;
-import org.terraform.biome.flat.BambooForestHandler;
-import org.terraform.biome.flat.DarkForestHandler;
-import org.terraform.biome.flat.DesertHandler;
-import org.terraform.biome.flat.ErodedPlainsHandler;
-import org.terraform.biome.flat.ForestHandler;
-import org.terraform.biome.flat.IceSpikesHandler;
-import org.terraform.biome.flat.JungleHandler;
-import org.terraform.biome.flat.PlainsHandler;
-import org.terraform.biome.flat.SavannaHandler;
-import org.terraform.biome.flat.SnowyTaigaHandler;
-import org.terraform.biome.flat.SnowyWastelandHandler;
-import org.terraform.biome.flat.TaigaHandler;
-import org.terraform.biome.mountainous.BadlandsCanyonHandler;
-import org.terraform.biome.mountainous.BirchMountainsHandler;
-import org.terraform.biome.mountainous.DesertHillsHandler;
-import org.terraform.biome.mountainous.RockyMountainsHandler;
-import org.terraform.biome.mountainous.SnowyMountainsHandler;
-import org.terraform.biome.ocean.BlackOceansHandler;
-import org.terraform.biome.ocean.ColdOceansHandler;
-import org.terraform.biome.ocean.FrozenOceansHandler;
-import org.terraform.biome.ocean.CoralReefOceanHandler;
-import org.terraform.biome.ocean.LukewarmOceansHandler;
-import org.terraform.biome.ocean.OceansHandler;
-import org.terraform.biome.ocean.SwampHandler;
-import org.terraform.biome.ocean.WarmOceansHandler;
-import org.terraform.biome.river.FrozenRiverHandler;
-import org.terraform.biome.river.JungleRiverHandler;
-import org.terraform.biome.river.RiverHandler;
+import org.terraform.biome.beach.*;
+import org.terraform.biome.cave.*;
+import org.terraform.biome.flat.*;
+import org.terraform.biome.mountainous.*;
+import org.terraform.biome.ocean.*;
+import org.terraform.biome.river.*;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TWSimpleLocation;
@@ -80,6 +49,7 @@ public enum BiomeBank {
     RIVER(new RiverHandler(), BiomeType.RIVER, BiomeClimate.TRANSITION), 
     JUNGLE_RIVER(new JungleRiverHandler(), BiomeType.RIVER, BiomeClimate.HUMID_VEGETATION),
     FROZEN_RIVER(new FrozenRiverHandler(), BiomeType.RIVER, BiomeClimate.SNOWY, new FrozenCavePopulator()), //Special case, handle later
+    DARK_FOREST_RIVER(new DarkForestRiverHandler(), BiomeType.RIVER, BiomeClimate.HUMID_VEGETATION, new FrozenCavePopulator()), //Special case, handle later
 
     //DEEP OCEANIC
     DEEP_OCEAN(new OceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_DEEP_OCEAN_WEIGHT.getInt()),
@@ -109,6 +79,7 @@ public enum BiomeBank {
 
     //BEACHES (Don't include in selectBiome)
     SANDY_BEACH(new SandyBeachHandler(), BiomeType.BEACH, BiomeClimate.TRANSITION),
+    DARK_FOREST_BEACH(new DarkForestBeachHandler(), BiomeType.BEACH, BiomeClimate.HUMID_VEGETATION),
     BADLANDS_BEACH(new BadlandsBeachHandler(), BiomeType.BEACH, BiomeClimate.HOT_BARREN),
     ROCKY_BEACH(new RockBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
     ICY_BEACH(new IcyBeachHandler(), BiomeType.BEACH, BiomeClimate.SNOWY, new FrozenCavePopulator()),
