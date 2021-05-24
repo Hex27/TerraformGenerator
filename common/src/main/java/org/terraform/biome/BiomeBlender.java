@@ -5,6 +5,8 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 
+import java.util.Collection;
+
 public class BiomeBlender {
     private final int mountainHeight = 80;
     private final TerraformWorld tw;
@@ -63,7 +65,7 @@ public class BiomeBlender {
 
         if (blendBiomeGrid) {
             // Same here when closer to biome edge
-            double gridFactor = getGridEdgeFactor(tw,x,z);//getGridEdgeFactor(BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z),
+            double gridFactor = getGridEdgeFactor(currentBiome, tw,x,z);//getGridEdgeFactor(BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z),
             		//currentBiome,
                     //BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature(), BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
             if (gridFactor < factor) factor = gridFactor;
@@ -76,34 +78,35 @@ public class BiomeBlender {
         Get edge factor only based on land, ignore rivers
         Updated to reflect new changes to heightmap and biomes
      */
-    public double getGridEdgeFactor(TerraformWorld tw, int x, int z) {
-    	BiomeSection section = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
-    	
-    	int sectionWidth = BiomeSection.sectionWidth;
-    	
-    	SimpleLocation lowerBound = section.getLowerBounds();
-    	SimpleLocation upperBound = section.getUpperBounds();
-    	
-    	double lowestDiff = (double) sectionWidth;
-    	
-    	if(Math.abs(lowerBound.getX() - x) < lowestDiff) 
-    		lowestDiff = Math.abs(lowerBound.getX() - x);
-    	if(Math.abs(upperBound.getX() - x) < lowestDiff) 
-    		lowestDiff = Math.abs(upperBound.getX() - x);
-    	if(Math.abs(lowerBound.getZ() - z) < lowestDiff) 
-    		lowestDiff = Math.abs(lowerBound.getZ() - z);
-    	if(Math.abs(upperBound.getZ() - z) < lowestDiff) 
-    		lowestDiff = Math.abs(upperBound.getZ() - z);
+    public double getGridEdgeFactor(BiomeBank currentBiome, TerraformWorld tw, int x, int z) {
+    	SimpleLocation target  = new SimpleLocation(x,0,z);
+    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
 
-    	//Questionable equation here.
-    	double factor = (lowestDiff/(2.0*biomeThreshold*((double) sectionWidth)));
-    	
-    	//Biome Edge is considered to be 60% close to the biomesection square border.
-    	if(factor > 1) {
-    		factor = 1;
-    	}else if(factor < 0) factor = 0;
-    	
-    	return factor;
+    	BiomeSection mostDominantTarget = null;
+    	double dominantDominance = -100;
+    	for (BiomeSection section : sections) {
+    	    if (section.getBiomeBank() == currentBiome) {
+    	        double dom = section.getDominance(target);
+    	        if (dom > dominantDominance) {
+    	            mostDominantTarget = section;
+    	            dominantDominance = dom;
+                }
+
+            }
+        }
+    	if (mostDominantTarget == null) return 0;
+
+        double factor = 1;
+    	for (BiomeSection section : sections) {
+    	    if (section.getBiomeBank() == currentBiome) continue;
+
+    	    float dom = section.getDominance(target);
+    	    double diff = Math.max(0, dominantDominance - dom);
+
+    	    factor = Math.min(factor, diff);
+        }
+
+    	return Math.min(factor, 1);
     }
 
     /**
