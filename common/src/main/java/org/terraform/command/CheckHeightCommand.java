@@ -81,7 +81,7 @@ public class CheckHeightCommand extends TerraCommand {
         p.sendMessage("Temperature: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature());
         p.sendMessage("Moisture: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
         p.sendMessage("Biome edge factor: " + new BiomeBlender(tw, true, false, false)
-                .setBiomeThreshold(0.45).getEdgeFactor(biome, x, z));
+                .setGridBlendingFactor(0.45).getEdgeFactor(biome, x, z));
         p.sendMessage("Result Biome: " + biome);
         
     }

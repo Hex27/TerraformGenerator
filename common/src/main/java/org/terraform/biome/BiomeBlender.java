@@ -7,10 +7,14 @@ import org.terraform.data.TerraformWorld;
 
 import java.util.Collection;
 
+/**
+ * This class is used to determine how near
+ * certain coordinate is to the edge of current biome.
+ */
 public class BiomeBlender {
     private final int mountainHeight = 80;
     private final TerraformWorld tw;
-    double biomeThreshold = 0.4;
+    double gridBlendingFactor = 1;
     boolean blendBiomeGrid;
     int riverThreshold = 5;
     boolean blendWater;
@@ -79,17 +83,17 @@ public class BiomeBlender {
         Updated to reflect new changes to heightmap and biomes
      */
     public double getGridEdgeFactor(BiomeBank currentBiome, TerraformWorld tw, int x, int z) {
-    	SimpleLocation target  = new SimpleLocation(x,0,z);
-    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
+        SimpleLocation target  = new SimpleLocation(x,0,z);
+    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, 3, x, z);
 
     	BiomeSection mostDominantTarget = null;
-    	double dominantDominance = -100;
+    	double dominance = -100;
     	for (BiomeSection section : sections) {
     	    if (section.getBiomeBank() == currentBiome) {
     	        double dom = section.getDominance(target);
-    	        if (dom > dominantDominance) {
+    	        if (dom > dominance) {
     	            mostDominantTarget = section;
-    	            dominantDominance = dom;
+    	            dominance = dom;
                 }
 
             }
@@ -101,22 +105,21 @@ public class BiomeBlender {
     	    if (section.getBiomeBank() == currentBiome) continue;
 
     	    float dom = section.getDominance(target);
-    	    double diff = Math.max(0, dominantDominance - dom);
+    	    double diff = Math.max(0, dominance - dom);
 
-    	    factor = Math.min(factor, diff);
+    	    factor = Math.min(factor, diff * gridBlendingFactor);
         }
 
     	return Math.min(factor, 1);
     }
 
     /**
-     * @param biomeThreshold Value between > 0 and 1, defines how quickly
-     *                       output value approaches 0 when near biome edge.
-     *                       Default of 0.25, which means blending will start
-     *                       1/4 "biome grid units" from biome edge.
+     * @param gridBlendingFactor Section dominance difference is multiplied
+     *                           by this value. Can be used to control how "steep"
+     *                           the blending near biome edge is.
      */
-    public BiomeBlender setBiomeThreshold(double biomeThreshold) {
-        this.biomeThreshold = biomeThreshold;
+    public BiomeBlender setGridBlendingFactor(double gridBlendingFactor) {
+        this.gridBlendingFactor = gridBlendingFactor;
         return this;
     }
 
