@@ -311,6 +311,8 @@ public class BlockUtils {
 			case BLACK_OCEAN:
 			case DEEP_BLACK_OCEAN:
 			case DARK_FOREST:
+			case DARK_FOREST_RIVER:
+			case DARK_FOREST_BEACH:
 				return Material.getMaterial("DARK_OAK_" + wood);
         }
         return Material.getMaterial("OAK_" + wood);
