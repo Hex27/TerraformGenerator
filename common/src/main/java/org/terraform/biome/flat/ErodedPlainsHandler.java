@@ -107,8 +107,8 @@ public class ErodedPlainsHandler extends BiomeHandler {
     }
 
     private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
-        if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true, true)
-                .setGridBlendingFactor(0.3).setRiverThreshold(4).setMountainThreshold(4).setBlendBeaches(false);
+        if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
+                .setGridBlendingFactor(0.3).setRiverThreshold(4).setBlendBeaches(false);
         return biomeBlender;
     }
 

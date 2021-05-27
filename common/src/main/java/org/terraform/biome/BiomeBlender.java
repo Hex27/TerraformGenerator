@@ -12,26 +12,22 @@ import java.util.Collection;
  * certain coordinate is to the edge of current biome.
  */
 public class BiomeBlender {
-    private final int mountainHeight = 80;
     private final TerraformWorld tw;
     double gridBlendingFactor = 1;
     boolean blendBiomeGrid;
     int riverThreshold = 5;
     boolean blendWater;
-    int mountainThreshold = 5;
-    boolean blendMountains;
     boolean blendBeachesToo = true;
 
-    public BiomeBlender(TerraformWorld tw, boolean blendBiomeGrid, boolean blendWater, boolean blendMountains) {
+    public BiomeBlender(TerraformWorld tw, boolean blendBiomeGrid, boolean blendWater) {
         this.tw = tw;
 
         this.blendBiomeGrid = blendBiomeGrid;
         this.blendWater = blendWater;
-        this.blendMountains = blendMountains;
     }
 
     public BiomeBlender(TerraformWorld tw) {
-        this(tw, true, true, true);
+        this(tw, true, true);
     }
 
     /**
@@ -59,12 +55,6 @@ public class BiomeBlender {
                     (HeightMap.getPreciseHeight(tw, x, z) - TerraformGenerator.seaLevel) / riverThreshold;
 
             if (riverFactor < factor) factor = Math.max(0, riverFactor);
-        }
-
-        if (blendMountains) {
-            // Linear blending when closer to mountains
-            double mountainFactor = ((mountainHeight - 5) - HeightMap.getPreciseHeight(tw, x, z)) / (double) mountainThreshold;
-            if (mountainFactor < factor) factor = Math.max(0, mountainFactor);
         }
 
         if (blendBiomeGrid) {
@@ -130,16 +120,6 @@ public class BiomeBlender {
      */
     public BiomeBlender setRiverThreshold(int riverThreshold) {
         this.riverThreshold = riverThreshold;
-        return this;
-    }
-
-    /**
-     * @param mountainThreshold Default value of 5, which means
-     *                          linear blending happens when closer
-     *                          than 5 blocks from mountain height threshold.
-     */
-    public BiomeBlender setMountainThreshold(int mountainThreshold) {
-        this.mountainThreshold = mountainThreshold;
         return this;
     }
 
