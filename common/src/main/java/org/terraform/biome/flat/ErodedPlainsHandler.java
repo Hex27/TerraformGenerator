@@ -48,11 +48,6 @@ public class ErodedPlainsHandler extends BiomeHandler {
 
     @Override
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
-        
-    	BiomeSection section = BiomeBank.getBiomeSectionFromChunk(tw, chunkX, chunkZ);
-    	
-    	//Don't touch sections which aren't eroded plains
-    	if(section.getBiomeBank() != BiomeBank.ERODED_PLAINS) return;
     	
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -86,6 +81,10 @@ public class ErodedPlainsHandler extends BiomeHandler {
 
                 double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
                 int height = (int) preciseHeight;
+
+                // Don't touch areas that aren't eroded plains
+                if (tw.getBiomeBank(rawX, height, rawZ) != BiomeBank.ERODED_PLAINS) continue;
+
                 double noiseValue = Math.max(0, noise.GetNoise(rawX, rawZ)) * getBiomeBlender(tw).getEdgeFactor(BiomeBank.ERODED_PLAINS, rawX, rawZ);
                 double detailsValue = details.GetNoise(rawX, rawZ);
 
@@ -108,7 +107,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
 
     private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
         if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
-                .setGridBlendingFactor(0.3).setRiverThreshold(4).setBlendBeaches(false);
+                .setRiverThreshold(4).setBlendBeaches(false);
         return biomeBlender;
     }
 
