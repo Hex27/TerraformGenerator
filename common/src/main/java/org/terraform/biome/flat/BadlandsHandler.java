@@ -35,14 +35,13 @@ public class BadlandsHandler extends BiomeHandler {
 
     private static BiomeBlender getRiversBlender(TerraformWorld tw) {
         // Only one blender needed!
-        if (riversBlender == null) riversBlender = new BiomeBlender(tw, true, false, false)
-                .setBiomeThreshold(0.45);
+        if (riversBlender == null) riversBlender = new BiomeBlender(tw, true, false)
+                .setGridBlendingFactor(0.45);
         return riversBlender;
     }
 
     private static BiomeBlender getPlateauBlender(TerraformWorld tw) {
-        if (plateauBlender == null) plateauBlender = new BiomeBlender(tw, true, true, true)
-                .setBiomeThreshold(0.35).setMountainThreshold(8).setRiverThreshold(10);
+        if (plateauBlender == null) plateauBlender = new BiomeBlender(tw, true, true).setRiverThreshold(10);
         return plateauBlender;
     }
 
@@ -247,7 +246,6 @@ public class BadlandsHandler extends BiomeHandler {
                         material = BlockUtils.getTerracotta(height + y);
 
                     data.setType(x, height + y, z, material);
-
                 }
 
                 // Prevent inner parts of plateau from generating sand in vain
