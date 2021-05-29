@@ -54,6 +54,34 @@ public class BiomeSection {
 	}
 
 	/**
+	 * @return the width * width closest biome sections to this block point.
+	 */
+	public static Collection<BiomeSection> getSurroundingSections(TerraformWorld tw, int width, int blockX, int blockZ) {
+	    BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, blockX, blockZ);
+	    Collection<BiomeSection> sections = new ArrayList<>();
+
+		SimpleLocation center = homeSection.getCenter();
+		int startX, startZ;
+		if (width % 2 == 1) {
+		    startX = startZ = -width / 2;
+        } else {
+		    startX = blockX >= center.getX() ? -width / 2 - 1 : -width / 2 ;
+		    startZ = blockZ >= center.getZ() ? -width / 2 - 1 : -width / 2 ;
+        }
+
+	    for (int rx = startX; rx < startX + width; rx++) {
+	        for (int rz = startZ; rz < startZ + width; rz++) {
+                sections.add(homeSection.getRelative(rx, rz));
+	        }
+        }
+
+	    if (sections.size() != width * width)
+            TerraformGeneratorPlugin.logger.error("Section size was not " + (width * width) + ".");
+
+	    return sections;
+    }
+
+	/**
 	 * 
 	 * @param blockX
 	 * @param blockZ
@@ -195,7 +223,7 @@ public class BiomeSection {
     	return mostDominant;
 	
 	}
-	
+
 	/**
 	 * 
 	 * @param radius in biomesection coords
