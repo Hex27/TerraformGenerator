@@ -35,7 +35,10 @@ public abstract class BiomeHandler {
 
     // Populate event but for the terrain.
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) { /* Do nothing by default */ }
-    
+    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome,  int chunkX, int chunkZ) {
+        transformTerrain(tw, random, chunk, chunkX, chunkZ);
+    }
+
     //Beach type. This will be used instead if the height is too close to sea level.
     public BiomeBank getBeachType() {
     	return BiomeBank.SANDY_BEACH;
@@ -49,9 +52,6 @@ public abstract class BiomeHandler {
     //By default, use the normal height map.
     //Omit mountain and sea calculations - they're not necessary.
     public double calculateHeight(TerraformWorld tw, int x, int z) {
-    	
-        double height = HeightMap.CORE.getHeight(tw, x, z);
-
-        return height;
+        return HeightMap.CORE.getHeight(tw, x, z);
     }
 }

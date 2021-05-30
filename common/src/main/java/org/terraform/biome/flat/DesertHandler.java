@@ -4,7 +4,10 @@ import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.beach.DesertBeachHandler;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -30,6 +33,21 @@ public class DesertHandler extends BiomeHandler {
         return Biome.DESERT;
     }
 
+    @Override
+    public BiomeBank getBeachType() {
+        return BiomeBank.DESERT_BEACH;
+    }
+
+    @Override
+    public BiomeHandler getTransformHandler() {
+        return BiomeBank.DESERT_BEACH.getHandler();
+    }
+
+    @Override
+    public BiomeBank getRiverType() {
+        return BiomeBank.OASIS_RIVER;
+    }
+
     //Pad more sandstone so that mountains don't get stone exposed vertically
     @Override
     public Material[] getSurfaceCrust(Random rand) {
@@ -46,10 +64,15 @@ public class DesertHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-
         boolean cactusGathering = GenUtils.chance(random, 1, 100);
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                double riverDepth = HeightMap.getRawRiverDepth(world, x, z);
+
+                if (DesertBeachHandler.isLushBeach(world, x, z)) {
+                    DesertBeachHandler.generateLushBeach(world, random, data, x, z, riverDepth);
+                }
+
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (data.getBiome(x, z) != getBiome()) continue;
                 Material base = data.getType(x, y, z);
@@ -99,7 +122,7 @@ public class DesertHandler extends BiomeHandler {
             new DesertWellPopulator().populate(tw, random, data, false);
         }
 	}
-	
+
 	public void spawnRibCage(Random random, SimpleBlock target) {
 		BlockFace direction = BlockUtils.getDirectBlockFace(random);
 		int spineLength = GenUtils.randInt(random, 10, 14);

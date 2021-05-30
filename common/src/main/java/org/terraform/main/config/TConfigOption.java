@@ -45,6 +45,7 @@ public enum TConfigOption {
     BIOME_DESERT_MOUNTAINS_WEIGHT("biome.desertmountains.weight", 0),
     BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE("biome.desertmountains.place-yellow-concrete", true),
     BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE_POWDER("biome.desertmountains.place-yellow-concrete-powder", true),
+    BIOME_DESERT_LUSH_COMMONNESS("biome.desert.lush-commonness", 1.0),
     BIOME_OCEAN_WEIGHT("biome.ocean.weight", 6),
     BIOME_BLACK_OCEAN_WEIGHT("biome.blackocean.weight", 1),
     BIOME_COLD_OCEAN_WEIGHT("biome.coldocean.weight", 6),

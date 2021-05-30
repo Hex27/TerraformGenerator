@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -37,7 +38,12 @@ public class JungleHandler extends BiomeHandler {
         return Biome.JUNGLE;
     }
 
-//	@Override
+    @Override
+    public BiomeBank getRiverType() {
+        return BiomeBank.JUNGLE_RIVER;
+    }
+
+    //	@Override
 //	public int getHeight(int x, int z, Random rand) {
 //		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
 //		gen.setScale(0.005);

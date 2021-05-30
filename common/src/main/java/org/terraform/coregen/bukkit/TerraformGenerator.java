@@ -115,7 +115,7 @@ public class TerraformGenerator extends ChunkGenerator {
         }
 
         for (BiomeHandler handler : biomesToTransform) {
-            handler.transformTerrain(tw, random, chunk, chunkX, chunkZ);
+            handler.transformTerrain(tw, random, chunk, biome, chunkX, chunkZ);
         }
 
         return chunk;

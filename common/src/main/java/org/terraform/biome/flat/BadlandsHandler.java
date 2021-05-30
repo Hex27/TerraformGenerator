@@ -7,6 +7,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.beach.DesertBeachHandler;
 import org.terraform.biome.mountainous.BadlandsCanyonHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -59,6 +60,11 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     @Override
+    public BiomeBank getRiverType() {
+        return BiomeBank.OASIS_RIVER;
+    }
+
+    @Override
     public boolean isOcean() {
         return false;
     }
@@ -88,6 +94,10 @@ public class BadlandsHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                if (DesertBeachHandler.isLushBeach(world, x, z)) {
+                    DesertBeachHandler.generateLushBeach(world, random, data, x, z, HeightMap.getRawRiverDepth(world, x, z));
+                }
+
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
                 BiomeBank currentBiome = world.getBiomeBank(x, highest, z);//BiomeBank.calculateBiome(world, x, TerraformGenerator.seaLevel, z);
@@ -131,7 +141,10 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ) {
+        // Lush oases
+        BiomeBank.DESERT_BEACH.getHandler().transformTerrain(tw, random, chunk, biome, chunkX, chunkZ);
+
         BiomeBlender blender = getRiversBlender(tw);
 
         FastNoise wallNoise = NoiseCacheHandler.getNoise(
@@ -154,7 +167,7 @@ public class BadlandsHandler extends BiomeHandler {
                 double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
                 //int height = (int) preciseHeight;
                 BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, TerraformGenerator.seaLevel, rawZ);
-
+//                System.out.println("Badlands river biome: " + currentBiome + ", with river depth of " + HeightMap.getRawRiverDepth(tw, rawX, rawZ));
                 if (currentBiome == BiomeBank.BADLANDS
                         || currentBiome == BiomeBank.BADLANDS_CANYON
                         || currentBiome == BiomeBank.BADLANDS_BEACH

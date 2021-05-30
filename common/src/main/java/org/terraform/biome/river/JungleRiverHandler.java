@@ -67,23 +67,8 @@ public class JungleRiverHandler extends BiomeHandler {
                 }
                 
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-
-                FastNoise lilypadNoise = NoiseCacheHandler.getNoise(
-                		world, 
-                		NoiseCacheEntry.BIOME_JUNGLE_LILYPADS, 
-                		tw -> {
-                            FastNoise n = new FastNoise((int) (tw.getSeed() * 2));
-                            n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-                            n.SetFrequency(0.05f);
-                        
-                	        return n;
-                		});
                 
-                // Generate random lily pads in jungle rivers
-                // Deeper waters -> less pads. Noise makes sure they are in groups
-                if (GenUtils.chance(1, (int) (lilypadNoise.GetNoise(x, z) * 7 + Math.pow(TerraformGenerator.seaLevel - y, 3) + 18))) {
-                    data.setType(x, TerraformGenerator.seaLevel + 1, z, Material.LILY_PAD);
-                }
+                generateLilyPad(world, random, data, x, z, y);
 
                 // SEA GRASS/KELP
                 if (GenUtils.chance(random, 10, 100)) {
@@ -102,8 +87,18 @@ public class JungleRiverHandler extends BiomeHandler {
         }
     }
 
-    private void generateKelp(int x, int y, int z, PopulatorDataAbstract data, Random random) {
-        for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(5, 15); ny++) {
+    /**
+     * Generate random lily pads in jungle rivers
+     * Deeper waters -> less pads. Noise makes sure they are in groups
+     */
+    public static void generateLilyPad(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int z, int highestGround) {
+        if (GenUtils.chance(random, 1, (int) (getLilyPadNoise(tw, x, z) * 7 + Math.pow(TerraformGenerator.seaLevel - highestGround, 3) + 18))) {
+            data.setType(x, TerraformGenerator.seaLevel + 1, z, Material.LILY_PAD);
+        }
+    }
+
+    public static void generateKelp(int x, int y, int z, PopulatorDataAbstract data, Random random) {
+        for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(random, 0, 5); ny++) {
             data.setType(x, ny, z, Material.KELP_PLANT);
         }
     }
@@ -114,5 +109,19 @@ public class JungleRiverHandler extends BiomeHandler {
 		
 	}
 
+	public static double getLilyPadNoise(TerraformWorld tw, int x, int z) {
+        FastNoise lilyPadNoise = NoiseCacheHandler.getNoise(
+                tw,
+                NoiseCacheEntry.BIOME_JUNGLE_LILYPADS,
+                world -> {
+                    FastNoise n = new FastNoise((int) (world.getSeed() * 2));
+                    n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+                    n.SetFrequency(0.05f);
+
+                    return n;
+                });
+
+        return lilyPadNoise.GetNoise(x, z);
+    }
 
 }
