@@ -8,6 +8,7 @@ import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
+import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -126,7 +127,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
                 done.add(hash);
 
                 TerraformGeneratorPlugin.injector.getICAData(((PopulatorDataPostGen) data).getWorld().getChunkAt(chunkX, chunkZ))
-                        .registerGuardians(x - range / 2, y, z - range / 2,
+                        .registerNaturalSpawns(NaturalSpawnType.GUARDIAN, x - range / 2, y, z - range / 2,
                                 x + range / 2, TerraformGenerator.seaLevel, z + range / 2);
             }
         }

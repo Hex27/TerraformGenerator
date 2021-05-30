@@ -1,12 +1,14 @@
 package org.terraform.v1_15_R1;
 
 import net.minecraft.server.v1_15_R1.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
+import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;
@@ -51,7 +53,7 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
     }
 
     public Biome getBiome(int rawX, int rawZ) {
-        int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
+        //int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
         return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf(ica
         // .getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase());
     }
@@ -194,21 +196,29 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
     }
 
     @Override
-    public void registerGuardians(int x0, int y0, int z0, int x1, int y1, int z1) {
-//		BiomeBase base = ica.getBiomeIndex().getBiome(x,y,z);
-//		BiomeBase.BiomeMeta spawnMeta = new BiomeBase.BiomeMeta(EntityTypes.GUARDIAN, 1, 2, 4);
-//		base.getMobs(EnumCreatureType.WATER_CREATURE).add(spawnMeta);
-
-        TerraStructureStart start = new TerraStructureStart("ocean_monument",
-                WorldGenerator.OCEAN_MONUMENT, chunkX, chunkZ, null, z1, z1);
+    public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
+    	String tagName = "ocean_monument";
+    	StructureGenerator<?> generator = StructureGenerator.OCEAN_MONUMENT;
+    	switch(type) {
+    	case GUARDIAN:
+    		tagName = "ocean_monument";
+    		generator = StructureGenerator.OCEAN_MONUMENT;
+    		break;
+    	case PILLAGER:
+    		tagName = "pillager_outpost";
+    		generator = StructureGenerator.PILLAGER_OUTPOST;
+    		break;
+    	}
+    	
+        TerraStructureStart start = new TerraStructureStart(tagName,
+        		generator, chunkX, chunkZ, null, z1, z1);
         start.setStructureBounds(x0, y0, z0, x1, y1, z1);
         IStructureAccess sa = ((IStructureAccess) ica);
         sa.a( //setStartForFeature
-                WorldGenerator.OCEAN_MONUMENT.b(), //Get ID
+        		generator.b(), //Get ID
                 start);
 
-        sa.a(WorldGenerator.OCEAN_MONUMENT.b(), new ChunkCoordIntPair(chunkX, chunkZ).pair());
-
+        sa.a(generator.b(), new ChunkCoordIntPair(chunkX, chunkZ).pair());
     }
 
     @Override

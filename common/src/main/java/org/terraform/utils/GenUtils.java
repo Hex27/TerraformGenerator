@@ -408,6 +408,46 @@ public class GenUtils {
         }
         return y;
     }
+    
+    @SuppressWarnings("incomplete-switch")
+	public static boolean isGroundLike(Material block) {
+        if(BlockUtils.isStoneLike(block)) return true;
+        if(block == Material.SAND 
+        	|| block == Material.RED_SAND
+        	|| block == Material.GRAVEL)
+        	return true;;
+
+        if(block.isSolid()) {
+            switch(block) {
+                case HAY_BLOCK:
+                case ICE:
+                case PACKED_ICE:
+                case BLUE_ICE:
+                case CACTUS:
+                case BAMBOO:
+                case BAMBOO_SAPLING:
+                case IRON_BARS:
+                case LANTERN:
+                    return false;
+            }
+            if(block.isInteractable()) {
+                return false;
+            }
+            if(Tag.SLABS.isTagged(block)) {
+                return false;
+            }
+            
+            String name = block.toString();
+            for(String contains : BLACKLIST_HIGHEST_GROUND) {
+                if(name.contains(contains)) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
 
 
     public static Material[] mergeArr(Material[]... arrs) {

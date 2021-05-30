@@ -46,6 +46,7 @@ public class TerraformCommandManager implements CommandExecutor {
             this.registerCommand(new AnimalSpawnerCommand(plugin, "animalspawner", "as"));
             this.registerCommand(new MineshaftCommand(plugin, "mineshaft", "ms"));
             this.registerCommand(new ShipwreckCommand(plugin, "shipwreck", "sw"));
+            this.registerCommand(new OutpostCommand(plugin, "outpost"));
             this.registerCommand(new UndergroundDungeonCommand(plugin, "ud", "undergrounddungeon"));
             this.registerCommand(new DrownedDungeonCommand(plugin, "dd", "drowneddungeon"));
             this.registerCommand(new CheckHeightCommand(plugin, "checkheight", "ch"));

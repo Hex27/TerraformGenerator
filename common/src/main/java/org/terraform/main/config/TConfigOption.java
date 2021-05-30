@@ -156,6 +156,8 @@ public enum TConfigOption {
     STRUCTURES_BADLANDS_MINE_ENABLED("structures.badlands-mine.enabled", true),
     STRUCTURES_BADLANDS_MINE_DISTANCE("structures.badlands-mine.distance-between-mines", 8),
     STRUCTURES_BADLANDS_MINE_DEPTH("structures.badlands-mine.depth", 25),
+    STRUCTURES_OUTPOST_ENABLED("structures.outpost.enabled", true),
+    STRUCTURES_OUTPOST_SPAWNRATIO("structures.outpost.spawnratio", 0.8),
 
     //-=[ANIMALS]=-
     //BEES

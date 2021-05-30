@@ -96,11 +96,6 @@ public class TerraSchematic {
         BlockDataFixerAbstract bdfa = TerraformGeneratorPlugin.injector.getBlockDataFixer();
         ArrayList<Vector> multiFace = new ArrayList<>();
         
-//        if(this.VERSION_VALUE > 14.4) {
-//        	//Fix weird one block offset.
-//        	refPoint = refPoint.getRelative(1,0,1);
-//        }
-        
         for (Entry<Vector, BlockData> entry : data.entrySet()) {
             Vector pos = entry.getKey().clone();
             BlockData bd = entry.getValue();

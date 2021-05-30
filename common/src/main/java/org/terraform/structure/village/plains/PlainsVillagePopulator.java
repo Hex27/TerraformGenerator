@@ -11,6 +11,8 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.village.VillagePopulator;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.WoodUtils;
+import org.terraform.utils.WoodUtils.WoodType;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -100,17 +102,17 @@ public class PlainsVillagePopulator extends VillagePopulator {
         pathStart = townHall.getDirection();
         
         BiomeBank biome = tw.getBiomeBank(townHall.getX(), townHall.getZ());
-        woodSlab = BlockUtils.getWoodForBiome(biome, "SLAB");
-        woodPlank = BlockUtils.getWoodForBiome(biome, "PLANKS");
-        woodLog = BlockUtils.getWoodForBiome(biome, "LOG");
-        woodStairs = BlockUtils.getWoodForBiome(biome, "STAIRS");
-        woodFence = BlockUtils.getWoodForBiome(biome, "FENCE");
-        woodStrippedLog = Material.getMaterial("STRIPPED_" + BlockUtils.getWoodForBiome(biome, "LOG"));
-        woodButton = BlockUtils.getWoodForBiome(biome, "BUTTON");
-        woodTrapdoor = BlockUtils.getWoodForBiome(biome, "TRAPDOOR");
-        woodPressurePlate = BlockUtils.getWoodForBiome(biome, "PRESSURE_PLATE");
-        woodDoor = BlockUtils.getWoodForBiome(biome, "DOOR");
-        woodLeaves = BlockUtils.getWoodForBiome(biome, "LEAVES");
+        woodSlab = WoodUtils.getWoodForBiome(biome, WoodType.SLAB);
+        woodPlank = WoodUtils.getWoodForBiome(biome, WoodType.PLANKS);
+        woodLog = WoodUtils.getWoodForBiome(biome, WoodType.LOG);
+        woodStairs = WoodUtils.getWoodForBiome(biome, WoodType.STAIRS);
+        woodFence = WoodUtils.getWoodForBiome(biome, WoodType.FENCE);
+        woodStrippedLog = WoodUtils.getWoodForBiome(biome, WoodType.STRIPPED_LOG);
+        woodButton = WoodUtils.getWoodForBiome(biome, WoodType.BUTTON);
+        woodTrapdoor = WoodUtils.getWoodForBiome(biome, WoodType.TRAPDOOR);
+        woodPressurePlate = WoodUtils.getWoodForBiome(biome, WoodType.PRESSURE_PLATE);
+        woodDoor = WoodUtils.getWoodForBiome(biome, WoodType.DOOR);
+        woodLeaves = WoodUtils.getWoodForBiome(biome, WoodType.LEAVES);
         wood = woodLeaves.toString().toLowerCase().replace("leaves","");
         
         //Re-get x and z because they change after ensureFarmHouseEntrance.

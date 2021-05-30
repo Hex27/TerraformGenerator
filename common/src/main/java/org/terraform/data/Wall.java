@@ -3,7 +3,6 @@ package org.terraform.data;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
-import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -44,15 +43,12 @@ public class Wall {
                 block.getZ()), direction);
     }
     
+    public Wall getGroundOrDry() {
+        return new Wall(get().getGroundOrDry(), direction);
+    }
 
     public Wall getGroundOrSeaLevel() {
-    	int y = GenUtils.getHighestGround(block.getPopData(), block.getX(), block.getZ());
-    	if(y < TerraformGenerator.seaLevel) y = TerraformGenerator.seaLevel;
-        return new Wall(new SimpleBlock(
-        		block.getPopData(),
-        		block.getX(),
-                y,
-                block.getZ()), direction);
+        return new Wall(get().getGroundOrSeaLevel(), direction);
     }
 
     /**
@@ -208,8 +204,8 @@ public class Wall {
      * @param rand
      * @param types
      */
-    public void LPillar(int height, Random rand, Material... types) {
-        LPillar(height, false, rand, types);
+    public int LPillar(int height, Random rand, Material... types) {
+        return LPillar(height, false, rand, types);
     }
 
     /**

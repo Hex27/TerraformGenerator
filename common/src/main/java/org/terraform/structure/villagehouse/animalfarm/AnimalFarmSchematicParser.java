@@ -8,8 +8,9 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.WoodUtils;
+import org.terraform.utils.WoodUtils.WoodType;
 
 import java.util.Random;
 
@@ -56,11 +57,9 @@ public class AnimalFarmSchematicParser extends SchematicParser {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             data.getMaterial().toString().toLowerCase(),
-                            BlockUtils.getWoodForBiome(biome,
-                                    data.getMaterial().toString()
-                                            .replaceAll("OAK_", "")
-                            ).toString().toLowerCase())
-            );
+                            WoodUtils.getWoodForBiome(biome,
+                                    WoodType.parse(data.getMaterial())).toString().toLowerCase()
+                            ).toString().toLowerCase());
             super.applyData(block, data);
             return;
         } else if (data.getMaterial() == Material.CHEST) {
