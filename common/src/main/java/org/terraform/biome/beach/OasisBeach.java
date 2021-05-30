@@ -18,18 +18,21 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import java.util.Random;
 
 /**
- * This class only exists to make sure lush desert beaches (oases)
- * generate properly and to make DesertHandler more readable.
+ * This class contains functions for oases, it's not a biome handler.
  */
-public class DesertBeachHandler extends SandyBeachHandler {
+public class OasisBeach {
     public static double lushThreshold = (2 - TConfigOption.BIOME_DESERT_LUSH_COMMONNESS.getDouble()) * 0.31;
 
-    @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ) {
+    /**
+     * Sets oasis biome as jungle
+     * @param targetBiome the biome this function is called from.
+     *                    Prevents code from running twice when biome overlap
+     */
+    public static void transformTerrain(TerraformWorld tw, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ, BiomeBank targetBiome) {
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
                 int height = HeightMap.getBlockHeight(tw, x, z);
-                if (DesertBeachHandler.isLushBeach(tw, x, z)) {
+                if (isOasisBeach(tw, x, z, targetBiome)) {
                     for(int y = height; y < height + 35; y++)
                         biome.setBiome(x, y, z, Biome.JUNGLE);
                 }
@@ -37,7 +40,7 @@ public class DesertBeachHandler extends SandyBeachHandler {
         }
     }
 
-    public static float getLushNoise(TerraformWorld world, int x, int z) {
+    public static float getOasisNoise(TerraformWorld world, int x, int z) {
         FastNoise lushRiversNoise = NoiseCacheHandler.getNoise(
                 world,
                 NoiseCacheHandler.NoiseCacheEntry.BIOME_DESERT_LUSH_RIVER,
@@ -55,18 +58,25 @@ public class DesertBeachHandler extends SandyBeachHandler {
     /**
      * @return true if (x, z) is inside oasis
      */
-    public static boolean isLushBeach(TerraformWorld tw, int x, int z) {
-        double lushRiverNoiseValue =  getLushNoise(tw, x, z);
+    private static boolean isOasisBeach(TerraformWorld tw, int x, int z, BiomeBank targetBiome) {
+        double lushRiverNoiseValue =  getOasisNoise(tw, x, z);
         double riverDepth = HeightMap.getRawRiverDepth(tw, x, z);
         BiomeBank biome = BiomeBank.calculateHeightIndependentBiome(tw, x, z);
 
         return lushRiverNoiseValue > lushThreshold &&
                 riverDepth > 0 &&
-                (biome == BiomeBank.DESERT ||
-                        biome == BiomeBank.BADLANDS);
+                biome == targetBiome;
     }
 
-    public static void generateLushBeach(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int z, double riverDepth) {
+    /**
+     * Generate lush beach for coordinate.
+     * Should be ran for every coordinate in BiomeHandler#populateSmallItems
+     * @param targetBiome the biome this function is called from.
+     *                    Prevents code from running twice when biome overlap
+     */
+    public static void generateOasisBeach(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int z, BiomeBank targetBiome) {
+        if (!isOasisBeach(tw, x, z, targetBiome)) return;
+
         int y = GenUtils.getHighestGround(data, x, z);
         int aboveSea = y - TerraformGenerator.seaLevel;
 
@@ -98,8 +108,8 @@ public class DesertBeachHandler extends SandyBeachHandler {
 
     // TODO: I feel like this is the 10th time I implement this in some form, should all game "objects" like rocks etc. be stored in one class as static functions?
     public static void createBush(Random random, PopulatorDataAbstract data, int x, int y, int z, double xRadius, double yRadius, double zRadius, Material leaves, Material stem, double density) {
-        for (int ay = y; ay < y + yRadius / 2d; ay++)
-            data.setType(x, ay, z, stem);
+        for (int ny = y; ny < y + yRadius / 2; ny++)
+            data.setType(x, ny, z, stem);
         for (int xr = (int) -Math.ceil(xRadius); xr < Math.ceil(xRadius); xr++) {
             for (int yr = (int) -Math.ceil(yRadius); yr < Math.ceil(yRadius); yr++) {
                 for (int zr = (int) -Math.ceil(zRadius); zr < Math.ceil(zRadius); zr++) {

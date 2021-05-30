@@ -98,7 +98,7 @@ public class JungleRiverHandler extends BiomeHandler {
     }
 
     public static void generateKelp(int x, int y, int z, PopulatorDataAbstract data, Random random) {
-        for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(random, 0, 5); ny++) {
+        for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(random, 0, 2); ny++) {
             data.setType(x, ny, z, Material.KELP_PLANT);
         }
     }

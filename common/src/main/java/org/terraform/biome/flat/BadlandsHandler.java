@@ -7,7 +7,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
-import org.terraform.biome.beach.DesertBeachHandler;
+import org.terraform.biome.beach.OasisBeach;
 import org.terraform.biome.mountainous.BadlandsCanyonHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -61,7 +61,7 @@ public class BadlandsHandler extends BiomeHandler {
 
     @Override
     public BiomeBank getRiverType() {
-        return BiomeBank.OASIS_RIVER;
+        return BiomeBank.BADLANDS_RIVER;
     }
 
     @Override
@@ -94,9 +94,7 @@ public class BadlandsHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                if (DesertBeachHandler.isLushBeach(world, x, z)) {
-                    DesertBeachHandler.generateLushBeach(world, random, data, x, z, HeightMap.getRawRiverDepth(world, x, z));
-                }
+                OasisBeach.generateOasisBeach(world, random, data, x, z, BiomeBank.BADLANDS);
 
                 int highest = GenUtils.getTrueHighestBlock(data, x, z);
 
@@ -142,8 +140,8 @@ public class BadlandsHandler extends BiomeHandler {
 
     @Override
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ) {
-        // Lush oases
-        BiomeBank.DESERT_BEACH.getHandler().transformTerrain(tw, random, chunk, biome, chunkX, chunkZ);
+        // Set jungle biome for lush oases
+        OasisBeach.transformTerrain(tw, biome, chunkX, chunkZ, BiomeBank.BADLANDS);
 
         BiomeBlender blender = getRiversBlender(tw);
 
