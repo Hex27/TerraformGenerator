@@ -45,7 +45,6 @@ public enum TConfigOption {
     BIOME_DESERT_MOUNTAINS_WEIGHT("biome.desertmountains.weight", 0),
     BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE("biome.desertmountains.place-yellow-concrete", true),
     BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE_POWDER("biome.desertmountains.place-yellow-concrete-powder", true),
-    BIOME_DESERT_LUSH_COMMONNESS("biome.desert.lush-commonness", 1.0),
     BIOME_OCEAN_WEIGHT("biome.ocean.weight", 6),
     BIOME_BLACK_OCEAN_WEIGHT("biome.blackocean.weight", 1),
     BIOME_COLD_OCEAN_WEIGHT("biome.coldocean.weight", 6),
@@ -83,6 +82,9 @@ public enum TConfigOption {
     BIOME_DARK_FOREST_WEIGHT("biome.darkforest.weight", 5),
     BIOME_DARK_FOREST_SPAWN_HEADS("biome.darkforest.spawn-heads",true),
     BIOME_SWAMP_WEIGHT("biome.swamp.weight", 5),
+    BIOME_OASIS_COMMONNESS("biome.oasis.commonness", 1.0),
+    BIOME_OASIS_FREQUENCY("biome.oasis.frequency", 0.012f),
+
     
     //-=[TREES]=-
     TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),

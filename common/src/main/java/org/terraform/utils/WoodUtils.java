@@ -74,7 +74,7 @@ public class WoodUtils {
             case PLAINS:
             case OCEAN:
             case MUDFLATS:
-            case CORALREEF_OCEAN:
+            case CORAL_REEF_OCEAN:
     		case DEEP_LUKEWARM_OCEAN:
     		case DEEP_OCEAN:
     		case DEEP_WARM_OCEAN:

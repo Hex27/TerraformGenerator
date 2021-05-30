@@ -21,8 +21,8 @@ import java.util.Random;
  * This class contains functions for oases, it's not a biome handler.
  */
 public class OasisBeach {
-    public static double lushThreshold = (2 - TConfigOption.BIOME_DESERT_LUSH_COMMONNESS.getDouble()) * 0.31;
-
+    public static final double oasisThreshold = (2 - TConfigOption.BIOME_OASIS_COMMONNESS.getDouble()) * 0.31;
+    private static final float oasisFrequency = TConfigOption.BIOME_OASIS_FREQUENCY.getFloat();
     /**
      * Sets oasis biome as jungle
      * @param targetBiome the biome this function is called from.
@@ -47,7 +47,7 @@ public class OasisBeach {
                 w -> {
                     FastNoise n = new FastNoise((int) (w.getSeed() * 0.4));
                     n.SetNoiseType(FastNoise.NoiseType.Cubic);
-                    n.SetFrequency(0.012f);
+                    n.SetFrequency(oasisFrequency);
 
                     return n;
                 });
@@ -63,7 +63,7 @@ public class OasisBeach {
         double riverDepth = HeightMap.getRawRiverDepth(tw, x, z);
         BiomeBank biome = BiomeBank.calculateHeightIndependentBiome(tw, x, z);
 
-        return lushRiverNoiseValue > lushThreshold &&
+        return lushRiverNoiseValue > oasisThreshold &&
                 riverDepth > 0 &&
                 biome == targetBiome;
     }
