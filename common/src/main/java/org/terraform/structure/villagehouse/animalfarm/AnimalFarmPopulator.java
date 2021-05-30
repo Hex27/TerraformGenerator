@@ -19,6 +19,8 @@ import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.WoodUtils;
+import org.terraform.utils.WoodUtils.WoodType;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 
@@ -72,14 +74,14 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                 for (int nx = -5; nx <= 5; nx++) {
                     for (int nz = -10; nz <= 10; nz++) {
                         if (data.getType(x + nx, y - 1, z + nz).isSolid())
-                            BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, BlockUtils.getWoodForBiome(biome, "LOG"));
+                            BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
                     }
                 }
             } else {
                 for (int nx = -10; nx <= 10; nx++) {
                     for (int nz = -5; nz <= 5; nz++) {
                         if (data.getType(x + nx, y - 1, z + nz).isSolid())
-                            BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, BlockUtils.getWoodForBiome(biome, "LOG"));
+                            BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
                     }
                 }
             }

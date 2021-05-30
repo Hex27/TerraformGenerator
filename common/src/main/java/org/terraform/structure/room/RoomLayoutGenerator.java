@@ -27,6 +27,10 @@ public class RoomLayoutGenerator {
     private int centY;
     private int centZ;
     private Random rand;
+    
+    //Range refers to the width of the room placement area.
+    //Note that only room central points follow rangem so it's possible
+    //for a room's area to exceed this range.
     private int range;
     private PathPopulatorAbstract pathPop;
     private boolean carveRooms = false;
@@ -214,13 +218,57 @@ public class RoomLayoutGenerator {
         this.allowOverlaps = allowOverlaps;
     }
 
+    @SuppressWarnings("unchecked")
+	public void runRoomPopulators(PopulatorDataAbstract data, TerraformWorld tw) {
+    	//Allocate room populators
+        Iterator<RoomPopulatorAbstract> it = roomPops.iterator();
+        while (it.hasNext()) {
+            RoomPopulatorAbstract pops = it.next();
+            if (pops.isForceSpawn()) {
+                for (CubeRoom room : rooms) {
+                    if (room.pop == null && pops.canPopulate(room)) {
+                        //TerraformGeneratorPlugin.logger.info("Set down forced populator of " + pops.getClass().getName());
+                        room.setRoomPopulator(pops);
+                        if (pops.isUnique()) it.remove();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (roomPops.isEmpty()) return;
+
+        //Apply room populators
+        for (CubeRoom room : rooms) {
+            if (room.pop == null) {
+                List<RoomPopulatorAbstract> shuffled = (List<RoomPopulatorAbstract>) roomPops.clone();
+                Collections.shuffle(shuffled, rand);
+                for (RoomPopulatorAbstract roomPop : shuffled) {
+                    if (roomPop.canPopulate(room)) {
+                        room.setRoomPopulator(roomPop);
+                        if (roomPop.isUnique()) {
+                            roomPops.remove(roomPop);
+                        }
+
+                        break;
+                    }
+                }
+            }
+            if (room.pop != null) {
+            	TerraformGeneratorPlugin.logger.info("Registered: " + room.pop.getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
+                room.populate(data);
+            } else {
+            	TerraformGeneratorPlugin.logger.info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
+            }
+        }
+    }
+    
     /**
      * Links room populators to empty rooms and applies paths and room to the actual world.
      * @param data
      * @param tw
      * @param mat
      */
-    @SuppressWarnings("unchecked")
     public void fill(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
         ArrayList<PathGenerator> pathGens = new ArrayList<>();
         //Carve Pathways
@@ -273,47 +321,7 @@ public class RoomLayoutGenerator {
 
         if (roomPops.isEmpty()) return;
 
-        //Allocate room populators
-        Iterator<RoomPopulatorAbstract> it = roomPops.iterator();
-        while (it.hasNext()) {
-            RoomPopulatorAbstract pops = it.next();
-            if (pops.isForceSpawn()) {
-                for (CubeRoom room : rooms) {
-                    if (room.pop == null && pops.canPopulate(room)) {
-                        //TerraformGeneratorPlugin.logger.info("Set down forced populator of " + pops.getClass().getName());
-                        room.setRoomPopulator(pops);
-                        if (pops.isUnique()) it.remove();
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (roomPops.isEmpty()) return;
-
-        //Apply room populators
-        for (CubeRoom room : rooms) {
-            if (room.pop == null) {
-                List<RoomPopulatorAbstract> shuffled = (List<RoomPopulatorAbstract>) roomPops.clone();
-                Collections.shuffle(shuffled, rand);
-                for (RoomPopulatorAbstract roomPop : shuffled) {
-                    if (roomPop.canPopulate(room)) {
-                        room.setRoomPopulator(roomPop);
-                        if (roomPop.isUnique()) {
-                            roomPops.remove(roomPop);
-                        }
-
-                        break;
-                    }
-                }
-            }
-            if (room.pop != null) {
-            	TerraformGeneratorPlugin.logger.info("Registered: " + room.pop.getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
-                room.populate(data);
-            } else {
-            	TerraformGeneratorPlugin.logger.info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
-            }
-        }
+        runRoomPopulators(data, tw);
 
     }
 

@@ -22,6 +22,8 @@ import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Temperature;
+import org.terraform.utils.WoodUtils;
+import org.terraform.utils.WoodUtils.WoodType;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 
@@ -77,10 +79,10 @@ public class FarmhousePopulator extends VillageHousePopulator {
                 w.getRight().setBlockData(stairs);
                 w.setBlockData(stairs);
                 w.getLeft().setBlockData(stairs);
-                w.getLeft().getLeft().getRelative(0, 1, 0).downUntilSolid(random, BlockUtils.getWoodForBiome(biome, "LOG"));
+                w.getLeft().getLeft().getRelative(0, 1, 0).downUntilSolid(random, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
                 w.getLeft().getLeft().getRelative(0, 2, 0).setType(GenUtils.randMaterial(random, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.MOSSY_COBBLESTONE_WALL));
-                w.getRight().getRight().getRelative(0, 1, 0).downUntilSolid(random, BlockUtils.getWoodForBiome(biome, "LOG"));
+                w.getRight().getRight().getRelative(0, 1, 0).downUntilSolid(random, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
                 w.getRight().getRight().getRelative(0, 2, 0).setType(GenUtils.randMaterial(random, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
                 w = w.getFront().getRelative(0, -1, 0);
@@ -182,7 +184,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         data.setBlockData(nx + x, height + 1, nz + z, crop);
                     }
                 } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { //Grass hedges
-                    BlockUtils.setPersistentLeaves(data, nx + x, height + 1, nz + z, BlockUtils.getWoodForBiome(biome, "LEAVES"));
+                    BlockUtils.setPersistentLeaves(data, nx + x, height + 1, nz + z, WoodUtils.getWoodForBiome(biome, WoodType.LEAVES));
 
                     if (GenUtils.chance(random, 1, 100)) {
                         placeLamp(tw, biome, random, data, nx + x, height + 1, z + nz);

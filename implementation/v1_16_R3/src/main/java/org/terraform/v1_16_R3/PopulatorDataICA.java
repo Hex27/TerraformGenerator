@@ -7,6 +7,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
+import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;
@@ -193,19 +194,26 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
     }
 
     @Override
-    public void registerGuardians(int x0, int y0, int z0, int x1, int y1, int z1) {
-//		BiomeBase base = ica.getBiomeIndex().getBiome(x,y,z);
-//		BiomeBase.BiomeMeta spawnMeta = new BiomeBase.BiomeMeta(EntityTypes.GUARDIAN, 1, 2, 4);
-//		base.getMobs(EnumCreatureType.WATER_CREATURE).add(spawnMeta);
+    public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
 
-        TerraStructureStart start = new TerraStructureStart("ocean_monument",
-                StructureGenerator.MONUMENT, chunkX, chunkZ, null, z1, z1);
+    	StructureGenerator<?> generator = StructureGenerator.MONUMENT;
+    	switch(type) {
+    	case GUARDIAN:
+    		generator = StructureGenerator.MONUMENT;
+    		break;
+    	case PILLAGER:
+    		generator = StructureGenerator.PILLAGER_OUTPOST;
+    		break;
+    	}
+    	
+        TerraStructureStart start = new TerraStructureStart(type,
+        		generator, chunkX, chunkZ, null, z1, z1);
         start.setStructureBounds(x0, y0, z0, x1, y1, z1);
         IStructureAccess sa = ica;
         sa.a( //setStartForFeature
-                StructureGenerator.MONUMENT, //Get ID
+        		generator, //Get ID
                 start);
-        sa.a(StructureGenerator.MONUMENT, new ChunkCoordIntPair(chunkX, chunkZ).pair());
+        sa.a(generator, new ChunkCoordIntPair(chunkX, chunkZ).pair());
     }
 
     @Override

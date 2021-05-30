@@ -1,7 +1,11 @@
 package org.terraform.utils;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BannerUtils {
@@ -42,5 +46,30 @@ public class BannerUtils {
 
     public static Material randomWallBannerMaterial(Random rand) {
         return WALL_BANNERS[rand.nextInt(WALL_BANNERS.length)];
+    }
+
+	/**
+	 * kms
+	 * https://minecraft.fandom.com/wiki/Banner/Patterns
+		Pattern:"mr",Color:CYAN
+		Pattern:"bs",Color:LIGHT_GRAY
+		Pattern:"cs",Color:GRAY
+		Pattern:"bo",Color:LIGHT_GRAY
+		Pattern:"ms",Color:BLACK
+		Pattern:"hh",Color:LIGHT_GRAY
+		Pattern:"mc",Color:LIGHT_GRAY
+		Pattern:"bo",Color:BLACK
+	 */
+    public static ArrayList<Pattern> getOminousBannerPatterns(){
+    	return new ArrayList<Pattern>() {{
+			add(new Pattern(DyeColor.CYAN, PatternType.RHOMBUS_MIDDLE));
+			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM));
+			add(new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER));
+			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER));
+			add(new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE));
+			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL));
+			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.CIRCLE_MIDDLE));
+			add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
+		}};
     }
 }

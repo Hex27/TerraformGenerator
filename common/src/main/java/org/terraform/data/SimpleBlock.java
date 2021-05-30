@@ -10,10 +10,12 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Leaves;
+import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 public class SimpleBlock {
@@ -165,6 +167,10 @@ public class SimpleBlock {
     public SimpleBlock getRelative(BlockFace face, int count) {
         return new SimpleBlock(popData, x + face.getModX() * count, y + face.getModY() * count, z + face.getModZ() * count);
     }
+    
+    public void addEntity(EntityType type) {
+    	popData.addEntity(x, y, z, type);
+    }
 
     public int getChunkX() {
         return x / 16;
@@ -262,6 +268,18 @@ public class SimpleBlock {
     public SimpleBlock getGroundOrSeaLevel() {
     	int y = GenUtils.getHighestGround(popData, x, z);
     	if(y < TerraformGenerator.seaLevel) y = TerraformGenerator.seaLevel;
+        return new SimpleBlock(
+                popData,
+                x,
+                y,
+                z);
+    }
+
+    public SimpleBlock getGroundOrDry() {
+    	int y = GenUtils.getHighestGround(popData, x, z);
+    	
+    	while(y < 254 && (BlockUtils.isWet(this.getRelative(0,1,0))||
+    			Tag.ICE.isTagged(this.getRelative(0,1,0).getType()))) y++;
         return new SimpleBlock(
                 popData,
                 x,

@@ -20,6 +20,8 @@ import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.structure.villagehouse.farmhouse.FarmhouseSchematicParser;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.WoodUtils;
+import org.terraform.utils.WoodUtils.WoodType;
 
 import java.util.Random;
 
@@ -87,11 +89,11 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
                 w.setBlockData(stairs);
                 w.getLeft().setBlockData(stairs);
 
-                w.getLeft(2).getRelative(0, 1, 0).downUntilSolid(this.rand, BlockUtils.getWoodForBiome(biome, "LOG"));
+                w.getLeft(2).getRelative(0, 1, 0).downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
                 w.getLeft(2).getRelative(0, 2, 0).setType(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.MOSSY_COBBLESTONE_WALL));
 
-                w.getRight(2).getRelative(0, 1, 0).downUntilSolid(this.rand, BlockUtils.getWoodForBiome(biome, "LOG"));
+                w.getRight(2).getRelative(0, 1, 0).downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
                 w.getRight(2).getRelative(0, 2, 0).setType(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
 

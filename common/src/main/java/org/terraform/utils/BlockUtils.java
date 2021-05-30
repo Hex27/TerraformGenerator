@@ -19,7 +19,6 @@ import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.block.data.type.Stairs;
-import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
@@ -125,6 +124,25 @@ public class BlockUtils {
             Material.POTTED_PINK_TULIP
     };
 
+    private static final Material[] WOOLS = {
+            Material.WHITE_WOOL,
+            Material.BLACK_WOOL,
+            Material.BLUE_WOOL,
+            Material.BROWN_WOOL,
+            Material.CYAN_WOOL,
+            Material.GRAY_WOOL,
+            Material.GREEN_WOOL,
+            Material.LIGHT_BLUE_WOOL,
+            Material.LIGHT_GRAY_WOOL,
+            Material.LIME_WOOL,
+            Material.MAGENTA_WOOL,
+            Material.ORANGE_WOOL,
+            Material.PINK_WOOL,
+            Material.PURPLE_WOOL,
+            Material.RED_WOOL,
+            Material.YELLOW_WOOL
+    };
+    
     private static final Material[] BED = {
             Material.WHITE_BED,
             Material.BLACK_BED,
@@ -199,6 +217,45 @@ public class BlockUtils {
         return original;
     }
     
+    /**
+     * @return rotates original block face (XZ plane only) clockwise the specified number of times
+     */
+    @SuppressWarnings("incomplete-switch")
+    public static BlockFace rotateXZPlaneBlockFace(BlockFace original, int times) {
+        //	N
+    	//W + E
+    	//	S
+    	for (int i = 0; i < times; i++) {
+            switch (original) {
+                case NORTH:
+                    original = BlockFace.NORTH_EAST;
+                    break;
+                case NORTH_EAST:
+                    original = BlockFace.EAST;
+                    break;
+                case EAST:
+                    original = BlockFace.SOUTH_EAST;
+                    break;
+                case SOUTH_EAST:
+                    original = BlockFace.SOUTH;
+                    break;
+                case SOUTH:
+                    original = BlockFace.SOUTH_WEST;
+                    break;
+                case SOUTH_WEST:
+                    original = BlockFace.WEST;
+                    break;
+                case WEST:
+                    original = BlockFace.NORTH_WEST;
+                    break;
+                case NORTH_WEST:
+                    original = BlockFace.NORTH;
+                    break;
+            }
+        }
+        return original;
+    }
+    
     public static BlockFace[] getRandomBlockfaceAxis(Random rand) {
     	if(rand.nextInt(2) == 0)
     		return new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH};
@@ -260,62 +317,9 @@ public class BlockUtils {
     public static BlockFace getDirectBlockFace(Random rand) {
         return directBlockFaces[rand.nextInt(4)];
     }
-
-    public static Material getWoodForBiome(BiomeBank biome, String wood) {
-        switch (biome) {
-            case BADLANDS:
-            case SAVANNA:
-            case DESERT_MOUNTAINS:
-            case DESERT:
-    		case BADLANDS_BEACH:
-            case BADLANDS_CANYON:
-                return Material.getMaterial("ACACIA_" + wood);
-            case BIRCH_MOUNTAINS:
-                return Material.getMaterial("BIRCH_" + wood);
-            case COLD_OCEAN:
-            case WARM_OCEAN:
-            case SWAMP:
-            case PLAINS:
-            case OCEAN:
-            case MUDFLATS:
-            case CORALREEF_OCEAN:
-    		case DEEP_LUKEWARM_OCEAN:
-    		case DEEP_OCEAN:
-    		case DEEP_WARM_OCEAN:
-    		case DEEP_DRY_OCEAN:
-    		case DEEP_HUMID_OCEAN:
-    		case DRY_OCEAN:
-    		case HUMID_OCEAN:
-    		case RIVER:
-    		case ERODED_PLAINS:
-            case FOREST:
-                return Material.getMaterial("OAK_" + wood);
-            case FROZEN_OCEAN:
-            case TAIGA:
-            case SNOWY_WASTELAND:
-            case SNOWY_TAIGA:
-            case SNOWY_MOUNTAINS:
-            case ROCKY_MOUNTAINS:
-            case ROCKY_BEACH:
-    		case FROZEN_RIVER:
-    		case DEEP_COLD_OCEAN:
-    		case DEEP_FROZEN_OCEAN:
-    		case ICY_BEACH:
-            case ICE_SPIKES:
-                return Material.getMaterial("SPRUCE_" + wood);
-            case SANDY_BEACH:
-            case JUNGLE:
-    		case JUNGLE_RIVER:
-    		case BAMBOO_FOREST:
-                return Material.getMaterial("JUNGLE_" + wood);
-			case BLACK_OCEAN:
-			case DEEP_BLACK_OCEAN:
-			case DARK_FOREST:
-			case DARK_FOREST_RIVER:
-			case DARK_FOREST_BEACH:
-				return Material.getMaterial("DARK_OAK_" + wood);
-        }
-        return Material.getMaterial("OAK_" + wood);
+    
+    public static Material pickWool() {
+        return GenUtils.randMaterial(WOOLS);
     }
 
     public static Material pickBed() {
