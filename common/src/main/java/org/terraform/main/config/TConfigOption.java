@@ -82,6 +82,9 @@ public enum TConfigOption {
     BIOME_DARK_FOREST_WEIGHT("biome.darkforest.weight", 5),
     BIOME_DARK_FOREST_SPAWN_HEADS("biome.darkforest.spawn-heads",true),
     BIOME_SWAMP_WEIGHT("biome.swamp.weight", 5),
+    BIOME_OASIS_COMMONNESS("biome.oasis.commonness", 1.0),
+    BIOME_OASIS_FREQUENCY("biome.oasis.frequency", 0.012f),
+
     
     //-=[TREES]=-
     TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),

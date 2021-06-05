@@ -4,7 +4,10 @@ import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.bukkit.generator.ChunkGenerator;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.beach.OasisBeach;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -30,6 +33,21 @@ public class DesertHandler extends BiomeHandler {
         return Biome.DESERT;
     }
 
+    @Override
+    public BiomeHandler getTransformHandler() {
+        return this;
+    }
+
+    @Override
+    public BiomeBank getRiverType() {
+        return BiomeBank.DESERT_RIVER;
+    }
+
+    @Override
+    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ) {
+        OasisBeach.transformTerrain(tw, biome, chunkX, chunkZ, BiomeBank.DESERT);
+    }
+
     //Pad more sandstone so that mountains don't get stone exposed vertically
     @Override
     public Material[] getSurfaceCrust(Random rand) {
@@ -46,10 +64,11 @@ public class DesertHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-
         boolean cactusGathering = GenUtils.chance(random, 1, 100);
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
+                OasisBeach.generateOasisBeach(world, random, data, x, z, BiomeBank.DESERT);
+
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (data.getBiome(x, z) != getBiome()) continue;
                 Material base = data.getType(x, y, z);
@@ -99,7 +118,7 @@ public class DesertHandler extends BiomeHandler {
             new DesertWellPopulator().populate(tw, random, data, false);
         }
 	}
-	
+
 	public void spawnRibCage(Random random, SimpleBlock target) {
 		BlockFace direction = BlockUtils.getDirectBlockFace(random);
 		int spineLength = GenUtils.randInt(random, 10, 14);

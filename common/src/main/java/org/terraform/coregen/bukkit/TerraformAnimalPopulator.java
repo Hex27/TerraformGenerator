@@ -23,22 +23,22 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     private static final AnimalPopulator[] ANIMAL_POPULATORS = {
             new AnimalPopulator(EntityType.PIG, TConfigOption.ANIMALS_PIG_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_PIG_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_PIG_CHANCE.getInt(), false, BiomeBank.RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.FROZEN_OCEAN,
-                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
+                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
                     BiomeBank.DEEP_WARM_OCEAN, BiomeBank.SWAMP, BiomeBank.DESERT, BiomeBank.DESERT_MOUNTAINS, BiomeBank.BADLANDS, BiomeBank.BADLANDS_CANYON),
             
             new AnimalPopulator(EntityType.COW, TConfigOption.ANIMALS_COW_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_COW_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_COW_CHANCE.getInt(), false, BiomeBank.RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.FROZEN_OCEAN,
-                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
+                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
                     BiomeBank.DEEP_WARM_OCEAN, BiomeBank.SWAMP, BiomeBank.DESERT, BiomeBank.DESERT_MOUNTAINS, BiomeBank.BADLANDS, BiomeBank.BADLANDS_CANYON),
             
             new AnimalPopulator(EntityType.SHEEP, TConfigOption.ANIMALS_SHEEP_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_SHEEP_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_SHEEP_CHANCE.getInt(), false, BiomeBank.RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.FROZEN_OCEAN,
-                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
+                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
                     BiomeBank.DEEP_WARM_OCEAN, BiomeBank.SWAMP, BiomeBank.DESERT, BiomeBank.DESERT_MOUNTAINS, BiomeBank.BADLANDS, BiomeBank.BADLANDS_CANYON),
             
             new AnimalPopulator(EntityType.CHICKEN, TConfigOption.ANIMALS_CHICKEN_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_CHICKEN_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_CHICKEN_CHANCE.getInt(), false, BiomeBank.RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.FROZEN_OCEAN,
-                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
+                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
                     BiomeBank.DEEP_WARM_OCEAN, BiomeBank.SWAMP, BiomeBank.DESERT, BiomeBank.DESERT_MOUNTAINS, BiomeBank.BADLANDS, BiomeBank.BADLANDS_CANYON),
             
             new AnimalPopulator(EntityType.HORSE, TConfigOption.ANIMALS_HORSE_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_HORSE_MAXHERDSIZE.getInt(),
@@ -76,11 +76,11 @@ public class TerraformAnimalPopulator extends BlockPopulator {
                     TConfigOption.ANIMALS_TURTLE_CHANCE.getInt(), true, BiomeBank.SANDY_BEACH),
 
             new AnimalPopulator(EntityType.DOLPHIN, TConfigOption.ANIMALS_DOLPHIN_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_DOLPHIN_MAXHERDSIZE.getInt(),
-                    TConfigOption.ANIMALS_DOLPHIN_CHANCE.getInt(), true, BiomeBank.OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_WARM_OCEAN)
+                    TConfigOption.ANIMALS_DOLPHIN_CHANCE.getInt(), true, BiomeBank.OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_WARM_OCEAN)
             .setAquatic(true),
     
             new AnimalPopulator(EntityType.COD, TConfigOption.ANIMALS_COD_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_COD_MAXHERDSIZE.getInt(),
-                    TConfigOption.ANIMALS_COD_CHANCE.getInt(), true, BiomeBank.OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.DEEP_COLD_OCEAN)
+                    TConfigOption.ANIMALS_COD_CHANCE.getInt(), true, BiomeBank.OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.DEEP_COLD_OCEAN)
             .setAquatic(true),
             
             new AnimalPopulator(EntityType.SQUID, TConfigOption.ANIMALS_SQUID_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_SQUID_MAXHERDSIZE.getInt(),
@@ -89,7 +89,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
                     BiomeBank.COLD_OCEAN, BiomeBank.DEEP_COLD_OCEAN,
                     BiomeBank.BLACK_OCEAN,BiomeBank.DEEP_BLACK_OCEAN,
                     BiomeBank.OCEAN, BiomeBank.DEEP_OCEAN, 
-                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, 
+                    BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
                     BiomeBank.WARM_OCEAN, BiomeBank.DEEP_WARM_OCEAN,
                     BiomeBank.RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.JUNGLE_RIVER)
             .setAquatic(true),
@@ -102,11 +102,11 @@ public class TerraformAnimalPopulator extends BlockPopulator {
             .setAquatic(true),
             
             new AnimalPopulator(EntityType.PUFFERFISH, TConfigOption.ANIMALS_PUFFERFISH_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_PUFFERFISH_MAXHERDSIZE.getInt(),
-                    TConfigOption.ANIMALS_PUFFERFISH_CHANCE.getInt(), true, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_WARM_OCEAN)
+                    TConfigOption.ANIMALS_PUFFERFISH_CHANCE.getInt(), true, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_WARM_OCEAN)
             .setAquatic(true),
             
             new AnimalPopulator(EntityType.TROPICAL_FISH, TConfigOption.ANIMALS_TROPICALFISH_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_TROPICALFISH_MAXHERDSIZE.getInt(),
-                    TConfigOption.ANIMALS_TROPICALFISH_CHANCE.getInt(), true, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORALREEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN)
+                    TConfigOption.ANIMALS_TROPICALFISH_CHANCE.getInt(), true, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN)
             .setAquatic(true),
     };
     
