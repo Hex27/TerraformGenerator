@@ -2,7 +2,6 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.terraform.biome.BiomeBank;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
