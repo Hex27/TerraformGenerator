@@ -2,6 +2,8 @@ package org.terraform.biome.flat;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.bukkit.block.data.Ageable;
+import org.bukkit.block.data.BlockData;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
@@ -15,6 +17,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler;
 
 import java.util.Random;
 
@@ -49,18 +52,43 @@ public class TaigaHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        // Use noise to group sweet berry bushes
+        FastNoise sweetBerriesNoise = NoiseCacheHandler.getNoise(
+                tw,
+                NoiseCacheHandler.NoiseCacheEntry.BIOME_TAIGA_BERRY_BUSHNOISE,
+                w -> {
+                    FastNoise n = new FastNoise((int) (w.getSeed() * 2));
+                    n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+                    n.SetFrequency(0.04f);
 
-        // Generate grass
+                    return n;
+                });
+
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (data.getBiome(x, z) != getBiome()) continue;
 
                 if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                    if (GenUtils.chance(random, 1, 20)) {
-                        data.setType(x, y + 1, z, Material.GRASS);
-                        if (random.nextBoolean()) {
-                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
+
+                    // Generate sweet berry bushes
+                    if (sweetBerriesNoise.GetNoise(x, z) > 0.3 &&
+                            sweetBerriesNoise.GetNoise(x, z) * random.nextFloat() > 0.35) {
+                        Ageable bush = (Ageable) Material.SWEET_BERRY_BUSH.createBlockData();
+                        bush.setAge(GenUtils.randInt(random,  1, 3));
+                        data.setBlockData(x, y + 1, z, bush);
+                        continue;
+                    }
+
+                    // Generate grass and flowers
+                    if (GenUtils.chance(random, 1, 16)) {
+                        int i = random.nextInt(4);
+
+                        if (i >= 2) {
+                            BlockUtils.setDoublePlant(data, x, y + 1, z,
+                                    random.nextBoolean() ? Material.TALL_GRASS : Material.LARGE_FERN);
+                        } else if (i == 1) {
+                            data.setType(x, y + 1, z, random.nextBoolean() ? Material.GRASS : Material.FERN);
                         } else {
                             data.setType(x, y + 1, z, BlockUtils.pickFlower());
                         }
@@ -109,7 +137,6 @@ public class TaigaHandler extends BiomeHandler {
      * @param seed
      * @param radius
      * @param base
-     * @param type
      */
     public static void replacePodzol(int seed, float radius, SimpleBlock base) {
     	if (radius <= 0) return;
