@@ -11,11 +11,11 @@ repositories {
 
 dependencies {
     implementation(project(":common"))
-    testCompile("junit", "junit", "4.12")
+    testImplementation("junit", "junit", "4.12")
     compileOnly(group = "org.spigotmc", name = "spigot", version = "1.16.3-R0.1-SNAPSHOT")
     compileOnly(fileTree("../../libs/"))
 }
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }

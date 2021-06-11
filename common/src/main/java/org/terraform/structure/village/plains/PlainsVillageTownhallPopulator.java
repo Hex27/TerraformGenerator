@@ -22,6 +22,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.WoodUtils;
 import org.terraform.utils.WoodUtils.WoodType;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -110,16 +111,16 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
             int maxDepth = 5;
 
             //Connect front to the nearest path.
-            while (entrance.getType() != Material.GRASS_PATH && maxDepth > 0) {
+            while (entrance.getType() != OneOneSevenBlockHandler.DIRT_PATH() && maxDepth > 0) {
                 if (BlockUtils.isDirtLike(entrance.getType()))
-                    entrance.setType(Material.GRASS_PATH);
+                    entrance.setType(OneOneSevenBlockHandler.DIRT_PATH());
 
                 Wall leftPath = entrance.getLeft().getGround();
                 Wall rightPath = entrance.getRight().getGround();
                 if (BlockUtils.isDirtLike(leftPath.getType()))
-                    leftPath.setType(Material.GRASS_PATH);
+                    leftPath.setType(OneOneSevenBlockHandler.DIRT_PATH());
                 if (BlockUtils.isDirtLike(rightPath.getType()))
-                    rightPath.setType(Material.GRASS_PATH);
+                    rightPath.setType(OneOneSevenBlockHandler.DIRT_PATH());
 
 
                 entrance = entrance.getFront().getGround();

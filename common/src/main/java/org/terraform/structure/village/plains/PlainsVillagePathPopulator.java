@@ -15,6 +15,8 @@ import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
+
 import java.util.Collection;
 import java.util.Random;
 
@@ -96,7 +98,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
             	if(!target.getRelative(0,1,0).getType().isSolid()
             			&& target.getRelative(0,1,0).getType() != Material.WATER
             			&& BlockUtils.isDirtLike(target.getType()) 
-            			&& target.getType() != Material.GRASS_PATH) {
+            			&& target.getType() != OneOneSevenBlockHandler.DIRT_PATH()) {
             		if(GenUtils.chance(2,5)) { //Leaves
             			target.getRelative(0,1,0).setType(Material.OAK_LEAVES);
             		}else if(GenUtils.chance(1, 5)) { //Flowers
@@ -122,7 +124,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                             ppd.base.getX() + side.getModX() * 3,
                             ppd.base.getZ() + side.getModZ() * 3),
                     ppd.base.getZ() + side.getModZ() * 3);
-            if (target.getType() == Material.GRASS_PATH) return;
+            if (target.getType() == OneOneSevenBlockHandler.DIRT_PATH()) return;
             for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
                 if (target.getRelative(face).getGround().getRelative(0, 1, 0).getType().isSolid())
                     return;

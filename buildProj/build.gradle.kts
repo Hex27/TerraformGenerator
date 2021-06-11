@@ -11,13 +11,14 @@ repositories {
 }
 
 dependencies {
-    testCompile("junit", "junit", "4.12")
+    testImplementation("junit", "junit", "4.12")
     implementation(project(":common"))
     implementation(project(":implementation:v1_14_R1"))
     implementation(project(":implementation:v1_15_R1"))
     implementation(project(":implementation:v1_16_R1"))
     implementation(project(":implementation:v1_16_R2"))
     implementation(project(":implementation:v1_16_R3"))
+    implementation(project(":implementation:v1_17_R1"))
 }
 
 tasks.shadowJar {
@@ -25,6 +26,6 @@ tasks.shadowJar {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }

@@ -1,6 +1,7 @@
 package org.terraform.coregen;
 
 public enum TerraLootTable {
+    EMPTY("chests/spawn_bonus_chest"),
     SPAWN_BONUS_CHEST("chests/spawn_bonus_chest"),
     END_CITY_TREASURE("chests/end_city_treasure"),
     SIMPLE_DUNGEON("chests/simple_dungeon"),

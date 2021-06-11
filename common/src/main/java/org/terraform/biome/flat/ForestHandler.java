@@ -15,6 +15,7 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -98,7 +99,7 @@ public class ForestHandler extends BiomeHandler {
                     if (GenUtils.chance(random, 99, 100) &&
                             data.getBiome(x, z) == getBiome() &&
                             BlockUtils.isDirtLike(data.getType(x, y, z)))
-                        data.setType(x, y, z, Material.GRASS_PATH);
+                        data.setType(x, y, z, OneOneSevenBlockHandler.DIRT_PATH());
                 }
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
                     if (GenUtils.chance(random, 1, 10)) {

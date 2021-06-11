@@ -10,7 +10,7 @@ plugins {
 }
 
 dependencies {
-
+	implementation(files("libs/spigot-1.17.jar"))
 }
 
 repositories {
@@ -18,8 +18,8 @@ repositories {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }
 
 val testDir = "target/server"

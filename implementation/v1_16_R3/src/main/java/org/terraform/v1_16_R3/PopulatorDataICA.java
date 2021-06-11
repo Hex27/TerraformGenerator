@@ -206,7 +206,7 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
     		break;
     	}
     	
-        TerraStructureStart start = new TerraStructureStart(type,
+        TerraStructureStart start = new TerraStructureStart(
         		generator, chunkX, chunkZ, null, z1, z1);
         start.setStructureBounds(x0, y0, z0, x1, y1, z1);
         IStructureAccess sa = ica;

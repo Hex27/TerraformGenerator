@@ -18,6 +18,7 @@ import org.terraform.structure.small.DesertWellPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -75,7 +76,7 @@ public class DesertHandler extends BiomeHandler {
 
                 if (cactusGathering) {
                     if (GenUtils.chance(random, 5, 100))
-                        data.setType(x, y, z, Material.GRASS_PATH);
+                        data.setType(x, y, z, OneOneSevenBlockHandler.DIRT_PATH());
                 }
 
                 if (base == Material.SAND) {

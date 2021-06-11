@@ -15,6 +15,7 @@ import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -202,12 +203,12 @@ public class PlainsPathRecursiveSpawner {
                 continue;
             }
             //if (BlockUtils.isDirtLike(w.getType()))
-            w.setType(Material.GRASS_PATH);
+            w.setType(OneOneSevenBlockHandler.DIRT_PATH());
 
             for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
                 Wall target = w.getRelative(face).getGround();
                 if (random.nextInt(3) != 0)
-                    target.setType(Material.GRASS_PATH);
+                    target.setType(OneOneSevenBlockHandler.DIRT_PATH());
             }
         }
         if (validRooms.isEmpty()) return;

@@ -12,7 +12,7 @@ repositories {
 dependencies {
     implementation(project(":common"))
     testImplementation("junit", "junit", "4.12")
-    compileOnly(group = "org.spigotmc", name = "spigot", version = "1.16.1-R0.1-SNAPSHOT")
+    //compileOnly(group = "org.spigotmc", name = "spigot", version = "1.17-R0.1-SNAPSHOT")
     compileOnly(fileTree("../../libs/"))
 }
 java {

@@ -44,3 +44,6 @@ org.eclipse.buildship.core.prefs
 *-mapping.txt
 WorldGenTestServer/
 /build/
+
+# No spigot 1.17 jar
+spigot-1.17.jar

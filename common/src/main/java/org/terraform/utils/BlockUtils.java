@@ -27,6 +27,7 @@ import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Arrays;
@@ -415,12 +416,11 @@ public class BlockUtils {
             case DIRT:
             case GRASS_BLOCK:
             case PODZOL:
-            case GRASS_PATH:
             case COARSE_DIRT:
             case MYCELIUM:
                 return true;
             default:
-                return false;
+                return mat == OneOneSevenBlockHandler.DIRT_PATH();
         }
     }
 

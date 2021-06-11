@@ -60,9 +60,11 @@ public class WoodUtils {
     public static Material getWoodForBiome(BiomeBank biome, WoodType wood) {
         switch (biome) {
             case BADLANDS:
+    		case BADLANDS_RIVER:
             case SAVANNA:
             case DESERT_MOUNTAINS:
             case DESERT:
+    		case DESERT_RIVER:
     		case BADLANDS_BEACH:
             case BADLANDS_CANYON:
                 return wood.getWood(WoodSpecies.ACACIA);
@@ -110,6 +112,8 @@ public class WoodUtils {
 			case DARK_FOREST_RIVER:
 			case DARK_FOREST_BEACH:
                 return wood.getWood(WoodSpecies.DARK_OAK);
+		default:
+			break;
         }
         return wood.getWood(WoodSpecies.OAK);
     }

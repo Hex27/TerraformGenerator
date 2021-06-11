@@ -12,6 +12,7 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class SavannaHandler extends BiomeHandler {
         while (length-- > 0) {
             if (BlockUtils.isDirtLike(data.getType(nx, y, nz)) &&
                     data.getType(nx, y + 1, nz) == Material.AIR)
-                data.setType(nx, y, nz, Material.GRASS_PATH);
+                data.setType(nx, y, nz, OneOneSevenBlockHandler.DIRT_PATH());
 
             switch (random.nextInt(5)) {  // The direction chooser
                 case 0:
