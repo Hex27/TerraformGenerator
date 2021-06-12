@@ -6,12 +6,14 @@ import org.bukkit.block.data.Snowable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -57,6 +59,11 @@ public class SnowyWastelandHandler extends BiomeHandler {
 //                        data.setType(x, y + 1, z, Material.DEAD_BUSH);
 //                    }
 //                }
+                
+                //Snowier Snow 
+                if(GenUtils.chance(random, 1, 500)) {
+                	BlockUtils.replaceCircularPatch(random.nextInt(9999), 3, new SimpleBlock(data,x,0,z), OneOneSevenBlockHandler.POWDER_SNOW);
+                }
                 if (data.getType(x, y + 1, z) == Material.AIR) {
                     data.setType(x, y + 1, z, Material.SNOW);
                     if (data.getBlockData(x, y, z) instanceof Snowable) {

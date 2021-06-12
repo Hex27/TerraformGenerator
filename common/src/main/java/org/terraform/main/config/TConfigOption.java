@@ -250,6 +250,11 @@ public enum TConfigOption {
     ANIMALS_TROPICALFISH_CHANCE("animals.tropical-fish.chance", 2),
 
     //-=[ORES]=-
+    //AMETHYST
+    ORE_AMETHYST_CHANCE("ore.amethyst.chance-per-chunk", 0.05),
+    ORE_AMETHYST_GEODE_SIZE("ore.amethyst.geode-size", 7),
+    ORE_AMETHYST_MIN_DEPTH("ore.amethyst.min-depth", 70),
+    
     //COAL
     ORE_COAL_CHANCE("ore.coal.chance-per-chunk", 50),
     ORE_COAL_VEINSIZE("ore.coal.max-vein-size", 25),
@@ -298,6 +303,14 @@ public enum TConfigOption {
     ORE_REDSTONE_MAXSPAWNHEIGHT("ore.redstone.max-spawn-height", 15),
     ORE_REDSTONE_MINSPAWNHEIGHT("ore.redstone.min-spawn-height", 5),
 
+    //COPPER
+    ORE_COPPER_CHANCE("ore.copper.chance-per-chunk", 40),
+    ORE_COPPER_VEINSIZE("ore.copper.max-vein-size", 8),
+    ORE_COPPER_MAXVEINNUMBER("ore.copper.max-vein-count", 5),
+    ORE_COPPER_COMMONSPAWNHEIGHT("ore.copper.common-spawn-height", 48),
+    ORE_COPPER_MAXSPAWNHEIGHT("ore.copper.max-spawn-height", 96),
+    ORE_COPPER_MINSPAWNHEIGHT("ore.copper.min-spawn-height", 5),
+    
     //GRAVEL
     ORE_GRAVEL_CHANCE("ore.gravel.chance-per-chunk", 75),
     ORE_GRAVEL_VEINSIZE("ore.gravel.max-vein-size", 45),
@@ -329,6 +342,22 @@ public enum TConfigOption {
     ORE_GRANITE_COMMONSPAWNHEIGHT("ore.granite.common-spawn-height", 255),
     ORE_GRANITE_MAXSPAWNHEIGHT("ore.granite.max-spawn-height", 255),
     ORE_GRANITE_MINSPAWNHEIGHT("ore.granite.min-spawn-height", 5),
+
+    //TUFF
+    ORE_TUFF_CHANCE("ore.tuff.chance-per-chunk", 40),
+    ORE_TUFF_VEINSIZE("ore.tuff.max-vein-size", 20),
+    ORE_TUFF_MAXVEINNUMBER("ore.tuff.max-vein-count", 10),
+    ORE_TUFF_COMMONSPAWNHEIGHT("ore.tuff.common-spawn-height", 7),
+    ORE_TUFF_MAXSPAWNHEIGHT("ore.tuff.max-spawn-height", 10),
+    ORE_TUFF_MINSPAWNHEIGHT("ore.tuff.min-spawn-height", 3),
+
+    //DEEPSLATE
+    ORE_DEEPSLATE_CHANCE("ore.deepslate.chance-per-chunk", 80),
+    ORE_DEEPSLATE_VEINSIZE("ore.deepslate.max-vein-size", 45),
+    ORE_DEEPSLATE_MAXVEINNUMBER("ore.deepslate.max-vein-count", 25),
+    ORE_DEEPSLATE_COMMONSPAWNHEIGHT("ore.deepslate.common-spawn-height", 10),
+    ORE_DEEPSLATE_MAXSPAWNHEIGHT("ore.deepslate.max-spawn-height", 15),
+    ORE_DEEPSLATE_MINSPAWNHEIGHT("ore.deepslate.min-spawn-height", 2),
 
     ;
     private final String path;

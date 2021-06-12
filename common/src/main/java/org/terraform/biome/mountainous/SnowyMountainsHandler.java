@@ -11,6 +11,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -29,14 +30,6 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
     public Biome getBiome() {
         return Biome.SNOWY_MOUNTAINS;
     }
-//
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 8);
-//		gen.setScale(0.005);
-//		
-//		return (int) ((gen.noise(x, z, 0.5, 0.5)*7D+50D)*1.5);
-//	}
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
@@ -76,7 +69,9 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
                 }
                 
 				//Thick Snow on shallow areas
-				if(HeightMap.getTrueHeightGradient(data, x, z, 3) < 1.4) {
+                //Snowy Snow on near flat areas
+                double gradient = HeightMap.getTrueHeightGradient(data, x, z, 3);
+				if(gradient < 1.4) {
 					
 					if(data.getBiome(x, z) != getBiome()) continue;
 	                //Don't touch submerged blocks
@@ -84,8 +79,10 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
 						continue;
 	                if(y < TerraformGenerator.seaLevel)
 	                	continue;
-	                
-					data.setType(x, y, z, Material.SNOW_BLOCK);
+	                if(gradient < 1.2)
+	                	data.setType(x, y, z, OneOneSevenBlockHandler.POWDER_SNOW);
+	                else
+	                	data.setType(x, y, z, Material.SNOW_BLOCK);
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+//import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
@@ -9,7 +9,6 @@ import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-
 import java.util.Stack;
 
 public class PopulateCommand extends TerraCommand {
@@ -40,6 +39,6 @@ public class PopulateCommand extends TerraCommand {
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
-        new TerraformPopulator(tw).populate(tw, ((CraftWorld) p.getWorld()).getHandle().getRandom(), data);
+        //new TerraformPopulator(tw).populate(tw, ((CraftWorld) p.getWorld()).getHandle().getRandom(), data);
     }
 }

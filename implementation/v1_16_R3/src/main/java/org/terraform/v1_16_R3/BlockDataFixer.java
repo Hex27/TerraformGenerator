@@ -62,7 +62,7 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
     public void correctFacing(Vector v, SimpleBlock b, BlockData data, BlockFace face) {
         if (data == null && b != null) data = b.getBlockData();
 
-        if (data.getMaterial().toString().endsWith("_WALL")) {
+//        if (data.getMaterial().toString().endsWith("_WALL")) {
 //			TerraformGeneratorPlugin.logger.info("====================");
 //			TerraformGeneratorPlugin.logger.info("hasflushed: " + hasFlushed);
 //			TerraformGeneratorPlugin.logger.info("Has simpleblock: " + (b != null));
@@ -70,7 +70,7 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
 //			TerraformGeneratorPlugin.logger.info("has vector: " + (v != null));
 //			TerraformGeneratorPlugin.logger.info("Instanceof wall: " + (data instanceof Wall));
 //
-        }
+//        }
         if (!hasFlushed && data instanceof Wall) {
             this.pushChanges(v);
             return;

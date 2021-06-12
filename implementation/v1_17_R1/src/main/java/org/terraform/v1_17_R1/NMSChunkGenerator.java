@@ -7,19 +7,16 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.IRegistryCustom;
-import net.minecraft.core.QuartPos;
 import net.minecraft.server.level.RegionLimitedWorldAccess;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.EnumCreatureType;
 import net.minecraft.world.level.BlockColumn;
-import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.BiomeManager;
-import net.minecraft.world.level.biome.BiomeSettingsGeneration;
 import net.minecraft.world.level.biome.WorldChunkManager;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ITileEntity;
@@ -29,17 +26,11 @@ import net.minecraft.world.level.chunk.BiomeStorage;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkSection;
 import net.minecraft.world.level.chunk.IChunkAccess;
-import net.minecraft.world.level.levelgen.Aquifer;
 import net.minecraft.world.level.levelgen.ChunkGeneratorAbstract;
 import net.minecraft.world.level.levelgen.HeightMap;
-import net.minecraft.world.level.levelgen.SeededRandom;
 import net.minecraft.world.level.levelgen.StructureSettings;
 import net.minecraft.world.level.levelgen.WorldGenStage;
-import net.minecraft.world.level.levelgen.carver.CarvingContext;
-import net.minecraft.world.level.levelgen.carver.WorldGenCanyonOcean;
 import net.minecraft.world.level.levelgen.carver.WorldGenCarverAbstract;
-import net.minecraft.world.level.levelgen.carver.WorldGenCarverWrapper;
-import net.minecraft.world.level.levelgen.carver.WorldGenCavesOcean;
 import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
 
@@ -49,8 +40,6 @@ import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_17_R1.generator.CraftChunkData;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
-import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
@@ -65,7 +54,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Supplier;
 
 public class NMSChunkGenerator extends ChunkGenerator {
     private final WorldServer world;
@@ -106,15 +94,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
         int pX = blockposition.getX();
         int pZ = blockposition.getZ();
 
-        if (structuregenerator == StructureGenerator.k) {
+        if (structuregenerator == StructureGenerator.k) { //stronghold
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
             return new BlockPosition(coords[0], 20, coords[1]);
         } 
-//        else if (structuregenerator == StructureGenerator.VILLAGE) {
-//            int[] coords = new FarmhousePopulator().getNearestFeature(tw, pX, pZ);
-//            return new BlockPosition(coords[0], 100, coords[1]);
-//        } 
-    	else if (structuregenerator == StructureGenerator.l) {
+    	else if (structuregenerator == StructureGenerator.l) { //Monument
             if(TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
             	return null;
     		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
@@ -133,7 +117,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     }
 
-    @SuppressWarnings({ "rawtypes", "deprecation", "unchecked" })
     @Override
     public void doCarving(long i, BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
 //        BiomeManager biomemanager1 = biomemanager.a(this.b);

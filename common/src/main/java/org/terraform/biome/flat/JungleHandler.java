@@ -73,11 +73,11 @@ public class JungleHandler extends BiomeHandler {
                  // Generate grass
                  if (data.getBiome(x, z) == getBiome() &&
                          BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                     if (data.getType(x, y + 1, z).isAir() && GenUtils.chance(2, 3)) {
+                     if (BlockUtils.isAir(data.getType(x, y + 1, z)) && GenUtils.chance(2, 3)) {
                          if (random.nextBoolean()) {
                              data.setType(x, y + 1, z, GenUtils.weightedRandomMaterial(random, Material.GRASS, 5, BlockUtils.pickFlower(), 1));
                          } else {
-                             if (data.getType(x, y + 2, z).isAir())
+                             if (BlockUtils.isAir(data.getType(x, y + 2, z)))
                                  BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
                          }
                      }
@@ -208,7 +208,7 @@ public class JungleHandler extends BiomeHandler {
                 if (data.getBiome(x, z) == getBiome() &&
                         BlockUtils.isDirtLike(data.getType(x, y, z))) {
                     if (data.getType(x, y + 1, z) == Material.JUNGLE_WOOD
-                            && data.getType(x, y + 2, z).isAir()
+                            && BlockUtils.isAir(data.getType(x, y + 2, z))
                             && GenUtils.chance(2, 9)) {
                         data.setType(x, y + 2, z, GenUtils.randMaterial(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM));
                     }

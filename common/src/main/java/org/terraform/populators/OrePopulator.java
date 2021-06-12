@@ -7,6 +7,8 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.Version;
 
 import java.util.Objects;
 import java.util.Random;
@@ -104,9 +106,28 @@ public class OrePopulator {
                         if (rel.getType() == Material.STONE) {
                             rel.setType(type);
                         }
+                        //1.17 behaviour
+                        else if(Version.isAtLeast(17)) 
+                        {
+                        	//Deepslate replacing other ores
+                        	if(type == OneOneSevenBlockHandler.DEEPSLATE
+                        			&& rel.getType().toString().endsWith("ORE")) {
+                        		rel.setType(OneOneSevenBlockHandler.deepSlateVersion(rel.getType()));
+                        	}
+                        	//Normal ores replacing deepslate
+                        	else if(rel.getType() == OneOneSevenBlockHandler.DEEPSLATE) 
+                        	{
+                        		rel.setType(OneOneSevenBlockHandler.deepSlateVersion(type));
+                        	}
+                        } 
+                        
                     }
                 }
             }
         }
     }
+
+	public Material getType() {
+		return type;
+	}
 }

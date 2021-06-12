@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+	implementation(files("libs/spigot-1.17.jar"))
     implementation(project(":common"))
     testImplementation("junit", "junit", "4.12")
     //compileOnly(group = "org.spigotmc", name = "spigot", version = "1.17-R0.1-SNAPSHOT")

@@ -72,7 +72,10 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                                 w.LPillar(h, random, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
                         }
 
-                    } else if (GenUtils.chance(random, 1, 25)) { //Slabbing
+                    } 
+                    else if (GenUtils.chance(random, 1, 25) 
+                    		&& BlockUtils.isStoneLike(data.getType(x, floor+1, z))) 
+                    { //Slabbing
                         SimpleBlock base = new SimpleBlock(data, x, floor + 1, z);
                         //Only next to spots where there's some kind of solid block.
                         if (base.getType() == Material.CAVE_AIR)
@@ -82,7 +85,9 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                                     break;
                                 }
                             }
-                    } else if (GenUtils.chance(random, 1, 35)) { //Shrooms :3
+                    } 
+                    else if (GenUtils.chance(random, 1, 35) && BlockUtils.isStoneLike(data.getType(x, floor+1, z))) 
+                    { //Shrooms
                         if (data.getType(x, floor + 1, z) == Material.CAVE_AIR)
                             data.setType(x, floor + 1, z, GenUtils.randMaterial(
                                     Material.RED_MUSHROOM,

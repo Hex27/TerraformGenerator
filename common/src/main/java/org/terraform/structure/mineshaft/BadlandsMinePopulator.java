@@ -293,7 +293,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
                     for (int add = 1; add < 2 * supportR; add++) {
                         SimpleBlock b = new SimpleBlock(platform.getPopData(), mainPillar.getX(), y,
                                 mainPillar.getZ()).getRelative(face, add);
-                        if (b.getType() == Material.STONE || b.getType().isAir()) {
+                        if (b.getType() == Material.STONE || BlockUtils.isAir(b.getType())) {
                             b.setType(Material.DARK_OAK_FENCE);
                             BlockUtils.correctSurroundingMultifacingData(b);
 
@@ -335,7 +335,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
             center.getRelative(face, 2).setBlockData(stairs);
 
             SimpleBlock lantern = center.getRelative(face, 2).getRelative(0, 1, 0);
-            if (lantern.getType().isAir() && GenUtils.chance(1, 4))
+            if (BlockUtils.isAir(lantern.getType()) && GenUtils.chance(1, 4))
                 lantern.setType(Material.LANTERN);
 
             Slab slab = (Slab) Bukkit.createBlockData(Material.DARK_OAK_SLAB);

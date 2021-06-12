@@ -314,7 +314,7 @@ public class MushroomBuilder {
 
                 while (true) {
                     if (pointBase.getType().isSolid()) {
-                        if (pointBase.getRelative(0, -1, 0).getType().isAir())
+                        if (BlockUtils.isAir(pointBase.getRelative(0, -1, 0).getType()))
                             pointBase.getRelative(0, -1, 0).setType(Material.MUSHROOM_STEM);
                         continue points;
                     } else {

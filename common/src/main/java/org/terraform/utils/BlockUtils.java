@@ -73,6 +73,9 @@ public class BlockUtils {
             Material.COAL_ORE, Material.IRON_ORE,
             Material.GOLD_ORE, Material.DIAMOND_ORE,
             Material.EMERALD_ORE, Material.REDSTONE_ORE,
+            OneOneSevenBlockHandler.COPPER_ORE, 
+            OneOneSevenBlockHandler.DEEPSLATE,
+            OneOneSevenBlockHandler.TUFF,
             Material.LAPIS_ORE, Material.SNOW_BLOCK,
             Material.PACKED_ICE, Material.BLUE_ICE
     );
@@ -1023,6 +1026,10 @@ public class BlockUtils {
                     downTypes);
             start = start.getRelative(extensionDir).getRelative(0, -1, 0);
         }
+    }
+    
+    public static boolean isAir(Material mat) {
+    	return mat.toString().endsWith("AIR");
     }
 
     public static BlockData getRandomBarrel() {

@@ -44,7 +44,7 @@ public class BadlandsMineEntranceParser extends SchematicParser {
                 break;
             }
             case GREEN_CONCRETE: {
-                if (noiseValue > 0.5 && block.getType().isAir()) {
+                if (noiseValue > 0.5 && BlockUtils.isAir(block.getType())) {
                     for (BlockFace face : BlockUtils.directBlockFaces) {
                         SimpleBlock b = block.getRelative(face);
 

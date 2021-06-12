@@ -12,6 +12,45 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
 
 public class BlockDataFixer extends BlockDataFixerAbstract {
+
+    @Override
+    public String updateSchematic(String schematic) {
+
+    	//1.16 change
+        if (schematic.contains("_wall[")) {
+            schematic = StringUtils.replace(schematic, "north=false", "north=none");
+            schematic = StringUtils.replace(schematic, "south=false", "south=none");
+            schematic = StringUtils.replace(schematic, "east=false", "east=none");
+            schematic = StringUtils.replace(schematic, "west=false", "west=none");
+            schematic = StringUtils.replace(schematic, "north=true", "north=low");
+            schematic = StringUtils.replace(schematic, "south=true", "south=low");
+            schematic = StringUtils.replace(schematic, "east=true", "east=low");
+            schematic = StringUtils.replace(schematic, "west=true", "west=low");
+        }
+        //1.17 change, cauldrons have water
+        else if (schematic.contains("minecraft:cauldron[level=")) 
+        {
+            schematic = StringUtils.replace(schematic, "minecraft:cauldron[level=", "minecraft:water_cauldron[level=");
+        }
+        return schematic;
+    }
+    
+    @Override
+    public void correctFacing(Vector v, SimpleBlock b, BlockData data, BlockFace face) {
+        if (data == null && b != null) data = b.getBlockData();
+
+        if (!hasFlushed && data instanceof Wall) {
+            this.pushChanges(v);
+            return;
+        }
+
+        if (data instanceof Wall && b != null) {
+            //1.16 stuff.
+            correctSurroundingWallData(b);
+        }
+    }
+    
+    //--------[1.16 stuff]
     public static void correctWallData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof Wall)) return;
         Wall data = (Wall) target.getBlockData();
@@ -25,12 +64,7 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
             } else data.setHeight(face, Height.NONE);
         }
 
-//		if(target.getRelative(BlockFace.UP).getBlockData() instanceof Wall&&
-//				((Wall) target.getRelative(BlockFace.UP).getBlockData()).isUp()) {
-//			data.setUp(true);
-//		}
-        //TerraformGeneratorPlugin.logger.info("Changed wall at " + target.toVector().toString());
-        target.setBlockData(data);
+//		target.setBlockData(data);
     }
 
     public static void correctSurroundingWallData(SimpleBlock target) {
@@ -43,42 +77,4 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
         }
     }
 
-    @Override
-    public String updateSchematic(String schematic) {
-        if (schematic.contains("_wall[")) {
-            schematic = StringUtils.replace(schematic, "north=false", "north=none");
-            schematic = StringUtils.replace(schematic, "south=false", "south=none");
-            schematic = StringUtils.replace(schematic, "east=false", "east=none");
-            schematic = StringUtils.replace(schematic, "west=false", "west=none");
-            schematic = StringUtils.replace(schematic, "north=true", "north=low");
-            schematic = StringUtils.replace(schematic, "south=true", "south=low");
-            schematic = StringUtils.replace(schematic, "east=true", "east=low");
-            schematic = StringUtils.replace(schematic, "west=true", "west=low");
-        }
-        return schematic;
-    }
-
-    @Override
-    public void correctFacing(Vector v, SimpleBlock b, BlockData data, BlockFace face) {
-        if (data == null && b != null) data = b.getBlockData();
-
-        if (data.getMaterial().toString().endsWith("_WALL")) {
-//			TerraformGeneratorPlugin.logger.info("====================");
-//			TerraformGeneratorPlugin.logger.info("hasflushed: " + hasFlushed);
-//			TerraformGeneratorPlugin.logger.info("Has simpleblock: " + (b != null));
-//			TerraformGeneratorPlugin.logger.info("data: " + data.getAsString());
-//			TerraformGeneratorPlugin.logger.info("has vector: " + (v != null));
-//			TerraformGeneratorPlugin.logger.info("Instanceof wall: " + (data instanceof Wall));
-//
-        }
-        if (!hasFlushed && data instanceof Wall) {
-            this.pushChanges(v);
-            return;
-        }
-
-        if (data instanceof Wall && b != null) {
-            //TerraformGeneratorPlugin.logger.info("corrected");
-            correctSurroundingWallData(b);
-        }
-    }
 }

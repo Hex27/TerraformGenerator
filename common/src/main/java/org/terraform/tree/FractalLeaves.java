@@ -210,7 +210,7 @@ public class FractalLeaves {
         }
 
         for (int i = 1; i <= GenUtils.randInt(minDist, maxDist); i++) {
-            if (base.getRelative(0, -i, 0).getType().isAir())
+            if (BlockUtils.isAir(base.getRelative(0, -i, 0).getType()))
                 base.getRelative(0, -i, 0).lsetBlockData(type);
             else
                 break;
