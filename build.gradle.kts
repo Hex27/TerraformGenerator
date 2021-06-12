@@ -1,25 +1,26 @@
 import java.io.ByteArrayOutputStream
 import java.net.URL
 import java.nio.channels.Channels
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
 
 plugins {
     java
 }
 
-dependencies {
-	implementation(files("libs/spigot-1.17.jar"))
-}
+subprojects {
+    apply<JavaPlugin>()
 
-repositories {
-    mavenCentral()
-}
+    group = "org.terraform"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven("https://repo.codemc.io/repository/nms/")
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
 }
 
 val testDir = "target/server"

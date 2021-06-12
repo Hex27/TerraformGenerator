@@ -1,22 +1,5 @@
-plugins {
-    java
-}
-
-group = "org.terraform"
-
-repositories {
-    mavenCentral()
-    maven{ url = uri("https://repo.codemc.io/repository/nms/") }
-}
-
 dependencies {
 	implementation(files("libs/spigot-1.17.jar"))
     implementation(project(":common"))
-    testImplementation("junit", "junit", "4.12")
-    //compileOnly(group = "org.spigotmc", name = "spigot", version = "1.17-R0.1-SNAPSHOT")
-    compileOnly(fileTree("../../libs/"))
-}
-java {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    compileOnly("org.spigotmc", "spigot", "1.17-R0.1-SNAPSHOT")
 }
