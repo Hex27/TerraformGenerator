@@ -198,15 +198,15 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
     @Override
     public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
     	String tagName = "ocean_monument";
-    	StructureGenerator<?> generator = StructureGenerator.OCEAN_MONUMENT;
+    	StructureGenerator<?> generator = WorldGenerator.OCEAN_MONUMENT;
     	switch(type) {
     	case GUARDIAN:
     		tagName = "ocean_monument";
-    		generator = StructureGenerator.OCEAN_MONUMENT;
+    		generator = WorldGenerator.OCEAN_MONUMENT;
     		break;
     	case PILLAGER:
     		tagName = "pillager_outpost";
-    		generator = StructureGenerator.PILLAGER_OUTPOST;
+    		generator = WorldGenerator.PILLAGER_OUTPOST;
     		break;
     	}
     	

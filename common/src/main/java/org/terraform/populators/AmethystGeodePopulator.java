@@ -81,7 +81,10 @@ public class AmethystGeodePopulator {
                     double noiseVal = 1 + 0.4 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
                     
                     if (airHollower <= noiseVal) {
-                        rel.setType(Material.CAVE_AIR);
+                    	if(BlockUtils.isWet(rel))
+                    		rel.setType(Material.WATER);
+                    	else
+                    		rel.setType(Material.CAVE_AIR);
                         //Only do the other stuff if this isn't air.
                     }else if(rel.getType().isSolid())
 	                    if (amethystCrust <= noiseVal) {

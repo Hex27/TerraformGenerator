@@ -196,27 +196,37 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
 
     @Override
     public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
-    	String tagName = "ocean_monument";
-    	StructureGenerator<?> generator = StructureGenerator.OCEAN_MONUMENT;
-    	switch(type) {
-    	case GUARDIAN:
-    		tagName = "ocean_monument";
-    		generator = StructureGenerator.OCEAN_MONUMENT;
-    		break;
-    	case PILLAGER:
-    		tagName = "pillager_outpost";
-    		generator = StructureGenerator.PILLAGER_OUTPOST;
-    		break;
-    	}
-        TerraStructureStart start = new TerraStructureStart(tagName,
-        		generator, chunkX, chunkZ, null, z1, z1);
+//    	String tagName = "ocean_monument";
+//    	StructureGenerator<?> generator = WorldGenerator.OCEAN_MONUMENT;
+//    	switch(type) {
+//    	case GUARDIAN:
+//    		tagName = "ocean_monument";
+//    		generator = WorldGenerator.OCEAN_MONUMENT;
+//    		break;
+//    	case PILLAGER:
+//    		tagName = "pillager_outpost";
+//    		generator = WorldGenerator.PILLAGER_OUTPOST;
+//    		break;
+//    	}
+//        TerraStructureStart start = new TerraStructureStart(tagName,
+//        		generator, chunkX, chunkZ, null, z1, z1);
+//        start.setStructureBounds(x0, y0, z0, x1, y1, z1);
+//        IStructureAccess sa = ica;
+//        sa.a( //setStartForFeature
+//        		generator.b(), //Get ID
+//                start);
+//
+//        sa.a(generator.b(), new ChunkCoordIntPair(chunkX, chunkZ).pair());
+
+        TerraStructureStart start = new TerraStructureStart("ocean_monument",
+                WorldGenerator.OCEAN_MONUMENT, chunkX, chunkZ, null, z1, z1);
         start.setStructureBounds(x0, y0, z0, x1, y1, z1);
         IStructureAccess sa = ica;
         sa.a( //setStartForFeature
-        		generator.b(), //Get ID
+                WorldGenerator.OCEAN_MONUMENT.b(), //Get ID
                 start);
 
-        sa.a(generator.b(), new ChunkCoordIntPair(chunkX, chunkZ).pair());
+        sa.a(WorldGenerator.OCEAN_MONUMENT.b(), new ChunkCoordIntPair(chunkX, chunkZ).pair());
     }
 
     @Override
