@@ -12,7 +12,7 @@ subprojects {
     group = "org.terraform"
 
     repositories {
-        mavenLocal()
+        //mavenLocal()
         mavenCentral()
         maven("https://repo.codemc.io/repository/nms/")
     }

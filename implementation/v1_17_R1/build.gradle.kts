@@ -1,5 +1,4 @@
 dependencies {
-	implementation(files("libs/spigot-1.17.jar"))
     implementation(project(":common"))
-    compileOnly("org.spigotmc", "spigot", "1.17-R0.1-SNAPSHOT")
+    compileOnly(group = "org.spigotmc", name = "spigot", version = "1.17-R0.1-20210612.142052-2")
 }
