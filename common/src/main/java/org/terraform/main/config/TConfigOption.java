@@ -19,6 +19,8 @@ public enum TConfigOption {
     BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.03f),
     BIOME_OCEANIC_FREQUENCY("biome.oceanic-frequency", 0.11f),
     BIOME_OCEANIC_THRESHOLD("biome.oceanic-threshold", 22f),
+    BIOME_CAVE_DRIPSTONECLUSTER_FREQUENCY("biome.cave.dripstone-cluster.frequency", 0.0002),
+    BIOME_CAVE_LUSHCLUSTER_FREQUENCY("biome.cave.lush-cluster.frequency", 0.0002),
     BIOME_DEEP_OCEANIC_THRESHOLD("biome.deep-oceanic-threshold", 27f),
     BIOME_DITHER("biome.dithering", 0.04d),
     BIOME_SECTION_BITSHIFTS("biome.biomesection-bitshifts", 7),

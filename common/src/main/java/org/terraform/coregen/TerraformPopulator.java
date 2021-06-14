@@ -2,6 +2,7 @@ package org.terraform.coregen;
 
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.cave.MasterCavePopulatorDistributor;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.AmethystGeodePopulator;
@@ -77,6 +78,7 @@ public class TerraformPopulator {
     	}
     }
     
+    private MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
 
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
@@ -102,10 +104,11 @@ public class TerraformPopulator {
             //Only decorate disruptive features if the structures allow for them
             if(canDecorate)
             	bank.getHandler().populateLargeItems(tw, random, data);
-                        
-            // Cave populators
-            bank.getCavePop().populate(tw, random, data);
         }
+        
+		// Cave populators
+        //They will recalculate biomes per block.
+		caveDistributor.populate(tw, random, data);
 
 
     }

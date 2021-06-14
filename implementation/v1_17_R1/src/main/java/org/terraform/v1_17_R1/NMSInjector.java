@@ -36,6 +36,7 @@ public class NMSInjector extends NMSInjectorAbstract {
         NMSChunkGenerator bpg = new NMSChunkGenerator(
                 world.getName(),
                 (int) world.getSeed(),
+                ws.getChunkProvider().getChunkGenerator(),
                 ws.getChunkProvider().getChunkGenerator().getWorldChunkManager(),
                 ws.getChunkProvider().getChunkGenerator().getWorldChunkManager(),
                 ws.getChunkProvider().getChunkGenerator().getSettings(),
@@ -78,7 +79,6 @@ public class NMSInjector extends NMSInjectorAbstract {
         return new PopulatorDataICA(tw, ws, ica, chunk.getX(), chunk.getZ());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
         if (data instanceof PopulatorData) {

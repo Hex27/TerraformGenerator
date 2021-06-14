@@ -3,6 +3,7 @@ package org.terraform.utils.version;
 import org.bukkit.Bukkit;
 
 public class Version {
+	
     public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     public static final double DOUBLE = toVersionDouble(VERSION);
 

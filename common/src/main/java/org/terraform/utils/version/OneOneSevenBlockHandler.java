@@ -1,6 +1,13 @@
 package org.terraform.utils.version;
 
+import java.util.Random;
+
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.terraform.data.SimpleBlock;
 
 public class OneOneSevenBlockHandler {
 
@@ -24,6 +31,9 @@ public class OneOneSevenBlockHandler {
 	
 	public static final Material MOSS_BLOCK = Material.getMaterial("MOSS_BLOCK") == null ? 
 			Material.getMaterial("GRASS_BLOCK") : Material.getMaterial("MOSS_BLOCK");
+
+	public static final Material MOSS_CARPET = Material.getMaterial("MOSS_CARPET") == null ? 
+			Material.getMaterial("CAVE_AIR") : Material.getMaterial("MOSS_CARPET");
 	
 	public static final Material AZALEA = Material.getMaterial("AZALEA") == null ? 
 			Material.getMaterial("OAK_SAPLING") : Material.getMaterial("AZALEA");
@@ -37,6 +47,9 @@ public class OneOneSevenBlockHandler {
 	public static final Material FLOWERING_AZALEA_LEAVES = Material.getMaterial("FLOWERING_AZALEA_LEAVES") == null ? 
 			Material.getMaterial("OAK_LEAVES") : Material.getMaterial("FLOWERING_AZALEA_LEAVES");
 	
+	public static final Material SPORE_BLOSSOM = Material.getMaterial("SPORE_BLOSSOM") == null ? 
+			Material.getMaterial("OAK_LEAVES") : Material.getMaterial("SPORE_BLOSSOM");
+
 	public static final Material ROOTED_DIRT = Material.getMaterial("ROOTED_DIRT") == null ? 
 			Material.getMaterial("DIRT") : Material.getMaterial("ROOTED_DIRT");
 
@@ -80,6 +93,110 @@ public class OneOneSevenBlockHandler {
 	public static Material DIRT_PATH() {
 		return DIRT_PATH;
 	}
+	
+	public static void downLCaveVines(int height, SimpleBlock base) {
+		int realHeight = 0;
+		while(!base.getRelative(0,-realHeight,0).getType().isSolid() && height > 0) {
+			realHeight++;
+			height--;
+		}
+		if(base.getRelative(0,-realHeight,0).getType().isSolid())
+			realHeight--;
+		
+		if(realHeight <= 0) return;
+		
+		for(int i = realHeight; i > 0; i--) {
+			Material vine = CAVE_VINES_PLANT;
+			if(i == 1)
+				vine = CAVE_VINES;
+			
+			base.getRelative(0, -(realHeight - i), 0).setBlockData(getCaveVine(vine, new Random().nextInt(3) == 0));
+		}
+	}
+	
+	public static void downLPointedDripstone(int height, SimpleBlock base) {
+		int realHeight = 0;
+		while(!base.getRelative(0,-realHeight,0).getType().isSolid() && height > 0) {
+			realHeight++;
+			height--;
+		}
+		if(base.getRelative(0,-realHeight,0).getType().isSolid())
+			realHeight--;
+		
+		if(realHeight <= 0) return;
+		
+		for(int i = realHeight; i > 0; i--) {
+			PointedDripstoneThickness thickness = PointedDripstoneThickness.middle;
+			if(i == 1)
+				thickness = PointedDripstoneThickness.tip;
+			if(i == 2)
+				thickness = PointedDripstoneThickness.frustum;
+			if(i == realHeight && realHeight > 2)
+				thickness = PointedDripstoneThickness.base;
+			
+			base.getRelative(0, -(realHeight - i), 0).setBlockData(getPointedDripstone(thickness, false, BlockFace.DOWN));
+		}
+	}
+	
+	public static void upLPointedDripstone(int height, SimpleBlock base) {
+		int realHeight = 0;
+		while(!base.getRelative(0,realHeight,0).getType().isSolid() && height > 0) {
+			realHeight++;
+			height--;
+		}
+		if(base.getRelative(0,realHeight,0).getType().isSolid())
+			realHeight--;
+		
+		if(realHeight <= 0) return;
+		
+		for(int i = 0; i < realHeight; i++) {
+			PointedDripstoneThickness thickness = PointedDripstoneThickness.middle;
+			
+			if(realHeight >= 4) {
+				if(i == realHeight-1)
+					thickness = PointedDripstoneThickness.tip;
+				if(i == realHeight-2)
+					thickness = PointedDripstoneThickness.frustum;
+				if(i == 0)
+					thickness = PointedDripstoneThickness.base;
+			}else if(realHeight >= 3) {
+				if(i == realHeight-1)
+					thickness = PointedDripstoneThickness.tip;
+				if(i == realHeight-2)
+					thickness = PointedDripstoneThickness.frustum;
+				if(i == 0)
+					thickness = PointedDripstoneThickness.base;
+			}else if(realHeight >= 2) {
+				thickness = PointedDripstoneThickness.tip;
+				if(i == 0)
+					thickness = PointedDripstoneThickness.frustum;
+			}else if(realHeight == 1) {
+				thickness = PointedDripstoneThickness.tip;
+			}
+			
+			base.getRelative(0, i, 0).setBlockData(getPointedDripstone(thickness, false, BlockFace.UP));
+		}
+	}
+	
+	public static BlockData getPointedDripstone(PointedDripstoneThickness thickness, boolean waterlogged, BlockFace direction) {
+		BlockData data = Bukkit.createBlockData(OneOneSevenBlockHandler.POINTED_DRIPSTONE);
+		String stringData = data.getAsString();
+		stringData = StringUtils.replace(stringData, "thickness=tip", "thickness=" + thickness.toString());
+		stringData = StringUtils.replace(stringData, "vertical_direction=up", "vertical_direction=" + direction.toString().toLowerCase());
+		stringData = StringUtils.replace(stringData, "waterlogged=false", "waterlogged=" + waterlogged);
+		
+		data = Bukkit.createBlockData(stringData);
+		return data;
+	}
+	
+	public static BlockData getCaveVine(Material caveVine, boolean glowBerries) {
+		BlockData data = Bukkit.createBlockData(caveVine);
+		String stringData = data.getAsString();
+		stringData = StringUtils.replace(stringData, "berries=false", "berries=" + glowBerries);
+		
+		data = Bukkit.createBlockData(stringData);
+		return data;
+	}
 
 	public static Material deepSlateVersion(Material target) {
 		Material mat = Material.getMaterial("DEEPSLATE_"+target.toString());
@@ -87,5 +204,12 @@ public class OneOneSevenBlockHandler {
 			return target;
 		else
 			return mat;
+	}
+	
+	public static enum PointedDripstoneThickness{
+		tip,
+		frustum,
+		middle,
+		base
 	}
 }

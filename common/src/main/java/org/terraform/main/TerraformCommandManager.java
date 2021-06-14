@@ -63,7 +63,6 @@ public class TerraformCommandManager implements CommandExecutor {
             this.registerCommand(new PlainsVillageCommand(plugin, "plainsvillage", "pv"));
             this.registerCommand(new RibCageCommand(plugin, "ribcage"));
             this.registerCommand(new OreDitCommand(plugin, "oredit"));
-            this.registerCommand(new PopulateCommand(plugin, "populate"));
 
         }
         this.registerCommand(new LocateCommand(plugin, "locate"));
