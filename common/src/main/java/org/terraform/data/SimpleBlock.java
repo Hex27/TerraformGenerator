@@ -18,6 +18,8 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
+import java.util.Arrays;
+
 public class SimpleBlock {
     @SerializedName("w")
     private final int x, y, z;
@@ -198,6 +200,18 @@ public class SimpleBlock {
 
     public Material getType() {
         return popData.getType(x, y, z);
+    }
+
+    /**
+     * setType(replaceWith) IF getType() == any of toReplace candidates
+     */
+    public void replaceType(Material replaceWith, Material... toReplace) {
+        Material currentMaterial = this.getType();
+        for (Material mat : toReplace) {
+            if (currentMaterial == mat) {
+                this.setType(replaceWith);
+            }
+        }
     }
 
     public void setType(Material type) {

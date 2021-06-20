@@ -11,27 +11,50 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.GenUtils;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class PortalPopulator extends MultiMegaChunkStructurePopulator {
     public static void spawnPortal(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int y, int z) {
         try {
-            boolean b = random.nextBoolean();
-            String path = b ? "portal-basalt-1" : "portal-bastion-remnant-big-1";
-            TerraSchematic portal = TerraSchematic.load(path, new Location(world.getWorld(), x, y, z));
-            portal.parser = b ? new BasaltPortalSchematicParser(data, random) : new BastionRemnantPortalBigSchematicParser(data, random);
-//            portal.refPoint = GenUtils.getHgihestGround(data, portal.refPoint.getRelative())
-            portal.setFace(b ? BlockUtils.getDirectBlockFace(random) : BlockFace.NORTH);
-            portal.apply();
+            int i = random.nextInt(3);
+            switch (i) {
+                case 0:
+                    spawnBasalt1(world, random, data, x, y, z); return;
+                case 1:
+                    spawnBigBastionRemnant1(world, random, data, x, y, z); return;
+                case 2:
+                    spawnBastionRemnant1(world, random, data, x, y, z); return;
+            }
 
-            TerraformGeneratorPlugin.logger.info("Spawning ruined portal at " + x + ", " + y + ", " + z + " with rotation of " + portal.getFace());
+            TerraformGeneratorPlugin.logger.info("Spawning ruined portal at " + x + ", " + y + ", " + z);
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place ruined portal at " + x + ", " + y + ", " + z);
             e.printStackTrace();
         }
+    }
+
+    public static void spawnBasalt1(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int y, int z) throws FileNotFoundException {
+            TerraSchematic portal = TerraSchematic.load("portal-basalt-1", new Location(world.getWorld(), x, y, z));
+            portal.parser = new BasaltPortalSchematicParser(data, random);
+            portal.setFace(BlockUtils.getDirectBlockFace(random));
+            portal.apply();
+    }
+
+    public static void spawnBigBastionRemnant1(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int y, int z) throws FileNotFoundException {
+        TerraSchematic portal = TerraSchematic.load("portal-bastion-remnant-big-1", new Location(world.getWorld(), x, y, z));
+        portal.parser = new BastionRemnantPortalBigSchematicParser(data, random);
+        portal.setFace(BlockFace.NORTH);
+        portal.apply();
+    }
+
+    public static void spawnBastionRemnant1(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int y, int z) throws FileNotFoundException {
+        TerraSchematic portal = TerraSchematic.load("portal-bastion-remnant-1", new Location(world.getWorld(), x, y, z));
+        portal.parser = new BastionRemnantPortalSchematicParser(data, random);
+        portal.setFace(BlockUtils.getDirectBlockFace(random));
+        portal.apply();
     }
 
     @Override

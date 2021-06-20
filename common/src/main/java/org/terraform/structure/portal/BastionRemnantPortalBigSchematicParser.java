@@ -20,6 +20,7 @@ public class BastionRemnantPortalBigSchematicParser extends SchematicParser {
     private final PopulatorDataAbstract pop;
     private final Random rand;
     private final ArrayList<SimpleBlock> pillarPositions = new ArrayList<>();
+    private final ArrayList<SimpleBlock> portalPositions = new ArrayList<>();
 
     public BastionRemnantPortalBigSchematicParser(PopulatorDataAbstract pop, Random random) {
         this.pop = pop;
@@ -53,9 +54,11 @@ public class BastionRemnantPortalBigSchematicParser extends SchematicParser {
                         Material.POLISHED_BLACKSTONE_SLAB,
                         Material.POLISHED_BLACKSTONE_BRICK_SLAB,
                         Material.POLISHED_BLACKSTONE_BRICK_SLAB,
-                        Material.LANTERN,
+                        Material.SOUL_LANTERN,
                         Material.REDSTONE_WIRE);
 
+                if (block.getType() == Material.OBSIDIAN || block.getType() == Material.CHISELED_POLISHED_BLACKSTONE)
+                    continue;
                 if (mat == Material.POLISHED_BLACKSTONE_BUTTON) {
                     Directional pebble = (Directional) Material.POLISHED_BLACKSTONE_BUTTON.createBlockData("[face=floor]");
                     block.getRelative(0, 1, 0).lsetBlockData(pebble);
@@ -64,6 +67,29 @@ public class BastionRemnantPortalBigSchematicParser extends SchematicParser {
                 } else {
                     block.getRelative(0, 1, 0).lsetType(mat);
                 }
+            }
+        }
+
+        // Damage portal
+        boolean destroyedFirst = false;
+        for (SimpleBlock pos : portalPositions) {
+            pos = GenUtils.getHighestGround(pop, pos);
+
+            if (rand.nextBoolean()) {
+                int width = rand.nextInt(4) + 1;
+                int height = rand.nextInt(5);
+                if (destroyedFirst) width = 5;
+                for (int side = 1; side < width; side++) {
+                    for (BlockFace face : BlockUtils.directBlockFaces) {
+                        pos.getRelative(face, side)
+                                .replaceType(Material.AIR, Material.OBSIDIAN, Material.CHISELED_POLISHED_BLACKSTONE);
+                    }
+                }
+                for (int y = 0; y < height; y++) {
+                        pos.getRelative(BlockFace.DOWN, y)
+                                .replaceType(Material.AIR, Material.OBSIDIAN, Material.CHISELED_POLISHED_BLACKSTONE);
+                }
+                destroyedFirst = true;
             }
         }
     }
@@ -77,6 +103,8 @@ public class BastionRemnantPortalBigSchematicParser extends SchematicParser {
                 ground.setType(getBricks());
         } else if (data.getMaterial() == Material.YELLOW_CONCRETE) {
             ground.setType(getBricks());
+        } else if (data.getMaterial() == Material.BLACK_CONCRETE) {
+            portalPositions.add(ground);
         }
         // Powders are for generating portal stairs
         else if (data.getMaterial() == Material.GREEN_CONCRETE_POWDER) {
@@ -92,7 +120,7 @@ public class BastionRemnantPortalBigSchematicParser extends SchematicParser {
         } else if (data.getMaterial() == Material.CHEST) {
             if (rand.nextInt(5) == 0) {
                 SimpleBlock chest = ground.getRelative(0 , 1, 0);
-                chest.setType(Material.CHEST);
+                chest.setBlockData(data);
                 pop.lootTableChest(chest.getX(), chest.getY(), chest.getZ(), TerraLootTable.RUINED_PORTAL);
             }
         } else if (data.getMaterial() == Material.RED_CONCRETE) {
