@@ -25,7 +25,7 @@ public class FractalLeaves {
     public float radiusZ = 4;
     public int offsetY = 0;
     public boolean halfSphere = false;
-    public Material material = Material.OAK_LEAVES;
+    public Material[] material = new Material[] {Material.OAK_LEAVES};
     public FractalTreeBuilder builder;
     Random rand = new Random();
     float leafNoiseMultiplier = 0.7f;
@@ -83,6 +83,7 @@ public class FractalLeaves {
         for (int y = halfSphere ? 0 : -Math.round(radiusY); y <= radiusY; y++) {
             for (int x = -Math.round(radiusX); x <= radiusX; x++) {
                 for (int z = -Math.round(radiusZ); z <= radiusZ; z++) {
+                	Material material = this.material[rand.nextInt(this.material.length)];
                     SimpleBlock relativeBlock = block.getRelative(Math.round(x), Math.round(y) + offsetY, Math.round(z));
 
                     if (relativeBlock.getY() - builder.oriY > builder.maxHeight) {
@@ -125,7 +126,7 @@ public class FractalLeaves {
 
                         //Decorate with fans
                         if (coralDecoration) {
-                        	CoralGenerator.generateSingleCoral(relativeBlock.getPopData(), relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ(), this.material.toString());
+                        	CoralGenerator.generateSingleCoral(relativeBlock.getPopData(), relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ(), this.material[0].toString());
                         }
 
                         // Leaves do not replace solid blocks.
@@ -203,6 +204,7 @@ public class FractalLeaves {
     }
 
     private void weepingLeaves(SimpleBlock base, int minDist, int maxDist) {
+    	Material material = this.material[rand.nextInt(this.material.length)];
         BlockData type = Bukkit.createBlockData(material);
         if (Tag.LEAVES.isTagged(material)) {
             Leaves leaf = (Leaves) type;
@@ -222,7 +224,7 @@ public class FractalLeaves {
         return this;
     }
 
-    public FractalLeaves setMaterial(Material material) {
+    public FractalLeaves setMaterial(Material... material) {
         this.material = material;
         return this;
     }

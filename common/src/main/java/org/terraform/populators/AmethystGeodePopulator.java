@@ -21,12 +21,14 @@ public class AmethystGeodePopulator {
 	private final int geodeRadius;
 	private final double frequency;
 	private final int minDepth;
+	private final int minDepthBelowSurface;
 	
 	
-    public AmethystGeodePopulator(int geodeRadius, double frequency, int minDepth) {
+    public AmethystGeodePopulator(int geodeRadius, double frequency, int minDepth, int minDepthBelowSurface) {
 		this.geodeRadius = geodeRadius;
 		this.frequency = frequency;
     	this.minDepth = minDepth;
+    	this.minDepthBelowSurface = minDepthBelowSurface;
     }
 
     
@@ -34,13 +36,13 @@ public class AmethystGeodePopulator {
     	if(GenUtils.chance(random, (int) (frequency*10000.0), 10000)) {
 			int x = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
         	int z = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-        	int upperHeightRange = GenUtils.getHighestGround(data, x, z);
+        	int upperHeightRange = GenUtils.getHighestGround(data, x, z) - minDepthBelowSurface;
         	if(upperHeightRange > minDepth)
         		upperHeightRange = minDepth;
         	
         	if(upperHeightRange < 14) return;
         	
-        	//Elevate 10 units up.
+        	//Elevate 14 units up.
         	int y = GenUtils.randInt(random, 14, upperHeightRange);
         	placeGeode(random.nextInt(9999), geodeRadius, new SimpleBlock(data,x,y,z));
     	}

@@ -15,10 +15,28 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
 public class GenericLargeCavePopulator {
+	
+	private static boolean isReplaceable(Material type) {
+		return(BlockUtils.isStoneLike(type)
+                && type != Material.COBBLESTONE)
+                || !type.isSolid()
+                || type == Material.STONE_SLAB
+                || type == Material.ICE
+                || type == Material.PACKED_ICE
+                || type == Material.BLUE_ICE
+                || type == Material.OBSIDIAN
+                || type == Material.MAGMA_BLOCK
+                || type.toString().endsWith("WALL")
+                || type.toString().endsWith("MOSS")
+                || type == OneOneSevenBlockHandler.AMETHYST_CLUSTER
+                || type == OneOneSevenBlockHandler.POINTED_DRIPSTONE;
+	}
+	
     /**
      * @return water level.
      */
@@ -40,6 +58,8 @@ public class GenericLargeCavePopulator {
                 
         	        return n;
         		});
+        
+        int waterLevel = -1;
         for (float x = -rX; x <= rX; x++) {
             for (float y = -rY; y <= rY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
@@ -56,20 +76,13 @@ public class GenericLargeCavePopulator {
                     double n = 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
                     if (n < 0) n = 0;
                     if (equationResult <= 1 + n) {
-                        if ((BlockUtils.isStoneLike(rel.getType())
-                                && rel.getType() != Material.COBBLESTONE)
-                                || !rel.getType().isSolid()
-                                || rel.getType() == Material.STONE_SLAB
-                                || rel.getType() == Material.ICE
-                                || rel.getType() == Material.PACKED_ICE
-                                || rel.getType() == Material.BLUE_ICE
-                                || rel.getType() == Material.OBSIDIAN
-                                || rel.getType() == Material.MAGMA_BLOCK
-                                || rel.getType().toString().endsWith("WALL")) {
+                        if (isReplaceable(rel.getType())) {
 
                             //Lower areas are water.
                             if (y < 0 && Math.abs(y) >= 0.8 * rY) {
                                 rel.setType(Material.WATER);
+                                if(rel.getY() > waterLevel)
+                                	waterLevel = rel.getY();
                             } else {
                                 //Replace drop blocks and water
                                 if (rel.getRelative(0, 1, 0).getType() == Material.SAND
@@ -91,7 +104,7 @@ public class GenericLargeCavePopulator {
                 }
             }
         }
-        return (int) (rY * 0.8);
+        return waterLevel;
     }
 
     public static void stalagmite(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {

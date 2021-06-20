@@ -28,6 +28,7 @@ import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Arrays;
@@ -70,12 +71,14 @@ public class BlockUtils {
             Material.STONE, Material.COBBLESTONE,
             Material.GRANITE, Material.ANDESITE,
             Material.DIORITE, Material.GRAVEL,
-            Material.COAL_ORE, Material.IRON_ORE,
-            Material.GOLD_ORE, Material.DIAMOND_ORE,
-            Material.EMERALD_ORE, Material.REDSTONE_ORE,
             OneOneSevenBlockHandler.COPPER_ORE, 
             OneOneSevenBlockHandler.DEEPSLATE,
             OneOneSevenBlockHandler.TUFF,
+            OneOneSevenBlockHandler.CALCITE,
+            OneOneSevenBlockHandler.BUDDING_AMETHYST,
+            OneOneSevenBlockHandler.AMETHYST_BLOCK,
+            OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
+            OneOneSixBlockHandler.SMOOTH_BASALT,
             Material.LAPIS_ORE, Material.SNOW_BLOCK,
             Material.PACKED_ICE, Material.BLUE_ICE
     );
@@ -411,7 +414,7 @@ public class BlockUtils {
     }
 
     public static boolean isStoneLike(Material mat) {
-        return isDirtLike(mat) || stoneLike.contains(mat);
+        return isDirtLike(mat) || stoneLike.contains(mat) || mat.toString().endsWith("_ORE");
     }
 
     public static boolean isDirtLike(Material mat) {
@@ -423,7 +426,8 @@ public class BlockUtils {
             case MYCELIUM:
                 return true;
             default:
-                return mat == OneOneSevenBlockHandler.DIRT_PATH();
+                return mat == OneOneSevenBlockHandler.DIRT_PATH() ||
+                		mat == OneOneSevenBlockHandler.ROOTED_DIRT;
         }
     }
 

@@ -8,7 +8,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.HeightMap;
@@ -24,6 +23,7 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.BeeHiveSpawner;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
@@ -94,6 +94,24 @@ public class FractalTreeBuilder {
                         .setFractalLeaves(new FractalLeaves(this).setRadius(3)
                                 .setLeafNoiseFrequency(1.0f).setLeafNoiseMultiplier(1.0f))
                         .setHeightVariation(1);
+                break;
+            case AZALEA_TOP:
+                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                        .setBaseHeight(3)
+                        .setBaseThickness(1)
+                        .setThicknessDecrement(0.3f)
+                        .setLengthDecrement(0.3f)
+                        .setMaxDepth(2)
+                        .setFractalLeaves(new FractalLeaves(this)
+                        		.setMaterial(OneOneSevenBlockHandler.AZALEA_LEAVES, OneOneSevenBlockHandler.FLOWERING_AZALEA_LEAVES)
+                        		.setRadiusX(3)
+                        		.setRadiusZ(3)
+                        		.setRadiusY(1.5f)
+                                .setLeafNoiseFrequency(1.0f).setLeafNoiseMultiplier(1.0f))
+                        .setVines(3)
+                        .setMinBend(0.9 * Math.PI / 6)
+                        .setMaxBend(1.1 * Math.PI / 6)
+                        .setHeightVariation(0);
                 break;
             case BIRCH_BIG:
                 this.setBaseHeight(6)
@@ -434,6 +452,10 @@ public class FractalTreeBuilder {
     			<= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
     }
     
+    public boolean build(TerraformWorld tw, SimpleBlock block) {
+    	return build(tw, block.getPopData(), block.getX(), block.getY(), block.getZ());
+    }
+    
     public boolean build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
         
     	//Terrain too steep, don't attempt tree generation, 
@@ -722,23 +744,23 @@ public class FractalTreeBuilder {
 
                             // Vines set only if the leaf type is leaves.
                             //Consider removal since this is done in fractalleaves.java
-                            if (Tag.LEAVES.isTagged(fractalLeaves.material))
-                                if (GenUtils.chance(1, 10)) {
-                                    for (BlockFace face : BlockUtils.directBlockFaces) {
-                                        MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
-                                        dir.setFace(face.getOppositeFace(), true);
-                                        SimpleBlock vine = rel.getRelative(face);
-                                        if (vine.getType().isSolid() ||
-                                                vine.getType() == Material.WATER) continue;
-
-                                        vine.setBlockData(dir);
-                                        for (int i = 0; i < GenUtils.randInt(1, vines); i++) {
-                                            if (vine.getRelative(0, -i, 0).getType().isSolid() ||
-                                                    vine.getRelative(0, -i, 0).getType() == Material.WATER) break;
-                                            vine.getRelative(0, -i, 0).setBlockData(dir);
-                                        }
-                                    }
-                                }
+//                            if (Tag.LEAVES.isTagged(fractalLeaves.material))
+//                                if (GenUtils.chance(1, 10)) {
+//                                    for (BlockFace face : BlockUtils.directBlockFaces) {
+//                                        MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
+//                                        dir.setFace(face.getOppositeFace(), true);
+//                                        SimpleBlock vine = rel.getRelative(face);
+//                                        if (vine.getType().isSolid() ||
+//                                                vine.getType() == Material.WATER) continue;
+//
+//                                        vine.setBlockData(dir);
+//                                        for (int i = 0; i < GenUtils.randInt(1, vines); i++) {
+//                                            if (vine.getRelative(0, -i, 0).getType().isSolid() ||
+//                                                    vine.getRelative(0, -i, 0).getType() == Material.WATER) break;
+//                                            vine.getRelative(0, -i, 0).setBlockData(dir);
+//                                        }
+//                                    }
+//                                }
 
                         }
                     }
@@ -771,8 +793,9 @@ public class FractalTreeBuilder {
     }
 
     void dangleLeavesDown(SimpleBlock block, int leafDist, int min, int max) {
-        BlockData type = Bukkit.createBlockData(fractalLeaves.material);
-        if (Tag.LEAVES.isTagged(fractalLeaves.material)) {
+    	Material material = fractalLeaves.material[rand.nextInt(fractalLeaves.material.length)];
+        BlockData type = Bukkit.createBlockData(material);
+        if (Tag.LEAVES.isTagged(material)) {
             Leaves leaf = (Leaves) type;
             leaf.setDistance(1);
         }
@@ -784,9 +807,16 @@ public class FractalTreeBuilder {
         }
 
         //Log for good measure, as well as some surrounding leaves.
-        if (Tag.LEAVES.isTagged(fractalLeaves.material))
+        if (Tag.LEAVES.isTagged(material))
             block.setType(this.trunkType);
         for (BlockFace face : BlockUtils.directBlockFaces) {
+        	material = fractalLeaves.material[rand.nextInt(fractalLeaves.material.length)];
+        	type = Bukkit.createBlockData(material);
+        	if(Tag.LEAVES.isTagged(material)) {
+        		Leaves leaf = (Leaves) type;
+            	leaf.setDistance(1);
+        	}
+            
             block.getRelative(face).lsetBlockData(type);
         }
         block.getRelative(0, 1, 0).lsetBlockData(type);

@@ -39,7 +39,9 @@ public class MasterCavePopulatorDistributor{
                     //Don't populate inside amethysts
                     if(Version.isAtLeast(17) 
                     		&& (floor.getType() == OneOneSevenBlockHandler.AMETHYST_BLOCK
-                    		|| floor.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER)) {
+                    		|| floor.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER
+                    		|| ceil.getType() == OneOneSevenBlockHandler.AMETHYST_BLOCK
+                    		|| ceil.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER)) {
                     	continue;
                     }
                     
@@ -61,7 +63,7 @@ public class MasterCavePopulatorDistributor{
                     	
                     	if(GenUtils.chance(random, (int) (lushClusterChance*100001.0), 100001)) {
                             TerraformGeneratorPlugin.logger.info("Spawning lush cluster at " + floor);
-                    		pop = new LushClusterCavePopulator();
+                    		pop = new LushClusterCavePopulator(false); //False to prevent Azalea Trees from spawning.
                     	}
                     	else if(GenUtils.chance(random, (int) (dripstoneClusterChance*100000.0), 100000)) {
                             TerraformGeneratorPlugin.logger.info("Spawning dripstone cluster at " + floor);

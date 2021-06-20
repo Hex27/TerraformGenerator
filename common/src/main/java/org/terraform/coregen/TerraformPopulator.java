@@ -64,7 +64,8 @@ public class TerraformPopulator {
     		amethystGeodePopulator = new AmethystGeodePopulator(
     				TConfigOption.ORE_AMETHYST_GEODE_SIZE.getInt(),
     				TConfigOption.ORE_AMETHYST_CHANCE.getDouble(),
-    				TConfigOption.ORE_AMETHYST_MIN_DEPTH.getInt());
+    				TConfigOption.ORE_AMETHYST_MIN_DEPTH.getInt(),
+    				TConfigOption.ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE.getInt());
     		
     		ORE_POPS[6] = new OrePopulator(OneOneSevenBlockHandler.COPPER_ORE, TConfigOption.ORE_REDSTONE_CHANCE.getInt(), TConfigOption.ORE_REDSTONE_VEINSIZE.getInt(),
                     TConfigOption.ORE_REDSTONE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_REDSTONE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_REDSTONE_COMMONSPAWNHEIGHT.getInt(),

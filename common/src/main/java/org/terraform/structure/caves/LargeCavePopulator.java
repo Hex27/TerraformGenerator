@@ -29,10 +29,17 @@ public class LargeCavePopulator extends SingleMegaChunkStructurePopulator {
         int highest = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
         int rY = (highest - 20) / 2; //5 block padding bottom, 15 padding top.
 
-        if (rand.nextBoolean())
-            new GenericLargeCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
-        else
-            new MushroomCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
+        switch(rand.nextInt(3)) {
+        case 0:
+    		new GenericLargeCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
+    		break;
+        case 1:
+    		new MushroomCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
+    		break;
+    	default:
+    		new LargeLushCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
+    		break;
+        }
     }
 
     private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {

@@ -11,7 +11,7 @@ public enum BiomeClimate {
 	DRY_VEGETATION(Range.between(-0.35, 4.0),Range.between(-4.0, 0.0),1),
 	
 	//Deserts
-	HOT_BARREN(Range.between(2.0, 4.0),Range.between(-4.0, -2.0),2), 
+	HOT_BARREN(Range.between(1.0, 4.0),Range.between(-4.0, -1.0),2), 
 	
 	//Cold biomes - taigas, maybe eroded plains
 	COLD(Range.between(-4.0, -0.8),Range.between(-4.0, 4.0),1), 

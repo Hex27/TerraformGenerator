@@ -10,6 +10,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.AnimalPopulator;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -21,6 +22,8 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     private final TerraformWorld tw;
 
     private static final AnimalPopulator[] ANIMAL_POPULATORS = {
+    		null, //Slot for goat
+    		
             new AnimalPopulator(EntityType.PIG, TConfigOption.ANIMALS_PIG_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_PIG_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_PIG_CHANCE.getInt(), false, BiomeBank.RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.FROZEN_OCEAN,
                     BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.WARM_OCEAN, BiomeBank.DEEP_OCEAN, BiomeBank.DEEP_COLD_OCEAN, BiomeBank.DEEP_FROZEN_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN,
@@ -112,6 +115,10 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     
     public TerraformAnimalPopulator(TerraformWorld tw) {
         this.tw = tw;
+        if(Version.isAtLeast(17)) {
+        	ANIMAL_POPULATORS[0] = new AnimalPopulator(EntityType.valueOf("GOAT"), TConfigOption.ANIMALS_GOAT_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_GOAT_MAXHERDSIZE.getInt(),
+                    TConfigOption.ANIMALS_GOAT_CHANCE.getInt(), true, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS);
+        }
     }
 
     @Override
@@ -123,6 +130,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
         Set<EntityType> spawned = EnumSet.noneOf(EntityType.class);
         //TerraformGeneratorPlugin.logger.debug("animal-populator eval for " + data.getChunkX() + "," + data.getChunkZ());
         for (AnimalPopulator pop : ANIMAL_POPULATORS) {
+        	if(pop == null) continue;
             if (pop.canSpawn(banks, random) && spawned.add(pop.getAnimalType())) {
                 //TerraformGeneratorPlugin.logger.debug("animal populator proc");
                 pop.populate(tw, random, data);

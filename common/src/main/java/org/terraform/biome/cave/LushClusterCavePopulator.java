@@ -5,6 +5,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.BisectedBuilder;
@@ -17,6 +18,12 @@ import java.util.Random;
 
 public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 
+	private boolean spawnAzaleaTrees;
+	public LushClusterCavePopulator(boolean spawnAzaleaTrees) {
+		super();
+		this.spawnAzaleaTrees = spawnAzaleaTrees;
+	}
+	
     @Override
     protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
     	
@@ -26,6 +33,11 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 
         int caveHeight = ceil.getY() - floor.getY();
 
+        //Don't decorate wet areas
+        if(BlockUtils.isWet(ceil.getRelative(0,-1,0))) {
+        	return;
+        }
+        
         //Don't touch slabbed floors or stalagmites
         if (Tag.SLABS.isTagged(floor.getType()) ||
         		Tag.WALLS.isTagged(floor.getType()))
@@ -33,17 +45,31 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         
         //Ceiling is sometimes roots
         if(GenUtils.chance(random, 1, 8)) {
-        	ceil.setType(OneOneSevenBlockHandler.ROOTED_DIRT);
+        	//This part doesn't spawn Azaleas
+    		ceil.setType(OneOneSevenBlockHandler.ROOTED_DIRT);
         	if(random.nextBoolean())
         		ceil.getRelative(0,-1,0).setType(OneOneSevenBlockHandler.HANGING_ROOTS);
+        	
         }
         else //If not, it's moss
         {
         	ceil.setType(OneOneSevenBlockHandler.MOSS_BLOCK);
+        	for(BlockFace face:BlockUtils.sixBlockFaces)
+        		if(ceil.getRelative(face).getType() == Material.LAVA)
+        			ceil.getRelative(face).setType(Material.AIR);
         	
         	//Spore blossom
         	if(GenUtils.chance(random, 1, 15))
         		ceil.getRelative(0,-1,0).setType(OneOneSevenBlockHandler.SPORE_BLOSSOM);
+        }
+        
+        //Spawn these on the surface, and let the roots go downwards.
+        //Hopefully, there won't be random small caves in between the tree
+        //and this cave hole.
+        if(spawnAzaleaTrees && GenUtils.chance(random, 1, 300)) {
+        	SimpleBlock base = ceil.getGround();
+        	if(BlockUtils.isDirtLike(base.getType()) && !BlockUtils.isWet(base.getRelative(0,1,0)))
+        		TreeDB.spawnAzalea(random, tw, base.getPopData(), base.getX(), base.getY()+1, base.getZ());
         }
         
         //Glow Berries
@@ -57,7 +83,11 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         //=========================
         //Lower decorations 
         //=========================
-
+        
+        //If floor is submerged, don't touch it.
+        if(BlockUtils.isWet(floor.getRelative(0,1,0)))
+        	return;
+        
         //Ground is moss.
         floor.setType(OneOneSevenBlockHandler.MOSS_BLOCK);
         

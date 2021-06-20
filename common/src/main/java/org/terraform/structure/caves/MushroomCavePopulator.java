@@ -35,7 +35,7 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
 
         FastNoise mycelNoise = NoiseCacheHandler.getNoise(
         		tw, 
-        		NoiseCacheEntry.STRUCTURE_MUSHROOMCAVE_MYCELNOISE, 
+        		NoiseCacheEntry.STRUCTURE_LARGECAVE_RAISEDGROUNDNOISE, 
         		world -> {
         	        FastNoise n = new FastNoise((int) (world.getSeed() * 5));
         	        n.SetNoiseType(NoiseType.SimplexFractal);

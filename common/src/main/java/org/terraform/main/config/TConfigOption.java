@@ -19,8 +19,8 @@ public enum TConfigOption {
     BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.03f),
     BIOME_OCEANIC_FREQUENCY("biome.oceanic-frequency", 0.11f),
     BIOME_OCEANIC_THRESHOLD("biome.oceanic-threshold", 22f),
-    BIOME_CAVE_DRIPSTONECLUSTER_FREQUENCY("biome.cave.dripstone-cluster.frequency", 0.0002),
-    BIOME_CAVE_LUSHCLUSTER_FREQUENCY("biome.cave.lush-cluster.frequency", 0.0002),
+    BIOME_CAVE_DRIPSTONECLUSTER_FREQUENCY("biome.cave.dripstone-cluster.frequency", 0.0001),
+    BIOME_CAVE_LUSHCLUSTER_FREQUENCY("biome.cave.lush-cluster.frequency", 0.0001),
     BIOME_DEEP_OCEANIC_THRESHOLD("biome.deep-oceanic-threshold", 27f),
     BIOME_DITHER("biome.dithering", 0.04d),
     BIOME_SECTION_BITSHIFTS("biome.biomesection-bitshifts", 7),
@@ -190,6 +190,10 @@ public enum TConfigOption {
     ANIMALS_DONKEY_MINHERDSIZE("animals.donkey.min-herd-size", 2),
     ANIMALS_DONKEY_MAXHERDSIZE("animals.donkey.max-herd-size", 6),
     ANIMALS_DONKEY_CHANCE("animals.donkey.chance", 1),
+    //GOAT
+    ANIMALS_GOAT_MINHERDSIZE("animals.goat.min-herd-size", 3),
+    ANIMALS_GOAT_MAXHERDSIZE("animals.goat.max-herd-size", 4),
+    ANIMALS_GOAT_CHANCE("animals.goat.chance", 1),
     //RABBIT
     ANIMALS_RABBIT_MINHERDSIZE("animals.rabbit.min-herd-size", 2),
     ANIMALS_RABBIT_MAXHERDSIZE("animals.rabbit.max-herd-size", 3),
@@ -256,6 +260,7 @@ public enum TConfigOption {
     ORE_AMETHYST_CHANCE("ore.amethyst.chance-per-chunk", 0.05),
     ORE_AMETHYST_GEODE_SIZE("ore.amethyst.geode-size", 7),
     ORE_AMETHYST_MIN_DEPTH("ore.amethyst.min-depth", 70),
+    ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE("ore.amethyst.min-depth-below-surface", 15),
     
     //COAL
     ORE_COAL_CHANCE("ore.coal.chance-per-chunk", 50),

@@ -21,8 +21,6 @@ import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.noise.NoiseCacheHandler;
-import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -477,16 +475,9 @@ public class GenUtils {
      */
     public static Vector2f[] vectorRandomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
 
-        FastNoise noise = NoiseCacheHandler.getNoise(
-        		world, 
-        		NoiseCacheEntry.GENUTILS_RANDOMOBJ_NOISE, 
-        		tw -> {
-                    FastNoise n = new FastNoise((int) tw.getSeed());
-                    n.SetFrequency(1);
-                    n.SetGradientPerturbAmp(maxPerturbation);
-                
-        	        return n;
-        		});
+        FastNoise noise = new FastNoise((int) world.getSeed());
+        noise.SetFrequency(1);
+        noise.SetGradientPerturbAmp(maxPerturbation);
 
         ArrayList<Vector2f> positions = new ArrayList<>();
 

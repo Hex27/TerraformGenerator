@@ -4,6 +4,7 @@ public class FractalTypes {
     public enum Tree {
         FOREST,
         NORMAL_SMALL,
+        AZALEA_TOP,
         TAIGA_BIG,
         TAIGA_SMALL,
         SAVANNA_SMALL,
