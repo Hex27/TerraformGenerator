@@ -160,6 +160,7 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
             case ABANDONED_MINESHAFT:
                 return LootTables.u;
             case NETHER_BRIDGE:
+            case RUINED_PORTAL:
                 return LootTables.v;
             case STRONGHOLD_LIBRARY:
                 return LootTables.w;

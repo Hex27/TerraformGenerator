@@ -211,6 +211,8 @@ public class PopulatorData extends PopulatorDataAbstract {
             return LootTables.J;
         case PILLAGER_OUTPOST:
             return LootTables.K;
+        case RUINED_PORTAL:
+            return LootTables.P;
 //        case BASTION_TREASURE:
 //            return LootTables.L;
 //        case BASTION_OTHER:

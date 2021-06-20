@@ -343,6 +343,23 @@ public class GenUtils {
         return new SimpleBlock(block.getPopData(), block.getX(), y, block.getZ());
     }
 
+    public static SimpleBlock getHighestGround(PopulatorDataAbstract data, SimpleBlock block) {
+        return block.getAtY(getHighestGround(data, block.getX(), block.getZ()));
+    }
+
+    /**
+     * Returns the lowest getHighestGround block in the area
+     */
+    public static int getLowestGround(PopulatorDataAbstract pop, int x1, int z1, int x2, int z2) {
+        int lowest = Integer.MAX_VALUE;
+        for (int x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
+            for (int z = Math.min(z1, z2); z <= Math.max(z1, z2); z++) {
+                lowest = Math.min(lowest, getHighestGround(pop, x, z));
+            }
+        }
+
+        return lowest;
+    }
 
     /**
      * @return the highest solid ground. Is dirt-like or stone-like, and is
@@ -472,7 +489,9 @@ public class GenUtils {
      *
      * @param distanceBetween Initial distance between objects in a grid.
      *                        (aka. density)
-     * @param maxPerturbation Max amount a point can move in each axis
+     * @param maxPerturbation Max amount a point can move in each axis.
+     *                        To prevent points from touching, this should
+     *                        be less than distanceBetween / 2.
      * @return List of points
      */
     public static Vector2f[] vectorRandomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {

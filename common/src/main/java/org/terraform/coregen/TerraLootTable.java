@@ -37,8 +37,8 @@ public enum TerraLootTable {
     SHIPWRECK_MAP("chests/shipwreck_map"),
     SHIPWRECK_SUPPLY("chests/shipwreck_supply"),
     SHIPWRECK_TREASURE("chests/shipwreck_treasure"),
-    PILLAGER_OUTPOST("chests/pillager_outpost");
-
+    PILLAGER_OUTPOST("chests/pillager_outpost"),
+    RUINED_PORTAL("chests/ruined_portal");
     @SuppressWarnings("unused")
     private final String key;
 

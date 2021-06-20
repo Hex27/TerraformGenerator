@@ -168,6 +168,8 @@ public class TerraSchematic {
                 bdfa.correctFacing(pos, b, null, face);
             }
         }
+
+        parser.finalizeSchematic();
     }
 
     public void export(String path) throws IOException {
