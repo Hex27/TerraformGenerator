@@ -1,6 +1,8 @@
 package org.terraform.command.contants;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+
 public abstract class TerraCommandArgument<T> {
 	
 	private String name;
@@ -15,6 +17,14 @@ public abstract class TerraCommandArgument<T> {
 	public abstract T parse(CommandSender sender,String value);
 	
 	public abstract String validate(CommandSender sender, String value);
+
+    /**
+     * Should return a list of valid parameters
+     * to show when tab completing the command
+     */
+	public ArrayList<String> getTabOptions(String[] args) {
+	    return new ArrayList<>();
+    }
 
 	/**
 	 * @return the name

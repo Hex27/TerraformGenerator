@@ -16,6 +16,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
 
+import java.util.ArrayList;
 import java.util.Stack;
 import java.util.UUID;
 
@@ -106,6 +107,17 @@ public class LocateBiomeCommand extends TerraCommand {
             return "";
         }
 
+        @Override
+        public ArrayList<String> getTabOptions(String[] args) {
+            if (args.length != 2) return new ArrayList<>();
+            ArrayList<String> values = new ArrayList<>();
+
+            for (BiomeBank bank : BiomeBank.values()) {
+                values.add(bank.name());
+            }
+
+            return values;
+        }
     }
 
     private class Task extends BukkitRunnable {

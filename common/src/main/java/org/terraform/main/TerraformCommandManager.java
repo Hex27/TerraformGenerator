@@ -1,20 +1,24 @@
 package org.terraform.main;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Stack;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.command.*;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
+import org.terraform.command.contants.TerraCommandArgument;
 import org.terraform.main.config.TConfigOption;
 
-public class TerraformCommandManager implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+
+public class TerraformCommandManager implements TabExecutor {
 
     public TerraformCommandManager(TerraformGeneratorPlugin plugin, String... bases) {
         
@@ -147,6 +151,28 @@ public class TerraformCommandManager implements CommandExecutor {
 		sender.sendMessage(plugin.getLang().fetchLang("command.unknown"));
 		return false;
 	}
-	
 
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+	    List<String> options = new ArrayList<>();
+        if (args.length <= 1) {
+            for (TerraCommand terraCommand : commands) {
+                if (terraCommand.hasPermission(commandSender))
+                    options.add(terraCommand.aliases.get(0));
+            }
+        } else {
+            for (TerraCommand terraCommand : commands) {
+                if (terraCommand.matchCommand(args[0].toLowerCase())) {
+                    for (TerraCommandArgument<?> arg : terraCommand.parameters) {
+                        options.addAll(arg.getTabOptions(args));
+                    }
+                    break;
+                }
+            }
+        }
+
+        return options;
+    }
 }

@@ -195,6 +195,18 @@ public class LocateCommand extends TerraCommand implements Listener {
             else
                 return "Structure type does not exist";
         }
+
+        @Override
+        public ArrayList<String> getTabOptions(String[] args) {
+            if (args.length != 2) return new ArrayList<>();
+            ArrayList<String> values = new ArrayList<>();
+
+            for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
+                values.add(spop.getClass().getSimpleName());
+            }
+
+            return values;
+        }
     }
 
 }
