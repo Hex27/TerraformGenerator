@@ -7,6 +7,10 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.IRegistryCustom;
+import net.minecraft.core.IRegistryWritable;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.RegionLimitedWorldAccess;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.util.random.WeightedRandomList;
@@ -37,10 +41,13 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStruct
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_17_R1.generator.CraftChunkData;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
+import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
+import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
@@ -66,7 +73,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                              WorldChunkManager worldchunkmanager,
                              WorldChunkManager worldchunkmanager1,
                              StructureSettings structuresettings, long i) {
-        super(worldchunkmanager, worldchunkmanager1, structuresettings, i);
+        super(new CustomBiomeSource(worldchunkmanager), new CustomBiomeSource(worldchunkmanager1), structuresettings, i);
         tw = TerraformWorld.get(worldname, seed);
         this.delegate = delegate;
         pop = new TerraformPopulator(tw);
@@ -178,6 +185,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return CompletableFuture.completedFuture(ichunkaccess);
      }
 
+  	@SuppressWarnings("unchecked")
     @Override
     public void buildBase(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {
         try {
@@ -216,11 +224,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
                }
             }
 
+            //Sets this chunk's biomegrid to that biome.
             ((ProtoChunk)ichunkaccess).a(biomegrid.biome);
             Method getTiles;
             getTiles = CraftChunkData.class.getDeclaredMethod("getTiles");
           	getTiles.setAccessible(true);
-          	@SuppressWarnings("unchecked")
           	Set<BlockPosition> tiles = (Set<BlockPosition>) getTiles.invoke(craftData);
             if (tiles != null) {
                Iterator<BlockPosition> var20 = tiles.iterator();
@@ -281,9 +289,10 @@ public class NMSChunkGenerator extends ChunkGenerator {
     protected Codec<? extends ChunkGenerator> a() {
         return ChunkGeneratorAbstract.d;
     }
-    
+
+    private static boolean debug = true;
     private static Field biomeBaseRegistry = null;
-    private class CustomBiomeGrid implements BiomeGrid {
+    private class CustomBiomeGrid extends CustomBiomeSupportedBiomeGrid implements BiomeGrid {
 
         private final BiomeStorage biome;
 
@@ -318,6 +327,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
 		@Override
         public Biome getBiome(int x, int y, int z) {
             try {
+            	if(debug) {
+	            	BiomeBase sad = biome.getBiome(x >> 2, y >> 2, z >> 2);
+	            	if(sad.g() == 16711680) {
+	            		TerraformGeneratorPlugin.logger.info("GET-biome called! Water color correct.");
+	            		debug = false;
+	            	}
+            	}
 				return CraftBlock.biomeBaseToBiome((IRegistry<BiomeBase>) biomeBaseRegistry.get(biome), biome.getBiome(x >> 2, y >> 2, z >> 2));
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
@@ -334,6 +350,34 @@ public class NMSChunkGenerator extends ChunkGenerator {
 				e.printStackTrace();
 			}
         }
+        
+		@Override
+		public void setBiome(int x, int y, int z, CustomBiomeType bio, Biome fallback) {
+			// TODO Auto-generated method stub
+			BiomeBase base = null;
+			DedicatedServer dedicatedserver = ((CraftServer) Bukkit.getServer()).getServer();
+	        IRegistryWritable<BiomeBase> registrywritable = dedicatedserver.getCustomRegistry().b(IRegistry.aO);
+	        
+			ResourceKey<BiomeBase> rkey = ResourceKey.a(IRegistry.aO, new MinecraftKey(bio.getKey()));
+	        base = registrywritable.a(rkey);
+	        if(base == null) {
+	        	String[] split = bio.getKey().split(":");
+	            ResourceKey<BiomeBase> newrkey = ResourceKey.a(IRegistry.aO, new MinecraftKey(split[0],split[1]));
+	            base = registrywritable.a(newrkey);
+	        }
+			
+			if(base != null) {
+				biome.setBiome(x >> 2, y >> 2, z >> 2, base);
+			}
+			else
+				setBiome(x,y,z,fallback);
+			
+//            if(debug) {
+//            	BiomeBase sad = biome.getBiome(x >> 2, y >> 2, z >> 2);
+//            	TerraformGeneratorPlugin.logger.info("Water Color: " + sad.g());
+//            	debug = false;
+//            }
+		}
     }
     
 	@Override

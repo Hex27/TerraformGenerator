@@ -18,10 +18,10 @@ import java.util.Random;
 
 public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 
-	private boolean spawnAzaleaTrees;
-	public LushClusterCavePopulator(boolean spawnAzaleaTrees) {
+	private boolean isForLargeCave;
+	public LushClusterCavePopulator(boolean isForLargeCave) {
 		super();
-		this.spawnAzaleaTrees = spawnAzaleaTrees;
+		this.isForLargeCave = isForLargeCave;
 	}
 	
     @Override
@@ -66,14 +66,16 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         //Spawn these on the surface, and let the roots go downwards.
         //Hopefully, there won't be random small caves in between the tree
         //and this cave hole.
-        if(spawnAzaleaTrees && GenUtils.chance(random, 1, 300)) {
+        if(isForLargeCave && GenUtils.chance(random, 1, 300)) {
         	SimpleBlock base = ceil.getGround();
         	if(BlockUtils.isDirtLike(base.getType()) && !BlockUtils.isWet(base.getRelative(0,1,0)))
         		TreeDB.spawnAzalea(random, tw, base.getPopData(), base.getX(), base.getY()+1, base.getZ());
         }
         
         //Glow Berries
-        if (GenUtils.chance(random, 1, 5)) {
+        int glowBerryChance = 5;
+        if(isForLargeCave) glowBerryChance = 15;
+        if (GenUtils.chance(random, 1, glowBerryChance)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 6) h = 6;

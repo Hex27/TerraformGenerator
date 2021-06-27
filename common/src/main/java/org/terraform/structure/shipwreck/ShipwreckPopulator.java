@@ -94,7 +94,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         int num = TConfigOption.STRUCTURES_SHIPWRECK_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++)
-            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 191921 + i));
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 191921*i));
         return coords;
 
     }

@@ -20,6 +20,7 @@ import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.main.config.TConfigOption;
@@ -556,8 +557,10 @@ public class BlockUtils {
         if (radius <= 0) return;
         if (radius <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            if (base.getType() == Material.AIR || base.getType() == Material.CAVE_AIR) return;
-            base.setType(Material.WATER);
+        	if (base.getY() <= TerraformGenerator.seaLevel) 
+        		base.setType(Material.WATER);
+	        else
+	        	base.setType(Material.AIR);
             return;
         }
 
@@ -576,9 +579,10 @@ public class BlockUtils {
                             + Math.pow(z, 2) / Math.pow(radius, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (rel.getType() != Material.AIR && rel.getType() != Material.CAVE_AIR) {
+                        if (rel.getY() <= TerraformGenerator.seaLevel) 
                             rel.setType(Material.WATER);
-                        }
+                        else
+                            rel.setType(Material.AIR);
                     }
                 }
             }

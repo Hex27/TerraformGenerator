@@ -16,6 +16,13 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.chunk.IChunkAccess;
 
 public class NMSInjector extends NMSInjectorAbstract {
+	
+	@Override
+	public void startupTasks() {
+        //Inject new biomes
+        CustomBiomeHandler.init();
+	}
+	
     @Override
     public BlockDataFixerAbstract getBlockDataFixer() {
         return new BlockDataFixer();
@@ -64,7 +71,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             e.printStackTrace();
             return false;
         }
-
+        
         return true;
     }
 

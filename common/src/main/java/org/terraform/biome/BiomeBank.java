@@ -47,6 +47,7 @@ public enum BiomeBank {
     //RIVERS (Don't include in selectBiome)
     //Rivers are handled specially and will not be allocated in selectBiome
     RIVER(new RiverHandler(), BiomeType.RIVER, BiomeClimate.TRANSITION), 
+    BOG_RIVER(new BogRiverHandler(), BiomeType.RIVER, BiomeClimate.DRY_VEGETATION), 
     JUNGLE_RIVER(new JungleRiverHandler(), BiomeType.RIVER, BiomeClimate.HUMID_VEGETATION),
     FROZEN_RIVER(new FrozenRiverHandler(), BiomeType.RIVER, BiomeClimate.SNOWY, new FrozenCavePopulator()), //Special case, handle later
     DARK_FOREST_RIVER(new DarkForestRiverHandler(), BiomeType.RIVER, BiomeClimate.HUMID_VEGETATION, new FrozenCavePopulator()), //Special case, handle later
@@ -66,6 +67,7 @@ public enum BiomeBank {
     PLAINS(new PlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PLAINS_WEIGHT.getInt()),
     ERODED_PLAINS(new ErodedPlainsHandler(), BiomeType.FLAT, BiomeClimate.COLD, TConfigOption.BIOME_ERODED_PLAINS_WEIGHT.getInt()),
     SAVANNA(new SavannaHandler(), BiomeType.FLAT, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_SAVANNA_WEIGHT.getInt()),
+    MUDDY_BOG(new MuddyBogHandler(), BiomeType.FLAT, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_MUDDYBOG_WEIGHT.getInt()),
     FOREST(new ForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_FOREST_WEIGHT.getInt()),
     DESERT(new DesertHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_DESERT_WEIGHT.getInt()),
     JUNGLE(new JungleHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_JUNGLE_WEIGHT.getInt()),
@@ -80,6 +82,7 @@ public enum BiomeBank {
 
     //BEACHES (Don't include in selectBiome)
     SANDY_BEACH(new SandyBeachHandler(), BiomeType.BEACH, BiomeClimate.TRANSITION),
+    BOG_BEACH(new BogBeachHandler(), BiomeType.BEACH, BiomeClimate.DRY_VEGETATION),
     DARK_FOREST_BEACH(new DarkForestBeachHandler(), BiomeType.BEACH, BiomeClimate.HUMID_VEGETATION),
     BADLANDS_BEACH(new BadlandsBeachHandler(), BiomeType.BEACH, BiomeClimate.HOT_BARREN),
     ROCKY_BEACH(new RockBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),

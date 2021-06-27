@@ -51,6 +51,8 @@ public class TerraformCommandManager implements TabExecutor {
             this.registerCommand(new MineshaftCommand(plugin, "mineshaft", "ms"));
             this.registerCommand(new ShipwreckCommand(plugin, "shipwreck", "sw"));
             this.registerCommand(new OutpostCommand(plugin, "outpost"));
+            this.registerCommand(new NMSChunkPacketRefreshCommand(plugin, "chunkrefresh"));
+            this.registerCommand(new NMSChunkQueryCommand(plugin, "chunkquery"));
             this.registerCommand(new UndergroundDungeonCommand(plugin, "ud", "undergrounddungeon"));
             this.registerCommand(new DrownedDungeonCommand(plugin, "dd", "drowneddungeon"));
             this.registerCommand(new CheckHeightCommand(plugin, "checkheight", "ch"));

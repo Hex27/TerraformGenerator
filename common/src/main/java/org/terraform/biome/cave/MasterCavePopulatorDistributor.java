@@ -6,7 +6,6 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
@@ -62,11 +61,11 @@ public class MasterCavePopulatorDistributor{
                     	 */
                     	
                     	if(GenUtils.chance(random, (int) (lushClusterChance*100001.0), 100001)) {
-                            TerraformGeneratorPlugin.logger.info("Spawning lush cluster at " + floor);
+                            //TerraformGeneratorPlugin.logger.info("Spawning lush cluster at " + floor);
                     		pop = new LushClusterCavePopulator(false); //False to prevent Azalea Trees from spawning.
                     	}
                     	else if(GenUtils.chance(random, (int) (dripstoneClusterChance*100000.0), 100000)) {
-                            TerraformGeneratorPlugin.logger.info("Spawning dripstone cluster at " + floor);
+                            //TerraformGeneratorPlugin.logger.info("Spawning dripstone cluster at " + floor);
                     		pop = new DripstoneClusterCavePopulator();
                     	}
                     	else

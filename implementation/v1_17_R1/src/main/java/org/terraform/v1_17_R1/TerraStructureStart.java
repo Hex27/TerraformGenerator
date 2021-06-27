@@ -3,8 +3,6 @@ package org.terraform.v1_17_R1;
 import java.lang.reflect.Field;
 import java.util.Random;
 
-import org.terraform.coregen.NaturalSpawnType;
-
 import net.minecraft.core.EnumDirection;
 import net.minecraft.core.IRegistryCustom;
 import net.minecraft.world.level.ChunkCoordIntPair;
@@ -21,12 +19,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStruct
 @SuppressWarnings("rawtypes")
 public class TerraStructureStart extends StructureStart {
 
-    private final NaturalSpawnType type;
-
     @SuppressWarnings("unchecked")
-	public TerraStructureStart(NaturalSpawnType type, StructureGenerator var0, ChunkCoordIntPair var1, int var2, long var3) {
+	public TerraStructureStart(StructureGenerator var0, ChunkCoordIntPair var1, int var2, long var3) {
         super(var0, var1, var2, var3);
-        this.type = type;
     }
 
 	@Override

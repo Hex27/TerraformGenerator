@@ -131,9 +131,9 @@ public class TerraformAnimalPopulator extends BlockPopulator {
         //TerraformGeneratorPlugin.logger.debug("animal-populator eval for " + data.getChunkX() + "," + data.getChunkZ());
         for (AnimalPopulator pop : ANIMAL_POPULATORS) {
         	if(pop == null) continue;
-            if (pop.canSpawn(banks, random) && spawned.add(pop.getAnimalType())) {
+            if (pop.canSpawn(banks, tw.getHashedRand(chunk.getX(), pop.hashCode(), chunk.getZ())) && spawned.add(pop.getAnimalType())) {
                 //TerraformGeneratorPlugin.logger.debug("animal populator proc");
-                pop.populate(tw, random, data);
+                pop.populate(tw, tw.getHashedRand(chunk.getX(), 111+pop.hashCode(), chunk.getZ()), data);
             }
         }
         spawned.clear();

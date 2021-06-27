@@ -59,12 +59,12 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
                     for (int nx = -2; nx <= 2; nx++)
                         for (int nz = -2; nz <= 2; nz++) {
                             if (GenUtils.chance(random, 1, 5)) continue;
-                            y = GenUtils.getHighestGround(data, x + nx, z + nz);
+                            int stoneY = GenUtils.getHighestGround(data, x + nx, z + nz);
                             
                             //Another check, make sure relative position isn't underwater.
-                            if(y < TerraformGenerator.seaLevel)
+                            if(stoneY < TerraformGenerator.seaLevel)
                             	continue;
-                            stoneStack(stoneType, data, random, x + nx, y, z + nz);
+                            stoneStack(stoneType, data, random, x + nx, stoneY, z + nz);
                         }
                 }
                 

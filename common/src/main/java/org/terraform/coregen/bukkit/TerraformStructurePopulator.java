@@ -1,5 +1,6 @@
 package org.terraform.coregen.bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
@@ -8,6 +9,7 @@ import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.PopulatorDataRecursiveICA;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
+import org.terraform.event.TerraformStructureSpawnEvent;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
@@ -57,6 +59,8 @@ public class TerraformStructurePopulator extends BlockPopulator {
         //TerraformGeneratorPlugin.logger.info("[v] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
         if(chunkCoords[0] == data.getChunkX() 
         		&& chunkCoords[1] == data.getChunkZ()) {
+        	int[] blockCoords = mc.getCenterBlockCoords();
+            
         	//TerraformGeneratorPlugin.logger.info("[!] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
             for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
 	            if (spop == null) continue;
@@ -65,7 +69,9 @@ public class TerraformStructurePopulator extends BlockPopulator {
 	            //TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
 	            if (((SingleMegaChunkStructurePopulator)spop).canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
 	                TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
+	                Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(blockCoords[0], blockCoords[1], spop.getClass().getName()));
 	                spop.populate(tw, data);
+	                break;
 	            }
 	        }
         }
@@ -74,6 +80,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {
             if (((MultiMegaChunkStructurePopulator)spop).canSpawn(tw, data.getChunkX(), data.getChunkZ(), banks)) {
                 TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
+                Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(data.getChunkX()*16+8, data.getChunkZ()*16+8, spop.getClass().getName()));
                 spop.populate(tw, data);
             }
         }

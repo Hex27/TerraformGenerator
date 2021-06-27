@@ -63,7 +63,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     	int num = TConfigOption.STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++)
-            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324 + i));
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324*i));
         return coords;
     }
 

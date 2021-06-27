@@ -4,6 +4,9 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 
 public abstract class NMSInjectorAbstract {
+	
+	public void startupTasks() {}
+	
     public BlockDataFixerAbstract getBlockDataFixer() {
         return null;
     }

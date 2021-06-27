@@ -83,6 +83,8 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
             logger.stdout("&cSomething went wrong initiating the injector!");
 
         }
+        
+        injector.startupTasks();
 
         if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
             Bukkit.getPluginManager().registerEvents(new SaplingOverrider(), this);

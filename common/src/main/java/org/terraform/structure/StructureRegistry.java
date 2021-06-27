@@ -74,7 +74,8 @@ public class StructureRegistry {
     /**
      * @param tw
      * @param mc
-     * @return the structure types that will spawn in this mega chunk
+     * @return the structure types that can spawn in this mega chunk
+     * Only one is meant to be picked.
      */
     public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(TerraformWorld tw, MegaChunk mc) {
     	//TerraformGeneratorPlugin.logger.info("getLargeStructureForMegaChunkQuery: " + mc.getX() + "," + mc.getZ());
@@ -86,7 +87,7 @@ public class StructureRegistry {
             return queryCache.get(key);
 
         Random structRand = tw.getRand(9);
-        int maxStructures = 1; //GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
+        int maxStructures = 3; //GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
         SingleMegaChunkStructurePopulator[] pops = new SingleMegaChunkStructurePopulator[maxStructures];
         int size = 0;
 
@@ -106,26 +107,26 @@ public class StructureRegistry {
                 }
             }
         }
-        //If a Mega Dungeon spawned, don't spawn other large structures.
-        if (size == 0) {
-            //TerraformGeneratorPlugin.logger.info(ChatColor.YELLOW + "MC: " + mc.getX() + "," + mc.getZ() + " - No Mega Dungeon");
-            StructureType[] types = {StructureType.LARGE_CAVE, StructureType.VILLAGE, StructureType.LARGE_MISC};
-            types = (StructureType[]) shuffleArray(structRand, types);
-            for (StructureType type : types) {
-                if (largeStructureRegistry.containsKey(type))
-                    for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(type)) {
-                        int[] coords = mc.getCenterBlockCoords();
-                        if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
-                            pops[0] = pop;
-                            size++;
-                            break; //ONLY ONE OF EACH TYPE. Do not try to spawn multiple.
-                        }
+        //Mega Dungeon will be in slot 0 (highest priority). The others are backups.
+        //if (size == 0) {
+        //TerraformGeneratorPlugin.logger.info(ChatColor.YELLOW + "MC: " + mc.getX() + "," + mc.getZ() + " - No Mega Dungeon");
+        StructureType[] types = {StructureType.LARGE_CAVE, StructureType.VILLAGE, StructureType.LARGE_MISC};
+        types = (StructureType[]) shuffleArray(structRand, types);
+        for (StructureType type : types) {
+            if (largeStructureRegistry.containsKey(type))
+                for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(type)) {
+                    int[] coords = mc.getCenterBlockCoords();
+                    if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
+                        pops[0] = pop;
+                        size++;
+                        break; //ONLY ONE OF EACH TYPE. Do not try to spawn multiple.
                     }
+                }
 
-                //Stop trying if max structures is hit
-                if (size >= maxStructures) break;
-            }
+            //Stop trying if max structures is hit
+            if (size >= maxStructures) break;
         }
+        //}
 
         SingleMegaChunkStructurePopulator[] returnVal = new SingleMegaChunkStructurePopulator[size];
         System.arraycopy(pops, 0, returnVal, 0, size);

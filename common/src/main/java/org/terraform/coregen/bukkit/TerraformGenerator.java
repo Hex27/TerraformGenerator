@@ -9,6 +9,8 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
+import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.ChunkCacheLoader;
 import org.terraform.coregen.HeightMap;
@@ -61,6 +63,8 @@ public class TerraformGenerator extends ChunkGenerator {
         return true;
     }
 
+    private static boolean debugged = false;
+    
     @SuppressWarnings("deprecation")
     @Override
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
@@ -85,7 +89,21 @@ public class TerraformGenerator extends ChunkGenerator {
                 
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
                 
-                biome.setBiome(x, z, bank.getHandler().getBiome());
+                if(bank.getHandler().getCustomBiome() != CustomBiomeType.NONE && 
+                		biome instanceof CustomBiomeSupportedBiomeGrid) {
+                	if(!debugged) {
+                		TerraformGeneratorPlugin.logger.info("[TerraformGenerator.class] Instance of CustomBiomeSupportedBiomeGrid! Setting biome...");
+                		debugged = true;
+                	}
+                	((CustomBiomeSupportedBiomeGrid) biome).setBiome(
+                			x, z, 
+                			bank.getHandler().getCustomBiome(), 
+                			bank.getHandler().getBiome());
+                }
+                else
+                {
+                	biome.setBiome(x, z, bank.getHandler().getBiome());
+                }
                 int undergroundHeight = height;
                 int index = 0;
                 while (index < crust.length) {

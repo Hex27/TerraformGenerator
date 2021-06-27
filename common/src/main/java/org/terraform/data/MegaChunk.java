@@ -7,11 +7,6 @@ import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-/**
- * Refers to a cluster of 64x64 chunks
- * 1024 blocks wide.
- * Used for spawning structures.
- */
 public class MegaChunk {
 	public static final int megaChunkBlockWidth = BiomeSection.sectionWidth*TConfigOption.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS.getInt(); 
     private int x, z;
@@ -54,8 +49,8 @@ public class MegaChunk {
         int highZ = lowZ + megaChunkBlockWidth-1;
 
         //Pad the sides. Never generate on the side of a mega chunk.
-        int x = GenUtils.randInt(rand, lowX + megaChunkBlockWidth/5, highX - megaChunkBlockWidth/5);
-        int z = GenUtils.randInt(rand, lowZ + megaChunkBlockWidth/5, highZ - megaChunkBlockWidth/5);
+        int x = GenUtils.randInt(rand, lowX + megaChunkBlockWidth/10, highX - megaChunkBlockWidth/10);
+        int z = GenUtils.randInt(rand, lowZ + megaChunkBlockWidth/10, highZ - megaChunkBlockWidth/10);
         return new int[]{x, z};
     }
     

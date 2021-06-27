@@ -234,7 +234,7 @@ public class EntityTypeMapper {
 		case FISHING_HOOK:
 		    return "bj";
 		}
-		TerraformGeneratorPlugin.logger.error("INVALID MATERIAL REQUESTED: " + e.toString());
+		TerraformGeneratorPlugin.logger.error("INVALID ENTITY REQUESTED: " + e.toString());
 		return "";
 	}
 }

@@ -85,7 +85,7 @@ public class TerraformWorld {
     }
 
     public Random getHashedRand(long x, int y, int z) {
-        return new Random(Objects.hash(seed, 11*x, 127*y, 773*z));
+        return new Random(11*x + Objects.hash(seed, 127*y, 773*z));
     }
 
     public Random getHashedRand(int x, int y, int z, long multiplier) {

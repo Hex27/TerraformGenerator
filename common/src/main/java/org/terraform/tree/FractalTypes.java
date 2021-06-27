@@ -34,6 +34,7 @@ public class FractalTypes {
     }
 
     public enum Mushroom {
+        TINY_BROWN_MUSHROOM,
         TINY_RED_MUSHROOM,
         SMALL_RED_MUSHROOM,
         SMALL_POINTY_RED_MUSHROOM,

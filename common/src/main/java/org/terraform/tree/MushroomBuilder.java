@@ -114,6 +114,18 @@ public class MushroomBuilder {
                         .setCapRadius(1.2f)
                         .setCapYOffset(-2)
                         .setCapShape(FractalTypes.MushroomCap.POINTY);
+            case TINY_BROWN_MUSHROOM:
+                this.setBaseThickness(0)
+                        .setThicknessIncrement(0)
+                        .setBaseHeight(2)
+                        .setMinTilt(0)
+                        .setMaxTilt(0)
+                        .setStemCurve(0.5f, 0.5f, 0.5f, 0.5f)
+                        .setSegmentFactor(1)
+                        .setCapRadius(1.5f)
+                        .setCapYOffset(1)
+                        .setCapShape(FractalTypes.MushroomCap.FLAT)
+                        .setCapType(Material.BROWN_MUSHROOM_BLOCK);
                 break;
         }
     }
