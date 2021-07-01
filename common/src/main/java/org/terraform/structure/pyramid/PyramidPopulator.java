@@ -50,7 +50,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
-        int[] coords = new MegaChunk(data.getChunkX(), data.getChunkZ()).getCenterBlockCoords();
+        int[] coords = new MegaChunk(data.getChunkX(), data.getChunkZ()).getCenterBiomeSectionBlockCoords();
         int x = coords[0];
         int z = coords[1];
 

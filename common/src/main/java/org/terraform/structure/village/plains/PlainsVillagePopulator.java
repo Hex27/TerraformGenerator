@@ -21,7 +21,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
         int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
         //Height set to 50 as plains village will settle its own height.

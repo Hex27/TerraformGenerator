@@ -72,7 +72,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
 
         //Find a suitable spawn direction
         MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
-    	int[] spawnCoords = mc.getCenterBlockCoords();
+    	int[] spawnCoords = mc.getCenterBiomeSectionBlockCoords();
         
     	//This is in the middle of a plateau.
     	//This must extend out until the entrance is found.

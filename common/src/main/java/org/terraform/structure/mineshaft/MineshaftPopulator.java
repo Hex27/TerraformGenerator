@@ -22,7 +22,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBlockCoords();
+        int[] coords = mc.getCenterBiomeSectionBlockCoords();
         	
 		//Do not spawn mineshafts under deep oceans, there's no space.
 		if(biome.getType() == BiomeType.DEEP_OCEANIC)
@@ -55,7 +55,7 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
             return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBlockCoords();
+        int[] coords = mc.getCenterBiomeSectionBlockCoords();
         int x = coords[0];
         int z = coords[1];
         int height = HeightMap.getBlockHeight(tw, x, z);

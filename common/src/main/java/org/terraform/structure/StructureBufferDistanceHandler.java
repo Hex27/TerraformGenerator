@@ -25,7 +25,7 @@ public class StructureBufferDistanceHandler {
             //checking spawn locations.
             
             //Grab the center chunk, where the structure will spawn
-        	int[] chunkCoords = mc.getCenterChunkCoords();
+        	int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
             if (spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
             	//If the structure will spawn, calculate distance to it.
             	int dist = (int) (Math.pow(chunkCoords[0] - chunkX,2) + Math.pow(chunkCoords[1] - chunkZ,2));

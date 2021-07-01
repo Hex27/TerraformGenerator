@@ -125,7 +125,6 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
                     continue;
 
                 done.add(hash);
-
                 TerraformGeneratorPlugin.injector.getICAData(((PopulatorDataPostGen) data).getWorld().getChunkAt(chunkX, chunkZ))
                         .registerNaturalSpawns(NaturalSpawnType.GUARDIAN, x - range / 2, y, z - range / 2,
                                 x + range / 2, TerraformGenerator.seaLevel, z + range / 2);
@@ -151,26 +150,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
 
-        ArrayList<BiomeBank> banks = new ArrayList<>();
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                //int height = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getTrueHighestBlock(data, x, z);
-                for (BiomeBank bank : BiomeBank.values()) {
-                    BiomeBank currentBiome = tw.getBiomeBank(x, z);//BiomeBank.calculateBiome(tw,tw.getTemperature(x, z), height);
-
-                    //Must be in deep ocean. Check done in canSpawn
-                    //if(currentBiome.getType() != BiomeType.DEEP_OCEANIC)
-                    //	return;
-
-                    if (bank == currentBiome) {
-                        if (!banks.contains(bank))
-                            banks.add(bank);
-                        break;
-                    }
-                }
-            }
-        }
-        int[] coords = new MegaChunk(data.getChunkX(),data.getChunkZ()).getCenterBlockCoords();
+        int[] coords = new MegaChunk(data.getChunkX(),data.getChunkZ()).getCenterBiomeSectionBlockCoords();
         int x = coords[0];
         int z = coords[1];
         int y = GenUtils.getHighestGround(data, x, z);

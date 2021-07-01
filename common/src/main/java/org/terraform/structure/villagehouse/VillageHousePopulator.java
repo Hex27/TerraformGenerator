@@ -12,7 +12,6 @@ import org.terraform.structure.villagehouse.animalfarm.AnimalFarmPopulator;
 import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
@@ -33,7 +32,7 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
             
         		if(!biome.getType().isDry())
@@ -58,32 +57,22 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-        ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
-
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-    	
-        for(BiomeBank b:banks) {
-    		if(!b.getType().isDry()) {
-    			//Below water level, spawn ships
-    			return;
-    		}
-    	}
 
         //On ground, spawn dry village houses
-        int[] coords = mc.getCenterBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
         if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-            if (banks.contains(BiomeBank.DESERT)
-                    || banks.contains(BiomeBank.DESERT_MOUNTAINS)
-                    || banks.contains(BiomeBank.BADLANDS)
-                    || banks.contains(BiomeBank.ICE_SPIKES)) {
+            if (biome == (BiomeBank.DESERT)
+                    || biome == (BiomeBank.BADLANDS)
+                    || biome == (BiomeBank.ICE_SPIKES)) {
                 if (!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
                     return;
 
                 new AnimalFarmPopulator().populate(tw, data);
-            } else if (banks.contains(BiomeBank.SNOWY_TAIGA)
-                    || banks.contains(BiomeBank.SNOWY_WASTELAND)
-                    || banks.contains(BiomeBank.ROCKY_MOUNTAINS)
-                    || banks.contains(BiomeBank.JUNGLE)) {
+            } else if (biome == (BiomeBank.SNOWY_TAIGA)
+                    || biome == (BiomeBank.SNOWY_WASTELAND)
+                    || biome == (BiomeBank.JUNGLE)) {
 
                 if (!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
                     return;

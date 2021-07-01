@@ -1,6 +1,5 @@
 package org.terraform.structure.dungeon;
 
-import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -9,7 +8,6 @@ import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
@@ -45,7 +43,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, ArrayList<BiomeBank> biomes) {
+    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ) {
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);

@@ -32,7 +32,7 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBlockCoords();//getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords();//getCoordsFromMegaChunk(tw, mc);
         //If it is below sea level, DON'T SPAWN IT.
         if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
             if(biome == (BiomeBank.PLAINS)
@@ -54,7 +54,7 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 
 
         //If it is below sea level, DON'T SPAWN IT.
-        int[] coords = mc.getCenterBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
            if (banks.contains(BiomeBank.PLAINS)
            		|| banks.contains(BiomeBank.FOREST)

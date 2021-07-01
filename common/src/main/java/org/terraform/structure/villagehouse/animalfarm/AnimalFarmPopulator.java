@@ -47,7 +47,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
     public void populate(TerraformWorld tw,
                          PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
         int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);

@@ -65,6 +65,7 @@ public class CheckHeightCommand extends TerraCommand {
         p.sendMessage("River Depth: " + HeightMap.getRawRiverDepth(tw, x, z));
         p.sendMessage("Mega Chunk: " + mc.getX() + "," + mc.getZ());
         p.sendMessage("Mega Chunk Center: " + mc.getCenterBlockCoords()[0] + "," + mc.getCenterBlockCoords()[1]);
+        p.sendMessage("Mega Chunk BiomeSection Center: " + mc.getCenterBiomeSectionBlockCoords()[0] + "," + mc.getCenterBiomeSectionBlockCoords()[1]);
         
         p.sendMessage("Biome Section: " + section.toString());
         p.sendMessage("Surrounding Sections:");

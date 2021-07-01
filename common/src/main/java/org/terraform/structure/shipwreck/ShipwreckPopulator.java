@@ -49,12 +49,17 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
             int x = coords[0];
             int z = coords[1];
             int height = GenUtils.getHighestGround(data, x, z) - 1 - random.nextInt(5);
+            
             spawnShipwreck(tw, random, data, x, height + 1, z);
         }
     }
 
     public void spawnShipwreck(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
         try {
+        	//If the ground is dry, force the whole ship down into the ground to bury it.
+        	if(!BlockUtils.isWet(new SimpleBlock(data,x,0,z).getGround().getRelative(0,1,0))) {
+        		y -= GenUtils.randInt(random, 4, 7);
+        	}
             y += GenUtils.randInt(random, -1, 1);
             TerraSchematic shipwreck = TerraSchematic.load(SCHEMATICS[random.nextInt(SCHEMATICS.length)], new Location(tw.getWorld(), x, y, z));
             shipwreck.parser = new ShipwreckSchematicParser(tw.getBiomeBank(x, z), random, data);
@@ -128,20 +133,27 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX,
-                            int chunkZ, ArrayList<BiomeBank> biomes) {
-        for (BiomeBank b : biomes) {
-            if (b.toString().contains("OCEAN")) {
-                MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-                for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
-                    if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-                        return rollSpawnRatio(tw,chunkX,chunkZ);
-                    }
-                }
+                            int chunkZ) {
+        MegaChunk mc = new MegaChunk(chunkX, chunkZ);
+        for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
+            if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+            	ArrayList<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
+                double numWet = 0;
+                double numDry = 0;
+            	for(BiomeBank b:biomes)
+                	if(b.getType().isDry())
+                		numDry++;
+                	else
+                		numWet++;
+            	
+            	return (numWet/(numWet+numDry)) > 0.5 &&  rollSpawnRatio(tw,chunkX,chunkZ);
             }
         }
         return false;
     }
 
+    
+    
     @Override
     public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(221819019, chunkX, chunkZ);

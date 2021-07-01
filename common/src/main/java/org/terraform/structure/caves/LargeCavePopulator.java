@@ -20,7 +20,7 @@ public class LargeCavePopulator extends SingleMegaChunkStructurePopulator {
         
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
-        int[] spawnCoords = mc.getCenterBlockCoords();
+        int[] spawnCoords = mc.getCenterBiomeSectionBlockCoords();
 
         int x = spawnCoords[0];//data.getChunkX()*16 + random.nextInt(16);
         int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);

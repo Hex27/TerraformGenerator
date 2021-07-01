@@ -16,10 +16,10 @@ import org.terraform.utils.noise.FastNoise.NoiseType;
 public class BiomeSection {
 	private int x, z;
 	// A BiomeSection is 128 blocks wide (Default of bitshift 7).
-	private static final int bitshifts = TConfigOption.BIOME_SECTION_BITSHIFTS.getInt();
+	public static final int bitshifts = TConfigOption.BIOME_SECTION_BITSHIFTS.getInt();
 	private TerraformWorld tw;
 	public static final int sectionWidth = (int) (1 << bitshifts);
-	private static final int minSize = sectionWidth;
+	public static final int minSize = sectionWidth;
 	private float temperature;
 	private float moisture;
 	private int radius;

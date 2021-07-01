@@ -97,7 +97,7 @@ public class StructureRegistry {
             //First check if the megadungeons can spawn. Shuffle the array first.
             SingleMegaChunkStructurePopulator[] available = (SingleMegaChunkStructurePopulator[]) shuffleArray(structRand, largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
             for (SingleMegaChunkStructurePopulator pop : available) {
-                int[] coords = mc.getCenterBlockCoords(); //pop.getCoordsFromMegaChunk(tw, mc);
+                int[] coords = mc.getCenterBiomeSectionBlockCoords(); //pop.getCoordsFromMegaChunk(tw, mc);
                 if (coords == null) continue;
 
                 if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
@@ -115,9 +115,9 @@ public class StructureRegistry {
         for (StructureType type : types) {
             if (largeStructureRegistry.containsKey(type))
                 for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(type)) {
-                    int[] coords = mc.getCenterBlockCoords();
+                    int[] coords = mc.getCenterBiomeSectionBlockCoords();
                     if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
-                        pops[0] = pop;
+                        pops[size] = pop;
                         size++;
                         break; //ONLY ONE OF EACH TYPE. Do not try to spawn multiple.
                     }

@@ -11,6 +11,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 
@@ -46,7 +47,7 @@ public class ShipwreckSchematicParser extends SchematicParser {
         //Water logging
         if (data instanceof Waterlogged) {
             Waterlogged logged = (Waterlogged) data;
-            logged.setWaterlogged(block.getType() != Material.AIR);
+            logged.setWaterlogged(BlockUtils.isWet(block));
         }
 
         //Mossy cobble
