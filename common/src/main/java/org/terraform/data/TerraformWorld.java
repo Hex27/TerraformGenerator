@@ -20,6 +20,8 @@ public class TerraformWorld {
     public static final HashMap<String, TerraformWorld> WORLDS = new HashMap<>();
     private final String worldName;
     private final long seed;
+    public int minY = 0;
+    public int maxY = 256;
 
     public TerraformWorld(String name, long seed) {
         this.worldName = name;

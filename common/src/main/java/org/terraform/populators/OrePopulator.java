@@ -67,6 +67,7 @@ public class OrePopulator {
             	
             	//Spawn failed.
             	if(minRange > range) continue;
+            	if(minRange < world.minY) minRange = world.minY;
             	
             	int y = GenUtils.randInt(random, minRange, range);
             	

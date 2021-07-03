@@ -1,4 +1,7 @@
 package org.terraform.v1_17_R1;
+import java.lang.reflect.Field;
+import java.util.OptionalLong;
+
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_17_R1.CraftChunk;
@@ -11,11 +14,16 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.level.PlayerChunkMap;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.level.biome.GenLayerZoomer;
 import net.minecraft.world.level.chunk.IChunkAccess;
+import net.minecraft.world.level.dimension.DimensionManager;
 
 public class NMSInjector extends NMSInjectorAbstract {
+	
+	private boolean heightInjectSuccess = true;
 	
 	@Override
 	public void startupTasks() {
@@ -48,21 +56,52 @@ public class NMSInjector extends NMSInjectorAbstract {
                 ws.getChunkProvider().getChunkGenerator().getWorldChunkManager(),
                 ws.getChunkProvider().getChunkGenerator().getSettings(),
                 world.getSeed());
+        
+        //Change DimensionManager height
+        //For now, leave at 0-256 until you can put something interesting down there.
+        DimensionManager delegate = ws.getDimensionManager();
+        
+		DimensionManager replacement = DimensionManager.a(
+		(OptionalLong) queryDimensionManagerPrivateField("u",delegate),
+		(boolean) queryDimensionManagerPrivateField("v",delegate),
+		(boolean) queryDimensionManagerPrivateField("w",delegate),
+		(boolean) queryDimensionManagerPrivateField("x",delegate),
+		(boolean) queryDimensionManagerPrivateField("y",delegate),
+		(double) queryDimensionManagerPrivateField("z",delegate),
+		(boolean) queryDimensionManagerPrivateField("A",delegate),
+		(boolean) queryDimensionManagerPrivateField("B",delegate),
+		(boolean) queryDimensionManagerPrivateField("C",delegate),
+		(boolean) queryDimensionManagerPrivateField("D",delegate),
+		(boolean) queryDimensionManagerPrivateField("E",delegate),
+		(int) 0,//queryDimensionManagerPrivateField("F",delegate), //minY
+		(int) 256,//queryDimensionManagerPrivateField("G",delegate), //Height
+		(int) 256,//queryDimensionManagerPrivateField("H",delegate), //Logical Height
+		(GenLayerZoomer) queryDimensionManagerPrivateField("I",delegate),
+		(MinecraftKey) queryDimensionManagerPrivateField("J",delegate),
+		(MinecraftKey) queryDimensionManagerPrivateField("K",delegate),
+		(float) queryDimensionManagerPrivateField("L",delegate)
+		);
+		
+		try {
+            TerraformGeneratorPlugin.privateFieldHandler.injectField(
+                    (net.minecraft.world.level.World) ws, 
+                    net.minecraft.world.level.World.class.getDeclaredField("C"),
+                    replacement);
+    		TerraformGeneratorPlugin.logger.info("&aSuccessfully injected custom world height!");
+    		TerraformGeneratorPlugin.logger.info("&aNew Heights:");
+    		TerraformGeneratorPlugin.logger.info("- minY " + ws.getDimensionManager().getMinY());
+    		TerraformGeneratorPlugin.logger.info("- Height " + ws.getDimensionManager().getHeight());
+    		TerraformGeneratorPlugin.logger.info("- LogicalHeight " + ws.getDimensionManager().getLogicalHeight());
+        } catch (Throwable e) {
+        	heightInjectSuccess = false;
+            e.printStackTrace();
+        }
+        
+		//Inject TerraformGenerator NMS chunk generator
+		
         PlayerChunkMap pcm = ws.getChunkProvider().a; //PlayerChunkMap
 
         try {
-//			Field pcmGenField = pcm.getClass().getField("chunkGenerator");
-//			Field cpGenField = ws.getChunkProvider().getClass().getField("chunkGenerator");
-//			pcmGenField.setAccessible(true);
-//			cpGenField.setAccessible(true);
-//			// Remove final modifier
-//			Field modifiersField = Field.class.getDeclaredField("modifiers");
-//			modifiersField.setAccessible(true);
-//			modifiersField.setInt(pcmGenField, pcmGenField.getModifiers() & ~Modifier.FINAL);
-//			modifiersField.setInt(cpGenField, cpGenField.getModifiers() & ~Modifier.FINAL);
-//			// Get and set field value		
-//			pcmGenField.set(pcm,bpg);
-//			cpGenField.set(ws.getChunkProvider(),bpg);
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
                     pcm, "r", bpg); //chunkGenerator
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
@@ -104,5 +143,33 @@ public class NMSInjector extends NMSInjectorAbstract {
 		((CraftWorld) world).getHandle().applyPhysics(
 				pos,
 				((CraftChunk) block.getChunk()).getHandle().getType(pos).getBlock());
+	}
+	
+	@Override
+	public int getMinY() {
+		if(this.heightInjectSuccess)
+			return -32;
+		else
+			return 0;
+	}
+
+	@Override
+	public int getMaxY() {
+		if(this.heightInjectSuccess)
+			return 256;
+		else
+			return 256;
+	}
+	
+	private static Object queryDimensionManagerPrivateField(String fieldName, DimensionManager delegate) {
+		try {
+			Field field = delegate.getClass().getDeclaredField(fieldName);
+			field.setAccessible(true);
+			return field.get(delegate);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

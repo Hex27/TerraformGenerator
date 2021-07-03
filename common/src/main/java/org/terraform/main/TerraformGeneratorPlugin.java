@@ -141,6 +141,10 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
             logger.stdout("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
             if (injector.attemptInject(event.getWorld())) {
                 INJECTED_WORLDS.add(event.getWorld().getName());
+                TerraformWorld tw = TerraformWorld.get(event.getWorld());
+                tw.minY = injector.getMinY();
+                tw.maxY = injector.getMaxY();
+                
                 logger.stdout("&aInjection success! Proceeding with generation.");
 
             } else {

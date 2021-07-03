@@ -112,7 +112,7 @@ public class TerraformGenerator extends ChunkGenerator {
                     undergroundHeight--;
                 }
 
-                for (int y = undergroundHeight; y > 0; y--) {
+                for (int y = undergroundHeight; y > tw.minY; y--) {
                     setBlockSync(chunk, x, y, z, Material.STONE);
                 }
 
@@ -122,9 +122,9 @@ public class TerraformGenerator extends ChunkGenerator {
                 }
 
                 //Bedrock Base
-                setBlockSync(chunk, x, 2, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
-                setBlockSync(chunk, x, 1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
-                setBlockSync(chunk, x, 0, z, Material.BEDROCK);
+                setBlockSync(chunk, x, 2, tw.minY+2, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
+                setBlockSync(chunk, x, tw.minY+1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
+                setBlockSync(chunk, x, tw.minY, z, Material.BEDROCK);
 
                 BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
                 if (transformHandler != null && !biomesToTransform.contains(transformHandler))

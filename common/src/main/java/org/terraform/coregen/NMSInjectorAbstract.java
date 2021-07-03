@@ -33,4 +33,12 @@ public abstract class NMSInjectorAbstract {
      * Force an NMS physics update at the location.
      */
     public abstract void updatePhysics(World world, org.bukkit.block.Block block);
+    
+    public int getMinY() {
+    	return 0;
+    }
+    
+    public int getMaxY() {
+    	return 256;
+    }
 }

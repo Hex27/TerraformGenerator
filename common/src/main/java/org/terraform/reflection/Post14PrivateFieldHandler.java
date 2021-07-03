@@ -45,9 +45,26 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
             Object varHandleModifiers = FIND_VAR_HANDLE.invoke(lookup, Field.class, "modifiers", int.class);
             VAR_HANDLE_SET.invoke(varHandleModifiers, new Object[]{targetField, mds & ~Modifier.FINAL});
         } catch (Throwable throwable) {
+	    	//throwable.printStackTrace();
             TerraformGeneratorPlugin.logger.info("Java 14+ detected.");
         }
 
         targetField.set(obj, value);
+    }
+    
+    @Override
+    public void injectField(Object obj, Field targetField, Object value) throws IllegalArgumentException, IllegalAccessException {
+	    targetField.setAccessible(true);
+	    int mds = targetField.getModifiers();
+	
+	    try {
+	        Object lookup = LOOKUP.invoke(null, Field.class, MethodHandles.lookup());
+	        Object varHandleModifiers = FIND_VAR_HANDLE.invoke(lookup, Field.class, "modifiers", int.class);
+	        VAR_HANDLE_SET.invoke(varHandleModifiers, new Object[]{targetField, mds & ~Modifier.FINAL});
+	    } catch (Throwable throwable) {
+	    	//throwable.printStackTrace();
+	        TerraformGeneratorPlugin.logger.info("Java 14+ detected.");
+	    }
+	    targetField.set(obj, value);
     }
 }
