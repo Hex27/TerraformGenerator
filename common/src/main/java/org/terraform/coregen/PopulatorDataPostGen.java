@@ -49,7 +49,7 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 
     @Override
     public void setType(int x, int y, int z, Material type) {
-        //if(type == Material.DIRT) Bukkit.getLogger().info("Set " + x + "," + y + "," + z + " to dirt.");
+        //Bukkit.getLogger().info("Set " + x + "," + y + "," + z + " to " + type);
         boolean isFragile = type.toString().contains("DOOR") ||
                 type == Material.FARMLAND ||
                 type == Material.WATER;

@@ -164,7 +164,7 @@ public class Wall {
     public void setType(Material... type) {
         block.setType(GenUtils.randMaterial(type));
     }
-
+    
     /**
      * Replaces everything in its way
      * @param height

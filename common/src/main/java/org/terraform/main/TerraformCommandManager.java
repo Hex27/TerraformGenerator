@@ -59,6 +59,7 @@ public class TerraformCommandManager implements TabExecutor {
             //this.registerCommand(new GuardianSpawnCheckCommand(plugin, "gsc","guardianspawncheck"));
             this.registerCommand(new WandCommand(plugin, "wand"));
             this.registerCommand(new MushroomCommand(plugin, "mushroom"));
+            this.registerCommand(new MansionCommand(plugin, "mansion"));
             this.registerCommand(new SchematicSaveCommand(plugin, "save"));
             this.registerCommand(new SchematicLoadCommand(plugin, "load"));
             this.registerCommand(new PyramidCommand(plugin, "pyramid"));
