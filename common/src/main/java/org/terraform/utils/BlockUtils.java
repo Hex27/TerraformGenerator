@@ -917,15 +917,18 @@ public class BlockUtils {
     }
 
     public static void placeBed(SimpleBlock block, Material mat, BlockFace dir) {
-        Bed bed = (Bed) Bukkit.createBlockData(mat);
-        bed.setFacing(dir.getOppositeFace());
-        bed.setPart(Bed.Part.HEAD);
-        block.setBlockData(bed);
+        if(BlockUtils.isAir(block.getType()) && BlockUtils.isAir(block.getRelative(dir).getType())) 
+        {
+        	Bed bed = (Bed) Bukkit.createBlockData(mat);
+            bed.setFacing(dir.getOppositeFace());
+            bed.setPart(Bed.Part.HEAD);
+            block.setBlockData(bed);
 
-        bed = (Bed) Bukkit.createBlockData(mat);
-        bed.setFacing(dir.getOppositeFace());
-        bed.setPart(Bed.Part.FOOT);
-        block.getRelative(dir).setBlockData(bed);
+            bed = (Bed) Bukkit.createBlockData(mat);
+            bed.setFacing(dir.getOppositeFace());
+            bed.setPart(Bed.Part.FOOT);
+            block.getRelative(dir).setBlockData(bed);
+        }
     }
 
     public static void placeRail(SimpleBlock block, Material mat) {

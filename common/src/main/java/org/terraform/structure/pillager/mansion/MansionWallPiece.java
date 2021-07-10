@@ -28,7 +28,7 @@ public class MansionWallPiece extends JigsawStructurePiece {
         	w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(1, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getRelative(0, 1, 0).Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
-            
+
             w = w.getLeft();
         }
     }

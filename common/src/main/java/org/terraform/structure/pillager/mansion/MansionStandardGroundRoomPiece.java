@@ -55,23 +55,23 @@ public class MansionStandardGroundRoomPiece extends JigsawStructurePiece {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
         //Raise ceiling.
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-                data.setType(x, this.getRoom().getY() + this.getRoom().getHeight(), z, Material.AIR);
-            }
-
-        //Fix weird walling for standard roofs.
-        for (BlockFace face : this.getWalledFaces()) {
-            SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, -1);
-            Wall w = entry.getKey().getRelative(0, 2, 0);
-            for (int i = 0; i < entry.getValue(); i++) {
-                Material type = w.getType();
-                if (w.getRelative(0, 1, 0).getType() != Material.DARK_OAK_LOG) ;
-                w.getRelative(0, 1, 0).setType(type);
-
-                w = w.getLeft();
-            }
-        }
+//        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+//            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+//                data.setType(x, this.getRoom().getY() + this.getRoom().getHeight(), z, Material.AIR);
+//            }
+//
+//        //Fix weird walling for standard roofs.
+//        for (BlockFace face : this.getWalledFaces()) {
+//            SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, -1);
+//            Wall w = entry.getKey().getRelative(0, 2, 0);
+//            for (int i = 0; i < entry.getValue(); i++) {
+//                Material type = w.getType();
+//                if (w.getRelative(0, 1, 0).getType() != Material.DARK_OAK_LOG) ;
+//                w.getRelative(0, 1, 0).setType(type);
+//
+//                w = w.getLeft();
+//            }
+//        }
 
         //Place lanterns (At least one per room)
         //for(int i = 0; i < GenUtils.randInt(random, 1, 4); i++) {

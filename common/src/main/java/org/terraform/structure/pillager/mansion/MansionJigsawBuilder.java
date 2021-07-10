@@ -13,6 +13,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -101,7 +102,8 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     	
     	target.Pillar(groundFloorRoomHeight, random, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS);
     	target.getRelative(0, -1, 0).downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-        
+        target.setType(Material.STONE_BRICKS); //For easier checks
+    	
         target = target.getRelative(0, 1, 0);
         
         if(!Tag.WALLS.isTagged(target.getRelative(one).getType())) {
@@ -126,7 +128,28 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         
         target = target.getRelative(0, -1, 0);
         
-        outerPillars.put(target, new BlockFace[] {one.getOppositeFace(),two.getOppositeFace()});
+        Wall closebyPillar = null;
+        for(BlockFace face:BlockUtils.directBlockFaces) {
+        	if(target.getRelative(face,2).getType() == Material.STONE_BRICKS) {
+        		closebyPillar = target.getRelative(face,2);
+        		break;
+        	}
+        }
+        
+        if(closebyPillar == null) {
+        	outerPillars.put(target, new BlockFace[] {one.getOppositeFace(),two.getOppositeFace()});
+        }
+        else
+        {
+            Iterator<Wall> it = outerPillars.keySet().iterator();
+            while(it.hasNext()) {
+            	Wall candidate = it.next();
+            	if(candidate.getX() == closebyPillar.getX()
+            			&& candidate.getY() == closebyPillar.getY()
+            			&& candidate.getZ() == closebyPillar.getZ())
+            		it.remove();
+            }
+        }
     }
     
     public void joinOuterPillars() {
@@ -139,8 +162,6 @@ public class MansionJigsawBuilder extends JigsawBuilder {
                 		&& pillarConnector.getRelative(face,2).getType() != Material.DARK_OAK_PLANKS) {
                 	if(pillarConnector.getType() != Material.STONE_BRICK_WALL) 
                 	{
-                    	pillarConnector.setType(Material.STONE_BRICK_WALL);
-                    	pillarConnector.CorrectMultipleFacing(1);
                     	
                     	//Special edge case for when there's 2 pillars very close to each other
                     	//and they lead into an awkward area
@@ -154,6 +175,10 @@ public class MansionJigsawBuilder extends JigsawBuilder {
                     			}
                     		}
                     	}
+
+                    	pillarConnector.setType(Material.STONE_BRICK_WALL);
+                    	pillarConnector.CorrectMultipleFacing(1);
+                    	
                 	}
                 	else if(pillarConnector.getRelative(face,3).getType() == Material.DARK_OAK_PLANKS)
                 	{

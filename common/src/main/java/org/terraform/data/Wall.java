@@ -348,5 +348,15 @@ public class Wall {
     public int getZ() {
         return get().getZ();
     }
+    
+    @Override
+    public int hashCode() {
+    	return this.block.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+    	return this.block.equals(obj);
+    }
 
 }
