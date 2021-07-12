@@ -91,10 +91,6 @@ public class TerraformGenerator extends ChunkGenerator {
                 
                 if(bank.getHandler().getCustomBiome() != CustomBiomeType.NONE && 
                 		biome instanceof CustomBiomeSupportedBiomeGrid) {
-                	if(!debugged) {
-                		TerraformGeneratorPlugin.logger.info("[TerraformGenerator.class] Instance of CustomBiomeSupportedBiomeGrid! Setting biome...");
-                		debugged = true;
-                	}
                 	((CustomBiomeSupportedBiomeGrid) biome).setBiome(
                 			x, z, 
                 			bank.getHandler().getCustomBiome(), 
@@ -125,7 +121,7 @@ public class TerraformGenerator extends ChunkGenerator {
                 setBlockSync(chunk, x, 2, tw.minY+2, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 setBlockSync(chunk, x, tw.minY+1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 setBlockSync(chunk, x, tw.minY, z, Material.BEDROCK);
-
+                
                 BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
                 if (transformHandler != null && !biomesToTransform.contains(transformHandler))
                 	biomesToTransform.add(transformHandler);
@@ -142,6 +138,11 @@ public class TerraformGenerator extends ChunkGenerator {
     private void setBlockSync(ChunkData data, int x, int y, int z, Material material) {
         synchronized(LOCK) {
             data.setBlock(x, y, z, material);
+//            if(material == Material.BEDROCK && !debugged) {
+//            	debugged = true;
+//            	TerraformGeneratorPlugin.logger.info("Bedrock layer set, Querying position at " + x + "," + y + "," + z);
+//            	TerraformGeneratorPlugin.logger.info(material.toString() + "-->" + data.getType(x, y, z).toString());
+//            }
         }
     }
 

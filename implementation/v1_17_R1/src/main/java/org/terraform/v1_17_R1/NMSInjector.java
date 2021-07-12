@@ -148,7 +148,7 @@ public class NMSInjector extends NMSInjectorAbstract {
 	@Override
 	public int getMinY() {
 		if(this.heightInjectSuccess)
-			return -32;
+			return 0;
 		else
 			return 0;
 	}

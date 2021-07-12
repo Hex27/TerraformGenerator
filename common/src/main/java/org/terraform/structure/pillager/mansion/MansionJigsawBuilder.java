@@ -1,8 +1,8 @@
 package org.terraform.structure.pillager.mansion;
 
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected.Half;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -12,9 +12,6 @@ import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Random;
 
 public class MansionJigsawBuilder extends JigsawBuilder {
@@ -72,8 +69,6 @@ public class MansionJigsawBuilder extends JigsawBuilder {
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST);
             }
         }
-
-        joinOuterPillars();
         
         //Place the roof
 //        if (!MansionRoofHandler.isRectangle(this))
@@ -88,108 +83,48 @@ public class MansionJigsawBuilder extends JigsawBuilder {
 
     }
 
-    private HashMap<Wall, BlockFace[]> outerPillars = new HashMap<>();
     public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two) {
-        Material[] fenceType = {Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL};
-        
         //Fill in gap in the corner
-    	target.Pillar(groundFloorRoomHeight, random, Material.DARK_OAK_LOG);
+    	target.Pillar(groundFloorRoomHeight, random, Material.POLISHED_ANDESITE);
+
+    	target.getRelative(0,2,0).setType(Material.STONE_BRICK_WALL);
+    	target.getRelative(0,3,0).setType(Material.POLISHED_DIORITE);
+    	target.getRelative(0,4,0).setType(Material.STONE_BRICK_WALL);
+    	target.getRelative(0,2,0).CorrectMultipleFacing(3);
+    	
     	target.getRelative(0, -1, 0).downUntilSolid(random, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
         
-    	//Build decorative pillar at the corner
+    	//Small stair base
+    	new StairBuilder(Material.COBBLESTONE_STAIRS)
+    	.setFacing(one.getOppositeFace())
+    	.apply(target.getRelative(one));
     	
-    	target = target.getRelative(one,3).getRelative(two,3);
+    	new StairBuilder(Material.COBBLESTONE_STAIRS)
+    	.setFacing(two.getOppositeFace())
+    	.apply(target.getRelative(two));
     	
-    	target.Pillar(groundFloorRoomHeight, random, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS);
-    	target.getRelative(0, -1, 0).downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-        target.setType(Material.STONE_BRICKS); //For easier checks
+    	new StairBuilder(Material.COBBLESTONE_STAIRS)
+    	.setFacing(two.getOppositeFace())
+    	.apply(target.getRelative(two).getRelative(one))
+    	.correct();
+
+    	//Small stair base
+    	new StairBuilder(Material.COBBLESTONE_STAIRS)
+    	.setFacing(one.getOppositeFace())
+    	.setHalf(Half.TOP)
+    	.apply(target.getRelative(0,6,0).getRelative(one));
     	
-        target = target.getRelative(0, 1, 0);
-        
-        if(!Tag.WALLS.isTagged(target.getRelative(one).getType())) {
-        	target.getRelative(one).Pillar(groundFloorRoomHeight-1, random, fenceType);
-            target.getRelative(one).CorrectMultipleFacing(groundFloorRoomHeight-1);
-            target.getRelative(0, -1, 0).getRelative(one).downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-        }
-        else
-        {
-        	target.getRelative(0, -1, 0).getRelative(one).Pillar(groundFloorRoomHeight, new Random(), Material.AIR);
-        }
-        
-        if(!Tag.WALLS.isTagged(target.getRelative(two).getType())) {
-            target.getRelative(two).Pillar(groundFloorRoomHeight-1, random, fenceType);
-            target.getRelative(two).CorrectMultipleFacing(groundFloorRoomHeight-1);
-            target.getRelative(0, -1, 0).getRelative(two).downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-        }
-        else
-        {
-        	target.getRelative(0, -1, 0).getRelative(two).Pillar(groundFloorRoomHeight, new Random(), Material.AIR);
-        }
-        
-        target = target.getRelative(0, -1, 0);
-        
-        Wall closebyPillar = null;
-        for(BlockFace face:BlockUtils.directBlockFaces) {
-        	if(target.getRelative(face,2).getType() == Material.STONE_BRICKS) {
-        		closebyPillar = target.getRelative(face,2);
-        		break;
-        	}
-        }
-        
-        if(closebyPillar == null) {
-        	outerPillars.put(target, new BlockFace[] {one.getOppositeFace(),two.getOppositeFace()});
-        }
-        else
-        {
-            Iterator<Wall> it = outerPillars.keySet().iterator();
-            while(it.hasNext()) {
-            	Wall candidate = it.next();
-            	if(candidate.getX() == closebyPillar.getX()
-            			&& candidate.getY() == closebyPillar.getY()
-            			&& candidate.getZ() == closebyPillar.getZ())
-            		it.remove();
-            }
-        }
+    	new StairBuilder(Material.COBBLESTONE_STAIRS)
+    	.setFacing(two.getOppositeFace())
+    	.setHalf(Half.TOP)
+    	.apply(target.getRelative(0,6,0).getRelative(two));
+    	
+    	new StairBuilder(Material.COBBLESTONE_STAIRS)
+    	.setFacing(two.getOppositeFace())
+    	.setHalf(Half.TOP)
+    	.apply(target.getRelative(0,6,0).getRelative(two).getRelative(one))
+    	.correct();
     }
     
-    public void joinOuterPillars() {
-    	for(Entry<Wall, BlockFace[]> entry:outerPillars.entrySet()) {
-            //Attempt to connect the pillars
-            for(BlockFace face:entry.getValue()) {
-            	Wall pillarConnector = entry.getKey().getRelative(face);
-                while(pillarConnector.getType() != Material.STONE_BRICKS 
-                		&& pillarConnector.getType() != Material.MOSSY_STONE_BRICKS
-                		&& pillarConnector.getRelative(face,2).getType() != Material.DARK_OAK_PLANKS) {
-                	if(pillarConnector.getType() != Material.STONE_BRICK_WALL) 
-                	{
-                    	
-                    	//Special edge case for when there's 2 pillars very close to each other
-                    	//and they lead into an awkward area
-                    	if(pillarConnector.getRelative(face,3).getType() == Material.DARK_OAK_PLANKS) {
-                    		for(BlockFace sideFace:BlockUtils.getAdjacentFaces(face)) {
-                    			if(pillarConnector.getRelative(sideFace,2).getType() == Material.STONE_BRICK_WALL) {
-                    				new StairBuilder(Material.COBBLESTONE_STAIRS)
-                    				.setFacing(face)
-                    				.apply(pillarConnector.getRelative(sideFace).getRelative(0,-1,0));
-                    				break;
-                    			}
-                    		}
-                    	}
-
-                    	pillarConnector.setType(Material.STONE_BRICK_WALL);
-                    	pillarConnector.CorrectMultipleFacing(1);
-                    	
-                	}
-                	else if(pillarConnector.getRelative(face,3).getType() == Material.DARK_OAK_PLANKS)
-                	{
-                		pillarConnector.Pillar(groundFloorRoomHeight, new Random(), Material.STONE_BRICKS);
-                    	break;
-                	}
-                	pillarConnector = pillarConnector.getRelative(face);
-                }
-                
-            }
-    	}
-    }
 
 }

@@ -29,24 +29,11 @@ public class MansionStandardGroundRoomPiece extends JigsawStructurePiece {
         //Place flooring.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-                data.setType(x, this.getRoom().getY(), z,
-                        GenUtils.randMaterial(
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.MOSSY_STONE_BRICKS,
-                                Material.CRACKED_STONE_BRICKS
-                        ));
+                data.setType(x, this.getRoom().getY(), z, Material.STONE_BRICKS);
                 
                 //Supporting ground
                 new Wall(new SimpleBlock(data, x, this.getRoom().getY() - 1, z))
-                        .downUntilSolid(rand,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.MOSSY_STONE_BRICKS,
-                                Material.CRACKED_STONE_BRICKS
-                        );
+                        .downUntilSolid(rand,Material.STONE_BRICKS);
             }
     }
 

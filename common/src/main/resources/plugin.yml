@@ -1,6 +1,6 @@
 name: TerraformGenerator
 author: Hex_27
-version: 4.6.2
+version: 4.6.3
 api-version: 1.14
 description: World Generator
 main: org.terraform.main.TerraformGeneratorPlugin
