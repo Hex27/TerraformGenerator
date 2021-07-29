@@ -63,7 +63,7 @@ public class TerraformGenerator extends ChunkGenerator {
         return true;
     }
 
-    private static boolean debugged = false;
+    //private static boolean debugged = false;
     
     @SuppressWarnings("deprecation")
     @Override
@@ -138,11 +138,6 @@ public class TerraformGenerator extends ChunkGenerator {
     private void setBlockSync(ChunkData data, int x, int y, int z, Material material) {
         synchronized(LOCK) {
             data.setBlock(x, y, z, material);
-//            if(material == Material.BEDROCK && !debugged) {
-//            	debugged = true;
-//            	TerraformGeneratorPlugin.logger.info("Bedrock layer set, Querying position at " + x + "," + y + "," + z);
-//            	TerraformGeneratorPlugin.logger.info(material.toString() + "-->" + data.getType(x, y, z).toString());
-//            }
         }
     }
 

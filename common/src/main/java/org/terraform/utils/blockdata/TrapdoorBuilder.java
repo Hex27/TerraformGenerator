@@ -58,6 +58,12 @@ public class TrapdoorBuilder {
         return this;
     }
 
+    public TrapdoorBuilder lapply(Wall block) {
+    	if(!block.getType().isSolid())
+    		block.setBlockData(blockData);
+        return this;
+    }
+
     public TrapdoorBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         return this;

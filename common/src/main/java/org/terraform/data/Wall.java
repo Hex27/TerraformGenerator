@@ -171,6 +171,19 @@ public class Wall {
      * @param rand
      * @param types
      */
+    public void Pillar(int height, Material... types) {
+    	Random rand = new Random();
+        for (int i = 0; i < height; i++) {
+            block.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
+        }
+    }
+    
+    /**
+     * Replaces everything in its way
+     * @param height
+     * @param rand
+     * @param types
+     */
     public void Pillar(int height, Random rand, Material... types) {
         for (int i = 0; i < height; i++) {
             block.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));

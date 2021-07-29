@@ -39,8 +39,6 @@ public abstract class JigsawStructurePiece implements Cloneable {
 
     public void postBuildDecoration(Random random, PopulatorDataAbstract data) {}
 
-    ;
-
     @SuppressWarnings("unchecked")
     public JigsawStructurePiece getInstance(Random rand, int depth) {
         JigsawStructurePiece clone;
@@ -130,6 +128,23 @@ public abstract class JigsawStructurePiece implements Cloneable {
 
     public void setRotation(BlockFace rotation) {
         this.rotation = rotation;
+    }
+    
+    /**
+     * 
+     * @return If the structure piece has at least 1 walled face, return
+     * a larger room with bigger widthX and widthZ (same height)
+     */
+    public CubeRoom getExtendedRoom(int extraSize) {
+    	if(this.walledFaces.size() == 0) {
+    		return this.room;
+    	}else {
+    		CubeRoom extendedRoom = new CubeRoom(
+    				this.room.getWidthX()+extraSize*2, this.room.getWidthZ()+extraSize*2, this.room.getHeight(),
+    				this.room.getX(),this.room.getY(),this.room.getZ()
+    				);
+    		return extendedRoom;
+    	}
     }
 
     @Override

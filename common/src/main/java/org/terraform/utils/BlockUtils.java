@@ -771,7 +771,15 @@ public class BlockUtils {
             Material type = target.getRelative(face).getType();
             data.setFace(face, type.isSolid()
                     && !type.toString().endsWith("PRESSURE_PLATE")
-                    && !Tag.SLABS.isTagged(type));
+                    && !Tag.SLABS.isTagged(type)
+                    && !Tag.TRAPDOORS.isTagged(type));
+            if(Tag.STAIRS.isTagged(type)) {
+            	Stairs stairs = (Stairs) target.getRelative(face).getBlockData();
+            	if(stairs.getFacing() == face.getOppositeFace())
+            		data.setFace(face, true);
+            	else
+            		data.setFace(face, false);
+            }
         }
         target.setBlockData(data);
     }

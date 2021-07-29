@@ -1,18 +1,19 @@
 package org.terraform.structure.pillager.mansion;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Lantern;
+import org.bukkit.block.data.Bisected.Half;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
-import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSixBlockHandler;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.blockdata.DirectionalBuilder;
+import org.terraform.utils.blockdata.StairBuilder;
 
-import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 import java.util.Random;
 
 public class MansionStandardGroundRoomPiece extends JigsawStructurePiece {
@@ -39,60 +40,100 @@ public class MansionStandardGroundRoomPiece extends JigsawStructurePiece {
 
     @Override
     public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
-        int[] lowerCorner = this.getRoom().getLowerCorner(0);
-        int[] upperCorner = this.getRoom().getUpperCorner(0);
-        //Raise ceiling.
-//        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-//            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-//                data.setType(x, this.getRoom().getY() + this.getRoom().getHeight(), z, Material.AIR);
-//            }
-//
-//        //Fix weird walling for standard roofs.
-//        for (BlockFace face : this.getWalledFaces()) {
-//            SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, -1);
-//            Wall w = entry.getKey().getRelative(0, 2, 0);
-//            for (int i = 0; i < entry.getValue(); i++) {
-//                Material type = w.getType();
-//                if (w.getRelative(0, 1, 0).getType() != Material.DARK_OAK_LOG) ;
-//                w.getRelative(0, 1, 0).setType(type);
-//
-//                w = w.getLeft();
-//            }
-//        }
-
-        //Place lanterns (At least one per room)
-        //for(int i = 0; i < GenUtils.randInt(random, 1, 4); i++) {
-        //	int[] coords = room.randomCoords(random,1);
-        //	genLanterns(data,coords[0],coords[2]);
-        //}
-        genLanterns(data, this.getRoom().getX(), this.getRoom().getZ());
-    }
-
-    private void genLanterns(PopulatorDataAbstract data, int x, int z) {
-        Material chain = OneOneSixBlockHandler.getChainMaterial();
+        CubeRoom targetRoom = this.getRoom();
+        if(this.getWalledFaces().size() > 0) 
+        	targetRoom = this.getExtendedRoom(6);
         
-        Wall w = new Wall(new SimpleBlock(data, x, this.getRoom().getY() + 1, z));
-        w = w.findCeiling(25);
-        if (w == null) {
-            //Bruh wtf
-            return;
-        }
-
-        w = w.getRelative(0, -1, 0);
-        int space = w.getY() - room.getY() - 3;
-        if (space <= 0) {
-            return; //Ceiling too low.
-        }
-        int units = GenUtils.randInt(1, space);
-        for (int i = 0; i < units; i++) {
-            if (i == units - 1) {
-                Lantern lantern = (Lantern) Bukkit.createBlockData(Material.LANTERN);
-                lantern.setHanging(true);
-                w.setBlockData(lantern);
-            } else {
-                w.setType(chain);
-                w = w.getRelative(0, -1, 0);
+    	int[] lowerCorner = targetRoom.getLowerCorner(0);
+        int[] upperCorner = targetRoom.getUpperCorner(0);
+        
+        //Places extended ground and roofing over the piece.
+        //If this piece is identified as a corner, place a pillar.
+        for(int nx = lowerCorner[0]; nx <= upperCorner[0]; nx++)
+        	for(int nz = lowerCorner[1]; nz <= upperCorner[1]; nz++) {
+        		SimpleBlock b = new SimpleBlock(data, nx, targetRoom.getY(), nz);
+        		
+        		//Edge Piece of extended room. Place cobblestone on ceiling edges
+        		if(upperCorner[0] - lowerCorner[0] > this.getRoom().getWidthX()
+        				&& (nx == lowerCorner[0] || nx == upperCorner[0] || nz == lowerCorner[1] || nz == upperCorner[1])) {
+        			if(b.getRelative(0,targetRoom.getHeight()+1,0).getType() != Material.STONE_BRICKS)
+        				b.getRelative(0,targetRoom.getHeight()+1,0).setType(Material.COBBLESTONE);
+        		}
+        		else
+        		{
+        			if(b.getType() != Material.STONE_BRICKS) {
+                		//Edge Piece of extended room. Place stone bricks on floor edges
+//        				if(upperCorner[0] - lowerCorner[0] > this.getRoom().getWidthX()
+//                				&& (nx == lowerCorner[0]+1 || nx == upperCorner[0]-1 || nz == lowerCorner[1]+1 || nz == upperCorner[1]-1)) {
+//        					if(b.getType() != Material.COBBLESTONE && 
+//        							b.countAdjacentsThatMatchType(BlockUtils.directBlockFaces, Material.COBBLESTONE) < 2)
+//        						b.setType(Material.POLISHED_ANDESITE);
+//        				}
+//        				else
+    					b.setType(Material.COBBLESTONE);
+        			}
+            		
+            		new Wall(b.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+            		
+            		b.getRelative(0,targetRoom.getHeight()+1,0).setType(Material.STONE_BRICKS);
+        		}
+        		
+        	}
+        
+        
+    }
+    
+    /**
+     * Mansions are complex, and they need a third pass to properly ensure that
+     * previous important details were planted before placing the final edge pieces.
+     * @param random
+     * @param data
+     */
+    public void thirdStageDecoration(Random random, PopulatorDataAbstract data) {
+    	CubeRoom targetRoom = this.getRoom();
+        if(this.getWalledFaces().size() > 0) {
+        	targetRoom = this.getExtendedRoom(6);
+        	//Decorate the top and bottom areas
+            for(Entry<Wall, Integer> entry:this.getRoom().getFourWalls(data, -5).entrySet()) {
+            	if(this.getWalledFaces().contains(entry.getKey().getDirection().getOppositeFace())) {
+            		Wall w = entry.getKey();
+            		for(int i = 0; i < entry.getValue(); i++) {
+            			if(w.getRear().getRelative(0,targetRoom.getHeight(),0).getType() == Material.COBBLESTONE)
+            			{
+            				//Lower decorations
+            				if(!w.getType().isSolid() || w.getType() == Material.POLISHED_ANDESITE) {
+            					
+            					new StairBuilder(Material.STONE_BRICK_STAIRS)
+            					.setFacing(BlockUtils.getRight(w.getDirection()))
+            					.setHalf(Half.BOTTOM)
+            					.apply(w);
+            					new StairBuilder(Material.STONE_BRICK_STAIRS)
+            					.setFacing(BlockUtils.getRight(w.getDirection()))
+            					.setHalf(Half.TOP)
+            					.apply(w.getRelative(0,1,0));
+            					
+            					w.getLeft().get().lsetType(Material.POLISHED_ANDESITE);
+            					w.getLeft().getRelative(0,1,0).get().lsetType(Material.POLISHED_ANDESITE);
+            					w.getRight().getRelative(0,1,0).get().lsetType(Material.POLISHED_ANDESITE);
+            					w.getRight().get().lsetType(Material.POLISHED_ANDESITE);
+            				}
+            				//Upper decorations
+            				if(i % 2 == 0) {
+                				w.getRear().getRelative(0,targetRoom.getHeight()+1,0).setType(Material.COBBLESTONE);
+                			}
+                			else 
+                			{
+                				new DirectionalBuilder(Material.DARK_OAK_FENCE_GATE)
+                				.setFacing(w.getDirection())
+                				.apply(w.getRear().getRelative(0,targetRoom.getHeight()+1,0));
+                			}
+            			}
+            			
+            			w = w.getLeft();
+            		}
+            	}
             }
         }
     }
+
 }

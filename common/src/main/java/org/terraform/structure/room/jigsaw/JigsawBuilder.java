@@ -23,6 +23,7 @@ public class JigsawBuilder {
     protected int[] upperBounds = new int[2];
     protected int maxDepth = 5; //The amount of pieces before an end piece is forced.
     protected int chanceToAddNewPiece = 60;
+    protected int minimumPieces = 0;
     protected int pieceWidth = 5;
     protected SimpleBlock core;
     protected JigsawStructurePiece center;
@@ -33,9 +34,9 @@ public class JigsawBuilder {
     protected HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
     protected ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
     protected JigsawStructurePiece[] pieceRegistry;
-    private BlockFace entranceDir;
+    protected BlockFace entranceDir;
     int traversalIndex = 0;
-    private boolean hasPlacedEntrance = false;
+    protected boolean hasPlacedEntrance = false;
 
     public JigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         this.widthX = widthX;
@@ -70,7 +71,48 @@ public class JigsawBuilder {
         traverseStack.push(center);
         while (!areAllPiecesCovered())
             if (!traverseAndPopulatePieces(random)) break;
+        
+        //MAKE SURE NO CELL HAS 4 WALLS. Remove all 4 walls and
+        //replace it with a room.
+        ArrayList<SimpleLocation> problemCells = new ArrayList<>();
+        HashMap<SimpleLocation, Integer> map = new HashMap<>();
+        for(JigsawStructurePiece piece:overlapperPieces) {
+        	if(map.containsKey(piece.getRoom().getSimpleLocation())) {
+        		map.put(piece.getRoom().getSimpleLocation(), map.get(piece.getRoom().getSimpleLocation())+1);
+        	}else {
+        		map.put(piece.getRoom().getSimpleLocation(), 1);
+        	}
+        	if(map.get(piece.getRoom().getSimpleLocation()) >= 4) {
+        		//4 wall thing spotted. That's bad. Try to replace it.
+        		problemCells.add(piece.getRoom().getSimpleLocation());
+        		TerraformGeneratorPlugin.logger.info("Found problem piece. Attempting to replace with room.");
+        	}
+        }
+        if(problemCells.size() > 0) {
+        	Iterator<JigsawStructurePiece> it = overlapperPieces.iterator();
+            while(it.hasNext()) {
+            	JigsawStructurePiece piece = it.next();
+            	if(problemCells.contains(piece.getRoom().getSimpleLocation()))
+            		it.remove();
+            }
+            
+            for(SimpleLocation loc:problemCells) {
 
+                JigsawStructurePiece toAdd = getPiece(pieceRegistry, JigsawType.STANDARD, random)
+                        .getInstance(random, 0);
+
+    			toAdd.getRoom().setX(loc.getX());
+    			toAdd.getRoom().setY(loc.getY());
+    			toAdd.getRoom().setZ(loc.getZ());
+    			
+    			toAdd.setPopulated(BlockFace.NORTH);
+    			toAdd.setPopulated(BlockFace.SOUTH);
+    			toAdd.setPopulated(BlockFace.EAST);
+    			toAdd.setPopulated(BlockFace.WEST);
+    			pieces.put(loc, toAdd);
+    			TerraformGeneratorPlugin.logger.info("Patched problem piece with new room.");
+            }
+        }
     }
 
     public boolean traverseAndPopulatePieces(Random random) {
@@ -112,7 +154,7 @@ public class JigsawBuilder {
                             toAdd = getRelativePiece(current, JigsawType.END, random)
                                     .getInstance(random, current.getDepth() + 1);
                             toAdd.setRotation(dir);
-                        } else if (!GenUtils.chance(random, chanceToAddNewPiece, 100)) {
+                        } else if (pieces.size() > minimumPieces && !GenUtils.chance(random, chanceToAddNewPiece, 100)) {
                             //Failed chance to add. Force wall.
                             toAdd = getRelativePiece(current, JigsawType.END, random)
                                     .getInstance(random, current.getDepth() + 1);
@@ -196,22 +238,25 @@ public class JigsawBuilder {
                 if (entranceDir == null //Random block face direction
                         || (piece.getRotation() == entranceDir))  //Forced entrance direction
                 {
-                    //Place an entrance if none was placed before.
-                    hasPlacedEntrance = true;
-                    entrance = getPiece(pieceRegistry, JigsawType.ENTRANCE, random)
-                            .getInstance(random, piece.getDepth());
-                    entrance.getRoom().setX(piece.getRoom().getX());
-                    entrance.getRoom().setY(piece.getRoom().getY());
-                    entrance.getRoom().setZ(piece.getRoom().getZ());
-                    entrance.setRotation(piece.getRotation());
-                    entranceBlock = new Wall(
-                            new SimpleBlock(
-                                    core.getPopData(),
-                                    piece.getRoom().getX(),
-                                    piece.getRoom().getY(),
-                                    piece.getRoom().getZ()),
-                            piece.getRotation());
-                    piece = entrance;
+                	//This check is to ensure that entrances aren't walled up in 4 sides.
+                	if(canPlaceEntrance(pieceLoc)) {
+	                    //Place an entrance if none was placed before.
+	                    hasPlacedEntrance = true;
+	                    entrance = getPiece(pieceRegistry, JigsawType.ENTRANCE, random)
+	                            .getInstance(random, piece.getDepth());
+	                    entrance.getRoom().setX(piece.getRoom().getX());
+	                    entrance.getRoom().setY(piece.getRoom().getY());
+	                    entrance.getRoom().setZ(piece.getRoom().getZ());
+	                    entrance.setRotation(piece.getRotation());
+	                    entranceBlock = new Wall(
+	                            new SimpleBlock(
+	                                    core.getPopData(),
+	                                    piece.getRoom().getX(),
+	                                    piece.getRoom().getY(),
+	                                    piece.getRoom().getZ()),
+	                            piece.getRotation());
+	                    piece = entrance;
+                	}
                 }
             }
             JigsawStructurePiece host = getAdjacentPiece(pieceLoc, piece.getRotation().getOppositeFace());
@@ -232,6 +277,18 @@ public class JigsawBuilder {
         		it.remove();
         }
         overlapperPieces.add(entrance);
+    }
+    
+    public boolean canPlaceEntrance(SimpleLocation pieceLoc) {
+		return this.countOverlappingPiecesAtLocation(pieceLoc) != 4;
+	}
+
+	public int countOverlappingPiecesAtLocation(SimpleLocation loc) {
+    	int count = 0;
+    	for(JigsawStructurePiece wall:overlapperPieces)
+    		if(wall.getRoom().getSimpleLocation().equals(loc))
+    			count++;
+    	return count;
     }
 
     public JigsawStructurePiece getAdjacentPiece(SimpleLocation loc, BlockFace face) {
@@ -282,7 +339,7 @@ public class JigsawBuilder {
     }
 
     public JigsawStructurePiece getRelativePiece(JigsawStructurePiece current, JigsawType type, Random random) {
-        if (current.getAllowedPieces() != null && current.getAllowedPieces().length == 0) {
+        if (current == null || (current.getAllowedPieces() != null && current.getAllowedPieces().length == 0)) {
             return getPiece(pieceRegistry, type, random);
         } else {
             return getPiece(current.getAllowedPieces(), type, random);
@@ -296,4 +353,8 @@ public class JigsawBuilder {
     public Wall getEntranceBlock() {
         return entranceBlock;
     }
+
+	public ArrayList<JigsawStructurePiece> getOverlapperPieces() {
+		return overlapperPieces;
+	}
 }

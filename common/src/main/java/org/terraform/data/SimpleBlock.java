@@ -89,6 +89,19 @@ public class SimpleBlock {
 
         return Math.pow(selfX - oX, 2) + Math.pow(selfY - oY, 2) + Math.pow(selfZ - oZ, 2);
     }
+    
+    public boolean isConnected(SimpleBlock other) {
+    	for(BlockFace face:BlockUtils.sixBlockFaces) {
+    		if(this.getRelative(face).equals(other))
+    			return true;
+    	}
+    	return false;
+    }
+    
+    public double distance(SimpleBlock other) {
+    	
+        return Math.sqrt(distanceSquared(other));
+    }
 
     public boolean sameLocation(SimpleBlock other) {
         return other.x == x && other.y == y && other.z == z;
@@ -170,6 +183,26 @@ public class SimpleBlock {
     
     public void addEntity(EntityType type) {
     	popData.addEntity(x, y, z, type);
+    }
+    
+
+    public int countAdjacentsThatMatchType(BlockFace[] faces, Material...types) {
+    	int i = 0;
+    	for(BlockFace face:faces) {
+    		for(Material type:types)
+    			if(getRelative(face).getType() == type)
+    				i++;
+    	}
+    	return i;
+    }
+    
+    public boolean doAdjacentsMatchType(BlockFace[] faces, Material...types) {
+    	for(BlockFace face:faces) {
+    		for(Material type:types)
+    			if(getRelative(face).getType() == type)
+    				return true;
+    	}
+    	return false;
     }
 
     public int getChunkX() {

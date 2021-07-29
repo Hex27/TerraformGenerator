@@ -16,8 +16,10 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
         if (!(target.getBlockData() instanceof Wall)) return;
         Wall data = (Wall) target.getBlockData();
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (target.getRelative(face).getType().isSolid() &&
-                    !target.getRelative(face).getType().toString().contains("PRESSURE_PLATE")) {
+            if (target.getRelative(face).getType().isSolid() 
+            		&& !target.getRelative(face).getType().toString().contains("PRESSURE_PLATE")
+                    && !Tag.TRAPDOORS.isTagged(target.getRelative(face).getType())
+                    && !Tag.SLABS.isTagged(target.getRelative(face).getType())) {
                 data.setHeight(face, Height.LOW);
                 if (target.getRelative(BlockFace.UP).getType().isSolid()) {
                     data.setHeight(face, Height.TALL);
