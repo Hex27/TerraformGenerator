@@ -6,7 +6,7 @@ import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
+import org.terraform.structure.pillager.mansion.ground.MansionJigsawBuilder;
 
 import java.util.Random;
 import java.util.Stack;

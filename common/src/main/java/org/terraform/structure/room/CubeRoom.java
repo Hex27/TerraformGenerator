@@ -142,6 +142,10 @@ public class CubeRoom {
         return new int[]{x, y, z};
     }
 
+    public SimpleBlock getCenterSimpleBlock(PopulatorDataAbstract data) {
+        return new SimpleBlock(data, x, y, z);
+    }
+
     public double centralDistanceSquared(int[] other) {
         return Math.pow(x - other[0], 2) + Math.pow(y - other[1], 2) + Math.pow(z - other[2], 2);
     }

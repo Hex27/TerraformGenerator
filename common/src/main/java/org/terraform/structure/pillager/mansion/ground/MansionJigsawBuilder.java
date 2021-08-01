@@ -1,4 +1,4 @@
-package org.terraform.structure.pillager.mansion;
+package org.terraform.structure.pillager.mansion.ground;
 
 import org.bukkit.Axis;
 import org.bukkit.Material;
@@ -9,6 +9,9 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
+import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorHandler;
+import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorWallPiece;
+import org.terraform.structure.pillager.mansion.tower.MansionTowerPieceHandler;
 import org.terraform.structure.room.jigsaw.JigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
@@ -16,17 +19,21 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MansionJigsawBuilder extends JigsawBuilder {
 	
 	public static final int roomHeight = 7;
 	public static final int groundFloorRoomWidth = 9;
+	private ArrayList<SimpleLocation> roofedLocations = new ArrayList<>();
 	
+	private MansionTowerPieceHandler towerPieceHandler;
 	private MansionSecondFloorHandler secondFloorHandler;
 	
     public MansionJigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
+        towerPieceHandler = new MansionTowerPieceHandler(this, data);
         secondFloorHandler = new MansionSecondFloorHandler(this);
         this.pieceWidth = groundFloorRoomWidth;
         this.pieceRegistry = new JigsawStructurePiece[]{
@@ -147,6 +154,28 @@ public class MansionJigsawBuilder extends JigsawBuilder {
             piece.postBuildDecoration(random, this.core.getPopData());
         }
         
+        for(JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()) {
+        	if(!getRoofedLocations().contains(piece.getRoom().getSimpleLocation())) {
+        		SimpleLocation loc = piece.getRoom().getSimpleLocation().getRelative(0,13,0);
+        		if(this.core.getPopData().getType(loc.getX(),loc.getY(),loc.getZ()) 
+        				!= Material.COBBLESTONE_SLAB)
+        			towerPieceHandler.registerTowerPiece(random, piece);
+        	}
+        }
+        
+        towerPieceHandler.setupWalls();
+        towerPieceHandler.buildPieces(random);
+        towerPieceHandler.buildOverlapperPieces(random);
+        
+        for (JigsawStructurePiece piece : towerPieceHandler.overlapperPieces) {
+            piece.postBuildDecoration(random, this.core.getPopData());
+        }
+        
+        for (JigsawStructurePiece piece : towerPieceHandler.pieces.values()) {
+            piece.postBuildDecoration(random, this.core.getPopData());
+        }
+        
+        towerPieceHandler.buildRoofs(MansionRoofHandler.getDominantBlockFace(lowerBounds, upperBounds), random);
     }
     
     /**
@@ -275,6 +304,14 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     	//I don't want to deal with a diagonal staircase, so fuck that.
 		return this.countOverlappingPiecesAtLocation(pieceLoc) != 4
 				&& this.countOverlappingPiecesAtLocation(pieceLoc) != 2;
+	}
+
+	public ArrayList<SimpleLocation> getRoofedLocations() {
+		return roofedLocations;
+	}
+
+	public MansionTowerPieceHandler getTowerPieceHandler() {
+		return towerPieceHandler;
 	}
     
 

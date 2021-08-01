@@ -1,16 +1,19 @@
-package org.terraform.structure.pillager.mansion;
+package org.terraform.structure.pillager.mansion.secondfloor;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.structure.pillager.mansion.ground.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import java.util.Random;
 
 public class MansionStandardSecondFloorPiece extends JigsawStructurePiece {
 
-    public MansionStandardSecondFloorPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-        super(widthX, height, widthZ, type, validDirs);
+	private MansionJigsawBuilder builder;
+    public MansionStandardSecondFloorPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+    	super(widthX, height, widthZ, type, validDirs);
+        this.builder = builder;
     }
 
     @Override

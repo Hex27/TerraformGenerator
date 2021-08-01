@@ -1,4 +1,4 @@
-package org.terraform.structure.pillager.mansion;
+package org.terraform.structure.pillager.mansion.ground;
 
 import org.bukkit.Axis;
 import org.bukkit.Material;
@@ -104,6 +104,14 @@ public class MansionRoofHandler {
         	previousNotInRect = piecesInRect;
         	i++;
         }
+        int y = builder.getCore().getY();
+        for (int x = lowestCoords[0]; x <= highestCoords[0]; x += builder.getPieceWidth()) {
+            for (int z = lowestCoords[1]; z <= highestCoords[1]; z += builder.getPieceWidth()) {
+                if (builder.getPieces().containsKey(new SimpleLocation(x, y, z))) {
+                	builder.getRoofedLocations().add(new SimpleLocation(x, y+MansionJigsawBuilder.roomHeight + 1, z));
+                }
+            }
+        }
         return new int[][] {lowestCoords, highestCoords};
     }
     
@@ -131,6 +139,19 @@ public class MansionRoofHandler {
             superiorAxis = Axis.Z;
         else //Square house
             superiorAxis = Axis.X;
+
+        return superiorAxis;
+    }
+    
+    public static BlockFace getDominantBlockFace(int[] lowestCoords, int[] highestCoords) {
+    	BlockFace superiorAxis;
+        //Longer axis is the superior one
+        if (highestCoords[0] - lowestCoords[0] > highestCoords[1] - lowestCoords[1])
+            superiorAxis = BlockFace.WEST;
+        else if (highestCoords[0] - lowestCoords[0] < highestCoords[1] - lowestCoords[1])
+            superiorAxis = BlockFace.NORTH;
+        else //Square house
+            superiorAxis = BlockFace.WEST;
 
         return superiorAxis;
     }
@@ -198,12 +219,12 @@ public class MansionRoofHandler {
                         //Connect the roof to the walls below
                         if(i == 2 || i == length - 3) {
                         	//Lower Walls
-                        	Wall bottom = target.getAtY(builder.getCore().getY() + 2*MansionJigsawBuilder.roomHeight);
+                        	Wall bottom = target.getAtY(builder.getCore().getY() + 2*MansionJigsawBuilder.roomHeight+2);
                         	if(bottom != null) {
                         		if(BlockUtils.isAir(bottom.getType()) || Tag.STAIRS.isTagged(bottom.getType()) || Tag.SLABS.isTagged(bottom.getType())) {
                         			bottom.setType(Material.DARK_OAK_PLANKS);
                         		}
-                        		target.getRelative(0,-2,0).downPillar(new Random(), target.getY()-bottom.getY()-4, bottom.getType());
+                        		target.getRelative(0,-2,0).downPillar(new Random(), target.getY()-bottom.getY()-2, bottom.getType());
                         	}
                         }
                         else if(i != 1 && i != length-2)//Force set air for things below the roof within the walls

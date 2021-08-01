@@ -1,4 +1,4 @@
-package org.terraform.structure.pillager.mansion;
+package org.terraform.structure.pillager.mansion.secondfloor;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -8,6 +8,7 @@ import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.structure.pillager.mansion.ground.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
@@ -35,8 +36,9 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     	if(this.builder.countOverlappingPiecesAtLocation(
     			this.getRoom().getSimpleLocation().getRelative(
     					0,-MansionJigsawBuilder.roomHeight-1,0
-    					)) >= 3)
-    		return;
+    					)) >= 3) {
+    		return;	
+    	}
     	
     	BlockFace walledFace = this.getRotation();
     	Wall w = new Wall(
@@ -54,7 +56,8 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     			&& upperBound[0] >= w.getX() 
     			&& upperBound[1] >= w.getZ()) {
     		//Piece is inside the roof. Don't do anything.
-    		return;
+    		builder.getRoofedLocations().add(this.getRoom().getSimpleLocation().getRelative(this.getRotation().getOppositeFace(), MansionJigsawBuilder.groundFloorRoomWidth));
+        	return;
     	}
     	else if(w.getX() >= lowerBound[0] && w.getX() <= upperBound[0]) 
     	{
@@ -88,6 +91,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     		return;
     	}
     	isTentRoofFace = true;
+    	builder.getRoofedLocations().add(this.getRoom().getSimpleLocation().getRelative(this.getRotation().getOppositeFace(), MansionJigsawBuilder.groundFloorRoomWidth));
     	//Place the actual roof
 		for(BlockFace side:BlockUtils.getAdjacentFaces(walledFace)) {
 			
@@ -133,21 +137,6 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
 						new StairBuilder(Material.DARK_OAK_STAIRS)
 						.setFacing(side.getOppositeFace())
 						.lapply(roofPiece.getRear(depth));
-//					else
-//						new StairBuilder(Material.COBBLESTONE_STAIRS)
-//						.setFacing(side.getOppositeFace())
-//						.lapply(roofPiece.getRear(depth));
-					
-					//Raise wall to cover hole between triangle and wall
-//					if(i != 0 && depth == 1) {
-//						Wall wallPiece = roofPiece.getRear(depth).findFloor(6);
-//						if(wallPiece != null)
-//							roofPiece.getRear(depth).getRelative(0,-1,0).downPillar(new Random(), roofPiece.getRear(depth).getY()-wallPiece.getY(),Material.RED_WOOL);//wallPiece.getType());
-//					}else if(i == 0 && depth == 1) {
-//						Wall wallPiece = roofPiece.getRear(depth).getRelative(0,-1,0).findFloor(6).getRelative(0,-2,0);
-//						if(wallPiece != null)
-//							roofPiece.getRear(depth).getRelative(0,-2,0).downPillar(new Random(), roofPiece.getRear(depth).getY()-wallPiece.getY(),Material.BLUE_WOOL);//wallPiece.getType());
-//					}
 				}
 			}
 		}
@@ -338,28 +327,35 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
         
         for (int i = 0; i < entry.getValue(); i++) {
             
-        	//Link the wall to the roof above
         	Wall target = w.getRelative(0, this.getRoom().getHeight(), 0);
          
-        	int spawnedHeight = target.getRelative(0,1,0).LPillar(10, new Random(), target.getType());
-        	
-        	if(!isTentRoofFace)
-        	//Spawn slightly overhanging roof
-	        	if(spawnedHeight == 0 && target.getRelative(0,1,0).getFront().getType().isAir() &&  Tag.STAIRS.isTagged(target.getRelative(0,1,0).getType())) {
-	        		StairBuilder builder = new StairBuilder(Material.COBBLESTONE_STAIRS)
-	        		.setFacing(target.getDirection().getOppositeFace())
-	        		.lapply(target.getFront());
-	        		
-	        		for(int depth = 1; depth <= 2; depth++) {
-	        			if(Tag.STAIRS.isTagged(target.getLeft(depth).getRelative(0,1,0).getType())
-	        					 && target.getLeft(depth).getRelative(0,1,0).getFront().getType().isAir())
-	        				builder.lapply(target.getLeft(depth).getFront());
-	        			if(Tag.STAIRS.isTagged(target.getRight(depth).getRelative(0,1,0).getType())
-	       					 && target.getRight(depth).getRelative(0,1,0).getFront().getType().isAir())
-	        				builder.lapply(target.getRight(depth).getFront());
-	        		}
-        			
+        	if(target.getRelative(0,1,0).getType() == Material.DARK_OAK_LOG)
+        		target.getRelative(0,1,0).setType(Material.AIR);
+
+        	//Link the wall to the roof above
+        	if(target.findCeiling(10) != null)
+        	{
+        		int spawnedHeight = target.getRelative(0,1,0).LPillar(10, new Random(), target.getType());
+            	
+            	if(!isTentRoofFace)
+            	//Spawn slightly overhanging roof
+    	        	if(spawnedHeight == 0 && target.getRelative(0,1,0).getFront().getType().isAir() &&  Tag.STAIRS.isTagged(target.getRelative(0,1,0).getType())) {
+    	        		StairBuilder builder = new StairBuilder(Material.COBBLESTONE_STAIRS)
+    	        		.setFacing(target.getDirection().getOppositeFace())
+    	        		.lapply(target.getFront());
+    	        		
+    	        		for(int depth = 1; depth <= 2; depth++) {
+    	        			if(Tag.STAIRS.isTagged(target.getLeft(depth).getRelative(0,1,0).getType())
+    	        					 && target.getLeft(depth).getRelative(0,1,0).getFront().getType().isAir())
+    	        				builder.lapply(target.getLeft(depth).getFront());
+    	        			if(Tag.STAIRS.isTagged(target.getRight(depth).getRelative(0,1,0).getType())
+    	       					 && target.getRight(depth).getRelative(0,1,0).getFront().getType().isAir())
+    	        				builder.lapply(target.getRight(depth).getFront());
+    	        		}
+            			
+            	}
         	}
+        	
             w = w.getLeft();
         }
         

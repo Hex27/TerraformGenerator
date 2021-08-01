@@ -1,4 +1,4 @@
-package org.terraform.structure.pillager.mansion;
+package org.terraform.structure.pillager.mansion.ground;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
