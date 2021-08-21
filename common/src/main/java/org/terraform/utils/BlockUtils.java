@@ -769,10 +769,16 @@ public class BlockUtils {
         MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
             Material type = target.getRelative(face).getType();
-            data.setFace(face, type.isSolid()
+            boolean facing = type.isSolid()
                     && !type.toString().endsWith("PRESSURE_PLATE")
+            		&& !type.toString().contains("BANNER")
                     && !Tag.SLABS.isTagged(type)
-                    && !Tag.TRAPDOORS.isTagged(type));
+                    && !Tag.TRAPDOORS.isTagged(type);
+            if(target.getType().toString().endsWith("GLASS_PANE")
+            		&& (Tag.FENCE_GATES.isTagged(type)
+            				|| Tag.FENCES.isTagged(type)))
+            	facing = false;
+            data.setFace(face, facing);
             if(Tag.STAIRS.isTagged(type)) {
             	Stairs stairs = (Stairs) target.getRelative(face).getBlockData();
             	if(stairs.getFacing() == face.getOppositeFace())

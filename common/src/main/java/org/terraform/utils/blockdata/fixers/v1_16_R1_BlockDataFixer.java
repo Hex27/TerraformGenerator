@@ -1,6 +1,7 @@
 package org.terraform.utils.blockdata.fixers;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -16,15 +17,29 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
         if (!(target.getBlockData() instanceof Wall)) return;
         Wall data = (Wall) target.getBlockData();
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (target.getRelative(face).getType().isSolid() 
-            		&& !target.getRelative(face).getType().toString().contains("PRESSURE_PLATE")
-                    && !Tag.TRAPDOORS.isTagged(target.getRelative(face).getType())
-                    && !Tag.SLABS.isTagged(target.getRelative(face).getType())) {
+        	Material relType = target.getRelative(face).getType();
+            if (relType.isSolid() 
+            		&& !relType.toString().contains("BANNER")
+            		&& !relType.toString().contains("PRESSURE_PLATE")
+                    && !Tag.TRAPDOORS.isTagged(relType)
+                    && !Tag.SLABS.isTagged(relType)) {
                 data.setHeight(face, Height.LOW);
                 if (target.getRelative(BlockFace.UP).getType().isSolid()) {
                     data.setHeight(face, Height.TALL);
                 }
-            } else data.setHeight(face, Height.NONE);
+
+                //Ensure that panes to do join with fences
+                if(target.getType().toString().endsWith("GLASS_PANE")
+                		&& (Tag.FENCE_GATES.isTagged(relType)
+                				|| Tag.FENCES.isTagged(relType))) {
+                	data.setHeight(face, Height.NONE);
+                }else if(target.getType().toString().contains("FENCE")
+                		&& (relType.toString().endsWith("GLASS_PANE"))) {
+                	data.setHeight(face, Height.NONE);
+                }
+                
+            } else 
+            	data.setHeight(face, Height.NONE);
         }
 
 //		if(target.getRelative(BlockFace.UP).getBlockData() instanceof Wall&&

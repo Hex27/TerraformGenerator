@@ -50,6 +50,7 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
     @Override
     public void setType(int x, int y, int z, Material type) {
         boolean isFragile = type.toString().contains("DOOR") ||
+                type.toString().contains("CARPET") ||
                 type == Material.FARMLAND ||
                 type == Material.WATER;
         //TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())
@@ -61,6 +62,7 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
     @Override
     public void setBlockData(int x, int y, int z, BlockData data) {
         boolean isFragile = data.getMaterial().toString().contains("DOOR") ||
+        		data.getMaterial().toString().contains("CARPET") ||
                 data.getMaterial() == Material.FARMLAND ||
                 data.getMaterial() == Material.WATER;
         //TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())

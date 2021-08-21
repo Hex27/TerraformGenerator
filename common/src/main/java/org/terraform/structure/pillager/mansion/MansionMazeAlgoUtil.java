@@ -1,0 +1,107 @@
+package org.terraform.structure.pillager.mansion;
+
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Stack;
+import java.util.Map.Entry;
+import java.util.Random;
+
+import org.bukkit.block.BlockFace;
+import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.GenUtils;
+
+public class MansionMazeAlgoUtil {
+
+	private static MansionStandardRoomPiece getStartingPiece(Collection<JigsawStructurePiece> pieces) {
+		for(JigsawStructurePiece p:pieces)
+			return (MansionStandardRoomPiece) p;
+		return null;
+	}
+	
+	public static void setupPathways(Collection<JigsawStructurePiece> pieces, Random rand) {
+        //Total number of cells
+        int n = pieces.size();
+
+        Stack<MansionStandardRoomPiece> cellStack = new Stack<>();
+        MansionStandardRoomPiece currentCell = getStartingPiece(pieces);
+        //Total number of visited cells during maze construction
+        int nv = 1;
+
+        //Knock down walls until all cells have been visited before
+        while (nv < n) {
+            //Bukkit.getLogger().info("CurrentCell: " + currentCell.x + "," + currentCell.z);
+            Map<BlockFace, MansionStandardRoomPiece> neighbours = getValidNeighbours(pieces, currentCell);
+
+            if (neighbours.isEmpty()) {
+                //Dead end. Go backwards.
+
+                //No items in stack, break out.
+                if (cellStack.isEmpty()) break;
+                currentCell = cellStack.pop();
+                continue;
+            }
+
+            //choose a random neighbouring cell and move into it.
+            @SuppressWarnings("unchecked")
+            Entry<BlockFace, MansionStandardRoomPiece> entry = (Entry<BlockFace, MansionStandardRoomPiece>)
+                    neighbours.entrySet().toArray()[
+                            rand.nextInt(neighbours.size())
+                            ];
+
+            //currentCell.knockDownWall(entry.getValue(), entry.getKey());
+    		if(currentCell.internalWalls.get(entry.getKey())) {
+    			currentCell.internalWalls.put(entry.getKey(), false);
+    			MansionStandardRoomPiece otherPiece = currentCell.adjacentPieces.get(entry.getKey());
+    			if(otherPiece.internalWalls.containsKey(entry.getKey().getOppositeFace()))
+    				otherPiece.internalWalls.put(entry.getKey().getOppositeFace(), false);
+			
+    		}
+            
+            cellStack.push(currentCell);
+            currentCell = entry.getValue();
+            nv++;
+        }
+	}
+	
+	/**
+	 * Based on chance, randomly open a few walls
+	 * @param builder
+	 * @param rand
+	 */
+	public static void knockdownRandomWalls(Collection<JigsawStructurePiece> pieces, Random rand) {
+		for(JigsawStructurePiece piece:pieces) {
+			MansionStandardRoomPiece spiece = (MansionStandardRoomPiece) piece;
+			for(BlockFace face:spiece.getShuffledInternalWalls()) {
+				if(GenUtils.chance(rand, 1, 10)) {
+					spiece.adjacentPieces.get(face).internalWalls.put(face.getOppositeFace(), false);
+					spiece.internalWalls.put(face, false);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Returns a map of adjacent mansion pieces aren't connected to anything.
+	 * @param builder
+	 * @param piece
+	 * @return
+	 */
+    private static Map<BlockFace, MansionStandardRoomPiece> getValidNeighbours(Collection<JigsawStructurePiece> pieces, MansionStandardRoomPiece piece) {
+        Map<BlockFace, MansionStandardRoomPiece> neighbours = new EnumMap<>(BlockFace.class);
+
+        //Loop NSEW
+        for (BlockFace face : BlockUtils.directBlockFaces) {
+        	if(!piece.adjacentPieces.containsKey(face))
+        		continue;
+        	MansionStandardRoomPiece neighbour = piece.adjacentPieces.get(face);
+            if (neighbour != null && neighbour.areInternalWallsFullyBlocked()) {
+                neighbours.put(face, neighbour);
+            }
+        }
+
+        return neighbours;
+    }
+	
+}

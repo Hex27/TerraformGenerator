@@ -8,7 +8,7 @@ import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
-import org.terraform.structure.pillager.mansion.ground.MansionJigsawBuilder;
+import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;

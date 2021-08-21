@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.Wall;
-import org.terraform.structure.pillager.mansion.ground.MansionJigsawBuilder;
+import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.blockdata.StairBuilder;

@@ -6,8 +6,8 @@ import org.bukkit.block.data.Bisected.Half;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.structure.pillager.mansion.MansionStandardRoomPiece;
 import org.terraform.structure.room.CubeRoom;
-import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
@@ -16,12 +16,12 @@ import org.terraform.utils.blockdata.StairBuilder;
 import java.util.Map.Entry;
 import java.util.Random;
 
-public class MansionStandardGroundRoomPiece extends JigsawStructurePiece {
-
+public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoomPiece {
+	
     public MansionStandardGroundRoomPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
     }
-
+    
     @Override
     public void build(PopulatorDataAbstract data, Random rand) {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
@@ -30,6 +30,7 @@ public class MansionStandardGroundRoomPiece extends JigsawStructurePiece {
         //Place flooring.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+            	
                 data.setType(x, this.getRoom().getY(), z, Material.STONE_BRICKS);
                 
                 //Supporting ground
@@ -76,11 +77,8 @@ public class MansionStandardGroundRoomPiece extends JigsawStructurePiece {
             		new Wall(b.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             		
             		b.getRelative(0,targetRoom.getHeight()+1,0).setType(Material.STONE_BRICKS);
-        		}
-        		
+        		}	
         	}
-        
-        
     }
     
     /**
@@ -135,5 +133,4 @@ public class MansionStandardGroundRoomPiece extends JigsawStructurePiece {
             }
         }
     }
-
 }

@@ -6,6 +6,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
@@ -101,16 +102,6 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         .setHalf(Half.TOP)
         .setFacing(BlockUtils.getLeft(w.getDirection()))
         .apply(w.getLeft().getRelative(0,2,0));
-        
-        //Inner layer (wall third layer) decorations
-        w.getRear().getLeft().Pillar(2, new Random(), Material.STRIPPED_DARK_OAK_LOG);
-        w.getRear().getRight().Pillar(2, new Random(), Material.STRIPPED_DARK_OAK_LOG);
-        
-        new OrientableBuilder(Material.STRIPPED_DARK_OAK_LOG)
-        .setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getRight(w.getDirection())))
-        .apply(w.getRelative(0,2,0).getRear())
-        .apply(w.getRelative(0,2,0).getRear().getLeft())
-        .apply(w.getRelative(0,2,0).getRear().getRight());
         
         //Stone decorations on the outside
         w.getFront(2).getRight(3).setType(Material.COBBLESTONE);

@@ -6,6 +6,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.Wall;
+import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
@@ -17,10 +18,10 @@ import org.terraform.utils.blockdata.TrapdoorBuilder;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;
 
-public class MansionWallPiece extends JigsawStructurePiece {
+public class MansionGroundWallPiece extends JigsawStructurePiece {
 
 	private MansionJigsawBuilder builder;
-    public MansionWallPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+    public MansionGroundWallPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
         this.builder = builder;
 

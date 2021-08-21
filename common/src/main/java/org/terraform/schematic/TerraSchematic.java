@@ -155,7 +155,8 @@ public class TerraSchematic {
 //            }
             parser.applyData(refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()), bd);
         }
-
+        
+        parser.applyDelayedData();
         //Multiple-facing blocks are just gonna be painful.
         for (Vector pos : multiFace) {
             SimpleBlock b = refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ());

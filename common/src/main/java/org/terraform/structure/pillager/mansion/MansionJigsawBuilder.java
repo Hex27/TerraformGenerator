@@ -1,4 +1,4 @@
-package org.terraform.structure.pillager.mansion.ground;
+package org.terraform.structure.pillager.mansion;
 
 import org.bukkit.Axis;
 import org.bukkit.Material;
@@ -9,6 +9,11 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
+import org.terraform.structure.pillager.mansion.ground.MansionEntrancePiece;
+import org.terraform.structure.pillager.mansion.ground.MansionGrandStairwayPopulator;
+import org.terraform.structure.pillager.mansion.ground.MansionGroundRoomPiece;
+import org.terraform.structure.pillager.mansion.ground.MansionGroundWallPiece;
+import org.terraform.structure.pillager.mansion.ground.MansionStandardGroundRoomPiece;
 import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorHandler;
 import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorWallPiece;
 import org.terraform.structure.pillager.mansion.tower.MansionTowerPieceHandler;
@@ -37,8 +42,8 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         secondFloorHandler = new MansionSecondFloorHandler(this);
         this.pieceWidth = groundFloorRoomWidth;
         this.pieceRegistry = new JigsawStructurePiece[]{
-                new MansionStandardGroundRoomPiece(groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.STANDARD, BlockUtils.directBlockFaces),
-                new MansionWallPiece(this, groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.END, BlockUtils.directBlockFaces),
+                new MansionGroundRoomPiece(groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.STANDARD, BlockUtils.directBlockFaces),
+                new MansionGroundWallPiece(this, groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.END, BlockUtils.directBlockFaces),
                 new MansionEntrancePiece(this, groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.ENTRANCE, BlockUtils.directBlockFaces)
         };
         this.chanceToAddNewPiece = 90;
@@ -47,7 +52,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
 
     @Override
     public JigsawStructurePiece getFirstPiece(Random random) {
-        return new MansionStandardGroundRoomPiece(groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.STANDARD, BlockUtils.directBlockFaces);
+        return new MansionGroundRoomPiece(groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.STANDARD, BlockUtils.directBlockFaces);
     }
     
     @Override
@@ -176,6 +181,58 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         }
         
         towerPieceHandler.buildRoofs(MansionRoofHandler.getDominantBlockFace(lowerBounds, upperBounds), random);
+        
+        //Begin decorating internal rooms
+        
+        //GROUND FLOOR
+        for (JigsawStructurePiece piece : pieces.values()){
+        	((MansionStandardRoomPiece) piece).setupInternalAttributes(this.getPieces());
+        }
+        
+        //Carves out pathways with a maze algorithm 
+        //and open random walls to make the maze less strict. 
+        MansionMazeAlgoUtil.setupPathways(this.pieces.values(), random);
+        MansionMazeAlgoUtil.knockdownRandomWalls(this.pieces.values(), random);
+        MansionCompoundRoomDistributor.distributeRooms(this.pieces.values(), random, true);
+        
+        for (JigsawStructurePiece piece : pieces.values()){
+        	((MansionStandardRoomPiece) piece).buildWalls(random, this.core.getPopData());
+        }
+        
+        MansionStandardRoomPiece secondFloorStairwayCenter = null;
+        //Find the Stairway piece and (it extends to the second floor.)
+        for (JigsawStructurePiece piece : pieces.values()){
+        	if(((MansionStandardRoomPiece) piece).getRoomPopulator() instanceof MansionGrandStairwayPopulator) {
+        		secondFloorStairwayCenter = (MansionStandardRoomPiece) secondFloorHandler.secondFloorPieces.get(piece.getRoom().getSimpleLocation().getRelative(0,MansionJigsawBuilder.roomHeight+1,0));
+        		MansionCompoundRoomDistributor.canRoomSizeFitWithCenter(secondFloorStairwayCenter, secondFloorHandler.secondFloorPieces.values(), new MansionRoomSize(3,3));
+        		secondFloorStairwayCenter.setRoomPopulator(new MansionEmptyRoomPopulator(secondFloorStairwayCenter.getRoom()));
+        	}
+        }
+        
+        //SECOND FLOOR WALLING
+
+        for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
+        	((MansionStandardRoomPiece) piece).setupInternalAttributes(secondFloorHandler.secondFloorPieces);
+        }
+        
+        MansionMazeAlgoUtil.setupPathways(secondFloorHandler.secondFloorPieces.values(), random);
+        MansionMazeAlgoUtil.knockdownRandomWalls(secondFloorHandler.secondFloorPieces.values(), random);
+        MansionCompoundRoomDistributor.distributeRooms(secondFloorHandler.secondFloorPieces.values(), random, false);
+
+        //redo this to make sure the second floor walls do not build here
+        MansionCompoundRoomDistributor.canRoomSizeFitWithCenter(secondFloorStairwayCenter, secondFloorHandler.secondFloorPieces.values(), new MansionRoomSize(3,3));
+		
+        for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
+        	((MansionStandardRoomPiece) piece).buildWalls(random, this.core.getPopData());
+        }
+        
+        //Decorate both floors last.
+        for (JigsawStructurePiece piece : pieces.values()){
+        	((MansionStandardRoomPiece) piece).decorateInternalRoom(random, this.core.getPopData());
+        }
+        for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
+        	((MansionStandardRoomPiece) piece).decorateInternalRoom(random, this.core.getPopData());
+        }
     }
     
     /**
