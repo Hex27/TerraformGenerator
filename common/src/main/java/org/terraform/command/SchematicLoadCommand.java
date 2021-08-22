@@ -42,6 +42,7 @@ public class SchematicLoadCommand extends TerraCommand {
         TerraSchematic schem = (TerraSchematic) parsed.get(0);
         sender.sendMessage("Schematic Version: " + schem.getVersionValue());
         schem.setFace(BlockUtils.getDirectBlockFace(new Random()));
+        sender.sendMessage("Facing: " + schem.getFace());
         schem.apply();
     }
 }

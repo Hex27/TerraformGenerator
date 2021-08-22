@@ -205,7 +205,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	if(((MansionStandardRoomPiece) piece).getRoomPopulator() instanceof MansionGrandStairwayPopulator) {
         		secondFloorStairwayCenter = (MansionStandardRoomPiece) secondFloorHandler.secondFloorPieces.get(piece.getRoom().getSimpleLocation().getRelative(0,MansionJigsawBuilder.roomHeight+1,0));
         		MansionCompoundRoomDistributor.canRoomSizeFitWithCenter(secondFloorStairwayCenter, secondFloorHandler.secondFloorPieces.values(), new MansionRoomSize(3,3));
-        		secondFloorStairwayCenter.setRoomPopulator(new MansionEmptyRoomPopulator(secondFloorStairwayCenter.getRoom()));
+        		secondFloorStairwayCenter.setRoomPopulator(new MansionEmptyRoomPopulator(secondFloorStairwayCenter.getRoom(), secondFloorStairwayCenter.internalWalls));
         	}
         }
         

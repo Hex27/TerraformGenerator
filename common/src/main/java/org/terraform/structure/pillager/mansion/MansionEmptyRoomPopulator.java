@@ -1,7 +1,9 @@
 package org.terraform.structure.pillager.mansion;
 
+import java.util.HashMap;
 import java.util.Random;
 
+import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 
@@ -13,12 +15,14 @@ import org.terraform.structure.room.CubeRoom;
  */
 public class MansionEmptyRoomPopulator extends MansionRoomPopulator {
 	
-	public MansionEmptyRoomPopulator(CubeRoom room) {
-		super(room);
+	public MansionEmptyRoomPopulator(CubeRoom room, HashMap<BlockFace, Boolean> internalWalls) {
+		super(room, internalWalls);
 	}
 
 	@Override
 	public void decorateRoom(PopulatorDataAbstract data, Random random) {
 	}
+	
+	
 
 }

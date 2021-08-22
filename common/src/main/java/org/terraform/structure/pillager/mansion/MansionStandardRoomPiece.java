@@ -7,8 +7,6 @@ import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.pillager.mansion.secondfloor.MansionStandardSecondFloorPiece;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
@@ -119,7 +117,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 	}
 
 	public void setRoomPopulator(MansionRoomPopulator roomPopulator) {
-		TerraformGeneratorPlugin.logger.info("Setting " + roomPopulator.getClass().getSimpleName() + " at " + this.getRoom().getSimpleLocation());
+		//TerraformGeneratorPlugin.logger.info("Setting " + roomPopulator.getClass().getSimpleName() + " at " + this.getRoom().getSimpleLocation());
 		this.roomPopulator = roomPopulator;
 	}
 }

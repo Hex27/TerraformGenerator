@@ -10,7 +10,8 @@ import org.bukkit.block.BlockFace;
 import org.terraform.data.SimpleLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.pillager.mansion.ground.MansionGrandStairwayPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionIndoorsFarmPopulator;
+import org.terraform.structure.pillager.mansion.ground.MansionGroundLevelDiningRoomPopulator;
+import org.terraform.structure.pillager.mansion.ground.MansionGroundLevelKitchenPopulator;
 import org.terraform.structure.pillager.mansion.ground.MansionLibraryPopulator;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
@@ -32,21 +33,21 @@ import org.terraform.utils.GenUtils;
 public class MansionCompoundRoomDistributor {
 	
 	//A map of populators and their respective room areas
-	private static HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators = new HashMap<>() {{
+	public static final HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators = new HashMap<>() {{
 		put(new MansionRoomSize(3,3), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionGrandStairwayPopulator(null));
+			add(new MansionGrandStairwayPopulator(null,null));
 			}});
 		put(new MansionRoomSize(2,2), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionLibraryPopulator(null));
+			add(new MansionLibraryPopulator(null,null));
 			}});
 		put(new MansionRoomSize(1,2), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionIndoorsFarmPopulator(null));
+			add(new MansionGroundLevelKitchenPopulator(null,null));
 			}});
 		put(new MansionRoomSize(2,1), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionIndoorsFarmPopulator(null));
+			add(new MansionGroundLevelDiningRoomPopulator(null,null));
 			}});
 		put(new MansionRoomSize(1,1), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionHallwayPopulator(null));
+			add(new MansionHallwayPopulator(null,null));
 			}});
 	}}; 
 	
@@ -62,16 +63,16 @@ public class MansionCompoundRoomDistributor {
 		potentialRoomSizes.add(new MansionRoomSize(2,2)); //At least one 2x2 room
 		
 		while(GenUtils.chance(random, pieces.size()-occupiedCells/4, pieces.size())) {
-			if(occupiedCells/pieces.size() < 0.7) {
-				occupiedCells += 4;
-				potentialRoomSizes.add(new MansionRoomSize(2,2));
-			}else {
+//			if(occupiedCells/pieces.size() < 0.7) {
+//				occupiedCells += 4;
+//				potentialRoomSizes.add(new MansionRoomSize(2,2));
+//			}else {
 				occupiedCells += 2;
 				if(random.nextBoolean())
 					potentialRoomSizes.add(new MansionRoomSize(2,1));
 				else
 					potentialRoomSizes.add(new MansionRoomSize(1,2));
-			}
+//			}
 		}
 		
 		//Iterate this way because index 0 is the 3x3 room which we want.
@@ -82,7 +83,7 @@ public class MansionCompoundRoomDistributor {
 				if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize)) {
 					//Shuffle and distribute populator
 					Collections.shuffle(groundFloorPopulators.get(roomSize), random);
-					MansionRoomPopulator populator = groundFloorPopulators.get(roomSize).get(0).getInstance(piece.getRoom());
+					MansionRoomPopulator populator = groundFloorPopulators.get(roomSize).get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
 					TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
 					((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
 					
@@ -96,7 +97,7 @@ public class MansionCompoundRoomDistributor {
 			MansionRoomSize roomSize = new MansionRoomSize(1,1);
 			if(((MansionStandardRoomPiece) piece).getRoomPopulator() == null) {
 				Collections.shuffle(groundFloorPopulators.get(roomSize), random);
-				MansionRoomPopulator populator = groundFloorPopulators.get(roomSize).get(0).getInstance(piece.getRoom());
+				MansionRoomPopulator populator = groundFloorPopulators.get(roomSize).get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
 				TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
 				((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
 			}
@@ -156,7 +157,7 @@ public class MansionCompoundRoomDistributor {
 		for(JigsawStructurePiece p:pieces) {
 			if(relevantLocations.contains(p.getRoom().getSimpleLocation())) {
 				MansionStandardRoomPiece spiece = ((MansionStandardRoomPiece) p);
-				spiece.setRoomPopulator(new MansionEmptyRoomPopulator(p.getRoom()));
+				spiece.setRoomPopulator(new MansionEmptyRoomPopulator(p.getRoom(), spiece.internalWalls));
 				for(BlockFace face:spiece.adjacentPieces.keySet()) {
 					if(relevantLocations.contains(spiece.adjacentPieces.get(face).getRoom().getSimpleLocation()))
 					{
