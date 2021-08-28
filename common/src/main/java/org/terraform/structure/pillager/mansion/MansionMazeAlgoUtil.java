@@ -51,11 +51,11 @@ public class MansionMazeAlgoUtil {
                             ];
 
             //currentCell.knockDownWall(entry.getValue(), entry.getKey());
-    		if(currentCell.internalWalls.get(entry.getKey())) {
-    			currentCell.internalWalls.put(entry.getKey(), false);
+    		if(currentCell.internalWalls.get(entry.getKey()) == MansionInternalWallState.SOLID) {
+    			currentCell.internalWalls.put(entry.getKey(), MansionInternalWallState.ROOM_ENTRANCE);
     			MansionStandardRoomPiece otherPiece = currentCell.adjacentPieces.get(entry.getKey());
     			if(otherPiece.internalWalls.containsKey(entry.getKey().getOppositeFace()))
-    				otherPiece.internalWalls.put(entry.getKey().getOppositeFace(), false);
+    				otherPiece.internalWalls.put(entry.getKey().getOppositeFace(), MansionInternalWallState.ROOM_ENTRANCE);
 			
     		}
             
@@ -74,9 +74,13 @@ public class MansionMazeAlgoUtil {
 		for(JigsawStructurePiece piece:pieces) {
 			MansionStandardRoomPiece spiece = (MansionStandardRoomPiece) piece;
 			for(BlockFace face:spiece.getShuffledInternalWalls()) {
+				if(spiece.internalWalls.get(face) == MansionInternalWallState.WINDOW
+						|| spiece.internalWalls.get(face) == MansionInternalWallState.EXIT)
+					continue;
+				
 				if(GenUtils.chance(rand, 1, 10)) {
-					spiece.adjacentPieces.get(face).internalWalls.put(face.getOppositeFace(), false);
-					spiece.internalWalls.put(face, false);
+					spiece.adjacentPieces.get(face).internalWalls.put(face.getOppositeFace(), MansionInternalWallState.ROOM_ENTRANCE);
+					spiece.internalWalls.put(face, MansionInternalWallState.ROOM_ENTRANCE);
 				}
 			}
 		}

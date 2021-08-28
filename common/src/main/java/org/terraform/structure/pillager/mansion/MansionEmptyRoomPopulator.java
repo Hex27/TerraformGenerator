@@ -15,7 +15,7 @@ import org.terraform.structure.room.CubeRoom;
  */
 public class MansionEmptyRoomPopulator extends MansionRoomPopulator {
 	
-	public MansionEmptyRoomPopulator(CubeRoom room, HashMap<BlockFace, Boolean> internalWalls) {
+	public MansionEmptyRoomPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		super(room, internalWalls);
 	}
 

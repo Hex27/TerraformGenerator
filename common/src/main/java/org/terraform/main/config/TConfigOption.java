@@ -151,7 +151,7 @@ public enum TConfigOption {
     STRUCTURES_DROWNEDDUNGEON_CHANCE("structures.drowned-dungeon.chance-out-of-1000", 200),
     STRUCTURES_SHIPWRECK_SPAWNRATIO("structures.shipwreck.spawnratio", 0.6),
     STRUCTURES_SHIPWRECK_ENABLED("structures.shipwreck.enabled", true),
-    STRUCTURES_SHIPWRECK_COUNT_PER_MEGACHUNK("structures.shipwreck.count-per-megachunk", 3),
+    STRUCTURES_SHIPWRECK_COUNT_PER_MEGACHUNK("structures.shipwreck.count-per-megachunk", 2),
     STRUCTURES_MINESHAFT_ENABLED("structures.mineshaft.enabled", true),
     STRUCTURES_MINESHAFT_SPAWNRATIO("structures.mineshaft.spawnratio", 0.8),
     STRUCTURES_MINESHAFT_MIN_Y("structures.mineshaft.min-y", 15),

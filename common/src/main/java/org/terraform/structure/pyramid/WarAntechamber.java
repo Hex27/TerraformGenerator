@@ -46,7 +46,7 @@ public class WarAntechamber extends Antechamber {
 
                 if (w.getRear().getType().isSolid() && !w.getType().isSolid()
                         && GenUtils.chance(rand, 3, 10)) {
-                    generateBanner(w.get(), w.getDirection(), true);
+                    BannerUtils.generateBanner(rand, w.get(), w.getDirection(), true);
                 }
 
                 w = w.getLeft();
@@ -81,38 +81,7 @@ public class WarAntechamber extends Antechamber {
 
     }
 
-    private Banner generateBanner(SimpleBlock base, BlockFace facing, boolean wallBanner) {
-
-        Material type = null;
-        if (wallBanner)
-            type = BannerUtils.randomWallBannerMaterial(rand);
-        else
-            BannerUtils.randomBannerMaterial(rand);
-        base.setType(type);
-        if (!wallBanner) {
-            Rotatable bd = ((Rotatable) base.getBlockData());
-            bd.setRotation(facing);
-            base.setBlockData(bd);
-        } else {
-            Directional bd = ((Directional) base.getBlockData());
-            bd.setFacing(facing);
-            base.setBlockData(bd);
-        }
-
-        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
-        ArrayList<Pattern> patterns = new ArrayList<Pattern>();
-
-        for (int i = 1 + rand.nextInt(3); i < 4 + rand.nextInt(3); i++) {
-            patterns.add(new Pattern(
-                    DyeColor.values()[rand.nextInt(DyeColor.values().length)],
-                    PatternType.values()[rand.nextInt(PatternType.values().length)]
-            ));
-        }
-        banner.setPatterns(patterns);
-        banner.update();
-        return banner;
-    }
-
+    
     @Override
     public boolean canPopulate(CubeRoom room) {
         return room.getWidthX() >= 6 && room.getWidthZ() >= 6;

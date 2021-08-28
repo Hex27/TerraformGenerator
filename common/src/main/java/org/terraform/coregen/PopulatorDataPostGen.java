@@ -1,6 +1,7 @@
 package org.terraform.coregen;
 
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -8,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -106,10 +108,12 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 
     @Override
     public void addEntity(int x, int y, int z, EntityType type) {
-        //Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),rawX,rawY,rawZ), type);
-        //e.setPersistent(true);
-        TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x, y, z).getChunk())
-                .addEntity(x, y, z, type);
+        Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),x,y,z), type);
+        e.setPersistent(true);
+        
+        //Why tf did you use ICA for this
+//        TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x, y, z).getChunk())
+//                .addEntity(x, y, z, type);
     }
 
     @Override

@@ -2,8 +2,14 @@ package org.terraform.utils;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.Banner;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
+import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.data.SimpleBlock;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,6 +45,39 @@ public class BannerUtils {
             Material.PINK_WALL_BANNER,
             Material.WHITE_WALL_BANNER,
     };
+    
+    public static Banner generateBanner(Random rand, SimpleBlock base, BlockFace facing, boolean wallBanner) {
+
+        Material type = null;
+        if (wallBanner)
+            type = BannerUtils.randomWallBannerMaterial(rand);
+        else
+            BannerUtils.randomBannerMaterial(rand);
+        base.setType(type);
+        if (!wallBanner) {
+            Rotatable bd = ((Rotatable) base.getBlockData());
+            bd.setRotation(facing);
+            base.setBlockData(bd);
+        } else {
+            Directional bd = ((Directional) base.getBlockData());
+            bd.setFacing(facing);
+            base.setBlockData(bd);
+        }
+
+        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
+        ArrayList<Pattern> patterns = new ArrayList<Pattern>();
+
+        for (int i = 1 + rand.nextInt(3); i < 4 + rand.nextInt(3); i++) {
+            patterns.add(new Pattern(
+                    DyeColor.values()[rand.nextInt(DyeColor.values().length)],
+                    PatternType.values()[rand.nextInt(PatternType.values().length)]
+            ));
+        }
+        banner.setPatterns(patterns);
+        banner.update();
+        return banner;
+    }
+
 
     public static Material randomBannerMaterial(Random rand) {
         return BANNERS[rand.nextInt(BANNERS.length)];

@@ -1,6 +1,5 @@
 package org.terraform.v1_17_R1;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 
@@ -44,7 +43,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_17_R1.generator.CraftChunkData;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
 import org.terraform.biome.custombiomes.CustomBiomeType;
@@ -64,16 +62,46 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class NMSChunkGenerator extends ChunkGenerator {
+	private static Class<?> chunkDataClass = null;
+	private static Method getTiles;
+	private static Method getTypeId;
 	private final ChunkGenerator delegate;
     private final WorldServer world;
     private final TerraformPopulator pop;
     private final TerraformWorld tw;
+    
     public NMSChunkGenerator(String worldname, int seed,
     						ChunkGenerator delegate,
                              WorldChunkManager worldchunkmanager,
                              WorldChunkManager worldchunkmanager1,
                              StructureSettings structuresettings, long i) {
         super(new CustomBiomeSource(worldchunkmanager), new CustomBiomeSource(worldchunkmanager1), structuresettings, i);
+        
+        //Time bomb, explodes in about 1-2 years. Written on 28/8/2021
+        if(chunkDataClass == null) {
+        	try {
+            	chunkDataClass = Class.forName("org.bukkit.craftbukkit.v1_17_R1.generator.OldCraftChunkData");
+            	TerraformGeneratorPlugin.logger.stdout("Detected new worldgen API. Adjusting accordingly.");
+            }
+            catch(ClassNotFoundException e)
+            {
+            	try {
+    				chunkDataClass = Class.forName("org.bukkit.craftbukkit.v1_17_R1.generator.CraftChunkData");
+    	        	TerraformGeneratorPlugin.logger.stdout("Detected old worldgen API. Adjusting accordingly.");
+    			} catch (ClassNotFoundException e1) {
+    				//If this fails again, just throw the exception and crash
+    				e1.printStackTrace();
+    			}
+            }
+            try {
+    			getTiles = chunkDataClass.getDeclaredMethod("getTiles");
+              	getTiles.setAccessible(true);
+              	getTypeId = chunkDataClass.getDeclaredMethod("getTypeId", int.class, int.class, int.class);
+    		} catch (NoSuchMethodException | SecurityException e1) {
+    			e1.printStackTrace();
+    		}
+        }
+        
         tw = TerraformWorld.get(worldname, seed);
         this.delegate = delegate;
         pop = new TerraformPopulator(tw);
@@ -205,13 +233,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
                }
             }
 
-            Preconditions.checkArgument(data instanceof CraftChunkData, "Plugins must use createChunkData(World) rather than implementing ChunkData: %s", data);
-            CraftChunkData craftData = (CraftChunkData)data;
+            //Preconditions.checkArgument(data instanceof CraftChunkData, "Plugins must use createChunkData(World) rather than implementing ChunkData: %s", data);
+            //Object craftData = data;
             
             //ChunkSection[] sections = craftData.getRawChunkData();
-            Method getRawChunkData = CraftChunkData.class.getDeclaredMethod("getRawChunkData");
+            Method getRawChunkData = chunkDataClass.getDeclaredMethod("getRawChunkData");
             getRawChunkData.setAccessible(true);
-            ChunkSection[] sections = (ChunkSection[]) getRawChunkData.invoke(craftData);
+            ChunkSection[] sections = (ChunkSection[]) getRawChunkData.invoke(data);
             
             
             ChunkSection[] csect = ichunkaccess.getSections();
@@ -226,10 +254,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
             //Sets this chunk's biomegrid to that biome.
             ((ProtoChunk)ichunkaccess).a(biomegrid.biome);
-            Method getTiles;
-            getTiles = CraftChunkData.class.getDeclaredMethod("getTiles");
-          	getTiles.setAccessible(true);
-          	Set<BlockPosition> tiles = (Set<BlockPosition>) getTiles.invoke(craftData);
+          	Set<BlockPosition> tiles = (Set<BlockPosition>) getTiles.invoke(data);
             if (tiles != null) {
                Iterator<BlockPosition> var20 = tiles.iterator();
 
@@ -238,7 +263,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                   int tx = pos.getX();
                   int ty = pos.getY();
                   int tz = pos.getZ();
-                  IBlockData block = craftData.getTypeId(tx, ty, tz);
+                  IBlockData block = (IBlockData) getTypeId.invoke(data, tx, ty, tz);
                   if (block.isTileEntity()) {
                      TileEntity tile = ((ITileEntity)block).createTile(new BlockPosition((x << 4) + tx, ty, (z << 4) + tz), block);
                      ichunkaccess.setTileEntity(tile);

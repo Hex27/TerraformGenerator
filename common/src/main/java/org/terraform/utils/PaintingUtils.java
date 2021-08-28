@@ -14,13 +14,19 @@ public class PaintingUtils {
 
 	public static void placePainting(SimpleBlock target, BlockFace facing, Art art) {
 		if(target.getPopData() instanceof PopulatorDataPostGen) {
-			PopulatorDataPostGen postGen = ((PopulatorDataPostGen) target.getPopData());
-			Painting painting = (Painting) postGen.getWorld().spawnEntity(new Location(postGen.getWorld(),
-					target.getX(), target.getY(), target.getZ()), EntityType.PAINTING);
-			painting.setFacingDirection(facing);
-			painting.setPersistent(true);
-			painting.setArt(art);
-			
+			try {
+				PopulatorDataPostGen postGen = ((PopulatorDataPostGen) target.getPopData());
+				Painting painting = (Painting) postGen.getWorld().spawnEntity(new Location(postGen.getWorld(),
+						target.getX(), target.getY(), target.getZ()), EntityType.PAINTING);
+				painting.setFacingDirection(facing);
+				painting.setPersistent(true);
+				painting.setArt(art);
+			}
+			catch(IllegalArgumentException e) 
+			{
+				//e.printStackTrace();
+				//Area is occupied by another entity. Fail silently.
+			}
 		}
 	}
 	

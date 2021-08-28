@@ -6,13 +6,14 @@ import java.util.Random;
 
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 
 public abstract class MansionRoomPopulator {
 
-	private HashMap<BlockFace, Boolean> internalWalls;
+	private HashMap<BlockFace, MansionInternalWallState> internalWalls;
 	private CubeRoom room;
-	public MansionRoomPopulator(CubeRoom room, HashMap<BlockFace, Boolean> internalWalls) {
+	public MansionRoomPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		super();
 		this.internalWalls = internalWalls;
 		this.room = room;
@@ -24,7 +25,7 @@ public abstract class MansionRoomPopulator {
 		return room;
 	}
 	
-	public MansionRoomPopulator getInstance(CubeRoom room, HashMap<BlockFace, Boolean> internalWalls) {
+	public MansionRoomPopulator getInstance(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		MansionRoomPopulator pop;
 		try {
 			pop = (MansionRoomPopulator) this.getClass().getConstructors()[0].newInstance(room, internalWalls);
@@ -34,8 +35,13 @@ public abstract class MansionRoomPopulator {
 			return null;
 		}
 	}
+	
+	public void decorateWall(Random rand, Wall w) {};
+	public void decorateWindow(Random rand, Wall w) {};
+	public void decorateEntrance(Random rand, Wall w) {};
+	public void decorateExit(Random rand, Wall w) {};
 
-	public HashMap<BlockFace, Boolean> getInternalWalls() {
+	public HashMap<BlockFace, MansionInternalWallState> getInternalWalls() {
 		return internalWalls;
 	}
 }

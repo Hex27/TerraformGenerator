@@ -26,6 +26,12 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
             schematic = StringUtils.replace(schematic, "east=tall", "east=true");
             schematic = StringUtils.replace(schematic, "west=tall", "west=true");
         }
+        if (schematic.contains("lantern[") ) {
+            schematic = StringUtils.replace(schematic, "minecraft:lantern[hanging=false,waterlogged=true]", "minecraft:lantern[hanging=false]");
+            schematic = StringUtils.replace(schematic, "minecraft:lantern[hanging=false,waterlogged=false]", "minecraft:lantern[hanging=false]");
+            schematic = StringUtils.replace(schematic, "minecraft:lantern[hanging=true,waterlogged=true]", "minecraft:lantern[hanging=true]");
+            schematic = StringUtils.replace(schematic, "minecraft:lantern[hanging=true,waterlogged=false]", "minecraft:lantern[hanging=true]");
+        }
 
         schematic = StringUtils.replace(schematic, "minecraft:chain[axis=y", "iron_bars[north=false,south=false,east=false,west=false");
         

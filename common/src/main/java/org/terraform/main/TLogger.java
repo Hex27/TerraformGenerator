@@ -67,7 +67,7 @@ public class TLogger {
             }
     	}
     }
-    
+	
     public void stdout(String message) {
     	Bukkit.getConsoleSender().sendMessage("[TerraformGenerator] "
     		+ ChatColor.translateAlternateColorCodes('&', message));

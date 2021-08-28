@@ -5,6 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
@@ -23,35 +24,47 @@ import java.util.Random;
 public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 
 	public HashMap<BlockFace, MansionStandardRoomPiece> adjacentPieces = new HashMap<>();
-	public HashMap<BlockFace, Boolean> internalWalls = new HashMap<>();
+	public HashMap<BlockFace, MansionInternalWallState> internalWalls = new HashMap<>();
 	
 	//Mansion standard pieces decorate themselves with a special populator.
 	//If it is null, it will not do anything.
 	private MansionRoomPopulator roomPopulator = null;
+	private boolean isPopulating = false;
 	
     public MansionStandardRoomPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
     }
     
-    public void setupInternalAttributes(HashMap<SimpleLocation, JigsawStructurePiece> pieces) {
+    public void setupInternalAttributes(PopulatorDataAbstract data, HashMap<SimpleLocation, JigsawStructurePiece> pieces) {
     	for(BlockFace face:BlockUtils.directBlockFaces) {
     		SimpleLocation otherLoc = this.getRoom().getSimpleLocation().getRelative(face, MansionJigsawBuilder.groundFloorRoomWidth);
-    		if(!pieces.containsKey(otherLoc))
+    		if(!pieces.containsKey(otherLoc)) {
+    			//This is likely to be a window. However, do checks to ensure that this 
+    			//isn't the main entrance or a balcony entrance.
+    			SimpleBlock center = this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0);
+    			if(center.getRelative(face,5).getType().isSolid())
+    				this.internalWalls.put(face, MansionInternalWallState.WINDOW);
+    			else
+    				this.internalWalls.put(face, MansionInternalWallState.EXIT);
     			continue;
+    		}
     		this.adjacentPieces.put(face, (MansionStandardRoomPiece) pieces.get(otherLoc));
-			this.internalWalls.put(face, true);
+			this.internalWalls.put(face, MansionInternalWallState.SOLID);
     	}
     }
     
     public void buildWalls(Random random, PopulatorDataAbstract data) {
     	for(BlockFace face:this.internalWalls.keySet()) {
+    		if(internalWalls.get(face) == MansionInternalWallState.WINDOW
+    				|| internalWalls.get(face) == MansionInternalWallState.EXIT)
+    			continue;
     		Entry<Wall, Integer> entry = this.getRoom().getWall(data, face, 0);
     		Wall w = entry.getKey();
     		Wall center = null;
     		for(int i = 0; i < entry.getValue(); i++) {
     			w.Pillar(this.getRoom().getHeight(), Material.DARK_OAK_PLANKS);
     			
-    			if(i == entry.getValue()/2 && !this.internalWalls.get(face)) {
+    			if(i == entry.getValue()/2 && this.internalWalls.get(face) == MansionInternalWallState.ROOM_ENTRANCE) {
     				center = w.clone();
     			}
     			
@@ -83,14 +96,14 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     }
     
     public void decorateInternalRoom(Random random, PopulatorDataAbstract data) {
-    	if(roomPopulator != null) {
+    	if(roomPopulator != null && this.isPopulating) {
     		roomPopulator.decorateRoom(data, random);
     	}
     }
 
     public boolean areInternalWallsFullyBlocked() {
     	for(BlockFace face:this.internalWalls.keySet()) {
-    		if(!this.internalWalls.get(face))
+    		if(this.internalWalls.get(face) == MansionInternalWallState.ROOM_ENTRANCE)
     			return false;
     	}
     	return true;
@@ -117,7 +130,51 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 	}
 
 	public void setRoomPopulator(MansionRoomPopulator roomPopulator) {
+		setRoomPopulator(roomPopulator, true);
+	}
+	
+	public void setRoomPopulator(MansionRoomPopulator roomPopulator, boolean isPopulating) {
 		//TerraformGeneratorPlugin.logger.info("Setting " + roomPopulator.getClass().getSimpleName() + " at " + this.getRoom().getSimpleLocation());
 		this.roomPopulator = roomPopulator;
+		this.isPopulating = isPopulating;
+	}
+	
+	/**
+	 * For special wall decorations depending on the room populator.
+	 * @param random
+	 * @param data
+	 */
+    public void decorateWalls(Random random, PopulatorDataAbstract data) {
+    	//UNLIKE ROOM POPULATOR, this will run even if isPopuating is false.
+    	//This is because the other cells must decorate their walls.
+    	if(this.roomPopulator == null) return; 
+    	
+    	for(BlockFace face:BlockUtils.directBlockFaces) {
+    		Wall target;
+    		if(!this.internalWalls.containsKey(face))
+    			continue;
+    		switch(this.internalWalls.get(face)) {
+			case EXIT:
+				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0), face.getOppositeFace());
+    			this.roomPopulator.decorateExit(random, target.getRear(4));
+				break;
+			case ROOM_ENTRANCE:
+				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0), face.getOppositeFace());
+				this.roomPopulator.decorateEntrance(random, target.getRear(3));
+				break;
+			case SOLID:
+				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0), face.getOppositeFace());
+				this.roomPopulator.decorateWall(random, target.getRear(3));
+				break;
+			case WINDOW:
+				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0), face.getOppositeFace());
+    			this.roomPopulator.decorateWindow(random, target.getRear(4));
+				break;
+    		}
+    	}
+    }
+
+	public boolean isPopulating() {
+		return isPopulating;
 	}
 }

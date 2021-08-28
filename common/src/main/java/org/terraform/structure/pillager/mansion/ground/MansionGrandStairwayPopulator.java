@@ -8,13 +8,14 @@ import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.TerraSchematic;
+import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 
 public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 
-	public MansionGrandStairwayPopulator(CubeRoom room, HashMap<BlockFace, Boolean> internalWalls) {
+	public MansionGrandStairwayPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		super(room, internalWalls);
 	}
 

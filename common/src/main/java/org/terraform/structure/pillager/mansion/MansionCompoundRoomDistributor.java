@@ -13,6 +13,7 @@ import org.terraform.structure.pillager.mansion.ground.MansionGrandStairwayPopul
 import org.terraform.structure.pillager.mansion.ground.MansionGroundLevelDiningRoomPopulator;
 import org.terraform.structure.pillager.mansion.ground.MansionGroundLevelKitchenPopulator;
 import org.terraform.structure.pillager.mansion.ground.MansionLibraryPopulator;
+import org.terraform.structure.pillager.mansion.ground.MansionWarroomPopulator;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -39,6 +40,7 @@ public class MansionCompoundRoomDistributor {
 			}});
 		put(new MansionRoomSize(2,2), new ArrayList<MansionRoomPopulator>() {{
 			add(new MansionLibraryPopulator(null,null));
+			add(new MansionWarroomPopulator(null,null));
 			}});
 		put(new MansionRoomSize(1,2), new ArrayList<MansionRoomPopulator>() {{
 			add(new MansionGroundLevelKitchenPopulator(null,null));
@@ -62,17 +64,18 @@ public class MansionCompoundRoomDistributor {
 			potentialRoomSizes.add(new MansionRoomSize(3,3)); //Stairway Room
 		potentialRoomSizes.add(new MansionRoomSize(2,2)); //At least one 2x2 room
 		
-		while(GenUtils.chance(random, pieces.size()-occupiedCells/4, pieces.size())) {
-//			if(occupiedCells/pieces.size() < 0.7) {
-//				occupiedCells += 4;
-//				potentialRoomSizes.add(new MansionRoomSize(2,2));
-//			}else {
+		while(occupiedCells/pieces.size() < 0.7 || 
+				GenUtils.chance(random, pieces.size()-occupiedCells/4, pieces.size())) {
+			if(occupiedCells/pieces.size() < 0.5 && GenUtils.chance(random, 1, 3)) {
+				occupiedCells += 4;
+				potentialRoomSizes.add(new MansionRoomSize(2,2));
+			} else {
 				occupiedCells += 2;
 				if(random.nextBoolean())
 					potentialRoomSizes.add(new MansionRoomSize(2,1));
 				else
 					potentialRoomSizes.add(new MansionRoomSize(1,2));
-//			}
+			}
 		}
 		
 		//Iterate this way because index 0 is the 3x3 room which we want.
@@ -80,10 +83,10 @@ public class MansionCompoundRoomDistributor {
 			MansionRoomSize roomSize = potentialRoomSizes.get(i);
 			Collections.shuffle(shuffledList);
 			for(JigsawStructurePiece piece:shuffledList) {
-				if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize)) {
+				Collections.shuffle(groundFloorPopulators.get(roomSize), random);
+				MansionRoomPopulator populator = groundFloorPopulators.get(roomSize).get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
+				if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize, populator)) {
 					//Shuffle and distribute populator
-					Collections.shuffle(groundFloorPopulators.get(roomSize), random);
-					MansionRoomPopulator populator = groundFloorPopulators.get(roomSize).get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
 					TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
 					((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
 					
@@ -113,7 +116,7 @@ public class MansionCompoundRoomDistributor {
 	 * @param roomSize
 	 * @return
 	 */
-	public static boolean canRoomSizeFitWithCenter(MansionStandardRoomPiece piece, Collection<JigsawStructurePiece> pieces, MansionRoomSize roomSize) {
+	public static boolean canRoomSizeFitWithCenter(MansionStandardRoomPiece piece, Collection<JigsawStructurePiece> pieces, MansionRoomSize roomSize, MansionRoomPopulator defaultPopulator) {
 		
 		SimpleLocation center = piece.getRoom().getSimpleLocation();
 		
@@ -157,7 +160,7 @@ public class MansionCompoundRoomDistributor {
 		for(JigsawStructurePiece p:pieces) {
 			if(relevantLocations.contains(p.getRoom().getSimpleLocation())) {
 				MansionStandardRoomPiece spiece = ((MansionStandardRoomPiece) p);
-				spiece.setRoomPopulator(new MansionEmptyRoomPopulator(p.getRoom(), spiece.internalWalls));
+				spiece.setRoomPopulator(defaultPopulator.getInstance(p.getRoom(), spiece.internalWalls),false);
 				for(BlockFace face:spiece.adjacentPieces.keySet()) {
 					if(relevantLocations.contains(spiece.adjacentPieces.get(face).getRoom().getSimpleLocation()))
 					{

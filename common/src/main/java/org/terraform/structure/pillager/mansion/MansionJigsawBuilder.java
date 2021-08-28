@@ -186,7 +186,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         
         //GROUND FLOOR
         for (JigsawStructurePiece piece : pieces.values()){
-        	((MansionStandardRoomPiece) piece).setupInternalAttributes(this.getPieces());
+        	((MansionStandardRoomPiece) piece).setupInternalAttributes(core.getPopData(), this.getPieces());
         }
         
         //Carves out pathways with a maze algorithm 
@@ -204,7 +204,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         for (JigsawStructurePiece piece : pieces.values()){
         	if(((MansionStandardRoomPiece) piece).getRoomPopulator() instanceof MansionGrandStairwayPopulator) {
         		secondFloorStairwayCenter = (MansionStandardRoomPiece) secondFloorHandler.secondFloorPieces.get(piece.getRoom().getSimpleLocation().getRelative(0,MansionJigsawBuilder.roomHeight+1,0));
-        		MansionCompoundRoomDistributor.canRoomSizeFitWithCenter(secondFloorStairwayCenter, secondFloorHandler.secondFloorPieces.values(), new MansionRoomSize(3,3));
+        		MansionCompoundRoomDistributor.canRoomSizeFitWithCenter(secondFloorStairwayCenter, secondFloorHandler.secondFloorPieces.values(), new MansionRoomSize(3,3), new MansionEmptyRoomPopulator(secondFloorStairwayCenter.getRoom(), secondFloorStairwayCenter.internalWalls));
         		secondFloorStairwayCenter.setRoomPopulator(new MansionEmptyRoomPopulator(secondFloorStairwayCenter.getRoom(), secondFloorStairwayCenter.internalWalls));
         	}
         }
@@ -212,26 +212,25 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         //SECOND FLOOR WALLING
 
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
-        	((MansionStandardRoomPiece) piece).setupInternalAttributes(secondFloorHandler.secondFloorPieces);
+        	((MansionStandardRoomPiece) piece).setupInternalAttributes(core.getPopData(),secondFloorHandler.secondFloorPieces);
         }
         
         MansionMazeAlgoUtil.setupPathways(secondFloorHandler.secondFloorPieces.values(), random);
         MansionMazeAlgoUtil.knockdownRandomWalls(secondFloorHandler.secondFloorPieces.values(), random);
         MansionCompoundRoomDistributor.distributeRooms(secondFloorHandler.secondFloorPieces.values(), random, false);
 
-        //redo this to make sure the second floor walls do not build here
-        MansionCompoundRoomDistributor.canRoomSizeFitWithCenter(secondFloorStairwayCenter, secondFloorHandler.secondFloorPieces.values(), new MansionRoomSize(3,3));
-		
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
         	((MansionStandardRoomPiece) piece).buildWalls(random, this.core.getPopData());
         }
         
-        //Decorate both floors last.
+        //Decorate both floors after all allocations are done.
         for (JigsawStructurePiece piece : pieces.values()){
         	((MansionStandardRoomPiece) piece).decorateInternalRoom(random, this.core.getPopData());
+        	((MansionStandardRoomPiece) piece).decorateWalls(random, core.getPopData());
         }
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
         	((MansionStandardRoomPiece) piece).decorateInternalRoom(random, this.core.getPopData());
+        	((MansionStandardRoomPiece) piece).decorateWalls(random, core.getPopData());
         }
     }
     
