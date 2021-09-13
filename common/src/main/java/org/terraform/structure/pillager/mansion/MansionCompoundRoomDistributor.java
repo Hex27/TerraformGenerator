@@ -9,11 +9,6 @@ import java.util.Random;
 import org.bukkit.block.BlockFace;
 import org.terraform.data.SimpleLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.pillager.mansion.ground.MansionGrandStairwayPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionGroundLevelDiningRoomPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionGroundLevelKitchenPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionLibraryPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionWarroomPopulator;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -34,34 +29,38 @@ import org.terraform.utils.GenUtils;
 public class MansionCompoundRoomDistributor {
 	
 	//A map of populators and their respective room areas
-	public static final HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators = new HashMap<>() {{
-		put(new MansionRoomSize(3,3), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionGrandStairwayPopulator(null,null));
-			}});
-		put(new MansionRoomSize(2,2), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionLibraryPopulator(null,null));
-			add(new MansionWarroomPopulator(null,null));
-			}});
-		put(new MansionRoomSize(1,2), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionGroundLevelKitchenPopulator(null,null));
-			}});
-		put(new MansionRoomSize(2,1), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionGroundLevelDiningRoomPopulator(null,null));
-			}});
-		put(new MansionRoomSize(1,1), new ArrayList<MansionRoomPopulator>() {{
-			add(new MansionHallwayPopulator(null,null));
-			}});
-	}}; 
-	
-	public static void distributeRooms(Collection<JigsawStructurePiece> pieces, Random random, boolean includeStairway) {
+	public static HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators = 
+			new HashMap<>() {{
+				put(new MansionRoomSize(3,3), MansionRoomPopulatorRegistry.GROUND_3_3.getPopulators());
+				put(new MansionRoomSize(2,2), MansionRoomPopulatorRegistry.GROUND_2_2.getPopulators());
+				put(new MansionRoomSize(1,2), MansionRoomPopulatorRegistry.GROUND_1_2.getPopulators());
+				put(new MansionRoomSize(2,1), MansionRoomPopulatorRegistry.GROUND_2_1.getPopulators());
+				put(new MansionRoomSize(1,1), MansionRoomPopulatorRegistry.GROUND_1_1.getPopulators());
+			}};
+
+	public static HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> secondFloorPopulators = 
+			new HashMap<>() {{
+				put(new MansionRoomSize(3,3), MansionRoomPopulatorRegistry.SECOND_3_3.getPopulators());
+				put(new MansionRoomSize(2,2), MansionRoomPopulatorRegistry.SECOND_2_2.getPopulators());
+				put(new MansionRoomSize(1,2), MansionRoomPopulatorRegistry.SECOND_1_2.getPopulators());
+				put(new MansionRoomSize(2,1), MansionRoomPopulatorRegistry.SECOND_2_1.getPopulators());
+				put(new MansionRoomSize(1,1), MansionRoomPopulatorRegistry.SECOND_1_1.getPopulators());
+			}};
+			
+	public static void distributeRooms(Collection<JigsawStructurePiece> pieces, Random random, boolean isGround) {
 		
+		HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> activeRoomPool;
 		ArrayList<JigsawStructurePiece> shuffledList = new ArrayList<>();
 		shuffledList.addAll(pieces);
 		
 		ArrayList<MansionRoomSize> potentialRoomSizes = new ArrayList<>();
 		int occupiedCells = 13;
-		if(includeStairway)
+		if(isGround) {
+			activeRoomPool = groundFloorPopulators;
 			potentialRoomSizes.add(new MansionRoomSize(3,3)); //Stairway Room
+		}else {
+			activeRoomPool = secondFloorPopulators;
+		}
 		potentialRoomSizes.add(new MansionRoomSize(2,2)); //At least one 2x2 room
 		
 		while(occupiedCells/pieces.size() < 0.7 || 
@@ -83,8 +82,14 @@ public class MansionCompoundRoomDistributor {
 			MansionRoomSize roomSize = potentialRoomSizes.get(i);
 			Collections.shuffle(shuffledList);
 			for(JigsawStructurePiece piece:shuffledList) {
-				Collections.shuffle(groundFloorPopulators.get(roomSize), random);
-				MansionRoomPopulator populator = groundFloorPopulators.get(roomSize).get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
+				//Force every room to generate at least once before generating duplicate types
+				Collections.shuffle(activeRoomPool.get(roomSize), random);
+				ArrayList<MansionRoomPopulator> populators = activeRoomPool.get(roomSize);
+				if(populators.size() <= 0){
+					activeRoomPool.put(roomSize, MansionRoomPopulatorRegistry.getByRoomSize(roomSize, isGround).getPopulators());
+					populators = activeRoomPool.get(roomSize);
+				}
+				MansionRoomPopulator populator = populators.remove(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
 				if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize, populator)) {
 					//Shuffle and distribute populator
 					TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
@@ -99,8 +104,8 @@ public class MansionCompoundRoomDistributor {
 		for(JigsawStructurePiece piece:pieces) {
 			MansionRoomSize roomSize = new MansionRoomSize(1,1);
 			if(((MansionStandardRoomPiece) piece).getRoomPopulator() == null) {
-				Collections.shuffle(groundFloorPopulators.get(roomSize), random);
-				MansionRoomPopulator populator = groundFloorPopulators.get(roomSize).get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
+				Collections.shuffle(activeRoomPool.get(roomSize), random);
+				MansionRoomPopulator populator = activeRoomPool.get(roomSize).get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
 				TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
 				((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
 			}
@@ -108,6 +113,7 @@ public class MansionCompoundRoomDistributor {
 		}
 	}
 	
+
 	/**
 	 * Also sets the needed rooms to empty room populator and knocks down relevant walls
 	 * if the return value is true.

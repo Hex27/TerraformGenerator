@@ -277,6 +277,9 @@ public class Wall {
         return depth;
     }
     
+    public void downPillar(int h, Material... types) {
+    	downPillar(new Random(),h,types);
+    }
 
     public void downPillar(Random rand, int h, Material... types) {
         int depth = 0;

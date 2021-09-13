@@ -16,6 +16,7 @@ import org.terraform.structure.pillager.mansion.ground.MansionGroundWallPiece;
 import org.terraform.structure.pillager.mansion.ground.MansionStandardGroundRoomPiece;
 import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorHandler;
 import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorWallPiece;
+import org.terraform.structure.pillager.mansion.secondfloor.MansionTowerStairwayPopulator;
 import org.terraform.structure.pillager.mansion.tower.MansionTowerPieceHandler;
 import org.terraform.structure.room.jigsaw.JigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
@@ -163,8 +164,12 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	if(!getRoofedLocations().contains(piece.getRoom().getSimpleLocation())) {
         		SimpleLocation loc = piece.getRoom().getSimpleLocation().getRelative(0,13,0);
         		if(this.core.getPopData().getType(loc.getX(),loc.getY(),loc.getZ()) 
-        				!= Material.COBBLESTONE_SLAB)
+        				!= Material.COBBLESTONE_SLAB) {
         			towerPieceHandler.registerTowerPiece(random, piece);
+        			((MansionStandardRoomPiece) piece).setRoomPopulator(new MansionTowerStairwayPopulator(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls));
+        			
+        			
+        		}
         	}
         }
         

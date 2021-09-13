@@ -77,6 +77,31 @@ public class BannerUtils {
         banner.update();
         return banner;
     }
+    
+    public static Banner generatePillagerBanner(SimpleBlock base, BlockFace facing, boolean wallBanner) {
+
+        Material type = null;
+        if (wallBanner)
+            type = Material.WHITE_WALL_BANNER;
+        else
+            type = Material.WHITE_BANNER;
+        base.setType(type);
+        if (!wallBanner) {
+            Rotatable bd = ((Rotatable) base.getBlockData());
+            bd.setRotation(facing);
+            base.setBlockData(bd);
+        } else {
+            Directional bd = ((Directional) base.getBlockData());
+            bd.setFacing(facing);
+            base.setBlockData(bd);
+        }
+
+        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
+        
+        banner.setPatterns(getOminousBannerPatterns());
+        banner.update();
+        return banner;
+    }
 
 
     public static Material randomBannerMaterial(Random rand) {
