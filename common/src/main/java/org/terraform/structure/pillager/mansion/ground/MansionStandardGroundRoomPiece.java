@@ -38,6 +38,23 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
                         .downUntilSolid(rand,Material.STONE_BRICKS);
             }
     }
+    
+    /**
+     * For forcefully removing anything in the area before any building.
+     */
+    public void purgeMinimalArea(PopulatorDataAbstract data) {
+    	
+    	int[] lowerCorner = this.getRoom().getLowerCorner(-5);
+        int[] upperCorner = this.getRoom().getUpperCorner(-5);
+        
+        //Places extended ground and roofing over the piece.
+        //If this piece is identified as a corner, place a pillar.
+        for(int nx = lowerCorner[0]; nx <= upperCorner[0]; nx++)
+        	for(int nz = lowerCorner[1]; nz <= upperCorner[1]; nz++) {
+        		SimpleBlock b = new SimpleBlock(data, nx, this.getRoom().getY(), nz);
+        		new Wall(b).Pillar(8, Material.AIR);
+        	}
+    }
 
     @Override
     public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
@@ -63,14 +80,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
         		else
         		{
         			if(b.getType() != Material.STONE_BRICKS) {
-                		//Edge Piece of extended room. Place stone bricks on floor edges
-//        				if(upperCorner[0] - lowerCorner[0] > this.getRoom().getWidthX()
-//                				&& (nx == lowerCorner[0]+1 || nx == upperCorner[0]-1 || nz == lowerCorner[1]+1 || nz == upperCorner[1]-1)) {
-//        					if(b.getType() != Material.COBBLESTONE && 
-//        							b.countAdjacentsThatMatchType(BlockUtils.directBlockFaces, Material.COBBLESTONE) < 2)
-//        						b.setType(Material.POLISHED_ANDESITE);
-//        				}
-//        				else
+
     					b.setType(Material.COBBLESTONE);
         			}
             		

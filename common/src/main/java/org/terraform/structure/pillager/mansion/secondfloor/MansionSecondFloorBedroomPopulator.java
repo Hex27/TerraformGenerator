@@ -15,6 +15,7 @@ import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
 import org.terraform.structure.pillager.mansion.MansionRoomSchematicParser;
+import org.terraform.structure.pillager.mansion.MansionRoomSize;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BannerUtils;
 import org.terraform.utils.BlockUtils;
@@ -58,6 +59,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 			}else if(randomFace == BlockFace.WEST) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]+roomWidth);
 				TerraSchematic schema = TerraSchematic.load("mansion/mansion-bedroom", target);
+				schema.parser = new MansionRoomSchematicParser(random, data);
 		        schema.setFace(randomFace);
 		        schema.apply();
 			}
@@ -175,5 +177,11 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 				w.getRelative(0,2,0).get(),
 				w.getDirection(), 
 				PaintingUtils.getArtFromDimensions(rand, 1, 2));
+	}
+	
+
+	@Override
+	public MansionRoomSize getSize() {
+		return new MansionRoomSize(2,2);
 	}
 }

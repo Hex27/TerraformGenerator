@@ -29,7 +29,7 @@ public class MansionTowerPieceHandler {
 		this.data = data;
 	}
 	
-	public void registerTowerPiece(Random rand, JigsawStructurePiece piece) {
+	public int registerTowerPiece(Random rand, JigsawStructurePiece piece) {
 		
 		int height = GenUtils.randInt(rand, 1, 2);
 		
@@ -54,6 +54,7 @@ public class MansionTowerPieceHandler {
 			
 			this.pieces.put(newPiece.getRoom().getSimpleLocation(), newPiece);	
 		}
+		return height;
 	}
 	
 	public void setupWalls() {

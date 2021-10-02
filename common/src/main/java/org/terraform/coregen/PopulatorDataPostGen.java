@@ -108,12 +108,10 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 
     @Override
     public void addEntity(int x, int y, int z, EntityType type) {
-        Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),x,y,z), type);
+    	//Always offset by 0.5 to prevent them spawning in corners.
+    	//Y is offset by a small bit to prevent falling through weird spawning areas
+        Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),x+0.5,y+0.3,z+0.5), type);
         e.setPersistent(true);
-        
-        //Why tf did you use ICA for this
-//        TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x, y, z).getChunk())
-//                .addEntity(x, y, z, type);
     }
 
     @Override
@@ -123,7 +121,6 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
         CreatureSpawner spawner = (CreatureSpawner) b.getState();
         spawner.setSpawnedType(type);
         spawner.update();
-        //TerraformGeneratorPlugin.injector.getICAData(c).setSpawner(rawX, rawY, rawZ, type);
     }
 
     @Override

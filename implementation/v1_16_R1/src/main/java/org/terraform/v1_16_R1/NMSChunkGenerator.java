@@ -19,6 +19,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.StructureLocator;
 import org.terraform.structure.monument.MonumentPopulator;
+import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
 
@@ -103,12 +104,19 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //			}
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
             return new BlockPosition(coords[0], 20, coords[1]);
-        }  else if (structuregenerator == StructureGenerator.MONUMENT) {
-          if(TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
-	          	return null;
-	  		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
-	          return new BlockPosition(coords[0], 50, coords[1]);
-	  	}
+        }
+        else if(!TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
+        {
+        	if (structuregenerator == StructureGenerator.MONUMENT) { //Monument
+                
+        		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+                return new BlockPosition(coords[0], 50, coords[1]);
+            } else if (structuregenerator == StructureGenerator.MANSION) { //Mansion
+                    
+        		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+                return new BlockPosition(coords[0], 50, coords[1]);
+            }
+        }
 
         return null;
     }

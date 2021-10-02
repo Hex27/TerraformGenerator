@@ -2,28 +2,35 @@ package org.terraform.structure.pillager.mansion;
 
 import java.util.ArrayList;
 
-import org.terraform.structure.pillager.mansion.ground.MansionGrandStairwayPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionGroundLevelDiningRoomPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionGroundLevelKitchenPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionLibraryPopulator;
-import org.terraform.structure.pillager.mansion.ground.MansionWarroomPopulator;
-import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorLoungePopulator;
-import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorBunkPopulator;
-import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorBedroomPopulator;
+import org.terraform.structure.pillager.mansion.ground.*;
+import org.terraform.structure.pillager.mansion.secondfloor.*;
 
 public enum MansionRoomPopulatorRegistry {
 	
-	GROUND_3_3(new MansionGrandStairwayPopulator(null,null)),
-	GROUND_2_2(new MansionLibraryPopulator(null,null), new MansionWarroomPopulator(null,null)),
-	GROUND_1_2(new MansionGroundLevelKitchenPopulator(null,null)),
-	GROUND_2_1(new MansionGroundLevelDiningRoomPopulator(null,null)),
-	GROUND_1_1(new MansionHallwayPopulator(null,null)),
+	GROUND_3_3(new MansionGrandStairwayPopulator(null,null)), //
+	GROUND_2_2(
+			new MansionGroundLevelLibraryPopulator(null,null), 
+			new MansionGroundLevelWarroomPopulator(null,null)),
+	GROUND_1_2(
+			new MansionGroundLevelKitchenPopulator(null,null),
+			new MansionGroundLevelMushroomFarmPopulator(null,null),
+			new MansionGroundLevelForgePopulator(null,null)),
+	GROUND_2_1(
+			new MansionGroundLevelDiningRoomPopulator(null,null),
+			new MansionGroundLevelBrewingRoomPopulator(null,null)),
+	GROUND_1_1(new MansionGroundFloorHallwayPopulator(null,null)),
 
 	SECOND_3_3(new MansionGrandStairwayPopulator(null,null)),
-	SECOND_2_2(new MansionSecondFloorBedroomPopulator(null,null)),
-	SECOND_1_2(new MansionSecondFloorLoungePopulator(null,null)),
-	SECOND_2_1(new MansionSecondFloorBunkPopulator(null,null)),
-	SECOND_1_1(new MansionHallwayPopulator(null,null)),
+	SECOND_2_2(
+			new MansionSecondFloorBedroomPopulator(null,null),
+			new MansionSecondFloorStudyPopulator(null,null)),
+	SECOND_1_2(
+			new MansionSecondFloorLoungePopulator(null,null),
+			new MansionSecondFloorPianoRoomPopulator(null,null)),
+	SECOND_2_1(
+			new MansionSecondFloorBunkPopulator(null,null),
+			new MansionSecondFloorStoreroomPopulator(null,null)),
+	SECOND_1_1(new MansionSecondFloorHallwayPopulator(null,null)),
 	
 	;
 	ArrayList<MansionRoomPopulator> populators = new ArrayList<>();

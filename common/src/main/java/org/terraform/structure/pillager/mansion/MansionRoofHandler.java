@@ -1,20 +1,27 @@
 package org.terraform.structure.pillager.mansion;
 
 import org.bukkit.Axis;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab.Type;
+import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.GenUtils;
+import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.TrapdoorBuilder;
+import org.terraform.utils.version.OneOneSixBlockHandler;
 
 import java.util.Random;
 
@@ -317,6 +324,57 @@ public class MansionRoofHandler {
 	    	.lapply(w);
     	} else if(Tag.STAIRS.isTagged(w.getType()) || Tag.SLABS.isTagged(w.getType()))
     		w.setType(Material.DARK_OAK_PLANKS);
+    }
+    
+    public static void atticDecorations(Random rand, PopulatorDataAbstract data, JigsawStructurePiece piece) {
+    	SimpleBlock core = piece.getRoom().getCenterSimpleBlock(data).getRelative(0,8,0);
+    	
+    	if(!core.getType().isSolid()) {
+    		Wall ceiling = new Wall(core).getUp().findCeiling(15);
+    		if(ceiling == null) return;
+    		if(ceiling.getType().toString().contains("DARK_OAK")) {
+    			ceiling = ceiling.getDown();
+    			int chainLength = ceiling.getY() - core.getY() - 2 - rand.nextInt(3);
+    			if(chainLength < 0)  chainLength = 0;
+    			ceiling.downPillar(chainLength, OneOneSixBlockHandler.getChainMaterial());
+    			Lantern lantern = (Lantern) Bukkit.createBlockData(Material.LANTERN);
+    			lantern.setHanging(true);
+    			ceiling.getDown(chainLength).setBlockData(lantern);
+    			if(ceiling.getY() - core.getY() > 5) {
+    				//If height is high enough, spawn a couple of cave spiders and spiders
+    				if(GenUtils.chance(rand, 1,2))
+    					data.addEntity(core.getX(), core.getY(), core.getZ(), EntityType.SPIDER);
+    				if(GenUtils.chance(rand, 1,2))
+    					data.addEntity(core.getX(), core.getY(), core.getZ(), EntityType.CAVE_SPIDER);
+    			}
+    		}
+    	}
+    	
+    	for(int[] loc:piece.getRoom().getAllCorners(2))
+    	{
+    		SimpleBlock target = new SimpleBlock(data, loc[0], core.getY(), loc[1]);
+    		Wall ceiling = new Wall(target).findCeiling(15);
+    		//Height more than 1
+    		if(ceiling != null && ceiling.getY() > target.getY()+1) {
+    			ceiling.getDown().downUntilSolid(new Random(), Material.DARK_OAK_LOG);
+    			for(BlockFace face:BlockUtils.directBlockFaces) {
+    				//Webs
+    				if(GenUtils.chance(rand, 1, 8))
+    					ceiling.getDown().getRelative(face).get().lsetType(Material.COBWEB);
+    			}
+    			
+    			//Small chance for chests against pillars
+    			if(GenUtils.chance(rand, 1, 20))
+    			{
+    				BlockFace f = BlockUtils.getDirectBlockFace(rand);
+    				if(!target.getRelative(f).getType().isSolid())
+    					new ChestBuilder(Material.CHEST)
+    					.setFacing(f).setLootTable(TerraLootTable.WOODLAND_MANSION)
+    					.apply(target.getRelative(f));
+    			}
+    			
+    		}
+    	}
     }
 
 }

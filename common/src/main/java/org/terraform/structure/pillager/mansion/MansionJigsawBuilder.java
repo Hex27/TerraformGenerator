@@ -9,11 +9,13 @@ import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.pillager.mansion.ground.MansionEntrancePiece;
 import org.terraform.structure.pillager.mansion.ground.MansionGrandStairwayPopulator;
 import org.terraform.structure.pillager.mansion.ground.MansionGroundRoomPiece;
 import org.terraform.structure.pillager.mansion.ground.MansionGroundWallPiece;
 import org.terraform.structure.pillager.mansion.ground.MansionStandardGroundRoomPiece;
+import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorGrandStairwayPopulator;
 import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorHandler;
 import org.terraform.structure.pillager.mansion.secondfloor.MansionSecondFloorWallPiece;
 import org.terraform.structure.pillager.mansion.secondfloor.MansionTowerStairwayPopulator;
@@ -58,6 +60,10 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     
     @Override
     public void build(Random random) {
+
+        for (JigsawStructurePiece piece : this.pieces.values()) {
+            ((MansionStandardGroundRoomPiece) piece).purgeMinimalArea(this.core.getPopData());
+        }
         super.build(random);
 
         //Make sure awkward corners are fixed
@@ -165,10 +171,8 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         		SimpleLocation loc = piece.getRoom().getSimpleLocation().getRelative(0,13,0);
         		if(this.core.getPopData().getType(loc.getX(),loc.getY(),loc.getZ()) 
         				!= Material.COBBLESTONE_SLAB) {
-        			towerPieceHandler.registerTowerPiece(random, piece);
-        			((MansionStandardRoomPiece) piece).setRoomPopulator(new MansionTowerStairwayPopulator(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls));
-        			
-        			
+        			int towerHeight = towerPieceHandler.registerTowerPiece(random, piece);
+        			((MansionStandardRoomPiece) piece).setRoomPopulator(new MansionTowerStairwayPopulator(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls, towerHeight));
         		}
         	}
         }
@@ -204,24 +208,31 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	((MansionStandardRoomPiece) piece).buildWalls(random, this.core.getPopData());
         }
         
-        MansionStandardRoomPiece secondFloorStairwayCenter = null;
-        //Find the Stairway piece and (it extends to the second floor.)
-        for (JigsawStructurePiece piece : pieces.values()){
-        	if(((MansionStandardRoomPiece) piece).getRoomPopulator() instanceof MansionGrandStairwayPopulator) {
-        		secondFloorStairwayCenter = (MansionStandardRoomPiece) secondFloorHandler.secondFloorPieces.get(piece.getRoom().getSimpleLocation().getRelative(0,MansionJigsawBuilder.roomHeight+1,0));
-        		MansionCompoundRoomDistributor.canRoomSizeFitWithCenter(secondFloorStairwayCenter, secondFloorHandler.secondFloorPieces.values(), new MansionRoomSize(3,3), new MansionEmptyRoomPopulator(secondFloorStairwayCenter.getRoom(), secondFloorStairwayCenter.internalWalls));
-        		secondFloorStairwayCenter.setRoomPopulator(new MansionEmptyRoomPopulator(secondFloorStairwayCenter.getRoom(), secondFloorStairwayCenter.internalWalls));
-        	}
-        }
-        
-        //SECOND FLOOR WALLING
-
+        //Second floor walling
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
         	((MansionStandardRoomPiece) piece).setupInternalAttributes(core.getPopData(),secondFloorHandler.secondFloorPieces);
         }
         
         MansionMazeAlgoUtil.setupPathways(secondFloorHandler.secondFloorPieces.values(), random);
         MansionMazeAlgoUtil.knockdownRandomWalls(secondFloorHandler.secondFloorPieces.values(), random);
+        
+        
+        MansionStandardRoomPiece secondFloorStairwayCenter = null;
+        //Find the Stairway piece and (it extends to the second floor.)
+        for (JigsawStructurePiece piece : pieces.values()){
+        	if(((MansionStandardRoomPiece) piece).getRoomPopulator() instanceof MansionGrandStairwayPopulator && ((MansionStandardRoomPiece) piece).isPopulating()) {
+        		secondFloorStairwayCenter = (MansionStandardRoomPiece) secondFloorHandler.secondFloorPieces.get(piece.getRoom().getSimpleLocation().getRelative(0,MansionJigsawBuilder.roomHeight+1,0));
+        		MansionRoomPopulator secondFloorGrandStairwayPopulator = new MansionSecondFloorGrandStairwayPopulator(null,null).getInstance(secondFloorStairwayCenter.getRoom(), secondFloorStairwayCenter.internalWalls);
+        		if(!MansionCompoundRoomDistributor.canRoomSizeFitWithCenter(secondFloorStairwayCenter, secondFloorHandler.secondFloorPieces.values(), new MansionRoomSize(3,3), secondFloorGrandStairwayPopulator, true))
+        		{
+        			TerraformGeneratorPlugin.logger.info("[!] Failed to allocate second floor grand stairway space!");
+        		}
+        		secondFloorStairwayCenter.setRoomPopulator(secondFloorGrandStairwayPopulator);
+        	}
+        }
+        
+        //SECOND FLOOR WALLING
+
         MansionCompoundRoomDistributor.distributeRooms(secondFloorHandler.secondFloorPieces.values(), random, false);
 
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
@@ -229,14 +240,30 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         }
         
         //Decorate both floors after all allocations are done.
+        //Always re-loop for each one to prevent weird race condition overlaps.
         for (JigsawStructurePiece piece : pieces.values()){
         	((MansionStandardRoomPiece) piece).decorateInternalRoom(random, this.core.getPopData());
+        }
+        for (JigsawStructurePiece piece : pieces.values()){
         	((MansionStandardRoomPiece) piece).decorateWalls(random, core.getPopData());
         }
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
         	((MansionStandardRoomPiece) piece).decorateInternalRoom(random, this.core.getPopData());
+            MansionRoofHandler.atticDecorations(random, this.core.getPopData(), piece);
+        }
+        for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
         	((MansionStandardRoomPiece) piece).decorateWalls(random, core.getPopData());
         }
+        
+        //Spawn guards
+        MansionStandardRoomPiece.spawnedGuards = 0;
+        for (JigsawStructurePiece piece : pieces.values()){
+        	((MansionStandardRoomPiece) piece).spawnGuards(random, core.getPopData());
+        }
+        for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
+        	((MansionStandardRoomPiece) piece).spawnGuards(random, core.getPopData());
+        }
+        TerraformGeneratorPlugin.logger.info("Mansion spawned " + MansionStandardRoomPiece.spawnedGuards + " vindicators and evokers");
     }
     
     /**

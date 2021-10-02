@@ -123,6 +123,11 @@ public enum TConfigOption {
     //-=[STRUCTURES]=-
     STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS("structures.technical.megachunk.numbiomesections", 4),
     STRUCTURES_MEGACHUNK_MAXSTRUCTURES("structures.technical.megachunk.max-structures-per-megachunk", 3),
+    STRUCTURES_MANSION_ENABLED("structures.mansion.enabled", true),
+    STRUCTURES_MANSION_SIZE("structures.mansion.size", 80),
+    STRUCTURES_MANSION_SPAWNAGGRESSION("structures.mansion.pillager-spawn-aggression", 1),
+    STRUCTURES_MANSION_SPAWNRATIO("structures.mansion.spawnratio", 0.3),
+    STRUCTURES_MANSION_CHUNK_EXCLUSION_ZONE("structures.mansion.chunk-exclusion-zone", 4),
     STRUCTURES_STRONGHOLD_ENABLED("structures.stronghold.enabled", true),
     STRUCTURES_STRONGHOLD_FAILSAFE_Y("structures.stronghold.failsafe-y", 7),
     STRUCTURES_STRONGHOLD_MIN_Y("structures.stronghold.min-y", 10),
@@ -295,6 +300,14 @@ public enum TConfigOption {
     ORE_DIAMOND_MAXSPAWNHEIGHT("ore.diamond.max-spawn-height", 15),
     ORE_DIAMOND_MINSPAWNHEIGHT("ore.diamond.min-spawn-height", 5),
 
+    //EMERALD
+    ORE_EMERALD_CHANCE("ore.emerald.chance-per-chunk", 30),
+    ORE_EMERALD_VEINSIZE("ore.emerald.max-vein-size", 7),
+    ORE_EMERALD_MAXVEINNUMBER("ore.emerald.max-vein-count", 3),
+    ORE_EMERALD_COMMONSPAWNHEIGHT("ore.emerald.common-spawn-height", 12),
+    ORE_EMERALD_MAXSPAWNHEIGHT("ore.emerald.max-spawn-height", 15),
+    ORE_EMERALD_MINSPAWNHEIGHT("ore.emerald.min-spawn-height", 5),
+    
     //LAPIS
     ORE_LAPIS_CHANCE("ore.lapis.chance-per-chunk", 30),
     ORE_LAPIS_VEINSIZE("ore.lapis.max-vein-size", 6),

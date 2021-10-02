@@ -12,13 +12,14 @@ import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
 import org.terraform.structure.pillager.mansion.MansionRoomSchematicParser;
+import org.terraform.structure.pillager.mansion.MansionRoomSize;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BannerUtils;
 import org.terraform.utils.BlockUtils;
 
-public class MansionWarroomPopulator extends MansionRoomPopulator {
+public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 
-	public MansionWarroomPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
+	public MansionGroundLevelWarroomPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		super(room, internalWalls);
 	}
 
@@ -83,6 +84,12 @@ public class MansionWarroomPopulator extends MansionRoomPopulator {
 //			w.getRight().setType(Material.BOOKSHELF);
 //			w.getRight().getRelative(0,1,0).setType(Material.LANTERN);
 //		}
+	}
+	
+
+	@Override
+	public MansionRoomSize getSize() {
+		return new MansionRoomSize(2,2);
 	}
 
 }

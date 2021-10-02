@@ -8,6 +8,7 @@ import org.terraform.structure.dungeon.SmallDungeonPopulator;
 import org.terraform.structure.mineshaft.BadlandsMinePopulator;
 import org.terraform.structure.mineshaft.MineshaftPopulator;
 import org.terraform.structure.monument.MonumentPopulator;
+import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.pillager.outpost.OutpostPopulator;
 import org.terraform.structure.pyramid.PyramidPopulator;
 import org.terraform.structure.shipwreck.ShipwreckPopulator;
@@ -42,6 +43,7 @@ public class StructureRegistry {
         registerStructure(StructureType.MEGA_DUNGEON, new PyramidPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new MonumentPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new StrongholdPopulator());
+        registerStructure(StructureType.MEGA_DUNGEON, new MansionPopulator());
 
         registerStructure(StructureType.LARGE_CAVE, new LargeCavePopulator());
 

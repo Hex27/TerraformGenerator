@@ -4,71 +4,88 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
 import org.terraform.structure.pillager.mansion.MansionRoomSchematicParser;
 import org.terraform.structure.pillager.mansion.MansionRoomSize;
 import org.terraform.structure.room.CubeRoom;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.PaintingUtils;
+import org.terraform.utils.blockdata.StairBuilder;
 
-public class MansionSecondFloorBunkPopulator extends MansionRoomPopulator {
+public class MansionSecondFloorPianoRoomPopulator extends MansionRoomPopulator {
 
-	public MansionSecondFloorBunkPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
+	public MansionSecondFloorPianoRoomPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		super(room, internalWalls);
 	}
 
 	//Refers to the kitchen room width, not the width of one room cell.
-	private static final int roomWidthX = 15;
-	private static final int roomWidthZ = 6;
+	private static final int roomWidthX = 6;
+	private static final int roomWidthZ = 15;
 	@Override
 	public void decorateRoom(PopulatorDataAbstract data, Random random) {
-
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
-		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
+		TerraformGeneratorPlugin.logger.info("Piano at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
 		try {
 			if(randomFace == BlockFace.NORTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);
-				TerraSchematic schema = TerraSchematic.load("mansion/mansion-bunk", target);
+				TerraSchematic schema = TerraSchematic.load("mansion/mansion-piano", target);
+		        schema.setFace(randomFace);
 		        schema.parser = new MansionRoomSchematicParser(random, data);
-				schema.setFace(randomFace);
 		        schema.apply();
 			}else if(randomFace == BlockFace.SOUTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0]+roomWidthX, this.getRoom().getY(), lowerBounds[1]+roomWidthZ);
-				TerraSchematic schema = TerraSchematic.load("mansion/mansion-bunk", target);
-		        schema.parser = new MansionRoomSchematicParser(random, data);
+				TerraSchematic schema = TerraSchematic.load("mansion/mansion-piano", target);
 		        schema.setFace(randomFace);
+		        schema.parser = new MansionRoomSchematicParser(random, data);
 		        schema.apply();
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
 	}
 	
 	@Override
 	public void decorateExit(Random rand, Wall w) {
 		
 	}
-
+	
 	@Override
 	public void decorateWindow(Random rand, Wall w) {
-		
+		w.setType(Material.DARK_OAK_LOG);
+		w.getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
+		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
+		.setFacing(BlockUtils.getLeft(w.getDirection()))
+		.apply(w.getLeft())
+		.setFacing(BlockUtils.getRight(w.getDirection()))
+		.apply(w.getRight());
 	}
 	
 	@Override
 	public void decorateWall(Random rand, Wall w) {
-		
+		PaintingUtils.placePainting(
+				w.getRelative(0,2,0).getLeft().get(), 
+				w.getDirection(), 
+				PaintingUtils.getArtFromDimensions(rand, 1, 2));
+		PaintingUtils.placePainting(
+				w.getRelative(0,2,0).getRight().get(), 
+				w.getDirection(), 
+				PaintingUtils.getArtFromDimensions(rand, 1, 2));
+		w.getRear().Pillar(6, Material.DARK_OAK_LOG);
+		w.getLeft(2).getRear().Pillar(6, Material.DARK_OAK_LOG);
+		w.getRight(2).getRear().Pillar(6, Material.DARK_OAK_LOG);
 	}
-
 
 	@Override
 	public MansionRoomSize getSize() {
-		return new MansionRoomSize(2,1);
+		return new MansionRoomSize(1,2);
 	}
 }

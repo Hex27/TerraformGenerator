@@ -89,12 +89,14 @@ public class MansionCompoundRoomDistributor {
 					activeRoomPool.put(roomSize, MansionRoomPopulatorRegistry.getByRoomSize(roomSize, isGround).getPopulators());
 					populators = activeRoomPool.get(roomSize);
 				}
-				MansionRoomPopulator populator = populators.remove(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
-				if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize, populator)) {
+				MansionRoomPopulator populator = populators.get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
+				if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize, populator, false)) {
 					//Shuffle and distribute populator
 					TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
 					((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
 					
+					//If successful, remove the populator from the active pool.
+					populators.remove(0);
 					break;
 				}
 			}
@@ -122,7 +124,7 @@ public class MansionCompoundRoomDistributor {
 	 * @param roomSize
 	 * @return
 	 */
-	public static boolean canRoomSizeFitWithCenter(MansionStandardRoomPiece piece, Collection<JigsawStructurePiece> pieces, MansionRoomSize roomSize, MansionRoomPopulator defaultPopulator) {
+	public static boolean canRoomSizeFitWithCenter(MansionStandardRoomPiece piece, Collection<JigsawStructurePiece> pieces, MansionRoomSize roomSize, MansionRoomPopulator defaultPopulator, boolean force) {
 		
 		SimpleLocation center = piece.getRoom().getSimpleLocation();
 		
@@ -154,15 +156,20 @@ public class MansionCompoundRoomDistributor {
 		//First pass, if any rooms are occupied, return false.
 		for(JigsawStructurePiece p:pieces) {
 			if(relevantLocations.contains(p.getRoom().getSimpleLocation())) {
-				if(((MansionStandardRoomPiece) p).getRoomPopulator() != null)
+				//If force is on, only care if the piece exists in pieces, not if the
+				//piece is occupied.
+				if(!force && ((MansionStandardRoomPiece) p).getRoomPopulator() != null)
 					return false;
 				hits++;
 			}
 		}
+		
+		//Should not return false when force is true
+		//Caller should ensure that.
 		if(hits < relevantLocations.size()) return false;
 		
-		//Second pass, set all rooms to occupied. Center room will be set by calling
-		//code.
+		//Second pass, knock down walls and set all rooms to occupied. 
+		//Center room will be set by calling code.
 		for(JigsawStructurePiece p:pieces) {
 			if(relevantLocations.contains(p.getRoom().getSimpleLocation())) {
 				MansionStandardRoomPiece spiece = ((MansionStandardRoomPiece) p);

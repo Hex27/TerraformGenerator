@@ -14,6 +14,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rail.Shape;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
@@ -337,6 +338,10 @@ public class BlockUtils {
 
     public static BlockFace getDirectBlockFace(Random rand) {
         return directBlockFaces[rand.nextInt(4)];
+    }
+    
+    public static BlockFace getSixBlockFace(Random rand) {
+    	return sixBlockFaces[rand.nextInt(6)];
     }
     
     public static Material pickWool() {
@@ -1107,5 +1112,29 @@ public class BlockUtils {
     	return BlockUtils.wetMaterials.contains(target.getType()) || 
         		(target.getBlockData() instanceof Waterlogged
             			&& ((Waterlogged) target.getBlockData()).isWaterlogged());
+    }
+    
+    public static float yawFromBlockFace(BlockFace face) {
+    	switch(face) {
+		case EAST:
+			return -90.0f;
+		case NORTH:
+			return 180.0f;
+		case SOUTH:
+			return 0.0f;
+		case WEST:
+			return 90.0f;
+		default:
+			return 180.0f;
+    	}
+    }
+    
+    public static void randRotateBlockData(Random rand, BlockData data) {
+    	if(data instanceof Directional) {
+    		Set<BlockFace> faces = ((Directional) data).getFaces();
+    		((Directional) data).setFacing(faces.stream().skip((int) (faces.size() * rand.nextDouble())).findAny().get());
+    	}else if(data instanceof Rotatable) {
+    		((Rotatable) data).setRotation(BlockUtils.getXZPlaneBlockFace(rand));
+    	}
     }
 }

@@ -22,6 +22,11 @@ public class MansionEmptyRoomPopulator extends MansionRoomPopulator {
 	@Override
 	public void decorateRoom(PopulatorDataAbstract data, Random random) {
 	}
+
+	@Override
+	public MansionRoomSize getSize() {
+		return new MansionRoomSize(1,1);
+	}
 	
 	
 

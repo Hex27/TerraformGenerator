@@ -7,7 +7,6 @@ import org.terraform.data.Wall;
 import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
-import org.terraform.utils.blockdata.StairBuilder;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;
@@ -15,6 +14,7 @@ import java.util.Random;
 public class MansionTowerWallPiece extends JigsawStructurePiece {
 
 	public boolean isTentRoofFace = false;
+	@SuppressWarnings("unused")
 	private MansionJigsawBuilder builder;
     public MansionTowerWallPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);

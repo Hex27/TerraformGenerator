@@ -1,4 +1,4 @@
-package org.terraform.structure.pillager.mansion;
+package org.terraform.structure.pillager.mansion.ground;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -11,6 +11,9 @@ import org.bukkit.block.data.type.Stairs.Shape;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.structure.pillager.mansion.MansionInternalWallState;
+import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
+import org.terraform.structure.pillager.mansion.MansionRoomSize;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BannerUtils;
 import org.terraform.utils.BlockUtils;
@@ -20,9 +23,9 @@ import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.TrapdoorBuilder;
 
-public class MansionHallwayPopulator extends MansionRoomPopulator {
+public class MansionGroundFloorHallwayPopulator extends MansionRoomPopulator {
 
-	public MansionHallwayPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
+	public MansionGroundFloorHallwayPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		super(room, internalWalls);
 	}
 
@@ -228,4 +231,8 @@ public class MansionHallwayPopulator extends MansionRoomPopulator {
 		.lapply(w.getRelative(0,7,0));
 	}
 
+	@Override
+	public MansionRoomSize getSize() {
+		return new MansionRoomSize(1,1);
+	}
 }

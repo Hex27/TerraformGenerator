@@ -3,8 +3,6 @@ package org.terraform.data;
 import org.bukkit.block.BlockFace;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-import java.util.Objects;
-
 public class SimpleLocation {
 
     protected int x;
@@ -123,7 +121,12 @@ public class SimpleLocation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z, 93929798);
+    	int prime = 93929798;
+        int hash = x * prime;
+        hash = (hash + y) * prime;
+        hash = (hash + z) * prime;
+       
+        return hash;
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.terraform.data;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.terraform.coregen.TerraLootTable;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -33,6 +34,14 @@ public class Wall {
 
     public Wall getLeft() {
         return new Wall(block.getRelative(BlockUtils.getAdjacentFaces(direction)[0]), direction);
+    }
+    
+    public Wall getUp() {
+    	return new Wall(block.getRelative(0,1,0), direction);
+    }
+
+    public Wall getUp(int i) {
+    	return new Wall(block.getRelative(0,i,0), direction);
     }
 
     public Wall getGround() {
@@ -276,6 +285,18 @@ public class Wall {
 
         return depth;
     }
+
+    public int blockfaceUntilSolid(int maxDepth, Random rand, BlockFace face, Material... types) {
+        int depth = 0;
+        while (depth <= maxDepth) {
+            if (!block.getRelative(face).getType().isSolid()) {
+                block.getRelative(face).setType(GenUtils.randMaterial(rand, types));
+            } else break;
+            depth++;
+        }
+
+        return depth;
+    }
     
     public void downPillar(int h, Material... types) {
     	downPillar(new Random(),h,types);
@@ -337,6 +358,14 @@ public class Wall {
     public BlockFace getDirection() {
         return direction;
     }
+    
+    public Wall getDown(int i) {
+        return new Wall(block.getRelative(0, -i, 0), direction);
+    }
+    
+    public Wall getDown() {
+        return new Wall(block.getRelative(0, -1, 0), direction);
+    }
 
     public Wall getRelative(int x, int y, int z) {
         return new Wall(block.getRelative(x, y, z), direction);
@@ -373,6 +402,10 @@ public class Wall {
     @Override
     public boolean equals(Object obj) {
     	return this.block.equals(obj);
+    }
+    
+    public void lootTableChest(TerraLootTable table) {
+    	get().getPopData().lootTableChest(getX(), getY(), getZ(), table);
     }
 
 }

@@ -14,6 +14,8 @@ public class SchematicParser {
 	private HashMap<SimpleBlock, BlockData> delayed = new HashMap<>();
 	private static ArrayList<Material> fragile = new ArrayList<>()
 			{{
+				add(Material.BROWN_MUSHROOM);
+				add(Material.RED_MUSHROOM);
 				add(Material.BROWN_CARPET);
 			}};
     public void applyData(SimpleBlock block, BlockData data) {

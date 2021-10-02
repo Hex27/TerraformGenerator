@@ -46,6 +46,23 @@ public class BannerUtils {
             Material.WHITE_WALL_BANNER,
     };
     
+    public static Banner generateBanner(SimpleBlock base, BlockFace facing, Material type, ArrayList<Pattern> patterns) {
+
+        base.setType(type);
+        Directional bd = ((Directional) base.getBlockData());
+        bd.setFacing(facing);
+        base.setBlockData(bd);
+    
+        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
+        if(patterns == null) {
+            patterns = new ArrayList<Pattern>();
+        }
+        
+        banner.setPatterns(patterns);
+        banner.update();
+        return banner;
+    }
+    
     public static Banner generateBanner(Random rand, SimpleBlock base, BlockFace facing, boolean wallBanner) {
 
         Material type = null;

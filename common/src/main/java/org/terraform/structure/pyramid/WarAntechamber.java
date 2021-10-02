@@ -1,18 +1,11 @@
 package org.terraform.structure.pyramid;
 
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.block.Banner;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.block.banner.PatternType;
 import org.bukkit.block.data.Bisected.Half;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
@@ -20,7 +13,6 @@ import org.terraform.utils.BannerUtils;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Random;
 

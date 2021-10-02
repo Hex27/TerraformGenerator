@@ -4,13 +4,16 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.bukkit.entity.EntityType;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 
@@ -96,6 +99,13 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     }
     
     public void decorateInternalRoom(Random random, PopulatorDataAbstract data) {
+		/*
+		 * if(roomPopulator == null)
+		 * TerraformGeneratorPlugin.logger.info("Null room at " +
+		 * this.getRoom().getCenterSimpleBlock(data)); else
+		 * TerraformGeneratorPlugin.logger.info(roomPopulator.getClass().getSimpleName()
+		 * + " invoked at " + this.getRoom().getCenterSimpleBlock(data));
+		 */
     	if(roomPopulator != null && this.isPopulating) {
     		roomPopulator.decorateRoom(data, random);
     	}
@@ -176,5 +186,52 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 
 	public boolean isPopulating() {
 		return isPopulating;
+	}
+	
+	public static int spawnedGuards = 0;
+	public void spawnGuards(Random rand, PopulatorDataAbstract data) {
+		if(this.roomPopulator == null) return;
+		
+		EntityType type = EntityType.VINDICATOR;
+		int[] spawnLoc = this.roomPopulator.getSpawnLocation();
+		
+		//Always one evoker if the area is 3x3 or 2x2.
+		//Second floor grand stairway will also spawn the evoker downstairs.
+		if(this.isPopulating
+				&& (this.roomPopulator.getSize().equals(new MansionRoomSize(3,3))
+						|| this.roomPopulator.getSize().equals(new MansionRoomSize(2,2)))) 
+			type = EntityType.EVOKER;
+		
+		//1x1 rooms don't spawn as often
+		if(this.roomPopulator.getSize().equals(new MansionRoomSize(1,1)))
+			if(GenUtils.chance(rand, 4, 5))
+				return;
+		
+		SimpleBlock target = new SimpleBlock(data, spawnLoc[0], spawnLoc[1], spawnLoc[2]);
+		int limit = 5;
+		BlockFace dir = BlockUtils.getDirectBlockFace(rand);
+		while(limit > 0 &&
+				((target.getType() != Material.AIR
+						&& target.getType() != Material.RED_CARPET)
+						|| (target.getRelative(0,1,0).getType() != Material.AIR))) {
+			target = target.getRelative(dir).getRelative(0,1,0);
+			limit--;
+		}
+		
+		if(limit > 0) {
+			//target = new Wall(target).findFloor(20).getUp().get();
+			target.addEntity(type);
+			spawnedGuards++;
+			if(!this.roomPopulator.getSize().equals(new MansionRoomSize(1,1))) 
+			{
+				for(int i = 0; i < TConfigOption.STRUCTURES_MANSION_SPAWNAGGRESSION.getInt(); i++) {
+					if(rand.nextBoolean()) {
+						target.addEntity(EntityType.VINDICATOR);
+						spawnedGuards++;
+					}
+				}
+			}
+			//new Wall(target).findFloor(20).getUp().get().addEntity(EntityType.ARMOR_STAND);
+		}
 	}
 }

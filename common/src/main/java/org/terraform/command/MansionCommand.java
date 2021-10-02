@@ -6,6 +6,7 @@ import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 
 import java.util.Random;
@@ -43,7 +44,9 @@ public class MansionCommand extends TerraCommand {
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
         MansionJigsawBuilder builder = new MansionJigsawBuilder(
-        		70, 70, data, x, y - 1, z
+        		TConfigOption.STRUCTURES_MANSION_SIZE.getInt(), 
+        		TConfigOption.STRUCTURES_MANSION_SIZE.getInt(), 
+        		data, x, y, z
         );
         builder.generate(new Random());
         builder.build(new Random());

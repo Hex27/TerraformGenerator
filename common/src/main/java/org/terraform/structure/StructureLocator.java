@@ -19,7 +19,8 @@ public class StructureLocator {
     		.maximumSize(300).build(new StructureLocatorCacheLoader());
 
 	public static int[] locateMultiMegaChunkStructure(TerraformWorld tw, MegaChunk center, MultiMegaChunkStructurePopulator populator, int timeoutMillis) {
-        
+
+		if(!populator.isEnabled()) return null;
 		StructureLocatorKey cacheKey = new StructureLocatorKey(center,tw,populator);
 		
 		//Do not use the cache if timeout is -1. 
@@ -77,6 +78,8 @@ public class StructureLocator {
 	
 	public static int[] locateSingleMegaChunkStructure(TerraformWorld tw, MegaChunk center, SingleMegaChunkStructurePopulator populator, int timeoutMillis) {
         
+		if(!populator.isEnabled()) return null;
+		
 		StructureLocatorKey cacheKey = new StructureLocatorKey(center,tw,populator);
 		
 		//Do not use the cache if timeout is -1. 

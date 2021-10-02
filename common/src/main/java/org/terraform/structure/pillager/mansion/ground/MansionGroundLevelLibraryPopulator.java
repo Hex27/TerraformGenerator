@@ -16,15 +16,16 @@ import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
 import org.terraform.structure.pillager.mansion.MansionRoomSchematicParser;
+import org.terraform.structure.pillager.mansion.MansionRoomSize;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.version.OneOneSixBlockHandler;
 
-public class MansionLibraryPopulator extends MansionRoomPopulator {
+public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 
-	public MansionLibraryPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
+	public MansionGroundLevelLibraryPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		super(room, internalWalls);
 	}
 
@@ -119,4 +120,8 @@ public class MansionLibraryPopulator extends MansionRoomPopulator {
 		}
 	};
 
+	@Override
+	public MansionRoomSize getSize() {
+		return new MansionRoomSize(2,2);
+	}
 }

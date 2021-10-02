@@ -18,8 +18,8 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.StructureLocator;
 import org.terraform.structure.monument.MonumentPopulator;
+import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
-import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -62,7 +62,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
 
-                int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, x, z);
+                //int y = org.terraform.coregen.HeightMap.getBlockHeight(tw, x, z);
                 BiomeBase b = CraftBlock.biomeToBiomeBase(tw.getBiomeBank(x, z).getHandler().getBiome()); //BiomeBank.calculateBiome(tw,tw.getTemperature(x,z), y).getHandler
                 // ().getBiome()
 
@@ -100,12 +100,19 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //			}
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
             return new BlockPosition(coords[0], 20, coords[1]);
-        }  else if (s.equalsIgnoreCase("Monument")) {
-          if(TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
-	          	return null;
-	  		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
-	          return new BlockPosition(coords[0], 50, coords[1]);
-	  	}
+        }
+        else if(!TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
+        {
+        	if (s.equalsIgnoreCase("Monument")) { //Monument
+                
+        		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+                return new BlockPosition(coords[0], 50, coords[1]);
+            } else if (s.toLowerCase().contains("mansion")) { //Mansion
+                    
+        		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+                return new BlockPosition(coords[0], 50, coords[1]);
+            }
+        }
 
         return null;
     }

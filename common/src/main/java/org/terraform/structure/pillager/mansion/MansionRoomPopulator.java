@@ -44,4 +44,10 @@ public abstract class MansionRoomPopulator {
 	public HashMap<BlockFace, MansionInternalWallState> getInternalWalls() {
 		return internalWalls;
 	}
+	
+	public abstract MansionRoomSize getSize();
+	
+	public int[] getSpawnLocation() {
+		return new int[] {this.room.getX(), this.room.getY()+1, this.room.getZ()};
+	}
 }

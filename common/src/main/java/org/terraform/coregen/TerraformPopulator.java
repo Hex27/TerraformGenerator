@@ -22,6 +22,10 @@ public class TerraformPopulator {
 
     private static final OrePopulator[] ORE_POPS = {
             // Ores
+
+            null, //deepslate
+            null,  //tuff
+            null, //Space for copper
             new OrePopulator(Material.COAL_ORE, TConfigOption.ORE_COAL_CHANCE.getInt(), TConfigOption.ORE_COAL_VEINSIZE.getInt(), TConfigOption.ORE_COAL_MAXVEINNUMBER.getInt(),
                     TConfigOption.ORE_COAL_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_COAL_COMMONSPAWNHEIGHT.getInt(), TConfigOption.ORE_COAL_MAXSPAWNHEIGHT.getInt()),
             new OrePopulator(Material.IRON_ORE, TConfigOption.ORE_IRON_CHANCE.getInt(), TConfigOption.ORE_IRON_VEINSIZE.getInt(), TConfigOption.ORE_IRON_MAXVEINNUMBER.getInt(),
@@ -31,13 +35,19 @@ public class TerraformPopulator {
             new OrePopulator(Material.DIAMOND_ORE, TConfigOption.ORE_DIAMOND_CHANCE.getInt(), TConfigOption.ORE_DIAMOND_VEINSIZE.getInt(),
                     TConfigOption.ORE_DIAMOND_MAXVEINNUMBER.getInt(), TConfigOption.ORE_DIAMOND_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_DIAMOND_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_DIAMOND_MAXSPAWNHEIGHT.getInt()),
+            
+            //Emeralds only spawn in mountainous biomes (except deserts)
+            new OrePopulator(Material.EMERALD_ORE, TConfigOption.ORE_EMERALD_CHANCE.getInt(), TConfigOption.ORE_EMERALD_VEINSIZE.getInt(),
+                    TConfigOption.ORE_EMERALD_MAXVEINNUMBER.getInt(), TConfigOption.ORE_EMERALD_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_EMERALD_COMMONSPAWNHEIGHT.getInt(),
+                    TConfigOption.ORE_EMERALD_MAXSPAWNHEIGHT.getInt(),
+                    BiomeBank.BIRCH_MOUNTAINS, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS),
+            
             new OrePopulator(Material.LAPIS_ORE, TConfigOption.ORE_LAPIS_CHANCE.getInt(), TConfigOption.ORE_LAPIS_VEINSIZE.getInt(),
                     TConfigOption.ORE_LAPIS_MAXVEINNUMBER.getInt(), TConfigOption.ORE_LAPIS_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_LAPIS_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_LAPIS_MAXSPAWNHEIGHT.getInt()),
             new OrePopulator(Material.REDSTONE_ORE, TConfigOption.ORE_REDSTONE_CHANCE.getInt(), TConfigOption.ORE_REDSTONE_VEINSIZE.getInt(),
                     TConfigOption.ORE_REDSTONE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_REDSTONE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_REDSTONE_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_REDSTONE_MAXSPAWNHEIGHT.getInt()),
-            null, //Space for copper
             
             //Non-ores
             new OrePopulator(Material.GRAVEL, TConfigOption.ORE_GRAVEL_CHANCE.getInt(), TConfigOption.ORE_GRAVEL_VEINSIZE.getInt(),
@@ -51,15 +61,11 @@ public class TerraformPopulator {
                     TConfigOption.ORE_DIORITE_MAXSPAWNHEIGHT.getInt()),
             new OrePopulator(Material.GRANITE, TConfigOption.ORE_GRANITE_CHANCE.getInt(), TConfigOption.ORE_GRANITE_VEINSIZE.getInt(),
                     TConfigOption.ORE_GRANITE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_GRANITE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_GRANITE_COMMONSPAWNHEIGHT.getInt(),
-                    TConfigOption.ORE_GRANITE_MAXSPAWNHEIGHT.getInt()),
-            null, //deepslate
-            null  //tuff
+                    TConfigOption.ORE_GRANITE_MAXSPAWNHEIGHT.getInt())
     }; 
 
-    //private CaveWormCreator cavePop;
     private AmethystGeodePopulator amethystGeodePopulator;
     public TerraformPopulator(TerraformWorld tw) {
-        //this.rwc = new RiverWormCreator(tw);
     	if(Version.isAtLeast(17)) {
     		amethystGeodePopulator = new AmethystGeodePopulator(
     				TConfigOption.ORE_AMETHYST_GEODE_SIZE.getInt(),
@@ -67,13 +73,13 @@ public class TerraformPopulator {
     				TConfigOption.ORE_AMETHYST_MIN_DEPTH.getInt(),
     				TConfigOption.ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE.getInt());
     		
-    		ORE_POPS[6] = new OrePopulator(OneOneSevenBlockHandler.COPPER_ORE, TConfigOption.ORE_REDSTONE_CHANCE.getInt(), TConfigOption.ORE_REDSTONE_VEINSIZE.getInt(),
-                    TConfigOption.ORE_REDSTONE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_REDSTONE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_REDSTONE_COMMONSPAWNHEIGHT.getInt(),
-                    TConfigOption.ORE_REDSTONE_MAXSPAWNHEIGHT.getInt());
-    		ORE_POPS[11] = new OrePopulator(OneOneSevenBlockHandler.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
+    		ORE_POPS[0] = new OrePopulator(OneOneSevenBlockHandler.COPPER_ORE, TConfigOption.ORE_COPPER_CHANCE.getInt(), TConfigOption.ORE_COPPER_VEINSIZE.getInt(),
+                    TConfigOption.ORE_COPPER_MAXVEINNUMBER.getInt(), TConfigOption.ORE_COPPER_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_COPPER_COMMONSPAWNHEIGHT.getInt(),
+                    TConfigOption.ORE_COPPER_MAXSPAWNHEIGHT.getInt());
+    		ORE_POPS[1] = new OrePopulator(OneOneSevenBlockHandler.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
                     TConfigOption.ORE_DEEPSLATE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_DEEPSLATE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_DEEPSLATE_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_DEEPSLATE_MAXSPAWNHEIGHT.getInt());
-    		ORE_POPS[12] = new OrePopulator(OneOneSevenBlockHandler.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
+    		ORE_POPS[2] = new OrePopulator(OneOneSevenBlockHandler.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
                     TConfigOption.ORE_TUFF_MAXVEINNUMBER.getInt(), TConfigOption.ORE_TUFF_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_TUFF_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_TUFF_MAXSPAWNHEIGHT.getInt());
     	}

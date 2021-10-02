@@ -189,6 +189,23 @@ public class CubeRoom {
                 new int[]{x + widthX / 2 - pad, y + height - 1 - pad, z + widthZ / 2 - pad});
     }
 
+
+    /**
+     * @param point 2d point (size 2 int array)
+     */
+    public boolean isPointInside(int[] point, int pad) {
+        int[] boundOne = getUpperCorner(pad);
+        int[] boundTwo = getLowerCorner(pad);
+
+        if (boundOne[0] >= point[0]
+                && boundOne[1] >= point[1]) {
+            return boundTwo[0] <= point[0]
+                    && boundTwo[1] <= point[1];
+        }
+
+        return false;
+    }
+
     /**
      * @param point 2d point (size 2 int array)
      */

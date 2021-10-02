@@ -1,6 +1,7 @@
 package org.terraform.populators;
 
 import org.bukkit.Material;
+import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -23,9 +24,11 @@ public class OrePopulator {
     private final int maxRange; //max y height where ore can be commonly found/
     private final int rareMaxRange; //max y height where ore can be rarely found
     private int minRange = 5; //min spawn height
+    private BiomeBank[] requiredBiomes;
 
     public OrePopulator(Material type, int baseChance, int maxOreSize,
-                        int maxNumberOfVeins, int maxRange, int rareMaxRange) {
+                        int maxNumberOfVeins, int maxRange, int rareMaxRange, 
+                        BiomeBank... requiredBiomes) {
         this.type = type;
         this.baseChance = baseChance;
         this.maxOreSize = maxOreSize;
@@ -33,10 +36,12 @@ public class OrePopulator {
         this.maxNumberOfVeins = maxNumberOfVeins;
         this.maxRange = maxRange;
         this.rareMaxRange = rareMaxRange;
+        this.requiredBiomes = requiredBiomes;
     }
 
     public OrePopulator(Material type, int baseChance, int maxOreSize,
-                        int maxNumberOfVeins, int minRange, int maxRange, int rareMaxRange) {
+                        int maxNumberOfVeins, int minRange, int maxRange, 
+                        int rareMaxRange, BiomeBank... requiredBiomes) {
         this.type = type;
         this.baseChance = baseChance;
         this.maxOreSize = maxOreSize;
@@ -45,9 +50,19 @@ public class OrePopulator {
         this.minRange = minRange;
         this.maxRange = maxRange;
         this.rareMaxRange = rareMaxRange;
+        this.requiredBiomes = requiredBiomes;
     }
     
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    	if(requiredBiomes.length > 0) {
+    		BiomeBank b = BiomeBank.getBiomeSectionFromChunk(world, data.getChunkX(), data.getChunkZ()).getBiomeBank();
+    		boolean canPopulate = false;
+    		for(BiomeBank comp:requiredBiomes)
+    			if(comp == b) canPopulate = true;
+    		
+    		if(canPopulate) return;
+    	}
+    	
     	//Attempt maxNumberOfVeins number of times
     	for (int i = 0; i < this.maxNumberOfVeins; i++) {
     		
