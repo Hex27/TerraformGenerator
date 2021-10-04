@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class TerraSchematic {
+	public static HashMap<String, HashMap<Vector,BlockData>> cache = new HashMap<>();
     public SchematicParser parser = new SchematicParser();
     HashMap<Vector, BlockData> data = new HashMap<>();
     SimpleBlock refPoint;
@@ -47,7 +48,13 @@ public class TerraSchematic {
     }
 
     public static TerraSchematic load(String internalPath, SimpleBlock refPoint) throws FileNotFoundException {
-        TerraSchematic schem = new TerraSchematic(refPoint);
+
+    	TerraSchematic schem = new TerraSchematic(refPoint);
+        if(cache.containsKey(internalPath)) { 
+        	schem.data = cache.get(internalPath);
+        	return schem;
+        }
+        
         InputStream is = TerraformGeneratorPlugin.get().getClass().getResourceAsStream("/" + internalPath + ".terra");
         @SuppressWarnings("resource")
         Scanner sc = new Scanner(is);    //file to be scanned
@@ -77,6 +84,10 @@ public class TerraSchematic {
             schem.data.put(key, value);
         }
         sc.close();
+        
+        //Cache all small schematics
+        if(schem.data.size() < 100)
+        	cache.put(internalPath, schem.data);
         return schem;
     }
     

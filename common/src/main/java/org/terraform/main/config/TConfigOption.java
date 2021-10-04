@@ -109,6 +109,7 @@ public enum TConfigOption {
     //-=[DEVSTUFF]=-
     DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
+    DEVSTUFF_VANILLA_MUSHROOMS("dev-stuff.force-only-vanilla-mushrooms",false),
     DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY("dev-stuff.patcher-cache-max-size", 100),
     DEVSTUFF_EXTENDED_COMMANDS("dev-stuff.extended-commands", false),
     DEVSTUFF_SUPPRESS_CONSOLE_LOGS("dev-stuff.suppress-terraform-console-logs", true),
