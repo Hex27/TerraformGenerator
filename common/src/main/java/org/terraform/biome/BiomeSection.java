@@ -259,6 +259,47 @@ public class BiomeSection {
 
         return candidates;
     }
+    
+    /**
+     * 
+     * @param rawX
+     * @param rawZ
+     * @return the subsection within this biome section that the coordinates belong in.
+     * Works even if the coords are outside the biome section.
+     */
+    public BiomeSubSection getSubSection(int rawX, int rawZ) {
+    	//if(new BiomeSection(tw, rawX, rawZ).equals(this)) {
+    		SimpleLocation sectionCenter = this.getCenter();
+    		int relXFromCenter = rawX - sectionCenter.getX();
+    		int relZFromCenter = rawZ - sectionCenter.getZ();
+    		
+    		if(relXFromCenter > 0) {
+    			if(relXFromCenter >= Math.abs(relZFromCenter))
+    				return BiomeSubSection.POSITIVE_X;
+    		}
+    		
+    		if(relXFromCenter <= 0) {
+    			if(Math.abs(relXFromCenter) >= Math.abs(relZFromCenter))
+    				return BiomeSubSection.NEGATIVE_X;
+    		}
+
+    		if(relZFromCenter > 0) {
+    			if(relZFromCenter >= Math.abs(relXFromCenter))
+    				return BiomeSubSection.POSITIVE_Z;
+    		}
+    		
+    		if(relZFromCenter <= 0) {
+    			if(Math.abs(relZFromCenter) >= Math.abs(relXFromCenter))
+    				return BiomeSubSection.NEGATIVE_Z;
+    		}
+    		
+    		return BiomeSubSection.NONE;
+    		
+    	//}
+    	
+    	//TerraformGeneratorPlugin.logger.info("Mismatch in biomesection! " + new BiomeSection(tw, rawX, rawZ).toString() + " vs " + this.toString());
+    	//return BiomeSubSection.NONE;
+    }
 
 	@Override
 	public int hashCode() {
@@ -295,6 +336,10 @@ public class BiomeSection {
 	public String toString() {
 		return "(" + x + "," + z + ")";
 	}
+	
+	public BiomeClimate getClimate() {
+		return BiomeClimate.selectClimate(temperature, moisture);
+	}
 
 	public float getTemperature() {
 		return temperature;
@@ -306,5 +351,13 @@ public class BiomeSection {
 
 	public TerraformWorld getTw() {
 		return tw;
+	}
+
+	public double getOceanLevel() {
+    	return tw.getOceanicNoise().GetNoise(x,z)*50.0;
+	}
+
+	public double getMountainLevel() {
+    	return tw.getMountainousNoise().GetNoise(x,z)*50.0;
 	}
 }

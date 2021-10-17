@@ -67,11 +67,15 @@ public class TreeDB {
         builder.build(tw, data, x, y, z);
     }
 
-    public static void spawnSmallJungleTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        if (GenUtils.chance(1, 8))
-            new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_EXTRA_SMALL).build(tw, data, x, y, z);
+    public static void spawnSmallJungleTree(boolean skipGradientCheck, TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    	FractalTreeBuilder ftb;
+    	if (GenUtils.chance(1, 8))
+    		ftb = new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_EXTRA_SMALL);
         else
-            new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_SMALL).build(tw, data, x, y, z);
+        	ftb = new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_SMALL);
+    	
+    	if(skipGradientCheck) ftb.skipGradientCheck();
+    	ftb.build(tw, data, x, y, z);
     }
 
     public static void spawnBigDarkOakTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {

@@ -56,6 +56,7 @@ public class CheckHeightCommand extends TerraCommand {
         
         BiomeSection section = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
+        p.sendMessage("[CH]===============================");
         p.sendMessage("Core Height: " + HeightMap.CORE.getHeight(tw, x, z));
         //p.sendMessage("Mountainous Height: " + HeightMap.MOUNTAIN.getHeight(tw, x, z));
         p.sendMessage("Attrition Height: " + HeightMap.ATTRITION.getHeight(tw, x, z));
@@ -68,6 +69,8 @@ public class CheckHeightCommand extends TerraCommand {
         p.sendMessage("Mega Chunk BiomeSection Center: " + mc.getCenterBiomeSectionBlockCoords()[0] + "," + mc.getCenterBiomeSectionBlockCoords()[1]);
         
         p.sendMessage("Biome Section: " + section.toString());
+        p.sendMessage("Biome Section Climate: " + section.getClimate().toString());
+        p.sendMessage("Biome Section Elevation: " +  section.getOceanLevel());
         p.sendMessage("Surrounding Sections:");
         for(BiomeSection sect:BiomeSection.getSurroundingSections(tw, x, z)) {
             p.sendMessage("    - " + sect.toString() + "(" + sect.getBiomeBank() + ")");

@@ -66,14 +66,26 @@ public class TerraformWorld {
         		});
     }
 
-    public FastNoise getOceanOctave() {
+    public FastNoise getOceanicNoise() {
         return NoiseCacheHandler.getNoise(
         		this, 
-        		NoiseCacheEntry.TW_OCEAN, 
+        		NoiseCacheEntry.TW_OCEANIC, 
         		tw -> {
                 	FastNoise n = new FastNoise((int) tw.getSeed() * 12);
                 	n.SetNoiseType(NoiseType.Simplex);
                 	n.SetFrequency(TConfigOption.BIOME_OCEANIC_FREQUENCY.getFloat());
+        	        return n;
+        		});
+    }
+
+    public FastNoise getMountainousNoise() {
+        return NoiseCacheHandler.getNoise(
+        		this, 
+        		NoiseCacheEntry.TW_MOUNTAINOUS, 
+        		tw -> {
+                	FastNoise n = new FastNoise((int) tw.getSeed() * 73);
+                	n.SetNoiseType(NoiseType.Simplex);
+                	n.SetFrequency(TConfigOption.BIOME_MOUNTAINOUS_FREQUENCY.getFloat());
         	        return n;
         		});
     }

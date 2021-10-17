@@ -32,7 +32,7 @@ public class MuddyBogHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.SAVANNA;
+        return Biome.SWAMP;
     }
 
     @Override
@@ -68,7 +68,8 @@ public class MuddyBogHandler extends BiomeHandler {
                 if (data.getBiome(x, z) != getBiome()) continue;
                 
                 SimpleBlock block = new SimpleBlock(data,x,y,z);
-                if(block.getRelative(0,1,0).getType() == Material.AIR) {
+                if(block.getRelative(0,1,0).getType() == Material.AIR &&
+                		block.getType() == Material.GRASS_BLOCK) {
                 	if(GenUtils.chance(random, 1, 85))
                 		block.getRelative(0,1,0).setType(Material.DEAD_BUSH);
                 	else if(GenUtils.chance(random, 1, 85))

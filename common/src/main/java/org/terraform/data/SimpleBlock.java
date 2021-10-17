@@ -259,6 +259,10 @@ public class SimpleBlock {
         setType(GenUtils.randMaterial(types));
     }
 
+    public void lsetType(Material... types) {
+        lsetType(GenUtils.randMaterial(types));
+    }
+
     public void RSolSetType(Material type) {
         if (getType().isSolid())
             setType(type);

@@ -23,7 +23,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
 	
 	//Birch Mountains must be shorter to allow trees to populate.
 	@Override
-	protected double getPeakMultiplier(Random sectionRandom) {
+	protected double getPeakMultiplier(BiomeSection section, Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
 	}
 	
@@ -133,7 +133,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
         }
         
         Random sectionRand = sect.getSectionRandom();
-        double maxPeak = getPeakMultiplier(sectionRand);
+        double maxPeak = getPeakMultiplier(sect, sectionRand);
         
         //Let's just not offset the peak. This seems to give a better result.
         SimpleLocation mountainPeak = sect.getCenter();

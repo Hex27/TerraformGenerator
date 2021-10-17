@@ -11,11 +11,15 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
-public class SnowyMountainsHandler extends AbstractMountainHandler {
+public class JaggedPeaksHandler extends AbstractMountainHandler {
 	
     @Override
     public boolean isOcean() {
@@ -33,21 +37,37 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
     }
 
     @Override
+    public double calculateHeight(TerraformWorld tw, int x, int z) {
+    	double height = super.calculateHeight(tw, x, z);
+    	FastNoise jaggedPeaksNoise = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_JAGGED_PEAKSNOISE, 
+        		world -> {
+        			FastNoise n = new FastNoise((int) (world.getSeed()*2));
+        	        n.SetNoiseType(NoiseType.SimplexFractal);
+        	        n.SetFractalOctaves(6);
+        	        n.SetFrequency(0.03f);
+        	        return n;
+        		});
+    	
+    	double noise = jaggedPeaksNoise.GetNoise(x,z); 
+    	if(noise > 0) {
+    		height += noise * 50;
+    	}
+    	return height * 1.03;
+    }
+    
+    @Override
     public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
 				int y = GenUtils.getHighestGround(data, x, z);
 				if(y < TerraformGenerator.seaLevel) continue;
 				
-				if(data.getBiome(x, z) != getBiome()) continue;
-
 				//Dirt Fixer 
 				//Snowy wastelands and the like will spawn snow blocks, then dirt blocks.
 				//Analyze 5 blocks down. Replace the block if anything next to it is stone.
 				correctDirt(new SimpleBlock(data,x,y,z));
-				
-				//Snow on top if the biome is the same
-				data.setType(x, y+1, z, Material.SNOW);
 				
 
                 //Make patches of decorative rock on the mountain sides.

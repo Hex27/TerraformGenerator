@@ -88,7 +88,7 @@ public class TerraformPopulator {
     private MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
 
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-
+    	random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
         //ores
         for (OrePopulator ore : ORE_POPS) {
         	if(ore == null)

@@ -4,6 +4,7 @@ public enum BiomeType {
     OCEANIC(false),
     FLAT,
     MOUNTAINOUS,
+    HIGH_MOUNTAINOUS,
     BEACH,
     DEEP_OCEANIC(false),
     RIVER(false);

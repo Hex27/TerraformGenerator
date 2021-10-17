@@ -2,6 +2,7 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -22,7 +23,7 @@ public class DesertHillsHandler extends AbstractMountainHandler {
 
 	//Make these resemble dunes more, not massive mountains.
 	@Override
-	protected double getPeakMultiplier(Random sectionRandom) {
+	protected double getPeakMultiplier(BiomeSection section, Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
 	}
 

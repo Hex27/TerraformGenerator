@@ -26,14 +26,24 @@ import com.google.common.cache.LoadingCache;
 
 public enum BiomeBank {
     //MOUNTAINOUS
-    ROCKY_MOUNTAINS(new RockyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.TRANSITION, TConfigOption.BIOME_ROCKY_MOUNTAINS_WEIGHT.getInt()),
-    BADLANDS_CANYON(new BadlandsCanyonHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_BADLANDS_MOUNTAINS_WEIGHT.getInt()),
     SNOWY_MOUNTAINS(new SnowyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.SNOWY, TConfigOption.BIOME_SNOWY_MOUNTAINS_WEIGHT.getInt(), new FrozenCavePopulator()),
     BIRCH_MOUNTAINS(new BirchMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.COLD, TConfigOption.BIOME_BIRCH_MOUNTAINS_WEIGHT.getInt()),
-    
+    ROCKY_MOUNTAINS(new RockyMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.TRANSITION, TConfigOption.BIOME_ROCKY_MOUNTAINS_WEIGHT.getInt()),
+    FORESTED_MOUNTAINS(new ForestedMountainsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_FORESTED_MOUNTAINS_WEIGHT.getInt(), new ForestedMountainsCavePopulator()),
+    SHATTERED_SAVANNA(new ShatteredSavannaHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_SHATTERED_SAVANNA_WEIGHT.getInt()),
+    PAINTED_HILLS(new PaintedHillsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_PAINTED_HILLS_WEIGHT.getInt()),
+    BADLANDS_CANYON(new BadlandsCanyonHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_BADLANDS_MOUNTAINS_WEIGHT.getInt()),
     //For now, disabled by default.
     DESERT_MOUNTAINS(new DesertHillsHandler(), BiomeType.MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_DESERT_MOUNTAINS_WEIGHT.getInt()),
 
+    //HIGH MOUNTAINOUS
+    JAGGED_PEAKS(new JaggedPeaksHandler(), BiomeType.HIGH_MOUNTAINOUS, BiomeClimate.SNOWY, TConfigOption.BIOME_JAGGED_PEAKS_WEIGHT.getInt(), new FrozenCavePopulator()),
+    COLD_JAGGED_PEAKS(new JaggedPeaksHandler(), BiomeType.HIGH_MOUNTAINOUS, BiomeClimate.COLD, TConfigOption.BIOME_JAGGED_PEAKS_WEIGHT.getInt(), new FrozenCavePopulator()),
+    TRANSITION_JAGGED_PEAKS(new JaggedPeaksHandler(), BiomeType.HIGH_MOUNTAINOUS, BiomeClimate.TRANSITION, TConfigOption.BIOME_JAGGED_PEAKS_WEIGHT.getInt(), new FrozenCavePopulator()),
+    FORESTED_PEAKS(new ForestedMountainsHandler(), BiomeType.HIGH_MOUNTAINOUS, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_FORESTED_MOUNTAINS_WEIGHT.getInt(), new ForestedMountainsCavePopulator()),
+    SHATTERED_SAVANNA_PEAK(new ShatteredSavannaHandler(), BiomeType.HIGH_MOUNTAINOUS, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_SHATTERED_SAVANNA_WEIGHT.getInt()),    
+    BADLANDS_CANYON_PEAK(new BadlandsCanyonHandler(), BiomeType.HIGH_MOUNTAINOUS, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_BADLANDS_MOUNTAINS_WEIGHT.getInt()),    
+    
     //OCEANIC
     OCEAN(new OceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_OCEAN_WEIGHT.getInt()),
     BLACK_OCEAN(new BlackOceansHandler(BiomeType.OCEANIC), BiomeType.OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_BLACK_OCEAN_WEIGHT.getInt()),
@@ -317,15 +327,8 @@ public enum BiomeBank {
     		bank = BiomeBank.PLAINS;
     	}
     	return bank;
-//    	try {
-//			return new HeightIndependentBiomeCacheLoader().load(loc);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return BiomeBank.PLAINS;
-//		}
     }
     
-    //private static boolean debugged = false;
     
     /**
      * Used to get a biomebank from temperature and moisture values.
@@ -340,15 +343,29 @@ public enum BiomeBank {
     	BiomeType targetType = null;
     	BiomeClimate climate = BiomeClimate.selectClimate(temperature, moisture);
     	
-    	double oceanNoise = section.getTw().getOceanOctave().GetNoise(section.getX(),section.getZ());
-    	oceanNoise = oceanNoise*50.0;
-    	if(oceanNoise < 0) oceanNoise = 0;
-    	
-    	if(oceanNoise >= TConfigOption.BIOME_DEEP_OCEANIC_THRESHOLD.getFloat()){//TConfigOption.HEIGHT_MAP_DEEP_OCEANIC_THRESHOLD.getFloat()) {
-    		targetType = BiomeType.DEEP_OCEANIC;
-    	}else if(oceanNoise >= TConfigOption.BIOME_OCEANIC_THRESHOLD.getFloat()){//TConfigOption.HEIGHT_MAP_OCEANIC_THRESHOLD.getFloat()) {
-    		targetType = BiomeType.OCEANIC;
+    	double oceanicNoise = section.getOceanLevel();
+    	if(oceanicNoise < 0)
+    	{
+    		 oceanicNoise = Math.abs(oceanicNoise);
+	    	if(oceanicNoise >= TConfigOption.BIOME_DEEP_OCEANIC_THRESHOLD.getFloat()){
+	    		targetType = BiomeType.DEEP_OCEANIC;
+	    	}else if(oceanicNoise >= TConfigOption.BIOME_OCEANIC_THRESHOLD.getFloat()){
+	    		targetType = BiomeType.OCEANIC;
+	    	}
     	}
+    	else
+    	{
+    		//If it isn't an ocean, mountains may be plausible.
+    		double mountainousNoise = section.getMountainLevel();
+    		if(mountainousNoise > 0) {
+    			if(mountainousNoise >= TConfigOption.BIOME_HIGH_MOUNTAINOUS_THRESHOLD.getFloat()){
+    	    		targetType = BiomeType.HIGH_MOUNTAINOUS;
+    	    	}else if(mountainousNoise >= TConfigOption.BIOME_MOUNTAINOUS_THRESHOLD.getFloat()){
+    	    		targetType = BiomeType.MOUNTAINOUS;
+    	    	}
+    		}
+    	}
+    	
     	
     	//Force types if they're set.
     	if(targetType == BiomeType.OCEANIC && TConfigOption.BIOME_SINGLE_OCEAN_TYPE.get(BiomeBank.class) != null) {
@@ -370,9 +387,11 @@ public enum BiomeBank {
     			if(targetType != biome.getType())
     				continue;
     			
-    			//Oceans only spawn with biome noise.
+    			//Oceans and mountains only spawn with biome noise.
     		}else if(biome.getType() == BiomeType.DEEP_OCEANIC 
-    				|| biome.getType() == BiomeType.OCEANIC) {
+    				|| biome.getType() == BiomeType.OCEANIC 
+    				|| biome.getType() == BiomeType.MOUNTAINOUS
+    				|| biome.getType() == BiomeType.HIGH_MOUNTAINOUS) {
     			continue;
     		}
     		
@@ -411,11 +430,15 @@ public enum BiomeBank {
 			case RIVER:
 	    		TerraformGeneratorPlugin.logger.info("Defaulted for river: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
 	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_RIVER.getString());
-			default:
-				return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
-    		}
+			//default:
+			//	return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
+			case HIGH_MOUNTAINOUS:
+				TerraformGeneratorPlugin.logger.info("Defaulted for high mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_HIGHMOUNTAINOUS.getString());
+			}
     	}else
     		return contenders.get(0);
+		return null;
     }
 
     /**

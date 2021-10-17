@@ -44,6 +44,7 @@ public class BiomeDistribCommand extends TerraCommand {
         MathValues temperature = new MathValues();
         MathValues moisture = new MathValues();
         double numOceans = 0;
+        double numMountains = 0;
     	double total = 0;
         TerraformWorld tw = TerraformWorld.get("world-" + new Random().nextInt(99999), new Random().nextInt(99999));
         for(int nx = -50; nx < 50; nx++)
@@ -52,6 +53,10 @@ public class BiomeDistribCommand extends TerraCommand {
 	        	if(sect.getBiomeBank().getType() == BiomeType.OCEANIC || sect.getBiomeBank().getType() == BiomeType.DEEP_OCEANIC) {
 	        		numOceans++;
 	        	}
+	        	if(sect.getBiomeBank().getType() == BiomeType.MOUNTAINOUS
+	        			|| sect.getBiomeBank().getType() == BiomeType.HIGH_MOUNTAINOUS)
+	        		numMountains++;
+	        	
 	            temperature.addValue(sect.getTemperature());
 	            moisture.addValue(sect.getMoisture());
 	        	
@@ -89,7 +94,8 @@ public class BiomeDistribCommand extends TerraCommand {
         }
         
         sender.sendMessage("=====================");
-        sender.sendMessage("Percent ocean: " + (100.0*numOceans/total) + "%");
+        sender.sendMessage("Percent Ocean: " + (100.0*numOceans/total) + "%");
+        sender.sendMessage("Percent Mountain: " + (100.0*numMountains/total) + "%");
         sender.sendMessage("=====================");
         total = 0;
 

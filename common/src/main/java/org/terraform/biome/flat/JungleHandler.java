@@ -86,7 +86,7 @@ public class JungleHandler extends BiomeHandler {
     	 }
     }
 
-    private void createBush(PopulatorDataAbstract data, float noiseIncrement, int oriX, int oriY, int oriZ) {
+    public static void createBush(PopulatorDataAbstract data, float noiseIncrement, int oriX, int oriY, int oriZ) {
         // noiseIncrement is always < 0.5 and > 0
         float rX = 2.5f + (float) (noiseIncrement * Math.random());
         float rY = 1.3f + (float) (noiseIncrement * Math.random());
@@ -167,7 +167,7 @@ public class JungleHandler extends BiomeHandler {
             if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
             	if(GenUtils.chance(random, 1000-TConfigOption.BIOME_JUNGLE_STATUE_CHANCE.getInt(), 1000)) {
-                    TreeDB.spawnSmallJungleTree(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    TreeDB.spawnSmallJungleTree(false, tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             	}else {
             		spawnStatue(random, data, sLoc);
             	}

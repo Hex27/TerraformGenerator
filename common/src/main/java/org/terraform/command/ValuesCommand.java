@@ -66,7 +66,7 @@ public class ValuesCommand extends TerraCommand {
             int x = i;
             //int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
-    		vals.addValue(50.0*tw.getOceanOctave().GetNoise(x,z));
+    		vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
         }
         sender.sendMessage("Finished");
         sender.sendMessage("Highest: " + vals.getHighest());

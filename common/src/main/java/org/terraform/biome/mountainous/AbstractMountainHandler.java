@@ -5,24 +5,46 @@ import java.util.Random;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.BiomeSection;
+import org.terraform.biome.BiomeSubSection;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 
 public abstract class AbstractMountainHandler extends BiomeHandler {
 
-	protected double getPeakMultiplier(Random sectionRandom) {
-		return GenUtils.randDouble(sectionRandom, 1.4, 1.7);
+	protected double getPeakMultiplier(BiomeSection section, Random sectionRandom)
+	{
+		//this is positive as this is a mountain.
+		//double elevation = section.getElevation();
+		double lowerBound = 1.4;
+		double upperBound = 1.7;
+		
+		//boolean surroundedByMountains = true;
+		
+		float mt =  TConfigOption.BIOME_MOUNTAINOUS_THRESHOLD.getFloat();
+		//float hmt =  TConfigOption.BIOME_HIGH_MOUNTAINOUS_THRESHOLD.getFloat();
+		
+		//Check direct faces, not diagonals
+		for(int[] rel:new int[][] {{1,0},{-1,0},{0,1},{0,-1}}) {
+			int nx = rel[0];
+			int nz = rel[1];
+			if(section.getRelative(nx, nz).getOceanLevel() >= mt) {
+				//surroundedByMountains = false;
+				lowerBound = 1.2;
+				upperBound = 1.4;
+				break;
+			}
+		}
+		
+		return GenUtils.randDouble(sectionRandom, lowerBound, upperBound);
 	}
 	
 	/**
-	 * Mountain height calculation works by identifying an offset from the BiomeSection
-	 * midpoint, then multiplying current height to peak at that offset.
-	 * <br><br>
-	 * This may lead to weird areas where blurring takes over, as the peak of the
-	 * mountain is too close to the side, or a part of the mountain is too high
+	 * Mountain height calculation works by taking the BiomeSection
+	 * center, then multiplying current height to peak at that location.
 	 */
 	@Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
@@ -40,32 +62,44 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
         }
         
         Random sectionRand = sect.getSectionRandom();
-        double maxPeak = getPeakMultiplier(sectionRand);
+        double maxPeak = getPeakMultiplier(sect, sectionRand);
         
         //Let's just not offset the peak. This seems to give a better result.
         SimpleLocation mountainPeak = sect.getCenter();
-        		//.getRelative(
-        		//GenUtils.randInt(sectionRand,-BiomeSection.sectionWidth/3,BiomeSection.sectionWidth/3),
-        		//0,
-        		//GenUtils.randInt(sectionRand,-BiomeSection.sectionWidth/3,BiomeSection.sectionWidth/3)
-        		//);
-        
-        //SimpleLocation sectionCenter = sect.getCenter();
         
         double distFromPeak = (1.42*maxMountainRadius)-Math.sqrt(
         		Math.pow(x-mountainPeak.getX(), 2)+Math.pow(z-mountainPeak.getZ(), 2)
         		);
 
-        //double distFromCenter = (maxSectRadius)-Math.sqrt(
-        //		Math.pow(x-sectionCenter.getX(), 2)+Math.pow(z-sectionCenter.getZ(), 2)
-        //		);
-        //if(distFromCenter < 0) distFromCenter = 0;
-        
         double heightMultiplier = maxPeak*(distFromPeak/maxMountainRadius);
+        double minMultiplier = 1;
+        BiomeSubSection subSect = sect.getSubSection(x, z);
+
+		float mt =  TConfigOption.BIOME_MOUNTAINOUS_THRESHOLD.getFloat();
+        switch(subSect) {
+		case NEGATIVE_X:
+			if(sect.getRelative(-1, 0).getOceanLevel() >= mt)
+				minMultiplier = 1.25;
+			break;
+		case NEGATIVE_Z:
+			if(sect.getRelative(0, -1).getOceanLevel() >= mt)
+				minMultiplier = 1.25;
+			break;
+		case POSITIVE_X:
+			if(sect.getRelative(1, 0).getOceanLevel() >= mt)
+				minMultiplier = 1.25;
+			break;
+		case POSITIVE_Z:
+			if(sect.getRelative(1, 0).getOceanLevel() >= mt)
+				minMultiplier = 1.25;
+			break;
+		case NONE:
+			minMultiplier = 1.7;
+			break;
         
-        if(heightMultiplier < 1) heightMultiplier = 1;
+        }
         
-       // heightMultiplier = heightMultiplier*(distFromCenter/maxSectRadius/2);
+        if(heightMultiplier < minMultiplier) heightMultiplier = minMultiplier;
         
         height = height*heightMultiplier;
         
