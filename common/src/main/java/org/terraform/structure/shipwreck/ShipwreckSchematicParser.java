@@ -88,10 +88,21 @@ public class ShipwreckSchematicParser extends SchematicParser {
                 return;
             }
             super.applyData(block, data);
-            if (GenUtils.chance(rand, 1, 5)) {
-                pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.SHIPWRECK_TREASURE);
-            } else
-                pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.SHIPWRECK_SUPPLY);
+            switch(rand.nextInt(3)) {
+            case 0:
+            	pop.lootTableChest(block.getX(), block.getY(), block.getZ(), 
+            			TerraLootTable.SHIPWRECK_TREASURE);
+        		break;
+            case 1:
+            	pop.lootTableChest(block.getX(), block.getY(), block.getZ(), 
+            			TerraLootTable.SHIPWRECK_SUPPLY);
+        		break;
+            case 2:
+        	default:
+        		pop.lootTableChest(block.getX(), block.getY(), block.getZ(), 
+        				TerraLootTable.SHIPWRECK_MAP);
+        		break;
+            }
             return;
         }
 

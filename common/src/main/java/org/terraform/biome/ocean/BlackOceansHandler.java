@@ -94,9 +94,8 @@ public class BlackOceansHandler extends AbstractOceanHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                
+        for (int x = data.getChunkX() * 16 + 3; x < data.getChunkX() * 16 + 16 - 3; x++) {
+            for (int z = data.getChunkZ() * 16 + 3; z < data.getChunkZ() * 16 + 16 - 3; z++) {
                 
                 if (data.getBiome(x, z) != getBiome()) continue;
                 //black spike
@@ -111,7 +110,12 @@ public class BlackOceansHandler extends AbstractOceanHandler {
 	}
 	
 	@Override
+	public boolean forceDefaultToBeach() {
+		return true;
+	}
+	
+	@Override
 	public BiomeBank getBeachType() {
-		return BiomeBank.ROCKY_BEACH;
+		return BiomeBank.BLACK_OCEAN_BEACH;
 	}
 }

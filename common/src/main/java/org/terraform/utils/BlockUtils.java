@@ -526,6 +526,41 @@ public class BlockUtils {
             }
         }
     }
+    
+    /**
+     * Places a noise-fuzzed circle of the defined material
+     * @param seed
+     * @param radius
+     * @param base
+     * @param type
+     */
+    public static void replaceCircle(int seed, float radius, SimpleBlock base, Material... type) {
+    	if (radius <= 0) return;
+        if (radius <= 0.5) {
+            //block.setReplaceType(ReplaceType.ALL);
+            base.setType(GenUtils.randMaterial(new Random(seed), type));
+            return;
+        }
+        
+        FastNoise noise = new FastNoise(seed);
+        noise.SetNoiseType(NoiseType.Simplex);
+        noise.SetFrequency(0.09f);
+        
+        for (float x = -radius; x <= radius; x++) {
+            for (float z = -radius; z <= radius; z++) {
+                SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
+                
+                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
+                        + Math.pow(z, 2) / Math.pow(radius, 2);
+                if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
+                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    rel.lsetType(GenUtils.randMaterial(type));
+                }
+            }
+        }
+        
+    }
 
     /**
      * Replaces the highest ground with a noise-fuzzed circle of the defined material

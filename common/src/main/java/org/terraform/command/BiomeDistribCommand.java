@@ -86,32 +86,41 @@ public class BiomeDistribCommand extends TerraCommand {
         		if(100*counts.getOrDefault(b, 0)/total < 5)
         			percent = ChatColor.RED + percent;
         		
-            	sender.sendMessage(b + 
-            			" (" + b.getClimate().getTemperatureRange() + "," + b.getClimate().getMoistureRange() + "): \t\t\t\t" 
-            			+ count 
-            			+ "\t" + percent + "%)");
+//            	sender.sendMessage(b + 
+//            			" (" + b.getClimate().getTemperatureRange() + "," + b.getClimate().getMoistureRange() + "): \t\t\t\t" 
+//            			+ count 
+//            			+ "\t" + percent + "%)");
+        		sender.sendMessage("%-35s(%-10s, %-10s): %-10s%s)"
+        				.formatted(b.toString(), b.getClimate().getTemperatureRange(), b.getClimate().getMoistureRange(),
+        						count, percent+"%)"));
         	}
         }
         
-        sender.sendMessage("=====================");
+        sender.sendMessage("=====================================");
         sender.sendMessage("Percent Ocean: " + (100.0*numOceans/total) + "%");
         sender.sendMessage("Percent Mountain: " + (100.0*numMountains/total) + "%");
-        sender.sendMessage("=====================");
+        sender.sendMessage("===================================");
         total = 0;
 
         for(int val:climates.values()) total += val;
         for(BiomeClimate c:BiomeClimate.values()) {
     		String count = ""+climates.getOrDefault(c, 0);
     		String percent = "("+Math.round(100*climates.getOrDefault(c, 0)/total);
+    		
     		if(count.equals("0"))
     			count = ChatColor.RED + count;
     		if(100*climates.getOrDefault(c, 0)/total < 5)
     			percent = ChatColor.RED + percent;
     		
-        	sender.sendMessage(c 
-        			+ "\t\t\t\t"
-        			+ count 
-        			+ "\t" + percent + "%)");
+    		int biomeTypes = 0;
+    		for(BiomeBank b:BiomeBank.values())
+    			if(b.getClimate() == c)
+    				biomeTypes++;
+    		
+    		float density = Math.round(100*climates.getOrDefault(c, 0)/total)/((float)biomeTypes);
+    		
+    		sender.sendMessage("%-30s%-10s %-10s (%d registered biomes) (density: %s)".formatted(
+    				c.toString(), count, percent + "%)", biomeTypes, density + ""));
         }
     }
 

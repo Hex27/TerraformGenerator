@@ -125,7 +125,7 @@ public class MushroomBuilder {
                         .setSegmentFactor(1)
                         .setCapRadius(1.5f)
                         .setCapYOffset(1)
-                        .setCapShape(FractalTypes.MushroomCap.FLAT)
+                        .setCapShape(FractalTypes.MushroomCap.ROUND)
                         .setCapType(Material.BROWN_MUSHROOM_BLOCK);
                 break;
         }

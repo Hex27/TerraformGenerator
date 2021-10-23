@@ -177,7 +177,6 @@ public class JungleHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-
                 // Fades noise, see below
                 int distanceToSeaOrMountain = Math.min(y - TerraformGenerator.seaLevel, 80 - y);
 
@@ -193,7 +192,8 @@ public class JungleHandler extends BiomeHandler {
                     }
 
                     // Generate some ground leaves
-                    if (leavesNoiseValue > -0.12
+                    if (data.getBiome(x, z) == getBiome()
+                            && leavesNoiseValue > -0.12
                             && Math.random() > 0.85)
                         createBush(data, leavesNoiseValue, x, y, z);
                     else if (GenUtils.chance(1, 95)) // Some random ones where there is no noise.

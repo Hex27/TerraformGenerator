@@ -63,6 +63,7 @@ public enum BiomeBank {
     DARK_FOREST_RIVER(new DarkForestRiverHandler(), BiomeType.RIVER, BiomeClimate.HUMID_VEGETATION, new FrozenCavePopulator()), //Special case, handle later
     DESERT_RIVER(new DesertRiverHandler(), BiomeType.RIVER, BiomeClimate.HOT_BARREN),
     BADLANDS_RIVER(new BadlandsRiverHandler(), BiomeType.RIVER, BiomeClimate.HOT_BARREN),
+    
     //DEEP OCEANIC
     DEEP_OCEAN(new OceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_DEEP_OCEAN_WEIGHT.getInt()),
     DEEP_COLD_OCEAN(new ColdOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.COLD, TConfigOption.BIOME_DEEP_COLD_OCEAN_WEIGHT.getInt()),
@@ -72,6 +73,7 @@ public enum BiomeBank {
     DEEP_HUMID_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_DEEP_HUMID_OCEAN_WEIGHT.getInt()),
     DEEP_DRY_OCEAN(new WarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_DEEP_DRY_OCEAN_WEIGHT.getInt()),
     DEEP_LUKEWARM_OCEAN(new LukewarmOceansHandler(BiomeType.DEEP_OCEANIC), BiomeType.DEEP_OCEANIC, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_DEEP_LUKEWARM_OCEAN_WEIGHT.getInt()),
+    MUSHROOM_ISLANDS(new MushroomIslandHandler(), BiomeType.DEEP_OCEANIC, BiomeClimate.TRANSITION, TConfigOption.BIOME_MUSHROOM_ISLAND_WEIGHT.getInt()),
 
     //FLAT
     PLAINS(new PlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PLAINS_WEIGHT.getInt()),
@@ -95,6 +97,8 @@ public enum BiomeBank {
     BOG_BEACH(new BogBeachHandler(), BiomeType.BEACH, BiomeClimate.DRY_VEGETATION),
     DARK_FOREST_BEACH(new DarkForestBeachHandler(), BiomeType.BEACH, BiomeClimate.HUMID_VEGETATION),
     BADLANDS_BEACH(new BadlandsBeachHandler(), BiomeType.BEACH, BiomeClimate.HOT_BARREN),
+    MUSHROOM_BEACH(new MushroomBeachHandler(), BiomeType.BEACH, BiomeClimate.TRANSITION),
+    BLACK_OCEAN_BEACH(new BlackOceanBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
     ROCKY_BEACH(new RockBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
     ICY_BEACH(new IcyBeachHandler(), BiomeType.BEACH, BiomeClimate.SNOWY, new FrozenCavePopulator()),
     MUDFLATS(new MudflatsHandler(), BiomeType.BEACH, BiomeClimate.HUMID_VEGETATION), //Special case, handle later
@@ -231,6 +235,7 @@ public enum BiomeBank {
     	if(debugPrint) 
     		TerraformGeneratorPlugin.logger.info("calculateBiome called with args: " + tw.getName() + "," + rawX + "," + height + "," + rawZ);
     	BiomeBank bank = calculateHeightIndependentBiome(tw, rawX, rawZ);
+    	
     	//locationBasedRandom  = tw.getHashedRand(rawX, 0, rawZ);
     	FastNoise beachNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_BEACH_HEIGHT, (world)->{
     		FastNoise n = new FastNoise((int) world.getSeed());
@@ -270,32 +275,41 @@ public enum BiomeBank {
         
         //Oceanic biomes that are above water level 
         //should be handled as the closest, most dominant dry biome, or be a beach
+        
         if(!bank.getType().isDry() && height >= TerraformGenerator.seaLevel) {
         	if(debugPrint) 
         		TerraformGeneratorPlugin.logger.info("calculateBiome -> Submerged biome above ground detected");
         	BiomeBank replacement = null;
-        	int highestDom = Integer.MIN_VALUE;
-        	for(BiomeSection sect:BiomeSection.getSurroundingSections(tw, rawX, rawZ)) {
-            	if(debugPrint) 
-            		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> Comparison Section: " + sect.toString());
-        		if(sect.getBiomeBank().getType().isDry()) {
-        			int compDist = (int) sect.getDominanceBasedOnRadius(rawX, rawZ);
+        	
+        	//If the ocean handler wants to force a beach default, it will be a beach default.
+            if(!bank.getHandler().forceDefaultToBeach())
+        	{
+        		int highestDom = Integer.MIN_VALUE;
+            	for(BiomeSection sect:BiomeSection.getSurroundingSections(tw, rawX, rawZ)) {
                 	if(debugPrint) 
-                		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> -> Dominance: " + compDist);
-        			if(compDist > highestDom) {
-        				replacement = sect.getBiomeBank();
-        				highestDom = compDist;
-        			}
-        		}
+                		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> Comparison Section: " + sect.toString());
+            		if(sect.getBiomeBank().getType().isDry()) {
+            			int compDist = (int) sect.getDominanceBasedOnRadius(rawX, rawZ);
+                    	if(debugPrint) 
+                    		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> -> Dominance: " + compDist);
+            			if(compDist > highestDom) {
+            				replacement = sect.getBiomeBank();
+            				highestDom = compDist;
+            			}
+            		}
+            	}
         	}
-        	//Fallback to beach if surrounding biomes are dry
+        	
+        	//Fallback to beach if surrounding biomes are not dry
         	if(replacement == null) {
         		bank = bank.getHandler().getBeachType();
         	}
+        	else
+            	bank = replacement;
+        	
         	if(debugPrint) 
         		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> Submerged biome defaulted to: " + replacement);
         	
-        	bank = replacement;
         }
     	if(debugPrint) 
     		TerraformGeneratorPlugin.logger.info("calculateBiome -> Evaluated: " + bank);

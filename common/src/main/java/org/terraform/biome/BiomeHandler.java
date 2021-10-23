@@ -58,4 +58,8 @@ public abstract class BiomeHandler {
     public double calculateHeight(TerraformWorld tw, int x, int z) {
         return HeightMap.CORE.getHeight(tw, x, z);
     }
+    
+    public boolean forceDefaultToBeach() {
+    	return false;
+    }
 }

@@ -3,6 +3,7 @@ package org.terraform.structure;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.caves.LargeCavePopulator;
 import org.terraform.structure.dungeon.SmallDungeonPopulator;
 import org.terraform.structure.mineshaft.BadlandsMinePopulator;
@@ -52,6 +53,7 @@ public class StructureRegistry {
 
         registerStructure(StructureType.SMALL, new SmallDungeonPopulator());
         registerStructure(StructureType.SMALL, new ShipwreckPopulator());
+        registerStructure(StructureType.SMALL, new BuriedTreasurePopulator());
 
 
         //registerStructure(StructureType.SMALL, new WitchHutPopulator());

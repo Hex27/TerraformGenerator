@@ -14,10 +14,12 @@ import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.StructureLocator;
+import org.terraform.structure.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
@@ -91,6 +93,10 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     
         		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
                 return new BlockPosition(coords[0], 50, coords[1]);
+            } else if (structuregenerator == StructureGenerator.BURIED_TREASURE) { //Mansion
+                
+        		int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+        		return new BlockPosition(coords[0], 50, coords[1]);
             }
         }
 

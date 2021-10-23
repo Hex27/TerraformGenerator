@@ -48,10 +48,12 @@ import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.StructureLocator;
+import org.terraform.structure.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
@@ -132,9 +134,42 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     public BlockPosition findNearestMapFeature(WorldServer worldserver, StructureGenerator<?> structuregenerator, BlockPosition blockposition, int i, boolean flag) {
-        //StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.ao.get(s.toLowerCase(Locale.ROOT));
+	//      PILLAGER_OUTPOST -> a
+	//      MINESHAFT -> b
+	//      MINESHAFT_MESA -> c
+	//      WOODLAND_MANSION -> d
+	//      JUNGLE_TEMPLE -> e
+	//      DESERT_PYRAMID -> f
+	//      IGLOO -> g
+	//      SHIPWRECK -> h
+	//      SHIPWRECH_BEACHED -> i
+	//      SWAMP_HUT -> j
+	//      STRONGHOLD -> k
+	//      OCEAN_MONUMENT -> l
+	//      OCEAN_RUIN_COLD -> m
+	//      OCEAN_RUIN_WARM -> n
+	//      NETHER_BRIDGE -> o
+	//      NETHER_FOSSIL -> p
+	//      END_CITY -> q
+	//      BURIED_TREASURE -> r
+	//      BASTION_REMNANT -> s
+	//      VILLAGE_PLAINS -> t
+	//      VILLAGE_DESERT -> u
+	//      VILLAGE_SAVANNA -> v
+	//      VILLAGE_SNOWY -> w
+	//      VILLAGE_TAIGA -> x
+	//      RUINED_PORTAL_STANDARD -> y
+	//      RUINED_PORTAL_DESERT -> z
+	//      RUINED_PORTAL_JUNGLE -> A
+	//      RUINED_PORTAL_SWAMP -> B
+	//      RUINED_PORTAL_MOUNTAIN -> C
+	//      RUINED_PORTAL_OCEAN -> D
+	//      RUINED_PORTAL_NETHER -> E
+    	
+    	//StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.ao.get(s.toLowerCase(Locale.ROOT));
         int pX = blockposition.getX();
         int pZ = blockposition.getZ();
+        TerraformGeneratorPlugin.logger.info("Vanilla locate for " + structuregenerator.getClass().getName() + " invoked.");
 
         if (structuregenerator == StructureGenerator.k) { //stronghold
             int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
@@ -150,6 +185,10 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     
         		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
                 return new BlockPosition(coords[0], 50, coords[1]);
+            } else if (structuregenerator.getClass().getName().equals("net.minecraft.world.level.levelgen.feature.WorldGenBuriedTreasure")) { 
+            	//Buried Treasure
+            	int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+            	return new BlockPosition(coords[0], 50, coords[1]);
             }
         }
 
@@ -285,7 +324,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
     public WeightedRandomList getMobsFor(BiomeBase biomebase, StructureManager structuremanager, EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-      if (structuremanager.a(blockposition, true, StructureGenerator.j).e()) {
+    	
+    	if (structuremanager.a(blockposition, true, StructureGenerator.j).e()) {
 	      if (enumcreaturetype == EnumCreatureType.a) { //MobCategory.MONSTER
 	          return StructureGenerator.j.c(); //Swamp Hut
 	      }
