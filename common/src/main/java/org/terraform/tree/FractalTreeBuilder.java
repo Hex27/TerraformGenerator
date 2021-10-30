@@ -35,6 +35,7 @@ public class FractalTreeBuilder {
     float baseThickness = 3;
     int baseHeight = 7;
     float thicknessDecrement = 0.5f;
+    float minThickness = 0f;
     int maxDepth = 4;
     int maxHeight = 999;
     float lengthDecrement = 1;
@@ -43,8 +44,10 @@ public class FractalTreeBuilder {
     Random rand;
     double minBend = 0.8 * Math.PI / 6;
     double maxBend = 1.2 * Math.PI / 6;
+    float depthPitchMultiplier = 1;
     int heightVariation = 0;
     double initialTilt = 0;
+    double minInitialTilt = -1;
     int alwaysOneStraight = 0;
     int alwaysOneStraightBranchLength = 0;
     boolean alwaysOneStraightExtendedBranches = false;
@@ -136,6 +139,42 @@ public class FractalTreeBuilder {
                         .setLengthDecrement(0.5f)
                         .setTrunkType(Material.BIRCH_WOOD)
                         .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2.3f, 3));
+                break;
+            case CHERRY_SMALL:
+                this.setBaseHeight(4)
+                        .setBaseThickness(2.5f)
+                        .setThicknessDecrement(0.5f)
+                        .setMaxDepth(3)
+                        .setDepthPitchMultiplier(0.8f)
+                        .setInitialTilt(Math.PI / 8)
+                        .setHeightVariation(1)
+                        .setMinBend(0.9 * Math.PI / 6)
+                        .setMaxBend(1.1 * Math.PI / 6)
+                        .setLengthDecrement(-0.5f)
+                        .setMinThickness(1.0f)
+                        .setTrunkType(Material.DARK_OAK_WOOD)
+                        .setFractalLeaves(new FractalLeaves(this)
+                        		.setMaterial(Material.DARK_OAK_LEAVES)
+                        		.setRadius(3, 2f, 3));
+                break;
+            case CHERRY_THICK:
+                this.setBaseHeight(5)
+                        .setBaseThickness(3f)
+                        .setThicknessDecrement(0.4f)
+                        .setMaxDepth(4)
+                        .setDepthPitchMultiplier(-0.6f)
+                        .setInitialTilt(1.3 * Math.PI / 6)
+                        .setMinInitialTilt(Math.PI / 6)
+                        .setHeightVariation(0)
+                        .setMinBend(0.9 * Math.PI / 6)
+                        .setMaxBend(1.1 * Math.PI / 6)
+                        .setLengthDecrement(0.3f)
+                        .setMinThickness(1.0f)
+                        .setTrunkType(Material.DARK_OAK_WOOD)
+                        .setFractalLeaves(new FractalLeaves(this)
+                        		.setMaterial(Material.DARK_OAK_LEAVES)
+                        		.setRadius(3, 2f, 3)
+                        		.setLeafNoiseFrequency(0.15f));
                 break;
             case SAVANNA_SMALL:
                 this.setBaseHeight(7)
@@ -492,12 +531,19 @@ public class FractalTreeBuilder {
         initialAngle = Math.PI / 2 + GenUtils.randDouble(rand, -initialTilt, initialTilt);
 
         alwaysOneStraightBranchLength = baseHeight;
-
+        double initialPitch;
+        if(minInitialTilt != -1) {
+        	initialPitch = new int[] {-1,1}[rand.nextInt(2)]
+        			* GenUtils.randDouble(rand, minInitialTilt, initialTilt);
+        }else 
+        	initialPitch = GenUtils.randDouble(rand, -initialTilt, initialTilt);
+        
+        
         if (alwaysOneStraight > 0) {
             //Starting Trunk
             fractalBranch(rand, base,
                     initialAngle,
-                    GenUtils.randDouble(rand, -initialTilt, initialTilt),
+                    initialPitch,
                     0,
                     baseThickness,
                     baseHeight);
@@ -505,7 +551,7 @@ public class FractalTreeBuilder {
             initialHeight = baseHeight + GenUtils.randInt(-heightVariation, heightVariation);
             fractalBranch(rand, base,
                     initialAngle,
-                    GenUtils.randDouble(rand, -initialTilt, initialTilt),
+                    initialPitch,
                     0, baseThickness,
                     initialHeight);
         }
@@ -526,6 +572,9 @@ public class FractalTreeBuilder {
 
     public void fractalBranch(Random rand, SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size) {
 
+    	if(thickness < minThickness)
+    		thickness = minThickness;
+    	
         if (pitch > maxPitch) {
             //reset pitch
             pitch = maxPitch - rta();
@@ -587,7 +636,7 @@ public class FractalTreeBuilder {
                 && thickness >= 1
                 && size >= 1) {
             //Make 1 branch
-            fractalBranch(rand, two, pitch - randomAngle(),
+            fractalBranch(rand, two, pitch - randomAngle(depth),
                     yaw + GenUtils.randInt(rand, 1, 5)
                             * GenUtils.getSign(rand) * rta(),
                     depth,
@@ -597,7 +646,7 @@ public class FractalTreeBuilder {
         }
 
         if (alwaysOneStraight > 0 && pitch != initialAngle) {
-            fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(), 99, thickness - thicknessDecrement, size - lengthDecrement);
+            fractalBranch(rand, two, pitch - randomAngle(depth), yaw - rta(), 99, thickness - thicknessDecrement, size - lengthDecrement);
             return;
         }
 
@@ -605,33 +654,33 @@ public class FractalTreeBuilder {
             alwaysOneStraightBranchLength -= this.lengthDecrement;
             //Extend a central trunk and make more branches.
             //this.logType = Material.GREEN_WOOL;
-            fractalBranch(rand, two, pitch + randomAngle(), -ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+            fractalBranch(rand, two, pitch + randomAngle(depth), -ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
             //this.logType = Material.BLUE_WOOL;
-            fractalBranch(rand, two, pitch + randomAngle(), ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+            fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
             //this.logType = Material.CYAN_WOOL;
-            fractalBranch(rand, two, pitch + randomAngle(), 5 * ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+            fractalBranch(rand, two, pitch + randomAngle(depth), 5 * ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
             //this.logType = Material.PURPLE_WOOL;
-            fractalBranch(rand, two, pitch + randomAngle(), -5 * ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+            fractalBranch(rand, two, pitch + randomAngle(depth), -5 * ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
 
 
             //4 more static angle fractals.
             if (alwaysOneStraightExtendedBranches) {
-                fractalBranch(rand, two, pitch + randomAngle(), ra(0, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                fractalBranch(rand, two, pitch + randomAngle(depth), ra(0, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
                 //this.logType = Material.PINK_WOOL;
-                fractalBranch(rand, two, pitch + randomAngle(), ra(Math.PI / 2, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 2, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
                 //this.logType = Material.BLACK_WOOL;
-                fractalBranch(rand, two, pitch + randomAngle(), ra(Math.PI, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
                 //this.logType = Material.WHITE_WOOL;
-                fractalBranch(rand, two, pitch + randomAngle(), -ra(Math.PI / 2, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                fractalBranch(rand, two, pitch + randomAngle(depth), -ra(Math.PI / 2, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
             }
             //this.logType = Material.SPRUCE_WOOD;
             fractalBranch(rand, two, pitch, yaw, depth + 1, thickness - thicknessDecrement, alwaysOneStraight);
         } else {
             //Make 4 branches
-            fractalBranch(rand, two, pitch - randomAngle(), yaw - rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
-            fractalBranch(rand, two, pitch + randomAngle(), yaw + rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
-            fractalBranch(rand, two, pitch + randomAngle(), yaw + 5 * rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
-            fractalBranch(rand, two, pitch + randomAngle(), yaw - 5 * rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
+            fractalBranch(rand, two, pitch - randomAngle(depth), yaw - rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
+            fractalBranch(rand, two, pitch + randomAngle(depth), yaw + rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
+            fractalBranch(rand, two, pitch + randomAngle(depth), yaw + 5 * rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
+            fractalBranch(rand, two, pitch + randomAngle(depth), yaw - 5 * rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
         }
     }
 
@@ -852,6 +901,11 @@ public class FractalTreeBuilder {
         return this;
     }
 
+    public FractalTreeBuilder setMinInitialTilt(double minInitialTilt) {
+        this.minInitialTilt = minInitialTilt;
+        return this;
+    }
+    
     public FractalTreeBuilder setFractalLeaves(FractalLeaves fractalLeaves) {
         this.fractalLeaves = fractalLeaves;
         return this;
@@ -920,6 +974,11 @@ public class FractalTreeBuilder {
         return this;
     }
 
+    public FractalTreeBuilder setMinThickness(float minThickness) {
+        this.minThickness = minThickness;
+        return this;
+    }
+
     public FractalTreeBuilder setBaseHeight(int h) {
         this.baseHeight = h;
         return this;
@@ -940,6 +999,11 @@ public class FractalTreeBuilder {
         return this;
     }
 
+    public FractalTreeBuilder setDepthPitchMultiplier(float depthPitchMultiplier) {
+        this.depthPitchMultiplier = depthPitchMultiplier;
+        return this;
+    }
+    
     public FractalTreeBuilder setLeafBranchFrequency(float freq) {
         this.branchNoiseFrequency = freq;
         return this;
@@ -970,8 +1034,8 @@ public class FractalTreeBuilder {
     /**
      * Random angle defined by the min and max bend angles
      */
-    public double randomAngle() {
-        return GenUtils.randDouble(rand, minBend, maxBend);
+    public double randomAngle(int depth) {
+        return (Math.pow(depthPitchMultiplier,depth))*GenUtils.randDouble(rand, minBend, maxBend);
     }
 
     /**

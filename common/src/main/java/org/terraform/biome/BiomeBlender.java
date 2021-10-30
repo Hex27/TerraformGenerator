@@ -8,8 +8,12 @@ import org.terraform.data.TerraformWorld;
 import java.util.Collection;
 
 /**
- * This class is used to determine how near
- * certain coordinate is to the edge of current biome.
+ * This class is used to determine an "edge factor".
+ * The edge factor refers to how close any xz coordinate is to
+ * a river or another biome. For example, being on near biome border
+ * or river is an edge factor of near 0. This helps for features
+ * like the plateaus in Eroded Plains to avoid rising in rivers and
+ * other biomes.
  */
 public class BiomeBlender {
     private final TerraformWorld tw;
@@ -18,6 +22,7 @@ public class BiomeBlender {
     int riverThreshold = 5;
     boolean blendWater;
     boolean blendBeachesToo = true;
+    int smoothBlendTowardsRivers = -1;
 
     public BiomeBlender(TerraformWorld tw, boolean blendBiomeGrid, boolean blendWater) {
         this.tw = tw;
@@ -50,10 +55,27 @@ public class BiomeBlender {
 
         if (blendWater) {
             // Linear blending when closer to water
-
-            double riverFactor = blendBeachesToo ? riverDepth / (-riverThreshold) :
+        	double riverFactor;
+        	if(smoothBlendTowardsRivers == -1) {
+        		riverFactor = blendBeachesToo ? riverDepth / (-riverThreshold) :
                     (HeightMap.getPreciseHeight(tw, x, z) - TerraformGenerator.seaLevel) / riverThreshold;
-
+        	}
+        	else
+        	{
+        		double height = HeightMap.getPreciseHeight(tw, x, z);
+        		if(height > TerraformGenerator.seaLevel + smoothBlendTowardsRivers) 
+        			riverFactor = 1;
+        		else if(height <= TerraformGenerator.seaLevel)
+        			riverFactor = 0;
+        		else
+        		{
+        			//if(height > TerraformGenerator.seaLevel) 
+        			//	height = TerraformGenerator.seaLevel;
+        			//Linearly blend
+            		riverFactor = ((height - TerraformGenerator.seaLevel)/((double)smoothBlendTowardsRivers));
+            		//TerraformGeneratorPlugin.logger.info("RF" + riverFactor);
+        		}
+        	}
             if (riverFactor < factor) factor = Math.max(0, riverFactor);
         }
 
@@ -121,6 +143,19 @@ public class BiomeBlender {
     public BiomeBlender setRiverThreshold(int riverThreshold) {
         this.riverThreshold = riverThreshold;
         return this;
+    }
+    
+    /**
+     * Use a slower algorithm to smooth towards rivers based on heightmap's getPreciseHeight
+     * 
+     * A higher number means a longer blend.
+     * @param smoothBlendTowardsRivers
+     * @return
+     */
+    public BiomeBlender setSmoothBlendTowardsRivers(int smoothBlendTowardsRivers)
+    {
+    	this.smoothBlendTowardsRivers = smoothBlendTowardsRivers;
+    	return this;
     }
 
     /**

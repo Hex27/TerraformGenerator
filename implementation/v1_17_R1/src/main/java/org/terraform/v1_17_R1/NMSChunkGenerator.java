@@ -228,6 +228,9 @@ public class NMSChunkGenerator extends ChunkGenerator {
                         //Extra blocks
                         Blocks.D, //Red sand
                         Blocks.ij, //COBBLESTONE slab
+                        Blocks.ie, //stone slab
+                        Blocks.lJ, //Mossy cobble slab
+                        Blocks.lO, //Andesite Slab
                         Blocks.m, //COBBLESTONE
                         Blocks.iS, //Dirt Path
                         Blocks.cM, //Snow block

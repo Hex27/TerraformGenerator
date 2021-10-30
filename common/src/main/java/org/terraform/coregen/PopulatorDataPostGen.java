@@ -1,5 +1,6 @@
 package org.terraform.coregen;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -113,14 +114,28 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
         Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),x+0.5,y+0.3,z+0.5), type);
         e.setPersistent(true);
     }
-
+    
+    private static int spawnerRetries = 0;
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
         Block b = w.getBlockAt(rawX, rawY, rawZ);
         b.setType(Material.SPAWNER, false);
-        CreatureSpawner spawner = (CreatureSpawner) b.getState();
-        spawner.setSpawnedType(type);
-        spawner.update();
+        try {
+            CreatureSpawner spawner = (CreatureSpawner) b.getState();
+            spawner.setSpawnedType(type);
+            spawner.update();
+        }
+        catch(IllegalStateException e)
+        {
+        	spawnerRetries++;
+        	if(spawnerRetries > 10){ 
+            	Bukkit.getLogger().info("Giving up on spawner at " + rawX + "," + rawY + "," + rawZ);
+            	spawnerRetries = 0;
+        		return;
+        	}
+        	Bukkit.getLogger().info("Failed to get state for spawner, try " + spawnerRetries);
+        	setSpawner(rawX, rawY, rawZ, type);
+        }
     }
 
     @Override

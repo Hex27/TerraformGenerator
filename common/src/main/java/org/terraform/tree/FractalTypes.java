@@ -14,6 +14,8 @@ public class FractalTypes {
         SWAMP_BOTTOM,
         BIRCH_BIG,
         BIRCH_SMALL,
+        CHERRY_SMALL,
+        CHERRY_THICK,
         JUNGLE_BIG,
         JUNGLE_SMALL,
         JUNGLE_EXTRA_SMALL,

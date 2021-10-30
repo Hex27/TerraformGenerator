@@ -2,7 +2,8 @@ package org.terraform.biome.custombiomes;
 
 public enum CustomBiomeType {
 	NONE,
-	MUDDY_BOG("b8ad49","9c8046","b8ad49","d9cd62","ad8445","ad8445", 0, false);
+	MUDDY_BOG("b8ad49","9c8046","b8ad49","d9cd62","ad8445","ad8445", 0, false),
+	CHERRY_GROVE("","69faff","","87fffb","ffa1fc","acff96", 0, false);
 	
 	private String key;
 	private String fogColor;

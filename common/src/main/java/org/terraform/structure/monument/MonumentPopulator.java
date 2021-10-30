@@ -135,7 +135,8 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-        if (biome.getType() != BiomeType.DEEP_OCEANIC)
+        if (biome.getType() != BiomeType.DEEP_OCEANIC || 
+        		biome == BiomeBank.MUSHROOM_ISLANDS)
             return false;
         return rollSpawnRatio(tw, chunkX, chunkZ);
     }

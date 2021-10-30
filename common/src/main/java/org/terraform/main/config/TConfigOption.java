@@ -88,6 +88,7 @@ public enum TConfigOption {
     BIOME_BADLANDS_PLATEAU_FREQUENCY("biome.badlands.plateaus.frequency", 0.01),
     BIOME_BADLANDS_PLATEAU_COMMONNESS("biome.badlands.plateaus.commonness", 0.18),
     BIOME_TAIGA_WEIGHT("biome.taiga.weight", 6),
+    BIOME_CHERRYGROVE_WEIGHT("biome.cherrygrove.weight", 3),
     BIOME_SNOWY_TAIGA_WEIGHT("biome.snowytaiga.weight", 6),
     BIOME_SNOWY_WASTELAND_WEIGHT("biome.snowywasteland.weight", 4),
     BIOME_ICE_SPIKES_WEIGHT("biome.icespikes.weight", 2),
