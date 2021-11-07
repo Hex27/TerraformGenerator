@@ -84,9 +84,15 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
     public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-            	if(GenUtils.getHighestGround(data, x, z) > 
+            	int y = GenUtils.getHighestGround(data, x, z);
+            	if(data.getBiome(x,z) != getBiome())
+            		continue;
+            	if(y > 
                 	10+HeightMap.CORE.getHeight(world, x, z)) {
                 	oneUnit(world, random, data, x, z, false);
+            	}
+            	if(HeightMap.getTrueHeightGradient(data, x, z, 2) < 2) {
+            		data.setType(x, y, z, Material.RED_SAND);
             	}
             }
         }
@@ -102,59 +108,83 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public BiomeBank getBeachType() {
 		return BiomeBank.BADLANDS_BEACH;
 	}
     
 	/**
-	 * Badlands Canyons will have a distorted circle resting in the middle of the
-	 * biome section, with sand padding at the sides.
+	 * Badlands Canyons will use the mountain algorithm, then forcefully
+	 * smooth out at a set Y level
 	 */
 	@Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
-		BiomeSection section = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
-		
-		FastNoise distortNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_BADLANDS_PLATEAU_DISTORTEDCIRCLE, (world)->{
-	        FastNoise noise = new FastNoise((int) (world.getSeed()/11));
-	        noise.SetNoiseType(NoiseType.Simplex);
-	        noise.SetFrequency(0.09f);
-	        return noise;
-		});
-		
-		SimpleLocation center = section.getCenter();
-		
-		int relX = x-center.getX();
-		int relZ = z-center.getZ();
-		
-		double plateauRadius = (double) (BiomeSection.sectionWidth/2.7f);
-		double sandRadius = (double) (BiomeSection.sectionWidth/2.4f);
-        double plateauEquationResult = Math.pow(relX, 2) / Math.pow(plateauRadius, 2)
-                + Math.pow(relZ, 2) / Math.pow(plateauRadius, 2);
-        double sandEquationResult = Math.pow(relX, 2) / Math.pow(sandRadius, 2)
-                + Math.pow(relZ, 2) / Math.pow(sandRadius, 2);
+		double baseHeight = HeightMap.CORE.getHeight(tw, x, z);
+		FastNoise duneNoise = NoiseCacheHandler.getNoise(
+		    		tw, 
+		    		NoiseCacheEntry.BIOME_BADLANDS_CANYON_NOISE, 
+		    		world -> {
+		    	    	FastNoise n = new FastNoise((int) world.getSeed());
+		    	        n.SetNoiseType(NoiseType.Simplex);
+		    	        n.SetFractalOctaves(3);
+		    	        n.SetFrequency(0.02f);
+		    	        return n;
+		    		});
+		double noise = duneNoise.GetNoise(x, z);
+		if(noise < 0) noise = 0;
+
+    	
+        double height = HeightMap.CORE.getHeight(tw, x, z);//HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
         
-        double noiseVal = distortNoise.GetNoise(x, z);
+        //Let mountains cut into adjacent sections.
+        double maxMountainRadius = ((double) BiomeSection.sectionWidth);
+        //Add dune height
+        height += noise*20;
         
-        double raisedHeight = 0;
-        
-        if (sandEquationResult <= 1 + 0.7 * noiseVal) {
-        	if (plateauEquationResult <= 1 + 0.7 * noiseVal) {
-                //Aggressively raise land into a plateau
-        		raisedHeight = 40.0;
-            }else {
-            	//Pad sides with shallow gradients
-            	
-            	//min 0.
-            	double diff = (1 + 0.7 * noiseVal) - sandEquationResult;
-            	if(diff > 1) diff = 1.0;
-            	raisedHeight += 10.0 * diff;
-            }
+        BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
+        if(sect.getBiomeBank() != BiomeBank.BADLANDS_CANYON
+        		|| sect.getBiomeBank() != BiomeBank.BADLANDS_CANYON_PEAK) {
+        	sect = BiomeSection.getMostDominantSection(tw, x, z);
         }
-		
-		double riverHeight = HeightMap.getRawRiverDepth(tw, x, z);
-        double height = HeightMap.CORE.getHeight(tw, x, z) + riverHeight + raisedHeight;
         
+        Random sectionRand = sect.getSectionRandom();
+        double maxPeak = getPeakMultiplier(sect, sectionRand);
+        
+        //Let's just not offset the peak. This seems to give a better result.
+        SimpleLocation mountainPeak = sect.getCenter();
+        
+        double distFromPeak = (1.42*maxMountainRadius)-Math.sqrt(
+        		Math.pow(x-mountainPeak.getX(), 2)+Math.pow(z-mountainPeak.getZ(), 2)
+        		);
+
+        double heightMultiplier = maxPeak*(distFromPeak/maxMountainRadius);
+        double minMultiplier = 1;
+        if(heightMultiplier < minMultiplier) heightMultiplier = minMultiplier;
+        
+        height = height*heightMultiplier;
+        
+		//Thresholds to make separate plateau-looking bits
+		if(height > 75) {
+			if(height < 80)
+				height = 80;
+			if(height < 90)
+				height = 90;
+			else if(height < 105)
+				height = 105;
+			else if(height < 120)
+				height = 120;
+			else
+				height = 135;
+		}
+		else height = baseHeight;
+		
         return height;
     }
+	
+	@Override
+	protected double getPeakMultiplier(BiomeSection section, Random sectionRandom)
+	{
+		return super.getPeakMultiplier(section, sectionRandom)*0.9;
+	}
 }

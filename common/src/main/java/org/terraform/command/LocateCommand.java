@@ -202,7 +202,8 @@ public class LocateCommand extends TerraCommand implements Listener {
             ArrayList<String> values = new ArrayList<>();
 
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
-                values.add(spop.getClass().getSimpleName());
+            	if(spop.getClass().getSimpleName().toUpperCase().startsWith(args[1].toUpperCase()))
+            		values.add(spop.getClass().getSimpleName());
             }
 
             return values;

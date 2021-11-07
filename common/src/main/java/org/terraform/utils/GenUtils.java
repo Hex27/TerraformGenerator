@@ -37,7 +37,7 @@ public class GenUtils {
             "POINTED_DRIPSTONE"
     };
     private static final LoadingCache<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache = CacheBuilder.newBuilder()
-            .maximumSize(64)
+            .maximumSize(128)
             .build(new CacheLoader<ChunkCache, ArrayList<BiomeBank>>() {
                 @Override
                 public ArrayList<BiomeBank> load(ChunkCache key) {

@@ -6,6 +6,8 @@ import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.FastNoise.NoiseType;
 
 import java.util.Random;
 import java.util.Stack;
@@ -60,13 +62,21 @@ public class ValuesCommand extends TerraCommand {
         MathValues vals = new MathValues();
         MathValues unwarped = new MathValues();
         MathValues warped = new MathValues();
+        
         TerraformWorld tw = TerraformWorld.get("world-1232341234", new Random().nextInt(99999));
+        
+        FastNoise n = new FastNoise((int) tw.getSeed());
+        n.SetNoiseType(NoiseType.SimplexFractal);
+        n.SetFractalOctaves(3);
+        n.SetFrequency(0.03f);
+        
         int period = 4;
         for (int i = 0; i < 9000000; i++) {
             int x = i;
             //int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
-    		vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
+            vals.addValue(50*n.GetNoise(x, z));
+    		//vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
         }
         sender.sendMessage("Finished");
         sender.sendMessage("Highest: " + vals.getHighest());

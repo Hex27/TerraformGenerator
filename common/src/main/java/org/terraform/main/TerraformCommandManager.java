@@ -160,12 +160,22 @@ public class TerraformCommandManager implements TabExecutor {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
 	    List<String> options = new ArrayList<>();
-        if (args.length <= 1) {
+        if (args.length == 0) {
             for (TerraCommand terraCommand : commands) {
                 if (terraCommand.hasPermission(commandSender))
                     options.add(terraCommand.aliases.get(0));
             }
-        } else {
+        }else if(args.length == 1) {
+            for (TerraCommand terraCommand : commands) {
+                if (terraCommand.hasPermission(commandSender))
+                	for(String a:terraCommand.aliases) {
+                		if(a.startsWith(args[0].toLowerCase())) {
+                			options.add(terraCommand.aliases.get(0));
+                			break;
+                		}
+                	}
+            }
+        }else {
             for (TerraCommand terraCommand : commands) {
                 if (terraCommand.matchCommand(args[0].toLowerCase())) {
                     for (TerraCommandArgument<?> arg : terraCommand.parameters) {

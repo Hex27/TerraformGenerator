@@ -126,6 +126,10 @@ public class BiomeSection {
 		return new Random(Objects.hash(tw.getSeed(), x, z));
 	}
 
+	public Random getSectionRandom(int multiplier) {
+		return new Random(multiplier*Objects.hash(tw.getSeed(), x, z));
+	}
+
 	public BiomeSection getRelative(int x, int z) {
 		BiomeSection mc = BiomeBank.getBiomeSectionFromSectionCoords(this.tw, this.x + x, this.z + z, true);
 		return mc;

@@ -8,7 +8,6 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
 
-import java.util.Collection;
 import java.util.Random;
 
 public class AnimalPopulator {
@@ -31,24 +30,29 @@ public class AnimalPopulator {
         this.maxNum = maxNum;
     }
 
-    public boolean canSpawn(Collection<BiomeBank> b, Random rand) {
-        //TerraformGeneratorPlugin.logger.info("Can-spawn for - " + animalType.toString());
+    //Changed to now only roll chances. TerraformAnimalPopulator will no longer
+    //call GenUtils.getBiomesInChunk, which polls biomes for 256 blocks each.
+    //Instead, each query will just call getBiome per block. This sounds more
+    //intensive, but it relies on the getBiome cache system to be faster.
+    public boolean canSpawn(Random rand) {
         if (GenUtils.chance(rand, 100 - chance, 100))
             return false;
-        //TerraformGeneratorPlugin.logger.info("Pass chance");
-        if (whitelistedBiomes != null) {
+        return true;
+    }
+    
+    private boolean canSpawnInBiome(BiomeBank b) {
+    	if (whitelistedBiomes != null) {
             for (BiomeBank entr : whitelistedBiomes) {
-                if (b.contains(entr)) return true;
+                if (entr == b) return true;
             }
             return false;
         }
         if (blacklistedBiomes != null) {
             for (BiomeBank entr : blacklistedBiomes) {
-                if (b.contains(entr)) return false;
+                if (entr == b) return false;
             }
             return true;
         }
-        //TerraformGeneratorPlugin.logger.info("Failed.");
         return false;
     }
 
@@ -61,13 +65,14 @@ public class AnimalPopulator {
             //To account for solid ground that spawns above the noisemap (i.e. boulders/black spikes)
             int height = GenUtils.getHighestGround(data,x,z)+1;//HeightMap.getBlockHeight(world, x, z) + 2;
             
-            if(!this.isAquatic() && height > TerraformGenerator.seaLevel) {
-            	if(!data.getType(x, height, z).isSolid()) //Don't spawn in blocks
-            		data.addEntity(x, height, z, animalType);
-            }else if(this.isAquatic() && height <= TerraformGenerator.seaLevel) {
-            	if(data.getType(x, height, z) == Material.WATER) //Don't spawn in anything but water
-            		data.addEntity(x, height, z, animalType);
-            }
+            if(canSpawnInBiome(world.getBiomeBank(x, z)))
+            	if(!this.isAquatic() && height > TerraformGenerator.seaLevel) {
+            		if(!data.getType(x, height, z).isSolid()) //Don't spawn in blocks
+            			data.addEntity(x, height, z, animalType);
+	            }else if(this.isAquatic() && height <= TerraformGenerator.seaLevel) {
+	            	if(data.getType(x, height, z) == Material.WATER) //Don't spawn in anything but water
+	            		data.addEntity(x, height, z, animalType);
+	            }
         }
     }
 

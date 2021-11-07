@@ -9,13 +9,9 @@ import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.AnimalPopulator;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.Version;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.Random;
-import java.util.Set;
 
 public class TerraformAnimalPopulator extends BlockPopulator {
 
@@ -125,17 +121,18 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     public void populate(World world, Random random, Chunk chunk) {
        
     	PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
-        ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, chunk.getX(),chunk.getZ());
+        //ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, chunk.getX(),chunk.getZ());
 
-        Set<EntityType> spawned = EnumSet.noneOf(EntityType.class);
+    	//wtf was this set for
+        //Set<EntityType> spawned = EnumSet.noneOf(EntityType.class);
         //TerraformGeneratorPlugin.logger.debug("animal-populator eval for " + data.getChunkX() + "," + data.getChunkZ());
         for (AnimalPopulator pop : ANIMAL_POPULATORS) {
         	if(pop == null) continue;
-            if (pop.canSpawn(banks, tw.getHashedRand(chunk.getX(), pop.hashCode(), chunk.getZ())) && spawned.add(pop.getAnimalType())) {
+            if (pop.canSpawn(tw.getHashedRand(chunk.getX(), pop.hashCode(), chunk.getZ()))) {
                 //TerraformGeneratorPlugin.logger.debug("animal populator proc");
                 pop.populate(tw, tw.getHashedRand(chunk.getX(), 111+pop.hashCode(), chunk.getZ()), data);
             }
         }
-        spawned.clear();
+        //spawned.clear();
     }
 }

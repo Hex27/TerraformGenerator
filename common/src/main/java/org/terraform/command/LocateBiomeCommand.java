@@ -113,7 +113,8 @@ public class LocateBiomeCommand extends TerraCommand {
             ArrayList<String> values = new ArrayList<>();
 
             for (BiomeBank bank : BiomeBank.values()) {
-                values.add(bank.name());
+            	if(bank.name().startsWith(args[1].toUpperCase()))
+            		values.add(bank.name());
             }
 
             return values;
