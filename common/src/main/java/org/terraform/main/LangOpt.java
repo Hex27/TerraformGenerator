@@ -9,6 +9,7 @@ public enum LangOpt {
     COMMAND_LOCATE_SEARCHING("&bSearching for structure asynchronously. Please wait..."),
     COMMAND_LOCATEBIOME_INVALIDBIOME("&cInvalid Biome. Valid Biomes:"),
     COMMAND_LOCATEBIOME_NOT_IN_5000("&cCould not find this biome within 5000 blocks."),
+    COMMAND_LOCATEBIOME_DISABLED("&cThis biome is disabled."),
     COMMAND_LOCATE_LIST_HEADER("&e-==[&bStructure Handlers&e]==-"),
     COMMAND_LOCATE_LIST_ENTRY("&e - &b%entry%"),
     COMMAND_LOCATE_COMPLETED_TASK("&aCompleted Locate task (%time%ms)");

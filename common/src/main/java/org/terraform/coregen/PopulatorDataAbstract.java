@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.terraform.data.TerraformWorld;
 
 public abstract class PopulatorDataAbstract {
     /**
@@ -63,6 +64,8 @@ public abstract class PopulatorDataAbstract {
 
     public abstract void lootTableChest(int x, int y, int z, TerraLootTable table);
 
+    public abstract TerraformWorld getTerraformWorld();
+    
     @Override
     public int hashCode() {
         return this.getClass().getCanonicalName().hashCode();

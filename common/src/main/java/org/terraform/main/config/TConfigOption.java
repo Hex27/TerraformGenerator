@@ -1,8 +1,6 @@
 package org.terraform.main.config;
 
 import org.bukkit.ChatColor;
-import org.terraform.biome.BiomeBank;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -29,12 +27,13 @@ public enum TConfigOption {
     BIOME_SECTION_BITSHIFTS("biome.biomesection-bitshifts", 7),
     BIOME_CLAY_DEPOSIT_SIZE("biome.clay-deposit-radius", 3f),
     BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND("biome.clay-deposit-chance-out-of-thousand", 3),
-    BIOME_SINGLE_TERRESTRIAL_TYPE("biome.single.land", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
-    BIOME_SINGLE_OCEAN_TYPE("biome.single.ocean", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
-    BIOME_SINGLE_DEEPOCEAN_TYPE("biome.single.ocean", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
-    BIOME_SINGLE_MOUNTAIN_TYPE("biome.single.mountain", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
-    BIOME_SINGLE_RIVER_TYPE("biome.single.river", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
-    BIOME_SINGLE_BEACH_TYPE("biome.single.beach", null, in -> in == null ? null : BiomeBank.valueOf((String) in)),
+    BIOME_SINGLE_TERRESTRIAL_TYPE("biome.single.land", "disabled"),
+    BIOME_SINGLE_OCEAN_TYPE("biome.single.ocean", "disabled"),
+    BIOME_SINGLE_DEEPOCEAN_TYPE("biome.single.deepocean", "disabled"),
+    BIOME_SINGLE_MOUNTAIN_TYPE("biome.single.mountain", "disabled"),
+    BIOME_SINGLE_HIGHMOUNTAIN_TYPE("biome.single.highmountain", "disabled"),
+    //BIOME_SINGLE_RIVER_TYPE("biome.single.river", "disabled"),
+    //BIOME_SINGLE_BEACH_TYPE("biome.single.beach", "disabled"),
     BIOME_DEFAULT_FLAT("biome.defaults.flat","PLAINS"),
     BIOME_DEFAULT_OCEANIC("biome.defaults.oceanic","OCEAN"),
     BIOME_DEFAULT_DEEPOCEANIC("biome.defaults.deepoceanic","DEEP_OCEAN"),
@@ -73,6 +72,8 @@ public enum TConfigOption {
     BIOME_DEEP_LUKEWARM_OCEAN_WEIGHT("biome.deeplukewarmocean.weight", 7),
     BIOME_MUSHROOM_ISLAND_WEIGHT("biome.mushroomisland.weight", 1),
     BIOME_PLAINS_WEIGHT("biome.plains.weight", 10),
+    BIOME_PETRIFIEDCLIFFS_WEIGHT("biome.petrifiedcliffs.weight", 6),
+    BIOME_GORGE_WEIGHT("biome.gorge.weight", 6),
     BIOME_ERODED_PLAINS_WEIGHT("biome.erodedplains.weight", 6),
     BIOME_SAVANNA_WEIGHT("biome.savanna.weight", 6),
     BIOME_MUDDYBOG_WEIGHT("biome.muddybog.weight", 2),
@@ -117,6 +118,8 @@ public enum TConfigOption {
     MISC_USE_SLABS_TO_SMOOTH("misc.use-slabs-to-smooth-terrain", true),
     
     //-=[DEVSTUFF]=-
+    DEVSTUFF_CHUNKCACHE_SIZE("dev-stuff.chunk-cache-size", 6000),
+    DEVSTUFF_CHUNKBIOMES_SIZE("dev-stuff.biomecache-size", 3000),
     DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
     DEVSTUFF_VANILLA_MUSHROOMS("dev-stuff.force-only-vanilla-mushrooms",false),

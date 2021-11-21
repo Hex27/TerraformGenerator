@@ -234,5 +234,10 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
         ws.addEntity(entityminecartchest);
     }
 
+	@Override
+	public TerraformWorld getTerraformWorld() {
+		return tw;
+	}
+
 
 }

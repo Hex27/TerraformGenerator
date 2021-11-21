@@ -190,5 +190,11 @@ public class PopulatorData extends PopulatorDataAbstract {
         return null;
     }
 
+	@Override
+	public TerraformWorld getTerraformWorld() {
+		// TODO Auto-generated method stub
+		return gen.getTerraformWorld();
+	}
+
 
 }

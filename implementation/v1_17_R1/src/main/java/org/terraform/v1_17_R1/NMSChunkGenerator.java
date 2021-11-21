@@ -262,10 +262,15 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return CompletableFuture.completedFuture(ichunkaccess);
      }
 
+//    public static ArrayList<Long> threadIds = new ArrayList<>();
   	@SuppressWarnings("unchecked")
     @Override
     public void buildBase(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {
-        try {
+//        if(!threadIds.contains(Thread.currentThread().getId())) {
+//        	TerraformGeneratorPlugin.logger.info("buildBase operating on thread ID " + Thread.currentThread().getId());
+//        	threadIds.add(Thread.currentThread().getId());
+//        }
+  		try {
         	TerraformGenerator generator = new TerraformGenerator();
             int x = ichunkaccess.getPos().b;
             int z = ichunkaccess.getPos().c;

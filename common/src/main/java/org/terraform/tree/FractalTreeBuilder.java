@@ -176,6 +176,57 @@ public class FractalTreeBuilder {
                         		.setRadius(3, 2f, 3)
                         		.setLeafNoiseFrequency(0.15f));
                 break;
+            case ANDESITE_PETRIFIED_SMALL:
+                this.setBaseHeight(6)
+                        .setBaseThickness(3)
+                        .setThicknessDecrement(0.5f)
+                        .setMaxDepth(3)
+                        .setTrunkType(Material.ANDESITE)
+                        .setMinBend(1.1 * Math.PI / 6)
+                        .setMaxBend(1.3 * Math.PI / 6)
+                        .setLengthDecrement(1)
+                        .setHeightVariation(2)
+                        .setVines(3)
+                        .setFractalLeaves(
+                        		new FractalLeaves(this)
+                        		.setRadius(4, 2f, 4)
+                        		.setMaterial(Material.ANDESITE, Material.POLISHED_ANDESITE, Material.ANDESITE)
+                        	);
+                break;
+            case GRANITE_PETRIFIED_SMALL:
+                this.setBaseHeight(6)
+                        .setBaseThickness(3)
+                        .setThicknessDecrement(0.5f)
+                        .setMaxDepth(3)
+                        .setTrunkType(Material.GRANITE)
+                        .setMinBend(1.1 * Math.PI / 6)
+                        .setMaxBend(1.3 * Math.PI / 6)
+                        .setLengthDecrement(1)
+                        .setHeightVariation(2)
+                        .setVines(3)
+                        .setFractalLeaves(
+                        		new FractalLeaves(this)
+                        		.setRadius(4, 2f, 4)
+                        		.setMaterial(Material.GRANITE, Material.POLISHED_GRANITE, Material.GRANITE)
+                        	);
+                break;
+            case DIORITE_PETRIFIED_SMALL:
+                this.setBaseHeight(6)
+                        .setBaseThickness(3)
+                        .setThicknessDecrement(0.5f)
+                        .setMaxDepth(3)
+                        .setTrunkType(Material.DIORITE)
+                        .setMinBend(1.1 * Math.PI / 6)
+                        .setMaxBend(1.3 * Math.PI / 6)
+                        .setLengthDecrement(1)
+                        .setHeightVariation(2)
+                        .setVines(3)
+                        .setFractalLeaves(
+                        		new FractalLeaves(this)
+                        		.setRadius(4, 2f, 4)
+                        		.setMaterial(Material.DIORITE, Material.POLISHED_DIORITE, Material.DIORITE)
+                        	);
+                break;
             case SAVANNA_SMALL:
                 this.setBaseHeight(7)
                         .setBaseThickness(1)
@@ -717,6 +768,8 @@ public class FractalTreeBuilder {
                 rY <= 0.5 &&
                 rZ <= 0.5) {
             block.setType(type);
+            if(Tag.WALLS.isTagged(type))
+            	BlockUtils.correctMultifacingData(block);
             return;
         }
 
@@ -760,7 +813,8 @@ public class FractalTreeBuilder {
 
                     if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         rel.setType(type);
-                        
+                        if(Tag.WALLS.isTagged(type))
+                        	BlockUtils.correctMultifacingData(rel);
                         if (coralDecoration) {
                             if (!changed.contains(rel))
                                 changed.add(rel);
@@ -790,35 +844,12 @@ public class FractalTreeBuilder {
                             if (GenUtils.chance(2, 10)) {
                                 dangleLeavesDown(rel, (int) Math.ceil(maxR), vines / 2, vines);
                             }
-
-                            // Vines set only if the leaf type is leaves.
-                            //Consider removal since this is done in fractalleaves.java
-//                            if (Tag.LEAVES.isTagged(fractalLeaves.material))
-//                                if (GenUtils.chance(1, 10)) {
-//                                    for (BlockFace face : BlockUtils.directBlockFaces) {
-//                                        MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
-//                                        dir.setFace(face.getOppositeFace(), true);
-//                                        SimpleBlock vine = rel.getRelative(face);
-//                                        if (vine.getType().isSolid() ||
-//                                                vine.getType() == Material.WATER) continue;
-//
-//                                        vine.setBlockData(dir);
-//                                        for (int i = 0; i < GenUtils.randInt(1, vines); i++) {
-//                                            if (vine.getRelative(0, -i, 0).getType().isSolid() ||
-//                                                    vine.getRelative(0, -i, 0).getType() == Material.WATER) break;
-//                                            vine.getRelative(0, -i, 0).setBlockData(dir);
-//                                        }
-//                                    }
-//                                }
-
                         }
                     }
                 }
             }
         }
-        //if(Tag.LEAVES.isTagged(type))
-        //debug = false;
-
+        
         //Ensures that corals don't die
         while (!changed.isEmpty()) {
             SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));

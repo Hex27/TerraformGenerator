@@ -402,7 +402,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public boolean isEnabled() {
         // TODO Auto-generated method stub
-        return TConfigOption.STRUCTURES_MONUMENT_ENABLED.getBoolean();
+        return BiomeBank.isBiomeEnabled(BiomeBank.DESERT) 
+        		&& TConfigOption.STRUCTURES_PYRAMID_ENABLED.getBoolean();
     }
 
 

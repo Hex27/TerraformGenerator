@@ -27,7 +27,11 @@ public class MasterCavePopulatorDistributor{
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 
             	BiomeBank bank = tw.getBiomeBank(x, z);
+            	int maxHeightForCaves = bank.getHandler().getMaxHeightForCaves(tw, x, z);
                 for (int[] pair : GenUtils.getCaveCeilFloors(data, x, z)) {
+                	
+                	//Biome disallows caves above this height
+                	if(pair[0] > maxHeightForCaves) continue;
                 	
                 	if(pair[0] - pair[1] <= 3) //Ceiling too short.
                 		continue;

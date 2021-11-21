@@ -26,6 +26,10 @@ public abstract class BiomeHandler {
     
     public abstract void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data);
 
+    public int getMaxHeightForCaves(TerraformWorld tw, int x, int z) {
+    	return 99999;
+    }
+    
     /**
      * @return The used handler for transforming
      * the terrain. If handler uses another

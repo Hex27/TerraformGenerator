@@ -263,4 +263,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
             setBiome(x, z, bio);
         }
     }
+    
+    protected TerraformWorld getTerraformWorld() {
+    	return tw;
+    }
 }

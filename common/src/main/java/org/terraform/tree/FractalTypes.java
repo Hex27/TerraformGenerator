@@ -30,7 +30,11 @@ public class FractalTypes {
         BRAIN_CORAL,
         TUBE_CORAL,
         BUBBLE_CORAL,
-        GIANT_PUMPKIN;
+        GIANT_PUMPKIN,
+        ANDESITE_PETRIFIED_SMALL,
+        GRANITE_PETRIFIED_SMALL,
+        DIORITE_PETRIFIED_SMALL
+        ;
 
         public static final Tree[] VALUES = Tree.values();
     }

@@ -114,13 +114,20 @@ public class BiomeDistribCommand extends TerraCommand {
     		
     		int biomeTypes = 0;
     		for(BiomeBank b:BiomeBank.values())
-    			if(b.getClimate() == c)
+    			if(b.getClimate() == c && 
+    			(b.getType() == BiomeType.FLAT 
+    			|| b.getType() == BiomeType.MOUNTAINOUS 
+    			|| b.getType() == BiomeType.HIGH_MOUNTAINOUS))
     				biomeTypes++;
     		
     		float density = Math.round(100*climates.getOrDefault(c, 0)/total)/((float)biomeTypes);
     		
     		sender.sendMessage("%-30s%-10s %-10s (%d registered biomes) (density: %s)".formatted(
-    				c.toString(), count, percent + "%)", biomeTypes, density + ""));
+    				c.toString(), 
+    				count, 
+    				percent + "%)", 
+    				biomeTypes, 
+    				density + ""));
         }
     }
 

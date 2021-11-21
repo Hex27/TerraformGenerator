@@ -407,4 +407,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
             biome.setBiome(x, y, z, CraftBlock.biomeToBiomeBase(bio));
         }
     }
+    
+    protected TerraformWorld getTerraformWorld() {
+    	return tw;
+    }
 }

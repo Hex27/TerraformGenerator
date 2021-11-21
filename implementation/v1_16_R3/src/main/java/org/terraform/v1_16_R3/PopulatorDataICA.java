@@ -227,4 +227,9 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
         entityminecartchest.setLootTable(getLootTable(table), random.nextLong());
         ws.addEntity(entityminecartchest);
     }
+
+	@Override
+	public TerraformWorld getTerraformWorld() {
+		return tw;
+	}
 }

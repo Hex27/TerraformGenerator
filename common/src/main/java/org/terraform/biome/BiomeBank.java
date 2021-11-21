@@ -78,7 +78,8 @@ public enum BiomeBank {
 
     //FLAT
     PLAINS(new PlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PLAINS_WEIGHT.getInt()),
-    GORGE(new GorgeHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PLAINS_WEIGHT.getInt()),
+    GORGE(new GorgeHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_GORGE_WEIGHT.getInt()),
+    PETRIFIED_CLIFFS(new PetrifiedCliffs(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PETRIFIEDCLIFFS_WEIGHT.getInt()),
     SAVANNA(new SavannaHandler(), BiomeType.FLAT, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_SAVANNA_WEIGHT.getInt()),
     MUDDY_BOG(new MuddyBogHandler(), BiomeType.FLAT, BiomeClimate.DRY_VEGETATION, TConfigOption.BIOME_MUDDYBOG_WEIGHT.getInt()),
     FOREST(new ForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_FOREST_WEIGHT.getInt()),
@@ -347,6 +348,64 @@ public enum BiomeBank {
     	return bank;
     }
     
+	public static BiomeBank singleLand = null;
+	public static BiomeBank singleOcean = null;
+	public static BiomeBank singleDeepOcean = null;
+	public static BiomeBank singleMountain = null;
+	public static BiomeBank singleHighMountain = null;
+	//static BiomeBank singleRiver;
+	//static BiomeBank singleBeach;
+    public static void initSinglesConfig() {
+    	try
+    	{ singleLand = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.getString().toUpperCase()); }
+    	catch(IllegalArgumentException e)
+    		{singleLand = null;}
+    	try
+    	{ singleOcean = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_OCEAN_TYPE.getString().toUpperCase()); }
+    	catch(IllegalArgumentException e)
+    		{singleOcean = null;}
+    	try
+    	{ singleDeepOcean = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_DEEPOCEAN_TYPE.getString().toUpperCase()); }
+    	catch(IllegalArgumentException e)
+    		{singleDeepOcean = null;}
+    	try
+    	{ singleMountain = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_MOUNTAIN_TYPE.getString().toUpperCase()); }
+    	catch(IllegalArgumentException e)
+    		{singleMountain = null;}
+    	try
+    	{ singleHighMountain = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_HIGHMOUNTAIN_TYPE.getString().toUpperCase()); }
+    	catch(IllegalArgumentException e)
+    		{singleHighMountain = null;}
+    }
+    
+    /**
+     * Does not currently work for beach and river.
+     * @param bank
+     * @return
+     */
+    public static boolean isBiomeEnabled(BiomeBank bank) {
+    	
+    	if(bank.getBiomeWeight() <= 0)
+    		return false;
+    	
+    	switch(bank.getType()) {
+		case BEACH:
+			return true; //L
+		case DEEP_OCEANIC:
+			return singleDeepOcean == null || singleDeepOcean == bank;
+		case FLAT:
+			return singleLand == null || singleLand == bank;
+		case HIGH_MOUNTAINOUS:
+			return singleHighMountain == null || singleHighMountain == bank;
+		case MOUNTAINOUS:
+			return singleMountain == null || singleMountain == bank;
+		case OCEANIC:
+			return singleOcean == null || singleOcean == bank;
+		case RIVER:
+			return true; //L    	
+    	}
+    	return true;
+    }
     
     /**
      * Used to get a biomebank from temperature and moisture values.
@@ -386,16 +445,16 @@ public enum BiomeBank {
     	
     	
     	//Force types if they're set.
-    	if(targetType == BiomeType.OCEANIC && TConfigOption.BIOME_SINGLE_OCEAN_TYPE.get(BiomeBank.class) != null) {
-    		return TConfigOption.BIOME_SINGLE_OCEAN_TYPE.get(BiomeBank.class);
-    	}else if(targetType == BiomeType.DEEP_OCEANIC && TConfigOption.BIOME_SINGLE_DEEPOCEAN_TYPE.get(BiomeBank.class) != null) {
-    		return TConfigOption.BIOME_SINGLE_DEEPOCEAN_TYPE.get(BiomeBank.class);
-    	}else if(targetType == BiomeType.FLAT && TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.get(BiomeBank.class) != null) {
-    		return TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.get(BiomeBank.class);
-    	}else if(targetType == BiomeType.MOUNTAINOUS && TConfigOption.BIOME_SINGLE_MOUNTAIN_TYPE.get(BiomeBank.class) != null) {
-    		return TConfigOption.BIOME_SINGLE_MOUNTAIN_TYPE.get(BiomeBank.class);
-    	}else if(targetType == BiomeType.RIVER && TConfigOption.BIOME_SINGLE_RIVER_TYPE.get(BiomeBank.class) != null) {
-    		return TConfigOption.BIOME_SINGLE_RIVER_TYPE.get(BiomeBank.class);
+    	if(targetType == BiomeType.OCEANIC && singleOcean != null) {
+    		return singleOcean;
+    	}else if(targetType == BiomeType.DEEP_OCEANIC && singleDeepOcean != null) {
+    		return singleDeepOcean;
+    	}else if(targetType == null && singleLand != null) {
+    		return singleLand;
+    	}else if(targetType == BiomeType.MOUNTAINOUS && singleMountain != null) {
+    		return singleMountain;
+    	}else if(targetType == BiomeType.HIGH_MOUNTAINOUS && singleHighMountain != null) {
+    		return singleHighMountain;
     	}
     	
     	ArrayList<BiomeBank> contenders = new ArrayList<>();

@@ -147,7 +147,7 @@ public enum HeightMap {
     public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
 
-        double cachedValue = cache.getHeight(x, z);
+        double cachedValue = cache.getHeightMapHeight(x, z);
         if (cachedValue != 0) return cachedValue;
 
         double height = getRiverlessHeight(tw,x,z);
@@ -169,7 +169,7 @@ public enum HeightMap {
         	height += heightAmplifier * (height - TerraformGenerator.seaLevel);
 
     	
-        cache.cacheHeight(x, z, height);
+        cache.cacheHeightMap(x, z, height);
         return height;
     }
 

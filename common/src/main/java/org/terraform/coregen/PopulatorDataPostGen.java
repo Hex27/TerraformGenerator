@@ -13,6 +13,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorDataPostGen extends PopulatorDataAbstract {
@@ -152,4 +153,9 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 //			//chestBlock.getState().update();
 //		}
     }
+
+	@Override
+	public TerraformWorld getTerraformWorld() {
+		return TerraformWorld.get(w);
+	}
 }

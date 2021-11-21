@@ -7,6 +7,9 @@ import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.ChunkCache;
+import org.terraform.coregen.ChunkCacheLoader;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.TerraformPopulator;
@@ -21,10 +24,15 @@ import org.terraform.reflection.PrivateFieldHandler;
 import org.terraform.schematic.SchematicListener;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.tree.SaplingOverrider;
+import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.Version;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -62,6 +70,33 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 		config = new ConfigLoader(this);
 		lang = new LanguageManager(this);
         TConfigOption.loadValues(config);
+        BiomeBank.initSinglesConfig(); //Initiates single biome modes.
+        
+        //Initialize chunk cache based on config size
+        TerraformGenerator.CHUNK_CACHE = 
+        		CacheBuilder.newBuilder()
+        		.maximumSize(TConfigOption.DEVSTUFF_CHUNKCACHE_SIZE.getInt()).build(new ChunkCacheLoader());
+        
+        //Initialize biome query cache based on config size
+        GenUtils.biomeQueryCache = CacheBuilder.newBuilder()
+                .maximumSize(TConfigOption.DEVSTUFF_CHUNKBIOMES_SIZE.getInt())
+                .build(new CacheLoader<ChunkCache, ArrayList<BiomeBank>>() {
+                    @Override
+                    public ArrayList<BiomeBank> load(ChunkCache key) {
+                        ArrayList<BiomeBank> banks = new ArrayList<>();
+                        int gridX = key.chunkX * 16;
+                        int gridZ = key.chunkZ * 16;
+                        for(int x = gridX; x < gridX + 16; x++) {
+                            for(int z = gridZ; z < gridZ + 16; z++) {
+                                BiomeBank bank = key.tw.getBiomeBank(x, z);
+                                if(!banks.contains(bank)) banks.add(bank);
+                            }
+                        }
+                        return banks;
+                    }
+                });
+        
+        
         LangOpt.init(this);
         logger = new TLogger();
         TerraformGenerator.updateSeaLevelFromConfig();

@@ -294,4 +294,9 @@ public class PopulatorData extends PopulatorDataAbstract {
         }
         return null;
     }
+
+	@Override
+	public TerraformWorld getTerraformWorld() {
+		return gen.getTerraformWorld();
+	}
 }

@@ -62,7 +62,8 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_BADLANDS_MINE_ENABLED.getBoolean();
+        return BiomeBank.isBiomeEnabled(BiomeBank.BADLANDS_CANYON) 
+        		&& TConfigOption.STRUCTURES_BADLANDS_MINE_ENABLED.getBoolean();
     }
 
     @Override

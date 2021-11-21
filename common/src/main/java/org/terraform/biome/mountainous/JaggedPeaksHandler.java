@@ -61,6 +61,7 @@ public class JaggedPeaksHandler extends AbstractMountainHandler {
     public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
 			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
+				if(data.getBiome(x, z) != getBiome()) continue;
 				int y = GenUtils.getHighestGround(data, x, z);
 				if(y < TerraformGenerator.seaLevel) continue;
 				

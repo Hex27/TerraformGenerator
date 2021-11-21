@@ -111,7 +111,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
         p.sendMessage(LangOpt.COMMAND_LOCATE_SEARCHING.parse());
         UUID uuid = p.getUniqueId();
-
+        
         long startTime = System.currentTimeMillis();
 
         BukkitRunnable runnable = new BukkitRunnable() {

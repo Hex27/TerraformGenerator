@@ -14,7 +14,8 @@ public class ChunkCache {
      * the most dominant biome at those coordinates.
      */
     double[][] dominantBiomeHeightCache;
-    double[][] heightCache;
+    double[][] heightMapCache;
+    short[][] highestGroundCache;
     BiomeBank[][] biomeCache;
 
     public ChunkCache(TerraformWorld tw, int chunkX, int chunkZ) {
@@ -38,7 +39,11 @@ public class ChunkCache {
     }
 
     public void initInternalCache() {
-        heightCache = new double[16][16];
+    	highestGroundCache = new short[16][16];
+    	for(short i = 0; i < 16; i++)
+    		for(short j = 0; j < 16; j++)
+    			highestGroundCache[i][j] = Short.MIN_VALUE;
+        heightMapCache = new double[16][16];
         dominantBiomeHeightCache = new double[16][16];
         biomeCache = new BiomeBank[16][16];
     }
@@ -62,8 +67,23 @@ public class ChunkCache {
     	dominantBiomeHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
     }
 
-    public double getHeight(int rawX, int rawZ) {
-        return heightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+    public double getHeightMapHeight(int rawX, int rawZ) {
+        return heightMapCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+    }
+
+    public short getHighestGround(int rawX, int rawZ) {
+        return highestGroundCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+    }
+
+
+    /**
+     *
+     * @param rawX BLOCK COORD x
+     * @param rawZ BLOCK COORD z
+     * @param value height to cache
+     */
+    public void cacheHeightMap(int rawX, int rawZ, double value) {
+        heightMapCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
     }
 
     /**
@@ -72,9 +92,10 @@ public class ChunkCache {
      * @param rawZ BLOCK COORD z
      * @param value height to cache
      */
-    public void cacheHeight(int rawX, int rawZ, double value) {
-        heightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+    public void cacheHighestGround(int rawX, int rawZ, short value) {
+        highestGroundCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
     }
+
 
     public BiomeBank getBiome(int rawX, int rawZ) {
         return biomeCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];

@@ -150,6 +150,9 @@ public class LocateBiomeCommand extends TerraCommand {
         	
         	if(location != null)
         		syncSendMessage(p, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", location.x + "", "%z%", location.y + ""));
+        	else
+        		syncSendMessage(p, LangOpt.COMMAND_LOCATEBIOME_DISABLED.parse());
+
         }
     }
 

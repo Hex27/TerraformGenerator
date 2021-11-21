@@ -77,6 +77,10 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean();
+        return (BiomeBank.isBiomeEnabled(BiomeBank.PLAINS) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.FOREST) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.SAVANNA) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.TAIGA) )
+        		&& TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean();
     }
 }

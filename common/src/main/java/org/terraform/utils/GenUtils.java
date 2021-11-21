@@ -22,8 +22,6 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.noise.FastNoise;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 public class GenUtils {
@@ -36,23 +34,7 @@ public class GenUtils {
             "CHAIN", "CORAL",
             "POINTED_DRIPSTONE"
     };
-    private static final LoadingCache<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache = CacheBuilder.newBuilder()
-            .maximumSize(128)
-            .build(new CacheLoader<ChunkCache, ArrayList<BiomeBank>>() {
-                @Override
-                public ArrayList<BiomeBank> load(ChunkCache key) {
-                    ArrayList<BiomeBank> banks = new ArrayList<>();
-                    int gridX = key.chunkX * 16;
-                    int gridZ = key.chunkZ * 16;
-                    for(int x = gridX; x < gridX + 16; x++) {
-                        for(int z = gridZ; z < gridZ + 16; z++) {
-                            BiomeBank bank = key.tw.getBiomeBank(x, z);
-                            if(!banks.contains(bank)) banks.add(bank);
-                        }
-                    }
-                    return banks;
-                }
-            });
+    public static LoadingCache<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache;
 
     public static SimplexOctaveGenerator getGenerator(World world) {
         SimplexOctaveGenerator generator = new SimplexOctaveGenerator(new Random(world.getSeed()), 8);
@@ -127,7 +109,8 @@ public class GenUtils {
      * @return Position for the biome or null if no biomes found.
      */
     public static Vector2f locateHeightDependentBiome(TerraformWorld tw, BiomeBank biome, Vector2f center, int radius, int blockSkip) {
-        if(tw.getBiomeBank(Math.round(center.x), Math.round(center.y)) == biome)
+        if(!BiomeBank.isBiomeEnabled(biome)) return null;
+    	if(tw.getBiomeBank(Math.round(center.x), Math.round(center.y)) == biome)
             return new Vector2f(center.x, center.y);
         int iter = 2;
 
@@ -170,6 +153,8 @@ public class GenUtils {
      * @return
      */
     public static Vector2f locateHeightIndependentBiome(TerraformWorld tw, BiomeBank biome, Vector2f centerBlockLocation) {
+        if(!BiomeBank.isBiomeEnabled(biome)) return null;
+        
     	BiomeSection center = BiomeBank.getBiomeSectionFromBlockCoords(tw, (int) centerBlockLocation.x, (int) centerBlockLocation.y);
     	boolean found = false;
     	int radius = 0;
@@ -342,82 +327,16 @@ public class GenUtils {
         return new SimpleBlock(block.getPopData(), block.getX(), y, block.getZ());
     }
 
-
-    /**
-     * @return the highest solid ground. Is dirt-like or stone-like, and is
-     * not leaves or logs
-     */
     @SuppressWarnings("incomplete-switch")
-    public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
-        int y = 255;
-        while(y > 0) {
-            Material block = data.getType(x, y, z);
-            if(BlockUtils.isStoneLike(block)) break;
-            if(block == Material.SAND 
-            	|| block == Material.RED_SAND
-            	|| block == Material.GRAVEL)
-            	break;
+	public static boolean isGroundLike(Material mat) {
+        if(BlockUtils.isStoneLike(mat)) return true;
+        if(mat == Material.SAND 
+        	|| mat == Material.RED_SAND
+        	|| mat == Material.GRAVEL)
+        	return true;
 
-            if(block.isSolid()) {
-                switch(block) {
-                    case HAY_BLOCK:
-                    case ICE:
-                    case PACKED_ICE:
-                    case BLUE_ICE:
-                    case CACTUS:
-                    case BAMBOO:
-                    case BAMBOO_SAPLING:
-                    case IRON_BARS:
-                    case LANTERN:
-                        y--;
-                        continue;
-                }
-                if(block.isInteractable()) {
-                    y--;
-                    continue;
-                }
-                if(Tag.SLABS.isTagged(block)) {
-                	y--;
-                	continue;
-                }
-                
-                String name = block.toString();
-                boolean continueMaster = false;
-                for(String contains : BLACKLIST_HIGHEST_GROUND) {
-                    if(name.contains(contains)) {
-                        continueMaster = true;
-                        break;
-                    }
-                }
-                if(continueMaster) {
-                    y--;
-                    continue;
-                }
-            } else {
-                y--;
-                continue;
-            }
-            break;
-        }
-        if(y == 0) {
-            TerraformGeneratorPlugin.logger.error("GetHighestGround returned 0!");
-            try { throw new Exception("GetHighestGround returned 0!"); }
-            catch (Exception e) 
-            {e.printStackTrace();}
-        }
-        return y;
-    }
-    
-    @SuppressWarnings("incomplete-switch")
-	public static boolean isGroundLike(Material block) {
-        if(BlockUtils.isStoneLike(block)) return true;
-        if(block == Material.SAND 
-        	|| block == Material.RED_SAND
-        	|| block == Material.GRAVEL)
-        	return true;;
-
-        if(block.isSolid()) {
-            switch(block) {
+        if(mat.isSolid()) {
+            switch(mat) {
                 case HAY_BLOCK:
                 case ICE:
                 case PACKED_ICE:
@@ -429,14 +348,15 @@ public class GenUtils {
                 case LANTERN:
                     return false;
             }
-            if(block.isInteractable()) {
+            if(mat.isInteractable()) {
                 return false;
             }
-            if(Tag.SLABS.isTagged(block)) {
-                return false;
+            if(Tag.SLABS.isTagged(mat)) {
+            	return false;
             }
             
-            String name = block.toString();
+            String name = mat.toString();
+            
             for(String contains : BLACKLIST_HIGHEST_GROUND) {
                 if(name.contains(contains)) {
                     return false;
@@ -445,9 +365,54 @@ public class GenUtils {
         } else {
             return false;
         }
-        return true;
+    	return true;
     }
 
+    /**
+     * @return the highest solid ground. Is dirt-like or stone-like, and is
+     * not leaves or logs
+     * 
+     * The damn issue with this stupid stupid method is that caching it is
+     * inherently unsafe. If I call this, then place stone on the floor, it
+     * technically changes.
+     * 
+     * I hate this method so much.
+     * 
+     * But you know what? I'm gonna cache it anyway.
+     */
+    public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
+
+    	int y = TerraformGeneratorPlugin.injector.getMaxY()-1;
+    	ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x, z);
+    	int cachedY = cache.getHighestGround(x, z);
+    	if(cachedY != Short.MIN_VALUE) {
+    		//Basic check to ensure block above is not ground
+    		//and current block is ground.
+    		//Will fail if the new ground is an overhang of some kind.
+    		if(isGroundLike(data.getType(x, cachedY, z))
+    				&& !isGroundLike(data.getType(x, cachedY+1, z)))
+    			return cache.getHighestGround(x, z);
+    	}
+        
+        while(y > 0) {
+            Material block = data.getType(x, y, z);
+            if(!isGroundLike(block)) {
+            	y--;
+            	continue;
+            }
+            break;
+        }
+        if(y <= TerraformGeneratorPlugin.injector.getMinY()) {
+            TerraformGeneratorPlugin.logger.error("GetHighestGround returned less than " + TerraformGeneratorPlugin.injector.getMinY() + "! (" + y + ")");
+            try { throw new Exception("GetHighestGround returned less than " + TerraformGeneratorPlugin.injector.getMinY() + "! (" + y + ")"); }
+            catch (Exception e) 
+            {e.printStackTrace();}
+        }
+        
+        //Y can be stored as a short, as there's no way world height will be 32k.
+        cache.cacheHighestGround(x, z, Integer.valueOf(y).shortValue());
+        return y;
+    }
 
     public static Material[] mergeArr(Material[]... arrs) {
         int totalLength = 0, index = 0;

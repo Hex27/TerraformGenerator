@@ -84,6 +84,12 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean() || TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean();
+        return  (BiomeBank.isBiomeEnabled(BiomeBank.DESERT) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.BADLANDS) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.ICE_SPIKES) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_TAIGA) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_WASTELAND) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE) )
+        		&& (TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean() || TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean());
     }
 }

@@ -62,6 +62,7 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_MANSION_ENABLED.getBoolean();
+        return BiomeBank.isBiomeEnabled(BiomeBank.DARK_FOREST) 
+        		&& TConfigOption.STRUCTURES_MANSION_ENABLED.getBoolean();
     }
 }

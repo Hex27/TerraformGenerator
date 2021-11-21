@@ -1,6 +1,5 @@
 package org.terraform.coregen.bukkit;
 
-import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,7 +11,6 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.ChunkCache;
-import org.terraform.coregen.ChunkCacheLoader;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
@@ -31,9 +29,7 @@ public class TerraformGenerator extends ChunkGenerator {
 
     private static final Object LOCK = new Object();
 
-    private static final LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE = 
-    		CacheBuilder.newBuilder()
-    		.maximumSize(1000).build(new ChunkCacheLoader());//new LoadingCache<ChunkCache, ChunkCache>();
+    public static LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE;
     public static int seaLevel = 62;
     
     public static void updateSeaLevelFromConfig() {

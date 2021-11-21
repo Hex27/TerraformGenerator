@@ -327,4 +327,9 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
         }
         return null;
     }
+
+	@Override
+	public TerraformWorld getTerraformWorld() {
+		return tw;
+	}
 }

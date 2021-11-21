@@ -7,7 +7,8 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 import java.util.Stack;
@@ -65,17 +66,23 @@ public class ValuesCommand extends TerraCommand {
         
         TerraformWorld tw = TerraformWorld.get("world-1232341234", new Random().nextInt(99999));
         
-        FastNoise n = new FastNoise((int) tw.getSeed());
-        n.SetNoiseType(NoiseType.SimplexFractal);
-        n.SetFractalOctaves(3);
-        n.SetFrequency(0.03f);
+        FastNoise details = NoiseCacheHandler.getNoise(
+        		tw, 
+        		NoiseCacheEntry.BIOME_PETRIFIEDCLIFFS_INNERNOISE, 
+        		world -> {
+        	    	FastNoise n = new FastNoise();
+        	        n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        	        n.SetFractalOctaves(3);
+        	        n.SetFrequency(0.06f);
+        	        return n;
+        		});
         
         int period = 4;
         for (int i = 0; i < 9000000; i++) {
             int x = i;
             //int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
-            vals.addValue(50*n.GetNoise(x, z));
+            vals.addValue(details.GetNoise(x, z));
     		//vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
         }
         sender.sendMessage("Finished");

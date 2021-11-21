@@ -16,10 +16,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class TerraformPopulator {
-    //private static Set<SimpleChunkLocation> chunks = new HashSet<SimpleChunkLocation>();
-
-    //private RiverWormCreator rwc;
-
+	
     private static final OrePopulator[] ORE_POPS = {
             // Ores
 

@@ -7,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.data.TerraformWorld;
 
 public class PopulatorDataSQLite extends PopulatorDataAbstract {
     @SuppressWarnings("unused")
@@ -83,4 +84,10 @@ public class PopulatorDataSQLite extends PopulatorDataAbstract {
         // TODO Auto-generated method stub
 
     }
+
+	@Override
+	public TerraformWorld getTerraformWorld() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

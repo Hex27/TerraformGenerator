@@ -15,14 +15,14 @@ import org.terraform.main.TerraformGeneratorPlugin;
 public class PopulatorData extends PopulatorDataAbstract {
     private final int chunkX;
     private final int chunkZ;
-    // private final NMSChunkGenerator gen;
+    private final NMSChunkGenerator gen;
     RegionLimitedWorldAccess rlwa;
 
     public PopulatorData(RegionLimitedWorldAccess rlwa, NMSChunkGenerator gen, int chunkX, int chunkZ) {
         this.rlwa = rlwa;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
-        //this.gen = gen;
+        this.gen = gen;
     }
 
     public Material getType(int x, int y, int z) {
@@ -199,5 +199,10 @@ public class PopulatorData extends PopulatorDataAbstract {
         }
         return null;
     }
+
+	@Override
+	public TerraformWorld getTerraformWorld() {
+		return gen.getTerraformWorld();
+	}
 
 }
