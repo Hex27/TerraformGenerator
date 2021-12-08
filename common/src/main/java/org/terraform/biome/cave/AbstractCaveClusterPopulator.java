@@ -6,7 +6,6 @@ import java.util.Random;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
@@ -15,6 +14,11 @@ import org.terraform.utils.version.Version;
 
 public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator {
 
+	private float radius;
+	public AbstractCaveClusterPopulator(float radius) {
+		this.radius = radius;
+	}
+	
 	protected abstract void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor);
 	@Override
     public void populate(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
@@ -32,7 +36,6 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
                     return n;
                 });
         
-        float radius = GenUtils.randInt(random, 5, 11);
         SimpleBlock center = new SimpleBlock(ceil.getPopData(), ceil.getX(), (ceil.getY() + floor.getY())/2, ceil.getZ());
         		
         for (float x = -radius; x <= radius; x++) {

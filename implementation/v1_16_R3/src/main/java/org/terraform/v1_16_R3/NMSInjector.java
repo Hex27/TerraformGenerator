@@ -10,8 +10,8 @@ import org.bukkit.craftbukkit.v1_16_R3.CraftChunk;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
-import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.PopulatorDataICAAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 

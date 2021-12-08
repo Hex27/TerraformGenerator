@@ -14,8 +14,8 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.ChunkCache;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -48,16 +48,16 @@ public class GenUtils {
 
     public static Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z) {
         int y = getHighestGround(data, x, z);
-        int[] pair = {-1, -1};
-        List<int[]> list = new ArrayList<>(y);
+        int[] pair = {TerraformGeneratorPlugin.injector.getMinY() - 1, TerraformGeneratorPlugin.injector.getMinY() - 1};
+        List<int[]> list = new ArrayList<>();
 
-        for(int ny = y; ny > 0; ny--) {
+        for(int ny = y; ny > TerraformGeneratorPlugin.injector.getMinY(); ny--) {
             Material type = data.getType(x, ny, z);
             if(type.isSolid()) {
                 pair[1] = ny;
                 list.add(pair);
-                pair = new int[] {-1, -1};
-            } else if(pair[0] == -1) pair[0] = ny;
+                pair = new int[] {TerraformGeneratorPlugin.injector.getMinY() - 1,TerraformGeneratorPlugin.injector.getMinY() - 1};
+            } else if(pair[0] == TerraformGeneratorPlugin.injector.getMinY() - 1) pair[0] = ny;
         }
 
         return list;
@@ -262,15 +262,15 @@ public class GenUtils {
 
 
     public static int getHighestX(PopulatorDataAbstract data, int x, int z, Material X) {
-        int y = 256 - 1;
-        while(y > 0 && data.getType(x, y, z) != X) y--;
+        int y = TerraformGeneratorPlugin.injector.getMaxY() - 1;
+        while(y > TerraformGeneratorPlugin.injector.getMinY() && data.getType(x, y, z) != X) y--;
         return y;
     }
     
     public static Location getHighestBlock(World w, int x, int z) {
         int y = w.getMaxHeight() - 1;
-        while(y > 0 && !w.getBlockAt(x, y, z).getType().isSolid()) y--;
-        if(y == 0) {
+        while(y > TerraformGeneratorPlugin.injector.getMinY() && !w.getBlockAt(x, y, z).getType().isSolid()) y--;
+        if(y == TerraformGeneratorPlugin.injector.getMinY()) {
             TerraformGeneratorPlugin.logger.error("getHighestBlock(w,x,z) returned 0!");
             try { throw new Exception("getHighestBlock(w,x,z) returned 0!"); }
             catch (Exception e) 
@@ -293,8 +293,8 @@ public class GenUtils {
      * @return the highest solid block
      */
     public static int getTrueHighestBlock(PopulatorDataAbstract data, int x, int z) {
-        int y = 255;
-        while(y > 0 && !data.getType(x, y, z).isSolid()) y--;
+        int y = TerraformGeneratorPlugin.injector.getMaxY()-1;
+        while(y > TerraformGeneratorPlugin.injector.getMinY() && !data.getType(x, y, z).isSolid()) y--;
         return y;
     }
 
@@ -317,13 +317,13 @@ public class GenUtils {
      * @return the highest solid block below y
      */
     public static int getTrueHighestBlockBelow(PopulatorDataAbstract data, int x, int y, int z) {
-        while(y > 0 && !data.getType(x, y, z).isSolid()) y--;
+        while(y > TerraformGeneratorPlugin.injector.getMinY() && !data.getType(x, y, z).isSolid()) y--;
         return y;
     }
 
     public static SimpleBlock getTrueHighestBlockBelow(SimpleBlock block) {
         int y = block.getY();
-        while(y > 0 && !block.getPopData().getType(block.getX(), y, block.getZ()).isSolid()) y--;
+        while(y > TerraformGeneratorPlugin.injector.getMinY() && !block.getPopData().getType(block.getX(), y, block.getZ()).isSolid()) y--;
         return new SimpleBlock(block.getPopData(), block.getX(), y, block.getZ());
     }
 
@@ -394,7 +394,7 @@ public class GenUtils {
     			return cache.getHighestGround(x, z);
     	}
         
-        while(y > 0) {
+        while(y > TerraformGeneratorPlugin.injector.getMinY()) {
             Material block = data.getType(x, y, z);
             if(!isGroundLike(block)) {
             	y--;

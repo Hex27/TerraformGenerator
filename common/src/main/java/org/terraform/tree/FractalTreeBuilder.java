@@ -11,7 +11,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;

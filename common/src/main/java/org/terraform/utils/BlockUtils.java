@@ -20,10 +20,11 @@ import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.block.data.type.Stairs;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
@@ -425,7 +426,7 @@ public class BlockUtils {
     }
 
     public static void downPillar(int x, int y, int z, int height, PopulatorDataAbstract data, Material... type) {
-        while (!data.getType(x, y, z).isSolid() && height > 0) {
+        while (!data.getType(x, y, z).isSolid() && height > TerraformGeneratorPlugin.injector.getMinY()) {
             data.setType(x, y, z, GenUtils.randMaterial(type));
             height--;
             y--;

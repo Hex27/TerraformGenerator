@@ -1,6 +1,7 @@
 package org.terraform.coregen;
 
 import org.terraform.carving.Carver;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 
 import java.util.ArrayList;

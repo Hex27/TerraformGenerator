@@ -2,8 +2,8 @@ package org.terraform.structure.pillager.mansion;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.BlockUtils;

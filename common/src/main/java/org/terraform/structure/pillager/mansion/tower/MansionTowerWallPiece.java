@@ -2,7 +2,7 @@ package org.terraform.structure.pillager.mansion.tower;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;

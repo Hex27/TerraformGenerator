@@ -5,7 +5,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
@@ -14,6 +14,7 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -27,7 +28,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         if (force)
             threshold = highest - GenUtils.randInt(random, 3, 6);
         for (int y = highest; y > threshold; y--) {
-            if (data.getBiome(x, z) != Biome.BADLANDS_PLATEAU && !force) {
+            if (data.getBiome(x, z) != OneOneEightBlockHandler.ERODED_BADLANDS && !force) {
             	if(data.getBiome(x, z) == Biome.DESERT) {
             		continue;
             	}
@@ -50,7 +51,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.BADLANDS_PLATEAU;
+        return OneOneEightBlockHandler.ERODED_BADLANDS;
     }
 
     //Extra red sandstone padding required: Prevents exposed vertical surfaces.

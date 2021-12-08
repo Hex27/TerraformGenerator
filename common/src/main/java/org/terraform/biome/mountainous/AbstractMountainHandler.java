@@ -10,6 +10,7 @@ import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 
@@ -104,10 +105,10 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
         height = height*heightMultiplier;
         
         //If the height is too high, just force it to smooth out
-        if (height > 200) height = 200 + (height - 200) * 0.5;
-        if (height > 230) height = 230 + (height - 230) * 0.3;
-        if (height > 240) height = 240 + (height - 240) * 0.1;
-        if (height > 250) height = 250 + (height - 250) * 0.05;
+        if (height > (TerraformGeneratorPlugin.injector.getMaxY() - 56)) height = (TerraformGeneratorPlugin.injector.getMaxY() - 56) + (height - (TerraformGeneratorPlugin.injector.getMaxY() - 56)) * 0.5;
+        if (height > (TerraformGeneratorPlugin.injector.getMaxY() - 25)) height = (TerraformGeneratorPlugin.injector.getMaxY() - 25) + (height - (TerraformGeneratorPlugin.injector.getMaxY() - 25)) * 0.3;
+        if (height > (TerraformGeneratorPlugin.injector.getMaxY() - 15)) height = (TerraformGeneratorPlugin.injector.getMaxY() - 15) + (height - (TerraformGeneratorPlugin.injector.getMaxY() - 15)) * 0.1;
+        if (height > TerraformGeneratorPlugin.injector.getMaxY() - 5) height = TerraformGeneratorPlugin.injector.getMaxY() - 5 + (height - (TerraformGeneratorPlugin.injector.getMaxY() - 5)) * 0.05;
         
         return height;
     }

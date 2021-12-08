@@ -4,16 +4,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.SeaPickle;
 import org.terraform.biome.cave.LushClusterCavePopulator;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -102,10 +105,19 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
                 //Low luminosity sea pickles
                 if (data.getType(nx, groundY + 1, nz) == Material.WATER) {
                 	//SUBMERGED DECORATIONS
+                	//sea pickle
                     if (GenUtils.chance(rand, 7, 100)) {
                         SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
                         sp.setPickles(GenUtils.randInt(3, 4));
                         data.setBlockData(nx, groundY + 1, nz, sp);
+                    }
+                    //clay
+                    if (GenUtils.chance(rand, 7, 100)) {
+                        new SphereBuilder(rand, new SimpleBlock(data,nx, groundY, nz), Material.CLAY)
+                        .setRadius(3)
+                        .addToWhitelist(Material.STONE)
+                        .addToWhitelist(OneOneSevenBlockHandler.DEEPSLATE)
+                        .build();
                     }
                     if(GenUtils.chance(rand, 7, 100)) {
                     	data.setType(nx, waterY+1, nz, Material.LILY_PAD);
@@ -113,7 +125,15 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
                 }else if(BlockUtils.isAir(data.getType(nx, groundY+1, nz))) {
                 	//DRY DECORATIONS
                 	if (GenUtils.chance(rand, 5, 100))
-                		new LushClusterCavePopulator(true).populate(tw, rand, ceil, floor);
+                		new LushClusterCavePopulator(GenUtils.randInt(rand, 5, 11), true).populate(tw, rand, ceil, floor);
+                }
+                
+                //set biome
+                //large cave uses PopulatorDataAbstract, which should be able to write biomes.
+                if(data instanceof PopulatorDataICABiomeWriterAbstract)
+                {
+                	for(int i = groundY; i <= ceilingY; i++)
+                	((PopulatorDataICABiomeWriterAbstract) data).setBiome(nx, i, nz, OneOneSevenBlockHandler.LUSH_CAVES);
                 }
             }
         }

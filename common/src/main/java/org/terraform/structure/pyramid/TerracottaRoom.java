@@ -1,7 +1,7 @@
 package org.terraform.structure.pyramid;
 
 import org.bukkit.Material;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;

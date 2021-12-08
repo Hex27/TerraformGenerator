@@ -1,7 +1,7 @@
 package org.terraform.structure.dungeon;
 
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;

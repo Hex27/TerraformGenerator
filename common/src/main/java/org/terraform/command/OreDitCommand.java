@@ -69,7 +69,7 @@ public class OreDitCommand extends TerraCommand {
                 
                 for(int x = 0; x < 16; x++) {
                 	for(int z = 0; z < 16; z++) {
-                		for(int y = (int) p.getLocation().getY(); y > 0; y--) {
+                		for(int y = (int) p.getLocation().getY(); y > p.getWorld().getMinHeight(); y--) {
                 			Material mat = target.getBlock(x, y, z).getType();
                 			for(Material audit:auditMat) {
                 				if(mat == audit) {

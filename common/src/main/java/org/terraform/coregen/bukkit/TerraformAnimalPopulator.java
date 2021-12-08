@@ -5,7 +5,7 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.generator.BlockPopulator;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.AnimalPopulator;

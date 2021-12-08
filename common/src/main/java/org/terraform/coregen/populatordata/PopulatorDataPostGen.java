@@ -1,4 +1,6 @@
-package org.terraform.coregen;
+package org.terraform.coregen.populatordata;
+
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -12,11 +14,14 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.NaturalSpawnType;
+import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-public class PopulatorDataPostGen extends PopulatorDataAbstract {
+public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract {
     private final World w;
     private final Chunk c;
 
@@ -99,6 +104,11 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
     }
 
     @Override
+    public void setBiome(int rawX, int rawY, int rawZ, Biome biome) {
+        w.setBiome(rawX, rawY, rawZ, biome);
+    }
+
+    @Override
     public int getChunkX() {
         return c.getX();
     }
@@ -141,21 +151,32 @@ public class PopulatorDataPostGen extends PopulatorDataAbstract {
 
     @Override
     public void lootTableChest(int x, int y, int z, TerraLootTable table) {
-//		if(!w.getBlockAt(x,y,z).getType().toString().contains("CHEST")){
-//			TerraformGeneratorPlugin.logger.error("Attempted to set loot table to a non chest @ " + x +"," + y + "," + z);
-//		}
         TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x, y, z).getChunk()).lootTableChest(x, y, z, table);
-//		LootTable lt = LootTables.valueOf(table.toString()).getLootTable();
-//		Block chestBlock = w.getBlockAt(x,y,z);
-//		if((chestBlock.getState() instanceof Lootable)){
-//			Lootable state = (Lootable) chestBlock.getState();
-//			state.setLootTable(lt);
-//			//chestBlock.getState().update();
-//		}
     }
 
 	@Override
 	public TerraformWorld getTerraformWorld() {
 		return TerraformWorld.get(w);
+	}
+
+	@Override
+	public void setBiome(int rawX, int rawY, int rawZ, BiomeBank biomebank) {
+		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(rawX, rawY, rawZ).getChunk());
+		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
+		((PopulatorDataICABiomeWriterAbstract) icad).setBiome(rawX, rawY, rawZ, biomebank);
+	}
+
+	@Override
+	public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
+		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x0,y0,z0).getChunk());
+		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
+		((PopulatorDataICABiomeWriterAbstract) icad).registerNaturalSpawns(type, x0, y0, z0, x1, y1, z1);
+	}
+
+	@Override
+	public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, Random random) {
+		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk());
+		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
+		((PopulatorDataICABiomeWriterAbstract) icad).spawnMinecartWithChest(x,y,z,table,random);
 	}
 }

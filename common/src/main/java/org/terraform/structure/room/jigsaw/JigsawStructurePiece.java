@@ -1,7 +1,7 @@
 package org.terraform.structure.room.jigsaw;
 
 import org.bukkit.block.BlockFace;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;

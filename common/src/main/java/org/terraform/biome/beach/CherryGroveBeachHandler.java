@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -45,9 +45,14 @@ public class CherryGroveBeachHandler extends BiomeHandler {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                int y = GenUtils.getHighestGround(data, x, z);
                 if (data.getBiome(x, z) != getBiome()) continue;
                 Material base = data.getType(x, y, z);
+                
+                //Remove submerged grass
+                if(base == Material.GRASS_BLOCK && data.getType(x, y+1, z) == Material.WATER)
+                	data.setType(x,y,z,Material.DIRT);
+                
                 if (base != Material.SAND && base != Material.GRASS_BLOCK) continue;
 
                 y++;

@@ -2,7 +2,7 @@ package org.terraform.structure.pillager.mansion.secondfloor;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.pillager.mansion.MansionStandardRoomPiece;
 import org.terraform.structure.room.jigsaw.JigsawType;

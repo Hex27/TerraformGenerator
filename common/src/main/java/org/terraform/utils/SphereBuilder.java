@@ -47,6 +47,12 @@ public class SphereBuilder {
 		return this;
 	}
 	
+	public SphereBuilder addToWhitelist(Material... mats) {
+		for(Material mat:mats)
+			replaceWhitelist.add(mat);
+		return this;
+	}
+	
 	public SphereBuilder setRadius(float radius) {
 		this.rX = radius; this.rY = radius; this.rZ = radius;
 		return this;

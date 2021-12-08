@@ -8,7 +8,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Material;
-import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 
 public class ArmorStandUtils {

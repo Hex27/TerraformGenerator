@@ -2,6 +2,9 @@ package org.terraform.coregen;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 
 public abstract class NMSInjectorAbstract {
 	
@@ -32,7 +35,9 @@ public abstract class NMSInjectorAbstract {
     /**
      * Force an NMS physics update at the location.
      */
-    public abstract void updatePhysics(World world, org.bukkit.block.Block block);
+    public void updatePhysics(World world, org.bukkit.block.Block block) {
+    	throw new UnsupportedOperationException("Tried to update physics without implementing.");
+    };
     
     public int getMinY() {
     	return 0;
@@ -41,4 +46,6 @@ public abstract class NMSInjectorAbstract {
     public int getMaxY() {
     	return 256;
     }
+    
+    public void debugTest(Player p) {}
 }

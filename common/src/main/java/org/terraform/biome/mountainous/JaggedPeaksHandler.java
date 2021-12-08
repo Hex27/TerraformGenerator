@@ -5,8 +5,8 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
@@ -15,6 +15,7 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.OneOneEightBlockHandler;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
@@ -28,7 +29,7 @@ public class JaggedPeaksHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.SNOWY_MOUNTAINS;
+        return OneOneEightBlockHandler.SNOWY_SLOPES;
     }
 
     @Override

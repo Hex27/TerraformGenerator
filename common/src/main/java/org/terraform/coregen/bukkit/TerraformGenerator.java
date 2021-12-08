@@ -12,16 +12,20 @@ import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 public class TerraformGenerator extends ChunkGenerator {
@@ -61,17 +65,49 @@ public class TerraformGenerator extends ChunkGenerator {
 
     //private static boolean debugged = false;
     
+    ConcurrentHashMap<SimpleChunkLocation, PopulatorDataAbstract> generatorDataAccess = new ConcurrentHashMap<SimpleChunkLocation, PopulatorDataAbstract>();
+    
+    public void addPopulatorData(PopulatorDataAbstract data) {
+    	//TerraformGeneratorPlugin.logger.info("Added (" + data.getChunkX() + "," + data.getChunkZ() + ")");
+    	generatorDataAccess.put(new SimpleChunkLocation(data.getTerraformWorld().getName(),data.getChunkX(),data.getChunkZ()), data);
+    }
+    
+	@SuppressWarnings("deprecation")
+	protected
+    ChunkData createChunkData(World world, int chunkX, int chunkZ) {
+    	if(Version.isAtLeast(18)) {
+    		PopulatorDataAbstract data = generatorDataAccess.remove(new SimpleChunkLocation(world.getName(), chunkX, chunkZ));
+    		if(data == null)
+    			throw new IllegalArgumentException("Requested for chunkX and Z that weren't in the concurrenthashmap!");
+    		//TerraformGeneratorPlugin.logger.info("Called for (" + chunkX + "," + chunkZ + "):(" + data.getChunkX() + "," + data.getChunkZ() + ")");
+    		return new TerraformChunkData(data);
+    	}
+    	else
+    		return super.createChunkData(world);
+    }
+	
+	private int getVanillaGeneratedHeight(TerraformWorld tw, ChunkData chunk, int x, int z) {
+		int y = tw.maxY;
+		while(y > tw.minY) {
+			if(chunk.getType(x, y, z).isSolid())
+				break;
+			else
+				y--;
+		}
+		return y;
+	}
+    
     @SuppressWarnings("deprecation")
     @Override
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
-        ChunkData chunk = createChunkData(world);
+        ChunkData chunk = createChunkData(world, chunkX, chunkZ);
         TerraformWorld tw = TerraformWorld.get(world);
         
         //Patch for WorldInitEvent issues.
         if (!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) {
             preWorldInitGen.add(new SimpleChunkLocation(world.getName(), chunkX, chunkZ));
         }
-
+        boolean newLogic = Version.isAtLeast(18);
         List<BiomeHandler> biomesToTransform = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
@@ -85,17 +121,36 @@ public class TerraformGenerator extends ChunkGenerator {
                 
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
                 
-                if(bank.getHandler().getCustomBiome() != CustomBiomeType.NONE && 
-                		biome instanceof CustomBiomeSupportedBiomeGrid) {
-                	((CustomBiomeSupportedBiomeGrid) biome).setBiome(
-                			x, z, 
-                			bank.getHandler().getCustomBiome(), 
-                			bank.getHandler().getBiome());
+                if(newLogic) {
+                    //Fix up height before doing anything else
+                	//New chunk generator will output vanilla heights. Correct them.
+                	//TODO: This method right now fills up any cave entrances.
+                	int vanillaHeight = getVanillaGeneratedHeight(tw, chunk,x,z);
+                    if(vanillaHeight < height)
+                    	for(int y = vanillaHeight; y <= height; y++)
+                    		setBlockSync(chunk,x,y,z, Material.STONE);
+                    else if(vanillaHeight > height)
+                    	for(int y = vanillaHeight; y > height; y--)
+                    		setBlockSync(chunk,x,y,z, Material.AIR);
                 }
                 else
                 {
-                	biome.setBiome(x, z, bank.getHandler().getBiome());
+                	//Old chunkgenerator must set biomes in ChunkData
+                    if(bank.getHandler().getCustomBiome() != CustomBiomeType.NONE && 
+                    		biome instanceof CustomBiomeSupportedBiomeGrid) {
+                    	((CustomBiomeSupportedBiomeGrid) biome).setBiome(
+                    			tw,
+                    			x, z, 
+                    			bank.getHandler().getCustomBiome(), 
+                    			bank.getHandler().getBiome());
+                    }
+                    else
+                    {
+                    	biome.setBiome(x, z, bank.getHandler().getBiome());
+                    }
                 }
+                
+                
                 int undergroundHeight = height;
                 int index = 0;
                 while (index < crust.length) {
@@ -103,18 +158,27 @@ public class TerraformGenerator extends ChunkGenerator {
                     index++;
                     undergroundHeight--;
                 }
-
+                
                 for (int y = undergroundHeight; y > tw.minY; y--) {
-                    setBlockSync(chunk, x, y, z, Material.STONE);
+                	if(chunk.getType(x, y, z).isSolid() || !newLogic)
+	                	if(y > 2)
+	                		setBlockSync(chunk, x, y, z, Material.STONE);
+	                	else if(y > 0 && y <= 2)
+	                		setBlockSync(chunk, x, y, z, GenUtils.randMaterial(OneOneSevenBlockHandler.DEEPSLATE, Material.STONE));
+	                	else
+	                		setBlockSync(chunk, x, y, z, OneOneSevenBlockHandler.DEEPSLATE);
                 }
 
                 //Any low elevation is sea
-                for (int y = height + 1; y <= seaLevel; y++) {
-                    setBlockSync(chunk, x, y, z, Material.WATER);
+                for (int y = seaLevel; y > height; y--) {
+                	if(!chunk.getType(x, y, z).isSolid())
+                		setBlockSync(chunk, x, y, z, Material.WATER);
+                	else 
+                		break;
                 }
 
                 //Bedrock Base
-                setBlockSync(chunk, x, 2, tw.minY+2, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
+                setBlockSync(chunk, x, tw.minY+2, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 setBlockSync(chunk, x, tw.minY+1, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
                 setBlockSync(chunk, x, tw.minY, z, Material.BEDROCK);
                 
@@ -132,9 +196,12 @@ public class TerraformGenerator extends ChunkGenerator {
     }
 
     private void setBlockSync(ChunkData data, int x, int y, int z, Material material) {
-        synchronized(LOCK) {
+    	if(Version.isAtLeast(18))
             data.setBlock(x, y, z, material);
-        }
+    	else
+	        synchronized(LOCK) {
+	            data.setBlock(x, y, z, material);
+	        }
     }
 
     @Override
@@ -146,5 +213,40 @@ public class TerraformGenerator extends ChunkGenerator {
     public List<BlockPopulator> getDefaultPopulators(World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
+    }
+
+    //This probably affects noise caves
+    public boolean shouldGenerateNoise() {
+        return true;
+    }
+    
+    //No effect on plugin, this is overridden.
+    public boolean shouldGenerateSurface() {
+        return false;
+    }
+
+    //no effect on plugin, this is overridden.
+    public boolean shouldGenerateBedrock() {
+        return false;
+    }
+
+    //Affects the carver caves
+    public boolean shouldGenerateCaves() {
+        return true;
+    }
+
+    //No effect on plugin, this is overridden.
+    public boolean shouldGenerateDecorations() {
+        return true;
+    }
+
+    //No effect on plugin, this is overridden.
+    public boolean shouldGenerateMobs() {
+        return false;
+    }
+
+    //No effect on plugin, this is overridden.
+    public boolean shouldGenerateStructures() {
+        return false;
     }
 }

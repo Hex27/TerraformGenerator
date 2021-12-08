@@ -5,7 +5,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.data.Snowable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -14,6 +14,7 @@ import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -26,7 +27,7 @@ public class SnowyWastelandHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.SNOWY_TUNDRA;
+        return OneOneEightBlockHandler.SNOWY_PLAINS;
     }
 
 //	@Override

@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Painting;
-import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 
 public class PaintingUtils {

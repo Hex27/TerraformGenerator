@@ -3,9 +3,10 @@ package org.terraform.biome.cave;
 import java.util.Random;
 
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
@@ -49,7 +50,7 @@ public class MasterCavePopulatorDistributor{
                     }
                     
                     AbstractCavePopulator pop;
-                    if(floor.getY() < 15)
+                    if(floor.getY() < TerraformGeneratorPlugin.injector.getMinY() + 32)
                     	/**
                     	 * Deep cave floors will use the deep cave populator.
                     	 * This has to happen, as most surfaces
@@ -66,11 +67,11 @@ public class MasterCavePopulatorDistributor{
                     	
                     	if(GenUtils.chance(random, (int) (lushClusterChance*100001.0), 100001)) {
                             //TerraformGeneratorPlugin.logger.info("Spawning lush cluster at " + floor);
-                    		pop = new LushClusterCavePopulator(false); //False to prevent Azalea Trees from spawning.
+                    		pop = new LushClusterCavePopulator(GenUtils.randInt(random, 10, 15), false); //False to prevent Azalea Trees from spawning.
                     	}
                     	else if(GenUtils.chance(random, (int) (dripstoneClusterChance*100000.0), 100000)) {
                             //TerraformGeneratorPlugin.logger.info("Spawning dripstone cluster at " + floor);
-                    		pop = new DripstoneClusterCavePopulator();
+                    		pop = new DripstoneClusterCavePopulator(GenUtils.randInt(random, 5, 11));
                     	}
                     	else
                     		//If both clusters don't spawn, then revert to the

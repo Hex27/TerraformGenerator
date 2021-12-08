@@ -12,9 +12,10 @@ import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
-import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.PopulatorDataPostGen;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -315,7 +316,7 @@ public class SimpleBlock {
     public SimpleBlock getGroundOrDry() {
     	int y = GenUtils.getHighestGround(popData, x, z);
     	
-    	while(y < 254 && (BlockUtils.isWet(this.getRelative(0,1,0))||
+    	while(y < TerraformGeneratorPlugin.injector.getMaxY() && (BlockUtils.isWet(this.getRelative(0,1,0))||
     			Tag.ICE.isTagged(this.getRelative(0,1,0).getType()))) y++;
         return new SimpleBlock(
                 popData,

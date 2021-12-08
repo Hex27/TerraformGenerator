@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -276,7 +277,7 @@ public class Wall {
 
     public int downUntilSolid(Random rand, Material... types) {
         int depth = 0;
-        for (int y = get().getY(); y > 0; y--) {
+        for (int y = get().getY(); y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
             if (!block.getRelative(0, -depth, 0).getType().isSolid()) {
                 block.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
             } else break;
@@ -304,7 +305,7 @@ public class Wall {
 
     public void downPillar(Random rand, int h, Material... types) {
         int depth = 0;
-        for (int y = get().getY(); y > 0; y--) {
+        for (int y = get().getY(); y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
             if (depth >= h) break;
             block.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
             depth++;
@@ -313,7 +314,7 @@ public class Wall {
 
     public void downLPillar(Random rand, int h, Material... types) {
         int depth = 0;
-        for (int y = get().getY(); y > 0; y--) {
+        for (int y = get().getY(); y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
             if (depth >= h) break;
             if (!block.getRelative(0, -depth, 0).getType().isSolid()) {
                 block.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
@@ -324,7 +325,7 @@ public class Wall {
 
     public void downRPillar(Random rand, int h, Material... types) {
         int depth = 0;
-        for (int y = get().getY(); y > 0; y--) {
+        for (int y = get().getY(); y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
             if (depth >= h) break;
             if (!block.getRelative(0, -depth, 0).getType().isSolid()) {
                 block.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));

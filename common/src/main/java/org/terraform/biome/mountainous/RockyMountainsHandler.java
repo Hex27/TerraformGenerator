@@ -4,9 +4,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.PhysicsUpdaterPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -16,6 +16,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -53,7 +54,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.MOUNTAINS;
+        return OneOneEightBlockHandler.JAGGED_PEAKS;
     }
 
     @Override

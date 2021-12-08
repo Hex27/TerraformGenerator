@@ -1,4 +1,4 @@
-package org.terraform.coregen;
+package org.terraform.coregen.populatordata;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
 

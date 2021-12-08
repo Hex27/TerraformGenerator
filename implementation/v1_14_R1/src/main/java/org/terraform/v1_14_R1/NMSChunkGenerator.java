@@ -185,7 +185,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    @SuppressWarnings("deprecation")
+	private void modifyCaveCarverLists(WorldGenCarverAbstract carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         Set<net.minecraft.server.v1_14_R1.Block> immutableCarverList =
                 ImmutableSet.of(
                         //vanilla blocks

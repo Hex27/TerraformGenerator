@@ -8,7 +8,7 @@ import org.terraform.biome.BiomeSection;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;

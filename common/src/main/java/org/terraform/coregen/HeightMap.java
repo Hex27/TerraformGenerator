@@ -2,6 +2,7 @@ package org.terraform.coregen;
 
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
@@ -168,7 +169,6 @@ public enum HeightMap {
         if (heightAmplifier != 1f && height > TerraformGenerator.seaLevel) 
         	height += heightAmplifier * (height - TerraformGenerator.seaLevel);
 
-    	
         cache.cacheHeightMap(x, z, height);
         return height;
     }

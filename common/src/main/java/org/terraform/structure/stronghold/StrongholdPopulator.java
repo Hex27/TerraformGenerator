@@ -2,7 +2,7 @@ package org.terraform.structure.stronghold;
 
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;

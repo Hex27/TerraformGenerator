@@ -3,8 +3,8 @@ package org.terraform.biome.ocean;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeType;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -28,7 +28,7 @@ public class WarmOceansHandler extends AbstractOceanHandler {
     @Override
     public Biome getBiome() {
     	if(this.oceanType == BiomeType.DEEP_OCEANIC)
-    		return Biome.DEEP_WARM_OCEAN;
+    		return Biome.WARM_OCEAN;
         return Biome.WARM_OCEAN;
     }
 

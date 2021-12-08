@@ -9,6 +9,8 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.StalactiteBuilder;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -35,12 +37,27 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Stalactites
-        if (GenUtils.chance(random, 1, 25)) {
-            int h = caveHeight / 4;
-            if (h < 1) h = 1;
-            if (h > 4) h = 4;
+        if (GenUtils.chance(random, 1, 8*Math.max(3, caveHeight/4))) {
+//            int h = caveHeight / 4;
+//            if (h < 1) h = 1;
+//            if (h > 4) h = 4;
             Wall w = new Wall(ceil, BlockFace.NORTH);
-            w.downLPillar(random, h, Material.COBBLESTONE_WALL);
+            if(w.getUp().getType() == OneOneSevenBlockHandler.DEEPSLATE) {
+                new StalactiteBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL)
+                .setSolidBlockType(OneOneSevenBlockHandler.DEEPSLATE)
+                .setFacingUp(false)
+                .setVerticalSpace(caveHeight)
+                .build(random, w);
+            	//w.downLPillar(random, h, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
+            }
+            else {
+                new StalactiteBuilder(Material.COBBLESTONE_WALL)
+                .setSolidBlockType(Material.COBBLESTONE)
+                .setFacingUp(false)
+                .setVerticalSpace(caveHeight)
+                .build(random, w);
+                //w.downLPillar(random, h, Material.COBBLESTONE_WALL);
+            }
 
         }
 
@@ -49,13 +66,28 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Stalagmites
-        if (GenUtils.chance(random, 1, 25)) {
+        if (GenUtils.chance(random, 1, 8*Math.max(3, caveHeight/4))) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;
             Wall w = new Wall(floor.getRelative(0,1,0));
             if (BlockUtils.isAir(w.getType()))
-                w.LPillar(h, random, Material.COBBLESTONE_WALL);
+            	if(w.getDown().getType() == OneOneSevenBlockHandler.DEEPSLATE) 
+            		//w.LPillar(h, random, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
+
+                    new StalactiteBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL)
+                    .setSolidBlockType(OneOneSevenBlockHandler.DEEPSLATE)
+                    .setFacingUp(true)
+                    .setVerticalSpace(caveHeight)
+                    .build(random, w);
+            	else
+                   // w.LPillar(h, random, Material.COBBLESTONE_WALL);
+
+                    new StalactiteBuilder(Material.COBBLESTONE_WALL)
+                    .setSolidBlockType(Material.COBBLESTONE)
+                    .setFacingUp(true)
+                    .setVerticalSpace(caveHeight)
+                    .build(random, w);
 
         } else if (GenUtils.chance(random, 1, 25)) { //Slabbing
             SimpleBlock base = floor.getRelative(0,1,0);
@@ -63,7 +95,10 @@ public class DeepCavePopulator extends AbstractCavePopulator {
             if (BlockUtils.isAir(base.getType()))
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (base.getRelative(face).getType().isSolid()) {
-                        base.setType(Material.STONE_SLAB);
+                    	if(base.getRelative(0,-1,0).getType() == OneOneSevenBlockHandler.DEEPSLATE)
+                    		base.setType(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_SLAB);
+                    	else
+                    		base.setType(Material.STONE_SLAB);
                         break;
                     }
                 }

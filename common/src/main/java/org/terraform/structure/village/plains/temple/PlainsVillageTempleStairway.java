@@ -2,7 +2,7 @@ package org.terraform.structure.village.plains.temple;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 

@@ -1,8 +1,8 @@
 package org.terraform.structure.room;
 
-import org.terraform.coregen.PopulatorDataAbstract;
-
 import java.util.Random;
+
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 
 public abstract class RoomPopulatorAbstract {
     private final boolean forceSpawn;

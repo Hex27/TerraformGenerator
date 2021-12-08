@@ -3,8 +3,10 @@ package org.terraform.biome.cave;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
+import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -19,13 +21,13 @@ import java.util.Random;
 public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 
 	private boolean isForLargeCave;
-	public LushClusterCavePopulator(boolean isForLargeCave) {
-		super();
+	public LushClusterCavePopulator(float radius, boolean isForLargeCave) {
+		super(radius);
 		this.isForLargeCave = isForLargeCave;
 	}
 	
     @Override
-    protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+	public void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
     	
     	//=========================
         //Upper decorations
@@ -140,6 +142,16 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         	target = target.getRelative(0,1,0);
         }
         
+        //=========================
+        //Biome Setter 
+        //=========================
+        if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract) {
+        	PopulatorDataICABiomeWriterAbstract data = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
+        	while(floor.getY() < ceil.getY()) {
+        		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), OneOneSevenBlockHandler.LUSH_CAVES);
+        		floor = floor.getRelative(0,1,0);
+        	}
+        }
     }
     
     

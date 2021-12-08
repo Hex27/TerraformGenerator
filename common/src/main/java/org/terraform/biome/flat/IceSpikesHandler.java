@@ -7,7 +7,7 @@ import org.bukkit.block.data.Snowable;
 import org.bukkit.util.Vector;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;

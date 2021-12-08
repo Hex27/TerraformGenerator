@@ -5,8 +5,8 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.biome.flat.MuddyBogHandler;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -29,7 +29,7 @@ public class BogRiverHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.SAVANNA;
+        return Biome.SWAMP;
     }
 
     @Override

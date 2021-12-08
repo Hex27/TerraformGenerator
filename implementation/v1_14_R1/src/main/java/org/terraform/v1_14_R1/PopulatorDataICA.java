@@ -1,7 +1,6 @@
 package org.terraform.v1_14_R1;
 
 import net.minecraft.server.v1_14_R1.*;
-import net.minecraft.server.v1_14_R1.StructureGenerator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,8 +9,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_14_R1.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.NaturalSpawnType;
-import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -32,7 +31,8 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
         this.tw = tw;
     }
 
-    private static MinecraftKey getLootTable(TerraLootTable table) {
+    @SuppressWarnings("incomplete-switch")
+	private static MinecraftKey getLootTable(TerraLootTable table) {
         switch (table) {
             case SPAWN_BONUS_CHEST:
                 return LootTables.b;

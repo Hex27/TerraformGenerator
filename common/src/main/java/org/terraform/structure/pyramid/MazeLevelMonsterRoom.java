@@ -2,7 +2,7 @@ package org.terraform.structure.pyramid;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.GenUtils;

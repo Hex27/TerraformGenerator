@@ -8,7 +8,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -32,7 +32,7 @@ public class PetrifiedCliffs extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.BIRCH_FOREST_HILLS;
+        return Biome.BIRCH_FOREST;
     }
 
     @Override

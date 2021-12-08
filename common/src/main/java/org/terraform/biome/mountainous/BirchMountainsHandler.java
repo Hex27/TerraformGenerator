@@ -6,8 +6,8 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -16,6 +16,7 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -34,7 +35,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.MOUNTAINS;
+        return OneOneEightBlockHandler.JAGGED_PEAKS;
     }
 
     @Override

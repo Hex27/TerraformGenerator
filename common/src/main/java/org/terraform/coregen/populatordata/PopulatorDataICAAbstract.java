@@ -1,6 +1,9 @@
-package org.terraform.coregen;
+package org.terraform.coregen.populatordata;
 
 import java.util.Random;
+
+import org.terraform.coregen.NaturalSpawnType;
+import org.terraform.coregen.TerraLootTable;
 
 
 public abstract class PopulatorDataICAAbstract extends PopulatorDataAbstract {

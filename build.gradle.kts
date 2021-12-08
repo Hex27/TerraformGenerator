@@ -12,14 +12,16 @@ subprojects {
     group = "org.terraform"
 
     repositories {
-        //mavenLocal()
+        mavenLocal()
         mavenCentral()
         maven("https://repo.codemc.io/repository/nms/")
+		//maven("https://libraries.minecraft.net/minecraft-server")
+		//maven("https://papermc.io/repo/repository/maven-public/")
     }
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_16
+        targetCompatibility = JavaVersion.VERSION_16
     }
 }
 

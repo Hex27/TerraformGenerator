@@ -1,6 +1,6 @@
 package org.terraform.structure.monument;
 
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.CoralGenerator;

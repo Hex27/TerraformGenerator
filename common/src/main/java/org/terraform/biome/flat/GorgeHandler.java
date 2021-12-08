@@ -8,9 +8,9 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.PhysicsUpdaterPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -37,6 +37,16 @@ public class GorgeHandler extends BiomeHandler {
     public Biome getBiome() {
         return plainsHandler.getBiome();
     }
+    
+    //Remove rivers from gorges.
+    @Override
+    public double calculateHeight(TerraformWorld tw, int x, int z) {
+    	double height = super.calculateHeight(tw, x, z);
+    	double riverDepth = HeightMap.getRawRiverDepth(tw, x, z); 
+    	if(riverDepth > 0)
+    		height += riverDepth;
+    	return height;
+    }
 
     @Override
     public Material[] getSurfaceCrust(Random rand) { return plainsHandler.getSurfaceCrust(rand); }
@@ -60,6 +70,10 @@ public class GorgeHandler extends BiomeHandler {
         		
         		//No water was placed
         		if(target.getY() == y+1) {
+        			//Not any of the rock types
+        			if(target.getType() != Material.ANDESITE
+        					&& target.getType() != Material.DIORITE
+        					&& target.getType() != Material.GRANITE)
         			target.getRelative(0,-1,0).setType(Material.GRASS_BLOCK);
         			target.getRelative(0,-2,0).setType(Material.DIRT);
         			if(random.nextBoolean()) {
@@ -163,21 +177,23 @@ public class GorgeHandler extends BiomeHandler {
                         else
                         {
                             chunk.setBlock(x, height - y, z, Material.AIR);
+                            
+                            //Bad code, requested adjacent chunks, possibly causing overflows
                             //Force adjacent water to flow
-                            for(BlockFace face:BlockUtils.directBlockFaces) {
-                            	if(chunk.getType(
-                            			x + face.getModX(), 
-                            			height - y, 
-                            			z + face.getModZ()) == Material.WATER)
-                            	{
-                                	PhysicsUpdaterPopulator.pushChange(
-                                			tw.getName(), 
-                                			new SimpleLocation(
-                                					rawX + face.getModX(), 
-                                					height - y, 
-                                					rawZ + face.getModZ()));
-                            	}
-                            }
+//                            for(BlockFace face:BlockUtils.directBlockFaces) {
+//                            	if(chunk.getType(
+//                            			x + face.getModX(), 
+//                            			height - y, 
+//                            			z + face.getModZ()) == Material.WATER)
+//                            	{
+//                                	PhysicsUpdaterPopulator.pushChange(
+//                                			tw.getName(), 
+//                                			new SimpleLocation(
+//                                					rawX + face.getModX(), 
+//                                					height - y, 
+//                                					rawZ + face.getModZ()));
+//                            	}
+//                            }
                         }
                     }
                 	
@@ -215,7 +231,6 @@ public class GorgeHandler extends BiomeHandler {
                 		new SimpleBlock(data,sLoc), 
                 		true, 
                 		GenUtils.randMaterial(
-                				Material.STONE,
                 				Material.GRANITE,
                 				Material.ANDESITE,
                 				Material.DIORITE
@@ -223,4 +238,14 @@ public class GorgeHandler extends BiomeHandler {
             }
         }
 	}
+	
+
+//	@Override
+//	public BiomeBank getRiverType() {
+//		return BiomeBank.GORGE_RIVER;
+//	}
+//	@Override
+//	public BiomeBank getBeachType() {
+//		return BiomeBank.GORGE_BEACH;
+//	}
 }

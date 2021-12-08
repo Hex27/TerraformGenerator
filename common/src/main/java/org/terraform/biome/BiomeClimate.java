@@ -1,6 +1,6 @@
 package org.terraform.biome;
 
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Range;
+import org.terraform.utils.Range;
 
 public enum BiomeClimate {
 

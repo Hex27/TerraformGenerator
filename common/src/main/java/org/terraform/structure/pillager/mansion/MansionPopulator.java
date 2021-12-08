@@ -3,8 +3,8 @@ package org.terraform.structure.pillager.mansion;
 import java.util.Random;
 
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;

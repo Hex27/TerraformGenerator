@@ -2,9 +2,10 @@ package org.terraform.populators;
 
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -21,36 +22,45 @@ public class OrePopulator {
     private final int maxOreSize; //Maximum size of one vein
     private final int minOreSize;
     private final int maxNumberOfVeins; //Maximum number of veins per chunk
-    private final int maxRange; //max y height where ore can be commonly found/
-    private final int rareMaxRange; //max y height where ore can be rarely found
+    private final int peakSpawnChanceHeight; //Optimal height for ore to spawn
+    private final int maxSpawnHeight; //max y height where ore can be rarely found
     private int minRange = 5; //min spawn height
     private BiomeBank[] requiredBiomes;
+    private int maxDistance;
+    private boolean ignorePeakSpawnChance = false;
 
     public OrePopulator(Material type, int baseChance, int maxOreSize,
-                        int maxNumberOfVeins, int maxRange, int rareMaxRange, 
+                        int maxNumberOfVeins, int peakSpawnChanceHeight, int maxSpawnHeight, 
+                        boolean ignorePeakSpawnChance, BiomeBank... requiredBiomes) {
+        this.type = type;
+        this.baseChance = baseChance;
+        this.maxOreSize = maxOreSize;
+        this.minOreSize = maxOreSize/2;
+        this.maxNumberOfVeins = maxNumberOfVeins;
+        this.peakSpawnChanceHeight = peakSpawnChanceHeight;
+        this.maxSpawnHeight = maxSpawnHeight;
+        this.requiredBiomes = requiredBiomes;
+        this.ignorePeakSpawnChance = ignorePeakSpawnChance;
+        this.minRange = TerraformGeneratorPlugin.injector.getMinY();
+        this.maxDistance = Math.max(Math.abs(minRange - peakSpawnChanceHeight), Math.abs(maxSpawnHeight - peakSpawnChanceHeight));
+    }
+
+    public OrePopulator(Material type, int baseChance, int maxOreSize,
+                        int maxNumberOfVeins, int minRange, int peakSpawnChanceHeight, 
+                        int maxSpawnHeight, boolean ignorePeakSpawnChance, 
                         BiomeBank... requiredBiomes) {
         this.type = type;
         this.baseChance = baseChance;
         this.maxOreSize = maxOreSize;
         this.minOreSize = maxOreSize/2;
         this.maxNumberOfVeins = maxNumberOfVeins;
-        this.maxRange = maxRange;
-        this.rareMaxRange = rareMaxRange;
-        this.requiredBiomes = requiredBiomes;
-    }
-
-    public OrePopulator(Material type, int baseChance, int maxOreSize,
-                        int maxNumberOfVeins, int minRange, int maxRange, 
-                        int rareMaxRange, BiomeBank... requiredBiomes) {
-        this.type = type;
-        this.baseChance = baseChance;
-        this.maxOreSize = maxOreSize;
-        this.minOreSize = maxOreSize/2;
-        this.maxNumberOfVeins = maxNumberOfVeins;
         this.minRange = minRange;
-        this.maxRange = maxRange;
-        this.rareMaxRange = rareMaxRange;
+        this.peakSpawnChanceHeight = peakSpawnChanceHeight;
+        this.maxSpawnHeight = maxSpawnHeight;
         this.requiredBiomes = requiredBiomes;
+        this.ignorePeakSpawnChance = ignorePeakSpawnChance;
+        this.minRange = TerraformGeneratorPlugin.injector.getMinY();
+        this.maxDistance = Math.max(Math.abs(minRange - peakSpawnChanceHeight), Math.abs(maxSpawnHeight - peakSpawnChanceHeight));
     }
     
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
@@ -72,10 +82,10 @@ public class OrePopulator {
     			int x = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
             	int z = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
             	int groundHeight = GenUtils.getHighestGround(data, x, z);
-            	int range = maxRange;
+            	int range = maxSpawnHeight;
+            	//Low chance for ores to spawn above max range
+            	//if (GenUtils.chance(random, 1, 5)) range = maxSpawnHeight;
             	
-            	//Rare chance for ores to spawn above max range
-            	if (GenUtils.chance(random, 1, 30)) range = rareMaxRange;
             	
             	//Range cannot be above ground
             	if(range > groundHeight) range = groundHeight;
@@ -84,7 +94,26 @@ public class OrePopulator {
             	if(minRange > range) continue;
             	if(minRange < world.minY) minRange = world.minY;
             	
-            	int y = GenUtils.randInt(random, minRange, range);
+            	int y = GenUtils.randInt(random, minRange + 64, range + 64) - 64; //The 64 is to make sure no negative numbers are fed in.
+
+            	if(!ignorePeakSpawnChance) {
+            		//Calculate chance based on spawnHeight and peakSpawnChanceHeight height. Max chance at peakSpawnChanceHeight.
+                	int distance = Math.abs(y - peakSpawnChanceHeight);
+                	
+                	if(!GenUtils.chance((int) Math.round(100.0*(1.0 - ((float)distance)/((float)maxDistance))), 100)) {
+//                		TerraformGeneratorPlugin.logger.info(" ====== ORE [" + this.type + "]======\n"
+//                				+ "Distance: " + distance + "\n"
+//                				+ "MaxDistance: " + maxDistance + "\n"
+//                				+ "Status: FAIL\n"
+//                				+ "minRange: " + minRange + "\n"
+//                				+ "maxRange: " + range + "\n"
+//                				+ "peakHeight: " + peakSpawnChanceHeight + "\n"
+//                				+ "Calculated Chance: " + (Math.round(100.0*(1.0 - ((float)distance)/((float)maxDistance)))) + "\n"
+//                				+ "==========\n");
+                		
+                		continue;
+                	}
+            	}
             	
             	//Generate ore with rough sphere size.
             	placeOre(

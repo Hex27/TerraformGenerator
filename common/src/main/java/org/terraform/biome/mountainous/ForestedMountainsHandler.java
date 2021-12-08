@@ -5,8 +5,8 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.flat.JungleHandler;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -59,7 +59,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.JUNGLE_HILLS;
+        return Biome.JUNGLE;
     }
 
     @Override

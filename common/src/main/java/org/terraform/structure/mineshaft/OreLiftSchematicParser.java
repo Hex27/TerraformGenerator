@@ -2,8 +2,8 @@ package org.terraform.structure.mineshaft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.data.BlockData;
-import org.terraform.coregen.PopulatorDataAbstract;
-import org.terraform.coregen.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;

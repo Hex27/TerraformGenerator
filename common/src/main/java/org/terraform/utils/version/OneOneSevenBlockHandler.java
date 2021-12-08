@@ -5,6 +5,7 @@ import java.util.Random;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.terraform.data.SimpleBlock;
@@ -82,6 +83,12 @@ public class OneOneSevenBlockHandler {
 
 	public static final Material DEEPSLATE = Material.getMaterial("DEEPSLATE") == null ? 
 			Material.getMaterial("STONE") : Material.getMaterial("DEEPSLATE");
+	
+	public static final Material COBBLED_DEEPSLATE_WALL = Material.getMaterial("COBBLED_DEEPSLATE_WALL") == null ? 
+			Material.getMaterial("COBBLESTONE_WALL") : Material.getMaterial("COBBLED_DEEPSLATE_WALL");
+	
+	public static final Material COBBLED_DEEPSLATE_SLAB = Material.getMaterial("COBBLED_DEEPSLATE_SLAB") == null ? 
+			Material.getMaterial("COBBLESTONE_SLAB") : Material.getMaterial("COBBLED_DEEPSLATE_SLAB");
 
 	public static final Material COPPER_ORE = Material.getMaterial("COPPER_ORE") == null ? 
 			Material.getMaterial("STONE") : Material.getMaterial("COPPER_ORE");
@@ -89,6 +96,18 @@ public class OneOneSevenBlockHandler {
 	public static final Material DRIPSTONE_BLOCK = Material.getMaterial("DRIPSTONE_BLOCK") == null ? 
 			Material.getMaterial("GRANITE") : Material.getMaterial("DRIPSTONE_BLOCK");
 
+	public static final Biome LUSH_CAVES = getBiome("LUSH_CAVES", "PLAINS");
+	public static final Biome DRIPSTONE_CAVES = getBiome("DRIPSTONE_CAVES", "PLAINS");
+	
+	private static Biome getBiome(String name, String fallback) {
+		try {
+			return Biome.valueOf(name);
+		}
+		catch(IllegalArgumentException e) {
+			return Biome.valueOf(fallback);
+		}
+	}
+	
 	//This isn't relevant anymore but im lazy
 	public static Material DIRT_PATH() {
 		return DIRT_PATH;

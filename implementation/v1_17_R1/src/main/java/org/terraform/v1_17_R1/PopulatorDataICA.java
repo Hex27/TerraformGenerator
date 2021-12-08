@@ -7,8 +7,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_17_R1.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.NaturalSpawnType;
-import org.terraform.coregen.PopulatorDataICAAbstract;
 import org.terraform.coregen.TerraLootTable;
+import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 

@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
@@ -29,7 +29,7 @@ public class DesertHillsHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.DESERT_HILLS;
+        return Biome.DESERT;
     }
 //
 //	@Override
