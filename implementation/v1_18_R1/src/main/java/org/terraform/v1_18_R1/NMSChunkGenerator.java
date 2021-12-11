@@ -41,8 +41,10 @@ import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.block.CraftBlock;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
+import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
 import org.terraform.biome.custombiomes.CustomBiomeType;
+import org.terraform.coregen.CarverRegistry;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
@@ -175,7 +177,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
     	//int chunkX = var1.a().c;
     	//int chunkZ  =var1.a().d;
     	ichunkaccess.a(this.b::getNoiseBiome, this.c());
-    	delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
     	
   		try {
         	TerraformGenerator generator = new TerraformGenerator();
@@ -189,8 +190,27 @@ public class NMSChunkGenerator extends ChunkGenerator {
         	PopulatorData data = new PopulatorData(regionlimitedworldaccess, ichunkaccess, this, chunkX, chunkZ);
         	data.setRadius(0);
         	generator.addPopulatorData(data);
-            generator.generateChunkData(tw.getWorld(), random, chunkX, chunkZ, biomegrid);
-        } catch (SecurityException | IllegalArgumentException e) {
+            ChunkData cd = generator.generateChunkData(tw.getWorld(), random, chunkX, chunkZ, biomegrid);
+            
+            //Do carving after ground is set.
+        	delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
+        	
+        	//Fill seas after carving.
+        	for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    int rawX = chunkX * 16 + x;
+                    int rawZ = chunkZ * 16 + z;
+
+                    //tw.getBiomeBank(rawX, rawZ);
+                    int height = (int) org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
+                    generator.fillSeaAndRivers(cd,x,z,height);
+                }
+        	}
+        	
+        	
+            //CarverRegistry.doCarving(tw, data, random);
+  		
+  		} catch (SecurityException | IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

@@ -127,11 +127,18 @@ public class TerraformGenerator extends ChunkGenerator {
                 	//TODO: This method right now fills up any cave entrances.
                 	int vanillaHeight = getVanillaGeneratedHeight(tw, chunk,x,z);
                     if(vanillaHeight < height)
-                    	for(int y = vanillaHeight; y <= height; y++)
-                    		setBlockSync(chunk,x,y,z, Material.STONE);
+                    {
+                    	for(int y = vanillaHeight; y <= height; y++) {
+                    		if(chunk.getType(x, y, z) != Material.CAVE_AIR) {
+                    			setBlockSync(chunk,x,y,z, Material.STONE);
+                    		}
+                    	}
+                    }
                     else if(vanillaHeight > height)
+                    {
                     	for(int y = vanillaHeight; y > height; y--)
                     		setBlockSync(chunk,x,y,z, Material.AIR);
+                    }
                 }
                 else
                 {
@@ -168,14 +175,10 @@ public class TerraformGenerator extends ChunkGenerator {
 	                	else
 	                		setBlockSync(chunk, x, y, z, OneOneSevenBlockHandler.DEEPSLATE);
                 }
-
-                //Any low elevation is sea
-                for (int y = seaLevel; y > height; y--) {
-                	if(!chunk.getType(x, y, z).isSolid())
-                		setBlockSync(chunk, x, y, z, Material.WATER);
-                	else 
-                		break;
-                }
+                
+                //New logic fills seas after cave carving
+                if(!newLogic)
+                	fillSeaAndRivers(chunk,x,z,height);
 
                 //Bedrock Base
                 setBlockSync(chunk, x, tw.minY+2, z, GenUtils.randMaterial(random, Material.STONE, Material.BEDROCK));
@@ -193,6 +196,30 @@ public class TerraformGenerator extends ChunkGenerator {
         }
 
         return chunk;
+    }
+    
+    public void fillSeaAndRivers(ChunkData chunk, int x, int z, int height) {
+
+    	int realLandHeight = seaLevel;
+    	for (int y = seaLevel; y > height; y--) {
+    		if(chunk.getType(x, y, z).isSolid())
+    		{
+    			realLandHeight = y;
+        		break;
+    		}
+        }
+    	
+    	//Implies that the hole was carved by a cave. Do not fill with water.
+    	if(height > TerraformGenerator.seaLevel && 
+    			height > realLandHeight) return;
+    	
+        //Any low elevation is sea. Iterate and fill until ground.
+        for (int y = seaLevel; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
+        	if(!chunk.getType(x, y, z).isSolid())
+        		setBlockSync(chunk, x, y, z, Material.WATER);
+        	else 
+        		break;
+        }
     }
 
     private void setBlockSync(ChunkData data, int x, int y, int z, Material material) {

@@ -212,11 +212,6 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     	{
     		e.printStackTrace();
     	}
-        //StructureBoundingBox b = start.a(); //Recalculate bounding box
-//    	
-//    	start.c.add(new WorldGenMonumentPieces
-//                .WorldGenMonumentPiece1(new Random(), x0, z0,
-//                EnumDirection.a));
     	
     	IStructureAccess sa = ica; //IStructureAccess is FeatureAccess
         sa.a( //setStartForFeature

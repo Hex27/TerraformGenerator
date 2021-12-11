@@ -8,6 +8,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
@@ -66,23 +67,23 @@ public class ValuesCommand extends TerraCommand {
         
         TerraformWorld tw = TerraformWorld.get("world-1232341234", new Random().nextInt(99999));
         
-        FastNoise details = NoiseCacheHandler.getNoise(
+        FastNoise carverEntranceStandard = NoiseCacheHandler.getNoise(
         		tw, 
-        		NoiseCacheEntry.BIOME_PETRIFIEDCLIFFS_INNERNOISE, 
+        		NoiseCacheEntry.CARVER_STANDARD, 
         		world -> {
-        	    	FastNoise n = new FastNoise();
-        	        n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        	        n.SetFractalOctaves(3);
-        	        n.SetFrequency(0.06f);
+        	        FastNoise n = new FastNoise((int) (world.getSeed() * 111));
+        	        n.SetNoiseType(NoiseType.SimplexFractal);
+        	        n.SetFractalOctaves(4);
+        	        n.SetFrequency(0.07f);
         	        return n;
         		});
         
         int period = 4;
         for (int i = 0; i < 9000000; i++) {
             int x = i;
-            //int y = GenUtils.randInt(0,100);
+            int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
-            vals.addValue(details.GetNoise(x, z));
+            vals.addValue(carverEntranceStandard.GetNoise(x, y, z));
     		//vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
         }
         sender.sendMessage("Finished");
