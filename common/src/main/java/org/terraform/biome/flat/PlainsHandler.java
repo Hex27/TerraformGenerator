@@ -63,7 +63,8 @@ public class PlainsHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getTrueHighestBlock(data, x, z);
                 if (data.getBiome(x, z) != getBiome()) continue;
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
+                if (data.getType(x, y, z) == Material.GRASS_BLOCK && 
+                		!BlockUtils.isWet(new SimpleBlock(data,x,y,z))) {
                 	
                     if (GenUtils.chance(random, 1, 10)) { //Grass
                         if (GenUtils.chance(random, 6, 10)) {
@@ -90,16 +91,18 @@ public class PlainsHandler extends BiomeHandler {
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
         
         for (SimpleLocation sLoc : trees) {
+    		int highestY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+    		if(BlockUtils.isWet(new SimpleBlock(data, sLoc.getX(), highestY+1, sLoc.getZ())))
+    			continue;
+    		
         	if(random.nextBoolean()) { //trees
-        		int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc.setY(highestY);
                 if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                         BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
                     new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
                 }
         	}else { //Poffs
-                int poffY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-                sLoc.setY(poffY);
+                sLoc.setY(highestY);
                 if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                         BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
                 	BlockUtils.replaceSphere(

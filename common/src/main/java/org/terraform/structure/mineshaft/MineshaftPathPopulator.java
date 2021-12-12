@@ -102,6 +102,11 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                 default:
                     break;
             }
+            
+            //Check if rails are wet.
+            if(BlockUtils.isWet(core.getRelative(0,1,0).get()))
+            	rail.setWaterlogged(true);
+            
             core.getRelative(0, 1, 0).setBlockData(rail);
             BlockUtils.correctSurroundingRails(core.getRelative(0, 1, 0).get());
             if (GenUtils.chance(rand, 1, 100)) {
@@ -295,7 +300,8 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         Wall core = new Wall(base.getRelative(0, 1, 0), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
-                pathWidth, pathWidth + 1, pathWidth, core.get(), false, BlockUtils.badlandsStoneLike);
+                pathWidth, pathWidth + 1, pathWidth, core.get(), false, 
+                BlockUtils.badlandsStoneLike);
 
         return true;
     }

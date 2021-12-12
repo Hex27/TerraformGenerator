@@ -649,7 +649,6 @@ public class BlockUtils {
     public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, Collection<Material> toReplace) {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
             if (waterToAir || block.getType() != Material.WATER) block.setType(Material.CAVE_AIR);
             return;
         }
@@ -662,23 +661,21 @@ public class BlockUtils {
             for (float y = -rY; y <= rY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                         if (toReplace.contains(Material.BARRIER)) { //Blacklist
                             if (!toReplace.contains(rel.getType()))
-                                if (block.getType() != Material.WATER || waterToAir)
+                                if (rel.getType() != Material.WATER || waterToAir)
                                     rel.setType(Material.CAVE_AIR);
 
                         } else if (toReplace.contains(rel.getType())) { //Whitelist
-                            if (block.getType() != Material.WATER || waterToAir)
+                            if (rel.getType() != Material.WATER || waterToAir)
                                 rel.setType(Material.CAVE_AIR);
 
                         } else if (!rel.getType().isSolid()) {
-                            if (block.getType() != Material.WATER || waterToAir)
+                            if (rel.getType() != Material.WATER || waterToAir)
                                 rel.setType(Material.CAVE_AIR);
                         }
                     }

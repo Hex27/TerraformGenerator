@@ -8,6 +8,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -23,6 +24,12 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
         int[] lowerCorner = room.getLowerCorner(3);
         int[] upperCorner = room.getUpperCorner(3);
 
+        //If the room has any sunlight or water, don't build this.
+        SimpleBlock center = room.getCenterSimpleBlock(data).getRelative(0,1,0);
+        if(BlockUtils.isWet(center) 
+    		|| GenUtils.getHighestGround(data, center.getX(), center.getZ()) <= center.getY())
+        	return;
+        	
         //Flooring - Have a stone brick platform.
         int y = room.getY();
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
