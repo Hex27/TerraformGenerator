@@ -9,6 +9,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.terraform.data.SimpleBlock;
+import org.terraform.utils.BlockUtils;
 
 public class OneOneSevenBlockHandler {
 
@@ -129,7 +130,8 @@ public class OneOneSevenBlockHandler {
 			if(i == 1)
 				vine = CAVE_VINES;
 			
-			base.getRelative(0, -(realHeight - i), 0).setBlockData(getCaveVine(vine, new Random().nextInt(3) == 0));
+			if(BlockUtils.isAir(base.getRelative(0, -(realHeight - i), 0).getType()))
+				base.getRelative(0, -(realHeight - i), 0).setBlockData(getCaveVine(vine, new Random().nextInt(3) == 0));
 		}
 	}
 	

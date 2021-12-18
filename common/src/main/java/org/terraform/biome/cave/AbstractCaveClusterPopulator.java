@@ -46,9 +46,11 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
                 double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 if (equationResult <= 1 + 0.7 * circleNoise.GetNoise(rel.getX(), rel.getZ())) {
-                	Wall candidateFloorWall = new Wall(rel).findFloor(60);
-                	Wall candidateCeilWall = new Wall(rel).findCeiling(60);
+                	Wall candidateFloorWall = new Wall(rel).findStonelikeFloor(60);
+                	Wall candidateCeilWall = new Wall(rel).findStonelikeCeiling(60);
                 	if(candidateFloorWall != null && candidateCeilWall != null) {
+                		
+                		
                 		SimpleBlock candidateCeil = candidateCeilWall.get();
                 		SimpleBlock candidateFloor = candidateFloorWall.get();
                 		
@@ -58,6 +60,12 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
                         		|| candidateFloor.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER)
                         				|| (candidateCeil.getType() == OneOneSevenBlockHandler.AMETHYST_BLOCK
                                         		|| candidateCeil.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER))) {
+                        	continue;
+                        }
+                		
+                		//Ensure that this is not already dripstone or moss
+                		if((candidateFloor.getType() == OneOneSevenBlockHandler.MOSS_BLOCK
+                        		|| candidateFloor.getType() == OneOneSevenBlockHandler.DRIPSTONE_BLOCK)) {
                         	continue;
                         }
                 		

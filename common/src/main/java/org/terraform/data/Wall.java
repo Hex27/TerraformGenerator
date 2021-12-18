@@ -94,6 +94,41 @@ public class Wall {
         }
         return null;
     }
+    
+
+    /**
+     * Gets the first stone-like block below this one
+     * @param cutoff
+     * @return
+     */
+    public Wall findStonelikeFloor(int cutoff) {
+        Wall floor = this.clone().getRelative(0, -1, 0);
+        while (cutoff > 0 && floor.getY() >= 0) {
+            if (BlockUtils.isStoneLike(floor.getType())) {
+                return floor;
+            }
+            cutoff--;
+            floor = floor.getRelative(0, -1, 0);
+        }
+        return null;
+    }
+    
+    /**
+     * Gets the first stone-like block above this one
+     * @param cutoff
+     * @return
+     */
+    public Wall findStonelikeCeiling(int cutoff) {
+        Wall ceil = this.getRelative(0, 1, 0);
+        while (cutoff > 0) {
+            if (BlockUtils.isStoneLike(ceil.getType())) {
+                return ceil;
+            }
+            cutoff--;
+            ceil = ceil.getRelative(0, 1, 0);
+        }
+        return null;
+    }
 
     /**
      * Gets the first solid block right from this one

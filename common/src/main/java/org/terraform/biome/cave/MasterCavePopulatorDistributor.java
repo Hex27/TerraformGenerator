@@ -5,6 +5,7 @@ import java.util.Random;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
@@ -20,10 +21,27 @@ import org.terraform.utils.version.Version;
  */
 public class MasterCavePopulatorDistributor{
 	
-	double lushClusterChance = TConfigOption.BIOME_CAVE_LUSHCLUSTER_FREQUENCY.getDouble();
-	double dripstoneClusterChance = TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_FREQUENCY.getDouble();
+	//double lushClusterChance = TConfigOption.BIOME_CAVE_LUSHCLUSTER_FREQUENCY.getDouble();
+	//double dripstoneClusterChance = TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_FREQUENCY.getDouble();
+	int lushClusterSeparation = TConfigOption.BIOME_CAVE_LUSHCLUSTER_SEPARATION.getInt();
+	int dripstoneClusterSeparation = TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_SEPARATION.getInt();
+	float lushClusterPertub = TConfigOption.BIOME_CAVE_LUSHCLUSTER_MAXPERTUB.getFloat();
+	float dripstoneClusterPertub = TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MAXPERTUB.getFloat();
 	
 	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+		SimpleLocation[] lushLocs = GenUtils.randomObjectPositions(
+    			tw.getHashedRand(9527213, data.getChunkX(), data.getChunkZ()).nextInt(99999), 
+    			data.getChunkX(), 
+    			data.getChunkZ(), 
+    			lushClusterSeparation, 
+    			lushClusterPertub);
+		SimpleLocation[] dripstoneLocs = GenUtils.randomObjectPositions(
+    			tw.getHashedRand(5902907, data.getChunkX(), data.getChunkZ()).nextInt(99999), 
+    			data.getChunkX(), 
+    			data.getChunkZ(), 
+    			dripstoneClusterSeparation, 
+    			dripstoneClusterPertub);
+		
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 
@@ -49,7 +67,7 @@ public class MasterCavePopulatorDistributor{
                     	continue;
                     }
                     
-                    AbstractCavePopulator pop;
+                    AbstractCavePopulator pop = null;
                     if(floor.getY() < TerraformGeneratorPlugin.injector.getMinY() + 32)
                     	/**
                     	 * Deep cave floors will use the deep cave populator.
@@ -65,17 +83,27 @@ public class MasterCavePopulatorDistributor{
                     	 * radius.
                     	 */
                     	
-                    	if(GenUtils.chance(random, (int) (lushClusterChance*100001.0), 100001)) {
-                            //TerraformGeneratorPlugin.logger.info("Spawning lush cluster at " + floor);
-                    		pop = new LushClusterCavePopulator(GenUtils.randInt(random, 10, 15), false); //False to prevent Azalea Trees from spawning.
+                    	for(SimpleLocation loc:lushLocs) {
+                    		if(loc.getX() == x && loc.getZ() == z)
+                    			pop = new LushClusterCavePopulator(
+                    					GenUtils.randInt(random, 
+                    							TConfigOption.BIOME_CAVE_LUSHCLUSTER_MINSIZE.getInt(), 
+                    							TConfigOption.BIOME_CAVE_LUSHCLUSTER_MAXSIZE.getInt()), 
+                    					false); //False to prevent Azalea Trees from spawning.
                     	}
-                    	else if(GenUtils.chance(random, (int) (dripstoneClusterChance*100000.0), 100000)) {
-                            //TerraformGeneratorPlugin.logger.info("Spawning dripstone cluster at " + floor);
-                    		pop = new DripstoneClusterCavePopulator(GenUtils.randInt(random, 5, 11));
+                    	
+                    	if(pop == null)
+                    	for(SimpleLocation loc:dripstoneLocs) {
+                    		if(loc.getX() == x && loc.getZ() == z)
+                    			pop = new DripstoneClusterCavePopulator(
+                    					GenUtils.randInt(random, 
+                    							TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE.getInt(), 
+                    							TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE.getInt()));
                     	}
-                    	else
-                    		//If both clusters don't spawn, then revert to the
-                    		//basic biome-based cave populator
+                    	
+                		//If both clusters don't spawn, then revert to the
+                		//basic biome-based cave populator
+                    	if(pop == null)
                     		pop = bank.getCavePop();
                     }
                     
