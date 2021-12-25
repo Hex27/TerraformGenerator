@@ -89,7 +89,7 @@ public class TerraformGenerator extends ChunkGenerator {
 	private int getVanillaGeneratedHeight(TerraformWorld tw, ChunkData chunk, int x, int z) {
 		int y = tw.maxY;
 		while(y > tw.minY) {
-			if(chunk.getType(x, y, z).isSolid())
+			if(!chunk.getType(x, y, z).isAir())
 				break;
 			else
 				y--;
@@ -107,6 +107,7 @@ public class TerraformGenerator extends ChunkGenerator {
         if (!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) {
             preWorldInitGen.add(new SimpleChunkLocation(world.getName(), chunkX, chunkZ));
         }
+        
         boolean newLogic = Version.isAtLeast(18);
         List<BiomeHandler> biomesToTransform = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
@@ -124,7 +125,6 @@ public class TerraformGenerator extends ChunkGenerator {
                 if(newLogic) {
                     //Fix up height before doing anything else
                 	//New chunk generator will output vanilla heights. Correct them.
-                	//TODO: This method right now fills up any cave entrances.
                 	int vanillaHeight = getVanillaGeneratedHeight(tw, chunk,x,z);
                     if(vanillaHeight < height)
                     {

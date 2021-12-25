@@ -60,12 +60,12 @@ public class CherryGroveRiverHandler extends BiomeHandler {
                 if (data.getBiome(x, z) != getBiome()) continue;
 
                 //Set ground near sea level to grass
-                if(y >= TerraformGenerator.seaLevel - 2) {
-                	data.setType(x, y, z, Material.GRASS_BLOCK);
-                }else if(y >= TerraformGenerator.seaLevel - 4) {
-                	if(random.nextBoolean())
-                    	data.setType(x, y, z, Material.GRASS_BLOCK);
-                }
+//                if(y >= TerraformGenerator.seaLevel - 2) {
+//                	data.setType(x, y, z, Material.GRASS_BLOCK);
+//                }else if(y >= TerraformGenerator.seaLevel - 4) {
+//                	if(random.nextBoolean())
+//                    	data.setType(x, y, z, Material.GRASS_BLOCK);
+//                }
                 
                 if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
 

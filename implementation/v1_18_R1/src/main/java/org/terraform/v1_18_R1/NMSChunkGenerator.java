@@ -44,7 +44,6 @@ import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
 import org.terraform.biome.custombiomes.CustomBiomeType;
-import org.terraform.coregen.CarverRegistry;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
@@ -172,7 +171,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
         pop.populate(tw, tw.getHashedRand(8292012, chunkX, chunkZ), popDat);
     }
 
-    @Override //applyCarving. Let AbstractChunkGenerator do it
+    @Override //applyCarving.
     public void a(RegionLimitedWorldAccess regionlimitedworldaccess, long var2, BiomeManager var4, StructureManager var5, IChunkAccess ichunkaccess, WorldGenStage.Features var7) {
     	//int chunkX = var1.a().c;
     	//int chunkZ  =var1.a().d;
@@ -193,7 +192,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
             ChunkData cd = generator.generateChunkData(tw.getWorld(), random, chunkX, chunkZ, biomegrid);
             
             //Do carving after ground is set.
-        	delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
+        	//delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
         	
         	//Fill seas after carving.
         	for (int x = 0; x < 16; x++) {

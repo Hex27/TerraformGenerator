@@ -8,7 +8,6 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.bukkit.PhysicsUpdaterPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -58,28 +57,41 @@ public class GorgeHandler extends BiomeHandler {
                 int y = GenUtils.getHighestGround(data, x, z);
                 if (data.getBiome(x, z) != getBiome()) continue;
                 
-                //Lower parts of the gorge have water
         		SimpleBlock target = new SimpleBlock(data,x,y+1,z);
-        		while(target.getY() <= TerraformGenerator.seaLevel - 20) {        			
-        			for(BlockFace face:new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN}) {
-        				if(target.getRelative(face).getType() == Material.AIR)
-        					target.getRelative(face).setType(Material.STONE);
+        		while(target.getY() <= TerraformGenerator.seaLevel) {     
+
+                    //Lower parts of the gorge have water
+        			if(target.getY() <= TerraformGenerator.seaLevel - 20) {
+        				if(target.getType() == Material.WATER)
+	        				for(BlockFace face:new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN}) {
+	            				if(target.getRelative(face).getType() == Material.AIR)
+	            					target.getRelative(face).setType(Material.STONE);
+	            			}
+        			} else {
+            			//Repair possible exposed water caves to prevent water from escaping and
+            			//forming weird blobs.
+        				for(BlockFace face:new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SELF}) {
+            				if(target.getRelative(face).getType() == Material.WATER) {
+            					target.getRelative(face).setType(Material.STONE);
+            					if(face == BlockFace.SELF)
+            						target.getRelative(face).setType(Material.STONE);
+            				}
+            			}
         			}
+        			
         			target = target.getRelative(0,1,0);
         		}
         		
-        		//No water was placed
-        		if(target.getY() == y+1) {
-        			//Not any of the rock types
-        			if(target.getType() != Material.ANDESITE
-        					&& target.getType() != Material.DIORITE
-        					&& target.getType() != Material.GRANITE)
-        			target.getRelative(0,-1,0).setType(Material.GRASS_BLOCK);
-        			target.getRelative(0,-2,0).setType(Material.DIRT);
+        		target = target.getGround();
+        		
+        		if(!BlockUtils.isWet(target.getRelative(0,1,0)) && target.getType() == Material.STONE) {
+        			//Make the ground more dynamic
+        			target.setType(Material.GRASS_BLOCK);
+        			target.getRelative(0,-1,0).setType(Material.DIRT);
         			if(random.nextBoolean()) {
-        				target.getRelative(0,-3,0).setType(Material.DIRT);
+        				target.getRelative(0,-2,0).setType(Material.DIRT);
         				if(random.nextBoolean())
-        					target.getRelative(0,-4,0).setType(Material.DIRT);
+        					target.getRelative(0,-3,0).setType(Material.DIRT);
         			}
         		}
             }
@@ -177,23 +189,6 @@ public class GorgeHandler extends BiomeHandler {
                         else
                         {
                             chunk.setBlock(x, height - y, z, Material.AIR);
-                            
-                            //Bad code, requested adjacent chunks, possibly causing overflows
-                            //Force adjacent water to flow
-//                            for(BlockFace face:BlockUtils.directBlockFaces) {
-//                            	if(chunk.getType(
-//                            			x + face.getModX(), 
-//                            			height - y, 
-//                            			z + face.getModZ()) == Material.WATER)
-//                            	{
-//                                	PhysicsUpdaterPopulator.pushChange(
-//                                			tw.getName(), 
-//                                			new SimpleLocation(
-//                                					rawX + face.getModX(), 
-//                                					height - y, 
-//                                					rawZ + face.getModZ()));
-//                            	}
-//                            }
                         }
                     }
                 	

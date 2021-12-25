@@ -849,6 +849,14 @@ public class BlockUtils {
     	return false;
     }
 
+    public static boolean isExposedToMaterial(SimpleBlock target, Material mat) {
+    	for(BlockFace face:directBlockFaces) {
+    		if(target.getRelative(face).getType() == mat)
+    			return true;
+    	}
+    	return false;
+    }
+
     /**
      * Correct fencse for example
      */
