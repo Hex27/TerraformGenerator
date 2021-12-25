@@ -192,7 +192,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
             ChunkData cd = generator.generateChunkData(tw.getWorld(), random, chunkX, chunkZ, biomegrid);
             
             //Do carving after ground is set.
-        	//delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
+        	delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
         	
         	//Fill seas after carving.
         	for (int x = 0; x < 16; x++) {
