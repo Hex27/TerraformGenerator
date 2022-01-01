@@ -8,6 +8,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rail.Shape;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
@@ -104,8 +105,9 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
             }
             
             //Check if rails are wet.
-            if(BlockUtils.isWet(core.getRelative(0,1,0).get()))
-            	rail.setWaterlogged(true);
+            if(rail instanceof Waterlogged 
+            		&& BlockUtils.isWet(core.getRelative(0,1,0).get()))
+            	((Waterlogged) rail).setWaterlogged(true);
             
             core.getRelative(0, 1, 0).setBlockData(rail);
             BlockUtils.correctSurroundingRails(core.getRelative(0, 1, 0).get());

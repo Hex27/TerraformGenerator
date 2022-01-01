@@ -99,12 +99,13 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         
         LangOpt.init(this);
         logger = new TLogger();
+        
         TerraformGenerator.updateSeaLevelFromConfig();
         new TerraformCommandManager(this, "terraform", "terra");
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
         String version = Version.getVersionPackage();
-        logger.stdout("Detected version: " + version);
+        logger.stdout("Detected version: " + version + ", number: " + Version.DOUBLE);
         try {
 			injector = (NMSInjectorAbstract) Class.forName("org.terraform." + version + ".NMSInjector").getDeclaredConstructor().newInstance();
 

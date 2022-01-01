@@ -175,4 +175,44 @@ public class OrePopulator {
 	public Material getType() {
 		return type;
 	}
+
+	public int getBaseChance() {
+		return baseChance;
+	}
+
+	public int getMaxOreSize() {
+		return maxOreSize;
+	}
+
+	public int getMinOreSize() {
+		return minOreSize;
+	}
+
+	public int getMaxNumberOfVeins() {
+		return maxNumberOfVeins;
+	}
+
+	public int getPeakSpawnChanceHeight() {
+		return peakSpawnChanceHeight;
+	}
+
+	public int getMaxSpawnHeight() {
+		return maxSpawnHeight;
+	}
+
+	public int getMinRange() {
+		return minRange;
+	}
+
+	public BiomeBank[] getRequiredBiomes() {
+		return requiredBiomes;
+	}
+
+	public int getMaxDistance() {
+		return maxDistance;
+	}
+
+	public boolean isIgnorePeakSpawnChance() {
+		return ignorePeakSpawnChance;
+	}
 }

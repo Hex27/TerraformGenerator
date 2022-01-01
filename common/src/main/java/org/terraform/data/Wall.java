@@ -3,6 +3,7 @@ package org.terraform.data;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Waterlogged;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
@@ -308,6 +309,16 @@ public class Wall {
             if (block.getRelative(0, i, 0).getType() != Material.CAVE_AIR)
                 block.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
         }
+    }
+    
+    public void waterlog(int height) {
+    	for (int i = 0; i < height; i++) {
+    		if(block.getRelative(0,i,0).getBlockData() instanceof Waterlogged) {
+    			Waterlogged log = (Waterlogged) (block.getRelative(0,i,0).getBlockData());
+    			log.setWaterlogged(true);
+    			block.getRelative(0,i,0).setBlockData(log);
+    		}
+    	}
     }
 
     public int downUntilSolid(Random rand, Material... types) {

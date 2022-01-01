@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraLootTable;
@@ -24,10 +25,10 @@ import java.util.Random;
 
 public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
 
-    private static void dropDownBlock(SimpleBlock block) {
+    private static void dropDownBlock(SimpleBlock block, Material fluid) {
         if (block.getType().isSolid()) {
             Material type = block.getType();
-            block.setType(Material.CAVE_AIR);
+            block.setType(fluid);
             int depth = 0;
             while (!block.getType().isSolid()) {
                 block = block.getRelative(0, -1, 0);
@@ -74,11 +75,22 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
                 GenUtils.randOddInt(rand, 9, 15),
                 GenUtils.randInt(rand, 5, 7),
                 x, y, z);
+        boolean isWet = false;
+        
+        Material fluid = Material.CAVE_AIR;
+        
+        SimpleBlock center = room.getCenterSimpleBlock(data);
+        if(BlockUtils.isWet(center.getRelative(0,1,0)))
+        {
+        	fluid = Material.WATER;
+        	isWet = true;
+        }
 
+        //Fill with water if the room is wet. If not, use cave air.
         room.fillRoom(data, -1, new Material[]{
                         Material.COBBLESTONE,
                         Material.MOSSY_COBBLESTONE},
-                Material.CAVE_AIR);
+        		fluid);
 
         //Make some fence pattern.
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
@@ -87,9 +99,11 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             while (length >= 0) {
                 if (length % 2 == 0 || length == entry.getValue()) {
 
-                } else
+                } else {
                     w.CAPillar(room.getHeight() - 3, rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
-
+                    if(isWet)
+                    	w.waterlog(room.getHeight()-3);
+                }
                 for (int h = 0; h < room.getHeight() - 3; h++) {
                     BlockUtils.correctSurroundingMultifacingData(w.getRelative(0, h, 0).get());
                 }
@@ -105,7 +119,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             int nX = coords[0];
             int nY = coords[1];
             int nZ = coords[2];
-            BlockUtils.replaceSphere(rand.nextInt(992), GenUtils.randInt(rand, 1, 3), new SimpleBlock(data, nX, nY, nZ), true, Material.CAVE_AIR);
+            BlockUtils.replaceSphere(rand.nextInt(992), GenUtils.randInt(rand, 1, 3), new SimpleBlock(data, nX, nY, nZ), true, fluid);
         }
 
         //Dropdown blocks
@@ -113,7 +127,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
                 int ny = room.getHeight();
                 if (GenUtils.chance(10, 13)) continue;
-                dropDownBlock(new SimpleBlock(data, x + nx, y + ny, z + nz));
+                dropDownBlock(new SimpleBlock(data, x + nx, y + ny, z + nz), fluid);
             }
         }
 
@@ -155,6 +169,8 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
                 type = EntityType.SPIDER;
                 break;
         }
+        if(isWet) type = EntityType.DROWNED;
+        
         data.setSpawner(x, y + 1, z, type);
 
         //Spawn chests
@@ -174,6 +190,10 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
                 if (length == chest) {
                     Directional dir = (Directional) Bukkit.createBlockData(Material.CHEST);
                     dir.setFacing(w.getDirection());
+                    
+                    if(isWet && dir instanceof Waterlogged) 
+                    	((Waterlogged) dir).setWaterlogged(true);
+                    
                     w.setBlockData(dir);
                     data.lootTableChest(w.get().getX(), w.get().getY(), w.get().getZ(), TerraLootTable.SIMPLE_DUNGEON);
                 }
@@ -182,21 +202,5 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             }
         }
     }
-
-//	public void spawnDungeonRoom(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
-//		try {
-//			BiomeBank biome = tw.getBiomeBank(x, y, z);
-//			y += GenUtils.randInt(random, 1, 3);
-//			TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new Location(tw.getWorld(),x,y,z));
-//			farmHouse.parser = new FarmhouseSchematicParser(biome,random,data);
-//			farmHouse.setFace(BlockUtils.getDirectBlockFace(random));
-//			farmHouse.apply();
-//
-//			TerraformGeneratorPlugin.logger.info("Spawning farmhouse at " + x + "," + y + "," + z + " with rotation of " + farmHouse.getFace().toString());
-//		} catch (Throwable e) {
-//			TerraformGeneratorPlugin.logger.error("Something went wrong trying to place farmhouse at " + x + "," + y + "," + z + "!");
-//			e.printStackTrace();
-//		}
-//	}
 
 }

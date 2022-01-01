@@ -5,12 +5,14 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.cave.MasterCavePopulatorDistributor;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.AmethystGeodePopulator;
 import org.terraform.populators.OrePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.OrePopulatorFallbackSettings;
 import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
@@ -152,6 +154,21 @@ public class TerraformPopulator {
                     TConfigOption.ORE_TUFF_MAXVEINNUMBER.getInt(), TConfigOption.ORE_TUFF_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_TUFF_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_TUFF_MAXSPAWNHEIGHT.getInt(),
                     true);
+    	}
+    	
+    	if(!Version.isAtLeast(18)) //Below 1.18
+    	{
+    		boolean repairOreSettings = false;
+    		for(OrePopulator orePop:ORE_POPS) { 
+    			if(orePop != null)
+	    			if(orePop.getMinRange() <= 0) { //Not configured for min height
+	    				TerraformGeneratorPlugin.logger.stdout("&cOres were configured to use Y <= 0! Reverting ore configuration to hardcoded 1.16 values.");
+	    				repairOreSettings = true;
+	    				break;
+	    			}
+    		}
+    		if(repairOreSettings)
+				OrePopulatorFallbackSettings.repairOreSettings(ORE_POPS);
     	}
     }
     

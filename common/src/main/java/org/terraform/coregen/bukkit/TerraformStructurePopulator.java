@@ -6,12 +6,10 @@ import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
-import org.terraform.coregen.populatordata.PopulatorDataRecursiveICA;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.event.TerraformStructureSpawnEvent;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructurePopulator;
@@ -34,8 +32,9 @@ public class TerraformStructurePopulator extends BlockPopulator {
         PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
 
         //Use IChunkAccess to place blocks instead. Known to cause lighting problems.
-        if (TConfigOption.DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT.getBoolean())
-            data = new PopulatorDataRecursiveICA(chunk);
+        //Since people keep turning this on for fun, then reporting bugs, I'm removing it. 
+//        if (TConfigOption.DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT.getBoolean())
+//            data = new PopulatorDataRecursiveICA(chunk);
 
         //Spawn large structures
         MegaChunk mc = new MegaChunk(chunk.getX(), chunk.getZ());

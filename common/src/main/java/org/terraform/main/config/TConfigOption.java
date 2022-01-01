@@ -11,6 +11,32 @@ public enum TConfigOption {
     HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER("heightmap.land-height-amplifier", 1f),
     HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level", 62),
 
+    //-=[CLIMATES]=-
+    CLIMATE_HUMIDVEGETATION_MINTEMP("climate.humid-vegetation.minimum-temperature",-0.35d),
+    CLIMATE_HUMIDVEGETATION_MAXTEMP("climate.humid-vegetation.maximum-temperature",4.0d),
+    CLIMATE_HUMIDVEGETATION_MINMOIST("climate.humid-vegetation.minimum-moisture",0d),
+    CLIMATE_HUMIDVEGETATION_MAXMOIST("climate.humid-vegetation.maximum-moisture",4.0d),
+
+    CLIMATE_DRYVEGETATION_MINTEMP("climate.dry-vegetation.minimum-temperature",-0.35d),
+    CLIMATE_DRYVEGETATION_MAXTEMP("climate.dry-vegetation.maximum-temperature",4.0d),
+    CLIMATE_DRYVEGETATION_MINMOIST("climate.dry-vegetation.minimum-moisture",-4.0d),
+    CLIMATE_DRYVEGETATION_MAXMOIST("climate.dry-vegetation.maximum-moisture",0d),
+
+    CLIMATE_HOTBARREN_MINTEMP("climate.hot-barren.minimum-temperature",1d),
+    CLIMATE_HOTBARREN_MAXTEMP("climate.hot-barren.maximum-temperature",4.0d),
+    CLIMATE_HOTBARREN_MINMOIST("climate.hot-barren.minimum-moisture",-4.0d),
+    CLIMATE_HOTBARREN_MAXMOIST("climate.hot-barren.maximum-moisture",-1.0d),
+
+    CLIMATE_COLD_MINTEMP("climate.cold.minimum-temperature",-4.0d),
+    CLIMATE_COLD_MAXTEMP("climate.cold.maximum-temperature",-0.8d),
+    CLIMATE_COLD_MINMOIST("climate.cold.minimum-moisture",-4.0d),
+    CLIMATE_COLD_MAXMOIST("climate.cold.maximum-moisture",4.0d),
+
+    CLIMATE_SNOWY_MINTEMP("climate.snowy.minimum-temperature",-4.0d),
+    CLIMATE_SNOWY_MAXTEMP("climate.snowy.maximum-temperature",-2.7d),
+    CLIMATE_SNOWY_MINMOIST("climate.snowy.minimum-moisture",-4.0d),
+    CLIMATE_SNOWY_MAXMOIST("climate.snowy.maximum-moisture",4.0d),
+    
     //-=[BIOMES]=-
     //Biome globals
     BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency", 0.03f),
@@ -126,7 +152,7 @@ public enum TConfigOption {
     //-=[DEVSTUFF]=-
     DEVSTUFF_CHUNKCACHE_SIZE("dev-stuff.chunk-cache-size", 6000),
     DEVSTUFF_CHUNKBIOMES_SIZE("dev-stuff.biomecache-size", 3000),
-    DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
+    //DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
     DEVSTUFF_VANILLA_MUSHROOMS("dev-stuff.force-only-vanilla-mushrooms",false),
     DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY("dev-stuff.patcher-cache-max-size", 100),
