@@ -59,6 +59,7 @@ public enum BiomeBank {
     RIVER(new RiverHandler(), BiomeType.RIVER, BiomeClimate.TRANSITION), 
     BOG_RIVER(new BogRiverHandler(), BiomeType.RIVER, BiomeClimate.DRY_VEGETATION), 
     CHERRY_GROVE_RIVER(new CherryGroveRiverHandler(), BiomeType.RIVER, BiomeClimate.COLD), 
+    SCARLET_FOREST_RIVER(new ScarletForestRiverHandler(), BiomeType.RIVER, BiomeClimate.COLD), 
     JUNGLE_RIVER(new JungleRiverHandler(), BiomeType.RIVER, BiomeClimate.HUMID_VEGETATION),
     FROZEN_RIVER(new FrozenRiverHandler(), BiomeType.RIVER, BiomeClimate.SNOWY, new FrozenCavePopulator()), //Special case, handle later
     DARK_FOREST_RIVER(new DarkForestRiverHandler(), BiomeType.RIVER, BiomeClimate.HUMID_VEGETATION, new FrozenCavePopulator()), //Special case, handle later
@@ -88,6 +89,7 @@ public enum BiomeBank {
     DESERT(new DesertHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_DESERT_WEIGHT.getInt()),
     BADLANDS(new BadlandsHandler(), BiomeType.FLAT, BiomeClimate.HOT_BARREN, TConfigOption.BIOME_BADLANDS_WEIGHT.getInt()),
     ERODED_PLAINS(new ErodedPlainsHandler(), BiomeType.FLAT, BiomeClimate.COLD, TConfigOption.BIOME_ERODED_PLAINS_WEIGHT.getInt()),
+    SCARLET_FOREST(new ScarletForestHandler(), BiomeType.FLAT, BiomeClimate.COLD, TConfigOption.BIOME_SCARLETFOREST_WEIGHT.getInt()),
     CHERRY_GROVE(new CherryGroveHandler(), BiomeType.FLAT, BiomeClimate.COLD, TConfigOption.BIOME_CHERRYGROVE_WEIGHT.getInt()),
     TAIGA(new TaigaHandler(), BiomeType.FLAT, BiomeClimate.COLD, TConfigOption.BIOME_TAIGA_WEIGHT.getInt()),
     SNOWY_TAIGA(new SnowyTaigaHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, TConfigOption.BIOME_SNOWY_TAIGA_WEIGHT.getInt(), new FrozenCavePopulator()),
@@ -107,7 +109,8 @@ public enum BiomeBank {
     ICY_BEACH(new IcyBeachHandler(), BiomeType.BEACH, BiomeClimate.SNOWY, new FrozenCavePopulator()),
     MUDFLATS(new MudflatsHandler(), BiomeType.BEACH, BiomeClimate.HUMID_VEGETATION), //Special case, handle later
     CHERRY_GROVE_BEACH(new CherryGroveBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
-     ;
+    SCARLET_FOREST_BEACH(new ScarletForestBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
+ ;
     public static final BiomeBank[] VALUES = values();
     public static boolean debugPrint = false;
     public static final ArrayList<BiomeBank> FLAT = new ArrayList<BiomeBank>() {{

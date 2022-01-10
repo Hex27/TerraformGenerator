@@ -39,6 +39,7 @@ public class FractalTreeBuilder {
     int maxDepth = 4;
     int maxHeight = 999;
     float lengthDecrement = 1;
+    float lengthDecrementMultiplier = 1;
     Material trunkType = Material.OAK_WOOD;
     FractalLeaves fractalLeaves = new FractalLeaves(this);
     Random rand;
@@ -50,7 +51,10 @@ public class FractalTreeBuilder {
     double minInitialTilt = -1;
     int alwaysOneStraight = 0;
     int alwaysOneStraightBranchLength = 0;
+    int alwaysOneStraightBranchSpawningDepth = 1;
     boolean alwaysOneStraightExtendedBranches = false;
+    double alwaysOneStraightBranchYawLowerMultiplier = 0.9;
+    double alwaysOneStraightBranchYawUpperMultiplier = 1.1;
     boolean noMainStem = false;
     double beeChance = 0.0f;
     int vines = 0;
@@ -68,7 +72,8 @@ public class FractalTreeBuilder {
     private SimpleBlock beeHive;
     protected boolean coralDecoration = false;
     private double initialAngle;
-    private int initialHeight;
+
+	private int initialHeight;
     private boolean heightGradientChecked = false;
 
     public FractalTreeBuilder(FractalTypes.Tree type) {
@@ -324,6 +329,36 @@ public class FractalTreeBuilder {
                         .setMinBend(Math.PI / 2)
                         .setMaxBend(Math.PI / 2)
                         .setHeightVariation(2);
+                break;
+            case SCARLET_BIG:
+                this.setBaseHeight(10).setBaseThickness(6f)
+                        .setThicknessDecrement(0.7f)
+                        .setLengthDecrement(0.5f)
+                        .setLengthDecrementMultiplier(1.5f)
+                        .setMinThickness(0.5f)
+                        .setMaxDepth(7)
+                        .setTrunkType(Material.BIRCH_WOOD)
+                        .setHeightVariation(2)
+                        .setAlwaysOneStraightBranchLength(14)
+                        .setAlwaysOneStraight(6)
+                        .setAlwaysOneStraightExtendedBranches(false)
+                        .setAlwaysOneStraightBranchYawLowerMultiplier(0.7d)
+                        .setAlwaysOneStraightBranchYawUpperMultiplier(1.3d)
+                        .setAlwaysOneStraightBranchSpawningDepth(3)
+                        .setMinBend(Math.PI / 3)
+                        .setMaxBend(Math.PI / 2)
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(5, 2, 5).setMaterial(Material.OAK_LEAVES)
+                                .setConeLeaves(true).setLeafNoiseFrequency(0.5f).setLeafNoiseMultiplier(0.8f));
+                break;
+            case SCARLET_SMALL:
+                this.setBaseHeight(2).setBaseThickness(1f)
+                        .setThicknessDecrement(0.3f)
+                        .setMaxDepth(1)
+                        .setTrunkType(Material.BIRCH_LOG)
+                        .setFractalLeaves(new FractalLeaves(this).setLeafNoiseFrequency(0.65f).setLeafNoiseMultiplier(0.8f)
+                                .setRadius(2).setMaterial(Material.OAK_LEAVES).setConeLeaves(true))
+                        .setLengthDecrement(1)
+                        .setHeightVariation(1);
                 break;
             case SWAMP_BOTTOM:
                 this.setBaseHeight(1)
@@ -581,7 +616,9 @@ public class FractalTreeBuilder {
         if (this.top == null) top = base;
         initialAngle = Math.PI / 2 + GenUtils.randDouble(rand, -initialTilt, initialTilt);
 
-        alwaysOneStraightBranchLength = baseHeight;
+        if(alwaysOneStraightBranchLength == 0)
+        	alwaysOneStraightBranchLength = baseHeight;
+        
         double initialPitch;
         if(minInitialTilt != -1) {
         	initialPitch = new int[] {-1,1}[rand.nextInt(2)]
@@ -696,6 +733,9 @@ public class FractalTreeBuilder {
             return;
         }
 
+        //This indicates a branch as the initial is no longer the same.
+        //For always straight trees, the branches don't have additional fractals.
+        //Set depth to 99 and force leaf generation.
         if (alwaysOneStraight > 0 && pitch != initialAngle) {
             fractalBranch(rand, two, pitch - randomAngle(depth), yaw - rta(), 99, thickness - thicknessDecrement, size - lengthDecrement);
             return;
@@ -703,27 +743,26 @@ public class FractalTreeBuilder {
 
         if (alwaysOneStraight > 0) {
             alwaysOneStraightBranchLength -= this.lengthDecrement;
+            this.lengthDecrement *= this.lengthDecrementMultiplier;
             //Extend a central trunk and make more branches.
-            //this.logType = Material.GREEN_WOOL;
-            fractalBranch(rand, two, pitch + randomAngle(depth), -ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
-            //this.logType = Material.BLUE_WOOL;
-            fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
-            //this.logType = Material.CYAN_WOOL;
-            fractalBranch(rand, two, pitch + randomAngle(depth), 5 * ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
-            //this.logType = Material.PURPLE_WOOL;
-            fractalBranch(rand, two, pitch + randomAngle(depth), -5 * ra(Math.PI / 4, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+            
+            //Only spawn branches if depth is sufficient.
+            if(depth >= alwaysOneStraightBranchSpawningDepth) {
+            	fractalBranch(rand, two, pitch + randomAngle(depth), -ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                fractalBranch(rand, two, pitch + randomAngle(depth), 5 * ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                fractalBranch(rand, two, pitch + randomAngle(depth), -5 * ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
 
 
-            //4 more static angle fractals.
-            if (alwaysOneStraightExtendedBranches) {
-                fractalBranch(rand, two, pitch + randomAngle(depth), ra(0, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
-                //this.logType = Material.PINK_WOOL;
-                fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 2, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
-                //this.logType = Material.BLACK_WOOL;
-                fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
-                //this.logType = Material.WHITE_WOOL;
-                fractalBranch(rand, two, pitch + randomAngle(depth), -ra(Math.PI / 2, 0.9, 1.1), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                //4 more static angle fractals.
+                if (alwaysOneStraightExtendedBranches) {
+                    fractalBranch(rand, two, pitch + randomAngle(depth), ra(0, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                    fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 2, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                    fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                    fractalBranch(rand, two, pitch + randomAngle(depth), -ra(Math.PI / 2, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
+                }
             }
+            
             //this.logType = Material.SPRUCE_WOOD;
             fractalBranch(rand, two, pitch, yaw, depth + 1, thickness - thicknessDecrement, alwaysOneStraight);
         } else {
@@ -1079,7 +1118,7 @@ public class FractalTreeBuilder {
 
     /**
      * Random-angle
-     * @return An angle between lowerBound*30 to upperBound*30 degrees in radians
+     * @return An angle between lowerBound*base to upperBound*base degrees in radians
      */
     public double ra(double base, double lowerBound, double upperBound) {
         return GenUtils.randDouble(new Random(), lowerBound * base, upperBound * base);
@@ -1090,4 +1129,29 @@ public class FractalTreeBuilder {
         this.fractalLeaves.coralDecoration = d;
         return this;
     }
+    
+    public FractalTreeBuilder setAlwaysOneStraightBranchLength(int alwaysOneStraightBranchLength) {
+    	this.alwaysOneStraightBranchLength = alwaysOneStraightBranchLength;
+    	return this;
+    }
+
+	public FractalTreeBuilder setLengthDecrementMultiplier(float lengthDecrementMultiplier) {
+		this.lengthDecrementMultiplier = lengthDecrementMultiplier;
+		return this;
+	}
+
+	public FractalTreeBuilder setAlwaysOneStraightBranchYawLowerMultiplier(double alwaysOneStraightBranchYawLowerMultiplier) {
+		this.alwaysOneStraightBranchYawLowerMultiplier = alwaysOneStraightBranchYawLowerMultiplier;
+		return this;
+	}
+
+	public FractalTreeBuilder setAlwaysOneStraightBranchYawUpperMultiplier(double alwaysOneStraightBranchYawUpperMultiplier) {
+		this.alwaysOneStraightBranchYawUpperMultiplier = alwaysOneStraightBranchYawUpperMultiplier;
+		return this;
+	}
+	
+	public FractalTreeBuilder setAlwaysOneStraightBranchSpawningDepth(int alwaysOneStraightBranchSpawningDepth) {
+		this.alwaysOneStraightBranchSpawningDepth = alwaysOneStraightBranchSpawningDepth;
+		return this;
+	}
 }

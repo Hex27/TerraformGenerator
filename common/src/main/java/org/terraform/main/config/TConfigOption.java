@@ -10,6 +10,8 @@ public enum TConfigOption {
     HEIGHT_MAP_RIVER_FREQUENCY("heightmap.river-frequency", 0.005f),
     HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER("heightmap.land-height-amplifier", 1f),
     HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level", 62),
+    HEIGHT_MAP_BEDROCK_HEIGHT("heightmap.bedrock-height",5),
+    HEIGHT_MAP_BEDROCK_DENSITY("heightmap.bedrock-density",70),
 
     //-=[CLIMATES]=-
     CLIMATE_HUMIDVEGETATION_MINTEMP("climate.humid-vegetation.minimum-temperature",-0.35d),
@@ -28,7 +30,7 @@ public enum TConfigOption {
     CLIMATE_HOTBARREN_MAXMOIST("climate.hot-barren.maximum-moisture",-1.0d),
 
     CLIMATE_COLD_MINTEMP("climate.cold.minimum-temperature",-4.0d),
-    CLIMATE_COLD_MAXTEMP("climate.cold.maximum-temperature",-0.8d),
+    CLIMATE_COLD_MAXTEMP("climate.cold.maximum-temperature",-0.5d),
     CLIMATE_COLD_MINMOIST("climate.cold.minimum-moisture",-4.0d),
     CLIMATE_COLD_MAXMOIST("climate.cold.maximum-moisture",4.0d),
 
@@ -122,6 +124,7 @@ public enum TConfigOption {
     BIOME_BADLANDS_PLATEAU_COMMONNESS("biome.badlands.plateaus.commonness", 0.18),
     BIOME_TAIGA_WEIGHT("biome.taiga.weight", 6),
     BIOME_CHERRYGROVE_WEIGHT("biome.cherrygrove.weight", 3),
+    BIOME_SCARLETFOREST_WEIGHT("biome.scarletforest.weight", 3),
     BIOME_SNOWY_TAIGA_WEIGHT("biome.snowytaiga.weight", 6),
     BIOME_SNOWY_WASTELAND_WEIGHT("biome.snowywasteland.weight", 4),
     BIOME_ICE_SPIKES_WEIGHT("biome.icespikes.weight", 2),

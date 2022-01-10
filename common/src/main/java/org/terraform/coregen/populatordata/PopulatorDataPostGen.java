@@ -136,7 +136,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract {
             spawner.setSpawnedType(type);
             spawner.update();
         }
-        catch(IllegalStateException e)
+        catch(IllegalStateException | ClassCastException e)
         {
         	spawnerRetries++;
         	if(spawnerRetries > 10){ 
@@ -144,7 +144,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract {
             	spawnerRetries = 0;
         		return;
         	}
-        	Bukkit.getLogger().info("Failed to get state for spawner, try " + spawnerRetries);
+        	Bukkit.getLogger().info("Failed to get state for spawner at " + rawX + "," + rawY + "," + rawZ + ", try " + spawnerRetries);
         	setSpawner(rawX, rawY, rawZ, type);
         }
     }

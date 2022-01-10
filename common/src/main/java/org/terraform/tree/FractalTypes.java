@@ -7,6 +7,8 @@ public class FractalTypes {
         AZALEA_TOP,
         TAIGA_BIG,
         TAIGA_SMALL,
+        SCARLET_BIG,
+        SCARLET_SMALL,
         SAVANNA_SMALL,
         SAVANNA_BIG,
         WASTELAND_BIG,

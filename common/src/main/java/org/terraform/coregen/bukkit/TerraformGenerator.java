@@ -183,9 +183,9 @@ public class TerraformGenerator extends ChunkGenerator {
                 //Bedrock Base
                 setBlockSync(chunk, x, tw.minY, z, Material.BEDROCK);
                 
-                //Up till y = minY+5
-                for(int i = 1; i <= 4; i++) {
-                	if(random.nextInt(3) > 0)
+                //Up till y = minY+HEIGHT_MAP_BEDROCK_HEIGHT
+                for(int i = 1; i < TConfigOption.HEIGHT_MAP_BEDROCK_HEIGHT.getInt(); i++) {
+                	if(GenUtils.chance(random, TConfigOption.HEIGHT_MAP_BEDROCK_DENSITY.getInt(), 100))
                 		setBlockSync(chunk, x, tw.minY+i, z, Material.BEDROCK);
                 	else
                 		break;

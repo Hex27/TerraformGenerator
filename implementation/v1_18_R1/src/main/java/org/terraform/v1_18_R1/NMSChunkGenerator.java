@@ -26,6 +26,8 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.IChunkAccess;
 import net.minecraft.world.level.levelgen.ChunkGeneratorAbstract;
 import net.minecraft.world.level.levelgen.HeightMap;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
+import net.minecraft.world.level.levelgen.SeededRandom;
 import net.minecraft.world.level.levelgen.WorldGenStage;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.carver.WorldGenCarverAbstract;
@@ -37,14 +39,18 @@ import net.minecraft.world.level.levelgen.feature.WorldGenNether;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_18_R1.generator.CraftLimitedRegion;
+import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.TerraformPopulator;
+import org.terraform.coregen.bukkit.TerraformBukkitBlockPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -169,6 +175,28 @@ public class NMSChunkGenerator extends ChunkGenerator {
         int chunkZ = ichunkaccess.f().d; //z
         PopulatorData popDat = new PopulatorData(generatoraccessseed, ichunkaccess, this, chunkX, chunkZ);
         pop.populate(tw, tw.getHashedRand(8292012, chunkX, chunkZ), popDat);
+        
+        //Spigot API BlockPopulator support
+        World world = generatoraccessseed.getMinecraftWorld().getWorld();
+        if (!world.getPopulators().isEmpty()) {
+           CraftLimitedRegion limitedRegion = new CraftLimitedRegion(generatoraccessseed, ichunkaccess.f());
+           int x = ichunkaccess.f().c;
+           int z = ichunkaccess.f().d;
+           Iterator<BlockPopulator> var10 = world.getPopulators().iterator();
+
+           while(var10.hasNext()) {
+              BlockPopulator populator = (BlockPopulator)var10.next();
+              if(populator instanceof TerraformBukkitBlockPopulator)
+            	  continue;
+              
+              SeededRandom seededrandom = new SeededRandom(new LegacyRandomSource(generatoraccessseed.E()));
+              seededrandom.a(generatoraccessseed.E(), x, z);
+              populator.populate(world, seededrandom, x, z, limitedRegion);
+           }
+
+           limitedRegion.saveEntities();
+           limitedRegion.breakLink();
+        }
     }
 
     @Override //applyCarving.
