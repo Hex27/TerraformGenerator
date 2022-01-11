@@ -1,6 +1,10 @@
 package org.terraform.data;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Arrays;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -324,6 +328,263 @@ public class SimpleBlock {
                 y,
                 z);
     }
+
+
+	public SimpleBlock getUp() {
+		return new SimpleBlock(popData,x,y+1,z);
+	}
+	public SimpleBlock getUp(int i) {
+		return new SimpleBlock(popData,x,y+i,z);
+	}
+	
+    /**
+     * Gets the first solid block above this one
+     * @param cutoff
+     * @return
+     */
+    public SimpleBlock findCeiling(int cutoff) {
+    	SimpleBlock ceil = this.getRelative(0, 1, 0);
+        while (cutoff > 0) {
+            if (ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
+                return ceil;
+            }
+            cutoff--;
+            ceil = ceil.getRelative(0, 1, 0);
+        }
+        return null;
+    }
+    
+    /**
+     * Gets the first solid block below this one
+     * @param cutoff
+     * @return
+     */
+    public SimpleBlock findFloor(int cutoff) {
+    	SimpleBlock floor = this.getRelative(0, -1, 0);
+        while (cutoff > 0 && floor.getY() >= 0) {
+            if (floor.getType().isSolid() && floor.getType() != Material.LANTERN) {
+                return floor;
+            }
+            cutoff--;
+            floor = floor.getRelative(0, -1, 0);
+        }
+        return null;
+    }
+    
+    /**
+     * Gets the first stone-like block below this one
+     * @param cutoff
+     * @return
+     */
+    public SimpleBlock findStonelikeFloor(int cutoff) {
+    	SimpleBlock floor = this.getRelative(0, -1, 0);
+        while (cutoff > 0 && floor.getY() >= 0) {
+            if (BlockUtils.isStoneLike(floor.getType())) {
+                return floor;
+            }
+            cutoff--;
+            floor = floor.getRelative(0, -1, 0);
+        }
+        return null;
+    }
+    
+    /**
+     * Gets the first stone-like block above this one
+     * @param cutoff
+     * @return
+     */
+    public SimpleBlock findStonelikeCeiling(int cutoff) {
+    	SimpleBlock ceil = this.getRelative(0, 1, 0);
+        while (cutoff > 0) {
+            if (BlockUtils.isStoneLike(ceil.getType())) {
+                return ceil;
+            }
+            cutoff--;
+            ceil = ceil.getRelative(0, 1, 0);
+        }
+        return null;
+    }
+    
+
+    /**
+     * Replaces everything in its way
+     * @param height
+     * @param rand
+     * @param types
+     */
+    public void Pillar(int height, Material... types) {
+    	Random rand = new Random();
+        for (int i = 0; i < height; i++) {
+            this.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
+        }
+    }
+    
+    /**
+     * Replaces everything in its way
+     * @param height
+     * @param rand
+     * @param types
+     */
+    public void Pillar(int height, Random rand, Material... types) {
+        for (int i = 0; i < height; i++) {
+        	this.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
+        }
+    }
+
+    public void Pillar(int height, boolean pattern, Random rand, Material... types) {
+        for (int i = 0; i < height; i++) {
+            if (Arrays.equals(new Material[]{Material.BARRIER}, types)) continue;
+            if (!pattern)
+            	this.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
+            else if (types[i % types.length] != Material.BARRIER)
+            	this.getRelative(0, i, 0).setType(types[i % types.length]);
+        }
+    }
+    
+
+    /**
+     * Corrects all multiple facing block data in a pillar
+     * @param height
+     */
+    public void CorrectMultipleFacing(int height) {
+        for (int i = 0; i < height; i++) {
+            BlockUtils.correctSurroundingMultifacingData(this.getRelative(0, i, 0));
+        }
+    }
+
+
+    /**
+     * Replaces until a solid block is reached.
+     * @param height
+     * @param rand
+     * @param types
+     */
+    public int LPillar(int height, Random rand, Material... types) {
+        return LPillar(height, false, rand, types);
+    }
+
+    /**
+     * Replaces until a solid block is reached.
+     * @param height
+     * @param rand
+     * @param types
+     */
+    public int LPillar(int height, boolean pattern, Random rand, Material... types) {
+        for (int i = 0; i < height; i++) {
+            if (this.getRelative(0, i, 0).getType().isSolid()) return i;
+            if (Arrays.equals(new Material[]{Material.BARRIER}, types)) continue;
+            if (!pattern)
+                this.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
+            else
+                this.getRelative(0, i, 0).setType(types[i % types.length]);
+        }
+        return height;
+    }
+
+    /**
+     * Replaces non-solid blocks only
+     * @param height
+     * @param rand
+     * @param types
+     */
+    public void RPillar(int height, Random rand, Material... types) {
+        for (int i = 0; i < height; i++) {
+            if (!this.getRelative(0, i, 0).getType().isSolid())
+                this.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
+        }
+    }
+
+    /**
+     * Replaces non-cave air only
+     * @param height
+     * @param rand
+     * @param types
+     */
+    public void CAPillar(int height, Random rand, Material... types) {
+        for (int i = 0; i < height; i++) {
+            if (this.getRelative(0, i, 0).getType() != Material.CAVE_AIR)
+                this.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
+        }
+    }
+    
+    public void waterlog(int height) {
+    	for (int i = 0; i < height; i++) {
+    		if(this.getRelative(0,i,0).getBlockData() instanceof Waterlogged) {
+    			Waterlogged log = (Waterlogged) (this.getRelative(0,i,0).getBlockData());
+    			log.setWaterlogged(true);
+    			this.getRelative(0,i,0).setBlockData(log);
+    		}
+    	}
+    }
+
+    public int downUntilSolid(Random rand, Material... types) {
+        int depth = 0;
+        for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
+            if (!this.getRelative(0, -depth, 0).getType().isSolid()) {
+                this.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
+            } else break;
+            depth++;
+        }
+
+        return depth;
+    }
+
+    public int blockfaceUntilSolid(int maxDepth, Random rand, BlockFace face, Material... types) {
+        int depth = 0;
+        while (depth <= maxDepth) {
+            if (!this.getRelative(face).getType().isSolid()) {
+                this.getRelative(face).setType(GenUtils.randMaterial(rand, types));
+            } else break;
+            depth++;
+        }
+
+        return depth;
+    }
+    
+    public void downPillar(int h, Material... types) {
+    	downPillar(new Random(),h,types);
+    }
+
+    public void downPillar(Random rand, int h, Material... types) {
+        int depth = 0;
+        for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
+            if (depth >= h) break;
+            this.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
+            depth++;
+        }
+    }
+
+    public void downLPillar(Random rand, int h, Material... types) {
+        int depth = 0;
+        for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
+            if (depth >= h) break;
+            if (!this.getRelative(0, -depth, 0).getType().isSolid()) {
+                this.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
+            } else break;
+            depth++;
+        }
+    }
+
+    public void downRPillar(Random rand, int h, Material... types) {
+        int depth = 0;
+        for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
+            if (depth >= h) break;
+            if (!this.getRelative(0, -depth, 0).getType().isSolid()) {
+                this.getRelative(0, -depth, 0).setType(GenUtils.randMaterial(rand, types));
+            }
+            depth++;
+        }
+    }
+    
+
+    public SimpleBlock getDown(int i) {
+        return this.getRelative(0, -i, 0);
+    }
+    
+    public SimpleBlock getDown() {
+        return this.getRelative(0, -1, 0);
+    }
+
     
     public String toString() {
     	return x + "," + y + "," + z;

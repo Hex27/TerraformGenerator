@@ -41,5 +41,9 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
         //Populate animals last
         this.animalPopulator.populate(world, random, chunk);
     }
+
+	public TerraformStructurePopulator getStructurePopulator() {
+		return structurePopulator;
+	}
     
 }

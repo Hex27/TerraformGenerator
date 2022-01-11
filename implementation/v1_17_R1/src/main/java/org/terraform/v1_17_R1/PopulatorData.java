@@ -13,6 +13,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.IRegistry;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.level.RegionLimitedWorldAccess;
 import net.minecraft.world.entity.Entity;
@@ -118,9 +119,10 @@ public class PopulatorData extends PopulatorDataAbstract {
 
         if (tileentity instanceof TileEntityMobSpawner) {
             try {
-                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-            } catch (IllegalArgumentException | IllegalAccessException
-                    | NoSuchFieldException | SecurityException e) {
+            	@SuppressWarnings("deprecation")
+            	EntityTypes<?> nmsEntity = IRegistry.Y.get(new MinecraftKey(type.getName()));
+                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName(nmsEntity);
+            } catch (IllegalArgumentException | SecurityException e) {
                 e.printStackTrace();
             }
         } else {

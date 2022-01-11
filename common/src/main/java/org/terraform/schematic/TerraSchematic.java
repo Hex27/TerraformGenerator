@@ -91,11 +91,11 @@ public class TerraSchematic {
         return schem;
     }
     
-    public static TerraSchematic load(String internalPath, Location loc) throws FileNotFoundException {
-        SimpleBlock block = new SimpleBlock(loc);
-
-        return load(internalPath, block);
-    }
+//    public static TerraSchematic load(String internalPath, Location loc) throws FileNotFoundException {
+//        SimpleBlock block = new SimpleBlock(loc);
+//
+//        return load(internalPath, block);
+//    }
 
     public void registerBlock(Block b) {
         Vector rel = b.getLocation().toVector().subtract(refPoint.toVector());

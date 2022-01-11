@@ -44,7 +44,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
         try {
             BiomeBank biome = tw.getBiomeBank(x, z);
             y += GenUtils.randInt(random, 1, 3);
-            TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new Location(tw.getWorld(), x, y, z));
+            TerraSchematic farmHouse = TerraSchematic.load("farmhouse",  new SimpleBlock(data,x,y,z));
             farmHouse.parser = new FarmhouseSchematicParser(biome, random, data);
             farmHouse.setFace(BlockUtils.getDirectBlockFace(random));
             farmHouse.apply();

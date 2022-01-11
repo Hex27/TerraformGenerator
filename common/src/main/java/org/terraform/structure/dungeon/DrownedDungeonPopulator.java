@@ -96,7 +96,7 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
             for (int nz = -radius; nz <= radius; nz++) {
                 int y = GenUtils.getHighestGround(data, nx + x, nz + z);
                 if (GenUtils.chance(rand, 1, 15)) {
-                    CoralGenerator.generateSingleCoral(data, nx, y, nz);
+                    CoralGenerator.generateSingleCoral(data, nx + x, y, nz + z);
                 } else if (GenUtils.chance(rand, 1, 10)) {
                     data.setType(x + nx, y + 1, z + nz, Material.SEAGRASS);
                 }

@@ -27,14 +27,14 @@ public class AnimalFarmPathPopulator extends PathPopulatorAbstract {
                 return;
         }
         if (GenUtils.chance(rand, 1, 50)) {
-            w.getLeft().getHighestSolidBlockFromAbove().getRelative(0, 1, 0)
+            w.getLeft().getGround().getRelative(0, 1, 0)
                     .setType(Material.CAMPFIRE);
         }
         if (GenUtils.chance(rand, 2, 10))
-            w.getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
+            w.getGround().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
         if (GenUtils.chance(rand, 2, 10))
-            w.getLeft().getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
+            w.getLeft().getGround().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
         if (GenUtils.chance(rand, 2, 10))
-            w.getRight().getHighestSolidBlockFromAbove().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
+            w.getRight().getGround().setType(GenUtils.randMaterial(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
     }
 }

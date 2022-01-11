@@ -15,6 +15,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.IRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.entity.Entity;
@@ -54,7 +55,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         	//return rlwa.getType(x, y, z);
         	return CraftMagicNumbers.getMaterial(rlwa.a_(new BlockPosition(x, y, z)).b());
     	}catch(Exception e) {
-        	Bukkit.getLogger().info("Error chunk: " + chunkX + "," + chunkZ + "--- Block Coords: " + 16*chunkX + "," + 16*chunkZ);
+        	Bukkit.getLogger().info("Error chunk: " + chunkX + "," + chunkZ + "--- Block Coords: " + 16*chunkX + "," + 16*chunkZ + " for coords " + x + "," + y + "," + z);
     		e.printStackTrace();
         }
     	return null;
@@ -140,9 +141,13 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 
         if (tileentity instanceof TileEntityMobSpawner) {
             try {
-                ((TileEntityMobSpawner) tileentity).d().a((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-            } catch (IllegalArgumentException | IllegalAccessException
-                    | NoSuchFieldException | SecurityException e) {
+            	//Fetch from ENTITY_TYPE_REGISTRY (m)'s map
+            	@SuppressWarnings("deprecation")
+            	EntityTypes<?> nmsEntity = IRegistry.Z.a(new MinecraftKey(type.getName()));
+            	//EntityTypes<?> nmsEntity = (EntityTypes<?>)IRegistry.Z.a(new MinecraftKey(type.getName()));
+            	//IRegistry.m.a(new MinecraftKey(type.getKey().getKey()));
+                ((TileEntityMobSpawner) tileentity).d().a(nmsEntity);
+            } catch (IllegalArgumentException | SecurityException e) {
                 e.printStackTrace();
             }
         } else {
@@ -153,7 +158,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     @Override
     public void lootTableChest(int x, int y, int z, TerraLootTable table) {
         BlockPosition pos = new BlockPosition(x, y, z);
-        TileEntityLootable.a(ica, gen.getTerraformWorld().getHashedRand(x, y, z), pos, getLootTable(table));
+        TileEntityLootable.a(rlwa, gen.getTerraformWorld().getHashedRand(x, y, z), pos, getLootTable(table));
     }
 
     private MinecraftKey getLootTable(TerraLootTable table) {

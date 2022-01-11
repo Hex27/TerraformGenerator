@@ -5,6 +5,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -15,6 +16,8 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.utils.version.Version;
+
 import java.util.Random;
 
 public class TerraformStructurePopulator extends BlockPopulator {
@@ -25,6 +28,9 @@ public class TerraformStructurePopulator extends BlockPopulator {
         this.tw = tw;
     }
 
+    //OLDER BLOCK POPULATOR API
+    //Used for large structures as they are too big and rely on a guaranteed write.
+    //The older api allows guaranteed writes via cascasion. Slow, but guaranteed to work
     @Override
     public void populate(World world, Random random, Chunk chunk) {
         //Don't attempt generation pre-injection.
@@ -67,14 +73,22 @@ public class TerraformStructurePopulator extends BlockPopulator {
 	            }
 	        }
         }
-
-        //Spawn small structures
+        
+        //spawnMultiMegaChunkStructures(data); //used to be here. Not anymore.
+    }
+    
+    public void spawnMultiMegaChunkStructures(PopulatorDataAbstract data) {
+    	//Spawn small structures
         for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {
             if (((MultiMegaChunkStructurePopulator)spop).canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
                 TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
-                Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(data.getChunkX()*16+8, data.getChunkZ()*16+8, spop.getClass().getName()));
+                
+                //No async events
+                //Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(data.getChunkX()*16+8, data.getChunkZ()*16+8, spop.getClass().getName()));
+                
                 spop.populate(tw, data);
             }
         }
     }
+    
 }

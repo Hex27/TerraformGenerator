@@ -1,6 +1,7 @@
 package org.terraform.v1_16_R3;
 
 import net.minecraft.server.v1_16_R3.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -107,9 +108,10 @@ public class PopulatorData extends PopulatorDataAbstract {
 
         if (tileentity instanceof TileEntityMobSpawner) {
             try {
-                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-            } catch (IllegalArgumentException | IllegalAccessException
-                    | NoSuchFieldException | SecurityException e) {
+            	@SuppressWarnings("deprecation")
+            	EntityTypes<?> nmsEntity = IRegistry.ENTITY_TYPE.get(new MinecraftKey(type.getName()));
+                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName(nmsEntity);
+            } catch (IllegalArgumentException | SecurityException e) {
                 e.printStackTrace();
             }
         } else {

@@ -49,7 +49,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
         try {
             BiomeBank biome = tw.getBiomeBank(x, z);
             y += elevation;
-            TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new Location(tw.getWorld(), x, y, z));
+            TerraSchematic farmHouse = TerraSchematic.load("farmhouse",  new SimpleBlock(data,x,y,z));
             farmHouse.parser = new FarmhouseSchematicParser(biome, this.rand, data);
             BlockFace face = BlockUtils.getDirectBlockFace(this.rand);
             if (room instanceof DirectionalCubeRoom) {

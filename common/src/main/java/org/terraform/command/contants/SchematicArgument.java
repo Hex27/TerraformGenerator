@@ -2,6 +2,7 @@ package org.terraform.command.contants;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.TerraSchematic;
 
 import java.io.FileNotFoundException;
@@ -17,7 +18,7 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
     public TerraSchematic parse(CommandSender sender, String value) {
 
         try {
-            return TerraSchematic.load(value, ((Player) sender).getLocation());
+            return TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -27,7 +28,7 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
     @Override
     public String validate(CommandSender sender, String value) {
         try {
-            TerraSchematic.load(value, ((Player) sender).getLocation());
+            TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
         } catch (Throwable e) {
             e.printStackTrace();
             return "Problem loading schematic. Check console for error";

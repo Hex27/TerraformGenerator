@@ -144,7 +144,7 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
     private void placeStatue(SimpleBlock base, BlockFace dir) {
         try {
             World w = ((PopulatorDataPostGen) base.getPopData()).getWorld();
-            TerraSchematic schema = TerraSchematic.load("pharoah-statue", new Location(w, base.getX(), base.getY(), base.getZ()));
+            TerraSchematic schema = TerraSchematic.load("pharoah-statue", base);
             schema.parser = new SchematicParser();
             schema.setFace(dir);
             schema.apply();

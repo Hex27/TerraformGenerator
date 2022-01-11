@@ -5,6 +5,7 @@ import org.bukkit.World;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.bukkit.TerraformBukkitBlockPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.noise.FastNoise;
@@ -22,15 +23,18 @@ public class TerraformWorld {
     private final long seed;
     public int minY = 0;
     public int maxY = 256;
+    private final TerraformBukkitBlockPopulator bukkitBlockPopulator;
 
     public TerraformWorld(String name, long seed) {
         this.worldName = name;
         this.seed = seed;
+        this.bukkitBlockPopulator = new TerraformBukkitBlockPopulator(this);
     }
 
     private TerraformWorld(World world) {
         this.worldName = world.getName();
         this.seed = world.getSeed();
+        this.bukkitBlockPopulator = new TerraformBukkitBlockPopulator(this);
     }
 
     public static TerraformWorld get(World world) {
@@ -139,4 +143,8 @@ public class TerraformWorld {
     public World getWorld() {
         return Bukkit.getWorld(worldName);
     }
+
+	public TerraformBukkitBlockPopulator getBukkitBlockPopulator() {
+		return bukkitBlockPopulator;
+	}
 }

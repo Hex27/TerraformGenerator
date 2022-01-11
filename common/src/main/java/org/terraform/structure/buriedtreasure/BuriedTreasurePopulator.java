@@ -29,6 +29,9 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 		for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
 		    int x = coords[0];
 		    int z = coords[1];
+		    if(x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ())
+		    	continue;
+		    
 		    int height = GenUtils.getHighestGround(data, x, z);
 		    height -= GenUtils.randInt(random, 3, 10);
 		    

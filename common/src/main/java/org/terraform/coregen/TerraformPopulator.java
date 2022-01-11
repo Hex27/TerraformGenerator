@@ -9,7 +9,10 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.AmethystGeodePopulator;
 import org.terraform.populators.OrePopulator;
+import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
+import org.terraform.structure.StructurePopulator;
+import org.terraform.structure.StructureRegistry;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.OrePopulatorFallbackSettings;
@@ -204,6 +207,16 @@ public class TerraformPopulator {
         //They will recalculate biomes per block.
 		caveDistributor.populate(tw, random, data);
 
-
+		//Multi-megachunk structures
+        for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {
+            if (((MultiMegaChunkStructurePopulator)spop).canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
+                TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
+                
+                //No async events
+                //Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(data.getChunkX()*16+8, data.getChunkZ()*16+8, spop.getClass().getName()));
+                
+                spop.populate(tw, data);
+            }
+        }
     }
 }

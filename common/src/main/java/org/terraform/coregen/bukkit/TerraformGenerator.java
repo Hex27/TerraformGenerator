@@ -245,7 +245,7 @@ public class TerraformGenerator extends ChunkGenerator {
     @Override
     public List<BlockPopulator> getDefaultPopulators(World world) {
         TerraformWorld tw = TerraformWorld.get(world);
-        return Collections.singletonList(new TerraformBukkitBlockPopulator(tw));
+        return Collections.singletonList(tw.getBukkitBlockPopulator());
     }
 
     //This probably affects noise caves

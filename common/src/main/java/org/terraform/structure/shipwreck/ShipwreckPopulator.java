@@ -48,6 +48,8 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
             int x = coords[0];
             int z = coords[1];
+		    if(x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ())
+		    	continue;
             int height = GenUtils.getHighestGround(data, x, z) - 1 - random.nextInt(5);
             
             spawnShipwreck(tw, random, data, x, height + 1, z);
@@ -61,7 +63,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         		y -= GenUtils.randInt(random, 4, 7);
         	}
             y += GenUtils.randInt(random, -1, 1);
-            TerraSchematic shipwreck = TerraSchematic.load(SCHEMATICS[random.nextInt(SCHEMATICS.length)], new Location(tw.getWorld(), x, y, z));
+            TerraSchematic shipwreck = TerraSchematic.load(SCHEMATICS[random.nextInt(SCHEMATICS.length)], new SimpleBlock(data, x, y, z));
             shipwreck.parser = new ShipwreckSchematicParser(tw.getBiomeBank(x, z), random, data);
             shipwreck.setFace(BlockUtils.getDirectBlockFace(random));
             shipwreck.apply();

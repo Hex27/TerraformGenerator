@@ -59,15 +59,15 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
         	
         	spawnStakes(random, new SimpleBlock(data,x,y,z),biome);
         	
-            TerraSchematic outpostBase = TerraSchematic.load("outpost/outpostbase1", new Location(tw.getWorld(), x, y, z));
+            TerraSchematic outpostBase = TerraSchematic.load("outpost/outpostbase1",  new SimpleBlock(data,x,y,z));
             outpostBase.parser = new OutpostSchematicParser(biome, random, data, y-1);
             outpostBase.setFace(BlockUtils.getDirectBlockFace(random));
             outpostBase.apply();
-            TerraSchematic outpostCore = TerraSchematic.load("outpost/outpostcore1", new Location(tw.getWorld(), x, y+5, z));
+            TerraSchematic outpostCore = TerraSchematic.load("outpost/outpostcore1",  new SimpleBlock(data,x,y+5,z));
             outpostCore.parser = new OutpostSchematicParser(biome, random, data, y-1);
             outpostCore.setFace(BlockUtils.getDirectBlockFace(random));
             outpostCore.apply();
-            TerraSchematic outpostTop = TerraSchematic.load("outpost/outposttop1", new Location(tw.getWorld(), x, y+11, z));
+            TerraSchematic outpostTop = TerraSchematic.load("outpost/outposttop1",  new SimpleBlock(data,x,y+11,z));
             outpostTop.parser = new OutpostSchematicParser(biome, random, data, y-1);
             outpostTop.setFace(BlockUtils.getDirectBlockFace(random));
             outpostTop.apply();
