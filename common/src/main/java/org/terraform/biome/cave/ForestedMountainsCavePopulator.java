@@ -5,7 +5,6 @@ import org.bukkit.Tag;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.CylinderBuilder;
 import org.terraform.utils.GenUtils;
@@ -14,8 +13,6 @@ import org.terraform.utils.version.OneOneSevenBlockHandler;
 import java.util.Random;
 
 public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
-    private static boolean genned = false;
-    
     private MossyCavePopulator mossyCavePop;
     
     public ForestedMountainsCavePopulator() {
@@ -25,12 +22,6 @@ public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
     @Override
     public void populate(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
 
-        if (!genned) {
-        	
-            genned = true;
-            TerraformGeneratorPlugin.logger.info("Spawning forested mountains cave at " + floor.toString() + ", floortype=" + floor.getType()  + ", aboveFloorType=" + floor.getRelative(0,1,0).getType());
-        }
-        
         //Likely to be a river cave
         if(ceil.getY() > TerraformGenerator.seaLevel && floor.getY() < TerraformGenerator.seaLevel)
         {

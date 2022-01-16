@@ -5,6 +5,7 @@ public enum CustomBiomeType {
 	MUDDY_BOG("b8ad49","9c8046","b8ad49","d9cd62","ad8445","ad8445", 0.8f, false),
 	CHERRY_GROVE("","69faff","","87fffb","ffa1fc","acff96", 0.8f, false),
 	SCARLET_FOREST("","","","","fc3103","ff7700", 0.8f, false),
+	CRYSTALLINE_CLUSTER("e54fff","c599ff","e54fff","","","", 0.8f, false),
 	;
 	
 	private String key;

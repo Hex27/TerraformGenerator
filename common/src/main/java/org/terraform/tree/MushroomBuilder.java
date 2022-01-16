@@ -59,6 +59,37 @@ public class MushroomBuilder {
                         .setCapYOffset(-2)
                         .setCapShape(FractalTypes.MushroomCap.FUNNEL);
                 break;
+            case GIANT_BROWN_MUSHROOM:
+                this.setCapType(Material.BROWN_MUSHROOM_BLOCK);
+                break;
+            case GIANT_RED_MUSHROOM:
+                this.setBaseThickness(6f)
+                        .setThicknessIncrement(1.5f)
+                        .setCapRadius(15)
+                        .setCapYOffset(-10);
+                break;
+            case MEDIUM_BROWN_FUNNEL_MUSHROOM:
+                this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
+                        .setCapRadius(5)
+                        .setCapYOffset(-1)
+                        .setBaseHeight(8)
+                        .setBaseThickness(1.2f)
+                        .setCapShape(FractalTypes.MushroomCap.FUNNEL);
+                break;
+            case MEDIUM_BROWN_MUSHROOM:
+                this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
+		                .setCapRadius(5)
+		                .setCapYOffset(-2)
+		                .setBaseHeight(8)
+		                .setBaseThickness(1.2f);
+                break;
+            case MEDIUM_RED_MUSHROOM:
+                this.setBaseThickness(1.3f)
+                		.setBaseHeight(8)
+                        .setThicknessIncrement(1.2f)
+                        .setCapRadius(4.5f)
+                        .setCapYOffset(-3);
+                break;
             case SMALL_BROWN_MUSHROOM:
                 this.setBaseThickness(0)
                         .setThicknessIncrement(0)
@@ -71,15 +102,6 @@ public class MushroomBuilder {
                         .setCapShape(FractalTypes.MushroomCap.FLAT)
                         .setCapRadius(3f)
                         .setCapYOffset(0);
-                break;
-            case GIANT_BROWN_MUSHROOM:
-                this.setCapType(Material.BROWN_MUSHROOM_BLOCK);
-                break;
-            case GIANT_RED_MUSHROOM:
-                this.setBaseThickness(6f)
-                        .setThicknessIncrement(1.5f)
-                        .setCapRadius(15)
-                        .setCapYOffset(-10);
                 break;
             case SMALL_RED_MUSHROOM:
                 this.setBaseThickness(0)

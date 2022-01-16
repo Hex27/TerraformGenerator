@@ -34,6 +34,8 @@ public class GenericLargeCavePopulator {
                 || type.toString().endsWith("WALL")
                 || type.toString().endsWith("MOSS")
                 || type == OneOneSevenBlockHandler.AMETHYST_CLUSTER
+                || type == OneOneSevenBlockHandler.MOSS_BLOCK
+                || type == OneOneSevenBlockHandler.MOSS_CARPET
                 || type == OneOneSevenBlockHandler.POINTED_DRIPSTONE;
 	}
 	
@@ -87,7 +89,8 @@ public class GenericLargeCavePopulator {
                                 //Replace drop blocks and water
                                 if (rel.getRelative(0, 1, 0).getType() == Material.SAND
                                         || rel.getRelative(0, 1, 0).getType() == Material.GRAVEL
-                                        || rel.getRelative(0, 1, 0).getType() == Material.WATER)
+                                        || rel.getRelative(0, 1, 0).getType() == Material.WATER
+                                        || rel.getRelative(0, 1, 0).getType() == OneOneSevenBlockHandler.POINTED_DRIPSTONE)
                                     rel.getRelative(0, 1, 0).setType(Material.DIRT);
 
                                 //Replace water
@@ -201,7 +204,8 @@ public class GenericLargeCavePopulator {
 
     public int getCaveFloor(PopulatorDataAbstract data, int x, int y, int z) {
         int ny = y;
-        while (ny > 2 && !data.getType(x, ny, z).isSolid()) ny--;
+        while (ny > 2 
+        		&& !BlockUtils.isStoneLike(data.getType(x, ny, z))) ny--;
         return Math.max(ny, 2);
     }
 

@@ -1,5 +1,7 @@
 package org.terraform.biome.cave;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.terraform.biome.BiomeBank;
@@ -8,7 +10,6 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
@@ -21,26 +22,9 @@ import org.terraform.utils.version.Version;
  */
 public class MasterCavePopulatorDistributor{
 	
-	//double lushClusterChance = TConfigOption.BIOME_CAVE_LUSHCLUSTER_FREQUENCY.getDouble();
-	//double dripstoneClusterChance = TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_FREQUENCY.getDouble();
-	int lushClusterSeparation = TConfigOption.BIOME_CAVE_LUSHCLUSTER_SEPARATION.getInt();
-	int dripstoneClusterSeparation = TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_SEPARATION.getInt();
-	float lushClusterPertub = TConfigOption.BIOME_CAVE_LUSHCLUSTER_MAXPERTUB.getFloat();
-	float dripstoneClusterPertub = TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MAXPERTUB.getFloat();
-	
+	private static ArrayList<Class<?>> populatedBefore = new ArrayList<>();
 	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		SimpleLocation[] lushLocs = GenUtils.randomObjectPositions(
-    			tw.getHashedRand(9527213, data.getChunkX(), data.getChunkZ()).nextInt(99999), 
-    			data.getChunkX(), 
-    			data.getChunkZ(), 
-    			lushClusterSeparation, 
-    			lushClusterPertub);
-		SimpleLocation[] dripstoneLocs = GenUtils.randomObjectPositions(
-    			tw.getHashedRand(5902907, data.getChunkX(), data.getChunkZ()).nextInt(99999), 
-    			data.getChunkX(), 
-    			data.getChunkZ(), 
-    			dripstoneClusterSeparation, 
-    			dripstoneClusterPertub);
+		HashMap<SimpleLocation, CaveClusterRegistry> clusters = calculateClusterLocations(random, tw, data.getChunkX(), data.getChunkZ());
 		
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -83,22 +67,10 @@ public class MasterCavePopulatorDistributor{
                     	 * radius.
                     	 */
                     	
-                    	for(SimpleLocation loc:lushLocs) {
-                    		if(loc.getX() == x && loc.getZ() == z)
-                    			pop = new LushClusterCavePopulator(
-                    					GenUtils.randInt(random, 
-                    							TConfigOption.BIOME_CAVE_LUSHCLUSTER_MINSIZE.getInt(), 
-                    							TConfigOption.BIOME_CAVE_LUSHCLUSTER_MAXSIZE.getInt()), 
-                    					false); //False to prevent Azalea Trees from spawning.
-                    	}
-                    	
-                    	if(pop == null)
-                    	for(SimpleLocation loc:dripstoneLocs) {
-                    		if(loc.getX() == x && loc.getZ() == z)
-                    			pop = new DripstoneClusterCavePopulator(
-                    					GenUtils.randInt(random, 
-                    							TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE.getInt(), 
-                    							TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE.getInt()));
+                    	for(SimpleLocation loc:clusters.keySet()) {
+                    		if(loc.getX() == x && loc.getZ() == z) {
+                    			pop = clusters.get(loc).getPopulator(random);
+                    		}
                     	}
                     	
                 		//If both clusters don't spawn, then revert to the
@@ -107,10 +79,40 @@ public class MasterCavePopulatorDistributor{
                     		pop = bank.getCavePop();
                     }
                     
-                    if(pop != null)
+                    if(pop != null) {
                     	pop.populate(tw, random, ceil, floor);
+                    	
+                    	//Locating and debug print
+            			if(!populatedBefore.contains(pop.getClass())) {
+            				populatedBefore.add(pop.getClass());
+            	            TerraformGeneratorPlugin.logger.info("Spawning " + pop.getClass().getSimpleName() + " at " + floor);
+            			}
+                    }
                 }
             }
         }
+	}
+	
+	private HashMap<SimpleLocation, CaveClusterRegistry> calculateClusterLocations(Random rand, TerraformWorld tw, int chunkX, int chunkZ){
+		HashMap<SimpleLocation, CaveClusterRegistry> locs = new HashMap<>();
+		
+		for(CaveClusterRegistry type:CaveClusterRegistry.values()) {
+			SimpleLocation[] positions =  GenUtils.randomObjectPositions(
+	    			tw.getHashedRand(type.getHashSeed(), chunkX, chunkZ).nextInt(99999), 
+	    			chunkX, 
+	    			chunkZ, 
+	    			type.getSeparation(), 
+	    			type.getPertub());
+			for(SimpleLocation pos:positions) {
+				if(locs.containsKey(pos))
+					//give a chance to replace the old one
+					if(rand.nextBoolean()) continue; 
+				
+				locs.put(pos, type);
+			}
+			
+		}
+		
+		return locs;
 	}
 }

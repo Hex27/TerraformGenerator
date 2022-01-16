@@ -8,7 +8,6 @@ import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.block.CraftBlock;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.terraform.biome.BiomeBank;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.TerraLootTable;
@@ -71,18 +70,18 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     }
     
 	@Override
-	public void setBiome(int rawX, int rawY, int rawZ, BiomeBank bank) {
+	public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
 		DedicatedServer dedicatedserver = ((CraftServer) Bukkit.getServer()).getServer();
 		IRegistryWritable<BiomeBase> registrywritable = dedicatedserver.aV().b(IRegistry.aR);
         BiomeBase targetBiome;
-		if(bank.getHandler().getCustomBiome() == CustomBiomeType.NONE) {
+		if(cbt == CustomBiomeType.NONE) {
 			
-			targetBiome = CraftBlock.biomeToBiomeBase(ica.biomeRegistry, bank.getHandler().getBiome());
+			targetBiome = CraftBlock.biomeToBiomeBase(ica.biomeRegistry, fallback);
 		} else {
-			ResourceKey<BiomeBase> rkey = ResourceKey.a(IRegistry.aR, new MinecraftKey(bank.getHandler().getCustomBiome().getKey()));
+			ResourceKey<BiomeBase> rkey = ResourceKey.a(IRegistry.aR, new MinecraftKey(cbt.getKey()));
 	        BiomeBase base = registrywritable.a(rkey);
 	        if(base == null) {
-	        	String[] split = bank.getHandler().getCustomBiome().getKey().split(":");
+	        	String[] split = cbt.getKey().split(":");
 	            ResourceKey<BiomeBase> newrkey = ResourceKey.a(IRegistry.aR, new MinecraftKey(split[0],split[1]));
 	            base = registrywritable.a(newrkey);
 	        }
@@ -91,7 +90,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 				targetBiome = base;
 			}
 			else
-				targetBiome =  CraftBlock.biomeToBiomeBase(ica.biomeRegistry, bank.getHandler().getBiome());
+				targetBiome =  CraftBlock.biomeToBiomeBase(ica.biomeRegistry, fallback);
 		}
 		
 		ica.setBiome(rawX >> 2, rawY >> 2, rawZ >> 2, targetBiome);

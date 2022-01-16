@@ -25,6 +25,7 @@ import org.terraform.schematic.SchematicListener;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.tree.SaplingOverrider;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.bstats.TerraformGeneratorMetricsHandler;
 import org.terraform.utils.version.Version;
 
 import com.google.common.cache.CacheBuilder;
@@ -99,6 +100,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         
         LangOpt.init(this);
         logger = new TLogger();
+        new TerraformGeneratorMetricsHandler(this); //bStats
         
         TerraformGenerator.updateSeaLevelFromConfig();
         new TerraformCommandManager(this, "terraform", "terra");

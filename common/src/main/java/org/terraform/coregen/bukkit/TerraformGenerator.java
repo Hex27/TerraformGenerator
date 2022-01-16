@@ -89,7 +89,7 @@ public class TerraformGenerator extends ChunkGenerator {
 	private int getVanillaGeneratedHeight(TerraformWorld tw, ChunkData chunk, int x, int z) {
 		int y = tw.maxY;
 		while(y > tw.minY) {
-			if(!chunk.getType(x, y, z).isAir())
+			if(chunk.getType(x, y, z).isSolid())
 				break;
 			else
 				y--;
@@ -126,7 +126,9 @@ public class TerraformGenerator extends ChunkGenerator {
                     //Fix up height before doing anything else
                 	//New chunk generator will output vanilla heights. Correct them.
                 	int vanillaHeight = getVanillaGeneratedHeight(tw, chunk,x,z);
-                    if(vanillaHeight < height)
+                	if(rawX == -89 && rawZ == 55)
+            			TerraformGeneratorPlugin.logger.info("getVanillaGeneratedHeight (-89, 55): " + vanillaHeight + " vs " + height);
+            		if(vanillaHeight < height)
                     {
                     	for(int y = vanillaHeight; y <= height; y++) {
                     		if(chunk.getType(x, y, z) != Material.CAVE_AIR) {

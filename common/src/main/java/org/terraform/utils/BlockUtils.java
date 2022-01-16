@@ -86,6 +86,8 @@ public class BlockUtils {
             Material.LAPIS_ORE, Material.SNOW_BLOCK,
             Material.PACKED_ICE, Material.BLUE_ICE
     );
+    
+    
 
     public static final Set<Material> badlandsStoneLike = EnumSet.of(
             Material.STONE, Material.COBBLESTONE,
@@ -113,7 +115,22 @@ public class BlockUtils {
             OneOneSevenBlockHandler.ROOTED_DIRT, OneOneSevenBlockHandler.DIRT_PATH()
     );
     public static final Material[] ores = {
-            Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE, Material.EMERALD_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE,
+            Material.COAL_ORE, 
+            Material.IRON_ORE, 
+            Material.GOLD_ORE, 
+            Material.DIAMOND_ORE, 
+            Material.EMERALD_ORE, 
+            Material.REDSTONE_ORE, 
+            Material.LAPIS_ORE,
+            OneOneSevenBlockHandler.COPPER_ORE,
+            OneOneSevenBlockHandler.deepSlateVersion(Material.COAL_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.IRON_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.GOLD_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.DIAMOND_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.EMERALD_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.REDSTONE_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.LAPIS_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.COPPER_ORE),
     };
     private static final Material[] TALL_FLOWER = {Material.LILAC, Material.ROSE_BUSH, Material.PEONY, Material.LARGE_FERN, Material.SUNFLOWER};
     private static final Material[] FLOWER = {Material.DANDELION,
@@ -1177,5 +1194,11 @@ public class BlockUtils {
     	}else if(data instanceof Rotatable) {
     		((Rotatable) data).setRotation(BlockUtils.getXZPlaneBlockFace(rand));
     	}
+    }
+    
+    public static boolean isOre(Material mat) {
+    	for(Material ore:ores)
+    		if(ore == mat) return true;
+    	return false;
     }
 }

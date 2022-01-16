@@ -7,7 +7,8 @@ public enum BiomeType {
     HIGH_MOUNTAINOUS,
     BEACH,
     DEEP_OCEANIC(false),
-    RIVER(false);
+    RIVER(false),
+    ;
 	
 	boolean isDry = true;
 	

@@ -1,0 +1,112 @@
+package org.terraform.biome.cave;
+
+import org.bukkit.Tag;
+import org.bukkit.block.BlockFace;
+import org.terraform.biome.custombiomes.CustomBiomeType;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
+import org.terraform.data.SimpleBlock;
+import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.BlockUtils;
+import org.terraform.utils.GenUtils;
+import org.terraform.utils.blockdata.DirectionalBuilder;
+import org.terraform.utils.blockdata.MultipleFacingBuilder;
+import org.terraform.utils.version.OneOneSevenBlockHandler;
+
+import java.util.Random;
+
+public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulator {
+    //private static boolean genned = false;
+    
+    public CrystallineClusterCavePopulator(float radius) {
+		super(radius);
+	}
+
+	@Override
+    protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+    	//if (!genned) {
+        //    genned = true;
+        //}
+    	
+    	//=========================
+        //Upper decorations
+        //=========================
+
+        int caveHeight = ceil.getY() - floor.getY();
+
+        //Don't touch slabbed floors or stalagmites
+        if (Tag.SLABS.isTagged(floor.getType()) ||
+        		Tag.WALLS.isTagged(floor.getType()))
+            return;
+        
+        //Amethyst crust. Don't cover ores. Don't mess with moss.
+        if(OneOneSevenBlockHandler.MOSS_BLOCK != ceil.getType() 
+        		&& !BlockUtils.isOre(ceil.getType())) {
+        	ceil.setType(OneOneSevenBlockHandler.AMETHYST_BLOCK);
+        	
+            //Amethysts
+            if (GenUtils.chance(random, 1, 5)) {
+                new DirectionalBuilder(OneOneSevenBlockHandler.AMETHYST_CLUSTER)
+                .setFacing(BlockFace.DOWN)
+                .apply(ceil.getRelative(0,-1,0));
+            }
+        }
+
+        //=========================
+        //Lower decorations 
+        //=========================        
+
+        //Amethyst crust. Don't cover ores. Don't mess with moss.
+        if(OneOneSevenBlockHandler.MOSS_BLOCK != floor.getType() 
+        		&& !BlockUtils.isOre(floor.getType())) {
+        	floor.setType(OneOneSevenBlockHandler.AMETHYST_BLOCK);
+        	
+            //Amethysts
+            if (GenUtils.chance(random, 1, 5)) {
+                new DirectionalBuilder(OneOneSevenBlockHandler.AMETHYST_CLUSTER)
+                .setFacing(BlockFace.UP)
+                .apply(floor.getRelative(0,1,0));
+            }else if(GenUtils.chance(random, 1, 20)) { //Calcite Pillars
+            	floor.setType(OneOneSevenBlockHandler.CALCITE);
+            	floor.getRelative(0,1,0).LPillar(2*caveHeight, new Random(), OneOneSevenBlockHandler.CALCITE);
+            }
+        }
+        
+        //=========================
+        //Attempt to replace close-by walls with Amethyst. Also apply lichen.
+        //=========================
+        
+        SimpleBlock target = floor;
+        while(target.getY() != ceil.getY()) {
+        	for(BlockFace face:BlockUtils.directBlockFaces) {
+        		SimpleBlock rel = target.getRelative(face);
+        		if(rel.getType() != OneOneSevenBlockHandler.CALCITE 
+                		&& !BlockUtils.isOre(ceil.getType()) 
+        				&& BlockUtils.isStoneLike(rel.getType())) {
+        			rel.setType(OneOneSevenBlockHandler.AMETHYST_BLOCK);
+        			if(BlockUtils.isAir(target.getType()) && GenUtils.chance(random, 1, 3)) {
+        				new MultipleFacingBuilder(OneOneSevenBlockHandler.GLOW_LICHEN)
+        				.setFace(face, true)
+        				.apply(target);
+        			}
+        		}
+        	}
+        	target = target.getRelative(0,1,0);
+        }
+
+        //=========================
+        //Biome Setter 
+        //=========================
+        PopulatorDataAbstract d = TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
+        if(d instanceof PopulatorDataICABiomeWriterAbstract) {
+        	PopulatorDataICABiomeWriterAbstract data = (PopulatorDataICABiomeWriterAbstract) d;
+        	while(floor.getY() < ceil.getY()) {
+        		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), CustomBiomeType.CRYSTALLINE_CLUSTER, OneOneSevenBlockHandler.DRIPSTONE_CAVES);
+        		floor = floor.getRelative(0,1,0);
+        	}
+        }
+    }
+    
+    
+}

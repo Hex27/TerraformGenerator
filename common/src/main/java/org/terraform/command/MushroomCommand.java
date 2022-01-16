@@ -24,7 +24,7 @@ public class MushroomCommand extends TerraCommand {
 
     @Override
     public String getDefaultDescription() {
-        return "Spawns a giant mushroom (red or brown)";
+        return "Spawns a mushroom";
     }
 
     @Override

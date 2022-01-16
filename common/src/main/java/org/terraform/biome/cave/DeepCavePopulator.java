@@ -6,7 +6,6 @@ import org.bukkit.block.BlockFace;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StalactiteBuilder;
@@ -15,15 +14,9 @@ import org.terraform.utils.version.OneOneSevenBlockHandler;
 import java.util.Random;
 
 public class DeepCavePopulator extends AbstractCavePopulator {
-    private static boolean genned = false;
     
     @Override
     public void populate(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
-        
-        if (!genned) {
-            genned = true;
-            TerraformGeneratorPlugin.logger.info("Spawning deep cave at " + floor);
-        }
         
         int caveHeight = ceil.getY() - floor.getY();
         

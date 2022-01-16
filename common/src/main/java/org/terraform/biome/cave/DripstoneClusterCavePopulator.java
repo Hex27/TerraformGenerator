@@ -11,7 +11,6 @@ import org.terraform.utils.version.OneOneSevenBlockHandler;
 import java.util.Random;
 
 public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator {
-    //private static boolean genned = false;
     
     public DripstoneClusterCavePopulator(float radius) {
 		super(radius);
@@ -19,9 +18,6 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
 
 	@Override
     protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
-    	//if (!genned) {
-        //    genned = true;
-        //}
     	
     	//=========================
         //Upper decorations
@@ -38,11 +34,11 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
         ceil.setType(OneOneSevenBlockHandler.DRIPSTONE_BLOCK);
         
         //Stalactites
-        if (GenUtils.chance(random, 1, 3)) {
+        if (GenUtils.chance(random, 1, 4)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;
-            OneOneSevenBlockHandler.downLPointedDripstone(h, ceil.getRelative(0,-1,0));
+            OneOneSevenBlockHandler.downLPointedDripstone(GenUtils.randInt(1, h), ceil.getRelative(0,-1,0));
         }
 
         //=========================
@@ -53,11 +49,11 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
         floor.setType(OneOneSevenBlockHandler.DRIPSTONE_BLOCK);
         
         //Stalagmites
-        if (GenUtils.chance(random, 1, 3)) {
+        if (GenUtils.chance(random, 1, 4)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;
-            OneOneSevenBlockHandler.upLPointedDripstone(h, floor.getRelative(0,1,0));
+            OneOneSevenBlockHandler.upLPointedDripstone(GenUtils.randInt(1,h), floor.getRelative(0,1,0));
         }
 
         //=========================

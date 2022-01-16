@@ -14,7 +14,7 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.terraform.biome.BiomeBank;
+import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -160,10 +160,10 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract {
 	}
 
 	@Override
-	public void setBiome(int rawX, int rawY, int rawZ, BiomeBank biomebank) {
+	public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
 		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(rawX, rawY, rawZ).getChunk());
 		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
-		((PopulatorDataICABiomeWriterAbstract) icad).setBiome(rawX, rawY, rawZ, biomebank);
+		((PopulatorDataICABiomeWriterAbstract) icad).setBiome(rawX, rawY, rawZ, cbt, fallback);
 	}
 
 	@Override
