@@ -13,6 +13,7 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.Version;
 
 import java.util.Random;
 
@@ -25,7 +26,9 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
 
 	@Override
     protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
-    	//if (!genned) {
+    	//Forget it on 1.16. This cave uses nothing but 1.17+ blocks
+		if(!Version.isAtLeast(17)) return;
+		//if (!genned) {
         //    genned = true;
         //}
     	

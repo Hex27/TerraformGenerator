@@ -130,7 +130,7 @@ public class BlockUtils {
             OneOneSevenBlockHandler.deepSlateVersion(Material.EMERALD_ORE),
             OneOneSevenBlockHandler.deepSlateVersion(Material.REDSTONE_ORE),
             OneOneSevenBlockHandler.deepSlateVersion(Material.LAPIS_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.COPPER_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(OneOneSevenBlockHandler.COPPER_ORE),
     };
     private static final Material[] TALL_FLOWER = {Material.LILAC, Material.ROSE_BUSH, Material.PEONY, Material.LARGE_FERN, Material.SUNFLOWER};
     private static final Material[] FLOWER = {Material.DANDELION,
