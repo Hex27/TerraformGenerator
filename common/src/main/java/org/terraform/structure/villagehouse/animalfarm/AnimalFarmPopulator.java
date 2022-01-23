@@ -1,6 +1,5 @@
 package org.terraform.structure.villagehouse.animalfarm;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;

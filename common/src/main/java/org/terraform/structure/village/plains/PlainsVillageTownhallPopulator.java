@@ -1,7 +1,6 @@
 package org.terraform.structure.village.plains;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Bell;

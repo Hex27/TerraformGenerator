@@ -69,6 +69,7 @@ public class WoodUtils {
             case BADLANDS_CANYON:
                 return wood.getWood(WoodSpecies.ACACIA);
             case BIRCH_MOUNTAINS:
+            case SCARLET_FOREST:
                 return wood.getWood(WoodSpecies.BIRCH);
             case COLD_OCEAN:
             case WARM_OCEAN:
@@ -108,6 +109,7 @@ public class WoodUtils {
                 return wood.getWood(WoodSpecies.JUNGLE);
 			case BLACK_OCEAN:
 			case DEEP_BLACK_OCEAN:
+			case CHERRY_GROVE:
 			case DARK_FOREST:
 			case DARK_FOREST_RIVER:
 			case DARK_FOREST_BEACH:

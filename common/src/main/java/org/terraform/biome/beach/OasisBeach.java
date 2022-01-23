@@ -14,8 +14,6 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
-import org.terraform.utils.version.Version;
-
 import java.util.Random;
 
 /**
@@ -30,17 +28,15 @@ public class OasisBeach {
      *                    Prevents code from running twice when biome overlap
      */
 	public static void transformTerrain(TerraformWorld tw, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ, BiomeBank targetBiome) {
-        //3d biomes fail on 1.14
-		if(Version.isAtLeast(15))
-			for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
-	            for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
-	                int height = HeightMap.getBlockHeight(tw, x, z);
-	                if (isOasisBeach(tw, x, z, targetBiome)) {
-	                	for(int y = height; y < height + 35; y++)
-	                       biome.setBiome(x, y, z, Biome.JUNGLE);
-	                }
-	            }
-	        }
+		for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
+            for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
+                int height = HeightMap.getBlockHeight(tw, x, z);
+                if (isOasisBeach(tw, x, z, targetBiome)) {
+                	for(int y = height; y < height + 35; y++)
+                       biome.setBiome(x, y, z, Biome.JUNGLE);
+                }
+            }
+        }
     }
 
     public static float getOasisNoise(TerraformWorld world, int x, int z) {

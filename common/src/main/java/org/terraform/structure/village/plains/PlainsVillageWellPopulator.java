@@ -5,14 +5,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
-import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
-import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
@@ -21,7 +21,7 @@ import org.terraform.utils.version.Version;
 import java.io.FileNotFoundException;
 import java.util.Random;
 
-public class PlainsVillageWellPopulator extends RoomPopulatorAbstract {
+public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulator {
 
 	private static final String[] villageWellSchems = new String[] {
 			"plainsvillage-well1",
@@ -36,12 +36,29 @@ public class PlainsVillageWellPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
+
+    	//This code is repeated from super, as it must be changed a little
+        int y = super.calculateRoomY(data, room);
+    	
+    	int worldHeight = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY() + 1;
+    	
+    	for(int[] corner:room.getAllCorners()) {
+    		SimpleBlock sb = new SimpleBlock(data,corner[0],y,corner[1]);
+    		int lowSb = sb.findFloor(worldHeight).getY();
+    		if(Math.abs(lowSb - y) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
+    		{
+    			//place platform as uneven ground was detected.
+    			this.placeFixerPlatform(y, data, room);
+    			break;
+    		}
+    	}
     	
     	int x = room.getX();
         int z = room.getZ();
-        int y = GenUtils.getHighestGround(data, x, z);
-        if(y < TerraformGenerator.seaLevel) 
-        	y = TerraformGenerator.seaLevel; //Force wells to not be submerged.
+        SimpleBlock tester = new SimpleBlock(data,x,y+1,z);
+        if(BlockUtils.isWet(tester)) 
+        	y = tester.getGroundOrDry().getY(); //Force wells to not be submerged.
+        
         BlockFace roomDir = ((DirectionalCubeRoom) room).getDirection();
         
         try {
@@ -53,13 +70,24 @@ public class PlainsVillageWellPopulator extends RoomPopulatorAbstract {
 			int depth = GenUtils.randInt(rand, 5, 20);
 			
 			for(int i = 0; i < depth; i++) {
+				boolean breakOut = false;
+				if(i > 0)
+					for(BlockFace face:BlockUtils.flatBlockFaces3x3) {
+						//no solid ground beneath. Do not place water.
+						if(!core.getRelative(face).getDown(depth+1).getType().isSolid()) {
+							breakOut = true;
+							break;
+						}
+					}
+				if(breakOut) break;
 				if(i == 0)
-					core.getRelative(0,-i,0).setType(Material.AIR);
+					core.setType(Material.AIR);
 				else
 					core.getRelative(0,-i,0).setType(Material.WATER);
+				
 				for(BlockFace face:BlockUtils.xzPlaneBlockFaces) {
 					if(i == 0)
-						core.getRelative(0,-i,0).setType(Material.AIR);
+						core.getRelative(face).setType(Material.AIR);
 					else
 						core.getRelative(0,-i,0).getRelative(face).setType(Material.WATER);
 				}

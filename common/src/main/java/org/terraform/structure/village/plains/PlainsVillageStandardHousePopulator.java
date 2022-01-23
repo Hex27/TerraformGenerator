@@ -4,7 +4,6 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
-import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.structure.village.plains.house.PlainsVillageHouseJigsawBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -12,7 +11,7 @@ import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
-public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
+public class PlainsVillageStandardHousePopulator extends PlainsVillageAbstractRoomPopulator {
 	
 	private PlainsVillagePopulator plainsVillagePopulator;
     public PlainsVillageStandardHousePopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
@@ -22,9 +21,10 @@ public class PlainsVillageStandardHousePopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
-
-        int height = GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
-
+    	super.populate(data, room);
+        int height = super.calculateRoomY(data, room);
+        //GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
+        
         //Debug squares
 //    	int[] lowerCorner = room.getLowerCorner();
 //    	int[] upperCorner = room.getUpperCorner();

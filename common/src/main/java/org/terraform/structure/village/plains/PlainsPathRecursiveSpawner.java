@@ -181,11 +181,12 @@ public class PlainsPathRecursiveSpawner {
             w = w.getGround();
             if (BlockUtils.isWet(w.getRelative(0,1,0).get())) {
             	
-                //Paths underwater are wood planks.
-
-            	//TODO: This is the most optimised way now, 
-            	//but if local water levels are implemented, this must change.
-            	w = w.getAtY(TerraformGenerator.seaLevel);
+                //Paths underwater are wood planks.            	
+            	if(BlockUtils.isWet(w.getAtY(TerraformGenerator.seaLevel)))
+            		w = w.getAtY(TerraformGenerator.seaLevel);
+        		else
+        			w = w.getGroundOrDry().getDown(); 
+            	
 				new SlabBuilder(Material.OAK_SLAB)
 				 .setWaterlogged(true).setType(Type.TOP)
 				 .apply(w)
@@ -202,13 +203,29 @@ public class PlainsPathRecursiveSpawner {
             	
                 continue;
             }
-            //if (BlockUtils.isDirtLike(w.getType()))
+            
+            //Remove foilage before placement
+            if(!w.getUp(2).getType().isSolid() && w.getUp(2).getType() != Material.AIR)
+            	w.getUp(2).setType(Material.AIR);
+            
+            if(!w.getUp().getType().isSolid() && w.getUp().getType() != Material.AIR)
+            	w.getUp().setType(Material.AIR);
+
+            
             w.setType(OneOneSevenBlockHandler.DIRT_PATH());
 
             for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
                 Wall target = w.getRelative(face).getGround();
-                if (random.nextInt(3) != 0)
+                //Remove foilage before placement
+                if (random.nextInt(3) != 0) {
+                    if(!target.getUp(2).getType().isSolid() && target.getUp(2).getType() != Material.AIR)
+                    	target.getUp(2).setType(Material.AIR);
+                    
+                    if(!target.getUp().getType().isSolid() && target.getUp().getType() != Material.AIR)
+                    	target.getUp().setType(Material.AIR);
+
                     target.setType(OneOneSevenBlockHandler.DIRT_PATH());
+                }
             }
         }
         if (validRooms.isEmpty()) return;

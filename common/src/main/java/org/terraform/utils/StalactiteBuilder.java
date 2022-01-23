@@ -4,11 +4,8 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
-import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 public class StalactiteBuilder {
 

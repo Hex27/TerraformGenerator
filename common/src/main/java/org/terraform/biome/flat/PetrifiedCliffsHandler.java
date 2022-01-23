@@ -23,7 +23,7 @@ import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
-public class PetrifiedCliffs extends BiomeHandler {
+public class PetrifiedCliffsHandler extends BiomeHandler {
     static BiomeBlender biomeBlender;
     @Override
     public boolean isOcean() {

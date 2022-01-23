@@ -30,7 +30,6 @@ public class AmethystGeodePopulator {
     	this.minDepth = minDepth;
     	this.minDepthBelowSurface = minDepthBelowSurface;
     }
-
     
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
     	if(GenUtils.chance(random, (int) (frequency*10000.0), 10000)) {
@@ -39,6 +38,10 @@ public class AmethystGeodePopulator {
         	int upperHeightRange = GenUtils.getHighestGround(data, x, z) - minDepthBelowSurface;
         	if(upperHeightRange > minDepth)
         		upperHeightRange = minDepth;
+        	
+        	upperHeightRange = Math.min(
+        			world.getBiomeBank(x,z).getHandler().getMaxHeightForCaves(world, x, z), 
+        			upperHeightRange);
         	
         	if(upperHeightRange < 14) return;
         	

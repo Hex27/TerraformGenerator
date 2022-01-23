@@ -320,8 +320,9 @@ public class SimpleBlock {
     public SimpleBlock getGroundOrDry() {
     	int y = GenUtils.getHighestGround(popData, x, z);
     	
-    	while(y < TerraformGeneratorPlugin.injector.getMaxY() && (BlockUtils.isWet(this.getRelative(0,1,0))||
-    			Tag.ICE.isTagged(this.getRelative(0,1,0).getType()))) y++;
+    	while(y < TerraformGeneratorPlugin.injector.getMaxY() 
+    			&& (BlockUtils.isWet(this.getAtY(y+1))||
+    			Tag.ICE.isTagged(this.getAtY(y+1).getType()))) y++;
         return new SimpleBlock(
                 popData,
                 x,
@@ -363,6 +364,23 @@ public class SimpleBlock {
     	SimpleBlock floor = this.getRelative(0, -1, 0);
         while (cutoff > 0 && floor.getY() >= 0) {
             if (floor.getType().isSolid() && floor.getType() != Material.LANTERN) {
+                return floor;
+            }
+            cutoff--;
+            floor = floor.getRelative(0, -1, 0);
+        }
+        return null;
+    }
+
+    /**
+     * Gets the first non-solid block below this one
+     * @param cutoff
+     * @return
+     */
+    public SimpleBlock findAirPocket(int cutoff) {
+    	SimpleBlock floor = this.getRelative(0, -1, 0);
+        while (cutoff > 0 && floor.getY() >= 0) {
+            if (!floor.getType().isSolid()) {
                 return floor;
             }
             cutoff--;

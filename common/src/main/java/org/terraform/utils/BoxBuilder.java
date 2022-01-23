@@ -10,7 +10,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 
-public class SphereBuilder {
+public class BoxBuilder {
 	
 	private Random random;
 	private int seed;
@@ -24,64 +24,65 @@ public class SphereBuilder {
 	private Material[] upperType;
 	private Material[] lowerType;
 	private int staticWaterLevel = -9999;
-	private SphereType sphereType = SphereType.FULL_SPHERE;
+	private float fuzzMultiplier = 0.2f;
+	private BoxType boxType = BoxType.FULL_BOX;
 	
 	
-	public SphereBuilder(Random random, SimpleBlock core, Material... types) {
+	public BoxBuilder(Random random, SimpleBlock core, Material... types) {
 		this.random = random;
 		this.seed = random.nextInt(99999999);
 		this.types = types;
 		this.core = core;
 	}
 	
-	public SphereBuilder setSphereType(SphereType sphereType) {
-		this.sphereType = sphereType;
+	public BoxBuilder setBoxType(BoxType sphereType) {
+		this.boxType = sphereType;
 		return this;
 	}
 	
-	public SphereBuilder setUpperType(Material... upperType) {
+	public BoxBuilder setUpperType(Material... upperType) {
 		this.upperType = upperType;
 		return this;
 	}
 
-	public SphereBuilder setLowerType(Material... lowerType) {
+	public BoxBuilder setLowerType(Material... lowerType) {
 		this.lowerType = lowerType;
 		return this;
 	}
 	
-	public SphereBuilder setStaticWaterLevel(int staticWaterLevel) {
+	public BoxBuilder setStaticWaterLevel(int staticWaterLevel) {
 		this.staticWaterLevel = staticWaterLevel;
 		return this;
 	}
 	
-	public SphereBuilder addToWhitelist(Material... mats) {
+	public BoxBuilder addToWhitelist(Material... mats) {
 		for(Material mat:mats)
 			replaceWhitelist.add(mat);
 		return this;
 	}
 	
-	public SphereBuilder setRadius(float radius) {
+	public BoxBuilder setRadius(float radius) {
 		this.rX = radius; this.rY = radius; this.rZ = radius;
 		return this;
 	}
 	
-	public SphereBuilder setRX(float rX) {
+	public BoxBuilder setRX(float rX) {
 		this.rX = rX;
 		return this;
 	}
-	public SphereBuilder setRZ(float rZ) {
+	public BoxBuilder setRZ(float rZ) {
 		this.rZ = rZ;
 		return this;
 	}
-	public SphereBuilder setRY(float rY) {
+	public BoxBuilder setRY(float rY) {
 		this.rY = rY;
 		return this;
 	}
-	public SphereBuilder setSnowy() {
+	public BoxBuilder setSnowy() {
 		this.upperType = new Material[] {Material.SNOW};
 		return this;
 	}
-	public SphereBuilder setHardReplace(boolean hardReplace) {
+	public BoxBuilder setHardReplace(boolean hardReplace) {
 		this.hardReplace = hardReplace;
 		return this;
 	}
@@ -95,22 +96,23 @@ public class SphereBuilder {
 
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
+        noise.SetFrequency(0.12f);
 
         float effectiveRYLower = -rY;
-        if(sphereType == SphereType.UPPER_SEMISPHERE) effectiveRYLower = 0;
+        if(boxType == BoxType.UPPER_SEMIBOX) effectiveRYLower = 0;
         float effectiveRYUpper = rY;
-        if(sphereType == SphereType.LOWER_SEMISPHERE) effectiveRYUpper = 0;
+        if(boxType == BoxType.LOWER_SEMIBOX) effectiveRYUpper = 0;
         
-        for (float x = -rX; x <= rX; x++) {
-            for (float y = effectiveRYLower; y <= effectiveRYUpper; y++) {
-                for (float z = -rZ; z <= rZ; z++) {
+        for (float x = -rX*(1f+fuzzMultiplier); x <= rX*(1f+fuzzMultiplier); x++) {
+            for (float y = effectiveRYLower*(1f+fuzzMultiplier); y <= effectiveRYUpper*(1f+fuzzMultiplier); y++) {
+                for (float z = -rZ*(1f+fuzzMultiplier); z <= rZ*(1f+fuzzMultiplier); z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
-                    double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
-                            + Math.pow(y, 2) / Math.pow(rY, 2)
-                            + Math.pow(z, 2) / Math.pow(rZ, 2);
-                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                    double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getY(), rel.getZ()));
+                    
+                    if (Math.abs(x) <= rX * (1+(noiseVal*fuzzMultiplier))
+                    		&& Math.abs(y) <= rY  * (1+(noiseVal*fuzzMultiplier))
+                    		&& Math.abs(z) <= rZ  * (1+(noiseVal*fuzzMultiplier))) {
                         Material[] original = types;
                     	if(rel.getY() <= staticWaterLevel) {
                         	types = new Material[] {Material.WATER};
@@ -151,8 +153,8 @@ public class SphereBuilder {
     	return true;
     }
 
-    public static enum SphereType{
-    	UPPER_SEMISPHERE, LOWER_SEMISPHERE, FULL_SPHERE;
+    public static enum BoxType{
+    	UPPER_SEMIBOX, LOWER_SEMIBOX, FULL_BOX;
     }
 
 }

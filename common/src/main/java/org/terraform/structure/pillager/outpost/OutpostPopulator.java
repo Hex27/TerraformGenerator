@@ -1,6 +1,5 @@
 package org.terraform.structure.pillager.outpost;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;

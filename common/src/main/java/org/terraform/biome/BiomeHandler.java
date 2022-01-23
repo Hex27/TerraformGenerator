@@ -27,7 +27,7 @@ public abstract class BiomeHandler {
     public abstract void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data);
 
     public int getMaxHeightForCaves(TerraformWorld tw, int x, int z) {
-    	return 99999;
+    	return tw.maxY;
     }
     
     /**
@@ -43,7 +43,8 @@ public abstract class BiomeHandler {
 
     // Populate event but for the terrain.
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) { /* Do nothing by default */ }
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome,  int chunkX, int chunkZ) {
+    @SuppressWarnings("deprecation")
+	public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome,  int chunkX, int chunkZ) {
         transformTerrain(tw, random, chunk, chunkX, chunkZ);
     }
 

@@ -38,7 +38,9 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
             if(biome == (BiomeBank.PLAINS)
             		|| biome == (BiomeBank.FOREST)
             		|| biome == (BiomeBank.SAVANNA)
-            		|| biome == (BiomeBank.TAIGA)) {
+            		|| biome == (BiomeBank.TAIGA)
+               		|| biome == (BiomeBank.SCARLET_FOREST)
+               		|| biome == (BiomeBank.CHERRY_GROVE)) {
 
                 return rollSpawnRatio(tw,chunkX,chunkZ);
             }
@@ -59,7 +61,9 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
            if (banks.contains(BiomeBank.PLAINS)
            		|| banks.contains(BiomeBank.FOREST)
            		|| banks.contains(BiomeBank.SAVANNA)
-           		|| banks.contains(BiomeBank.TAIGA)) {
+           		|| banks.contains(BiomeBank.TAIGA)
+           		|| banks.contains(BiomeBank.SCARLET_FOREST)
+           		|| banks.contains(BiomeBank.CHERRY_GROVE)) {
 
                 if (!TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean())
                     return;
@@ -80,7 +84,9 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
         return (BiomeBank.isBiomeEnabled(BiomeBank.PLAINS) 
         		|| BiomeBank.isBiomeEnabled(BiomeBank.FOREST) 
         		|| BiomeBank.isBiomeEnabled(BiomeBank.SAVANNA) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.TAIGA) )
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.TAIGA) 
+           		|| BiomeBank.isBiomeEnabled(BiomeBank.SCARLET_FOREST)
+           		|| BiomeBank.isBiomeEnabled(BiomeBank.CHERRY_GROVE))
         		&& TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean();
     }
 }

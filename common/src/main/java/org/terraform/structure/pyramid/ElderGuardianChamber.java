@@ -1,9 +1,7 @@
 package org.terraform.structure.pyramid;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab;
@@ -11,7 +9,6 @@ import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.config.TConfigOption;
@@ -143,7 +140,6 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
 
     private void placeStatue(SimpleBlock base, BlockFace dir) {
         try {
-            World w = ((PopulatorDataPostGen) base.getPopData()).getWorld();
             TerraSchematic schema = TerraSchematic.load("pharoah-statue", base);
             schema.parser = new SchematicParser();
             schema.setFace(dir);
