@@ -43,6 +43,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_18_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_18_R1.generator.CraftLimitedRegion;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
@@ -231,11 +232,14 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     int rawZ = chunkZ * 16 + z;
 
                     //tw.getBiomeBank(rawX, rawZ);
-                    int height = (int) org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
-                    generator.fillSeaAndRivers(cd,x,z,height);
-                    for(int y = Math.max(TerraformGenerator.seaLevel, height)+1; y < tw.maxY; y++) {
-                    	ichunkaccess.a(new BlockPosition(rawX, y, rawZ), Blocks.a.n(), false); //AIR
+                    int height = tw.maxY-1; //(int) org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
+                    while(!CraftBlockData.fromData(ichunkaccess.a_(new BlockPosition(rawX, height, rawZ))).getMaterial().isSolid()
+                    	&& height > TerraformGenerator.seaLevel) {
+                		ichunkaccess.a(new BlockPosition(rawX, height, rawZ), Blocks.a.n(), false); //AIR
+                    	height--;
                     }
+                    
+                    generator.fillSeaAndRivers(cd,x,z,(int) org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ));
                 }
         	}
         	
