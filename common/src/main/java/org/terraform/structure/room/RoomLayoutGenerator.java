@@ -288,7 +288,7 @@ public class RoomLayoutGenerator {
             } else
                 for (CubeRoom room : rooms) {
                     SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
-                    PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound);
+                    PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
                     if (pathPop != null) gen.setPopulator(pathPop);
                     while (!gen.isDead()) {
                         gen.next();
@@ -330,7 +330,7 @@ public class RoomLayoutGenerator {
         if (genPaths)
             for (CubeRoom room : rooms) {
                 SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
-                PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound);
+                PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
                 if (pathPop != null) gen.setPopulator(pathPop);
                 while (!gen.isDead()) {
                     gen.next();

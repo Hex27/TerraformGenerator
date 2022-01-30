@@ -110,6 +110,14 @@ public class BlockUtils {
             OneOneSevenBlockHandler.AMETHYST_BLOCK,
             OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
             OneOneSixBlockHandler.SMOOTH_BASALT,
+            OneOneSevenBlockHandler.deepSlateVersion(Material.COAL_ORE), 
+            OneOneSevenBlockHandler.deepSlateVersion(Material.IRON_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.GOLD_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.DIAMOND_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.EMERALD_ORE), 
+            OneOneSevenBlockHandler.deepSlateVersion(Material.REDSTONE_ORE),
+            OneOneSevenBlockHandler.deepSlateVersion(Material.LAPIS_ORE), 
+            OneOneSevenBlockHandler.deepSlateVersion(OneOneSevenBlockHandler.COPPER_ORE), 
             Material.SNOW_BLOCK,
             Material.PACKED_ICE, Material.BLUE_ICE,
             Material.TERRACOTTA, Material.ORANGE_TERRACOTTA,
@@ -266,6 +274,45 @@ public class BlockUtils {
      */
     @SuppressWarnings("incomplete-switch")
     public static BlockFace rotateXZPlaneBlockFace(BlockFace original, int times) {
+        //	N
+    	//W + E
+    	//	S
+    	for (int i = 0; i < times; i++) {
+            switch (original) {
+                case NORTH:
+                    original = BlockFace.NORTH_EAST;
+                    break;
+                case NORTH_EAST:
+                    original = BlockFace.EAST;
+                    break;
+                case EAST:
+                    original = BlockFace.SOUTH_EAST;
+                    break;
+                case SOUTH_EAST:
+                    original = BlockFace.SOUTH;
+                    break;
+                case SOUTH:
+                    original = BlockFace.SOUTH_WEST;
+                    break;
+                case SOUTH_WEST:
+                    original = BlockFace.WEST;
+                    break;
+                case WEST:
+                    original = BlockFace.NORTH_WEST;
+                    break;
+                case NORTH_WEST:
+                    original = BlockFace.NORTH;
+                    break;
+            }
+        }
+        return original;
+    }
+    
+    /**
+     * @return rotates original block face (XZ plane only) clockwise the specified number of times
+     */
+    @SuppressWarnings("incomplete-switch")
+    public static BlockFace rotateXZPlaneBlockFaceOppositeAngle(BlockFace original, int times) {
         //	N
     	//W + E
     	//	S

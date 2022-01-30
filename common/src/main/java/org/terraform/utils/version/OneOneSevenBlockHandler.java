@@ -1,5 +1,8 @@
 package org.terraform.utils.version;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
@@ -8,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Lightable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
 
@@ -107,6 +111,31 @@ public class OneOneSevenBlockHandler {
 		catch(IllegalArgumentException e) {
 			return Biome.valueOf(fallback);
 		}
+	}
+	
+	public static final Material CANDLE = Material.getMaterial("CANDLE") == null ? 
+			Material.getMaterial("TORCH") : Material.getMaterial("CANDLE");
+	
+	private static Method setCandlesMethod = null;
+	public static void placeCandle(SimpleBlock block, int numCandles, boolean lit) {
+		if(Version.isAtLeast(17)) {
+			Lightable candle = (Lightable) Bukkit.createBlockData(CANDLE);
+			candle.setLit(lit);
+			
+			try {
+				if(setCandlesMethod == null) {
+					setCandlesMethod = Class.forName("org.bukkit.block.data.type.Candle").getMethod("setCandles", int.class);
+				}
+				setCandlesMethod.invoke(candle, numCandles);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			block.setBlockData(candle);
+		}
+		else
+			block.setType(Material.TORCH);
 	}
 	
 	//This isn't relevant anymore but im lazy
@@ -219,12 +248,23 @@ public class OneOneSevenBlockHandler {
 		return data;
 	}
 
+	private static final HashMap<String, Material> deepslateMap = new HashMap<>();
 	public static Material deepSlateVersion(Material target) {
-		Material mat = Material.getMaterial("DEEPSLATE_"+target.toString());
+		if(!Version.isAtLeast(17)) //No deepslate in 1.16
+			return target;
+		
+		Material mat = deepslateMap.get("DEEPSLATE_"+target.toString());
+		
+		if(mat == null) {
+			mat =  Material.getMaterial("DEEPSLATE_"+target.toString());
+		}
+		
 		if(mat == null)
 			return target;
-		else
+		else {
+			deepslateMap.put("DEEPSLATE_"+target.toString(), mat);
 			return mat;
+		}
 	}
 	
 	public static enum PointedDripstoneThickness{

@@ -116,7 +116,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
         
         //Carve entrance out
         PathGenerator g = new PathGenerator(entrance.getRelative(inDir.getModX() * 3, -1, inDir.getModZ() * 3),
-                new Material[] {Material.CAVE_AIR}, new Random(), new int[]{0,0}, new int[]{0,0});
+                new Material[] {Material.CAVE_AIR}, new Random(), new int[]{0,0}, new int[]{0,0}, -1);
         g.setPopulator(new BadlandsMineshaftPathPopulator(random));
         g.generateStraightPath(null, inDir, hallwayLength);
         

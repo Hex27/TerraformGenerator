@@ -1,5 +1,16 @@
 package org.terraform.command;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Stack;
+
+import javax.imageio.ImageIO;
+
 import org.bukkit.command.CommandSender;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
@@ -10,15 +21,6 @@ import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Stack;
 
 public class PreviewCommand extends TerraCommand {
 
@@ -103,7 +105,7 @@ public class PreviewCommand extends TerraCommand {
             }
         }
         try {
-            f = new File("terra-preview.png");
+            f = new java.io.File("terra-preview.png");
             ImageIO.write(img, "png", f);
         } catch (IOException e) {
             System.out.println(e);

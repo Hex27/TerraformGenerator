@@ -16,14 +16,12 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 import net.minecraft.server.level.PlayerChunkMap;
 import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.level.biome.WorldChunkManager;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.IChunkAccess;
-import net.minecraft.world.level.dimension.DimensionManager;
 
 public class NMSInjector extends NMSInjectorAbstract {
 	
-	private boolean heightInjectSuccess = true;
+	//private boolean heightInjectSuccess = true;
 	
 	@Override
 	public void startupTasks() {

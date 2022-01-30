@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.Chest.Type;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -34,22 +35,44 @@ public class ChestBuilder {
         return this;
     }
 
-    public void apply(SimpleBlock block) {
+    public ChestBuilder apply(SimpleBlock block) {
         block.setBlockData(blockData);
         if (lootTable != null)
             block.getPopData().lootTableChest(block.getX(), block.getY(), block.getZ(), lootTable);
+        return this;
+    }
+    
+    public void extend(SimpleBlock original, SimpleBlock extended, boolean lootTableExtendedChest) {
+    	extended.setBlockData(blockData);
+    	Wall originalWall = new Wall(original, blockData.getFacing());
+    	Chest originalChest = (Chest) original.getBlockData();
+    	Chest extendedChest = (Chest) extended.getBlockData();
+    	
+    	if(originalWall.getLeft().equals(extended)) {
+    		originalChest.setType(Type.LEFT);
+    		extendedChest.setType(Type.RIGHT);
+    	}else if(originalWall.getRight().equals(extended)) {
+    		originalChest.setType(Type.RIGHT);
+    		extendedChest.setType(Type.LEFT);
+    	}
+    	else {
+    		throw new IllegalArgumentException("A request to extend a doublechest was made, but an invalid location was specified.");
+    	}
+    	
+    	original.setBlockData(originalChest);
+    	extended.setBlockData(extendedChest);
+    	
+    	if (lootTable != null)
+    		original.getPopData().lootTableChest(original.getX(), original.getY(), original.getZ(), lootTable);
+        if (lootTableExtendedChest && lootTable != null)
+        	extended.getPopData().lootTableChest(extended.getX(), extended.getY(), extended.getZ(), lootTable);
     }
 
-    public void apply(Wall block) {
-        block.setBlockData(blockData);
-        if (lootTable != null)
-            block.get().getPopData().lootTableChest(block.getX(), block.getY(), block.getZ(), lootTable);
-    }
-
-    public void apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public ChestBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         if (lootTable != null)
             data.lootTableChest(x, y, z, lootTable);
+        return this;
     }
 
     public Chest get() {

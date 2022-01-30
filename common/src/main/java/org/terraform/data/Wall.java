@@ -116,6 +116,24 @@ public class Wall extends SimpleBlock{
         }
         return null;
     }
+    
+
+    /**
+     * Gets the first solid block towards that blockface
+     * @param cutoff
+     * @return
+     */
+    public Wall findDir(BlockFace face, int cutoff) {
+        Wall ceil = this.getRelative(face);
+        while (cutoff > 0) {
+            if (ceil.getType().isSolid()) {
+                return ceil;
+            }
+            cutoff--;
+            ceil = ceil.getRelative(face);
+        }
+        return null;
+    }
 
     /**
      * Gets the first solid block above this one

@@ -102,10 +102,10 @@ public class BoxBuilder {
         if(boxType == BoxType.UPPER_SEMIBOX) effectiveRYLower = 0;
         float effectiveRYUpper = rY;
         if(boxType == BoxType.LOWER_SEMIBOX) effectiveRYUpper = 0;
-        
-        for (float x = -rX*(1f+fuzzMultiplier); x <= rX*(1f+fuzzMultiplier); x++) {
-            for (float y = effectiveRYLower*(1f+fuzzMultiplier); y <= effectiveRYUpper*(1f+fuzzMultiplier); y++) {
-                for (float z = -rZ*(1f+fuzzMultiplier); z <= rZ*(1f+fuzzMultiplier); z++) {
+        for (float y = effectiveRYLower*(1f+fuzzMultiplier); y <= effectiveRYUpper*(1f+fuzzMultiplier); y++) {
+        	float yMultiplier = 1f - (Math.abs(y)/rY);
+        	for (float x = -rX*(1f+fuzzMultiplier)*yMultiplier; x <= rX*(1f+fuzzMultiplier)*yMultiplier; x++) {
+                for (float z = -rZ*(1f+fuzzMultiplier)*yMultiplier; z <= rZ*(1f+fuzzMultiplier)*yMultiplier; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getY(), rel.getZ()));

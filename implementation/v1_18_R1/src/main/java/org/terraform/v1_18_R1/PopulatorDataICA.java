@@ -6,6 +6,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_18_R1.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.terraform.biome.custombiomes.CustomBiomeType;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.vehicle.EntityMinecartChest;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.block.entity.TileEntityLootable;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.chunk.IChunkAccess;
 import net.minecraft.world.level.chunk.IStructureAccess;
 import net.minecraft.world.level.levelgen.feature.StructureGenerator;
@@ -58,15 +60,15 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     }
     
     public Material getType(int x, int y, int z) {
-    	return parent.getType(x, y, z);
-        //IBlockData ibd = ica.getType(new BlockPosition(x, y, z));
-        //return CraftBlockData.fromData(ibd).getMaterial();
+    	//return parent.getType(x, y, z);
+    	IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); //getState
+        return CraftBlockData.fromData(ibd).getMaterial();
     }
 
     public BlockData getBlockData(int x, int y, int z) {
-       return parent.getBlockData(x, y, z);
-    	// IBlockData ibd = ica.getType(new BlockPosition(x, y, z));
-       // return CraftBlockData.fromData(ibd);
+       //return parent.getBlockData(x, y, z);
+    	IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); //getState
+        return CraftBlockData.fromData(ibd);
     }
     
 	@Override
@@ -104,13 +106,17 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     @Override
     public void setType(int x, int y, int z, Material type) {
-    	parent.setType(x, y, z, type);
-        //ica.setType(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
+    	//parent.setType(x, y, z, type);
+    	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
+
+    	//ica.setType(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
     }
 
     @Override
     public void setBlockData(int x, int y, int z, BlockData data) {
-    	parent.setBlockData(x, y, z, data);
+    	//parent.setBlockData(x, y, z, data);
+    	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), false);
+
     	//ica.setType(new BlockPosition(x, y, z)
         //        , ((CraftBlockData) data).getState(), false);
     }
@@ -197,8 +203,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         .WorldGenMonumentPiece1(new Random(), x0, z0,
         EnumDirection.a);
     	
-    	@SuppressWarnings("serial")
-		PiecesContainer container = new PiecesContainer(new ArrayList<StructurePiece>() {{add(customBoundPiece);}});
+    	PiecesContainer container = new PiecesContainer(new ArrayList<StructurePiece>() {{add(customBoundPiece);}});
         @SuppressWarnings({ "rawtypes", "unchecked" })
 		StructureStart<?> start = new StructureStart(generator, new ChunkCoordIntPair(chunkX, chunkZ), 0, container);
 

@@ -210,6 +210,21 @@ public class SimpleBlock {
     	return false;
     }
 
+    public void replaceAdjacentNonLiquids(BlockFace[] faces, Material liquid, Material...types) {
+    	for(BlockFace face:faces) {
+			if(!getRelative(face).isSolid() && getRelative(face).getType() != liquid)
+				getRelative(face).setType(types);
+    	}
+    }
+    
+    public boolean hasAdjacentSolid(BlockFace[] faces) {
+    	for(BlockFace face:faces) {
+			if(getRelative(face).getType().isSolid())
+				return true;
+    	}
+    	return false;
+    }
+
     public int getChunkX() {
         return x / 16;
     }
@@ -236,6 +251,14 @@ public class SimpleBlock {
 
     public Material getType() {
         return popData.getType(x, y, z);
+    }
+    
+    public boolean isAir() {
+    	return popData.getType(x, y, z) == Material.AIR || popData.getType(x, y, z) == Material.CAVE_AIR;
+    }
+
+    public boolean isSolid() {
+    	return popData.getType(x, y, z).isSolid();
     }
 
     public void setType(Material type) {
@@ -264,8 +287,8 @@ public class SimpleBlock {
         setType(GenUtils.randMaterial(types));
     }
 
-    public void lsetType(Material... types) {
-        lsetType(GenUtils.randMaterial(types));
+    public boolean lsetType(Material... types) {
+        return lsetType(GenUtils.randMaterial(types));
     }
 
     public void RSolSetType(Material type) {
@@ -509,6 +532,19 @@ public class SimpleBlock {
         for (int i = 0; i < height; i++) {
             if (!this.getRelative(0, i, 0).getType().isSolid())
                 this.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
+        }
+    }
+
+    /**
+     * Replaces solid blocks only
+     * @param height
+     * @param rand
+     * @param types
+     */
+    public void ReplacePillar(int height, Material... types) {
+        for (int i = 0; i < height; i++) {
+            if (this.getRelative(0, i, 0).getType().isSolid())
+                this.getRelative(0, i, 0).setType(GenUtils.randMaterial(types));
         }
     }
 

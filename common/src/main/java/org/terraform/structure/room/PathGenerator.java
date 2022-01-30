@@ -26,15 +26,27 @@ public class PathGenerator {
     private int pathHeight = 3;
     private boolean dead = false;
 
-    public PathGenerator(SimpleBlock origin, Material[] mat, Random rand, int[] upperBound, int[] lowerBound) {
+    public PathGenerator(SimpleBlock origin, Material[] mat, Random rand, int[] upperBound, int[] lowerBound, int maxNoBend) {
         this.base = origin;
         this.rand = rand;
         this.dir = BlockUtils.directBlockFaces[GenUtils.randInt(rand, 0, 3)];
         this.upperBound = upperBound;
         this.lowerBound = lowerBound;
         this.mat = mat;
-        this.maxNoBend = (int) ((upperBound[0] - lowerBound[0]) * 0.5);
+        if(maxNoBend != -1)
+        	this.maxNoBend = maxNoBend;
+        else
+            this.maxNoBend = (int) ((upperBound[0] - lowerBound[0]) * 0.5);
     }
+    
+//    public PathGenerator(SimpleBlock origin, Material[] mat, Random rand, int[] upperBound, int[] lowerBound) {
+//        this.base = origin;
+//        this.rand = rand;
+//        this.dir = BlockUtils.directBlockFaces[GenUtils.randInt(rand, 0, 3)];
+//        this.upperBound = upperBound;
+//        this.lowerBound = lowerBound;
+//        this.mat = mat;
+//    }
 
     public boolean isDead() {
         return dead;

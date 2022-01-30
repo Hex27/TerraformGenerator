@@ -21,9 +21,11 @@ public class SphereBuilder {
 	private boolean hardReplace = false;
 	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
 	private Material[] types;
+	private Material[] containmentMaterial = new Material[] {Material.STONE};
 	private Material[] upperType;
 	private Material[] lowerType;
 	private int staticWaterLevel = -9999;
+	private boolean doLiquidContainment = false;
 	private SphereType sphereType = SphereType.FULL_SPHERE;
 	
 	
@@ -85,6 +87,15 @@ public class SphereBuilder {
 		this.hardReplace = hardReplace;
 		return this;
 	}
+	public SphereBuilder setDoLiquidContainment(boolean doLiquidContainment) {
+		this.doLiquidContainment = doLiquidContainment;
+		return this;
+	}
+
+	public SphereBuilder setCointainmentMaterials(Material... containmentMaterial) {
+		this.containmentMaterial = containmentMaterial;
+		return this;
+	}
 
     public void build() {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
@@ -133,21 +144,28 @@ public class SphereBuilder {
     	if(replaceWhitelist.size() == 0) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
+                if(this.doLiquidContainment)
+                	rel.replaceAdjacentNonLiquids(BlockUtils.sixBlockFaces, types[0], containmentMaterial);
             }
     		else
     			return false;
     	} else if(replaceWhitelist.contains(rel.getType())) {
             rel.setType(GenUtils.randMaterial(random, types));
+            if(this.doLiquidContainment)
+            	rel.replaceAdjacentNonLiquids(BlockUtils.sixBlockFaces, types[0], containmentMaterial);
     	}
     	else
     		return false;
     	
     	if(rel.getRelative(0,-1,0).getType().isSolid()) {
-	    	if(upperType != null)
+	    	if(upperType != null) {
 	    		rel.getRelative(0,1,0).lsetType(upperType);
+	    	}
 	    	if(lowerType != null)
 	    		rel.getRelative(0,-1,0).setType(lowerType);
     	}
+    	
+    	
     	return true;
     }
 

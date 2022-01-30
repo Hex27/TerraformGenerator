@@ -52,6 +52,7 @@ import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformBukkitBlockPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -71,7 +72,6 @@ import java.util.function.Predicate;
 public class NMSChunkGenerator extends ChunkGenerator {
 	private final ChunkGenerator delegate;
     
-	@SuppressWarnings("unused")
 	private final WorldServer world;
     private final TerraformPopulator pop;
     private final TerraformWorld tw;
@@ -214,15 +214,17 @@ public class NMSChunkGenerator extends ChunkGenerator {
             
         	//CustomBiomeGrid biomegrid = new CustomBiomeGrid(new BiomeStorage(this.world.t().d(IRegistry.aO), regionlimitedworldaccess, ichunkaccess.getPos(), this.getWorldChunkManager()));
         	CustomBiomeGrid biomegrid = new CustomBiomeGrid(ichunkaccess);
-        	PopulatorData data = new PopulatorData(regionlimitedworldaccess, ichunkaccess, this, chunkX, chunkZ);
-        	data.setRadius(0);
+        	PopulatorDataAbstract data = new PopulatorData(regionlimitedworldaccess, ichunkaccess, this, chunkX, chunkZ);
+        	((PopulatorData)data).setRadius(0);
+        	data = new PopulatorDataICA(data,tw,this.world,ichunkaccess,chunkX,chunkZ);
+        	
         	generator.addPopulatorData(data);
             ChunkData cd = generator.generateChunkData(tw.getWorld(), random, chunkX, chunkZ, biomegrid);
             
             //Do carving after ground is set.
         	delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
         	
-        	//Fill seas after carving.
+        	//Fill seas and delete water caves in the air after carving.
         	for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     int rawX = chunkX * 16 + x;
@@ -231,6 +233,9 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     //tw.getBiomeBank(rawX, rawZ);
                     int height = (int) org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
                     generator.fillSeaAndRivers(cd,x,z,height);
+                    for(int y = Math.max(TerraformGenerator.seaLevel, height)+1; y < tw.maxY; y++) {
+                    	ichunkaccess.a(new BlockPosition(rawX, y, rawZ), Blocks.a.n(), false); //AIR
+                    }
                 }
         	}
         	
@@ -431,8 +436,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override //getBaseHeight
     public int a(int x, int z, HeightMap.Type var2, LevelHeightAccessor var3) {
-        return delegate.a(x, z, var2, var3);
-    	//return 100;
+        //return delegate.a(x, z, var2, var3);
+    	return 100;
     	//return org.terraform.coregen.HeightMap.getBlockHeight(tw, x, z);
     }
    
