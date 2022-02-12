@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.bukkit.command.CommandSender;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.FractalTypes.Mushroom;
-import org.terraform.tree.FractalTypes.Tree;
 
 public class MushroomTypeArgument extends TerraCommandArgument<FractalTypes.Mushroom> {
 

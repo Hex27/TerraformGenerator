@@ -7,9 +7,8 @@ import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.material.MaterialData;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
-import org.terraform.main.TerraformGeneratorPlugin;
 
+@SuppressWarnings("deprecation")
 public class TerraformChunkData implements ChunkData {
 
 	private PopulatorDataAbstract popData;
@@ -18,7 +17,7 @@ public class TerraformChunkData implements ChunkData {
 		this.popData = popData;
 	}
 	
-	private static boolean debug = true;
+	//private static boolean debug = true;
 	public int getBaseHeight(int x, int z) {
 		int height = -64;
 		if(popData instanceof IPopulatorDataBaseHeightAccess) {

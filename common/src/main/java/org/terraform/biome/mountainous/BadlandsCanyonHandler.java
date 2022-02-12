@@ -155,10 +155,16 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         //Let's just not offset the peak. This seems to give a better result.
         SimpleLocation mountainPeak = sect.getCenter();
         
-        double distFromPeak = (1.42*maxMountainRadius)-Math.sqrt(
+        double angleFromPeak = new SimpleLocation(x, 0, z).twoDAngleTo(mountainPeak);
+        double circleFuzz = 1.32 + Math.abs(duneNoise.GetValue((float) (10*angleFromPeak), 40519*mountainPeak.getX() + 75721*mountainPeak.getZ()));//Math.min(0.5, 0.5*duneNoise.GetValue((float) angleFromPeak, 40519*mountainPeak.getX() + 75721*mountainPeak.getZ()));
+        
+        
+        double distFromPeak = (circleFuzz*maxMountainRadius)-Math.sqrt(
         		Math.pow(x-mountainPeak.getX(), 2)+Math.pow(z-mountainPeak.getZ(), 2)
         		);
-
+        
+        
+        
         double heightMultiplier = maxPeak*(distFromPeak/maxMountainRadius);
         double minMultiplier = 1;
         if(heightMultiplier < minMultiplier) heightMultiplier = minMultiplier;

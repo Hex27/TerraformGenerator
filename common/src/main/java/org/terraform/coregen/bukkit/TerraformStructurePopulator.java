@@ -16,7 +16,6 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.structure.stronghold.StrongholdPopulator;
-import org.terraform.utils.version.Version;
 
 import java.util.Random;
 

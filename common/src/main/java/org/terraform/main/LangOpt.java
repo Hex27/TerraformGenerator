@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 public enum LangOpt {
     COMMAND_LOCATE_NOVANILLA("&c&lFor terraformgenerator worlds, use &e&l/terra locate &c&linstead!"),
     COMMAND_LOCATE_STRUCTURE_NOT_ENABLED("&cThe specified structure was not enabled!"),
-    COMMAND_LOCATE_LOCATE_COORDS("&aLocated at X: ~%x% Z: ~%z%"),
+    COMMAND_LOCATE_LOCATE_COORDS("&aLocated at X: %x% Z: %z%"),
     COMMAND_LOCATE_SEARCHING("&bSearching for structure asynchronously. Please wait..."),
     COMMAND_LOCATEBIOME_INVALIDBIOME("&cInvalid Biome. Valid Biomes:"),
     COMMAND_LOCATEBIOME_NOT_IN_5000("&cCould not find this biome within 5000 blocks."),

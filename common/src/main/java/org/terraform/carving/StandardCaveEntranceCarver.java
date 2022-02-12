@@ -3,9 +3,7 @@ package org.terraform.carving;
 import java.util.Random;
 
 import org.bukkit.Material;
-import org.terraform.coregen.bukkit.PhysicsUpdaterPopulator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;

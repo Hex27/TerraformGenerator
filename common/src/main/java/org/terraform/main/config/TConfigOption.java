@@ -110,6 +110,7 @@ public enum TConfigOption {
     BIOME_DEEP_LUKEWARM_OCEAN_WEIGHT("biome.deeplukewarmocean.weight", 7),
     BIOME_MUSHROOM_ISLAND_WEIGHT("biome.mushroomisland.weight", 1),
     BIOME_PLAINS_WEIGHT("biome.plains.weight", 10),
+    BIOME_ELEVATED_PLAINS_WEIGHT("biome.elevatedplains.weight", 8),
     BIOME_PETRIFIEDCLIFFS_WEIGHT("biome.petrifiedcliffs.weight", 6),
     BIOME_ARCHED_CLIFFS_WEIGHT("biome.archedcliffs.weight", 6),
     BIOME_GORGE_WEIGHT("biome.gorge.weight", 6),

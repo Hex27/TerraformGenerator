@@ -79,6 +79,7 @@ public enum BiomeBank {
 
     //FLAT
     PLAINS(new PlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PLAINS_WEIGHT.getInt()),
+    ELEVATED_PLAINS(new ElevatedPlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PLAINS_WEIGHT.getInt()),
     GORGE(new GorgeHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_GORGE_WEIGHT.getInt()),
     PETRIFIED_CLIFFS(new PetrifiedCliffsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PETRIFIEDCLIFFS_WEIGHT.getInt()),
     ARCHED_CLIFFS(new ArchedCliffsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfigOption.BIOME_PETRIFIEDCLIFFS_WEIGHT.getInt()),
