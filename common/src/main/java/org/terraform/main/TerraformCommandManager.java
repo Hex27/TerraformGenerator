@@ -47,9 +47,11 @@ public class TerraformCommandManager implements TabExecutor {
             this.registerCommand(new StrongholdCommand(plugin, "stronghold", "sh"));
             this.registerCommand(new AnimalFarmCommand(plugin, "animalfarm", "af"));
             this.registerCommand(new FarmhouseCommand(plugin, "farmhouse", "fh"));
+            this.registerCommand(new MountainhouseCommand(plugin, "mountainhouse", "mh"));
             this.registerCommand(new AnimalSpawnerCommand(plugin, "animalspawner", "as"));
             this.registerCommand(new MineshaftCommand(plugin, "mineshaft", "ms"));
             this.registerCommand(new CatacombsCommand(plugin, "catacombs", "ccs"));
+            this.registerCommand(new IglooCommand(plugin, "igloo"));
             this.registerCommand(new ShipwreckCommand(plugin, "shipwreck", "sw"));
             this.registerCommand(new OutpostCommand(plugin, "outpost"));
             this.registerCommand(new NMSChunkPacketRefreshCommand(plugin, "chunkrefresh"));
@@ -63,6 +65,7 @@ public class TerraformCommandManager implements TabExecutor {
             //this.registerCommand(new GuardianSpawnCheckCommand(plugin, "gsc","guardianspawncheck"));
             this.registerCommand(new WandCommand(plugin, "wand"));
             this.registerCommand(new MushroomCommand(plugin, "mushroom"));
+            this.registerCommand(new RuinedPortalCommand(plugin, "ruinedportal"));
             this.registerCommand(new MansionCommand(plugin, "mansion"));
             this.registerCommand(new SchematicSaveCommand(plugin, "save"));
             this.registerCommand(new SchematicLoadCommand(plugin, "load"));

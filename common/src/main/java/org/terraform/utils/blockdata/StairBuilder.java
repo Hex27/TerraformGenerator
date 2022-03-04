@@ -52,12 +52,12 @@ public class StairBuilder {
         return this;
     }
 
-    public StairBuilder lapply(Wall block) {
+    public StairBuilder lapply(SimpleBlock block) {
     	if(block.getType().isSolid())
     		return this;
     	
         block.setBlockData(blockData);
-        placed.add(block.get());
+        placed.add(block);
         return this;
     }
     

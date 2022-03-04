@@ -17,6 +17,8 @@ public class SchematicParser {
 				add(Material.BROWN_MUSHROOM);
 				add(Material.RED_MUSHROOM);
 				add(Material.BROWN_CARPET);
+				add(Material.RED_CARPET);
+				add(Material.WHITE_CARPET);
 			}};
     public void applyData(SimpleBlock block, BlockData data) {
     	if(isDelayedApply || !fragile.contains(data.getMaterial()))

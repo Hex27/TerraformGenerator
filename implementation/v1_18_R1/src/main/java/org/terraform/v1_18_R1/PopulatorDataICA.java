@@ -323,8 +323,8 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 //            return LootTables.N;
 //        case BASTION_HOGLIN_STABLE:
 //            return LootTables.O;
-//        case RUINED_PORTAL:
-//            return LootTables.P;
+        case RUINED_PORTAL:
+            return LootTables.P;
 //        case SHEEP_WHITE:
 //            return LootTables.Q;
 //        case SHEEP_ORANGE:

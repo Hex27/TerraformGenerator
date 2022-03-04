@@ -104,6 +104,8 @@ public class PopulatorDataICA extends PopulatorDataICAAbstract {
                 return LootTables.J;
             case PILLAGER_OUTPOST:
                 return LootTables.K;
+            case RUINED_PORTAL:
+                return LootTables.P;
         }
         return null;
     }

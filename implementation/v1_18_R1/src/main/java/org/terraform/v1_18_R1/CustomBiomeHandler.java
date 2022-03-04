@@ -27,7 +27,7 @@ public class CustomBiomeHandler {
 		CraftServer craftserver = (CraftServer)Bukkit.getServer();
 		DedicatedServer dedicatedserver = craftserver.getServer();
 
-		//aR is the Biome Registry
+		//aR is BIOME_REGISTRY
 		//aV is registryAccess
 		//b is ownedRegistryOrThrow
 		IRegistryWritable<BiomeBase> registrywritable = dedicatedserver.aV().b(IRegistry.aR);

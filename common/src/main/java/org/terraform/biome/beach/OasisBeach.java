@@ -27,6 +27,7 @@ public class OasisBeach {
      * @param targetBiome the biome this function is called from.
      *                    Prevents code from running twice when biome overlap
      */
+	@SuppressWarnings("deprecation")
 	public static void transformTerrain(TerraformWorld tw, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ, BiomeBank targetBiome) {
 		for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {

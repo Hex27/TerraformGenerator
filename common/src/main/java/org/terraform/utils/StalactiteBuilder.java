@@ -13,6 +13,7 @@ public class StalactiteBuilder {
 	private Material[] wallType;
 	private boolean isFacingUp;
 	private int verticalSpace;
+	private int minRadius = 0;
 	
 	public StalactiteBuilder(Material... wallType) {
 		this.wallType = wallType;
@@ -80,12 +81,18 @@ public class StalactiteBuilder {
 		return this;
 	}
 
+	public StalactiteBuilder setMinRadius(int minRadius) {
+		this.minRadius = minRadius;
+		return this;
+	}
+	
 	public StalactiteBuilder setVerticalSpace(int verticalSpace) {
 		this.verticalSpace = verticalSpace;
 		return this;
 	}
 	
 	public void stalagmite(Random random, Wall w, double baseRadius, int height) {
+		baseRadius = Math.max(baseRadius, minRadius);
 		//Vector one to two;
 		Vector base = new Vector(w.getX(),w.getY(),w.getZ());
 		Vector base2 = new Vector(w.getX(),w.getY()+height,w.getZ());
@@ -103,6 +110,7 @@ public class StalactiteBuilder {
 	}
 	
 	public void stalactite(Random random, Wall w, double baseRadius, int height) {
+		baseRadius = Math.max(baseRadius, minRadius);
 	
 	    //Vector one to two;
 		Vector base = new Vector(w.getX(),w.getY(),w.getZ());

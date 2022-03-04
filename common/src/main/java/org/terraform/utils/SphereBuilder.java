@@ -12,11 +12,15 @@ import org.terraform.utils.noise.FastNoise.NoiseType;
 
 public class SphereBuilder {
 	
+	private boolean isSmooth = false;
 	private Random random;
 	private int seed;
 	private float rX = 1f;
 	private float rY = 1f;
 	private float rZ = 1f;
+	private float padding = 0f;
+	private double minRadius = 0;
+	private double maxRadius = 100;
 	private SimpleBlock core;
 	private boolean hardReplace = false;
 	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
@@ -25,6 +29,7 @@ public class SphereBuilder {
 	private Material[] upperType;
 	private Material[] lowerType;
 	private int staticWaterLevel = -9999;
+	private float sphereFrequency = 0.09f;
 	private boolean doLiquidContainment = false;
 	private SphereType sphereType = SphereType.FULL_SPHERE;
 	
@@ -67,6 +72,11 @@ public class SphereBuilder {
 		return this;
 	}
 	
+	public SphereBuilder setSphereFrequency(float sphereFrequency) {
+		this.sphereFrequency = sphereFrequency;
+		return this;
+	}
+	
 	public SphereBuilder setRX(float rX) {
 		this.rX = rX;
 		return this;
@@ -96,32 +106,72 @@ public class SphereBuilder {
 		this.containmentMaterial = containmentMaterial;
 		return this;
 	}
+	
+	/**
+	 * Refers to minimum percentage radius (0.0 to 1.0)
+	 * @param minRadius
+	 * @return
+	 */
+	public SphereBuilder setMinRadius(double minRadius) {
+		this.minRadius = minRadius;
+		return this;
+	}
+
+	/**
+	 * Refers to minimum percentage radius (0.0 to 1.0)
+	 * @param minRadius
+	 * @return
+	 */
+	public SphereBuilder setMaxRadius(double maxRadius) {
+		this.maxRadius = maxRadius;
+		return this;
+	}
+	
+	public SphereBuilder setSmooth(boolean isSmooth) {
+		this.isSmooth = isSmooth;
+		return this;
+	}
+
+	public SphereBuilder setPadding(int padding) {
+		this.padding = padding;
+		return this;
+	}
 
     public void build() {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
-            unitReplace(core);
+            unitReplace(core, core.getY());
             return;
         }
 
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
+        noise.SetFrequency(sphereFrequency);
 
         float effectiveRYLower = -rY;
         if(sphereType == SphereType.UPPER_SEMISPHERE) effectiveRYLower = 0;
         float effectiveRYUpper = rY;
         if(sphereType == SphereType.LOWER_SEMISPHERE) effectiveRYUpper = 0;
         
-        for (float x = -rX; x <= rX; x++) {
+        for (float x = -rX-padding; x <= rX+padding; x++) {
             for (float y = effectiveRYLower; y <= effectiveRYUpper; y++) {
-                for (float z = -rZ; z <= rZ; z++) {
+                for (float z = -rZ-padding; z <= rZ+padding; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
-                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                    double noiseVal;
+                    
+                    if(!isSmooth)
+                    	noiseVal = 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
+                    else
+                    	noiseVal = 1;
+                    
+                    if(noiseVal < minRadius) noiseVal = minRadius;
+                    if(noiseVal > maxRadius) noiseVal = maxRadius;
+                    
+                    if (equationResult <= noiseVal) {
                         Material[] original = types;
                     	if(rel.getY() <= staticWaterLevel) {
                         	types = new Material[] {Material.WATER};
@@ -132,7 +182,7 @@ public class SphereBuilder {
                         		}
                         	}
                         }
-                    	unitReplace(rel);
+                    	unitReplace(rel, (int) (core.getY() + effectiveRYUpper));
                     	types = original;
                     }
                 }
@@ -140,25 +190,25 @@ public class SphereBuilder {
         }
     }
     
-    private boolean unitReplace(SimpleBlock rel) {
+    private boolean unitReplace(SimpleBlock rel, int effectiveRYUpper) {
     	if(replaceWhitelist.size() == 0) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
                 if(this.doLiquidContainment)
                 	rel.replaceAdjacentNonLiquids(BlockUtils.sixBlockFaces, types[0], containmentMaterial);
             }
-    		else
-    			return false;
+//    		else
+//    			return false;
     	} else if(replaceWhitelist.contains(rel.getType())) {
             rel.setType(GenUtils.randMaterial(random, types));
             if(this.doLiquidContainment)
             	rel.replaceAdjacentNonLiquids(BlockUtils.sixBlockFaces, types[0], containmentMaterial);
     	}
-    	else
-    		return false;
+//    	else
+//    		return false;
     	
-    	if(rel.getRelative(0,-1,0).getType().isSolid()) {
-	    	if(upperType != null) {
+    	if(rel.getType().isSolid()) {
+	    	if(upperType != null && rel.getY() == effectiveRYUpper) {
 	    		rel.getRelative(0,1,0).lsetType(upperType);
 	    	}
 	    	if(lowerType != null)

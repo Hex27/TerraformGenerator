@@ -1,4 +1,4 @@
-package org.terraform.structure.buriedtreasure;
+package org.terraform.structure.small.buriedtreasure;
 
 import java.util.ArrayList;
 import java.util.Random;

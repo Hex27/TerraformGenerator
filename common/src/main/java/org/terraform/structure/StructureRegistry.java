@@ -3,17 +3,18 @@ package org.terraform.structure;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.catacombs.CatacombsPopulator;
 import org.terraform.structure.caves.LargeCavePopulator;
-import org.terraform.structure.dungeon.SmallDungeonPopulator;
 import org.terraform.structure.mineshaft.BadlandsMinePopulator;
 import org.terraform.structure.mineshaft.MineshaftPopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.pillager.outpost.OutpostPopulator;
 import org.terraform.structure.pyramid.PyramidPopulator;
-import org.terraform.structure.shipwreck.ShipwreckPopulator;
+import org.terraform.structure.small.buriedtreasure.BuriedTreasurePopulator;
+import org.terraform.structure.small.dungeon.SmallDungeonPopulator;
+import org.terraform.structure.small.ruinedportal.RuinedPortalPopulator;
+import org.terraform.structure.small.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.village.VillagePopulator;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
@@ -56,6 +57,7 @@ public class StructureRegistry {
         registerStructure(StructureType.SMALL, new SmallDungeonPopulator());
         registerStructure(StructureType.SMALL, new ShipwreckPopulator());
         registerStructure(StructureType.SMALL, new BuriedTreasurePopulator());
+        registerStructure(StructureType.SMALL, new RuinedPortalPopulator());
 
 
         //registerStructure(StructureType.SMALL, new WitchHutPopulator());

@@ -1,4 +1,4 @@
-package org.terraform.structure.dungeon;
+package org.terraform.structure.small.dungeon;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

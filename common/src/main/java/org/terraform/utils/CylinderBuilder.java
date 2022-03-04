@@ -16,7 +16,9 @@ public class CylinderBuilder {
 	private float rX = 1f;
 	private float rY = 1f;
 	private float rZ = 1f;
+	private float minRadius = 0f;
 	private SimpleBlock core;
+	private boolean singleBlockY = false;
 	private boolean hardReplace = false;
 	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
 	private Material[] types;
@@ -44,7 +46,11 @@ public class CylinderBuilder {
 		this.rX = radius; this.rY = radius; this.rZ = radius;
 		return this;
 	}
-	
+
+	public CylinderBuilder setMinRadius(float minRadius) {
+		this.minRadius = minRadius;
+		return this;
+	}
 	public CylinderBuilder setRX(float rX) {
 		this.rX = rX;
 		return this;
@@ -66,6 +72,11 @@ public class CylinderBuilder {
 		return this;
 	}
 
+	public CylinderBuilder setSingleBlockY(boolean singleBlockY) {
+		this.singleBlockY = singleBlockY;
+		return this;
+	}
+	
     public void build() {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
@@ -76,9 +87,12 @@ public class CylinderBuilder {
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(0.09f);
-
+        
+        float effectiveRY = rY;
+        if(singleBlockY) effectiveRY = 0;
+        
         for (float x = -rX; x <= rX; x++) {
-            for (float y = -rY; y <= rY; y++) {
+            for (float y = -effectiveRY; y <= effectiveRY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
@@ -90,7 +104,9 @@ public class CylinderBuilder {
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(effectiveY, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
-                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                    double radius = 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
+                    if(radius < minRadius) radius = minRadius;
+                    if (equationResult <= radius) {
                         unitReplace(rel);
                     }
                 }

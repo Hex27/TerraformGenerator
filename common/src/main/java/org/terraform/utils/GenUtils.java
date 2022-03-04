@@ -31,7 +31,8 @@ public class GenUtils {
             "FENCE", "WALL",
             "POTTED", "BRICK",
             "CHAIN", "CORAL",
-            "POINTED_DRIPSTONE"
+            "POINTED_DRIPSTONE",
+            "NETHERRACK"
     };
     public static LoadingCache<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache;
 

@@ -1,4 +1,4 @@
-package org.terraform.structure.shipwreck;
+package org.terraform.structure.small.shipwreck;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;

@@ -28,15 +28,20 @@ public class StairwayBuilder {
 		//Infer downTypes
 		ArrayList<Material> downTypes = new ArrayList<Material>();
 		for(Material mat:stairTypes) {
-			downTypes.add(Material.matchMaterial(
-					mat.toString().replace("_STAIRS", ""))
-			);
+			Material toAdd = Material.matchMaterial(
+					mat.toString().replace("_STAIRS", ""));
+			if(toAdd != null) downTypes.add(toAdd);
 		}
 		this.downTypes = new Material[downTypes.size()];
 		
 		for(int i = 0; i < downTypes.size(); i++)
 			this.downTypes[i] = downTypes.get(i);
 		
+	}
+	
+	public StairwayBuilder setDownTypes(Material... mat) {
+		this.downTypes = mat;
+		return this;
 	}
 	
 	public StairwayBuilder build(Wall start) {
@@ -51,9 +56,14 @@ public class StairwayBuilder {
 	    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
 	    			start = start.getRelative(extensionDir);
 	    		}
-	    		new StairBuilder(stairTypes)
+	    		
+	    		Material stairType = stairTypes[new Random().nextInt(stairTypes.length)];
+	    		if(stairType.toString().endsWith("STAIRS"))
+	    			new StairBuilder(stairType)
 	                    .setFacing(extensionDir.getOppositeFace())
 	                    .apply(start);
+	    		else
+	    			start.setType(stairType);
 	            
 	    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
 
@@ -91,9 +101,13 @@ public class StairwayBuilder {
 	    			start = start.getRelative(extensionDir).getRelative(0,1,0);
 	    		}
 	    		
-	    		new StairBuilder(stairTypes)
+	    		Material stairType = stairTypes[new Random().nextInt(stairTypes.length)];
+	    		if(stairType.toString().endsWith("STAIRS"))
+	    			new StairBuilder(stairTypes)
 	                    .setFacing(extensionDir)
 	                    .apply(start);
+	    		else
+	    			start.setType(stairType);
 	            
 	    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
 	    		

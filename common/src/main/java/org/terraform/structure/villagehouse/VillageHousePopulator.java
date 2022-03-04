@@ -10,6 +10,7 @@ import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.villagehouse.animalfarm.AnimalFarmPopulator;
 import org.terraform.structure.villagehouse.farmhouse.FarmhousePopulator;
+import org.terraform.structure.villagehouse.mountainhouse.MountainhousePopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -49,6 +50,9 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
                         || biome == (BiomeBank.JUNGLE)) {
 
                     return TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean() && rollSpawnRatio(tw,chunkX,chunkZ);
+                }else if (biome == (BiomeBank.ROCKY_MOUNTAINS)) {
+
+                    return TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean() && rollSpawnRatio(tw,chunkX,chunkZ);
                 }
             }
         }
@@ -78,6 +82,12 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
                     return;
 
                 new FarmhousePopulator().populate(tw, data);
+            } else if (biome == (BiomeBank.ROCKY_MOUNTAINS)) {
+
+                if (!TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean())
+                    return;
+
+                new MountainhousePopulator().populate(tw, data);
             }
         }
     }
@@ -89,7 +99,10 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
         		|| BiomeBank.isBiomeEnabled(BiomeBank.ICE_SPIKES) 
         		|| BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_TAIGA) 
         		|| BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_WASTELAND) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE) )
-        		&& (TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean() || TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean());
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE) 
+        		|| BiomeBank.isBiomeEnabled(BiomeBank.ROCKY_MOUNTAINS) )
+        		&& (TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean() 
+        				|| TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean()
+        				|| TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean());
     }
 }

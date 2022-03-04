@@ -24,6 +24,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
+import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.blockdata.StairBuilder;
@@ -434,9 +435,12 @@ public class BlockUtils {
     }
 
     public static void dropDownBlock(SimpleBlock block) {
+        dropDownBlock(block, Material.CAVE_AIR);
+    }
+    public static void dropDownBlock(SimpleBlock block, Material fluid) {
         if (block.getType().isSolid()) {
             Material type = block.getType();
-            block.setType(Material.CAVE_AIR);
+            block.setType(fluid);
             int depth = 0;
             while (!block.getType().isSolid()) {
                 block = block.getRelative(0, -1, 0);
@@ -630,6 +634,10 @@ public class BlockUtils {
         }
         
     }
+    
+    public static void replaceCircularPatch(int seed, float radius, SimpleBlock base, Material... type) {
+    	replaceCircularPatch(seed,radius,base,false,type);
+    }
 
     /**
      * Replaces the highest ground with a noise-fuzzed circle of the defined material
@@ -638,7 +646,7 @@ public class BlockUtils {
      * @param base
      * @param type
      */
-    public static void replaceCircularPatch(int seed, float radius, SimpleBlock base, Material... type) {
+    public static void replaceCircularPatch(int seed, float radius, SimpleBlock base, boolean snowy, Material... type) {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
@@ -661,6 +669,8 @@ public class BlockUtils {
                 if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
                     //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
                     rel.setType(GenUtils.randMaterial(type));
+                    if(snowy && rel.getUp().isAir())
+                    	rel.getUp().setType(Material.SNOW);
                 }
             }
         }
@@ -1043,6 +1053,10 @@ public class BlockUtils {
         for (BlockFace face : sixBlockFaces) correctMushroomData(target.getRelative(face));
     }
 
+    public static void placeDoor(PopulatorDataAbstract data, Material mat, Wall w) {
+    	placeDoor(data,mat,w.getX(),w.getY(),w.getZ(),w.getDirection());
+    }
+    
     public static void placeDoor(PopulatorDataAbstract data, Material mat, int x, int y, int z, BlockFace dir) {
         data.setType(x, y, z, mat);
         data.setType(x, y + 1, z, mat);

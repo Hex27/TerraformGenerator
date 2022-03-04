@@ -7,7 +7,7 @@ import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.dungeon.UndergroundDungeonPopulator;
+import org.terraform.structure.small.dungeon.UndergroundDungeonPopulator;
 
 import java.util.Random;
 import java.util.Stack;
