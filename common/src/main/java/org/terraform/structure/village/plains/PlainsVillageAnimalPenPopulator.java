@@ -35,75 +35,56 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
 
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    	
+    	//If terrain is adverse, 
+    	//just forget it, animal pens don't fare well in hilly terrain.
+    	if(super.doesAreaFailTolerance(data, room))
+    		return;
+    	
     	int roomY = super.calculateRoomY(data, room);
-    	boolean areaFailedTolerance = true;
-    	//if(areaFailedTolerance)
+    	
     	
     	//For animal farms, they look increasingly stupid when tilted.
     	//Just give up and place a platform underneath.
-		super.placeFixerPlatform(roomY, data, room);
+		//super.placeFixerPlatform(roomY, data, room);
+    	//Maybe this isn't needed as it no longer places when terrain is adverse
     	
     	SimpleBlock jobBlock = null;
     	boolean spawnedWater = false;
     	//Place fence
     	for(Entry<Wall,Integer> entry:room.getFourWalls(data, 2).entrySet()) {
-            Wall w;
-            
-//            if(!areaFailedTolerance) {
-//            	w = entry.getKey().getGroundOrSeaLevel();
-//            }
-//            else
-            	w = entry.getKey().getAtY(roomY);
-    		
+    		Wall w = entry.getKey();
     		for(int i = 0; i < entry.getValue(); i++) {
-    			
-    			if(Math.abs(w.getY()-roomY) <= TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt()) {
-    				//Wtf are you doing here, all these calculations just always lead to 2
-	//    			int heightOne = w.getFront().getLeft().getY()-w.getY();
-	//    			int heightTwo = w.getFront().getRight().getY()-w.getY();
-	//    			int heightThree = w.getFront().getY()-w.getY();
-	//    			
-	//    			int wallHeight = Math.max(heightOne, heightTwo);
-	//    			wallHeight = Math.max(wallHeight, heightThree);
-	//    			
-	//    			wallHeight = 2+wallHeight;
-	//    			if(wallHeight < 2) wallHeight = 2;
-	    			
-	    			int wallHeight = 2;
-	    			w = w.getRelative(0,wallHeight,0);
-	    			
-	    			//Entrance
-	    			if(w.getDirection().getOppositeFace() == ((DirectionalCubeRoom) room).getDirection()) {
-	    				if(i == entry.getValue()/2) {
-	
-//	    		            if(!areaFailedTolerance) {
-//	    		            	jobBlock = w.getRear(2).getGroundOrSeaLevel().getRelative(0,1,0);
-//	    		            }
-//	    		            else
-	    		            	jobBlock = w.getRear(2).getAtY(roomY).getRelative(0,1,0);
-	    		            
-	    					
-	    					new Wall(jobBlock.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.DIRT);
-	    				}
-	    			}
-	    			
-	    			int toCorrect = 0;
-	    			if(i % 2 == 0) {
-	    				toCorrect = w.downUntilSolid(rand, plainsVillagePopulator.woodLog);
-	    				w.getRelative(0,1,0).setType(Material.COBBLESTONE_SLAB);
-	    			} else {
-	    				toCorrect = w.downUntilSolid(new Random(), plainsVillagePopulator.woodFence);
-	    			}
-	    			
-	    			w.getDown(toCorrect).CorrectMultipleFacing(toCorrect);
+    			Wall target = w.getAtY(roomY).findNearestAirPocket(15);
+    			if(target != null) {
+    				if(target.getDown().getType()!=Material.COBBLESTONE_SLAB &&
+    						target.getDown().getType()!=plainsVillagePopulator.woodFence)
+    				{
+    					int wallHeight = 3;
+        				if(target.getY() < roomY) 
+        					wallHeight = 2 + (roomY - target.getY());
+//        				else if(target.getY() > roomY) 
+//        					wallHeight -= 1;
+        				
+        				if(i % 2 == 0) {
+        					target.Pillar(wallHeight, plainsVillagePopulator.woodLog);
+        					target.getUp(wallHeight).setType(Material.COBBLESTONE_SLAB);
+        					target.getDown(2).getRight().CorrectMultipleFacing(wallHeight+2);
+        					target.getDown(2).getLeft().CorrectMultipleFacing(wallHeight+2);
+        				}else {
+        					target.Pillar(wallHeight, plainsVillagePopulator.woodFence);
+        					target.CorrectMultipleFacing(wallHeight);
+        				}
+        				
+    				}
+    				if(w.getDirection() == ((DirectionalCubeRoom) room).getDirection().getOppositeFace()
+    						&& i == entry.getValue()/2) {
+    					jobBlock = target.getRear();
+    				}
     			}
-
-//                if(!areaFailedTolerance) {
-//        			w = w.getLeft().getGroundOrSeaLevel();
-//                }
-//                else
-        			w = w.getLeft().getAtY(roomY);
+        		w = w.getLeft();
     		}
+    		
     	}
     	
     	//Decorations
@@ -116,10 +97,10 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     			
 				int highest;
 //                if(!areaFailedTolerance) {
-//        			highest = GenUtils.getHighestGroundOrSeaLevel(data, x, z);
+        			highest = GenUtils.getHighestGroundOrSeaLevel(data, x, z);
 //                }
 //                else
-                	highest = roomY;
+//                	highest = roomY;
                 
                 if(Math.abs(highest-roomY) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
                 	continue;
@@ -147,10 +128,10 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     					Wall core = new Wall(new SimpleBlock(data, x,0,z),BlockUtils.getDirectBlockFace(rand));
 
 //    		            if(!areaFailedTolerance) {
-//    		                core = core.getGroundOrSeaLevel().getRelative(0,1,0);
+    		                core = core.getGroundOrSeaLevel().getRelative(0,1,0);
 //    		            }
 //    		            else
-    		            	core.getAtY(roomY+1);
+//    		            	core.getAtY(roomY+1);
 
     	                if(Math.abs(core.getY()-roomY) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
     	                	continue;
@@ -176,18 +157,12 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     					core.getFront().getRelative(0,-1,0).downUntilSolid(new Random(),Material.DIRT);
     					break;
     				} else { //Haybales
-    					int hayY;
-    		            if(!areaFailedTolerance) {
-    		            	hayY = GenUtils.getHighestGround(data, x,z);
-    		            }
-    		            else
-    		            	hayY = roomY;
-
-    	                if(Math.abs(hayY-roomY) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
-    	                	continue;
+    					SimpleBlock core = new SimpleBlock(data, x, roomY, z).findAirPocket(15);
+    		            if(core == null)
+    		            	continue;
     	                
                         BlockUtils.replaceUpperSphere(x + 7 * z + 17 * 17, 1.5f, 2.5f, 1.5f,
-                                new SimpleBlock(data, x, hayY, z),
+                                core,
                                 false, Material.HAY_BLOCK);
                         break;
     				}
@@ -201,10 +176,10 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
 
 		int highest;
 //            if(!areaFailedTolerance) {
-//                highest = GenUtils.getTrueHighestBlock(data, coords[0], coords[2]);
+                highest = GenUtils.getTrueHighestBlock(data, coords[0], coords[2]);
 //            }
 //            else
-    	highest = roomY;
+//    	highest = roomY;
 
     	int threshold = 0;
         while(data.getType(coords[0], highest + 1, coords[2]).isSolid() &&
@@ -220,23 +195,24 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
             }
         }
         
-    	switch(animal) {
-    	case PIG:
-    	case CHICKEN:
-    		new DirectionalBuilder(Material.SMOKER)
-    		.setFacing(((DirectionalCubeRoom) room).getDirection())
-    		.apply(jobBlock);
-    		break;
-    	case SHEEP:
-    		jobBlock.setType(Material.LOOM);
-    		break;
-    	case COW:
-    	case HORSE:
-    		jobBlock.setType(Material.CAULDRON);
-    		break;
-		default:
-			break;
-    	}
+        if(jobBlock != null)
+	    	switch(animal) {
+	    	case PIG:
+	    	case CHICKEN:
+	    		new DirectionalBuilder(Material.SMOKER)
+	    		.setFacing(((DirectionalCubeRoom) room).getDirection())
+	    		.apply(jobBlock);
+	    		break;
+	    	case SHEEP:
+	    		jobBlock.setType(Material.LOOM);
+	    		break;
+	    	case COW:
+	    	case HORSE:
+	    		jobBlock.setType(Material.CAULDRON);
+	    		break;
+			default:
+				break;
+	    	}
     }
 
     @Override

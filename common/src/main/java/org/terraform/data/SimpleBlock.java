@@ -413,6 +413,32 @@ public class SimpleBlock {
     }
     
     /**
+     * If solid, find nearest air pocket upwards.
+     * If not solid, find nearest floor.
+     * @param cutoff
+     * @return
+     */
+    public SimpleBlock findNearestAirPocket(int cutoff) {
+    	if(this.isSolid()) {
+    		SimpleBlock rel = this.getRelative(0, 1, 0);
+            while (cutoff > 0) {
+                if (!rel.getType().isSolid()) {
+                    return rel;
+                }
+                cutoff--;
+                rel = rel.getRelative(0, 1, 0);
+            }
+            return null;
+    	}
+    	else
+    	{
+    		SimpleBlock candidate = this.findFloor(cutoff);
+    		if(candidate != null) candidate = candidate.getUp();
+    		return candidate;
+    	}
+    }
+    
+    /**
      * Gets the first stone-like block below this one
      * @param cutoff
      * @return

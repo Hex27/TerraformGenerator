@@ -12,10 +12,8 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
-import org.terraform.utils.BoxBuilder;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
-import org.terraform.utils.BoxBuilder.BoxType;
 import org.terraform.utils.SphereBuilder.SphereType;
 
 public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAbstract {
@@ -61,28 +59,15 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 		new SphereBuilder(this.rand, core.getDown(), Material.DIRT)
 		.setRX(room.getWidthX()/2f)
 		.setRZ(room.getWidthZ()/2f)
-		.setRY(room.getWidthX()/3f)
-		.setHardReplace(true)
+		.setRY(3)
+		.setPadding(4)
+		.setSphereFrequency(0.11f)
+		.setMinRadius(0.8)
+		.setHardReplace(false)
+		.setUpperType(Material.GRASS_BLOCK)
 		.setSphereType(SphereType.LOWER_SEMISPHERE)
 		.build(); 
-		
 
-//		//Forcefully ensure that the platform itself has a certain area
-		new BoxBuilder(this.rand, core.getDown(), Material.DIRT)
-		.setUpperType(Material.GRASS_BLOCK)
-		.setRX(room.getWidthX()/2f)
-		.setRZ(room.getWidthZ()/2f)
-		.setRY(1f)
-		.setHardReplace(true)
-		.setBoxType(BoxType.LOWER_SEMIBOX)
-		.build(); 
-//		
-//    	int[] lowerCorner = room.getLowerCorner();
-//    	int[] upperCorner = room.getUpperCorner();
-//    	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-//    		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-//    			data.setType(x, roomY, z, Material.GRASS_BLOCK);
-//    		}
 	}
 	
 	public int getRoomRoughNeededHeight() {

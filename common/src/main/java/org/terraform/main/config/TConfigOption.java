@@ -198,7 +198,7 @@ public enum TConfigOption {
     STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled", true),
     STRUCTURES_VILLAGE_SPAWNRATIO("structures.village.spawnratio", 1.0),
     STRUCTURES_PLAINSVILLAGE_ENABLED("structures.plainsvillage.enabled", true),
-    STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE("structures.plainsvillage.farm-height-tolerance", 4),
+    STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE("structures.plainsvillage.height-tolerance", 10),
     STRUCTURES_VILLAGE_CHUNK_EXCLUSION_ZONE("structures.village.chunk-exclusion-zone", 4),
     STRUCTURES_SWAMPHUT_ENABLED("structures.swamphut.enabled", true),
     STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND("structures.swamphut.chance-out-of-10000", 10),

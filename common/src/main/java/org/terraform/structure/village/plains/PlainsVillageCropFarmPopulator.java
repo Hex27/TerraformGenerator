@@ -44,6 +44,11 @@ public class PlainsVillageCropFarmPopulator extends PlainsVillageAbstractRoomPop
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
     	int roomY = super.calculateRoomY(data, room);
     	boolean areaFailedTolerance = super.doesAreaFailTolerance(data, room);
+    	
+    	//If terrain is adverse, don't bother.
+    	if(areaFailedTolerance)
+    		return;
+    	
     	super.populate(data, room);
     	
         BlockFace dir = ((DirectionalCubeRoom) room).getDirection();
@@ -53,11 +58,11 @@ public class PlainsVillageCropFarmPopulator extends PlainsVillageAbstractRoomPop
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, pad).entrySet()) {
             Wall w;
             
-            if(!areaFailedTolerance) {
-            	w = entry.getKey().getGroundOrSeaLevel().getRelative(0, 1, 0);
-            }
-            else
-            	w = entry.getKey().getAtY(roomY).getRelative(0, 1, 0);
+//            if(!areaFailedTolerance) {
+        	w = entry.getKey().getGroundOrSeaLevel().getRelative(0, 1, 0);
+//            }
+//            else
+        	//w = entry.getKey().getAtY(roomY).getRelative(0, 1, 0);
             
             for (int i = 0; i < entry.getValue(); i++) {
             	//Added height tolerance check. Don't place anything on areas that deviate too far off.
@@ -126,10 +131,10 @@ public class PlainsVillageCropFarmPopulator extends PlainsVillageAbstractRoomPop
 	                }
 
 
-                if(!areaFailedTolerance)
-                    w = w.getLeft().getGroundOrSeaLevel().getRelative(0, 1, 0);
-                else
-                    w = w.getLeft().getAtY(roomY).getRelative(0, 1, 0);
+//                if(!areaFailedTolerance)
+                w = w.getLeft().getGroundOrSeaLevel().getRelative(0, 1, 0);
+//                else
+                //w = w.getLeft().getAtY(roomY).getRelative(0, 1, 0);
             }
         }
 
@@ -144,14 +149,14 @@ public class PlainsVillageCropFarmPopulator extends PlainsVillageAbstractRoomPop
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 int height;
 
-                if(!areaFailedTolerance) {
-                	height = GenUtils.getHighestGroundOrSeaLevel(data, x, z);
+//                if(!areaFailedTolerance) {
+            	height = GenUtils.getHighestGroundOrSeaLevel(data, x, z);
                 	
-                	//Forget populating areas that are too far up/down
-                	if(Math.abs(height-roomY) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
-                		continue;
-                } else
-                	height = roomY;
+            	//Forget populating areas that are too far up/down
+            	if(Math.abs(height-roomY) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
+            		continue;
+//                } else
+//                	height = roomY;
                 
                 BlockUtils.setDownUntilSolid(x, height-1, z, data, Material.DIRT);
                 

@@ -60,6 +60,7 @@ public class PlainsPathRecursiveSpawner {
         boolean cull = false;
         SimpleLocation loc = new SimpleLocation(target.loc).getRelative(direction);
         int lastCrossroad = 0;
+        int edgeTurns = 0;
         while (!cull) {
 
             //Advance the path forward in this arbitrary direction.
@@ -104,14 +105,29 @@ public class PlainsPathRecursiveSpawner {
                         }
                     }
                     loc = loc.getRelative(direction);
-                } else
+                }else if(loc.distanceSqr(core.getX(), core.getY(), core.getZ()) > Math.pow(range, 2))
+                {
+                	loc = loc.getRelative(direction.getOppositeFace());
+                	direction = BlockUtils.getTurnBlockFace(random, direction);
+                	loc = loc.getRelative(direction);
+                	edgeTurns++;
+                	if(edgeTurns > 3) {
+                		cull = true;
+                    	//TerraformGeneratorPlugin.logger.info("Death by edgeTurns .+ 3");
+                	}
+                }
+                else {
+                	//TerraformGeneratorPlugin.logger.info("Death by ");
                     cull = true;
+                }
             }
-            BlockFace[] valid = new BlockFace[3];
-            valid[0] = BlockUtils.getLeft(direction);
-            valid[1] = BlockUtils.getRight(direction);
-            valid[2] = direction;
-            direction = valid[random.nextInt(3)];
+            edgeTurns = 0;
+//            BlockFace[] valid = new BlockFace[3];
+//            valid[0] = BlockUtils.getLeft(direction);
+//            valid[1] = BlockUtils.getRight(direction);
+//            valid[2] = direction;
+//            direction = valid[random.nextInt(3)];
+            direction = BlockUtils.getTurnBlockFace(random, direction);
             loc = loc.getRelative(direction);
         }
     }

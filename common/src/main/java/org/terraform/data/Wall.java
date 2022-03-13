@@ -76,7 +76,17 @@ public class Wall extends SimpleBlock{
     	if(sb == null) return null;
         return new Wall(sb, direction);
     }
-    
+
+    /**
+     * Gets the first solid block below this one
+     * @param cutoff
+     * @return
+     */
+    public Wall findNearestAirPocket(int cutoff) {
+    	SimpleBlock sb = super.findNearestAirPocket(cutoff);
+    	if(sb == null) return null;
+        return new Wall(sb, direction);
+    }
 
     /**
      * Gets the first stone-like block below this one
