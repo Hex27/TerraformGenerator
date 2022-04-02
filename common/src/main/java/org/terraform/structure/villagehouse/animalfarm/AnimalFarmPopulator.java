@@ -36,6 +36,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
             EntityType.HORSE,
             EntityType.CHICKEN
     };
+    
 
     @Override
     public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {

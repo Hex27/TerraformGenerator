@@ -315,7 +315,11 @@ public class GenUtils {
 
     @SuppressWarnings("incomplete-switch")
 	public static boolean isGroundLike(Material mat) {
-        if(BlockUtils.isStoneLike(mat)) return true;
+    	//Ice is considered stone-like, but not in a million years is it ground.
+        if(BlockUtils.isStoneLike(mat) 
+        		&& mat != Material.PACKED_ICE 
+        		&& mat != Material.BLUE_ICE) 
+        	return true;
         if(mat == Material.SAND 
         	|| mat == Material.RED_SAND
         	|| mat == Material.GRAVEL)
@@ -325,13 +329,14 @@ public class GenUtils {
             switch(mat) {
                 case HAY_BLOCK:
                 case ICE:
-                case PACKED_ICE:
-                case BLUE_ICE:
+                //case PACKED_ICE:
+                //case BLUE_ICE:
                 case CACTUS:
                 case BAMBOO:
                 case BAMBOO_SAPLING:
                 case IRON_BARS:
                 case LANTERN:
+                //case SNOW_BLOCK: //This is new.
                     return false;
             }
             if(mat.isInteractable()) {

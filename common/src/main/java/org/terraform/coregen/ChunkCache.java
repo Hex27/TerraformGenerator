@@ -10,10 +10,16 @@ public class ChunkCache {
 
     /**
      * heightCache caches the FINAL height of the terrain (the one applied to the 
-     * world). dominantBiomeHeightCache holds the non-final height calculation of
+     * world). 
+     * <br>
+     * dominantBiomeHeightCache holds the non-final height calculation of
      * the most dominant biome at those coordinates.
+     * <br>
+     * blurredHeightCache will hold intermediate height blurring values
+     * (calculated after dominantBiomeHeightCache)
      */
-    double[][] dominantBiomeHeightCache;
+    float[][] dominantBiomeHeightCache;
+    float[][] blurredHeightCache;
     double[][] heightMapCache;
     short[][] highestGroundCache;
     BiomeBank[][] biomeCache;
@@ -40,11 +46,16 @@ public class ChunkCache {
 
     public void initInternalCache() {
     	highestGroundCache = new short[16][16];
-    	for(short i = 0; i < 16; i++)
-    		for(short j = 0; j < 16; j++)
-    			highestGroundCache[i][j] = Short.MIN_VALUE;
         heightMapCache = new double[16][16];
-        dominantBiomeHeightCache = new double[16][16];
+        dominantBiomeHeightCache = new float[16][16];
+        blurredHeightCache = new float[16][16];
+        
+    	for(short i = 0; i < 16; i++)
+    		for(short j = 0; j < 16; j++) {
+    			highestGroundCache[i][j] = Short.MIN_VALUE;
+    			blurredHeightCache[i][j] = Float.MIN_VALUE;
+    			dominantBiomeHeightCache[i][j] = Float.MIN_VALUE;
+    		}
         biomeCache = new BiomeBank[16][16];
     }
 
@@ -53,7 +64,7 @@ public class ChunkCache {
         return (ax == Axis.X) ? j - this.chunkX * 16 : j - this.chunkZ * 16;
     }
 
-    public double getDominantBiomeHeight(int rawX, int rawZ) {
+    public float getDominantBiomeHeight(int rawX, int rawZ) {
         return dominantBiomeHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
     }
 
@@ -63,7 +74,7 @@ public class ChunkCache {
      * @param rawZ BLOCK COORD z
      * @param value dominant biome height to cache
      */
-    public void cacheDominantBiomeHeight(int rawX, int rawZ, double value) {
+    public void cacheDominantBiomeHeight(int rawX, int rawZ, float value) {
     	dominantBiomeHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
     }
 
@@ -94,6 +105,21 @@ public class ChunkCache {
      */
     public void cacheHighestGround(int rawX, int rawZ, short value) {
         highestGroundCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+    }
+    
+    public double getBlurredHeight(int rawX, int rawZ) {
+        return blurredHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+    }
+
+
+    /**
+     *
+     * @param rawX BLOCK COORD x
+     * @param rawZ BLOCK COORD z
+     * @param value height to cache
+     */
+    public void cacheBlurredHeight(int rawX, int rawZ, float value) {
+    	blurredHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
     }
 
 

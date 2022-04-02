@@ -59,7 +59,9 @@ public class SnowyWastelandHandler extends BiomeHandler {
                 if(GenUtils.chance(random, 1, 500)) {
                 	BlockUtils.replaceCircularPatch(random.nextInt(9999), 3, new SimpleBlock(data,x,0,z), OneOneSevenBlockHandler.POWDER_SNOW);
                 }
-                if (data.getType(x, y + 1, z) == Material.AIR && data.getType(x, y, z) != OneOneSevenBlockHandler.POWDER_SNOW) {
+                if (data.getType(x, y + 1, z) == Material.AIR 
+                		&& data.getType(x, y, z) != OneOneSevenBlockHandler.POWDER_SNOW
+                		&& GenUtils.isGroundLike(data.getType(x, y, z))) {
                     data.setType(x, y + 1, z, Material.SNOW);
                     if (data.getBlockData(x, y, z) instanceof Snowable) {
                         Snowable snowable = (Snowable) data.getBlockData(x, y, z);
@@ -74,14 +76,14 @@ public class SnowyWastelandHandler extends BiomeHandler {
 	@Override
 	public void populateLargeItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
 
-        SimpleLocation[] items = GenUtils.randomObjectPositions(world, data.getChunkX(), data.getChunkZ(), 16*3);
+        SimpleLocation[] items = GenUtils.randomObjectPositions(world, data.getChunkX(), data.getChunkZ(), 44);
 
         for(SimpleLocation sLoc:items) {
         	if (data.getBiome(sLoc.getX(),sLoc.getZ()) != getBiome()) continue;
         	sLoc.setY(GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ()));
             if (data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) != Material.SNOW_BLOCK) continue;
 
-            BlockUtils.spawnPillar(random, data, sLoc.getX(),sLoc.getY(),sLoc.getZ(), Material.SPRUCE_LOG, 3, 6);
+            BlockUtils.spawnPillar(random, data, sLoc.getX(),sLoc.getY(),sLoc.getZ(), Material.SPRUCE_LOG, 6, 8);
 
             if (GenUtils.chance(1, 3))
                 new FractalTreeBuilder(FractalTypes.Tree.FROZEN_TREE_SMALL)

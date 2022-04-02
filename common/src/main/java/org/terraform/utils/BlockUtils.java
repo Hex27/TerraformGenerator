@@ -88,7 +88,7 @@ public class BlockUtils {
             OneOneSevenBlockHandler.AMETHYST_BLOCK,
             OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
             OneOneSixBlockHandler.SMOOTH_BASALT,
-            Material.LAPIS_ORE, Material.SNOW_BLOCK,
+            Material.LAPIS_ORE,
             Material.PACKED_ICE, Material.BLUE_ICE
     );
     
@@ -119,7 +119,7 @@ public class BlockUtils {
             OneOneSevenBlockHandler.deepSlateVersion(Material.REDSTONE_ORE),
             OneOneSevenBlockHandler.deepSlateVersion(Material.LAPIS_ORE), 
             OneOneSevenBlockHandler.deepSlateVersion(OneOneSevenBlockHandler.COPPER_ORE), 
-            Material.SNOW_BLOCK,
+            //Material.SNOW_BLOCK,
             Material.PACKED_ICE, Material.BLUE_ICE,
             Material.TERRACOTTA, Material.ORANGE_TERRACOTTA,
             Material.RED_TERRACOTTA, Material.BROWN_TERRACOTTA,
@@ -177,6 +177,25 @@ public class BlockUtils {
             Material.POTTED_PINK_TULIP
     };
 
+    private static final Material[] CARPETS = {
+            Material.WHITE_CARPET,
+            Material.BLACK_CARPET,
+            Material.BLUE_CARPET,
+            Material.BROWN_CARPET,
+            Material.CYAN_CARPET,
+            Material.GRAY_CARPET,
+            Material.GREEN_CARPET,
+            Material.LIGHT_BLUE_CARPET,
+            Material.LIGHT_GRAY_CARPET,
+            Material.LIME_CARPET,
+            Material.MAGENTA_CARPET,
+            Material.ORANGE_CARPET,
+            Material.PINK_CARPET,
+            Material.PURPLE_CARPET,
+            Material.RED_CARPET,
+            Material.YELLOW_CARPET
+    };
+    
     private static final Material[] WOOLS = {
             Material.WHITE_WOOL,
             Material.BLACK_WOOL,
@@ -413,7 +432,10 @@ public class BlockUtils {
     public static BlockFace getSixBlockFace(Random rand) {
     	return sixBlockFaces[rand.nextInt(6)];
     }
-    
+
+    public static Material pickCarpet() {
+        return GenUtils.randMaterial(CARPETS);
+    }
     public static Material pickWool() {
         return GenUtils.randMaterial(WOOLS);
     }

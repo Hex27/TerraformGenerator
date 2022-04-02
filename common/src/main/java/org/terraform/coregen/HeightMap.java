@@ -1,6 +1,9 @@
 package org.terraform.coregen;
 
+import java.util.ArrayList;
+
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -34,7 +37,7 @@ public enum HeightMap {
             FastNoise cubic = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_CORE, world -> {
                 FastNoise n = new FastNoise((int) world.getSeed());
                 n.SetNoiseType(NoiseType.CubicFractal);
-                n.SetFractalOctaves(6);
+                n.SetFractalOctaves(3);
                 n.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
                 return n;
             });
@@ -174,17 +177,20 @@ public enum HeightMap {
     }
 
     
-    private static double getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
+    private static float getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
     	ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
-    	double h = cache.getDominantBiomeHeight(x, z);
-    	if(h == 0)
-    		h = BiomeBank.calculateHeightIndependentBiome(tw, x, z)
+    	float h = cache.getDominantBiomeHeight(x, z);
+    	if(h == Float.MIN_VALUE)
+    		h = (float) BiomeBank.calculateHeightIndependentBiome(tw, x, z)
 			.getHandler().calculateHeight(tw,x,z);
     	cache.cacheDominantBiomeHeight(x, z, h);
     	return h;
     }
+    
     /**
      * Biome calculations are done here as well.
+     * 
+     * This function is responsible for applying blurring to merge biomes together
      * @param tw
      * @param x
      * @param z
@@ -192,55 +198,110 @@ public enum HeightMap {
      */
     public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
     	
-    	int maskRadius = 10;
-    	int candidateCount = 81; //20*4 + 1
-    	double totalHeight = getDominantBiomeHeight(tw,x,z);
+    	int maskRadius = 5;
+    	int maskDiameter = (maskRadius*2) + 1;
+    	//int maskDiameterSquared = maskDiameter*maskDiameter;
+    	double coreHeight = 0;
+
+		ChunkCache mainCache = TerraformGenerator.getCache(tw, x, z);
+		
+		//If this chunk cache hasn't cached a blurred value, 
+		if(mainCache.getBlurredHeight(x, z) == Float.MIN_VALUE) {
+			
+			//Box blur across the biome section
+	    	//MegaChunk mc = new MegaChunk(x, 0, z);
+	    	BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
+	    	
+	    	//Some extra Z values will be calculated to allow for blurring across sections.
+	    	//These values must be deleted afterwards.
+	    	ArrayList<ChunkCache> toPurgeValues = new ArrayList<ChunkCache>();
+	    	
+	    	//For every point in the biome section, blur across the X axis.
+	    	for(int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
+	    		for(int relZ = sect.getLowerBounds().getZ() - maskRadius; relZ <= sect.getUpperBounds().getZ() + maskRadius; relZ++) {
+	    			
+	    			ChunkCache targetCache = TerraformGenerator.getCache(tw, relX, relZ);
+	    			float lineTotalHeight = 0;
+		    		for(int offsetX = -maskRadius; offsetX <= maskRadius; offsetX++) {
+		    			lineTotalHeight += getDominantBiomeHeight(tw, relX + offsetX, relZ);
+		    		}
+		    		
+		    		//Temporarily cache these X-Blurred values into chunkcache.
+		    		if(relZ < sect.getLowerBounds().getZ() || relZ > sect.getUpperBounds().getZ()) {
+		    			//Do not purge values that are legitimate.
+		    			if(targetCache.getBlurredHeight(relX, relZ) == Float.MIN_VALUE)
+		    			{
+			    			//add these to toPurgeValues as they must be deleted after Z calculation.
+				    		targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
+				    		toPurgeValues.add(targetCache);
+		    			}
+		    		}
+		    		else
+		    			//Temporarily cache the X-axis blurred value into this.
+			    		targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
+			    		
+	        	}
+	    	}
+
+	    	//For every point in the biome section, blur across the Z axis.
+	    	for(int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
+	    		for(int relZ = sect.getLowerBounds().getZ(); relZ <= sect.getUpperBounds().getZ(); relZ++) {
+	    			
+	    			ChunkCache targetCache = TerraformGenerator.getCache(tw, relX, relZ);
+	    			float lineTotalHeight = 0;
+		    		for(int offsetZ = -maskRadius; offsetZ <= maskRadius; offsetZ++) {
+		    			ChunkCache queryCache = TerraformGenerator.getCache(tw, relX, relZ + offsetZ);
+//		    			if(queryCache != targetCache) {
+//		    				//This is a little suspicious, because this whole optimisation relies
+//		    				//on the fact that this thing is supposed to already be blurred 
+//		    				//in the X direction, but this seems* to be ok. May produce weird
+//		    				//artifacts in the Z direction.
+//		    				lineTotalHeight += getDominantBiomeHeight(tw, relX, relZ + offsetZ);
+//		    			}
+//		    			else
+		    			
+		    			//Note, this may accidentally blur twice for some Z values if 
+		    			//chunks generate in a specific weird order. That's (probably) fine.
+	    				lineTotalHeight += queryCache.getBlurredHeight(relX, relZ + offsetZ);
+		    		}
+		    		//final blurred value
+		    		targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
+	        	}
+	    	}
+	    	
+	    	for(ChunkCache toPurge:toPurgeValues) {
+	        	for(short i = 0; i < 16; i++)
+	        		for(short j = 0; j < 16; j++) {
+	        			toPurge.blurredHeightCache[i][j] = Float.MIN_VALUE;
+	        		}
+	    	}
+		}
+		
+		coreHeight = mainCache.getBlurredHeight(x, z);
     	
-		//First, blur by averaging horizontally, vertically and diagonally by maskRadius.
-    	
-    	//X dir
-    	for(int nx = x-maskRadius; nx <= x+maskRadius; nx++) {
-    		if(nx == x) continue;
-			totalHeight += getDominantBiomeHeight(tw,nx,z);
-    	}
-    	
-    	//Z dir
-    	for(int nz = z-maskRadius; nz <= z+maskRadius; nz++) {
-    		if(nz == z) continue;
-			totalHeight += getDominantBiomeHeight(tw,x,nz);
-    	}
-    	
-    	//-x to +x, -z to +z Diagonal
-    	for(int rel = -maskRadius; rel <= maskRadius; rel++) {
-    		int nx = x + rel;
-    		int nz = z + rel;
-    		if(nz == z && nx == x) continue;
-			totalHeight += getDominantBiomeHeight(tw,nx,nz);
-    	}
-    	//-x to +x, +z to -z Diagonal
-    	for(int rel = -maskRadius; rel <= maskRadius; rel++) {
-    		int nx = x + rel;
-    		int nz = z - rel;
-    		if(nz == z && nx == x) continue;
-			totalHeight += getDominantBiomeHeight(tw,nx,nz);
-    	}
-    	
-    	double coreHeight = totalHeight/candidateCount;
-    	
-    	//Now, boxBlur coreHeight by 2D averaging with a much smaller radius
-    	int boxBlurRadius = 3;
-    	candidateCount = 49; //Math.pow(3*2+1,2)
-    	totalHeight = 0;
-    	for(int nx = x-boxBlurRadius; nx <= x+boxBlurRadius; nx++) {
-    		for(int nz = z-boxBlurRadius; nz <= z+boxBlurRadius; nz++) {
-    			if(nx == x&& nz == z)
-    				totalHeight += coreHeight;
-    			else
-    				totalHeight += getDominantBiomeHeight(tw,nx,nz);
-        	}
-    	}
-    	
-    	coreHeight = totalHeight/candidateCount;
+		//This is the older method (2d blurring) that is slower. May consider readding
+		//the blur exemption (don't blur the center of sections)
+      	//Don't calculate if distance is very close to center. 
+    	//The bulk of the section doesn't need blurring.
+//    	double coreHeight = 0;
+//    	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x,z);
+//    	if(new SimpleLocation(x,0,z).distance(homeSection.getCenter()) <= BiomeSection.dominanceThreshold) {
+//    		coreHeight = getDominantBiomeHeight(tw,x,z); 
+//    	}
+//    	else
+//    	{
+//        	//Box blur with radius of 5. 
+//        	float totalHeight = 0;
+//        	for(int nx = x-maskRadius; nx <= x+maskRadius; nx++) {
+//        		double lineHeight = 0;
+//        		for(int nz = z-maskRadius; nz <= z+maskRadius; nz++) {
+//        			lineHeight += getDominantBiomeHeight(tw,nx,nz);
+//        		}
+//        		totalHeight += lineHeight;
+//        	}
+//      	
+//        	coreHeight = totalHeight/maskDiameterSquared;
+//    	}
     	
     	coreHeight += HeightMap.ATTRITION.getHeight(tw, x, z);
     	

@@ -20,6 +20,7 @@ public class BiomeSection {
 	private TerraformWorld tw;
 	public static final int sectionWidth = (int) (1 << bitshifts);
 	public static final int minSize = sectionWidth;
+	public static final int dominanceThreshold = (int)(0.35 * sectionWidth);
 	private float temperature;
 	private float moisture;
 	private int radius;
@@ -213,6 +214,11 @@ public class BiomeSection {
     	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
     	SimpleLocation target  = new SimpleLocation(x,0,z);
     	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x,z);
+    	
+    	//Don't calculate if distance is very close to center
+    	if(target.distance(homeSection.getCenter()) <= dominanceThreshold) {
+    		return homeSection;
+    	}
     	
     	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, x, z);
     	BiomeSection mostDominant = homeSection;

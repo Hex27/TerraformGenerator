@@ -526,6 +526,16 @@ public class SimpleBlock {
      * @param rand
      * @param types
      */
+    public int LPillar(int height, Material... types) {
+        return LPillar(height, false, new Random(), types);
+    }
+
+    /**
+     * Replaces until a solid block is reached.
+     * @param height
+     * @param rand
+     * @param types
+     */
     public int LPillar(int height, Random rand, Material... types) {
         return LPillar(height, false, rand, types);
     }

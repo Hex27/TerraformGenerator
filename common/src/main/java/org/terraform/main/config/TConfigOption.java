@@ -217,7 +217,7 @@ public enum TConfigOption {
     STRUCTURES_RUINEDPORTAL_SPAWNRATIO("structures.ruinedportal.spawnratio", 0.4),
     STRUCTURES_RUINEDPORTAL_ENABLED("structures.ruinedportal.enabled", true),
     STRUCTURES_RUINEDPORTAL_COUNT_PER_MEGACHUNK("structures.ruinedportal.count-per-megachunk", 1),
-    STRUCTURES_IGLOO_SPAWNRATIO("structures.igloo.spawnratio", 0.4),
+    STRUCTURES_IGLOO_SPAWNRATIO("structures.igloo.spawnratio", 0.8),
     STRUCTURES_IGLOO_ENABLED("structures.igloo.enabled", true),
     STRUCTURES_IGLOO_COUNT_PER_MEGACHUNK("structures.igloo.count-per-megachunk", 1),
     STRUCTURES_BURIEDTREASURE_SPAWNRATIO("structures.buriedtreasure.spawnratio", 0.3),

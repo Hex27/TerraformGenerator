@@ -15,6 +15,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.structure.StructureRegistry;
+import org.terraform.utils.GenUtils;
 
 import java.util.Stack;
 
@@ -88,6 +89,7 @@ public class CheckHeightCommand extends TerraCommand {
                 .setGridBlendingFactor(2)
                 .setSmoothBlendTowardsRivers(7).getEdgeFactor(biome, x, z));
         p.sendMessage("Result Biome: " + biome);
+        p.sendMessage("Highest Ground: " + GenUtils.getHighestGround(data, x, z));
         
     }
 }

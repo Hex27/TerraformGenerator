@@ -53,6 +53,23 @@ public class MegaChunk {
         int z = GenUtils.randInt(rand, lowZ + megaChunkBlockWidth/10, highZ - megaChunkBlockWidth/10);
         return new int[]{x, z};
     }
+
+    /**
+     * @param rand
+     * @return A random pair of xz block coords within the mega chunk. This pair of coords WILL be in the middle of a chunk.
+     */
+    public int[] getRandomCenterChunkBlockCoords(Random rand) {
+        
+        int lowX = this.getLowerCornerChunkCoords()[0];
+        int lowZ = this.getLowerCornerChunkCoords()[1];
+        int highX = this.getUpperCornerChunkCoords()[0];
+        int highZ = this.getUpperCornerChunkCoords()[1];
+
+        //Pad the sides. Never generate on the side of a mega chunk.
+        int x = GenUtils.randInt(rand, lowX, highX);
+        int z = GenUtils.randInt(rand, lowZ, highZ);
+        return new int[]{x*16+7, z*16+7};
+    }
     
     public int[] getCenterBlockCoords() {
         
@@ -87,6 +104,13 @@ public class MegaChunk {
     	
     	return new int[] { coords[0] >> 4, coords[1] >> 4 };
     }
+
+    public int[] getUpperCornerBlockCoords() {
+        
+        int upperX = megaToBlockCoords(this.x) + megaChunkBlockWidth - 1;
+        int upperZ = megaToBlockCoords(this.z) + megaChunkBlockWidth - 1;
+        return new int[]{upperX, upperZ};
+    }
     
     public int[] getLowerCornerBlockCoords() {
         
@@ -105,7 +129,12 @@ public class MegaChunk {
     	
     	return new int[] { coords[0] >> 4, coords[1] >> 4 };
     }
-    
+
+    public int[] getUpperCornerChunkCoords() {
+    	int[] coords = getUpperCornerBlockCoords();
+    	
+    	return new int[] { coords[0] >> 4, coords[1] >> 4 };
+    }
     public BiomeSection getCenterBiomeSection(TerraformWorld tw) {
     	int[] coords = getCenterBiomeSectionBlockCoords();
     	return BiomeBank.getBiomeSectionFromBlockCoords(tw,coords[0],coords[1]);

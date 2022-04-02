@@ -66,7 +66,7 @@ public class SnowyTaigaHandler extends BiomeHandler {
                     }
                 }
                 if (data.getType(x, y + 1, z) == Material.AIR
-                        && data.getType(x, y, z).isSolid()) {
+                		&& GenUtils.isGroundLike(data.getType(x, y, z))) {
                     data.setType(x, y + 1, z, Material.SNOW);
                     if (data.getBlockData(x, y, z) instanceof Snowable) {
                         Snowable snowable = (Snowable) data.getBlockData(x, y, z);

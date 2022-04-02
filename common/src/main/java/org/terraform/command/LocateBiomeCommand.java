@@ -63,7 +63,7 @@ public class LocateBiomeCommand extends TerraCommand {
                 StringBuilder types = new StringBuilder();
                 boolean b = true;
 
-                for (BiomeBank type : BiomeBank.VALUES) {
+                for (BiomeBank type : BiomeBank.values()) {
                     ChatColor col = ChatColor.RED;
                     if (b) col = ChatColor.DARK_RED;
                     b = !b;

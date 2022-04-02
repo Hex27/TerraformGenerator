@@ -1,9 +1,15 @@
 package org.terraform.v1_18_R2;
 import java.lang.reflect.Field;
+import java.util.Collection;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_18_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_18_R2.generator.CustomChunkGenerator;
 import org.bukkit.entity.Player;
 import org.terraform.coregen.BlockDataFixerAbstract;
@@ -11,12 +17,16 @@ import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import net.minecraft.server.level.PlayerChunkMap;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.ChunkSection;
 import net.minecraft.world.level.chunk.IChunkAccess;
 
 public class NMSInjector extends NMSInjectorAbstract {
@@ -133,18 +143,6 @@ public class NMSInjector extends NMSInjectorAbstract {
 	public int getMaxY() {
 		return 320;
 	}
-	
-//	private static Object queryDimensionManagerPrivateField(String fieldName, DimensionManager delegate) {
-//		try {
-//			Field field = delegate.getClass().getDeclaredField(fieldName);
-//			field.setAccessible(true);
-//			return field.get(delegate);
-//		}
-//		catch(Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
 	
 	@Override
 	public void debugTest(Player p) {
