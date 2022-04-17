@@ -1,10 +1,9 @@
 package org.terraform.structure.village;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -31,26 +30,29 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
 
-        MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBiomeSectionBlockCoords();//getCoordsFromMegaChunk(tw, mc);
+        //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
+        //int[] coords = mc.getCenterBiomeSectionBlockCoords();//getCoordsFromMegaChunk(tw, mc);
         //If it is below sea level, DON'T SPAWN IT.
-        if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-            if(biome == (BiomeBank.PLAINS)
-            		|| biome == (BiomeBank.FOREST)
-            		|| biome == (BiomeBank.SAVANNA)
-            		|| biome == (BiomeBank.TAIGA)
-               		|| biome == (BiomeBank.SCARLET_FOREST)
-               		|| biome == (BiomeBank.CHERRY_GROVE)) {
+        //if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+        
+    	//Height no longer checked in the interest of speed.
+    	
+    	if(biome == (BiomeBank.PLAINS)
+        		|| biome == (BiomeBank.FOREST)
+        		|| biome == (BiomeBank.SAVANNA)
+        		|| biome == (BiomeBank.TAIGA)
+           		|| biome == (BiomeBank.SCARLET_FOREST)
+           		|| biome == (BiomeBank.CHERRY_GROVE)) {
 
-                return rollSpawnRatio(tw,chunkX,chunkZ);
-            }
+            return rollSpawnRatio(tw,chunkX,chunkZ);
         }
+        //}
         return false;
     }
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-        ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
+    	EnumSet<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 

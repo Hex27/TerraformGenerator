@@ -8,8 +8,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.BlockUtils;
-
-import java.util.Random;
+import org.terraform.utils.GenUtils;
 
 public class OreLiftSchematicParser extends SchematicParser {
 	
@@ -22,8 +21,8 @@ public class OreLiftSchematicParser extends SchematicParser {
 	
     @Override
     public void applyData(SimpleBlock block, BlockData data) {
-        if (data.getMaterial().name().endsWith("ORE")) {
-            data = Bukkit.createBlockData(BlockUtils.ores[new Random().nextInt(BlockUtils.ores.length)]);
+        if (BlockUtils.ores.contains(data.getMaterial())) {
+            data = Bukkit.createBlockData(GenUtils.randMaterial(BlockUtils.ores));
         }
         //super.applyData(block, data);
         //Override the normal way as it updates physics.

@@ -117,7 +117,6 @@ public class TerraformWorld {
      * @return
      */
     public BiomeBank getBiomeBank(int x, int z) {
-    	
         ChunkCache cache = TerraformGenerator.getCache(this, x, z);
         BiomeBank cachedValue = cache.getBiome(x, z);
         if (!BiomeBank.debugPrint && cachedValue != null) return cachedValue;

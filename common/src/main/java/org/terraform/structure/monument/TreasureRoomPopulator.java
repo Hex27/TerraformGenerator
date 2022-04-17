@@ -2,13 +2,11 @@ package org.terraform.structure.monument;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
@@ -89,7 +87,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
 
         //Spawn gold core
         try {
-            World w = ((PopulatorDataPostGen) data).getWorld();
+            //World w = ((PopulatorDataPostGen) data).getWorld();
             //Add one to all to correct some weird aligning shit.
             schema = TerraSchematic.load("monument-gold", new SimpleBlock(data,x+1,y-5,z+1));
             schema.parser = new MonumentSchematicParser();

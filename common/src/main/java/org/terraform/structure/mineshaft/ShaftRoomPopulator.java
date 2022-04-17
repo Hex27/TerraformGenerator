@@ -9,7 +9,7 @@ import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class ShaftRoomPopulator extends RoomPopulatorAbstract {
@@ -28,9 +28,7 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
                     (room.getWidthZ() - 4) / 2f,
                     new SimpleBlock(data, room.getX(), room.getY() + i, room.getZ()),
                     false,
-                    new ArrayList<Material>() {{
-                        add(Material.BARRIER);
-                    }});
+                    EnumSet.of(Material.BARRIER));
         }
 
         int[] lowerCorner = room.getLowerCorner(3);

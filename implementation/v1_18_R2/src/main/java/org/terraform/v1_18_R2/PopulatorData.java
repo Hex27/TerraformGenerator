@@ -1,5 +1,7 @@
 package org.terraform.v1_18_R2;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -38,12 +40,29 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     private final NMSChunkGenerator gen;
     GeneratorAccessSeed rlwa;
     IChunkAccess ica;
+    
+    private static final HashMap<EntityType,EntityTypes<?>> entityTypesDict = new HashMap<>();
+    
     public PopulatorData(GeneratorAccessSeed rlwa, IChunkAccess ica, NMSChunkGenerator gen, int chunkX, int chunkZ) {
         this.rlwa = rlwa;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.gen = gen;
         this.ica = ica;
+        
+        if(entityTypesDict.size() == 0) {
+        	for(EntityType type:EntityType.values()) {
+        		if(type == EntityType.ENDER_SIGNAL) continue;
+        		if(type == EntityType.UNKNOWN) continue;
+				try {
+					EntityTypes<?> et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(EntityTypeMapper.getObfsNameFromBukkitEntityType(type)).get(null);
+	        		entityTypesDict.put(type, et);
+				} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
+						| SecurityException e) {
+					e.printStackTrace();
+				}
+        	}
+        }
     }
     
     public void setRadius(int radius) {
@@ -105,7 +124,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     public int getChunkZ() {
         return chunkZ;
     }
-
+    
     @Override
     public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
     	if (Math.abs((rawX >> 4) - chunkX) > 1 || Math.abs((rawZ >> 4) - chunkZ) > 1) {
@@ -113,19 +132,17 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     		return;
     	}
 		try {
-	    	 EntityTypes<?> et;
-			et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(EntityTypeMapper.getObfsNameFromBukkitEntityType(type)).get(null);
+	    	EntityTypes<?> et = entityTypesDict.get(type);
 			Entity e = et.a(rlwa.getMinecraftWorld());
-	         //o is setPosRaw
-	         e.o((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D);
-	         if (e instanceof EntityInsentient) {
+	    	//o is setPosRaw
+	    	e.o((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D);
+	    	if (e instanceof EntityInsentient) {
 
-	             ((EntityInsentient)e).a(rlwa, rlwa.d_(new BlockPosition(rawX + 0.5D, rawY, rawZ + 0.5D)), EnumMobSpawn.n, (GroupDataEntity)null, (NBTTagCompound)null);
-	         }
-	         //b is addFreshEntity
-	         rlwa.b(e);
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e1) {
-			// TODO Auto-generated catch block
+	    		((EntityInsentient)e).a(rlwa, rlwa.d_(new BlockPosition(rawX + 0.5D, rawY, rawZ + 0.5D)), EnumMobSpawn.n, (GroupDataEntity)null, (NBTTagCompound)null);
+	    	}
+	    	//b is addFreshEntity
+	    	rlwa.b(e);
+		} catch (IllegalArgumentException | SecurityException e1) {
 			e1.printStackTrace();
 		}
          

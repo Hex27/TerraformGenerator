@@ -225,7 +225,7 @@ public enum TConfigOption {
     STRUCTURES_BURIEDTREASURE_COUNT_PER_MEGACHUNK("structures.buriedtreasure.count-per-megachunk", 2),
     STRUCTURES_MINESHAFT_ENABLED("structures.mineshaft.enabled", true),
     STRUCTURES_MINESHAFT_SPAWNRATIO("structures.mineshaft.spawnratio", 0.8),
-    STRUCTURES_MINESHAFT_MIN_Y("structures.mineshaft.min-y", 15),
+    STRUCTURES_MINESHAFT_MIN_Y("structures.mineshaft.min-y", -10),
     STRUCTURES_MINESHAFT_MAX_Y("structures.mineshaft.max-y", 30),
     STRUCTURES_CATACOMBS_ENABLED("structures.catacombs.enabled", true),
     STRUCTURES_CATACOMBS_SPAWNRATIO("structures.catacombs.spawnratio", 0.6),
@@ -343,7 +343,7 @@ public enum TConfigOption {
     //COAL
     ORE_COAL_CHANCE("ore.coal.chance-per-chunk", 50),
     ORE_COAL_VEINSIZE("ore.coal.max-vein-size", 25),
-    ORE_COAL_MAXVEINNUMBER("ore.coal.max-vein-count", 50),
+    ORE_COAL_MAXVEINNUMBER("ore.coal.max-vein-count", 115),
     ORE_COAL_COMMONSPAWNHEIGHT("ore.coal.common-spawn-height", 96),
     ORE_COAL_MAXSPAWNHEIGHT("ore.coal.max-spawn-height", 256),
     ORE_COAL_MINSPAWNHEIGHT("ore.coal.min-spawn-height", 5),
@@ -351,7 +351,7 @@ public enum TConfigOption {
     //IRON
     ORE_IRON_CHANCE("ore.iron.chance-per-chunk", 50),
     ORE_IRON_VEINSIZE("ore.iron.max-vein-size", 10),
-    ORE_IRON_MAXVEINNUMBER("ore.iron.max-vein-count", 30),
+    ORE_IRON_MAXVEINNUMBER("ore.iron.max-vein-count", 73),
     ORE_IRON_COMMONSPAWNHEIGHT("ore.iron.common-spawn-height", 16),
     ORE_IRON_MAXSPAWNHEIGHT("ore.iron.max-spawn-height", 256),
     ORE_IRON_MINSPAWNHEIGHT("ore.iron.min-spawn-height", -64),
@@ -367,7 +367,7 @@ public enum TConfigOption {
     //DIAMOND
     ORE_DIAMOND_CHANCE("ore.diamond.chance-per-chunk", 30),
     ORE_DIAMOND_VEINSIZE("ore.diamond.max-vein-size", 7),
-    ORE_DIAMOND_MAXVEINNUMBER("ore.diamond.max-vein-count", 12),
+    ORE_DIAMOND_MAXVEINNUMBER("ore.diamond.max-vein-count", 16),
     ORE_DIAMOND_COMMONSPAWNHEIGHT("ore.diamond.common-spawn-height", -64),
     ORE_DIAMOND_MAXSPAWNHEIGHT("ore.diamond.max-spawn-height", 16),
     ORE_DIAMOND_MINSPAWNHEIGHT("ore.diamond.min-spawn-height", -64),
@@ -407,7 +407,7 @@ public enum TConfigOption {
     //GRAVEL
     ORE_GRAVEL_CHANCE("ore.gravel.chance-per-chunk", 75),
     ORE_GRAVEL_VEINSIZE("ore.gravel.max-vein-size", 45),
-    ORE_GRAVEL_MAXVEINNUMBER("ore.gravel.max-vein-count", 35),
+    ORE_GRAVEL_MAXVEINNUMBER("ore.gravel.max-vein-count", 100),
     ORE_GRAVEL_COMMONSPAWNHEIGHT("ore.gravel.common-spawn-height", 255),
     ORE_GRAVEL_MAXSPAWNHEIGHT("ore.gravel.max-spawn-height", 300),
     ORE_GRAVEL_MINSPAWNHEIGHT("ore.gravel.min-spawn-height", -64),
@@ -415,7 +415,7 @@ public enum TConfigOption {
     //ANDESITE
     ORE_ANDESITE_CHANCE("ore.andesite.chance-per-chunk", 80),
     ORE_ANDESITE_VEINSIZE("ore.andesite.max-vein-size", 45),
-    ORE_ANDESITE_MAXVEINNUMBER("ore.andesite.max-vein-count", 38),
+    ORE_ANDESITE_MAXVEINNUMBER("ore.andesite.max-vein-count", 110),
     ORE_ANDESITE_COMMONSPAWNHEIGHT("ore.andesite.common-spawn-height", 255),
     ORE_ANDESITE_MAXSPAWNHEIGHT("ore.andesite.max-spawn-height", 300),
     ORE_ANDESITE_MINSPAWNHEIGHT("ore.andesite.min-spawn-height", -64),
@@ -423,7 +423,7 @@ public enum TConfigOption {
     //DIORITE
     ORE_DIORITE_CHANCE("ore.diorite.chance-per-chunk", 80),
     ORE_DIORITE_VEINSIZE("ore.diorite.max-vein-size", 45),
-    ORE_DIORITE_MAXVEINNUMBER("ore.diorite.max-vein-count", 38),
+    ORE_DIORITE_MAXVEINNUMBER("ore.diorite.max-vein-count", 110),
     ORE_DIORITE_COMMONSPAWNHEIGHT("ore.diorite.common-spawn-height", 255),
     ORE_DIORITE_MAXSPAWNHEIGHT("ore.diorite.max-spawn-height", 300),
     ORE_DIORITE_MINSPAWNHEIGHT("ore.diorite.min-spawn-height", -64),
@@ -431,7 +431,7 @@ public enum TConfigOption {
     //GRANITE
     ORE_GRANITE_CHANCE("ore.granite.chance-per-chunk", 80),
     ORE_GRANITE_VEINSIZE("ore.granite.max-vein-size", 45),
-    ORE_GRANITE_MAXVEINNUMBER("ore.granite.max-vein-count", 38),
+    ORE_GRANITE_MAXVEINNUMBER("ore.granite.max-vein-count", 110),
     ORE_GRANITE_COMMONSPAWNHEIGHT("ore.granite.common-spawn-height", 255),
     ORE_GRANITE_MAXSPAWNHEIGHT("ore.granite.max-spawn-height", 300),
     ORE_GRANITE_MINSPAWNHEIGHT("ore.granite.min-spawn-height", -64),

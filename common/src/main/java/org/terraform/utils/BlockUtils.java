@@ -35,22 +35,34 @@ import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 public class BlockUtils {
+	
+	public static void initBlockUtils() {
+		//init ores
+		for(Material mat:Material.values()) {
+    		if(mat.toString().endsWith("_ORE"))
+    			ores.add(mat);
+    	}
+		
+		//init glass panes
+    	for(Material mat:Material.values()) {
+    		if(mat.toString().endsWith("_GLASS_PANE"))
+    			glassPanes.add(mat);
+    	}
+	}
+	
     // N
     //W E
     // S
-    public static final List<BlockFace> xzPlaneBlockFaces = Arrays.asList(
+    public static final BlockFace[] xzPlaneBlockFaces = new BlockFace[] {
             BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
-    );
+    };
     
-    public static final List<Material> wetMaterials = Arrays.asList(
+    public static final EnumSet<Material> wetMaterials = EnumSet.of(
     		Material.WATER,
     		Material.KELP_PLANT,
     		Material.SEAGRASS,
@@ -75,7 +87,7 @@ public class BlockUtils {
     };
 
     public static final BlockFace[] sixBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
-    public static final Set<Material> stoneLike = EnumSet.of(
+    public static final EnumSet<Material> stoneLike = EnumSet.of(
             Material.STONE, Material.COBBLESTONE,
             Material.GRANITE, Material.ANDESITE,
             Material.DIORITE, Material.GRAVEL,
@@ -94,7 +106,7 @@ public class BlockUtils {
     
     
 
-    public static final Set<Material> badlandsStoneLike = EnumSet.of(
+    public static final EnumSet<Material> badlandsStoneLike = EnumSet.of(
             Material.STONE, Material.COBBLESTONE,
             Material.GRANITE, Material.ANDESITE,
             Material.DIORITE, Material.GRAVEL,
@@ -127,24 +139,15 @@ public class BlockUtils {
             Material.DIRT, Material.PODZOL, Material.GRASS_BLOCK, Material.MYCELIUM,
             OneOneSevenBlockHandler.ROOTED_DIRT, OneOneSevenBlockHandler.DIRT_PATH()
     );
-    public static final Material[] ores = {
-            Material.COAL_ORE, 
-            Material.IRON_ORE, 
-            Material.GOLD_ORE, 
-            Material.DIAMOND_ORE, 
-            Material.EMERALD_ORE, 
-            Material.REDSTONE_ORE, 
-            Material.LAPIS_ORE,
-            OneOneSevenBlockHandler.COPPER_ORE,
-            OneOneSevenBlockHandler.deepSlateVersion(Material.COAL_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.IRON_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.GOLD_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.DIAMOND_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.EMERALD_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.REDSTONE_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.LAPIS_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(OneOneSevenBlockHandler.COPPER_ORE),
-    };
+    
+    //Do not hardcode this.
+    public static final EnumSet<Material> ores = EnumSet.noneOf(Material.class);
+    
+    public static final EnumSet<Material> airs = EnumSet.of(Material.AIR, Material.CAVE_AIR);
+
+    //Do not hardcode this.
+    public static final EnumSet<Material> glassPanes = EnumSet.noneOf(Material.class);
+    
     private static final Material[] TALL_FLOWER = {Material.LILAC, Material.ROSE_BUSH, Material.PEONY, Material.LARGE_FERN, Material.SUNFLOWER};
     private static final Material[] FLOWER = {Material.DANDELION,
             Material.POPPY,
@@ -383,7 +386,7 @@ public class BlockUtils {
     }
 
     public static BlockFace getXZPlaneBlockFace(Random rand) {
-        return xzPlaneBlockFaces.get(rand.nextInt(8));
+        return xzPlaneBlockFaces[rand.nextInt(8)];
     }
     
     public static BlockFace getBlockFaceFromAxis(Axis ax) {
@@ -528,7 +531,7 @@ public class BlockUtils {
     }
 
     public static boolean isStoneLike(Material mat) {
-        return isDirtLike(mat) || stoneLike.contains(mat) || mat.toString().endsWith("_ORE");
+        return isDirtLike(mat) || stoneLike.contains(mat) || ores.contains(mat);
     }
 
     public static boolean isDirtLike(Material mat) {
@@ -746,7 +749,7 @@ public class BlockUtils {
     /**
      * Put barrier in toReplace to hard replace all solid blocks.
      */
-    public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, Collection<Material> toReplace) {
+    public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, EnumSet<Material> toReplace) {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             if (waterToAir || block.getType() != Material.WATER) block.setType(Material.CAVE_AIR);
@@ -911,7 +914,7 @@ public class BlockUtils {
 
     public static void correctMultifacingData(SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
-            if (Version.isAtLeast(16.1) && target.getType().name().endsWith(("_WALL"))) {
+            if (Tag.WALLS.isTagged(target.getType())) {
                 v1_16_R1_BlockDataFixer.correctSurroundingWallData(target);
             }
             return;
@@ -921,11 +924,11 @@ public class BlockUtils {
         for (BlockFace face : data.getAllowedFaces()) {
             Material type = target.getRelative(face).getType();
             boolean facing = type.isSolid()
-                    && !type.toString().endsWith("PRESSURE_PLATE")
-            		&& !type.toString().contains("BANNER")
+                    && !Tag.PRESSURE_PLATES.isTagged(type)
+            		&& !Tag.BANNERS.isTagged(type)
                     && !Tag.SLABS.isTagged(type)
                     && !Tag.TRAPDOORS.isTagged(type);
-            if(target.getType().toString().endsWith("GLASS_PANE")
+            if(glassPanes.contains(target.getType())
             		&& (Tag.FENCE_GATES.isTagged(type)
             				|| Tag.FENCES.isTagged(type)))
             	facing = false;
@@ -1114,8 +1117,8 @@ public class BlockUtils {
         BlockFace upperFace = null;
         for (BlockFace face : BlockUtils.directBlockFaces) {
             SimpleBlock relative = block.getRelative(face);
-            if (relative.getType().name().contains("RAIL")) faces.add(face);
-            if (relative.getRelative(0, 1, 0).getType().name().contains("RAIL")) upperFace = face;
+            if (Tag.RAILS.isTagged(relative.getType())) faces.add(face);
+            if (Tag.RAILS.isTagged(relative.getUp().getType())) upperFace = face;
         }
 
         if (upperFace != null) {
@@ -1217,7 +1220,7 @@ public class BlockUtils {
     }
     
     public static boolean isAir(Material mat) {
-    	return mat.toString().endsWith("AIR");
+    	return airs.contains(mat);
     }
 
     public static BlockData getRandomBarrel() {

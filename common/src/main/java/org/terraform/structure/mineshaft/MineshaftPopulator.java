@@ -21,8 +21,8 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-        MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBiomeSectionBlockCoords();
+        //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
+        //int[] coords = mc.getCenterBiomeSectionBlockCoords();
         	
 		//Do not spawn mineshafts under deep oceans, there's no space.
 		if(biome.getType() == BiomeType.DEEP_OCEANIC)
@@ -33,12 +33,13 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
 			return false;
 		
 		//Do height and space checks
-        int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
-        if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
-            //Way too little space. Abort generation.
-            //TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
-            return false;
-        }
+		//In the interest of optimisation, this check will not be performed.
+//        int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
+//        if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
+//            //Way too little space. Abort generation.
+//            //TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
+//            return false;
+//        }
 
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }
@@ -61,7 +62,9 @@ public class MineshaftPopulator extends SingleMegaChunkStructurePopulator {
         int height = HeightMap.getBlockHeight(tw, x, z);
 
         int y = GenUtils.randInt(TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(), TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt());
-
+        if(y < TerraformGeneratorPlugin.injector.getMinY())
+        	y = TerraformGeneratorPlugin.injector.getMinY() + 15;
+        
         spawnMineshaft(tw,
                 tw.getHashedRand(x, y, z, 82392812),
                 data, x, y + 1, z,

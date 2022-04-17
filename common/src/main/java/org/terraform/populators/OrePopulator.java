@@ -6,6 +6,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -81,14 +82,14 @@ public class OrePopulator {
     			//RNG determined X Y and Z within chunk
     			int x = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
             	int z = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
-            	int groundHeight = GenUtils.getHighestGround(data, x, z);
+            	//int groundHeight = GenUtils.getHighestGround(data, x, z);
             	int range = maxSpawnHeight;
             	//Low chance for ores to spawn above max range
             	//if (GenUtils.chance(random, 1, 5)) range = maxSpawnHeight;
             	
-            	
+            	//Ignore ground height and just spawn
             	//Range cannot be above ground
-            	if(range > groundHeight) range = groundHeight;
+            	//if(range > groundHeight) range = groundHeight;
             	
             	//Spawn failed.
             	if(minRange > range) continue;
@@ -118,13 +119,14 @@ public class OrePopulator {
             	//Generate ore with rough sphere size.
             	placeOre(
             			Objects.hash(world.getSeed(),x,y,z), 
-            			new SimpleBlock(data, x, y, z));
+            			data, x, y, z);
             	
     		}
     	}
     }
-
-    public void placeOre(int seed, SimpleBlock block) {
+    
+    //Don't use simpleblock to forcefully compress memory usage and GC invocations by this.
+    public void placeOre(int seed, PopulatorDataAbstract data, int coreX, int coreY, int coreZ) {
     	double size = GenUtils.randDouble(new Random(seed), minOreSize, maxOreSize);
     	//Size is the volume of the sphere, so radius is:
     	double radius = Math.pow(((3.0/4.0)*size*(1.0/Math.PI)), 1.0/3.0);
@@ -132,7 +134,7 @@ public class OrePopulator {
         if (radius <= 0 && radius <= 0 && radius <= 0) return;
         if (radius <= 0.5 && radius <= 0.5 && radius <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            block.setType(GenUtils.randMaterial(new Random(seed), type));
+            data.setType(coreX,coreY,coreZ,GenUtils.randMaterial(new Random(seed), type));
             return;
         }
         
@@ -143,26 +145,30 @@ public class OrePopulator {
         for (double x = -radius; x <= radius; x++) {
             for (double y = -radius; y <= radius; y++) {
                 for (double z = -radius; z <= radius; z++) {
-                    SimpleBlock rel = block.getRelative((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
+                    int relX = (int) Math.round(x) + coreX;
+                    int relY = (int) Math.round(y) + coreY;
+                    int relZ = (int) Math.round(z) + coreZ;
+                	//SimpleBlock rel = block.getRelative((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
                     double equationResult = Math.pow(x, 2) / Math.pow(radius,2)
                             + Math.pow(y, 2) / Math.pow(radius, 2)
                             + Math.pow(z, 2) / Math.pow(radius, 2);
-                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        if (rel.getType() == Material.STONE) {
-                            rel.setType(type);
+                    Material oreType = data.getType(relX,relY,relZ);
+                    if (equationResult <= 1 + 0.7 * noise.GetNoise(relX, relY, relZ)) {
+                        if (oreType == Material.STONE) {
+                            data.setType(relX,relY,relZ,type);
                         }
                         //1.17 behaviour
                         else if(Version.isAtLeast(17)) 
                         {
                         	//Deepslate replacing other ores
                         	if(type == OneOneSevenBlockHandler.DEEPSLATE
-                        			&& rel.getType().toString().endsWith("ORE")) {
-                        		rel.setType(OneOneSevenBlockHandler.deepSlateVersion(rel.getType()));
+                        			&& BlockUtils.ores.contains(oreType)) {
+                        		data.setType(relX,relY,relZ,OneOneSevenBlockHandler.deepSlateVersion(oreType));
                         	}
                         	//Normal ores replacing deepslate
-                        	else if(rel.getType() == OneOneSevenBlockHandler.DEEPSLATE) 
+                        	else if(oreType == OneOneSevenBlockHandler.DEEPSLATE) 
                         	{
-                        		rel.setType(OneOneSevenBlockHandler.deepSlateVersion(type));
+                        		data.setType(relX,relY,relZ,OneOneSevenBlockHandler.deepSlateVersion(type));
                         	}
                         } 
                         
@@ -171,6 +177,54 @@ public class OrePopulator {
             }
         }
     }
+
+//    public void placeOre(int seed, SimpleBlock block) {
+//    	double size = GenUtils.randDouble(new Random(seed), minOreSize, maxOreSize);
+//    	//Size is the volume of the sphere, so radius is:
+//    	double radius = Math.pow(((3.0/4.0)*size*(1.0/Math.PI)), 1.0/3.0);
+//    	
+//        if (radius <= 0 && radius <= 0 && radius <= 0) return;
+//        if (radius <= 0.5 && radius <= 0.5 && radius <= 0.5) {
+//            //block.setReplaceType(ReplaceType.ALL);
+//            block.setType(GenUtils.randMaterial(new Random(seed), type));
+//            return;
+//        }
+//        
+//        FastNoise noise = new FastNoise(seed);
+//        noise.SetNoiseType(NoiseType.Simplex);
+//        noise.SetFrequency(0.09f);
+//
+//        for (double x = -radius; x <= radius; x++) {
+//            for (double y = -radius; y <= radius; y++) {
+//                for (double z = -radius; z <= radius; z++) {
+//                    SimpleBlock rel = block.getRelative((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
+//                    double equationResult = Math.pow(x, 2) / Math.pow(radius,2)
+//                            + Math.pow(y, 2) / Math.pow(radius, 2)
+//                            + Math.pow(z, 2) / Math.pow(radius, 2);
+//                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+//                        if (rel.getType() == Material.STONE) {
+//                            rel.setType(type);
+//                        }
+//                        //1.17 behaviour
+//                        else if(Version.isAtLeast(17)) 
+//                        {
+//                        	//Deepslate replacing other ores
+//                        	if(type == OneOneSevenBlockHandler.DEEPSLATE
+//                        			&& BlockUtils.ores.contains(rel.getType())) {
+//                        		rel.setType(OneOneSevenBlockHandler.deepSlateVersion(rel.getType()));
+//                        	}
+//                        	//Normal ores replacing deepslate
+//                        	else if(rel.getType() == OneOneSevenBlockHandler.DEEPSLATE) 
+//                        	{
+//                        		rel.setType(OneOneSevenBlockHandler.deepSlateVersion(type));
+//                        	}
+//                        } 
+//                        
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 	public Material getType() {
 		return type;

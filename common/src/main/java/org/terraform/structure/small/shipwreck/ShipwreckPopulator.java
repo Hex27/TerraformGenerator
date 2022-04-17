@@ -14,7 +14,7 @@ import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
@@ -138,7 +138,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
             if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-            	ArrayList<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
+            	EnumSet<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
                 double numWet = 0;
                 double numDry = 0;
             	for(BiomeBank b:biomes)

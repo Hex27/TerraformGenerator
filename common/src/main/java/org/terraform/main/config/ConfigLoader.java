@@ -12,7 +12,7 @@ public class ConfigLoader {
 	
 	private HashMap<String, Object> configOptions = new HashMap<>();
 	private TerraformGeneratorPlugin plugin;
-	private static final int configVersion = 2;
+	private static final int configVersion = 3;
 	public ConfigLoader(TerraformGeneratorPlugin plugin){
 		this.plugin = plugin;
 		plugin.getConfig().options().copyDefaults(false);

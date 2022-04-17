@@ -38,14 +38,14 @@ public class MansionTowerStairwayPopulator extends MansionRoomPopulator {
         for (int i = 1; i < height; i++) {
             b.getRelative(0,i,0).setType(Material.STONE_BRICKS);
 
-            BlockFace face = BlockUtils.xzPlaneBlockFaces.get(bfIndex);
+            BlockFace face = BlockUtils.xzPlaneBlockFaces[bfIndex];
             Slab bottom = (Slab) Bukkit.createBlockData(Material.STONE_BRICK_SLAB);
             bottom.setType(Type.BOTTOM);
             b.getRelative(face).getRelative(0,i,0).setBlockData(bottom);
             b.getRelative(face).getRelative(0,i+1,0).Pillar(3, Material.AIR);
             bfIndex = getNextIndex(bfIndex);
 
-            face = BlockUtils.xzPlaneBlockFaces.get(bfIndex);
+            face = BlockUtils.xzPlaneBlockFaces[bfIndex];
             Slab top = (Slab) Bukkit.createBlockData(Material.STONE_BRICK_SLAB);
             top.setType(Type.TOP);
             b.getRelative(face).getRelative(0,i,0).setBlockData(top);

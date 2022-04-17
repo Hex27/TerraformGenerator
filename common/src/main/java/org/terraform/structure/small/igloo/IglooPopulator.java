@@ -1,6 +1,6 @@
 package org.terraform.structure.small.igloo;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -397,7 +397,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
             if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-            	ArrayList<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
+            	EnumSet<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
                 double suitable = 0;
                 double notsuitable = 0;
             	for(BiomeBank b:biomes)

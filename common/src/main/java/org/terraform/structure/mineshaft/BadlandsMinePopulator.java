@@ -25,9 +25,8 @@ import org.terraform.utils.GenUtils;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Random;
-import java.util.Set;
 
 public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
     static int shaftDepth = TConfigOption.STRUCTURES_BADLANDS_MINE_DEPTH.getInt();
@@ -199,7 +198,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
         BlockFace outDir = inDir.getOppositeFace();
         int shaftStart = -5;
         int supportR = 3;
-        Set<Material> toReplace = new HashSet<>(BlockUtils.badlandsStoneLike);
+        EnumSet<Material> toReplace = EnumSet.copyOf(BlockUtils.badlandsStoneLike);
         toReplace.addAll(Arrays.asList(Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                 Material.MOSSY_COBBLESTONE, Material.COBWEB, Material.MOSSY_COBBLESTONE_SLAB, Material.COBBLESTONE_SLAB));
 

@@ -244,7 +244,12 @@ public enum BiomeBank {
     public static BiomeBank calculateBiome(TerraformWorld tw, int rawX, int height, int rawZ) {
     	if(debugPrint) 
     		TerraformGeneratorPlugin.logger.info("calculateBiome called with args: " + tw.getName() + "," + rawX + "," + height + "," + rawZ);
+    	
     	BiomeBank bank = calculateHeightIndependentBiome(tw, rawX, rawZ);
+    	
+    	//Bitshift rawX and rawZ. Biome storage is done every 4 blocks,
+    	//so there's no need to recalculate for every block.
+    	//rawX = (rawX >> 2) << 2; rawZ = (rawZ >> 2) << 2;
     	
     	//locationBasedRandom  = tw.getHashedRand(rawX, 0, rawZ);
     	FastNoise beachNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_BEACH_HEIGHT, (world)->{

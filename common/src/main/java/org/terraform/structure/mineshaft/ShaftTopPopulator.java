@@ -12,7 +12,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class ShaftTopPopulator extends RoomPopulatorAbstract {
@@ -60,9 +60,7 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
                         3,
                         new SimpleBlock(data, target.getX(), room.getY(), target.getZ()),
                         false,
-                        new ArrayList<Material>() {{
-                            add(Material.BARRIER);
-                        }});
+                        EnumSet.of(Material.BARRIER));
 
                 schema = TerraSchematic.load("ore-lift", target.get().getRelative(-1, 0, -1));
                 schema.parser = new OreLiftSchematicParser();

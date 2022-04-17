@@ -25,14 +25,14 @@ public class StairwayRoomPopulator extends RoomPopulatorAbstract {
 
             //Two slab stairs
 
-            BlockFace face = BlockUtils.xzPlaneBlockFaces.get(bfIndex);
+            BlockFace face = BlockUtils.xzPlaneBlockFaces[bfIndex];
             Slab bottom = (Slab) Bukkit.createBlockData(BlockUtils.stoneBrickSlab(rand));
             bottom.setType(Type.BOTTOM);
             data.setBlockData(room.getX() + face.getModX(), room.getY() + i, room.getZ() + face.getModZ(), bottom);
 
             bfIndex = getNextIndex(bfIndex);
 
-            face = BlockUtils.xzPlaneBlockFaces.get(bfIndex);
+            face = BlockUtils.xzPlaneBlockFaces[bfIndex];
             Slab top = (Slab) Bukkit.createBlockData(BlockUtils.stoneBrickSlab(rand));
             top.setType(Type.TOP);
             data.setBlockData(room.getX() + face.getModX(), room.getY() + i, room.getZ() + face.getModZ(), top);

@@ -18,7 +18,7 @@ import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.OrePopulatorFallbackSettings;
 import org.terraform.utils.version.Version;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class TerraformPopulator {
@@ -191,7 +191,7 @@ public class TerraformPopulator {
         	amethystGeodePopulator.populate(tw, random, data);
 
         // Get all biomes in a chunk
-        ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
+        EnumSet<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 
         boolean canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
         for (BiomeBank bank : banks) {

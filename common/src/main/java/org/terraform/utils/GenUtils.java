@@ -2,6 +2,7 @@ package org.terraform.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
@@ -25,16 +26,48 @@ import com.google.common.cache.LoadingCache;
 
 public class GenUtils {
     private static final Random RANDOMIZER = new Random();
-    private static final String[] BLACKLIST_HIGHEST_GROUND = {
-            "LEAVES", "LOG",
-            "WOOD", "MUSHROOM",
-            "FENCE", "WALL",
-            "POTTED", "BRICK",
-            "CHAIN", "CORAL",
-            "POINTED_DRIPSTONE",
-            "NETHERRACK"
-    };
-    public static LoadingCache<ChunkCache, ArrayList<BiomeBank>> biomeQueryCache;
+    private static final EnumSet<Material> BLACKLIST_HIGHEST_GROUND = EnumSet.noneOf(Material.class);
+    public static void initGenUtils() {
+
+    	//Initialize highest ground blacklist
+    	for(Material mat:Material.values()) {
+    		if(mat.toString().contains("LEAVES")
+    				|| mat.toString().contains("LOG")
+    				|| mat.toString().contains("WOOD")
+    				|| mat.toString().contains("MUSHROOM")
+    				|| mat.toString().contains("FENCE")
+    				|| mat.toString().contains("WALL")
+    				|| mat.toString().contains("POTTED")
+    				|| mat.toString().contains("BRICK")
+    				|| mat.toString().contains("CHAIN")
+    				|| mat.toString().contains("CORAL")
+    				|| mat.toString().contains("POINTED_DRIPSTONE")
+    				|| mat.toString().contains("NETHERRACK")
+    				|| mat == Material.HAY_BLOCK
+    				|| mat == Material.ICE
+    				|| mat == Material.CACTUS
+    				|| mat == Material.BAMBOO
+    				|| mat == Material.BAMBOO_SAPLING
+    				|| mat == Material.IRON_BARS
+    				|| mat == Material.LANTERN
+    				//|| mat == Material.SNOW_BLOCK
+    				//|| mat == Material.PACKED_ICE
+    				//|| mat == Material.BLUE_ICE
+    				) {
+//    	    	{
+//              "LEAVES", "LOG",
+//              "WOOD", "MUSHROOM",
+//              "FENCE", "WALL",
+//              "POTTED", "BRICK",
+//              "CHAIN", "CORAL",
+//              "POINTED_DRIPSTONE",
+//              "NETHERRACK"
+//      };
+    			BLACKLIST_HIGHEST_GROUND.add(mat);
+    		}
+    	}
+    }
+    public static LoadingCache<ChunkCache, EnumSet<BiomeBank>> biomeQueryCache;
 
     public static int getSign(Random rand) {
         return rand.nextBoolean() ? 1 : -1;
@@ -78,7 +111,7 @@ public class GenUtils {
         return randInt(new Random(), 1, outOf) <= chance;
     }
 
-    public static ArrayList<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ) {
+    public static EnumSet<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ) {
         ChunkCache key = new ChunkCache(tw, chunkX, chunkZ);
         return biomeQueryCache.getUnchecked(key);
     }
@@ -185,6 +218,15 @@ public class GenUtils {
 
     public static Material randMaterial(Material... candidates) {
         return randMaterial(RANDOMIZER, candidates);
+    }
+    public static Material randMaterial(EnumSet<Material> candidates) {
+    	Material[] temp = new Material[candidates.size()];
+    	int pointer = 0;
+    	for(Material candidate:candidates) {
+    		temp[pointer] = candidate;
+    		pointer++;
+    	}
+        return randMaterial(RANDOMIZER, temp);
     }
 
     public static int[] randomSurfaceCoordinates(Random rand, PopulatorDataAbstract data) {
@@ -313,7 +355,6 @@ public class GenUtils {
         return new SimpleBlock(block.getPopData(), block.getX(), y, block.getZ());
     }
 
-    @SuppressWarnings("incomplete-switch")
 	public static boolean isGroundLike(Material mat) {
     	//Ice is considered stone-like, but not in a million years is it ground.
         if(BlockUtils.isStoneLike(mat) 
@@ -326,33 +367,21 @@ public class GenUtils {
         	return true;
 
         if(mat.isSolid()) {
-            switch(mat) {
-                case HAY_BLOCK:
-                case ICE:
-                //case PACKED_ICE:
-                //case BLUE_ICE:
-                case CACTUS:
-                case BAMBOO:
-                case BAMBOO_SAPLING:
-                case IRON_BARS:
-                case LANTERN:
-                //case SNOW_BLOCK: //This is new.
-                    return false;
-            }
             if(mat.isInteractable()) {
                 return false;
             }
             if(Tag.SLABS.isTagged(mat)) {
             	return false;
             }
-            
-            String name = mat.toString();
-            
-            for(String contains : BLACKLIST_HIGHEST_GROUND) {
-                if(name.contains(contains)) {
-                    return false;
-                }
-            }
+            if(BLACKLIST_HIGHEST_GROUND.contains(mat))
+            	return false;
+//            String name = mat.toString();
+//          
+//            for(String contains : BLACKLIST_HIGHEST_GROUND) {
+//                if(name.contains(contains)) {
+//                    return false;
+//                }
+//            }
         } else {
             return false;
         }

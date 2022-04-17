@@ -1,6 +1,6 @@
 package org.terraform.structure.small.buriedtreasure;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -85,7 +85,7 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 		MegaChunk mc = new MegaChunk(chunkX, chunkZ);
 		for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
 		    if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-		    	ArrayList<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
+		    	EnumSet<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
 		        double numBeach = 0;
 		    	for(BiomeBank b:biomes)
 		        	if(b.getType() == BiomeType.BEACH)
