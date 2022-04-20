@@ -94,6 +94,36 @@ public class OneOneSevenBlockHandler {
 	public static final Material COBBLED_DEEPSLATE_SLAB = Material.getMaterial("COBBLED_DEEPSLATE_SLAB") == null ? 
 			Material.getMaterial("COBBLESTONE_SLAB") : Material.getMaterial("COBBLED_DEEPSLATE_SLAB");
 
+	public static final Material POLISHED_DEEPSLATE = Material.getMaterial("POLISHED_DEEPSLATE") == null ? 
+			Material.getMaterial("POLISHED_ANDESITE") : Material.getMaterial("POLISHED_DEEPSLATE");
+
+	public static final Material POLISHED_DEEPSLATE_STAIRS = Material.getMaterial("POLISHED_DEEPSLATE_STAIRS") == null ? 
+			Material.getMaterial("POLISHED_ANDESITE_STAIRS") : Material.getMaterial("POLISHED_DEEPSLATE_STAIRS");
+
+	public static final Material DEEPSLATE_BRICK_STAIRS = Material.getMaterial("DEEPSLATE_BRICK_STAIRS") == null ? 
+			Material.getMaterial("POLISHED_ANDESITE_STAIRS") : Material.getMaterial("DEEPSLATE_BRICK_STAIRS");
+
+	public static final Material DEEPSLATE_BRICK_SLAB = Material.getMaterial("DEEPSLATE_BRICK_SLAB") == null ? 
+			Material.getMaterial("POLISHED_ANDESITE_SLAB") : Material.getMaterial("DEEPSLATE_BRICK_SLAB");
+
+	public static final Material DEEPSLATE_BRICKS = Material.getMaterial("DEEPSLATE_BRICKS") == null ? 
+			Material.getMaterial("STONE_BRICKS") : Material.getMaterial("DEEPSLATE_BRICKS");
+
+	public static final Material CRACKED_DEEPSLATE_BRICKS = Material.getMaterial("CRACKED_DEEPSLATE_BRICKS") == null ? 
+			Material.getMaterial("CRACKED_STONE_BRICKS") : Material.getMaterial("CRACKED_DEEPSLATE_BRICKS");
+	
+	public static final Material DEEPSLATE_BRICK_WALL = Material.getMaterial("DEEPSLATE_BRICK_WALL") == null ? 
+			Material.getMaterial("STONE_BRICK_WALL") : Material.getMaterial("DEEPSLATE_BRICK_WALL");
+	
+	public static final Material CHISELED_DEEPSLATE = Material.getMaterial("CHISELED_DEEPSLATE") == null ? 
+			Material.getMaterial("CHISELED_STONE_BRICKS") : Material.getMaterial("CHISELED_DEEPSLATE");
+	
+	public static final Material DEEPSLATE_TILES = Material.getMaterial("DEEPSLATE_TILES") == null ? 
+			Material.getMaterial("STONE_BRICKS") : Material.getMaterial("DEEPSLATE_TILES");
+	
+	public static final Material DEEPSLATE_TILE_STAIRS = Material.getMaterial("DEEPSLATE_TILE_STAIRS") == null ? 
+			Material.getMaterial("STONE_BRICK_STAIRS") : Material.getMaterial("DEEPSLATE_TILE_STAIRS");
+
 	public static final Material COPPER_ORE = Material.getMaterial("COPPER_ORE") == null ? 
 			Material.getMaterial("STONE") : Material.getMaterial("COPPER_ORE");
 

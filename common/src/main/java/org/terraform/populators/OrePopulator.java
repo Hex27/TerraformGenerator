@@ -3,7 +3,6 @@ package org.terraform.populators;
 import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
@@ -177,54 +176,6 @@ public class OrePopulator {
             }
         }
     }
-
-//    public void placeOre(int seed, SimpleBlock block) {
-//    	double size = GenUtils.randDouble(new Random(seed), minOreSize, maxOreSize);
-//    	//Size is the volume of the sphere, so radius is:
-//    	double radius = Math.pow(((3.0/4.0)*size*(1.0/Math.PI)), 1.0/3.0);
-//    	
-//        if (radius <= 0 && radius <= 0 && radius <= 0) return;
-//        if (radius <= 0.5 && radius <= 0.5 && radius <= 0.5) {
-//            //block.setReplaceType(ReplaceType.ALL);
-//            block.setType(GenUtils.randMaterial(new Random(seed), type));
-//            return;
-//        }
-//        
-//        FastNoise noise = new FastNoise(seed);
-//        noise.SetNoiseType(NoiseType.Simplex);
-//        noise.SetFrequency(0.09f);
-//
-//        for (double x = -radius; x <= radius; x++) {
-//            for (double y = -radius; y <= radius; y++) {
-//                for (double z = -radius; z <= radius; z++) {
-//                    SimpleBlock rel = block.getRelative((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
-//                    double equationResult = Math.pow(x, 2) / Math.pow(radius,2)
-//                            + Math.pow(y, 2) / Math.pow(radius, 2)
-//                            + Math.pow(z, 2) / Math.pow(radius, 2);
-//                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-//                        if (rel.getType() == Material.STONE) {
-//                            rel.setType(type);
-//                        }
-//                        //1.17 behaviour
-//                        else if(Version.isAtLeast(17)) 
-//                        {
-//                        	//Deepslate replacing other ores
-//                        	if(type == OneOneSevenBlockHandler.DEEPSLATE
-//                        			&& BlockUtils.ores.contains(rel.getType())) {
-//                        		rel.setType(OneOneSevenBlockHandler.deepSlateVersion(rel.getType()));
-//                        	}
-//                        	//Normal ores replacing deepslate
-//                        	else if(rel.getType() == OneOneSevenBlockHandler.DEEPSLATE) 
-//                        	{
-//                        		rel.setType(OneOneSevenBlockHandler.deepSlateVersion(type));
-//                        	}
-//                        } 
-//                        
-//                    }
-//                }
-//            }
-//        }
-//    }
 
 	public Material getType() {
 		return type;

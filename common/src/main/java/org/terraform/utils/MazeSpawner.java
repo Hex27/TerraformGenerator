@@ -142,7 +142,7 @@ public class MazeSpawner {
             int realWorldX = cell.x * (mazePathWidth + mazePeriod);
             int realWorldZ = cell.z * (mazePathWidth + mazePeriod);
             Wall cellCore = new Wall(core.getRelative(realWorldX, 0, realWorldZ));
-            pathPopDatas.add(new PathPopulatorData(cellCore.getRelative(0, -1, 0).get(), BlockFace.UP, mazePathWidth));
+            pathPopDatas.add(new PathPopulatorData(cellCore.getRelative(0, -1, 0).get(), BlockFace.UP, mazePathWidth, false));
 
             //Carve 1 cell
             for (int nx = -cellRadius; nx <= cellRadius; nx++) {
@@ -166,7 +166,7 @@ public class MazeSpawner {
                 //Carve Pathway
                 if (wallllllllless.contains(dir)) {
                     for (int i = 0; i < Math.ceil(((float) this.mazePeriod) / 2.0f); i++) {
-                        pathPopDatas.add(new PathPopulatorData(startPoint.getRelative(0, -1, 0).get(), dir, mazePathWidth));
+                        pathPopDatas.add(new PathPopulatorData(startPoint.getRelative(0, -1, 0).get(), dir, mazePathWidth, false));
 
                         startPoint.Pillar(mazeHeight, rand, Material.CAVE_AIR);
                         if (covered) {

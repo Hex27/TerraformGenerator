@@ -76,6 +76,10 @@ public class SimpleBlock {
         //this.data = b.getBlockData().getAsString();
     }
     
+    public SimpleLocation getLoc() {
+    	return new SimpleLocation(x,y,z);
+    }
+    
     public SimpleBlock getAtY(int y) {
     	return new SimpleBlock(popData,x,y,z);
     }
@@ -484,6 +488,25 @@ public class SimpleBlock {
         for (int i = 0; i < height; i++) {
             this.getRelative(0, i, 0).setType(GenUtils.randMaterial(rand, types));
         }
+    }
+    
+    /**
+     * Replaces the block's material with either air or water or lava depending
+     * on the block's surrounding fluid (same y).
+     */
+    public void fluidize()
+    {
+    	Material fluid = Material.AIR;
+    	if(!BlockUtils.isWet(this))
+	    	for(BlockFace face:BlockUtils.directBlockFaces) {
+	    		if(getRelative(face).getType() == Material.WATER)
+	    			fluid = Material.WATER;
+	    		else if(getRelative(face).getType() == Material.LAVA)
+	    			fluid = Material.LAVA;
+	    	}
+    	else
+    		fluid = Material.WATER;
+    	setType(fluid);
     }
     
     /**

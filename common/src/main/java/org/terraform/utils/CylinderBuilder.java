@@ -24,12 +24,18 @@ public class CylinderBuilder {
 	private Material[] types;
 	private Material[] upperType;
 	private Material[] lowerType;
+	private float noiseMagnitude = 0.7f;
 	
 	public CylinderBuilder(Random random, SimpleBlock core, Material... types) {
 		this.random = random;
 		this.seed = random.nextInt(99999999);
 		this.types = types;
 		this.core = core;
+	}
+	
+	public CylinderBuilder setNoiseMagnitude(float mag) {
+		this.noiseMagnitude = mag;
+		return this;
 	}
 	
 	public CylinderBuilder setUpperType(Material... upperType) {
@@ -104,9 +110,14 @@ public class CylinderBuilder {
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(effectiveY, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
-                    double radius = 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
-                    if(radius < minRadius) radius = minRadius;
-                    if (equationResult <= radius) {
+                    double noiseFuzz;
+                    if(noiseMagnitude > 0)
+                    	noiseFuzz = 1 + noiseMagnitude * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
+                    else
+                    	noiseFuzz = 1;
+                    
+                    if(noiseFuzz < minRadius) noiseFuzz = minRadius;
+                    if (equationResult <= noiseFuzz) {
                         unitReplace(rel);
                     }
                 }

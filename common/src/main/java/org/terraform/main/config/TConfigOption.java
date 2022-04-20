@@ -233,6 +233,7 @@ public enum TConfigOption {
     STRUCTURES_CATACOMBS_MAX_LEVELS("structures.catacombs.max-levels", 5),
     STRUCTURES_CATACOMBS_MIN_Y("structures.catacombs.min-y", 0),
     STRUCTURES_CATACOMBS_MAX_Y("structures.catacombs.max-y", 30),
+    STRUCTURES_ANCIENTCITY_ENABLED("structures.ancientcity.enabled", true),
     STRUCTURES_LARGECAVE_ENABLED("structures.largecave.enabled", true),
     STRUCTURES_LARGECAVE_SPAWNRATIO("structures.largecave.spawnratio", 0.8),
     STRUCTURES_BADLANDS_MINE_ENABLED("structures.badlands-mine.enabled", true),

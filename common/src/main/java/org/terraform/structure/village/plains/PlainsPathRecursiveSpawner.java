@@ -291,7 +291,7 @@ public class PlainsPathRecursiveSpawner {
         //Populate pathways
         for (SimpleLocation loc : path.keySet()) {
             if (pathPop != null) {
-                pathPop.populate(new PathPopulatorData(new SimpleBlock(core.getPopData(), loc.getX(), loc.getY(), loc.getZ()), path.get(loc), 3));
+                pathPop.populate(new PathPopulatorData(new SimpleBlock(core.getPopData(), loc.getX(), loc.getY(), loc.getZ()), path.get(loc), 3, false));
             }
         }
 

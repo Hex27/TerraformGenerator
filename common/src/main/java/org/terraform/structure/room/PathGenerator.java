@@ -65,6 +65,18 @@ public class PathGenerator {
     public void die() {
         this.dead = true;
         wall();
+        
+        PathPopulatorData candidate = new PathPopulatorData(base, dir, pathWidth, false);
+        candidate.isEnd = true;
+        //Prevent overlapping - path populators don't need to rerun against the same locations
+        if(!path.contains(candidate))
+	        path.add(candidate);
+        else
+        {
+        	path.remove(candidate);
+        	candidate.isOverlapped = true;
+        	path.add(candidate);
+        }
     }
 
     public void populate() {
@@ -87,6 +99,7 @@ public class PathGenerator {
         }
 
         // Make a turn if out of bounds
+        BlockFace oldDir = dir;
         while (isOutOfBounds(base.getRelative(dir))) {
             straightInARow = 0;
 
@@ -99,7 +112,7 @@ public class PathGenerator {
             }
             for (int i = 0; i < cover; i++)
                 base = base.getRelative(dir.getOppositeFace());
-
+            //turn
             dir = BlockUtils.getTurnBlockFace(rand, dir);
         }
 
@@ -117,7 +130,7 @@ public class PathGenerator {
             }
             for (int i = 0; i < cover; i++)
                 base = base.getRelative(dir.getOppositeFace());
-
+            //turn
             dir = BlockUtils.getTurnBlockFace(rand, dir);
         }
 
@@ -127,7 +140,19 @@ public class PathGenerator {
         }
 
         /// Handle populating the paths
-        path.add(new PathPopulatorData(base, dir, pathWidth));
+        PathPopulatorData candidate = new PathPopulatorData(base, dir, pathWidth, oldDir != dir);
+        
+        //Prevent overlapping - path populators don't need to rerun against the same locations
+        if(!path.contains(candidate))
+	        path.add(candidate);
+        else
+        {
+        	path.remove(candidate);
+        	candidate.isOverlapped = true;
+        	path.add(candidate);
+        }
+        
+        oldDir = dir;
         base = base.getRelative(dir);
         length++;
     }
@@ -145,7 +170,6 @@ public class PathGenerator {
                 for (int h = 1; h <= pathHeight; h++)
                     if (rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
                         rel.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
-
             }
         }
     }
@@ -173,11 +197,7 @@ public class PathGenerator {
                 } else { //Air in hallway (And floor and ceiling)
                     if (rel.getType() != Material.CAVE_AIR)
                         rel.setType(GenUtils.randMaterial(mat));
-//					rel.getRelative(0,1,0).setType(Material.CAVE_AIR);
-//					rel.getRelative(0,2,0).setType(Material.CAVE_AIR);
-//					rel.getRelative(0,3,0).setType(Material.CAVE_AIR);
-//					if(rel.getRelative(0,4,0).getType() != Material.CAVE_AIR)
-//						rel.getRelative(0,4,0).setType(GenUtils.randMaterial(mat));
+                    
                     w = new Wall(rel).getRelative(0, 1, 0);
                     w.Pillar(pathHeight, rand, Material.CAVE_AIR);
                     if (rel.getRelative(0, pathHeight + 1, 0).getType() != Material.CAVE_AIR)
@@ -201,7 +221,7 @@ public class PathGenerator {
         for (int i = 0; i < length; i++) {
             if (!populator.customCarve(start, direction, pathWidth)) setHall();
             start = start.getRelative(direction);
-            pathPopulatorDatas.add(new PathPopulatorData(start, direction, pathWidth));
+            pathPopulatorDatas.add(new PathPopulatorData(start, direction, pathWidth, false));
         }
 
         if (populator != null) {
