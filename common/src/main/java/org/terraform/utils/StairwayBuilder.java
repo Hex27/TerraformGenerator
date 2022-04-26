@@ -19,8 +19,10 @@ public class StairwayBuilder {
 	private BlockFace stairDirection = BlockFace.DOWN;
 	private Material[] downTypes;
 	private boolean stopAtWater = false;
+	private int stopAtY = Short.MIN_VALUE;
 	private boolean angled = false;
 	private int maxExtensionForward = 10;
+	private boolean upwardsCarveUntilNotSolid = true;
 	
 	public StairwayBuilder(Material... stairTypes) {
 		this.stairTypes = stairTypes;
@@ -37,6 +39,16 @@ public class StairwayBuilder {
 		for(int i = 0; i < downTypes.size(); i++)
 			this.downTypes[i] = downTypes.get(i);
 		
+	}
+	
+	public StairwayBuilder setStopAtY(int y) {
+		this.stopAtY = y;
+		return this;
+	}
+
+	public StairwayBuilder setUpwardsCarveUntilNotSolid(boolean carve) {
+		this.upwardsCarveUntilNotSolid = carve;
+		return this;
 	}
 	
 	public StairwayBuilder setDownTypes(Material... mat) {
@@ -129,14 +141,25 @@ public class StairwayBuilder {
     }
 	
 	private boolean continueCondition(Wall target) {
+		
 		if(this.stairDirection == BlockFace.DOWN) {
+			if(stopAtY != Short.MIN_VALUE)
+				if(target.getY() == stopAtY) return false;
+			
 			if(stopAtWater && BlockUtils.isWet(target.get()))
 				return false;
 			
 			return !target.getType().isSolid();
-		}else {			
+		}else { 
+			if(stopAtY != Short.MIN_VALUE)
+				if(target.getY() == stopAtY+1) 
+					return false;
+
 			//Continue carving upwards until the area isn't solid anymore.
-			return target.getType().isSolid();
+			if (upwardsCarveUntilNotSolid)
+				return target.getType().isSolid();
+			
+			return true;
 		}
 	}
 

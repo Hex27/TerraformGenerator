@@ -101,7 +101,7 @@ public class CubeRoom {
         if (pop != null) pop.populate(data, this);
     }
 
-    public void fillRoom(PopulatorDataAbstract data, Material[] mat) {
+    public void fillRoom(PopulatorDataAbstract data, Material... mat) {
         fillRoom(data, -1, mat, Material.AIR);
     }
 

@@ -39,16 +39,24 @@ public class PathPopulatorData {
             return 0; //BlockFace was not NSEW
         }
     }
-    
-    @Override
-    public boolean equals(Object obj) {
-    	if(!(obj instanceof PathPopulatorData)) return false;
-    	
-    	return ((PathPopulatorData) obj).base.equals(obj);
-    }
-    
+
     @Override
     public int hashCode() {
-    	return base.hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + base.getX();
+        result = prime * result + base.getY();
+        result = prime * result + base.getZ();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof PathPopulatorData)) return false;
+        PathPopulatorData other = (PathPopulatorData) obj;
+        return base.getX() == other.base.getX() 
+        		&& base.getZ() == other.base.getZ() 
+        		&& base.getY() == other.base.getY();
     }
 }

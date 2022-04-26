@@ -8,12 +8,13 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 public class PathGenerator {
     private final int[] upperBound;
     private final int[] lowerBound;
-    ArrayList<PathPopulatorData> path = new ArrayList<>();
+    HashSet<PathPopulatorData> path = new HashSet<>();
     PathPopulatorAbstract populator;
     Random rand;
     Material[] mat;
@@ -98,40 +99,44 @@ public class PathGenerator {
             return;
         }
 
-        // Make a turn if out of bounds
         BlockFace oldDir = dir;
-        while (isOutOfBounds(base.getRelative(dir))) {
-            straightInARow = 0;
+        //Only turn if the path is turning at a nice degree
+        //This should prevent weird intersections.
+        if(length % (1+2*this.pathWidth) == 0) {
+            // Make a turn if out of bounds
+            while (isOutOfBounds(base.getRelative(dir))) {
+                straightInARow = 0;
 
-            //For ensuring that corners are covered.
-            int cover = this.pathWidth - 1;
-            if (cover == 0) cover = 1;
-            for (int i = 0; i < cover; i++) {
-                setHall();
-                base = base.getRelative(dir);
+                //For ensuring that corners are covered.
+                int cover = this.pathWidth - 1;
+                if (cover == 0) cover = 1;
+                for (int i = 0; i < cover; i++) {
+                    setHall();
+                    base = base.getRelative(dir);
+                }
+                for (int i = 0; i < cover; i++)
+                    base = base.getRelative(dir.getOppositeFace());
+                //turn
+                dir = BlockUtils.getTurnBlockFace(rand, dir);
             }
-            for (int i = 0; i < cover; i++)
-                base = base.getRelative(dir.getOppositeFace());
-            //turn
-            dir = BlockUtils.getTurnBlockFace(rand, dir);
-        }
 
-        // Make a turn if too long
-        straightInARow++;
-        if (straightInARow > maxNoBend || GenUtils.chance(rand, 1, 500)) {
-            straightInARow = 0;
+            // Make a turn if too long
+            straightInARow++;
+            if (straightInARow > maxNoBend || GenUtils.chance(rand, 1, 500)) {
+                straightInARow = 0;
 
-            //For ensuring that corners are covered
-            int cover = this.pathWidth - 1;
-            if (cover == 0) cover = 1;
-            for (int i = 0; i < cover; i++) {
-                setHall();
-                base = base.getRelative(dir);
+                //For ensuring that corners are covered
+                int cover = this.pathWidth - 1;
+                if (cover == 0) cover = 1;
+                for (int i = 0; i < cover; i++) {
+                    setHall();
+                    base = base.getRelative(dir);
+                }
+                for (int i = 0; i < cover; i++)
+                    base = base.getRelative(dir.getOppositeFace());
+                //turn
+                dir = BlockUtils.getTurnBlockFace(rand, dir);
             }
-            for (int i = 0; i < cover; i++)
-                base = base.getRelative(dir.getOppositeFace());
-            //turn
-            dir = BlockUtils.getTurnBlockFace(rand, dir);
         }
 
         // Carve

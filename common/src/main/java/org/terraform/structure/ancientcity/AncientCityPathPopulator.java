@@ -9,6 +9,7 @@ import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomLayoutGenerator;
@@ -18,15 +19,16 @@ import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 public class AncientCityPathPopulator extends PathPopulatorAbstract {
 	
-	private int state = 0;
+	//private int state = 0;
     private final Random rand;
     private final RoomLayoutGenerator gen;
-    private ArrayList<SimpleLocation> occupied;
-    public AncientCityPathPopulator(Random rand, RoomLayoutGenerator gen, ArrayList<SimpleLocation> occupied) {
+    private HashSet<SimpleLocation> occupied;
+    public AncientCityPathPopulator(Random rand, RoomLayoutGenerator gen, HashSet<SimpleLocation> occupied) {
         this.rand = rand;
         this.gen = gen;
         this.occupied = occupied;
@@ -36,12 +38,16 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     public void populate(PathPopulatorData ppd) {
         Wall core = new Wall(ppd.base, ppd.dir);
         
+        //Do not populate in rooms.
+        if(gen.isInRoom(new int[] {ppd.base.getX(), ppd.base.getZ()}))
+        	return;
+        
         if(ppd.isTurn) { //Turn area
         	for(int nx = -1; nx <= 1; nx++)
         		for(int nz = -1; nz <= 1; nz++) {
         			core.getRelative(nx,0,nz).setType(Material.GRAY_WOOL);
         		}
-        	placeSupportPillar(core.getDown());
+        	AncientCityUtils.placeSupportPillar(core.getDown());
     		
         	for(BlockFace face:BlockUtils.directBlockFaces)
         	{
@@ -64,10 +70,22 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         	.setFacing(BlockUtils.getRight(ppd.dir))
         	.lapply(core.getLeft(2));
         	
+        	int state;
+        	if(ppd.dir == BlockFace.NORTH)
+        		state = (-1*core.getZ()) % 9;
+        	else if(ppd.dir == BlockFace.SOUTH)
+        		state = core.getZ() % 9;
+        	else if(ppd.dir == BlockFace.EAST)
+        		state = core.getX() % 9;
+        	else //if(ppd.dir == BlockFace.WEST)
+        		state = (-1*core.getX()) % 9;
+        	
+        	if(state < 0) state += 9;
+        	
             if(!ppd.isOverlapped) {
-            	placeWallArc(core,state%9);
+            	placeWallArc(core,state);
             }
-            state++;
+            //state++;
         }
         else { //End
         	AncientCityPathMiniRoomPlacer.placeAltar(core, rand);
@@ -75,12 +93,14 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     }
     
     private void placeWallArc(Wall core, int state) {
-    	if(occupied.contains(core.getLoc())) return;
+    	if(occupied.contains(core.getLoc())) 
+    		return;
     	
 		occupied.add(core.getLoc());
 		
 		BlockFace pathFacing = core.getDirection();
 		if(state > 4) pathFacing = core.getDirection().getOppositeFace();
+		
 		//0 is center
 		//1, 8 is the segment closest to center
 		//2, 7 is next closest
@@ -88,6 +108,10 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 		//4, 5 is the sides (highest point in the arc)
     	switch(state) {
     	case 0:
+    		//Debug arrow
+//    		core.getUp().setType(Material.RED_WOOL);
+//    		core.getUp().getRear().getLeft().setType(Material.RED_WOOL);
+//    		core.getUp().getRear().getRight().setType(Material.RED_WOOL);
         	//Middle of the arc.
     		core.getUp(6).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
     		core.getUp(5).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
@@ -96,7 +120,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     		core.getUp(4).lsetBlockData(lantern);
 			
     		//Support pillar
-    		placeSupportPillar(core.getDown());
+    		AncientCityUtils.placeSupportPillar(core.getDown());
     		
     		//Mirror the sides to create the arc in the middle
     		for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
@@ -136,6 +160,11 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     			new SlabBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB)
     			.setType(Type.TOP)
     			.lapply(core.getRelative(leftRight,2).getDown());
+    			
+//    			if(pathFacing == core.getDirection())
+//    				core.getUp().setType(Material.BLUE_WOOL);
+//    			else
+//    				core.getUp().setType(Material.GREEN_WOOL);
     			
     			//Stairs that complete the arc
     			new StairBuilder(OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
@@ -200,21 +229,9 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 				.lapply(core.getRelative(leftRight, 2).getUp(6));
 			}
     		break;
-    	}
-    }
-    
-    private void placeSupportPillar(Wall w) {
-    	Random dud = new Random();
-    	w.getUp().lsetType(Material.GRAY_WOOL);
-    	w.downUntilSolid(dud, OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
-    	for(BlockFace face:BlockUtils.directBlockFaces)
-        	w.getRelative(face).downUntilSolid(dud, OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
-    	
-    	for(BlockFace face:BlockUtils.xzDiagonalPlaneBlockFaces)
-    	{
-        	int height = w.getRelative(face).downUntilSolid(dud, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
-        	w.getRelative(face).getUp().lsetType(Material.GRAY_WOOL);
-        	w.getRelative(face).getDown(height-1).CorrectMultipleFacing(height);
+		default:
+			TerraformGeneratorPlugin.logger.info("Ancient City Populator: Irregular path state: " + state);
+			break;
     	}
     }
 

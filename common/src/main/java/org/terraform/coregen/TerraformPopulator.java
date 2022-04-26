@@ -165,9 +165,8 @@ public class TerraformPopulator {
     		for(OrePopulator orePop:ORE_POPS) { 
     			if(orePop != null)
 	    			if(orePop.getMinRange() <= 0) { //Not configured for min height
-	    				TerraformGeneratorPlugin.logger.stdout("&cOres were configured to use Y <= 0! Reverting ore configuration to hardcoded 1.16 values.");
+	    				TerraformGeneratorPlugin.logger.stdout("&c" + orePop.getType().toString() + " was configured to use Y <= 0! Reverting ore configuration to hardcoded 1.16 values.");
 	    				repairOreSettings = true;
-	    				break;
 	    			}
     		}
     		if(repairOreSettings)

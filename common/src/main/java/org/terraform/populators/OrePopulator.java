@@ -41,7 +41,7 @@ public class OrePopulator {
         this.maxSpawnHeight = maxSpawnHeight;
         this.requiredBiomes = requiredBiomes;
         this.ignorePeakSpawnChance = ignorePeakSpawnChance;
-        this.minRange = TerraformGeneratorPlugin.injector.getMinY();
+        this.minRange = TerraformGeneratorPlugin.injector.getMinY()+1;
         this.maxDistance = Math.max(Math.abs(minRange - peakSpawnChanceHeight), Math.abs(maxSpawnHeight - peakSpawnChanceHeight));
     }
 
@@ -59,7 +59,7 @@ public class OrePopulator {
         this.maxSpawnHeight = maxSpawnHeight;
         this.requiredBiomes = requiredBiomes;
         this.ignorePeakSpawnChance = ignorePeakSpawnChance;
-        this.minRange = TerraformGeneratorPlugin.injector.getMinY();
+        //this.minRange = TerraformGeneratorPlugin.injector.getMinY()+1;
         this.maxDistance = Math.max(Math.abs(minRange - peakSpawnChanceHeight), Math.abs(maxSpawnHeight - peakSpawnChanceHeight));
     }
     

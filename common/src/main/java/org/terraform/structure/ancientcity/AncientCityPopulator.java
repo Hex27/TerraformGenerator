@@ -9,12 +9,14 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
+import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
@@ -75,18 +77,23 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
     	TerraformGeneratorPlugin.logger.info("Spawning ancient city at: " + x + "," + z);
     	
         //Level One
-    	ArrayList<SimpleLocation> occupied = new ArrayList<>();
+    	HashSet<SimpleLocation> occupied = new HashSet<>();
         Random hashedRand = tw.getHashedRand(x, y, z);
-        RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 10, x, y, z, 150);
+        RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 20, x, y, z, 120);
         gen.setPathPopulator(new AncientCityPathPopulator(tw.getHashedRand(x, y, z, 2), gen, occupied));
-        gen.setRoomMaxX(17);
-        gen.setRoomMaxZ(17);
-        gen.setRoomMinX(13);
-        gen.setRoomMinZ(13);
+        gen.setRoomMaxX(20);
+        gen.setRoomMaxZ(20);
+        gen.setRoomMinX(16);
+        gen.setRoomMinZ(16);
         
-        //gen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
+        gen.registerRoomPopulator(new AncientCityRuinsPlatform(gen, random, false, false));
         //gen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
 
+        //Forcefully place the center platform in the middle
+        CubeRoom room = new CubeRoom(50, 50, 40, x,y,z);
+        room.setRoomPopulator(new AncientCityCenterPlatformPopulator(gen, random, true, true));
+        gen.getRooms().add(room);
+        
         gen.setCarveRooms(true);
         
         gen.generate();

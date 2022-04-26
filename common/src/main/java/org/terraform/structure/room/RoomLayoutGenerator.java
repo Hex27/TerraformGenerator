@@ -2,6 +2,7 @@ package org.terraform.structure.room;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -9,13 +10,17 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
 public class RoomLayoutGenerator {
-    private final ArrayList<CubeRoom> rooms = new ArrayList<>();
+	
+	private final HashSet<PathGenerator> pathGens = new HashSet<>();
+	private final HashSet<PathPopulatorData> pathPopulators = new HashSet<>();
+    private final HashSet<CubeRoom> rooms = new HashSet<>();
     private final int[] upperBound;
     private final int[] lowerBound;
     private final ArrayList<RoomPopulatorAbstract> roomPops = new ArrayList<>();
@@ -29,7 +34,7 @@ public class RoomLayoutGenerator {
     private Random rand;
     
     //Range refers to the width of the room placement area.
-    //Note that only room central points follow rangem so it's possible
+    //Note that only room central points follow range so it's possible
     //for a room's area to exceed this range.
     private int range;
     private PathPopulatorAbstract pathPop;
@@ -270,7 +275,7 @@ public class RoomLayoutGenerator {
      * @param mat
      */
     public void fill(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
-        ArrayList<PathGenerator> pathGens = new ArrayList<>();
+        //ArrayList<PathGenerator> pathGens = new ArrayList<>();
         //Carve Pathways
         if (genPaths) {
             if (mazePathGenerator != null) {
@@ -287,7 +292,12 @@ public class RoomLayoutGenerator {
                 mazePathGenerator.carveMaze(false, mat);
             } else
                 for (CubeRoom room : rooms) {
-                    SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
+                    SimpleBlock base = new SimpleBlock(
+                    		data, 
+                    		room.getX() + room.getX() % (pathPop.getPathWidth()*2+1), 
+                    		room.getY(), 
+                    		room.getZ() + room.getZ() % (pathPop.getPathWidth()*2+1)
+            		);
                     PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
                     if (pathPop != null) gen.setPopulator(pathPop);
                     while (!gen.isDead()) {
@@ -315,6 +325,7 @@ public class RoomLayoutGenerator {
             }
         } else {
             for (PathGenerator pGen : pathGens) {
+            	//TerraformGeneratorPlugin.logger.info("pathgen");
                 pGen.populate();
             }
         }
@@ -326,7 +337,7 @@ public class RoomLayoutGenerator {
     }
 
     public void fillPathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
-        ArrayList<PathGenerator> pathGens = new ArrayList<>();
+        //ArrayList<PathGenerator> pathGens = new ArrayList<>();
         if (genPaths)
             for (CubeRoom room : rooms) {
                 SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
@@ -403,7 +414,7 @@ public class RoomLayoutGenerator {
     /**
      * @return the rooms
      */
-    public ArrayList<CubeRoom> getRooms() {
+    public HashSet<CubeRoom> getRooms() {
         return rooms;
     }
 
@@ -533,6 +544,14 @@ public class RoomLayoutGenerator {
     public void setMazePathGenerator(MazeSpawner mazePathGenerator) {
         this.mazePathGenerator = mazePathGenerator;
     }
-
+    
+    public HashSet<PathPopulatorData> getPathPopulators(){
+    	if(this.pathPopulators.isEmpty()) {
+    		for(PathGenerator pGen:this.pathGens) {
+    			this.pathPopulators.addAll(pGen.path);
+    		}
+    	}
+    	return this.pathPopulators;
+    }
 
 }

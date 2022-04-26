@@ -280,8 +280,9 @@ public class SimpleBlock {
         //Setting leaves with setType will be persistent
         if (Tag.LEAVES.isTagged(type)) {
             //if (type.toString().contains("LEAVES")) {
-            Leaves l = (Leaves) Bukkit.createBlockData(type);
-            l.setPersistent(true);
+            BlockData l = Bukkit.createBlockData(type);
+            if(l instanceof Leaves)
+            ((Leaves) l).setPersistent(true);
 
             setBlockData(l);
         }
