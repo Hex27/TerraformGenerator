@@ -100,7 +100,10 @@ public class TerraformGenerator extends ChunkGenerator {
     @SuppressWarnings("deprecation")
     @Override
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biome) {
-        ChunkData chunk = createChunkData(world, chunkX, chunkZ);
+        //Tick the server watchdog to avoid server termination
+    	TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
+    	
+    	ChunkData chunk = createChunkData(world, chunkX, chunkZ);
         TerraformWorld tw = TerraformWorld.get(world);
         
         //Patch for WorldInitEvent issues.

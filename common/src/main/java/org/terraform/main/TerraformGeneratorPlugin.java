@@ -28,6 +28,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.bstats.TerraformGeneratorMetricsHandler;
 import org.terraform.utils.version.Version;
+import org.terraform.watchdog.TfgWatchdogSuppressant;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -46,6 +47,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     public static final PrivateFieldHandler privateFieldHandler;
     public static NMSInjectorAbstract injector;
     private static TerraformGeneratorPlugin instance;
+    public static TfgWatchdogSuppressant watchdogSuppressant;
     
     private ConfigLoader config;
     private LanguageManager lang;
@@ -100,9 +102,9 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
                     }
                 });
         
-        
         LangOpt.init(this);
         logger = new TLogger();
+        watchdogSuppressant = new TfgWatchdogSuppressant();
         new TerraformGeneratorMetricsHandler(this); //bStats
         
         TerraformGenerator.updateSeaLevelFromConfig();

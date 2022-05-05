@@ -159,6 +159,7 @@ public enum TConfigOption {
     MISC_USE_SLABS_TO_SMOOTH("misc.use-slabs-to-smooth-terrain", true),
     
     //-=[DEVSTUFF]=-
+    DEVSTUFF_SUPPRESS_WATCHDOG("dev-stuff.suppress-watchdog",true),
     DEVSTUFF_CHUNKCACHE_SIZE("dev-stuff.chunk-cache-size", 6000),
     DEVSTUFF_CHUNKBIOMES_SIZE("dev-stuff.biomecache-size", 3000),
     //DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
