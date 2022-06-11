@@ -120,6 +120,9 @@ public class OneOneSevenBlockHandler {
 	
 	public static final Material DEEPSLATE_TILES = Material.getMaterial("DEEPSLATE_TILES") == null ? 
 			Material.getMaterial("STONE_BRICKS") : Material.getMaterial("DEEPSLATE_TILES");
+
+	public static final Material CRACKED_DEEPSLATE_TILES = Material.getMaterial("CRACKED_DEEPSLATE_TILES") == null ? 
+			Material.getMaterial("STONE_BRICKS") : Material.getMaterial("CRACKED_DEEPSLATE_TILES");
 	
 	public static final Material DEEPSLATE_TILE_STAIRS = Material.getMaterial("DEEPSLATE_TILE_STAIRS") == null ? 
 			Material.getMaterial("STONE_BRICK_STAIRS") : Material.getMaterial("DEEPSLATE_TILE_STAIRS");

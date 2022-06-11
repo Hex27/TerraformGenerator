@@ -45,7 +45,36 @@ public class SimpleBlock {
         this.x = x;
         this.y = y;
         this.z = z;
-
+    }
+    
+    public void pathTowards(int width, int maxLength, SimpleBlock target, Material... types) {
+    	BlockFace dir = BlockFace.NORTH;
+    	int max = -1;
+    	if(target.getX() - this.getX() > max) {
+    		max = target.getX() - this.getX(); //east
+    		dir = BlockFace.EAST;
+    	}else if(this.getX() - target.getX() > max) {
+    		max = this.getX() - target.getX(); //west
+    		dir = BlockFace.WEST;
+    	}else if(this.getZ() - target.getZ() > max) {
+    		max = this.getZ() - target.getZ(); //north
+    		dir = BlockFace.NORTH;
+    	}else if(target.getZ() - this.getZ() > max) {
+    		max = target.getZ() - this.getZ(); //south
+    		dir = BlockFace.SOUTH;
+    	}
+    	
+    	SimpleBlock base = this;
+    	for(int i = 0; i < maxLength; i++) {
+    		if(!base.lsetType(types))
+    			break;
+    		
+    		for(int w = 0; w < width; w++)
+    			for(BlockFace adj:BlockUtils.getAdjacentFaces(dir))
+    				base.getRelative(adj).setType(types);
+    		base = base.getRelative(dir);
+    	}
+    	
     }
     
 

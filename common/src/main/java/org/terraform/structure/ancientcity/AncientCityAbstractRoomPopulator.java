@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorData;
@@ -14,13 +15,17 @@ import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Map.Entry;
+import java.util.HashSet;
 import java.util.Random;
 
 public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbstract {
 
+	protected HashSet<SimpleLocation> occupied;
+	protected int shrunkenWidth = 0;
 	protected RoomLayoutGenerator gen;
-    public AncientCityAbstractRoomPopulator(RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
+    public AncientCityAbstractRoomPopulator(HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
+        this.occupied = occupied;
         this.gen = gen;
     }
 
@@ -29,7 +34,7 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
     @Override
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
     	
-    	int shrunkenWidth = GenUtils.randInt(this.rand, 2,4);
+    	shrunkenWidth = GenUtils.randInt(this.rand, 2,4);
     	
     	//This variable is named depression, but can also represent elevation.
     	int depression = shrunkenWidth;
@@ -60,11 +65,27 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
                 //every few intervals, place a pillar
                 int relX = effectiveRoom.getX() - x;
                 int relZ = effectiveRoom.getZ() - z;
-                if(relX % 5 == 0 && relZ % 5 == 0)
+                if(relX % 5 == 0 && relZ % 5 == 0 && 
+                		(effectiveRoom.isPointInside(b.getRelative(BlockFace.NORTH))
+                				&& effectiveRoom.isPointInside(b.getRelative(BlockFace.SOUTH))
+                				&& effectiveRoom.isPointInside(b.getRelative(BlockFace.EAST))
+                				&& effectiveRoom.isPointInside(b.getRelative(BlockFace.WEST))))
                 	AncientCityUtils.placeSupportPillar(b.getDown());
                 
             }
         }
+        //Debug purposes
+//        lowerCorner = room.getLowerCorner(0);
+//        upperCorner = room.getUpperCorner(0);
+
+//        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+//            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+//                SimpleBlock b = new SimpleBlock(data, x, y, z);
+//                b.lsetType(Material.RED_WOOL);
+//                
+//                
+//            }
+//        }
         
         //Connect the paths to the rooms
         for(Entry<Wall, Integer> entry:room.getFourWalls(data, 0).entrySet()) {
@@ -94,6 +115,12 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
 	        			.build(w.getUp().getFront())
 	        			.build(w.getUp().getFront().getLeft())
 	        			.build(w.getUp().getFront().getRight());
+        			
+//        			Wall stairEnd = w.getAtY(effectiveRoom.getY()).getFront(effectiveRoom.getY() - room.getY());
+//        			if(!effectiveRoom.isPointInside(stairEnd.getLeft())) {
+//        				stairEnd.pathTowards(shrunkenWidth, shrunkenWidth+2, effectiveRoom.getCenterSimpleBlock(data), OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
+//        			}
+        			
         		}
         		w = w.getLeft();
         	}

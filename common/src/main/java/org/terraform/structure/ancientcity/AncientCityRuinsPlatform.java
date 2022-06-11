@@ -1,15 +1,17 @@
 package org.terraform.structure.ancientcity;
 
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayoutGenerator;
 
+import java.util.HashSet;
 import java.util.Random;
 
 public class AncientCityRuinsPlatform extends AncientCityAbstractRoomPopulator {
 
-    public AncientCityRuinsPlatform(RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
-        super(gen, rand, forceSpawn, unique);
+    public AncientCityRuinsPlatform(HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
+        super(occupied, gen, rand, forceSpawn, unique);
     }
 
     @Override

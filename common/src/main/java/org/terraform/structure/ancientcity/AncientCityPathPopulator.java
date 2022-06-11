@@ -18,7 +18,6 @@ import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -93,7 +92,9 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     }
     
     private void placeWallArc(Wall core, int state) {
-    	if(occupied.contains(core.getLoc())) 
+    	if(occupied.contains(core.getLoc()) 
+    			|| occupied.contains(core.getRight().getLoc())
+    			|| occupied.contains(core.getLeft().getLoc())) 
     		return;
     	
 		occupied.add(core.getLoc());

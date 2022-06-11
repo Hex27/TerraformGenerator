@@ -10,8 +10,8 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
@@ -335,6 +335,29 @@ public class RoomLayoutGenerator {
         runRoomPopulators(data, tw);
 
     }
+    
+    /**
+     * @param data
+     * @param tw
+     * @param mat
+     */
+    public void fillRoomsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+
+    	//Create empty rooms
+        for (CubeRoom room : rooms) {
+            if (carveRooms) room = new CarvedRoom(room);
+
+            if (allowOverlaps)
+                room.fillRoom(data, tile, mat, Material.CAVE_AIR);
+            else
+                room.fillRoom(data, tile, mat, Material.AIR);
+        }
+
+        if (roomPops.isEmpty()) return;
+
+        runRoomPopulators(data, tw);
+
+    }
 
     public void fillPathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
         //ArrayList<PathGenerator> pathGens = new ArrayList<>();
@@ -552,6 +575,22 @@ public class RoomLayoutGenerator {
     		}
     	}
     	return this.pathPopulators;
+    }
+    
+    public boolean isPointInPath(Wall w, int rearOffset, int includeWidth) {
+    	if(getPathPopulators().contains(new PathPopulatorData(w.getRear(rearOffset).getAtY(centY), 3)))
+    		return true;
+    	if(includeWidth != 0)
+	    	for(int i = 1; i < includeWidth; i++) {
+	    		if(getPathPopulators().contains(new PathPopulatorData(
+	    				w.getRear(rearOffset).getLeft(i).getAtY(centY), 3)))
+	        		return true;
+	
+	    		if(getPathPopulators().contains(new PathPopulatorData(
+	    				w.getRear(rearOffset).getRight(i).getAtY(centY), 3)))
+	        		return true;
+	    	}
+    	return false;
     }
 
 }

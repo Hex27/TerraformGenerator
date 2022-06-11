@@ -15,7 +15,6 @@ import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.Version;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -79,26 +78,27 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         //Level One
     	HashSet<SimpleLocation> occupied = new HashSet<>();
         Random hashedRand = tw.getHashedRand(x, y, z);
-        RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 20, x, y, z, 120);
+        RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 40, x, y, z, 120);
         gen.setPathPopulator(new AncientCityPathPopulator(tw.getHashedRand(x, y, z, 2), gen, occupied));
         gen.setRoomMaxX(20);
         gen.setRoomMaxZ(20);
         gen.setRoomMinX(16);
         gen.setRoomMinZ(16);
         
-        gen.registerRoomPopulator(new AncientCityRuinsPlatform(gen, random, false, false));
+        gen.registerRoomPopulator(new AncientCityRuinsPlatform(occupied, gen, random, false, false));
         //gen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
 
         //Forcefully place the center platform in the middle
         CubeRoom room = new CubeRoom(50, 50, 40, x,y,z);
-        room.setRoomPopulator(new AncientCityCenterPlatformPopulator(gen, random, true, true));
+        room.setRoomPopulator(new AncientCityCenterPlatformPopulator(occupied, gen, random, true, true));
         gen.getRooms().add(room);
         
         gen.setCarveRooms(true);
         
         gen.generate();
-        gen.fill(data, tw, Material.CAVE_AIR);
-    
+        //gen.fill(data, tw, Material.CAVE_AIR);
+        gen.fillPathsOnly(data, tw, Material.CAVE_AIR);
+        gen.fillRoomsOnly(data, tw, Material.CAVE_AIR);
     }
 
     @Override

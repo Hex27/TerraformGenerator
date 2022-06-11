@@ -4,9 +4,7 @@ import java.util.EnumSet;
 import java.util.Random;
 
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
@@ -52,27 +50,29 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-    	EnumSet<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
+    	//For now, don't check biomes. There is only plains village.
+//    	EnumSet<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 
-        MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
+        //MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
 
-        //If it is below sea level, DON'T SPAWN IT.
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-           if (banks.contains(BiomeBank.PLAINS)
-           		|| banks.contains(BiomeBank.FOREST)
-           		|| banks.contains(BiomeBank.SAVANNA)
-           		|| banks.contains(BiomeBank.TAIGA)
-           		|| banks.contains(BiomeBank.SCARLET_FOREST)
-           		|| banks.contains(BiomeBank.CHERRY_GROVE)) {
+        //int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        
+        //NO HIGHEST GROUND CHECKS IN POPULATE. If canSpawn is true, the structure MUST spawn.
+        //if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+//        if (banks.contains(BiomeBank.PLAINS)
+//       		|| banks.contains(BiomeBank.FOREST)
+//       		|| banks.contains(BiomeBank.SAVANNA)
+//       		|| banks.contains(BiomeBank.TAIGA)
+//       		|| banks.contains(BiomeBank.SCARLET_FOREST)
+//       		|| banks.contains(BiomeBank.CHERRY_GROVE)) {
 
-                if (!TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean())
-                    return;
+            if (!TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean())
+            	return;
 
-                new PlainsVillagePopulator().populate(tw, data);
-            }
-        }
+            new PlainsVillagePopulator().populate(tw, data);
+//        }
+        //}
         
     }
 

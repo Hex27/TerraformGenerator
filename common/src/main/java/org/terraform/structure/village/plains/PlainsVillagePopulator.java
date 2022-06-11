@@ -41,6 +41,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
     	Wall w = new Wall(new SimpleBlock(data,room.getX(),room.getY(),room.getZ()).getGround(), room.getDirection())
     			.getRelative(0,4,0);
     	
+    	
     	int elevation = GenUtils.randInt(rand, 2,4);
     	int max = 30;
     	while(max > 0 && !isFrontSpaceClear(w,frontSpaceGuarantee)) {
@@ -57,12 +58,20 @@ public class PlainsVillagePopulator extends VillagePopulator {
     		}
     		max--;
     	}
+
+    	//If the block above is wet, find another area.
+    	Wall temp = w.getGround().getUp(elevation);
+    	while(BlockUtils.isWet(temp) || BlockUtils.isWet(temp.getDown())) {
+    		temp = temp.getUp();
+    		elevation++;
+    	}
     	
     	if(max == 0) { //Maybe it's a mountain or stuck in the middle of eroded plains
     		TerraformGeneratorPlugin.logger.info("Village at " + w.get().getVector() + " may have a weird spawn.");
     	}
     	
     	room.setX(w.getX());
+    	room.setY(w.getY());
     	room.setZ(w.getZ());
     	room.setDirection(w.getDirection());
     	((PlainsVillageTownhallPopulator) room.getPop()).setElevation(elevation);

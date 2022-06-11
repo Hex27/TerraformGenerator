@@ -14,6 +14,11 @@ public class AncientCityUtils {
 			OneOneSevenBlockHandler.DEEPSLATE_BRICKS,
 			OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS
 	};
+
+	public static final Material[] deepslateTiles = new Material[] {
+			OneOneSevenBlockHandler.DEEPSLATE_TILES,
+			OneOneSevenBlockHandler.CRACKED_DEEPSLATE_TILES
+	};
 	
     public static void placeSupportPillar(SimpleBlock w) {
     	Random dud = new Random();

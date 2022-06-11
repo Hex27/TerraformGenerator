@@ -64,32 +64,32 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
         //On ground, spawn dry village houses
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        //int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
-        if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
-            if (biome == (BiomeBank.DESERT)
-                    || biome == (BiomeBank.BADLANDS)
-                    || biome == (BiomeBank.ICE_SPIKES)) {
-                if (!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
-                    return;
+        //if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+        if (biome == (BiomeBank.DESERT)
+                || biome == (BiomeBank.BADLANDS)
+                || biome == (BiomeBank.ICE_SPIKES)) {
+            if (!TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean())
+                return;
 
-                new AnimalFarmPopulator().populate(tw, data);
-            } else if (biome == (BiomeBank.SNOWY_TAIGA)
-                    || biome == (BiomeBank.SNOWY_WASTELAND)
-                    || biome == (BiomeBank.JUNGLE)) {
+            new AnimalFarmPopulator().populate(tw, data);
+        } else if (biome == (BiomeBank.SNOWY_TAIGA)
+                || biome == (BiomeBank.SNOWY_WASTELAND)
+                || biome == (BiomeBank.JUNGLE)) {
 
-                if (!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
-                    return;
+            if (!TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean())
+                return;
 
-                new FarmhousePopulator().populate(tw, data);
-            } else if (biome == (BiomeBank.ROCKY_MOUNTAINS)) {
+            new FarmhousePopulator().populate(tw, data);
+        } else if (biome == (BiomeBank.ROCKY_MOUNTAINS)) {
 
-                if (!TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean())
-                    return;
+            if (!TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean())
+                return;
 
-                new MountainhousePopulator().populate(tw, data);
-            }
+            new MountainhousePopulator().populate(tw, data);
         }
+        //}
     }
 
     @Override
