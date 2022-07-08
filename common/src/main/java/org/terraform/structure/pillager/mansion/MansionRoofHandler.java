@@ -21,7 +21,9 @@ import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.TrapdoorBuilder;
+import org.terraform.utils.version.OneOneNineBlockHandler;
 import org.terraform.utils.version.OneOneSixBlockHandler;
+import org.terraform.utils.version.Version;
 
 import java.util.Random;
 
@@ -346,6 +348,13 @@ public class MansionRoofHandler {
     					data.addEntity(core.getX(), core.getY(), core.getZ(), EntityType.SPIDER);
     				if(GenUtils.chance(rand, 1,2))
     					data.addEntity(core.getX(), core.getY(), core.getZ(), EntityType.CAVE_SPIDER);
+
+    				//If lucky, spawn allays
+    				if(Version.isAtLeast(19) && rand.nextBoolean())
+    	        		for(int i = 0; i < 1 + rand.nextInt(3); i++)
+    	        			data.addEntity(core.getX(), core.getY(), core.getZ(), OneOneNineBlockHandler.ALLAY);
+
+    				
     			}
     		}
     	}

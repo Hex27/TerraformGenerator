@@ -21,6 +21,7 @@ public class OneOneEightBlockHandler {
 			return Biome.valueOf(fallback);
 		}
 	}
+	@SuppressWarnings("unused")
 	private static Material getMaterial(String name, String fallback) {
 		try {
 			return Material.valueOf(name);

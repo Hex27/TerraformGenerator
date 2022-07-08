@@ -157,6 +157,7 @@ public class SimpleBlock {
         return rel;
     }
 
+
     /**
      * Lenient set. Only replaces non-solid blocks.
      * @return if the set was a success.
@@ -718,7 +719,17 @@ public class SimpleBlock {
             depth++;
         }
     }
-    
+
+    public void directionalLPillar(Random rand, BlockFace face, int h, Material... types) {
+        int depth = 0;
+        for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
+            if (depth >= h) break;
+            if (!this.getRelative(face, depth).getType().isSolid()) {
+                this.getRelative(face, depth).setType(GenUtils.randMaterial(rand, types));
+            } else break;
+            depth++;
+        }
+    }
 
     public SimpleBlock getDown(int i) {
         return this.getRelative(0, -i, 0);

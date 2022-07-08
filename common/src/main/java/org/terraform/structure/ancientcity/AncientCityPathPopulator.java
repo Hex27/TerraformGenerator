@@ -98,6 +98,8 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     		return;
     	
 		occupied.add(core.getLoc());
+		occupied.add(core.getRight().getLoc());
+		occupied.add(core.getLeft().getLoc());
 		
 		BlockFace pathFacing = core.getDirection();
 		if(state > 4) pathFacing = core.getDirection().getOppositeFace();

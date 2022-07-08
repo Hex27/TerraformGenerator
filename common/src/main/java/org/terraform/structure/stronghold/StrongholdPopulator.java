@@ -182,10 +182,17 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     //This has to be kept. It is used to locate strongholds
     public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
-        double minDistanceSquared = Integer.MAX_VALUE;
+        double minDistanceSquared = Double.MAX_VALUE;
         int[] min = null;
         for (int[] loc : strongholdPositions(tw)) {
             double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
+
+        	if(min == null) {
+                minDistanceSquared = distSqr;
+        		min = loc;
+        		continue;
+        	}
+        	
             if (distSqr < minDistanceSquared) {
                 minDistanceSquared = distSqr;
                 min = loc;

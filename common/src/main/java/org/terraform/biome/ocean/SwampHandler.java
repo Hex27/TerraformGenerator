@@ -7,6 +7,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
@@ -20,6 +21,7 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.OneOneNineBlockHandler;
 
 import java.util.Random;
 
@@ -33,7 +35,7 @@ public class SwampHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.SWAMP;
+        return OneOneNineBlockHandler.MANGROVE_SWAMP;
     }
     @Override
     public Material[] getSurfaceCrust(Random rand) {
@@ -95,6 +97,12 @@ public class SwampHandler extends BiomeHandler {
                 if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
                     BlockUtils.generateClayDeposit(x, y, z, data, random);
                 }
+                if(GenUtils.chance(random, 5, 1000)) {
+                	BlockUtils.replaceCircularPatch(
+                			random.nextInt(9999), 
+                			3.5f, 
+                			new SimpleBlock(data,x,y,z), OneOneNineBlockHandler.MUD);
+                }
             }
         }
 
@@ -136,8 +144,8 @@ public class SwampHandler extends BiomeHandler {
                     minHeight = TerraformGenerator.seaLevel - sLoc.getY();
                 }
 
-                BlockUtils.spawnPillar(random, data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ(), Material.OAK_LOG, minHeight, minHeight + 3);
-                
+                //BlockUtils.spawnPillar(random, data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ(), OneOneNineBlockHandler.MANGROVE_ROOTS, );
+                new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ()).Pillar(GenUtils.randInt(random, minHeight, minHeight + 3), OneOneNineBlockHandler.MANGROVE_ROOTS);
             }
         }
         

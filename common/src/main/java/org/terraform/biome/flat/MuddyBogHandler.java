@@ -20,7 +20,6 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
-
 import java.util.Random;
 
 public class MuddyBogHandler extends BiomeHandler {
@@ -89,6 +88,15 @@ public class MuddyBogHandler extends BiomeHandler {
                 	}
                 		
                 }
+
+                //Mud
+                //Weirdly, STRANGELY, mud is not brown, it is grey
+                //It looks absolutely hideous with the brown colour palatte.
+                //Guess there is no mud in the muddy bog. Wee.
+//                if(Version.isAtLeast(1.19))
+//	                if (GenUtils.chance(random, 3, 1000)) {
+//	                	BlockUtils.replaceCircularPatch(random.nextInt(9999), 3f, new SimpleBlock(data,x,y,z), OneOneNineBlockHandler.MUD);
+//	                }
             }
         }
     }

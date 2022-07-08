@@ -60,7 +60,15 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
-                b.lsetType(AncientCityUtils.deepslateBricks);
+                
+                //Fuzz the sides to give a sense of ruin
+                if(x == lowerCorner[0] || x == upperCorner[0] || z == lowerCorner[1] || z == upperCorner[1])
+                {
+                	if(rand.nextBoolean())
+                		b.lsetType(AncientCityUtils.deepslateBricks);
+                }
+                else
+                	b.lsetType(AncientCityUtils.deepslateBricks);
                 
                 //every few intervals, place a pillar
                 int relX = effectiveRoom.getX() - x;
@@ -91,14 +99,14 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
         for(Entry<Wall, Integer> entry:room.getFourWalls(data, 0).entrySet()) {
         	Wall w = entry.getKey().getDown();
         	for(int i = shrunkenWidth; i < entry.getValue()-shrunkenWidth; i++) {
-    			//w.getRear().setType(Material.RED_WOOL);
+    			
         		if(this.gen.getPathPopulators().contains(new PathPopulatorData(w.getRear().getAtY(room.getY()), 3))) {
-        			
+        			//w.getUp(3).setType(Material.RED_WOOL);
         			w.setType(AncientCityUtils.deepslateBricks);
         			w.getLeft().setType(AncientCityUtils.deepslateBricks);
         			w.getRight().setType(AncientCityUtils.deepslateBricks);
         			
-        			if(depression < 0)
+        			if(depression < 0) {
 	        			new StairwayBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
 	        			.setDownTypes(AncientCityUtils.deepslateBricks)
 	        			.setStairwayDirection(BlockFace.DOWN)
@@ -106,7 +114,9 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
 	        			.build(w.getFront())
 	        			.build(w.getFront().getLeft())
 	        			.build(w.getFront().getRight());
+        			}
         			else
+        			{
 	        			new StairwayBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
 	        			.setDownTypes(AncientCityUtils.deepslateBricks)
 	        			.setStairwayDirection(BlockFace.UP)
@@ -115,11 +125,7 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
 	        			.build(w.getUp().getFront())
 	        			.build(w.getUp().getFront().getLeft())
 	        			.build(w.getUp().getFront().getRight());
-        			
-//        			Wall stairEnd = w.getAtY(effectiveRoom.getY()).getFront(effectiveRoom.getY() - room.getY());
-//        			if(!effectiveRoom.isPointInside(stairEnd.getLeft())) {
-//        				stairEnd.pathTowards(shrunkenWidth, shrunkenWidth+2, effectiveRoom.getCenterSimpleBlock(data), OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
-//        			}
+        			}
         			
         		}
         		w = w.getLeft();

@@ -16,6 +16,7 @@ import java.util.Random;
 public class StairwayBuilder {
 	
 	private Material[] stairTypes;
+	private boolean carveAirSpace = true;
 	private BlockFace stairDirection = BlockFace.DOWN;
 	private Material[] downTypes;
 	private boolean stopAtWater = false;
@@ -23,6 +24,7 @@ public class StairwayBuilder {
 	private boolean angled = false;
 	private int maxExtensionForward = 10;
 	private boolean upwardsCarveUntilNotSolid = true;
+	private boolean upwardsCarveUntilSolid = false;
 	
 	public StairwayBuilder(Material... stairTypes) {
 		this.stairTypes = stairTypes;
@@ -43,6 +45,16 @@ public class StairwayBuilder {
 	
 	public StairwayBuilder setStopAtY(int y) {
 		this.stopAtY = y;
+		return this;
+	}
+	
+	public StairwayBuilder setCarveAirSpace(boolean carveAirSpace) {
+		this.carveAirSpace = carveAirSpace;
+		return this;
+	}
+
+	public StairwayBuilder setUpwardsCarveUntilSolid(boolean carve) {
+		this.upwardsCarveUntilSolid = carve;
 		return this;
 	}
 
@@ -106,7 +118,8 @@ public class StairwayBuilder {
 	    		
 	    		if(threshold == 0) {
 	    			start = start.getRelative(0,-1,0);
-		    		start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
+	    			if(carveAirSpace)
+	    				start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
 	    			start.setType(downTypes);
 		    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
 	    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
@@ -124,8 +137,11 @@ public class StairwayBuilder {
 	    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
 	    		
 	    		//This space is required for movement
-	    		start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
-	    		start.getRelative(0,2,0).getRelative(extensionDir).setType(Material.AIR);
+	    		if(carveAirSpace)
+	    		{
+	    			start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
+		    		start.getRelative(0,2,0).getRelative(extensionDir).setType(Material.AIR);
+		    	}
 	    		
 	    		if(angled) 
 	        		threshold--;
@@ -158,6 +174,10 @@ public class StairwayBuilder {
 			//Continue carving upwards until the area isn't solid anymore.
 			if (upwardsCarveUntilNotSolid)
 				return target.getType().isSolid();
+
+			//Continue carving upwards until the area is solid anymore.
+			if(upwardsCarveUntilSolid) 
+				return !target.getType().isSolid();
 			
 			return true;
 		}

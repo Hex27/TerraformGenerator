@@ -14,6 +14,8 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -36,6 +38,7 @@ public class FractalLeaves {
     float weepingLeavesChance = 0;
     int weepingLeavesLength = 0;
     boolean coralDecoration = false;
+    boolean mangrovePropagules = false;
 
     public FractalLeaves(FractalTreeBuilder builder) {
     	this.builder = builder;
@@ -118,6 +121,12 @@ public class FractalLeaves {
                     if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
                         if (equationResult < hollowLeaves)
                             continue;
+                        
+                        if(mangrovePropagules && Version.isAtLeast(19) && !BlockUtils.isWet(relativeBlock.getDown())) {
+                        	 if (GenUtils.chance(1, 50)) {
+                                 relativeBlock.getDown().lsetBlockData(OneOneNineBlockHandler.getHangingMangrovePropagule());
+                             }
+                        }
 
                         if (Tag.CORALS.isTagged(material)) {
                             if (!changed.contains(relativeBlock))
@@ -288,6 +297,10 @@ public class FractalLeaves {
         return this;
     }
 
+    public FractalLeaves setMangrovePropagules(boolean mangrovePropagules) {
+        this.mangrovePropagules = mangrovePropagules;
+        return this;
+    }
     /**
      * Creates dangling leaves without vines. Useful for
      * creating types of weeping trees.

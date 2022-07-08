@@ -23,6 +23,7 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.BeeHiveSpawner;
+import org.terraform.utils.version.OneOneNineBlockHandler;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
@@ -365,11 +366,11 @@ public class FractalTreeBuilder {
                         .setBaseThickness(3)
                         .setThicknessDecrement(0.5f)
                         .setMaxDepth(3)
-                        .setTrunkType(Material.OAK_WOOD)
+                        .setTrunkType(OneOneNineBlockHandler.MANGROVE_ROOTS)
                         .setLengthDecrement(-2f)
                         .setMaxBend(-Math.PI / 6)
                         .setMinBend(-Math.PI / 3)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(0).setMaterial(Material.OAK_LEAVES));
+                        .setFractalLeaves(new FractalLeaves(this).setRadius(0).setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES));
                 break;
             case SWAMP_TOP:
                 this.setBaseHeight(8)
@@ -378,9 +379,9 @@ public class FractalTreeBuilder {
                         .setMaxDepth(4)
                         .setLengthDecrement(0f)
                         .setHeightVariation(2)
-                        .setTrunkType(Material.OAK_WOOD)
+                        .setTrunkType(OneOneNineBlockHandler.MANGROVE_WOOD)
                         .setVines(7)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(5, 2, 5));
+                        .setFractalLeaves(new FractalLeaves(this).setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES).setRadius(5, 2, 5).setMangrovePropagules(true));
                 break;
             case COCONUT_TOP:
                 this.setBaseHeight(8)

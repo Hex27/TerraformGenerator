@@ -11,6 +11,7 @@ import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneNineBlockHandler;
 
 import java.util.Random;
 
@@ -23,7 +24,7 @@ public class MudflatsHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.SWAMP;
+        return OneOneNineBlockHandler.MANGROVE_SWAMP;
     }
 
 //	@Override
@@ -36,7 +37,7 @@ public class MudflatsHandler extends BiomeHandler {
 
     @Override
     public Material[] getSurfaceCrust(Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.PODZOL, 35, Material.GRASS_BLOCK, 10),
+        return new Material[]{GenUtils.weightedRandomMaterial(rand, OneOneNineBlockHandler.MUD, 35, Material.GRASS_BLOCK, 10),
                 GenUtils.randMaterial(rand, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
@@ -67,7 +68,7 @@ public class MudflatsHandler extends BiomeHandler {
                         Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
                         skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
 
-                        data.setType(x, y, z, Material.OAK_FENCE);
+                        data.setType(x, y, z, OneOneNineBlockHandler.MANGROVE_FENCE);
                         data.setBlockData(x, y + 1, z, skull);
                     }
                 }

@@ -150,6 +150,11 @@ public class CubeRoom {
         return Math.pow(x - other[0], 2) + Math.pow(y - other[1], 2) + Math.pow(z - other[2], 2);
     }
 
+    public CubeRoom getCloneSubsetRoom(int paddingX, int paddingZ)
+    {
+    	return new CubeRoom(this.widthX - paddingX*2, this.widthZ - paddingZ*2, this.height, this.x, this.y, this.z);
+    }
+    
     public boolean isClone(CubeRoom other) {
         return this.x == other.x
                 && this.y == other.y

@@ -88,6 +88,9 @@ public class OneOneSevenBlockHandler {
 	public static final Material DEEPSLATE = Material.getMaterial("DEEPSLATE") == null ? 
 			Material.getMaterial("STONE") : Material.getMaterial("DEEPSLATE");
 	
+	public static final Material COBBLED_DEEPSLATE_STAIRS = Material.getMaterial("COBBLED_DEEPSLATE_STAIRS") == null ? 
+			Material.getMaterial("COBBLESTONE_STAIRS") : Material.getMaterial("COBBLED_DEEPSLATE_STAIRS");
+	
 	public static final Material COBBLED_DEEPSLATE_WALL = Material.getMaterial("COBBLED_DEEPSLATE_WALL") == null ? 
 			Material.getMaterial("COBBLESTONE_WALL") : Material.getMaterial("COBBLED_DEEPSLATE_WALL");
 	

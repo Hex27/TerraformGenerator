@@ -43,6 +43,7 @@ public class GenUtils {
     				|| mat.toString().contains("CORAL")
     				|| mat.toString().contains("POINTED_DRIPSTONE")
     				|| mat.toString().contains("NETHERRACK")
+    				|| mat.toString().contains("MANGROVE")
     				|| mat == Material.HAY_BLOCK
     				|| mat == Material.ICE
     				|| mat == Material.CACTUS
