@@ -1,21 +1,23 @@
 package org.terraform.structure.ancientcity;
 
+import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Map.Entry;
 
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
+import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomLayoutGenerator;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 public class AncientCityAltarPopulator extends AncientCityAbstractRoomPopulator {
 
-    public AncientCityAltarPopulator(HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
-        super(occupied, gen, rand, forceSpawn, unique);
+    public AncientCityAltarPopulator(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
+        super(tw, occupied, gen, rand, forceSpawn, unique);
     }
 
     @Override
@@ -36,29 +38,47 @@ public class AncientCityAltarPopulator extends AncientCityAbstractRoomPopulator 
     			w = w.getLeft();
     		}
     		if(shouldPlaceAltar) {
-    			if(entry.getValue() % 2 == 0)
-    				placeAltarEven(center.getUp());
+    			String altarFile;
+    			if(entry.getValue() < 7)
+    			{
+    				altarFile = "ancient-city/ancient-city-altar-small";
+    			}
+    			else if(entry.getValue() < 11)
+    			{
+    				altarFile = "ancient-city/ancient-city-altar-medium";
+    			}
     			else
-    				placeAltarOdd(center.getUp());
+    			{
+    				altarFile = "ancient-city/ancient-city-altar-large";
+    			}
+    			
+				try {
+					TerraSchematic schema = TerraSchematic.load(altarFile, center);
+	                schema.parser = new AncientCitySchematicParser();
+	                schema.setFace(center.getDirection());
+	                schema.apply();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+				//Misc pillars leading up to the altar
+				int pillarSpacing = entry.getValue() / 3;
+				for(int i = pillarSpacing; i < Math.min(effectiveRoom.getWidthX(), effectiveRoom.getWidthZ()); i += 3)
+				{
+					center.getFront(i).getLeft(pillarSpacing).LPillar(rand.nextInt(room.getHeight()/3), AncientCityUtils.deepslateBricks);
+					center.getFront(i).getRight(pillarSpacing).LPillar(rand.nextInt(room.getHeight()/3), AncientCityUtils.deepslateBricks);
+				}
+				
+		    	super.sculkUp(tw, data, this.effectiveRoom);
     			return;
     		}
     	}
+    	super.sculkUp(tw, data, this.effectiveRoom);
     }
     
-    public void placeAltarOdd(Wall w) {
-    	w.Pillar(3, AncientCityUtils.deepslateTiles);
-    	w.getLeft().Pillar(2, AncientCityUtils.deepslateTiles);
-    	w.getRight().Pillar(2, AncientCityUtils.deepslateTiles);
-    	w.getFront().setType(AncientCityUtils.deepslateTiles);
-    	w.getFront().getUp().setType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
-    	
-    }
-    public void placeAltarEven(Wall w) {
-    	
-    }
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return true;
+        return room.getWidthX() % 2 ==1 || room.getWidthZ() % 2 == 1;
     }
 }

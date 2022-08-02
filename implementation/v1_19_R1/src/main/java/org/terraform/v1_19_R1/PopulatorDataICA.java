@@ -415,6 +415,12 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 //            return LootTables.ax;
 //        case PIGLIN_BARTERING:
 //            return LootTables.ay
+		case ANCIENT_CITY:
+			return LootTables.P;
+		case ANCIENT_CITY_ICE_BOX:
+			return LootTables.Q;
+		default:
+			break;
         }
         return null;
     }

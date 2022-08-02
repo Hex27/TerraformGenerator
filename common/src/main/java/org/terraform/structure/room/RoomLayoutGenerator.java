@@ -39,6 +39,9 @@ public class RoomLayoutGenerator {
     private int range;
     private PathPopulatorAbstract pathPop;
     private boolean carveRooms = false;
+    private float xCarveMul = 1.0f;
+    private float yCarveMul = 1.0f;
+    private float zCarveMul = 1.0f;
     private boolean pyramidish = false;
     private MazeSpawner mazePathGenerator;
     private int tile = -1;
@@ -71,6 +74,11 @@ public class RoomLayoutGenerator {
 
     public void setCarveRooms(boolean carve) {
         this.carveRooms = carve;
+    }
+    public void setCarveRoomsMultiplier(float xMul, float yMul, float zMul) {
+        this.xCarveMul = xMul;
+        this.yCarveMul = yMul;
+        this.zCarveMul = zMul;
     }
 
     public void registerRoomPopulator(RoomPopulatorAbstract pop) {
@@ -309,7 +317,17 @@ public class RoomLayoutGenerator {
 
         //Create empty rooms
         for (CubeRoom room : rooms) {
-            if (carveRooms) room = new CarvedRoom(room);
+            if (carveRooms) {
+            	room = new CarvedRoom(room);
+        		//TerraformGeneratorPlugin.logger.info("Vol: " + (room.getWidthX() * room.getWidthZ() * room.getHeight()));
+            	if(room.largerThanVolume(40000)) {
+            		//TerraformGeneratorPlugin.logger.info("Larger Room Invoked");
+                	((CarvedRoom) room).setFrequency(0.03f);
+            	}
+            	((CarvedRoom) room).setxMultiplier(this.xCarveMul);
+            	((CarvedRoom) room).setyMultiplier(this.yCarveMul);
+            	((CarvedRoom) room).setzMultiplier(this.zCarveMul);
+            }
 
             if (allowOverlaps)
                 room.fillRoom(data, tile, mat, Material.CAVE_AIR);
@@ -336,6 +354,25 @@ public class RoomLayoutGenerator {
 
     }
     
+    public void carveRoomsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+    	//Create empty rooms
+        for (CubeRoom room : rooms) {
+            if (carveRooms) {
+            	room = new CarvedRoom(room);
+            	if(room.largerThanVolume(40000))
+                	((CarvedRoom) room).setFrequency(0.03f);
+            	((CarvedRoom) room).setxMultiplier(this.xCarveMul);
+            	((CarvedRoom) room).setyMultiplier(this.yCarveMul);
+            	((CarvedRoom) room).setzMultiplier(this.zCarveMul);
+            }
+
+            if (allowOverlaps)
+                room.fillRoom(data, tile, mat, Material.CAVE_AIR);
+            else
+                room.fillRoom(data, tile, mat, Material.AIR);
+        }
+    }
+    
     /**
      * @param data
      * @param tw
@@ -343,15 +380,7 @@ public class RoomLayoutGenerator {
      */
     public void fillRoomsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
 
-    	//Create empty rooms
-        for (CubeRoom room : rooms) {
-            if (carveRooms) room = new CarvedRoom(room);
-
-            if (allowOverlaps)
-                room.fillRoom(data, tile, mat, Material.CAVE_AIR);
-            else
-                room.fillRoom(data, tile, mat, Material.AIR);
-        }
+    	carveRoomsOnly(data,tw,mat);
 
         if (roomPops.isEmpty()) return;
 
@@ -359,7 +388,7 @@ public class RoomLayoutGenerator {
 
     }
 
-    public void fillPathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+    public void carvePathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
         //ArrayList<PathGenerator> pathGens = new ArrayList<>();
         if (genPaths)
             for (CubeRoom room : rooms) {
@@ -371,11 +400,27 @@ public class RoomLayoutGenerator {
                 }
                 pathGens.add(gen);
             }
+    }
+    
+
+    /**
+     * ONLY RUN AFTER FILL, IF NOT THE PATHS MAY BE SOLID.
+     * @param data
+     * @param tw
+     * @param mat
+     */
+    public void populatePathsOnly() {
 
         //Populate pathways
         for (PathGenerator pGen : pathGens) {
             pGen.populate();
         }
+    }
+    
+    public void fillPathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+        carvePathsOnly(data,tw,mat);
+
+        populatePathsOnly();
     }
 
     /**

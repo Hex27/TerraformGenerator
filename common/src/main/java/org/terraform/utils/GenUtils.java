@@ -25,7 +25,7 @@ import org.terraform.utils.noise.FastNoise;
 import com.google.common.cache.LoadingCache;
 
 public class GenUtils {
-    private static final Random RANDOMIZER = new Random();
+    public static final Random RANDOMIZER = new Random();
     private static final EnumSet<Material> BLACKLIST_HIGHEST_GROUND = EnumSet.noneOf(Material.class);
     public static void initGenUtils() {
 

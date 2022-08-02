@@ -31,6 +31,7 @@ import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.version.OneOneNineBlockHandler;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
@@ -45,8 +46,14 @@ public class BlockUtils {
 		//init ores
 		for(Material mat:Material.values()) {
     		if(mat.toString().endsWith("_ORE"))
+    		{
     			ores.add(mat);
+    			stoneLike.add(mat);
+    		}
     	}
+		
+		for(Material mat:stoneLike)
+			badlandsStoneLike.add(mat);
 		
 		//init glass panes
     	for(Material mat:Material.values()) {
@@ -87,12 +94,16 @@ public class BlockUtils {
     };
 
     public static final BlockFace[] sixBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+    
+    /**
+     * Everything here <strong>must</strong> be solid blocks that tend to generate
+     * in the ground.
+     */
     public static final EnumSet<Material> stoneLike = EnumSet.of(
             Material.STONE, Material.COBBLESTONE,
             Material.GRANITE, Material.ANDESITE,
             Material.DIORITE, Material.GRAVEL,
             Material.CLAY,
-            OneOneSevenBlockHandler.COPPER_ORE, 
             OneOneSevenBlockHandler.DEEPSLATE,
             OneOneSevenBlockHandler.TUFF,
             OneOneSevenBlockHandler.CALCITE,
@@ -100,52 +111,34 @@ public class BlockUtils {
             OneOneSevenBlockHandler.AMETHYST_BLOCK,
             OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
             OneOneSixBlockHandler.SMOOTH_BASALT,
-            Material.LAPIS_ORE,
-            Material.PACKED_ICE, Material.BLUE_ICE
+            Material.PACKED_ICE, Material.BLUE_ICE,
+            Material.DIRT, Material.PODZOL, Material.GRASS_BLOCK, Material.MYCELIUM,
+            OneOneSevenBlockHandler.ROOTED_DIRT, OneOneSevenBlockHandler.DIRT_PATH(),
+            OneOneNineBlockHandler.SCULK
     );
     
+    public static final EnumSet<Material> caveDecoratorMaterials = EnumSet.of(
+    		Material.ANDESITE_WALL, Material.DIORITE_WALL, Material.GRANITE_WALL,
+    		Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL, 
+    		OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL,
+    		Material.COBBLESTONE_SLAB, Material.STONE_SLAB,
+    		Material.MOSS_BLOCK, Material.MOSS_CARPET
+    		
+	);
     
-
+    //This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> badlandsStoneLike = EnumSet.of(
-            Material.STONE, Material.COBBLESTONE,
-            Material.GRANITE, Material.ANDESITE,
-            Material.DIORITE, Material.GRAVEL,
-            Material.CLAY,
-            Material.COAL_ORE, Material.IRON_ORE,
-            Material.GOLD_ORE, Material.DIAMOND_ORE,
-            Material.EMERALD_ORE, Material.REDSTONE_ORE,
-            Material.LAPIS_ORE, 
-            OneOneSevenBlockHandler.COPPER_ORE, 
-            OneOneSevenBlockHandler.DEEPSLATE,
-            OneOneSevenBlockHandler.TUFF,
-            OneOneSevenBlockHandler.CALCITE,
-            OneOneSevenBlockHandler.BUDDING_AMETHYST,
-            OneOneSevenBlockHandler.AMETHYST_BLOCK,
-            OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
-            OneOneSixBlockHandler.SMOOTH_BASALT,
-            OneOneSevenBlockHandler.deepSlateVersion(Material.COAL_ORE), 
-            OneOneSevenBlockHandler.deepSlateVersion(Material.IRON_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.GOLD_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.DIAMOND_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.EMERALD_ORE), 
-            OneOneSevenBlockHandler.deepSlateVersion(Material.REDSTONE_ORE),
-            OneOneSevenBlockHandler.deepSlateVersion(Material.LAPIS_ORE), 
-            OneOneSevenBlockHandler.deepSlateVersion(OneOneSevenBlockHandler.COPPER_ORE), 
-            //Material.SNOW_BLOCK,
-            Material.PACKED_ICE, Material.BLUE_ICE,
             Material.TERRACOTTA, Material.ORANGE_TERRACOTTA,
             Material.RED_TERRACOTTA, Material.BROWN_TERRACOTTA,
-            Material.YELLOW_TERRACOTTA, Material.RED_SAND,
-            Material.DIRT, Material.PODZOL, Material.GRASS_BLOCK, Material.MYCELIUM,
-            OneOneSevenBlockHandler.ROOTED_DIRT, OneOneSevenBlockHandler.DIRT_PATH()
+            Material.YELLOW_TERRACOTTA, Material.RED_SAND
     );
-    
-    //Do not hardcode this.
+
+    //This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> ores = EnumSet.noneOf(Material.class);
     
     public static final EnumSet<Material> airs = EnumSet.of(Material.AIR, Material.CAVE_AIR);
 
-    //Do not hardcode this.
+    //This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> glassPanes = EnumSet.noneOf(Material.class);
     
     private static final Material[] TALL_FLOWER = {Material.LILAC, Material.ROSE_BUSH, Material.PEONY, Material.LARGE_FERN, Material.SUNFLOWER};
@@ -746,10 +739,15 @@ public class BlockUtils {
         }
     }
 
+    
+    public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, EnumSet<Material> toReplace)
+    {
+    	carveCaveAir(seed,rX,rY,rZ,0.09f, block,waterToAir, toReplace);
+    }
     /**
      * Put barrier in toReplace to hard replace all solid blocks.
      */
-    public static void carveCaveAir(int seed, float rX, float rY, float rZ, SimpleBlock block, boolean waterToAir, EnumSet<Material> toReplace) {
+    public static void carveCaveAir(int seed, float rX, float rY, float rZ, float frequency, SimpleBlock block, boolean waterToAir, EnumSet<Material> toReplace) {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             if (waterToAir || block.getType() != Material.WATER) block.setType(Material.CAVE_AIR);
@@ -758,11 +756,11 @@ public class BlockUtils {
 
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
+        noise.SetFrequency(frequency);
 
-        for (float x = -rX; x <= rX; x++) {
+        for (float x = -rX*1.3f; x <= rX*1.3f; x++) {
             for (float y = -rY; y <= rY; y++) {
-                for (float z = -rZ; z <= rZ; z++) {
+                for (float z = -rZ*1.3f; z <= rZ*1.3f; z++) {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
@@ -1109,6 +1107,22 @@ public class BlockUtils {
             bed.setPart(Bed.Part.FOOT);
             block.getRelative(dir).setBlockData(bed);
         }
+    }
+    
+    public static BlockFace[] getDirectFacesFromDiagonal(BlockFace face) {
+    	switch(face) {
+    	case NORTH_EAST:
+    		return new BlockFace[] {BlockFace.NORTH, BlockFace.EAST};
+    	case NORTH_WEST:
+    		return new BlockFace[] {BlockFace.NORTH, BlockFace.WEST};
+    	case SOUTH_EAST:
+    		return new BlockFace[] {BlockFace.SOUTH, BlockFace.EAST};
+    	case SOUTH_WEST:
+    		return new BlockFace[] {BlockFace.SOUTH, BlockFace.EAST};
+		default:
+			throw new UnsupportedOperationException("getDirectFacesFromDiagonal can only be used for XZ-Plane diagonals");
+    	}
+    	
     }
 
     public static void placeRail(SimpleBlock block, Material mat) {

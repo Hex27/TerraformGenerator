@@ -3,12 +3,15 @@ package org.terraform.v1_19_R1;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R1.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_19_R1.util.CraftMagicNumbers;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
@@ -18,14 +21,10 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistry;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.EnumMobSpawn;
-import net.minecraft.world.entity.GroupDataEntity;
+import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityLootable;
@@ -131,22 +130,13 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     		TerraformGeneratorPlugin.logger.info("Failed to spawn " + type + " as it was out of bounds.");
     		return;
     	}
-		try {
-	    	EntityTypes<?> et = entityTypesDict.get(type);
-			Entity e = et.a(rlwa.getMinecraftWorld());
-	    	//o is setPosRaw
-	    	e.o((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D);
-	    	if (e instanceof EntityInsentient) {
-
-	    		((EntityInsentient)e).a(rlwa, rlwa.d_(new BlockPosition(rawX + 0.5D, rawY, rawZ + 0.5D)), EnumMobSpawn.n, (GroupDataEntity)null, (NBTTagCompound)null);
-	    	}
-	    	//b is addFreshEntity
-	    	rlwa.b(e);
-		} catch (IllegalArgumentException | SecurityException e1) {
-			e1.printStackTrace();
-		}
-         
-    	//rlwa.spawnEntity(new Location(gen.getTerraformWorld().getWorld(), rawX, rawY, rawZ), type);
+    	
+    	//Use this method for thread safety.
+    	CraftLimitedRegion clr = new CraftLimitedRegion(rlwa, ica.f());
+    	net.minecraft.world.entity.Entity e = clr.createEntity(new Location(gen.getTerraformWorld().getWorld(),rawX,rawY,rawZ),
+    			type.getEntityClass());
+    	rlwa.b(e);
+    	//TerraformGeneratorPlugin.logger.info("Spawned " + e.getType() + " at " + rawX + " " + rawY + " " + rawZ);
     }
 
     @Override
@@ -335,6 +325,12 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 //            return LootTables.ax;
 //        case PIGLIN_BARTERING:
 //            return LootTables.ay
+		case ANCIENT_CITY:
+			return LootTables.P;
+		case ANCIENT_CITY_ICE_BOX:
+			return LootTables.Q;
+		default:
+			break;
         }
         return null;
     }

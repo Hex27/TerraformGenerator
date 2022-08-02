@@ -420,7 +420,7 @@ public class SimpleBlock {
      */
     public SimpleBlock findFloor(int cutoff) {
     	SimpleBlock floor = this.getRelative(0, -1, 0);
-        while (cutoff > 0 && floor.getY() >= 0) {
+        while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
             if (floor.getType().isSolid() && floor.getType() != Material.LANTERN) {
                 return floor;
             }
@@ -437,7 +437,7 @@ public class SimpleBlock {
      */
     public SimpleBlock findAirPocket(int cutoff) {
     	SimpleBlock floor = this.getRelative(0, -1, 0);
-        while (cutoff > 0 && floor.getY() >= 0) {
+        while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
             if (!floor.getType().isSolid()) {
                 return floor;
             }
@@ -479,13 +479,14 @@ public class SimpleBlock {
      * @return
      */
     public SimpleBlock findStonelikeFloor(int cutoff) {
-    	SimpleBlock floor = this.getRelative(0, -1, 0);
-        while (cutoff > 0 && floor.getY() >= 0) {
+    	SimpleBlock floor = this.getDown();
+        while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
+        	//floor.getUp().setType(Material.CYAN_STAINED_GLASS);
             if (BlockUtils.isStoneLike(floor.getType())) {
                 return floor;
             }
             cutoff--;
-            floor = floor.getRelative(0, -1, 0);
+            floor = floor.getDown();
         }
         return null;
     }

@@ -46,13 +46,13 @@ public class CrappyDebugStructureCommand extends TerraCommand {
 //						null,p.getLocation().getChunk().getX(),p.getLocation().getChunk().getZ());
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
         int x = p.getLocation().getBlockX() + 1000;
-        int y = 70;
+        int y = -24;
         int z = p.getLocation().getBlockZ();
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
         
         new AncientCityPopulator().spawnAncientCity(tw, new Random(), data, x, y, z);
-        p.teleport(new Location(p.getWorld(), x,y + 40,z));
-        
+        p.teleport(new Location(p.getWorld(), x,y+30,z));
+        p.sendMessage("Done.");
     }
 
 }

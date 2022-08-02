@@ -387,6 +387,10 @@ public class CubeRoom {
     public boolean isHuge() {
         return widthX * widthZ * height >= 7000;
     }
+    
+    public boolean largerThanVolume(int vol) {
+        return widthX * widthZ * height >= vol;
+    }
 
     /**
      * @return the widthX

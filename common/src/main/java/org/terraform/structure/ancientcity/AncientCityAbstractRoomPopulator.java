@@ -5,13 +5,18 @@ import org.bukkit.block.BlockFace;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
+import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.structure.room.CarvedRoom;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StairwayBuilder;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Map.Entry;
@@ -20,11 +25,13 @@ import java.util.Random;
 
 public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbstract {
 
+	TerraformWorld tw;
 	protected HashSet<SimpleLocation> occupied;
 	protected int shrunkenWidth = 0;
 	protected RoomLayoutGenerator gen;
-    public AncientCityAbstractRoomPopulator(HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
+    public AncientCityAbstractRoomPopulator(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
+        this.tw = tw;
         this.occupied = occupied;
         this.gen = gen;
     }
@@ -44,11 +51,11 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
     		depression = depression*-1;
     	}
     	
-    	this.effectiveRoom = new CubeRoom(
+    	this.effectiveRoom = new CarvedRoom(new CubeRoom(
     			room.getWidthX() - shrunkenWidth*2 - 1,
     			room.getWidthZ() - shrunkenWidth*2 - 1,
     			room.getHeight(),
-    			room.getX(), room.getY() + depression, room.getZ());
+    			room.getX(), room.getY() + depression, room.getZ()));
     	
         //Clear out space for the room
     	effectiveRoom.fillRoom(data, Material.CAVE_AIR);
@@ -71,7 +78,7 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
                 	b.lsetType(AncientCityUtils.deepslateBricks);
                 
                 //every few intervals, place a pillar
-                int relX = effectiveRoom.getX() - x;
+            	int relX = effectiveRoom.getX() - x;
                 int relZ = effectiveRoom.getZ() - z;
                 if(relX % 5 == 0 && relZ % 5 == 0 && 
                 		(effectiveRoom.isPointInside(b.getRelative(BlockFace.NORTH))
@@ -82,18 +89,6 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
                 
             }
         }
-        //Debug purposes
-//        lowerCorner = room.getLowerCorner(0);
-//        upperCorner = room.getUpperCorner(0);
-
-//        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-//            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-//                SimpleBlock b = new SimpleBlock(data, x, y, z);
-//                b.lsetType(Material.RED_WOOL);
-//                
-//                
-//            }
-//        }
         
         //Connect the paths to the rooms
         for(Entry<Wall, Integer> entry:room.getFourWalls(data, 0).entrySet()) {
@@ -132,4 +127,26 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
         	}
         }
     }
+
+	public void sculkUp(TerraformWorld tw, PopulatorDataAbstract data, CubeRoom room) {
+        FastNoise circleNoise = NoiseCacheHandler.getNoise(
+                tw,
+                NoiseCacheEntry.BIOME_CAVECLUSTER_CIRCLENOISE,
+                world -> {
+                    FastNoise n = new FastNoise((int) (world.getSeed() * 11));
+                    n.SetNoiseType(FastNoise.NoiseType.Simplex);
+                    n.SetFrequency(0.09f);
+
+                    return n;
+                });
+		for(int i = 0; i <= ((room.getWidthX()*room.getWidthZ())/150); i++)
+		{
+			//Generates 3d coords, but we will discard the y coords.
+			//We will separately generate y coords later.
+			int[] coords = room.randomCoords(rand);
+			int y = rand.nextInt(5);
+			SimpleBlock target = new SimpleBlock(data, coords[0], room.getY()+y,coords[2]);
+			AncientCityUtils.spreadSculk(circleNoise, rand, 5, target);
+		}
+	}
 }

@@ -35,8 +35,17 @@ public class OneOneNineBlockHandler {
 	public static final Material MANGROVE_FENCE = Material.getMaterial("MANGROVE_FENCE") == null ? 
 			Material.getMaterial("OAK_FENCE") : Material.getMaterial("MANGROVE_FENCE");
 	
+	//Pre-1.19 versions WILL NOT have any sculk related spawns.
+	public static final Material SCULK_VEIN = Material.getMaterial("SCULK_VEIN");
+	public static final Material SCULK = Material.getMaterial("SCULK") == null ? 
+			Material.getMaterial("STONE") : Material.getMaterial("SCULK");
+	public static final Material SCULK_CATALYST = Material.getMaterial("SCULK_CATALYST");
+	public static final Material SCULK_SHRIEKER = Material.getMaterial("SCULK_SHRIEKER");
+	public static final Material SCULK_SENSOR = Material.getMaterial("SCULK_SENSOR");
+	
 	
 	public static final Biome MANGROVE_SWAMP = getBiome("MANGROVE_SWAMP", "SWAMP");
+	public static final Biome DEEP_DARK = getBiome("DEEP_DARK", "PLAINS");
 	
 	private static Biome getBiome(String name, String fallback) {
 		try {
@@ -53,6 +62,11 @@ public class OneOneNineBlockHandler {
 		catch(IllegalArgumentException e) {
 			return EntityType.valueOf(fallback);
 		}
+	}
+	
+	private static final String shriekerDataString = "minecraft:sculk_shrieker[can_summon=true,shrieking=false,waterlogged=false]";
+	public static BlockData getActiveSculkShrieker() {
+		return Bukkit.createBlockData(shriekerDataString);
 	}
 	
 	private static final String propaguleDataString = "minecraft:mangrove_propagule[hanging=true,age=4,waterlogged=false]";

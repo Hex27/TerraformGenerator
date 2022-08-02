@@ -14,6 +14,7 @@ import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
+import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayoutGenerator;
@@ -30,8 +31,8 @@ import org.terraform.utils.version.Version;
 
 public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomPopulator {
 
-    public AncientCityCenterPlatformPopulator(HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
-        super(occupied, gen, rand, forceSpawn, unique);
+    public AncientCityCenterPlatformPopulator(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
+        super(tw, occupied, gen, rand, forceSpawn, unique);
     }
 
     @Override
@@ -79,9 +80,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
 						.setFacing(rel.getDirection().getOppositeFace())
 						.lapply(rel.getUp(3).getFront());
 					}
-					
 				}
-    			
     			w = w.getLeft();
     		}
     	}
@@ -94,6 +93,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         	spawnLargePillar(new SimpleBlock(data,x,y,z),room);
         }
 
+        //Direction the head faces
     	BlockFace facing = BlockUtils.getDirectBlockFace(this.getRand());
 
     	int modX = 0; int modZ = 0; CubeRoom fireBox;
@@ -199,6 +199,15 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         			.build();
         		}
         	}
+
+
+    	CubeRoom basement = new CubeRoom(this.effectiveRoom.getWidthX(),
+    			this.effectiveRoom.getWidthZ(),
+    			6, 
+    			this.effectiveRoom.getX(), this.effectiveRoom.getY()-6, this.effectiveRoom.getZ());
+    	AncientCityResearchBasementHandler.populate(data, basement, facing);
+    	
+    	super.sculkUp(tw, data, this.effectiveRoom);
     }
     
     private void spawnCentralHead(SimpleBlock core, BlockFace facing) {

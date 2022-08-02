@@ -35,6 +35,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 
     @Override
     public void populate(PathPopulatorData ppd) {
+        
         Wall core = new Wall(ppd.base, ppd.dir);
         
         //Do not populate in rooms.
@@ -50,9 +51,9 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     		
         	for(BlockFace face:BlockUtils.directBlockFaces)
         	{
-        		core.getRelative(face,2).lsetType(Material.REDSTONE_BLOCK);
+        		core.getRelative(face,2).lsetType(AncientCityUtils.deepslateBricks);
         		for(BlockFace rel:BlockUtils.getAdjacentFaces(face))
-        			core.getRelative(rel).getRelative(face,2).lsetType(Material.REDSTONE_BLOCK);
+        			core.getRelative(rel).getRelative(face,2).lsetType(AncientCityUtils.deepslateBricks);
         	}
         }
         else if (!ppd.isEnd){ //Straight path
@@ -243,9 +244,9 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         Wall core = new Wall(base.getRelative(0, 1, 0), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
-                pathWidth, pathWidth + 1, pathWidth, core.get(), false, 
+                pathWidth + 3, pathWidth + 3, pathWidth + 3, core.get(), false, 
                 BlockUtils.badlandsStoneLike);
-
+        
         return true;
     }
 

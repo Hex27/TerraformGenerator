@@ -46,13 +46,26 @@ public class TerraSchematic {
     public TerraSchematic(Location loc) {
         this.refPoint = new SimpleBlock(loc);
     }
+    
+    public TerraSchematic clone(SimpleBlock refPoint) {
+    	TerraSchematic clone = new TerraSchematic(refPoint);
+    	clone.data = new HashMap<>();
+    	for(Entry<Vector, BlockData> entry:data.entrySet()) {
+    		clone.data.put(entry.getKey(),entry.getValue());
+    	}
+    	clone.VERSION_VALUE = VERSION_VALUE;
+    	return clone;
+    }
 
     public static TerraSchematic load(String internalPath, SimpleBlock refPoint) throws FileNotFoundException {
 
+    	//A new object gets created from here. If the path is in the cache,
+    	//this object is NOT the one that gets returned. Instead, a clone is
+    	//returned, with a new hashmap copy and a (broken) version number.
     	TerraSchematic schem = new TerraSchematic(refPoint);
         if(cache.containsKey(internalPath)) { 
         	schem.data = cache.get(internalPath);
-        	return schem;
+        	return schem.clone(refPoint);
         }
         
         InputStream is = TerraformGeneratorPlugin.get().getClass().getResourceAsStream("/" + internalPath + ".terra");
@@ -71,10 +84,12 @@ public class TerraSchematic {
             BlockData value;
             try {
                 value = Bukkit.createBlockData(cont[1]);
+                //TerraformGeneratorPlugin.logger.info("loaded: " + value.getAsString());
             } catch (IllegalArgumentException e) {
                 BlockDataFixerAbstract fixer = TerraformGeneratorPlugin.injector.getBlockDataFixer();
                 if (fixer != null) {
                     value = Bukkit.createBlockData(fixer.updateSchematic(cont[1]));
+                    
                 } else {
                     //GG
                     value = null;
@@ -90,12 +105,6 @@ public class TerraSchematic {
         	cache.put(internalPath, schem.data);
         return schem;
     }
-    
-//    public static TerraSchematic load(String internalPath, Location loc) throws FileNotFoundException {
-//        SimpleBlock block = new SimpleBlock(loc);
-//
-//        return load(internalPath, block);
-//    }
 
     public void registerBlock(Block b) {
         Vector rel = b.getLocation().toVector().subtract(refPoint.toVector());
@@ -109,7 +118,7 @@ public class TerraSchematic {
         
         for (Entry<Vector, BlockData> entry : data.entrySet()) {
             Vector pos = entry.getKey().clone();
-            BlockData bd = entry.getValue();
+            BlockData bd = entry.getValue().clone();
             if (face == BlockFace.WEST) {
                 int x = pos.getBlockX();
                 pos.setX(pos.getZ());
@@ -142,17 +151,25 @@ public class TerraSchematic {
                     } else if (face == BlockFace.WEST) {
                         r.setRotation(BlockUtils.getAdjacentFaces(r.getRotation())[1]);
                     }
-                } else if (bd instanceof Directional) {
+                } 
+                else if (bd instanceof Directional) {
                     Directional r = (Directional) bd;
                     if (BlockUtils.isDirectBlockFace(r.getFacing()))
                         if (face == BlockFace.SOUTH) {
+                        	//South means flip it to opposite face
+                        	//TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + r.getFacing().getOppositeFace());
                             r.setFacing(r.getFacing().getOppositeFace());
                         } else if (face == BlockFace.WEST) {
+                        	//Turn left
+                        	//TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + BlockUtils.getAdjacentFaces(r.getFacing())[1]);
                             r.setFacing(BlockUtils.getAdjacentFaces(r.getFacing())[1]);
                         } else if (face == BlockFace.EAST) {
+                        	//Turn right
+                        	//TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + BlockUtils.getAdjacentFaces(r.getFacing())[0]);
                             r.setFacing(BlockUtils.getAdjacentFaces(r.getFacing())[0]);
                         }
-                } else if (bd instanceof MultipleFacing) {
+                } 
+                else if (bd instanceof MultipleFacing) {
                     multiFace.add(pos);
                 }
 
@@ -214,6 +231,11 @@ public class TerraSchematic {
         this.face = face;
     }
 
+    /**
+     * This doesn't appear to be used at all
+     * lmao.
+     * @return
+     */
 	public double getVersionValue() {
 		return VERSION_VALUE;
 	}

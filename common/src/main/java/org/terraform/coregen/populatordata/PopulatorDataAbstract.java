@@ -1,5 +1,7 @@
 package org.terraform.coregen.populatordata;
 
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
@@ -34,6 +36,11 @@ public abstract class PopulatorDataAbstract {
      * @return
      */
     public abstract void setType(int x, int y, int z, Material type);
+    
+    public void setType(int x, int y, int z, Material... type)
+    {
+    	setType(x,y,z,type[new Random().nextInt(type.length)]);
+    }
     
     public void lsetType(int x, int y, int z, Material type) {
     	if(!getType(x,y,z).isSolid())
