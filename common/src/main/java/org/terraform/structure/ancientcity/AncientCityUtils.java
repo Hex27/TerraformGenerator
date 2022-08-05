@@ -105,7 +105,7 @@ public class AncientCityUtils {
 	                					.setFace(face.getOppositeFace(), true)
 	                					.apply(adj);
 	                				}
-	                				else if(adj.getBlockData() instanceof MultipleFacing)
+	                				else if(adj.getType() == OneOneNineBlockHandler.SCULK_VEIN)
 	                				{
 	                					MultipleFacing mf = (MultipleFacing) adj.getBlockData();
 	                					mf.setFace(face.getOppositeFace(), true);

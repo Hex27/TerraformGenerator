@@ -205,7 +205,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     			this.effectiveRoom.getWidthZ(),
     			6, 
     			this.effectiveRoom.getX(), this.effectiveRoom.getY()-6, this.effectiveRoom.getZ());
-    	AncientCityResearchBasementHandler.populate(data, basement, facing);
+    	AncientCityResearchBasementHandler.populate(rand, data, basement, facing);
     	
     	super.sculkUp(tw, data, this.effectiveRoom);
     }

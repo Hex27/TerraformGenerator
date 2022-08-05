@@ -137,6 +137,6 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
 
     @Override
     public boolean canPopulate(CubeRoom room) {
-        return room.getWidthX() <= 18 && room.getWidthZ() <= 18;
+        return room.getWidthX() <= 20 && room.getWidthZ() <= 20;
     }
 }

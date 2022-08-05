@@ -36,7 +36,8 @@ public class CarvedRoom extends CubeRoom {
                 zMultiplier*(widthZ / 2f),
                 frequency,
                 new SimpleBlock(data, x, y + heightOffset, z),
-                false, carveMaterials);
+                true,
+                true, carveMaterials);
     }
 
 	public double getxMultiplier() {

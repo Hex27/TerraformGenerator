@@ -17,6 +17,7 @@ import org.bukkit.block.data.type.Leaves;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.populatordata.IPopulatorDataPhysicsCapable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -293,6 +294,52 @@ public class SimpleBlock {
 
     public boolean isSolid() {
     	return popData.getType(x, y, z).isSolid();
+    }
+    
+    public void physicsSetType(Material type, boolean updatePhysics)
+    {
+    	if(this.popData instanceof IPopulatorDataPhysicsCapable)
+    	{
+            if (popData.getType(x, y, z) == Material.WATER) {
+                BlockData data = Bukkit.createBlockData(type);
+                if (data instanceof Waterlogged) {
+                    Waterlogged wl = (Waterlogged) data;
+                    wl.setWaterlogged(true);
+                    data = wl;
+                }
+                ((IPopulatorDataPhysicsCapable) popData).setBlockData(x, y, z, data, updatePhysics);
+            } else
+            	((IPopulatorDataPhysicsCapable) popData).setType(x, y, z, type, updatePhysics);
+
+            //Setting leaves with setType will be persistent
+            if (Tag.LEAVES.isTagged(type)) {
+                //if (type.toString().contains("LEAVES")) {
+                BlockData l = Bukkit.createBlockData(type);
+                if(l instanceof Leaves)
+                ((Leaves) l).setPersistent(true);
+
+                ((IPopulatorDataPhysicsCapable) popData).setBlockData(x,y,z,l, updatePhysics);
+            }
+        
+    	}
+    	else
+    		setType(type);
+    }
+    
+    public void physicsSetBlockData(BlockData dat, boolean updatePhysics)
+    {
+    	if(this.popData instanceof IPopulatorDataPhysicsCapable)
+    	{
+	        if (popData.getType(x, y, z) == Material.WATER) {
+	            if (dat instanceof Waterlogged) {
+	                Waterlogged wl = (Waterlogged) dat;
+	                wl.setWaterlogged(true);
+	            }
+	        }
+	        ((IPopulatorDataPhysicsCapable) popData).setBlockData(x, y, z, dat, updatePhysics);
+    	}
+    	else
+    		setBlockData(dat);
     }
 
     public void setType(Material type) {

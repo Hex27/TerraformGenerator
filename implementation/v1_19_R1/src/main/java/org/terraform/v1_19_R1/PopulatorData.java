@@ -11,28 +11,29 @@ import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_19_R1.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_19_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
+import org.terraform.coregen.populatordata.IPopulatorDataBeehiveEditor;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistry;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.entity.TileEntity;
+import net.minecraft.world.level.block.entity.TileEntityBeehive;
 import net.minecraft.world.level.block.entity.TileEntityLootable;
 import net.minecraft.world.level.block.entity.TileEntityMobSpawner;
 import net.minecraft.world.level.chunk.IChunkAccess;
 import net.minecraft.world.level.storage.loot.LootTables;
 
-public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDataBaseHeightAccess {
+public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDataBaseHeightAccess, IPopulatorDataBeehiveEditor {
     private final int chunkX;
     private final int chunkZ;
     private int radius = 1;
@@ -345,5 +346,23 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 		//(int i, int j, HeightMap.Type heightmap_type, LevelHeightAccessor levelheightaccessor, RandomState randomstate)
 		return 100;
 		//return gen.a(rawX, rawZ, HeightMap.Type.a, this.rlwa);
+	}
+
+	@Override
+	public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
+		BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
+        //TerraformGeneratorPlugin.logger.info(IRegistry.X.b(EntityTypes.h).toString());
+        setType(rawX, rawY, rawZ, Material.BEE_NEST);
+
+        try {
+            TileEntityBeehive tileentity = (TileEntityBeehive) rlwa.c_(pos);
+        	NBTTagCompound nbtTag = new NBTTagCompound();
+        	nbtTag.a("id", IRegistry.X.b(EntityTypes.h).toString());
+        	tileentity.a(nbtTag, 0, false);
+        } catch (IllegalArgumentException | SecurityException e) {
+            TerraformGeneratorPlugin.logger.error("Failed to set beehive at (" + rawX + "," + rawY + "," + rawZ + ")");
+            e.printStackTrace();
+        }
+        
 	}
 }

@@ -18,6 +18,7 @@ import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -243,9 +244,14 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
         Wall core = new Wall(base.getRelative(0, 1, 0), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
+        EnumSet<Material> carveMaterials = BlockUtils.stoneLike.clone();
+        carveMaterials.addAll(BlockUtils.caveDecoratorMaterials);
         BlockUtils.carveCaveAir(seed,
-                pathWidth + 3, pathWidth + 3, pathWidth + 3, core.get(), false, 
-                BlockUtils.badlandsStoneLike);
+                pathWidth + 3, pathWidth + 3, pathWidth + 3, 
+                0.09f,
+                core.get(), 
+                true, true, 
+                carveMaterials);
         
         return true;
     }

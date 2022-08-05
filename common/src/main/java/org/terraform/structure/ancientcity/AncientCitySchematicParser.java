@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Lightable;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
@@ -29,6 +30,22 @@ public class AncientCitySchematicParser extends SchematicParser {
 		{ //Rot some wood away
     		if(rand.nextBoolean())
     			data = Bukkit.createBlockData(Material.AIR);
+		}
+		else if(data.getMaterial() == OneOneSevenBlockHandler.CANDLE)
+		{
+			try {
+				Lightable candle = (Lightable) Bukkit.createBlockData(OneOneSevenBlockHandler.CANDLE);
+				candle.setLit(true);
+				
+				if(OneOneSevenBlockHandler.setCandlesMethod == null) {
+					OneOneSevenBlockHandler.setCandlesMethod = Class.forName("org.bukkit.block.data.type.Candle").getMethod("setCandles", int.class);
+				}
+				OneOneSevenBlockHandler.setCandlesMethod.invoke(candle, 1+rand.nextInt(4));
+				data = candle;
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		else if(data.getMaterial() == Material.CHEST)
 		{ //Populate chests

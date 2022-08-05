@@ -18,8 +18,15 @@ public class SchematicParser {
 				Material.BROWN_CARPET,
 				Material.RED_CARPET,
 				Material.WHITE_CARPET,
-				Material.SOUL_FIRE
+				Material.SOUL_FIRE,
+				Material.REDSTONE_WIRE,
+				Material.REDSTONE_TORCH,
+				Material.REPEATER,
+				Material.LEVER,
+				Material.POTATOES,
+				Material.KELP
 			);
+	
     public void applyData(SimpleBlock block, BlockData data) {
     	if(isDelayedApply || !fragile.contains(data.getMaterial()))
 	    	block.setBlockData(data);

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.MegaChunk;
@@ -32,39 +33,30 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-//        MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-//        int[] coords = mc.getCenterBiomeSectionBlockCoords();      	
-		//Do not spawn catacombs under deep oceans, there's no space.
-//		if(biome.getType() == BiomeType.DEEP_OCEANIC)
-//			return false;
-//
-//		//Don't compete with badlandsmine for space
-//		if(biome == BiomeBank.BADLANDS_CANYON)
-//			return false;
-//		
-//		//Don't compete with villages for space. In future, this may be changed
-//		//to allow multiple structures per megachunk
-//		if(biome == (BiomeBank.PLAINS)
-//            		|| biome == (BiomeBank.FOREST)
-//            		|| biome == (BiomeBank.SAVANNA)
-//            		|| biome == (BiomeBank.TAIGA)
-//               		|| biome == (BiomeBank.SCARLET_FOREST)
-//               		|| biome == (BiomeBank.CHERRY_GROVE))
-//			return false;
-    	if(!Version.isAtLeast(1.18)) return false;
+        if (!TConfigOption.STRUCTURES_ANCIENTCITY_ENABLED.getBoolean())
+            return false;
+        
+        //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
+        //int[] coords = mc.getCenterBiomeSectionBlockCoords();      	
+		//Do not spawn ancient cities in non-mountains, like vanilla
+		if(biome.getType() != BiomeType.MOUNTAINOUS
+				&& biome.getType() != BiomeType.HIGH_MOUNTAINOUS)
+			return false;
+		
+    	if(!Version.isAtLeast(19)) return false;
 
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }
     private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
-        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 17261),
-                (int) (TConfigOption.STRUCTURES_CATACOMBS_SPAWNRATIO
+        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 123122),
+                (int) (TConfigOption.STRUCTURES_ANCIENTCITY_SPAWNRATIO
                         .getDouble() * 10000),
                 10000);
     }
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-        if (!TConfigOption.STRUCTURES_CATACOMBS_ENABLED.getBoolean())
+        if (!TConfigOption.STRUCTURES_ANCIENTCITY_ENABLED.getBoolean())
             return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
@@ -72,18 +64,18 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         int x = coords[0];
         int z = coords[1];
         //int height = HeightMap.getBlockHeight(tw, x, z);
-        int minY = TConfigOption.STRUCTURES_CATACOMBS_MIN_Y.getInt();
-        if(!Version.isAtLeast(18) && minY < 0) minY = 8;
-        int y = GenUtils.randInt(minY, TConfigOption.STRUCTURES_CATACOMBS_MAX_Y.getInt());
+        int minY = TConfigOption.STRUCTURES_ANCIENTCITY_MIN_Y.getInt();
+        //if(!Version.isAtLeast(18) && minY < 0) minY = 8;
+        int y = GenUtils.randInt(minY, TConfigOption.STRUCTURES_ANCIENTCITY_MAX_Y.getInt());
 
         
         spawnAncientCity(tw,
-                tw.getHashedRand(x, y, z, 1928374),
+                tw.getHashedRand(x, y, z, 23412222),
                 data, x, y + 1, z);
     }
 
     public void spawnAncientCity(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
-    	TerraformGeneratorPlugin.logger.info("Spawning ancient city at: " + x + "," + z);
+    	TerraformGeneratorPlugin.logger.info("Spawning ancient city at: " + x + "," + y + "," + z);
     	
         //Level One
     	HashSet<SimpleLocation> occupied = new HashSet<>();
@@ -186,6 +178,8 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 	                			}
 	                		}
 	                	}
+	                	else if(rel.getType() == Material.WATER)
+	                		rel.setType(Material.CAVE_AIR);
                 	}
                 }
             }

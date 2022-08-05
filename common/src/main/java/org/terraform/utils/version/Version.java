@@ -12,6 +12,7 @@ public class Version {
         return DOUBLE >= toVersionDouble(version);
     }
 
+    //Since I keep forgetting, an example version is 19.1 for 1.19.1
     public static boolean isAtLeast(double version) {
         return DOUBLE >= version;
     }

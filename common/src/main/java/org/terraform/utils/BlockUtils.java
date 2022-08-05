@@ -101,6 +101,7 @@ public class BlockUtils {
      */
     public static final EnumSet<Material> stoneLike = EnumSet.of(
             Material.STONE, Material.COBBLESTONE,
+            Material.MOSSY_COBBLESTONE,
             Material.GRANITE, Material.ANDESITE,
             Material.DIORITE, Material.GRAVEL,
             Material.CLAY,
@@ -122,8 +123,23 @@ public class BlockUtils {
     		Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL, 
     		OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL,
     		Material.COBBLESTONE_SLAB, Material.STONE_SLAB,
-    		Material.MOSS_BLOCK, Material.MOSS_CARPET
-    		
+    		OneOneSevenBlockHandler.COBBLED_DEEPSLATE_SLAB,
+    		Material.MOSS_BLOCK, Material.MOSS_CARPET, 
+    		OneOneSevenBlockHandler.CAVE_VINES,
+    		OneOneSevenBlockHandler.HANGING_ROOTS,
+    		OneOneSevenBlockHandler.SPORE_BLOSSOM,
+    		OneOneSevenBlockHandler.SMALL_DRIPLEAF,
+    		OneOneSevenBlockHandler.AZALEA,
+    		OneOneSevenBlockHandler.FLOWERING_AZALEA,
+    		OneOneSevenBlockHandler.BIG_DRIPLEAF,
+    		OneOneSevenBlockHandler.BIG_DRIPLEAF_STEM,
+    		Material.GRASS, Material.TALL_GRASS,
+    		Material.ICE, Material.PACKED_ICE,
+    		OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
+    		OneOneSevenBlockHandler.POINTED_DRIPSTONE,
+    		OneOneSevenBlockHandler.AMETHYST_CLUSTER,
+    		OneOneSevenBlockHandler.BUDDING_AMETHYST,
+    		OneOneSevenBlockHandler.GLOW_LICHEN
 	);
     
     //This enumset gets populated more in initBlockUtils
@@ -744,10 +760,16 @@ public class BlockUtils {
     {
     	carveCaveAir(seed,rX,rY,rZ,0.09f, block,waterToAir, toReplace);
     }
+    
+    public static void carveCaveAir(int seed, float rX, float rY, float rZ, float frequency, SimpleBlock block, boolean waterToAir, EnumSet<Material> toReplace)
+    {
+    	carveCaveAir(seed, rX, rY, rZ, frequency, block, false, waterToAir, toReplace);
+    }
+    
     /**
      * Put barrier in toReplace to hard replace all solid blocks.
      */
-    public static void carveCaveAir(int seed, float rX, float rY, float rZ, float frequency, SimpleBlock block, boolean waterToAir, EnumSet<Material> toReplace) {
+    public static void carveCaveAir(int seed, float rX, float rY, float rZ, float frequency, SimpleBlock block, boolean blockWaterHoles, boolean waterToAir, EnumSet<Material> toReplace) {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             if (waterToAir || block.getType() != Material.WATER) block.setType(Material.CAVE_AIR);
@@ -765,20 +787,34 @@ public class BlockUtils {
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
-                    if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
+                    double noiseVal = 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
+                    if (equationResult <= noiseVal) {
                         if (toReplace.contains(Material.BARRIER)) { //Blacklist
                             if (!toReplace.contains(rel.getType()))
-                                if (rel.getType() != Material.WATER || waterToAir)
-                                    rel.setType(Material.CAVE_AIR);
+                                if (!isWet(rel) || waterToAir)
+                                    rel.physicsSetType(Material.CAVE_AIR, false);
 
                         } else if (toReplace.contains(rel.getType())) { //Whitelist
-                            if (rel.getType() != Material.WATER || waterToAir)
-                                rel.setType(Material.CAVE_AIR);
+                            if (!isWet(rel) || waterToAir)
+                                rel.physicsSetType(Material.CAVE_AIR, false);
 
                         } else if (!rel.getType().isSolid()) {
-                            if (rel.getType() != Material.WATER || waterToAir)
-                                rel.setType(Material.CAVE_AIR);
+                            if (!isWet(rel) || waterToAir)
+                                rel.physicsSetType(Material.CAVE_AIR, false);
                         }
+                        
+                        //Patches found water holes
+                        if(blockWaterHoles)
+	                        for(BlockFace face:BlockUtils.sixBlockFaces)
+	                        {
+	                        	SimpleBlock relrel = rel.getRelative(face);
+	                        	if(isWet(relrel) ||
+	                        			relrel.getType() == Material.LAVA)
+	                        	{
+	                        		Material setMat = relrel.getY() < 0 ? OneOneSevenBlockHandler.DEEPSLATE: Material.STONE;
+	                        		relrel.physicsSetType(setMat, false);
+	                        	}
+	                        }
                     }
                 }
             }
@@ -970,6 +1006,9 @@ public class BlockUtils {
         }
 
         correctMultifacingData(target);
+        if(!(target.getBlockData() instanceof MultipleFacing))
+        	return;
+        
         MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
             if (target.getRelative(face).getBlockData() instanceof MultipleFacing) {
@@ -1290,7 +1329,7 @@ public class BlockUtils {
 			return 180.0f;
     	}
     }
-    
+
     public static void randRotateBlockData(Random rand, BlockData data) {
     	if(data instanceof Directional) {
     		Set<BlockFace> faces = ((Directional) data).getFaces();

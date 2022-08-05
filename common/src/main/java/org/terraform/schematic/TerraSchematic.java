@@ -3,6 +3,7 @@ package org.terraform.schematic;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -10,6 +11,8 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.type.RedstoneWire;
+import org.bukkit.block.data.type.RedstoneWire.Connection;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.data.SimpleBlock;
@@ -172,6 +175,29 @@ public class TerraSchematic {
                 else if (bd instanceof MultipleFacing) {
                     multiFace.add(pos);
                 }
+                else if (bd instanceof RedstoneWire) {
+                	RedstoneWire w = (RedstoneWire) bd;
+                	RedstoneWire newData = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
+                	newData.setPower(w.getPower());
+                	for(BlockFace wireFace:w.getAllowedFaces())
+                	{
+                		if(w.getFace(wireFace) == Connection.NONE) continue;
+                		
+                		if (this.face == BlockFace.SOUTH) {
+                        	//South means flip it to opposite face
+                			newData.setFace(wireFace.getOppositeFace(), w.getFace(wireFace));
+                        } else if (this.face == BlockFace.WEST) {
+                        	//Turn left
+                        	newData.setFace(BlockUtils.getAdjacentFaces(wireFace)[1], w.getFace(wireFace));
+                        } else if (this.face == BlockFace.EAST) {
+                        	//Turn right
+                        	newData.setFace(BlockUtils.getAdjacentFaces(wireFace)[0], w.getFace(wireFace));
+                        }
+                        else
+                        	newData.setFace(wireFace, w.getFace(wireFace));
+                	}
+                	bd = newData;
+                }
 
                 //Apply version-specific updates
                 if (bdfa != null)
@@ -188,8 +214,8 @@ public class TerraSchematic {
         //Multiple-facing blocks are just gonna be painful.
         for (Vector pos : multiFace) {
             SimpleBlock b = refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ());
-
-            BlockUtils.correctSurroundingMultifacingData(b);
+            if(b.getBlockData() instanceof MultipleFacing)
+            	BlockUtils.correctSurroundingMultifacingData(b);
         }
         if (bdfa != null && face != BlockFace.NORTH) {
             for (Vector pos : bdfa.flush()) {

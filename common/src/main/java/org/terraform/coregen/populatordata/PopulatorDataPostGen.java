@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -21,7 +22,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract {
+public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract implements IPopulatorDataPhysicsCapable {
     private final World w;
     private final Chunk c;
 
@@ -58,8 +59,8 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract {
 
     @Override
     public void setType(int x, int y, int z, Material type) {
-        boolean isFragile = type.toString().contains("DOOR") ||
-                type.toString().contains("CARPET") ||
+        boolean isFragile = Tag.DOORS.isTagged(type) ||
+        		Tag.CARPETS.isTagged(type) ||
                 type == Material.FARMLAND ||
                 type == Material.WATER;
         //TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())
@@ -70,14 +71,26 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract {
 
     @Override
     public void setBlockData(int x, int y, int z, BlockData data) {
-        boolean isFragile = data.getMaterial().toString().contains("DOOR") ||
-        		data.getMaterial().toString().contains("CARPET") ||
+        boolean isFragile = Tag.DOORS.isTagged(data.getMaterial()) ||
+        		Tag.CARPETS.isTagged(data.getMaterial()) ||
                 data.getMaterial() == Material.FARMLAND ||
                 data.getMaterial() == Material.WATER;
         //TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())
         //.setBlockData(x, y, z, data);
         Block b = w.getBlockAt(x, y, z);
         b.setBlockData(data.clone(), !isFragile);
+    }
+    
+    @Override
+    public void setType(int x, int y, int z, Material type, boolean updatePhysics) {
+        Block b = w.getBlockAt(x, y, z);
+        b.setType(type, updatePhysics);
+    }
+
+    @Override
+    public void setBlockData(int x, int y, int z, BlockData data, boolean updatePhysics) {
+        Block b = w.getBlockAt(x, y, z);
+        b.setBlockData(data.clone(), updatePhysics);
     }
 
     /**

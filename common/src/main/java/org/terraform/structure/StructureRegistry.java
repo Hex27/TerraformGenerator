@@ -3,6 +3,7 @@ package org.terraform.structure;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.ancientcity.AncientCityPopulator;
 import org.terraform.structure.catacombs.CatacombsPopulator;
 import org.terraform.structure.caves.LargeCavePopulator;
 import org.terraform.structure.mineshaft.BadlandsMinePopulator;
@@ -48,6 +49,7 @@ public class StructureRegistry {
         registerStructure(StructureType.MEGA_DUNGEON, new MonumentPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new StrongholdPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new MansionPopulator());
+        registerStructure(StructureType.MEGA_DUNGEON, new AncientCityPopulator());
 
         registerStructure(StructureType.LARGE_CAVE, new LargeCavePopulator());
 

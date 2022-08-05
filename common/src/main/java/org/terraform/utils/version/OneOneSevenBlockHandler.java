@@ -151,7 +151,7 @@ public class OneOneSevenBlockHandler {
 	public static final Material CANDLE = Material.getMaterial("CANDLE") == null ? 
 			Material.getMaterial("TORCH") : Material.getMaterial("CANDLE");
 	
-	private static Method setCandlesMethod = null;
+	public static Method setCandlesMethod = null;
 	public static void placeCandle(SimpleBlock block, int numCandles, boolean lit) {
 		if(Version.isAtLeast(17)) {
 			Lightable candle = (Lightable) Bukkit.createBlockData(CANDLE);
