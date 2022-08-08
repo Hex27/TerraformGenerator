@@ -254,8 +254,6 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 //            return LootTables.N;
 //        case BASTION_HOGLIN_STABLE:
 //            return LootTables.O;
-        case RUINED_PORTAL:
-            return LootTables.P;
 //        case SHEEP_WHITE:
 //            return LootTables.Q;
 //        case SHEEP_ORANGE:
@@ -330,6 +328,8 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 			return LootTables.P;
 		case ANCIENT_CITY_ICE_BOX:
 			return LootTables.Q;
+        case RUINED_PORTAL:
+            return LootTables.R;
 		default:
 			break;
         }
