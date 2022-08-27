@@ -148,6 +148,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
      * @param event
      * @deprecated
      */
+    @Deprecated
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {

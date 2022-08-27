@@ -9,6 +9,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -80,11 +81,15 @@ public class ScarletForestHandler extends BiomeHandler {
             if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
             {
-            	new FractalTreeBuilder(FractalTypes.Tree.SCARLET_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());	
-            	TaigaHandler.replacePodzol(
-                		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
-                		7f,
-                		new SimpleBlock(data,sLoc.getX(),sLoc.getY(),sLoc.getZ()));
+                if(TConfigOption.TREES_SCARLET_BIG_ENABLED.getBoolean())
+                    new FractalTreeBuilder(FractalTypes.Tree.SCARLET_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                else
+                    new FractalTreeBuilder(FractalTypes.Tree.SCARLET_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+
+                TaigaHandler.replacePodzol(
+                            tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
+                            7f,
+                            new SimpleBlock(data,sLoc.getX(),sLoc.getY(),sLoc.getZ()));
             }
         }
         

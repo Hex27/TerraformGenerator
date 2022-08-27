@@ -356,10 +356,15 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 
         try {
             TileEntityBeehive tileentity = (TileEntityBeehive) rlwa.c_(pos);
+            if(tileentity == null)
+            { //retry?
+            	 setType(rawX, rawY, rawZ, Material.BEE_NEST);
+            	 tileentity = (TileEntityBeehive) rlwa.c_(pos);
+            }
         	NBTTagCompound nbtTag = new NBTTagCompound();
         	nbtTag.a("id", IRegistry.X.b(EntityTypes.h).toString());
         	tileentity.a(nbtTag, 0, false);
-        } catch (IllegalArgumentException | SecurityException e) {
+        } catch (NullPointerException | IllegalArgumentException | SecurityException e) {
             TerraformGeneratorPlugin.logger.error("Failed to set beehive at (" + rawX + "," + rawY + "," + rawZ + ")");
             e.printStackTrace();
         }

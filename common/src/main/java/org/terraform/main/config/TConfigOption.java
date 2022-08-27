@@ -147,6 +147,7 @@ public enum TConfigOption {
     TREES_FOREST_BIG_ENABLED("trees.big-forest-trees.enabled", true),
     TREES_SAVANNA_BIG_ENABLED("trees.big-savanna-trees.enabled", true),
     TREES_BIRCH_BIG_ENABLED("trees.big-birch-trees.enabled", true),
+    TREES_SCARLET_BIG_ENABLED("trees.big-scarlet-trees.enabled", true),
     TREES_SNOWY_TAIGA_BIG_ENABLED("trees.big-snowy-taiga-trees.enabled", true),
     TREES_DARK_FOREST_BIG_ENABLED("trees.big-dark-forest-trees.enabled", true),
 
