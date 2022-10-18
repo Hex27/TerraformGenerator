@@ -227,19 +227,13 @@ public enum HeightMap {
 		    		}
 		    		
 		    		//Temporarily cache these X-Blurred values into chunkcache.
-		    		if(relZ < sect.getLowerBounds().getZ() || relZ > sect.getUpperBounds().getZ()) {
-		    			//Do not purge values that are legitimate.
-		    			if(targetCache.getBlurredHeight(relX, relZ) == Float.MIN_VALUE)
-		    			{
-			    			//add these to toPurgeValues as they must be deleted after Z calculation.
-				    		targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
-				    		toPurgeValues.add(targetCache);
-		    			}
-		    		}
-		    		else
-		    			//Temporarily cache the X-axis blurred value into this.
-			    		targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
-			    		
+		    		//Do not purge values that are legitimate.
+                    if(targetCache.getIntermediateBlurHeight(relX, relZ) == Float.MIN_VALUE)
+                    {
+                        //add these to toPurgeValues as they must be deleted after Z calculation.
+                        targetCache.cacheIntermediateBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
+                        //toPurgeValues.add(targetCache);
+                    }
 	        	}
 	    	}
 
@@ -262,47 +256,23 @@ public enum HeightMap {
 		    			
 		    			//Note, this may accidentally blur twice for some Z values if 
 		    			//chunks generate in a specific weird order. That's (probably) fine.
-	    				lineTotalHeight += queryCache.getBlurredHeight(relX, relZ + offsetZ);
+	    				lineTotalHeight += queryCache.getIntermediateBlurHeight(relX, relZ + offsetZ);
 		    		}
 		    		//final blurred value
 		    		targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
 	        	}
 	    	}
 	    	
-	    	for(ChunkCache toPurge:toPurgeValues) {
-	        	for(short i = 0; i < 16; i++)
-	        		for(short j = 0; j < 16; j++) {
-	        			toPurge.blurredHeightCache[i][j] = Float.MIN_VALUE;
-	        		}
-	    	}
+//	    	for(ChunkCache toPurge:toPurgeValues) {
+//	        	for(short i = 0; i < 16; i++)
+//	        		for(short j = 0; j < 16; j++) {
+//	        			toPurge.blurredHeightCache[i][j] = Float.MIN_VALUE;
+//	        		}
+//	    	}
 		}
 		
 		coreHeight = mainCache.getBlurredHeight(x, z);
-    	
-		//This is the older method (2d blurring) that is slower. May consider readding
-		//the blur exemption (don't blur the center of sections)
-      	//Don't calculate if distance is very close to center. 
-    	//The bulk of the section doesn't need blurring.
-//    	double coreHeight = 0;
-//    	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x,z);
-//    	if(new SimpleLocation(x,0,z).distance(homeSection.getCenter()) <= BiomeSection.dominanceThreshold) {
-//    		coreHeight = getDominantBiomeHeight(tw,x,z); 
-//    	}
-//    	else
-//    	{
-//        	//Box blur with radius of 5. 
-//        	float totalHeight = 0;
-//        	for(int nx = x-maskRadius; nx <= x+maskRadius; nx++) {
-//        		double lineHeight = 0;
-//        		for(int nz = z-maskRadius; nz <= z+maskRadius; nz++) {
-//        			lineHeight += getDominantBiomeHeight(tw,nx,nz);
-//        		}
-//        		totalHeight += lineHeight;
-//        	}
-//      	
-//        	coreHeight = totalHeight/maskDiameterSquared;
-//    	}
-    	
+
     	coreHeight += HeightMap.ATTRITION.getHeight(tw, x, z);
     	
     	return coreHeight;

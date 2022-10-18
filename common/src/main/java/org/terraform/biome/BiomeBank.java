@@ -341,7 +341,6 @@ public enum BiomeBank {
      * <br><br>
      * If for whatever reason, the biome must be calculated intead of
      * fetched from the cache, use calculateBiome(tw,x,y,z);
-     * @param height Ranges between 0-255
      * @return a biome type
      */
     public static BiomeBank calculateHeightIndependentBiome(TerraformWorld tw, int x, int z) {

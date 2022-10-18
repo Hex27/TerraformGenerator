@@ -140,7 +140,13 @@ public class BlockUtils {
     		OneOneSevenBlockHandler.POINTED_DRIPSTONE,
     		OneOneSevenBlockHandler.AMETHYST_CLUSTER,
     		OneOneSevenBlockHandler.BUDDING_AMETHYST,
-    		OneOneSevenBlockHandler.GLOW_LICHEN
+    		OneOneSevenBlockHandler.GLOW_LICHEN,
+
+            //ItemsAdder Blocks
+            Material.NOTE_BLOCK,
+            Material.SPAWNER,
+            Material.BROWN_MUSHROOM_BLOCK,
+            Material.RED_MUSHROOM_BLOCK
 	);
     
     //This enumset gets populated more in initBlockUtils

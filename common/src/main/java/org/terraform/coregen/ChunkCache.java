@@ -20,6 +20,7 @@ public class ChunkCache {
      */
     float[][] dominantBiomeHeightCache;
     float[][] blurredHeightCache;
+    float[][] intermediateBlurCache;
     double[][] heightMapCache;
     short[][] highestGroundCache;
     BiomeBank[][] biomeCache;
@@ -48,12 +49,14 @@ public class ChunkCache {
     	highestGroundCache = new short[16][16];
         heightMapCache = new double[16][16];
         dominantBiomeHeightCache = new float[16][16];
+        intermediateBlurCache = new float[16][16];
         blurredHeightCache = new float[16][16];
         
     	for(short i = 0; i < 16; i++)
     		for(short j = 0; j < 16; j++) {
     			highestGroundCache[i][j] = Short.MIN_VALUE;
     			blurredHeightCache[i][j] = Float.MIN_VALUE;
+                intermediateBlurCache[i][j] = Float.MIN_VALUE;
     			dominantBiomeHeightCache[i][j] = Float.MIN_VALUE;
     		}
         biomeCache = new BiomeBank[16][16];
@@ -111,6 +114,14 @@ public class ChunkCache {
         return blurredHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
     }
 
+    /**
+     * MEANT FOR USE ONLY IN THE BLURRING PROCESS.
+     */
+    public double getIntermediateBlurHeight(int rawX, int rawZ)
+    {
+        return intermediateBlurCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+    }
+
 
     /**
      *
@@ -120,6 +131,16 @@ public class ChunkCache {
      */
     public void cacheBlurredHeight(int rawX, int rawZ, float value) {
     	blurredHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+    }
+
+    /**
+     * MEANT FOR USE ONLY IN THE BLURRING PROCESS.
+     * @param rawX BLOCK COORD x
+     * @param rawZ BLOCK COORD z
+     * @param value height to cache
+     */
+    public void cacheIntermediateBlurredHeight(int rawX, int rawZ, float value) {
+        intermediateBlurCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
     }
 
 
