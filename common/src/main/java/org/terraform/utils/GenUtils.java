@@ -546,4 +546,12 @@ public class GenUtils {
         
         return locs;
     }
+
+    /**
+     * Random-angle
+     * @return An angle between lowerBound*base to upperBound*base degrees in radians
+     */
+    public static double randAngle(double base, double lowerBound, double upperBound) {
+        return GenUtils.randDouble(new Random(), lowerBound * base, upperBound * base);
+    }
 }

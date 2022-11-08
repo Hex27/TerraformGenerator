@@ -78,6 +78,7 @@ public class TerraformCommandManager implements TabExecutor {
             this.registerCommand(new PlainsVillageCommand(plugin, "plainsvillage", "pv"));
             this.registerCommand(new RibCageCommand(plugin, "ribcage"));
             this.registerCommand(new OreDitCommand(plugin, "oredit"));
+            this.registerCommand(new NewTreeCommand(plugin, "newtree","nt"));
             this.registerCommand(new CrappyDebugStructureCommand(plugin, "cdsc"));
 
         }

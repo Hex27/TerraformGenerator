@@ -91,7 +91,7 @@ public class TerraSchematic {
             } catch (IllegalArgumentException e) {
                 BlockDataFixerAbstract fixer = TerraformGeneratorPlugin.injector.getBlockDataFixer();
                 if (fixer != null) {
-                    value = Bukkit.createBlockData(fixer.updateSchematic(cont[1]));
+                    value = Bukkit.createBlockData(fixer.updateSchematic(schem.getVersionValue(),cont[1]));
                     
                 } else {
                     //GG
@@ -227,6 +227,7 @@ public class TerraSchematic {
 
     public void export(String path) throws IOException {
         File fout = new File(path);
+        fout.getParentFile().mkdirs();
         FileOutputStream fos = new FileOutputStream(fout);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
         

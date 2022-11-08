@@ -44,17 +44,22 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
     }
 
     @Override
-    public String updateSchematic(String schematic) {
-        if (schematic.contains("_wall[")) {
-            schematic = StringUtils.replace(schematic, "north=false", "north=none");
-            schematic = StringUtils.replace(schematic, "south=false", "south=none");
-            schematic = StringUtils.replace(schematic, "east=false", "east=none");
-            schematic = StringUtils.replace(schematic, "west=false", "west=none");
-            schematic = StringUtils.replace(schematic, "north=true", "north=low");
-            schematic = StringUtils.replace(schematic, "south=true", "south=low");
-            schematic = StringUtils.replace(schematic, "east=true", "east=low");
-            schematic = StringUtils.replace(schematic, "west=true", "west=low");
-        }
+    public String updateSchematic(double schematicVersion, String schematic) {
+        //This isn't needed anymore as there are no more schematics that are that old.
+//        if (schematic.contains("_wall[")) {
+//            schematic = StringUtils.replace(schematic, "north=false", "north=none");
+//            schematic = StringUtils.replace(schematic, "south=false", "south=none");
+//            schematic = StringUtils.replace(schematic, "east=false", "east=none");
+//            schematic = StringUtils.replace(schematic, "west=false", "west=none");
+//            schematic = StringUtils.replace(schematic, "north=true", "north=low");
+//            schematic = StringUtils.replace(schematic, "south=true", "south=low");
+//            schematic = StringUtils.replace(schematic, "east=true", "east=low");
+//            schematic = StringUtils.replace(schematic, "west=true", "west=low");
+//        }
+        //Unpatch 1.17+ schematics
+        if(schematicVersion >= 17)
+            schematic = StringUtils.replace(schematic, "minecraft:water_cauldron[level=", "minecraft:cauldron[level=");
+
         return schematic;
     }
 

@@ -13,14 +13,15 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
 
 public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
+
+    //TODO: Investigate what this class is for. Seems quite random to have this around.
     public static void correctWallData(SimpleBlock target) {
-        if (!(target.getBlockData() instanceof Wall)) return;
-        Wall data = (Wall) target.getBlockData();
+        if (!(target.getBlockData() instanceof Wall data)) return;
         for (BlockFace face : BlockUtils.directBlockFaces) {
         	Material relType = target.getRelative(face).getType();
             if (relType.isSolid() 
-            		&& !relType.toString().contains("BANNER")
-            		&& !relType.toString().contains("PRESSURE_PLATE")
+            		&& !Tag.BANNERS.isTagged(relType)
+            		&& !Tag.PRESSURE_PLATES.isTagged(relType)
                     && !Tag.TRAPDOORS.isTagged(relType)
                     && !Tag.SLABS.isTagged(relType)) {
                 data.setHeight(face, Height.LOW);
@@ -28,16 +29,15 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
                     data.setHeight(face, Height.TALL);
                 }
 
-                //Ensure that panes to do join with fences
-                if(target.getType().toString().endsWith("GLASS_PANE")
-                		&& (Tag.FENCE_GATES.isTagged(relType)
-                				|| Tag.FENCES.isTagged(relType))) {
+                //Ensure that target panes do not join with relType fences and vice versa
+                if(BlockUtils.glassPanes.contains(target.getType())
+                		&& (Tag.FENCE_GATES.isTagged(relType)||Tag.FENCES.isTagged(relType))) {
                 	data.setHeight(face, Height.NONE);
-                }else if(target.getType().toString().contains("FENCE")
-                		&& (relType.toString().endsWith("GLASS_PANE"))) {
+                }else if((Tag.FENCES.isTagged(target.getType())||Tag.FENCE_GATES.isTagged(target.getType()))
+                		&& (BlockUtils.glassPanes.contains(relType))) {
                 	data.setHeight(face, Height.NONE);
                 }
-                
+
             } else 
             	data.setHeight(face, Height.NONE);
         }
@@ -61,17 +61,18 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
     }
 
     @Override
-    public String updateSchematic(String schematic) {
-        if (schematic.contains("_wall[")) {
-            schematic = StringUtils.replace(schematic, "north=false", "north=none");
-            schematic = StringUtils.replace(schematic, "south=false", "south=none");
-            schematic = StringUtils.replace(schematic, "east=false", "east=none");
-            schematic = StringUtils.replace(schematic, "west=false", "west=none");
-            schematic = StringUtils.replace(schematic, "north=true", "north=low");
-            schematic = StringUtils.replace(schematic, "south=true", "south=low");
-            schematic = StringUtils.replace(schematic, "east=true", "east=low");
-            schematic = StringUtils.replace(schematic, "west=true", "west=low");
-        }
+    public String updateSchematic(double schematicVersion, String schematic) {
+//        if(schematicVersion < 16)
+//            if (schematic.contains("_wall[")) {
+//                schematic = StringUtils.replace(schematic, "north=false", "north=none");
+//                schematic = StringUtils.replace(schematic, "south=false", "south=none");
+//                schematic = StringUtils.replace(schematic, "east=false", "east=none");
+//                schematic = StringUtils.replace(schematic, "west=false", "west=none");
+//                schematic = StringUtils.replace(schematic, "north=true", "north=low");
+//                schematic = StringUtils.replace(schematic, "south=true", "south=low");
+//                schematic = StringUtils.replace(schematic, "east=true", "east=low");
+//                schematic = StringUtils.replace(schematic, "west=true", "west=low");
+//            }
         return schematic;
     }
 
@@ -79,15 +80,6 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
     public void correctFacing(Vector v, SimpleBlock b, BlockData data, BlockFace face) {
         if (data == null && b != null) data = b.getBlockData();
 
-        if (data.getMaterial().toString().endsWith("_WALL")) {
-//			TerraformGeneratorPlugin.logger.info("====================");
-//			TerraformGeneratorPlugin.logger.info("hasflushed: " + hasFlushed);
-//			TerraformGeneratorPlugin.logger.info("Has simpleblock: " + (b != null));
-//			TerraformGeneratorPlugin.logger.info("data: " + data.getAsString());
-//			TerraformGeneratorPlugin.logger.info("has vector: " + (v != null));
-//			TerraformGeneratorPlugin.logger.info("Instanceof wall: " + (data instanceof Wall));
-//
-        }
         if (!hasFlushed && data instanceof Wall) {
             this.pushChanges(v);
             return;

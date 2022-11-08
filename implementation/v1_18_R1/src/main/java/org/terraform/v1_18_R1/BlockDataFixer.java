@@ -14,24 +14,7 @@ import org.terraform.utils.BlockUtils;
 public class BlockDataFixer extends BlockDataFixerAbstract {
 
     @Override
-    public String updateSchematic(String schematic) {
-    	//There has to be a better fucking system. Consider revamp in future.
-    	//1.16 change
-        if (schematic.contains("_wall[")) {
-            schematic = StringUtils.replace(schematic, "north=false", "north=none");
-            schematic = StringUtils.replace(schematic, "south=false", "south=none");
-            schematic = StringUtils.replace(schematic, "east=false", "east=none");
-            schematic = StringUtils.replace(schematic, "west=false", "west=none");
-            schematic = StringUtils.replace(schematic, "north=true", "north=low");
-            schematic = StringUtils.replace(schematic, "south=true", "south=low");
-            schematic = StringUtils.replace(schematic, "east=true", "east=low");
-            schematic = StringUtils.replace(schematic, "west=true", "west=low");
-        }
-        //1.17 change, cauldrons have water
-        else if (schematic.contains("minecraft:cauldron[level=")) 
-        {
-            schematic = StringUtils.replace(schematic, "minecraft:cauldron[level=", "minecraft:water_cauldron[level=");
-        }
+    public String updateSchematic(double schematicVersion, String schematic) {
         return schematic;
     }
     

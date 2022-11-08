@@ -235,7 +235,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         right = right.getLeft();
 
         //At least distance of 3
-        int dist = (int) left.get().getVector().distance(right.get().getVector());
+        int dist = (int) left.get().toVector().distance(right.get().toVector());
         if (dist >= 3) {
             if (left.LPillar(10, false, rand, Material.BARRIER) != 10) {
                 left.LPillar(10, false, rand, getFenceMaterial());

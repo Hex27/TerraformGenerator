@@ -778,7 +778,7 @@ public class FractalTreeBuilder {
     public void drawLine(SimpleBlock one, SimpleBlock two, int segments, double thickness) {
         if (one.equals(two)) return;
         //Vector one to two;
-        Vector v = two.getVector().subtract(one.getVector());
+        Vector v = two.toVector().subtract(one.toVector());
         for (int i = 0; i <= segments; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) segments));
             SimpleBlock segment = one.getRelative(seg);

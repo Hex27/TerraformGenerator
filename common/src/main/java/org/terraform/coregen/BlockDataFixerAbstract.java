@@ -4,6 +4,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.Vector;
 import org.terraform.data.SimpleBlock;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public abstract class BlockDataFixerAbstract {
         multifacing.add(e);
     }
 
-    public abstract String updateSchematic(String schematic);
+    public abstract String updateSchematic(double schematicVersion, String schematic);
 
     public abstract void correctFacing(Vector v, SimpleBlock b, BlockData data, BlockFace face);
 }

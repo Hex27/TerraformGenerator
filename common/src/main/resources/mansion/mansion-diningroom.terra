@@ -1,4 +1,4 @@
-17.1
+19.1
 1,6,0:@:minecraft:dark_oak_stairs[facing=west,half=top,shape=straight,waterlogged=false]
 1,6,2:@:minecraft:air
 14,7,3:@:minecraft:polished_andesite_slab[type=top,waterlogged=false]
@@ -71,8 +71,8 @@
 6,2,0:@:minecraft:dark_oak_trapdoor[facing=north,half=bottom,open=true,powered=false,waterlogged=false]
 6,0,2:@:minecraft:polished_andesite
 8,4,3:@:minecraft:air
-4,1,1:@:minecraft:dark_oak_wall_sign[facing=east,waterlogged=false]
 8,4,0:@:minecraft:air
+4,1,1:@:minecraft:dark_oak_wall_sign[facing=east,waterlogged=false]
 8,4,2:@:minecraft:air
 3,5,1:@:minecraft:air
 8,4,5:@:minecraft:air
@@ -197,8 +197,8 @@
 9,1,6:@:minecraft:dark_oak_trapdoor[facing=south,half=bottom,open=true,powered=false,waterlogged=false]
 13,0,5:@:minecraft:polished_diorite
 13,2,5:@:minecraft:air
-2,2,0:@:minecraft:air
 0,0,0:@:minecraft:stone_bricks
+2,2,0:@:minecraft:air
 0,2,2:@:minecraft:air
 3,4,3:@:minecraft:dark_oak_fence[east=false,north=false,south=false,waterlogged=false,west=false]
 0,2,0:@:minecraft:dark_oak_log[axis=y]
@@ -305,10 +305,10 @@
 14,3,1:@:minecraft:air
 9,5,3:@:minecraft:air
 0,1,3:@:minecraft:air
+4,4,6:@:minecraft:air
 2,1,3:@:minecraft:dark_oak_stairs[facing=east,half=top,shape=straight,waterlogged=false]
 3,0,4:@:minecraft:polished_andesite
 3,2,4:@:minecraft:heavy_weighted_pressure_plate[power=0]
-4,4,6:@:minecraft:air
 9,5,0:@:minecraft:air
 9,5,2:@:minecraft:air
 13,1,5:@:minecraft:dark_oak_wall_sign[facing=east,waterlogged=false]
@@ -316,9 +316,9 @@
 0,1,0:@:minecraft:dark_oak_log[axis=y]
 3,0,3:@:minecraft:polished_andesite
 2,1,0:@:minecraft:air
+4,4,4:@:minecraft:white_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]
 2,1,2:@:minecraft:dark_oak_stairs[facing=south,half=top,shape=outer_left,waterlogged=false]
 3,2,3:@:minecraft:potted_poppy
-4,4,4:@:minecraft:white_stained_glass_pane[east=false,north=false,south=false,waterlogged=false,west=false]
 13,1,6:@:minecraft:air
 0,1,5:@:minecraft:air
 2,1,5:@:minecraft:dark_oak_wall_sign[facing=west,waterlogged=false]

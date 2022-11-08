@@ -1,4 +1,4 @@
-14.1
+19.1
 -1,3,1:@:minecraft:cut_sandstone
 1,3,1:@:minecraft:cut_sandstone
 -1,4,1:@:minecraft:cut_sandstone_slab[type=bottom,waterlogged=false]
@@ -33,9 +33,9 @@
 -1,9,2:@:minecraft:smooth_sandstone
 0,9,1:@:minecraft:smooth_sandstone
 1,9,2:@:minecraft:smooth_sandstone
+-1,1,1:@:minecraft:chiseled_sandstone
 0,4,2:@:minecraft:cut_sandstone
 -1,2,2:@:minecraft:orange_terracotta
--1,1,1:@:minecraft:chiseled_sandstone
 -1,0,2:@:minecraft:cut_sandstone
 -1,3,3:@:minecraft:cut_sandstone
 0,0,1:@:minecraft:cut_sandstone

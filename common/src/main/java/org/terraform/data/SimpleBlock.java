@@ -114,10 +114,6 @@ public class SimpleBlock {
     	return new SimpleBlock(popData,x,y,z);
     }
 
-    public Vector getVector() {
-        return new Vector(x, y, z);
-    }
-
     public double distanceSquared(SimpleBlock other) {
         float selfX = (float) x;
         float selfY = (float) y;

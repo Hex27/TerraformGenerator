@@ -31,9 +31,6 @@ public class PlainsVillagePopulator extends VillagePopulator {
     /**
      * 
      * @param data
-     * @param x
-     * @param y
-     * @param z
      * @return new location where farmhouse has enough space to spawn
      */
     private void ensureFarmHouseEntrance(Random rand, DirectionalCubeRoom room, PopulatorDataAbstract data) {
@@ -67,7 +64,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
     	}
     	
     	if(max == 0) { //Maybe it's a mountain or stuck in the middle of eroded plains
-    		TerraformGeneratorPlugin.logger.info("Village at " + w.get().getVector() + " may have a weird spawn.");
+    		TerraformGeneratorPlugin.logger.info("Village at " + w.get().toVector() + " may have a weird spawn.");
     	}
     	
     	room.setX(w.getX());
