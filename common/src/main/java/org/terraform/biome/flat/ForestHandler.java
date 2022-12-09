@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
@@ -128,7 +129,7 @@ public class ForestHandler extends BiomeHandler {
                 int treeY = GenUtils.getHighestGround(data, treeX, treeZ);
 
                 if (BlockUtils.isDirtLike(data.getType(treeX, treeY, treeZ)))
-                    new FractalTreeBuilder(FractalTypes.Tree.FOREST).build(tw, data, treeX, treeY, treeZ);
+                    FractalTypes.Tree.FOREST.build(tw, new SimpleBlock(data, treeX, treeY, treeZ));
             }
         }
 
@@ -140,7 +141,7 @@ public class ForestHandler extends BiomeHandler {
             sLoc.setY(treeY);
             if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
-                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                FractalTypes.Tree.NORMAL_SMALL.build(tw, new SimpleBlock(data, sLoc.getX(),sLoc.getY(),sLoc.getZ()));
             }
         }
 

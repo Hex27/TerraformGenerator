@@ -86,10 +86,10 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         //Initialize biome query cache based on config size
         GenUtils.biomeQueryCache = CacheBuilder.newBuilder()
                 .maximumSize(TConfigOption.DEVSTUFF_CHUNKBIOMES_SIZE.getInt())
-                .build(new CacheLoader<ChunkCache, EnumSet<BiomeBank>>() {
+                .build(new CacheLoader<>() {
                     @Override
                     public EnumSet<BiomeBank> load(ChunkCache key) {
-                    	EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
+                        EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
                         int gridX = key.chunkX * 16;
                         int gridZ = key.chunkZ * 16;
                         for(int x = gridX; x < gridX + 16; x++) {

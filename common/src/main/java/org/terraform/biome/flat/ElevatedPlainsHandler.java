@@ -133,7 +133,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
                 FractalTreeBuilder builder = new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL);
                 builder.setTrunkType(Material.OAK_LOG);
         		builder.setFractalLeaves(
-        				new FractalLeaves(builder)
+        				new FractalLeaves()
         				.setLeafNoiseFrequency(0.65f)
         				.setLeafNoiseMultiplier(0.8f)
                         .setRadius(2).setMaterial(Material.OAK_LEAVES)

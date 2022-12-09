@@ -215,7 +215,7 @@ public class BlockUtils {
             Material.YELLOW_CARPET
     };
     
-    private static final Material[] WOOLS = {
+    public static final Material[] WOOLS = {
             Material.WHITE_WOOL,
             Material.BLACK_WOOL,
             Material.BLUE_WOOL,

@@ -38,11 +38,13 @@ public class FractalTreeBuilder {
     float thicknessDecrement = 0.5f;
     float minThickness = 0f;
     int maxDepth = 4;
+
+    //maxHeight is used for corals to force sea-level cutoff.
     int maxHeight = 999;
     float lengthDecrement = 1;
     float lengthDecrementMultiplier = 1;
     Material trunkType = Material.OAK_WOOD;
-    FractalLeaves fractalLeaves = new FractalLeaves(this);
+    FractalLeaves fractalLeaves = new FractalLeaves();
     Random rand;
     double minBend = 0.8 * Math.PI / 6;
     double maxBend = 1.2 * Math.PI / 6;
@@ -91,7 +93,7 @@ public class FractalTreeBuilder {
                         .setMaxDepth(4)
                         .setHeightVariation(2)
                         .setLeafBranchFrequency(0.05f)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(3)
+                        .setFractalLeaves(new FractalLeaves().setRadius(3)
                                 .setLeafNoiseFrequency(1.0f).setLeafNoiseMultiplier(1.0f));
                 break;
             case NORMAL_SMALL:
@@ -100,7 +102,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(1)
                         .setThicknessDecrement(1f)
                         .setMaxDepth(1)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(3)
+                        .setFractalLeaves(new FractalLeaves().setRadius(3)
                                 .setLeafNoiseFrequency(1.0f).setLeafNoiseMultiplier(1.0f))
                         .setHeightVariation(1);
                 break;
@@ -111,12 +113,13 @@ public class FractalTreeBuilder {
                         .setThicknessDecrement(0.3f)
                         .setLengthDecrement(0.3f)
                         .setMaxDepth(2)
-                        .setFractalLeaves(new FractalLeaves(this)
+                        .setFractalLeaves(new FractalLeaves()
                         		.setMaterial(OneOneSevenBlockHandler.AZALEA_LEAVES, OneOneSevenBlockHandler.FLOWERING_AZALEA_LEAVES)
                         		.setRadiusX(3)
                         		.setRadiusZ(3)
                         		.setRadiusY(1.5f)
-                                .setLeafNoiseFrequency(1.0f).setLeafNoiseMultiplier(1.0f))
+                                .setLeafNoiseFrequency(1.0f).setLeafNoiseMultiplier(1.0f)
+                                .setWeepingLeaves(0.3f,3))
                         .setVines(3)
                         .setMinBend(0.9 * Math.PI / 6)
                         .setMaxBend(1.1 * Math.PI / 6)
@@ -132,7 +135,7 @@ public class FractalTreeBuilder {
                         .setMaxBend(1.1 * Math.PI / 6)
                         .setLengthDecrement(0.5f)
                         .setTrunkType(Material.BIRCH_WOOD)
-                        .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2.3f, 3));
+                        .setFractalLeaves(new FractalLeaves().setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2.3f, 3));
                 break;
             case BIRCH_SMALL:
                 this.setBaseHeight(3)
@@ -144,7 +147,7 @@ public class FractalTreeBuilder {
                         .setMaxBend(1.1 * Math.PI / 6)
                         .setLengthDecrement(0.5f)
                         .setTrunkType(Material.BIRCH_WOOD)
-                        .setFractalLeaves(new FractalLeaves(this).setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2.3f, 3));
+                        .setFractalLeaves(new FractalLeaves().setMaterial(Material.BIRCH_LEAVES).setRadius(3, 2.3f, 3));
                 break;
             case CHERRY_SMALL:
                 this.setBaseHeight(4)
@@ -159,7 +162,7 @@ public class FractalTreeBuilder {
                         .setLengthDecrement(-0.5f)
                         .setMinThickness(1.0f)
                         .setTrunkType(Material.DARK_OAK_WOOD)
-                        .setFractalLeaves(new FractalLeaves(this)
+                        .setFractalLeaves(new FractalLeaves()
                         		.setMaterial(Material.DARK_OAK_LEAVES)
                         		.setRadius(3, 2f, 3));
                 break;
@@ -177,7 +180,7 @@ public class FractalTreeBuilder {
                         .setLengthDecrement(0.3f)
                         .setMinThickness(1.0f)
                         .setTrunkType(Material.DARK_OAK_WOOD)
-                        .setFractalLeaves(new FractalLeaves(this)
+                        .setFractalLeaves(new FractalLeaves()
                         		.setMaterial(Material.DARK_OAK_LEAVES)
                         		.setRadius(3, 2f, 3)
                         		.setLeafNoiseFrequency(0.15f));
@@ -194,10 +197,11 @@ public class FractalTreeBuilder {
                         .setHeightVariation(2)
                         .setVines(3)
                         .setFractalLeaves(
-                        		new FractalLeaves(this)
+                        		new FractalLeaves()
                         		.setRadius(4, 2f, 4)
                         		.setMaterial(Material.ANDESITE, Material.POLISHED_ANDESITE, Material.ANDESITE)
-                        	);
+                                .setWeepingLeaves(0.3f,3)
+                        );
                 break;
             case GRANITE_PETRIFIED_SMALL:
                 this.setBaseHeight(6)
@@ -211,10 +215,11 @@ public class FractalTreeBuilder {
                         .setHeightVariation(2)
                         .setVines(3)
                         .setFractalLeaves(
-                        		new FractalLeaves(this)
+                        		new FractalLeaves()
                         		.setRadius(4, 2f, 4)
                         		.setMaterial(Material.GRANITE, Material.POLISHED_GRANITE, Material.GRANITE)
-                        	);
+                                .setWeepingLeaves(0.3f,3)
+                            );
                 break;
             case DIORITE_PETRIFIED_SMALL:
                 this.setBaseHeight(6)
@@ -228,10 +233,11 @@ public class FractalTreeBuilder {
                         .setHeightVariation(2)
                         .setVines(3)
                         .setFractalLeaves(
-                        		new FractalLeaves(this)
+                        		new FractalLeaves()
                         		.setRadius(4, 2f, 4)
                         		.setMaterial(Material.DIORITE, Material.POLISHED_DIORITE, Material.DIORITE)
-                        	);
+                                .setWeepingLeaves(0.3f,3)
+                        );
                 break;
             case SAVANNA_SMALL:
                 this.setBaseHeight(7)
@@ -243,7 +249,7 @@ public class FractalTreeBuilder {
                         .setMaxBend(0.8 * Math.PI / 2)
                         .setLengthDecrement(1)
                         .setHeightVariation(1)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2f, 4).setMaterial(Material.ACACIA_LEAVES));
+                        .setFractalLeaves(new FractalLeaves().setRadius(4, 2f, 4).setMaterial(Material.ACACIA_LEAVES));
                 break;
             case JUNGLE_BIG:
                 this.setBaseHeight(15)
@@ -256,8 +262,9 @@ public class FractalTreeBuilder {
                         .setVines(7)
                         .setTrunkType(Material.JUNGLE_WOOD)
                         .setCocoaBeans(3)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 1, 4)
-                                .setMaterial(Material.JUNGLE_LEAVES).setOffsetY(1));
+                        .setFractalLeaves(new FractalLeaves().setRadius(4, 1, 4)
+                                .setMaterial(Material.JUNGLE_LEAVES).setOffsetY(1)
+                                .setWeepingLeaves(0.4f,7));
                 break;
             case JUNGLE_SMALL:
                 this.setBaseHeight(5)
@@ -270,7 +277,10 @@ public class FractalTreeBuilder {
                         .setVines(3)
                         .setTrunkType(Material.JUNGLE_WOOD)
                         .setCocoaBeans(1)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2, 4).setMaterial(Material.JUNGLE_LEAVES));
+                        .setFractalLeaves(new FractalLeaves()
+                                .setRadius(4, 2, 4)
+                                .setMaterial(Material.JUNGLE_LEAVES)
+                                .setWeepingLeaves(0.3f,3));
                 break;
             case JUNGLE_EXTRA_SMALL:
                 this.setBaseHeight(3)
@@ -280,7 +290,9 @@ public class FractalTreeBuilder {
                         .setVines(3)
                         .setTrunkType(Material.JUNGLE_WOOD)
                         .setCocoaBeans(1)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(3, 2, 3).setMaterial(Material.JUNGLE_LEAVES));
+                        .setFractalLeaves(new FractalLeaves()
+                                .setRadius(3, 2, 3)
+                                .setMaterial(Material.JUNGLE_LEAVES).setWeepingLeaves(0.3f,3));
                 break;
             case SAVANNA_BIG:
                 this.setBaseHeight(10)
@@ -290,7 +302,7 @@ public class FractalTreeBuilder {
                         .setTrunkType(Material.ACACIA_LOG)
                         .setLengthDecrement(0.4f)
                         .setHeightVariation(2)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2.5f, 4)
+                        .setFractalLeaves(new FractalLeaves().setRadius(4, 2.5f, 4)
                                 .setMaterial(Material.ACACIA_LEAVES).setLeafNoiseFrequency(0.7f).setLeafNoiseMultiplier(0.8f));
                 break;
             case WASTELAND_BIG:
@@ -301,7 +313,7 @@ public class FractalTreeBuilder {
                         .setTrunkType(Material.SPRUCE_WOOD)
                         .setLengthDecrement(0.5f)
                         .setHeightVariation(1)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(0).setMaterial(Material.AIR));
+                        .setFractalLeaves(new FractalLeaves().setRadius(0).setMaterial(Material.AIR));
                 break;
             case TAIGA_BIG:
                 this.setBaseHeight(10).setBaseThickness(3.5f)
@@ -314,7 +326,7 @@ public class FractalTreeBuilder {
                         .setAlwaysOneStraightExtendedBranches(true)
                         .setMinBend(Math.PI / 2)
                         .setMaxBend(Math.PI / 2)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(3, 5, 3).setMaterial(Material.SPRUCE_LEAVES)
+                        .setFractalLeaves(new FractalLeaves().setRadius(3, 5, 3).setMaterial(Material.SPRUCE_LEAVES)
                                 .setConeLeaves(true).setLeafNoiseFrequency(0.3f).setLeafNoiseMultiplier(0.7f));
                 break;
             case TAIGA_SMALL:
@@ -322,7 +334,7 @@ public class FractalTreeBuilder {
                         .setThicknessDecrement(0.3f)
                         .setMaxDepth(4)
                         .setTrunkType(Material.SPRUCE_WOOD)
-                        .setFractalLeaves(new FractalLeaves(this).setLeafNoiseFrequency(0.65f).setLeafNoiseMultiplier(0.8f)
+                        .setFractalLeaves(new FractalLeaves().setLeafNoiseFrequency(0.65f).setLeafNoiseMultiplier(0.8f)
                                 .setRadius(2).setMaterial(Material.SPRUCE_LEAVES).setConeLeaves(true))
                         .setLengthDecrement(1)
                         .setAlwaysOneStraight(4)
@@ -348,7 +360,7 @@ public class FractalTreeBuilder {
                         .setAlwaysOneStraightBranchSpawningDepth(3)
                         .setMinBend(Math.PI / 3)
                         .setMaxBend(Math.PI / 2)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(5, 2, 5).setMaterial(Material.OAK_LEAVES)
+                        .setFractalLeaves(new FractalLeaves().setRadius(5, 2, 5).setMaterial(Material.OAK_LEAVES)
                                 .setConeLeaves(true).setLeafNoiseFrequency(0.5f).setLeafNoiseMultiplier(0.8f));
                 break;
             case SCARLET_SMALL:
@@ -356,7 +368,7 @@ public class FractalTreeBuilder {
                         .setThicknessDecrement(0.3f)
                         .setMaxDepth(1)
                         .setTrunkType(Material.BIRCH_LOG)
-                        .setFractalLeaves(new FractalLeaves(this).setLeafNoiseFrequency(0.65f).setLeafNoiseMultiplier(0.8f)
+                        .setFractalLeaves(new FractalLeaves().setLeafNoiseFrequency(0.65f).setLeafNoiseMultiplier(0.8f)
                                 .setRadius(2).setMaterial(Material.OAK_LEAVES).setConeLeaves(true))
                         .setLengthDecrement(1)
                         .setHeightVariation(1);
@@ -370,7 +382,7 @@ public class FractalTreeBuilder {
                         .setLengthDecrement(-2f)
                         .setMaxBend(-Math.PI / 6)
                         .setMinBend(-Math.PI / 3)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(0).setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES));
+                        .setFractalLeaves(new FractalLeaves().setRadius(0).setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES));
                 break;
             case SWAMP_TOP:
                 this.setBaseHeight(8)
@@ -381,7 +393,7 @@ public class FractalTreeBuilder {
                         .setHeightVariation(2)
                         .setTrunkType(OneOneNineBlockHandler.MANGROVE_WOOD)
                         .setVines(7)
-                        .setFractalLeaves(new FractalLeaves(this).setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES).setRadius(5, 2, 5).setMangrovePropagules(true));
+                        .setFractalLeaves(new FractalLeaves().setWeepingLeaves(0.4f,7).setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES).setRadius(5, 2, 5).setMangrovePropagules(true));
                 break;
             case COCONUT_TOP:
                 this.setBaseHeight(8)
@@ -393,7 +405,7 @@ public class FractalTreeBuilder {
                         .setHeightVariation(1)
                         .setVines(3)
                         .setTrunkType(Material.JUNGLE_WOOD)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(3, 1.2f, 3));
+                        .setFractalLeaves(new FractalLeaves().setWeepingLeaves(0.3f,3).setRadius(3, 1.2f, 3));
                 break;
             case GIANT_PUMPKIN:
                 this.setBaseHeight(6)
@@ -403,7 +415,7 @@ public class FractalTreeBuilder {
                         .setLengthDecrement(-0.5f)
                         .setHeightVariation(0)
                         .setTrunkType(Material.OAK_LOG)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4).setMaterial(Material.PUMPKIN));
+                        .setFractalLeaves(new FractalLeaves().setRadius(4).setMaterial(Material.PUMPKIN));
             case DARK_OAK_SMALL:
                 this.setBaseHeight(3)
                         .setBaseThickness(3)
@@ -417,7 +429,7 @@ public class FractalTreeBuilder {
                         .setMinBend(1 * Math.PI / 6)
                         .setMaxPitch(Math.PI/1.5)
                         .setMinPitch(0)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(5, 1, 5).setMaterial(Material.DARK_OAK_LEAVES));
+                        .setFractalLeaves(new FractalLeaves().setRadius(5, 1, 5).setMaterial(Material.DARK_OAK_LEAVES));
                 break;
             case DARK_OAK_BIG_TOP:
                 this.setBaseHeight(6)
@@ -432,7 +444,7 @@ public class FractalTreeBuilder {
                         .setMinBend(1 * Math.PI / 6)
                         .setMaxPitch(Math.PI/1.5)
                         .setMinPitch(0)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(6, 2, 6).setMaterial(Material.DARK_OAK_LEAVES).setOffsetY(1));
+                        .setFractalLeaves(new FractalLeaves().setRadius(6, 2, 6).setMaterial(Material.DARK_OAK_LEAVES).setOffsetY(1));
                 break;
             case DARK_OAK_BIG_BOTTOM:
                 this.setBaseHeight(4)
@@ -445,7 +457,7 @@ public class FractalTreeBuilder {
                         .setFractalThreshold(5)
                         .setMaxBend(2.3 * Math.PI / 6)
                         .setMinBend(2.0 * Math.PI / 6)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(0).setMaterial(Material.DARK_OAK_LEAVES));
+                        .setFractalLeaves(new FractalLeaves().setRadius(0).setMaterial(Material.DARK_OAK_LEAVES));
                 break;
             case FROZEN_TREE_BIG:
                 this.setBaseHeight(4)
@@ -461,7 +473,7 @@ public class FractalTreeBuilder {
                         .setMinBend(1.2 * Math.PI / 6)
                         .setMaxPitch(Math.PI)
                         .setMinPitch(0)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 2, 4).setMaterial(Material.ICE));
+                        .setFractalLeaves(new FractalLeaves().setRadius(4, 2, 4).setMaterial(Material.ICE));
                 break;
             case FROZEN_TREE_SMALL:
                 this.setBaseHeight(1)
@@ -477,7 +489,7 @@ public class FractalTreeBuilder {
                         .setMinBend(1.2 * Math.PI / 6)
                         .setMaxPitch(Math.PI)
                         .setMinPitch(0)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(4, 1, 4).setMaterial(Material.ICE));
+                        .setFractalLeaves(new FractalLeaves().setRadius(4, 1, 4).setMaterial(Material.ICE));
                 break;
             case FIRE_CORAL:
                 this.setBaseHeight(2)
@@ -485,7 +497,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(1)
                         .setThicknessDecrement(0)
                         .setMaxDepth(3)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(1, 4, 1).setMaterial(Material.FIRE_CORAL_BLOCK))
+                        .setFractalLeaves(new FractalLeaves().setRadius(1, 4, 1).setMaterial(Material.FIRE_CORAL_BLOCK))
                         .setTrunkType(Material.FIRE_CORAL_BLOCK)
                         .setLengthDecrement(-2f)
                         .setHeightVariation(0)
@@ -500,7 +512,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(2)
                         .setThicknessDecrement(0)
                         .setMaxDepth(3)
-                        .setFractalLeaves(new FractalLeaves(this).setRadius(3, 1, 3).setMaterial(Material.HORN_CORAL_BLOCK))
+                        .setFractalLeaves(new FractalLeaves().setRadius(3, 1, 3).setMaterial(Material.HORN_CORAL_BLOCK))
                         .setTrunkType(Material.HORN_CORAL_BLOCK)
                         .setLengthDecrement(-1)
                         .setHeightVariation(0)
@@ -516,7 +528,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(1)
                         .setThicknessDecrement(0f)
                         .setMaxDepth(3)
-                        .setFractalLeaves(new FractalLeaves(this)
+                        .setFractalLeaves(new FractalLeaves()
                                 .setRadius(1, 2, 1)
                                 .setHollowLeaves(0.9)
                                 .setMaterial(Material.BRAIN_CORAL_BLOCK))
@@ -536,7 +548,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(3)
                         .setThicknessDecrement(0f)
                         .setMaxDepth(3)
-                        .setFractalLeaves(new FractalLeaves(this)
+                        .setFractalLeaves(new FractalLeaves()
                                 .setRadius(1, 1, 1)
                                 .setHollowLeaves(0.9)
                                 .setMaterial(Material.TUBE_CORAL_BLOCK))
@@ -554,7 +566,7 @@ public class FractalTreeBuilder {
                         .setBaseThickness(1)
                         .setThicknessDecrement(0f)
                         .setMaxDepth(3)
-                        .setFractalLeaves(new FractalLeaves(this)
+                        .setFractalLeaves(new FractalLeaves()
                                 .setRadius(3, 3, 3)
                                 .setHollowLeaves(0.9)
                                 .setMaterial(Material.BUBBLE_CORAL_BLOCK))
@@ -583,7 +595,7 @@ public class FractalTreeBuilder {
     }
     
     public boolean build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        
+        fractalLeaves.purgeOccupiedLeavesCache();
     	//Terrain too steep, don't attempt tree generation, 
     	//lest it gets stuck in a wall.
     	if(!heightGradientChecked) {
@@ -597,6 +609,9 @@ public class FractalTreeBuilder {
         this.oriY = y;
         this.oriZ = z;
         this.tw = tw;
+        this.fractalLeaves.setOriY(oriY);
+        this.fractalLeaves.setTw(tw);
+        this.fractalLeaves.setMaxHeight(maxHeight);
         //this.noiseGen = new FastNoise((int) tw.getSeed());
 
         FastNoise noiseGen = NoiseCacheHandler.getNoise(
@@ -672,12 +687,12 @@ public class FractalTreeBuilder {
         }
 
         if (depth >= maxDepth) {
-            fractalLeaves.placeLeaves(base);
+            fractalLeaves.placeLeaves(tw, oriY, maxHeight, base);
             base.setType(trunkType);
             return;
         }
         if (size <= 0) {
-            fractalLeaves.placeLeaves(base);
+            fractalLeaves.placeLeaves(tw, oriY, maxHeight, base);
             base.setType(trunkType);
             return;
         }
@@ -882,7 +897,7 @@ public class FractalTreeBuilder {
                                 && Math.abs(x) >= rX - 2
                                 && Math.abs(z) >= rZ - 2) {
                             if (GenUtils.chance(2, 10)) {
-                                dangleLeavesDown(rel, (int) Math.ceil(maxR), vines / 2, vines);
+                                dangleLeavesDown(rel, vines / 2, vines);
                             }
                         }
                     }
@@ -912,7 +927,20 @@ public class FractalTreeBuilder {
         }
     }
 
-    void dangleLeavesDown(SimpleBlock block, int leafDist, int min, int max) {
+    /**
+     * For a randomised length downwards, dangle a downward pillar of leaves
+     * (up till a solid is hit)
+     *
+     * On top of the vine dangle, set 1 log, then surround that log with leaves.
+     *
+     * For some ungodly reason this is in this class instead of the leaf class.
+     * That ungodly reason is that the branches run this
+     *
+     * @param block under which the vine spawns
+     * @param min minimum vine length
+     * @param max maximum vine length
+     */
+    void dangleLeavesDown(SimpleBlock block, int min, int max) {
     	Material material = fractalLeaves.material[rand.nextInt(fractalLeaves.material.length)];
         BlockData type = Bukkit.createBlockData(material);
         if (Tag.LEAVES.isTagged(material)) {

@@ -76,10 +76,6 @@ public class GenUtils {
 
     /**
      * This will now use StoneLike, and not just any solid block.
-     * @param data
-     * @param x
-     * @param z
-     * @return
      */
     public static Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z) {
         int y = getHighestGround(data, x, z);
@@ -141,18 +137,10 @@ public class GenUtils {
                 || Math.abs(center.y - z) < radius) {
             for(int i = 0; i < iter / 2; i++) {
                 switch(iter % 4) {
-                    case 0:
-                        x += blockSkip;
-                        break;
-                    case 1:
-                        z -= blockSkip;
-                        break;
-                    case 2:
-                        x -= blockSkip;
-                        break;
-                    case 3:
-                        z += blockSkip;
-                        break;
+                    case 0 -> x += blockSkip;
+                    case 1 -> z -= blockSkip;
+                    case 2 -> x -= blockSkip;
+                    case 3 -> z += blockSkip;
                 }
             }
 
@@ -167,30 +155,22 @@ public class GenUtils {
      * Locates a biome with BiomeSection.
      * WILL NOT FIND RIVERS AND BEACHES.
      * Does not stop until biome is found, much like structure locate, because it should work.
-     * @param tw
-     * @param biome
-     * @param centerBlockLocation
-     * @return
      */
     public static Vector2f locateHeightIndependentBiome(TerraformWorld tw, BiomeBank biome, Vector2f centerBlockLocation) {
         if(!BiomeBank.isBiomeEnabled(biome)) return null;
         
     	BiomeSection center = BiomeBank.getBiomeSectionFromBlockCoords(tw, (int) centerBlockLocation.x, (int) centerBlockLocation.y);
-    	boolean found = false;
     	int radius = 0;
     	
-    	while(!found) {
+    	while(true) {
     		for(BiomeSection sect:center.getRelativeSurroundingSections(radius)) {
     			if(sect.getBiomeBank() == biome) {
     				SimpleLocation sectionCenter = sect.getCenter();
-    				found = true;
     				return new Vector2f(sectionCenter.getX(),sectionCenter.getZ());
     			}
     			radius++;
     		}
     	}
-
-        return null;
     }
 
     public static Material weightedRandomMaterial(Random rand, Object... candidates) {
@@ -214,6 +194,7 @@ public class GenUtils {
 //	}
 
     public static Material randMaterial(Random rand, Material... candidates) {
+        if(candidates.length == 1) return candidates[0]; //avoid invocation to randInt
         return candidates[randInt(rand, 0, candidates.length - 1)];
     }
 
@@ -246,6 +227,7 @@ public class GenUtils {
     }
 
     public static int randInt(Random rand, int d, int max) {
+        if(d == max) return d;
         boolean negative = false;
         if(d < 0 && max < 0) {
             negative = true;
@@ -553,5 +535,12 @@ public class GenUtils {
      */
     public static double randAngle(double base, double lowerBound, double upperBound) {
         return GenUtils.randDouble(new Random(), lowerBound * base, upperBound * base);
+    }
+
+    public static <T> T choice(Random rand, T[] array)
+    {
+        if(array.length == 0) return null;
+        if(array.length == 1) return array[0];
+        return array[rand.nextInt(array.length)];
     }
 }
