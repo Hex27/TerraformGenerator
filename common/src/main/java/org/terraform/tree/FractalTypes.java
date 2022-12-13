@@ -15,17 +15,20 @@ public class FractalTypes {
 //                (
 //                //Medium Forest Tree
 //            new NewFractalTreeBuilder()
+//                .setLengthVariance(2)
 //                .setOriginalTrunkLength(12)
 //                .setInitialBranchRadius(1.6f)
+//                .setMinBranchHorizontalComponent(0.7)
 //                .setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth*(1.0f-branchRatio/1.7f))
 //                .setBranchDecrement((currentBranchLength, totalTreeHeight) -> currentBranchLength/1.7f)
 //                .setBranchSpawnChance(0.15)
+//                .setCrownBranches(4)
 //                .setFractalLeaves(new FractalLeaves()
 //                        .setWeepingLeaves(0.3f, 3)
 //                        .setRadius(4f)
 //                        .setRadiusY(2f))
-//                .setSpawnBees(true),
-//                //Large Forest Tree
+//                .setSpawnBees(true)
+                //Large Forest Tree
 //            new NewFractalTreeBuilder()
 //                .setOriginalTrunkLength(18)
 //                .setInitialBranchRadius(2f)
@@ -65,7 +68,7 @@ public class FractalTypes {
 //                        .setRadiusY(2.5f)
 //                )
 //                .setSpawnBees(true)
-//        )
+ //       )
         ,
         NORMAL_SMALL(
                 new NewFractalTreeBuilder()

@@ -11,8 +11,8 @@ import org.terraform.data.SimpleBlock;
 public class SchematicParser {
 	
 	private boolean isDelayedApply = false;
-	private HashMap<SimpleBlock, BlockData> delayed = new HashMap<>();
-	private static EnumSet<Material> fragile = EnumSet.of(
+	private final HashMap<SimpleBlock, BlockData> delayed = new HashMap<>();
+	private static final EnumSet<Material> fragile = EnumSet.of(
 				Material.BROWN_MUSHROOM,
 				Material.RED_MUSHROOM,
 				Material.BROWN_CARPET,
@@ -22,6 +22,7 @@ public class SchematicParser {
 				Material.REDSTONE_WIRE,
 				Material.REDSTONE_TORCH,
 				Material.REPEATER,
+                Material.RAIL,
 				Material.LEVER,
 				Material.POTATOES,
 				Material.KELP

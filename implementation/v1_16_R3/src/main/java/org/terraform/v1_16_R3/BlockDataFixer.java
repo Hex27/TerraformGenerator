@@ -57,9 +57,10 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
 //            schematic = StringUtils.replace(schematic, "west=true", "west=low");
 //        }
         //Unpatch 1.17+ schematics
-        if(schematicVersion >= 17)
+        if(schematicVersion >= 17) {
             schematic = StringUtils.replace(schematic, "minecraft:water_cauldron[level=", "minecraft:cauldron[level=");
-
+            schematic = StringUtils.replace(schematic, ",waterlogged=false", "");
+        }
         return schematic;
     }
 

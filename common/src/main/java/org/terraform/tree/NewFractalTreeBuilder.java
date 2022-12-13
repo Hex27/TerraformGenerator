@@ -145,6 +145,7 @@ public class NewFractalTreeBuilder {
             Vector branchVect = normal.clone().multiply(length);
             float subBranchLength = branchDecrement.apply(length, (float) (base.getY() - oriY));
 
+            boolean placedPatcherLeaves = false;
             //This for loop places the branch.
             //i is the branchIndex, and steps is the maximum steps the branch will
             //take. Preferably, the radius of the branch will shrink as steps
@@ -165,6 +166,12 @@ public class NewFractalTreeBuilder {
                         lastOperatedCentre.getPopData(),
                         branchVect.clone().multiply(i/length).add(base.toVector()),
                         appliedNormal, appliedNoisePriority, appliedWidth, noiseGen, i);
+
+                if(!placedPatcherLeaves && lastOperatedCentre.getY() < base.getY()) {
+                    placedPatcherLeaves = true;
+                    fractalLeaves.placeLeaves(tw, oriY, maxHeight, base);
+                }
+                
                 currentWidth = getBranchWidth.apply(initialWidth, (i/length));
                 //TerraformGeneratorPlugin.logger.info("CWidth: " + currentWidth);
                 //Spawn more branches
@@ -254,8 +261,7 @@ public class NewFractalTreeBuilder {
         //with a random direction (+ or -)
         return normal.clone()
                 .add(A.multiply(
-                        GenUtils.getSign(random)
-                            * GenUtils.randDouble(
+                            GenUtils.randDouble(
                                     random,
                                     minBranchHorizontalComponent,
                                     maxBranchHorizontalComponent)
