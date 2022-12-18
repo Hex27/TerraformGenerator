@@ -38,12 +38,7 @@ public class FractalLeaves {
     public Material[] material = new Material[] {Material.OAK_LEAVES};
     //public FractalTreeBuilder builder;
 
-    BiFunction<FractalLeaves, Float, Float> getNextRadius = (fractalLeaves, radiusIndex) -> {
-        //Decrease the radius based on the sine wave.
-        //There are numYSegments steps, so change the sin period to accommodate this.
-        //The sine function should run from 0 to pi
-        return (float) (radiusX*Math.sin(radiusIndex*((Math.PI)/((float)numYSegments))));
-    };
+    boolean semiSphereLeaves = false;
     Random rand = new Random();
     float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;
@@ -112,10 +107,11 @@ public class FractalLeaves {
         double maxR = radiusX;
         if (radiusX < radiusY) maxR = radiusY;
         if (radiusY < radiusZ) maxR = radiusZ;
-
+        int minRadiusY = -Math.round(radiusY);
+        if(semiSphereLeaves) minRadiusY = 0;
         ArrayList<SimpleBlock> changed = new ArrayList<>();
 
-        for (int y = -Math.round(radiusY); y <= radiusY; y++) {
+        for (int y = minRadiusY; y <= radiusY; y++) {
             for (int x = -Math.round(radiusX); x <= radiusX; x++) {
                 for (int z = -Math.round(radiusZ); z <= radiusZ; z++) {
                 	Material material = this.material[rand.nextInt(this.material.length)];
@@ -348,6 +344,11 @@ public class FractalLeaves {
         this.unitLeafSize = unitSize;
         return this;
     }
+    public FractalLeaves setSemiSphereLeaves(boolean semiSphereLeaves)
+    {
+        this.semiSphereLeaves = semiSphereLeaves;
+        return this;
+    }
 
     public int getOriY() {
         return oriY;
@@ -372,4 +373,6 @@ public class FractalLeaves {
     public void setTw(TerraformWorld tw) {
         this.tw = tw;
     }
+
+
 }

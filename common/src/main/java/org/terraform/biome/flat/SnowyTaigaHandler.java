@@ -88,13 +88,13 @@ public class SnowyTaigaHandler extends BiomeHandler {
                 sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
                 if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20)) {
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).setSnowyLeaves(true).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    FractalTypes.Tree.TAIGA_BIG.build(tw, new SimpleBlock(data, sLoc.getX(),sLoc.getY(),sLoc.getZ()), (b) -> b.getFractalLeaves().setSnowy(true));
                     defrostAndReplacePodzol(
                     		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
                     		2.5f,
                     		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()));
                 }else { // Normal trees
-                    new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL).setSnowyLeaves(true).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    FractalTypes.Tree.TAIGA_SMALL.build(tw, new SimpleBlock(data, sLoc.getX(),sLoc.getY(),sLoc.getZ()), (b) -> b.getFractalLeaves().setSnowy(true));
                     defrostAndReplacePodzol(
                     		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
                     		1.5f,
@@ -106,10 +106,6 @@ public class SnowyTaigaHandler extends BiomeHandler {
     /**
      * Replaces the highest dirt-like blocks with a noise-fuzzed 
      * circle of Podzol. Fuzzes the edges.
-     * @param seed
-     * @param radius
-     * @param base
-     * @param type
      */
     public static void defrostAndReplacePodzol(int seed, float radius, SimpleBlock base) {
     	if (radius <= 0) return;

@@ -45,7 +45,17 @@ public class ChestBuilder {
     public void extend(SimpleBlock original, SimpleBlock extended, boolean lootTableExtendedChest) {
     	extended.setBlockData(blockData);
     	Wall originalWall = new Wall(original, blockData.getFacing());
-    	Chest originalChest = (Chest) original.getBlockData();
+        Chest originalChest;
+        try
+        {
+            originalChest = (Chest) original.getBlockData();
+        }
+        catch(ClassCastException e)
+        {
+            original.setBlockData(blockData);
+            originalChest = (Chest) original.getBlockData();
+        }
+
     	Chest extendedChest = (Chest) extended.getBlockData();
     	
     	if(originalWall.getLeft().equals(extended)) {

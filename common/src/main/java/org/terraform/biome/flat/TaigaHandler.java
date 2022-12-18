@@ -107,14 +107,14 @@ public class TaigaHandler extends BiomeHandler {
                 sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
                 if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20)) {
-                    if(new FractalTreeBuilder(FractalTypes.Tree.TAIGA_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ())) 
+                    if(FractalTypes.Tree.TAIGA_BIG.build(tw, new SimpleBlock(data, sLoc.getX(),sLoc.getY(),sLoc.getZ())))
 	                    replacePodzol(
 	                    		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
 	                    		5f,
 	                    		new SimpleBlock(data,sLoc.getX(),sLoc.getY()-1,sLoc.getZ()));
                 }else { // Normal trees
-                    if(new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL)
-                    		.build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ()))
+                    if(FractalTypes.Tree.TAIGA_SMALL
+                    		.build(tw, new SimpleBlock(data, sLoc.getX(),sLoc.getY(),sLoc.getZ())))
 	                    replacePodzol(
 	                    		tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
 	                    		3.5f,

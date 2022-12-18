@@ -1,10 +1,10 @@
 name: TerraformGenerator
 author: Hex_27
-version: 9.2.1
+version: 9.2.2
 api-version: 1.16
 description: World Generator
 main: org.terraform.main.TerraformGeneratorPlugin
-load: startup
+load: STARTUP
 commands:
   terraform:
     description: Main command

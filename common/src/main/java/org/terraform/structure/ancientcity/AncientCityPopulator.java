@@ -169,10 +169,10 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 	                					.setFace(face.getOppositeFace(), true)
 	                					.apply(adj);
 	                				}
-	                				else if(adj.getBlockData() instanceof MultipleFacing)
+	                				else if(adj.getBlockData() instanceof MultipleFacing mf)
 	                				{
-	                					MultipleFacing mf = (MultipleFacing) adj.getBlockData();
-	                					mf.setFace(face.getOppositeFace(), true);
+                                        if(mf.getAllowedFaces().contains(face.getOppositeFace()))
+	                					    mf.setFace(face.getOppositeFace(), true);
 	                					adj.setBlockData(mf);
 	                				}
 	                			}
