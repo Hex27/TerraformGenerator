@@ -76,7 +76,11 @@ public class TerraformPopulator {
              false,
              BiomeBank.BIRCH_MOUNTAINS,
              BiomeBank.ROCKY_MOUNTAINS,
-             BiomeBank.SNOWY_MOUNTAINS),
+             BiomeBank.SNOWY_MOUNTAINS,
+             BiomeBank.FORESTED_MOUNTAINS,
+             BiomeBank.COLD_JAGGED_PEAKS,
+             BiomeBank.JAGGED_PEAKS,
+             BiomeBank.FORESTED_PEAKS),
             
             
             new OrePopulator(Material.LAPIS_ORE,

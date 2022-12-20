@@ -25,8 +25,8 @@ public class OrePopulator {
     private final int peakSpawnChanceHeight; //Optimal height for ore to spawn
     private final int maxSpawnHeight; //max y height where ore can be rarely found
     private int minRange = 5; //min spawn height
-    private BiomeBank[] requiredBiomes;
-    private int maxDistance;
+    private final BiomeBank[] requiredBiomes;
+    private final int maxDistance;
     private boolean ignorePeakSpawnChance = false;
 
     public OrePopulator(Material type, int baseChance, int maxOreSize,
@@ -68,9 +68,12 @@ public class OrePopulator {
     		BiomeBank b = BiomeBank.getBiomeSectionFromChunk(world, data.getChunkX(), data.getChunkZ()).getBiomeBank();
     		boolean canPopulate = false;
     		for(BiomeBank comp:requiredBiomes)
-    			if(comp == b) canPopulate = true;
+                if(comp == b) {
+                    canPopulate = true;
+                    break;
+                }
     		
-    		if(canPopulate) return;
+    		if(!canPopulate) return;
     	}
     	
     	//Attempt maxNumberOfVeins number of times
@@ -130,8 +133,8 @@ public class OrePopulator {
     	//Size is the volume of the sphere, so radius is:
     	double radius = Math.pow(((3.0/4.0)*size*(1.0/Math.PI)), 1.0/3.0);
     	
-        if (radius <= 0 && radius <= 0 && radius <= 0) return;
-        if (radius <= 0.5 && radius <= 0.5 && radius <= 0.5) {
+        if (radius <= 0) return;
+        if (radius <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
             data.setType(coreX,coreY,coreZ,GenUtils.randMaterial(new Random(seed), type));
             return;
