@@ -54,6 +54,21 @@ public class TerraformPopulator {
              TConfigOption.ORE_GOLD_COMMONSPAWNHEIGHT.getInt(),
              TConfigOption.ORE_GOLD_MAXSPAWNHEIGHT.getInt(),
              false),
+
+            //BADLANDS SPAWNRATE
+            new OrePopulator(Material.GOLD_ORE,
+                    TConfigOption.ORE_BADLANDSGOLD_CHANCE.getInt(),
+                    TConfigOption.ORE_BADLANDSGOLD_VEINSIZE.getInt(),
+                    TConfigOption.ORE_BADLANDSGOLD_MAXVEINNUMBER.getInt(),
+                    TConfigOption.ORE_BADLANDSGOLD_MINSPAWNHEIGHT.getInt(),
+                    TConfigOption.ORE_BADLANDSGOLD_COMMONSPAWNHEIGHT.getInt(),
+                    TConfigOption.ORE_BADLANDSGOLD_MAXSPAWNHEIGHT.getInt(),
+                    false,
+                    BiomeBank.BADLANDS,
+                    BiomeBank.BADLANDS_CANYON,
+                    BiomeBank.BADLANDS_CANYON_PEAK,
+                    BiomeBank.BADLANDS_BEACH,
+                    BiomeBank.BADLANDS_RIVER),
             
             new OrePopulator(Material.DIAMOND_ORE,
              TConfigOption.ORE_DIAMOND_CHANCE.getInt(),

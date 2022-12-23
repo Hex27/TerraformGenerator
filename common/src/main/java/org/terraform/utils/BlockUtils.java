@@ -47,13 +47,13 @@ public class BlockUtils {
 		for(Material mat:Material.values()) {
     		if(mat.toString().endsWith("_ORE"))
     		{
-    			ores.add(mat);
+                if(!mat.toString().contains("NETHER"))
+    			    ores.add(mat);
     			stoneLike.add(mat);
     		}
     	}
-		
-		for(Material mat:stoneLike)
-			badlandsStoneLike.add(mat);
+
+        badlandsStoneLike.addAll(stoneLike);
 		
 		//init glass panes
     	for(Material mat:Material.values()) {

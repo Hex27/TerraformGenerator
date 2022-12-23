@@ -57,7 +57,7 @@ public class FractalLeaves {
      * Meant to be cleared when a new tree begins using the class.
      */
     private final HashSet<SimpleBlock> occupiedLeaves = new HashSet<>();
-    public void purgeOccupiedLeavesCache(){ occupiedLeaves.clone(); }
+    public void purgeOccupiedLeavesCache(){ occupiedLeaves.clear(); }
 
     public void placeLeaves(SimpleBlock centre)
     {

@@ -370,6 +370,14 @@ public enum TConfigOption {
     ORE_GOLD_MAXSPAWNHEIGHT("ore.gold.max-spawn-height", 32),
     ORE_GOLD_MINSPAWNHEIGHT("ore.gold.min-spawn-height", -64),
 
+    //GOLD
+    ORE_BADLANDSGOLD_CHANCE("ore.badlandsgold.chance-per-chunk", 40),
+    ORE_BADLANDSGOLD_VEINSIZE("ore.badlandsgold.max-vein-size", 10),
+    ORE_BADLANDSGOLD_MAXVEINNUMBER("ore.badlandsgold.max-vein-count", 15),
+    ORE_BADLANDSGOLD_COMMONSPAWNHEIGHT("ore.badlandsgold.common-spawn-height", 32),
+    ORE_BADLANDSGOLD_MAXSPAWNHEIGHT("ore.badlandsgold.max-spawn-height", 256),
+    ORE_BADLANDSGOLD_MINSPAWNHEIGHT("ore.badlandsgold.min-spawn-height", -64),
+
     //DIAMOND
     ORE_DIAMOND_CHANCE("ore.diamond.chance-per-chunk", 30),
     ORE_DIAMOND_VEINSIZE("ore.diamond.max-vein-size", 7),
