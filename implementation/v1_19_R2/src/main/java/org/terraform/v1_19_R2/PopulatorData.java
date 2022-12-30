@@ -58,8 +58,9 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         		if(type == EntityType.UNKNOWN) continue;
 				try {
                     //EntityTypes.byString
-					Optional<EntityTypes<?>> et = EntityTypes.a(type.toString());
+					Optional<EntityTypes<?>> et = EntityTypes.a("minecraft:"+type.toString().toLowerCase());
                     //EntityTypes<?> et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(EntityTypeMapper.getObfsNameFromBukkitEntityType(type)).get(null);
+                    //TerraformGeneratorPlugin.logger.info(type + ":" + et.isPresent());
                     et.ifPresent(entityTypes -> entityTypesDict.put(type, entityTypes));
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
@@ -152,10 +153,15 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 
         if (tileentity instanceof TileEntityMobSpawner) {
             try {
-            	//Fetch from ENTITY_TYPE (Q)'s map
+                //Refer to WorldGenDungeons
+//                TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) tileentity;
+//
+//                tileentitymobspawner.setEntityId(this.randomEntityId(randomsource), randomsource);
+
+                //Fetch from ENTITY_TYPE (Q)'s map
             	//q is ENTITY_TYPE
             	EntityTypes<?> nmsEntity = entityTypesDict.get(type);
-            	//Refer to WorldGenDungeons
+                if(nmsEntity == null) TerraformGeneratorPlugin.logger.error(type + " was not present in the entityTypesDict.");
                 ((TileEntityMobSpawner) tileentity).a(nmsEntity, new RandomSourceWrapper(new Random()));
             } catch (IllegalArgumentException | SecurityException e) {
                 e.printStackTrace();

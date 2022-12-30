@@ -195,6 +195,10 @@ public class CustomBiomeHandler {
         //Make unregisteredIntrusiveHolders null again to remove potential for undefined behaviour
         unregisteredIntrusiveHolders.set(registrywritable, null);
 
+        //There is a slightly cleaner way this can be done (void bindValue(T value)
+        // instead of the whole unregistered intrusive holders stuff),
+        //but it also involves reflection so I don't want to
+        //change this out just yet. Consider for the next version.
 		terraformGenBiomeRegistry.put(biomeType, newKey);
 	
 	}
