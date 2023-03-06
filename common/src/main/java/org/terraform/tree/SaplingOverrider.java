@@ -9,7 +9,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 
 public class SaplingOverrider implements Listener {
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onTreeGrow(StructureGrowEvent event) {
         if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
 
