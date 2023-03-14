@@ -1,6 +1,7 @@
 package org.terraform.structure;
 
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.HeightMap;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 public class StructureBufferDistanceHandler {
@@ -11,6 +12,11 @@ public class StructureBufferDistanceHandler {
 	 * they must make way for structures.
 	 */
 	public static boolean canDecorateChunk(TerraformWorld tw, int chunkX, int chunkZ) {
+
+        //Within radius
+        if(Math.pow(chunkX*16,2) + Math.pow(chunkZ*16,2) < HeightMap.spawnFlatRadiusSquared)
+            return false;
+
 		MegaChunk mc = new MegaChunk(chunkX, chunkZ);
 		BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
         for (StructurePopulator structPop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {

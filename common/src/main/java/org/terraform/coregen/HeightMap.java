@@ -143,11 +143,14 @@ public enum HeightMap {
     }
 
     public static double getRawRiverDepth(TerraformWorld tw, int x, int z) {
+        if(Math.pow(x,2) + Math.pow(z,2) < spawnFlatRadiusSquared)
+            return 0;
     	double depth = HeightMap.RIVER.getHeight(tw, x, z);
         depth = depth < 0 ? 0 : depth;
         return depth;
     }
 
+    public static int spawnFlatRadiusSquared = -324534;
     public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
 
@@ -155,8 +158,8 @@ public enum HeightMap {
         if (cachedValue != 0) return cachedValue;
 
         double height = getRiverlessHeight(tw,x,z);
-    	
-    	//River Depth
+
+        //River Depth
         double depth = getRawRiverDepth(tw,x,z);
 
         //Normal scenario: Shallow area
@@ -164,8 +167,8 @@ public enum HeightMap {
             height -= depth;
 
             //Fix for underwater river carving: Don't carve deeply
-        } else if (height > TerraformGenerator.seaLevel - 15 
-        		&& height - depth < TerraformGenerator.seaLevel - 15) {
+        } else if (height > TerraformGenerator.seaLevel - 15
+                && height - depth < TerraformGenerator.seaLevel - 15) {
             height = TerraformGenerator.seaLevel - 15;
         }
 
@@ -180,10 +183,13 @@ public enum HeightMap {
     private static float getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
     	ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
     	float h = cache.getDominantBiomeHeight(x, z);
-    	if(h == Float.MIN_VALUE)
-    		h = (float) BiomeBank.calculateHeightIndependentBiome(tw, x, z)
-			.getHandler().calculateHeight(tw,x,z);
-    	cache.cacheDominantBiomeHeight(x, z, h);
+    	if(h == Float.MIN_VALUE) {
+            h = (float) BiomeBank.calculateHeightIndependentBiome(tw, x, z)
+                    .getHandler().calculateHeight(tw, x, z);
+            if(Math.pow(x,2) + Math.pow(z,2) < spawnFlatRadiusSquared)
+                h = (float) HeightMap.CORE.getHeight(tw,x,z);
+        }
+        cache.cacheDominantBiomeHeight(x, z, h);
     	return h;
     }
     

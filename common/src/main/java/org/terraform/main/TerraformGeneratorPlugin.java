@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.ChunkCacheLoader;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -76,6 +77,11 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 		config = new ConfigLoader(this);
 		lang = new LanguageManager(this);
         TConfigOption.loadValues(config);
+
+        //Initiate the height map flat radius value
+        HeightMap.spawnFlatRadiusSquared = TConfigOption.HEIGHT_MAP_SPAWN_FLAT_RADIUS.getInt();
+        if(HeightMap.spawnFlatRadiusSquared > 0) HeightMap.spawnFlatRadiusSquared *= HeightMap.spawnFlatRadiusSquared;
+
         BiomeBank.initSinglesConfig(); //Initiates single biome modes.
         
         //Initialize chunk cache based on config size

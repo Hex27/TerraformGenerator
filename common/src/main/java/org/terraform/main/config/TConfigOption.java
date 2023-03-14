@@ -12,6 +12,7 @@ public enum TConfigOption {
     HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level", 62),
     HEIGHT_MAP_BEDROCK_HEIGHT("heightmap.bedrock-height",5),
     HEIGHT_MAP_BEDROCK_DENSITY("heightmap.bedrock-density",70),
+    HEIGHT_MAP_SPAWN_FLAT_RADIUS("heightmap.spawn-flat-radius",-1),
 
     //-=[CLIMATES]=-
     CLIMATE_HUMIDVEGETATION_MINTEMP("climate.humid-vegetation.minimum-temperature",-0.35d),
