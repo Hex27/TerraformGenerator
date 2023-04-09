@@ -1,4 +1,5 @@
 package org.terraform.v1_19_R3;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_19_R3.CraftChunk;
@@ -78,7 +79,8 @@ public class NMSInjector extends NMSInjectorAbstract {
 
     @Override
     public PopulatorDataICAAbstract getICAData(Chunk chunk) {
-        IChunkAccess ica = ((CraftChunk) chunk).getHandle();
+        //ChunKStatus.FULL
+        IChunkAccess ica = ((CraftChunk) chunk).getHandle(ChunkStatus.o);
         CraftWorld cw = (CraftWorld) chunk.getWorld();
         WorldServer ws = cw.getHandle();
         

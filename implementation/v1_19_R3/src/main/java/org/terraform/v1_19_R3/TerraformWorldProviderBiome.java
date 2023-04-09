@@ -52,8 +52,12 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 
         for (Biome biome : Biome.values()) {
         	if(biome == null || biome == Biome.CUSTOM) continue;
-            //Preconditions.checkArgument(biome != Biome.CUSTOM, "Cannot use the biome %s", biome);
-            biomeBases.add(CraftBlock.biomeToBiomeBase(registry, biome));
+            try {
+                //Preconditions.checkArgument(biome != Biome.CUSTOM, "Cannot use the biome %s", biome);
+                biomeBases.add(CraftBlock.biomeToBiomeBase(registry, biome));
+            } catch(IllegalStateException e) {
+                TerraformGeneratorPlugin.logger.info("Ignoring biome " + biome);
+            }
         }
         
         for(CustomBiomeType cbt:CustomBiomeType.values()) {
