@@ -45,18 +45,20 @@ public class ChestBuilder {
     public void extend(SimpleBlock original, SimpleBlock extended, boolean lootTableExtendedChest) {
     	extended.setBlockData(blockData);
     	Wall originalWall = new Wall(original, blockData.getFacing());
-        Chest originalChest;
+        Chest originalChest, extendedChest;
         try
         {
             originalChest = (Chest) original.getBlockData();
+            extendedChest = (Chest) extended.getBlockData();
         }
         catch(ClassCastException e)
         {
             original.setBlockData(blockData);
-            originalChest = (Chest) original.getBlockData();
+            extended.setBlockData(blockData);
+            originalChest = (Chest) blockData.clone(); //original.getBlockData();
+            extendedChest = (Chest) blockData.clone(); //original.getBlockData();
         }
 
-    	Chest extendedChest = (Chest) extended.getBlockData();
     	
     	if(originalWall.getLeft().equals(extended)) {
     		originalChest.setType(Type.LEFT);

@@ -23,11 +23,13 @@ public class SaplingOverrider implements Listener {
         switch (event.getSpecies()) {
             case ACACIA:
                 new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL)
+                        .skipGradientCheck()
                         .build(tw, data, x, y, z);
                 break;
             case BIG_TREE:
             case TREE:
                 new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL)
+                        .skipGradientCheck()
                         .build(tw, data, x, y, z);
                 break;
             case BIRCH:
@@ -35,6 +37,7 @@ public class SaplingOverrider implements Listener {
 //			break;
             case TALL_BIRCH:
                 new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL)
+                        .skipGradientCheck()
                         .build(tw, data, x, y, z);
                 break;
             case COCOA_TREE:
@@ -43,11 +46,13 @@ public class SaplingOverrider implements Listener {
                 break;
             case DARK_OAK:
                 new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
+                        .skipGradientCheck()
                         .build(tw, data, x, y, z);
                 break;
             case JUNGLE:
                 if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean())
                     new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG)
+                            .skipGradientCheck()
                             .build(tw, data, x, y, z);
                 else
                     TreeDB.spawnSmallJungleTree(true, tw, data, x, y, z);
@@ -56,6 +61,7 @@ public class SaplingOverrider implements Listener {
             case REDWOOD:
             case TALL_REDWOOD:
                 new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL)
+                        .skipGradientCheck()
                         .build(tw, data, x, y, z);
                 break;
             default: //Not handled by TG
