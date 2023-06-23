@@ -16,7 +16,6 @@ public class TreasureAntechamber extends Antechamber {
 
     public TreasureAntechamber(Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
-        // TODO Auto-generated constructor stub
     }
 
     /***

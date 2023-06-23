@@ -25,6 +25,7 @@ import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.BeeHiveSpawner;
 import org.terraform.utils.version.OneOneNineBlockHandler;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
@@ -161,9 +162,9 @@ public class FractalTreeBuilder {
                         .setMaxBend(1.1 * Math.PI / 6)
                         .setLengthDecrement(-0.5f)
                         .setMinThickness(1.0f)
-                        .setTrunkType(Material.DARK_OAK_WOOD)
+                        .setTrunkType(OneTwentyBlockHandler.CHERRY_LOG)
                         .setFractalLeaves(new FractalLeaves()
-                        		.setMaterial(Material.DARK_OAK_LEAVES)
+                        		.setMaterial(OneTwentyBlockHandler.CHERRY_LEAVES)
                         		.setRadius(3, 2f, 3));
                 break;
             case CHERRY_THICK:
@@ -179,9 +180,9 @@ public class FractalTreeBuilder {
                         .setMaxBend(1.1 * Math.PI / 6)
                         .setLengthDecrement(0.3f)
                         .setMinThickness(1.0f)
-                        .setTrunkType(Material.DARK_OAK_WOOD)
+                        .setTrunkType(OneTwentyBlockHandler.CHERRY_WOOD)
                         .setFractalLeaves(new FractalLeaves()
-                        		.setMaterial(Material.DARK_OAK_LEAVES)
+                        		.setMaterial(OneTwentyBlockHandler.CHERRY_LEAVES)
                         		.setRadius(3, 2f, 3)
                         		.setLeafNoiseFrequency(0.15f));
                 break;

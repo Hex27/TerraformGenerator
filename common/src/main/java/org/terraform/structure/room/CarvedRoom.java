@@ -28,8 +28,6 @@ public class CarvedRoom extends CubeRoom {
     @Override
     public void fillRoom(PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
         int heightOffset = height - (2 * height / 3);
-        EnumSet<Material> carveMaterials = BlockUtils.stoneLike.clone();
-        carveMaterials.addAll(BlockUtils.caveDecoratorMaterials);
         BlockUtils.carveCaveAir(new Random().nextInt(9999291),
                 xMultiplier*(widthX / 2f), 
                 yMultiplier*(2 * height / 3f), 
@@ -37,7 +35,7 @@ public class CarvedRoom extends CubeRoom {
                 frequency,
                 new SimpleBlock(data, x, y + heightOffset, z),
                 true,
-                true, carveMaterials);
+                true, BlockUtils.caveCarveReplace);
     }
 
 	public double getxMultiplier() {

@@ -54,6 +54,8 @@ public class BlockUtils {
     	}
 
         badlandsStoneLike.addAll(stoneLike);
+        caveCarveReplace.addAll(badlandsStoneLike);
+        caveCarveReplace.addAll(caveDecoratorMaterials);
 		
 		//init glass panes
     	for(Material mat:Material.values()) {
@@ -155,6 +157,8 @@ public class BlockUtils {
             Material.RED_TERRACOTTA, Material.BROWN_TERRACOTTA,
             Material.YELLOW_TERRACOTTA, Material.RED_SAND
     );
+
+    public static final EnumSet<Material> caveCarveReplace = EnumSet.of(Material.NOTE_BLOCK);
 
     //This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> ores = EnumSet.noneOf(Material.class);
@@ -270,6 +274,25 @@ public class BlockUtils {
             Material.PURPLE_GLAZED_TERRACOTTA,
             Material.RED_GLAZED_TERRACOTTA,
             Material.YELLOW_GLAZED_TERRACOTTA
+    };
+
+    public static final Material[] TERRACOTTA = {
+            Material.WHITE_TERRACOTTA,
+            Material.BLACK_TERRACOTTA,
+            Material.BLUE_TERRACOTTA,
+            Material.BROWN_TERRACOTTA,
+            Material.CYAN_TERRACOTTA,
+            Material.GRAY_TERRACOTTA,
+            Material.GREEN_TERRACOTTA,
+            Material.LIGHT_BLUE_TERRACOTTA,
+            Material.LIGHT_GRAY_TERRACOTTA,
+            Material.LIME_TERRACOTTA,
+            Material.MAGENTA_TERRACOTTA,
+            Material.ORANGE_TERRACOTTA,
+            Material.PINK_TERRACOTTA,
+            Material.PURPLE_TERRACOTTA,
+            Material.RED_TERRACOTTA,
+            Material.YELLOW_TERRACOTTA
     };
 
     public static boolean isDirectBlockFace(BlockFace facing) {

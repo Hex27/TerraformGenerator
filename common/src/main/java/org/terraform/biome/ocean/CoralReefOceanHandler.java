@@ -36,9 +36,9 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
     @Override
     public Material[] getSurfaceCrust(Random rand) {
         return new Material[]{
-        		Material.GRAVEL,
-        		Material.GRAVEL,
-                GenUtils.randMaterial(rand, Material.STONE, Material.GRAVEL, Material.STONE),
+        		Material.SAND,
+        		Material.SAND,
+                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.SAND),
                 GenUtils.randMaterial(rand, Material.STONE),
                 GenUtils.randMaterial(rand, Material.STONE)};
     }

@@ -303,7 +303,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
                 pathWidth, pathWidth + 1, pathWidth, core.get(), false, 
-                BlockUtils.badlandsStoneLike);
+                BlockUtils.caveCarveReplace);
 
         return true;
     }

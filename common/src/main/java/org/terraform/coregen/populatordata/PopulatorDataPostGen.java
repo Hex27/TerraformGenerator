@@ -15,6 +15,7 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.TerraLootTable;
@@ -98,7 +99,6 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
      * @param x
      * @param y
      * @param z
-     * @param state
      * @return
      */
     public BlockState getBlockState(int x, int y, int z) {
@@ -137,6 +137,8 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     	//Y is offset by a small bit to prevent falling through weird spawning areas
         Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),x+0.5,y+0.3,z+0.5), type);
         e.setPersistent(true);
+        if(e instanceof LivingEntity)
+            ((LivingEntity) e).setRemoveWhenFarAway(false);
     }
     
     private static int spawnerRetries = 0;

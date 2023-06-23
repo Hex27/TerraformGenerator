@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":implementation:v1_19_R1"))
     implementation(project(":implementation:v1_19_R2"))
     implementation(project(":implementation:v1_19_R3"))
+    implementation(project(":implementation:v1_20_R1"))
 }
 
 tasks.shadowJar {

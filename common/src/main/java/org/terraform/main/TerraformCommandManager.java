@@ -38,6 +38,8 @@ public class TerraformCommandManager implements TabExecutor {
             this.registerCommand(new SphereCommand(plugin, "sphere"));
             this.registerCommand(new FractalTreeCommand(plugin, "fractal", "fractaltree", "ftree"));
             this.registerCommand(new CaveCommand(plugin, "cave"));
+            this.registerCommand(new WarmOceanRuinsCommand(plugin, "warmoceanruins","wor"));
+            this.registerCommand(new TrailRuinsCommand(plugin, "trailruins","tr"));
             this.registerCommand(new IceSpikeCommand(plugin, "icespike"));
             this.registerCommand(new CoralCommand(plugin, "coral"));
             this.registerCommand(new WitchHutCommand(plugin, "hut"));

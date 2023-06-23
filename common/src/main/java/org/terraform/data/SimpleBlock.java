@@ -716,6 +716,16 @@ public class SimpleBlock {
 
         return depth;
     }
+
+    public int blockface(int maxDepth, Random rand, BlockFace face, Material... types) {
+        int depth = 0;
+        while (depth <= maxDepth) {
+            this.getRelative(face).setType(GenUtils.randMaterial(rand, types));
+            depth++;
+        }
+
+        return depth;
+    }
     
     public void downPillar(int h, Material... types) {
     	downPillar(new Random(),h,types);

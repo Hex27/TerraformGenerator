@@ -179,7 +179,7 @@ public class CubeRoom {
     }
 
     /**
-     * @return random coordinates from inside the room.
+     * @return random 3d coordinates from inside the room.
      */
     public int[] randomCoords(Random rand) {
         return randomCoords(rand, 0);

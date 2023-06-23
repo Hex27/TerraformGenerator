@@ -1,5 +1,7 @@
 package org.terraform.biome.custombiomes;
 
+import org.terraform.utils.version.Version;
+
 public enum CustomBiomeType {
 	NONE,
 	MUDDY_BOG("b8ad49","9c8046","b8ad49","d9cd62","ad8445","ad8445", 0.8f, false),
@@ -28,7 +30,7 @@ public enum CustomBiomeType {
 		this.grassColor = "";
 	}
 	
-	private CustomBiomeType(String fogColor, String waterColor, String waterFogColor, 
+	CustomBiomeType(String fogColor, String waterColor, String waterFogColor,
 			String skyColor, String foliageColor, String grassColor, float rainFall,
 			boolean isCold) {
 		this.key = "terraformgenerator:" + this.toString().toLowerCase();
@@ -40,6 +42,10 @@ public enum CustomBiomeType {
 		this.grassColor = grassColor;
 		this.rainFall = rainFall;
 		this.isCold = isCold;
+        //In 1.20, cherry trees no longer need the pink.
+        if(Version.isAtLeast(20) && this.foliageColor.equals("ffa1fc"))
+            this.foliageColor = "acff96";
+
 	}
 
 	public String getKey() {

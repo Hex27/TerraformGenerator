@@ -19,6 +19,7 @@ public class CylinderBuilder {
 	private float minRadius = 0f;
 	private SimpleBlock core;
 	private boolean singleBlockY = false;
+    private boolean startFromZero = false;
 	private boolean hardReplace = false;
 	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
 	private Material[] types;
@@ -32,7 +33,11 @@ public class CylinderBuilder {
 		this.types = types;
 		this.core = core;
 	}
-	
+
+    public CylinderBuilder setStartFromZero(boolean startFromZero) {
+        this.startFromZero = startFromZero;
+        return this;
+    }
 	public CylinderBuilder setNoiseMagnitude(float mag) {
 		this.noiseMagnitude = mag;
 		return this;
@@ -98,7 +103,7 @@ public class CylinderBuilder {
         if(singleBlockY) effectiveRY = 0;
         
         for (float x = -rX; x <= rX; x++) {
-            for (float y = -effectiveRY; y <= effectiveRY; y++) {
+            for (float y = startFromZero ? 0 : -effectiveRY; y <= effectiveRY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);

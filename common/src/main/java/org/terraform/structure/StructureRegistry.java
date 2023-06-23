@@ -18,8 +18,11 @@ import org.terraform.structure.small.igloo.IglooPopulator;
 import org.terraform.structure.small.ruinedportal.RuinedPortalPopulator;
 import org.terraform.structure.small.shipwreck.ShipwreckPopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.structure.trailruins.TrailRuinsPopulator;
 import org.terraform.structure.village.VillagePopulator;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
+import org.terraform.structure.warmoceanruins.WarmOceanRuinsPopulator;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -56,6 +59,8 @@ public class StructureRegistry {
         registerStructure(StructureType.LARGE_MISC, new MineshaftPopulator());
         registerStructure(StructureType.LARGE_MISC, new CatacombsPopulator());
         registerStructure(StructureType.LARGE_MISC, new BadlandsMinePopulator());
+        registerStructure(StructureType.LARGE_MISC, new WarmOceanRuinsPopulator());
+        registerStructure(StructureType.LARGE_MISC, new TrailRuinsPopulator());
 
         registerStructure(StructureType.SMALL, new SmallDungeonPopulator());
         registerStructure(StructureType.SMALL, new ShipwreckPopulator());

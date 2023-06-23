@@ -254,7 +254,6 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     
     private MinecraftKey getLootTable(TerraLootTable table) {
         return switch(table) {
-            case EMPTY -> LootTables.a;
             case SPAWN_BONUS_CHEST -> LootTables.b;
             case END_CITY_TREASURE -> LootTables.c;
             case SIMPLE_DUNGEON -> LootTables.d;
@@ -372,6 +371,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 //                return LootTables.az;
 //            case PIGLIN_BARTERING:
 //                return LootTables.aA;
+            default -> LootTables.a;
         };
     }
 

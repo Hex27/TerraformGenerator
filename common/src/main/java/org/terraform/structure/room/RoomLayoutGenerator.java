@@ -17,9 +17,9 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
 public class RoomLayoutGenerator {
-	
-	private final HashSet<PathGenerator> pathGens = new HashSet<>();
-	private final HashSet<PathPopulatorData> pathPopulators = new HashSet<>();
+
+    private final HashSet<PathGenerator> pathGens = new HashSet<>();
+    private final HashSet<PathPopulatorData> pathPopulators = new HashSet<>();
     private final HashSet<CubeRoom> rooms = new HashSet<>();
     private final int[] upperBound;
     private final int[] lowerBound;
@@ -32,7 +32,7 @@ public class RoomLayoutGenerator {
     private int centY;
     private int centZ;
     private Random rand;
-    
+
     //Range refers to the width of the room placement area.
     //Note that only room central points follow range so it's possible
     //for a room's area to exceed this range.
@@ -60,12 +60,12 @@ public class RoomLayoutGenerator {
         this.centZ = centZ;
         this.rand = random;
         this.range = range;
-        this.upperBound = new int[]{centX + range / 2, centZ + range / 2};
-        this.lowerBound = new int[]{centX - range / 2, centZ - range / 2};
+        this.upperBound = new int[] {centX + range / 2, centZ + range / 2};
+        this.lowerBound = new int[] {centX - range / 2, centZ - range / 2};
     }
 
     public int[] getCenter() {
-        return new int[]{centX, centY, centZ};
+        return new int[] {centX, centY, centZ};
     }
 
     public void setPathPopulator(PathPopulatorAbstract pop) {
@@ -75,6 +75,7 @@ public class RoomLayoutGenerator {
     public void setCarveRooms(boolean carve) {
         this.carveRooms = carve;
     }
+
     public void setCarveRoomsMultiplier(float xMul, float yMul, float zMul) {
         this.xCarveMul = xMul;
         this.yCarveMul = yMul;
@@ -405,9 +406,6 @@ public class RoomLayoutGenerator {
 
     /**
      * ONLY RUN AFTER FILL, IF NOT THE PATHS MAY BE SOLID.
-     * @param data
-     * @param tw
-     * @param mat
      */
     public void populatePathsOnly() {
 

@@ -14,8 +14,11 @@ public class OneOneNineBlockHandler {
 	
 	public static final Material MUD = Material.getMaterial("MUD") == null ? 
 			Material.getMaterial("PODZOL") : Material.getMaterial("MUD");
-	
-	public static final Material REINFORCED_DEEPSLATE = Material.getMaterial("REINFORCED_DEEPSLATE") == null ? 
+
+    public static final Material MUD_BRICKS = Material.getMaterial("MUD_BRICKS") == null ?
+            Material.getMaterial("BRICKS") : Material.getMaterial("MUD_BRICKS");
+
+    public static final Material REINFORCED_DEEPSLATE = Material.getMaterial("REINFORCED_DEEPSLATE") == null ?
 			Material.getMaterial("POLISHED_DIORITE") : Material.getMaterial("REINFORCED_DEEPSLATE");
 	
 	

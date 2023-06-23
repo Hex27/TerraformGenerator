@@ -11,7 +11,6 @@ import org.terraform.populators.AmethystGeodePopulator;
 import org.terraform.populators.OrePopulator;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
-import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
@@ -226,8 +225,8 @@ public class TerraformPopulator {
 		caveDistributor.populate(tw, random, data);
 
 		//Multi-megachunk structures
-        for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {
-            if (((MultiMegaChunkStructurePopulator)spop).canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
+        for (MultiMegaChunkStructurePopulator spop : StructureRegistry.smallStructureRegistry) {
+            if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
                 TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
                 
                 //No async events

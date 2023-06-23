@@ -71,7 +71,7 @@ public class DesertHandler extends BiomeHandler {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 OasisBeach.generateOasisBeach(world, random, data, x, z, BiomeBank.DESERT);
 
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
+                int y = GenUtils.getHighestGround(data, x, z);
                 if (data.getBiome(x, z) != getBiome()) continue;
                 Material base = data.getType(x, y, z);
 

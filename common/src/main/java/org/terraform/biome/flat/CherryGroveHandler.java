@@ -16,6 +16,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Random;
@@ -54,12 +55,13 @@ public class CherryGroveHandler extends BiomeHandler {
                 if (data.getBiome(x, z) != getBiome()) continue;                
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
                 	
-                    if (GenUtils.chance(random, 1, 10)) { //Grass
-                        if (GenUtils.chance(random, 6, 10)) {
-                            data.setType(x, y + 1, z, Material.GRASS);
-                            if (random.nextBoolean()) {
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                            }
+                    if (GenUtils.chance(random, 2, 10)) { //Grass
+                        if (GenUtils.chance(random, 8, 10)) {
+                            //Pink petals. No longer generate tall grass.
+                            if (Version.isAtLeast(20) && GenUtils.chance(random, 6, 10)) {
+                                data.setBlockData(x,y+1,z, OneTwentyBlockHandler.getPinkPetalData(GenUtils.randInt(1,4)));
+                            }else
+                                data.setType(x, y + 1, z, Material.GRASS);
                         } else {
                             if (GenUtils.chance(random, 7, 10))
                                 data.setType(x, y + 1, z, Material.ALLIUM);
@@ -102,7 +104,8 @@ public class CherryGroveHandler extends BiomeHandler {
             		new FractalTreeBuilder(FractalTypes.Tree.CHERRY_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             	else
             		new FractalTreeBuilder(FractalTypes.Tree.CHERRY_THICK).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());		
-            	if(Version.isAtLeast(17)) {
+            	//No spore blossoms on 1.20 as the new cherry trees already drop petals
+                if(Version.isAtLeast(17) && !Version.isAtLeast(20)) {
                 	for(int rX = sLoc.getX()-6; rX <= sLoc.getX() + 6; rX++) {
                 		for(int rZ = sLoc.getZ()-6; rZ <= sLoc.getZ() + 6; rZ++) {
                         	Wall ceil = new Wall(new SimpleBlock(data,rX,sLoc.getY(),rZ)).findCeiling(15);

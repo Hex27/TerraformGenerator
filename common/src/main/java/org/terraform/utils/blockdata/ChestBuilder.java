@@ -30,6 +30,12 @@ public class ChestBuilder {
         return this;
     }
 
+    public ChestBuilder setWaterlogged(boolean waterlogged)
+    {
+        this.blockData.setWaterlogged(waterlogged);
+        return this;
+    }
+
     public ChestBuilder setFacing(BlockFace face) {
         this.blockData.setFacing(face);
         return this;

@@ -227,7 +227,7 @@ public class TerraSchematic {
 
     public void export(String path) throws IOException {
         File fout = new File(path);
-        fout.getParentFile().mkdirs();
+        //fout.getParentFile().mkdirs();
         FileOutputStream fos = new FileOutputStream(fout);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
         
