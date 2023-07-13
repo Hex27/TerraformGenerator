@@ -15,14 +15,14 @@ subprojects {
         mavenLocal()
         mavenCentral()
         maven("https://repo.codemc.io/repository/nms/")
-		//maven("https://libraries.minecraft.net/minecraft-server")
-		//maven("https://repo.papermc.io/repository/maven-public/")
+		maven("https://libraries.minecraft.net/minecraft-server")
+		maven("https://repo.papermc.io/repository/maven-public/")
 		maven("https://mvn-repo.arim.space/lesser-gpl3/")
     }
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_16
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
