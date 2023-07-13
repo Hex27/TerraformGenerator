@@ -76,7 +76,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     		} else {
     			//Let the event handler do it
     			//TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher]   - Loading a chunk to flush changes...");
-    	        w.loadChunk(scl.getX(), scl.getZ());
+    	        TerraformGeneratorPlugin.get().morePaperLib.scheduling().asyncScheduler().run(() -> w.loadChunk(scl.getX(), scl.getZ()));
     		}
     	}
     }
