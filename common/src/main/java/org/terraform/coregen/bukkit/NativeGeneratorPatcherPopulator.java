@@ -62,22 +62,24 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     	for(SimpleChunkLocation scl:locs) {
     		World w = Bukkit.getWorld(scl.getWorld());
     		if(w == null) continue;
-    		if(w.isChunkLoaded(scl.getX(), scl.getZ())) {
-    			//TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher]   - Flushing changes to loaded chunk...");
-				Collection<Object[]> changes = cache.remove(scl);
-    	        if (changes != null) {
-    	        	for (Object[] entry : changes) {
-    	                int[] loc = (int[]) entry[0];
-    	                BlockData data = (BlockData) entry[1];
-    	                w.getBlockAt(loc[0], loc[1], loc[2])
-    	                        .setBlockData(data, false);
-    	            }
-    	        }
-    		} else {
-    			//Let the event handler do it
-    			//TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher]   - Loading a chunk to flush changes...");
-    	        TerraformGeneratorPlugin.get().morePaperLib.scheduling().asyncScheduler().run(() -> w.loadChunk(scl.getX(), scl.getZ()));
-    		}
+            TerraformGeneratorPlugin.get().morePaperLib.scheduling().regionSpecificScheduler(w, scl.getX(), scl.getZ()).run(() -> {
+                if(w.isChunkLoaded(scl.getX(), scl.getZ())) {
+                    //TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher]   - Flushing changes to loaded chunk...");
+                    Collection<Object[]> changes = cache.remove(scl);
+                    if (changes != null) {
+                        for (Object[] entry : changes) {
+                            int[] loc = (int[]) entry[0];
+                            BlockData data = (BlockData) entry[1];
+                            w.getBlockAt(loc[0], loc[1], loc[2])
+                                    .setBlockData(data, false);
+                        }
+                    }
+                } else {
+                    //Let the event handler do it
+                    //TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher]   - Loading a chunk to flush changes...");
+                    w.loadChunk(scl.getX(), scl.getZ());
+                }
+            });
     	}
     }
     
