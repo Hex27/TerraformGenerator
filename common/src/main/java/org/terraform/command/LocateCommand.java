@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
@@ -114,21 +113,18 @@ public class LocateCommand extends TerraCommand implements Listener {
         
         long startTime = System.currentTimeMillis();
 
-        BukkitRunnable runnable = new BukkitRunnable() {
-            public void run() {
-            	int[] loc = StructureLocator.locateMultiMegaChunkStructure(tw, center, populator, -1);
-            	long timeTaken = System.currentTimeMillis() - startTime;
-            	
-                syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
+        plugin.morePaperLib.scheduling().regionSpecificScheduler(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockZ()).run(() -> {
+            int[] loc = StructureLocator.locateMultiMegaChunkStructure(tw, center, populator, -1);
+            long timeTaken = System.currentTimeMillis() - startTime;
 
-                if (loc != null)
-                    syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", loc[0] + "",
-                            "%z%", loc[1] + ""));
-                else
-                    syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
-            }
-        };
-        runnable.runTaskAsynchronously(plugin);
+            syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
+
+            if (loc != null)
+                syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", loc[0] + "",
+                        "%z%", loc[1] + ""));
+            else
+                syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
+        });
     }
 
     private void locateSingleMegaChunkStructure(Player p, SingleMegaChunkStructurePopulator populator) {
@@ -144,21 +140,18 @@ public class LocateCommand extends TerraCommand implements Listener {
 
         long startTime = System.currentTimeMillis();
 
-        BukkitRunnable runnable = new BukkitRunnable() {
-            public void run() {
-            	int[] loc = StructureLocator.locateSingleMegaChunkStructure(tw, center, populator, -1);
-            	long timeTaken = System.currentTimeMillis() - startTime;
-            	
-                syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
+        plugin.morePaperLib.scheduling().regionSpecificScheduler(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockZ()).run(() -> {
+            int[] loc = StructureLocator.locateSingleMegaChunkStructure(tw, center, populator, -1);
+            long timeTaken = System.currentTimeMillis() - startTime;
 
-                if (loc != null)
-                    syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", loc[0] + "",
-                            "%z%", loc[1] + ""));
-                else
-                    syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
-            }
-        };
-        runnable.runTaskAsynchronously(plugin);
+            syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
+
+            if (loc != null)
+                syncSendMessage(uuid, ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", loc[0] + "",
+                        "%z%", loc[1] + ""));
+            else
+                syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
+        });
     }
 
     private void syncSendMessage(UUID uuid, String message) {

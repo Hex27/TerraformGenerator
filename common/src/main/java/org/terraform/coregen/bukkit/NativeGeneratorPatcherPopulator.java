@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.BlockPopulator;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
@@ -36,13 +35,10 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     	
     	if(!flushIsQueued && cache.size() > TConfigOption.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY.getInt()) {
 			flushIsQueued = true;
-    		new BukkitRunnable() {
-	    		@Override
-				public void run() {
-		    		flushChanges();		
-		    		flushIsQueued = false;
-				}
-    		}.runTask(TerraformGeneratorPlugin.get());
+            TerraformGeneratorPlugin.get().morePaperLib.scheduling().regionSpecificScheduler(TerraformGeneratorPlugin.get().getServer().getWorld(world), x, z).run(() -> {
+                flushChanges();
+                flushIsQueued = false;
+            });
     	}
     	
         SimpleChunkLocation scl = new SimpleChunkLocation(world, x, y, z);

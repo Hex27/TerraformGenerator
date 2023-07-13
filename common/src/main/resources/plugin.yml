@@ -9,3 +9,4 @@ commands:
   terraform:
     description: Main command
     aliases: terra
+folia-supported: true

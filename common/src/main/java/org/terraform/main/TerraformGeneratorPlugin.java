@@ -33,6 +33,7 @@ import org.terraform.watchdog.TfgWatchdogSuppressant;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import space.arim.morepaperlib.MorePaperLib;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -49,7 +50,8 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     public static NMSInjectorAbstract injector;
     private static TerraformGeneratorPlugin instance;
     public static TfgWatchdogSuppressant watchdogSuppressant;
-    
+    public MorePaperLib morePaperLib;
+
     private ConfigLoader config;
     private LanguageManager lang;
 
@@ -70,6 +72,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
 	@Override
     public void onEnable() {
+        morePaperLib = new MorePaperLib(this);
         super.onEnable();
 		GenUtils.initGenUtils();
 		BlockUtils.initBlockUtils();
