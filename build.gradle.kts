@@ -16,13 +16,13 @@ subprojects {
         mavenCentral()
         maven("https://repo.codemc.io/repository/nms/")
 		//maven("https://libraries.minecraft.net/minecraft-server")
-		//maven("https://papermc.io/repo/repository/maven-public/")
+		maven("https://papermc.io/repo/repository/maven-public/")
     }
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_16
-    }
+//    Handle this inside each implementation as different minecraft versions support a different max jvm version
+//    java {
+//        sourceCompatibility = JavaVersion.VERSION_16
+//        targetCompatibility = JavaVersion.VERSION_16
+//    }
 }
 
 val testDir = "target/server"

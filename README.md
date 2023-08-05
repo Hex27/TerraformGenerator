@@ -23,6 +23,16 @@
   </ol>
 </details>
 
+<h2 name="support">Building</h2>
+
+```bash
+git clone https://github.com/Hex27/TerraformGenerator.git
+cd TerraformGenerator
+gradlew buildProj:shadowJar
+```
+The jar at `buildProj/build/libs/buildProj-all.jar` is the plugin.
+
+
 <h2 name="support">Support</h2>
 
 Support Discord: https://discord.gg/yW7JcqM
