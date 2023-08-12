@@ -11,6 +11,7 @@
 <details open="open">
   <summary>Table of Contents</summary>
   <ol>
+    <li><a href="#support">Building</a></li>
     <li><a href="#support">Support</a></li>
     <li><a href="#about">About Project & Wiki</a></li>
     <li><a href="#getting-started">Getting started</a></li>
