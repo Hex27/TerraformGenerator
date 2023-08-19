@@ -77,29 +77,22 @@ public class NewFractalTreeBuilder {
     private Material rootMaterial = Material.OAK_WOOD;
     private boolean spawnBees = false;
 
-    //[Mutable fields]=============================================
-    Random random;
-    TerraformWorld tw;
-    int oriY;
-    private final HashSet<SimpleBlock> prospectiveHives = new HashSet<>();
-    private double currentBranchTheta = 0;
-    private double displacementTheta = 0;
+    //[No more mutable fields. They caused concurrency problems]===================
 
     public boolean build(TerraformWorld tw, SimpleBlock base)
     {
         //Clear and set mutable structures
         if(!checkGradient(base.getPopData(),base.getX(),base.getZ())) return false;
-        this.random = tw.getHashedRand(base.getX(), base.getY(), base.getZ());
-        this.displacementTheta = GenUtils.randDouble(random, 0,displacementThetaDelta);
-        this.prospectiveHives.clear();
-        this.tw = tw;
-        this.oriY = base.getY();
-        this.currentBranchTheta = GenUtils.randInt(random, 0, randomBranchSegmentCount);
+        int oriY = base.getY();
+        Random random = tw.getHashedRand(base.getX(), base.getY(), base.getZ());
+        double displacementTheta = GenUtils.randDouble(random, 0,displacementThetaDelta);
+        HashSet<SimpleBlock> prospectiveHives = new HashSet<>();
+        double currentBranchTheta = GenUtils.randInt(random, 0, randomBranchSegmentCount);
 
         fractalLeaves.purgeOccupiedLeavesCache();
 
         //Spawn the actual tree
-        branch(base, initialNormal.clone()
+        branch(tw, random, base, initialNormal.clone()
                         .add(
                         new Vector(
                             GenUtils.randDouble(random, minInitialNormalDelta, maxInitialNormalDelta),
@@ -107,6 +100,10 @@ public class NewFractalTreeBuilder {
                             GenUtils.randDouble(random, minInitialNormalDelta, maxInitialNormalDelta)
                         ))
                         .normalize(),
+                        prospectiveHives,
+                currentBranchTheta,
+                oriY,
+                displacementTheta,
                 originalTrunkLength + (float)GenUtils.randDouble(random, -lengthVariance, lengthVariance),firstEnd,
                 0, this.initialBranchRadius);
 
@@ -139,7 +136,7 @@ public class NewFractalTreeBuilder {
      * @param depth of the current recursion. Starts from 0 and stops at maxDepth
      * @param currentWidth width of the current recursion
      */
-    public void branch(SimpleBlock base, Vector normal, float length, float end, int depth, float currentWidth)
+    public void branch(TerraformWorld tw, Random random, SimpleBlock base, Vector normal, HashSet<SimpleBlock> prospectiveHives, double currentBranchTheta, int oriY, double displacementTheta, float length, float end, int depth, float currentWidth)
     {
         boolean spawnedNewBranch = false;
         SimpleBlock lastOperatedCentre = base;
@@ -188,9 +185,10 @@ public class NewFractalTreeBuilder {
                 //this.setBranchMaterial(BlockUtils.WOOLS[(int) length]);
 
                 lastOperatedCentre = generateRotatedCircle(
+                        random, oriY,
                         lastOperatedCentre.getPopData(),
                         branchVect.clone().multiply(i/length).add(base.toVector()),
-                        appliedNormal, appliedNoisePriority, appliedWidth, noiseGen, i);
+                        appliedNormal, prospectiveHives, appliedNoisePriority, appliedWidth, noiseGen, i);
 
                 this.branchMaterial = temp;
 
@@ -207,14 +205,18 @@ public class NewFractalTreeBuilder {
                     randomBranchSpawnCooldownCurrent = randomBranchSpawnCooldown;
                     spawnedNewBranch = true;
                     //If the cluster count is more than 0, you must reshuffle displacement theta
-                    double effectiveDisplacementTheta = this.displacementTheta;
+                    double effectiveDisplacementTheta = displacementTheta;
                     if(randomBranchClusterCount > 0)
-                        this.displacementTheta = GenUtils.randDouble(random, 0,displacementThetaDelta);
+                        displacementTheta = GenUtils.randDouble(random, 0,displacementThetaDelta);
 
                     //Place the randomised branches.
                     for(int y = 0; y < randomBranchClusterCount; y++)
-                        branch(lastOperatedCentre,
-                                calculateNextProjection(normal, getNextTheta(randomBranchSegmentCount, effectiveDisplacementTheta)),
+                        branch(tw, random, lastOperatedCentre,
+                                calculateNextProjection(random, normal, getNextTheta(currentBranchTheta, randomBranchSegmentCount, effectiveDisplacementTheta)),
+                                prospectiveHives,
+                                currentBranchTheta,
+                                oriY,
+                                displacementTheta,
                                 branchDecrement.apply(length, (float) (lastOperatedCentre.getY() - oriY)),
                                 1.0f,
                                 depth + 1,
@@ -228,8 +230,12 @@ public class NewFractalTreeBuilder {
                 for(int i = 0; i < crownBranches; i++) {
                     //branchMaterial = BlockUtils.pickWool();
                     spawnedNewBranch = true;
-                    branch(lastOperatedCentre,
-                            calculateNextProjection(normal, thetaDelta*i),
+                    branch(tw, random, lastOperatedCentre,
+                            calculateNextProjection(random, normal, thetaDelta*i),
+                            prospectiveHives,
+                            currentBranchTheta,
+                            oriY,
+                            displacementTheta,
                             branchDecrement.apply(length, (float) (lastOperatedCentre.getY() - oriY)),
                             1.0f,
                             depth + 1,
@@ -249,7 +255,7 @@ public class NewFractalTreeBuilder {
      *                    same branch
      * @return a theta with the next segment
      */
-    private double getNextTheta(int numSegments, double displacementTheta)
+    private double getNextTheta(double currentBranchTheta, int numSegments, double displacementTheta)
     {
         double thetaDelta = (2*Math.PI)/((double)numSegments);
         currentBranchTheta++;
@@ -267,7 +273,7 @@ public class NewFractalTreeBuilder {
      * @param theta refers to the yaw (represented by 0 to 2pi)
      * @return the new normal vector
      */
-    private Vector calculateNextProjection(Vector normal, double theta) {
+    private Vector calculateNextProjection(Random random, Vector normal, double theta) {
         //One perpendicular vector will be rotated about the normal to
         //generate a rotating projection.
         //
@@ -336,7 +342,7 @@ public class NewFractalTreeBuilder {
      *                    its length.
      * @return the centre of the evaluated circle.
      */
-    private SimpleBlock generateRotatedCircle(PopulatorDataAbstract data, Vector centre, Vector normal, float noisePriority, float radius, FastNoise noiseGen, float heightIndex)
+    private SimpleBlock generateRotatedCircle(Random random, int oriY, PopulatorDataAbstract data, Vector centre, Vector normal, HashSet<SimpleBlock> prospectiveHives, float noisePriority, float radius, FastNoise noiseGen, float heightIndex)
     {
         if(radius <= 0.5f)
         {

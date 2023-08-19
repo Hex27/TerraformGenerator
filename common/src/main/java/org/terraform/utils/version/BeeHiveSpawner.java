@@ -4,20 +4,26 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.populatordata.IPopulatorDataBeehiveEditor;
 import org.terraform.data.SimpleBlock;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 public class BeeHiveSpawner {
 
     public static void spawnFullBeeNest(SimpleBlock block) {
-        
-        if(block.getPopData() instanceof IPopulatorDataBeehiveEditor)
+        try
         {
-        	IPopulatorDataBeehiveEditor ipopdata = (IPopulatorDataBeehiveEditor) block.getPopData();
-        	ipopdata.setBeehiveWithBee(block.getX(), block.getY(), block.getZ());
+            if(block.getPopData() instanceof IPopulatorDataBeehiveEditor ipopdata)
+            {
+                ipopdata.setBeehiveWithBee(block.getX(), block.getY(), block.getZ());
+            }
+            else
+            {
+                block.setType(Material.BEE_NEST);
+                block.getPopData().addEntity(block.getX(), block.getY(), block.getZ(), EntityType.BEE);
+            }
         }
-        else
+        catch(NullPointerException e)
         {
-            block.setType(Material.BEE_NEST);
-        	block.getPopData().addEntity(block.getX(), block.getY(), block.getZ(), EntityType.BEE);
+            TerraformGeneratorPlugin.logger.info("Beehive null silently ignored");
         }
     }
 
