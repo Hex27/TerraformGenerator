@@ -175,11 +175,8 @@ public enum BiomeBank {
     }
     
     /**
-     * Block X, block Z.
-     * @param tw
-     * @param x
-     * @param z
-     * @return
+     * @param x Block X
+     * @param z Block Z
      */
     public static BiomeSection getBiomeSectionFromBlockCoords(TerraformWorld tw, int x, int z) {
     	BiomeSection sect = new BiomeSection(tw,x,z);
@@ -198,8 +195,6 @@ public enum BiomeBank {
     /**
      * ChunkX, ChunkZ
      * @param tw
-     * @param x
-     * @param z
      * @return the biome section that this chunk belongs to.
      */
     public static BiomeSection getBiomeSectionFromChunk(TerraformWorld tw, int chunkX, int chunkZ) {
@@ -235,10 +230,6 @@ public enum BiomeBank {
      * THIS METHOD WILL RUN ALL CALCULATIONS.
      * <br><br>
      * Use terraformWorld.getCache(...).getBiomeBank(x,y,z) instead.
-     * @param tw
-     * @param rawX
-     * @param height
-     * @param rawZ
      * @return exact biome that will appear at these coordinates
      */
     public static BiomeBank calculateBiome(TerraformWorld tw, int rawX, int height, int rawZ) {
@@ -396,32 +387,20 @@ public enum BiomeBank {
     	
     	if(bank.getBiomeWeight() <= 0)
     		return false;
-    	
-    	switch(bank.getType()) {
-		case BEACH:
-			return true; //L
-		case DEEP_OCEANIC:
-			return singleDeepOcean == null || singleDeepOcean == bank;
-		case FLAT:
-			return singleLand == null || singleLand == bank;
-		case HIGH_MOUNTAINOUS:
-			return singleHighMountain == null || singleHighMountain == bank;
-		case MOUNTAINOUS:
-			return singleMountain == null || singleMountain == bank;
-		case OCEANIC:
-			return singleOcean == null || singleOcean == bank;
-		case RIVER:
-			return true; //L    	
-    	}
-    	return true;
+
+        return switch(bank.getType()) {
+            case BEACH, RIVER -> true; //L
+            case DEEP_OCEANIC -> singleDeepOcean == null || singleDeepOcean == bank;
+            case FLAT -> singleLand == null || singleLand == bank;
+            case HIGH_MOUNTAINOUS -> singleHighMountain == null || singleHighMountain == bank;
+            case MOUNTAINOUS -> singleMountain == null || singleMountain == bank;
+            case OCEANIC -> singleOcean == null || singleOcean == bank;
+            //L
+        };
     }
     
     /**
      * Used to get a biomebank from temperature and moisture values.
-     * @param section
-     * @param temperature
-     * @param moisture
-     * @return
      */
     public static BiomeBank selectBiome(BiomeSection section, double temperature, double moisture) {
     	Random sectionRand = section.getSectionRandom();

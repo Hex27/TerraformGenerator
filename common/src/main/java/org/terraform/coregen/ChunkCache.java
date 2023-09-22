@@ -110,7 +110,7 @@ public class ChunkCache {
         highestGroundCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
     }
     
-    public double getBlurredHeight(int rawX, int rawZ) {
+    public float getBlurredHeight(int rawX, int rawZ) {
         return blurredHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
     }
 

@@ -231,7 +231,6 @@ public class BiomeSection {
     	}
     	
     	return mostDominant;
-	
 	}
 
 	/**
