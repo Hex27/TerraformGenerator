@@ -179,8 +179,8 @@ public class StructureRegistry {
         if (pop instanceof SingleMegaChunkStructurePopulator) {
             SingleMegaChunkStructurePopulator[] pops = {(SingleMegaChunkStructurePopulator) pop};
             if (largeStructureRegistry.containsKey(type)) {
-                StructurePopulator[] existing = largeStructureRegistry.get(type);
-                StructurePopulator[] old = pops;
+                SingleMegaChunkStructurePopulator[] existing = largeStructureRegistry.get(type);
+                SingleMegaChunkStructurePopulator[] old = pops;
                 pops = new SingleMegaChunkStructurePopulator[existing.length + 1];
                 System.arraycopy(existing, 0, pops, 0, existing.length);
                 System.arraycopy(old, 0, pops, existing.length, 1);

@@ -132,6 +132,12 @@ public class NewFractalTreeBuilder {
     /**
      *
      * @param base the start of the branch's base.
+     * @param normal the direction of the branch represented via a unit vector
+     * @param prospectiveHives a collection of possible beehive locations
+     * @param currentBranchTheta a counter for getNextTheta to spawn cluster branches properly
+     * @param oriY original tree base Y
+     * @param displacementTheta i forgot what this is
+     * @param length length of the branch
      * @param end is the percentage from 0.0 to 1.0 for where the branch is considered done
      * @param depth of the current recursion. Starts from 0 and stops at maxDepth
      * @param currentWidth width of the current recursion
@@ -210,7 +216,8 @@ public class NewFractalTreeBuilder {
                         displacementTheta = GenUtils.randDouble(random, 0,displacementThetaDelta);
 
                     //Place the randomised branches.
-                    for(int y = 0; y < randomBranchClusterCount; y++)
+                    for(int y = 0; y < randomBranchClusterCount; y++) {
+                        currentBranchTheta++;
                         branch(tw, random, lastOperatedCentre,
                                 calculateNextProjection(random, normal, getNextTheta(currentBranchTheta, randomBranchSegmentCount, effectiveDisplacementTheta)),
                                 prospectiveHives,
@@ -221,6 +228,7 @@ public class NewFractalTreeBuilder {
                                 1.0f,
                                 depth + 1,
                                 currentWidth);
+                    }
                 }
             }
 
@@ -258,7 +266,6 @@ public class NewFractalTreeBuilder {
     private double getNextTheta(double currentBranchTheta, int numSegments, double displacementTheta)
     {
         double thetaDelta = (2*Math.PI)/((double)numSegments);
-        currentBranchTheta++;
         return (displacementTheta + currentBranchTheta * thetaDelta);
     }
 

@@ -69,27 +69,26 @@ public class LocateCommand extends TerraCommand implements Listener {
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
                 sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_ENTRY.parse("%entry%", spop.getClass().getSimpleName().replace("Populator", "")));
             }
+            sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_ENTRY.parse("%entry%", "Stronghold"));
             return;
         }
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player p)) {
             sender.sendMessage(LangOpt.fetchLang("permissions.console-cannot-exec"));
             return;
         }
         StructurePopulator spop = (StructurePopulator) params.get(0); //TODO: Get populator by name
 
-        Player p = (Player) sender;
 //		if(!(p.getWorld().getGenerator() instanceof TerraformGenerator)) {
 //			p.sendMessage(ChatColor.RED + "Can only be used in TerraformGenerator worlds!");
 //			return;
 //		}
-        if (!spop.isEnabled()) {
+        if (!spop.isEnabled() && !(spop instanceof StrongholdPopulator)) {
             p.sendMessage(LangOpt.COMMAND_LOCATE_STRUCTURE_NOT_ENABLED.parse());
             return;
         }
         
         //Stronghold Special Case
-        if (spop instanceof StrongholdPopulator ||
-                (!(spop instanceof SingleMegaChunkStructurePopulator) && !(spop instanceof MultiMegaChunkStructurePopulator))) {
+        if (spop instanceof StrongholdPopulator) {
             int[] coords = ((StrongholdPopulator)spop).getNearestFeature(TerraformWorld.get(p.getWorld()), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
             syncSendMessage(p.getUniqueId(), LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", coords[0] + "", "%z%", coords[1] + ""));
             return;
@@ -179,7 +178,8 @@ public class LocateCommand extends TerraCommand implements Listener {
 
         @Override
         public StructurePopulator parse(CommandSender arg0, String arg1) {
-
+            if(arg1.equalsIgnoreCase("stronghold")||arg1.equalsIgnoreCase("strongholdpopulator"))
+                return new StrongholdPopulator();
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
                 if (spop.getClass().getSimpleName().equalsIgnoreCase(arg1) ||
                         spop.getClass().getSimpleName().equalsIgnoreCase(arg1 + "populator"))
