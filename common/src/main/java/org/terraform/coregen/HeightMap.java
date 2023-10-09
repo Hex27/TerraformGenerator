@@ -7,6 +7,7 @@ import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
@@ -179,15 +180,21 @@ public enum HeightMap {
         return height;
     }
 
-
+    private static final int upscaleSize = 3;
     private static float getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
         float h = cache.getDominantBiomeHeight(x, z);
         if(h == Float.MIN_VALUE) {
-            h = (float) BiomeBank.calculateHeightIndependentBiome(tw, x, z)
-                    .getHandler().calculateHeight(tw, x, z);
-            if(Math.pow(x,2) + Math.pow(z,2) < spawnFlatRadiusSquared)
-                h = (float) HeightMap.CORE.getHeight(tw,x,z);
+            //Upscale the biome
+            if(x % upscaleSize != 0 && z % upscaleSize != 0)
+                h = getDominantBiomeHeight(tw, x-(x%upscaleSize),z-(z%upscaleSize));
+            else
+            {
+                h = (float) BiomeBank.calculateHeightIndependentBiome(tw, x, z)
+                        .getHandler().calculateHeight(tw, x, z);
+                if(Math.pow(x,2) + Math.pow(z,2) < spawnFlatRadiusSquared)
+                    h = (float) HeightMap.CORE.getHeight(tw,x,z);
+            }
         }
         cache.cacheDominantBiomeHeight(x, z, h);
         return h;
@@ -195,12 +202,9 @@ public enum HeightMap {
 
     /**
      * Biome calculations are done here as well.
-     *
+     * <br>
      * This function is responsible for applying blurring to merge biomes together
-     * @param tw
-     * @param x
-     * @param z
-     * @return
+     * @return Near-final world height without rivers accounted for
      */
     public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
 
@@ -218,10 +222,6 @@ public enum HeightMap {
             //MegaChunk mc = new MegaChunk(x, 0, z);
             BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
 
-            //Some extra Z values will be calculated to allow for blurring across sections.
-            //These values must be deleted afterwards.
-            ArrayList<ChunkCache> toPurgeValues = new ArrayList<ChunkCache>();
-
             //For every point in the biome section, blur across the X axis.
             for(int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
                 for(int relZ = sect.getLowerBounds().getZ() - maskRadius; relZ <= sect.getUpperBounds().getZ() + maskRadius; relZ++) {
@@ -236,9 +236,7 @@ public enum HeightMap {
                     //Do not purge values that are legitimate.
                     if(targetCache.getIntermediateBlurHeight(relX, relZ) == Float.MIN_VALUE)
                     {
-                        //add these to toPurgeValues as they must be deleted after Z calculation.
                         targetCache.cacheIntermediateBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
-                        //toPurgeValues.add(targetCache);
                     }
                 }
             }
@@ -251,14 +249,6 @@ public enum HeightMap {
                     float lineTotalHeight = 0;
                     for(int offsetZ = -maskRadius; offsetZ <= maskRadius; offsetZ++) {
                         ChunkCache queryCache = TerraformGenerator.getCache(tw, relX, relZ + offsetZ);
-//		    			if(queryCache != targetCache) {
-//		    				//This is a little suspicious, because this whole optimisation relies
-//		    				//on the fact that this thing is supposed to already be blurred
-//		    				//in the X direction, but this seems* to be ok. May produce weird
-//		    				//artifacts in the Z direction.
-//		    				lineTotalHeight += getDominantBiomeHeight(tw, relX, relZ + offsetZ);
-//		    			}
-//		    			else
 
                         //Note, this may accidentally blur twice for some Z values if
                         //chunks generate in a specific weird order. That's (probably) fine.
@@ -268,13 +258,6 @@ public enum HeightMap {
                     targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
                 }
             }
-
-//	    	for(ChunkCache toPurge:toPurgeValues) {
-//	        	for(short i = 0; i < 16; i++)
-//	        		for(short j = 0; j < 16; j++) {
-//	        			toPurge.blurredHeightCache[i][j] = Float.MIN_VALUE;
-//	        		}
-//	    	}
         }
 
         coreHeight = mainCache.getBlurredHeight(x, z);

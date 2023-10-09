@@ -3,6 +3,7 @@ package org.terraform.utils.version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
 import org.terraform.utils.BlockUtils;
 
 import java.util.Random;
@@ -22,8 +23,16 @@ public class OneTwentyBlockHandler {
     public static final Material SUSPICIOUS_GRAVEL = Material.getMaterial("SUSPICIOUS_GRAVEL") == null ?
             Material.GRAVEL : Material.getMaterial("SUSPICIOUS_GRAVEL");
 
+    public static final EntityType CAMEL = getCamel();
+
     public static BlockData getPinkPetalData(int count)
     {
         return Bukkit.createBlockData("pink_petals[flower_amount=" + count + ",facing=" + BlockUtils.getDirectBlockFace(new Random()).toString().toLowerCase() +  "]");
+    }
+
+    private static EntityType getCamel(){
+        try{
+            return EntityType.valueOf("CAMEL");
+        }catch(Exception e){ return null; }
     }
 }

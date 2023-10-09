@@ -242,7 +242,37 @@ public class FractalTypes {
         JUNGLE_SMALL,
         JUNGLE_EXTRA_SMALL,
         COCONUT_TOP,
-        DARK_OAK_SMALL,
+        DARK_OAK_SMALL(
+            //Curved tree
+            new NewFractalTreeBuilder()
+                .setOriginalTrunkLength(7)
+                .setInitialBranchRadius(3f)
+                .setCrownBranches(3)
+                .setMinBranchSpawnLength(0.2f)
+                .setMaxDepth(5)
+                .setBranchSpawnChance(0f)
+                .setMinBranchHorizontalComponent(0.5f)
+                .setMaxBranchHorizontalComponent(0.9f)
+                .setGetBranchWidth(
+                        (initialBranchWidth, branchRatio)
+                                -> initialBranchWidth*(1.0f-branchRatio/2f)
+                )
+                .setBranchDecrement(
+                        (currentBranchLength, totalTreeHeight)
+                                -> currentBranchLength
+                )
+                .setBranchSpawnChance(0.05)
+                .setTreeRootMultiplier(1.3f)
+                .setTreeRootThreshold(3)
+                .setRootMaterial(Material.DARK_OAK_WOOD)
+                .setBranchMaterial(Material.DARK_OAK_LOG)
+                .setFractalLeaves(new FractalLeaves()
+                        .setWeepingLeaves(0.3f, 1)
+                        .setRadius(4f)
+                        .setRadiusY(2.5f)
+                        .setMaterial(Material.DARK_OAK_LEAVES)
+                )
+        ),
         DARK_OAK_BIG_TOP,
         DARK_OAK_BIG_BOTTOM,
         FROZEN_TREE_BIG,

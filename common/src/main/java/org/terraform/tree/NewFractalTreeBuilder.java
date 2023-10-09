@@ -105,7 +105,8 @@ public class NewFractalTreeBuilder {
                 oriY,
                 displacementTheta,
                 originalTrunkLength + (float)GenUtils.randDouble(random, -lengthVariance, lengthVariance),firstEnd,
-                0, this.initialBranchRadius);
+                0, this.initialBranchRadius,
+                0);
 
         //Process prospectiveHives
         if(spawnBees)
@@ -142,7 +143,7 @@ public class NewFractalTreeBuilder {
      * @param depth of the current recursion. Starts from 0 and stops at maxDepth
      * @param currentWidth width of the current recursion
      */
-    public void branch(TerraformWorld tw, Random random, SimpleBlock base, Vector normal, HashSet<SimpleBlock> prospectiveHives, double currentBranchTheta, int oriY, double displacementTheta, float length, float end, int depth, float currentWidth)
+    public void branch(TerraformWorld tw, Random random, SimpleBlock base, Vector normal, HashSet<SimpleBlock> prospectiveHives, double currentBranchTheta, int oriY, double displacementTheta, float length, float end, int depth, float currentWidth, float startingBranchIndex)
     {
         boolean spawnedNewBranch = false;
         SimpleBlock lastOperatedCentre = base;
@@ -173,9 +174,10 @@ public class NewFractalTreeBuilder {
             //i is the branchIndex, and steps is the maximum steps the branch will
             //take. Preferably, the radius of the branch will shrink as steps
             //increase.
-            for(float i = 0; i < length; i+=0.5f)
-            {
-                if((i/length) > end) break;
+            for(float i = 0; i < length-startingBranchIndex; i+=0.5f) {
+                if((i / length) > end) break;
+
+                
                 float appliedWidth = currentWidth;
                 float appliedNoisePriority = this.noisePriority;
                 Vector appliedNormal = normal;
@@ -227,7 +229,7 @@ public class NewFractalTreeBuilder {
                                 branchDecrement.apply(length, (float) (lastOperatedCentre.getY() - oriY)),
                                 1.0f,
                                 depth + 1,
-                                currentWidth);
+                                currentWidth, 0);
                     }
                 }
             }
@@ -247,7 +249,7 @@ public class NewFractalTreeBuilder {
                             branchDecrement.apply(length, (float) (lastOperatedCentre.getY() - oriY)),
                             1.0f,
                             depth + 1,
-                            currentWidth);
+                            currentWidth, 0);
                 }
             }
         }

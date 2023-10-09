@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeClimate;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -23,6 +24,8 @@ import org.terraform.utils.WoodUtils.WoodType;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
+import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.Version;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -151,6 +154,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
         }
 
         //Create each pen
+        int pens = 0;
         for (CubeRoom room : gen.getRooms()) {
             //Don't touch the center room
             if (room.getWidthX() == 20 && room.getWidthZ() == 20) continue;
@@ -197,10 +201,16 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                 }
             }
 
+            int animalCount = GenUtils.randInt(3, 7);
             EntityType animal = farmAnimals[random.nextInt(farmAnimals.length)];
-
+            if(Version.isAtLeast(20)
+                    && pens == 0
+                    && biome.getClimate() == BiomeClimate.HOT_BARREN) {
+                animal = OneTwentyBlockHandler.CAMEL;
+                animalCount = 2;
+            }
             //Spawn animals
-            for (int i = 0; i < GenUtils.randInt(3, 7); i++) {
+            for (int i = 0; i < animalCount; i++) {
                 int[] coords = room.randomCoords(random, 2);
                 int highest = GenUtils.getHighestGround(data, coords[0], coords[2]);
                 data.addEntity(coords[0], highest + 1, coords[2], animal);
@@ -213,8 +223,8 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                     if (data.getType(nx, highest, nz) == Material.CHISELED_STONE_BRICKS)
                         highest--;
 
-                    if (Math.pow((nx - room.getX()) / (room.getWidthX() / 2), 2)
-                            + Math.pow((nz - room.getZ()) / (room.getWidthZ() / 2), 2) <= 1) {
+                    if (Math.pow((nx - room.getX()) / (room.getWidthX() / 2f), 2)
+                            + Math.pow((nz - room.getZ()) / (room.getWidthZ() / 2f), 2) <= 1) {
 
                         data.setType(nx, highest, nz, GenUtils.randMaterial(random,
                                 Material.GRASS_BLOCK,
@@ -234,6 +244,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                     }
                 }
             }
+            pens++;
         }
     }
 }

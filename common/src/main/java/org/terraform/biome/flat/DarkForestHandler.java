@@ -7,6 +7,7 @@ import org.bukkit.block.data.Rotatable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
@@ -95,18 +96,11 @@ public class DarkForestHandler extends BiomeHandler {
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
                 if (GenUtils.chance(random, 2, 10)) {
                 	int choice = random.nextInt(3);
-                	FractalTypes.Mushroom type;
-                	switch(choice) {
-                	case 0:
-                		type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
-                		break;
-                	case 1:
-                		type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
-                		break;
-                	default:
-                		type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
-                		break;
-                	}
+                	FractalTypes.Mushroom type = switch(choice) {
+                        case 0 -> FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
+                        case 1 -> FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                        default -> FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
+                    };
                     new MushroomBuilder(type).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
                 } else if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()) {
                     TreeDB.spawnBigDarkOakTree(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
@@ -120,8 +114,8 @@ public class DarkForestHandler extends BiomeHandler {
             sLoc.setY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
-            	new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
-                .build(tw, data, sLoc.getX(),sLoc.getY()+1,sLoc.getZ());
+            	//new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
+                FractalTypes.Tree.DARK_OAK_SMALL.build(tw, new SimpleBlock(data,sLoc));
             }
         }
 
