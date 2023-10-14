@@ -39,7 +39,9 @@ public class TrailRuinsHutRoom extends RoomPopulatorAbstract {
                     //If this is inside a jungle, allow jungle chests.
                     if(data.getBiome(w.getX(),w.getZ()) == Biome.JUNGLE
                             || data.getBiome(w.getX(),w.getZ()) == Biome.BAMBOO_JUNGLE
-                            || data.getBiome(w.getX(),w.getZ()) == Biome.SPARSE_JUNGLE)
+                            //|| data.getBiome(w.getX(),w.getZ()) == Biome.SPARSE_JUNGLE
+                            // this biome doesn't exist in 1.16. It's not used anyway, might as well remove the check
+                        )
                         if(i > 1 && i < entry.getValue() - 2
                                 && GenUtils.chance(rand, 1, 9))
                             new ChestBuilder(Material.CHEST)
