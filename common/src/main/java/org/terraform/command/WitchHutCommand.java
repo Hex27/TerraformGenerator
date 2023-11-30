@@ -40,11 +40,10 @@ public class WitchHutCommand extends TerraCommand {
 
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
-//		int x = p.getLocation().getBlockX();
-//		int y = p.getLocation().getBlockY();
-//		int z = p.getLocation().getBlockZ();
-//		TreeDB.spawnCoconutTree(new Random(), data, x,y,z);
-        new WitchHutPopulator().populate(TerraformWorld.get(p.getWorld()), new Random(), data);
+		int x = p.getLocation().getBlockX();
+		int y = p.getLocation().getBlockY();
+		int z = p.getLocation().getBlockZ();
+        new WitchHutPopulator().spawnSwampHut(TerraformWorld.get(p.getWorld()),new Random(),data,x,y,z);
 
     }
 

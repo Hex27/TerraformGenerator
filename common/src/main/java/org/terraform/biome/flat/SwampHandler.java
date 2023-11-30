@@ -1,4 +1,4 @@
-package org.terraform.biome.ocean;
+package org.terraform.biome.flat;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -8,18 +8,17 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.small.WitchHutPopulator;
-import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
+import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.OneOneNineBlockHandler;
 
@@ -27,6 +26,8 @@ import java.util.Random;
 
 public class SwampHandler extends BiomeHandler {
 
+    @Override
+    public BiomeBank getRiverType(){ return BiomeBank.SWAMP; }
 
     @Override
     public boolean isOcean() {
@@ -35,7 +36,7 @@ public class SwampHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneNineBlockHandler.MANGROVE_SWAMP;
+        return Biome.SWAMP;
     }
     @Override
     public Material[] getSurfaceCrust(Random rand) {
@@ -111,47 +112,28 @@ public class SwampHandler extends BiomeHandler {
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
-        int treeX = 0, treeY, treeZ = 0;
-        if (GenUtils.chance(random, 3, 10)) {
+        int treeX, treeY, treeZ;
+        if (GenUtils.chance(random, 8, 10)) {
             treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
 
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 
-                if(treeY < TerraformGenerator.seaLevel) {
+                if(treeY > TerraformGenerator.seaLevel-6) {
                 	 //Don't do gradient checks for swamp trees, the mud is uneven.
                 	//just make sure it's submerged
-                    new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
-                            .skipGradientCheck().build(tw, data, treeX, treeY - 3, treeZ);
-                    new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
-                    		.skipGradientCheck().build(tw, data, treeX, treeY - 2, treeZ);
+                    TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data,treeX,treeY,treeZ), Material.OAK_LOG);
+                    FractalTypes.Tree.SWAMP_TOP.build(tw, new SimpleBlock(data,treeX,treeY,treeZ), (t)->{
+                        t.setCheckGradient(false);
+                        t.setRootMaterial(Material.OAK_WOOD);
+                        t.setBranchMaterial(Material.OAK_LOG);
+                        t.getFractalLeaves().setMaterial(Material.OAK_LEAVES);
+                        t.getFractalLeaves().setMangrovePropagules(false);
+                        return null;
+                    });
                 }
             }
-        }
-        
-        SimpleLocation[] roots = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 7, 0.6f);
-        
-        for (SimpleLocation sLoc : roots) {
-            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
-                int rootY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-                sLoc.setY(rootY);
-                if(!BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
-                		continue;
-                
-                int minHeight = 3;
-                if (sLoc.getY() < TerraformGenerator.seaLevel) {
-                    minHeight = TerraformGenerator.seaLevel - sLoc.getY();
-                }
-
-                //BlockUtils.spawnPillar(random, data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ(), OneOneNineBlockHandler.MANGROVE_ROOTS, );
-                new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ()).Pillar(GenUtils.randInt(random, minHeight, minHeight + 3), OneOneNineBlockHandler.MANGROVE_ROOTS);
-            }
-        }
-        
-        WitchHutPopulator whp = new WitchHutPopulator();
-        if (GenUtils.chance(tw.getHashedRand(66*data.getChunkX(), 666*data.getChunkZ(), 66666), TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
-            whp.populate(tw, random, data);
         }
 	}
 

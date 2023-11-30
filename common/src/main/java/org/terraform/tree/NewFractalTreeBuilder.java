@@ -21,7 +21,7 @@ import java.util.function.Function;
 /**
  * This class isn't designed to run in a multithreaded environment
  */
-public class NewFractalTreeBuilder {
+public class NewFractalTreeBuilder implements Cloneable {
 
     //Supposedly final fields not meant for mutation during build
     private int maxDepth = 3; //Last branch is depth 1
@@ -76,15 +76,24 @@ public class NewFractalTreeBuilder {
     private Material branchMaterial = Material.OAK_LOG;
     private Material rootMaterial = Material.OAK_WOOD;
     private boolean spawnBees = false;
+    private boolean checkGradient = true;
 
     //[No more mutable fields. They caused concurrency problems]===================
+
+    //Dev use
+    private Random forcedSeed = null;
+
+    public NewFractalTreeBuilder(Random forcedSeed){
+        this.forcedSeed = forcedSeed;
+    }
+    public NewFractalTreeBuilder(){}
 
     public boolean build(TerraformWorld tw, SimpleBlock base)
     {
         //Clear and set mutable structures
         if(!checkGradient(base.getPopData(),base.getX(),base.getZ())) return false;
         int oriY = base.getY();
-        Random random = tw.getHashedRand(base.getX(), base.getY(), base.getZ());
+        Random random = forcedSeed == null ? tw.getHashedRand(base.getX(), base.getY(), base.getZ()) : forcedSeed;
         double displacementTheta = GenUtils.randDouble(random, 0,displacementThetaDelta);
         HashSet<SimpleBlock> prospectiveHives = new HashSet<>();
         double currentBranchTheta = GenUtils.randInt(random, 0, randomBranchSegmentCount);
@@ -126,8 +135,14 @@ public class NewFractalTreeBuilder {
     }
 
     public boolean checkGradient(PopulatorDataAbstract data, int x, int z) {
-        return (HeightMap.getTrueHeightGradient(data, x, z, 3)
+        return !checkGradient || (HeightMap.getTrueHeightGradient(data, x, z, 3)
                 <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
+    }
+
+    public NewFractalTreeBuilder setCheckGradient(boolean checkGradient)
+    {
+        this.checkGradient = checkGradient;
+        return this;
     }
 
     /**
@@ -277,6 +292,11 @@ public class NewFractalTreeBuilder {
      * slightly away from the current normal.
      * <br><br>
      * normal will be cloned here, no need to clone before input.
+     * <br><br>
+     * This method works by creating a cloned normal, rotating it to be
+     * perpendicular to the original, then rotating this
+     * clone by theta. This rotated vector is then added
+     * to the normal to slightly displace it.
      *
      * @param normal refers to the current normal
      * @param theta refers to the yaw (represented by 0 to 2pi)
@@ -569,5 +589,12 @@ public class NewFractalTreeBuilder {
 
     public FractalLeaves getFractalLeaves() {
         return fractalLeaves;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException{
+        NewFractalTreeBuilder cl = (NewFractalTreeBuilder) super.clone();
+        cl.setFractalLeaves(this.fractalLeaves.clone());
+        return cl;
     }
 }

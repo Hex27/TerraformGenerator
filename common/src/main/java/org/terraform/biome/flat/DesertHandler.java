@@ -115,10 +115,6 @@ public class DesertHandler extends BiomeHandler {
             	spawnRibCage(random, new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ()));
             }
         }
-
-        if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
-            new DesertWellPopulator().populate(tw, random, data, false);
-        }
 	}
 
 	public void spawnRibCage(Random random, SimpleBlock target) {

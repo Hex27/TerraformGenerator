@@ -24,7 +24,7 @@ import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class FractalLeaves {
+public class FractalLeaves implements Cloneable{
 
     int oriY;
     int maxHeight;
@@ -375,4 +375,9 @@ public class FractalLeaves {
     }
 
 
+    @Override
+    public FractalLeaves clone() throws CloneNotSupportedException{
+        FractalLeaves clone = (FractalLeaves) super.clone();
+        return clone;
+    }
 }

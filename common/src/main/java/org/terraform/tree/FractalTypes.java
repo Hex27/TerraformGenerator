@@ -6,9 +6,11 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneNineBlockHandler;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Function;
 
 public class FractalTypes {
@@ -232,8 +234,34 @@ public class FractalTypes {
         SAVANNA_SMALL,
         SAVANNA_BIG,
         WASTELAND_BIG,
-        SWAMP_TOP,
-        SWAMP_BOTTOM,
+        SWAMP_TOP(
+                new NewFractalTreeBuilder()
+                        .setOriginalTrunkLength(13)
+                        .setLengthVariance(2)
+                        .setMaxDepth(4)
+                        .setInitialBranchRadius(2f)
+                        .setGetBranchWidth(
+                                (initialBranchWidth, branchRatio)
+                                        -> initialBranchWidth*(1.0f-branchRatio/2f)
+                        )
+                        .setBranchDecrement(
+                                (currentBranchLength, totalTreeHeight)
+                                        -> currentBranchLength/1.7f
+                        )
+                        .setMinBranchHorizontalComponent(0.9f)
+                        .setMaxBranchHorizontalComponent(1.3f)
+                        .setBranchSpawnChance(0.2)
+                        .setBranchMaterial(OneOneNineBlockHandler.MANGROVE_LOG)
+                        .setRootMaterial(OneOneNineBlockHandler.MANGROVE_ROOTS)
+                        .setTreeRootMultiplier(2f)
+                        .setTreeRootThreshold(3)
+                        .setFractalLeaves(new FractalLeaves()
+                                .setWeepingLeaves(0.4f, 2)
+                                .setRadius(4f)
+                                .setRadiusY(1.5f)
+                                .setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES)
+                                .setMangrovePropagules(true))
+        ),
         BIRCH_BIG,
         BIRCH_SMALL,
         CHERRY_SMALL,
@@ -243,38 +271,68 @@ public class FractalTypes {
         JUNGLE_EXTRA_SMALL,
         COCONUT_TOP,
         DARK_OAK_SMALL(
-            //Curved tree
             new NewFractalTreeBuilder()
-                .setOriginalTrunkLength(7)
-                .setInitialBranchRadius(3f)
+                    .setOriginalTrunkLength(7)
+                    .setLengthVariance(1)
+                    .setInitialBranchRadius(2.7f)
+                    .setCrownBranches(3)
+                    .setMinBranchSpawnLength(0.2f)
+                    .setMaxDepth(4)
+                    .setBranchSpawnChance(0f)
+                    .setMinBranchHorizontalComponent(0.5f)
+                    .setMaxBranchHorizontalComponent(0.9f)
+                    .setGetBranchWidth(
+                            (initialBranchWidth, branchRatio)
+                                    -> initialBranchWidth*(1.0f-branchRatio/2f)
+                    )
+                    .setBranchDecrement(
+                            (currentBranchLength, totalTreeHeight)
+                                    -> currentBranchLength-1
+                    )
+                    .setBranchSpawnChance(0.05)
+                    .setTreeRootMultiplier(1.3f)
+                    .setTreeRootThreshold(3)
+                    .setRootMaterial(Material.DARK_OAK_WOOD)
+                    .setBranchMaterial(Material.DARK_OAK_LOG)
+                    .setFractalLeaves(new FractalLeaves()
+                            .setWeepingLeaves(0.3f, 1)
+                            .setRadius(4.5f)
+                            .setRadiusY(2.5f)
+                            .setMaterial(Material.DARK_OAK_LEAVES)
+                    )
+        ),
+        DARK_OAK_BIG_TOP(
+            new NewFractalTreeBuilder()
+                .setOriginalTrunkLength(12)
+                .setLengthVariance(1)
+                .setInitialBranchRadius(2.7f)
                 .setCrownBranches(3)
                 .setMinBranchSpawnLength(0.2f)
-                .setMaxDepth(5)
+                .setMaxDepth(3)
                 .setBranchSpawnChance(0f)
-                .setMinBranchHorizontalComponent(0.5f)
-                .setMaxBranchHorizontalComponent(0.9f)
+                .setMinBranchHorizontalComponent(-1.2)
+                .setMaxBranchHorizontalComponent(1.2f)
                 .setGetBranchWidth(
                         (initialBranchWidth, branchRatio)
-                                -> initialBranchWidth*(1.0f-branchRatio/2f)
+                                -> initialBranchWidth*(1.0f-branchRatio/3f)
                 )
                 .setBranchDecrement(
                         (currentBranchLength, totalTreeHeight)
-                                -> currentBranchLength
+                                -> currentBranchLength-0.5f
                 )
+                .setRandomBranchClusterCount(3)
                 .setBranchSpawnChance(0.05)
-                .setTreeRootMultiplier(1.3f)
-                .setTreeRootThreshold(3)
+                .setTreeRootMultiplier(1.6f)
+                .setTreeRootThreshold(5)
                 .setRootMaterial(Material.DARK_OAK_WOOD)
                 .setBranchMaterial(Material.DARK_OAK_LOG)
                 .setFractalLeaves(new FractalLeaves()
-                        .setWeepingLeaves(0.3f, 1)
+                        .setWeepingLeaves(0.3f, 2)
                         .setRadius(4f)
                         .setRadiusY(2.5f)
                         .setMaterial(Material.DARK_OAK_LEAVES)
                 )
         ),
-        DARK_OAK_BIG_TOP,
-        DARK_OAK_BIG_BOTTOM,
         FROZEN_TREE_BIG,
         FROZEN_TREE_SMALL,
         FIRE_CORAL,
@@ -295,6 +353,9 @@ public class FractalTypes {
         {
             return build(tw,base,null);
         }
+
+        //Use of treeMutator is currently not optimal as it makes a copy before every use
+        //No idea how bad that is.
         public boolean build(TerraformWorld tw, SimpleBlock base, Function<NewFractalTreeBuilder, Object> treeMutator){
             if(builders.length > 0) {
                 NewFractalTreeBuilder b = Objects.requireNonNull(
@@ -302,17 +363,21 @@ public class FractalTypes {
                                 tw.getHashedRand(base.getX(), base.getY(), base.getZ()),
                                 builders)
                 );
-                if(treeMutator != null)
-                    treeMutator.apply(b);
-
+                if(treeMutator != null) {
+                    try {
+                        b = (NewFractalTreeBuilder) b.clone();
+                        treeMutator.apply(b);
+                    }catch(CloneNotSupportedException e){
+                        //good luck m8
+                        e.printStackTrace();
+                        return b.build(tw,base);
+                    }
+                }
                 return b.build(tw, base);
             }
             else
                 return new FractalTreeBuilder(this).build(tw, base);
         }
-
-        public static final Tree[] VALUES = Tree.values();
-
     }
 
     public enum Mushroom {
@@ -327,8 +392,6 @@ public class FractalTypes {
         GIANT_BROWN_MUSHROOM,
         GIANT_BROWN_FUNNEL_MUSHROOM,
         GIANT_RED_MUSHROOM;
-
-        public static final Mushroom[] VALUES = Mushroom.values();
     }
 
     public enum MushroomCap {
@@ -336,6 +399,5 @@ public class FractalTypes {
         FLAT,
         FUNNEL,
         POINTY;
-        public static final MushroomCap[] VALUES = MushroomCap.values();
     }
 }

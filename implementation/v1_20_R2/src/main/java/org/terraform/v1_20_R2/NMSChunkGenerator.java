@@ -3,7 +3,6 @@ package org.terraform.v1_20_R2;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-
 import net.minecraft.SystemUtils;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.Holder;
@@ -28,19 +27,17 @@ import net.minecraft.world.level.levelgen.WorldGenStage;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.carver.WorldGenCarverAbstract;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentStructure;
-import net.minecraft.world.level.levelgen.structure.structures.WoodlandMansionStructure;
-import net.minecraft.world.level.levelgen.structure.structures.StrongholdStructure;
 import net.minecraft.world.level.levelgen.structure.structures.BuriedTreasureStructure;
+import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentStructure;
+import net.minecraft.world.level.levelgen.structure.structures.StrongholdStructure;
+import net.minecraft.world.level.levelgen.structure.structures.WoodlandMansionStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBiome;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_20_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_20_R2.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_20_R2.util.CraftMagicNumbers;
@@ -65,7 +62,11 @@ import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.utils.BlockUtils;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -170,25 +171,25 @@ public class NMSChunkGenerator extends ChunkGenerator {
         int chunkZ = ichunkaccess.f().f; //z
         PopulatorData popDat = new PopulatorData(generatoraccessseed, ichunkaccess, this, chunkX, chunkZ);
         pop.populate(tw, tw.getHashedRand(8292012, chunkX, chunkZ), popDat);
-        
+
         //Spigot API BlockPopulator support
         World world = generatoraccessseed.getMinecraftWorld().getWorld();
         if (!world.getPopulators().isEmpty()) {
-           CraftLimitedRegion limitedRegion = new CraftLimitedRegion(generatoraccessseed, ichunkaccess.f());
-           int x = ichunkaccess.f().e;
-           int z = ichunkaccess.f().f;
-           Iterator<BlockPopulator> var10 = world.getPopulators().iterator();
+            CraftLimitedRegion limitedRegion = new CraftLimitedRegion(generatoraccessseed, ichunkaccess.f());
+            int x = ichunkaccess.f().e;
+            int z = ichunkaccess.f().f;
+            Iterator<BlockPopulator> var10 = world.getPopulators().iterator();
 
-           while(var10.hasNext()) {
-              BlockPopulator populator = var10.next();
-              if(populator instanceof TerraformBukkitBlockPopulator)
-            	  continue;
-              //A is getSeed
-              populator.populate(world, tw.getHashedRand(generatoraccessseed.A(), x, z), x, z, limitedRegion);
-           }
+            while(var10.hasNext()) {
+                BlockPopulator populator = var10.next();
+                if(populator instanceof TerraformBukkitBlockPopulator)
+                    continue;
+                //A is getSeed
+                populator.populate(world, tw.getHashedRand(generatoraccessseed.A(), x, z), x, z, limitedRegion);
+            }
 
-           limitedRegion.saveEntities();
-           limitedRegion.breakLink();
+            limitedRegion.saveEntities();
+            limitedRegion.breakLink();
         }
     }
 
@@ -277,7 +278,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override //createStructures should be empty
     public void a(IRegistryCustom iregistrycustom, ChunkGeneratorStructureState chunkgeneratorstructurestate, StructureManager structuremanager, IChunkAccess ichunkaccess, StructureTemplateManager structuretemplatemanager) {
-    	
     }
 
     @Override //getSpawnHeight

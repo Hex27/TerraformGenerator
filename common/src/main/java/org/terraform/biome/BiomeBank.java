@@ -99,6 +99,7 @@ public enum BiomeBank {
     ICE_SPIKES(new IceSpikesHandler(), BiomeType.FLAT, BiomeClimate.SNOWY, TConfigOption.BIOME_ICE_SPIKES_WEIGHT.getInt(), new FrozenCavePopulator()),
     DARK_FOREST(new DarkForestHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_DARK_FOREST_WEIGHT.getInt()),
     SWAMP(new SwampHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_SWAMP_WEIGHT.getInt()),
+    MANGROVE(new MangroveHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfigOption.BIOME_MANGROVE_WEIGHT.getInt()),
 
     //BEACHES (Don't include in selectBiome)
     SANDY_BEACH(new SandyBeachHandler(), BiomeType.BEACH, BiomeClimate.TRANSITION),
@@ -272,6 +273,7 @@ public enum BiomeBank {
         //Correct submerged biomes. They'll be rivers.
         //Exclude swamps from this check, as swamps are submerged.
         if(bank != BiomeBank.SWAMP
+                && bank != BiomeBank.MANGROVE
         		&& height < TerraformGenerator.seaLevel 
         		&& bank.getType().isDry()){
         	bank = bank.getHandler().getRiverType();

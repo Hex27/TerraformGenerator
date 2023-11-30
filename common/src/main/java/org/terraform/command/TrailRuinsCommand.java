@@ -7,7 +7,6 @@ import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.small.igloo.IglooPopulator;
 import org.terraform.structure.trailruins.TrailRuinsPopulator;
 
 import java.util.Random;

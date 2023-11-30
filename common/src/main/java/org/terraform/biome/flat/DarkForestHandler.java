@@ -84,7 +84,7 @@ public class DarkForestHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 32);
+		SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
 		SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 10);
 		SimpleLocation[] smallDecorations = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 7);
 		
@@ -103,7 +103,7 @@ public class DarkForestHandler extends BiomeHandler {
                     };
                     new MushroomBuilder(type).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
                 } else if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()) {
-                    TreeDB.spawnBigDarkOakTree(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    FractalTypes.Tree.DARK_OAK_BIG_TOP.build(tw, new SimpleBlock(data,sLoc));
                 }
             }
         }

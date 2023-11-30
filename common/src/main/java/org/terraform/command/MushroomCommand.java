@@ -58,7 +58,7 @@ public class MushroomCommand extends TerraCommand {
                 sender.sendMessage(ChatColor.RED + "Valid types:");
                 StringBuilder types = new StringBuilder();
                 boolean b = true;
-                for (FractalTypes.Mushroom type : FractalTypes.Mushroom.VALUES) {
+                for (FractalTypes.Mushroom type : FractalTypes.Mushroom.values()) {
                     ChatColor col = ChatColor.RED;
                     if (b) col = ChatColor.DARK_RED;
                     b = !b;

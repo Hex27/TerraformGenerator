@@ -4,8 +4,12 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeClimate;
+import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -13,25 +17,32 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
+import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.io.FileNotFoundException;
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Random;
 
-public class DesertWellPopulator {
+public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
-    public void populate(TerraformWorld tw, Random random,
-                         PopulatorDataAbstract data, boolean badlandsWell) {
-        if (!TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()) return;
-        int x = data.getChunkX() * 16 + random.nextInt(16);
-        int z = data.getChunkZ() * 16 + random.nextInt(16);
-        int height = GenUtils.getHighestGround(data, x, z);
-        if(!BlockUtils.isWet(new SimpleBlock(data,x,height+1,z)))
-        	spawnDesertWell(tw, random, data, x, height, z, badlandsWell);
+    @Override
+    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
+        Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
+        MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
+        for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
+            int x = coords[0];
+            int z = coords[1];
+            if(x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ())
+                continue;
+            int height = GenUtils.getHighestGround(data, x, z);
+            spawnDesertWell(tw, random, data, x, height, z, tw.getBiomeBank(x,z) == BiomeBank.BADLANDS);
+        }
     }
 
     public void spawnDesertWell(TerraformWorld tw, Random random,
@@ -74,6 +85,70 @@ public class DesertWellPopulator {
             e.printStackTrace();
         }
 
+    }
+
+    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 8291374),
+                (int) (TConfigOption.STRUCTURES_DESERTWELL_SPAWNRATIO
+                        .getDouble() * 10000),
+                10000);
+    }
+    @Override
+    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ) {
+        MegaChunk mc = new MegaChunk(chunkX, chunkZ);
+        int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
+        for (int[] coords : allCoords) {
+            if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+                EnumSet<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
+                for(BiomeBank b:biomes) {
+                    if(b.getClimate() != BiomeClimate.HOT_BARREN) return false;
+                    if(b.getType() != BiomeType.FLAT) return false;
+                }
+                return rollSpawnRatio(tw,chunkX,chunkZ);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+        int num = TConfigOption.STRUCTURES_DESERTWELL_COUNT_PER_MEGACHUNK.getInt();
+        int[][] coords = new int[num][2];
+        for (int i = 0; i < num; i++)
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 819227*(1+i)));
+        return coords;
+    }
+
+    @Override
+    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+        MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
+
+        double minDistanceSquared = Integer.MAX_VALUE;
+        int[] min = null;
+        for (int nx = -1; nx <= 1; nx++) {
+            for (int nz = -1; nz <= 1; nz++) {
+                for (int[] loc : getCoordsFromMegaChunk(tw, mc)) {
+                    double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
+                    if (distSqr < minDistanceSquared) {
+                        minDistanceSquared = distSqr;
+                        min = loc;
+                    }
+                }
+            }
+        }
+        return min;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()
+                && (TConfigOption.BIOME_DESERT_WEIGHT.getInt() > 0||
+                TConfigOption.BIOME_BADLANDS_WEIGHT.getInt() > 0);
+    }
+
+    @Override
+    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+        return world.getHashedRand(189821, chunkX, chunkZ);
     }
 
     private static class DesertWellSchematicParser extends SchematicParser {
@@ -165,5 +240,10 @@ public class DesertWellPopulator {
 
 
         }
+    }
+
+    @Override
+    public int getChunkBufferDistance() {
+        return 1;
     }
 }

@@ -46,9 +46,7 @@ public class MudflatsHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-    	boolean spawnHut = GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666),
-                TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000);
-        
+
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
@@ -61,17 +59,6 @@ public class MudflatsHandler extends BiomeHandler {
                     else
                         data.setType(x, y, z, Material.GRASS);
                 }
-                if (spawnHut 
-                		&& TConfigOption.STRUCTURES_SWAMPHUT_SPAWN_MUDFLAT_HEADS.getBoolean() 
-                		&& GenUtils.chance(10, 100)) {
-                    if (BlockUtils.isDirtLike(data.getType(x, y - 1, z))) {
-                        Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
-                        skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
-
-                        data.setType(x, y, z, OneOneNineBlockHandler.MANGROVE_FENCE);
-                        data.setBlockData(x, y + 1, z, skull);
-                    }
-                }
             }
         }
 
@@ -79,13 +66,6 @@ public class MudflatsHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		// TODO Auto-generated method stub
-		boolean spawnHut = GenUtils.chance(tw.getHashedRand(data.getChunkX(), data.getChunkZ(), 66666),
-                TConfigOption.STRUCTURES_SWAMPHUT_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000);
-
-        if (spawnHut) {
-            WitchHutPopulator whp = new WitchHutPopulator();
-            whp.populate(tw, random, data);
-        }
+        //does nothing
 	}
 }

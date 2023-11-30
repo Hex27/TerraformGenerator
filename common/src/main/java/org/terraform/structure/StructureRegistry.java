@@ -12,6 +12,8 @@ import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.pillager.outpost.OutpostPopulator;
 import org.terraform.structure.pyramid.PyramidPopulator;
+import org.terraform.structure.small.DesertWellPopulator;
+import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.structure.small.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.small.dungeon.SmallDungeonPopulator;
 import org.terraform.structure.small.igloo.IglooPopulator;
@@ -67,10 +69,8 @@ public class StructureRegistry {
         registerStructure(StructureType.SMALL, new BuriedTreasurePopulator());
         registerStructure(StructureType.SMALL, new RuinedPortalPopulator());
         registerStructure(StructureType.SMALL, new IglooPopulator());
-
-        //These aren't really "structures" now, they're instead spawned by the biomes.
-        //registerStructure(StructureType.SMALL, new WitchHutPopulator());
-        //registerStructure(StructureType.SMALL, new DesertWellPopulator());
+        registerStructure(StructureType.SMALL, new DesertWellPopulator());
+        registerStructure(StructureType.SMALL, new WitchHutPopulator());
     }
 
     /**

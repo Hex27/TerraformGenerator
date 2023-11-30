@@ -374,17 +374,6 @@ public class FractalTreeBuilder {
                         .setLengthDecrement(1)
                         .setHeightVariation(1);
                 break;
-            case SWAMP_BOTTOM:
-                this.setBaseHeight(1)
-                        .setBaseThickness(3)
-                        .setThicknessDecrement(0.5f)
-                        .setMaxDepth(3)
-                        .setTrunkType(OneOneNineBlockHandler.MANGROVE_ROOTS)
-                        .setLengthDecrement(-2f)
-                        .setMaxBend(-Math.PI / 6)
-                        .setMinBend(-Math.PI / 3)
-                        .setFractalLeaves(new FractalLeaves().setRadius(0).setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES));
-                break;
             case SWAMP_TOP:
                 this.setBaseHeight(8)
                         .setBaseThickness(3)
@@ -447,19 +436,19 @@ public class FractalTreeBuilder {
                         .setMinPitch(0)
                         .setFractalLeaves(new FractalLeaves().setRadius(6, 2, 6).setMaterial(Material.DARK_OAK_LEAVES).setOffsetY(1));
                 break;
-            case DARK_OAK_BIG_BOTTOM:
-                this.setBaseHeight(4)
-                        .setBaseThickness(4)
-                        .setThicknessDecrement(0f)
-                        .setMaxDepth(3)
-                        .setTrunkType(Material.DARK_OAK_WOOD)
-                        .setLengthDecrement(-1)
-                        .setHeightVariation(1)
-                        .setFractalThreshold(5)
-                        .setMaxBend(2.3 * Math.PI / 6)
-                        .setMinBend(2.0 * Math.PI / 6)
-                        .setFractalLeaves(new FractalLeaves().setRadius(0).setMaterial(Material.DARK_OAK_LEAVES));
-                break;
+//            case DARK_OAK_BIG_BOTTOM:
+//                this.setBaseHeight(4)
+//                        .setBaseThickness(4)
+//                        .setThicknessDecrement(0f)
+//                        .setMaxDepth(3)
+//                        .setTrunkType(Material.DARK_OAK_WOOD)
+//                        .setLengthDecrement(-1)
+//                        .setHeightVariation(1)
+//                        .setFractalThreshold(5)
+//                        .setMaxBend(2.3 * Math.PI / 6)
+//                        .setMinBend(2.0 * Math.PI / 6)
+//                        .setFractalLeaves(new FractalLeaves().setRadius(0).setMaterial(Material.DARK_OAK_LEAVES));
+//                break;
             case FROZEN_TREE_BIG:
                 this.setBaseHeight(4)
                         .setBaseThickness(4)

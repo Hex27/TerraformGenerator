@@ -11,8 +11,10 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
+import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.OneOneNineBlockHandler;
 
 import java.util.Random;
 
@@ -98,30 +100,11 @@ public class DarkForestRiverHandler extends BiomeHandler {
 	                if(treeY < TerraformGenerator.seaLevel) {
 	                	 //Don't do gradient checks for swamp trees, the mud is uneven.
 	                	//just make sure it's submerged
-	                    new FractalTreeBuilder(FractalTypes.Tree.SWAMP_BOTTOM)
-	                            .skipGradientCheck().build(tw, data, sLoc.getX(), treeY - 3, sLoc.getZ());
-	                    new FractalTreeBuilder(FractalTypes.Tree.SWAMP_TOP)
-	                    		.skipGradientCheck().build(tw, data, sLoc.getX(), treeY - 2, sLoc.getZ());
+                        TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data,sLoc), OneOneNineBlockHandler.MANGROVE_ROOTS);
+                        FractalTypes.Tree.SWAMP_TOP.build(tw, new SimpleBlock(data,sLoc), (t)->t.setCheckGradient(false));
 	                }
 	            }
 		 }
-        
-        for (SimpleLocation sLoc : roots) {
-            if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
-                int rootY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-                sLoc.setY(rootY);
-                if(!BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
-                		continue;
-                
-                int minHeight = 3;
-                if (sLoc.getY() < TerraformGenerator.seaLevel) {
-                    minHeight = TerraformGenerator.seaLevel - sLoc.getY();
-                }
-
-                BlockUtils.spawnPillar(random, data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ(), Material.OAK_LOG, minHeight, minHeight + 3);
-                
-            }
-        }
 	}
 
 

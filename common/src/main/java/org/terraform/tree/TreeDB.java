@@ -7,6 +7,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -25,7 +26,6 @@ public class TreeDB {
     
     /**
      * Spawns an Azalea tree, complete with rooted dirt.
-     * @param base
      */
     public static void spawnAzalea(Random random, TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
     	FractalTreeBuilder builder = new FractalTreeBuilder(FractalTypes.Tree.AZALEA_TOP);
@@ -78,17 +78,6 @@ public class TreeDB {
     	ftb.build(tw, data, x, y, z);
     }
 
-    public static void spawnBigDarkOakTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
-        
-    	FractalTreeBuilder bottomBuilder = new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_BIG_BOTTOM);
-    	
-    	//Don't spawn a tree if the terrain is too steep.
-    	if(!bottomBuilder.checkGradient(data, x, z)) return;
-    	
-    	new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_BIG_TOP).skipGradientCheck().build(tw, data, x, y, z);
-        bottomBuilder.build(tw, data, x, y - 5, z);
-    }
-
     /**
      * Corals will always dig 2 blocks deeper first.
      * Grows a random giant coral (fire, tube, etc)
@@ -98,5 +87,24 @@ public class TreeDB {
         FractalTreeBuilder ftb = new FractalTreeBuilder(type);
         ftb.setMaxHeight(TerraformGenerator.seaLevel - y - 1); //Max height is one below sea level
         ftb.build(tw, data, x, y - 2, z);
+    }
+
+    /**
+     * Used to create pillars of said material in a randomised circle around
+     * a location. Use before spawning the tree.
+     * <br>
+     * Roots will extend at least a little above sea level
+     */
+    public static void spawnBreathingRoots(TerraformWorld tw, SimpleBlock centre, Material type){
+        Random rand = tw.getHashedRand(centre.getX(),centre.getY(),centre.getZ(),178782);
+        for(int i = 0; i < 4+rand.nextInt(8); i++)
+        {
+            SimpleBlock core = centre.getRelative(
+                    GenUtils.getSign(rand)*GenUtils.randInt(4,8),0,
+                    GenUtils.getSign(rand)*GenUtils.randInt(4,8)).getGround().getUp();
+            int min = core.getY() < TerraformGenerator.seaLevel ?
+                    TerraformGenerator.seaLevel - core.getY() + 1 : 1;
+            core.LPillar(min + rand.nextInt(4), type);
+        }
     }
 }

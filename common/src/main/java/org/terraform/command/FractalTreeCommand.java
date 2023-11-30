@@ -54,7 +54,7 @@ public class FractalTreeCommand extends TerraCommand {
             sender.sendMessage(ChatColor.RED + "Valid types:");
             StringBuilder types = new StringBuilder();
             boolean b = true;
-            for (FractalTypes.Tree type : FractalTypes.Tree.VALUES) {
+            for (FractalTypes.Tree type : FractalTypes.Tree.values()) {
                 ChatColor col = ChatColor.RED;
                 if (b) col = ChatColor.DARK_RED;
                 b = !b;

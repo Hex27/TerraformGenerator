@@ -61,6 +61,13 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
             schematic = StringUtils.replace(schematic, "minecraft:water_cauldron[level=", "minecraft:cauldron[level=");
             schematic = StringUtils.replace(schematic, ",waterlogged=false", "");
         }
+
+        //Unpatch mud related things
+        if(schematicVersion >= 20) {
+            schematic = StringUtils.replace(schematic, "minecraft:mud_brick", "minecraft:stone_brick");
+            schematic = StringUtils.replace(schematic, "minecraft:mud_", "minecraft:stone_brick_");
+        }
+
         return schematic;
     }
 

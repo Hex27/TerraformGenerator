@@ -2,6 +2,7 @@ package org.terraform.coregen.bukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
@@ -25,6 +26,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 	private static boolean flushIsQueued = false;
     //SimpleChunkLocation to a collection of location:blockdata entries marked for repair.
     public static Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
+    //public static Map<Material, Integer> cacheContents = new ConcurrentHashMap<>();
     //private final TerraformWorld tw;
 
     public NativeGeneratorPatcherPopulator() {
@@ -48,7 +50,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
         SimpleChunkLocation scl = new SimpleChunkLocation(world, x, y, z);
         if (!cache.containsKey(scl))
             cache.put(scl, new ArrayList<>());
-
+//        cacheContents.put(data.getMaterial(), cacheContents.getOrDefault(data.getMaterial(),0)+1);
         cache.get(scl).add(new Object[]{
                 new int[]{x, y, z},
                 data
@@ -59,6 +61,11 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     	if(cache.size() == 0)
     		return;
     	TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Flushing repairs (" + cache.size() + " chunks), pushed by cache size");
+//        for(Material mat:cacheContents.keySet())
+//        {
+//            TerraformGeneratorPlugin.logger.info(mat + " : " + cacheContents.get(mat));
+//        }
+//        cacheContents.clear();
         ArrayList<SimpleChunkLocation> locs = new ArrayList<>();
     	for(SimpleChunkLocation scl:cache.keySet()) {
     		locs.add(scl);

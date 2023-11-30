@@ -378,10 +378,6 @@ public class BadlandsHandler extends BiomeHandler {
 
             }
         }
-		
-        if (GenUtils.chance(random, TConfigOption.STRUCTURES_DESERTWELL_CHANCE_OUT_OF_TEN_THOUSAND.getInt(), 10000)) {
-            new DesertWellPopulator().populate(tw, random, data, true);
-        }
 	}
 	
 	@Override
