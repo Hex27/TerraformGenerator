@@ -54,8 +54,8 @@ There is also support for Java 14, but be warned that it will spit some minor er
 
 <h3>Step one: Install TerraformGenerator</h3>
 
-Make sure that you have installed the latest version of [TerraformGenerator][spigot-tfg] and [Drycell][spigot-drycell].  
-To do that, stop your server and upload both jar files to your server's `plugins` directory. Afterwards can you start your server again.
+Make sure that you have installed the latest version of [TerraformGenerator][spigot-tfg].  
+To do that, stop your server and the jar file to your server's `plugins` directory. Afterwards can you start your server again.
 
 <h3>Step two: Create the world</h3>
 You can choose between two methods on how to generate the world with TerraformGenerator
@@ -82,7 +82,7 @@ Before creating the world, make sure it doesn't exist already. If it does will y
 To create a world with TerraformGenerator, execute `/mvcreate <world> normal -g TerraformGenerator` where `<world>` is the name of the world to create.
 
 **Note:**  
-There is a rare chance that the world might not get loaded woth TerraformGenerator as the World Generator set. In those cases could newly loaded chunks break the look of the world by being normal vanilla chunks. That may mean that you haven't done method one. If you have, try doing method one alone without the world management plugin. If the problem persists, report it on github or discord.
+There is a rare chance that the world might not get loaded with TerraformGenerator as the World Generator set. In those cases could newly loaded chunks break the look of the world by being normal vanilla chunks. That may mean that you haven't done method one. If you have, try doing method one alone without the world management plugin. If the problem persists, report it on github or discord.
 
 <h2 name="images">Images</h2>
 Find images on the wiki 
@@ -104,4 +104,3 @@ Not maintained here. You can check the issue tracker. If you've found a bug, you
 [issues-shield]: https://img.shields.io/github/issues/Hex27/terraformgenerator.svg?style=for-the-badge
 [issues-url]: https://github.com/Hex27/terraformgenerator/issues
 [spigot-tfg]: https://www.spigotmc.org/resources/75132/
-[spigot-drycell]: https://www.spigotmc.org/resources/73386/
