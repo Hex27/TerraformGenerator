@@ -55,7 +55,7 @@ There is also support for Java 14, but be warned that it will spit some minor er
 <h3>Step one: Install TerraformGenerator</h3>
 
 Make sure that you have installed the latest version of [TerraformGenerator][spigot-tfg].  
-To do that, stop your server and the jar file to your server's `plugins` directory. Afterwards can you start your server again.
+To do that, stop your server and move the jar file to your server's `plugins` directory. Afterwards can you start your server again.
 
 <h3>Step two: Create the world</h3>
 You can choose between two methods on how to generate the world with TerraformGenerator
