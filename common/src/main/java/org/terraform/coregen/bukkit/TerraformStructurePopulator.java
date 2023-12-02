@@ -32,8 +32,10 @@ public class TerraformStructurePopulator extends BlockPopulator {
     //The older api allows guaranteed writes via cascasion. Slow, but guaranteed to work
     @Override
     public void populate(World world, Random random, Chunk chunk) {
+        //Structuregen will freeze for long periods
+        TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
         //Don't attempt generation pre-injection.
-        if (!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) return;
+        if(!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) return;
         PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
 
         //Use IChunkAccess to place blocks instead. Known to cause lighting problems.
@@ -44,50 +46,33 @@ public class TerraformStructurePopulator extends BlockPopulator {
         //Spawn large structures
         MegaChunk mc = new MegaChunk(chunk.getX(), chunk.getZ());
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
-        
+
         //Special Case
         if(new StrongholdPopulator().canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
-        	TerraformGeneratorPlugin.logger.info("Generating Stronghold at chunk: " + data.getChunkX() + "," + data.getChunkZ());
-        	new StrongholdPopulator().populate(tw, data);
+            TerraformGeneratorPlugin.logger.info("Generating Stronghold at chunk: " + data.getChunkX() + "," + data.getChunkZ());
+            new StrongholdPopulator().populate(tw, data);
         }
-        
+
         //Only check singlemegachunkstructures if this chunk is a central chunk.
         int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
         //TerraformGeneratorPlugin.logger.info("[v] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
-        if(chunkCoords[0] == data.getChunkX() 
-        		&& chunkCoords[1] == data.getChunkZ()) {
-        	int[] blockCoords = mc.getCenterBiomeSectionBlockCoords();
-            
-        	//TerraformGeneratorPlugin.logger.info("[!] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
-            for (StructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
-	            if (spop == null) continue;
-	            if (!spop.isEnabled()) continue;
-	            if (spop instanceof StrongholdPopulator) continue;
-	            //TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
-	            if (((SingleMegaChunkStructurePopulator)spop).canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
-	                TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
-	                Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(blockCoords[0], blockCoords[1], spop.getClass().getName()));
-	                spop.populate(tw, data);
-	                break;
-	            }
-	        }
-        }
-        
-        //spawnMultiMegaChunkStructures(data); //used to be here. Not anymore.
-    }
-    
-    public void spawnMultiMegaChunkStructures(PopulatorDataAbstract data) {
-    	//Spawn small structures
-        for (StructurePopulator spop : StructureRegistry.smallStructureRegistry) {
-            if (((MultiMegaChunkStructurePopulator)spop).canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
-                TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
-                
-                //No async events
-                //Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(data.getChunkX()*16+8, data.getChunkZ()*16+8, spop.getClass().getName()));
-                
-                spop.populate(tw, data);
+        if(chunkCoords[0] == data.getChunkX()
+                && chunkCoords[1] == data.getChunkZ()) {
+            int[] blockCoords = mc.getCenterBiomeSectionBlockCoords();
+
+            //TerraformGeneratorPlugin.logger.info("[!] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
+            for(SingleMegaChunkStructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
+                if(spop == null) continue;
+                if(!spop.isEnabled()) continue;
+                if(spop instanceof StrongholdPopulator) continue;
+                //TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
+                if(spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
+                    TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
+                    Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(blockCoords[0], blockCoords[1], spop.getClass().getName()));
+                    spop.populate(tw, data);
+                    break;
+                }
             }
         }
     }
-    
 }

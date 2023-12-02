@@ -4,32 +4,26 @@ import com.google.common.cache.LoadingCache;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
-import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
-import org.terraform.biome.custombiomes.CustomBiomeType;
+import org.terraform.cave.NoiseCaveRegistry;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformPopulator;
-import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
-import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 public class TerraformGenerator extends ChunkGenerator {
@@ -37,7 +31,7 @@ public class TerraformGenerator extends ChunkGenerator {
 
     public static LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE;
     public static int seaLevel = 62;
-    
+
     public static void updateSeaLevelFromConfig() {
         seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
     }
@@ -64,28 +58,21 @@ public class TerraformGenerator extends ChunkGenerator {
     public boolean isParallelCapable() {
         return true;
     }
-    
-    ConcurrentHashMap<SimpleChunkLocation, PopulatorDataAbstract> generatorDataAccess = new ConcurrentHashMap<SimpleChunkLocation, PopulatorDataAbstract>();
-    
-    public void addPopulatorData(PopulatorDataAbstract data) {
-    	//TerraformGeneratorPlugin.logger.info("Added (" + data.getChunkX() + "," + data.getChunkZ() + ")");
-    	generatorDataAccess.put(new SimpleChunkLocation(data.getTerraformWorld().getName(),data.getChunkX(),data.getChunkZ()), data);
-    }
 
     public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
 
-        List<BiomeHandler> biomesToTransform = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
                 //tw.getBiomeBank(rawX, rawZ);
-                int height = HeightMap.getBlockHeight(tw, rawX, rawZ); //bank.getHandler().calculateHeight(tw, rawX, rawZ);
+                double height = HeightMap.getPreciseHeight(tw, rawX, rawZ); //bank.getHandler().calculateHeight(tw, rawX, rawZ);
 
-                BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);//BiomeBank.calculateBiome(tw, rawX, height, rawZ);
+                BiomeBank bank = tw.getBiomeBank(rawX, (int)height, rawZ);//BiomeBank.calculateBiome(tw, rawX, height, rawZ);
 
+                //Fill stone up to the world height. Differentiate between deepslate or not.
                 for(int y = TerraformGeneratorPlugin.injector.getMinY(); y <= height; y++)
                 {
                     Material stoneType = Material.STONE;
@@ -94,26 +81,20 @@ public class TerraformGenerator extends ChunkGenerator {
                     else if(y <= 2)
                         stoneType = GenUtils.randMaterial(OneOneSevenBlockHandler.DEEPSLATE, Material.STONE);
 
-                    chunkData.setBlock(x, y, z, stoneType);
+                    //If a noise cave is to be carved here, then don't set stone.
+                    if(!tw.noiseCaveRegistry.canCarve(rawX,y,rawZ,height))
+                        chunkData.setBlock(x, y, z, stoneType);
                 }
 
                 //Water for below certain heights
-                for(int y = height+1; y <= seaLevel; y++)
+                for(int y = (int)height+1; y <= seaLevel; y++)
                 {
                     chunkData.setBlock(x,y,z,Material.WATER);
                 }
 
-                BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
-                if (transformHandler != null && !biomesToTransform.contains(transformHandler))
-                    biomesToTransform.add(transformHandler);
             }
         }
 
-        //This causes height cache to be anomalous for transformed biomes.
-        //Do not rely on getHeight for them.
-        for (BiomeHandler handler : biomesToTransform) {
-            handler.transformTerrain(tw, random, chunkData, chunkX, chunkZ);
-        }
     }
 
     /**
@@ -122,6 +103,7 @@ public class TerraformGenerator extends ChunkGenerator {
     public void generateSurface(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
 
+        List<BiomeHandler> biomesToTransform = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
             for(int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
@@ -134,7 +116,18 @@ public class TerraformGenerator extends ChunkGenerator {
                     chunkData.setBlock(x, height-index, z, crust[index]);
                     index++;
                 }
+
+                BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
+                if (transformHandler != null && !biomesToTransform.contains(transformHandler))
+                    biomesToTransform.add(transformHandler);
             }
+        }
+        //TODO: Cache an updated value for caves/structures to operate on?
+        //That or ignore this and just don't open caves on the surface on these.
+        //This causes height cache to be anomalous for transformed biomes.
+        //Do not rely on getHeight for them.
+        for (BiomeHandler handler : biomesToTransform) {
+            handler.transformTerrain(tw, random, chunkData, chunkX, chunkZ);
         }
     }
 

@@ -8,7 +8,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Bee;
 import org.bukkit.entity.EntityType;
 import org.bukkit.generator.LimitedRegion;
 import org.bukkit.loot.Lootable;
@@ -17,8 +16,6 @@ import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-
-import java.lang.reflect.Method;
 
 public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPopulatorDataBeehiveEditor{
     public final LimitedRegion lr;
