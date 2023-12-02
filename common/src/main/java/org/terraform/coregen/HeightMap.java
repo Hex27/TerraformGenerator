@@ -58,28 +58,6 @@ public enum HeightMap {
             return height;
         }
     },
-    //    MOUNTAINOUS {
-//        @Override
-//        public double getHeight(TerraformWorld tw, int x, int z) {
-//            FastNoise attrition = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_MOUNTAINOUS, world -> {
-//                FastNoise n = new FastNoise((int) world.getSeed()/4);
-//                n.SetNoiseType(NoiseType.SimplexFractal);
-//                n.SetFractalOctaves(6);
-//                n.SetFrequency(0.002f);
-//                return n;
-//            });
-//
-//            double attritionHeight = Math.pow(Math.abs(attrition.GetNoise(x,z) * 31),1.5);
-//
-//            double height = HeightMap.CORE.getHeight(tw, x, z) + attritionHeight;
-//
-//            //Remove river carving
-//            //I am the pinnacle of efficiency
-//            height += getRawRiverDepth(tw,x,z);
-//
-//            return height;
-//        }
-//    },
     ATTRITION {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {

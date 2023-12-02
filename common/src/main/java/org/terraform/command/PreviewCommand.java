@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Stack;
 
@@ -13,14 +11,14 @@ import javax.imageio.ImageIO;
 
 import org.bukkit.command.CommandSender;
 import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeSection;
 import org.terraform.biome.BiomeType;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
-import org.terraform.data.SimpleLocation;
+import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.GenUtils;
+import org.terraform.utils.noise.FastNoise;
 
 public class PreviewCommand extends TerraCommand {
 
@@ -48,60 +46,34 @@ public class PreviewCommand extends TerraCommand {
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
         //int seed = GenUtils.randInt(1, 1000000);
-        int x = 5000;
-        int z = 5000;
-        double highest = -1;
-        double lowest = 10000;
-        boolean hasdebugged = true;
+        int maxX = 16*10;
+        int maxY = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY();
+
         TerraformWorld tw = TerraformWorld.get("test-world-"+new Random().nextInt(99999), new Random().nextInt(99999));//TerraformWorld.get("test-world", 11111);
         
-        BufferedImage img = new BufferedImage(x, z, BufferedImage.TYPE_INT_RGB);
-        //file object
-        File f = new File("terra-preview.png");
-        if (f.exists())
-            f.delete();
-        double dither = 0.04;
-        int debugX = 0;
-        int debugZ = 0;
-        for (int nz = -z/2; nz < z/2; nz++) {
-            for (int nx = -x/2; nx < x/2; nx++) {
-            	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),nx,nz));
-            	SimpleLocation target  = new SimpleLocation(nx,0,nz);
-            	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, nx,nz);
-            	boolean debugMe = !hasdebugged && homeSection.getX() == debugX && homeSection.getZ() == debugZ;
-            	if(debugMe) {
-            		hasdebugged = true;
-            		TerraformGeneratorPlugin.logger.info("Debugging: "+homeSection.toString());
-            		TerraformGeneratorPlugin.logger.info(nx + "," + nz);
-            	}
-            	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, nx, nz);
-            	BiomeSection mostDominant = homeSection;
-            	if(debugMe)TerraformGeneratorPlugin.logger.info(homeSection.toString() + " Dom: " + homeSection.getDominance(target));
-            	for(BiomeSection sect:sections) {
-            		float dom = (float) (sect.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither));
-            		if(debugMe)
-            			TerraformGeneratorPlugin.logger.info(sect.toString() + " Dom: " + dom);
-            		if(dom > mostDominant.getDominance(target)+GenUtils.randDouble(locationBasedRandom,-dither,dither))
-            			mostDominant = sect;
-            	}
-            	
-            	if(nx % BiomeSection.sectionWidth == 0 || nz % BiomeSection.sectionWidth == 0)
-            		img.setRGB(nx+x/2, nz+z/2, new Color(255,0,0).getRGB());
-            	else {
-            		Color col = getClimateColor(mostDominant.getBiomeBank());
-//            		if(homeSection.getX() % 2 == 0 && homeSection.getZ() % 2 == 0) {
-//            			col = col.darker();
-//            			if(homeSection.getDominanceBasedOnRadius(target.getX(), target.getZ()) > 0)
-//            				col = col.darker();
-//            		}
-//            		
-//            		//Debug this section
-//            		if(homeSection.getX() == debugX && homeSection.getZ() == debugZ) {
-//            			col = new Color((col.getRed() + 30) % 255, col.getBlue(), col.getGreen());
-//            			
-//            		}
-            		img.setRGB(nx+x/2, nz+z/2, col.getRGB());
-            	}
+        BufferedImage img = new BufferedImage(maxX, maxY, BufferedImage.TYPE_INT_RGB);
+        //Delete existing
+        File f = new File("terra-preview.png"); if (f.exists()) f.delete();
+        for (int x = -maxX/2; x < maxX/2; x++) {
+            double height = HeightMap.getPreciseHeight(tw,x,0);
+            for (int y = TerraformGeneratorPlugin.injector.getMinY(); y < TerraformGeneratorPlugin.injector.getMaxY(); y++) {
+                Color col = Color.WHITE;
+                if(y <= height)
+                {
+                    //Stone
+                    col = Color.LIGHT_GRAY;
+
+                    //Apply cave stuff if it is below height
+//                    if(cheeseCave(tw,x,y,0,height))
+//                        col = Color.BLACK;
+                    col = cheeseCave(tw,x,y,0,height);
+                }
+                else if(y <= TerraformGenerator.seaLevel)
+                    col = Color.CYAN;
+
+                //Flip maxY values, images have 0 at the top
+                img.setRGB(x+maxX/2, maxY-(y-TerraformGeneratorPlugin.injector.getMinY())-1,
+                        col.getRGB());
             }
         }
         try {
@@ -110,10 +82,69 @@ public class PreviewCommand extends TerraCommand {
         } catch (IOException e) {
             System.out.println(e);
         }
-        sender.sendMessage("Exported. H: " + highest + ", L: " + lowest);
+        System.out.println("Done.");
     }
 
-    
+    /**
+     * Determine if the x,y,z coordinate should be a noodle cave
+     */
+    public Color cheeseCave(TerraformWorld tw, int x, int y, int z, double height){
+        float filterHeight = barrier(tw, x,y,z, (float)height, 10, 5);
+        float filterGround = barrier(tw, x,y,z, (float) TerraformGeneratorPlugin.injector.getMinY(), 20, 5);
+
+        FastNoise cheeseNoise = new FastNoise((int) tw.getSeed());
+        cheeseNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+        cheeseNoise.SetFrequency(0.05f);
+        cheeseNoise.SetFractalOctaves(2);
+        float cheese = cheeseNoise.GetNoise(x*0.5f,y,z*0.5f);
+
+        float caveBoundary = -0.2f; //Check if less than this
+        float coreCave = filterHeight*filterGround*cheese;
+
+        //Attempt to make stalactites and stalagmites.
+        //No need to apply the filter here because they exist
+        //by not carving stuff.
+        //Check if this is the wall of the cave. If it is,
+        //ADD a low-frequency powered noise for spikes
+        if(Math.abs(coreCave-caveBoundary) <= 0.175)
+        {
+            FastNoise spikeNoise = new FastNoise();
+            spikeNoise.SetNoiseType(FastNoise.NoiseType.Simplex);
+            spikeNoise.SetFrequency(0.2f);
+            //spikeNoise.SetFractalOctaves(2);
+            double spike = (1-(Math.abs(coreCave-caveBoundary)/0.175))*
+                    Math.pow(Math.max(0,spikeNoise.GetNoise(x,z)),3);
+            if(coreCave + spike > caveBoundary && coreCave <= caveBoundary)
+                return Color.RED;
+        }
+
+        return coreCave <= caveBoundary ? Color.BLACK : Color.LIGHT_GRAY;
+    }
+
+    /**
+     * Used to prevent functions from passing certain thresholds.
+     * Useful for stuff like preventing caves from breaking into
+     * the ocean or under minimum Y
+     * @return a value between 0 and 1 inclusive.
+     */
+    public float barrier(TerraformWorld tw, float x, float y, float z, float v, float barrier, float limit){
+
+        FastNoise boundaryNoise = new FastNoise((int) tw.getSeed()*5);
+        boundaryNoise.SetNoiseType(FastNoise.NoiseType.Simplex);
+        boundaryNoise.SetFrequency(0.01f);
+        barrier += 3*boundaryNoise.GetNoise(x,z); //fuzz the boundary
+
+        if(Math.abs(y-v) <= limit)
+            return 0;
+        else {
+            float abs = Math.abs(y - v);
+            if(abs < barrier+limit)
+                return (abs-limit)/barrier;
+            else
+                return 1;
+        }
+    }
+    @SuppressWarnings("unused")
 	private Color getClimateColor(BiomeBank bank) {
     	if(bank.getType() == BiomeType.OCEANIC||bank.getType() == BiomeType.DEEP_OCEANIC)
     		return Color.blue;
