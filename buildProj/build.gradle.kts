@@ -4,14 +4,14 @@ plugins {
 
 dependencies {
     implementation(project(":common"))
-	implementation(project(":implementation:v1_16_R3"))
+	/*implementation(project(":implementation:v1_16_R3"))
     implementation(project(":implementation:v1_17_R1"))
     implementation(project(":implementation:v1_18_R1"))
     implementation(project(":implementation:v1_18_R2"))
     implementation(project(":implementation:v1_19_R1"))
     implementation(project(":implementation:v1_19_R2"))
     implementation(project(":implementation:v1_19_R3"))
-    implementation(project(":implementation:v1_20_R1"))
+    implementation(project(":implementation:v1_20_R1"))*/
     implementation(project(":implementation:v1_20_R2"))
 }
 

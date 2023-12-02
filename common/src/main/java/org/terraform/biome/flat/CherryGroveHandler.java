@@ -52,7 +52,7 @@ public class CherryGroveHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;                
+                if (world.getBiomeBank(x,z) != BiomeBank.CHERRY_GROVE) continue;
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
                 	
                     if (GenUtils.chance(random, 2, 10)) { //Grass

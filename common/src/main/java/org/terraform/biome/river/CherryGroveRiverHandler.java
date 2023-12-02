@@ -2,6 +2,7 @@ package org.terraform.biome.river;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -57,7 +58,7 @@ public class CherryGroveRiverHandler extends BiomeHandler {
                 int y = GenUtils.getHighestGround(data, x, z);
                 if(y >= TerraformGenerator.seaLevel) //Don't apply to dry land
                 	continue;
-                if (data.getBiome(x, z) != getBiome()) continue;
+                if (world.getBiomeBank(x,z) != BiomeBank.CHERRY_GROVE_RIVER) continue;
 
                 //Set ground near sea level to grass
 //                if(y >= TerraformGenerator.seaLevel - 2) {

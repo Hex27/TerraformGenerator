@@ -44,12 +44,6 @@ public class DesertHandler extends BiomeHandler {
         return BiomeBank.DESERT_RIVER;
     }
 
-    @SuppressWarnings("deprecation")
-	@Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ) {
-        OasisBeach.transformTerrain(tw, biome, chunkX, chunkZ, BiomeBank.DESERT);
-    }
-
     //Pad more sandstone so that mountains don't get stone exposed vertically
     @Override
     public Material[] getSurfaceCrust(Random rand) {

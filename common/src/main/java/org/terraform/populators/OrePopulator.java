@@ -150,6 +150,9 @@ public class OrePopulator {
                     int relX = (int) Math.round(x) + coreX;
                     int relY = (int) Math.round(y) + coreY;
                     int relZ = (int) Math.round(z) + coreZ;
+                    if(relY > TerraformGeneratorPlugin.injector.getMaxY()
+                    || relY <= TerraformGeneratorPlugin.injector.getMinY()) //do not touch bedrock layer
+                        continue;
                 	//SimpleBlock rel = block.getRelative((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
                     double equationResult = Math.pow(x, 2) / Math.pow(radius,2)
                             + Math.pow(y, 2) / Math.pow(radius, 2)

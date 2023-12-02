@@ -43,10 +43,6 @@ public abstract class BiomeHandler {
 
     // Populate event but for the terrain.
     public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) { /* Do nothing by default */ }
-    @SuppressWarnings("deprecation")
-	public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome,  int chunkX, int chunkZ) {
-        transformTerrain(tw, random, chunk, chunkX, chunkZ);
-    }
 
     //Beach type. This will be used instead if the height is too close to sea level.
     public BiomeBank getBeachType() {

@@ -2,6 +2,7 @@ package org.terraform.biome.river;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.biome.flat.MuddyBogHandler;
@@ -72,7 +73,10 @@ public class BogRiverHandler extends BiomeHandler {
             		if(block.getY() < TerraformGenerator.seaLevel){
             			double maxHeight = (TerraformGenerator.seaLevel - block.getY()) + 2.0;
             			int height = (int) Math.round((maxHeight*noise));
-                        if (data.getBiome(x, z) != getBiome())
+
+                        if (tw.getBiomeBank(x,z) != BiomeBank.BOG_RIVER
+                        && tw.getBiomeBank(x,z) != BiomeBank.MUDDY_BOG
+                        && tw.getBiomeBank(x,z) != BiomeBank.BOG_BEACH)
                         	height *= 0.5;
             			
             			new Wall(block.getRelative(0,1,0)).LPillar(height, random, Material.DIRT);

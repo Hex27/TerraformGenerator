@@ -138,11 +138,9 @@ public class BadlandsHandler extends BiomeHandler {
         return this;
     }
 
-    @SuppressWarnings("deprecation")
 	@Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ) {
+    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
         // Set jungle biome for lush oases
-        OasisBeach.transformTerrain(tw, biome, chunkX, chunkZ, BiomeBank.BADLANDS);
 
         BiomeBlender blender = getRiversBlender(tw);
 

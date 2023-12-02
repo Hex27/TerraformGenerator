@@ -3,6 +3,7 @@ package org.terraform.biome.beach;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.biome.flat.MuddyBogHandler;
@@ -54,8 +55,8 @@ public class BogBeachHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
+                if (tw.getBiomeBank(x,z) != BiomeBank.BOG_BEACH) continue;
+
                 SimpleBlock block = new SimpleBlock(data,x,y,z);
                 if(!BlockUtils.isWet(block.getRelative(0,1,0))) {
                 	if(GenUtils.chance(random, 1, 85))

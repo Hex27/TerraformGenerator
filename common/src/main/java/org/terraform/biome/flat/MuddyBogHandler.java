@@ -64,8 +64,8 @@ public class MuddyBogHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
+                if (world.getBiomeBank(x,z) != BiomeBank.MUDDY_BOG) continue;
+
                 SimpleBlock block = new SimpleBlock(data,x,y,z);
                 if(block.getRelative(0,1,0).getType() == Material.AIR &&
                 		block.getType() == Material.GRASS_BLOCK) {

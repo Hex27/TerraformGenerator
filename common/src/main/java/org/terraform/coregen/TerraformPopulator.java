@@ -1,9 +1,13 @@
 package org.terraform.coregen;
 
 import org.bukkit.Material;
+import org.bukkit.generator.BlockPopulator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.cave.MasterCavePopulatorDistributor;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
@@ -20,7 +24,7 @@ import org.terraform.utils.version.Version;
 import java.util.EnumSet;
 import java.util.Random;
 
-public class TerraformPopulator {
+public class TerraformPopulator extends BlockPopulator {
 	
     private static final OrePopulator[] ORE_POPS = {
             // Ores
@@ -193,6 +197,16 @@ public class TerraformPopulator {
     }
     
     private MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
+
+    @Override
+    public void populate(@NotNull org.bukkit.generator.WorldInfo worldInfo, @NotNull java.util.Random random,
+                         int chunkX, int chunkZ,
+                         @NotNull org.bukkit.generator.LimitedRegion limitedRegion)
+    {
+        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        PopulatorDataAbstract data = new PopulatorDataSpigotAPI(limitedRegion, tw, chunkX, chunkZ);
+        this.populate(tw, random, data);
+    }
 
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
     	random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());

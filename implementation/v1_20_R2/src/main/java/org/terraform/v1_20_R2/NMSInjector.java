@@ -1,15 +1,23 @@
 package org.terraform.v1_20_R2;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.level.GeneratorAccessSeed;
+import net.minecraft.world.level.block.entity.TileEntityBeehive;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.block.Beehive;
 import org.bukkit.craftbukkit.v1_20_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R2.block.CraftBeehive;
+import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockEntityState;
+import org.bukkit.craftbukkit.v1_20_R2.generator.CraftLimitedRegion;
 import org.bukkit.entity.Player;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -17,6 +25,10 @@ import net.minecraft.server.level.PlayerChunkMap;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.IChunkAccess;
+
+import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class NMSInjector extends NMSInjectorAbstract {
 	
@@ -94,7 +106,36 @@ public class NMSInjector extends NMSInjectorAbstract {
             TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.A()); //B is getSeed()
             return new PopulatorDataICA(data, tw, ws, ica, data.getChunkX(), data.getChunkZ());
         }
+
+        //This is for the damn bees
+        if (data instanceof PopulatorDataSpigotAPI pdata) {
+            GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
+            WorldServer ws = gas.getMinecraftWorld();
+            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.A()); //B is getSeed()
+            return new PopulatorDataICA(data, tw, ws, gas.a(data.getChunkX(),data.getChunkZ()), data.getChunkX(), data.getChunkZ());
+        }
         return null;
+    }
+
+    private static Method getTileEntity = null;
+    @Override
+    public void storeBee(Beehive hive) {
+        try {
+            if(getTileEntity == null)
+            {
+                    getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
+                    getTileEntity.setAccessible(true);
+            }
+            TileEntityBeehive teb = (TileEntityBeehive) getTileEntity.invoke(hive);
+
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.a("id", "minecraft:bee");
+            //TileEntityBeehive.storeBee
+            teb.a(nbttagcompound, 0, false);
+
+        } catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 //
 //	@Override

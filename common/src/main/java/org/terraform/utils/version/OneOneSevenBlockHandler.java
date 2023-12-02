@@ -83,10 +83,10 @@ public class OneOneSevenBlockHandler {
 			Material.getMaterial("GRANITE_WALL") : Material.getMaterial("POINTED_DRIPSTONE");
 
 	public static final Material TUFF = Material.getMaterial("TUFF") == null ? 
-			Material.getMaterial("STONE") : Material.getMaterial("TUFF");
+			Material.STONE : Material.getMaterial("TUFF");
 
 	public static final Material DEEPSLATE = Material.getMaterial("DEEPSLATE") == null ? 
-			Material.getMaterial("STONE") : Material.getMaterial("DEEPSLATE");
+			Material.STONE : Material.getMaterial("DEEPSLATE");
 	
 	public static final Material COBBLED_DEEPSLATE_STAIRS = Material.getMaterial("COBBLED_DEEPSLATE_STAIRS") == null ? 
 			Material.getMaterial("COBBLESTONE_STAIRS") : Material.getMaterial("COBBLED_DEEPSLATE_STAIRS");

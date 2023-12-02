@@ -2,6 +2,7 @@ package org.terraform.coregen;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.block.Beehive;
 import org.bukkit.entity.Player;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
@@ -31,6 +32,15 @@ public abstract class NMSInjectorAbstract {
      * @return a populatorDataICA instance.
      */
     public abstract PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data);
+
+    /**
+     * This was unironically the easiest way to add a bee to a
+     * beehive without spawning an entity.
+     * <br><br>
+     * You've never made a PR to spigot before, maybe learn how to do it
+     * for this.
+     */
+    public abstract void storeBee(Beehive hive);
     
     /**
      * Force an NMS physics update at the location.
