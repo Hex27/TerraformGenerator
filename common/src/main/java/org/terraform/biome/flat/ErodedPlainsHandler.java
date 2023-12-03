@@ -46,8 +46,8 @@ public class ErodedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
-    	
+    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_ERODEDPLAINS_CLIFFNOISE, 
@@ -92,6 +92,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
                         + (64 * Math.pow(d, 7) * heightFactor)
                         + detailsValue * heightFactor * 0.5;
 
+                heightChanges[x][z] = (short) (Math.round(platformHeight)+height);
                 for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
                     Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
                             Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE);

@@ -189,7 +189,7 @@ public enum HeightMap {
         int maskRadius = 5;
         int maskDiameter = (maskRadius*2) + 1;
         //int maskDiameterSquared = maskDiameter*maskDiameter;
-        double coreHeight = 0;
+        double coreHeight;
 
         ChunkCache mainCache = TerraformGenerator.getCache(tw, x, z);
 

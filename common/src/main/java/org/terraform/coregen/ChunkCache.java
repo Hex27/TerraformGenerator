@@ -4,6 +4,11 @@ import org.bukkit.Axis;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
 
+/**
+ * I don't know why Z and X indices are swapped consistently here.
+ * I guess it doesn't affect anything but it sure is a fucking
+ * war crime
+ */
 public class ChunkCache {
     public final TerraformWorld tw;
     public final int chunkX, chunkZ;
@@ -23,6 +28,7 @@ public class ChunkCache {
     float[][] intermediateBlurCache;
     double[][] heightMapCache;
     short[][] highestGroundCache;
+    short[][] transformedHeightCache;
     BiomeBank[][] biomeCache;
 
     public ChunkCache(TerraformWorld tw, int chunkX, int chunkZ) {
@@ -39,6 +45,7 @@ public class ChunkCache {
         this.tw = tw;
         this.chunkX = getChunkCoordinate(rawX);
         this.chunkZ = getChunkCoordinate(rawZ);
+        initInternalCache();
     }
 
     public static int getChunkCoordinate(int coordinate) {
@@ -47,6 +54,7 @@ public class ChunkCache {
 
     public void initInternalCache() {
     	highestGroundCache = new short[16][16];
+        transformedHeightCache = new short[16][16];
         heightMapCache = new double[16][16];
         dominantBiomeHeightCache = new float[16][16];
         intermediateBlurCache = new float[16][16];
@@ -55,6 +63,7 @@ public class ChunkCache {
     	for(short i = 0; i < 16; i++)
     		for(short j = 0; j < 16; j++) {
     			highestGroundCache[i][j] = Short.MIN_VALUE;
+                transformedHeightCache[i][j] = Short.MIN_VALUE;
     			blurredHeightCache[i][j] = Float.MIN_VALUE;
                 intermediateBlurCache[i][j] = Float.MIN_VALUE;
     			dominantBiomeHeightCache[i][j] = Float.MIN_VALUE;
@@ -89,6 +98,19 @@ public class ChunkCache {
         return highestGroundCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
     }
 
+    //This one is swapped because it is passed straight in from elsewhere.
+    public short getTransformedHeight(int rawX, int rawZ) {
+        return transformedHeightCache[getCoordinateInsideChunk(rawX, Axis.X)][getCoordinateInsideChunk(rawZ, Axis.Z)];
+    }
+
+    /**
+     * This is solely for surface cave carving use as surface
+     * caves may modify heights.
+     * @return the ACTUAL mutable copy from the cache.
+     */
+    public short[][] getWriteableTransformedHeight(){
+        return transformedHeightCache;
+    }
 
     /**
      *
@@ -108,6 +130,14 @@ public class ChunkCache {
      */
     public void cacheHighestGround(int rawX, int rawZ, short value) {
         highestGroundCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+    }
+
+    /**
+     * Only used in TerraformGenerator for height calculations.
+     * Do not use elsewhere.
+     */
+    public void cacheTransformedHeight(short[][] heights) {
+        this.transformedHeightCache = heights;
     }
     
     public float getBlurredHeight(int rawX, int rawZ) {

@@ -3,7 +3,7 @@ package org.terraform.structure.caves;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.SeaPickle;
-import org.terraform.biome.cave.LushClusterCavePopulator;
+import org.terraform.biome.cavepopulators.LushClusterCavePopulator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;

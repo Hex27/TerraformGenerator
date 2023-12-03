@@ -61,19 +61,21 @@ public class TerraformGenerator extends ChunkGenerator {
 
     public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
-
+        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+        short[][] transformedHeight = cache.getWriteableTransformedHeight();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
-                //tw.getBiomeBank(rawX, rawZ);
                 double height = HeightMap.getPreciseHeight(tw, rawX, rawZ); //bank.getHandler().calculateHeight(tw, rawX, rawZ);
+                transformedHeight[x][z] = (short) height;
 
                 BiomeBank bank = tw.getBiomeBank(rawX, (int)height, rawZ);//BiomeBank.calculateBiome(tw, rawX, height, rawZ);
 
+                boolean mustUpdateHeight = true;
                 //Fill stone up to the world height. Differentiate between deepslate or not.
-                for(int y = TerraformGeneratorPlugin.injector.getMinY(); y <= height; y++)
+                for(int y = (int) height; y >= TerraformGeneratorPlugin.injector.getMinY(); y--)
                 {
                     Material stoneType = Material.STONE;
                     if(y < 0)
@@ -81,27 +83,28 @@ public class TerraformGenerator extends ChunkGenerator {
                     else if(y <= 2)
                         stoneType = GenUtils.randMaterial(OneOneSevenBlockHandler.DEEPSLATE, Material.STONE);
 
-                    //If a noise cave is to be carved here, then don't set stone.
-                    if(!tw.noiseCaveRegistry.canCarve(rawX,y,rawZ,height))
+                    //Set stone if a cave CANNOT be carved here
+                    if(!tw.noiseCaveRegistry.canNoiseCarve(rawX,y,rawZ,height))
+                    {
+                        mustUpdateHeight = false;
                         chunkData.setBlock(x, y, z, stoneType);
-                }
+                    }
+                    else if(mustUpdateHeight) //if not, update transformed height
+                        transformedHeight[x][z] = (short) (y-1);
 
-                //Water for below certain heights
-                for(int y = (int)height+1; y <= seaLevel; y++)
-                {
-                    chunkData.setBlock(x,y,z,Material.WATER);
                 }
-
             }
         }
 
     }
 
     /**
-     * Responsible for setting surface biome blocks.
+     * Responsible for setting surface biome blocks and biomeTransforms
      */
     public void generateSurface(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+        short[][] transformedHeight = cache.getWriteableTransformedHeight();
 
         List<BiomeHandler> biomesToTransform = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
@@ -120,14 +123,19 @@ public class TerraformGenerator extends ChunkGenerator {
                 BiomeHandler transformHandler = bank.getHandler().getTransformHandler();
                 if (transformHandler != null && !biomesToTransform.contains(transformHandler))
                     biomesToTransform.add(transformHandler);
+
+                //Water for below certain heights
+                for(int y = (int)transformedHeight[x][z]+1; y <= seaLevel; y++)
+                {
+                    chunkData.setBlock(x,y,z,Material.WATER);
+                }
             }
         }
-        //TODO: Cache an updated value for caves/structures to operate on?
-        //That or ignore this and just don't open caves on the surface on these.
-        //This causes height cache to be anomalous for transformed biomes.
-        //Do not rely on getHeight for them.
+
+        //Actually apply transformations. Keep track of height changes
+        //All writes will update the cache accordingly.
         for (BiomeHandler handler : biomesToTransform) {
-            handler.transformTerrain(tw, random, chunkData, chunkX, chunkZ);
+            handler.transformTerrain(transformedHeight, tw, random, chunkData, chunkX, chunkZ);
         }
     }
 
@@ -149,11 +157,17 @@ public class TerraformGenerator extends ChunkGenerator {
         }
     }
 
-    public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int x, int z, @NotNull ChunkData chunkData) {
+    /**
+     * NEW PLAN BITCHES
+     * NO MORE USE OF THIS SHIT.
+     * IT IS IMPURE
+     * */
+    public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
+
     }
 
     @Override
-    public Location getFixedSpawnLocation(World world, Random random) {
+    public Location getFixedSpawnLocation(@NotNull World world, @NotNull Random random) {
         return new Location(world, 0, HeightMap.getBlockHeight(TerraformWorld.get(world), 0, 0), 0);
     }
 
@@ -166,37 +180,31 @@ public class TerraformGenerator extends ChunkGenerator {
         }};
     }
 
-    //This probably affects noise caves
+    //Do exactly 0 of this, TFG now handles ALL of it.
     public boolean shouldGenerateNoise() {
         return false;
     }
-    
-    //No effect on plugin, this is overridden.
+
     public boolean shouldGenerateSurface() {
         return false;
     }
 
-    //no effect on plugin, this is overridden.
     public boolean shouldGenerateBedrock() {
         return false;
     }
 
-    //Affects the carver caves
     public boolean shouldGenerateCaves() {
         return false;
     }
 
-    //No effect on plugin, this is overridden.
     public boolean shouldGenerateDecorations() {
         return false;
     }
 
-    //No effect on plugin, this is overridden.
     public boolean shouldGenerateMobs() {
         return false;
     }
 
-    //No effect on plugin, this is overridden.
     public boolean shouldGenerateStructures() {
         return false;
     }

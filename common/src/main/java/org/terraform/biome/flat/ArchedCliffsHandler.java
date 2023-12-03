@@ -179,7 +179,8 @@ public class ArchedCliffsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+
         FastNoise platformNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_ARCHEDCLIFFS_PLATFORMNOISE, 
@@ -223,10 +224,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
 	                		*getBiomeBlender(tw).getEdgeFactor(BiomeBank.ARCHED_CLIFFS, rawX, rawZ)
 	                		, 0)
 						);
-                
-                //if(platformNoiseVal > 10) platformNoiseVal *= 1.3;
 
-                
                 if(platformNoiseVal > 0) {
                 	int platformHeight = (int) (
                 			HeightMap.CORE.getHeight(tw, rawX, rawZ) 
@@ -234,7 +232,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
                 			+ 55);
 
                 	//for higher platform noise vals, make a thicker platform
-                	
+                	heightChanges[x][z] = (short) platformHeight;
                 	chunk.setBlock(x, platformHeight, z, Material.GRASS_BLOCK);
                 	Material[] crust = getSurfaceCrust(random);
                 	for(int i = 0; i < platformNoiseVal; i++) {

@@ -139,8 +139,11 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
 	@Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
-        // Set jungle biome for lush oases
+    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+        //Badlands doesn't actually mutate height in here (WHY??).
+        //Because of that, don't edit heightChanges
+        //This is perpetuating the cycle of abuse and falsehood
+        //Let's leave it till it explodes for some reason
 
         BiomeBlender blender = getRiversBlender(tw);
 
@@ -155,7 +158,6 @@ public class BadlandsHandler extends BiomeHandler {
         	        return n;
         		});
 
-        // Rivers
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;

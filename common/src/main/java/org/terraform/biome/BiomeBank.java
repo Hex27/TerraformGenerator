@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import org.terraform.biome.beach.*;
-import org.terraform.biome.cave.*;
+import org.terraform.biome.cavepopulators.*;
 import org.terraform.biome.flat.*;
 import org.terraform.biome.mountainous.*;
 import org.terraform.biome.ocean.*;

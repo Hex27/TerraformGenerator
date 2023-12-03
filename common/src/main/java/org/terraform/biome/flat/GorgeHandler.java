@@ -107,8 +107,8 @@ public class GorgeHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
-    	
+    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+
         FastNoise cliffNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_GORGE_CLIFFNOISE, 
@@ -156,6 +156,7 @@ public class GorgeHandler extends BiomeHandler {
                             + (64 * Math.pow(d, 7) * heightFactor)
                             + detailsValue * heightFactor * 0.5;
 
+                    heightChanges[x][z] = (short)(Math.round(platformHeight) + height);
                     for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
                         Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
                                 Material.COBBLESTONE, Material.COBBLESTONE, Material.ANDESITE, Material.ANDESITE);
@@ -182,7 +183,8 @@ public class GorgeHandler extends BiomeHandler {
                 	
                 	//Prevent going beneath y = 10
                     if(depth > height - 10) depth = height-10;
-                    
+
+                    heightChanges[x][z] = (short) (height - depth);
                 	for (int y = 0; y < depth; y++) {
                         if(TerraformGenerator.seaLevel - 20 >= height-y)
                             chunk.setBlock(x, height - y, z, Material.WATER);

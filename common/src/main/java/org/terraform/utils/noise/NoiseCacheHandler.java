@@ -80,6 +80,7 @@ public class NoiseCacheHandler{
 		BIOME_SHATTERED_SAVANNANOISE,
 
         CAVE_CHEESE_NOISE,
+        CAVE_XRAVINE_NOISE,
 		
 		STRUCTURE_LARGECAVE_CARVER,
 		

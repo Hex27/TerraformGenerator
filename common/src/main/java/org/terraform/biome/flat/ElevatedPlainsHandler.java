@@ -79,7 +79,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
 
         int heightFactor = 15;
 
@@ -98,6 +98,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
                 for (int y = 1; y <= noiseValue; y++) {
                     chunk.setBlock(x, height + y, z, getRockAt(random, x,y,z));
                 }
+                heightChanges[x][z] = (short) height;
             }
         }
     }

@@ -1,4 +1,4 @@
-package org.terraform.biome.cave;
+package org.terraform.biome.cavepopulators;
 
 import org.bukkit.Tag;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;

@@ -108,8 +108,8 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
     
 
     @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
-    	
+    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_PETRIFIEDCLIFFS_CLIFFNOISE, 
@@ -155,15 +155,17 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
                 	double detailsNoiseMultiplier = Math.pow(1.0-(1.0/(Math.pow(platformHeight/2.0, 2)))*Math.pow(y-platformHeight/2.0, 2), 2);
                 	double detailsNoise = details.GetNoise(rawX, height+y, rawZ);
                     
-                	if(0.85+detailsNoise > detailsNoiseMultiplier)
-                    	chunk.setBlock(x, height + y, z,
-                    			GenUtils.randMaterial(
-                    			Material.STONE, 
-                    			Material.STONE, 
-                    			Material.STONE, 
-                    			Material.COBBLESTONE, 
-                    			Material.MOSSY_COBBLESTONE
-                    			));
+                	if(0.85+detailsNoise > detailsNoiseMultiplier) {
+                        chunk.setBlock(x, height + y, z,
+                                GenUtils.randMaterial(
+                                        Material.STONE,
+                                        Material.STONE,
+                                        Material.STONE,
+                                        Material.COBBLESTONE,
+                                        Material.MOSSY_COBBLESTONE
+                                ));
+                        heightChanges[x][z] = (short) Math.max(heightChanges[x][z], height+y);
+                    }
                 }
                 
             }
