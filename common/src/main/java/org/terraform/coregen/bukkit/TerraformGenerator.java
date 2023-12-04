@@ -111,7 +111,7 @@ public class TerraformGenerator extends ChunkGenerator {
             for(int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
-                int height = HeightMap.getBlockHeight(tw,rawX,rawZ);
+                int height = transformedHeight[x][z]; //NOT HeightMap
                 BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);
                 int index = 0;
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
@@ -125,7 +125,7 @@ public class TerraformGenerator extends ChunkGenerator {
                     biomesToTransform.add(transformHandler);
 
                 //Water for below certain heights
-                for(int y = (int)transformedHeight[x][z]+1; y <= seaLevel; y++)
+                for(int y = height+1; y <= seaLevel; y++)
                 {
                     chunkData.setBlock(x,y,z,Material.WATER);
                 }
@@ -134,9 +134,9 @@ public class TerraformGenerator extends ChunkGenerator {
 
         //Actually apply transformations. Keep track of height changes
         //All writes will update the cache accordingly.
-        for (BiomeHandler handler : biomesToTransform) {
-            handler.transformTerrain(transformedHeight, tw, random, chunkData, chunkX, chunkZ);
-        }
+//        for (BiomeHandler handler : biomesToTransform) {
+//            handler.transformTerrain(transformedHeight, tw, random, chunkData, chunkX, chunkZ);
+//        }
     }
 
     public void generateBedrock(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
@@ -157,13 +157,22 @@ public class TerraformGenerator extends ChunkGenerator {
         }
     }
 
-    /**
-     * NEW PLAN BITCHES
-     * NO MORE USE OF THIS SHIT.
-     * IT IS IMPURE
-     * */
     public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
-
+        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        for(int x = 0; x < 16; x++)
+            for(int z = 0; z < 16; z++)
+            {
+                int rawX = chunkX * 16 + x;
+                int rawZ = chunkZ * 16 + z;
+                int height = HeightMap.getBlockHeight(tw,rawX,rawZ);
+                for(int y = height; y > TerraformGeneratorPlugin.injector.getMinY(); y--)
+                {
+                    if(tw.noiseCaveRegistry.canGenerateCarve(rawX,y,rawZ,height))
+                    {
+                        chunkData.setBlock(x, y, z, Material.CAVE_AIR);
+                    }
+                }
+            }
     }
 
     @Override

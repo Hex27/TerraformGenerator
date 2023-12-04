@@ -109,7 +109,7 @@ public class MuddyBogHandler extends BiomeHandler {
         for (SimpleLocation sLoc : shrooms) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
             sLoc.setY(treeY);
-            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+            if(tw.getBiomeBank(sLoc.getX(),sLoc.getZ()) == BiomeBank.MUDDY_BOG &&
             		!BlockUtils.isWet(new SimpleBlock(data,sLoc.getX(),sLoc.getY()+1,sLoc.getZ()))&&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
             	if(data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()) == Material.AIR)

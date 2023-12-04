@@ -47,7 +47,7 @@ public class ScarletForestHandler extends BiomeHandler {
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;                
+                if (world.getBiomeBank(x,z) != BiomeBank.SCARLET_FOREST) continue;
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
                 	
                     if (GenUtils.chance(random, 1, 10)) { //Grass
@@ -78,7 +78,7 @@ public class ScarletForestHandler extends BiomeHandler {
     		int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
             sLoc.setY(treeY);
             
-            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+            if(tw.getBiomeBank(sLoc.getX(),sLoc.getZ()) == BiomeBank.SCARLET_FOREST &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
             {
                 if(TConfigOption.TREES_SCARLET_BIG_ENABLED.getBoolean())

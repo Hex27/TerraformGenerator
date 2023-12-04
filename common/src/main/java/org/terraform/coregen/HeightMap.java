@@ -35,25 +35,27 @@ public enum HeightMap {
     CORE {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise cubic = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_CORE, world -> {
+            FastNoise noise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_CORE, world -> {
                 FastNoise n = new FastNoise((int) world.getSeed());
-                n.SetNoiseType(NoiseType.CubicFractal);
-                n.SetFractalOctaves(3);
+                n.SetNoiseType(NoiseType.SimplexFractal);
+                n.SetFractalOctaves(2); //Poor detail after blurs. Rely on Attrition for detail
                 n.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
                 return n;
             });
 
-            double height = cubic.GetNoise(x, z) * 2 * 5 + 7 + defaultSeaLevel;
+            //7 blocks elevated from the sea level
+            double height = 10*noise.GetNoise(x, z) + 7 + TerraformGenerator.seaLevel;
 
-            //Ensure that height doesn't automatically go upwards sharply
-            if (height > defaultSeaLevel + 10) {
-                height = (height - defaultSeaLevel - 10) * 0.1 + defaultSeaLevel + 10;
+            //Plateau-out height to make it flat-ish
+            if (height > TerraformGenerator.seaLevel + 10) {
+                height = (height - TerraformGenerator.seaLevel - 10) * 0.1 + TerraformGenerator.seaLevel + 10;
             }
 
-            //Ensure that height doesn't automatically go too deep
-            if (height < defaultSeaLevel - 30) {
-                height = -(defaultSeaLevel - 30 - height) * 0.1 + defaultSeaLevel - 30;
-            }
+            //This is fucking nonsense
+//            //Ensure that height doesn't automatically go too deep
+//            if (height < defaultSeaLevel - 30) {
+//                height = -(defaultSeaLevel - 30 - height) * 0.1 + defaultSeaLevel - 30;
+//            }
 
             return height;
         }

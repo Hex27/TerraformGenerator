@@ -81,6 +81,7 @@ public class NoiseCacheHandler{
 
         CAVE_CHEESE_NOISE,
         CAVE_XRAVINE_NOISE,
+        CAVE_XRAVINE_DETAILS,
 		
 		STRUCTURE_LARGECAVE_CARVER,
 		

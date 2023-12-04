@@ -1,6 +1,6 @@
 package org.terraform.cave;
 
-import org.bukkit.Material;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.noise.FastNoise;
@@ -15,7 +15,9 @@ public class NoiseCaveRegistry {
         this.noiseCaveCarvers = new NoiseCaveAbstract[]{
                 new CheeseCave()
         };
-        this.generateCaveCarvers = new NoiseCaveAbstract[]{};
+        this.generateCaveCarvers = new NoiseCaveAbstract[]{
+                new NoiseRavine()
+        };
     }
 
     public boolean canNoiseCarve(int x, int y, int z, double height){
@@ -24,6 +26,16 @@ public class NoiseCaveRegistry {
         float filter = filterHeight*filterGround;
         for(NoiseCaveAbstract carver:noiseCaveCarvers) {
             if(carver.canCarve(tw, x, y, z, height, filter)) return true;
+        }
+        return false;
+    }
+
+    public boolean canGenerateCarve(int x, int y, int z, double height){
+
+        //The sea filter is special, pass in HEIGHT as its about scaling towards the sea
+        float filterSea = yBarrier(tw, x,(int)height,z, TerraformGenerator.seaLevel, 5, 1);
+        for(NoiseCaveAbstract carver:generateCaveCarvers) {
+            if(carver.canCarve(tw, x, y, z, height, filterSea)) return true;
         }
         return false;
     }
