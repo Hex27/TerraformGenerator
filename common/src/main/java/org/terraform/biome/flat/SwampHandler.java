@@ -85,15 +85,15 @@ public class SwampHandler extends BiomeHandler {
                     }
                     y += att;
 
-                    if (y < TerraformGenerator.seaLevel) {
+                    if (data.getType(x,TerraformGenerator.seaLevel,z) == Material.WATER) {
                         if (GenUtils.chance(random, 1, 30))
                             data.setType(x, TerraformGenerator.seaLevel + 1, z, Material.LILY_PAD);
                     }
                 }
 
-                if (GenUtils.chance(random, 10, 100) && y < TerraformGenerator.seaLevel - 3) { //SEA GRASS/KELP
+                if (BlockUtils.isWet(new SimpleBlock(data,x,y+1,z))
+                        && GenUtils.chance(random, 10, 100) && y < TerraformGenerator.seaLevel - 3) { //SEA GRASS/KELP
                     CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
-
                 }
                 if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
                     BlockUtils.generateClayDeposit(x, y, z, data, random);

@@ -60,6 +60,8 @@ public class TerraformGenerator extends ChunkGenerator {
     }
 
     public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
+        TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
+
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
         ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
         short[][] transformedHeight = cache.getWriteableTransformedHeight();
@@ -134,9 +136,9 @@ public class TerraformGenerator extends ChunkGenerator {
 
         //Actually apply transformations. Keep track of height changes
         //All writes will update the cache accordingly.
-//        for (BiomeHandler handler : biomesToTransform) {
-//            handler.transformTerrain(transformedHeight, tw, random, chunkData, chunkX, chunkZ);
-//        }
+        for (BiomeHandler handler : biomesToTransform) {
+            handler.transformTerrain(transformedHeight, tw, random, chunkData, chunkX, chunkZ);
+        }
     }
 
     public void generateBedrock(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
@@ -159,9 +161,13 @@ public class TerraformGenerator extends ChunkGenerator {
 
     public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+        short[][] transformedHeight = cache.getWriteableTransformedHeight();
+
         for(int x = 0; x < 16; x++)
             for(int z = 0; z < 16; z++)
             {
+                boolean mustUpdateHeight = true;
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
                 int height = HeightMap.getBlockHeight(tw,rawX,rawZ);
@@ -170,7 +176,8 @@ public class TerraformGenerator extends ChunkGenerator {
                     if(tw.noiseCaveRegistry.canGenerateCarve(rawX,y,rawZ,height))
                     {
                         chunkData.setBlock(x, y, z, Material.CAVE_AIR);
-                    }
+                        transformedHeight[x][z] = (short) (y-1);
+                    }else mustUpdateHeight = false;
                 }
             }
     }

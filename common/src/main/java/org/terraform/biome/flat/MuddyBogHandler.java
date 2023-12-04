@@ -109,7 +109,7 @@ public class MuddyBogHandler extends BiomeHandler {
         for (SimpleLocation sLoc : shrooms) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
             sLoc.setY(treeY);
-            if(tw.getBiomeBank(sLoc.getX(),sLoc.getZ()) == BiomeBank.MUDDY_BOG &&
+            if(isRightBiome(tw.getBiomeBank(sLoc.getX(),sLoc.getZ())) &&
             		!BlockUtils.isWet(new SimpleBlock(data,sLoc.getX(),sLoc.getY()+1,sLoc.getZ()))&&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
             	if(data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()) == Material.AIR)
@@ -122,7 +122,12 @@ public class MuddyBogHandler extends BiomeHandler {
             }
         }
 	}
-	
+
+    private boolean isRightBiome(BiomeBank bank){
+        return bank == BiomeBank.MUDDY_BOG ||
+                bank == BiomeBank.BOG_BEACH;
+    }
+
     @Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
         

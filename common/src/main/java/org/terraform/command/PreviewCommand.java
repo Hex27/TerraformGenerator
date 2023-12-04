@@ -60,7 +60,7 @@ public class PreviewCommand extends TerraCommand {
 
         ImageWorldInfo iwi = new ImageWorldInfo(tw.getName(), tw.getSeed());
 
-        BufferedImage img = new BufferedImage(maxX, maxX, BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(maxX, maxY+maxX, BufferedImage.TYPE_INT_RGB);
         //Delete existing
         File f = new File("terra-preview.png"); if (f.exists()) f.delete();
         TerraformGenerator generator = new TerraformGenerator();
@@ -110,11 +110,11 @@ public class PreviewCommand extends TerraCommand {
             }
 
             //Vertical slice at z=0
-//            if(z==0 && chunkZ == 0)
-//                img.setRGB(
-//                        (maxX/2) + x+chunkX*16,
-//                        maxY-(y-TerraformGeneratorPlugin.injector.getMinY())-1,
-//                        col.getRGB());
+            if(z==0 && chunkZ == 0)
+                img.setRGB(
+                        (maxX/2) + x+chunkX*16,
+                        maxY-(y-TerraformGeneratorPlugin.injector.getMinY())-1,
+                        col.getRGB());
             //Top-Down slice
             if(y>=maxHeights[x][z])
             {
@@ -125,7 +125,7 @@ public class PreviewCommand extends TerraCommand {
                      else col = col.darker();
                 }
                 img.setRGB((maxX/2) + x+chunkX*16,
-                        (maxX/2) + z+chunkZ*16,col.getRGB());
+                        maxY+(maxX/2) + z+chunkZ*16,col.getRGB());
             }
         }
         @Override
