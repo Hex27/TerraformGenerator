@@ -9,6 +9,7 @@ import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.beach.OasisBeach;
 import org.terraform.biome.mountainous.BadlandsCanyonHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -139,7 +140,7 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
 	@Override
-    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
         //Badlands doesn't actually mutate height in here (WHY??).
         //Because of that, don't edit heightChanges
         //This is perpetuating the cycle of abuse and falsehood

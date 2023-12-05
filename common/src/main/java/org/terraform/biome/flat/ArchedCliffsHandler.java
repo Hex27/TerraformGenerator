@@ -7,6 +7,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -179,7 +180,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
 
         FastNoise platformNoise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -232,7 +233,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
                 			+ 55);
 
                 	//for higher platform noise vals, make a thicker platform
-                	heightChanges[x][z] = (short) platformHeight;
+                    cache.writeTransformedHeight (x,z,(short) platformHeight);
                 	chunk.setBlock(x, platformHeight, z, Material.GRASS_BLOCK);
                 	Material[] crust = getSurfaceCrust(random);
                 	for(int i = 0; i < platformNoiseVal; i++) {

@@ -1,8 +1,9 @@
 package org.terraform.coregen;
 
-import org.bukkit.Axis;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
+
+import java.util.Arrays;
 
 /**
  * I don't know why Z and X indices are swapped consistently here.
@@ -23,13 +24,14 @@ public class ChunkCache {
      * blurredHeightCache will hold intermediate height blurring values
      * (calculated after dominantBiomeHeightCache)
      */
-    float[][] dominantBiomeHeightCache;
-    float[][] blurredHeightCache;
-    float[][] intermediateBlurCache;
-    double[][] heightMapCache;
-    short[][] highestGroundCache;
-    short[][] transformedHeightCache;
-    BiomeBank[][] biomeCache;
+//    float[][] dominantBiomeHeightCache; //KEY 0
+//    float[][] blurredHeightCache; //KEY 1
+//    float[][] intermediateBlurCache; //KEY 2
+//    double[][] heightMapCache; //KEY 3
+//    short[][] highestGroundCache; //KEY 4
+//    short[][] transformedHeightCache; //KEY 5
+    float[] arrayCache; //These 6 arrays are now one big array. No more nested pointers
+    BiomeBank[] biomeCache;
 
     public ChunkCache(TerraformWorld tw, int chunkX, int chunkZ) {
         this.tw = tw;
@@ -45,7 +47,10 @@ public class ChunkCache {
         this.tw = tw;
         this.chunkX = getChunkCoordinate(rawX);
         this.chunkZ = getChunkCoordinate(rawZ);
-        initInternalCache();
+        //initInternalCache(); THIS IS COMMENTED ON PURPOSE.
+        //THIS CONSTRUCTOR IS ONLY USED FOR CACHE HITS, SO DOES NOT INITIALIZE.
+        //Good practice mandates that we mark this constructor with protected,
+        //but the class calling this is in another package, so too bad!
     }
 
     public static int getChunkCoordinate(int coordinate) {
@@ -53,31 +58,36 @@ public class ChunkCache {
     }
 
     public void initInternalCache() {
-    	highestGroundCache = new short[16][16];
-        transformedHeightCache = new short[16][16];
-        heightMapCache = new double[16][16];
-        dominantBiomeHeightCache = new float[16][16];
-        intermediateBlurCache = new float[16][16];
-        blurredHeightCache = new float[16][16];
-        
-    	for(short i = 0; i < 16; i++)
-    		for(short j = 0; j < 16; j++) {
-    			highestGroundCache[i][j] = Short.MIN_VALUE;
-                transformedHeightCache[i][j] = Short.MIN_VALUE;
-    			blurredHeightCache[i][j] = Float.MIN_VALUE;
-                intermediateBlurCache[i][j] = Float.MIN_VALUE;
-    			dominantBiomeHeightCache[i][j] = Float.MIN_VALUE;
-    		}
-        biomeCache = new BiomeBank[16][16];
+        /*
+        This used to be a nested for loop initiating 6 2D float arrays.
+        However, neither the compiler or JVM bothered optimizing it
+        and it became a fucking hotspot. Because of that, it is
+        more appropriate to just inline it manually into this
+        disgusting monster array with hardcoded numbers because of
+        how speed sensitive this is.
+        */
+        arrayCache = new float[1536]; //6*256 for 6 separate caches
+
+        /*
+        If arrays.fill gives further speed problems, just use
+        System.arraycopy next time with a static final MIN_VALUE array
+        Problems might occur because the lib itself uses a for loop.
+        Optimization lies entirely at the mercy of the running JVM.
+        */
+        Arrays.fill(arrayCache, Float.MIN_VALUE);
+
+        biomeCache = new BiomeBank[256];
     }
 
-    // Coordinates from 0 to 15
-    private int getCoordinateInsideChunk(int j, Axis ax) {
-        return (ax == Axis.X) ? j - this.chunkX * 16 : j - this.chunkZ * 16;
-    }
 
     public float getDominantBiomeHeight(int rawX, int rawZ) {
-        return dominantBiomeHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+        /*
+          A general explanation of this shitty inlining:
+          rawX & 0xF will return internal chunk coordinates [0-15]. This
+          happens because the chunk coordinates are the LSB, so ANDing by
+          0xF will return the bits needed to give 0-15.
+         */
+        return arrayCache[(rawX&0xF)+16*(rawZ&0xF)];
     }
 
     /**
@@ -87,20 +97,15 @@ public class ChunkCache {
      * @param value dominant biome height to cache
      */
     public void cacheDominantBiomeHeight(int rawX, int rawZ, float value) {
-    	dominantBiomeHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+        arrayCache[(rawX&0xF)+16*(rawZ&0xF)] = value;
     }
 
     public double getHeightMapHeight(int rawX, int rawZ) {
-        return heightMapCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+        return arrayCache[768 + (rawX&0xF)+16*(rawZ&0xF)];
     }
 
     public short getHighestGround(int rawX, int rawZ) {
-        return highestGroundCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
-    }
-
-    //This one is swapped because it is passed straight in from elsewhere.
-    public short getTransformedHeight(int rawX, int rawZ) {
-        return transformedHeightCache[getCoordinateInsideChunk(rawX, Axis.X)][getCoordinateInsideChunk(rawZ, Axis.Z)];
+        return (short) arrayCache[1024 + (rawX&0xF)+16*(rawZ&0xF)];
     }
 
     /**
@@ -108,8 +113,12 @@ public class ChunkCache {
      * caves may modify heights.
      * @return the ACTUAL mutable copy from the cache.
      */
-    public short[][] getWriteableTransformedHeight(){
-        return transformedHeightCache;
+    public short getTransformedHeight(int chunkSubX, int chunkSubZ){
+        return (short) arrayCache[1280 + chunkSubX + 16*chunkSubZ];
+    }
+
+    public void writeTransformedHeight(int chunkSubX, int chunkSubZ, short val){
+        arrayCache[1280 + chunkSubX + 16*chunkSubZ] = val;
     }
 
     /**
@@ -119,7 +128,7 @@ public class ChunkCache {
      * @param value height to cache
      */
     public void cacheHeightMap(int rawX, int rawZ, double value) {
-        heightMapCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+        arrayCache[768 + (rawX&0xF)+16*(rawZ&0xF)] = (float) value;
     }
 
     /**
@@ -129,7 +138,7 @@ public class ChunkCache {
      * @param value height to cache
      */
     public void cacheHighestGround(int rawX, int rawZ, short value) {
-        highestGroundCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+        arrayCache[1024 + (rawX&0xF)+16*(rawZ&0xF)] = value;
     }
 
     /**
@@ -137,11 +146,13 @@ public class ChunkCache {
      * Do not use elsewhere.
      */
     public void cacheTransformedHeight(short[][] heights) {
-        this.transformedHeightCache = heights;
+        for(int i = 0; i < 16; i++)
+            for(int j = 0; j < 16; j++)
+                arrayCache[1280 + i + 16*j] = heights[i][j];
     }
     
     public float getBlurredHeight(int rawX, int rawZ) {
-        return blurredHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+        return arrayCache[256 + (rawX&0xF)+16*(rawZ&0xF)];
     }
 
     /**
@@ -149,7 +160,7 @@ public class ChunkCache {
      */
     public double getIntermediateBlurHeight(int rawX, int rawZ)
     {
-        return intermediateBlurCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+        return arrayCache[512 + (rawX&0xF)+16*(rawZ&0xF)];
     }
 
 
@@ -160,7 +171,7 @@ public class ChunkCache {
      * @param value height to cache
      */
     public void cacheBlurredHeight(int rawX, int rawZ, float value) {
-    	blurredHeightCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+        arrayCache[256 + (rawX&0xF)+16*(rawZ&0xF)] = value;
     }
 
     /**
@@ -170,12 +181,12 @@ public class ChunkCache {
      * @param value height to cache
      */
     public void cacheIntermediateBlurredHeight(int rawX, int rawZ, float value) {
-        intermediateBlurCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+        arrayCache[512 + (rawX&0xF)+16*(rawZ&0xF)] = value;
     }
 
 
     public BiomeBank getBiome(int rawX, int rawZ) {
-        return biomeCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)];
+        return biomeCache[(rawX&0xF)+16*(rawZ&0xF)];
     }
 
     /**
@@ -185,14 +196,14 @@ public class ChunkCache {
      * @param value biome to cache
      */
     public BiomeBank cacheBiome(int rawX, int rawZ, BiomeBank value) {
-        biomeCache[getCoordinateInsideChunk(rawZ, Axis.Z)][getCoordinateInsideChunk(rawX, Axis.X)] = value;
+        biomeCache[(rawX&0xF)+16*(rawZ&0xF)] = value;
         return value;
     }
 
-    public boolean areCoordsInside(int rawX, int rawZ) {
-        return chunkX == rawX >> 4 && chunkZ == rawZ >> 4;
-    }
-
+    /**
+     * Nobody benchmarked the performance of this hashcode.
+     * oh well.
+     */
     @Override
     public int hashCode() {
         return tw.hashCode() ^ (chunkX + chunkZ * 31);
@@ -200,8 +211,9 @@ public class ChunkCache {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof ChunkCache)) return false;
-        ChunkCache chunk = (ChunkCache) obj;
-        return this.tw == chunk.tw && this.chunkX == chunk.chunkX && this.chunkZ == chunk.chunkZ;
+        if (!(obj instanceof ChunkCache chunk)) return false;
+        return this.tw == chunk.tw
+                && this.chunkX == chunk.chunkX
+                && this.chunkZ == chunk.chunkZ;
     }
 }

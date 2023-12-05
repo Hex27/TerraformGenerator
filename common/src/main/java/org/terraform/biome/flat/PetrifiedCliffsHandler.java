@@ -7,6 +7,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -108,7 +109,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
     
 
     @Override
-    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
 
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -164,7 +165,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
                                         Material.COBBLESTONE,
                                         Material.MOSSY_COBBLESTONE
                                 ));
-                        heightChanges[x][z] = (short) Math.max(heightChanges[x][z], height+y);
+                        cache.writeTransformedHeight (x,z, (short) Math.max(cache.getTransformedHeight(x,z), height+y));
                     }
                 }
                 

@@ -6,6 +6,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -46,7 +47,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
 
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -92,7 +93,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
                         + (64 * Math.pow(d, 7) * heightFactor)
                         + detailsValue * heightFactor * 0.5;
 
-                heightChanges[x][z] = (short) (Math.round(platformHeight)+height);
+                cache.writeTransformedHeight (x,z,(short) (Math.round(platformHeight)+height));
                 for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
                     Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
                             Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE);

@@ -136,7 +136,7 @@ public enum HeightMap {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
 
         double cachedValue = cache.getHeightMapHeight(x, z);
-        if (cachedValue != 0) return cachedValue;
+        if (cachedValue != Float.MIN_VALUE) return cachedValue;
 
         double height = getRiverlessHeight(tw,x,z);
 

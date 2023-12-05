@@ -173,7 +173,7 @@ public class MegaChunk {
         return z;
     }
     
-    private static int blockCoordsToMega(int coord) {
+    private static int blockCoordsToMega(int coord) {.
     	if(coord >= 0) {
     		return (int) Math.floor(coord/megaChunkBlockWidth);
     	}

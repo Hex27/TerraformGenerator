@@ -64,14 +64,13 @@ public class TerraformGenerator extends ChunkGenerator {
 
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
         ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
-        short[][] transformedHeight = cache.getWriteableTransformedHeight();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
 
                 double height = HeightMap.getPreciseHeight(tw, rawX, rawZ); //bank.getHandler().calculateHeight(tw, rawX, rawZ);
-                transformedHeight[x][z] = (short) height;
+                cache.writeTransformedHeight(x,z, (short) height);
 
                 BiomeBank bank = tw.getBiomeBank(rawX, (int)height, rawZ);//BiomeBank.calculateBiome(tw, rawX, height, rawZ);
 
@@ -92,7 +91,7 @@ public class TerraformGenerator extends ChunkGenerator {
                         chunkData.setBlock(x, y, z, stoneType);
                     }
                     else if(mustUpdateHeight) //if not, update transformed height
-                        transformedHeight[x][z] = (short) (y-1);
+                        cache.writeTransformedHeight(x,z, (short) (y-1));
 
                 }
             }
@@ -106,14 +105,13 @@ public class TerraformGenerator extends ChunkGenerator {
     public void generateSurface(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
         ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
-        short[][] transformedHeight = cache.getWriteableTransformedHeight();
 
         List<BiomeHandler> biomesToTransform = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
             for(int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
                 int rawZ = chunkZ * 16 + z;
-                int height = transformedHeight[x][z]; //NOT HeightMap
+                int height = cache.getTransformedHeight(x,z); //NOT HeightMap
                 BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);
                 int index = 0;
                 Material[] crust = bank.getHandler().getSurfaceCrust(random);
@@ -137,7 +135,7 @@ public class TerraformGenerator extends ChunkGenerator {
         //Actually apply transformations. Keep track of height changes
         //All writes will update the cache accordingly.
         for (BiomeHandler handler : biomesToTransform) {
-            handler.transformTerrain(transformedHeight, tw, random, chunkData, chunkX, chunkZ);
+            handler.transformTerrain(cache, tw, random, chunkData, chunkX, chunkZ);
         }
     }
 
@@ -162,7 +160,6 @@ public class TerraformGenerator extends ChunkGenerator {
     public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
         ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
-        short[][] transformedHeight = cache.getWriteableTransformedHeight();
 
         for(int x = 0; x < 16; x++)
             for(int z = 0; z < 16; z++)
@@ -176,7 +173,8 @@ public class TerraformGenerator extends ChunkGenerator {
                     if(tw.noiseCaveRegistry.canGenerateCarve(rawX,y,rawZ,height))
                     {
                         chunkData.setBlock(x, y, z, Material.CAVE_AIR);
-                        transformedHeight[x][z] = (short) (y-1);
+                        if(mustUpdateHeight)
+                            cache.writeTransformedHeight (x,z, (short) (y-1));
                     }else mustUpdateHeight = false;
                 }
             }

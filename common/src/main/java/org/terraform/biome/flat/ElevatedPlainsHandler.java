@@ -6,6 +6,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -79,7 +80,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(short[][] heightChanges, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
 
         int heightFactor = 15;
 
@@ -98,7 +99,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
                 for (int y = 1; y <= noiseValue; y++) {
                     chunk.setBlock(x, height + y, z, getRockAt(random, x,y,z));
                 }
-                heightChanges[x][z] = (short) height;
+                cache.writeTransformedHeight(x,z, (short) height);
             }
         }
     }
