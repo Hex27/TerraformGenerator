@@ -17,6 +17,7 @@ import org.terraform.structure.stronghold.StrongholdPopulator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * This class will handle the java threads that queue structures to be
@@ -33,6 +34,8 @@ public class StructurePregenerator {
     //Used by TerraformGenerator to give information to the structurepregenerator.
     private static final ConcurrentHashMap<ChunkCache, ChunkCache> READ_ONLY_CACHE = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<MegaChunkKey, PopulatorDataStructurePregen> PREGENERATION_TASKS = new ConcurrentHashMap<>();
+
+    public static final ConcurrentLinkedQueue<StructurePregenRunnable> threads = new ConcurrentLinkedQueue<>();
 
     //Mutated by StructurePregenRunnable
     public static final HashSet<MegaChunkKey> completed = new HashSet<>();
@@ -82,14 +85,27 @@ public class StructurePregenerator {
             markFinished(mck);
             return;
         }
-        //If it is not ready, spinlock
-        pregen.spinlock();
+        //If it is not ready, spinlock.
+        //If the thread wasn't started, start it.
+        TerraformGeneratorPlugin.logger.info("Entering spin: " + data.getChunkX()+"," + data.getChunkZ());
+        if(!pregen.getPregeneratorThread().hasFinished) {
+            if(!pregen.getPregeneratorThread().isAlive())
+                pregen.getPregeneratorThread().start();
+            pregen.spinlock();
+        }
         pregen.flush(data);
+        TerraformGeneratorPlugin.logger.info("Flushed on " + data.getChunkX()+"," + data.getChunkZ());
     }
 
     public static void markFinished(MegaChunkKey mck)
     {
-        PREGENERATION_TASKS.remove(mck);
+        PopulatorDataStructurePregen pregen = PREGENERATION_TASKS.remove(mck);
+        if(pregen != null) {
+            TerraformGeneratorPlugin.logger.info("Finished structure for " + mck.getMc().getX() + "," + mck.getMc().getZ());
+            while(threads.size() > 0 && threads.peek().hasFinished) threads.remove();
+            if(threads.size() > 0 && !threads.peek().isAlive())
+                threads.peek().start();
+        }
     }
     public static void markFinished(TerraformWorld tw, MegaChunk mc)
     {
