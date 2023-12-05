@@ -24,7 +24,6 @@ import org.bukkit.craftbukkit.v1_20_R2.util.RandomSourceWrapper;
 import org.bukkit.entity.EntityType;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
-import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
 import org.terraform.coregen.populatordata.IPopulatorDataBeehiveEditor;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -34,7 +33,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
 
-public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDataBaseHeightAccess, IPopulatorDataBeehiveEditor {
+public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDataBeehiveEditor {
     private final int chunkX;
     private final int chunkZ;
     private int radius = 1;
@@ -192,13 +191,6 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 	@Override
 	public TerraformWorld getTerraformWorld() {
 		return gen.getTerraformWorld();
-	}
-
-	@Override
-	public int getBaseHeight(int rawX, int rawZ) {
-		//(int i, int j, HeightMap.Type heightmap_type, LevelHeightAccessor levelheightaccessor, RandomState randomstate)
-		return 100;
-		//return gen.a(rawX, rawZ, HeightMap.Type.a, this.rlwa);
 	}
 
 	@Override

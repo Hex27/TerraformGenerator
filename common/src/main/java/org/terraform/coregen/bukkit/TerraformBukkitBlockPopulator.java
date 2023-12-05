@@ -3,7 +3,14 @@ package org.terraform.coregen.bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
+import org.bukkit.generator.LimitedRegion;
+import org.bukkit.generator.WorldInfo;
+import org.jetbrains.annotations.NotNull;
+import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
+import org.terraform.coregen.populatordata.PopulatorDataStructurePregen;
+import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
+import org.terraform.structure.StructurePregenerator;
 
 import java.util.Random;
 
@@ -34,16 +41,20 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
         //Run the fixers first
         this.nativePatcherPopulator.populate(world, random, chunk);
         this.physicsUpdaterPopulator.populate(world, random, chunk);
-        
-        //Populate structures next
+
+        //For strongholds as they don't use the regular structure system
         this.structurePopulator.populate(world, random, chunk);
 
         //Populate animals last
         this.animalPopulator.populate(world, random, chunk);
     }
 
-	public TerraformStructurePopulator getStructurePopulator() {
-		return structurePopulator;
-	}
-    
+    //After all the other stuff, populate structures last
+    @Override
+    public void populate(@NotNull WorldInfo worldInfo, @NotNull Random random,
+                         int chunkX, int chunkZ,
+                         @NotNull LimitedRegion limitedRegion)
+    {
+        StructurePregenerator.flushChanges(new PopulatorDataSpigotAPI(limitedRegion, tw, chunkX, chunkZ));
+    }
 }
