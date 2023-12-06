@@ -58,11 +58,13 @@ public class TerraformGenerator extends ChunkGenerator {
 		}
     }
 
-    public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
-        TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
+    @Override
+    public boolean isParallelCapable() {
+        return true;
+    }
 
-        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
-        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+    public void generateNoise(TerraformWorld tw, int chunkX, int chunkZ, @NotNull ChunkData chunkData, @NotNull ChunkCache cache)
+    {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
@@ -70,6 +72,8 @@ public class TerraformGenerator extends ChunkGenerator {
 
                 double height = HeightMap.getPreciseHeight(tw, rawX, rawZ); //bank.getHandler().calculateHeight(tw, rawX, rawZ);
                 cache.writeTransformedHeight(x,z, (short) height);
+
+                BiomeBank bank = tw.getBiomeBank(rawX, (int)height, rawZ);//BiomeBank.calculateBiome(tw, rawX, height, rawZ);
 
                 boolean mustUpdateHeight = true;
                 //Fill stone up to the world height. Differentiate between deepslate or not.
@@ -93,6 +97,14 @@ public class TerraformGenerator extends ChunkGenerator {
                 }
             }
         }
+    }
+
+    public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
+        TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
+
+        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+        generateNoise(tw,chunkX,chunkZ,chunkData,cache);
     }
 
     /**
@@ -154,10 +166,7 @@ public class TerraformGenerator extends ChunkGenerator {
         }
     }
 
-    @Override
-    public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
-        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
-        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+    public void generateCaves(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull ChunkData chunkData, @NotNull ChunkCache cache) {
         for(int x = 0; x < 16; x++)
             for(int z = 0; z < 16; z++)
             {
@@ -175,8 +184,14 @@ public class TerraformGenerator extends ChunkGenerator {
                     }else mustUpdateHeight = false;
                 }
             }
+    }
 
-        //Tell the structure pre-generator to begin generating requested structures.
+    @Override
+    public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
+        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+        generateCaves(tw,chunkX,chunkZ,chunkData,cache);
+        //Push from here, as the other one tries to use the method above
         StructurePregenerator.pushChunkCache(this, cache);
     }
 
@@ -186,36 +201,12 @@ public class TerraformGenerator extends ChunkGenerator {
     }
 
     @Override
-    public @NotNull List<BlockPopulator> getDefaultPopulators(@NotNull World world) {
+    public @NotNull List<BlockPopulator> getDefaultPopulators(World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return new ArrayList<>(){{
             add(new TerraformPopulator(tw));
             add(new TerraformBukkitBlockPopulator(tw));
         }};
-    }
-
-    //This method ONLY does height updates, and writes nothing.
-    public void buildFilledCache(TerraformWorld tw, int chunkX, int chunkZ, ChunkCache cache){
-        TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int rawX = chunkX * 16 + x;
-                int rawZ = chunkZ * 16 + z;
-
-                double height = HeightMap.getPreciseHeight(tw, rawX, rawZ); //bank.getHandler().calculateHeight(tw, rawX, rawZ);
-                cache.writeTransformedHeight(x,z, (short) height);
-
-                for(int y = (int) height; y >= TerraformGeneratorPlugin.injector.getMinY(); y--)
-                {
-                    //Set stone if a cave CANNOT be carved here
-                    if(tw.noiseCaveRegistry.canNoiseCarve(rawX,y,rawZ,height)
-                     || tw.noiseCaveRegistry.canGenerateCarve(rawX,y,rawZ,height))
-                    {
-                        cache.writeTransformedHeight(x,z, (short) (y-1));
-                    }
-                }
-            }
-        }
     }
 
     //Do exactly 0 of this, TFG now handles ALL of it.
@@ -245,11 +236,5 @@ public class TerraformGenerator extends ChunkGenerator {
 
     public boolean shouldGenerateStructures() {
         return false;
-    }
-
-    //Not sure what this is for
-    @Override
-    public boolean isParallelCapable() {
-        return true;
     }
 }

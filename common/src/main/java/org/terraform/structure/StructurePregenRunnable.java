@@ -1,11 +1,20 @@
 package org.terraform.structure;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.material.MaterialData;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataStructurePregen;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.MegaChunkKey;
 import org.terraform.data.TerraformWorld;
+import org.terraform.event.TerraformStructureSpawnEvent;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +42,7 @@ public class StructurePregenRunnable extends Thread {
     public void run() {
         if(spop != null)
         {
+            PregenChunkData pcd = new PregenChunkData(); //This is a shell class that discards all data
             /*
             Begin by ensuring that the boundaries are generated and ready for use
              */
@@ -47,7 +57,9 @@ public class StructurePregenRunnable extends Thread {
                     ChunkCache query = new ChunkCache(tw,targetX<<4,0,targetZ<<4);
                     readOnlyCache.computeIfAbsent(query, (key)->{
                         key.initInternalCache();
-                        generator.buildFilledCache(tw ,targetX, targetZ, key);
+                        //The null is on purpose. Please do crash if you try to use that shit
+                        generator.generateNoise(tw ,targetX, targetZ, pcd, key);
+                        generator.generateCaves(tw ,targetX, targetZ, pcd, key);
                         return key;
                     });
                 }
@@ -70,4 +82,75 @@ public class StructurePregenRunnable extends Thread {
 //        //would be great to debug
 //        while(!hasFinished) Thread.onSpinWait();
 //    }
+
+    private class PregenChunkData implements ChunkGenerator.ChunkData{
+        //We only care about this one.
+        //x,z in [0,15]
+        @Override
+        public void setBlock(int x, int y, int z, @NotNull Material material) {
+        }
+        @Override
+        public void setBlock(int i, int i1, int i2, @NotNull BlockData blockData) {
+
+        }
+
+        @Override
+        public int getMinHeight() {
+            return 0; //idc
+        }
+
+        @Override
+        public int getMaxHeight() {
+            return 0; //idc
+        }
+
+        @NotNull
+        @Override
+        public Material getType(int i, int i1, int i2) {
+            return null;
+        }
+
+        @NotNull
+        @Override
+        public BlockData getBlockData(int i, int i1, int i2) {
+            return null;
+        }
+
+        //Ignore these.
+        @NotNull
+        @Override
+        public Biome getBiome(int i, int i1, int i2) {
+            return null;
+        }
+        @Override
+        public void setBlock(int i, int i1, int i2, @NotNull MaterialData materialData) {
+
+        }
+
+        @Override
+        public void setRegion(int i, int i1, int i2, int i3, int i4, int i5, @NotNull Material material) {
+
+        }
+
+        @Override
+        public void setRegion(int i, int i1, int i2, int i3, int i4, int i5, @NotNull MaterialData materialData) {
+
+        }
+
+        @Override
+        public void setRegion(int i, int i1, int i2, int i3, int i4, int i5, @NotNull BlockData blockData) {
+
+        }
+
+        @NotNull
+        @Override
+        public MaterialData getTypeAndData(int i, int i1, int i2) {
+            return null;
+        }
+
+        @Override
+        public byte getData(int i, int i1, int i2) {
+            return 0;
+        }
+    }
 }
