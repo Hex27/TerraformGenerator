@@ -19,7 +19,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class StructurePregenRunnable extends Thread {
+public class StructurePregenRunnable implements Runnable {
 
     private final TerraformWorld tw;
     private final MegaChunk mc;
@@ -27,7 +27,7 @@ public class StructurePregenRunnable extends Thread {
     private final StructurePopulator spop;
     private final ConcurrentHashMap<ChunkCache, ChunkCache> readOnlyCache;
     private final TerraformGenerator generator;
-    public volatile boolean hasFinished = false;
+    volatile boolean hasFinished = false;
 
     public StructurePregenRunnable(TerraformWorld tw, MegaChunk mc, PopulatorDataStructurePregen data, StructurePopulator spop, ConcurrentHashMap<ChunkCache, ChunkCache> readOnlyCache, TerraformGenerator generator) {
         this.tw = tw;

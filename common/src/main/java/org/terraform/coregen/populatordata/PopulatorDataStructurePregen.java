@@ -5,11 +5,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.bukkit.scheduler.BukkitTask;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunkKey;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -19,12 +21,9 @@ import org.terraform.structure.StructurePregenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
 /**
@@ -44,7 +43,7 @@ public class PopulatorDataStructurePregen extends PopulatorDataAbstract implemen
     private final MegaChunkKey mck;
     private final TerraformWorld tw;
     private final int chunkX,chunkZ;
-    private final StructurePregenRunnable pregeneratorThread;
+    private final Thread pregeneratorThread;
     private final ConcurrentHashMap<ChunkCache, ChunkCache> readOnlyCache;
 
     private final StructurePopulator structurePop;
@@ -60,10 +59,6 @@ public class PopulatorDataStructurePregen extends PopulatorDataAbstract implemen
     //This is the lambda function used to spawn entities or apply loot tables etc
     private final HashMap<SimpleChunkLocation, List<Consumer<PopulatorDataAbstract>>> lambdas = new HashMap<>();
 
-    public StructurePregenRunnable getPregeneratorThread() {
-        return pregeneratorThread;
-    }
-
     public PopulatorDataStructurePregen(MegaChunkKey mck, int chunkX, int chunkZ, StructurePopulator structurePop, ConcurrentHashMap<ChunkCache, ChunkCache> readOnlyCache, TerraformGenerator generator) {
         this.mck = mck;
         this.chunkX = chunkX;
@@ -71,11 +66,8 @@ public class PopulatorDataStructurePregen extends PopulatorDataAbstract implemen
         this.tw = mck.getTw();
         this.readOnlyCache = readOnlyCache;
         this.structurePop = structurePop;
-        this.pregeneratorThread = new StructurePregenRunnable(tw, mck.getMc(),this,structurePop,readOnlyCache,generator);
-        StructurePregenerator.threads.add(this.pregeneratorThread);
-        if(StructurePregenerator.threads.size() < 2) {
-            this.pregeneratorThread.start();
-        }
+        this.pregeneratorThread = new Thread(new StructurePregenRunnable(tw, mck.getMc(),this,structurePop,readOnlyCache,generator));
+        this.pregeneratorThread.start();
     }
 
     public void flush(PopulatorDataSpigotAPI data)
@@ -89,7 +81,7 @@ public class PopulatorDataStructurePregen extends PopulatorDataAbstract implemen
                 int x = i % 16;
                 int z = ((i-x) % 256)/16;
                 int y = (22055-x-z*16)/256 + TerraformGeneratorPlugin.injector.getMinY();
-                x += data.getChunkX()*16; z += data.getChunkZ()*16;
+                x += chunkX*16; z += chunkZ*16;
                 data.setBlockData(x,y,z,changes[i]);
             }
 
@@ -104,7 +96,11 @@ public class PopulatorDataStructurePregen extends PopulatorDataAbstract implemen
     }
 
     public void spinlock(){
-        while(!pregeneratorThread.hasFinished) Thread.onSpinWait();
+        try {
+            pregeneratorThread.join();
+        } catch(InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
