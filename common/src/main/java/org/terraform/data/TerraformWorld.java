@@ -27,7 +27,7 @@ public class TerraformWorld {
     private final TerraformBukkitBlockPopulator bukkitBlockPopulator;
 
     public final NoiseCaveRegistry noiseCaveRegistry;
-    private TerraformWorld(String name, long seed) {
+    public TerraformWorld(String name, long seed) {
         this.worldName = name;
         this.seed = seed;
         this.bukkitBlockPopulator = new TerraformBukkitBlockPopulator(this);

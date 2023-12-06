@@ -5,8 +5,6 @@ import org.terraform.biome.BiomeSection;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class MegaChunk {
@@ -99,18 +97,7 @@ public class MegaChunk {
         //TerraformGeneratorPlugin.logger.info("MC(" + this.x + "," + this.z + "):(" + (lowX + megaChunkBlockWidth/2) + "," + (lowZ + megaChunkBlockWidth/2) + ")");
         return new int[]{centerOfSectionX, centerOfSectionZ};
     }
-
-    public List<int[]> getChunkCoordinates(){
-        ArrayList<int[]> scls = new ArrayList<>();
-        int[] low = getLowerCornerChunkCoords();
-        int[] high = getUpperCornerChunkCoords();
-        for(int nx = low[0]; nx <= high[0]; nx++)
-            for(int nz = low[1]; nz <= high[1]; nz++)
-            {
-                scls.add(new int[]{nx,nz});
-            }
-        return scls;
-    }
+    
 
     public int[] getCenterBiomeSectionChunkCoords() {
     	int[] coords = getCenterBiomeSectionBlockCoords();
@@ -160,7 +147,8 @@ public class MegaChunk {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof MegaChunk megaChunk) {
+        if (obj instanceof MegaChunk) {
+            MegaChunk megaChunk = (MegaChunk) obj;
             return this.x == megaChunk.x && this.z == megaChunk.z;
         }
         return false;
@@ -185,9 +173,9 @@ public class MegaChunk {
         return z;
     }
     
-    private static int blockCoordsToMega(int coord) {
+    private static int blockCoordsToMega(int coord) {.
     	if(coord >= 0) {
-    		return coord/megaChunkBlockWidth;
+    		return (int) Math.floor(coord/megaChunkBlockWidth);
     	}
     	else
     	{

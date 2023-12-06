@@ -14,20 +14,16 @@ import org.terraform.cave.NoiseCaveRegistry;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformPopulator;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.MegaChunkKey;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
-import org.terraform.structure.StructurePregenerator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 public class TerraformGenerator extends ChunkGenerator {
@@ -63,8 +59,11 @@ public class TerraformGenerator extends ChunkGenerator {
         return true;
     }
 
-    public void generateNoise(TerraformWorld tw, int chunkX, int chunkZ, @NotNull ChunkData chunkData, @NotNull ChunkCache cache)
-    {
+    public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
+        TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
+
+        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
@@ -97,20 +96,12 @@ public class TerraformGenerator extends ChunkGenerator {
                 }
             }
         }
-    }
 
-    public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
-        TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
-
-        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
-        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
-        generateNoise(tw,chunkX,chunkZ,chunkData,cache);
     }
 
     /**
      * Responsible for setting surface biome blocks and biomeTransforms
      */
-    @Override
     public void generateSurface(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
         ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
@@ -166,7 +157,10 @@ public class TerraformGenerator extends ChunkGenerator {
         }
     }
 
-    public void generateCaves(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull ChunkData chunkData, @NotNull ChunkCache cache) {
+    public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
+        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+
         for(int x = 0; x < 16; x++)
             for(int z = 0; z < 16; z++)
             {
@@ -184,15 +178,6 @@ public class TerraformGenerator extends ChunkGenerator {
                     }else mustUpdateHeight = false;
                 }
             }
-    }
-
-    @Override
-    public void generateCaves(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
-        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
-        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
-        generateCaves(tw,chunkX,chunkZ,chunkData,cache);
-        //Push from here, as the other one tries to use the method above
-        StructurePregenerator.pushChunkCache(this, cache);
     }
 
     @Override

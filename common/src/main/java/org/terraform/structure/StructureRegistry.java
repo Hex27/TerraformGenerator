@@ -1,7 +1,6 @@
 package org.terraform.structure;
 
 import org.terraform.data.MegaChunk;
-import org.terraform.data.MegaChunkKey;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.ancientcity.AncientCityPopulator;
@@ -217,5 +216,27 @@ public class StructureRegistry {
             }
         }
         return pops;
+    }
+    
+    private static class MegaChunkKey {
+    	private TerraformWorld tw;
+    	private MegaChunk mc;
+		public MegaChunkKey(TerraformWorld tw, MegaChunk mc) {
+			super();
+			this.tw = tw;
+			this.mc = mc;
+		}
+
+	    @Override
+	    public int hashCode() {
+	        return tw.hashCode() ^ (mc.getX() + mc.getZ() * 31);
+	    }
+
+	    @Override
+	    public boolean equals(Object obj) {
+	        if (!(obj instanceof MegaChunkKey)) return false;
+	        MegaChunkKey other = (MegaChunkKey) obj;
+	        return this.tw.equals(other.tw) && mc.getX() == other.mc.getX() && mc.getZ() == other.mc.getZ();
+	    }
     }
 }
