@@ -7,6 +7,7 @@ import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.ChunkCacheLoader;
@@ -94,7 +95,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
                 .maximumSize(TConfigOption.DEVSTUFF_CHUNKBIOMES_SIZE.getInt())
                 .build(new CacheLoader<>() {
                     @Override
-                    public EnumSet<BiomeBank> load(ChunkCache key) {
+                    public @NotNull EnumSet<BiomeBank> load(@NotNull ChunkCache key) {
                         EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
                         int gridX = key.chunkX * 16;
                         int gridZ = key.chunkZ * 16;
@@ -151,7 +152,6 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     
     /**
      * Legacy thing. Consider removal.
-     * @param event
      * @deprecated
      */
     @Deprecated
@@ -185,6 +185,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onWorldInit(WorldInitEvent event) {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
@@ -204,7 +205,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     }
 
     @Override
-    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+    public ChunkGenerator getDefaultWorldGenerator(@NotNull String worldName, String id) {
         return new TerraformGenerator();
     }
 

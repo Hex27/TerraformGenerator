@@ -38,23 +38,14 @@ public class ScarletForestBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                Material base = data.getType(x, y, z);
-                
-                //Remove submerged grass
-                if(base == Material.GRASS_BLOCK && data.getType(x, y+1, z) == Material.WATER)
-                	data.setType(x,y,z,Material.DIRT);
-                
-                if (base != Material.SAND && base != Material.GRASS_BLOCK) continue;
-
-                y++;
-            }
-        }
+        //WHAT THE FUCK DO YOU MEAN REMOVE SUBMERGED GRASS??? WHY WAS IT BEING SET???
+//        Material base = data.getType(x, y, z);
+//
+//        //Remove submerged grass
+//        if(base == Material.GRASS_BLOCK && data.getType(x, y+1, z) == Material.WATER)
+//            data.setType(x,y,z,Material.DIRT);
     }
 
 	@Override

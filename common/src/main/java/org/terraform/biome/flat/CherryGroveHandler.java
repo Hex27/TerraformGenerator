@@ -48,27 +48,22 @@ public class CherryGroveHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (world.getBiomeBank(x,z) != BiomeBank.CHERRY_GROVE) continue;
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                	
-                    if (GenUtils.chance(random, 2, 10)) { //Grass
-                        if (GenUtils.chance(random, 8, 10)) {
-                            //Pink petals. No longer generate tall grass.
-                            if (Version.isAtLeast(20) && GenUtils.chance(random, 6, 10)) {
-                                data.setBlockData(x,y+1,z, OneTwentyBlockHandler.getPinkPetalData(GenUtils.randInt(1,4)));
-                            }else
-                                data.setType(x, y + 1, z, Material.GRASS);
-                        } else {
-                            if (GenUtils.chance(random, 7, 10))
-                                data.setType(x, y + 1, z, Material.ALLIUM);
-                            else
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.PEONY);
-                        }
-                    }
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
+
+            if (GenUtils.chance(random, 2, 10)) { //Grass
+                if (GenUtils.chance(random, 8, 10)) {
+                    //Pink petals. No longer generate tall grass.
+                    if (Version.isAtLeast(20) && GenUtils.chance(random, 6, 10)) {
+                        data.setBlockData(rawX,surfaceY+1,rawZ, OneTwentyBlockHandler.getPinkPetalData(GenUtils.randInt(1,4)));
+                    }else
+                        data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                } else {
+                    if (GenUtils.chance(random, 7, 10))
+                        data.setType(rawX, surfaceY + 1, rawZ, Material.ALLIUM);
+                    else
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.PEONY);
                 }
             }
         }

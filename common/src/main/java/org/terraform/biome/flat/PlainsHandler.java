@@ -36,7 +36,28 @@ public class PlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK &&
+                !BlockUtils.isWet(new SimpleBlock(data,rawX,surfaceY,rawZ))) {
+
+            if (GenUtils.chance(random, 1, 10)) { //Grass
+                if (GenUtils.chance(random, 6, 10)) {
+                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    if (random.nextBoolean()) {
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                    }
+                } else {
+                    if (GenUtils.chance(random, 7, 10))
+                        data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                    else
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, BlockUtils.pickTallFlower());
+                }
+            }
+        }
+    }
+
+	@Override
+	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
         //Pumpkin Patch
         if (GenUtils.chance(1, 1000)) {
             for (int i = 0; i < GenUtils.randInt(5, 10); i++) {
@@ -44,7 +65,7 @@ public class PlainsHandler extends BiomeHandler {
                 if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
                 SimpleBlock target = new SimpleBlock(data, loc[0], GenUtils.getHighestGround(data, loc[0], loc[2])+1, loc[2]);
                 if(!target.getType().isSolid())
-                	target.setType(Material.PUMPKIN);
+                    target.setType(Material.PUMPKIN);
             }
         }
 
@@ -55,38 +76,10 @@ public class PlainsHandler extends BiomeHandler {
                 if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
                 SimpleBlock target = new SimpleBlock(data, loc[0], GenUtils.getHighestGround(data, loc[0], loc[2])+1, loc[2]);
                 if(!target.getType().isSolid())
-                	target.setType(Material.MELON);
+                    target.setType(Material.MELON);
             }
         }
-        
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK && 
-                		!BlockUtils.isWet(new SimpleBlock(data,x,y,z))) {
-                	
-                    if (GenUtils.chance(random, 1, 10)) { //Grass
-                        if (GenUtils.chance(random, 6, 10)) {
-                            data.setType(x, y + 1, z, Material.GRASS);
-                            if (random.nextBoolean()) {
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                            }
-                        } else {
-                            if (GenUtils.chance(random, 7, 10))
-                                data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                            else
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, BlockUtils.pickTallFlower());
-                        }
-                    }
-                }
-            }
-        }
-    }
 
-	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		
 		//Small trees or grass poffs
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
         

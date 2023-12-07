@@ -59,45 +59,29 @@ public class MuddyBogHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (world.getBiomeBank(x,z) != BiomeBank.MUDDY_BOG) continue;
-
-                SimpleBlock block = new SimpleBlock(data,x,y,z);
-                if(block.getRelative(0,1,0).getType() == Material.AIR &&
-                		block.getType() == Material.GRASS_BLOCK) {
-                	if(GenUtils.chance(random, 1, 85))
-                		block.getRelative(0,1,0).setType(Material.DEAD_BUSH);
-                	else if(GenUtils.chance(random, 1, 85))
-                		block.getRelative(0,1,0).setType(Material.BROWN_MUSHROOM);
-                	else if(GenUtils.chance(random, 1, 85))
-                		block.getRelative(0,1,0).setType(Material.GRASS);
-                	else if(GenUtils.chance(random, 1, 85))
-                		BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_GRASS);
-                	else if(GenUtils.chance(random, 1, 300)) 
-                	{//Dripstone Cluster
-                		BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.5f, block, OneOneSevenBlockHandler.DRIPSTONE_BLOCK);
-                		if(GenUtils.chance(random, 1, 7))
-                			OneOneSevenBlockHandler.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(0,1,0));
-                		for(BlockFace face:BlockUtils.xzPlaneBlockFaces)
-                			if(GenUtils.chance(random, 1, 7))
-                    			OneOneSevenBlockHandler.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(face).getGround().getRelative(0,1,0));
-                	}
-                		
-                }
-
-                //Mud
-                //Weirdly, STRANGELY, mud is not brown, it is grey
-                //It looks absolutely hideous with the brown colour palatte.
-                //Guess there is no mud in the muddy bog. Wee.
-//                if(Version.isAtLeast(1.19))
-//	                if (GenUtils.chance(random, 3, 1000)) {
-//	                	BlockUtils.replaceCircularPatch(random.nextInt(9999), 3f, new SimpleBlock(data,x,y,z), OneOneNineBlockHandler.MUD);
-//	                }
+        SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
+        if(block.getRelative(0,1,0).getType() == Material.AIR &&
+                block.getType() == Material.GRASS_BLOCK) {
+            if(GenUtils.chance(random, 1, 85))
+                block.getRelative(0,1,0).setType(Material.DEAD_BUSH);
+            else if(GenUtils.chance(random, 1, 85))
+                block.getRelative(0,1,0).setType(Material.BROWN_MUSHROOM);
+            else if(GenUtils.chance(random, 1, 85))
+                block.getRelative(0,1,0).setType(Material.GRASS);
+            else if(GenUtils.chance(random, 1, 85))
+                BlockUtils.setDoublePlant(data, rawX, surfaceY+1, rawZ, Material.TALL_GRASS);
+            else if(GenUtils.chance(random, 1, 300))
+            {//Dripstone Cluster
+                BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.5f, block, OneOneSevenBlockHandler.DRIPSTONE_BLOCK);
+                if(GenUtils.chance(random, 1, 7))
+                    OneOneSevenBlockHandler.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(0,1,0));
+                for(BlockFace face:BlockUtils.xzPlaneBlockFaces)
+                    if(GenUtils.chance(random, 1, 7))
+                        OneOneSevenBlockHandler.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(face).getGround().getRelative(0,1,0));
             }
+
         }
     }
 

@@ -67,47 +67,25 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        boolean spawnedWaterfall = false;
-    	for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                
-                //Don't touch submerged blocks
-                if(y < TerraformGenerator.seaLevel)
-                	continue;
-                
-                //Make patches of dirt that extend on the mountain sides
-                if (GenUtils.chance(random, 1, 25)) {
-                    dirtStack(data, random, x, y, z);
-                    for (int nx = -2; nx <= 2; nx++)
-                        for (int nz = -2; nz <= 2; nz++) {
-                            if (GenUtils.chance(random, 1, 5)) continue;
-                            y = GenUtils.getHighestGround(data, x + nx, z + nz);
-                            
-                            //Another check, make sure relative position isn't underwater.
-                            if(y < TerraformGenerator.seaLevel)
-                            	continue;
-                            dirtStack(data, random, x + nx, y, z + nz);
-                        }
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        //Don't touch submerged blocks
+        if(surfaceY < TerraformGenerator.seaLevel)
+            return;
+        //Make patches of dirt that extend on the mountain sides
+        if (GenUtils.chance(random, 1, 25)) {
+            dirtStack(data, random, rawX, surfaceY, rawZ);
+            for (int nx = -2; nx <= 2; nx++)
+                for (int nz = -2; nz <= 2; nz++) {
+                    if (GenUtils.chance(random, 1, 5)) continue;
+                    surfaceY = GenUtils.getHighestGround(data, rawX + nx, rawZ + nz);
+
+                    //Another check, make sure relative position isn't underwater.
+                    if(surfaceY < TerraformGenerator.seaLevel)
+                        continue;
+                    dirtStack(data, random, rawX + nx, surfaceY, rawZ + nz);
                 }
-                
-                //This area is steep and could have been a river
-                //Waterfalls only spawn 1 in 30 times (rolled after checking position.).
-                if(!spawnedWaterfall)
-	                if(HeightMap.getTrueHeightGradient(data, x, z, 3) > 1.5)
-		                if(HeightMap.CORE.getHeight(tw, x, z) - HeightMap.getRawRiverDepth(tw, x, z) < TerraformGenerator.seaLevel) {
-		                	//If this face is at least 4 blocks wide, carve a waterfall opening
-		                	SimpleBlock block = new SimpleBlock(data,x,y,z);
-		                	if(checkWaterfallSpace(block) 
-		                			&& GenUtils.chance(tw.getHashedRand(x, y, z), 1, 30)) {
-		                		block = block.getRelative(0,-4,0);
-		                		placeWaterFall(tw, x + 11*z + 31*y, block);
-		                		spawnedWaterfall = true;
-		                	}
-		                }
-            }
         }
+
     }
     
     public static void placeWaterFall(TerraformWorld tw, int seed, SimpleBlock base) {
@@ -154,7 +132,26 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		//Small trees
+
+        //Waterfalls only spawn 1 in 30 times (rolled after checking position.).
+        for(int rawX = data.getChunkX()*16; rawX < data.getChunkX()*16+16; rawX++)
+            for(int rawZ = data.getChunkZ()*16; rawZ < data.getChunkZ()*16+16; rawZ++)
+            {
+                int surfaceY = GenUtils.getTransformedHeight(data,rawX,rawZ);
+                if(HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3) > 1.5)
+                    if(HeightMap.CORE.getHeight(tw, rawX, rawZ) - HeightMap.getRawRiverDepth(tw, rawX, rawZ) < TerraformGenerator.seaLevel) {
+                        //If this face is at least 4 blocks wide, carve a waterfall opening
+                        SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
+                        if(checkWaterfallSpace(block)
+                                && GenUtils.chance(tw.getHashedRand(rawX, surfaceY, rawZ), 1, 30)) {
+                            block = block.getRelative(0,-4,0);
+                            placeWaterFall(tw, rawX + 11*rawZ + 31*surfaceY, block);
+                            break;
+                        }
+                    }
+            }
+
+        //Small trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 14);
         
         //Trees on shallow areas

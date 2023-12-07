@@ -39,36 +39,29 @@ public class ElevatedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-    	for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
-                boolean gradient = HeightMap.getTrueHeightGradient(data, x, z, 3)
-                		<= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble();
-                if(gradient) {
-                	data.setType(x, y, z, Material.GRASS_BLOCK);
-                	if(random.nextBoolean())
-                    	data.setType(x, y-1, z, Material.DIRT);
-                }
-                
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK && 
-                		!BlockUtils.isWet(new SimpleBlock(data,x,y,z))) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        boolean gradient = HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3)
+                <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble();
+        if(gradient) {
+            data.setType(rawX, surfaceY, rawZ, Material.GRASS_BLOCK);
+            if(random.nextBoolean())
+                data.setType(rawX, surfaceY-1, rawZ, Material.DIRT);
+        }
 
-                    if (GenUtils.chance(random, 1, 10)) { //Grass
-                        if (GenUtils.chance(random, 6, 10)) {
-                            data.setType(x, y + 1, z, Material.GRASS);
-                            if (random.nextBoolean()) {
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                            }
-                        } else {
-                            if (GenUtils.chance(random, 7, 10))
-                                data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                            else
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, BlockUtils.pickTallFlower());
-                        }
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK &&
+                !BlockUtils.isWet(new SimpleBlock(data,rawX,surfaceY,rawZ))) {
+
+            if (GenUtils.chance(random, 1, 10)) { //Grass
+                if (GenUtils.chance(random, 6, 10)) {
+                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    if (random.nextBoolean()) {
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
                     }
+                } else {
+                    if (GenUtils.chance(random, 7, 10))
+                        data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                    else
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, BlockUtils.pickTallFlower());
                 }
             }
         }
@@ -80,28 +73,21 @@ public class ElevatedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
 
         int heightFactor = 15;
+        int rawX = chunkX * 16 + x;
+        int rawZ = chunkZ * 16 + z;
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int rawX = chunkX * 16 + x;
-                int rawZ = chunkZ * 16 + z;
+        double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
+        int height = (int) preciseHeight;
 
-                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
-
-                // Don't touch areas that aren't elevated plains
-                if (tw.getBiomeBank(rawX, height, rawZ) != BiomeBank.ELEVATED_PLAINS) continue;
-
-                int noiseValue = (int) Math.round(heightFactor * getBiomeBlender(tw).getEdgeFactor(BiomeBank.ELEVATED_PLAINS, rawX, rawZ));
-                for (int y = 1; y <= noiseValue; y++) {
-                    chunk.setBlock(x, height + y, z, getRockAt(random, x,y,z));
-                }
-                cache.writeTransformedHeight(x,z, (short) height);
-            }
+        int noiseValue = (int) Math.round(heightFactor * getBiomeBlender(tw).getEdgeFactor(BiomeBank.ELEVATED_PLAINS, rawX, rawZ));
+        for (int y = 1; y <= noiseValue; y++) {
+            chunk.setBlock(x, height + y, z, getRockAt(random, x,y,z));
         }
+        cache.writeTransformedHeight(x,z, (short) (height+noiseValue));
+
     }
     
     private static final Material[] rocks = new Material[] {

@@ -39,21 +39,14 @@ public class MushroomBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if(data.getBiome(x, z) != getBiome()) continue;
-                if(y < TerraformGenerator.seaLevel) continue;
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        if(surfaceY < TerraformGenerator.seaLevel) return;
                 
-                // Generate small shrooms
-                if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                    if (BlockUtils.isAir(data.getType(x, y + 1, z)) 
-                    		&& GenUtils.chance(1, 60)) {
-                        data.setType(x, y + 1, z, GenUtils.randMaterial(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM));
-                    }
-                }
+        // Generate small shrooms
+        if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
+            if (BlockUtils.isAir(data.getType(rawX, surfaceY + 1, rawZ))
+                    && GenUtils.chance(1, 60)) {
+                data.setType(rawX, surfaceY + 1, rawZ, GenUtils.randMaterial(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM));
             }
         }
     }

@@ -23,7 +23,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
      * Performs badlands plateau generation for one x/z coord.
      */
     public static void oneUnit(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int z, boolean force) {
-        int highest = GenUtils.getTrueHighestBlock(data, x, z);
+        int highest = GenUtils.getHighestGround(data, x, z);
         int threshold = 65;
         if (force)
             threshold = highest - GenUtils.randInt(random, 3, 6);
@@ -82,27 +82,16 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-            	int y = GenUtils.getHighestGround(data, x, z);
-            	if(data.getBiome(x,z) != getBiome())
-            		continue;
-            	if(y > 
-                	10+HeightMap.CORE.getHeight(world, x, z)) {
-                	oneUnit(world, random, data, x, z, false);
-            	}
-            	if(HeightMap.getTrueHeightGradient(data, x, z, 2) < 2) {
-            		data.setType(x, y, z, Material.RED_SAND);
-            	}
-            }
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+
+        if(surfaceY >
+            10+HeightMap.CORE.getHeight(world, rawX, rawZ)) {
+            oneUnit(world, random, data, rawX, rawZ, false);
+        }
+        if(HeightMap.getTrueHeightGradient(data, rawX, rawZ, 2) < 2) {
+            data.setType(rawX, surfaceY, rawZ, Material.RED_SAND);
         }
     }
-
-    //@Override
-    //public BiomeHandler getTransformHandler() {
-    //    return BiomeBank.BADLANDS.getHandler();
-    //}
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {

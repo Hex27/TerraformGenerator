@@ -42,7 +42,7 @@ public class SavannaHandler extends BiomeHandler {
                     break;
             }
 
-            y = GenUtils.getTrueHighestBlock(data, nx, nz);
+            y = GenUtils.getHighestGround(data, nx, nz);
         }
     }
 
@@ -75,31 +75,15 @@ public class SavannaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        if(GenUtils.chance(random,1,128))
+            makeYellowPatch(rawX, surfaceY, rawZ, data, random);
 
-        for (int i = 0; i < GenUtils.randInt(random, 1, 3); i++) {
-            int x = data.getChunkX() * 16 + GenUtils.randInt(0, 15);
-            int z = data.getChunkZ() * 16 + GenUtils.randInt(0, 15);
-            int y = GenUtils.getHighestGround(data, x, z);
-            if (data.getBiome(x, z) != getBiome()) continue;
-            makeYellowPatch(x, y, z, data, random);
-        }
-
-
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK
-                        && !data.getType(x, y + 1, z).isSolid()) {
-                    //Dense grass
-                    if (GenUtils.chance(random, 5, 10)) {
-                        BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                    }
-                }
-
-
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
+                && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
+            //Dense grass
+            if (GenUtils.chance(random, 5, 10)) {
+                BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
             }
         }
     }

@@ -221,17 +221,29 @@ public class TerraformPopulator extends BlockPopulator {
         	amethystGeodePopulator.populate(tw, random, data);
 
         // Get all biomes in a chunk
-        EnumSet<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
+        EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
 
         boolean canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
-        for (BiomeBank bank : banks) {
-            // Biome specific populators
-            bank.getHandler().populateSmallItems(tw, random, data);
-            
-            //Only decorate disruptive features if the structures allow for them
-            if(canDecorate)
-            	bank.getHandler().populateLargeItems(tw, random, data);
-        }
+
+        //Small Populators run per block.
+        for(int rawX = data.getChunkX()*16; rawX <= data.getChunkX()*16+16; rawX++)
+            for(int rawZ = data.getChunkZ()*16; rawZ <= data.getChunkZ()*16+16; rawZ++)
+            {
+                int surfaceY = GenUtils.getTransformedHeight(data,rawX,rawZ);
+                BiomeBank bank = tw.getBiomeBank(rawX,surfaceY,rawZ);
+                banks.add(bank);
+
+                //Don't populate wet stuff in places that aren't wet
+                if(!bank.getType().isDry() && data.getType(rawX,surfaceY+1,rawZ) != Material.WATER)
+                    continue;
+                bank.getHandler().populateSmallItems(tw, random, rawX, surfaceY, rawZ, data);
+            }
+
+        //Only decorate disruptive features if the structures allow for them
+        if(canDecorate)
+            for (BiomeBank bank : banks)
+                bank.getHandler().populateLargeItems(tw, random, data);
+
         
 		// Cave populators
         //They will recalculate biomes per block.

@@ -21,21 +21,13 @@ public class IcyBeachHandler extends BiomeHandler {
                     data.getType(nx, y + 1, nz) == Material.AIR)
                 data.setType(nx, y, nz, Material.ICE);
 
-            switch (random.nextInt(5)) {  // The direction chooser
-                case 0:
-                    nx++;
-                    break;
-                case 2:
-                    nz++;
-                    break;
-                case 3:
-                    nx--;
-                    break;
-                case 4:
-                    nz--;
-                    break;
+            switch(random.nextInt(5)) {  // The direction chooser
+                case 0 -> nx++;
+                case 2 -> nz++;
+                case 3 -> nx--;
+                case 4 -> nz--;
             }
-            y = GenUtils.getHighestGround(data, nx, nz);
+            y = GenUtils.getTransformedHeight(data, nx, nz);
         }
     }
 
@@ -58,21 +50,11 @@ public class IcyBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-
-                if (GenUtils.chance(random, 7, 100)) {
-                    makeIceSheet(x, y, z, data, random);
-                    break;
-                }
-
-                if (GenUtils.chance(random, 1, 100))
-                    data.setType(x, y + 1, z, Material.COBBLESTONE_SLAB);
-            }
+        if (GenUtils.chance(random, 7, 100)) {
+            makeIceSheet(rawX, surfaceY, rawZ, data, random);
+            return;
         }
     }
 

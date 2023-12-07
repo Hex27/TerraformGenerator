@@ -22,6 +22,7 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
+import java.util.HashSet;
 import java.util.Random;
 
 public class PetrifiedCliffsHandler extends BiomeHandler {
@@ -45,53 +46,53 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
     }
 
-    @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public static final HashSet<Material> endWithStones = new HashSet<>(){{
+        add(Material.STONE);
+        add(Material.MOSSY_COBBLESTONE);
+        add(Material.COBBLESTONE);
+    }};
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
-                for(int i = 0; i < 30; i++)
-                	if(data.getType(x, y, z) == Material.DIORITE
-                	|| data.getType(x, y, z) == Material.ANDESITE
-                	|| data.getType(x, y, z) == Material.GRANITE
-                	|| data.getType(x, y, z) == Material.POLISHED_DIORITE
-                	|| data.getType(x, y, z) == Material.POLISHED_ANDESITE
-                	|| data.getType(x, y, z) == Material.POLISHED_GRANITE)
-                	{
-                		y--;
-                	}
-                	else
-                		break;
-                
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                	SimpleBlock core = new SimpleBlock(data,x,y+1,z);
-                	boolean continueOut = false;
-                	for(BlockFace face:BlockUtils.directBlockFaces) {
-                		if(core.getRelative(face).getType().toString().endsWith("STONE"))
-                		{
-                			core.setType(Material.DIORITE_SLAB);
-                			continueOut = true;
-                			break;
-                		}
-                	}
-                	if(continueOut) continue;
-                	
-                    if (GenUtils.chance(random, 1, 10)) { //Grass
-                        if (GenUtils.chance(random, 6, 10)) {
-                            data.setType(x, y + 1, z, Material.GRASS);
-                            if (random.nextBoolean()) {
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                            }
-                        } else {
-                            if (GenUtils.chance(random, 7, 10))
-                                data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                            else
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, BlockUtils.pickTallFlower());
-                        }
+    @Override
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+
+        for(int i = 0; i < 30; i++)
+            if(data.getType(rawX, surfaceY, rawZ) == Material.DIORITE
+            || data.getType(rawX, surfaceY, rawZ) == Material.ANDESITE
+            || data.getType(rawX, surfaceY, rawZ) == Material.GRANITE
+            || data.getType(rawX, surfaceY, rawZ) == Material.POLISHED_DIORITE
+            || data.getType(rawX, surfaceY, rawZ) == Material.POLISHED_ANDESITE
+            || data.getType(rawX, surfaceY, rawZ) == Material.POLISHED_GRANITE)
+            {
+                surfaceY--;
+            }
+            else
+                break;
+
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
+            SimpleBlock core = new SimpleBlock(data,rawX,surfaceY+1,rawZ);
+            boolean continueOut = false;
+            for(BlockFace face:BlockUtils.directBlockFaces) {
+                Material relType = core.getRelative(face).getType();
+                if(endWithStones.contains(relType))
+                {
+                    core.setType(Material.DIORITE_SLAB);
+                    continueOut = true;
+                    break;
+                }
+            }
+            if(continueOut) return;
+
+            if (GenUtils.chance(random, 1, 10)) { //Grass
+                if (GenUtils.chance(random, 6, 10)) {
+                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    if (random.nextBoolean()) {
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
                     }
+                } else {
+                    if (GenUtils.chance(random, 7, 10))
+                        data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                    else
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, BlockUtils.pickTallFlower());
                 }
             }
         }
@@ -109,7 +110,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
     
 
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
 
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -133,42 +134,33 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
         	        return n;
         		});
         //Generates -0.8 to 0.8
+        int rawX = chunkX * 16 + x;
+        int rawZ = chunkZ * 16 + z;
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int rawX = chunkX * 16 + x;
-                int rawZ = chunkZ * 16 + z;
+        double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
+        int height = (int) preciseHeight;
 
-                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
-                
-                // Don't touch areas that aren't petrified cliffs
-                if (tw.getBiomeBank(rawX, height, rawZ) != BiomeBank.PETRIFIED_CLIFFS) continue;
+        double noiseValue = Math.max(0, noise.GetNoise(rawX, rawZ)) * getBiomeBlender(tw).getEdgeFactor(BiomeBank.PETRIFIED_CLIFFS, rawX, rawZ);
+        if(noiseValue == 0) return;
 
-                double noiseValue = Math.max(0, noise.GetNoise(rawX, rawZ)) * getBiomeBlender(tw).getEdgeFactor(BiomeBank.PETRIFIED_CLIFFS, rawX, rawZ);
-                if(noiseValue == 0) continue;
-                
-                double platformHeight = 7 + noiseValue * 50;
-                
-                if(platformHeight > 15) platformHeight = 15 + Math.sqrt(0.5*(platformHeight - 15));
-                
-                for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
-                	double detailsNoiseMultiplier = Math.pow(1.0-(1.0/(Math.pow(platformHeight/2.0, 2)))*Math.pow(y-platformHeight/2.0, 2), 2);
-                	double detailsNoise = details.GetNoise(rawX, height+y, rawZ);
-                    
-                	if(0.85+detailsNoise > detailsNoiseMultiplier) {
-                        chunk.setBlock(x, height + y, z,
-                                GenUtils.randMaterial(
-                                        Material.STONE,
-                                        Material.STONE,
-                                        Material.STONE,
-                                        Material.COBBLESTONE,
-                                        Material.MOSSY_COBBLESTONE
-                                ));
-                        cache.writeTransformedHeight (x,z, (short) Math.max(cache.getTransformedHeight(x,z), height+y));
-                    }
-                }
-                
+        double platformHeight = 7 + noiseValue * 50;
+
+        if(platformHeight > 15) platformHeight = 15 + Math.sqrt(0.5*(platformHeight - 15));
+
+        for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
+            double detailsNoiseMultiplier = Math.pow(1.0-(1.0/(Math.pow(platformHeight/2.0, 2)))*Math.pow(y-platformHeight/2.0, 2), 2);
+            double detailsNoise = details.GetNoise(rawX, height+y, rawZ);
+
+            if(0.85+detailsNoise > detailsNoiseMultiplier) {
+                chunk.setBlock(x, height + y, z,
+                        GenUtils.randMaterial(
+                                Material.STONE,
+                                Material.STONE,
+                                Material.STONE,
+                                Material.COBBLESTONE,
+                                Material.MOSSY_COBBLESTONE
+                        ));
+                cache.writeTransformedHeight (x,z, (short) Math.max(cache.getTransformedHeight(x,z), height+y));
             }
         }
     }

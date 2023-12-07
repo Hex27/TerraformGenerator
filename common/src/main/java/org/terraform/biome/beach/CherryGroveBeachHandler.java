@@ -40,40 +40,33 @@ public class CherryGroveBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
         boolean hasSugarcane = GenUtils.chance(random, 1, 100);
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (world.getBiomeBank(x,z) != BiomeBank.CHERRY_GROVE_RIVER) continue;
+        Material base = data.getType(rawX,surfaceY,rawZ);
 
-                Material base = data.getType(x, y, z);
-                
-                //Remove submerged grass
-                if(base == Material.GRASS_BLOCK && data.getType(x, y+1, z) == Material.WATER)
-                	data.setType(x,y,z,Material.DIRT);
-                
-                if (base != Material.SAND && base != Material.GRASS_BLOCK) continue;
+        //Remove submerged grass
+        if(base == Material.GRASS_BLOCK && data.getType(rawX, surfaceY+1, rawZ) == Material.WATER)
+            data.setType(rawX, surfaceY, rawZ,Material.DIRT);
 
-                y++;
+        if (base != Material.SAND && base != Material.GRASS_BLOCK) return;
 
-                //Spawn sugarcane
-                if (hasSugarcane) {
-                    boolean hasWater = false;
-                    if (data.getType(x + 1, y - 1, z) == Material.WATER)
-                        hasWater = true;
-                    if (data.getType(x - 1, y - 1, z) == Material.WATER)
-                        hasWater = true;
-                    if (data.getType(x, y - 1, z + 1) == Material.WATER)
-                        hasWater = true;
-                    if (data.getType(x, y - 1, z - 1) == Material.WATER)
-                        hasWater = true;
+        surfaceY++;
 
-                    if (hasWater) BlockUtils.spawnPillar(random, data, x, y, z, Material.SUGAR_CANE, 3, 7);
-                }
-            }
+        //Spawn sugarcane
+        if (hasSugarcane) {
+            boolean hasWater = false;
+            if (data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER)
+                hasWater = true;
+            if (data.getType(rawX - 1, surfaceY - 1, rawZ) == Material.WATER)
+                hasWater = true;
+            if (data.getType(rawX, surfaceY - 1, rawZ + 1) == Material.WATER)
+                hasWater = true;
+            if (data.getType(rawX, surfaceY - 1, rawZ - 1) == Material.WATER)
+                hasWater = true;
+
+            if (hasWater) BlockUtils.spawnPillar(random, data, rawX, surfaceY, rawZ, Material.SUGAR_CANE, 3, 7);
         }
     }
 

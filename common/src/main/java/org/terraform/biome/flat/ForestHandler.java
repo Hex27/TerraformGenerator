@@ -80,7 +80,7 @@ public class ForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         FastNoise pathNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_FOREST_PATHNOISE, 
@@ -90,33 +90,26 @@ public class ForestHandler extends BiomeHandler {
         	        n.SetFractalOctaves(3);
         	        n.SetFrequency(0.07f);
         	        return n;
-        		});
-    	
+        });
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (pathNoise.GetNoise(x, z) > 0.3) {
-                    if (GenUtils.chance(random, 99, 100) &&
-                            data.getBiome(x, z) == getBiome() &&
-                            BlockUtils.isDirtLike(data.getType(x, y, z)))
-                        data.setType(x, y, z, OneOneSevenBlockHandler.DIRT_PATH());
-                }
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                    if (GenUtils.chance(random, 1, 10)) {
-                        if (data.getType(x, y + 1, z) != Material.AIR) continue;
-                        //Grass & Flowers
-                        data.setType(x, y + 1, z, Material.GRASS);
-                        if (random.nextBoolean()) {
-                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                        } else {
-                            data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                        }
-                    }
+        if (pathNoise.GetNoise(rawX, rawZ) > 0.3) {
+            if (GenUtils.chance(random, 99, 100) &&
+                    data.getBiome(rawX, rawZ) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ)))
+                data.setType(rawX, surfaceY, rawZ, OneOneSevenBlockHandler.DIRT_PATH());
+        }
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
+            if (GenUtils.chance(random, 1, 10)) {
+                if (data.getType(rawX, surfaceY + 1, rawZ) != Material.AIR) return;
+                //Grass & Flowers
+                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                if (random.nextBoolean()) {
+                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                } else {
+                    data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
                 }
             }
         }
-
     }
 
 	@Override

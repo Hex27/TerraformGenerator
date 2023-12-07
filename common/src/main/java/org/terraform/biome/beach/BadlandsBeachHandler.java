@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataColumn;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
 
@@ -32,7 +33,7 @@ public class BadlandsBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
     }
 

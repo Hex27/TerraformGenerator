@@ -49,31 +49,21 @@ public class SnowyTaigaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        
-
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-
-                if (data.getType(x, y, z) == Material.DIRT) {
-                    if (GenUtils.chance(random, 1, 20)) {
-                        data.setType(x, y + 1, z, Material.DEAD_BUSH);
-                        if (random.nextBoolean()) {
-                            data.setType(x, y + 1, z, Material.ALLIUM);
-                        }
-                    }
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        if (data.getType(rawX, surfaceY, rawZ) == Material.DIRT) {
+            if (GenUtils.chance(random, 1, 20)) {
+                data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                if (random.nextBoolean()) {
+                    data.setType(rawX, surfaceY + 1, rawZ, Material.ALLIUM);
                 }
-                if (data.getType(x, y + 1, z) == Material.AIR
-                		&& GenUtils.isGroundLike(data.getType(x, y, z))) {
-                    data.setType(x, y + 1, z, Material.SNOW);
-                    if (data.getBlockData(x, y, z) instanceof Snowable) {
-                        Snowable snowable = (Snowable) data.getBlockData(x, y, z);
-                        snowable.setSnowy(true);
-                        data.setBlockData(x, y, z, snowable);
-                    }
-                }
+            }
+        }
+        if (data.getType(rawX, surfaceY + 1, rawZ) == Material.AIR
+                && GenUtils.isGroundLike(data.getType(rawX, surfaceY, rawZ))) {
+            data.setType(rawX, surfaceY + 1, rawZ, Material.SNOW);
+            if (data.getBlockData(rawX, surfaceY, rawZ) instanceof Snowable snowable) {
+                snowable.setSnowy(true);
+                data.setBlockData(rawX, surfaceY, rawZ, snowable);
             }
         }
     }

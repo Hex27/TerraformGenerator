@@ -140,16 +140,6 @@ public class ChunkCache {
     public void cacheHighestGround(int rawX, int rawZ, short value) {
         arrayCache[1024 + (rawX&0xF)+16*(rawZ&0xF)] = value;
     }
-
-    /**
-     * Only used in TerraformGenerator for height calculations.
-     * Do not use elsewhere.
-     */
-    public void cacheTransformedHeight(short[][] heights) {
-        for(int i = 0; i < 16; i++)
-            for(int j = 0; j < 16; j++)
-                arrayCache[1280 + i + 16*j] = heights[i][j];
-    }
     
     public float getBlurredHeight(int rawX, int rawZ) {
         return arrayCache[256 + (rawX&0xF)+16*(rawZ&0xF)];

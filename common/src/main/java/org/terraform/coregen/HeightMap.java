@@ -106,6 +106,9 @@ public enum HeightMap {
      * 1.5 for a radius of 3 is considered steep.
      * Does GenUtils.getHighestGround to get height values.
      */
+    /*TODO: There are several calls to this in Biome Handlers.
+     * Write a version that uses transformed height.
+     */
     public static double getTrueHeightGradient(PopulatorDataAbstract data, int x, int z, int radius) {
         double totalChangeInGradient = 0;
         int count = 0;

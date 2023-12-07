@@ -59,57 +59,50 @@ public class ArchedCliffsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-    	for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        SimpleBlock target = new SimpleBlock(data,rawX,surfaceY,rawZ);
 
-        		SimpleBlock target = new SimpleBlock(data,x,y,z);
-        		
-                //Highest Ground decorations: grass and flowers
-                if (GenUtils.chance(random, 1, 10)) { //Grass
-                    if (GenUtils.chance(random, 6, 10)) {
-                    	target.getUp().setType(Material.GRASS);
-                        if (random.nextBoolean()) {
-                            BlockUtils.setDoublePlant(target.getPopData(), target.getX(), target.getY()+1, target.getZ(), 
-                            		Material.TALL_GRASS);
+        //Highest Ground decorations: grass and flowers
+        if (GenUtils.chance(random, 1, 10)) { //Grass
+            if (GenUtils.chance(random, 6, 10)) {
+                target.getUp().setType(Material.GRASS);
+                if (random.nextBoolean()) {
+                    BlockUtils.setDoublePlant(target.getPopData(), target.getX(), target.getY()+1, target.getZ(),
+                            Material.TALL_GRASS);
+                }
+            } else {
+                if (GenUtils.chance(random, 7, 10))
+                    target.getUp().setType(BlockUtils.pickFlower());
+                else
+                    BlockUtils.setDoublePlant(target.getPopData(), target.getX(), target.getY()+1, target.getZ(),
+                            BlockUtils.pickTallFlower());
+            }
+        }
+
+        //Underside decorations: Mushrooms
+        SimpleBlock underside = target.findAirPocket(30);
+        if(underside != null && underside.getY() > TerraformGenerator.seaLevel) {
+            //TODO: Consider optimization: calculateHeight() instead of this shit
+            SimpleBlock grassBottom = underside.findStonelikeFloor(50);
+            if(grassBottom != null && grassBottom.getY() > TerraformGenerator.seaLevel) {
+                if(grassBottom.getType() == Material.GRASS_BLOCK) {
+                    //Indicates that this area is valid for population
+
+                    if (GenUtils.chance(random, 1, 10)) {
+                        grassBottom.getUp().setType(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM);
+                    }
+
+                    //If an underside was valid, you can check the upper area for
+                    //decorating overhangs
+                    for(BlockFace face:BlockUtils.directBlockFaces) {
+                        if(target.getRelative(face).getType() == Material.AIR) {
+                            if(GenUtils.chance(random, 1, 5))
+                                target.getRelative(face).downLPillar(random, random.nextInt(8), Material.OAK_LEAVES);
                         }
-                    } else {
-                        if (GenUtils.chance(random, 7, 10))
-                        	target.getUp().setType(BlockUtils.pickFlower());
-                        else
-                            BlockUtils.setDoublePlant(target.getPopData(), target.getX(), target.getY()+1, target.getZ(), 
-                            		BlockUtils.pickTallFlower());
                     }
                 }
-                
-                //Underside decorations: Mushrooms
-        		SimpleBlock underside = target.findAirPocket(30);
-        		if(underside != null && underside.getY() > TerraformGenerator.seaLevel) {
-        			SimpleBlock grassBottom = underside.findStonelikeFloor(50);
-        			if(grassBottom != null && grassBottom.getY() > TerraformGenerator.seaLevel) {
-        				if(grassBottom.getType() == Material.GRASS_BLOCK) {
-        					//Indicates that this area is valid for population
-
-        			        if (GenUtils.chance(random, 1, 10)) {
-        			        	grassBottom.getUp().setType(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM);
-        			        	
-        			        }
-        			        
-        			        //If an underside was valid, you can check the upper area for
-        			        //decorating overhangs
-        			        for(BlockFace face:BlockUtils.directBlockFaces) {
-        			        	if(target.getRelative(face).getType() == Material.AIR) {
-        			        		if(GenUtils.chance(random, 1, 5))
-        			        			target.getRelative(face).downLPillar(random, random.nextInt(8), Material.OAK_LEAVES);
-        			        	}
-        			        }
-        				}
-        			}
-        		}
             }
-    	}
+        }
     }
 
 	@Override
@@ -180,7 +173,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
 
         FastNoise platformNoise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -204,60 +197,52 @@ public class ArchedCliffsHandler extends BiomeHandler {
         	        return n;
         		});
 
+        int rawX = chunkX * 16 + x;
+        int rawZ = chunkZ * 16 + z;
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int rawX = chunkX * 16 + x;
-                int rawZ = chunkZ * 16 + z;
+        double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
+        int height = (int) preciseHeight;
 
-                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
+        //Round to force a 0 if the value is too low. Makes blending better.
+        double platformNoiseVal =
+                Math.round(
+                    Math.max(
+                    platformNoise.GetNoise(rawX, rawZ)
+                    *70
+                    *getBiomeBlender(tw).getEdgeFactor(BiomeBank.ARCHED_CLIFFS, rawX, rawZ)
+                    , 0)
+                );
 
-                // Don't touch areas that aren't arched cliffs
-                if (tw.getBiomeBank(rawX, height, rawZ) != BiomeBank.ARCHED_CLIFFS) continue;
-                
-                //Round to force a 0 if the value is too low. Makes blending better.
-                double platformNoiseVal =
-        				Math.round(
-    						Math.max(
-	                		platformNoise.GetNoise(rawX, rawZ)
-	                		*70
-	                		*getBiomeBlender(tw).getEdgeFactor(BiomeBank.ARCHED_CLIFFS, rawX, rawZ)
-	                		, 0)
-						);
+        if(platformNoiseVal > 0) {
+            int platformHeight = (int) (
+                    HeightMap.CORE.getHeight(tw, rawX, rawZ)
+                    - HeightMap.ATTRITION.getHeight(tw, rawX, rawZ)
+                    + 55);
 
-                if(platformNoiseVal > 0) {
-                	int platformHeight = (int) (
-                			HeightMap.CORE.getHeight(tw, rawX, rawZ) 
-                			- HeightMap.ATTRITION.getHeight(tw, rawX, rawZ) 
-                			+ 55);
+            //for higher platform noise vals, make a thicker platform
+            cache.writeTransformedHeight (x,z,(short) platformHeight);
+            chunk.setBlock(x, platformHeight, z, Material.GRASS_BLOCK);
+            Material[] crust = getSurfaceCrust(random);
+            for(int i = 0; i < platformNoiseVal; i++) {
+                if(i < crust.length)
+                    chunk.setBlock(x, platformHeight-i, z, crust[i]);
+                else
+                    chunk.setBlock(x, platformHeight-i, z, Material.STONE);
+            }
 
-                	//for higher platform noise vals, make a thicker platform
-                    cache.writeTransformedHeight (x,z,(short) platformHeight);
-                	chunk.setBlock(x, platformHeight, z, Material.GRASS_BLOCK);
-                	Material[] crust = getSurfaceCrust(random);
-                	for(int i = 0; i < platformNoiseVal; i++) {
-                		if(i < crust.length)
-                        	chunk.setBlock(x, platformHeight-i, z, crust[i]);
-                		else
-                			chunk.setBlock(x, platformHeight-i, z, Material.STONE);
-                	}
-                	
-                	if(platformNoiseVal > 6) {
-                        int pillarNoiseVal = (int) ((platformNoiseVal/10.0)*((0.1+Math.abs(pillarNoise.GetNoise(rawX, rawZ)))*20.0));
-	                	if(pillarNoiseVal + height > platformHeight)
-	                		pillarNoiseVal = platformHeight - height;
-                    	
-	                	//Crust cannot be under solids.
-	                	boolean applyCrust = !chunk.getType(x, height+pillarNoiseVal+1, z).isSolid();
-	                	
-                        for(int i = pillarNoiseVal; i >= 1; i--) {
-                    		if((pillarNoiseVal-i) < crust.length && applyCrust)
-                            	chunk.setBlock(x, height+i, z, crust[pillarNoiseVal-i]);
-                    		else
-                    			chunk.setBlock(x, height+i, z, Material.STONE);
-                    	}
-                	}
+            if(platformNoiseVal > 6) {
+                int pillarNoiseVal = (int) ((platformNoiseVal/10.0)*((0.1+Math.abs(pillarNoise.GetNoise(rawX, rawZ)))*20.0));
+                if(pillarNoiseVal + height > platformHeight)
+                    pillarNoiseVal = platformHeight - height;
+
+                //Crust cannot be under solids.
+                boolean applyCrust = !chunk.getType(x, height+pillarNoiseVal+1, z).isSolid();
+
+                for(int i = pillarNoiseVal; i >= 1; i--) {
+                    if((pillarNoiseVal-i) < crust.length && applyCrust)
+                        chunk.setBlock(x, height+i, z, crust[pillarNoiseVal-i]);
+                    else
+                        chunk.setBlock(x, height+i, z, Material.STONE);
                 }
             }
         }

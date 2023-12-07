@@ -52,31 +52,23 @@ public class OceansHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        boolean growsKelp = random.nextBoolean();
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        boolean growsKelp = world.getHashedRand(rawX>>4,rawZ>>4,371412).nextBoolean();
+        //Set ground near sea level to sand
+        if(surfaceY >= TerraformGenerator.seaLevel - 2) {
+            data.setType(rawX, surfaceY, rawZ, Material.SAND);
+        }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
+            if(random.nextBoolean())
+                data.setType(rawX, surfaceY, rawZ, Material.SAND);
+        }
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
-                //Set ground near sea level to sand
-                if(y >= TerraformGenerator.seaLevel - 2) {
-                	data.setType(x, y, z, Material.SAND);
-                }else if(y >= TerraformGenerator.seaLevel - 4) {
-                	if(random.nextBoolean())
-                    	data.setType(x, y, z, Material.SAND);
-                }
-                
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
-                    CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
-                } else if (GenUtils.chance(random, 3, 50)
-                        && growsKelp
-                        && y + 1 < TerraformGenerator.seaLevel - 10) {
-                    generateKelp(x, y + 1, z, data, random);
-                }
-            }
+        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
+        if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
+            CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
+        } else if (GenUtils.chance(random, 3, 50)
+                && growsKelp
+                && surfaceY + 1 < TerraformGenerator.seaLevel - 10) {
+            generateKelp(rawX, surfaceY + 1, rawZ, data, random);
         }
     }
 

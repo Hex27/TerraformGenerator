@@ -40,49 +40,41 @@ public class BambooForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         FastNoise pathNoise = NoiseCacheHandler.getNoise(
-        		world, 
-        		NoiseCacheEntry.BIOME_BAMBOOFOREST_PATHNOISE, 
-        		tw -> {
-        	    	FastNoise n = new FastNoise((int) (tw.getSeed() * 13));
-        	        n.SetNoiseType(NoiseType.SimplexFractal);
-        	        n.SetFractalOctaves(3);
-        	        n.SetFrequency(0.07f);
-        	        return n;
-        		});
-    	
+            world,
+            NoiseCacheEntry.BIOME_BAMBOOFOREST_PATHNOISE,
+            tw -> {
+                FastNoise n = new FastNoise((int) (tw.getSeed() * 13));
+                n.SetNoiseType(NoiseType.SimplexFractal);
+                n.SetFractalOctaves(3);
+                n.SetFrequency(0.07f);
+                return n;
+        });
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
+        //Podzol Paths
+        if (pathNoise.GetNoise(rawX, rawZ) > 0.27) {
+            if (GenUtils.chance(random, 99, 100) &&
+                    data.getBiome(rawX, rawZ) == getBiome() &&
+                    BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ)))
+                data.setType(rawX, surfaceY, rawZ, Material.PODZOL);
+        }
 
-                //Podzol Paths
-                if (pathNoise.GetNoise(x, z) > 0.27) {
-                    if (GenUtils.chance(random, 99, 100) &&
-                            data.getBiome(x, z) == getBiome() &&
-                            BlockUtils.isDirtLike(data.getType(x, y, z)))
-                        data.setType(x, y, z, Material.PODZOL);
-                }
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK ||
+                data.getType(rawX, surfaceY, rawZ) == Material.PODZOL) {
 
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK ||
-                        data.getType(x, y, z) == Material.PODZOL) {
-
-                    //Grass and shrubbery
-                    if (GenUtils.chance(random, 1, 3)) {
-                        if (GenUtils.chance(random, 6, 10)) {
-                            data.setType(x, y + 1, z, Material.GRASS);
-                            if (random.nextBoolean()) {
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                            }
-                        } else {
-                            if (GenUtils.chance(random, 7, 10))
-                                data.setType(x, y + 1, z, Material.FERN);
-                            else
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.LARGE_FERN);
-                        }
+            //Grass and shrubbery
+            if (GenUtils.chance(random, 1, 3)) {
+                if (GenUtils.chance(random, 6, 10)) {
+                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    if (random.nextBoolean()) {
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
                     }
+                } else {
+                    if (GenUtils.chance(random, 7, 10))
+                        data.setType(rawX, surfaceY + 1, rawZ, Material.FERN);
+                    else
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.LARGE_FERN);
                 }
             }
         }

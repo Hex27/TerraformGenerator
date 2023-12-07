@@ -61,29 +61,21 @@ public class JungleHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
     	//Almost everything about jungle population is highly disruptive.
     	//Only grass spawning remains here. Mushrooms and everything else go to
     	//populateLargeItems
-    	
-    	 for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                 int y = GenUtils.getHighestGround(data, x, z);
-
-                 // Generate grass
-                 if (data.getBiome(x, z) == getBiome() &&
-                         BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                     if (BlockUtils.isAir(data.getType(x, y + 1, z)) && GenUtils.chance(2, 3)) {
-                         if (random.nextBoolean()) {
-                             data.setType(x, y + 1, z, GenUtils.weightedRandomMaterial(random, Material.GRASS, 5, BlockUtils.pickFlower(), 1));
-                         } else {
-                             if (BlockUtils.isAir(data.getType(x, y + 2, z)))
-                                 BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                         }
-                     }
+         // Generate grass
+         if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
+             if (BlockUtils.isAir(data.getType(rawX, surfaceY + 1, rawZ)) && GenUtils.chance(2, 3)) {
+                 if (random.nextBoolean()) {
+                     data.setType(rawX, surfaceY + 1, rawZ, GenUtils.weightedRandomMaterial(random, Material.GRASS, 5, BlockUtils.pickFlower(), 1));
+                 } else {
+                     if (BlockUtils.isAir(data.getType(rawX, surfaceY + 2, rawZ)))
+                         BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
                  }
              }
-    	 }
+         }
     }
 
     public static void createBush(PopulatorDataAbstract data, float noiseIncrement, int oriX, int oriY, int oriZ) {

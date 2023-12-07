@@ -45,26 +45,18 @@ public class ColdOceansHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
-                //Set ground near sea level to gravel
-                if(y >= TerraformGenerator.seaLevel - 2) {
-                	data.setType(x, y, z, Material.GRAVEL);
-                }else if(y >= TerraformGenerator.seaLevel - 4) {
-                	if(random.nextBoolean())
-                    	data.setType(x, y, z, Material.GRAVEL);
-                }
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        //Set ground near sea level to gravel
+        if(surfaceY >= TerraformGenerator.seaLevel - 2) {
+            data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
+        }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
+            if(random.nextBoolean())
+                data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
+        }
 
-
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if (GenUtils.chance(random, 1, 150)) { //SEA GRASS/KELP
-                    CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
-                }
-            }
+        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
+        if (GenUtils.chance(random, 1, 150)) { //SEA GRASS/KELP
+            CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
         }
     }
 

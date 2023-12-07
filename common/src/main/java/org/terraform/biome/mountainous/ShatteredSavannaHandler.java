@@ -43,93 +43,51 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         		Material.STONE
         		};
     }
-    
+
     @Override
     protected double getPeakMultiplier(BiomeSection section, Random sectionRandom)
     {
     	double original = super.getPeakMultiplier(section, sectionRandom);
     	return 1.0 + (original - 1.0)*0.2;
     }
-
+//    FastNoise shatteredSavannaNoise = NoiseCacheHandler.getNoise(
+//            tw,
+//            NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE,
+//            world -> {
+//                FastNoise n = new FastNoise((int) (world.getSeed()*2));
+//                n.SetNoiseType(NoiseType.SimplexFractal);
+//                n.SetFractalOctaves(6);
+//                n.SetFrequency(0.03f);
+//                return n;
+//            });
     @Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
-    	double height = super.calculateHeight(tw, x, z);
-    	FastNoise shatteredSavannaNoise = NoiseCacheHandler.getNoise(
-        		tw, 
-        		NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE, 
-        		world -> {
-        			FastNoise n = new FastNoise((int) (world.getSeed()*2));
-        	        n.SetNoiseType(NoiseType.SimplexFractal);
-        	        n.SetFractalOctaves(6);
-        	        n.SetFrequency(0.03f);
-        	        return n;
-        		});
-    	
-        //Let rivers forcefully carve through shattered savanna if they're deep enough.
-        double riverDepth = HeightMap.getRawRiverDepth(tw, x, z); //HeightMap.RIVER.getHeight(tw, x, z);
-        
-        if(height - riverDepth <= TerraformGenerator.seaLevel - 4) {
-        	double makeup = 0;
-        	//Ensure depth
-        	if(height - riverDepth > TerraformGenerator.seaLevel - 10) {
-        		makeup = (height - riverDepth) - (TerraformGenerator.seaLevel - 10);
-        	}
-        	height = height - makeup;
-        }else
-        {
-        	double noise = shatteredSavannaNoise.GetNoise(x,z); 
-        	if(noise > 0) {
-        		if(noise > 0.7) noise = 0.7;
-        		height += 15;
-        	}
-        }
+    	BiomeSection b = BiomeBank.getBiomeSectionFromBlockCoords(tw,x,z);
+        int cap = tw.getHashedRand(b.getX(),b.getZ(),7312849).nextInt();
+        double height = super.calculateHeight(tw, x, z);
+
+        //Plateau-ify height
+        //height = Math.max(Math.pow(height, 1.5), );
+
         
     	return height;
     }
     
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
-			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int y = GenUtils.getHighestGround(data, x, z);
-				if(y < TerraformGenerator.seaLevel) continue;
-				if(data.getBiome(x, z) != getBiome()) continue;
-				
-				
-				//Above sea level + 20. Carve spheres.
-				if(y > TerraformGenerator.seaLevel + 20) {
-					double gradient = HeightMap.getTrueHeightGradient(data, x, z, 3);
-					if(gradient > 2)
-						if(GenUtils.chance(random, 1, 100)) {
-							float rY = (y - TerraformGenerator.seaLevel)/3;
-							float radius = (float) Math.max(5.0, rY/3);
-							new CylinderBuilder(random, 
-									new SimpleBlock(data,x,y,z),
-									Material.AIR)
-							.setRadius(radius)
-							.setRY(rY)
-							.setLowerType(Material.GRASS_BLOCK)
-							.setHardReplace(true)
-							.build();
-							y = GenUtils.getHighestGround(data, x, z);
-						}
-				}
-				
-				if (data.getType(x, y, z) == Material.GRASS_BLOCK
-                        && !data.getType(x, y + 1, z).isSolid()) {
-                    //Dense grass
-                    if (GenUtils.chance(random, 2, 10)) {
-                        data.setType(x, y+1, z, Material.GRASS);
-                    }
-                }
-				
-			}
-		}
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ,  PopulatorDataAbstract data) {
+        if(surfaceY < TerraformGenerator.seaLevel) return;
+
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
+                && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
+            //Dense grass
+            if (GenUtils.chance(random, 2, 10)) {
+                data.setType(rawX, surfaceY+1, rawZ, Material.GRASS);
+            }
+        }
     }
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		
         //Small trees
 	    SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 34);
         for (SimpleLocation sLoc : trees) {

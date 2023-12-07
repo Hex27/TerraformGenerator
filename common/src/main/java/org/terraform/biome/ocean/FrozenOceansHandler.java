@@ -44,27 +44,20 @@ public class FrozenOceansHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
-                //Set ground near sea level to gravel
-                if(y >= TerraformGenerator.seaLevel - 2) {
-                	data.setType(x, y, z, Material.GRAVEL);
-                }else if(y >= TerraformGenerator.seaLevel - 4) {
-                	if(random.nextBoolean())
-                    	data.setType(x, y, z, Material.GRAVEL);
-                }
-
-                //Full ice-sheets
-                if (!data.getType(x, TerraformGenerator.seaLevel, z).isSolid())
-                    data.setType(x, TerraformGenerator.seaLevel, z, Material.ICE);
-
-            }
+        //Set ground near sea level to gravel
+        if(surfaceY >= TerraformGenerator.seaLevel - 2) {
+            data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
+        }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
+            if(random.nextBoolean())
+                data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
         }
+
+        //Full ice-sheets
+        if (!data.getType(rawX, TerraformGenerator.seaLevel, rawZ).isSolid())
+            data.setType(rawX, TerraformGenerator.seaLevel, rawZ, Material.ICE);
+
     }
 
 	@Override

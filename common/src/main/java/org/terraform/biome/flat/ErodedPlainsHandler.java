@@ -37,8 +37,8 @@ public class ErodedPlainsHandler extends BiomeHandler {
     public Material[] getSurfaceCrust(Random rand) { return plainsHandler.getSurfaceCrust(rand); }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        plainsHandler.populateSmallItems(world, random, data);
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        plainsHandler.populateSmallItems(world, random, rawX, surfaceY, rawZ, data);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
 
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -74,36 +74,31 @@ public class ErodedPlainsHandler extends BiomeHandler {
         double threshold = 0.1;
         int heightFactor = 10;
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int rawX = chunkX * 16 + x;
-                int rawZ = chunkZ * 16 + z;
+        int rawX = chunkX * 16 + x;
+        int rawZ = chunkZ * 16 + z;
 
-                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
+        double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
+        int height = (int) preciseHeight;
 
-                // Don't touch areas that aren't eroded plains
-                if (tw.getBiomeBank(rawX, height, rawZ) != BiomeBank.ERODED_PLAINS) continue;
+        double noiseValue = Math.max(0, noise.GetNoise(rawX, rawZ)) * getBiomeBlender(tw).getEdgeFactor(BiomeBank.ERODED_PLAINS, rawX, rawZ);
+        double detailsValue = details.GetNoise(rawX, rawZ);
 
-                double noiseValue = Math.max(0, noise.GetNoise(rawX, rawZ)) * getBiomeBlender(tw).getEdgeFactor(BiomeBank.ERODED_PLAINS, rawX, rawZ);
-                double detailsValue = details.GetNoise(rawX, rawZ);
+        double d = (noiseValue / threshold) - (int) (noiseValue / threshold) - 0.5;
+        double platformHeight = (int) (noiseValue / threshold) * heightFactor
+                + (64 * Math.pow(d, 7) * heightFactor)
+                + detailsValue * heightFactor * 0.5;
 
-                double d = (noiseValue / threshold) - (int) (noiseValue / threshold) - 0.5;
-                double platformHeight = (int) (noiseValue / threshold) * heightFactor
-                        + (64 * Math.pow(d, 7) * heightFactor)
-                        + detailsValue * heightFactor * 0.5;
-
-                cache.writeTransformedHeight (x,z,(short) (Math.round(platformHeight)+height));
-                for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
-                    Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
-                            Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE);
-                    if (slabs && material != Material.GRASS_BLOCK && y == (int) Math.round(platformHeight) &&
-                            platformHeight - (int) platformHeight >= 0.5) material = Material.getMaterial(material.name() + "_SLAB");
-                    chunk.setBlock(x, height + y, z, material);
-                }
-                if (detailsValue < 0.2 && GenUtils.chance(3, 4)) chunk.setBlock(x, height + (int) Math.round(platformHeight), z, Material.GRASS_BLOCK);
-            }
+        cache.writeTransformedHeight (x,z,(short) (Math.round(platformHeight)+height));
+        for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
+            Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
+                    Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE);
+            if (slabs && material != Material.GRASS_BLOCK && y == (int) Math.round(platformHeight) &&
+                    platformHeight - (int) platformHeight >= 0.5)
+                material = Material.getMaterial(material.name() + "_SLAB");
+            assert material != null;
+            chunk.setBlock(x, height + y, z, material);
         }
+        if (detailsValue < 0.2 && GenUtils.chance(3, 4)) chunk.setBlock(x, height + (int) Math.round(platformHeight), z, Material.GRASS_BLOCK);
     }
 
     private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
