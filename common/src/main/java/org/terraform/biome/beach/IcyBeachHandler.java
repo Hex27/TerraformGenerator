@@ -27,7 +27,7 @@ public class IcyBeachHandler extends BiomeHandler {
                 case 3 -> nx--;
                 case 4 -> nz--;
             }
-            y = GenUtils.getTransformedHeight(data, nx, nz);
+            y = GenUtils.getTransformedHeight(data.getTerraformWorld(), nx, nz);
         }
     }
 

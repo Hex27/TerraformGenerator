@@ -137,7 +137,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
         for(int rawX = data.getChunkX()*16; rawX < data.getChunkX()*16+16; rawX++)
             for(int rawZ = data.getChunkZ()*16; rawZ < data.getChunkZ()*16+16; rawZ++)
             {
-                int surfaceY = GenUtils.getTransformedHeight(data,rawX,rawZ);
+                int surfaceY = GenUtils.getTransformedHeight(data.getTerraformWorld(), rawX, rawZ);
                 if(HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3) > 1.5)
                     if(HeightMap.CORE.getHeight(tw, rawX, rawZ) - HeightMap.getRawRiverDepth(tw, rawX, rawZ) < TerraformGenerator.seaLevel) {
                         //If this face is at least 4 blocks wide, carve a waterfall opening

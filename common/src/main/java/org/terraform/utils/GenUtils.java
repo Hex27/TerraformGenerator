@@ -318,37 +318,40 @@ public class GenUtils {
      * Stop fucking iterating from the sky, you look like an idiot.
      * Please for the love of god, use this where you can
      */
-    public static int getTransformedHeight(PopulatorDataAbstract data, int rawX, int rawZ)
+    public static int getTransformedHeight(TerraformWorld tw, int rawX, int rawZ)
     {
-        ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), rawX, rawZ);
+        ChunkCache cache = TerraformGenerator.getCache(tw, rawX, rawZ);
         int cachedY = cache.getTransformedHeight(rawX&0xF, rawZ&0xF);
-        if(cachedY == Float.MIN_VALUE){
-            TerraformGenerator.buildFilledCache(data.getTerraformWorld(), rawX>>4,rawZ>>4, cache);
+        if(cachedY == TerraformGeneratorPlugin.injector.getMinY()-1){
+            TerraformGenerator.buildFilledCache(tw, rawX>>4,rawZ>>4, cache);
+            cachedY = cache.getTransformedHeight(rawX&0xF, rawZ&0xF);
         }
-        //TODO: There is a problem with this that makes it return 0. Check it.
-        return cache.getTransformedHeight(rawX&0xF, rawZ&0xF);
+        if(cachedY < 10)
+            TerraformGeneratorPlugin.logger.info("GENUTILS TRANSFORMED < 10! " + rawX + "," + rawZ);
+        return cachedY;
     }
 
     /**
      * @return the highest solid ground. Is dirt-like or stone-like, and is
      * not leaves or logs
      * <br>
-     * The damn issue with this stupid stupid method is that caching it is
+     * The damn issue with this stupid, stupid method is that caching it is
      * inherently unsafe. If I call this, then place stone on the floor, it
      * technically changes.
      * <br>
      * I hate this method so much.
      * <br>
-     * But you know what? I'm gonna cache it anyway.
+     * But you know what? I'm going to cache it anyway.
      */
     public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
         //If you're too lazy to bother then just do this
-        if(data instanceof PopulatorDataSpigotAPI) return getTransformedHeight(data,x,z);
+        if(data instanceof PopulatorDataSpigotAPI)
+            return getTransformedHeight(data.getTerraformWorld(),x,z);
 
     	int y = TerraformGeneratorPlugin.injector.getMaxY()-1;
     	ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x, z);
     	int cachedY = cache.getHighestGround(x, z);
-    	if(cachedY != Float.MIN_VALUE) {
+    	if(cachedY != TerraformGeneratorPlugin.injector.getMinY()-1) {
     		//Basic check to ensure block above is not ground
     		//and current block is ground.
     		//Will fail if the new ground is an overhang of some kind.

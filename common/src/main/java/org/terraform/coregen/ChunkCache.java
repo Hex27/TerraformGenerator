@@ -2,6 +2,7 @@ package org.terraform.coregen;
 
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.Arrays;
 
@@ -74,7 +75,7 @@ public class ChunkCache {
         Problems might occur because the lib itself uses a for loop.
         Optimization lies entirely at the mercy of the running JVM.
         */
-        Arrays.fill(arrayCache, Float.MIN_VALUE);
+        Arrays.fill(arrayCache, TerraformGeneratorPlugin.injector.getMinY()-1);
 
         biomeCache = new BiomeBank[256];
     }

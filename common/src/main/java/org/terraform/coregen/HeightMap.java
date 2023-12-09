@@ -139,7 +139,7 @@ public enum HeightMap {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
 
         double cachedValue = cache.getHeightMapHeight(x, z);
-        if (cachedValue != Float.MIN_VALUE) return cachedValue;
+        if (cachedValue != TerraformGeneratorPlugin.injector.getMinY()-1) return cachedValue;
 
         double height = getRiverlessHeight(tw,x,z);
 
@@ -167,7 +167,7 @@ public enum HeightMap {
     private static float getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
         float h = cache.getDominantBiomeHeight(x, z);
-        if(h == Float.MIN_VALUE) {
+        if(h == TerraformGeneratorPlugin.injector.getMinY()-1) {
             //Upscale the biome
             if(x % upscaleSize != 0 && z % upscaleSize != 0)
                 h = getDominantBiomeHeight(tw, x-(x%upscaleSize),z-(z%upscaleSize));
@@ -199,7 +199,7 @@ public enum HeightMap {
         ChunkCache mainCache = TerraformGenerator.getCache(tw, x, z);
 
         //If this chunk cache hasn't cached a blurred value,
-        if(mainCache.getBlurredHeight(x, z) == Float.MIN_VALUE) {
+        if(mainCache.getBlurredHeight(x, z) == TerraformGeneratorPlugin.injector.getMinY()-1) {
 
             //Box blur across the biome section
             //MegaChunk mc = new MegaChunk(x, 0, z);
@@ -217,7 +217,7 @@ public enum HeightMap {
 
                     //Temporarily cache these X-Blurred values into chunkcache.
                     //Do not purge values that are legitimate.
-                    if(targetCache.getIntermediateBlurHeight(relX, relZ) == Float.MIN_VALUE)
+                    if(targetCache.getIntermediateBlurHeight(relX, relZ) == TerraformGeneratorPlugin.injector.getMinY()-1)
                     {
                         targetCache.cacheIntermediateBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
                     }

@@ -90,6 +90,7 @@ public class CheckHeightCommand extends TerraCommand {
                 .setSmoothBlendTowardsRivers(7).getEdgeFactor(biome, x, z));
         p.sendMessage("Result Biome: " + biome);
         p.sendMessage("Highest Ground: " + GenUtils.getHighestGround(data, x, z));
+        p.sendMessage("Transformed Height: " + GenUtils.getTransformedHeight(data.getTerraformWorld(), x, z));
         
     }
 }

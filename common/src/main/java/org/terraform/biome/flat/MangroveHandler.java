@@ -83,6 +83,7 @@ public class MangroveHandler extends BiomeHandler {
                 else
                     chunk.setBlock(x, surfaceY + i, z, getSurfaceCrust(random)[0]);
             }
+            //No guard needed, att < 1 will write surfaceY
             cache.writeTransformedHeight(x,z, (short) (surfaceY + att));
         }
     }

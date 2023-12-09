@@ -11,6 +11,7 @@ import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -138,28 +139,15 @@ public class ArchedCliffsHandler extends BiomeHandler {
     					//Indicates that this area is valid for population
     					sLoc.setY(grassBottom.getY());
 
-                    	FractalTypes.Mushroom type;
-                    	switch(random.nextInt(6)) {
-                    	case 0:
-                    		type = FractalTypes.Mushroom.MEDIUM_RED_MUSHROOM;
-                    		break;
-                    	case 1:
-                    		type = FractalTypes.Mushroom.MEDIUM_BROWN_MUSHROOM;
-                    		break;
-                    	case 2:
-                    		type = FractalTypes.Mushroom.MEDIUM_BROWN_FUNNEL_MUSHROOM;
-                    		break;
-                    	case 3:
-                    		type = FractalTypes.Mushroom.SMALL_BROWN_MUSHROOM;
-                    		break;
-                    	case 4:
-                    		type = FractalTypes.Mushroom.SMALL_POINTY_RED_MUSHROOM;
-                    		break;
-                    	default:
-                    		type = FractalTypes.Mushroom.SMALL_RED_MUSHROOM;
-                    		break;
-                    	}
-                    	
+                    	FractalTypes.Mushroom type = switch(random.nextInt(6)) {
+                            case 0 -> FractalTypes.Mushroom.MEDIUM_RED_MUSHROOM;
+                            case 1 -> FractalTypes.Mushroom.MEDIUM_BROWN_MUSHROOM;
+                            case 2 -> FractalTypes.Mushroom.MEDIUM_BROWN_FUNNEL_MUSHROOM;
+                            case 3 -> FractalTypes.Mushroom.SMALL_BROWN_MUSHROOM;
+                            case 4 -> FractalTypes.Mushroom.SMALL_POINTY_RED_MUSHROOM;
+                            default -> FractalTypes.Mushroom.SMALL_RED_MUSHROOM;
+                        };
+
                         new MushroomBuilder(type).build(tw, data, sLoc.getX(), sLoc.getY()+1, sLoc.getZ());
     				}
     			}
@@ -213,7 +201,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
                     , 0)
                 );
 
-        if(platformNoiseVal > 0) {
+        if(platformNoiseVal >= 1) {
             int platformHeight = (int) (
                     HeightMap.CORE.getHeight(tw, rawX, rawZ)
                     - HeightMap.ATTRITION.getHeight(tw, rawX, rawZ)
@@ -230,12 +218,17 @@ public class ArchedCliffsHandler extends BiomeHandler {
                     chunk.setBlock(x, platformHeight-i, z, Material.STONE);
             }
 
-            if(platformNoiseVal > 6) {
+            //This is for the bottom platform
+            //DOES NOT change height, so can be ignored in pure height calculation
+            //This is bad practice
+            if(!(chunk instanceof DudChunkData)
+                    && platformNoiseVal > 6) {
                 int pillarNoiseVal = (int) ((platformNoiseVal/10.0)*((0.1+Math.abs(pillarNoise.GetNoise(rawX, rawZ)))*20.0));
                 if(pillarNoiseVal + height > platformHeight)
                     pillarNoiseVal = platformHeight - height;
 
                 //Crust cannot be under solids.
+                //Guarded from DudChunkData, so safe to read
                 boolean applyCrust = !chunk.getType(x, height+pillarNoiseVal+1, z).isSolid();
 
                 for(int i = pillarNoiseVal; i >= 1; i--) {
@@ -248,6 +241,9 @@ public class ArchedCliffsHandler extends BiomeHandler {
         }
     }
 
+    /**
+     * Might want to phase this out
+     */
     private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
         if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
                 .setGridBlendingFactor(4)

@@ -83,6 +83,8 @@ public class ElevatedPlainsHandler extends BiomeHandler {
         int height = (int) preciseHeight;
 
         int noiseValue = (int) Math.round(heightFactor * getBiomeBlender(tw).getEdgeFactor(BiomeBank.ELEVATED_PLAINS, rawX, rawZ));
+        if(noiseValue < 1) return; //If no changes are made, DO NOT TOUCH CACHE
+
         for (int y = 1; y <= noiseValue; y++) {
             chunk.setBlock(x, height + y, z, getRockAt(random, x,y,z));
         }

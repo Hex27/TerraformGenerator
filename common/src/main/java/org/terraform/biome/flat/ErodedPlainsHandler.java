@@ -88,17 +88,20 @@ public class ErodedPlainsHandler extends BiomeHandler {
                 + (64 * Math.pow(d, 7) * heightFactor)
                 + detailsValue * heightFactor * 0.5;
 
-        cache.writeTransformedHeight (x,z,(short) (Math.round(platformHeight)+height));
-        for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
+        short newHeight = (short) (height + (int) Math.round(platformHeight));
+        if(newHeight < height) return; //Does not make changes if the platform is lower.
+
+        cache.writeTransformedHeight (x,z,(short) ((int)Math.round(platformHeight)+height));
+        for (int y = height+1; y <= newHeight; y++) {
             Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
                     Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE);
-            if (slabs && material != Material.GRASS_BLOCK && y == (int) Math.round(platformHeight) &&
+            if (slabs && material != Material.GRASS_BLOCK && y == newHeight &&
                     platformHeight - (int) platformHeight >= 0.5)
                 material = Material.getMaterial(material.name() + "_SLAB");
             assert material != null;
-            chunk.setBlock(x, height + y, z, material);
+            chunk.setBlock(x, y, z, material);
         }
-        if (detailsValue < 0.2 && GenUtils.chance(3, 4)) chunk.setBlock(x, height + (int) Math.round(platformHeight), z, Material.GRASS_BLOCK);
+        if (detailsValue < 0.2 && GenUtils.chance(3, 4)) chunk.setBlock(x, newHeight, z, Material.GRASS_BLOCK);
     }
 
     private static BiomeBlender getBiomeBlender(TerraformWorld tw) {

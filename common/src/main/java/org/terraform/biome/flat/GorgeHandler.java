@@ -55,31 +55,23 @@ public class GorgeHandler extends BiomeHandler {
     public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
         SimpleBlock target = new SimpleBlock(data,rawX,surfaceY+1,rawZ);
-        //the repair work is here because it needs the 3x3 boundary.
-        //This is a fucking war crime and it will be prosecuted later
-        while(target.getY() <= TerraformGenerator.seaLevel) {
-
-            //Lower parts of the gorge have water
-            if(target.getY() <= TerraformGenerator.seaLevel - 20) {
-                if(target.getType() == Material.WATER)
-                    for(BlockFace face:new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN}) {
-                        if(target.getRelative(face).getType() == Material.AIR)
-                            target.getRelative(face).setType(Material.STONE);
-                    }
-            } else {
-                //Repair possible exposed water caves to prevent water from escaping and
-                //forming weird blobs.
-                for(BlockFace face:new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SELF}) {
-                    if(target.getRelative(face).getType() == Material.WATER) {
+        boolean wasBelowSea = false;
+        //the repair work is here because it needs the 3x3 boundary
+        //for cave air that is BESIDE the water
+        //DOES NOT change height truth because another block MUST be above the
+        //one being changed due to the way this works
+        while(target.getY() <= TerraformGenerator.seaLevel-20) {
+            wasBelowSea = true;
+            if(target.getType() == Material.WATER)
+                for(BlockFace face:BlockUtils.directBlockFaces) {
+                    if(BlockUtils.isAir(target.getRelative(face).getType()))
                         target.getRelative(face).setType(Material.STONE);
-                        if(face == BlockFace.SELF)
-                            target.getRelative(face).setType(Material.STONE);
-                    }
                 }
-            }
-
-            target = target.getRelative(0,1,0);
+            target = target.getUp();
         }
+
+        //Do not do dry decorations if this was water
+        if(wasBelowSea) return;
 
         target = target.getGround();
 
@@ -93,8 +85,7 @@ public class GorgeHandler extends BiomeHandler {
                     target.getRelative(0,-3,0).setType(Material.DIRT);
             }
         }
-    	
-    		
+
     	plainsHandler.populateSmallItems(world, random, rawX, surfaceY, rawZ, data);
     }
 
@@ -178,7 +169,7 @@ public class GorgeHandler extends BiomeHandler {
 
             //Prevent going beneath y = 10
             if(depth > height - 10) depth = height-10;
-
+            //No guard here, depth is an integer, so if its 0, this cache write is safe
             cache.writeTransformedHeight (x,z, (short) (height - depth));
             for (int y = 0; y < depth; y++) {
                 if(TerraformGenerator.seaLevel - 20 >= height-y)
@@ -189,6 +180,10 @@ public class GorgeHandler extends BiomeHandler {
                 }
             }
 
+            //Stop water from escaping. Also makes the highest-ground assertion true
+            //MYSTERIO IS THE TRUTH
+            if(height-depth <= TerraformGenerator.seaLevel - 20)
+                chunk.setBlock(x, height-depth, z, Material.STONE);
         }
     }
 
