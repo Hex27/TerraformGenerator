@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.HashMap;
 import java.util.Stack;
@@ -50,10 +49,10 @@ public class OreDitCommand extends TerraCommand {
     			Material.LAPIS_ORE,
     			Material.REDSTONE_ORE,
     			Material.EMERALD_ORE,
-    			OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
-    			OneOneSevenBlockHandler.DEEPSLATE,
-    			OneOneSevenBlockHandler.TUFF,
-    			OneOneSevenBlockHandler.COPPER_ORE
+    			Material.DRIPSTONE_BLOCK,
+                Material.DEEPSLATE,
+                Material.TUFF,
+                Material.COPPER_ORE
     	};
         Player p = (Player) sender;
         Chunk c = p.getLocation().getChunk();

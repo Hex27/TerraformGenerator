@@ -23,7 +23,6 @@ import org.terraform.utils.WoodUtils;
 import org.terraform.utils.WoodUtils.WoodType;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;
 
@@ -232,7 +231,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                                 Material.GRASS_BLOCK,
                                 Material.GRASS_BLOCK,
                                 Material.GRASS_BLOCK,
-                                OneOneSevenBlockHandler.DIRT_PATH(),
+                                Material.DIRT_PATH,
                                 Material.GRASS_BLOCK,
                                 Material.COARSE_DIRT));
                     }

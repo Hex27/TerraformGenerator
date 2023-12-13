@@ -15,8 +15,6 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneEightBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -29,7 +27,7 @@ public class JaggedPeaksHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.SNOWY_SLOPES;
+        return Biome.SNOWY_SLOPES;
     }
 
     @Override
@@ -92,7 +90,7 @@ public class JaggedPeaksHandler extends AbstractMountainHandler {
             if(surfaceY < TerraformGenerator.seaLevel)
                 return;
             if(gradient < 1.2) {
-                data.setType(rawX, surfaceY, rawZ, OneOneSevenBlockHandler.POWDER_SNOW);
+                data.setType(rawX, surfaceY, rawZ, Material.POWDER_SNOW);
                 data.setType(rawX, surfaceY+1, rawZ, Material.AIR); //remove snow
             }else
                 data.setType(rawX, surfaceY, rawZ, Material.SNOW_BLOCK);

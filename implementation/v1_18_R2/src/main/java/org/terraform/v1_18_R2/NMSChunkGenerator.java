@@ -1,9 +1,7 @@
 package org.terraform.v1_18_R2;
 
-import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-
 import net.minecraft.SystemUtils;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.Holder;
@@ -20,36 +18,15 @@ import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.Climate.Sampler;
 import net.minecraft.world.level.biome.WorldChunkManager;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.IChunkAccess;
 import net.minecraft.world.level.levelgen.ChunkGeneratorAbstract;
 import net.minecraft.world.level.levelgen.HeightMap;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
-import net.minecraft.world.level.levelgen.SeededRandom;
 import net.minecraft.world.level.levelgen.WorldGenStage;
 import net.minecraft.world.level.levelgen.blending.Blender;
-import net.minecraft.world.level.levelgen.carver.WorldGenCarverAbstract;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_18_R2.generator.CraftLimitedRegion;
-import org.bukkit.generator.BlockPopulator;
-import org.bukkit.generator.ChunkGenerator.BiomeGrid;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
-import org.terraform.biome.custombiomes.CustomBiomeSupportedBiomeGrid;
-import org.terraform.biome.custombiomes.CustomBiomeType;
-import org.terraform.coregen.TerraformPopulator;
-import org.terraform.coregen.bukkit.TerraformBukkitBlockPopulator;
-import org.terraform.coregen.bukkit.TerraformGenerator;
-import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -59,12 +36,11 @@ import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.small.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
-import java.lang.reflect.Field;
-import java.util.*;
+
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-@SuppressWarnings("deprecation")
 public class NMSChunkGenerator extends ChunkGenerator {
 	private final ChunkGenerator delegate;
     private final TerraformWorld tw;
@@ -74,13 +50,12 @@ public class NMSChunkGenerator extends ChunkGenerator {
     	super(
     			delegate.b,//b is structureSets
     			delegate.e,//e is structureOverrides
-    			new TerraformWorldProviderBiome(TerraformWorld.get(worldname,seed), 
+    			new TerraformWorldProviderBiome(TerraformWorld.get(worldname,seed),
     					delegate.e()));  //Last arg is WorldChunkManager
 
         tw = TerraformWorld.get(worldname, seed);
         this.delegate = delegate;
     }
-    
 
     @Override //getBiomeSource
     public WorldChunkManager e() {
@@ -139,8 +114,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
             if (structuregenerator == StructureGenerator.k) { //stronghold
                 int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
-                return new Pair<BlockPosition, Holder<StructureFeature<?, ?>>>
-                (new BlockPosition(coords[0], 20, coords[1]), holder);
+                return new Pair<>
+                        (new BlockPosition(coords[0], 20, coords[1]), holder);
             } 
             else if(!TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
             {
@@ -148,20 +123,20 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     
             		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
-                    return new Pair<BlockPosition, Holder<StructureFeature<?, ?>>>
-                    (new BlockPosition(coords[0], 50, coords[1]), holder);
+                    return new Pair<>
+                            (new BlockPosition(coords[0], 50, coords[1]), holder);
                 } else if (structuregenerator == StructureGenerator.d) { //Mansion
                         
             		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
-                    return new Pair<BlockPosition, Holder<StructureFeature<?, ?>>>
-                    (new BlockPosition(coords[0], 50, coords[1]), holder);
+                    return new Pair<>
+                            (new BlockPosition(coords[0], 50, coords[1]), holder);
                 } else if (structuregenerator.getClass().getName().equals("net.minecraft.world.level.levelgen.feature.WorldGenBuriedTreasure")) { 
                 	//Buried Treasure
                 	int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
                     if(coords == null) return null;
-                    return new Pair<BlockPosition, Holder<StructureFeature<?, ?>>>
-                    (new BlockPosition(coords[0], 50, coords[1]), holder);
+                    return new Pair<>
+                            (new BlockPosition(coords[0], 50, coords[1]), holder);
                 }
             }
         }
@@ -178,7 +153,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     	//POPULATES BIOMES. IMPORTANT
     	//ichunkaccess.fillBiomesFromNoise(this.runtimeBiomeSource::getNoiseBiome, this.climateSampler())
-    	ichunkaccess.a(this.d, this.d());
+    	ichunkaccess.a(this.e(), null);
     	delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
     }
 

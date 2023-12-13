@@ -15,7 +15,6 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Map.Entry;
@@ -30,10 +29,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
 
     private static void dangleIronBarsDown(Random rand, int length, SimpleBlock base) {
         for (int i = 0; i < length; i++) {
-            if (Version.isAtLeast(16)) {
-                base.setType(OneOneSixBlockHandler.getChainMaterial());
-            } else
-                base.setType(Material.IRON_BARS);
+            base.setType(Material.CHAIN);
             base = base.getRelative(0, -1, 0);
         }
     }

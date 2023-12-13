@@ -8,7 +8,6 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
-import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -16,7 +15,6 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -96,7 +94,7 @@ public class ForestHandler extends BiomeHandler {
             if (GenUtils.chance(random, 99, 100) &&
                     data.getBiome(rawX, rawZ) == getBiome() &&
                     BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ)))
-                data.setType(rawX, surfaceY, rawZ, OneOneSevenBlockHandler.DIRT_PATH());
+                data.setType(rawX, surfaceY, rawZ, Material.DIRT_PATH);
         }
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
             if (GenUtils.chance(random, 1, 10)) {

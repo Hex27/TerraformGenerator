@@ -4,7 +4,6 @@ import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
-import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.beach.OasisBeach;
@@ -13,12 +12,9 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
-import org.terraform.structure.small.DesertWellPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -67,7 +63,7 @@ public class DesertHandler extends BiomeHandler {
 
         if (cactusGathering) {
             if (GenUtils.chance(random, 5, 100))
-                data.setType(rawX, surfaceY, rawZ, OneOneSevenBlockHandler.DIRT_PATH());
+                data.setType(rawX, surfaceY, rawZ, Material.DIRT_PATH);
         }
 
         if (base == Material.SAND) {

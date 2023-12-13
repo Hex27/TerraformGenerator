@@ -10,8 +10,6 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -93,12 +91,12 @@ public class AmethystGeodePopulator {
                         //Only do the other stuff if this isn't air.
                     }else if(rel.getType().isSolid())
 	                    if (amethystCrust <= noiseVal) {
-	                        rel.setType(OneOneSevenBlockHandler.AMETHYST_BLOCK,OneOneSevenBlockHandler.BUDDING_AMETHYST);
+	                        rel.setType(Material.AMETHYST_BLOCK,Material.BUDDING_AMETHYST);
 	                        amethystBlocks.add(rel);
 	                    }else if (innerCrust <= noiseVal) {
-	                        rel.setType(OneOneSevenBlockHandler.CALCITE);
+	                        rel.setType(Material.CALCITE);
 	                    }else if (outerCrust <= noiseVal) {
-	                        rel.setType(OneOneSixBlockHandler.SMOOTH_BASALT);
+	                        rel.setType(Material.SMOOTH_BASALT);
 	                    }
                 }
             }
@@ -110,7 +108,7 @@ public class AmethystGeodePopulator {
         		if(GenUtils.chance(1,6)) continue;
             	SimpleBlock target = rel.getRelative(face);
             	if(BlockUtils.isAir(target.getType()) && GenUtils.chance(1,6)) {
-            		new DirectionalBuilder(OneOneSevenBlockHandler.AMETHYST_CLUSTER)
+            		new DirectionalBuilder(Material.AMETHYST_CLUSTER)
             		.setFacing(face)
             		.apply(target);
             	}

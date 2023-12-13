@@ -15,7 +15,6 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -33,10 +32,10 @@ public class GenericLargeCavePopulator {
                 || type == Material.MAGMA_BLOCK
                 || type.toString().endsWith("WALL")
                 || type.toString().endsWith("MOSS")
-                || type == OneOneSevenBlockHandler.AMETHYST_CLUSTER
-                || type == OneOneSevenBlockHandler.MOSS_BLOCK
-                || type == OneOneSevenBlockHandler.MOSS_CARPET
-                || type == OneOneSevenBlockHandler.POINTED_DRIPSTONE;
+                || type == Material.AMETHYST_CLUSTER
+                || type == Material.MOSS_BLOCK
+                || type == Material.MOSS_CARPET
+                || type == Material.POINTED_DRIPSTONE;
 	}
 	
     /**
@@ -90,7 +89,7 @@ public class GenericLargeCavePopulator {
                                 if (rel.getRelative(0, 1, 0).getType() == Material.SAND
                                         || rel.getRelative(0, 1, 0).getType() == Material.GRAVEL
                                         || rel.getRelative(0, 1, 0).getType() == Material.WATER
-                                        || rel.getRelative(0, 1, 0).getType() == OneOneSevenBlockHandler.POINTED_DRIPSTONE)
+                                        || rel.getRelative(0, 1, 0).getType() == Material.POINTED_DRIPSTONE)
                                     rel.getRelative(0, 1, 0).setType(Material.DIRT);
 
                                 //Replace water

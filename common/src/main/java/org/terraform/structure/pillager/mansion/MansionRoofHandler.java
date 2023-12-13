@@ -22,7 +22,6 @@ import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.TrapdoorBuilder;
 import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Random;
@@ -338,7 +337,7 @@ public class MansionRoofHandler {
     			ceiling = ceiling.getDown();
     			int chainLength = ceiling.getY() - core.getY() - 2 - rand.nextInt(3);
     			if(chainLength < 0)  chainLength = 0;
-    			ceiling.downPillar(chainLength, OneOneSixBlockHandler.getChainMaterial());
+    			ceiling.downPillar(chainLength, Material.CHAIN);
     			Lantern lantern = (Lantern) Bukkit.createBlockData(Material.LANTERN);
     			lantern.setHanging(true);
     			ceiling.getDown(chainLength).setBlockData(lantern);

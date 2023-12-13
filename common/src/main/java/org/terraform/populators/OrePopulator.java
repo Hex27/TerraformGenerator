@@ -9,7 +9,6 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Objects;
@@ -166,14 +165,14 @@ public class OrePopulator {
                         else if(Version.isAtLeast(17)) 
                         {
                         	//Deepslate replacing other ores
-                        	if(type == OneOneSevenBlockHandler.DEEPSLATE
+                        	if(type == Material.DEEPSLATE
                         			&& BlockUtils.ores.contains(oreType)) {
-                        		data.setType(relX,relY,relZ,OneOneSevenBlockHandler.deepSlateVersion(oreType));
+                        		data.setType(relX,relY,relZ,BlockUtils.deepSlateVersion(oreType));
                         	}
                         	//Normal ores replacing deepslate
-                        	else if(oreType == OneOneSevenBlockHandler.DEEPSLATE) 
+                        	else if(oreType == Material.DEEPSLATE)
                         	{
-                        		data.setType(relX,relY,relZ,OneOneSevenBlockHandler.deepSlateVersion(type));
+                        		data.setType(relX,relY,relZ,BlockUtils.deepSlateVersion(type));
                         	}
                         } 
                         

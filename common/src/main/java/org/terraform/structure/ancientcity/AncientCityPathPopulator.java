@@ -16,7 +16,6 @@ import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -64,7 +63,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         	core.getRight().setType(Material.GRAY_WOOL);
         	core.getUp().Pillar(3, Material.AIR);
         	
-        	new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+        	new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
         	.setHalf(Half.TOP)
         	.setFacing(BlockUtils.getLeft(ppd.dir))
         	.lapply(core.getRight(2))
@@ -118,8 +117,8 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 //    		core.getUp().getRear().getLeft().setType(Material.RED_WOOL);
 //    		core.getUp().getRear().getRight().setType(Material.RED_WOOL);
         	//Middle of the arc.
-    		core.getUp(6).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
-    		core.getUp(5).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
+    		core.getUp(6).lsetType(Material.DEEPSLATE_BRICK_WALL);
+    		core.getUp(5).lsetType(Material.DEEPSLATE_BRICKS);
 			Lantern lantern = (Lantern) Bukkit.createBlockData(Material.SOUL_LANTERN);
 			lantern.setHanging(true);
     		core.getUp(4).lsetBlockData(lantern);
@@ -130,39 +129,39 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     		//Mirror the sides to create the arc in the middle
     		for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
     			
-    			new StairBuilder(OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
+    			new StairBuilder(Material.POLISHED_DEEPSLATE_STAIRS)
     			.setHalf(Half.TOP).setFacing(leftRight.getOppositeFace())
     			.apply(core.getRelative(leftRight,2).getDown());
     			
-    			core.getRelative(leftRight,2).setType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
-    			core.getRelative(leftRight,2).getUp().lsetType(OneOneSevenBlockHandler.DEEPSLATE_TILES);
-    			core.getRelative(leftRight,2).getUp(2).LPillar(2, OneOneSevenBlockHandler.POLISHED_DEEPSLATE);
-    			core.getRelative(leftRight,2).getUp(4).lsetType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
+    			core.getRelative(leftRight,2).setType(Material.CHISELED_DEEPSLATE);
+    			core.getRelative(leftRight,2).getUp().lsetType(Material.DEEPSLATE_TILES);
+    			core.getRelative(leftRight,2).getUp(2).LPillar(2, Material.POLISHED_DEEPSLATE);
+    			core.getRelative(leftRight,2).getUp(4).lsetType(Material.CHISELED_DEEPSLATE);
     			
-    			new StairBuilder(OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
+    			new StairBuilder(Material.POLISHED_DEEPSLATE_STAIRS)
     			.setFacing(leftRight.getOppositeFace())
     			.lapply(core.getUp(5).getRelative(leftRight,2));
 
-    			new StairBuilder(OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
+    			new StairBuilder(Material.POLISHED_DEEPSLATE_STAIRS)
     			.setFacing(leftRight)
     			.setHalf(Half.TOP)
     			.lapply(core.getUp(4).getRelative(leftRight));
     			
-    			core.getRelative(leftRight).getUp(5).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
+    			core.getRelative(leftRight).getUp(5).lsetType(Material.DEEPSLATE_BRICKS);
     			
     		}
         	break;
     	case 1, 8:
 			
 			//Upper stair
-			new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_TILE_STAIRS)
+			new StairBuilder(Material.DEEPSLATE_TILE_STAIRS)
 			.setHalf(Half.TOP)
 			.setFacing(pathFacing.getOppositeFace())
 			.lapply(core.getUp(5));
     	
     		for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
         		//Slab
-    			new SlabBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB)
+    			new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
     			.setType(Type.TOP)
     			.lapply(core.getRelative(leftRight,2).getDown());
     			
@@ -172,64 +171,64 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 //    				core.getUp().setType(Material.GREEN_WOOL);
     			
     			//Stairs that complete the arc
-    			new StairBuilder(OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
+    			new StairBuilder(Material.POLISHED_DEEPSLATE_STAIRS)
     			.setFacing(pathFacing.getOppositeFace())
     			.lapply(core.getRelative(leftRight,2).getUp());
-    			new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_TILE_STAIRS)
+    			new StairBuilder(Material.DEEPSLATE_TILE_STAIRS)
     			.setHalf(Half.TOP)
     			.setFacing(pathFacing.getOppositeFace())
     			.lapply(core.getRelative(leftRight,2).getUp(4));
     			
-    			core.getRelative(leftRight,2).getUp(5).lsetType(OneOneSevenBlockHandler.DEEPSLATE_TILES);
-    			core.getRelative(leftRight).getUp(5).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
-    			core.getRelative(leftRight).getUp(6).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+    			core.getRelative(leftRight,2).getUp(5).lsetType(Material.DEEPSLATE_TILES);
+    			core.getRelative(leftRight).getUp(5).lsetType(Material.DEEPSLATE_BRICK_WALL);
+    			core.getRelative(leftRight).getUp(6).lsetType(Material.DEEPSLATE_BRICK_SLAB);
     			
     		}
     		break;
     	case 2, 7:
     		for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
         		//Slab
-    			new SlabBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB)
+    			new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
     			.setType(Type.TOP)
     			.lapply(core.getRelative(leftRight,2).getDown())
     			.lapply(core.getRelative(leftRight).getUp(5));
     			
-    			core.getRelative(leftRight,2).getUp(5).lsetType(OneOneSevenBlockHandler.DEEPSLATE_TILES);
-    			core.getRelative(leftRight,2).getUp(6).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+    			core.getRelative(leftRight,2).getUp(5).lsetType(Material.DEEPSLATE_TILES);
+    			core.getRelative(leftRight,2).getUp(6).lsetType(Material.DEEPSLATE_BRICK_SLAB);
     			
     		}
     		break;
     	case 3, 6:
     		//Center slab
-    		new SlabBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB)
+    		new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
 			.setType(Type.TOP)
 			.lapply(core.getUp(5));
     	
 	    	for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
 	    		//Slab
-				new SlabBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB)
+				new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
 				.setType(Type.TOP)
 				.lapply(core.getRelative(leftRight, 2).getUp(5));
 				
-				new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+				new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 				.setFacing(pathFacing.getOppositeFace())
 				.lapply(core.getRelative(leftRight, 2).getUp(6));
 			}
     		break;
     	case 4, 5:
     		//Center slab
-    		new SlabBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB)
+    		new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
 			.setType(Type.TOP)
 			.lapply(core.getUp(5));
     	
 	    	for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
 	    		//Slab
-	    		new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+	    		new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 				.setFacing(leftRight)
 				.setHalf(Half.TOP)
 				.lapply(core.getRelative(leftRight, 2).getUp(5));
 				
-				new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+				new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 				.setFacing(pathFacing.getOppositeFace())
 				.lapply(core.getRelative(leftRight, 2).getUp(6));
 			}

@@ -18,7 +18,6 @@ import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 public class AncientCityResearchBasementHandler {
 
@@ -52,9 +51,9 @@ public class AncientCityResearchBasementHandler {
 			Wall w = entry.getKey().getLeft(3);
 			for(int i = 3; i < entry.getValue()-3; i+=3)
 			{
-				w.getUp(4).setType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
-				w.setType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
-				new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_TILE_STAIRS)
+				w.getUp(4).setType(Material.CHISELED_DEEPSLATE);
+				w.setType(Material.CHISELED_DEEPSLATE);
+				new StairBuilder(Material.DEEPSLATE_TILE_STAIRS)
 				.setFacing(w.getDirection())
 				.apply(w.getUp(3))
 				.setHalf(Half.TOP)
@@ -65,10 +64,10 @@ public class AncientCityResearchBasementHandler {
 				.apply(w.getUp(2).getFront());
 				
 				//Back of wall
-				w.getUp().getFront().setType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
-				w.getUp(3).getFront().setType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
-				w.getFront().setType(OneOneSevenBlockHandler.DEEPSLATE_TILES);
-				w.getUp(4).getFront().setType(OneOneSevenBlockHandler.DEEPSLATE_TILES);
+				w.getUp().getFront().setType(Material.CHISELED_DEEPSLATE);
+				w.getUp(3).getFront().setType(Material.CHISELED_DEEPSLATE);
+				w.getFront().setType(Material.DEEPSLATE_TILES);
+				w.getUp(4).getFront().setType(Material.DEEPSLATE_TILES);
 				
 				
 				//Left and right sides
@@ -78,13 +77,13 @@ public class AncientCityResearchBasementHandler {
 					
 					temp.getUp(2).setType(Material.POLISHED_BASALT);
 					
-					new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_TILE_STAIRS)
+					new StairBuilder(Material.DEEPSLATE_TILE_STAIRS)
 					.setFacing(face.getOppositeFace())
 					.apply(temp)
 					.setHalf(Half.TOP)
 					.apply(temp.getUp(4));
 					
-					new StairBuilder(OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
+					new StairBuilder(Material.POLISHED_DEEPSLATE_STAIRS)
 					.setFacing(face.getOppositeFace())
 					.apply(temp.getUp(3))
 					.setHalf(Half.TOP)
@@ -92,7 +91,7 @@ public class AncientCityResearchBasementHandler {
 					
 					//rear
 					w.getFront().getRelative(face).Pillar(2, Material.POLISHED_BASALT);
-					w.getFront().getRelative(face).getUp(2).setType(OneOneSevenBlockHandler.DEEPSLATE_TILES);
+					w.getFront().getRelative(face).getUp(2).setType(Material.DEEPSLATE_TILES);
 					w.getFront().getRelative(face).getUp(3).Pillar(2, Material.POLISHED_BASALT);
 				}
 				
@@ -113,13 +112,13 @@ public class AncientCityResearchBasementHandler {
 	        	{
 	    			SimpleBlock target = core.getRelative(relX,1,relZ);
 	    			target.RPillar(4, new Random(),
-	    					OneOneSevenBlockHandler.DEEPSLATE_BRICKS, 
-	    					OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS, 
-	    					OneOneSevenBlockHandler.DEEPSLATE_BRICKS, 
-	    					OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS,
-	    					OneOneSevenBlockHandler.DEEPSLATE_BRICKS, 
-	    					OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS,
-	    					OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+	    					Material.DEEPSLATE_BRICKS, 
+	    					Material.CRACKED_DEEPSLATE_BRICKS, 
+	    					Material.DEEPSLATE_BRICKS, 
+	    					Material.CRACKED_DEEPSLATE_BRICKS,
+	    					Material.DEEPSLATE_BRICKS, 
+	    					Material.CRACKED_DEEPSLATE_BRICKS,
+	    					Material.DEEPSLATE_BRICK_SLAB);
 	        	}
 	    	
 	    	//Stairs at the top and bottom
@@ -131,7 +130,7 @@ public class AncientCityResearchBasementHandler {
 	    		for(BlockFace adj:BlockUtils.getAdjacentFaces(side))
 	    		{
 	    			if(w.getRelative(adj).isSolid()) continue;
-	    			new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+	    			new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 	    			.setFacing(w.getDirection().getOppositeFace())
 	    			.apply(w)
 	    			.apply(w.getRelative(adj,1))
@@ -170,7 +169,7 @@ public class AncientCityResearchBasementHandler {
 						core.getFront(i).Pillar(6, AncientCityUtils.deepslateBricks);
 				}
 				else
-		    		new StairwayBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+		    		new StairwayBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 		    		.setDownTypes(AncientCityUtils.deepslateBricks)
 		    		.setStairwayDirection(BlockFace.UP)
 		    		.setStopAtY(room.getY()+6)
@@ -191,7 +190,7 @@ public class AncientCityResearchBasementHandler {
 		pillarCent.getUp().Pillar(2, OneOneNineBlockHandler.SCULK_SENSOR);
 		for(BlockFace face:BlockUtils.directBlockFaces)
 		{
-			new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+			new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 			.setFacing(face.getOppositeFace())
 			.apply(pillarCent.getRelative(face,2))
 			.setHalf(Half.TOP)
@@ -200,7 +199,7 @@ public class AncientCityResearchBasementHandler {
 			pillarCent.getRelative(face).getUp().Pillar(2, Material.REDSTONE_LAMP);
 			
 			pillarCent.getRelative(face).getRelative(BlockUtils.getLeft(face))
-				.getUp().Pillar(2, OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
+				.getUp().Pillar(2, Material.DEEPSLATE_BRICK_WALL);
 			pillarCent.getRelative(face).getRelative(BlockUtils.getLeft(face))
 			.getUp().CorrectMultipleFacing(2);
 		}

@@ -18,9 +18,7 @@ import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,9 +76,9 @@ public class TerraformGenerator extends ChunkGenerator {
                 {
                     Material stoneType = Material.STONE;
                     if(y < 0)
-                        stoneType = OneOneSevenBlockHandler.DEEPSLATE;
+                        stoneType = Material.DEEPSLATE;
                     else if(y <= 2)
-                        stoneType = GenUtils.randMaterial(OneOneSevenBlockHandler.DEEPSLATE, Material.STONE);
+                        stoneType = GenUtils.randMaterial(Material.DEEPSLATE, Material.STONE);
 
                     //Set stone if a cave CANNOT be carved here
                     if(!tw.noiseCaveRegistry.canNoiseCarve(rawX,y,rawZ,height))

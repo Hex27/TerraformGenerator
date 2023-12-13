@@ -1,12 +1,14 @@
 package org.terraform.biome.cavepopulators;
 
+import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.block.Biome;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -31,14 +33,14 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
             return;
         
         //All ceiling is dripstone
-        ceil.setType(OneOneSevenBlockHandler.DRIPSTONE_BLOCK);
+        ceil.setType(Material.DRIPSTONE_BLOCK);
         
         //Stalactites
         if (GenUtils.chance(random, 1, 4)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;
-            OneOneSevenBlockHandler.downLPointedDripstone(GenUtils.randInt(1, h), ceil.getRelative(0,-1,0));
+            BlockUtils.downLPointedDripstone(GenUtils.randInt(1, h), ceil.getRelative(0,-1,0));
         }
 
         //=========================
@@ -46,14 +48,14 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
         //=========================
 
         //Floor is dripstone
-        floor.setType(OneOneSevenBlockHandler.DRIPSTONE_BLOCK);
+        floor.setType(Material.DRIPSTONE_BLOCK);
         
         //Stalagmites
         if (GenUtils.chance(random, 1, 4)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;
-            OneOneSevenBlockHandler.upLPointedDripstone(GenUtils.randInt(1,h), floor.getRelative(0,1,0));
+            BlockUtils.upLPointedDripstone(GenUtils.randInt(1,h), floor.getRelative(0,1,0));
         }
 
         //=========================
@@ -62,7 +64,7 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
         if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract) {
         	PopulatorDataICABiomeWriterAbstract data = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
         	while(floor.getY() < ceil.getY()) {
-        		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), OneOneSevenBlockHandler.DRIPSTONE_CAVES);
+        		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), Biome.DRIPSTONE_CAVES);
         		floor = floor.getRelative(0,1,0);
         	}
         }

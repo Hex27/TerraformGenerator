@@ -15,7 +15,6 @@ import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.io.FileNotFoundException;
@@ -110,14 +109,14 @@ public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulat
 				pathLength = room.getWidthZ()/2;
 			
 			for(int i = 0; i < pathLength-1; i++) {
-				w.getGround().setType(OneOneSevenBlockHandler.DIRT_PATH());
-				w.getLeft().getGround().setType(OneOneSevenBlockHandler.DIRT_PATH());
-				w.getRight().getGround().setType(OneOneSevenBlockHandler.DIRT_PATH());
+				w.getGround().setType(Material.DIRT_PATH);
+				w.getLeft().getGround().setType(Material.DIRT_PATH);
+				w.getRight().getGround().setType(Material.DIRT_PATH);
 				
 				if(GenUtils.chance(rand, 1, 10)) {
 					BlockFace lampFace = BlockUtils.getTurnBlockFace(rand, roomDir);
 					SimpleBlock target = w.getRelative(lampFace,2).getGround().getRelative(0,1,0).get();
-					if(target.getRelative(0,-1,0).getType() != OneOneSevenBlockHandler.DIRT_PATH() 
+					if(target.getRelative(0,-1,0).getType() != Material.DIRT_PATH
 							&& PlainsVillagePathPopulator.canPlaceLamp(target)) {
 						PlainsVillagePathPopulator.placeLamp(rand, target);
 					}

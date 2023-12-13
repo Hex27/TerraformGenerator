@@ -9,7 +9,6 @@ import org.terraform.data.Wall;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StalactiteBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -40,13 +39,13 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                 .build(random, w);
             	//w.downLPillar(random, h, Material.SANDSTONE_WALL);
             else 
-                if(w.getUp().getType() == OneOneSevenBlockHandler.DEEPSLATE) {
-                    new StalactiteBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL)
-                    .setSolidBlockType(OneOneSevenBlockHandler.DEEPSLATE)
+                if(w.getUp().getType() == Material.DEEPSLATE) {
+                    new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL)
+                    .setSolidBlockType(Material.DEEPSLATE)
                     .setFacingUp(false)
                     .setVerticalSpace(caveHeight)
                     .build(random, w);
-                	//w.downLPillar(random, h, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
+                	//w.downLPillar(random, h, Material.COBBLED_DEEPSLATE_WALL);
                 }
                 else if(BlockUtils.isStoneLike(w.getUp().getType())){
                     new StalactiteBuilder(Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL)
@@ -77,13 +76,13 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                     .build(random, w);
                 	//w.downLPillar(random, h, Material.SANDSTONE_WALL);
                 else 
-                    if(w.getDown().getType() == OneOneSevenBlockHandler.DEEPSLATE) {
-                        new StalactiteBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL)
-                        .setSolidBlockType(OneOneSevenBlockHandler.DEEPSLATE)
+                    if(w.getDown().getType() == Material.DEEPSLATE) {
+                        new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL)
+                        .setSolidBlockType(Material.DEEPSLATE)
                         .setFacingUp(true)
                         .setVerticalSpace(caveHeight)
                         .build(random, w);
-                    	//w.downLPillar(random, h, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
+                    	//w.downLPillar(random, h, Material.COBBLED_DEEPSLATE_WALL);
                     }
                     else if(BlockUtils.isStoneLike(w.getDown().getType())){
                         new StalactiteBuilder(Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL)
@@ -104,8 +103,8 @@ public class MossyCavePopulator extends AbstractCavePopulator {
             if (BlockUtils.isAir(base.getType()))
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (base.getRelative(face).getType().isSolid()) {
-                    	if(base.getRelative(0,-1,0).getType() == OneOneSevenBlockHandler.DEEPSLATE)
-                    		base.setType(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_SLAB);
+                    	if(base.getRelative(0,-1,0).getType() == Material.DEEPSLATE)
+                    		base.setType(Material.COBBLED_DEEPSLATE_SLAB);
                     	else
                     		base.setType(Material.STONE_SLAB);
                         break;

@@ -13,8 +13,6 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
-import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -27,7 +25,7 @@ public class SnowyWastelandHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.SNOWY_PLAINS;
+        return Biome.SNOWY_PLAINS;
     }
 
 //	@Override
@@ -51,10 +49,10 @@ public class SnowyWastelandHandler extends BiomeHandler {
     public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         //Snowier Snow
         if(GenUtils.chance(random, 1, 500)) {
-            BlockUtils.replaceCircularPatch(random.nextInt(9999), 3, new SimpleBlock(data,rawX,0,rawZ), OneOneSevenBlockHandler.POWDER_SNOW);
+            BlockUtils.replaceCircularPatch(random.nextInt(9999), 3, new SimpleBlock(data,rawX,0,rawZ), Material.POWDER_SNOW);
         }
         if (data.getType(rawX, surfaceY + 1, rawZ) == Material.AIR
-                && data.getType(rawX, surfaceY, rawZ) != OneOneSevenBlockHandler.POWDER_SNOW
+                && data.getType(rawX, surfaceY, rawZ) != Material.POWDER_SNOW
                 && GenUtils.isGroundLike(data.getType(rawX, surfaceY, rawZ))) {
             data.setType(rawX, surfaceY + 1, rawZ, Material.SNOW);
             if (data.getBlockData(rawX, surfaceY, rawZ) instanceof Snowable snowable) {

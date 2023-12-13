@@ -13,7 +13,6 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -126,7 +125,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     	        			.setFacing(dir)
     	        			.apply(rel.getRelative(dir.getOppositeFace()));
     	        			
-    	        			OneOneSevenBlockHandler.placeCandle(rel.getRelative(dir.getOppositeFace()).getUp(), GenUtils.randInt(1, 4),true);
+    	        			BlockUtils.placeCandle(rel.getRelative(dir.getOppositeFace()).getUp(), GenUtils.randInt(1, 4),true);
     	        		}
     	        	}else if(rel.getRelative(dir.getOppositeFace()).getUp().isSolid()
     	        			&& GenUtils.chance(rand, 1, 10)) {
@@ -157,8 +156,8 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     public static final Material[] pathMaterial = new Material[] {
         Material.DIRT,
         Material.COARSE_DIRT,
-        OneOneSevenBlockHandler.ROOTED_DIRT,
-        OneOneSevenBlockHandler.DRIPSTONE_BLOCK
+        Material.ROOTED_DIRT,
+        Material.DRIPSTONE_BLOCK
     };
 
     public Material getFenceMaterial() {

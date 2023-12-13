@@ -24,7 +24,6 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 
 public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator {
 
@@ -116,8 +115,8 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 		.apply(w.getUp(4).getLeft())
 		.apply(w.getUp(4).getRight());
 		
-		w.getUp(4).setType(OneOneSixBlockHandler.getChainMaterial());
-		w.getUp(3).setType(OneOneSixBlockHandler.getChainMaterial());
+		w.getUp(4).setType(Material.CHAIN);
+		w.getUp(3).setType(Material.CHAIN);
 		Lantern lat = (Lantern) Bukkit.createBlockData(Material.LANTERN);
 		lat.setHanging(true);
 		w.getUp(2).setBlockData(lat);

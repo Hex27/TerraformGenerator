@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -11,7 +12,6 @@ import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 /**
@@ -44,10 +44,10 @@ public class MasterCavePopulatorDistributor{
                     
                     //Don't populate inside amethysts
                     if(Version.isAtLeast(17) 
-                    		&& (floor.getType() == OneOneSevenBlockHandler.AMETHYST_BLOCK
-                    		|| floor.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER
-                    		|| ceil.getType() == OneOneSevenBlockHandler.AMETHYST_BLOCK
-                    		|| ceil.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER)) {
+                    		&& (floor.getType() == Material.AMETHYST_BLOCK
+                    		|| floor.getType() == Material.AMETHYST_CLUSTER
+                    		|| ceil.getType() == Material.AMETHYST_BLOCK
+                    		|| ceil.getType() == Material.AMETHYST_CLUSTER)) {
                     	continue;
                     }
                     

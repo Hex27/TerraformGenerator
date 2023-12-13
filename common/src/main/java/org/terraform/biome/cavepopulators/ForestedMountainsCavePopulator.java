@@ -5,15 +5,15 @@ import org.bukkit.Tag;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.CylinderBuilder;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
 public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
-    private MossyCavePopulator mossyCavePop;
+    private final MossyCavePopulator mossyCavePop;
     
     public ForestedMountainsCavePopulator() {
     	mossyCavePop = new MossyCavePopulator();
@@ -39,7 +39,7 @@ public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
                 			0,(ceil.getY() - floor.getY())/2,0), 
                 			Material.STONE)
                 	.setRadius(1.5f)
-                	.setRY((ceil.getY() - floor.getY())/2 + 3)
+                	.setRY((ceil.getY() - floor.getY())/2f + 3)
                 	.setHardReplace(false)
                 	.build();
                 	return;
@@ -51,15 +51,13 @@ public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
                 int glowBerryChance = 15;
                 if (GenUtils.chance(random, 1, glowBerryChance)) {
                     int h = caveHeight / 2;
-                    if(h > 0) {
-                    	if (h > 6) h = 6;
-                        OneOneSevenBlockHandler.downLCaveVines(h, ceil);
-                    }
+                    if (h > 6) h = 6;
+                    BlockUtils.downLCaveVines(h, ceil);
                 }
                 
                 //Spore blossom
             	if(GenUtils.chance(random, 1, 30))
-            		ceil.setType(OneOneSevenBlockHandler.SPORE_BLOSSOM);
+            		ceil.setType(Material.SPORE_BLOSSOM);
                 
                 //WATER DECORATIONS
                 //Lily pads

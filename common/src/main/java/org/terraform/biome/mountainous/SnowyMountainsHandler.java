@@ -11,8 +11,6 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneEightBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -25,7 +23,7 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.SNOWY_SLOPES;
+        return Biome.SNOWY_SLOPES;
     }
 
     @Override
@@ -70,7 +68,7 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
             if(surfaceY < TerraformGenerator.seaLevel)
                 return;
             if(gradient < 1.2) {
-                data.setType(rawX, surfaceY, rawZ, OneOneSevenBlockHandler.POWDER_SNOW);
+                data.setType(rawX, surfaceY, rawZ, Material.POWDER_SNOW);
                 data.setType(rawX, surfaceY+1, rawZ, Material.AIR); //remove snow
             }else
                 data.setType(rawX, surfaceY, rawZ, Material.SNOW_BLOCK);

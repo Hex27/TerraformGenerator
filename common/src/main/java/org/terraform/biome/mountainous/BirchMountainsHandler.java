@@ -16,7 +16,6 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -35,7 +34,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.JAGGED_PEAKS;
+        return Biome.JAGGED_PEAKS;
     }
 
     @Override

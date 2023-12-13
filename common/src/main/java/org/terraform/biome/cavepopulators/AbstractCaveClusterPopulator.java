@@ -3,13 +3,13 @@ package org.terraform.biome.cavepopulators;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator {
@@ -56,16 +56,16 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
                 		
                 		//Don't allow amethysts to be part of this
                 		if(Version.isAtLeast(17) 
-                        		&& ((candidateFloor.getType() == OneOneSevenBlockHandler.AMETHYST_BLOCK
-                        		|| candidateFloor.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER)
-                        				|| (candidateCeil.getType() == OneOneSevenBlockHandler.AMETHYST_BLOCK
-                                        		|| candidateCeil.getType() == OneOneSevenBlockHandler.AMETHYST_CLUSTER))) {
+                        		&& ((candidateFloor.getType() == Material.AMETHYST_BLOCK
+                        		|| candidateFloor.getType() == Material.AMETHYST_CLUSTER)
+                        				|| (candidateCeil.getType() == Material.AMETHYST_BLOCK
+                                        		|| candidateCeil.getType() == Material.AMETHYST_CLUSTER))) {
                         	continue;
                         }
                 		
                 		//Ensure that this is not already dripstone or moss
-                		if((candidateFloor.getType() == OneOneSevenBlockHandler.MOSS_BLOCK
-                        		|| candidateFloor.getType() == OneOneSevenBlockHandler.DRIPSTONE_BLOCK)) {
+                		if((candidateFloor.getType() == Material.MOSS_BLOCK
+                        		|| candidateFloor.getType() == Material.DRIPSTONE_BLOCK)) {
                         	continue;
                         }
                 		

@@ -21,7 +21,6 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 
 public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 
@@ -79,7 +78,7 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 		.setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
 		.apply(w.getRear().getRelative(0,5,0));
 		
-		w.getRelative(0,6,0).downPillar(rand, 2, OneOneSixBlockHandler.getChainMaterial());
+		w.getRelative(0,6,0).downPillar(rand, 2, Material.CHAIN);
 		Lantern lantern = (Lantern) Bukkit.createBlockData(Material.LANTERN);
 		lantern.setHanging(true);
 		w.getRelative(0,4,0).setBlockData(lantern);

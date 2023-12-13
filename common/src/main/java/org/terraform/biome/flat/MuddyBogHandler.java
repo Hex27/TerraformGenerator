@@ -19,7 +19,6 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import java.util.Random;
 
 public class MuddyBogHandler extends BiomeHandler {
@@ -74,12 +73,12 @@ public class MuddyBogHandler extends BiomeHandler {
                 BlockUtils.setDoublePlant(data, rawX, surfaceY+1, rawZ, Material.TALL_GRASS);
             else if(GenUtils.chance(random, 1, 300))
             {//Dripstone Cluster
-                BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.5f, block, OneOneSevenBlockHandler.DRIPSTONE_BLOCK);
+                BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.5f, block, Material.DRIPSTONE_BLOCK);
                 if(GenUtils.chance(random, 1, 7))
-                    OneOneSevenBlockHandler.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(0,1,0));
+                    BlockUtils.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(0,1,0));
                 for(BlockFace face:BlockUtils.xzPlaneBlockFaces)
                     if(GenUtils.chance(random, 1, 7))
-                        OneOneSevenBlockHandler.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(face).getGround().getRelative(0,1,0));
+                        BlockUtils.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(face).getGround().getRelative(0,1,0));
             }
 
         }

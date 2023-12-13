@@ -6,7 +6,6 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -19,7 +18,7 @@ public class RockBeachHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.STONY_SHORE;
+        return Biome.STONY_SHORE;
     }
 
     @Override

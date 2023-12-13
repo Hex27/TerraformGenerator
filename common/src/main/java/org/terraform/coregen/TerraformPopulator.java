@@ -16,8 +16,6 @@ import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
-import org.terraform.utils.version.OrePopulatorFallbackSettings;
 import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
@@ -166,36 +164,22 @@ public class TerraformPopulator extends BlockPopulator {
     				TConfigOption.ORE_AMETHYST_MIN_DEPTH.getInt(),
     				TConfigOption.ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE.getInt());
     		
-    		ORE_POPS[0] = new OrePopulator(OneOneSevenBlockHandler.COPPER_ORE, TConfigOption.ORE_COPPER_CHANCE.getInt(), TConfigOption.ORE_COPPER_VEINSIZE.getInt(),
+    		ORE_POPS[0] = new OrePopulator(Material.COPPER_ORE, TConfigOption.ORE_COPPER_CHANCE.getInt(), TConfigOption.ORE_COPPER_VEINSIZE.getInt(),
                     TConfigOption.ORE_COPPER_MAXVEINNUMBER.getInt(), TConfigOption.ORE_COPPER_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_COPPER_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_COPPER_MAXSPAWNHEIGHT.getInt(),
                     false);
-    		ORE_POPS[1] = new OrePopulator(OneOneSevenBlockHandler.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
+    		ORE_POPS[1] = new OrePopulator(Material.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
                     TConfigOption.ORE_DEEPSLATE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_DEEPSLATE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_DEEPSLATE_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_DEEPSLATE_MAXSPAWNHEIGHT.getInt(),
                     true);
-    		ORE_POPS[2] = new OrePopulator(OneOneSevenBlockHandler.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
+    		ORE_POPS[2] = new OrePopulator(Material.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
                     TConfigOption.ORE_TUFF_MAXVEINNUMBER.getInt(), TConfigOption.ORE_TUFF_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_TUFF_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_TUFF_MAXSPAWNHEIGHT.getInt(),
                     true);
     	}
-    	
-    	if(!Version.isAtLeast(18)) //Below 1.18
-    	{
-    		boolean repairOreSettings = false;
-    		for(OrePopulator orePop:ORE_POPS) { 
-    			if(orePop != null)
-	    			if(orePop.getMinRange() <= 0) { //Not configured for min height
-	    				TerraformGeneratorPlugin.logger.stdout("&c" + orePop.getType().toString() + " was configured to use Y <= 0! Reverting ore configuration to hardcoded 1.16 values.");
-	    				repairOreSettings = true;
-	    			}
-    		}
-    		if(repairOreSettings)
-				OrePopulatorFallbackSettings.repairOreSettings(ORE_POPS);
-    	}
     }
     
-    private MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
+    private final MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
 
     @Override
     public void populate(@NotNull org.bukkit.generator.WorldInfo worldInfo, @NotNull java.util.Random random,

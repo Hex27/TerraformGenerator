@@ -15,7 +15,6 @@ import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;
 
@@ -95,13 +94,13 @@ public class CherryGroveHandler extends BiomeHandler {
                         else
                             new FractalTreeBuilder(FractalTypes.Tree.CHERRY_THICK).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
                         //No spore blossoms on 1.20 as the new cherry trees already drop petals
-                        if(Version.isAtLeast(17) && !Version.isAtLeast(20)) {
+                        if(!Version.isAtLeast(20)) {
                             for(int rX = sLoc.getX() - 6; rX <= sLoc.getX() + 6; rX++) {
                                 for(int rZ = sLoc.getZ() - 6; rZ <= sLoc.getZ() + 6; rZ++) {
                                     Wall ceil = new Wall(new SimpleBlock(data, rX, sLoc.getY(), rZ)).findCeiling(15);
                                     if(ceil != null && GenUtils.chance(random, 1, 30)) {
                                         if(ceil.getType() == Material.DARK_OAK_LEAVES) {
-                                            ceil.getRelative(0, -1, 0).setType(OneOneSevenBlockHandler.SPORE_BLOSSOM);
+                                            ceil.getRelative(0, -1, 0).setType(Material.SPORE_BLOSSOM);
                                         }
                                     }
                                 }

@@ -14,7 +14,6 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -28,7 +27,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         if (force)
             threshold = highest - GenUtils.randInt(random, 3, 6);
         for (int y = highest; y > threshold; y--) {
-            if (data.getBiome(x, z) != OneOneEightBlockHandler.ERODED_BADLANDS && !force) {
+            if (data.getBiome(x, z) != Biome.ERODED_BADLANDS && !force) {
             	if(data.getBiome(x, z) == Biome.DESERT) {
             		continue;
             	}
@@ -51,7 +50,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.ERODED_BADLANDS;
+        return Biome.ERODED_BADLANDS;
     }
 
     //Extra red sandstone padding required: Prevents exposed vertical surfaces.

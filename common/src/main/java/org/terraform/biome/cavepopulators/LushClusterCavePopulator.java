@@ -2,6 +2,7 @@ package org.terraform.biome.cavepopulators;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
@@ -13,7 +14,6 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.BisectedBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Random;
@@ -45,21 +45,21 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
             //Ceiling is sometimes roots
             if(GenUtils.chance(random, 1, 8)) {
             	//This part doesn't spawn Azaleas
-        		ceil.setType(OneOneSevenBlockHandler.ROOTED_DIRT);
+        		ceil.setType(Material.ROOTED_DIRT);
             	if(random.nextBoolean())
-            		ceil.getRelative(0,-1,0).setType(OneOneSevenBlockHandler.HANGING_ROOTS);
+            		ceil.getRelative(0,-1,0).setType(Material.HANGING_ROOTS);
             	
             }
             else //If not, it's moss
             {
-            	ceil.setType(OneOneSevenBlockHandler.MOSS_BLOCK);
+            	ceil.setType(Material.MOSS_BLOCK);
             	for(BlockFace face:BlockUtils.sixBlockFaces)
             		if(ceil.getRelative(face).getType() == Material.LAVA)
             			ceil.getRelative(face).setType(Material.AIR);
             	
             	//Spore blossom
             	if(GenUtils.chance(random, 1, 15))
-            		ceil.getRelative(0,-1,0).setType(OneOneSevenBlockHandler.SPORE_BLOSSOM);
+            		ceil.getRelative(0,-1,0).setType(Material.SPORE_BLOSSOM);
             }
             
             //Spawn these on the surface, and let the roots go downwards.
@@ -78,7 +78,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
                 int h = caveHeight / 4;
                 if (h < 1) h = 1;
                 if (h > 6) h = 6;
-                OneOneSevenBlockHandler.downLCaveVines(h, ceil.getRelative(0,-1,0));
+                BlockUtils.downLCaveVines(h, ceil.getRelative(0,-1,0));
             }
         }
 
@@ -94,24 +94,24 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         }
         
         //Ground is moss.
-        floor.setType(OneOneSevenBlockHandler.MOSS_BLOCK);
+        floor.setType(Material.MOSS_BLOCK);
         
        
         if (GenUtils.chance(random, 1, 15)) 
         { //Azaleas
         	if(random.nextBoolean())
-        		floor.getRelative(0,1,0).setType(OneOneSevenBlockHandler.AZALEA);
+        		floor.getRelative(0,1,0).setType(Material.AZALEA);
         	else
-        		floor.getRelative(0,1,0).setType(OneOneSevenBlockHandler.FLOWERING_AZALEA);
+        		floor.getRelative(0,1,0).setType(Material.FLOWERING_AZALEA);
         }
         else if (Version.isAtLeast(17) && GenUtils.chance(random, 1, 7)) 
         { //Dripleaves
         	if(random.nextBoolean())
-	        	new DirectionalBuilder(OneOneSevenBlockHandler.BIG_DRIPLEAF)
+	        	new DirectionalBuilder(Material.BIG_DRIPLEAF)
 	        	.setFacing(BlockUtils.getDirectBlockFace(random))
 	        	.apply(floor.getRelative(0,1,0));
         	else
-        		new BisectedBuilder(OneOneSevenBlockHandler.SMALL_DRIPLEAF)
+        		new BisectedBuilder(Material.SMALL_DRIPLEAF)
         		.placeBoth(floor.getRelative(0,1,0));
         }
         else if(GenUtils.chance(random, 1, 6))
@@ -119,7 +119,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
     		floor.getRelative(0,1,0).setType(Material.GRASS);
         else if(GenUtils.chance(random, 1, 7))
         	//Moss carpets
-    		floor.getRelative(0,1,0).setType(OneOneSevenBlockHandler.MOSS_CARPET);
+    		floor.getRelative(0,1,0).setType(Material.MOSS_CARPET);
         
 
 
@@ -132,9 +132,9 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         	for(BlockFace face:BlockUtils.directBlockFaces) {
         		SimpleBlock rel = target.getRelative(face);
         		if(BlockUtils.isStoneLike(rel.getType())) {
-        			rel.setType(OneOneSevenBlockHandler.MOSS_BLOCK);
+        			rel.setType(Material.MOSS_BLOCK);
         			if(BlockUtils.isAir(target.getType()) && GenUtils.chance(random, 1, 5)) {
-        				new MultipleFacingBuilder(OneOneSevenBlockHandler.GLOW_LICHEN)
+        				new MultipleFacingBuilder(Material.GLOW_LICHEN)
         				.setFace(face, true)
         				.apply(target);
         			}
@@ -149,7 +149,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract) {
         	PopulatorDataICABiomeWriterAbstract data = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
         	while(floor.getY() < ceil.getY()) {
-        		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), OneOneSevenBlockHandler.LUSH_CAVES);
+        		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), Biome.LUSH_CAVES);
         		floor = floor.getRelative(0,1,0);
         	}
         }

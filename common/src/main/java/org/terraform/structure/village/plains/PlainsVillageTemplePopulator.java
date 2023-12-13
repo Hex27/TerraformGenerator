@@ -1,5 +1,6 @@
 package org.terraform.structure.village.plains;
 
+import org.bukkit.Material;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -7,7 +8,6 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.village.plains.temple.PlainsVillageTempleJigsawBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -42,9 +42,9 @@ public class PlainsVillageTemplePopulator extends PlainsVillageAbstractRoomPopul
 
         boolean placedLamp = false;
         //Connect front to the nearest path.
-        while (entrance.getType() != OneOneSevenBlockHandler.DIRT_PATH() && maxDepth > 0) {
+        while (entrance.getType() != Material.DIRT_PATH && maxDepth > 0) {
             if (BlockUtils.isDirtLike(entrance.getType()))
-                entrance.setType(OneOneSevenBlockHandler.DIRT_PATH());
+                entrance.setType(Material.DIRT_PATH);
 
             if (!placedLamp && GenUtils.chance(this.rand, 3, 5)) {
                 SimpleBlock target;

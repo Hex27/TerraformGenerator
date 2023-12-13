@@ -9,7 +9,6 @@ import org.terraform.data.Wall;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StalactiteBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -35,9 +34,9 @@ public class DeepCavePopulator extends AbstractCavePopulator {
 //            if (h < 1) h = 1;
 //            if (h > 4) h = 4;
             Wall w = new Wall(ceil, BlockFace.NORTH);
-            if(w.getUp().getType() == OneOneSevenBlockHandler.DEEPSLATE) {
-                new StalactiteBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL)
-                .setSolidBlockType(OneOneSevenBlockHandler.DEEPSLATE)
+            if(w.getUp().getType() == Material.DEEPSLATE) {
+                new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL)
+                .setSolidBlockType(Material.DEEPSLATE)
                 .setFacingUp(false)
                 .setVerticalSpace(caveHeight)
                 .build(random, w);
@@ -65,11 +64,11 @@ public class DeepCavePopulator extends AbstractCavePopulator {
             if (h > 4) h = 4;
             Wall w = new Wall(floor.getRelative(0,1,0));
             if (BlockUtils.isAir(w.getType()))
-            	if(w.getDown().getType() == OneOneSevenBlockHandler.DEEPSLATE) 
+            	if(w.getDown().getType() == Material.DEEPSLATE)
             		//w.LPillar(h, random, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
 
-                    new StalactiteBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL)
-                    .setSolidBlockType(OneOneSevenBlockHandler.DEEPSLATE)
+                    new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL)
+                    .setSolidBlockType(Material.DEEPSLATE)
                     .setFacingUp(true)
                     .setVerticalSpace(caveHeight)
                     .build(random, w);
@@ -88,8 +87,8 @@ public class DeepCavePopulator extends AbstractCavePopulator {
             if (BlockUtils.isAir(base.getType()))
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (base.getRelative(face).getType().isSolid()) {
-                    	if(base.getRelative(0,-1,0).getType() == OneOneSevenBlockHandler.DEEPSLATE)
-                    		base.setType(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_SLAB);
+                    	if(base.getRelative(0,-1,0).getType() == Material.DEEPSLATE)
+                    		base.setType(Material.COBBLED_DEEPSLATE_SLAB);
                     	else
                     		base.setType(Material.STONE_SLAB);
                         break;
