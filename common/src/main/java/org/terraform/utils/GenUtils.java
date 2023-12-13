@@ -326,8 +326,6 @@ public class GenUtils {
             TerraformGenerator.buildFilledCache(tw, rawX>>4,rawZ>>4, cache);
             cachedY = cache.getTransformedHeight(rawX&0xF, rawZ&0xF);
         }
-        if(cachedY < 10)
-            TerraformGeneratorPlugin.logger.info("GENUTILS TRANSFORMED < 10! " + rawX + "," + rawZ);
         return cachedY;
     }
 

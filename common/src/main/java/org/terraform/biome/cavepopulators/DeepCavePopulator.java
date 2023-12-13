@@ -30,7 +30,7 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Stalactites
-        if (GenUtils.chance(random, 1, 8*Math.max(3, caveHeight/4))) {
+        if (GenUtils.chance(random, 1, 10*Math.max(3, caveHeight/4))) {
 //            int h = caveHeight / 4;
 //            if (h < 1) h = 1;
 //            if (h > 4) h = 4;
@@ -59,7 +59,7 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Stalagmites
-        if (GenUtils.chance(random, 1, 8*Math.max(3, caveHeight/4))) {
+        if (GenUtils.chance(random, 1, 10*Math.max(3, caveHeight/4))) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;

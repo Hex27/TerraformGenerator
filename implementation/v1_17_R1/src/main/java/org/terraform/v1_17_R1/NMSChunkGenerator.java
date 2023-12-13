@@ -65,13 +65,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class NMSChunkGenerator extends ChunkGenerator {
-	private static Class<?> chunkDataClass = null;
-	private static Method getTiles;
-	private static Method getTypeId;
 	private final ChunkGenerator delegate;
-    private final WorldServer world;
-    private final TerraformPopulator pop;
     private final TerraformWorld tw;
+    private final TerraformWorldProviderBiome twBS;
     
     public NMSChunkGenerator(String worldname, int seed,
     						ChunkGenerator delegate,
@@ -80,56 +76,21 @@ public class NMSChunkGenerator extends ChunkGenerator {
                              StructureSettings structuresettings, long i) {
         super(new CustomBiomeSource(worldchunkmanager), new CustomBiomeSource(worldchunkmanager1), structuresettings, i);
         
-        //Time bomb, explodes in about 1-2 years. Written on 28/8/2021
-        if(chunkDataClass == null) {
-        	try {
-            	chunkDataClass = Class.forName("org.bukkit.craftbukkit.v1_17_R1.generator.OldCraftChunkData");
-            	TerraformGeneratorPlugin.logger.stdout("Detected new worldgen API. Adjusting accordingly.");
-            }
-            catch(ClassNotFoundException e)
-            {
-            	try {
-    				chunkDataClass = Class.forName("org.bukkit.craftbukkit.v1_17_R1.generator.CraftChunkData");
-    	        	TerraformGeneratorPlugin.logger.stdout("Detected old worldgen API. Adjusting accordingly.");
-    			} catch (ClassNotFoundException e1) {
-    				//If this fails again, just throw the exception and crash
-    				e1.printStackTrace();
-    			}
-            }
-            try {
-    			getTiles = chunkDataClass.getDeclaredMethod("getTiles");
-              	getTiles.setAccessible(true);
-              	getTypeId = chunkDataClass.getDeclaredMethod("getTypeId", int.class, int.class, int.class);
-    		} catch (NoSuchMethodException | SecurityException e1) {
-    			e1.printStackTrace();
-    		}
-        }
-        
+
         tw = TerraformWorld.get(worldname, seed);
+        this.twBS = new TerraformWorldProviderBiome(tw, worldchunkmanager);
         this.delegate = delegate;
-        pop = new TerraformPopulator(tw);
-        world = ((CraftWorld) Bukkit.getWorld(worldname)).getHandle();
-        
-        try {
-            modifyCaveCarverLists(WorldGenCarverAbstract.a);
-            modifyCaveCarverLists(WorldGenCarverAbstract.b);
-            modifyCaveCarverLists(WorldGenCarverAbstract.c);
-            modifyCaveCarverLists(WorldGenCarverAbstract.d);
-            modifyCaveCarverLists(WorldGenCarverAbstract.e);
-        } catch (Exception e) {
-            TerraformGeneratorPlugin.logger.error("Failed to modify vanilla cave carver lists. You may see floating blocks above caves.");
-            e.printStackTrace();
-        }
     }
 
     public TerraformWorld getTerraformWorld() {
         return tw;
     }
 
+    //tf does this do then
     @Override
     public void createBiomes(IRegistry<BiomeBase> iregistry, IChunkAccess ichunkaccess) {
-        ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
-        ((ProtoChunk)ichunkaccess).a(new BiomeStorage(iregistry, ichunkaccess, chunkcoordintpair, this.c));
+//        ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
+//        ((ProtoChunk)ichunkaccess).a(new BiomeStorage(iregistry, ichunkaccess, chunkcoordintpair, this.c));
      }
 
     @Override
@@ -188,7 +149,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
             } else if (structuregenerator.getClass().getName().equals("net.minecraft.world.level.levelgen.feature.WorldGenBuriedTreasure")) { 
             	//Buried Treasure
             	int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
-            	return new BlockPosition(coords[0], 50, coords[1]);
+                assert coords != null;
+                return new BlockPosition(coords[0], 50, coords[1]);
             }
         }
 
@@ -197,49 +159,12 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     public void addDecorations(RegionLimitedWorldAccess rlwa, StructureManager structuremanager) {
-        int chunkX = rlwa.a().b; //x
-        int chunkZ = rlwa.a().c; //z
-        PopulatorData popDat = new PopulatorData(rlwa, this, chunkX, chunkZ);
-        pop.populate(tw, rlwa.getRandom(), popDat);
-
+        delegate.addDecorations(rlwa, structuremanager);
     }
 
     @Override
     public void doCarving(long i, BiomeManager biomemanager, IChunkAccess ichunkaccess, WorldGenStage.Features worldgenstage_features) {
-    	super.doCarving(i, biomemanager, ichunkaccess, worldgenstage_features);
-    }
-
-    /**
-     * Used to modify cave carvers in vanilla to carve some other blocks.
-     * @param carverAbstract
-     * @throws NoSuchFieldException
-     * @throws SecurityException
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     */
-    @SuppressWarnings({ "deprecation" })
-    private void modifyCaveCarverLists(WorldGenCarverAbstract<?> carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-        Set<net.minecraft.world.level.block.Block> immutableCarverList =
-                ImmutableSet.of(
-                		//Defaults
-                		//Lolmao kms
-                		Blocks.b, Blocks.c, Blocks.e, Blocks.g, Blocks.j, Blocks.k, 
-                		Blocks.l, Blocks.i, Blocks.hf, Blocks.fS, Blocks.fT, Blocks.fU, Blocks.fV, Blocks.fW, Blocks.fX, Blocks.fY, Blocks.fZ, Blocks.ga, Blocks.gb, Blocks.gc, Blocks.gd, Blocks.ge, Blocks.gf, Blocks.gg, Blocks.gh, Blocks.az, Blocks.hU, Blocks.ec, Blocks.cK, Blocks.hh, Blocks.pN, Blocks.oL, Blocks.c, Blocks.H, Blocks.I, Blocks.qj, Blocks.oU, Blocks.oV, Blocks.qk,
-                        //Extra blocks
-                        Blocks.D, //Red sand
-                        Blocks.ij, //COBBLESTONE slab
-                        Blocks.ie, //stone slab
-                        Blocks.lJ, //Mossy cobble slab
-                        Blocks.lO, //Andesite Slab
-                        Blocks.m, //COBBLESTONE
-                        Blocks.iS, //Dirt Path
-                        Blocks.cM, //Snow block
-                        Blocks.bP //Mossy cobblestone
-                );
-        Field field = WorldGenCarverAbstract.class.getDeclaredField("k");
-        if (!field.isAccessible())
-            field.setAccessible(true);
-        field.set(carverAbstract, immutableCarverList);
+        delegate.doCarving(i, biomemanager, ichunkaccess, worldgenstage_features);
     }
 
     @Override
@@ -259,76 +184,15 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override
     public CompletableFuture<IChunkAccess> buildNoise(Executor executor, StructureManager structuremanager, IChunkAccess ichunkaccess) {
-        return CompletableFuture.completedFuture(ichunkaccess);
+        return delegate.buildNoise(executor, structuremanager, ichunkaccess);
      }
 
-//    public static ArrayList<Long> threadIds = new ArrayList<>();
-  	@SuppressWarnings("unchecked")
     @Override
     public void buildBase(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {
-//        if(!threadIds.contains(Thread.currentThread().getId())) {
-//        	TerraformGeneratorPlugin.logger.info("buildBase operating on thread ID " + Thread.currentThread().getId());
-//        	threadIds.add(Thread.currentThread().getId());
-//        }
-  		try {
-        	TerraformGenerator generator = new TerraformGenerator();
-            int x = ichunkaccess.getPos().b;
-            int z = ichunkaccess.getPos().c;
-        	Random random = tw.getRand(3);
-        	random.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
-            
-        	CustomBiomeGrid biomegrid = new CustomBiomeGrid(new BiomeStorage(this.world.t().d(IRegistry.aO), regionlimitedworldaccess, ichunkaccess.getPos(), this.getWorldChunkManager()));
-            org.bukkit.generator.ChunkGenerator.ChunkData data;
-            if (generator.isParallelCapable()) {
-               data = generator.generateChunkData(this.world.getWorld(), random, x, z, biomegrid);
-            } else {
-               synchronized(this) {
-                  data = generator.generateChunkData(this.world.getWorld(), random, x, z, biomegrid);
-               }
-            }
-
-            //Preconditions.checkArgument(data instanceof CraftChunkData, "Plugins must use createChunkData(World) rather than implementing ChunkData: %s", data);
-            //Object craftData = data;
-            
-            //ChunkSection[] sections = craftData.getRawChunkData();
-            Method getRawChunkData = chunkDataClass.getDeclaredMethod("getRawChunkData");
-            getRawChunkData.setAccessible(true);
-            ChunkSection[] sections = (ChunkSection[]) getRawChunkData.invoke(data);
-            
-            
-            ChunkSection[] csect = ichunkaccess.getSections();
-            int scnt = Math.min(csect.length, sections.length);
-
-            for(int sec = 0; sec < scnt; ++sec) {
-               if (sections[sec] != null) {
-                  ChunkSection section = sections[sec];
-                  csect[sec] = section;
-               }
-            }
-
-            //Sets this chunk's biomegrid to that biome.
-            ((ProtoChunk)ichunkaccess).a(biomegrid.biome);
-          	Set<BlockPosition> tiles = (Set<BlockPosition>) getTiles.invoke(data);
-            if (tiles != null) {
-               Iterator<BlockPosition> var20 = tiles.iterator();
-
-               while(var20.hasNext()) {
-                  BlockPosition pos = (BlockPosition)var20.next();
-                  int tx = pos.getX();
-                  int ty = pos.getY();
-                  int tz = pos.getZ();
-                  IBlockData block = (IBlockData) getTypeId.invoke(data, tx, ty, tz);
-                  if (block.isTileEntity()) {
-                     TileEntity tile = ((ITileEntity)block).createTile(new BlockPosition((x << 4) + tx, ty, (z << 4) + tz), block);
-                     ichunkaccess.setTileEntity(tile);
-                  }
-               }
-            }
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        delegate.buildBase(regionlimitedworldaccess, ichunkaccess);
     }
 
+    //what the fuck is this for
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
     public WeightedRandomList getMobsFor(BiomeBase biomebase, StructureManager structuremanager, EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
@@ -370,96 +234,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return ChunkGeneratorAbstract.d;
     }
 
-    private static boolean debug = true;
-    private static Field biomeBaseRegistry = null;
-    private class CustomBiomeGrid extends CustomBiomeSupportedBiomeGrid implements BiomeGrid {
-
-        private final BiomeStorage biome;
-
-        public CustomBiomeGrid(BiomeStorage biome) {
-            this.biome = biome;
-            if(biomeBaseRegistry == null) {
-            	try {
-					biomeBaseRegistry = BiomeStorage.class.getField("registry");
-				} catch (NoSuchFieldException e) {
-					try {
-						biomeBaseRegistry = BiomeStorage.class.getField("e");
-					} catch (Throwable e1) {
-						e1.printStackTrace();
-					}
-				}
-            }
-        }
-
-        @Override
-        public Biome getBiome(int x, int z) {
-            return getBiome(x, 0, z);
-        }
-
-        @Override
-        public void setBiome(int x, int z, Biome bio) {
-            for (int y = 0; y < tw.getWorld().getMaxHeight(); y++) {
-                setBiome(x, y, z, bio);
-            }
-        }
-
-        @SuppressWarnings("unchecked")
-		@Override
-        public Biome getBiome(int x, int y, int z) {
-            try {
-            	if(debug) {
-	            	BiomeBase sad = biome.getBiome(x >> 2, y >> 2, z >> 2);
-	            	if(sad.g() == 16711680) {
-	            		TerraformGeneratorPlugin.logger.info("GET-biome called! Water color correct.");
-	            		debug = false;
-	            	}
-            	}
-				return CraftBlock.biomeBaseToBiome((IRegistry<BiomeBase>) biomeBaseRegistry.get(biome), biome.getBiome(x >> 2, y >> 2, z >> 2));
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-				return null;
-			}
-        }
-
-        @SuppressWarnings("unchecked")
-		@Override
-        public void setBiome(int x, int y, int z, Biome bio) {
-            try {
-				biome.setBiome(x >> 2, y >> 2, z >> 2, CraftBlock.biomeToBiomeBase((IRegistry<BiomeBase>) biomeBaseRegistry.get(biome), bio));
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
-        }
-        
-		@Override
-		public void setBiome(int x, int y, int z, CustomBiomeType bio, Biome fallback) {
-			// TODO Auto-generated method stub
-			BiomeBase base = null;
-			DedicatedServer dedicatedserver = ((CraftServer) Bukkit.getServer()).getServer();
-	        IRegistryWritable<BiomeBase> registrywritable = dedicatedserver.getCustomRegistry().b(IRegistry.aO);
-	        
-			ResourceKey<BiomeBase> rkey = ResourceKey.a(IRegistry.aO, new MinecraftKey(bio.getKey()));
-	        base = registrywritable.a(rkey);
-	        if(base == null) {
-	        	String[] split = bio.getKey().split(":");
-	            ResourceKey<BiomeBase> newrkey = ResourceKey.a(IRegistry.aO, new MinecraftKey(split[0],split[1]));
-	            base = registrywritable.a(newrkey);
-	        }
-			
-			if(base != null) {
-				biome.setBiome(x >> 2, y >> 2, z >> 2, base);
-			}
-			else
-				setBiome(x,y,z,fallback);
-			
-//            if(debug) {
-//            	BiomeBase sad = biome.getBiome(x >> 2, y >> 2, z >> 2);
-//            	TerraformGeneratorPlugin.logger.info("Water Color: " + sad.g());
-//            	debug = false;
-//            }
-		}
-    }
-    
 	@Override
 	public BlockColumn getBaseColumn(int var0, int var1, LevelHeightAccessor var2) {
 		

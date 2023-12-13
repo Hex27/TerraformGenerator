@@ -33,27 +33,23 @@ public enum CaveClusterRegistry {
 	}
 	
 	public AbstractCaveClusterPopulator getPopulator(Random random) {
-		switch(this) {
-		case LUSH:
-			return new LushClusterCavePopulator(
-					GenUtils.randInt(random, 
-							TConfigOption.BIOME_CAVE_LUSHCLUSTER_MINSIZE.getInt(), 
-							TConfigOption.BIOME_CAVE_LUSHCLUSTER_MAXSIZE.getInt()), 
-					false);
-		case DRIPSTONE:
-			return new DripstoneClusterCavePopulator(
-					GenUtils.randInt(random, 
-							TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE.getInt(), 
-							TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE.getInt()));
-		case CRYSTALLINE:
-			return new CrystallineClusterCavePopulator(
-					GenUtils.randInt(random, 
-							TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MINSIZE.getInt(), 
-							TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MAXSIZE.getInt()));
-		}
-		
-		return null;
-	}
+        return switch(this) {
+            case LUSH -> new LushClusterCavePopulator(
+                    GenUtils.randInt(random,
+                            TConfigOption.BIOME_CAVE_LUSHCLUSTER_MINSIZE.getInt(),
+                            TConfigOption.BIOME_CAVE_LUSHCLUSTER_MAXSIZE.getInt()),
+                    false);
+            case DRIPSTONE -> new DripstoneClusterCavePopulator(
+                    GenUtils.randInt(random,
+                            TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE.getInt(),
+                            TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE.getInt()));
+            case CRYSTALLINE -> new CrystallineClusterCavePopulator(
+                    GenUtils.randInt(random,
+                            TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MINSIZE.getInt(),
+                            TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MAXSIZE.getInt()));
+        };
+
+    }
 
 	public int getHashSeed() {
 		return hashSeed;

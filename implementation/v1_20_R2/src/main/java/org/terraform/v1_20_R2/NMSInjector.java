@@ -1,14 +1,18 @@
 package org.terraform.v1_20_R2;
+
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.level.PlayerChunkMap;
+import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.entity.TileEntityBeehive;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.IChunkAccess;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Beehive;
 import org.bukkit.craftbukkit.v1_20_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBeehive;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_20_R2.generator.CraftLimitedRegion;
 import org.bukkit.entity.Player;
@@ -21,12 +25,6 @@ import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-import net.minecraft.server.level.PlayerChunkMap;
-import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.chunk.IChunkAccess;
-
-import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -45,7 +43,6 @@ public class NMSInjector extends NMSInjectorAbstract {
         return new BlockDataFixer();
     }
 
-    @SuppressWarnings("resource")
     @Override
     public boolean attemptInject(World world) {
         CraftWorld cw = (CraftWorld) world;
@@ -93,20 +90,11 @@ public class NMSInjector extends NMSInjectorAbstract {
         WorldServer ws = cw.getHandle();
         
         TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
-        //return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
         return new PopulatorDataICA(new PopulatorDataPostGen(chunk), tw, ws, ica, chunk.getX(), chunk.getZ());
     }
 
     @Override
     public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
-        if (data instanceof PopulatorData pdata) {
-            IChunkAccess ica = pdata.ica;//pdata.rlwa.getChunkAt(data.getChunkX(), data.getChunkZ());
-            //funny if this explodes.
-            WorldServer ws = ((PopulatorData) data).rlwa.getMinecraftWorld();
-            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.A()); //B is getSeed()
-            return new PopulatorDataICA(data, tw, ws, ica, data.getChunkX(), data.getChunkZ());
-        }
-
         //This is for the damn bees
         if (data instanceof PopulatorDataSpigotAPI pdata) {
             GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
@@ -114,6 +102,9 @@ public class NMSInjector extends NMSInjectorAbstract {
             TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.A()); //B is getSeed()
             return new PopulatorDataICA(data, tw, ws, gas.a(data.getChunkX(),data.getChunkZ()), data.getChunkX(), data.getChunkZ());
         }
+        if(data instanceof PopulatorDataPostGen gdata)
+            return getICAData(gdata.getChunk());
+
         return null;
     }
 
@@ -137,15 +128,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             throw new RuntimeException(e);
         }
     }
-//
-//	@Override
-//	public void updatePhysics(World world, org.bukkit.block.Block block) {
-//		BlockPosition pos = new BlockPosition(block.getX(),block.getY(),block.getZ());
-//		((CraftWorld) world).getHandle()..applyPhysics(
-//				pos,
-//				((CraftChunk) block.getChunk()).getHandle().a_(pos).b()); //a_ is getBlockState, b is getBlock
-//	}
-	
+
 	@Override
 	public int getMinY() {
 		return -64;

@@ -67,9 +67,6 @@ import java.util.concurrent.Executor;
 @SuppressWarnings("deprecation")
 public class NMSChunkGenerator extends ChunkGenerator {
 	private final ChunkGenerator delegate;
-    
-	private final WorldServer world;
-    private final TerraformPopulator pop;
     private final TerraformWorld tw;
     
 	public NMSChunkGenerator(String worldname, long seed,
@@ -82,18 +79,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
         tw = TerraformWorld.get(worldname, seed);
         this.delegate = delegate;
-        
-        pop = new TerraformPopulator(tw);
-        world = ((CraftWorld) Bukkit.getWorld(worldname)).getHandle();
-        
-        try {
-            modifyCaveCarverLists(WorldGenCarverAbstract.a);
-            modifyCaveCarverLists(WorldGenCarverAbstract.b);
-            modifyCaveCarverLists(WorldGenCarverAbstract.c);
-        } catch (Exception e) {
-            TerraformGeneratorPlugin.logger.error("Failed to modify vanilla cave carver lists. You may see floating blocks above caves.");
-            e.printStackTrace();
-        }
     }
     
 
@@ -174,7 +159,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 } else if (structuregenerator.getClass().getName().equals("net.minecraft.world.level.levelgen.feature.WorldGenBuriedTreasure")) { 
                 	//Buried Treasure
                 	int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
-
+                    if(coords == null) return null;
                     return new Pair<BlockPosition, Holder<StructureFeature<?, ?>>>
                     (new BlockPosition(coords[0], 50, coords[1]), holder);
                 }
@@ -185,32 +170,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     @Override //applyBiomeDecoration
     public void a(GeneratorAccessSeed generatoraccessseed, IChunkAccess ichunkaccess, StructureManager structuremanager) {
-    	int chunkX = ichunkaccess.f().c; //x
-        int chunkZ = ichunkaccess.f().d; //z
-        PopulatorData popDat = new PopulatorData(generatoraccessseed, ichunkaccess, this, chunkX, chunkZ);
-        pop.populate(tw, tw.getHashedRand(8292012, chunkX, chunkZ), popDat);
-        
-        //Spigot API BlockPopulator support
-        World world = generatoraccessseed.getMinecraftWorld().getWorld();
-        if (!world.getPopulators().isEmpty()) {
-           CraftLimitedRegion limitedRegion = new CraftLimitedRegion(generatoraccessseed, ichunkaccess.f());
-           int x = ichunkaccess.f().c;
-           int z = ichunkaccess.f().d;
-           Iterator<BlockPopulator> var10 = world.getPopulators().iterator();
-
-           while(var10.hasNext()) {
-              BlockPopulator populator = (BlockPopulator)var10.next();
-              if(populator instanceof TerraformBukkitBlockPopulator)
-            	  continue;
-              
-              SeededRandom seededrandom = new SeededRandom(new LegacyRandomSource(generatoraccessseed.D()));
-              seededrandom.a(generatoraccessseed.D(), x, z);
-              populator.populate(world, seededrandom, x, z, limitedRegion);
-           }
-
-           limitedRegion.saveEntities();
-           limitedRegion.breakLink();
-        }
+    	delegate.a(generatoraccessseed, ichunkaccess, structuremanager);
     }
 
     @Override //applyCarvers
@@ -218,79 +178,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
     	//POPULATES BIOMES. IMPORTANT
     	//ichunkaccess.fillBiomesFromNoise(this.runtimeBiomeSource::getNoiseBiome, this.climateSampler())
-    	ichunkaccess.a(this.d::getNoiseBiome, this.d());
-    	
-  		try {
-        	TerraformGenerator generator = new TerraformGenerator();
-            int chunkX = ichunkaccess.f().c; //x
-            int chunkZ = ichunkaccess.f().d; //z
-        	Random random = tw.getRand(3);
-        	random.setSeed((long) chunkX * 341873128712L + (long) chunkZ * 132897987541L);
-            
-        	//CustomBiomeGrid biomegrid = new CustomBiomeGrid(new BiomeStorage(this.world.t().d(IRegistry.aO), regionlimitedworldaccess, ichunkaccess.getPos(), this.getWorldChunkManager()));
-        	CustomBiomeGrid biomegrid = new CustomBiomeGrid(ichunkaccess);
-        	PopulatorDataAbstract data = new PopulatorData(regionlimitedworldaccess, ichunkaccess, this, chunkX, chunkZ);
-        	((PopulatorData)data).setRadius(0);
-        	data = new PopulatorDataICA(data,tw,this.world,ichunkaccess,chunkX,chunkZ);
-        	
-        	generator.addPopulatorData(data);
-            ChunkData cd = generator.generateChunkData(tw.getWorld(), random, chunkX, chunkZ, biomegrid);
-            
-            //Do carving after ground is set.
-        	delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
-        	
-        	//Fill seas and delete water caves in the air after carving.
-        	for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    int rawX = chunkX * 16 + x;
-                    int rawZ = chunkZ * 16 + z;
-
-                    //tw.getBiomeBank(rawX, rawZ);
-                    int height = tw.maxY-1; //(int) org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ);
-                    while(!CraftBlockData.fromData(ichunkaccess.a_(new BlockPosition(rawX, height, rawZ))).getMaterial().isSolid()
-                    	&& height > TerraformGenerator.seaLevel) {
-                		ichunkaccess.a(new BlockPosition(rawX, height, rawZ), Blocks.a.n(), false); //AIR
-                    	height--;
-                    }
-                    
-                    generator.fillSeaAndRivers(cd,x,z,(int) org.terraform.coregen.HeightMap.getBlockHeight(tw, rawX, rawZ));
-                }
-        	}
-        	
-        	
-            //CarverRegistry.doCarving(tw, data, random);
-  		
-  		} catch (SecurityException | IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Used to modify cave carvers in vanilla to carve some other blocks.
-     * @param carverAbstract
-     * @throws NoSuchFieldException
-     * @throws SecurityException
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     */
-    private void modifyCaveCarverLists(WorldGenCarverAbstract<?> carverAbstract) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-        Set<net.minecraft.world.level.block.Block> immutableCarverList =
-        		ImmutableSet.of(Blocks.A, Blocks.b, Blocks.c, Blocks.e, Blocks.g, Blocks.j, Blocks.k, Blocks.l, Blocks.i, Blocks.hf, Blocks.fS, Blocks.fT, Blocks.fU, Blocks.fV, Blocks.fW, Blocks.fX, Blocks.fY, Blocks.fZ, Blocks.ga, Blocks.gb, Blocks.gc, Blocks.gd, Blocks.ge, Blocks.gf, Blocks.gg, Blocks.gh, Blocks.az, Blocks.hU, Blocks.ec, Blocks.cK, Blocks.hh, Blocks.pN, Blocks.oM, Blocks.C, Blocks.D, Blocks.E, Blocks.oL, Blocks.c, Blocks.H, Blocks.I, Blocks.qj, Blocks.oU, Blocks.oV, Blocks.qk,
-        				//Extra blocks
-                        Blocks.D, //Red sand
-                        Blocks.ij, //COBBLESTONE slab
-                        Blocks.ie, //stone slab
-                        Blocks.lJ, //Mossy cobble slab
-                        Blocks.lO, //Andesite Slab
-                        Blocks.m, //COBBLESTONE
-                        Blocks.iS, //Dirt Path
-                        Blocks.cM, //Snow block
-                        Blocks.bP //Mossy cobblestone
-                );
-        Field field = WorldGenCarverAbstract.class.getDeclaredField("h");
-        if (!field.isAccessible())
-            field.setAccessible(true);
-        field.set(carverAbstract, immutableCarverList);
+    	ichunkaccess.a(this.d, this.d());
+    	delegate.a(regionlimitedworldaccess, var2, var4, var5, ichunkaccess, var7);
     }
 
     @Override //getSeaLevel
@@ -318,7 +207,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //  	@SuppressWarnings("unchecked")
     @Override //buildSurface. Used to be buildBase
     public void a(RegionLimitedWorldAccess regionlimitedworldaccess, StructureManager structuremanager, IChunkAccess ichunkaccess) {
-
+        delegate.a(regionlimitedworldaccess, structuremanager, ichunkaccess);
     }
   	
   	@Override //createReferences. Idk what this is
@@ -327,82 +216,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
   		delegate.a(gas, manager, ica);
   	}
 
-  	//Here lies madness
-//    @SuppressWarnings({ "rawtypes", "unchecked" })
-//	@Override //getMobsAt
-//    public WeightedRandomList<BiomeSettingsMobs.c> a(Holder<BiomeBase> holder, StructureManager structuremanager, EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-//        Map<StructureFeature<?, ?>, LongSet> map = structuremanager.b(blockposition); //b is getAllStructuresAt
-//        Iterator iterator = map.entrySet().iterator();
-//
-//        while (iterator.hasNext()) {
-//            Entry<StructureFeature<?, ?>, LongSet> entry = (Entry) iterator.next();
-//            StructureFeature<?, ?> structurefeature = (StructureFeature) entry.getKey();
-//            StructureSpawnOverride structurespawnoverride = (StructureSpawnOverride) structurefeature.g.get(enumcreaturetype); //g is spawnOverrides
-//
-//            if (structurespawnoverride != null) {
-//                MutableBoolean mutableboolean = new MutableBoolean(false);
-//                //a is boundingBox(), a.a is a.PIECE 
-//                Predicate<StructureStart> predicate = structurespawnoverride.a() == StructureSpawnOverride.a. ? (structurestart) -> {
-//                    return structuremanager.structureHasPieceAt(blockposition, structurestart);
-//                } : (structurestart) -> {
-//                    return structurestart.getBoundingBox().isInside(blockposition);
-//                };
-//
-//                structuremanager.fillStartsForFeature(structurefeature, (LongSet) entry.getValue(), (structurestart) -> {
-//                    if (mutableboolean.isFalse() && predicate.test(structurestart)) {
-//                        mutableboolean.setTrue();
-//                    }
-//
-//                });
-//                if (mutableboolean.isTrue()) {
-//                    return structurespawnoverride.spawns();
-//                }
-//            }
-//        }
-//
-//        return ((BiomeBase) holder.value()).getMobSettings().getMobs(enumcreaturetype);
-//    }
-
     @Override
     protected Codec<? extends ChunkGenerator> b() {
         return ChunkGeneratorAbstract.a;
     }
 
-    //This class is on the verge of getting deleted.
-	private class CustomBiomeGrid extends CustomBiomeSupportedBiomeGrid implements BiomeGrid {
-
-        private final IChunkAccess biome;
-        public CustomBiomeGrid(IChunkAccess biome) {
-            this.biome = biome;
-        }
-
-        @Override
-        public Biome getBiome(int x, int z) {
-        	return getBiome(x, TerraformGenerator.seaLevel, z);
-        }
-
-        @Override
-        public void setBiome(int x, int z, Biome bio) {
-        }
-
-		@Override
-        public Biome getBiome(int x, int y, int z) {
-            try {
-            	return CraftBlock.biomeBaseToBiome(this.biome.biomeRegistry, this.biome.getNoiseBiome(x >> 2, y >> 2, z >> 2));
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-				return null;
-			}
-        }
-		@Override
-        public void setBiome(int x, int y, int z, Biome bio) {
-        }
-        
-		@Override
-		public void setBiome(int x, int y, int z, CustomBiomeType bio, Biome fallback) {
-		}
-    }
-    
 	@Override //getBaseColumn
 	public BlockColumn a(int var0, int var1, LevelHeightAccessor var2) {
 		

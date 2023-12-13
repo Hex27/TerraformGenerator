@@ -1,4 +1,4 @@
-package org.terraform.v1_19_R3;
+package org.terraform.v1_20_R3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.entity.TileEntityBeehive;
@@ -6,10 +6,10 @@ import net.minecraft.world.level.chunk.ChunkStatus;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Beehive;
-import org.bukkit.craftbukkit.v1_19_R3.CraftChunk;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.block.CraftBlockEntityState;
-import org.bukkit.craftbukkit.v1_19_R3.generator.CraftLimitedRegion;
+import org.bukkit.craftbukkit.v1_20_R3.CraftChunk;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlockEntityState;
+import org.bukkit.craftbukkit.v1_20_R3.generator.CraftLimitedRegion;
 import org.bukkit.entity.Player;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
@@ -29,35 +29,34 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class NMSInjector extends NMSInjectorAbstract {
-	
+
 	//private boolean heightInjectSuccess = true;
-	
+
 	@Override
 	public void startupTasks() {
         //Inject new biomes
         CustomBiomeHandler.init();
 	}
-	
+
     @Override
     public BlockDataFixerAbstract getBlockDataFixer() {
         return new BlockDataFixer();
     }
 
-    @SuppressWarnings("resource")
     @Override
     public boolean attemptInject(World world) {
         CraftWorld cw = (CraftWorld) world;
         WorldServer ws = cw.getHandle();
-        
+
         //Force world to correct height
         TerraformWorld.get(world).minY = -64;
         TerraformWorld.get(world).maxY = 320;
 
-        //k is getChunkProvider, g is getChunkGenerator()
-        ChunkGenerator delegate = ws.k().g();
+        //k is getChunkSource, g is getChunkGenerator()
+        ChunkGenerator delegate = ws.l().g();
 
         TerraformGeneratorPlugin.logger.info("NMSChunkGenerator Delegate is of type " + delegate.getClass().getSimpleName());
-        
+
         //String worldname,
         //int seed,
         //WorldChunkManager worldchunkmanager,
@@ -67,38 +66,33 @@ public class NMSInjector extends NMSInjectorAbstract {
         NMSChunkGenerator bpg = new NMSChunkGenerator(
                 world.getName(),
                 (int) world.getSeed(),
-                delegate); 
-                //old,
-                //old,
-                //ws.k().g().d(),
-                //world.getSeed());
+                delegate);
 
 		//Inject TerraformGenerator NMS chunk generator
-        PlayerChunkMap pcm = ws.k().a; //getChunkProvider().PlayerChunkMap
+        PlayerChunkMap pcm = ws.l().a; //getChunkProvider().PlayerChunkMap
 
         try {
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
-                    pcm, "u", bpg); //chunkGenerator
+                    pcm, "t", bpg); //chunkGenerator
         } catch (Throwable e) {
             e.printStackTrace();
             return false;
         }
-        
+
         return true;
     }
 
     @Override
     public PopulatorDataICAAbstract getICAData(Chunk chunk) {
         //ChunKStatus.FULL
-        IChunkAccess ica = ((CraftChunk) chunk).getHandle(ChunkStatus.o);
+        IChunkAccess ica = ((CraftChunk) chunk).getHandle(ChunkStatus.n);
         CraftWorld cw = (CraftWorld) chunk.getWorld();
         WorldServer ws = cw.getHandle();
-        
+
         TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
         //return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
         return new PopulatorDataICA(new PopulatorDataPostGen(chunk), tw, ws, ica, chunk.getX(), chunk.getZ());
     }
-
 
     @Override
     public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
@@ -106,7 +100,7 @@ public class NMSInjector extends NMSInjectorAbstract {
         if (data instanceof PopulatorDataSpigotAPI pdata) {
             GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
             WorldServer ws = gas.getMinecraftWorld();
-            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.A()); //C is getSeed()
+            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.C()); //C is getSeed()
             return new PopulatorDataICA(data, tw, ws, gas.a(data.getChunkX(),data.getChunkZ()), data.getChunkX(), data.getChunkZ());
         }
         if(data instanceof PopulatorDataPostGen gdata)
@@ -135,7 +129,6 @@ public class NMSInjector extends NMSInjectorAbstract {
             throw new RuntimeException(e);
         }
     }
-	
 	@Override
 	public int getMinY() {
 		return -64;
@@ -145,9 +138,9 @@ public class NMSInjector extends NMSInjectorAbstract {
 	public int getMaxY() {
 		return 320;
 	}
-	
+
 	@Override
 	public void debugTest(Player p) {
 	}
-	
+
 }

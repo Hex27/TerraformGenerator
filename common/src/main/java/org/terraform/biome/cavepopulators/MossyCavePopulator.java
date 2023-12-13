@@ -30,10 +30,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Stalactites
-        if (GenUtils.chance(random, 1, 25)) {
-            int h = caveHeight / 4;
-            if (h < 1) h = 1;
-            if (h > 4) h = 4;
+        if (GenUtils.chance(random, 1, 35)) {
             Wall w = new Wall(ceil);
             if (w.getRelative(0, 1, 0).getType() == Material.SAND || w.getRelative(0, 1, 0).getType() == Material.SANDSTONE)
                 new StalactiteBuilder(Material.SANDSTONE_WALL)
@@ -66,7 +63,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Stalagmites
-        if (GenUtils.chance(random, 1, 25)) {
+        if (GenUtils.chance(random, 1, 35)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;

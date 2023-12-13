@@ -85,10 +85,22 @@ public enum TerraLootTable {
     WEAPONSMITH_GIFT("gameplay/hero_of_the_village/weaponsmith_gift"),
     SNIFFER_DIGGING("gameplay/sniffer_digging"),
     PIGLIN_BARTERING("gameplay/piglin_bartering"),
+    SPAWNER_TRIAL_CHAMBER_KEY("spawners/trial_chamber/key"),
+    SPAWNER_TRIAL_CHAMBER_CONSUMABLES("spawners/trial_chamber/consumables"),
     DESERT_WELL_ARCHAEOLOGY("archaeology/desert_well"),
     DESERT_PYRAMID_ARCHAEOLOGY("archaeology/desert_pyramid"),
     TRAIL_RUINS_ARCHAEOLOGY_COMMON("archaeology/trail_ruins_common"),
     TRAIL_RUINS_ARCHAEOLOGY_RARE("archaeology/trail_ruins_rare"),
+    TRIAL_CHAMBERS_REWARD("chests/trial_chambers/reward"),
+    TRIAL_CHAMBERS_SUPPLY("chests/trial_chambers/supply"),
+    TRIAL_CHAMBERS_CORRIDOR("chests/trial_chambers/corridor"),
+    TRIAL_CHAMBERS_INTERSECTION("chests/trial_chambers/intersection"),
+    TRIAL_CHAMBERS_INTERSECTION_BARREL("chests/trial_chambers/intersection_barrel"),
+    TRIAL_CHAMBERS_ENTRANCE("chests/trial_chambers/entrance"),
+    TRIAL_CHAMBERS_CORRIDOR_DISPENSER("dispensers/trial_chambers/corridor"),
+    TRIAL_CHAMBERS_CHAMBER_DISPENSER("dispensers/trial_chambers/chamber"),
+    TRIAL_CHAMBERS_WATER_DISPENSER("dispensers/trial_chambers/water"),
+    TRIAL_CHAMBERS_CORRIDOR_POT("pots/trial_chambers/corridor"),
     OCEAN_RUIN_WARM_ARCHAEOLOGY("archaeology/ocean_ruin_warm"),
     OCEAN_RUIN_COLD_ARCHAEOLOGY("archaeology/ocean_ruin_cold"),
     ;
@@ -99,7 +111,6 @@ public enum TerraLootTable {
     TerraLootTable(String key) {
         this.key = key;
     }
-
     public LootTable bukkit(){
         return Bukkit.getLootTable(NamespacedKey.minecraft(this.key));
     }

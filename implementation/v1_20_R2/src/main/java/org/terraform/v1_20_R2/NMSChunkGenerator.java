@@ -28,9 +28,6 @@ import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentStru
 import net.minecraft.world.level.levelgen.structure.structures.StrongholdStructure;
 import net.minecraft.world.level.levelgen.structure.structures.WoodlandMansionStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -42,34 +39,27 @@ import org.terraform.structure.small.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-@SuppressWarnings("deprecation")
 public class NMSChunkGenerator extends ChunkGenerator {
 	private final ChunkGenerator delegate;
-    
-	private final WorldServer world;
-    private final TerraformPopulator pop;
     private final TerraformWorld tw;
     private final MapRenderWorldProviderBiome mapRendererBS;
     private final TerraformWorldProviderBiome twBS;
     
-	public NMSChunkGenerator(String worldname, long seed,
+	public NMSChunkGenerator(String worldName, long seed,
     						ChunkGenerator delegate) {
     	super(
                 delegate.c(), //WorldChunkManager c() is getBiomeSource()
     			delegate.d); //Idk what generationSettingsGetter is
-        tw = TerraformWorld.get(worldname, seed);
+        tw = TerraformWorld.get(worldName, seed);
         this.delegate = delegate;
 
         //Set the long term biome handler to this one. The normal behaving one
         //is initiated inside the cave carver
         mapRendererBS = new MapRenderWorldProviderBiome(tw, delegate.c());
         twBS = new TerraformWorldProviderBiome(tw, delegate.c());
-        pop = new TerraformPopulator(tw);
-        world = ((CraftWorld) Objects.requireNonNull(Bukkit.getWorld(worldname))).getHandle();
     }
     
 

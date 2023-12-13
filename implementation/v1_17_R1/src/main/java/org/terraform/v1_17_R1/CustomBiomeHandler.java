@@ -1,7 +1,9 @@
 package org.terraform.v1_17_R1;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
+import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.terraform.biome.custombiomes.CustomBiomeType;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.biome.BiomeSettingsMobs;
 import net.minecraft.world.level.biome.Biomes;
 
 public class CustomBiomeHandler {
+    public static final HashMap<CustomBiomeType, ResourceKey<BiomeBase>> terraformGenBiomeRegistry = new HashMap<>();
 
 	public static void init() {
 		CraftServer craftserver = (CraftServer)Bukkit.getServer();
@@ -112,6 +115,14 @@ public class CustomBiomeHandler {
 		
 		newBiome.a(newFog.a());
 		dedicatedserver.getCustomRegistry().b(IRegistry.aO).a(newKey, newBiome.a(), Lifecycle.stable());
-	
+        terraformGenBiomeRegistry.put(biomeType, newKey);
 	}
+
+    public static IRegistry<BiomeBase> getBiomeRegistry()
+    {
+        CraftServer craftserver = (CraftServer)Bukkit.getServer();
+        DedicatedServer dedicatedserver = craftserver.getServer();
+
+        return dedicatedserver.getCustomRegistry().b(IRegistry.aO);
+    }
 }

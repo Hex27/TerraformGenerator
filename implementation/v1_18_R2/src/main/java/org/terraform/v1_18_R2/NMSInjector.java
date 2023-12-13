@@ -1,15 +1,23 @@
 package org.terraform.v1_18_R2;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.level.GeneratorAccessSeed;
+import net.minecraft.world.level.block.entity.TileEntityBeehive;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Beehive;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_18_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_18_R2.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_18_R2.generator.CustomChunkGenerator;
 import org.bukkit.entity.Player;
 import org.terraform.coregen.BlockDataFixerAbstract;
@@ -17,6 +25,7 @@ import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -44,7 +53,6 @@ public class NMSInjector extends NMSInjectorAbstract {
         return new BlockDataFixer();
     }
 
-    @SuppressWarnings("resource")
     @Override
     public boolean attemptInject(World world) {
         CraftWorld cw = (CraftWorld) world;
@@ -115,24 +123,39 @@ public class NMSInjector extends NMSInjectorAbstract {
 
     @Override
     public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
-        if (data instanceof PopulatorData) {
-            PopulatorData pdata = (PopulatorData) data;
-            IChunkAccess ica = pdata.ica;//pdata.rlwa.getChunkAt(data.getChunkX(), data.getChunkZ());
-            //funny if this explodes.
-            WorldServer ws = ((PopulatorData) data).rlwa.getMinecraftWorld();
-            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.D()); //D is getSeed()
-            return new PopulatorDataICA(data, tw, ws, ica, data.getChunkX(), data.getChunkZ());
+        //This is for the damn bees
+        if (data instanceof PopulatorDataSpigotAPI pdata) {
+            GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
+            WorldServer ws = gas.getMinecraftWorld();
+            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.D()); //C is getSeed()
+            return new PopulatorDataICA(data, tw, ws, gas.a(data.getChunkX(),data.getChunkZ()), data.getChunkX(), data.getChunkZ());
         }
+        if(data instanceof PopulatorDataPostGen gdata)
+            return getICAData(gdata.getChunk());
+
         return null;
     }
-//
-//	@Override
-//	public void updatePhysics(World world, org.bukkit.block.Block block) {
-//		BlockPosition pos = new BlockPosition(block.getX(),block.getY(),block.getZ());
-//		((CraftWorld) world).getHandle()..applyPhysics(
-//				pos,
-//				((CraftChunk) block.getChunk()).getHandle().a_(pos).b()); //a_ is getBlockState, b is getBlock
-//	}
+
+    private static Method getTileEntity = null;
+    @Override
+    public void storeBee(Beehive hive) {
+        try {
+            if(getTileEntity == null)
+            {
+                getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
+                getTileEntity.setAccessible(true);
+            }
+            TileEntityBeehive teb = (TileEntityBeehive) getTileEntity.invoke(hive);
+
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.a("id", "minecraft:bee");
+            //TileEntityBeehive.storeBee
+            teb.a(nbttagcompound, 0, false);
+
+        } catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
 	
 	@Override
 	public int getMinY() {

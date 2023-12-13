@@ -1,25 +1,34 @@
 package org.terraform.v1_17_R1;
-import java.lang.reflect.Field;
-import java.util.OptionalLong;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.server.level.PlayerChunkMap;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.level.GeneratorAccessSeed;
+import net.minecraft.world.level.biome.GenLayerZoomer;
+import net.minecraft.world.level.block.entity.TileEntityBeehive;
+import net.minecraft.world.level.chunk.IChunkAccess;
+import net.minecraft.world.level.dimension.DimensionManager;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.block.Beehive;
 import org.bukkit.craftbukkit.v1_17_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlockEntityState;
+import org.bukkit.craftbukkit.v1_17_R1.generator.CraftLimitedRegion;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-import net.minecraft.core.BlockPosition;
-import net.minecraft.resources.MinecraftKey;
-import net.minecraft.server.level.PlayerChunkMap;
-import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.level.biome.GenLayerZoomer;
-import net.minecraft.world.level.chunk.IChunkAccess;
-import net.minecraft.world.level.dimension.DimensionManager;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.OptionalLong;
 
 public class NMSInjector extends NMSInjectorAbstract {
 	
@@ -127,23 +136,39 @@ public class NMSInjector extends NMSInjectorAbstract {
 
     @Override
     public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
-        if (data instanceof PopulatorData) {
-            PopulatorData pdata = (PopulatorData) data;
-            IChunkAccess ica = pdata.rlwa.getChunkAt(data.getChunkX(), data.getChunkZ());
-            WorldServer ws = ((PopulatorData) data).rlwa.getMinecraftWorld();
-            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.getSeed());
-            return new PopulatorDataICA(tw, ws, ica, data.getChunkX(), data.getChunkZ());
+        //This is for the damn bees
+        if (data instanceof PopulatorDataSpigotAPI pdata) {
+            GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
+            WorldServer ws = gas.getMinecraftWorld();
+            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.getSeed()); //C is getSeed()
+            return new PopulatorDataICA(tw, ws, gas.getChunkAt(data.getChunkX(),data.getChunkZ()), data.getChunkX(), data.getChunkZ());
         }
+        if(data instanceof PopulatorDataPostGen gdata)
+            return getICAData(gdata.getChunk());
+
         return null;
     }
 
-	@Override
-	public void updatePhysics(World world, org.bukkit.block.Block block) {
-		BlockPosition pos = new BlockPosition(block.getX(),block.getY(),block.getZ());
-		((CraftWorld) world).getHandle().applyPhysics(
-				pos,
-				((CraftChunk) block.getChunk()).getHandle().getType(pos).getBlock());
-	}
+    private static Method getTileEntity = null;
+    @Override
+    public void storeBee(Beehive hive) {
+        try {
+            if(getTileEntity == null)
+            {
+                getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
+                getTileEntity.setAccessible(true);
+            }
+            TileEntityBeehive teb = (TileEntityBeehive) getTileEntity.invoke(hive);
+
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setString("id", "minecraft:bee");
+            //TileEntityBeehive.storeBee
+            teb.a(nbttagcompound, 0, false);
+
+        } catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
 	
 	@Override
 	public int getMinY() {

@@ -53,7 +53,7 @@ public class MasterCavePopulatorDistributor{
                     
                     AbstractCavePopulator pop = null;
                     if(floor.getY() < TerraformGeneratorPlugin.injector.getMinY() + 32)
-                    	/**
+                    	/*
                     	 * Deep cave floors will use the deep cave populator.
                     	 * This has to happen, as most surfaces
                     	 * too low down will be lava. Hard to decorate.
@@ -61,7 +61,7 @@ public class MasterCavePopulatorDistributor{
                     	pop = new DeepCavePopulator();
                     else 
                     {
-                    	/**
+                    	/*
                     	 * Cluster Populators won't just decorate one block, they
                     	 * will populate the surrounding surfaces in a fuzzy 
                     	 * radius.

@@ -1,4 +1,4 @@
-package org.terraform.v1_20_R1;
+package org.terraform.v1_20_R3;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -46,7 +46,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
     private final ChunkGenerator delegate;
     private final TerraformWorld tw;
     private final MapRenderWorldProviderBiome mapRendererBS;
-    private final TerraformWorldProviderBiome twBS;;
+    private final TerraformWorldProviderBiome twBS;
 
     public NMSChunkGenerator(String worldName, long seed,
                              ChunkGenerator delegate) {
@@ -137,7 +137,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
         //(net.minecraft.world.level.biome.BiomeResolver,net.minecraft.world.level.biome.Climate$Sampler)
         //Use twBS as it is the biome provider that actually calculates biomes.
         //The other one only returns river/plains
-        ichunkaccess.a(twBS, null); //This can be null as its passed into twBS
+        ichunkaccess.a(this.twBS, null); //This can be null as its passed into twBS
 
         //Call delegate applyCarvers to apply spigot ChunkGenerator;
         delegate.a(regionlimitedworldaccess, seed, randomstate, biomemanager,structuremanager,ichunkaccess,worldgenstage_features);
