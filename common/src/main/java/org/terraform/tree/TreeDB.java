@@ -7,11 +7,9 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -32,22 +30,22 @@ public class TreeDB {
     	builder.build(tw, data, x, y, z);
         
     	SimpleBlock rooter = new SimpleBlock(data,x,y-1,z);
-    	rooter.setType(OneOneSevenBlockHandler.ROOTED_DIRT);
+    	rooter.setType(Material.ROOTED_DIRT);
     	rooter = rooter.getRelative(0,-1,0);
     	
     	while(!BlockUtils.isAir(rooter.getType())) {
-    		rooter.setType(OneOneSevenBlockHandler.ROOTED_DIRT);
+    		rooter.setType(Material.ROOTED_DIRT);
     		for(BlockFace face:BlockUtils.xzPlaneBlockFaces) {
     			SimpleBlock rel = rooter.getRelative(face);
     			if(random.nextBoolean() && BlockUtils.isStoneLike(rel.getType())) {
-    				rel.setType(OneOneSevenBlockHandler.ROOTED_DIRT);
+    				rel.setType(Material.ROOTED_DIRT);
     				if(BlockUtils.isAir(rel.getRelative(0,-1,0).getType()))
-    					rel.getRelative(0,-1,0).setType(OneOneSevenBlockHandler.HANGING_ROOTS);
+    					rel.getRelative(0,-1,0).setType(Material.HANGING_ROOTS);
     			}
     		}
     		rooter = rooter.getRelative(0,-1,0);
     	}
-    	rooter.setType(OneOneSevenBlockHandler.HANGING_ROOTS);
+    	rooter.setType(Material.HANGING_ROOTS);
     }
 
     public static void spawnCoconutTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {

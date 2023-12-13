@@ -47,43 +47,28 @@ public class JungleRiverHandler extends BiomeHandler {
 
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         boolean growsKelp = random.nextBoolean();
+        if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
+            return;
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if(y >= TerraformGenerator.seaLevel) //Don't apply to dry land
-                	continue;
+        //Set ground near sea level to sand
+        if(surfaceY >= TerraformGenerator.seaLevel - 2) {
+            data.setType(rawX, surfaceY, rawZ, Material.SAND);
+        }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
+            if(random.nextBoolean())
+                data.setType(rawX, surfaceY, rawZ, Material.SAND);
+        }
 
-                if (data.getBiome(x, z) != getBiome()) continue;
+        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
 
-                //Set ground near sea level to sand
-                if(y >= TerraformGenerator.seaLevel - 2) {
-                	data.setType(x, y, z, Material.SAND);
-                }else if(y >= TerraformGenerator.seaLevel - 4) {
-                	if(random.nextBoolean())
-                    	data.setType(x, y, z, Material.SAND);
-                }
-                
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                
-                generateLilyPad(world, random, data, x, z, y);
+        generateLilyPad(world, random, data, rawX, rawZ, surfaceY);
 
-                // SEA GRASS/KELP
-                if (GenUtils.chance(random, 10, 100)) {
-                    data.setType(x, y + 1, z, Material.SEAGRASS);
-                    if (random.nextBoolean() && y < TerraformGenerator.seaLevel - 2)
-                        BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_SEAGRASS);
-                } else if (GenUtils.chance(random, 3, 50) && growsKelp && y + 1 < TerraformGenerator.seaLevel - 10) {
-                    generateKelp(x, y + 1, z, data, random);
-                }
+        RiverHandler.riverVegetation(world, random, data, rawX, surfaceY, rawZ);
 
-                // Generate clay
-                if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
-                    BlockUtils.generateClayDeposit(x, y, z, data, random);
-                }
-            }
+        // Generate clay
+        if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
+            BlockUtils.generateClayDeposit(rawX, surfaceY, rawZ, data, random);
         }
     }
 

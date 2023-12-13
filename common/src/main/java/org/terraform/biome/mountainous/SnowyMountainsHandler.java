@@ -11,8 +11,6 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneEightBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -25,7 +23,7 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.SNOWY_SLOPES;
+        return Biome.SNOWY_SLOPES;
     }
 
     @Override
@@ -34,58 +32,47 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
-			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int y = GenUtils.getHighestGround(data, x, z);
-				if(y < TerraformGenerator.seaLevel) continue;
-				
-				if(data.getBiome(x, z) != getBiome()) continue;
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-				//Dirt Fixer 
-				//Snowy wastelands and the like will spawn snow blocks, then dirt blocks.
-				//Analyze 5 blocks down. Replace the block if anything next to it is stone.
-				correctDirt(new SimpleBlock(data,x,y,z));
-				
-				//Snow on top if the biome is the same
-				data.setType(x, y+1, z, Material.SNOW);
-				
+        if(surfaceY < TerraformGenerator.seaLevel) return;
+        //Dirt Fixer
+        //Snowy wastelands and the like will spawn snow blocks, then dirt blocks.
+        //Analyze 5 blocks down. Replace the block if anything next to it is stone.
+        correctDirt(new SimpleBlock(data,rawX,surfaceY,rawZ));
 
-                //Make patches of decorative rock on the mountain sides.
-                if (GenUtils.chance(random, 1, 25)) {
-                	Material stoneType = GenUtils.randMaterial(Material.ANDESITE, Material.DIORITE);
-                    stoneStack(stoneType, data, random, x, y, z);
-                    for (int nx = -2; nx <= 2; nx++)
-                        for (int nz = -2; nz <= 2; nz++) {
-                            if (GenUtils.chance(random, 1, 5)) continue;
-                            int stoneY = GenUtils.getHighestGround(data, x + nx, z + nz);
-                            
-                            //Another check, make sure relative position isn't underwater.
-                            if(stoneY < TerraformGenerator.seaLevel)
-                            	continue;
-                            stoneStack(stoneType, data, random, x + nx, stoneY, z + nz);
-                        }
+        //Snow on top if the biome is the same
+        data.setType(rawX, surfaceY+1, rawZ, Material.SNOW);
+
+
+        //Make patches of decorative rock on the mountain sides.
+        if (GenUtils.chance(random, 1, 25)) {
+            Material stoneType = GenUtils.randMaterial(Material.ANDESITE, Material.DIORITE);
+            stoneStack(stoneType, data, random, rawX, surfaceY, rawZ);
+            for (int nx = -2; nx <= 2; nx++)
+                for (int nz = -2; nz <= 2; nz++) {
+                    if (GenUtils.chance(random, 1, 5)) continue;
+                    int stoneY = GenUtils.getHighestGround(data, rawX + nx, rawZ + nz);
+
+                    //Another check, make sure relative position isn't underwater.
+                    if(stoneY < TerraformGenerator.seaLevel)
+                        continue;
+                    stoneStack(stoneType, data, random, rawX + nx, stoneY, rawZ + nz);
                 }
-                
-				//Thick Snow on shallow areas
-                //Snowy Snow on near flat areas
-                double gradient = HeightMap.getTrueHeightGradient(data, x, z, 3);
-				if(gradient < 1.4) {
-					
-					if(data.getBiome(x, z) != getBiome()) continue;
-	                //Don't touch submerged blocks
-					if(data.getBiome(x, z) != getBiome())
-						continue;
-	                if(y < TerraformGenerator.seaLevel)
-	                	continue;
-	                if(gradient < 1.2) {
-	                	data.setType(x, y, z, OneOneSevenBlockHandler.POWDER_SNOW);
-	                	data.setType(x, y+1, z, Material.AIR); //remove snow
-	                }else
-	                	data.setType(x, y, z, Material.SNOW_BLOCK);
-				}
-			}
-		}
+        }
+
+        //Thick Snow on shallow areas
+        //Snowy Snow on near flat areas
+        double gradient = HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3);
+        if(gradient < 1.4) {
+
+            if(surfaceY < TerraformGenerator.seaLevel)
+                return;
+            if(gradient < 1.2) {
+                data.setType(rawX, surfaceY, rawZ, Material.POWDER_SNOW);
+                data.setType(rawX, surfaceY+1, rawZ, Material.AIR); //remove snow
+            }else
+                data.setType(rawX, surfaceY, rawZ, Material.SNOW_BLOCK);
+        }
     }
     
     private void correctDirt(SimpleBlock start) {

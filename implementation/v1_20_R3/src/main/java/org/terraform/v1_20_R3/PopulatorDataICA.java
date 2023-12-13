@@ -75,8 +75,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     	IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); //getState
         return CraftBlockData.fromData(ibd);
     }
-    
-	@SuppressWarnings("deprecation")
+
 	@Override
 	public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
 		IRegistry<BiomeBase> biomeRegistry = CustomBiomeHandler.getBiomeRegistry();
@@ -218,7 +217,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     	
     	//ws.a() is getStructureManager
     	//a is setStartForStructure
-    	/**setStartForStructure(
+    	/*setStartForStructure(
     	 * SectionPosition sectionposition, 
     	 * Structure structure, 
     	 * StructureStart structurestart, 

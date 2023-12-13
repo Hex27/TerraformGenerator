@@ -40,49 +40,32 @@ public class DarkForestRiverHandler extends BiomeHandler {
 
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if(y >= TerraformGenerator.seaLevel) //Don't apply to dry land
-                	continue;
-                if (data.getBiome(x, z) != getBiome()) continue;
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-                //Set ground near sea level to coarse dirt
-                if(y >= TerraformGenerator.seaLevel - 2) {
-                	data.setType(x, y, z, Material.COARSE_DIRT);
-                }else if(y >= TerraformGenerator.seaLevel - 4) {
-                	if(random.nextBoolean())
-                    	data.setType(x, y, z, Material.COARSE_DIRT);
-                }
-                
-                //Don't generate kelp on non-stonelike.
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
+        if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
+            return;
 
-                // SEA GRASS/KELP
-                if (GenUtils.chance(random, 1, 10)) {
-                    data.setType(x, y + 1, z, Material.SEAGRASS);
-                    if (random.nextBoolean() && y < TerraformGenerator.seaLevel - 2)
-                    	generateKelp(x, y + 1, z, data, random);
-                }
-
-                // Generate clay
-                if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
-                    BlockUtils.generateClayDeposit(x, y, z, data, random);
-                }
-                
-                if(GenUtils.chance(random, 1, 1000)) {
-                	BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.0f, new SimpleBlock(data,x,y,z), Material.MAGMA_BLOCK);
-                }
-            }
+        //Set ground near sea level to coarse dirt
+        if(surfaceY >= TerraformGenerator.seaLevel - 2) {
+            data.setType(rawX, surfaceY, rawZ, Material.COARSE_DIRT);
+        }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
+            if(random.nextBoolean())
+                data.setType(rawX, surfaceY, rawZ, Material.COARSE_DIRT);
         }
-    }
 
-    private void generateKelp(int x, int y, int z, PopulatorDataAbstract data, Random random) {
-        for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(5, 15); ny++) {
-        	if(data.getType(x, ny, z) != Material.WATER)
-        		break;
-            data.setType(x, ny, z, Material.KELP_PLANT);
+        //Don't generate kelp on non-stonelike.
+        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
+
+        // SEA GRASS/KELP
+        RiverHandler.riverVegetation(world, random, data, rawX, surfaceY, rawZ);
+
+        // Generate clay
+        if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
+            BlockUtils.generateClayDeposit(rawX, surfaceY, rawZ, data, random);
+        }
+
+        if(GenUtils.chance(random, 1, 1000)) {
+            BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.0f, new SimpleBlock(data,rawX,surfaceY,rawZ), Material.MAGMA_BLOCK);
         }
     }
 

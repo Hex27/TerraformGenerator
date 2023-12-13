@@ -12,30 +12,29 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 public class AncientCityUtils {
 	
 	public static final Material[] deepslateBricks = new Material[] {
-			OneOneSevenBlockHandler.DEEPSLATE_BRICKS,
-			OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS
+			Material.DEEPSLATE_BRICKS,
+			Material.CRACKED_DEEPSLATE_BRICKS
 	};
 
 	public static final Material[] deepslateTiles = new Material[] {
-			OneOneSevenBlockHandler.DEEPSLATE_TILES,
-			OneOneSevenBlockHandler.CRACKED_DEEPSLATE_TILES
+			Material.DEEPSLATE_TILES,
+			Material.CRACKED_DEEPSLATE_TILES
 	};
 	
     public static void placeSupportPillar(SimpleBlock w) {
     	Random dud = new Random();
     	//w.getUp().lsetType(Material.GRAY_WOOL);
-    	w.downUntilSolid(dud, OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
+    	w.downUntilSolid(dud, Material.DEEPSLATE_BRICKS);
     	for(BlockFace face:BlockUtils.directBlockFaces)
-        	w.getRelative(face).downUntilSolid(dud, OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
+        	w.getRelative(face).downUntilSolid(dud, Material.DEEPSLATE_BRICKS);
     	
     	for(BlockFace face:BlockUtils.xzDiagonalPlaneBlockFaces)
     	{
-        	int height = w.getRelative(face).downUntilSolid(dud, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
+        	int height = w.getRelative(face).downUntilSolid(dud, Material.COBBLED_DEEPSLATE_WALL);
         	//w.getRelative(face).getUp().lsetType(Material.GRAY_WOOL);
         	w.getRelative(face).getDown(height-1).CorrectMultipleFacing(height);
     	}

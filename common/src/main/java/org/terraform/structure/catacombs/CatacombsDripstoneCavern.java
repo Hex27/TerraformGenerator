@@ -6,9 +6,9 @@ import org.bukkit.Material;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.CubeRoom;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 public class CatacombsDripstoneCavern extends CatacombsStandardPopulator {
 
@@ -33,8 +33,8 @@ public class CatacombsDripstoneCavern extends CatacombsStandardPopulator {
     		target = target.findCeiling(room.getHeight());
     		if(target == null || target.getY() - room.getY() < 4) continue;
     		
-    		target.setType(OneOneSevenBlockHandler.DRIPSTONE_BLOCK);
-    		OneOneSevenBlockHandler.downLPointedDripstone(GenUtils.randInt(rand, 1, 3), target.getDown());
+    		target.setType(Material.DRIPSTONE_BLOCK);
+    		BlockUtils.downLPointedDripstone(GenUtils.randInt(rand, 1, 3), target.getDown());
     	}
     }
 

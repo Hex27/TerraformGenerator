@@ -16,7 +16,6 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -35,7 +34,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.JAGGED_PEAKS;
+        return Biome.JAGGED_PEAKS;
     }
 
     @Override
@@ -49,24 +48,18 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                setRock(new SimpleBlock(data,x,0,z).getGround());
-                
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                	
-                    if (GenUtils.chance(random, 1, 10)) {
-                        data.setType(x, y + 1, z, Material.GRASS);
-                        if (random.nextBoolean()) {
-                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                        } else {
-                            data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                        }
-                    }
+        setRock(new SimpleBlock(data,rawX,0,rawZ).getGround());
+
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
+
+            if (GenUtils.chance(random, 1, 10)) {
+                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                if (random.nextBoolean()) {
+                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                } else {
+                    data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
                 }
             }
         }
@@ -74,7 +67,6 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
     
     /**
      * Replace steep areas with various rocks.
-     * @param target
      */
     private void setRock(SimpleBlock target) {
     	if(HeightMap.getTrueHeightGradient(target.getPopData(), target.getX(), target.getZ(), 3) 

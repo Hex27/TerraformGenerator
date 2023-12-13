@@ -43,26 +43,20 @@ public class ScarletForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;                
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                	
-                    if (GenUtils.chance(random, 1, 10)) { //Grass
-                        if (GenUtils.chance(random, 6, 10)) {
-                            data.setType(x, y + 1, z, Material.GRASS);
-                            if (random.nextBoolean()) {
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                            }
-                        } else {
-                            if (GenUtils.chance(random, 7, 10))
-                                data.setType(x, y + 1, z, Material.POPPY);
-                            else
-                                BlockUtils.setDoublePlant(data, x, y + 1, z, Material.ROSE_BUSH);
-                        }
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
+
+            if (GenUtils.chance(random, 1, 10)) { //Grass
+                if (GenUtils.chance(random, 6, 10)) {
+                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    if (random.nextBoolean()) {
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
                     }
+                } else {
+                    if (GenUtils.chance(random, 7, 10))
+                        data.setType(rawX, surfaceY + 1, rawZ, Material.POPPY);
+                    else
+                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.ROSE_BUSH);
                 }
             }
         }
@@ -78,7 +72,7 @@ public class ScarletForestHandler extends BiomeHandler {
     		int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
             sLoc.setY(treeY);
             
-            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+            if(tw.getBiomeBank(sLoc.getX(),sLoc.getZ()) == BiomeBank.SCARLET_FOREST &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
             {
                 if(TConfigOption.TREES_SCARLET_BIG_ENABLED.getBoolean())

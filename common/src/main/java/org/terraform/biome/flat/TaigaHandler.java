@@ -50,48 +50,41 @@ public class TaigaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         // Use noise to group sweet berry bushes
         FastNoise sweetBerriesNoise = NoiseCacheHandler.getNoise(
-                tw,
-                NoiseCacheHandler.NoiseCacheEntry.BIOME_TAIGA_BERRY_BUSHNOISE,
-                w -> {
-                    FastNoise n = new FastNoise((int) (w.getSeed() * 2));
-                    n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-                    n.SetFrequency(0.04f);
+            tw,
+            NoiseCacheHandler.NoiseCacheEntry.BIOME_TAIGA_BERRY_BUSHNOISE,
+            w -> {
+                FastNoise n = new FastNoise((int) (w.getSeed() * 2));
+                n.SetNoiseType(NoiseType.SimplexFractal);
+                n.SetFrequency(0.04f);
 
-                    return n;
-                });
+                return n;
+        });
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
+        if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
 
-                if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
+            // Generate sweet berry bushes
+            if (sweetBerriesNoise.GetNoise(rawX, rawZ) > 0.3 &&
+                    sweetBerriesNoise.GetNoise(rawX, rawZ) * random.nextFloat() > 0.35) {
+                Ageable bush = (Ageable) Material.SWEET_BERRY_BUSH.createBlockData();
+                bush.setAge(GenUtils.randInt(random,  1, 3));
+                data.setBlockData(rawX, surfaceY + 1, rawZ, bush);
+                return;
+            }
 
-                    // Generate sweet berry bushes
-                    if (sweetBerriesNoise.GetNoise(x, z) > 0.3 &&
-                            sweetBerriesNoise.GetNoise(x, z) * random.nextFloat() > 0.35) {
-                        Ageable bush = (Ageable) Material.SWEET_BERRY_BUSH.createBlockData();
-                        bush.setAge(GenUtils.randInt(random,  1, 3));
-                        data.setBlockData(x, y + 1, z, bush);
-                        continue;
-                    }
+            // Generate grass and flowers
+            if (GenUtils.chance(random, 1, 16)) {
+                int i = random.nextInt(4);
 
-                    // Generate grass and flowers
-                    if (GenUtils.chance(random, 1, 16)) {
-                        int i = random.nextInt(4);
-
-                        if (i >= 2) {
-                            BlockUtils.setDoublePlant(data, x, y + 1, z,
-                                    random.nextBoolean() ? Material.TALL_GRASS : Material.LARGE_FERN);
-                        } else if (i == 1) {
-                            data.setType(x, y + 1, z, random.nextBoolean() ? Material.GRASS : Material.FERN);
-                        } else {
-                            data.setType(x, y + 1, z, BlockUtils.pickFlower());
-                        }
-                    }
+                if (i >= 2) {
+                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ,
+                            random.nextBoolean() ? Material.TALL_GRASS : Material.LARGE_FERN);
+                } else if (i == 1) {
+                    data.setType(rawX, surfaceY + 1, rawZ, random.nextBoolean() ? Material.GRASS : Material.FERN);
+                } else {
+                    data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
                 }
             }
         }
@@ -133,9 +126,6 @@ public class TaigaHandler extends BiomeHandler {
     /**
      * Replaces the highest dirt-like blocks with a noise-fuzzed 
      * circle of Podzol. Fuzzes the edges.
-     * @param seed
-     * @param radius
-     * @param base
      */
     public static void replacePodzol(int seed, float radius, SimpleBlock base) {
     	if (radius <= 0) return;

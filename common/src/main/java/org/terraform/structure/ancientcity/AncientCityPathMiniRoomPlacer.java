@@ -9,20 +9,19 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 
 public class AncientCityPathMiniRoomPlacer {
 
 	public static void placeAltar(Wall origin, Random rand) {
-		Material[] deepSlateBricks = new Material[] {OneOneSevenBlockHandler.DEEPSLATE_BRICKS, OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS};
+		Material[] deepSlateBricks = new Material[] {Material.DEEPSLATE_BRICKS, Material.CRACKED_DEEPSLATE_BRICKS};
 		//Place cylinder below
 		cylinderDown(origin, 4, deepSlateBricks);
 		
 		cylinderDown(origin.getUp(), 3, deepSlateBricks);
 		
 		//Place stairs leading to altar
-		new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+		new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 		.setFacing(origin.getDirection())
 		.apply(origin.getRear(2).getUp())
 		.apply(origin.getRear().getLeft().getUp())
@@ -38,28 +37,28 @@ public class AncientCityPathMiniRoomPlacer {
 		altarCore.getLeft().setType(deepSlateBricks);
 		altarCore.getRight().setType(deepSlateBricks);
 		
-		new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+		new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 		.setFacing(altarCore.getDirection())
 		.apply(altarCore.getRear())
 		.setFacing(altarCore.getDirection().getOppositeFace())
 		.apply(altarCore.getFront());
 		
 		altarCore.getFront().getDown().setType(deepSlateBricks);
-		altarCore.getRear().getLeft().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
-		altarCore.getRear().getRight().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
-		altarCore.getLeft(2).setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
-		altarCore.getRight(2).setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+		altarCore.getRear().getLeft().setType(Material.DEEPSLATE_BRICK_SLAB);
+		altarCore.getRear().getRight().setType(Material.DEEPSLATE_BRICK_SLAB);
+		altarCore.getLeft(2).setType(Material.DEEPSLATE_BRICK_SLAB);
+		altarCore.getRight(2).setType(Material.DEEPSLATE_BRICK_SLAB);
 		
-		altarCore.getUp().Pillar(2, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
-		altarCore.getUp().getLeft().Pillar(2, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
-		altarCore.getUp().getRight().Pillar(2, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
+		altarCore.getUp().Pillar(2, Material.COBBLED_DEEPSLATE_WALL);
+		altarCore.getUp().getLeft().Pillar(2, Material.COBBLED_DEEPSLATE_WALL);
+		altarCore.getUp().getRight().Pillar(2, Material.COBBLED_DEEPSLATE_WALL);
 		
-		altarCore.getUp(3).setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
-		altarCore.getUp(3).getLeft().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
-		altarCore.getUp(3).getRight().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+		altarCore.getUp(3).setType(Material.DEEPSLATE_BRICK_SLAB);
+		altarCore.getUp(3).getLeft().setType(Material.DEEPSLATE_BRICK_SLAB);
+		altarCore.getUp(3).getRight().setType(Material.DEEPSLATE_BRICK_SLAB);
 		
 		for(BlockFace adj:BlockUtils.getAdjacentFaces(altarCore.getDirection())) {
-			new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+			new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 			.setFacing(adj.getOppositeFace())
 			.apply(altarCore.getRelative(adj,2).getUp(2))
 			.setHalf(Half.TOP)

@@ -7,7 +7,6 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Objects;
 import java.util.Random;
@@ -124,7 +123,7 @@ public class FractalTypes {
                                 .setRadius(4f)
                                 .setRadiusY(1.5f)
                                 .setLeafNoiseFrequency(0.2f)
-                                .setMaterial(OneOneSevenBlockHandler.AZALEA_LEAVES, OneOneSevenBlockHandler.FLOWERING_AZALEA_LEAVES))
+                                .setMaterial(Material.AZALEA_LEAVES, Material.FLOWERING_AZALEA_LEAVES))
         )
         ,
         TAIGA_BIG(

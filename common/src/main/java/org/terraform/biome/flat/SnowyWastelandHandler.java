@@ -13,8 +13,6 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
-import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -27,7 +25,7 @@ public class SnowyWastelandHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.SNOWY_PLAINS;
+        return Biome.SNOWY_PLAINS;
     }
 
 //	@Override
@@ -48,27 +46,18 @@ public class SnowyWastelandHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-
-                //Snowier Snow 
-                if(GenUtils.chance(random, 1, 500)) {
-                	BlockUtils.replaceCircularPatch(random.nextInt(9999), 3, new SimpleBlock(data,x,0,z), OneOneSevenBlockHandler.POWDER_SNOW);
-                }
-                if (data.getType(x, y + 1, z) == Material.AIR 
-                		&& data.getType(x, y, z) != OneOneSevenBlockHandler.POWDER_SNOW
-                		&& GenUtils.isGroundLike(data.getType(x, y, z))) {
-                    data.setType(x, y + 1, z, Material.SNOW);
-                    if (data.getBlockData(x, y, z) instanceof Snowable) {
-                        Snowable snowable = (Snowable) data.getBlockData(x, y, z);
-                        snowable.setSnowy(true);
-                        data.setBlockData(x, y, z, snowable);
-                    }
-                }
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        //Snowier Snow
+        if(GenUtils.chance(random, 1, 500)) {
+            BlockUtils.replaceCircularPatch(random.nextInt(9999), 3, new SimpleBlock(data,rawX,0,rawZ), Material.POWDER_SNOW);
+        }
+        if (data.getType(rawX, surfaceY + 1, rawZ) == Material.AIR
+                && data.getType(rawX, surfaceY, rawZ) != Material.POWDER_SNOW
+                && GenUtils.isGroundLike(data.getType(rawX, surfaceY, rawZ))) {
+            data.setType(rawX, surfaceY + 1, rawZ, Material.SNOW);
+            if (data.getBlockData(rawX, surfaceY, rawZ) instanceof Snowable snowable) {
+                snowable.setSnowy(true);
+                data.setBlockData(rawX, surfaceY, rawZ, snowable);
             }
         }
     }

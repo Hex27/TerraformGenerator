@@ -9,6 +9,7 @@ import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.beach.OasisBeach;
 import org.terraform.biome.mountainous.BadlandsCanyonHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -85,50 +86,40 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         
     	//While not a small item, generatePlateaus is left in, as it
     	//transforms the terrain itself. Structures placed must account for
     	//these terrain changes.
-    	generatePlateaus(world, data);
+        //TODO: Past me wrote this to kick the bucket to future me. I am future me. Fuck you.
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                OasisBeach.generateOasisBeach(world, random, data, x, z, BiomeBank.BADLANDS);
+    	generatePlateaus(world, rawX, surfaceY, rawZ,data);
 
-                int highest = GenUtils.getTrueHighestBlock(data, x, z);
+        OasisBeach.generateOasisBeach(world, random, data, rawX, rawZ, BiomeBank.BADLANDS);
 
-                BiomeBank currentBiome = world.getBiomeBank(x, highest, z);//BiomeBank.calculateBiome(world, x, TerraformGenerator.seaLevel, z);
-                if (currentBiome != BiomeBank.BADLANDS &&
-                        currentBiome != BiomeBank.BADLANDS_BEACH &&
-                        currentBiome != BiomeBank.BADLANDS_CANYON) continue;
+        if (HeightMap.getNoiseGradient(world, rawX, rawZ, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
+            BadlandsCanyonHandler.oneUnit(world, random, data, rawX, rawZ, true);
+            return;
+        }
 
-                if (HeightMap.getNoiseGradient(world, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
-                    BadlandsCanyonHandler.oneUnit(world, random, data, x, z, true);
-                    continue;
+        Material base = data.getType(rawX, surfaceY, rawZ);
+        if (base == Material.SAND ||
+                base == Material.RED_SAND) {
+            if (GenUtils.chance(random, 1, 200)) {
+
+                boolean canSpawn = true;
+                for (BlockFace face : BlockUtils.directBlockFaces) {
+                    if (data.getType(rawX + face.getModX(), surfaceY + 1, rawZ + face.getModZ()) != Material.AIR)
+                        canSpawn = false;
                 }
-
-                Material base = data.getType(x, highest, z);
-                if (base == Material.SAND ||
-                        base == Material.RED_SAND) {
-                    if (GenUtils.chance(random, 1, 200)) {
-
-                        boolean canSpawn = true;
-                        for (BlockFace face : BlockUtils.directBlockFaces) {
-                            if (data.getType(x + face.getModX(), highest + 1, z + face.getModZ()) != Material.AIR)
-                                canSpawn = false;
-                        }
-                        // Prevent cactus from spawning on plateaus:
-                        if (HeightMap.getBlockHeight(world, x, z) + 5 < highest) canSpawn = false;
-                        if (canSpawn && GenUtils.chance(1, 50))
-                            spawnDeadTree(data, x, highest, z);
-                        else if (canSpawn)
-                            BlockUtils.spawnPillar(random, data, x, highest + 1, z, Material.CACTUS, 2, 5);
-                    } else if (GenUtils.chance(random, 1, 80) && highest > TerraformGenerator.seaLevel) {
-                        data.setType(x, highest + 1, z, Material.DEAD_BUSH);
-                    }
-                }
-
+                // Prevent cactus from spawning on plateaus:
+                if (HeightMap.getBlockHeight(world, rawX, rawZ) + 5 < surfaceY) canSpawn = false;
+                if (canSpawn && GenUtils.chance(1, 50))
+                    spawnDeadTree(data, rawX, surfaceY, rawZ);
+                else if (canSpawn)
+                    BlockUtils.spawnPillar(random, data, rawX, surfaceY + 1, rawZ, Material.CACTUS, 2, 5);
+            } else if (GenUtils.chance(random, 1, 80) && surfaceY > TerraformGenerator.seaLevel) {
+                data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
             }
         }
     }
@@ -138,11 +129,12 @@ public class BadlandsHandler extends BiomeHandler {
         return this;
     }
 
-    @SuppressWarnings("deprecation")
 	@Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ) {
-        // Set jungle biome for lush oases
-        OasisBeach.transformTerrain(tw, biome, chunkX, chunkZ, BiomeBank.BADLANDS);
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+        //Badlands doesn't actually mutate height in here (WHY??).
+        //Because of that, don't edit heightChanges
+        //This is perpetuating the cycle of abuse and falsehood
+        //Let's leave it till it explodes for some reason
 
         BiomeBlender blender = getRiversBlender(tw);
 
@@ -157,70 +149,63 @@ public class BadlandsHandler extends BiomeHandler {
         	        return n;
         		});
 
-        // Rivers
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int rawX = chunkX * 16 + x;
-                int rawZ = chunkZ * 16 + z;
+        int rawX = chunkX * 16 + x;
+        int rawZ = chunkZ * 16 + z;
 
-                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                //int height = (int) preciseHeight;
-                BiomeBank currentBiome = BiomeBank.calculateBiome(tw, rawX, TerraformGenerator.seaLevel, rawZ);
-//                System.out.println("Badlands river biome: " + currentBiome + ", with river depth of " + HeightMap.getRawRiverDepth(tw, rawX, rawZ));
-                if (currentBiome == BiomeBank.BADLANDS
-                        || currentBiome == BiomeBank.BADLANDS_CANYON
-                        || currentBiome == BiomeBank.BADLANDS_BEACH
-                        && HeightMap.getRawRiverDepth(tw, rawX, rawZ) > 0
-                ) {
-                    double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
+        double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
 
-                    // These are for blending river effect with other biomes
-                    double edgeFactor = blender.getEdgeFactor(BiomeBank.BADLANDS, rawX, rawZ);
-                    double bottomEdgeFactor = Math.min(2 * edgeFactor, 1);
-                    double topEdgeFactor = Math.max(2 * edgeFactor - 1, 0);
+        if (HeightMap.getRawRiverDepth(tw, rawX, rawZ) > 0) {
+            double riverlessHeight = HeightMap.getRiverlessHeight(tw, rawX, rawZ) - 2;
 
-                    // Max height difference between sea level and riverlessHeight
-                    double maxDiff = riverlessHeight - TerraformGenerator.seaLevel;
-                    double heightAboveSea = preciseHeight - 2 - TerraformGenerator.seaLevel;
-                    double riverFactor = heightAboveSea / maxDiff; // 0 at river level, 1 at riverlessHeight
+            // These are for blending river effect with other biomes
+            double edgeFactor = blender.getEdgeFactor(BiomeBank.BADLANDS, rawX, rawZ);
+            double bottomEdgeFactor = Math.min(2 * edgeFactor, 1);
+            double topEdgeFactor = Math.max(2 * edgeFactor - 1, 0);
 
-                    if (riverFactor > 0 && heightAboveSea > 0) {
-                        int buildHeight = (int) Math.round(bottomEdgeFactor *
-                                (Math.min(1, 4 * Math.pow(riverFactor, 4)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
+            // Max height difference between sea level and riverlessHeight
+            double maxDiff = riverlessHeight - TerraformGenerator.seaLevel;
+            double heightAboveSea = preciseHeight - 2 - TerraformGenerator.seaLevel;
+            double riverFactor = heightAboveSea / maxDiff; // 0 at river level, 1 at riverlessHeight
 
-                        for (int i = buildHeight; i >= 0; i--) {
-                            int lowerHeight = Math.min(TerraformGenerator.seaLevel + i, (int) Math.round(riverlessHeight));
+            if (riverFactor > 0 && heightAboveSea > 0) {
+                int buildHeight = (int) Math.round(bottomEdgeFactor *
+                        (Math.min(1, 4 * Math.pow(riverFactor, 4)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
 
-                            chunk.setBlock(x, lowerHeight, z, BlockUtils.getTerracotta(lowerHeight));
-                        }
+                for (int i = buildHeight; i >= 0; i--) {
+                    int lowerHeight = Math.min(TerraformGenerator.seaLevel + i, (int) Math.round(riverlessHeight));
 
-                        double threshold = 0.4 + (1 - topEdgeFactor) * 0.6;
+                    chunk.setBlock(x, lowerHeight, z, BlockUtils.getTerracotta(lowerHeight));
+                }
 
-                        // Curved top edges
-                        if (riverFactor > threshold) {
-                            int upperBuildHeight = (int) Math.round(
-                                    1 *//topEdgeFactor *
-                                            (Math.min(1, 50 * Math.pow(riverFactor - threshold, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
+                double threshold = 0.4 + (1 - topEdgeFactor) * 0.6;
 
-                            if (topEdgeFactor == 0) continue;
+                // Curved top edges
+                if (riverFactor > threshold) {
+                    int upperBuildHeight = (int) Math.round(
+                            1 *//topEdgeFactor *
+                                    (Math.min(1, 50 * Math.pow(riverFactor - threshold, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
 
-                            for (int i = 0; i <= upperBuildHeight; i++) {
-                                int upperHeight = (int) riverlessHeight - i;
+                    if (topEdgeFactor == 0) return;
 
-                                chunk.setBlock(x, upperHeight, z, BlockUtils.getTerracotta(upperHeight));
-                            }
-                        }
+                    for (int i = 0; i <= upperBuildHeight; i++) {
+                        int upperHeight = (int) riverlessHeight - i;
 
-                        // Coat with red sand
-                        if (riverFactor > threshold + 0.12)
-                            chunk.setBlock(x, (int) riverlessHeight + 1, z, Material.RED_SAND);
+                        chunk.setBlock(x, upperHeight, z, BlockUtils.getTerracotta(upperHeight));
                     }
                 }
+
+                // Coat with red sand
+                if (riverFactor > threshold + 0.12)
+                    chunk.setBlock(x, (int) riverlessHeight + 1, z, Material.RED_SAND);
             }
         }
     }
 
-    void generatePlateaus(TerraformWorld tw, PopulatorDataAbstract data) {
+    /*TODO: This is currently not in transformTerrain because of some impurity regarding
+     * how the surrounding base sand is placed. transformTerrain is only supposed to access
+     * one pair of x and z coordinates at a time.
+     */
+    void generatePlateaus(TerraformWorld tw, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         FastNoise detailsNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_BADLANDS_WALLNOISE, 
@@ -231,13 +216,9 @@ public class BadlandsHandler extends BiomeHandler {
         	        return n;
         		});
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int height = HeightMap.getBlockHeight(tw, x, z);
-
                 // Calculate plateau height
-                double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(x, z) + plateauCommonness);
-                double noiseValue = rawValue * getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, x, z) * (1 - ((int) (rawValue / plateauThreshold) * 0.05));
+                double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(rawX, rawZ) + plateauCommonness);
+                double noiseValue = rawValue * getPlateauBlender(tw).getEdgeFactor(BiomeBank.BADLANDS, rawX, rawZ) * (1 - ((int) (rawValue / plateauThreshold) * 0.05));
 
                 double graduated = noiseValue / plateauThreshold;
                 double platformHeight = (int) graduated * plateauHeight
@@ -250,24 +231,24 @@ public class BadlandsHandler extends BiomeHandler {
                     if ((int) graduated * plateauHeight == y)
                         material = Material.RED_SAND;
                     else if ((int) graduated * plateauHeight == y + 1)
-                        material = GenUtils.randMaterial(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(height + y));
+                        material = GenUtils.randMaterial(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y));
                     else if ((int) graduated * plateauHeight == y + 2)
-                        material = GenUtils.randMaterial(Material.RED_SAND, BlockUtils.getTerracotta(height + y),
-                                BlockUtils.getTerracotta(height + y));
+                        material = GenUtils.randMaterial(Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y),
+                                BlockUtils.getTerracotta(surfaceY + y));
                     else
-                        material = BlockUtils.getTerracotta(height + y);
+                        material = BlockUtils.getTerracotta(surfaceY + y);
 
-                    data.setType(x, height + y, z, material);
+                    data.setType(rawX, surfaceY + y, rawZ, material);
                 }
 
                 // Prevent inner parts of plateau from generating sand in vain
-                if (!placeSand || graduated - (int) graduated > 0.2) continue;
+                if (!placeSand || graduated - (int) graduated > 0.2) return;
 
                 // Surround plateaus with sand
                 int level = (((int) graduated) - 1) * plateauHeight; // handle second and third levels of plateau
-                for (int sx = x - sandRadius; sx <= x + sandRadius; sx++) {
-                    for (int sz = z - sandRadius; sz <= z + sandRadius; sz++) {
-                        double distance = Math.sqrt(Math.pow(sx - x, 2) + Math.pow(sz - z, 2));
+                for (int sx = rawX - sandRadius; sx <= rawX + sandRadius; sx++) {
+                    for (int sz = rawZ - sandRadius; sz <= rawZ + sandRadius; sz++) {
+                        double distance = Math.sqrt(Math.pow(sx - rawX, 2) + Math.pow(sz - rawZ, 2));
 
                         if (distance < sandRadius) {
                             // Skip if sand would levitate
@@ -280,8 +261,6 @@ public class BadlandsHandler extends BiomeHandler {
                         }
                     }
                 }
-            }
-        }
     }
 
     public static boolean containsPlateau(TerraformWorld tw, int x, int z) {

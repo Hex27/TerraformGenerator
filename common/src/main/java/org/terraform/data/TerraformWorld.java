@@ -3,6 +3,7 @@ package org.terraform.data;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.terraform.biome.BiomeBank;
+import org.terraform.cave.NoiseCaveRegistry;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformBukkitBlockPopulator;
@@ -25,16 +26,19 @@ public class TerraformWorld {
     public int maxY = 256;
     private final TerraformBukkitBlockPopulator bukkitBlockPopulator;
 
+    public final NoiseCaveRegistry noiseCaveRegistry;
     public TerraformWorld(String name, long seed) {
         this.worldName = name;
         this.seed = seed;
         this.bukkitBlockPopulator = new TerraformBukkitBlockPopulator(this);
+        this.noiseCaveRegistry = new NoiseCaveRegistry(this);
     }
 
     private TerraformWorld(World world) {
         this.worldName = world.getName();
         this.seed = world.getSeed();
         this.bukkitBlockPopulator = new TerraformBukkitBlockPopulator(this);
+        this.noiseCaveRegistry = new NoiseCaveRegistry(this);
     }
 
     public static TerraformWorld get(World world) {

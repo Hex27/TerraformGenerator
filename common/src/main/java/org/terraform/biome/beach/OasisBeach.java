@@ -22,23 +22,6 @@ import java.util.Random;
 public class OasisBeach {
     public static final double oasisThreshold = (2 - TConfigOption.BIOME_OASIS_COMMONNESS.getDouble()) * 0.31;
     private static final float oasisFrequency = TConfigOption.BIOME_OASIS_FREQUENCY.getFloat();
-    /**
-     * Sets oasis biome as jungle
-     * @param targetBiome the biome this function is called from.
-     *                    Prevents code from running twice when biome overlap
-     */
-	@SuppressWarnings("deprecation")
-	public static void transformTerrain(TerraformWorld tw, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ, BiomeBank targetBiome) {
-		for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
-            for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
-                int height = HeightMap.getBlockHeight(tw, x, z);
-                if (isOasisBeach(tw, x, z, targetBiome)) {
-                	for(int y = height; y < height + 35; y++)
-                       biome.setBiome(x, y, z, Biome.JUNGLE);
-                }
-            }
-        }
-    }
 
     public static float getOasisNoise(TerraformWorld world, int x, int z) {
         FastNoise lushRiversNoise = NoiseCacheHandler.getNoise(

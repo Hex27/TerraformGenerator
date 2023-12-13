@@ -24,7 +24,6 @@ import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.BeeHiveSpawner;
 import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;
 
@@ -115,7 +114,7 @@ public class FractalTreeBuilder {
                         .setLengthDecrement(0.3f)
                         .setMaxDepth(2)
                         .setFractalLeaves(new FractalLeaves()
-                        		.setMaterial(OneOneSevenBlockHandler.AZALEA_LEAVES, OneOneSevenBlockHandler.FLOWERING_AZALEA_LEAVES)
+                        		.setMaterial(Material.AZALEA_LEAVES, Material.FLOWERING_AZALEA_LEAVES)
                         		.setRadiusX(3)
                         		.setRadiusZ(3)
                         		.setRadiusY(1.5f)

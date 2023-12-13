@@ -2,8 +2,9 @@ package org.terraform.structure.caves;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.block.data.type.SeaPickle;
-import org.terraform.biome.cave.LushClusterCavePopulator;
+import org.terraform.biome.cavepopulators.LushClusterCavePopulator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
@@ -16,7 +17,6 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -116,7 +116,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
                         new SphereBuilder(rand, new SimpleBlock(data,nx, groundY, nz), Material.CLAY)
                         .setRadius(3)
                         .addToWhitelist(Material.STONE)
-                        .addToWhitelist(OneOneSevenBlockHandler.DEEPSLATE)
+                        .addToWhitelist(Material.DEEPSLATE)
                         .build();
                     }
                     if(GenUtils.chance(rand, 7, 100)) {
@@ -133,7 +133,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
                 if(data instanceof PopulatorDataICABiomeWriterAbstract)
                 {
                 	for(int i = groundY; i <= ceilingY; i++)
-                	((PopulatorDataICABiomeWriterAbstract) data).setBiome(nx, i, nz, OneOneSevenBlockHandler.LUSH_CAVES);
+                	    ((PopulatorDataICABiomeWriterAbstract) data).setBiome(nx, i, nz, Biome.LUSH_CAVES);
                 }
             }
         }

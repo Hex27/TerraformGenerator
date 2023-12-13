@@ -26,7 +26,6 @@ import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomPopulator {
@@ -47,14 +46,14 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
 				if(i > 2 && i < entry.getValue() - 3 && i % 3 == 0) {
 					
 					if(!this.gen.isPointInPath(w, shrunkenWidth+1, 2)) {
-						w.lsetType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
+						w.lsetType(Material.CHISELED_DEEPSLATE);
 						w.getUp().CorrectMultipleFacing(2);
-						w.getUp().LPillar(2, OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
-						w.getUp(3).lsetType(OneOneSevenBlockHandler.CHISELED_DEEPSLATE);
-						new SlabBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB)
+						w.getUp().LPillar(2, Material.DEEPSLATE_BRICK_WALL);
+						w.getUp(3).lsetType(Material.CHISELED_DEEPSLATE);
+						new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
 						.setType(Type.TOP).lapply(w.getUp(3).getRear());
 						
-						w.getRear().getUp(4).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
+						w.getRear().getUp(4).lsetType(Material.DEEPSLATE_BRICK_WALL);
 						w.getRear().getUp(4).CorrectMultipleFacing(1);
 					}
 					for(BlockFace dir:BlockUtils.getAdjacentFaces(w.getDirection()))
@@ -63,17 +62,17 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
 						if(this.gen.isPointInPath(rel, shrunkenWidth+1, 2)) 
 							continue;
 						
-						rel.lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
-						new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+						rel.lsetType(Material.DEEPSLATE_BRICKS);
+						new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 						.setFacing(rel.getDirection().getOppositeFace())
 						.lapply(rel.getFront())
 						.setFacing(dir).lapply(rel.getUp())
 						.setFacing(dir.getOppositeFace())
 						.lapply(rel.getUp(2))
 						.lapply(rel.getUp(4).getRear());
-						rel.getUp(3).lsetType(OneOneSevenBlockHandler.DEEPSLATE_BRICKS);
+						rel.getUp(3).lsetType(Material.DEEPSLATE_BRICKS);
 						
-						new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+						new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 						.setHalf(Half.TOP)
 						.setFacing(rel.getDirection())
 						.lapply(rel.getUp(3).getRear())
@@ -125,24 +124,24 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     				w.getRear().setType(AncientCityUtils.deepslateBricks);
     				w.getRear(2).setType(AncientCityUtils.deepslateBricks);
     				if(GenUtils.chance(rand, 1, 30))
-    					OneOneSevenBlockHandler.placeCandle(w.getRear().getUp(), rand.nextInt(3)+1, true);
+    					BlockUtils.placeCandle(w.getRear().getUp(), rand.nextInt(3)+1, true);
     				if(GenUtils.chance(rand, 1, 30))
-    					OneOneSevenBlockHandler.placeCandle(w.getRear(2).getUp(), rand.nextInt(3)+1, true);
+    					BlockUtils.placeCandle(w.getRear(2).getUp(), rand.nextInt(3)+1, true);
     				if(rand.nextBoolean())
     				{
     					w.getRear(3).setType(AncientCityUtils.deepslateBricks);
         				if(GenUtils.chance(rand, 1, 30))
-        					OneOneSevenBlockHandler.placeCandle(w.getRear(3).getUp(), rand.nextInt(3)+1, true);
+        					BlockUtils.placeCandle(w.getRear(3).getUp(), rand.nextInt(3)+1, true);
         				if(rand.nextBoolean())
-	    					new StairBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_STAIRS,
-	                			OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
+	    					new StairBuilder(Material.COBBLED_DEEPSLATE_STAIRS,
+	                			Material.POLISHED_DEEPSLATE_STAIRS)
 	    					.setFacing(w.getDirection())
 	    					.apply(w.getRear(4));
     				}
     				else {
     					if(rand.nextBoolean())
-	    					new StairBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_STAIRS,
-	                			OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
+	    					new StairBuilder(Material.COBBLED_DEEPSLATE_STAIRS,
+	                			Material.POLISHED_DEEPSLATE_STAIRS)
 	    					.setFacing(w.getDirection())
 	    					.apply(w.getRear(3));
     				}
@@ -171,8 +170,8 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         	
         	for(int radius = 0; radius <= 14; radius++) {
         		for(BlockFace rel:BlockUtils.getAdjacentFaces(facing)) {
-                	new StairwayBuilder(OneOneSevenBlockHandler.COBBLED_DEEPSLATE_STAIRS,
-                			OneOneSevenBlockHandler.POLISHED_DEEPSLATE_STAIRS)
+                	new StairwayBuilder(Material.COBBLED_DEEPSLATE_STAIRS,
+                			Material.POLISHED_DEEPSLATE_STAIRS)
                 	.setAngled(false)
                 	.setCarveAirSpace(false)
                 	.setUpwardsCarveUntilSolid(true)
@@ -253,7 +252,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     				if(Version.isAtLeast(19))
     					core.getRelative(rel,radius).Pillar(headHeight, OneOneNineBlockHandler.REINFORCED_DEEPSLATE);
     				else
-    					core.getRelative(rel,radius).Pillar(headHeight, true, new Random(), OneOneSevenBlockHandler.DEEPSLATE_TILES, Material.DIORITE);
+    					core.getRelative(rel,radius).Pillar(headHeight, true, new Random(), Material.DEEPSLATE_TILES, Material.DIORITE);
 
     				//Fuzz left and right
     				for(int i = -2; i <= headHeight + 2; i++) {
@@ -305,13 +304,13 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     			if(Math.abs(relX) == 2 || Math.abs(relZ) == 2 || 
     					(relX == 0 && relZ == 0))
 	    			target.RPillar(10, new Random(),
-	    					OneOneSevenBlockHandler.DEEPSLATE_BRICKS, 
-	    					OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS, 
-	    					OneOneSevenBlockHandler.DEEPSLATE_BRICKS, 
-	    					OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS,
-	    					OneOneSevenBlockHandler.DEEPSLATE_BRICKS, 
-	    					OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS,
-	    					OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+	    					Material.DEEPSLATE_BRICKS, 
+	    					Material.CRACKED_DEEPSLATE_BRICKS, 
+	    					Material.DEEPSLATE_BRICKS, 
+	    					Material.CRACKED_DEEPSLATE_BRICKS,
+	    					Material.DEEPSLATE_BRICKS, 
+	    					Material.CRACKED_DEEPSLATE_BRICKS,
+	    					Material.DEEPSLATE_BRICK_SLAB);
     			else
     				target.Pillar(10, Material.AIR);
         	}
@@ -339,7 +338,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         	}
             //Two slab stairs
             BlockFace face = BlockUtils.xzPlaneBlockFaces[bfIndex];
-            Slab bottom = (Slab) Bukkit.createBlockData(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+            Slab bottom = (Slab) Bukkit.createBlockData(Material.DEEPSLATE_BRICK_SLAB);
             bottom.setType(Type.BOTTOM);
             core.getRelative(face.getModX(), i, face.getModZ()).setBlockData(bottom);
             
@@ -347,7 +346,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
             bfIndex = getNextIndex(bfIndex);
 
             face = BlockUtils.xzPlaneBlockFaces[bfIndex];
-            Slab top = (Slab) Bukkit.createBlockData(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+            Slab top = (Slab) Bukkit.createBlockData(Material.DEEPSLATE_BRICK_SLAB);
             top.setType(Type.TOP);
             core.getRelative(face.getModX(), i, face.getModZ()).setBlockData(top);
             bfIndex = getNextIndex(bfIndex);
@@ -355,26 +354,26 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     	
     	for(BlockFace face:BlockUtils.directBlockFaces) {
     		Wall target = new Wall(core.getUp(10), face).getFront(2);
-    		target.getFront().getUp().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
-    		target.getFront().getDown().getRight().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
-    		target.getFront().getDown().getLeft().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
-    		target.getFront().getRight().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
-    		target.getFront().getLeft().setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_SLAB);
+    		target.getFront().getUp().setType(Material.DEEPSLATE_BRICK_WALL);
+    		target.getFront().getDown().getRight().setType(Material.DEEPSLATE_BRICK_WALL);
+    		target.getFront().getDown().getLeft().setType(Material.DEEPSLATE_BRICK_WALL);
+    		target.getFront().getRight().setType(Material.DEEPSLATE_BRICK_SLAB);
+    		target.getFront().getLeft().setType(Material.DEEPSLATE_BRICK_SLAB);
     		
-    		new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+    		new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
     		.setFacing(face)
     		.apply(target.getUp().getRight())
     		.apply(target.getUp().getLeft());
 
-    		new StairBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+    		new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
     		.setFacing(face)
     		.setHalf(Half.TOP)
     		.apply(target.getFront())
     		.apply(target.getFront().getRight().getDown(2))
     		.apply(target.getFront().getLeft().getDown(2));
     		
-    		target.getUp().getRight(2).setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
-    		target.getUp().getLeft(2).setType(OneOneSevenBlockHandler.DEEPSLATE_BRICK_WALL);
+    		target.getUp().getRight(2).setType(Material.DEEPSLATE_BRICK_WALL);
+    		target.getUp().getLeft(2).setType(Material.DEEPSLATE_BRICK_WALL);
     		
     	}
     }

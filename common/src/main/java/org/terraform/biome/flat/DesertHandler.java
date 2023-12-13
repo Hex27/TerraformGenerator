@@ -4,7 +4,6 @@ import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
-import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.beach.OasisBeach;
@@ -13,12 +12,9 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
-import org.terraform.structure.small.DesertWellPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -44,12 +40,6 @@ public class DesertHandler extends BiomeHandler {
         return BiomeBank.DESERT_RIVER;
     }
 
-    @SuppressWarnings("deprecation")
-	@Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, ChunkGenerator.BiomeGrid biome, int chunkX, int chunkZ) {
-        OasisBeach.transformTerrain(tw, biome, chunkX, chunkZ, BiomeBank.DESERT);
-    }
-
     //Pad more sandstone so that mountains don't get stone exposed vertically
     @Override
     public Material[] getSurfaceCrust(Random rand) {
@@ -65,37 +55,29 @@ public class DesertHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         boolean cactusGathering = GenUtils.chance(random, 1, 100);
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                OasisBeach.generateOasisBeach(world, random, data, x, z, BiomeBank.DESERT);
+        OasisBeach.generateOasisBeach(world, random, data, rawX, rawZ, BiomeBank.DESERT);
 
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                Material base = data.getType(x, y, z);
+        Material base = data.getType(rawX, surfaceY, rawZ);
 
-                if (cactusGathering) {
-                    if (GenUtils.chance(random, 5, 100))
-                        data.setType(x, y, z, OneOneSevenBlockHandler.DIRT_PATH());
+        if (cactusGathering) {
+            if (GenUtils.chance(random, 5, 100))
+                data.setType(rawX, surfaceY, rawZ, Material.DIRT_PATH);
+        }
+
+        if (base == Material.SAND) {
+            if (GenUtils.chance(random, 1, 100) ||
+                    (GenUtils.chance(random, 1, 20) && cactusGathering)) {
+                boolean canSpawn = true;
+                for (BlockFace face : BlockUtils.directBlockFaces) {
+                    if (data.getType(rawX + face.getModX(), surfaceY + 1, rawZ + face.getModZ()) != Material.AIR)
+                        canSpawn = false;
                 }
-
-                if (base == Material.SAND) {
-                    if (GenUtils.chance(random, 1, 100) ||
-                            (GenUtils.chance(random, 1, 20) && cactusGathering)) {
-                        boolean canSpawn = true;
-                        for (BlockFace face : BlockUtils.directBlockFaces) {
-                            if (data.getType(x + face.getModX(), y + 1, z + face.getModZ()) != Material.AIR)
-                                canSpawn = false;
-                        }
-                        if (canSpawn)
-                            BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.CACTUS, 3, 5);
-                    } else if (GenUtils.chance(random, 1, 80)) {
-                        data.setType(x, y + 1, z, Material.DEAD_BUSH);
-                    }
-                }
-
-
+                if (canSpawn)
+                    BlockUtils.spawnPillar(random, data, rawX, surfaceY + 1, rawZ, Material.CACTUS, 3, 5);
+            } else if (GenUtils.chance(random, 1, 80)) {
+                data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
             }
         }
     }

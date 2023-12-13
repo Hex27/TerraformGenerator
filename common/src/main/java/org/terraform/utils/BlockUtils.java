@@ -17,8 +17,12 @@ import org.bukkit.block.data.Rail.Shape;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Candle;
+import org.bukkit.block.data.type.CaveVines;
+import org.bukkit.block.data.type.CaveVinesPlant;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Leaves;
+import org.bukkit.block.data.type.PointedDripstone;
 import org.bukkit.block.data.type.Stairs;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -32,11 +36,10 @@ import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
 
@@ -107,42 +110,42 @@ public class BlockUtils {
             Material.GRANITE, Material.ANDESITE,
             Material.DIORITE, Material.GRAVEL,
             Material.CLAY,
-            OneOneSevenBlockHandler.DEEPSLATE,
-            OneOneSevenBlockHandler.TUFF,
-            OneOneSevenBlockHandler.CALCITE,
-            OneOneSevenBlockHandler.BUDDING_AMETHYST,
-            OneOneSevenBlockHandler.AMETHYST_BLOCK,
-            OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
-            OneOneSixBlockHandler.SMOOTH_BASALT,
+            Material.DEEPSLATE,
+            Material.TUFF,
+            Material.CALCITE,
+            Material.BUDDING_AMETHYST,
+            Material.AMETHYST_BLOCK,
+            Material.DRIPSTONE_BLOCK,
+            Material.SMOOTH_BASALT,
             Material.PACKED_ICE, Material.BLUE_ICE,
             Material.DIRT, Material.PODZOL, Material.GRASS_BLOCK, Material.MYCELIUM,
-            OneOneSevenBlockHandler.ROOTED_DIRT, OneOneSevenBlockHandler.DIRT_PATH(),
+            Material.ROOTED_DIRT, Material.DIRT_PATH,
             OneOneNineBlockHandler.SCULK
     );
     
     public static final EnumSet<Material> caveDecoratorMaterials = EnumSet.of(
     		Material.ANDESITE_WALL, Material.DIORITE_WALL, Material.GRANITE_WALL,
-    		Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL, 
-    		OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL,
+    		Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL,
+            Material.COBBLED_DEEPSLATE_WALL,
     		Material.COBBLESTONE_SLAB, Material.STONE_SLAB,
-    		OneOneSevenBlockHandler.COBBLED_DEEPSLATE_SLAB,
-    		OneOneSevenBlockHandler.MOSS_BLOCK, 
-    		OneOneSevenBlockHandler.MOSS_CARPET, 
-    		OneOneSevenBlockHandler.CAVE_VINES,
-    		OneOneSevenBlockHandler.HANGING_ROOTS,
-    		OneOneSevenBlockHandler.SPORE_BLOSSOM,
-    		OneOneSevenBlockHandler.SMALL_DRIPLEAF,
-    		OneOneSevenBlockHandler.AZALEA,
-    		OneOneSevenBlockHandler.FLOWERING_AZALEA,
-    		OneOneSevenBlockHandler.BIG_DRIPLEAF,
-    		OneOneSevenBlockHandler.BIG_DRIPLEAF_STEM,
+            Material.COBBLED_DEEPSLATE_SLAB,
+            Material.MOSS_BLOCK,
+            Material.MOSS_CARPET,
+            Material.CAVE_VINES,
+            Material.HANGING_ROOTS,
+            Material.SPORE_BLOSSOM,
+            Material.SMALL_DRIPLEAF,
+            Material.AZALEA,
+            Material.FLOWERING_AZALEA,
+            Material.BIG_DRIPLEAF,
+            Material.BIG_DRIPLEAF_STEM,
     		Material.GRASS, Material.TALL_GRASS,
     		Material.ICE, Material.PACKED_ICE,
-    		OneOneSevenBlockHandler.DRIPSTONE_BLOCK,
-    		OneOneSevenBlockHandler.POINTED_DRIPSTONE,
-    		OneOneSevenBlockHandler.AMETHYST_CLUSTER,
-    		OneOneSevenBlockHandler.BUDDING_AMETHYST,
-    		OneOneSevenBlockHandler.GLOW_LICHEN,
+            Material.DRIPSTONE_BLOCK,
+            Material.POINTED_DRIPSTONE,
+            Material.AMETHYST_CLUSTER,
+            Material.BUDDING_AMETHYST,
+            Material.GLOW_LICHEN,
 
             //ItemsAdder Blocks
             Material.NOTE_BLOCK,
@@ -582,8 +585,8 @@ public class BlockUtils {
             case MYCELIUM:
                 return true;
             default:
-                return mat == OneOneSevenBlockHandler.DIRT_PATH() ||
-                		mat == OneOneSevenBlockHandler.ROOTED_DIRT;
+                return mat == Material.DIRT_PATH ||
+                		mat == Material.ROOTED_DIRT;
         }
     }
 
@@ -841,7 +844,7 @@ public class BlockUtils {
 	                        	if(isWet(relrel) ||
 	                        			relrel.getType() == Material.LAVA)
 	                        	{
-	                        		Material setMat = relrel.getY() < 0 ? OneOneSevenBlockHandler.DEEPSLATE: Material.STONE;
+	                        		Material setMat = relrel.getY() < 0 ? Material.DEEPSLATE: Material.STONE;
 	                        		relrel.physicsSetType(setMat, false);
 	                        	}
 	                        }
@@ -1374,4 +1377,115 @@ public class BlockUtils {
     		if(ore == mat) return true;
     	return false;
     }
+    public static void placeCandle(SimpleBlock block, int numCandles, boolean lit) {
+        Candle candle = (Candle) Bukkit.createBlockData(Material.CANDLE);
+        candle.setLit(lit);
+
+        candle.setCandles(numCandles);
+        block.setBlockData(candle);
+    }
+
+    public static void downLPointedDripstone(int height, SimpleBlock base) {
+        int realHeight = 0;
+        while(!base.getRelative(0,-realHeight,0).getType().isSolid() && height > 0) {
+            realHeight++;
+            height--;
+        }
+        if(base.getRelative(0,-realHeight,0).getType().isSolid())
+            realHeight--;
+
+        if(realHeight <= 0) return;
+
+        for(int i = realHeight; i > 0; i--) {
+            PointedDripstone.Thickness thickness = PointedDripstone.Thickness.MIDDLE;
+            if(i == 1)
+                thickness = PointedDripstone.Thickness.TIP;
+            if(i == 2)
+                thickness = PointedDripstone.Thickness.FRUSTUM;
+            if(i == realHeight && realHeight > 2)
+                thickness = PointedDripstone.Thickness.BASE;
+
+            PointedDripstone dripstone = (PointedDripstone) Bukkit.createBlockData(Material.POINTED_DRIPSTONE);
+            dripstone.setVerticalDirection(BlockFace.DOWN);
+            dripstone.setThickness(thickness);
+            base.getRelative(0, -(realHeight - i), 0).setBlockData(dripstone);
+        }
+    }
+
+    public static void upLPointedDripstone(int height, SimpleBlock base) {
+        int realHeight = 0;
+        while(!base.getRelative(0,realHeight,0).getType().isSolid() && height > 0) {
+            realHeight++;
+            height--;
+        }
+        if(base.getRelative(0,realHeight,0).getType().isSolid())
+            realHeight--;
+
+        if(realHeight <= 0) return;
+
+        for(int i = 0; i < realHeight; i++) {
+            PointedDripstone.Thickness thickness = PointedDripstone.Thickness.MIDDLE;
+
+            if(realHeight >= 4) {
+                if(i == realHeight-1)
+                    thickness = PointedDripstone.Thickness.TIP;
+                if(i == realHeight-2)
+                    thickness = PointedDripstone.Thickness.FRUSTUM;
+                if(i == 0)
+                    thickness = PointedDripstone.Thickness.BASE;
+            }else if(realHeight >= 3) {
+                if(i == realHeight-1)
+                    thickness = PointedDripstone.Thickness.TIP;
+                if(i == realHeight-2)
+                    thickness = PointedDripstone.Thickness.FRUSTUM;
+                if(i == 0)
+                    thickness = PointedDripstone.Thickness.BASE;
+            }else if(realHeight >= 2) {
+                thickness = PointedDripstone.Thickness.TIP;
+                if(i == 0)
+                    thickness = PointedDripstone.Thickness.FRUSTUM;
+            }else {
+                thickness = PointedDripstone.Thickness.TIP;
+            }
+
+            PointedDripstone dripstone = (PointedDripstone) Bukkit.createBlockData(Material.POINTED_DRIPSTONE);
+            dripstone.setVerticalDirection(BlockFace.UP);
+            dripstone.setThickness(thickness);
+            base.getRelative(0, i, 0).setBlockData(dripstone);
+        }
+    }
+
+    public static void downLCaveVines(int height, SimpleBlock base) {
+        int realHeight = 0;
+        while(!base.getRelative(0,-realHeight,0).getType().isSolid() && height > 0) {
+            realHeight++;
+            height--;
+        }
+        if(base.getRelative(0,-realHeight,0).getType().isSolid())
+            realHeight--;
+
+        if(realHeight <= 0) return;
+
+        for(int i = realHeight; i > 0; i--) {
+            CaveVinesPlant vines = (CaveVinesPlant) Bukkit.createBlockData(i == 1 ? Material.CAVE_VINES : Material.CAVE_VINES_PLANT);
+            vines.setBerries(new Random().nextInt(3) == 0);
+            base.getRelative(0, -(realHeight - i), 0).lsetBlockData(vines);
+        }
+    }
+
+    private static final HashMap<String, Material> deepslateMap = new HashMap<>();
+    public static Material deepSlateVersion(Material target) {
+        Material mat = deepslateMap.get("DEEPSLATE_"+target.toString());
+
+        if(mat == null) {
+            mat =  Material.getMaterial("DEEPSLATE_"+ target);
+        }
+        if(mat == null)
+            return target;
+        else {
+            deepslateMap.put("DEEPSLATE_"+ target, mat);
+            return mat;
+        }
+    }
+
 }

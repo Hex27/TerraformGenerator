@@ -35,25 +35,27 @@ public enum HeightMap {
     CORE {
         @Override
         public double getHeight(TerraformWorld tw, int x, int z) {
-            FastNoise cubic = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_CORE, world -> {
+            FastNoise noise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_CORE, world -> {
                 FastNoise n = new FastNoise((int) world.getSeed());
-                n.SetNoiseType(NoiseType.CubicFractal);
-                n.SetFractalOctaves(3);
+                n.SetNoiseType(NoiseType.SimplexFractal);
+                n.SetFractalOctaves(2); //Poor detail after blurs. Rely on Attrition for detail
                 n.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
                 return n;
             });
 
-            double height = cubic.GetNoise(x, z) * 2 * 5 + 7 + defaultSeaLevel;
+            //7 blocks elevated from the sea level
+            double height = 10*noise.GetNoise(x, z) + 7 + TerraformGenerator.seaLevel;
 
-            //Ensure that height doesn't automatically go upwards sharply
-            if (height > defaultSeaLevel + 10) {
-                height = (height - defaultSeaLevel - 10) * 0.1 + defaultSeaLevel + 10;
+            //Plateau-out height to make it flat-ish
+            if (height > TerraformGenerator.seaLevel + 10) {
+                height = (height - TerraformGenerator.seaLevel - 10) * 0.1 + TerraformGenerator.seaLevel + 10;
             }
 
-            //Ensure that height doesn't automatically go too deep
-            if (height < defaultSeaLevel - 30) {
-                height = -(defaultSeaLevel - 30 - height) * 0.1 + defaultSeaLevel - 30;
-            }
+            //This is fucking nonsense
+//            //Ensure that height doesn't automatically go too deep
+//            if (height < defaultSeaLevel - 30) {
+//                height = -(defaultSeaLevel - 30 - height) * 0.1 + defaultSeaLevel - 30;
+//            }
 
             return height;
         }
@@ -104,6 +106,9 @@ public enum HeightMap {
      * 1.5 for a radius of 3 is considered steep.
      * Does GenUtils.getHighestGround to get height values.
      */
+    /*TODO: There are several calls to this in Biome Handlers.
+     * Write a version that uses transformed height.
+     */
     public static double getTrueHeightGradient(PopulatorDataAbstract data, int x, int z, int radius) {
         double totalChangeInGradient = 0;
         int count = 0;
@@ -134,7 +139,7 @@ public enum HeightMap {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
 
         double cachedValue = cache.getHeightMapHeight(x, z);
-        if (cachedValue != 0) return cachedValue;
+        if (cachedValue != TerraformGeneratorPlugin.injector.getMinY()-1) return cachedValue;
 
         double height = getRiverlessHeight(tw,x,z);
 
@@ -162,7 +167,7 @@ public enum HeightMap {
     private static float getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
         float h = cache.getDominantBiomeHeight(x, z);
-        if(h == Float.MIN_VALUE) {
+        if(h == TerraformGeneratorPlugin.injector.getMinY()-1) {
             //Upscale the biome
             if(x % upscaleSize != 0 && z % upscaleSize != 0)
                 h = getDominantBiomeHeight(tw, x-(x%upscaleSize),z-(z%upscaleSize));
@@ -189,12 +194,12 @@ public enum HeightMap {
         int maskRadius = 5;
         int maskDiameter = (maskRadius*2) + 1;
         //int maskDiameterSquared = maskDiameter*maskDiameter;
-        double coreHeight = 0;
+        double coreHeight;
 
         ChunkCache mainCache = TerraformGenerator.getCache(tw, x, z);
 
         //If this chunk cache hasn't cached a blurred value,
-        if(mainCache.getBlurredHeight(x, z) == Float.MIN_VALUE) {
+        if(mainCache.getBlurredHeight(x, z) == TerraformGeneratorPlugin.injector.getMinY()-1) {
 
             //Box blur across the biome section
             //MegaChunk mc = new MegaChunk(x, 0, z);
@@ -212,7 +217,7 @@ public enum HeightMap {
 
                     //Temporarily cache these X-Blurred values into chunkcache.
                     //Do not purge values that are legitimate.
-                    if(targetCache.getIntermediateBlurHeight(relX, relZ) == Float.MIN_VALUE)
+                    if(targetCache.getIntermediateBlurHeight(relX, relZ) == TerraformGeneratorPlugin.injector.getMinY()-1)
                     {
                         targetCache.cacheIntermediateBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
                     }

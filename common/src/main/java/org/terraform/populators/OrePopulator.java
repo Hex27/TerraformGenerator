@@ -9,7 +9,6 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Objects;
@@ -150,6 +149,9 @@ public class OrePopulator {
                     int relX = (int) Math.round(x) + coreX;
                     int relY = (int) Math.round(y) + coreY;
                     int relZ = (int) Math.round(z) + coreZ;
+                    if(relY > TerraformGeneratorPlugin.injector.getMaxY()
+                    || relY <= TerraformGeneratorPlugin.injector.getMinY()) //do not touch bedrock layer
+                        continue;
                 	//SimpleBlock rel = block.getRelative((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
                     double equationResult = Math.pow(x, 2) / Math.pow(radius,2)
                             + Math.pow(y, 2) / Math.pow(radius, 2)
@@ -163,14 +165,14 @@ public class OrePopulator {
                         else if(Version.isAtLeast(17)) 
                         {
                         	//Deepslate replacing other ores
-                        	if(type == OneOneSevenBlockHandler.DEEPSLATE
+                        	if(type == Material.DEEPSLATE
                         			&& BlockUtils.ores.contains(oreType)) {
-                        		data.setType(relX,relY,relZ,OneOneSevenBlockHandler.deepSlateVersion(oreType));
+                        		data.setType(relX,relY,relZ,BlockUtils.deepSlateVersion(oreType));
                         	}
                         	//Normal ores replacing deepslate
-                        	else if(oreType == OneOneSevenBlockHandler.DEEPSLATE) 
+                        	else if(oreType == Material.DEEPSLATE)
                         	{
-                        		data.setType(relX,relY,relZ,OneOneSevenBlockHandler.deepSlateVersion(type));
+                        		data.setType(relX,relY,relZ,BlockUtils.deepSlateVersion(type));
                         	}
                         } 
                         

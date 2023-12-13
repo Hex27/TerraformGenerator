@@ -17,7 +17,6 @@ import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Map.Entry;
 import java.util.HashSet;
@@ -102,7 +101,7 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
         			w.getRight().setType(AncientCityUtils.deepslateBricks);
         			
         			if(depression < 0) {
-	        			new StairwayBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+	        			new StairwayBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 	        			.setDownTypes(AncientCityUtils.deepslateBricks)
 	        			.setStairwayDirection(BlockFace.DOWN)
 	        			.setStopAtY(effectiveRoom.getY())
@@ -112,7 +111,7 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
         			}
         			else
         			{
-	        			new StairwayBuilder(OneOneSevenBlockHandler.DEEPSLATE_BRICK_STAIRS)
+	        			new StairwayBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 	        			.setDownTypes(AncientCityUtils.deepslateBricks)
 	        			.setStairwayDirection(BlockFace.UP)
 	        			.setUpwardsCarveUntilNotSolid(false)

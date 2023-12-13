@@ -58,36 +58,28 @@ public class DesertHillsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
         
         FastNoise duneNoise = NoiseCacheHandler.getNoise(
-        		world, 
-        		NoiseCacheEntry.BIOME_DESERT_DUNENOISE, 
-        		tw -> {
-        	    	FastNoise n = new FastNoise((int) tw.getSeed());
-        	        n.SetNoiseType(NoiseType.CubicFractal);
-        	        n.SetFractalOctaves(3);
-        	        n.SetFrequency(0.03f);
-        	        return n;
-        		});
-    	
+            world,
+            NoiseCacheEntry.BIOME_DESERT_DUNENOISE,
+            tw -> {
+                FastNoise n = new FastNoise((int) tw.getSeed());
+                n.SetNoiseType(NoiseType.CubicFractal);
+                n.SetFractalOctaves(3);
+                n.SetFrequency(0.03f);
+                return n;
+        });
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int highest = GenUtils.getTrueHighestBlock(data, x, z);
-
-                for (int y = highest; y > HeightMap.CORE.getHeight(world, x, z); y--) {
-                    if (data.getBiome(x, z) != getBiome()) continue;
-                    if (duneNoise.GetNoise(x, y, z) > 0)
-                        if (data.getType(x, y, z).toString().endsWith("SAND")) {
-                            if (TConfigOption.BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE_POWDER.getBoolean())
-                                data.setType(x, y, z, Material.YELLOW_CONCRETE_POWDER);
-                        } else if (data.getType(x, y, z).toString().endsWith("SANDSTONE")) {
-                            if (TConfigOption.BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE.getBoolean())
-                                data.setType(x, y, z, Material.YELLOW_CONCRETE);
-                        }
+        for (int y = surfaceY; y > HeightMap.CORE.getHeight(world, rawX, rawZ); y--) {
+            if (duneNoise.GetNoise(rawX, y, rawZ) > 0)
+                if (data.getType(rawX, y, rawZ) == Material.SAND || data.getType(rawX,y,rawZ) == Material.RED_SAND) {
+                    if (TConfigOption.BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE_POWDER.getBoolean())
+                        data.setType(rawX, y, rawZ, Material.YELLOW_CONCRETE_POWDER);
+                } else if (data.getType(rawX, y, rawZ) == Material.SANDSTONE || data.getType(rawX, y, rawZ) == Material.RED_SANDSTONE) {
+                    if (TConfigOption.BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE.getBoolean())
+                        data.setType(rawX, y, rawZ, Material.YELLOW_CONCRETE);
                 }
-            }
         }
     }
 

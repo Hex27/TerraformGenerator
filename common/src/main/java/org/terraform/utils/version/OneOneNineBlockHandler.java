@@ -12,35 +12,35 @@ public class OneOneNineBlockHandler {
 
 	public static final EntityType ALLAY = getEntityType("ALLAY", "CHICKEN");
 	
-	public static final Material MUD = Material.getMaterial("MUD") == null ? 
+	public static final Material MUD = !Version.isAtLeast(19) ?
 			Material.getMaterial("PODZOL") : Material.getMaterial("MUD");
 
-    public static final Material MUD_BRICKS = Material.getMaterial("MUD_BRICKS") == null ?
+    public static final Material MUD_BRICKS =  !Version.isAtLeast(19) ?
             Material.getMaterial("BRICKS") : Material.getMaterial("MUD_BRICKS");
 
-    public static final Material REINFORCED_DEEPSLATE = Material.getMaterial("REINFORCED_DEEPSLATE") == null ?
+    public static final Material REINFORCED_DEEPSLATE = !Version.isAtLeast(19) ?
 			Material.getMaterial("POLISHED_DIORITE") : Material.getMaterial("REINFORCED_DEEPSLATE");
 	
 	
-	public static final Material MANGROVE_LEAVES = Material.getMaterial("MANGROVE_LEAVES") == null ? 
+	public static final Material MANGROVE_LEAVES = !Version.isAtLeast(19) ?
 			Material.getMaterial("OAK_LEAVES") : Material.getMaterial("MANGROVE_LEAVES");
-	public static final Material MANGROVE_LOG = Material.getMaterial("MANGROVE_LOG") == null ? 
+	public static final Material MANGROVE_LOG = !Version.isAtLeast(19) ?
 			Material.getMaterial("OAK_LOG") : Material.getMaterial("MANGROVE_LOG");
-	public static final Material MANGROVE_WOOD = Material.getMaterial("MANGROVE_WOOD") == null ? 
+	public static final Material MANGROVE_WOOD = !Version.isAtLeast(19) ?
 			Material.getMaterial("OAK_WOOD") : Material.getMaterial("MANGROVE_WOOD");
-	public static final Material MANGROVE_PROPAGULE = Material.getMaterial("MANGROVE_PROPAGULE") == null ? 
+	public static final Material MANGROVE_PROPAGULE = !Version.isAtLeast(19) ?
 			Material.getMaterial("AIR") : Material.getMaterial("MANGROVE_PROPAGULE");
-	public static final Material MANGROVE_ROOTS = Material.getMaterial("MANGROVE_ROOTS") == null ? 
+	public static final Material MANGROVE_ROOTS = !Version.isAtLeast(19) ?
 			Material.getMaterial("OAK_WOOD") : Material.getMaterial("MANGROVE_ROOTS");
-	public static final Material MUDDY_MANGROVE_ROOTS = Material.getMaterial("MUDDY_MANGROVE_ROOTS") == null ? 
+	public static final Material MUDDY_MANGROVE_ROOTS = !Version.isAtLeast(19) ?
 			Material.getMaterial("OAK_WOOD") : Material.getMaterial("MUDDY_MANGROVE_ROOTS");
 	
-	public static final Material MANGROVE_FENCE = Material.getMaterial("MANGROVE_FENCE") == null ? 
+	public static final Material MANGROVE_FENCE = !Version.isAtLeast(19) ?
 			Material.getMaterial("OAK_FENCE") : Material.getMaterial("MANGROVE_FENCE");
 	
 	//Pre-1.19 versions WILL NOT have any sculk related spawns.
 	public static final Material SCULK_VEIN = Material.getMaterial("SCULK_VEIN");
-	public static final Material SCULK = Material.getMaterial("SCULK") == null ? 
+	public static final Material SCULK = !Version.isAtLeast(19) ?
 			Material.getMaterial("STONE") : Material.getMaterial("SCULK");
 	public static final Material SCULK_CATALYST = Material.getMaterial("SCULK_CATALYST");
 	public static final Material SCULK_SHRIEKER = Material.getMaterial("SCULK_SHRIEKER");

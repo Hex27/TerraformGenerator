@@ -17,7 +17,6 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.SphereBuilder.SphereType;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Map.Entry;
 import java.util.Random;
@@ -103,7 +102,7 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
         			.setFacing(w.getDirection().getOppositeFace())
         			.apply(w.getUp(2));
         			
-        			OneOneSevenBlockHandler.placeCandle(w.getUp(3), GenUtils.randInt(1, 4),lightCandles());
+        			BlockUtils.placeCandle(w.getUp(3), GenUtils.randInt(1, 4),lightCandles());
         		}
         		
         		w = w.getLeft();

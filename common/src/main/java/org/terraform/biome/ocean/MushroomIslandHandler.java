@@ -46,7 +46,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
         //CHECK 4 SURROUNDING BIOMES.
         //If ANY of them are dry, the mushroom island radius will be 
         //aggressively shrunk to avoid land connections.
-        //If they're still connected uh. Lol I guess.s
+        //If they're still connected uh. Lol I guess.
         float islandRadius = BiomeSection.sectionWidth/2.5f;
         for(BlockFace face:BlockUtils.directBlockFaces) {
         	if(currentSection.getRelative(face.getModX(), face.getModZ())
@@ -96,9 +96,6 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
             }else
             	return height + supplement + 7;
         }
-            
-        
-        
         return height;
     }
 
@@ -123,19 +120,14 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                if(y >= TerraformGenerator.seaLevel) continue;
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        if(rawX >= TerraformGenerator.seaLevel) return;
 
-                if (!BlockUtils.isStoneLike(data.getType(x, y, z))) continue;
-                if (GenUtils.chance(random, 1, 150)) { //SEA GRASS/KELP
-                    CoralGenerator.generateKelpGrowth(data, x, y + 1, z);
-                }
-            }
+        if (!BlockUtils.isStoneLike(data.getType(rawX, rawX, rawZ))) return;
+        if (GenUtils.chance(random, 1, 150)) { //SEA GRASS/KELP
+            CoralGenerator.generateKelpGrowth(data, rawX, rawX + 1, rawZ);
         }
+
     }
 
 	@Override

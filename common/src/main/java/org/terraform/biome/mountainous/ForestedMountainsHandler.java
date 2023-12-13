@@ -72,53 +72,46 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-    	for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                
-                //Carve under-mountain river holes
-                if(x % 3 == 0 && z % 3 == 0)
-	                if(HeightMap.CORE.getHeight(tw, x, z) 
-	                		- HeightMap.getRawRiverDepth(tw, x, z) 
-	                		< TerraformGenerator.seaLevel - 4) {
-	                	new SphereBuilder(random, new SimpleBlock(data,x,TerraformGenerator.seaLevel,z), Material.AIR)
-	                	.setRadius(5)
-	                	.setStaticWaterLevel(TerraformGenerator.seaLevel)
-	                	.setHardReplace(true)
-	                	.build();
-	                	
-	                	if(GenUtils.chance(random, 1, 30)) {
-	                		int cylY = TerraformGenerator.seaLevel + (y-TerraformGenerator.seaLevel)/2 + 4;
-	                		new CylinderBuilder(random, new SimpleBlock(data,x,cylY,z), Material.AIR)
-	                		.setRadius(5)
-	                		.setRY((y-TerraformGenerator.seaLevel)/2 + 2)
-		                	.setHardReplace(true)
-	                		.build();
-	                	}
-	                }
-                
-                //Don't touch submerged blocks for the other decorations
-                if(y < TerraformGenerator.seaLevel)
-                	continue;
-                
-                //Make patches of dirt that extend on the mountain sides
-                if (GenUtils.chance(random, 1, 25)) {
-                    dirtStack(data, random, x, y, z);
-                    for (int nx = -2; nx <= 2; nx++)
-                        for (int nz = -2; nz <= 2; nz++) {
-                            if (GenUtils.chance(random, 1, 5)) continue;
-                            y = GenUtils.getHighestGround(data, x + nx, z + nz);
-                            
-                            //Another check, make sure relative position isn't underwater.
-                            if(y < TerraformGenerator.seaLevel)
-                            	continue;
-                            dirtStack(data, random, x + nx, y, z + nz);
-                        }
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+
+        //Carve under-mountain river holes
+        if(rawX % 3 == 0 && rawZ % 3 == 0)
+            if(HeightMap.CORE.getHeight(tw, rawX, rawZ)
+                    - HeightMap.getRawRiverDepth(tw, rawX, rawZ)
+                    < TerraformGenerator.seaLevel - 4) {
+                new SphereBuilder(random, new SimpleBlock(data,rawX,TerraformGenerator.seaLevel,rawZ), Material.AIR)
+                .setRadius(5)
+                .setStaticWaterLevel(TerraformGenerator.seaLevel)
+                .setHardReplace(true)
+                .build();
+
+                if(GenUtils.chance(random, 1, 30)) {
+                    int cylY = TerraformGenerator.seaLevel + (surfaceY-TerraformGenerator.seaLevel)/2 + 4;
+                    new CylinderBuilder(random, new SimpleBlock(data,rawX,cylY,rawZ), Material.AIR)
+                    .setRadius(5)
+                    .setRY((surfaceY-TerraformGenerator.seaLevel)/2f + 2)
+                    .setHardReplace(true)
+                    .build();
                 }
-                
-                
             }
+
+        //Don't touch submerged blocks for the other decorations
+        if(surfaceY < TerraformGenerator.seaLevel)
+            return;
+
+        //Make patches of dirt that extend on the mountain sides
+        if (GenUtils.chance(random, 1, 25)) {
+            dirtStack(data, random, rawX, surfaceY, rawZ);
+            for (int nx = -2; nx <= 2; nx++)
+                for (int nz = -2; nz <= 2; nz++) {
+                    if (GenUtils.chance(random, 1, 5)) continue;
+                    surfaceY = GenUtils.getHighestGround(data, rawX + nx, rawZ + nz);
+
+                    //Another check, make sure relative position isn't underwater.
+                    if(surfaceY < TerraformGenerator.seaLevel)
+                        continue;
+                    dirtStack(data, random, rawX + nx, surfaceY, rawZ + nz);
+                }
         }
     }    
 

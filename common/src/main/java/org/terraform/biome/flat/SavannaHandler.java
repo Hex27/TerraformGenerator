@@ -12,7 +12,6 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.Random;
 
@@ -25,24 +24,16 @@ public class SavannaHandler extends BiomeHandler {
         while (length-- > 0) {
             if (BlockUtils.isDirtLike(data.getType(nx, y, nz)) &&
                     data.getType(nx, y + 1, nz) == Material.AIR)
-                data.setType(nx, y, nz, OneOneSevenBlockHandler.DIRT_PATH());
+                data.setType(nx, y, nz, Material.DIRT_PATH);
 
-            switch (random.nextInt(5)) {  // The direction chooser
-                case 0:
-                    nx++;
-                    break;
-                case 2:
-                    nz++;
-                    break;
-                case 3:
-                    nx--;
-                    break;
-                case 4:
-                    nz--;
-                    break;
+            switch(random.nextInt(5)) {  // The direction chooser
+                case 0 -> nx++;
+                case 2 -> nz++;
+                case 3 -> nx--;
+                case 4 -> nz--;
             }
 
-            y = GenUtils.getTrueHighestBlock(data, nx, nz);
+            y = GenUtils.getHighestGround(data, nx, nz);
         }
     }
 
@@ -75,31 +66,15 @@ public class SavannaHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        if(GenUtils.chance(random,1,128))
+            makeYellowPatch(rawX, surfaceY, rawZ, data, random);
 
-        for (int i = 0; i < GenUtils.randInt(random, 1, 3); i++) {
-            int x = data.getChunkX() * 16 + GenUtils.randInt(0, 15);
-            int z = data.getChunkZ() * 16 + GenUtils.randInt(0, 15);
-            int y = GenUtils.getHighestGround(data, x, z);
-            if (data.getBiome(x, z) != getBiome()) continue;
-            makeYellowPatch(x, y, z, data, random);
-        }
-
-
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getTrueHighestBlock(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK
-                        && !data.getType(x, y + 1, z).isSolid()) {
-                    //Dense grass
-                    if (GenUtils.chance(random, 5, 10)) {
-                        BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                    }
-                }
-
-
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
+                && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
+            //Dense grass
+            if (GenUtils.chance(random, 5, 10)) {
+                BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
             }
         }
     }

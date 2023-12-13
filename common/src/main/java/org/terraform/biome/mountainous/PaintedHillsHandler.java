@@ -58,64 +58,56 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                correctDirt(new SimpleBlock(data,x,y,z));
-                
-            	FastNoise paintNoise = NoiseCacheHandler.getNoise(
-                		tw, 
-                		NoiseCacheEntry.BIOME_PAINTEDHILLS_NOISE, 
-                		world -> {
-                			FastNoise n = new FastNoise((int) (world.getSeed()*4));
-                	        n.SetNoiseType(NoiseType.SimplexFractal);
-                	        n.SetFractalOctaves(3);
-                	        n.SetFrequency(0.03f);
-                	        return n;
-                		});
-            	
-                
-            	if(HeightMap.getTrueHeightGradient(data, x, z, 3) 
-            			< TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble()) {
-            		data.setType(x, y, z, Material.GRASS_BLOCK);
-                    
-            		if (random.nextBoolean())
-            			data.setType(x, y-1, z, Material.DIRT);
-            		
-                    if (GenUtils.chance(random, 1, 30)) {
-                        data.setType(x, y + 1, z, Material.GRASS);
-                        if (random.nextBoolean()) {
-                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                        } else {
-                            data.setType(x, y + 1, z, Material.DEAD_BUSH);
-                        }
-                    }
-            	}
+        correctDirt(new SimpleBlock(data,rawX,surfaceY,rawZ));
 
-            	int terracottaDepth = 9;
-            	for(int i = 0; i < terracottaDepth; i++) {
-            		if(data.getType(x, y-i, z) != Material.ORANGE_TERRACOTTA)
-            			continue;
-            		
-            		double noise = paintNoise.GetNoise(x, y-i, z);
-            		Material mat;
-            		if(noise > 0.3)
-            			mat = Material.RED_TERRACOTTA;
-            		else if(noise > 0)
-                		mat = Material.CYAN_TERRACOTTA;
-            		else if(noise > -0.3)
-                		mat = Material.LIGHT_BLUE_TERRACOTTA;
-            		else
-                		mat = Material.YELLOW_TERRACOTTA;
-            		
-            		data.setType(x, y-i, z, mat);
-            	}
-                
-                
+        FastNoise paintNoise = NoiseCacheHandler.getNoise(
+                tw,
+                NoiseCacheEntry.BIOME_PAINTEDHILLS_NOISE,
+                world -> {
+                    FastNoise n = new FastNoise((int) (world.getSeed()*4));
+                    n.SetNoiseType(NoiseType.SimplexFractal);
+                    n.SetFractalOctaves(3);
+                    n.SetFrequency(0.03f);
+                    return n;
+                });
+
+
+        if(HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3)
+                < TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble()) {
+            data.setType(rawX, surfaceY, rawZ, Material.GRASS_BLOCK);
+
+            if (random.nextBoolean())
+                data.setType(rawX, surfaceY-1, rawZ, Material.DIRT);
+
+            if (GenUtils.chance(random, 1, 30)) {
+                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                if (random.nextBoolean()) {
+                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                } else {
+                    data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                }
             }
+        }
+
+        int terracottaDepth = 9;
+        for(int i = 0; i < terracottaDepth; i++) {
+            if(data.getType(rawX, surfaceY-i, rawZ) != Material.ORANGE_TERRACOTTA)
+                continue;
+
+            double noise = paintNoise.GetNoise(rawX, surfaceY-i, rawZ);
+            Material mat;
+            if(noise > 0.3)
+                mat = Material.RED_TERRACOTTA;
+            else if(noise > 0)
+                mat = Material.CYAN_TERRACOTTA;
+            else if(noise > -0.3)
+                mat = Material.LIGHT_BLUE_TERRACOTTA;
+            else
+                mat = Material.YELLOW_TERRACOTTA;
+
+            data.setType(rawX, surfaceY-i, rawZ, mat);
         }
     }
     
@@ -132,8 +124,6 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
                 	continue;
                 // Normal trees
                 new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
-                    
-                
             }
         }
 	}

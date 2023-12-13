@@ -7,6 +7,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -51,54 +52,41 @@ public class GorgeHandler extends BiomeHandler {
     public Material[] getSurfaceCrust(Random rand) { return plainsHandler.getSurfaceCrust(rand); }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-    	for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
-        		SimpleBlock target = new SimpleBlock(data,x,y+1,z);
-        		while(target.getY() <= TerraformGenerator.seaLevel) {     
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-                    //Lower parts of the gorge have water
-        			if(target.getY() <= TerraformGenerator.seaLevel - 20) {
-        				if(target.getType() == Material.WATER)
-	        				for(BlockFace face:new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN}) {
-	            				if(target.getRelative(face).getType() == Material.AIR)
-	            					target.getRelative(face).setType(Material.STONE);
-	            			}
-        			} else {
-            			//Repair possible exposed water caves to prevent water from escaping and
-            			//forming weird blobs.
-        				for(BlockFace face:new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SELF}) {
-            				if(target.getRelative(face).getType() == Material.WATER) {
-            					target.getRelative(face).setType(Material.STONE);
-            					if(face == BlockFace.SELF)
-            						target.getRelative(face).setType(Material.STONE);
-            				}
-            			}
-        			}
-        			
-        			target = target.getRelative(0,1,0);
-        		}
-        		
-        		target = target.getGround();
-        		
-        		if(!BlockUtils.isWet(target.getRelative(0,1,0)) && target.getType() == Material.STONE) {
-        			//Make the ground more dynamic
-        			target.setType(Material.GRASS_BLOCK);
-        			target.getRelative(0,-1,0).setType(Material.DIRT);
-        			if(random.nextBoolean()) {
-        				target.getRelative(0,-2,0).setType(Material.DIRT);
-        				if(random.nextBoolean())
-        					target.getRelative(0,-3,0).setType(Material.DIRT);
-        			}
-        		}
+        SimpleBlock target = new SimpleBlock(data,rawX,surfaceY+1,rawZ);
+        boolean wasBelowSea = false;
+        //the repair work is here because it needs the 3x3 boundary
+        //for cave air that is BESIDE the water
+        //DOES NOT change height truth because another block MUST be above the
+        //one being changed due to the way this works
+        while(target.getY() <= TerraformGenerator.seaLevel-20) {
+            wasBelowSea = true;
+            if(target.getType() == Material.WATER)
+                for(BlockFace face:BlockUtils.directBlockFaces) {
+                    if(BlockUtils.isAir(target.getRelative(face).getType()))
+                        target.getRelative(face).setType(Material.STONE);
+                }
+            target = target.getUp();
+        }
+
+        //Do not do dry decorations if this was water
+        if(wasBelowSea) return;
+
+        target = target.getGround();
+
+        if(!BlockUtils.isWet(target.getRelative(0,1,0)) && target.getType() == Material.STONE) {
+            //Make the ground more dynamic
+            target.setType(Material.GRASS_BLOCK);
+            target.getRelative(0,-1,0).setType(Material.DIRT);
+            if(random.nextBoolean()) {
+                target.getRelative(0,-2,0).setType(Material.DIRT);
+                if(random.nextBoolean())
+                    target.getRelative(0,-3,0).setType(Material.DIRT);
             }
-    	}
-    	
-    		
-    	plainsHandler.populateSmallItems(world, random, data);
+        }
+
+    	plainsHandler.populateSmallItems(world, random, rawX, surfaceY, rawZ, data);
     }
 
     @Override
@@ -107,8 +95,8 @@ public class GorgeHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int chunkX, int chunkZ) {
-    	
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+
         FastNoise cliffNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_GORGE_CLIFFNOISE, 
@@ -134,66 +122,68 @@ public class GorgeHandler extends BiomeHandler {
         double threshold = 0.1;
         int heightFactor = 12;
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int rawX = chunkX * 16 + x;
-                int rawZ = chunkZ * 16 + z;
+        int rawX = chunkX * 16 + x;
+        int rawZ = chunkZ * 16 + z;
 
-                double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
-                int height = (int) preciseHeight;
+        double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
+        int height = (int) preciseHeight;
 
-                // Don't touch areas that aren't gorges
-                if (tw.getBiomeBank(rawX, height, rawZ) != BiomeBank.GORGE) continue;
-                
-                double rawCliffNoiseVal = cliffNoise.GetNoise(rawX, rawZ);
-                double noiseValue = rawCliffNoiseVal * getBiomeBlender(tw).getEdgeFactor(BiomeBank.GORGE, rawX, rawZ);
-            	double detailsValue = detailsNoise.GetNoise(rawX, rawZ);
-                
-                //Raise up a tall area
-                if(noiseValue >= 0) {
-                    double d = (noiseValue / threshold) - (int) (noiseValue / threshold) - 0.5;
-                    double platformHeight = (int) (noiseValue / threshold) * heightFactor
-                            + (64 * Math.pow(d, 7) * heightFactor)
-                            + detailsValue * heightFactor * 0.5;
+        double rawCliffNoiseVal = cliffNoise.GetNoise(rawX, rawZ);
+        double noiseValue = rawCliffNoiseVal * getBiomeBlender(tw).getEdgeFactor(BiomeBank.GORGE, rawX, rawZ);
+        double detailsValue = detailsNoise.GetNoise(rawX, rawZ);
 
-                    for (int y = 1; y <= (int) Math.round(platformHeight); y++) {
-                        Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
-                                Material.COBBLESTONE, Material.COBBLESTONE, Material.ANDESITE, Material.ANDESITE);
-                        
-                        if (slabs 
-                        		&& material != Material.GRASS_BLOCK 
-                        		&& y == (int) Math.round(platformHeight) 
-                        		&& platformHeight - (int) platformHeight >= 0.5) 
-                        	material = Material.getMaterial(material.name() + "_SLAB");
-                        chunk.setBlock(x, height + y, z, material);
-                    }
-                    if (detailsValue < 0.2 && GenUtils.chance(3, 4))
-                    	chunk.setBlock(x, height + (int) Math.round(platformHeight), z, Material.GRASS_BLOCK);
-                }
-                else //Burrow a gorge deep down like a ravine
+        //Raise up a tall area
+        if(noiseValue >= 0) {
+            double d = (noiseValue / threshold) - (int) (noiseValue / threshold) - 0.5;
+            double platformHeight = (int) (noiseValue / threshold) * heightFactor
+                    + (64 * Math.pow(d, 7) * heightFactor)
+                    + detailsValue * heightFactor * 0.5;
+
+            if(Math.round(platformHeight) >= 1)
+                cache.writeTransformedHeight(x, z, (short) (Math.round(platformHeight) + height));
+            for(int y = 1; y <= (int) Math.round(platformHeight); y++) {
+                Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
+                        Material.COBBLESTONE, Material.COBBLESTONE, Material.ANDESITE, Material.ANDESITE);
+
+                if(slabs
+                        && material != Material.GRASS_BLOCK
+                        && y == (int) Math.round(platformHeight)
+                        && platformHeight - (int) platformHeight >= 0.5)
+                    material = Material.getMaterial(material.name() + "_SLAB");
+                chunk.setBlock(x, height + y, z, material);
+            }
+            if(detailsValue < 0.2 && GenUtils.chance(3, 4)) {
+                chunk.setBlock(x, height + (int) Math.round(platformHeight), z, Material.GRASS_BLOCK);
+
+            }
+        }
+        else //Burrow a gorge deep down like a ravine
+        {
+            int depth = (int) Math.sqrt(Math.abs(rawCliffNoiseVal * getBiomeBlender(tw).getEdgeFactor(BiomeBank.GORGE, rawX, rawZ)) * 200 * 50);
+
+            //Smooth out anything that crosses the water threshold
+            if(height - depth < TerraformGenerator.seaLevel - 20) {
+                int depthToPreserve = height - (TerraformGenerator.seaLevel - 20);
+                depth = (int) (depthToPreserve + Math.round(Math.sqrt(depth - depthToPreserve)));
+            }
+
+            //Prevent going beneath y = 10
+            if(depth > height - 10) depth = height-10;
+            //No guard here, depth is an integer, so if its 0, this cache write is safe
+            cache.writeTransformedHeight (x,z, (short) (height - depth));
+            for (int y = 0; y < depth; y++) {
+                if(TerraformGenerator.seaLevel - 20 >= height-y)
+                    chunk.setBlock(x, height - y, z, Material.WATER);
+                else
                 {
-                	int depth = (int) Math.sqrt(Math.abs(rawCliffNoiseVal * getBiomeBlender(tw).getEdgeFactor(BiomeBank.GORGE, rawX, rawZ)) * 200 * 50);
-                	
-                	//Smooth out anything that crosses the water threshold
-                	if(height - depth < TerraformGenerator.seaLevel - 20) {
-                		int depthToPreserve = height - (TerraformGenerator.seaLevel - 20);
-                		depth = (int) (depthToPreserve + Math.round(Math.sqrt(depth - depthToPreserve)));
-                	}
-                	
-                	//Prevent going beneath y = 10
-                    if(depth > height - 10) depth = height-10;
-                    
-                	for (int y = 0; y < depth; y++) {
-                        if(TerraformGenerator.seaLevel - 20 >= height-y)
-                            chunk.setBlock(x, height - y, z, Material.WATER);
-                        else
-                        {
-                            chunk.setBlock(x, height - y, z, Material.AIR);
-                        }
-                    }
-                	
+                    chunk.setBlock(x, height - y, z, Material.AIR);
                 }
             }
+
+            //Stop water from escaping. Also makes the highest-ground assertion true
+            //MYSTERIO IS THE TRUTH
+            if(height-depth <= TerraformGenerator.seaLevel - 20)
+                chunk.setBlock(x, height-depth, z, Material.STONE);
         }
     }
 

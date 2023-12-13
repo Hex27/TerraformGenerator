@@ -44,39 +44,33 @@ public class DarkForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
       
         boolean spawnHeads = TConfigOption.BIOME_DARK_FOREST_SPAWN_HEADS.getBoolean() 
         		&& GenUtils.chance(random, 1, 100);
 
-        //Small decorations
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getType(x, y, z) == Material.GRASS_BLOCK) {
-                    if (GenUtils.chance(random, 1, 10)) {
-                        if (data.getType(x, y + 1, z) != Material.AIR) continue;
-                        //Only grass and mushrooms
-                        data.setType(x, y + 1, z, Material.GRASS);
-                        if (random.nextInt(3) != 0) {
-                            BlockUtils.setDoublePlant(data, x, y + 1, z, Material.TALL_GRASS);
-                        } else {
-                            Material mushroom = Material.RED_MUSHROOM;
-                            if (random.nextBoolean())
-                                mushroom = Material.BROWN_MUSHROOM;
-                            data.setType(x, y + 1, z, mushroom);
-                        }
-                    }
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
+            if (GenUtils.chance(random, 1, 10)) {
+                if (data.getType(rawX, surfaceY + 1, rawZ) != Material.AIR) return;
+                //Only grass and mushrooms
+                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                if (random.nextInt(3) != 0) {
+                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                } else {
+                    Material mushroom = Material.RED_MUSHROOM;
+                    if (random.nextBoolean())
+                        mushroom = Material.BROWN_MUSHROOM;
+                    data.setType(rawX, surfaceY + 1, rawZ, mushroom);
                 }
+            }
+        }
 
-                if (spawnHeads && GenUtils.chance(random, 1, 50)) {
-                    if (BlockUtils.isDirtLike(data.getType(x, y, z))) {
-                        Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
-                        skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
+        if (spawnHeads && GenUtils.chance(random, 1, 50)) {
+            if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
+                Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
+                skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
 
-                        data.setBlockData(x, y + 1, z, skull);
-                    }
-                }
+                data.setBlockData(rawX, surfaceY + 1, rawZ, skull);
             }
         }
 

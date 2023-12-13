@@ -10,17 +10,17 @@ import java.util.Random;
 
 public class OneTwentyBlockHandler {
 	
-	public static final Material CHERRY_LOG = Material.getMaterial("CHERRY_LOG") == null ?
+	public static final Material CHERRY_LOG = !Version.isAtLeast(20) ?
 			Material.DARK_OAK_LOG : Material.getMaterial("CHERRY_LOG");
-    public static final Material CHERRY_WOOD = Material.getMaterial("CHERRY_WOOD") == null ?
+    public static final Material CHERRY_WOOD = !Version.isAtLeast(20) ?
             Material.DARK_OAK_WOOD : Material.getMaterial("CHERRY_WOOD");
-    public static final Material CHERRY_LEAVES = Material.getMaterial("CHERRY_LEAVES") == null ?
+    public static final Material CHERRY_LEAVES = !Version.isAtLeast(20) ?
             Material.DARK_OAK_LEAVES : Material.getMaterial("CHERRY_LEAVES");
-    public static final Material PINK_PETALS = Material.getMaterial("PINK_PETALS") == null ?
+    public static final Material PINK_PETALS = !Version.isAtLeast(20) ?
             Material.AIR : Material.getMaterial("PINK_PETALS");
-    public static final Material SUSPICIOUS_SAND = Material.getMaterial("SUSPICIOUS_SAND") == null ?
+    public static final Material SUSPICIOUS_SAND = !Version.isAtLeast(20) ?
             Material.SAND : Material.getMaterial("SUSPICIOUS_SAND");
-    public static final Material SUSPICIOUS_GRAVEL = Material.getMaterial("SUSPICIOUS_GRAVEL") == null ?
+    public static final Material SUSPICIOUS_GRAVEL = !Version.isAtLeast(20) ?
             Material.GRAVEL : Material.getMaterial("SUSPICIOUS_GRAVEL");
 
     public static final EntityType CAMEL = getCamel();

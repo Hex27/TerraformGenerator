@@ -6,19 +6,26 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Stack;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
+import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.generator.WorldInfo;
+import org.bukkit.material.MaterialData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
-import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.noise.FastNoise;
 
 public class PreviewCommand extends TerraCommand {
 
@@ -50,30 +57,21 @@ public class PreviewCommand extends TerraCommand {
         int maxY = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY();
 
         TerraformWorld tw = TerraformWorld.get("test-world-"+new Random().nextInt(99999), new Random().nextInt(99999));//TerraformWorld.get("test-world", 11111);
-        
-        BufferedImage img = new BufferedImage(maxX, maxY, BufferedImage.TYPE_INT_RGB);
+
+        ImageWorldInfo iwi = new ImageWorldInfo(tw.getName(), tw.getSeed());
+
+        BufferedImage img = new BufferedImage(maxX, maxY+maxX, BufferedImage.TYPE_INT_RGB);
         //Delete existing
         File f = new File("terra-preview.png"); if (f.exists()) f.delete();
-        for (int x = -maxX/2; x < maxX/2; x++) {
-            double height = HeightMap.getPreciseHeight(tw,x,0);
-            for (int y = TerraformGeneratorPlugin.injector.getMinY(); y < TerraformGeneratorPlugin.injector.getMaxY(); y++) {
-                Color col = Color.WHITE;
-                if(y <= height)
-                {
-                    //Stone
-                    col = Color.LIGHT_GRAY;
-
-                    //Apply cave stuff if it is below height
-//                    if(cheeseCave(tw,x,y,0,height))
-//                        col = Color.BLACK;
-                    col = cheeseCave(tw,x,y,0,height);
-                }
-                else if(y <= TerraformGenerator.seaLevel)
-                    col = Color.CYAN;
-
-                //Flip maxY values, images have 0 at the top
-                img.setRGB(x+maxX/2, maxY-(y-TerraformGeneratorPlugin.injector.getMinY())-1,
-                        col.getRGB());
+        TerraformGenerator generator = new TerraformGenerator();
+        //Generate both side and top-down
+        for (int x = (-maxX/2)>>4; x < (maxX/2)>>4; x++) {
+            for(int z = (-maxX/2)>>4; z < (maxX/2)>>4; z++)
+            {
+                ImageChunkData icd = new ImageChunkData(img, x,z, maxX, maxY);
+                generator.generateNoise(iwi, tw.getHashedRand(1, x,z), x, z, icd);
+                generator.generateSurface(iwi, tw.getHashedRand(1, x,z), x, z, icd);
+                generator.generateCaves(iwi, tw.getHashedRand(1, x,z), x, z, icd);
             }
         }
         try {
@@ -85,63 +83,156 @@ public class PreviewCommand extends TerraCommand {
         System.out.println("Done.");
     }
 
-    /**
-     * Determine if the x,y,z coordinate should be a noodle cave
-     */
-    public Color cheeseCave(TerraformWorld tw, int x, int y, int z, double height){
-        float filterHeight = barrier(tw, x,y,z, (float)height, 10, 5);
-        float filterGround = barrier(tw, x,y,z, (float) TerraformGeneratorPlugin.injector.getMinY(), 20, 5);
+    private class ImageChunkData implements ChunkGenerator.ChunkData{
+        final BufferedImage img;
+        final int chunkX,chunkZ,maxX,maxY;
+        private final int[][] maxHeights = new int[16][16];
 
-        FastNoise cheeseNoise = new FastNoise((int) tw.getSeed());
-        cheeseNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-        cheeseNoise.SetFrequency(0.05f);
-        cheeseNoise.SetFractalOctaves(2);
-        float cheese = cheeseNoise.GetNoise(x*0.5f,y,z*0.5f);
-
-        float caveBoundary = -0.2f; //Check if less than this
-        float coreCave = filterHeight*filterGround*cheese;
-
-        //Attempt to make stalactites and stalagmites.
-        //No need to apply the filter here because they exist
-        //by not carving stuff.
-        //Check if this is the wall of the cave. If it is,
-        //ADD a low-frequency powered noise for spikes
-        if(Math.abs(coreCave-caveBoundary) <= 0.175)
-        {
-            FastNoise spikeNoise = new FastNoise();
-            spikeNoise.SetNoiseType(FastNoise.NoiseType.Simplex);
-            spikeNoise.SetFrequency(0.2f);
-            //spikeNoise.SetFractalOctaves(2);
-            double spike = (1-(Math.abs(coreCave-caveBoundary)/0.175))*
-                    Math.pow(Math.max(0,spikeNoise.GetNoise(x,z)),3);
-            if(coreCave + spike > caveBoundary && coreCave <= caveBoundary)
-                return Color.RED;
+        private ImageChunkData(BufferedImage img, int chunkX, int chunkZ, int maxX, int maxY) {
+            this.img = img;
+            this.chunkX = chunkX;
+            this.chunkZ = chunkZ;
+            this.maxY = maxY;
+            this.maxX = maxX;
         }
 
-        return coreCave <= caveBoundary ? Color.BLACK : Color.LIGHT_GRAY;
+        //We only care about this one.
+        //x,z in [0,15]
+        @Override
+        public void setBlock(int x, int y, int z, @NotNull Material material) {
+            Color col;
+            switch(material){
+                case STONE -> col = Color.LIGHT_GRAY;
+                case DEEPSLATE -> col = Color.GRAY;
+                case WATER -> col = Color.CYAN;
+                case CAVE_AIR -> col = Color.RED.darker();
+                default -> col = Color.GREEN.darker();
+            }
+
+            //Vertical slice at z=0
+            if(z==0 && chunkZ == 0)
+                img.setRGB(
+                        (maxX/2) + x+chunkX*16,
+                        maxY-(y-TerraformGeneratorPlugin.injector.getMinY())-1,
+                        col.getRGB());
+            //Top-Down slice
+            if(y>=maxHeights[x][z])
+            {
+                maxHeights[x][z] = y;
+                if((y-TerraformGenerator.seaLevel) % 3 == 0) {
+                    if(y > TerraformGenerator.seaLevel)
+                        col = col.brighter();
+                     else col = col.darker();
+                }
+                img.setRGB((maxX/2) + x+chunkX*16,
+                        maxY+(maxX/2) + z+chunkZ*16,col.getRGB());
+            }
+        }
+        @Override
+        public void setBlock(int i, int i1, int i2, @NotNull BlockData blockData) {
+
+        }
+
+        @Override
+        public int getMinHeight() {
+            return 0; //idc
+        }
+
+        @Override
+        public int getMaxHeight() {
+            return 0; //idc
+        }
+
+        @NotNull
+        @Override
+        public Material getType(int i, int i1, int i2) {
+            return null;
+        }
+
+        @NotNull
+        @Override
+        public BlockData getBlockData(int i, int i1, int i2) {
+            return null;
+        }
+
+        //Ignore these.
+        @NotNull
+        @Override
+        public Biome getBiome(int i, int i1, int i2) {
+            return null;
+        }
+        @Override
+        public void setBlock(int i, int i1, int i2, @NotNull MaterialData materialData) {
+
+        }
+
+        @Override
+        public void setRegion(int i, int i1, int i2, int i3, int i4, int i5, @NotNull Material material) {
+
+        }
+
+        @Override
+        public void setRegion(int i, int i1, int i2, int i3, int i4, int i5, @NotNull MaterialData materialData) {
+
+        }
+
+        @Override
+        public void setRegion(int i, int i1, int i2, int i3, int i4, int i5, @NotNull BlockData blockData) {
+
+        }
+
+        @NotNull
+        @Override
+        public MaterialData getTypeAndData(int i, int i1, int i2) {
+            return null;
+        }
+
+        @Override
+        public byte getData(int i, int i1, int i2) {
+            return 0;
+        }
     }
 
-    /**
-     * Used to prevent functions from passing certain thresholds.
-     * Useful for stuff like preventing caves from breaking into
-     * the ocean or under minimum Y
-     * @return a value between 0 and 1 inclusive.
-     */
-    public float barrier(TerraformWorld tw, float x, float y, float z, float v, float barrier, float limit){
+    private class ImageWorldInfo implements WorldInfo{
+        private final String name;
+        private final long seed;
 
-        FastNoise boundaryNoise = new FastNoise((int) tw.getSeed()*5);
-        boundaryNoise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        boundaryNoise.SetFrequency(0.01f);
-        barrier += 3*boundaryNoise.GetNoise(x,z); //fuzz the boundary
+        private ImageWorldInfo(String name, long seed) {
+            this.name = name;
+            this.seed = seed;
+        }
 
-        if(Math.abs(y-v) <= limit)
+        @NotNull
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @NotNull
+        @Override
+        public UUID getUID() {
+            return null;
+        }
+
+        @NotNull
+        @Override
+        public World.Environment getEnvironment() {
+            return null;
+        }
+
+        @Override
+        public long getSeed() {
+            return seed;
+        }
+
+        @Override
+        public int getMinHeight() {
             return 0;
-        else {
-            float abs = Math.abs(y - v);
-            if(abs < barrier+limit)
-                return (abs-limit)/barrier;
-            else
-                return 1;
+        }
+
+        @Override
+        public int getMaxHeight() {
+            return 0;
         }
     }
     @SuppressWarnings("unused")

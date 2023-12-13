@@ -1,5 +1,9 @@
 package org.terraform.coregen;
 
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.loot.LootTable;
+
 public enum TerraLootTable {
     EMPTY("empty"), //Not a valid key
     SPAWN_BONUS_CHEST("chests/spawn_bonus_chest"),
@@ -106,5 +110,8 @@ public enum TerraLootTable {
 
     TerraLootTable(String key) {
         this.key = key;
+    }
+    public LootTable bukkit(){
+        return Bukkit.getLootTable(NamespacedKey.minecraft(this.key));
     }
 }

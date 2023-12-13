@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 public class AncientCityPillarSchematicParser extends SchematicParser {
 	
@@ -41,15 +41,15 @@ public class AncientCityPillarSchematicParser extends SchematicParser {
     		touchedOffsets.add(block);
     	}
     	
-    	if(data.getMaterial() == OneOneSevenBlockHandler.DEEPSLATE_TILES)
+    	if(data.getMaterial() == Material.DEEPSLATE_TILES)
     	{ //Crack deepslate tiles
     		if(rand.nextBoolean())
-    			data = Bukkit.createBlockData(OneOneSevenBlockHandler.CRACKED_DEEPSLATE_TILES);
+    			data = Bukkit.createBlockData(Material.CRACKED_DEEPSLATE_TILES);
     	}
-		else if(data.getMaterial() == OneOneSevenBlockHandler.DEEPSLATE_BRICKS)
+		else if(data.getMaterial() == Material.DEEPSLATE_BRICKS)
 		{ //Crack deepslate bricks
     		if(rand.nextBoolean())
-    			data = Bukkit.createBlockData(OneOneSevenBlockHandler.CRACKED_DEEPSLATE_BRICKS);
+    			data = Bukkit.createBlockData(Material.CRACKED_DEEPSLATE_BRICKS);
 		}
     	super.applyData(block, data);
     }

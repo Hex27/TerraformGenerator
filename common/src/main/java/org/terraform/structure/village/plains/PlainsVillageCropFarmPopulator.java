@@ -17,7 +17,6 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.AgeableBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.TrapdoorBuilder;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Map.Entry;
@@ -114,13 +113,9 @@ public class PlainsVillageCropFarmPopulator extends PlainsVillageAbstractRoomPop
 	                                lampWall = lampWall.getFront();
 	                            }
 	                            lampWall = lampWall.getRear().getRelative(0, -1, 0);
-	
-	                            Material chain = Material.IRON_BARS;
-	                            if (Version.isAtLeast(16.0))
-	                                chain = OneOneSixBlockHandler.getChainMaterial();
-	
+
 	                            for (int j = 0; j < GenUtils.randInt(rand, 0, 1); j++) {
-	                                lampWall.setType(chain);
+	                                lampWall.setType(Material.CHAIN);
 	                                lampWall = lampWall.getRelative(0, -1, 0);
 	                            }
 	                            Lantern lantern = (Lantern) Bukkit.createBlockData(Material.LANTERN);

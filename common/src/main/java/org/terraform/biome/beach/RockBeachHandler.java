@@ -6,7 +6,6 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneEightBlockHandler;
 
 import java.util.Random;
 
@@ -19,7 +18,7 @@ public class RockBeachHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return OneOneEightBlockHandler.STONY_SHORE;
+        return Biome.STONY_SHORE;
     }
 
     @Override
@@ -31,17 +30,8 @@ public class RockBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-
-                if (GenUtils.chance(random, 1, 100))
-                    data.setType(x, y + 1, z, Material.COBBLESTONE_SLAB);
-            }
-        }
     }
 
 	@Override

@@ -15,7 +15,6 @@ import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -228,7 +227,7 @@ public class PlainsPathRecursiveSpawner {
             	w.getUp().setType(Material.AIR);
 
             
-            w.setType(OneOneSevenBlockHandler.DIRT_PATH());
+            w.setType(Material.DIRT_PATH);
 
             for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
                 Wall target = w.getRelative(face).getGround();
@@ -240,7 +239,7 @@ public class PlainsPathRecursiveSpawner {
                     if(!target.getUp().getType().isSolid() && target.getUp().getType() != Material.AIR)
                     	target.getUp().setType(Material.AIR);
 
-                    target.setType(OneOneSevenBlockHandler.DIRT_PATH());
+                    target.setType(Material.DIRT_PATH);
                 }
             }
         }

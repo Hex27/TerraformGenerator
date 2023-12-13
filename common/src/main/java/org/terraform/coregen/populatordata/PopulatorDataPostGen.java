@@ -64,8 +64,6 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
         		Tag.CARPETS.isTagged(type) ||
                 type == Material.FARMLAND ||
                 type == Material.WATER;
-        //TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())
-        //.setType(x, y, z, type);
         Block b = w.getBlockAt(x, y, z);
         b.setType(type, !isFragile);
     }
@@ -76,8 +74,6 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
         		Tag.CARPETS.isTagged(data.getMaterial()) ||
                 data.getMaterial() == Material.FARMLAND ||
                 data.getMaterial() == Material.WATER;
-        //TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk())
-        //.setBlockData(x, y, z, data);
         Block b = w.getBlockAt(x, y, z);
         b.setBlockData(data.clone(), !isFragile);
     }
@@ -96,10 +92,6 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
 
     /**
      * Blockstates are mutable, so just edit them. There is no method to directly set them.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public BlockState getBlockState(int x, int y, int z) {
         Block b = w.getBlockAt(x, y, z);
@@ -177,21 +169,21 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
 	@Override
 	public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
 		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(rawX, rawY, rawZ).getChunk());
-		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
-		((PopulatorDataICABiomeWriterAbstract) icad).setBiome(rawX, rawY, rawZ, cbt, fallback);
+		if(icad instanceof PopulatorDataICABiomeWriterAbstract biomeWriter)
+            biomeWriter.setBiome(rawX, rawY, rawZ, cbt, fallback);
 	}
 
 	@Override
 	public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
 		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x0,y0,z0).getChunk());
 		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
-		((PopulatorDataICABiomeWriterAbstract) icad).registerNaturalSpawns(type, x0, y0, z0, x1, y1, z1);
+		    icad.registerNaturalSpawns(type, x0, y0, z0, x1, y1, z1);
 	}
 
 	@Override
 	public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, Random random) {
 		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk());
 		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
-		((PopulatorDataICABiomeWriterAbstract) icad).spawnMinecartWithChest(x,y,z,table,random);
+		    icad.spawnMinecartWithChest(x,y,z,table,random);
 	}
 }

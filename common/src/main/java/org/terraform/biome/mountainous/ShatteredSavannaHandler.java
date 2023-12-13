@@ -2,25 +2,40 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.bukkit.generator.ChunkGenerator;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.BiomeBlender;
+import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.BiomeSection;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CylinderBuilder;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+
 import java.util.Random;
 
+
+/**
+ * Shattered Savannas do not extend AbstractMountainHandler despite
+ * being technically mountains
+ * <br>
+ * They instead artificially raise height to this point, then
+ * just add a flat number and let the blurring process handle the rest.
+ * <br>
+ * The real interest in the biome lies in its transformer
+ */
 public class ShatteredSavannaHandler extends AbstractMountainHandler {
 	
     @Override
@@ -43,93 +58,107 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         		Material.STONE
         		};
     }
-    
-    @Override
-    protected double getPeakMultiplier(BiomeSection section, Random sectionRandom)
-    {
-    	double original = super.getPeakMultiplier(section, sectionRandom);
-    	return 1.0 + (original - 1.0)*0.2;
-    }
 
     @Override
-    public double calculateHeight(TerraformWorld tw, int x, int z) {
-    	double height = super.calculateHeight(tw, x, z);
-    	FastNoise shatteredSavannaNoise = NoiseCacheHandler.getNoise(
-        		tw, 
-        		NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE, 
-        		world -> {
-        			FastNoise n = new FastNoise((int) (world.getSeed()*2));
-        	        n.SetNoiseType(NoiseType.SimplexFractal);
-        	        n.SetFractalOctaves(6);
-        	        n.SetFrequency(0.03f);
-        	        return n;
-        		});
-    	
-        //Let rivers forcefully carve through shattered savanna if they're deep enough.
-        double riverDepth = HeightMap.getRawRiverDepth(tw, x, z); //HeightMap.RIVER.getHeight(tw, x, z);
-        
-        if(height - riverDepth <= TerraformGenerator.seaLevel - 4) {
-        	double makeup = 0;
-        	//Ensure depth
-        	if(height - riverDepth > TerraformGenerator.seaLevel - 10) {
-        		makeup = (height - riverDepth) - (TerraformGenerator.seaLevel - 10);
-        	}
-        	height = height - makeup;
-        }else
+    public BiomeHandler getTransformHandler(){ return this; }
+
+    /**
+     * One 2D noise value to handle whether or not to carve
+     * One 1D noise value as a Y-multiplier
+     */
+    @Override
+    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+//        BiomeSection b = BiomeBank.getBiomeSectionFromBlockCoords(tw,x,z);
+//        int peakHeight = TerraformGenerator.seaLevel
+//                + GenUtils.randInt(tw.getHashedRand(b.getX(),b.getZ(),7312849),
+//                40, 60);
+
+        FastNoise creviceNoise = NoiseCacheHandler.getNoise(
+            tw,
+            NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE,
+            world -> {
+                FastNoise n = new FastNoise(tw.getHashedRand(181234,32189,16342134).nextInt());
+                n.SetNoiseType(NoiseType.SimplexFractal);
+                n.SetFractalType(FastNoise.FractalType.Billow);
+                n.SetFractalOctaves(1);
+                n.SetFrequency(0.02f);
+                return n;
+        });
+        FastNoise yScaleNoise = NoiseCacheHandler.getNoise(
+            tw,
+            NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE,
+            world -> {
+                FastNoise n = new FastNoise(tw.getHashedRand(982374,18723,1983701).nextInt());
+                n.SetNoiseType(NoiseType.Simplex);
+                n.SetFrequency(0.06f);
+                return n;
+            });
+        int rawX = chunkX*16+x;
+        int rawZ = chunkZ*16+z;
+        double crevice = Math.abs(creviceNoise.GetNoise(rawX,rawZ));
+        //peakHeight *= getBiomeBlender(tw).getEdgeFactor(BiomeBank.SHATTERED_SAVANNA, rawX, rawZ);
+        if(crevice < 0.40f) return;
+
+        short baseHeight = cache.getTransformedHeight(x,z);
+        int low = (int) HeightMap.CORE.getHeight(tw,rawX,rawZ);
+        boolean updateHeight = true;
+        for(int y = baseHeight; y > low; y--)
         {
-        	double noise = shatteredSavannaNoise.GetNoise(x,z); 
-        	if(noise > 0) {
-        		if(noise > 0.7) noise = 0.7;
-        		height += 15;
-        	}
+            //Noise meant to scale with y while making terraces every 10 blocks
+            //Additionally, add a small curve to make the land bend a bit
+            //Make the pillars connect around baseHeight+0.5*(peakHeight-baseHeight)
+            //by multiplying a factor that approaches lower values there
+            double scale = (1f - 0.4*Math.abs(yScaleNoise.GetNoise(y,0)));
+            if(crevice*scale < 0.40f){
+                updateHeight = false;
+                continue;
+            }
+            chunk.setBlock(x,y,z,Material.CAVE_AIR);
+            if(updateHeight) cache.writeTransformedHeight(x,z, (short) (y-1));
         }
-        
-    	return height;
+
+        //Make write changes
+        if(chunk instanceof DudChunkData) return;
+
+        Material[] crust = getSurfaceCrust(new Random());
+        for(int i = 0; i < crust.length; i++)
+        {
+            if(BlockUtils.isAir(chunk.getType(x,cache.getTransformedHeight(x,z)-i,z)))
+                return;
+            chunk.setBlock(x,cache.getTransformedHeight(x,z)-i,z,crust[i]);
+        }
     }
+
+    static BiomeBlender biomeBlender;
+    private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
+        if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
+                .setGridBlendingFactor(4)
+                .setSmoothBlendTowardsRivers(2);
+        return biomeBlender;
+    }
+
+//    @Override
+//    public double calculateHeight(TerraformWorld tw, int x, int z) {
+//    	BiomeSection b = BiomeBank.getBiomeSectionFromBlockCoords(tw,x,z);
+//        return super.calculateHeight(tw,x,z) + GenUtils.randInt(tw.getHashedRand(b.getX(),b.getZ(),7312849),
+//                40, 60);
+//    }
     
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, PopulatorDataAbstract data) {
-		for(int x = data.getChunkX()*16; x < data.getChunkX()*16+16; x++){
-			for(int z = data.getChunkZ()*16; z < data.getChunkZ()*16+16; z++){
-				int y = GenUtils.getHighestGround(data, x, z);
-				if(y < TerraformGenerator.seaLevel) continue;
-				if(data.getBiome(x, z) != getBiome()) continue;
-				
-				
-				//Above sea level + 20. Carve spheres.
-				if(y > TerraformGenerator.seaLevel + 20) {
-					double gradient = HeightMap.getTrueHeightGradient(data, x, z, 3);
-					if(gradient > 2)
-						if(GenUtils.chance(random, 1, 100)) {
-							float rY = (y - TerraformGenerator.seaLevel)/3;
-							float radius = (float) Math.max(5.0, rY/3);
-							new CylinderBuilder(random, 
-									new SimpleBlock(data,x,y,z),
-									Material.AIR)
-							.setRadius(radius)
-							.setRY(rY)
-							.setLowerType(Material.GRASS_BLOCK)
-							.setHardReplace(true)
-							.build();
-							y = GenUtils.getHighestGround(data, x, z);
-						}
-				}
-				
-				if (data.getType(x, y, z) == Material.GRASS_BLOCK
-                        && !data.getType(x, y + 1, z).isSolid()) {
-                    //Dense grass
-                    if (GenUtils.chance(random, 2, 10)) {
-                        data.setType(x, y+1, z, Material.GRASS);
-                    }
-                }
-				
-			}
-		}
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ,  PopulatorDataAbstract data) {
+        if(surfaceY < TerraformGenerator.seaLevel) return;
+
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
+                && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
+            //Dense grass
+            if (GenUtils.chance(random, 2, 10)) {
+                data.setType(rawX, surfaceY+1, rawZ, Material.GRASS);
+            }
+        }
     }
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		
         //Small trees
 	    SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 34);
         for (SimpleLocation sLoc : trees) {
@@ -140,8 +169,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
 		           new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
 		    }
         }
-        
-       
+
         //Grass Poffs
         SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 35);
         for (SimpleLocation sLoc : poffs) {

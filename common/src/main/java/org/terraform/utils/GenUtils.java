@@ -1,28 +1,25 @@
 package org.terraform.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-
-import org.bukkit.Chunk;
-import org.bukkit.Location;
+import com.google.common.cache.LoadingCache;
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.World;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.noise.FastNoise;
 
-import com.google.common.cache.LoadingCache;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
 
 public class GenUtils {
     public static final Random RANDOMIZER = new Random();
@@ -185,14 +182,6 @@ public class GenUtils {
         return types.get(randInt(rand, 0, types.size() - 1));
     }
 
-//	public static Location randomConfinedSurfaceCoordinates(Random rand, PopulatorDataAbstract c){
-//		int x = randInt(rand,5,9);
-//		int z = randInt(rand,5,9);
-//		int y = getTrueHighestBlock(c,x,z);
-//		
-//		return data.getBlock(x, y, z).getLocation();
-//	}
-
     public static Material randMaterial(Random rand, Material... candidates) {
         if(candidates.length == 1) return candidates[0]; //avoid invocation to randInt
         return candidates[randInt(rand, 0, candidates.length - 1)];
@@ -259,46 +248,12 @@ public class GenUtils {
     public static double randDouble(Random rand, double min, double max) {
         return rand.nextDouble() * (max - min) + min;
     }
-
-//	public static int getHighestSpawnableBlock(Chunk c, int x, int z){
-//		int y = getOctaveHeightAt(c,x,z);
-//		if(c.getBlock(x, y, z).getType().isSolid() &&
-//				c.getBlock(x, y+1, z).getType() == Material.AIR &&
-//				c.getBlock(x, y+2, z).getType() == Material.AIR){
-//			return y+1;
-//		}
-//		return getHighestBlock(c,x,z);
-//	}
-//	
-
-
     public static int getHighestX(PopulatorDataAbstract data, int x, int z, Material X) {
         int y = TerraformGeneratorPlugin.injector.getMaxY() - 1;
         while(y > TerraformGeneratorPlugin.injector.getMinY() && data.getType(x, y, z) != X) y--;
         return y;
     }
-    
-    public static Location getHighestBlock(World w, int x, int z) {
-        int y = w.getMaxHeight() - 1;
-        while(y > TerraformGeneratorPlugin.injector.getMinY() && !w.getBlockAt(x, y, z).getType().isSolid()) y--;
-        if(y == TerraformGeneratorPlugin.injector.getMinY()) {
-            TerraformGeneratorPlugin.logger.error("getHighestBlock(w,x,z) returned minimum height!");
-            try { throw new Exception("getHighestBlock(w,x,z) returned minimum height!"); }
-            catch (Exception e) 
-            {e.printStackTrace();}
-        }
-        return new Location(w, x, y, z);
-    }
 
-    public static int getHighestBlock(Chunk c, int x, int z, Collection<Material> airs) {
-        int y;
-        for(y = c.getWorld().getMaxHeight() - 1;
-            airs.contains(c.getBlock(x, y, z).getType());
-            y--)
-            ;
-
-        return y;
-    }
 
     /**
      * @return the highest solid block
@@ -311,17 +266,12 @@ public class GenUtils {
 
     
     /**
-     * 
-     * @param data
-     * @param x
-     * @param z
+     *
      * @return the highest dry ground, or the sea level
      */
     public static int getHighestGroundOrSeaLevel(PopulatorDataAbstract data, int x, int z) {
     	int y = getHighestGround(data,x,z);
-    	if(y < TerraformGenerator.seaLevel)
-    		return TerraformGenerator.seaLevel;
-    	return y;
+        return Math.max(y, TerraformGenerator.seaLevel);
     }
     
     /**
@@ -356,47 +306,59 @@ public class GenUtils {
             if(Tag.SLABS.isTagged(mat)) {
             	return false;
             }
-            if(BLACKLIST_HIGHEST_GROUND.contains(mat))
-            	return false;
-//            String name = mat.toString();
-//          
-//            for(String contains : BLACKLIST_HIGHEST_GROUND) {
-//                if(name.contains(contains)) {
-//                    return false;
-//                }
-//            }
+            return !BLACKLIST_HIGHEST_GROUND.contains(mat);
         } else {
             return false;
         }
-    	return true;
+    }
+
+    /**
+     * Meant as a new way to calculate noise-cached heights.
+     * <br>
+     * Stop fucking iterating from the sky, you look like an idiot.
+     * Please for the love of god, use this where you can
+     */
+    public static int getTransformedHeight(TerraformWorld tw, int rawX, int rawZ)
+    {
+        ChunkCache cache = TerraformGenerator.getCache(tw, rawX, rawZ);
+        int cachedY = cache.getTransformedHeight(rawX&0xF, rawZ&0xF);
+        if(cachedY == TerraformGeneratorPlugin.injector.getMinY()-1){
+            TerraformGenerator.buildFilledCache(tw, rawX>>4,rawZ>>4, cache);
+            cachedY = cache.getTransformedHeight(rawX&0xF, rawZ&0xF);
+        }
+        return cachedY;
     }
 
     /**
      * @return the highest solid ground. Is dirt-like or stone-like, and is
      * not leaves or logs
-     * 
-     * The damn issue with this stupid stupid method is that caching it is
+     * <br>
+     * The damn issue with this stupid, stupid method is that caching it is
      * inherently unsafe. If I call this, then place stone on the floor, it
      * technically changes.
-     * 
+     * <br>
      * I hate this method so much.
-     * 
-     * But you know what? I'm gonna cache it anyway.
+     * <br>
+     * But you know what? I'm going to cache it anyway.
      */
     public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
+        //If you're too lazy to bother then just do this
+        if(data instanceof PopulatorDataSpigotAPI)
+            return getTransformedHeight(data.getTerraformWorld(),x,z);
 
     	int y = TerraformGeneratorPlugin.injector.getMaxY()-1;
     	ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x, z);
     	int cachedY = cache.getHighestGround(x, z);
-    	if(cachedY != Short.MIN_VALUE) {
+    	if(cachedY != TerraformGeneratorPlugin.injector.getMinY()-1) {
     		//Basic check to ensure block above is not ground
     		//and current block is ground.
     		//Will fail if the new ground is an overhang of some kind.
     		if(isGroundLike(data.getType(x, cachedY, z))
-    				&& !isGroundLike(data.getType(x, cachedY+1, z)))
-    			return cache.getHighestGround(x, z);
+    				&& !isGroundLike(data.getType(x, cachedY+1, z))) {
+                return cache.getHighestGround(x, z);
+            }
     	}
-        
+
         while(y > TerraformGeneratorPlugin.injector.getMinY()) {
             Material block = data.getType(x, y, z);
             if(!isGroundLike(block)) {
@@ -490,13 +452,8 @@ public class GenUtils {
     }
 
     /**
-     * 
-     * @param world
-     * @param chunkX
-     * @param chunkZ
-     * @param distanceBetween
+     *
      * @param pertubMultiplier is normally 0.35.
-     * @return
      */
     public static SimpleLocation[] randomObjectPositions(TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float pertubMultiplier) {
     	Vector2f[] vecs = vectorRandomObjectPositions((int)world.getSeed(), chunkX, chunkZ, distanceBetween, pertubMultiplier * distanceBetween);
@@ -512,11 +469,7 @@ public class GenUtils {
     /**
      * 
      * @param seed for tighter control between points
-     * @param chunkX
-     * @param chunkZ
-     * @param distanceBetween
      * @param pertubMultiplier is normally 0.35.
-     * @return
      */
     public static SimpleLocation[] randomObjectPositions(int seed, int chunkX, int chunkZ, int distanceBetween, float pertubMultiplier) {
     	Vector2f[] vecs = vectorRandomObjectPositions(seed, chunkX, chunkZ, distanceBetween, pertubMultiplier * distanceBetween);

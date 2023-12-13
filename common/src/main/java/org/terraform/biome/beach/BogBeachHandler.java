@@ -3,10 +3,12 @@ package org.terraform.biome.beach;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.biome.flat.MuddyBogHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataColumn;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -50,33 +52,26 @@ public class BogBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
-            for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                int y = GenUtils.getHighestGround(data, x, z);
-                if (data.getBiome(x, z) != getBiome()) continue;
-                
-                SimpleBlock block = new SimpleBlock(data,x,y,z);
-                if(!BlockUtils.isWet(block.getRelative(0,1,0))) {
-                	if(GenUtils.chance(random, 1, 85))
-                		block.getRelative(0,1,0).setType(Material.DEAD_BUSH);
-                	else if(GenUtils.chance(random, 1, 85))
-                		block.getRelative(0,1,0).setType(Material.BROWN_MUSHROOM);
-                	else if(GenUtils.chance(random, 1, 85))
-                		block.getRelative(0,1,0).setType(Material.GRASS);
-                	else if(GenUtils.chance(random, 1, 85))
-                		BlockUtils.setDoublePlant(data, x, y+1, z, Material.TALL_GRASS);
-                	else { //Possible Sugarcane
-                		for(BlockFace face:BlockUtils.directBlockFaces) {
-                			if(GenUtils.chance(random, 1, 75) && BlockUtils.isWet(block.getRelative(face))) {
-                				new Wall(block.getRelative(0,1,0))
-                					.LPillar(GenUtils.randInt(2, 5), random, Material.SUGAR_CANE);
-                			}
-                		}
-                	}
-                		
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+        SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
+        if(!BlockUtils.isWet(block.getRelative(0,1,0))) {
+            if(GenUtils.chance(random, 1, 85))
+                block.getRelative(0,1,0).setType(Material.DEAD_BUSH);
+            else if(GenUtils.chance(random, 1, 85))
+                block.getRelative(0,1,0).setType(Material.BROWN_MUSHROOM);
+            else if(GenUtils.chance(random, 1, 85))
+                block.getRelative(0,1,0).setType(Material.GRASS);
+            else if(GenUtils.chance(random, 1, 85))
+                BlockUtils.setDoublePlant(data, rawX,surfaceY+1,rawZ, Material.TALL_GRASS);
+            else { //Possible Sugarcane
+                for(BlockFace face:BlockUtils.directBlockFaces) {
+                    if(GenUtils.chance(random, 1, 75) && BlockUtils.isWet(block.getRelative(face))) {
+                        new Wall(block.getRelative(0,1,0))
+                            .LPillar(GenUtils.randInt(2, 5), random, Material.SUGAR_CANE);
+                    }
                 }
             }
+
         }
     }
 

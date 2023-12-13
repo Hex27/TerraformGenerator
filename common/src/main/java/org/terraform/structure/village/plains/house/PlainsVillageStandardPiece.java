@@ -11,7 +11,6 @@ import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSixBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -86,10 +85,6 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
     }
 
     private void genLanterns(PopulatorDataAbstract data, int x, int z) {
-        Material chain = Material.IRON_BARS;
-        if (Version.isAtLeast(1.16)) {
-            chain = OneOneSixBlockHandler.getChainMaterial();
-        }
         Wall w = new Wall(new SimpleBlock(data, x, this.getRoom().getY() + 1, z));
         w = w.findCeiling(25);
         if (w == null) {
@@ -109,7 +104,7 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
                 lantern.setHanging(true);
                 w.setBlockData(lantern);
             } else {
-                w.setType(chain);
+                w.setType(Material.CHAIN);
                 w = w.getRelative(0, -1, 0);
             }
         }

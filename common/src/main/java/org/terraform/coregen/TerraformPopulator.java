@@ -1,9 +1,12 @@
 package org.terraform.coregen;
 
 import org.bukkit.Material;
+import org.bukkit.generator.BlockPopulator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
-import org.terraform.biome.cave.MasterCavePopulatorDistributor;
+import org.terraform.biome.cavepopulators.MasterCavePopulatorDistributor;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
@@ -13,14 +16,12 @@ import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneSevenBlockHandler;
-import org.terraform.utils.version.OrePopulatorFallbackSettings;
 import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
 import java.util.Random;
 
-public class TerraformPopulator {
+public class TerraformPopulator extends BlockPopulator {
 	
     private static final OrePopulator[] ORE_POPS = {
             // Ores
@@ -163,36 +164,32 @@ public class TerraformPopulator {
     				TConfigOption.ORE_AMETHYST_MIN_DEPTH.getInt(),
     				TConfigOption.ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE.getInt());
     		
-    		ORE_POPS[0] = new OrePopulator(OneOneSevenBlockHandler.COPPER_ORE, TConfigOption.ORE_COPPER_CHANCE.getInt(), TConfigOption.ORE_COPPER_VEINSIZE.getInt(),
+    		ORE_POPS[0] = new OrePopulator(Material.COPPER_ORE, TConfigOption.ORE_COPPER_CHANCE.getInt(), TConfigOption.ORE_COPPER_VEINSIZE.getInt(),
                     TConfigOption.ORE_COPPER_MAXVEINNUMBER.getInt(), TConfigOption.ORE_COPPER_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_COPPER_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_COPPER_MAXSPAWNHEIGHT.getInt(),
                     false);
-    		ORE_POPS[1] = new OrePopulator(OneOneSevenBlockHandler.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
+    		ORE_POPS[1] = new OrePopulator(Material.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
                     TConfigOption.ORE_DEEPSLATE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_DEEPSLATE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_DEEPSLATE_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_DEEPSLATE_MAXSPAWNHEIGHT.getInt(),
                     true);
-    		ORE_POPS[2] = new OrePopulator(OneOneSevenBlockHandler.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
+    		ORE_POPS[2] = new OrePopulator(Material.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
                     TConfigOption.ORE_TUFF_MAXVEINNUMBER.getInt(), TConfigOption.ORE_TUFF_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_TUFF_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_TUFF_MAXSPAWNHEIGHT.getInt(),
                     true);
     	}
-    	
-    	if(!Version.isAtLeast(18)) //Below 1.18
-    	{
-    		boolean repairOreSettings = false;
-    		for(OrePopulator orePop:ORE_POPS) { 
-    			if(orePop != null)
-	    			if(orePop.getMinRange() <= 0) { //Not configured for min height
-	    				TerraformGeneratorPlugin.logger.stdout("&c" + orePop.getType().toString() + " was configured to use Y <= 0! Reverting ore configuration to hardcoded 1.16 values.");
-	    				repairOreSettings = true;
-	    			}
-    		}
-    		if(repairOreSettings)
-				OrePopulatorFallbackSettings.repairOreSettings(ORE_POPS);
-    	}
     }
     
-    private MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
+    private final MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
+
+    @Override
+    public void populate(@NotNull org.bukkit.generator.WorldInfo worldInfo, @NotNull java.util.Random random,
+                         int chunkX, int chunkZ,
+                         @NotNull org.bukkit.generator.LimitedRegion limitedRegion)
+    {
+        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
+        PopulatorDataAbstract data = new PopulatorDataSpigotAPI(limitedRegion, tw, chunkX, chunkZ);
+        this.populate(tw, random, data);
+    }
 
     public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
     	random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
@@ -208,17 +205,29 @@ public class TerraformPopulator {
         	amethystGeodePopulator.populate(tw, random, data);
 
         // Get all biomes in a chunk
-        EnumSet<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
+        EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
 
         boolean canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
-        for (BiomeBank bank : banks) {
-            // Biome specific populators
-            bank.getHandler().populateSmallItems(tw, random, data);
-            
-            //Only decorate disruptive features if the structures allow for them
-            if(canDecorate)
-            	bank.getHandler().populateLargeItems(tw, random, data);
-        }
+
+        //Small Populators run per block.
+        for(int rawX = data.getChunkX()*16; rawX <= data.getChunkX()*16+16; rawX++)
+            for(int rawZ = data.getChunkZ()*16; rawZ <= data.getChunkZ()*16+16; rawZ++)
+            {
+                int surfaceY = GenUtils.getTransformedHeight(data.getTerraformWorld(), rawX, rawZ);
+                BiomeBank bank = tw.getBiomeBank(rawX,surfaceY,rawZ);
+                banks.add(bank);
+
+                //Don't populate wet stuff in places that aren't wet
+                if(!bank.getType().isDry() && data.getType(rawX,surfaceY+1,rawZ) != Material.WATER)
+                    continue;
+                bank.getHandler().populateSmallItems(tw, random, rawX, surfaceY, rawZ, data);
+            }
+
+        //Only decorate disruptive features if the structures allow for them
+        if(canDecorate)
+            for (BiomeBank bank : banks)
+                bank.getHandler().populateLargeItems(tw, random, data);
+
         
 		// Cave populators
         //They will recalculate biomes per block.
