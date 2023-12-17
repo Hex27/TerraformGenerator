@@ -58,11 +58,28 @@ public class TerraformGenerator extends ChunkGenerator {
         return true;
     }
 
-    public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
+    /**
+     * EVERY STAGE IS DONE INSIDE HERE FOR A REASON.
+     * The cache MAY invalidate between stages, making it infeasible to even
+     * bother splitting it up.
+     * <br>
+     * It was originally split into 4 phases for readability's sake,
+     * but there's really no point - its faster to iterate x/z ONCE here,
+     * and avoid all the cache and other nonsense issues.
+     * <br>
+     * It's that or throw ChunkCaches into ConcurrentHashMaps and
+     * then flush it into the CHUNK_CACHE after generation, which is
+     * dumb. That's dumb.
+     */
+    public void generateNoise(@NotNull WorldInfo worldInfo, @NotNull Random dontCareRandom, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
         TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
 
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
         ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
+
+        //For transformation ONLY
+        Random transformRandom = tw.getHashedRand(chunkX, chunkZ, 31278);
+
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int rawX = chunkX * 16 + x;
@@ -85,42 +102,24 @@ public class TerraformGenerator extends ChunkGenerator {
                         chunkData.setBlock(x, y, z, stoneType);
 
                 }
-            }
-        }
 
-    }
-
-    /**
-     * Responsible for setting surface biome blocks and biomeTransforms
-     */
-    public void generateSurface(@NotNull WorldInfo worldInfo, @NotNull Random dontCareRandom, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
-        TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
-        ChunkCache cache = getCache(tw, chunkX*16,chunkZ*16);
-
-        //For transformation ONLY
-        Random transformRandom = tw.getHashedRand(chunkX, chunkZ, 31278);
-
-        for (int x = 0; x < 16; x++) {
-            for(int z = 0; z < 16; z++) {
-                int rawX = chunkX * 16 + x;
-                int rawZ = chunkZ * 16 + z;
-                int height = cache.getTransformedHeight(x,z); //NOT HeightMap
-                BiomeBank bank = tw.getBiomeBank(rawX, height, rawZ);
+                //PERFORM SURFACE AND CAVE CARVING
+                BiomeBank bank = tw.getBiomeBank(rawX, (int) height, rawZ);
                 int index = 0;
                 Material[] crust = bank.getHandler().getSurfaceCrust(dontCareRandom);
                 while (index < crust.length) {
-                    chunkData.setBlock(x, height-index, z, crust[index]);
+                    chunkData.setBlock(x, (int) (height-index), z, crust[index]);
                     index++;
                 }
                 //Water for below certain heights
-                for(int y = height+1; y <= seaLevel; y++)
+                for(int y = (int) (height+1); y <= seaLevel; y++)
                 {
                     chunkData.setBlock(x,y,z,Material.WATER);
                 }
 
                 //Carve caves HERE.
                 boolean mustUpdateHeight = true;
-                for(int y = height; y > TerraformGeneratorPlugin.injector.getMinY(); y--)
+                for(int y = (int) height; y > TerraformGeneratorPlugin.injector.getMinY(); y--)
                 {
                     if(tw.noiseCaveRegistry.canGenerateCarve(rawX,y,rawZ,height)
                             || !chunkData.getType(x,y,z).isSolid())
@@ -147,10 +146,16 @@ public class TerraformGenerator extends ChunkGenerator {
                     else
                         break;
                 }
-
-                //END ONE COLUMN
             }
         }
+
+    }
+
+    /**
+     * Responsible for setting surface biome blocks and biomeTransforms
+     */
+    public void generateSurface(@NotNull WorldInfo worldInfo, @NotNull Random dontCareRandom, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {
+
     }
 
     public void generateBedrock(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull ChunkData chunkData) {

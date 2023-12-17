@@ -14,12 +14,12 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TerraformWorld {
-    public static final HashMap<String, TerraformWorld> WORLDS = new HashMap<>();
+    private static final ConcurrentHashMap<String, TerraformWorld> WORLDS = new ConcurrentHashMap<>();
     private final String worldName;
     private final long seed;
     public int minY = 0;
