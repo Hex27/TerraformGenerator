@@ -22,6 +22,7 @@ import org.terraform.utils.version.Version;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,7 +34,10 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class TerraSchematic {
-	public static HashMap<String, HashMap<Vector,BlockData>> cache = new HashMap<>();
+	private static final String SCHEMATIC_FOLDER = "/schematic";
+    public static HashMap<String, HashMap<Vector,BlockData>> cache = new HashMap<>();
+
+    private final File schematicFolder;
     public SchematicParser parser = new SchematicParser();
     HashMap<Vector, BlockData> data = new HashMap<>();
     SimpleBlock refPoint;
@@ -43,10 +47,12 @@ public class TerraSchematic {
     //North is always the default blockface.
     //
     public TerraSchematic(SimpleBlock vector) {
+        this.schematicFolder = new File(TerraformGeneratorPlugin.get().getDataFolder(), SCHEMATIC_FOLDER);
         this.refPoint = vector;
     }
 
     public TerraSchematic(Location loc) {
+        this.schematicFolder = new File(TerraformGeneratorPlugin.get().getDataFolder(), SCHEMATIC_FOLDER);
         this.refPoint = new SimpleBlock(loc);
     }
     
@@ -61,7 +67,6 @@ public class TerraSchematic {
     }
 
     public static TerraSchematic load(String internalPath, SimpleBlock refPoint) throws FileNotFoundException {
-
     	//A new object gets created from here. If the path is in the cache,
     	//this object is NOT the one that gets returned. Instead, a clone is
     	//returned, with a new hashmap copy and a (broken) version number.
@@ -72,6 +77,15 @@ public class TerraSchematic {
         }
         
         InputStream is = TerraformGeneratorPlugin.get().getClass().getResourceAsStream("/" + internalPath + ".terra");
+        if(is == null) {
+            //Try to lookup in the schematics folder
+            final File schematicFolder = new File(TerraformGeneratorPlugin.get().getDataFolder(), SCHEMATIC_FOLDER);
+            final File schematicFile = new File(schematicFolder, internalPath + ".terra");
+            FileInputStream fileInputStream = new FileInputStream(schematicFile);
+
+            is = fileInputStream;
+        }
+
         @SuppressWarnings("resource")
         Scanner sc = new Scanner(is);    //file to be scanned
 
@@ -226,22 +240,30 @@ public class TerraSchematic {
     }
 
     public void export(String path) throws IOException {
-        File fout = new File(path);
-        //fout.getParentFile().mkdirs();
-        FileOutputStream fos = new FileOutputStream(fout);
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-        
-        //Append version header
-        bw.write(Version.DOUBLE+"");
-        bw.newLine();
-        
-        for (Entry<Vector, BlockData> entry : data.entrySet()) {
-            String v = entry.getKey().getBlockX() + "," + entry.getKey().getBlockY() + ',' + entry.getKey().getBlockZ();
-            bw.write(v + ":@:" + entry.getValue().getAsString());
-            bw.newLine();
+        File outputFile = new File(schematicFolder, path);
+
+        if(!outputFile.getParentFile().exists()) {
+            outputFile.getParentFile().mkdirs();
         }
 
-        bw.close();
+        if(!outputFile.exists()) {
+            outputFile.createNewFile();
+        }
+
+        FileOutputStream outputStream = new FileOutputStream(outputFile);
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+        
+        //Append version header
+        bufferedWriter.write(Version.DOUBLE+"");
+        bufferedWriter.newLine();
+        
+        for (Entry<Vector, BlockData> entry : data.entrySet()) {
+            String vector = entry.getKey().getBlockX() + "," + entry.getKey().getBlockY() + ',' + entry.getKey().getBlockZ();
+            bufferedWriter.write(vector + ":@:" + entry.getValue().getAsString());
+            bufferedWriter.newLine();
+        }
+
+        bufferedWriter.close();
     }
 
     /**
