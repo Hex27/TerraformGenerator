@@ -11,7 +11,6 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
 
     public SchematicArgument(String name, boolean isOptional) {
         super(name, isOptional);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -28,6 +27,7 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
     @Override
     public String validate(CommandSender sender, String value) {
         try {
+            //Path validation is done inside TerraSchematic.load
             TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
         } catch (Throwable e) {
             e.printStackTrace();

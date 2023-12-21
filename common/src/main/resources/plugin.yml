@@ -1,7 +1,7 @@
 name: TerraformGenerator
 author: Hex_27
-version: 13.0.1
-api-version: 1.16
+version: 13.0.2
+api-version: 1.18
 description: World Generator
 main: org.terraform.main.TerraformGeneratorPlugin
 load: STARTUP

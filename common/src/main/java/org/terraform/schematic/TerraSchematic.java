@@ -14,6 +14,7 @@ import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.RedstoneWire;
 import org.bukkit.block.data.type.RedstoneWire.Connection;
 import org.bukkit.util.Vector;
+import org.terraform.command.contants.FilenameArgument;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -34,7 +35,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class TerraSchematic {
-	private static final String SCHEMATIC_FOLDER = "/schematic";
+	public static final String SCHEMATIC_FOLDER = File.separator + "schematic";
     public static HashMap<String, HashMap<Vector,BlockData>> cache = new HashMap<>();
 
     private final File schematicFolder;
@@ -59,9 +60,7 @@ public class TerraSchematic {
     public TerraSchematic clone(SimpleBlock refPoint) {
     	TerraSchematic clone = new TerraSchematic(refPoint);
     	clone.data = new HashMap<>();
-    	for(Entry<Vector, BlockData> entry:data.entrySet()) {
-    		clone.data.put(entry.getKey(),entry.getValue());
-    	}
+        clone.data.putAll(data);
     	clone.VERSION_VALUE = VERSION_VALUE;
     	return clone;
     }
@@ -75,18 +74,24 @@ public class TerraSchematic {
         	schem.data = cache.get(internalPath);
         	return schem.clone(refPoint);
         }
-        
+
+        boolean wasInDataFolder = false;
         InputStream is = TerraformGeneratorPlugin.get().getClass().getResourceAsStream("/" + internalPath + ".terra");
         if(is == null) {
             //Try to lookup in the schematics folder
             final File schematicFolder = new File(TerraformGeneratorPlugin.get().getDataFolder(), SCHEMATIC_FOLDER);
             final File schematicFile = new File(schematicFolder, internalPath + ".terra");
-            FileInputStream fileInputStream = new FileInputStream(schematicFile);
-
-            is = fileInputStream;
+            try{
+                if(!schematicFile.getCanonicalPath().startsWith(schematicFolder.getCanonicalPath()))
+                    throw new IllegalArgumentException("Schematic name contained illegal characters (i.e. periods)");
+            }
+            catch(Exception e){
+                throw new IllegalArgumentException("Schematic name contained illegal characters (i.e. periods)");
+            }
+            is = new FileInputStream(schematicFile);
+            wasInDataFolder = true;
         }
 
-        @SuppressWarnings("resource")
         Scanner sc = new Scanner(is);    //file to be scanned
 
         String line = sc.nextLine(); //First line is the schematic's version.
@@ -117,8 +122,8 @@ public class TerraSchematic {
         }
         sc.close();
         
-        //Cache all small schematics
-        if(schem.data.size() < 100)
+        //Cache all small schematics that are not in the data folder
+        if(schem.data.size() < 100 && !wasInDataFolder)
         	cache.put(internalPath, schem.data);
         return schem;
     }
@@ -150,8 +155,7 @@ public class TerraSchematic {
             }
 
             if (face != BlockFace.NORTH) {
-                if (bd instanceof Orientable) {
-                    Orientable o = (Orientable) bd;
+                if (bd instanceof Orientable o) {
                     if (face == BlockFace.EAST || face == BlockFace.WEST) {
                         if (o.getAxis() == Axis.X) {
                             o.setAxis(Axis.Z);
@@ -159,8 +163,7 @@ public class TerraSchematic {
                             o.setAxis(Axis.X);
                         }
                     }
-                } else if (bd instanceof Rotatable) {
-                    Rotatable r = (Rotatable) bd;
+                } else if (bd instanceof Rotatable r) {
                     if (face == BlockFace.SOUTH) {
                         r.setRotation(r.getRotation().getOppositeFace());
                     } else if (face == BlockFace.EAST) {
@@ -169,8 +172,7 @@ public class TerraSchematic {
                         r.setRotation(BlockUtils.getAdjacentFaces(r.getRotation())[1]);
                     }
                 } 
-                else if (bd instanceof Directional) {
-                    Directional r = (Directional) bd;
+                else if (bd instanceof Directional r) {
                     if (BlockUtils.isDirectBlockFace(r.getFacing()))
                         if (face == BlockFace.SOUTH) {
                         	//South means flip it to opposite face
@@ -189,9 +191,8 @@ public class TerraSchematic {
                 else if (bd instanceof MultipleFacing) {
                     multiFace.add(pos);
                 }
-                else if (bd instanceof RedstoneWire) {
-                	RedstoneWire w = (RedstoneWire) bd;
-                	RedstoneWire newData = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
+                else if (bd instanceof RedstoneWire w) {
+                    RedstoneWire newData = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
                 	newData.setPower(w.getPower());
                 	for(BlockFace wireFace:w.getAllowedFaces())
                 	{
@@ -240,6 +241,11 @@ public class TerraSchematic {
     }
 
     public void export(String path) throws IOException {
+        //Validate it again.
+        String validation = new FilenameArgument("schem-name", false).validate(null,path);
+        if(!validation.equals(""))
+            throw new IOException(validation);
+
         File outputFile = new File(schematicFolder, path);
 
         if(!outputFile.getParentFile().exists()) {

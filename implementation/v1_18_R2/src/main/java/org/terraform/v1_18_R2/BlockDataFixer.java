@@ -15,6 +15,10 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
 
     @Override
     public String updateSchematic(double schematicVersion, String schematic) {
+
+        //No waterlogged leaves in 1.18
+        if(schematicVersion > 18)
+            schematic = StringUtils.replace(schematic, "persistent=true,waterlogged=false]", "persistent=true]");
         return schematic;
     }
     
