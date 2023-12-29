@@ -110,10 +110,20 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
 
     @Override
     public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
-        if(!lr.isInRegion(rawX,rawY,rawZ)) return; //just forget it
+        if(!lr.isInRegion(rawX, rawY, rawZ)) return; //just forget it
 
-        setType(rawX,rawY,rawZ,Material.BEE_NEST);
-        Beehive bukkitBeehive = (Beehive) lr.getBlockState(rawX,rawY,rawZ);
-        TerraformGeneratorPlugin.injector.storeBee(bukkitBeehive);
+        setType(rawX, rawY, rawZ, Material.BEE_NEST);
+
+        //I guess the above can fail sometimes. I don't know why.
+        //Catch and throw because that's fucking stupid
+        try {
+            Beehive bukkitBeehive = (Beehive) lr.getBlockState(rawX,rawY,rawZ);
+            TerraformGeneratorPlugin.injector.storeBee(bukkitBeehive);
+        }
+        catch(ClassCastException e)
+        {
+            TerraformGeneratorPlugin.logger.info("Failed to set beehive at " + rawX + "," + rawY + "," + rawZ);
+        }
+
     }
 }
