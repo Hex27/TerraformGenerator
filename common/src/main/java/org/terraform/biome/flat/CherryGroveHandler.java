@@ -29,12 +29,12 @@ public class CherryGroveHandler extends BiomeHandler {
 
     @Override
     public Biome getBiome() {
-        return Biome.PLAINS;
+        return !Version.isAtLeast(20) ? Biome.PLAINS : Biome.valueOf("CHERRY_GROVE");
     }
     
     @Override
     public CustomBiomeType getCustomBiome() {
-        return CustomBiomeType.CHERRY_GROVE;
+        return !Version.isAtLeast(20) ? CustomBiomeType.CHERRY_GROVE : CustomBiomeType.NONE;
     }
 
     @Override
