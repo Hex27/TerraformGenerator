@@ -411,7 +411,7 @@ public enum BiomeBank {
     	BiomeClimate climate = BiomeClimate.selectClimate(temperature, moisture);
     	
     	double oceanicNoise = section.getOceanLevel();
-    	if(oceanicNoise < 0)
+    	if(oceanicNoise < 0 || TConfigOption.BIOME_OCEANIC_THRESHOLD.getFloat() < 0)
     	{
     		 oceanicNoise = Math.abs(oceanicNoise);
 	    	if(oceanicNoise >= TConfigOption.BIOME_DEEP_OCEANIC_THRESHOLD.getFloat()){

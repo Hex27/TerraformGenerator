@@ -16,9 +16,14 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
     @Override
     public String updateSchematic(double schematicVersion, String schematic) {
 
-        //No waterlogged leaves in 1.18
-        if(schematicVersion > 18)
+        if(schematicVersion > 18) {
+            //No waterlogged leaves in 1.18
             schematic = StringUtils.replace(schematic, "persistent=true,waterlogged=false]", "persistent=true]");
+
+            //No mud bricks
+            schematic = StringUtils.replace(schematic, "mud_brick_", "stone_brick_");
+            schematic = StringUtils.replace(schematic, "mud_bricks", "stone_bricks");
+        }
         return schematic;
     }
     
@@ -39,8 +44,7 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
     
     //--------[1.16 stuff]
     public static void correctWallData(SimpleBlock target) {
-        if (!(target.getBlockData() instanceof Wall)) return;
-        Wall data = (Wall) target.getBlockData();
+        if (!(target.getBlockData() instanceof Wall data)) return;
         for (BlockFace face : BlockUtils.directBlockFaces) {
             if (target.getRelative(face).getType().isSolid() &&
                     !target.getRelative(face).getType().toString().contains("PRESSURE_PLATE")) {
