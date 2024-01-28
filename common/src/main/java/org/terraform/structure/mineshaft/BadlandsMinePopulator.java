@@ -19,7 +19,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
-import org.terraform.structure.room.PathGenerator;
+import org.terraform.structure.room.LegacyPathGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import java.io.FileNotFoundException;
@@ -114,7 +114,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
         spawnShaft(random, shaft, inDir);
         
         //Carve entrance out
-        PathGenerator g = new PathGenerator(entrance.getRelative(inDir.getModX() * 3, -1, inDir.getModZ() * 3),
+        LegacyPathGenerator g = new LegacyPathGenerator(entrance.getRelative(inDir.getModX() * 3, -1, inDir.getModZ() * 3),
                 new Material[] {Material.CAVE_AIR}, new Random(), new int[]{0,0}, new int[]{0,0}, -1);
         g.setPopulator(new BadlandsMineshaftPathPopulator(random));
         g.generateStraightPath(null, inDir, hallwayLength);

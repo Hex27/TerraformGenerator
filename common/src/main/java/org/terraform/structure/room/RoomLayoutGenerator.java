@@ -13,12 +13,14 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.room.path.PathState;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
 public class RoomLayoutGenerator {
 
-    private final HashSet<PathGenerator> pathGens = new HashSet<>();
+    private PathState pathState;
+    private final HashSet<LegacyPathGenerator> pathGens = new HashSet<>();
     private final HashSet<PathPopulatorData> pathPopulators = new HashSet<>();
     private final HashSet<CubeRoom> rooms = new HashSet<>();
     private final int[] upperBound;
@@ -62,6 +64,13 @@ public class RoomLayoutGenerator {
         this.range = range;
         this.upperBound = new int[] {centX + range / 2, centZ + range / 2};
         this.lowerBound = new int[] {centX - range / 2, centZ - range / 2};
+    }
+
+    public PathState getOrCalculatePathState(TerraformWorld tw){
+        if(pathState == null)
+            pathState = new PathState(this, tw);
+
+        return pathState;
     }
 
     public int[] getCenter() {
@@ -276,7 +285,7 @@ public class RoomLayoutGenerator {
             }
         }
     }
-    
+
     /**
      * Links room populators to empty rooms and applies paths and room to the actual world.
      * @param data
@@ -302,15 +311,15 @@ public class RoomLayoutGenerator {
             } else
                 for (CubeRoom room : rooms) {
                     SimpleBlock base = new SimpleBlock(
-                    		data, 
-                    		room.getX() + room.getX() % (pathPop.getPathWidth()*2+1), 
-                    		room.getY(), 
+                    		data,
+                    		room.getX() + room.getX() % (pathPop.getPathWidth()*2+1),
+                    		room.getY(),
                     		room.getZ() + room.getZ() % (pathPop.getPathWidth()*2+1)
             		);
-                    PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
+                    LegacyPathGenerator gen = new LegacyPathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
                     if (pathPop != null) gen.setPopulator(pathPop);
                     while (!gen.isDead()) {
-                        gen.next();
+                        gen.placeNext();
                     }
                     pathGens.add(gen);
                 }
@@ -343,7 +352,7 @@ public class RoomLayoutGenerator {
                     this.pathPop.populate(pPData);
             }
         } else {
-            for (PathGenerator pGen : pathGens) {
+            for (LegacyPathGenerator pGen : pathGens) {
             	//TerraformGeneratorPlugin.logger.info("pathgen");
                 pGen.populate();
             }
@@ -354,7 +363,7 @@ public class RoomLayoutGenerator {
         runRoomPopulators(data, tw);
 
     }
-    
+
     public void carveRoomsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
     	//Create empty rooms
         for (CubeRoom room : rooms) {
@@ -373,7 +382,7 @@ public class RoomLayoutGenerator {
                 room.fillRoom(data, tile, mat, Material.AIR);
         }
     }
-    
+
     /**
      * @param data
      * @param tw
@@ -394,15 +403,15 @@ public class RoomLayoutGenerator {
         if (genPaths)
             for (CubeRoom room : rooms) {
                 SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
-                PathGenerator gen = new PathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
+                LegacyPathGenerator gen = new LegacyPathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
                 if (pathPop != null) gen.setPopulator(pathPop);
                 while (!gen.isDead()) {
-                    gen.next();
+                    gen.placeNext();
                 }
                 pathGens.add(gen);
             }
     }
-    
+
 
     /**
      * ONLY RUN AFTER FILL, IF NOT THE PATHS MAY BE SOLID.
@@ -410,11 +419,11 @@ public class RoomLayoutGenerator {
     public void populatePathsOnly() {
 
         //Populate pathways
-        for (PathGenerator pGen : pathGens) {
+        for (LegacyPathGenerator pGen : pathGens) {
             pGen.populate();
         }
     }
-    
+
     public void fillPathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
         carvePathsOnly(data,tw,mat);
 
@@ -610,16 +619,16 @@ public class RoomLayoutGenerator {
     public void setMazePathGenerator(MazeSpawner mazePathGenerator) {
         this.mazePathGenerator = mazePathGenerator;
     }
-    
+
     public HashSet<PathPopulatorData> getPathPopulators(){
     	if(this.pathPopulators.isEmpty()) {
-    		for(PathGenerator pGen:this.pathGens) {
+    		for(LegacyPathGenerator pGen:this.pathGens) {
     			this.pathPopulators.addAll(pGen.path);
     		}
     	}
     	return this.pathPopulators;
     }
-    
+
     public boolean isPointInPath(Wall w, int rearOffset, int includeWidth) {
     	if(getPathPopulators().contains(new PathPopulatorData(w.getRear(rearOffset).getAtY(centY), 3)))
     		return true;
@@ -628,7 +637,7 @@ public class RoomLayoutGenerator {
 	    		if(getPathPopulators().contains(new PathPopulatorData(
 	    				w.getRear(rearOffset).getLeft(i).getAtY(centY), 3)))
 	        		return true;
-	
+
 	    		if(getPathPopulators().contains(new PathPopulatorData(
 	    				w.getRear(rearOffset).getRight(i).getAtY(centY), 3)))
 	        		return true;

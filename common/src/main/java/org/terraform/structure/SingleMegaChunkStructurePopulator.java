@@ -18,11 +18,6 @@ public abstract class SingleMegaChunkStructurePopulator extends StructurePopulat
 	 * <br>
 	 * THIS METHOD IS NO LONGER USED TO CHECK IF THE STRUCTURE WILL SPAWN IN THE
 	 * SPECIFIED CHUNK COORDS. THIS MUST BE HANDLED SEPARATELY.
-	 * @param tw
-	 * @param chunkX
-	 * @param chunkZ
-	 * @param biome
-	 * @return
 	 */
 	public abstract boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome);
 

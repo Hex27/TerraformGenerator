@@ -2,6 +2,7 @@ package org.terraform.structure.room;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.generator.LimitedRegion;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -343,6 +344,12 @@ public class CubeRoom {
     //Negative x,z corner
     public int[] getLowerCorner() {
         return new int[]{x - widthX / 2, z - widthZ / 2};
+    }
+
+    public boolean isInRegion(LimitedRegion region)
+    {
+        return region.isInRegion(x - widthX / 2, 50,z - widthZ / 2)
+                && region.isInRegion(x + widthX / 2, 50,  + widthZ / 2);
     }
 
     //Positive x,z corner

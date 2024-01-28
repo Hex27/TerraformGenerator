@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 
+/**
+ * This class has nothing to do with the new system
+ */
 public abstract class JigsawStructurePiece implements Cloneable {
     protected CubeRoom room;
     protected HashMap<BlockFace, Boolean> validDirections = new HashMap<BlockFace, Boolean>();
