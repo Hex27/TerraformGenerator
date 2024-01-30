@@ -28,7 +28,7 @@ public class PathState {
     /*
     /* General settings
     */
-    public PathWriter writer = new CavePathWriter();
+    public PathWriter writer = new CavePathWriter(0,0,0,0,0,0);
     private int pathWidth = 3;
     private int pathHeight = 3;
     private int maxBend = -1;
@@ -85,7 +85,7 @@ public class PathState {
                     tw.getHashedRand(one.center.getX(), two.center.getZ(), 1890341).nextBoolean() ?
                             new SimpleLocation(one.center.getX(),one.center.getY(),two.center.getZ())
                             : new SimpleLocation(two.center.getX(),one.center.getY(), one.center.getZ()), pathWidth, generator.getPathPop());
-
+            toAdd.add(newNode);
             connectNodes(newNode, one, tw, toAdd);
             connectNodes(newNode, two, tw, toAdd);
             return; //do NOT run the code below
@@ -134,6 +134,7 @@ public class PathState {
             //Lock path nodes to a grid-like structure which will allow
             //path nodes to be spaced properly
             this.center.setX((center.getX() / pathWidth)*pathWidth);
+            this.center.setZ((center.getZ() / pathWidth)*pathWidth);
             Collections.addAll(connected, connections);
             this.populator = populator;
         }

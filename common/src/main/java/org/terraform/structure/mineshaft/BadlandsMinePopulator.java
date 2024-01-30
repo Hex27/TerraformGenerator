@@ -70,16 +70,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
 
     @Override
     public JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc) {
-        JigsawState state = new MineshaftPopulator().calculateRoomPopulators(tw, mc);
-
-        state.roomPopulatorStates.forEach((gen)->{
-            gen.setPathPopulator(new BadlandsMineshaftPathPopulator(tw.getHashedRand(gen.getCentX(),gen.getCentY(),gen.getCentZ(), 2)));
-            gen.getRooms().forEach((room)->{
-                room.setL
-            });
-        });
-
-        return state;
+        return new MineshaftPopulator().calculateRoomPopulators(tw, mc, true);
     }
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
@@ -107,7 +98,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         shaft = spawnSpot.getAtY(entrance.getY()); //entrance.getRelative(inDir, hallwayLen + sandRadius - 1);
         
         
-        int hallwayLength = 0;
+        int hallwayLength;
         if(BlockUtils.getAxisFromBlockFace(inDir) == Axis.X) {
         	hallwayLength = Math.abs(shaft.getX() - entrance.getX());
         }else {
@@ -115,8 +106,8 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         }
         hallwayLength -= 6; //Don't cover the shaft entrance
         
-        TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Entrance: " + entrance.toString());
-        TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Shaft: " + shaft.toString());
+        TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Entrance: " + entrance);
+        TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Shaft: " + shaft);
         TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Hallway Length: " + hallwayLength);
         
         Random random = tw.getHashedRand(entrance.getX(), entrance.getY(), entrance.getZ(), 4);
@@ -124,6 +115,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         // Spawning stuff
         
         //Standard mineshaft below the badlands entrance
+        //Comment this out, the new populator will handle this
         //new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
 
         //Carve downwards hole into the mineshaft below
@@ -212,6 +204,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
 
     private void spawnShaft(Random random, SimpleBlock shaft, BlockFace inDir) {
         BlockFace outDir = inDir.getOppositeFace();
+        int mineshaftY = (int) (HeightMap.CORE.getHeight(shaft.getPopData().getTerraformWorld(), shaft.getX(), shaft.getZ()) - BadlandsMinePopulator.shaftDepth);
         int shaftStart = -5;
         int supportR = 3;
         EnumSet<Material> toReplace = EnumSet.copyOf(BlockUtils.badlandsStoneLike);
@@ -228,7 +221,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
                 toReplace);
 
         ArrayList<SimpleBlock> platforms = new ArrayList<>();
-        for (double i = 0; i < shaftDepth; i ++) { // Carve shaft
+        for (double i = 0; i < shaft.getY()-mineshaftY; i ++) { // Carve shaft
             double width = 6 + Math.pow((i % 6) * 0.2, 2);
 
             SimpleBlock centerBlock = shaft.getRelative(GenUtils.randInt(random, -1, 1),
@@ -242,7 +235,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
                     true,
                     toReplace);
 
-            if (i % 6 > 4 && i < shaftDepth - 6) { // Add mineshaft platform positions
+            if (i % 6 > 4 && i < shaft.getY()-mineshaftY - 6) { // Add mineshaft platform positions
                 for (int b = 0; b < 1; b++) {
                     double angle = GenUtils.randDouble(random, 0, 2 * Math.PI);
                     int xAdd = (int) Math.round(Math.sin(angle) * 3);
@@ -291,7 +284,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
 
         // Place vertical support structure
         for (SimpleBlock pillar : supportPillars) {
-            for (int y = -4; y < shaftDepth + 5; y++) {
+            for (int y = -4; y < shaft.getY()-mineshaftY + 5; y++) {
                 pillar.getRelative(0, -y, 0).lsetType(Material.DARK_OAK_FENCE);
             }
         }

@@ -31,11 +31,34 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         this.rand = rand;
     }
 
+    /**
+     * @Deprecated Kept for legacy reasons for BadlandsMine.
+     * Does not actually get used anywhere else.
+     */
+    @Deprecated
+    @Override
+    public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
+        Wall core = new Wall(base.getRelative(0, 1, 0), dir);
+        int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
+        BlockUtils.carveCaveAir(seed,
+                pathWidth, pathWidth + 1, pathWidth, core.get(), false,
+                BlockUtils.caveCarveReplace);
+
+        return true;
+    }
+
     @Override
     public void populate(PathPopulatorData ppd) {
-        if(ppd.dir == BlockFace.UP) return;
         Wall core = new Wall(ppd.base, ppd.dir);
 
+        if(ppd.dir == BlockFace.UP)
+        {
+            //Make a platform
+            for(int nx = -1; nx <= 1; nx++)
+                for(int nz = -1; nz <= 1; nz++)
+                    core.getRelative(nx,0,nz).setType(getPathMaterial());
+            return;
+        }
         //God this sucks
         legacyPopulate(core.getRear());
         legacyPopulate(core);
@@ -103,7 +126,6 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
             switch(core.getDirection()) {
                 case NORTH, SOUTH -> rail.setShape(Shape.NORTH_SOUTH);
                 case EAST, WEST -> rail.setShape(Shape.EAST_WEST);
-                default -> {  }
             }
             
             //Check if rails are wet.
@@ -111,7 +133,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
             	rail.setWaterlogged(true);
             
             core.getRelative(0, 1, 0).setBlockData(rail);
-            BlockUtils.correctSurroundingRails(core.getRelative(0, 1, 0).get());
+            //BlockUtils.correctSurroundingRails(core.getRelative(0, 1, 0).get());
             if (GenUtils.chance(rand, 1, 100)) {
                 TerraformGeneratorPlugin.logger.info("Minecart with chest at: " + core.getX() + ", " + core.getY() + ", " + core.getZ());
                 IPopulatorDataMinecartSpawner ms = (IPopulatorDataMinecartSpawner) core.get().getPopData();
@@ -296,17 +318,6 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     			w.setType(getFenceMaterial());
     		w = w.getRelative(0,-1,0);
     	}
-    }
-
-    @Override
-    public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
-        Wall core = new Wall(base.getRelative(0, 1, 0), dir);
-        int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
-        BlockUtils.carveCaveAir(seed,
-                pathWidth, pathWidth + 1, pathWidth, core.getUp().get(), false,
-                BlockUtils.caveCarveReplace);
-
-        return true;
     }
 
     @Override

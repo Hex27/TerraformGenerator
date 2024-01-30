@@ -5,6 +5,7 @@ import org.bukkit.block.Jigsaw;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -17,6 +18,8 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.room.carver.CaveRoomCarver;
+import org.terraform.structure.room.path.CavePathWriter;
+import org.terraform.structure.room.path.PathState;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -56,15 +59,28 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
     @Override
     public JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc) {
+        return calculateRoomPopulators(tw, mc, false);
+    }
+    public JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc, boolean badlandsMineshaft) {
         JigsawState state = new JigsawState();
 
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
         int x = coords[0];
         int z = coords[1];
 
-        int y = GenUtils.randInt(TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(), TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt());
-        if(y < TerraformGeneratorPlugin.injector.getMinY())
-            y = TerraformGeneratorPlugin.injector.getMinY() + 15;
+        int y;
+        if(!badlandsMineshaft)
+        {
+            y = GenUtils.randInt(TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(), TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt());
+            if(y < TerraformGeneratorPlugin.injector.getMinY())
+                y = TerraformGeneratorPlugin.injector.getMinY() + 15;
+        }
+        else
+        {
+            //Badlands mines want to spawn an entrance shaft. Because of this,
+            //they will spawn closer to the surface.
+            y = (int) (HeightMap.CORE.getHeight(tw,x,z) - BadlandsMinePopulator.shaftDepth);
+        }
 
         //Level One
         Random hashedRand = tw.getHashedRand(mc.getX(), mc.getZ(), 179821643);
@@ -72,7 +88,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 10, x, y, z, 150);
         Random pathRand = tw.getHashedRand(x, y, z, 2);
-        gen.setPathPopulator(new MineshaftPathPopulator(pathRand));
+        gen.setPathPopulator(badlandsMineshaft ? new BadlandsMineshaftPathPopulator(pathRand) : new MineshaftPathPopulator(pathRand));
         gen.setRoomMaxX(15);
         gen.setRoomMaxZ(15);
         gen.setRoomMinX(13);
@@ -84,10 +100,22 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
         if (doubleLevel)
             gen.registerRoomPopulator(new ShaftRoomPopulator(tw.getHashedRand(mc.getX(), mc.getZ(),213098), true, false));
 
+        //To connect the mineshaft to the surface entrance
+        if (badlandsMineshaft) {
+            CubeRoom brokenShaft = new CubeRoom(
+                    15,
+                    15,
+                    7,
+                    gen.getCentX(), gen.getCentY(), gen.getCentZ());
+            brokenShaft.setRoomPopulator(new BrokenShaftPopulator(hashedRand, true, false));
+            gen.getRooms().add(brokenShaft);
+        }
+
         gen.wallMaterials = new Material[]{Material.CAVE_AIR};
         gen.roomCarver = new CaveRoomCarver();
         gen.generate();
-        gen.getOrCalculatePathState(tw);
+        PathState ps = gen.getOrCalculatePathState(tw);
+        ps.writer = new CavePathWriter(0f, 1f, 0f, 0,1,0);
         gen.calculateRoomPopulators(tw);
         state.roomPopulatorStates.add(gen);
         //gen.fill(data, tw, Material.CAVE_AIR);
@@ -96,7 +124,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
             //Level Two
             RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 10, x, y + 15, z, 150);
             pathRand = tw.getHashedRand(x, y + 15, z, 2);
-            secondGen.setPathPopulator(new MineshaftPathPopulator(pathRand));
+            secondGen.setPathPopulator(badlandsMineshaft ? new BadlandsMineshaftPathPopulator(pathRand) : new MineshaftPathPopulator(pathRand));
             secondGen.setRoomMaxX(15);
             secondGen.setRoomMaxZ(15);
             secondGen.setRoomMinX(13);
@@ -121,111 +149,14 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
             secondGen.wallMaterials = new Material[]{Material.CAVE_AIR};
             secondGen.roomCarver = new CaveRoomCarver();
             secondGen.generate();
-            secondGen.getOrCalculatePathState(tw);
+            ps = secondGen.getOrCalculatePathState(tw);
+            ps.writer = new CavePathWriter(0f, 1f, 0f, 0,1,0);
             secondGen.calculateRoomPopulators(tw);
             state.roomPopulatorStates.add(secondGen);
             //secondGen.fill(data, tw, Material.CAVE_AIR);
         }
 
-
         return state;
-    }
-
-    @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-/*        if (!TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean())
-            return;
-
-        MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords();
-        int x = coords[0];
-        int z = coords[1];
-        int height = HeightMap.getBlockHeight(tw, x, z);
-
-        int y = GenUtils.randInt(TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(), TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt());
-        if(y < TerraformGeneratorPlugin.injector.getMinY())
-        	y = TerraformGeneratorPlugin.injector.getMinY() + 15;
-        
-        spawnMineshaft(tw,
-                tw.getHashedRand(x, y, z, 82392812),
-                data, x, y + 1, z,
-                height - y > 25);*/
-    }
-
-    public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
-        spawnMineshaft(tw, random, data, x, y, z, true);
-    }
-
-    public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel) {
-        spawnMineshaft(tw, random, data, x, y, z, doubleLevel, 10, 150, false);
-    }
-
-    public void spawnMineshaft(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel, int numRooms, int range, boolean badlandsMine) {
-        TerraformGeneratorPlugin.logger.info("Spawning mineshaft at: " + x + "," + z);
-
-        //Level One
-        Random hashedRand = tw.getHashedRand(x, y, z);
-        RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range);
-        if (!badlandsMine)
-            gen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y, z, 2)));
-        else
-            gen.setPathPopulator(new BadlandsMineshaftPathPopulator(tw.getHashedRand(x, y, z, 2)));
-        gen.setRoomMaxX(17);
-        gen.setRoomMaxZ(17);
-        gen.setRoomMinX(13);
-        gen.setRoomMinZ(13);
-
-        gen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
-        gen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
-
-        if (doubleLevel)
-            gen.registerRoomPopulator(new ShaftRoomPopulator(random, true, false));
-
-        gen.setCarveRooms(true);
-        if (badlandsMine) {
-            CubeRoom brokenShaft = new CubeRoom(
-                    15,
-                    15,
-                    7,
-                    gen.getCentX(), gen.getCentY(), gen.getCentZ());
-                    brokenShaft.setRoomPopulator(new BrokenShaftPopulator(hashedRand, true, false));
-                    gen.getRooms().add(brokenShaft);
-        }
-        gen.generate();
-        gen.fill(data, tw, Material.CAVE_AIR);
-
-        if (doubleLevel) {
-            //Level Two
-            hashedRand = tw.getHashedRand(x, y + 15, z);
-            RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y + 15, z, range);
-            if (!badlandsMine)
-                secondGen.setPathPopulator(new MineshaftPathPopulator(tw.getHashedRand(x, y + 15, z, 2)));
-            else
-                secondGen.setPathPopulator(new BadlandsMineshaftPathPopulator(tw.getHashedRand(x, y + 15, z, 2)));
-            secondGen.setRoomMaxX(17);
-            secondGen.setRoomMaxZ(17);
-            secondGen.setRoomMinX(13);
-            secondGen.setRoomMinZ(13);
-
-            for (CubeRoom room : gen.getRooms()) {
-
-                if (room.getPop() instanceof ShaftRoomPopulator) {
-                    CubeRoom topShaft = new CubeRoom(
-                            room.getWidthX(),
-                            room.getHeight(),
-                            room.getWidthZ(),
-                            room.getX(), room.getY() + 15, room.getZ());
-                    topShaft.setRoomPopulator(new ShaftTopPopulator(hashedRand, true, false));
-                    secondGen.getRooms().add(topShaft);
-                }
-            }
-
-            secondGen.registerRoomPopulator(new SmeltingHallPopulator(random, false, false));
-            secondGen.registerRoomPopulator(new CaveSpiderDenPopulator(random, false, false));
-            secondGen.setCarveRooms(true);
-            secondGen.generate();
-            secondGen.fill(data, tw, Material.CAVE_AIR);
-        }
     }
 
     @Override

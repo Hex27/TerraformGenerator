@@ -6,11 +6,27 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 
 public class CavePathWriter extends PathWriter{
+    private final float rXMod;
+    private final float rYMod;
+    private final float rZMod;
+    private final int xOff;
+    private final int yOff;
+    private final int zOff;
+
+    public CavePathWriter(float rXMod, float rYMod, float rZMod, int xOff, int yOff, int zOff) {
+        this.rXMod = rXMod;
+        this.rYMod = rYMod;
+        this.rZMod = rZMod;
+        this.xOff = xOff;
+        this.yOff = yOff;
+        this.zOff = zOff;
+    }
+
     @Override
     public void apply(PopulatorDataAbstract popData, TerraformWorld tw, PathState.PathNode node) {
         BlockUtils.carveCaveAir((int) (node.center.hashCode() * tw.getSeed()),
-                node.pathWidth, node.pathWidth + 1, node.pathWidth,
-                new SimpleBlock(popData, node.center), false,
+                node.pathWidth+rXMod, node.pathWidth+rYMod, node.pathWidth+rZMod,
+                new SimpleBlock(popData, node.center.getRelative(xOff,yOff,zOff)), false,
                 BlockUtils.caveCarveReplace);
     }
 }

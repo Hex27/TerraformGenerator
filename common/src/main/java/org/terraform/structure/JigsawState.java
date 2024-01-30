@@ -19,16 +19,5 @@ public class JigsawState {
     //Lowest index generates first.
     public final ArrayList<RoomLayoutGenerator> roomPopulatorStates = new ArrayList<>();
 
-/*
-    //Sort the rooms into hashmaps, with the chunk coordinates as the key
-    //Small rooms contains stuff that fit in 3x3 chunks
-    public final HashMap<SimpleChunkLocation, HashMap<SimpleLocation,RoomPopulatorAbstract>> smallRooms = new HashMap<>();
-
-    //Large rooms will contain stuff that will be put in the legacy
-    //block populator. This will thus ALWAYS generate last, no matter what
-    //you do.
-    public final HashMap<SimpleChunkLocation, HashMap<SimpleLocation,RoomPopulatorAbstract>> largeRooms = new HashMap<>();
-*/
-
 
 }

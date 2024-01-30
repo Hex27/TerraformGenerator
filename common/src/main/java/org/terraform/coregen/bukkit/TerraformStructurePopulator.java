@@ -78,10 +78,8 @@ public class TerraformStructurePopulator extends BlockPopulator {
         state.roomPopulatorStates.forEach(roomLayoutGenerator -> {
             final PathState pathState = roomLayoutGenerator.getOrCalculatePathState(tw);
             pathState.nodes.stream()
-                    //Filter those inside this chunk
+                    //Filter to only those inside this chunk
                     .filter(node->node.center.getX() >> 4 == chunkX && node.center.getZ() >> 4 == chunkZ)
-
-                    //Place each path, and populate it
                     .forEach(node->{
                         pathState.writer.apply(data, tw, node);
                         seenNodes.add(node);
@@ -94,7 +92,6 @@ public class TerraformStructurePopulator extends BlockPopulator {
                 roomLayoutGenerator.getRooms().stream()
                 //No rooms that have bounds beyond LR
                 .filter(room-> room.isInRegion(lr))
-                //.filter(room-> lr.isInRegion(room.getX(), room.getY(), room.getZ()))
                 .forEach(room->
                 {
                     seenRooms.add(room);
