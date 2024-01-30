@@ -13,33 +13,59 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.room.carver.RoomCarver;
 import org.terraform.structure.room.path.PathState;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
+/**
+ * This class is a fucking disgrace.
+ * <br>
+ * When you have the time, please refactor this into a builder or
+ * fucking something, anything else please
+ */
 public class RoomLayoutGenerator {
 
+    /**
+     * Needed for normal function or part of the recode
+     */
     private PathState pathState;
-    private final HashSet<LegacyPathGenerator> pathGens = new HashSet<>();
-    private final HashSet<PathPopulatorData> pathPopulators = new HashSet<>();
     private final HashSet<CubeRoom> rooms = new HashSet<>();
     private final int[] upperBound;
     private final int[] lowerBound;
-    private final ArrayList<RoomPopulatorAbstract> roomPops = new ArrayList<>();
     private final RoomLayout layout;
     boolean genPaths = true;
-    boolean allowOverlaps = false;
     private int numRooms;
     private int centX;
     private int centY;
     private int centZ;
-    private Random rand;
+    private PathPopulatorAbstract pathPop;
+    public RoomCarver roomCarver = null;
+    private int roomMaxHeight = 7;
+    private int roomMinHeight = 5;
+    private int roomMaxX = 15;
+    private int roomMinX = 10;
+    private int roomMaxZ = 15;
+    private int roomMinZ = 10;
 
     //Range refers to the width of the room placement area.
     //Note that only room central points follow range so it's possible
     //for a room's area to exceed this range.
     private int range;
-    private PathPopulatorAbstract pathPop;
+
+    /**
+     * For stupid transitory phase shit
+     */
+    public Material[] wallMaterials = new Material[]{Material.CAVE_AIR};
+
+    /**
+     * LEGACY SHIT. Disorganised nonsense from a bygone era
+     */
+    private final HashSet<LegacyPathGenerator> pathGens = new HashSet<>();
+    private final HashSet<PathPopulatorData> pathPopulators = new HashSet<>();
+    private final ArrayList<RoomPopulatorAbstract> roomPops = new ArrayList<>();
+    boolean allowOverlaps = false;
+    private Random rand;
     private boolean carveRooms = false;
     private float xCarveMul = 1.0f;
     private float yCarveMul = 1.0f;
@@ -47,12 +73,6 @@ public class RoomLayoutGenerator {
     private boolean pyramidish = false;
     private MazeSpawner mazePathGenerator;
     private int tile = -1;
-    private int roomMaxHeight = 7;
-    private int roomMinHeight = 5;
-    private int roomMaxX = 15;
-    private int roomMinX = 10;
-    private int roomMaxZ = 15;
-    private int roomMinZ = 10;
 
     public RoomLayoutGenerator(Random random, RoomLayout layout, int numRooms, int centX, int centY, int centZ, int range) {
         this.numRooms = numRooms;
@@ -242,8 +262,9 @@ public class RoomLayoutGenerator {
     }
 
     @SuppressWarnings("unchecked")
-	public void runRoomPopulators(PopulatorDataAbstract data, TerraformWorld tw) {
-    	//Allocate room populators
+    public void calculateRoomPopulators(TerraformWorld tw)
+    {
+        //Set force spawn rooms
         Iterator<RoomPopulatorAbstract> it = roomPops.iterator();
         while (it.hasNext()) {
             RoomPopulatorAbstract pops = it.next();
@@ -261,9 +282,10 @@ public class RoomLayoutGenerator {
 
         if (roomPops.isEmpty()) return;
 
-        //Apply room populators
+        //Allocate randomly placed room populators
         for (CubeRoom room : rooms) {
             if (room.pop == null) {
+                Random rand = tw.getHashedRand(room.getX(), room.getY(), room.getZ());
                 List<RoomPopulatorAbstract> shuffled = (List<RoomPopulatorAbstract>) roomPops.clone();
                 Collections.shuffle(shuffled, rand);
                 for (RoomPopulatorAbstract roomPop : shuffled) {
@@ -278,19 +300,29 @@ public class RoomLayoutGenerator {
                 }
             }
             if (room.pop != null) {
-            	TerraformGeneratorPlugin.logger.info("Registered: " + room.pop.getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
-                room.populate(data);
+                TerraformGeneratorPlugin.logger.info("Registered: " + room.pop.getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
             } else {
-            	TerraformGeneratorPlugin.logger.info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
+                TerraformGeneratorPlugin.logger.info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
             }
         }
     }
 
     /**
+     * @Deprecated don't use this for new structures. Use the new jigsaw system
+     */
+    @Deprecated
+	public void runRoomPopulators(PopulatorDataAbstract data, TerraformWorld tw) {
+    	//Allocate room populators
+        calculateRoomPopulators(tw);
+
+        if (roomPops.isEmpty()) return;
+
+        rooms.forEach((room)->room.populate(data));
+    }
+
+    /**
      * Links room populators to empty rooms and applies paths and room to the actual world.
-     * @param data
-     * @param tw
-     * @param mat
+     * @param mat Material to use for lining room walls.
      */
     public void fill(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
         //ArrayList<PathGenerator> pathGens = new ArrayList<>();
@@ -384,9 +416,6 @@ public class RoomLayoutGenerator {
     }
 
     /**
-     * @param data
-     * @param tw
-     * @param mat
      */
     public void fillRoomsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
 
@@ -644,5 +673,4 @@ public class RoomLayoutGenerator {
 	    	}
     	return false;
     }
-
 }

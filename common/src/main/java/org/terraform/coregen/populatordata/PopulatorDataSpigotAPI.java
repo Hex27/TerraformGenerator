@@ -9,6 +9,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.generator.LimitedRegion;
 import org.bukkit.loot.Lootable;
 import org.terraform.coregen.TerraLootTable;
@@ -17,7 +18,9 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPopulatorDataBeehiveEditor{
+import java.util.Random;
+
+public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPopulatorDataBeehiveEditor,IPopulatorDataMinecartSpawner {
     public final LimitedRegion lr;
     private final TerraformWorld tw;
     private final int chunkX,chunkZ;
@@ -125,5 +128,12 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
             TerraformGeneratorPlugin.logger.info("Failed to set beehive at " + rawX + "," + rawY + "," + rawZ);
         }
 
+    }
+
+    @Override
+    public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, Random random) {
+
+         StorageMinecart e = (StorageMinecart) lr.spawnEntity(new Location(tw.getWorld(), x+0.5f, y+0.5f, z+0.5f), EntityType.MINECART_CHEST);
+         e.setLootTable(table.bukkit());
     }
 }

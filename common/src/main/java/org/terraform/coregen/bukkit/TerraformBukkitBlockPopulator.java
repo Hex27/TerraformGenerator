@@ -3,6 +3,9 @@ package org.terraform.coregen.bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
+import org.bukkit.generator.LimitedRegion;
+import org.bukkit.generator.WorldInfo;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.TerraformWorld;
 
 import java.util.Random;
@@ -42,7 +45,12 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
         this.animalPopulator.populate(world, random, chunk);
     }
 
-	public TerraformStructurePopulator getStructurePopulator() {
+    @Override
+    public void populate(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull LimitedRegion lr) {
+        this.structurePopulator.populate(worldInfo, random, chunkX, chunkZ, lr);
+    }
+
+        public TerraformStructurePopulator getStructurePopulator() {
 		return structurePopulator;
 	}
     

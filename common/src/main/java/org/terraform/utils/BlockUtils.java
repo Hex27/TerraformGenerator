@@ -126,6 +126,7 @@ public class BlockUtils {
     public static final EnumSet<Material> caveDecoratorMaterials = EnumSet.of(
     		Material.ANDESITE_WALL, Material.DIORITE_WALL, Material.GRANITE_WALL,
     		Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL,
+            Material.MOSSY_COBBLESTONE_SLAB,
             Material.COBBLED_DEEPSLATE_WALL,
     		Material.COBBLESTONE_SLAB, Material.STONE_SLAB,
             Material.COBBLED_DEEPSLATE_SLAB,

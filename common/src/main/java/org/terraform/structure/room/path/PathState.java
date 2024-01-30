@@ -4,10 +4,12 @@ import org.bukkit.block.BlockFace;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.room.CubeRoom;
+import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.RoomLayoutGenerator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -46,7 +48,7 @@ public class PathState {
         //One starting node for each room
         for(int i = 0; i < generator.getRooms().size(); i++) {
             CubeRoom room = rooms.get(i);
-            baseNodes[i] = new PathNode(new SimpleLocation(room.getX(), room.getY(), room.getZ()), pathWidth);
+            baseNodes[i] = new PathNode(new SimpleLocation(room.getX(), room.getY(), room.getZ()), pathWidth, generator.getPathPop());
         }
 
         //For every node, connect it to the next node
@@ -81,8 +83,8 @@ public class PathState {
             //Either add a node varying the X of one or the Z of two
             PathNode newNode = new PathNode(
                     tw.getHashedRand(one.center.getX(), two.center.getZ(), 1890341).nextBoolean() ?
-                    one.center.getRelative(BlockFace.NORTH, one.center.getX() - two.center.getX())
-                    :two.center.getRelative(BlockFace.WEST, one.center.getZ() - two.center.getZ()), pathWidth);
+                            new SimpleLocation(one.center.getX(),one.center.getY(),two.center.getZ())
+                            : new SimpleLocation(two.center.getX(),one.center.getY(), one.center.getZ()), pathWidth, generator.getPathPop());
 
             connectNodes(newNode, one, tw, toAdd);
             connectNodes(newNode, two, tw, toAdd);
@@ -92,7 +94,7 @@ public class PathState {
         //Add path nodes that lead from one to two
         for(int i = pathWidth; i < one.center.distance(two.center); i++)
         {
-            toAdd.add(new PathNode(one.center.getRelative(oneConn, i), pathWidth));
+            toAdd.add(new PathNode(one.center.getRelative(oneConn, i), pathWidth, generator.getPathPop(), oneConn));
         }
     }
 
@@ -120,17 +122,20 @@ public class PathState {
         this.maxBend = maxBend;
     }
 
-    public class PathNode{
+    public static class PathNode{
         public final int pathWidth;
         public final SimpleLocation center;
+        public final PathPopulatorAbstract populator;
         public final HashSet<BlockFace> connected = new HashSet<>();
         //Assumes input is new
-        public PathNode(SimpleLocation center, int pathWidth) {
+        public PathNode(SimpleLocation center, int pathWidth, PathPopulatorAbstract populator, BlockFace... connections) {
             this.pathWidth = pathWidth;
             this.center = center;
             //Lock path nodes to a grid-like structure which will allow
             //path nodes to be spaced properly
             this.center.setX((center.getX() / pathWidth)*pathWidth);
+            Collections.addAll(connected, connections);
+            this.populator = populator;
         }
 
         //Equality is based on the simple location

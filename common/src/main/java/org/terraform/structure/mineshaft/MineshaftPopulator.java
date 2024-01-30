@@ -16,6 +16,7 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
+import org.terraform.structure.room.carver.CaveRoomCarver;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -70,7 +71,8 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
         boolean doubleLevel = hashedRand.nextBoolean();
 
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 10, x, y, z, 150);
-        gen.setPathPopulator(new BadlandsMineshaftPathPopulator(tw.getHashedRand(x, y, z, 2)));
+        Random pathRand = tw.getHashedRand(x, y, z, 2);
+        gen.setPathPopulator(new MineshaftPathPopulator(pathRand));
         gen.setRoomMaxX(15);
         gen.setRoomMaxZ(15);
         gen.setRoomMinX(13);
@@ -82,16 +84,19 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
         if (doubleLevel)
             gen.registerRoomPopulator(new ShaftRoomPopulator(tw.getHashedRand(mc.getX(), mc.getZ(),213098), true, false));
 
-        gen.setCarveRooms(true);
+        gen.wallMaterials = new Material[]{Material.CAVE_AIR};
+        gen.roomCarver = new CaveRoomCarver();
         gen.generate();
         gen.getOrCalculatePathState(tw);
+        gen.calculateRoomPopulators(tw);
         state.roomPopulatorStates.add(gen);
         //gen.fill(data, tw, Material.CAVE_AIR);
 
         if (doubleLevel) {
             //Level Two
             RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 10, x, y + 15, z, 150);
-            secondGen.setPathPopulator(new BadlandsMineshaftPathPopulator(tw.getHashedRand(x, y + 15, z, 2)));
+            pathRand = tw.getHashedRand(x, y + 15, z, 2);
+            secondGen.setPathPopulator(new MineshaftPathPopulator(pathRand));
             secondGen.setRoomMaxX(15);
             secondGen.setRoomMaxZ(15);
             secondGen.setRoomMinX(13);
@@ -112,9 +117,12 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
             secondGen.registerRoomPopulator(new SmeltingHallPopulator(tw.getHashedRand(mc.getX(), mc.getZ(),9870312), false, false));
             secondGen.registerRoomPopulator(new CaveSpiderDenPopulator(tw.getHashedRand(mc.getX(), mc.getZ(),46783129), false, false));
-            secondGen.setCarveRooms(true);
+
+            secondGen.wallMaterials = new Material[]{Material.CAVE_AIR};
+            secondGen.roomCarver = new CaveRoomCarver();
             secondGen.generate();
             secondGen.getOrCalculatePathState(tw);
+            secondGen.calculateRoomPopulators(tw);
             state.roomPopulatorStates.add(secondGen);
             //secondGen.fill(data, tw, Material.CAVE_AIR);
         }

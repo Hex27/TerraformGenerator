@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Jigsaw;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.LimitedRegion;
@@ -28,12 +29,16 @@ import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
+import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.path.PathState;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.utils.BlockUtils;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 public class TerraformStructurePopulator extends BlockPopulator {
@@ -62,13 +67,14 @@ public class TerraformStructurePopulator extends BlockPopulator {
             if(spop == null) return;
             if(!(spop instanceof JigsawStructurePopulator jsp)) return;
             state = jsp.calculateRoomPopulators(tw, mc);
+            TerraformGeneratorPlugin.logger.info("Calculated structure at " + chunkX + "," + chunkZ);
             jigsawCache.put(mc, state);
         }
 
-        //THIS DOESN'T WORK
         PopulatorDataAbstract data = new PopulatorDataSpigotAPI(lr, tw, chunkX, chunkZ);
 
-        //Place each path
+        //Carve each path
+        HashSet<PathState.PathNode> seenNodes = new HashSet<>();
         state.roomPopulatorStates.forEach(roomLayoutGenerator -> {
             final PathState pathState = roomLayoutGenerator.getOrCalculatePathState(tw);
             pathState.nodes.stream()
@@ -78,26 +84,36 @@ public class TerraformStructurePopulator extends BlockPopulator {
                     //Place each path, and populate it
                     .forEach(node->{
                         pathState.writer.apply(data, tw, node);
-                        PathPopulatorAbstract pathPopulator = roomLayoutGenerator.getPathPop();
-                        if(pathPopulator != null)
-                            pathPopulator.populate(new PathPopulatorData(
-                                    new Wall(new SimpleBlock(data, node.center),
-                                            node.connected.stream().findAny().get()),
-                                        node.pathWidth));
+                        seenNodes.add(node);
                     });
         });
 
-        //Place each room
-        state.roomPopulatorStates.forEach(roomLayoutGenerator -> {
-            roomLayoutGenerator.getRooms().stream()
-                    //No rooms that have bounds beyond LR
-                    .filter(room-> room.isInRegion(lr))
-                    .forEach(room->
-                    {
-                        room.fillRoom(data, Material.CAVE_AIR);
-                        room.getPop().populate(data, room);
-                    });
+        //Carve each room
+        ArrayList<CubeRoom> seenRooms = new ArrayList<>();
+        state.roomPopulatorStates.forEach(roomLayoutGenerator ->
+                roomLayoutGenerator.getRooms().stream()
+                //No rooms that have bounds beyond LR
+                .filter(room-> room.isInRegion(lr))
+                //.filter(room-> lr.isInRegion(room.getX(), room.getY(), room.getZ()))
+                .forEach(room->
+                {
+                    seenRooms.add(room);
+                    roomLayoutGenerator.roomCarver.carveRoom(data, room, roomLayoutGenerator.wallMaterials);
+                }));
+
+        //Populate the paths
+        seenNodes.forEach((node)->{
+            //If the path has a direction of up, it is a crossway.
+            if(node.populator != null)
+                node.populator.populate(new PathPopulatorData(
+                        new Wall(new SimpleBlock(data, node.center),
+                                node.connected.size() == 1 ? node.connected.stream().findAny().get()
+                                        : BlockFace.UP),
+                        node.pathWidth));
         });
+
+        //Populate the rooms
+        seenRooms.forEach(room-> room.getPop().populate(data, room));
     }
 
     //OLDER BLOCK POPULATOR API
@@ -163,4 +179,5 @@ public class TerraformStructurePopulator extends BlockPopulator {
         }
         return null;
     }
+
 }

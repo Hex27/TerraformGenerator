@@ -8,6 +8,8 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.structure.room.carver.RoomCarver;
+import org.terraform.structure.room.carver.StandardRoomCarver;
 import org.terraform.utils.GenUtils;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -30,44 +32,49 @@ public class CubeRoom {
         this.z = z;
     }
 
+    /**
+     * @param face Direction of the wall relative to the center
+     * @param padding padding of 0 refers to the room's wall.
+     *                1 refers to one layer inside the room and so on.
+     * @return The walls of one side of the room
+     */
     public SimpleEntry<Wall, Integer> getWall(PopulatorDataAbstract data, BlockFace face, int padding) {
         int[] lowerBounds = getLowerCorner();
         int[] upperBounds = getUpperCorner();
         Wall wall;
         int length = 0;
-        switch (face) {
-            case SOUTH:
+        switch(face) {
+            case SOUTH -> {
                 wall = new Wall(
                         new SimpleBlock(data, lowerBounds[0] + padding, y + 1, upperBounds[1] - padding)
                         , BlockFace.NORTH);
                 length = widthX - 2 * padding;
-                break;
-            case NORTH:
+            }
+            case NORTH -> {
                 wall = new Wall(
                         new SimpleBlock(data, upperBounds[0] - padding, y + 1, lowerBounds[1] + padding)
                         , BlockFace.SOUTH);
                 length = widthX - 2 * padding;
-                break;
-            case WEST:
+            }
+            case WEST -> {
                 wall = new Wall(
                         new SimpleBlock(data, lowerBounds[0] + padding, y + 1, lowerBounds[1] + padding)
                         , BlockFace.EAST);
                 length = widthZ - 2 * padding;
-                break;
-            case EAST:
+            }
+            case EAST -> {
                 wall = new Wall(
                         new SimpleBlock(data, upperBounds[0] - padding, y + 1, upperBounds[1] - padding)
                         , BlockFace.WEST);
                 length = widthZ - 2 * padding;
-                break;
-            default:
+            }
+            default -> {
                 wall = null;
                 TerraformGeneratorPlugin.logger.error("Invalid wall direction requested!");
-                break;
+            }
         }
-        SimpleEntry<Wall, Integer> walls = new SimpleEntry<Wall, Integer>(wall, length);
 
-        return walls;
+        return new SimpleEntry<>(wall, length);
     }
 
     public HashMap<Wall, Integer> getFourWalls(PopulatorDataAbstract data, int padding) {
@@ -106,37 +113,17 @@ public class CubeRoom {
         fillRoom(data, -1, mat, Material.AIR);
     }
 
+    /**
+     * Carves a hollow cube room.
+     * @param data populator data to use for writing
+     * @param tile whether to treat mat as a pattern to tile with. If this is -1,
+     *             no repetition will occur and instead mat will be sampled randomly
+     * @param mat the array of materials for the walls, floor and ceiling of the room
+     * @param fillMat material to use for the hollow area. Typically a fluid like air or water
+     */
     public void fillRoom(PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
-        int tileIndex = 0;
-        if (mat[0] != Material.BARRIER)
-            //Create a solid block with the specified width
-            for (int nx = x - widthX / 2; nx <= x + widthX / 2; nx++) {
-                for (int ny = y; ny <= y + height; ny++) {
-                    for (int nz = z - widthZ / 2; nz <= z + widthZ / 2; nz++) {
-                        if (data.getType(nx, ny, nz) == Material.CAVE_AIR)
-                            continue;
-                        if (tile == -1) data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
-                        else {
-                            data.setType(nx, ny, nz, mat[(Math.abs(nz + widthZ / 2 + ny + nx + widthX / 2 - tileIndex)) % mat.length]);
-                            tileIndex += 1;
-                            if (tileIndex == 2) tileIndex = 0;
-                        }
-                    }
-                }
-            }
 
-        //Hollow out the room
-        for (int nx = x - widthX / 2 + 1; nx <= x + widthX / 2 - 1; nx++) {
-            for (int ny = y + 1; ny <= y + height - 1; ny++) {
-                for (int nz = z - widthZ / 2 + 1; nz <= z + widthZ / 2 - 1; nz++) {
-//					if(!fillMat)
-//						data.setType(nx, ny, nz, Material.AIR);
-//					else
-//						data.setType(nx,ny,nz,Material.CAVE_AIR);
-                    data.setType(nx, ny, nz, fillMat);
-                }
-            }
-        }
+        new StandardRoomCarver(tile, fillMat).carveRoom(data, this, mat);
     }
 
     public int[] getCenter() {
@@ -348,8 +335,8 @@ public class CubeRoom {
 
     public boolean isInRegion(LimitedRegion region)
     {
-        return region.isInRegion(x - widthX / 2, 50,z - widthZ / 2)
-                && region.isInRegion(x + widthX / 2, 50,  + widthZ / 2);
+        return region.isInRegion(x-widthX / 2, y,z-widthZ / 2)
+                && region.isInRegion(x+widthX / 2, y, z+widthZ / 2);
     }
 
     //Positive x,z corner

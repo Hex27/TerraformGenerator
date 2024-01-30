@@ -18,6 +18,8 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
+import org.terraform.structure.JigsawState;
+import org.terraform.structure.JigsawStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.LegacyPathGenerator;
 import org.terraform.utils.BlockUtils;
@@ -28,13 +30,14 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Random;
 
-public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
+public class BadlandsMinePopulator extends JigsawStructurePopulator {
     static int shaftDepth = TConfigOption.STRUCTURES_BADLANDS_MINE_DEPTH.getInt();
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         if (biome != BiomeBank.BADLANDS_CANYON) return false;
 
+        //what the fuck is this
 		/*
 		 * // randomObjectPositions returns chunk positions here for (Vector2f pos :
 		 * GenUtils.vectorRandomObjectPositions(tw, chunkX >> 4, chunkZ >> 4,
@@ -65,6 +68,19 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
         		&& TConfigOption.STRUCTURES_BADLANDS_MINE_ENABLED.getBoolean();
     }
 
+    @Override
+    public JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc) {
+        JigsawState state = new MineshaftPopulator().calculateRoomPopulators(tw, mc);
+
+        state.roomPopulatorStates.forEach((gen)->{
+            gen.setPathPopulator(new BadlandsMineshaftPathPopulator(tw.getHashedRand(gen.getCentX(),gen.getCentY(),gen.getCentZ(), 2)));
+            gen.getRooms().forEach((room)->{
+                room.setL
+            });
+        });
+
+        return state;
+    }
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
         BlockFace outDir, inDir;
@@ -108,7 +124,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
         // Spawning stuff
         
         //Standard mineshaft below the badlands entrance
-        new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
+        //new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
 
         //Carve downwards hole into the mineshaft below
         spawnShaft(random, shaft, inDir);
