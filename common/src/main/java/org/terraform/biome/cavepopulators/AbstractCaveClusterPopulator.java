@@ -15,6 +15,8 @@ import org.terraform.utils.version.Version;
 public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator {
 
 	private float radius;
+    //Starts null, but will be populated by the time oneUnit is called.
+    protected SimpleBlock center;
 	public AbstractCaveClusterPopulator(float radius) {
 		this.radius = radius;
 	}
@@ -36,7 +38,7 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
                     return n;
                 });
         
-        SimpleBlock center = new SimpleBlock(ceil.getPopData(), ceil.getX(), (ceil.getY() + floor.getY())/2, ceil.getZ());
+        center = new SimpleBlock(ceil.getPopData(), ceil.getX(), (ceil.getY() + floor.getY())/2, ceil.getZ());
         		
         for (float x = -radius; x <= radius; x++) {
             for (float z = -radius; z <= radius; z++) {

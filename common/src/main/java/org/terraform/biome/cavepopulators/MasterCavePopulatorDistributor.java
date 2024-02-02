@@ -22,7 +22,7 @@ import org.terraform.utils.version.Version;
  */
 public class MasterCavePopulatorDistributor{
 	
-	private static ArrayList<Class<?>> populatedBefore = new ArrayList<>();
+	private static final ArrayList<Class<?>> populatedBefore = new ArrayList<>();
 	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 		HashMap<SimpleLocation, CaveClusterRegistry> clusters = calculateClusterLocations(random, tw, data.getChunkX(), data.getChunkZ());
 		
