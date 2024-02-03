@@ -21,6 +21,11 @@ public enum CaveClusterRegistry {
 			TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_SEPARATION.getInt(), 
 			TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MAXPERTUB.getFloat()
 			),
+    FLUID(
+            79183628,
+            40,
+            0.2f
+    ),
 	;
 	
 	int hashSeed;
@@ -44,6 +49,10 @@ public enum CaveClusterRegistry {
                             TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE.getInt(),
                             TConfigOption.BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE.getInt()));
             case CRYSTALLINE -> new CrystallineClusterCavePopulator(
+                    GenUtils.randInt(random,
+                            TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MINSIZE.getInt(),
+                            TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MAXSIZE.getInt()));
+            case FLUID -> new CaveFluidClusterPopulator(
                     GenUtils.randInt(random,
                             TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MINSIZE.getInt(),
                             TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MAXSIZE.getInt()));

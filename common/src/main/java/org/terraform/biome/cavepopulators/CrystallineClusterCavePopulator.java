@@ -26,9 +26,7 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
 	}
 
 	@Override
-    protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
-    	//Forget it on 1.16. This cave uses nothing but 1.17+ blocks
-		if(!Version.isAtLeast(17)) return;
+    protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
 		//if (!genned) {
         //    genned = true;
         //}

@@ -3,18 +3,17 @@ package org.terraform.structure.mineshaft;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rail.Shape;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
 import org.terraform.coregen.TerraLootTable;
-import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
-import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.IPopulatorDataMinecartSpawner;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -32,9 +31,41 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         this.rand = rand;
     }
 
+    /**
+     * @Deprecated Kept for legacy reasons for BadlandsMine.
+     * Does not actually get used anywhere else.
+     */
+    @Deprecated
+    @Override
+    public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
+        Wall core = new Wall(base.getRelative(0, 1, 0), dir);
+        int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
+        BlockUtils.carveCaveAir(seed,
+                pathWidth, pathWidth + 1, pathWidth, core.get(), false,
+                BlockUtils.caveCarveReplace);
+
+        return true;
+    }
+
     @Override
     public void populate(PathPopulatorData ppd) {
         Wall core = new Wall(ppd.base, ppd.dir);
+
+        if(ppd.dir == BlockFace.UP)
+        {
+            //Make a platform
+            for(int nx = -1; nx <= 1; nx++)
+                for(int nz = -1; nz <= 1; nz++)
+                    core.getRelative(nx,0,nz).setType(getPathMaterial());
+            return;
+        }
+        //God this sucks
+        legacyPopulate(core.getRear());
+        legacyPopulate(core);
+        legacyPopulate(core.getFront());
+    }
+    public void legacyPopulate(Wall core) {
+        //what the fuck is wrong with you
 
         //Was populated before.
         if (core.getType() != Material.CAVE_AIR)
@@ -70,16 +101,17 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         if (rand.nextBoolean()) core.getLeft(2)
                 .setType(GenUtils.randMaterial(getPathMaterial()));
 
-        Directional pebble = (Directional) Material.STONE_BUTTON.createBlockData("[face=floor]");
         //Decorate with pebbles n shit lol
         for (int i = -2; i <= 2; i++) {
             if (i == 0) continue;
             Wall target = core.getLeft(i);
-            if (!target.getType().toString().contains("SLAB")
+            //Checks if there's space on the ground
+            if (!Tag.SLABS.isTagged(target.getType())
                     && target.getType().isSolid()
                     && target.getType() != Material.GRAVEL
                     && target.getRelative(0, 1, 0).getType() == Material.CAVE_AIR) {
                 if (GenUtils.chance(1, 10)) { //Pebble
+                    Directional pebble = (Directional) Material.STONE_BUTTON.createBlockData("[face=floor]");
                     pebble.setFacing(BlockUtils.getDirectBlockFace(rand));
                     target.getRelative(0, 1, 0).setBlockData(pebble);
                 } else if (GenUtils.chance(1, 10)) { //Mushroom
@@ -91,30 +123,21 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         //Rails
         if (core.getType().isSolid() && rand.nextBoolean()) {
             Rail rail = (Rail) Bukkit.createBlockData(Material.RAIL);
-            switch (ppd.dir) {
-                case NORTH:
-                case SOUTH:
-                    rail.setShape(Shape.NORTH_SOUTH);
-                    break;
-                case EAST:
-                case WEST:
-                    rail.setShape(Shape.EAST_WEST);
-                    break;
-                default:
-                    break;
+            switch(core.getDirection()) {
+                case NORTH, SOUTH -> rail.setShape(Shape.NORTH_SOUTH);
+                case EAST, WEST -> rail.setShape(Shape.EAST_WEST);
             }
             
             //Check if rails are wet.
-            if(rail instanceof Waterlogged 
-            		&& BlockUtils.isWet(core.getRelative(0,1,0).get()))
-            	((Waterlogged) rail).setWaterlogged(true);
+            if(BlockUtils.isWet(core.getRelative(0,1,0).get()))
+            	rail.setWaterlogged(true);
             
             core.getRelative(0, 1, 0).setBlockData(rail);
-            BlockUtils.correctSurroundingRails(core.getRelative(0, 1, 0).get());
+            //BlockUtils.correctSurroundingRails(core.getRelative(0, 1, 0).get());
             if (GenUtils.chance(rand, 1, 100)) {
                 TerraformGeneratorPlugin.logger.info("Minecart with chest at: " + core.getX() + ", " + core.getY() + ", " + core.getZ());
-                PopulatorDataICAAbstract ica = TerraformGeneratorPlugin.injector.getICAData(((PopulatorDataPostGen) core.get().getPopData()).getChunk());
-                ica.spawnMinecartWithChest(
+                IPopulatorDataMinecartSpawner ms = (IPopulatorDataMinecartSpawner) core.get().getPopData();
+                ms.spawnMinecartWithChest(
                         core.getX(), core.getY() + 1, core.getZ(),
                         TerraLootTable.ABANDONED_MINESHAFT, rand
                 );
@@ -155,13 +178,13 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                 }
 
             //Vertical decorations
-            if (ceil != null && !ceil.getType().toString().contains("SLAB") && !ceil.getType().toString().contains("LOG")) {
+            if (ceil != null && !Tag.SLABS.isTagged(ceil.getType()) && !Tag.LOGS.isTagged(ceil.getType())) {
                 ceil = ceil.getRelative(0, -1, 0);
                 if (GenUtils.chance(rand, 1, 10)) {
                     //Stalactites
                     boolean canSpawn = true;
                     for (BlockFace face : BlockUtils.directBlockFaces) {
-                        if (ceil.getRelative(face).getType().toString().contains("WALL")) {
+                        if (Tag.WALLS.isTagged(ceil.getRelative(face).getType())) {
                             canSpawn = false;
                             break;
                         }
@@ -182,13 +205,13 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                     ceil.setBlockData(slab);
                 }
             }
-            if (floor != null && !floor.getType().toString().contains("SLAB") && !floor.getType().toString().contains("LOG")) {
+            if (floor != null && !Tag.SLABS.isTagged(floor.getType()) && !Tag.LOGS.isTagged(floor.getType())) {
                 floor = floor.getRelative(0, 1, 0);
                 if (GenUtils.chance(rand, 1, 10)) {
                     //Stalagmites
                     boolean canSpawn = true;
                     for (BlockFace face : BlockUtils.directBlockFaces) {
-                        if (floor.getRelative(face).getType().toString().contains("WALL")) {
+                        if (Tag.WALLS.isTagged(floor.getRelative(face).getType())) {
                             canSpawn = false;
                             break;
                         }
@@ -295,17 +318,6 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     			w.setType(getFenceMaterial());
     		w = w.getRelative(0,-1,0);
     	}
-    }
-
-    @Override
-    public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
-        Wall core = new Wall(base.getRelative(0, 1, 0), dir);
-        int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
-        BlockUtils.carveCaveAir(seed,
-                pathWidth, pathWidth + 1, pathWidth, core.get(), false, 
-                BlockUtils.caveCarveReplace);
-
-        return true;
     }
 
     @Override

@@ -25,9 +25,18 @@ public class TerraformPopulator extends BlockPopulator {
 	
     private static final OrePopulator[] ORE_POPS = {
             // Ores
-            null,//deepslate
-            null,//tuff
-            null,//Space for copper
+            new OrePopulator(Material.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
+                    TConfigOption.ORE_DEEPSLATE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_DEEPSLATE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_DEEPSLATE_COMMONSPAWNHEIGHT.getInt(),
+                    TConfigOption.ORE_DEEPSLATE_MAXSPAWNHEIGHT.getInt(),
+                    true),//deepslate
+            new OrePopulator(Material.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
+                    TConfigOption.ORE_TUFF_MAXVEINNUMBER.getInt(), TConfigOption.ORE_TUFF_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_TUFF_COMMONSPAWNHEIGHT.getInt(),
+                    TConfigOption.ORE_TUFF_MAXSPAWNHEIGHT.getInt(),
+                    true),//tuff
+            new OrePopulator(Material.COPPER_ORE, TConfigOption.ORE_COPPER_CHANCE.getInt(), TConfigOption.ORE_COPPER_VEINSIZE.getInt(),
+                    TConfigOption.ORE_COPPER_MAXVEINNUMBER.getInt(), TConfigOption.ORE_COPPER_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_COPPER_COMMONSPAWNHEIGHT.getInt(),
+                    TConfigOption.ORE_COPPER_MAXSPAWNHEIGHT.getInt(),
+                    false),//Space for copper
             new OrePopulator(Material.COAL_ORE,
              TConfigOption.ORE_COAL_CHANCE.getInt(),
              TConfigOption.ORE_COAL_VEINSIZE.getInt(),
@@ -155,28 +164,12 @@ public class TerraformPopulator extends BlockPopulator {
              true)
     }; 
 
-    private AmethystGeodePopulator amethystGeodePopulator;
+    private final AmethystGeodePopulator amethystGeodePopulator = new AmethystGeodePopulator(
+            TConfigOption.ORE_AMETHYST_GEODE_SIZE.getInt(),
+            TConfigOption.ORE_AMETHYST_CHANCE.getDouble(),
+            TConfigOption.ORE_AMETHYST_MIN_DEPTH.getInt(),
+            TConfigOption.ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE.getInt());
     public TerraformPopulator(TerraformWorld tw) {
-    	if(Version.isAtLeast(17)) {
-    		amethystGeodePopulator = new AmethystGeodePopulator(
-    				TConfigOption.ORE_AMETHYST_GEODE_SIZE.getInt(),
-    				TConfigOption.ORE_AMETHYST_CHANCE.getDouble(),
-    				TConfigOption.ORE_AMETHYST_MIN_DEPTH.getInt(),
-    				TConfigOption.ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE.getInt());
-    		
-    		ORE_POPS[0] = new OrePopulator(Material.COPPER_ORE, TConfigOption.ORE_COPPER_CHANCE.getInt(), TConfigOption.ORE_COPPER_VEINSIZE.getInt(),
-                    TConfigOption.ORE_COPPER_MAXVEINNUMBER.getInt(), TConfigOption.ORE_COPPER_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_COPPER_COMMONSPAWNHEIGHT.getInt(),
-                    TConfigOption.ORE_COPPER_MAXSPAWNHEIGHT.getInt(),
-                    false);
-    		ORE_POPS[1] = new OrePopulator(Material.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
-                    TConfigOption.ORE_DEEPSLATE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_DEEPSLATE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_DEEPSLATE_COMMONSPAWNHEIGHT.getInt(),
-                    TConfigOption.ORE_DEEPSLATE_MAXSPAWNHEIGHT.getInt(),
-                    true);
-    		ORE_POPS[2] = new OrePopulator(Material.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
-                    TConfigOption.ORE_TUFF_MAXVEINNUMBER.getInt(), TConfigOption.ORE_TUFF_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_TUFF_COMMONSPAWNHEIGHT.getInt(),
-                    TConfigOption.ORE_TUFF_MAXSPAWNHEIGHT.getInt(),
-                    true);
-    	}
     }
     
     private final MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
@@ -195,14 +188,11 @@ public class TerraformPopulator extends BlockPopulator {
     	random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
         //ores
         for (OrePopulator ore : ORE_POPS) {
-        	if(ore == null)
-        		continue;
             ore.populate(tw, random, data);
         }
         
         //Amethysts
-        if(amethystGeodePopulator != null)
-        	amethystGeodePopulator.populate(tw, random, data);
+        amethystGeodePopulator.populate(tw, random, data);
 
         // Get all biomes in a chunk
         EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);

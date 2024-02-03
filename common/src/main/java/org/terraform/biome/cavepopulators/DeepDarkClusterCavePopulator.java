@@ -25,12 +25,12 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
 	
 	public static void oneUnit(TerraformWorld tw, Random random, SimpleBlock origin) {
 		if(origin.isSolid()) return;
-		new DeepDarkClusterCavePopulator(0f).oneUnit(tw, random, origin.findStonelikeCeiling(50), origin.findStonelikeFloor(50));
+		new DeepDarkClusterCavePopulator(0f).oneUnit(tw, random, origin.findStonelikeCeiling(50), origin.findStonelikeFloor(50), false);
 		origin.setType(Material.GLASS);
 	}
 	
     @Override
-	public void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+	public void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
     	if(ceil == null || floor == null) return;
     	
     	//Already processed

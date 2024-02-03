@@ -18,8 +18,10 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
+import org.terraform.structure.JigsawState;
+import org.terraform.structure.JigsawStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
-import org.terraform.structure.room.PathGenerator;
+import org.terraform.structure.room.LegacyPathGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import java.io.FileNotFoundException;
@@ -28,13 +30,14 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Random;
 
-public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
+public class BadlandsMinePopulator extends JigsawStructurePopulator {
     static int shaftDepth = TConfigOption.STRUCTURES_BADLANDS_MINE_DEPTH.getInt();
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         if (biome != BiomeBank.BADLANDS_CANYON) return false;
 
+        //what the fuck is this
 		/*
 		 * // randomObjectPositions returns chunk positions here for (Vector2f pos :
 		 * GenUtils.vectorRandomObjectPositions(tw, chunkX >> 4, chunkZ >> 4,
@@ -66,6 +69,10 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
+    public JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc) {
+        return new MineshaftPopulator().calculateRoomPopulators(tw, mc, true);
+    }
+    @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
         BlockFace outDir, inDir;
         SimpleBlock entrance, shaft;
@@ -91,7 +98,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
         shaft = spawnSpot.getAtY(entrance.getY()); //entrance.getRelative(inDir, hallwayLen + sandRadius - 1);
         
         
-        int hallwayLength = 0;
+        int hallwayLength;
         if(BlockUtils.getAxisFromBlockFace(inDir) == Axis.X) {
         	hallwayLength = Math.abs(shaft.getX() - entrance.getX());
         }else {
@@ -99,8 +106,8 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
         }
         hallwayLength -= 6; //Don't cover the shaft entrance
         
-        TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Entrance: " + entrance.toString());
-        TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Shaft: " + shaft.toString());
+        TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Entrance: " + entrance);
+        TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Shaft: " + shaft);
         TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Hallway Length: " + hallwayLength);
         
         Random random = tw.getHashedRand(entrance.getX(), entrance.getY(), entrance.getZ(), 4);
@@ -108,13 +115,14 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
         // Spawning stuff
         
         //Standard mineshaft below the badlands entrance
-        new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
+        //Comment this out, the new populator will handle this
+        //new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
 
         //Carve downwards hole into the mineshaft below
         spawnShaft(random, shaft, inDir);
         
         //Carve entrance out
-        PathGenerator g = new PathGenerator(entrance.getRelative(inDir.getModX() * 3, -1, inDir.getModZ() * 3),
+        LegacyPathGenerator g = new LegacyPathGenerator(entrance.getRelative(inDir.getModX() * 3, -1, inDir.getModZ() * 3),
                 new Material[] {Material.CAVE_AIR}, new Random(), new int[]{0,0}, new int[]{0,0}, -1);
         g.setPopulator(new BadlandsMineshaftPathPopulator(random));
         g.generateStraightPath(null, inDir, hallwayLength);
@@ -196,6 +204,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
 
     private void spawnShaft(Random random, SimpleBlock shaft, BlockFace inDir) {
         BlockFace outDir = inDir.getOppositeFace();
+        int mineshaftY = (int) (HeightMap.CORE.getHeight(shaft.getPopData().getTerraformWorld(), shaft.getX(), shaft.getZ()) - BadlandsMinePopulator.shaftDepth);
         int shaftStart = -5;
         int supportR = 3;
         EnumSet<Material> toReplace = EnumSet.copyOf(BlockUtils.badlandsStoneLike);
@@ -212,7 +221,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
                 toReplace);
 
         ArrayList<SimpleBlock> platforms = new ArrayList<>();
-        for (double i = 0; i < shaftDepth; i ++) { // Carve shaft
+        for (double i = 0; i < shaft.getY()-mineshaftY; i ++) { // Carve shaft
             double width = 6 + Math.pow((i % 6) * 0.2, 2);
 
             SimpleBlock centerBlock = shaft.getRelative(GenUtils.randInt(random, -1, 1),
@@ -226,7 +235,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
                     true,
                     toReplace);
 
-            if (i % 6 > 4 && i < shaftDepth - 6) { // Add mineshaft platform positions
+            if (i % 6 > 4 && i < shaft.getY()-mineshaftY - 6) { // Add mineshaft platform positions
                 for (int b = 0; b < 1; b++) {
                     double angle = GenUtils.randDouble(random, 0, 2 * Math.PI);
                     int xAdd = (int) Math.round(Math.sin(angle) * 3);
@@ -275,7 +284,7 @@ public class BadlandsMinePopulator extends SingleMegaChunkStructurePopulator {
 
         // Place vertical support structure
         for (SimpleBlock pillar : supportPillars) {
-            for (int y = -4; y < shaftDepth + 5; y++) {
+            for (int y = -4; y < shaft.getY()-mineshaftY + 5; y++) {
                 pillar.getRelative(0, -y, 0).lsetType(Material.DARK_OAK_FENCE);
             }
         }

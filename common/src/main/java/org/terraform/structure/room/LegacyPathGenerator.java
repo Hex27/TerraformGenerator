@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
-public class PathGenerator {
+public class LegacyPathGenerator {
     private final int[] upperBound;
     private final int[] lowerBound;
     HashSet<PathPopulatorData> path = new HashSet<>();
@@ -27,7 +27,7 @@ public class PathGenerator {
     private int pathHeight = 3;
     private boolean dead = false;
 
-    public PathGenerator(SimpleBlock origin, Material[] mat, Random rand, int[] upperBound, int[] lowerBound, int maxNoBend) {
+    public LegacyPathGenerator(SimpleBlock origin, Material[] mat, Random rand, int[] upperBound, int[] lowerBound, int maxNoBend) {
         this.base = origin;
         this.rand = rand;
         this.dir = BlockUtils.directBlockFaces[GenUtils.randInt(rand, 0, 3)];
@@ -70,9 +70,7 @@ public class PathGenerator {
         PathPopulatorData candidate = new PathPopulatorData(base, dir, pathWidth, false);
         candidate.isEnd = true;
         //Prevent overlapping - path populators don't need to rerun against the same locations
-        if(!path.contains(candidate))
-	        path.add(candidate);
-        else
+        if(!path.add(candidate))
         {
         	path.remove(candidate);
         	candidate.isOverlapped = true;
@@ -88,7 +86,7 @@ public class PathGenerator {
         }
     }
 
-    public void next() {
+    public void placeNext() {
         if (length > (upperBound[0] - lowerBound[0])) {
             die();
             return;

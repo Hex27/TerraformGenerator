@@ -16,6 +16,9 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Stack;
 
+/**
+ * This class has nothing to do with the new system
+ */
 public class JigsawBuilder {
     protected int widthX;
     protected int widthZ;

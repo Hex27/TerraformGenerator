@@ -37,14 +37,6 @@ public class OreLiftSchematicParser extends SchematicParser {
              }
         }
         
-        PopulatorDataAbstract pop = block.getPopData();
-        if (pop instanceof PopulatorDataPostGen) {
-            PopulatorDataPostGen gen = (PopulatorDataPostGen) pop;
-            gen.noPhysicsUpdateForce(block.getX(), block.getY(), block.getZ(), data);
-        } else {
-            //L, broken rails.
-            TerraformGeneratorPlugin.logger.error("Ore-lift generation attempted without PopulatorDataPostGen");
-            super.applyData(block, data);
-        }
+        super.applyData(block, data);
     }
 }

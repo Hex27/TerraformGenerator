@@ -172,6 +172,11 @@ public class MegaChunk {
     public int getZ() {
         return z;
     }
+
+    @Override
+    public String toString(){
+        return x + "," + z;
+    }
     
     private static int blockCoordsToMega(int coord) {
     	if(coord >= 0) {

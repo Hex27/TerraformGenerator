@@ -40,6 +40,7 @@ import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -73,12 +74,22 @@ public class BlockUtils {
     public static final BlockFace[] xzPlaneBlockFaces = new BlockFace[] {
             BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
     };
-    
+
+    public static final EnumSet<Material> fluids = EnumSet.of(Material.WATER, Material.LAVA);
     public static final EnumSet<Material> wetMaterials = EnumSet.of(
     		Material.WATER,
     		Material.KELP_PLANT,
     		Material.SEAGRASS,
     		Material.TALL_SEAGRASS
+    );
+
+    public static final EnumSet<Material> amethysts = EnumSet.of(
+            Material.AMETHYST_BLOCK,
+            Material.AMETHYST_CLUSTER,
+            Material.BUDDING_AMETHYST,
+            Material.LARGE_AMETHYST_BUD,
+            Material.MEDIUM_AMETHYST_BUD,
+            Material.SMALL_AMETHYST_BUD
     );
     
     public static final BlockFace[] flatBlockFaces3x3 = {
@@ -126,6 +137,7 @@ public class BlockUtils {
     public static final EnumSet<Material> caveDecoratorMaterials = EnumSet.of(
     		Material.ANDESITE_WALL, Material.DIORITE_WALL, Material.GRANITE_WALL,
     		Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL,
+            Material.MOSSY_COBBLESTONE_SLAB,
             Material.COBBLED_DEEPSLATE_WALL,
     		Material.COBBLESTONE_SLAB, Material.STONE_SLAB,
             Material.COBBLED_DEEPSLATE_SLAB,
@@ -1019,6 +1031,13 @@ public class BlockUtils {
     	return false;
     }
 
+    public static boolean isExposedToMaterial(SimpleBlock target, Set<Material> mats) {
+        for(BlockFace face:directBlockFaces) {
+            if(mats.contains(target.getRelative(face).getType()))
+                return true;
+        }
+        return false;
+    }
     public static boolean isExposedToMaterial(SimpleBlock target, Material mat) {
     	for(BlockFace face:directBlockFaces) {
     		if(target.getRelative(face).getType() == mat)
