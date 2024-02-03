@@ -44,8 +44,16 @@ public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
         {
             //If the floor is above the pinned water level, set it to cave air
             //If not, set it to the solid boundary block, or the fluid
-            floor.setType(boundary ? original :
-                    floor.getY() > lowestYCenter.getY() ? Material.CAVE_AIR : fluid);
+            //The exposedToMaterial check is REQUIRED as adjacent fluid sources
+            //may spawn, and cave air may forcefully remove boundaries.
+            if(boundary)
+                floor.setType(original);
+            else if(floor.getY() <= lowestYCenter.getY())
+                floor.setType(fluid);
+            else if(!BlockUtils.isExposedToMaterial(floor, BlockUtils.fluids)
+                && !BlockUtils.fluids.contains(floor.getUp().getType())) //isExposed only checks NSEW
+                floor.setType(Material.CAVE_AIR);
+
             floor = floor.getDown();
 
             //Fix floating fluids

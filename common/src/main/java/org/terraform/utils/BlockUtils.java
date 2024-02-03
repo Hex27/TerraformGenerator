@@ -40,6 +40,7 @@ import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -1030,6 +1031,13 @@ public class BlockUtils {
     	return false;
     }
 
+    public static boolean isExposedToMaterial(SimpleBlock target, Set<Material> mats) {
+        for(BlockFace face:directBlockFaces) {
+            if(mats.contains(target.getRelative(face).getType()))
+                return true;
+        }
+        return false;
+    }
     public static boolean isExposedToMaterial(SimpleBlock target, Material mat) {
     	for(BlockFace face:directBlockFaces) {
     		if(target.getRelative(face).getType() == mat)
