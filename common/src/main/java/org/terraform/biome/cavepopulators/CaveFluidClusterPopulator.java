@@ -21,56 +21,38 @@ import java.util.Random;
 public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
 
     boolean skip = false;
-    SimpleBlock fluidCenter;
     Random rand;
     Material fluid;
-    int rX, rY, rZ;
+    int rY;
 
 	public CaveFluidClusterPopulator(float radius) {
 		super(radius);
 	}
     @Override
-	public void oneUnit(TerraformWorld tw, Random doNotUse, SimpleBlock ceil, SimpleBlock floor) {
+	public void oneUnit(TerraformWorld tw, Random doNotUse, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
     	if(skip || ceil == null || floor == null) return;
-        if(fluidCenter == null)
+        if(rand == null)
         {
             rand = tw.getHashedRand(center.getX(),center.getY(),center.getZ());
-            //fluidCenter = center.findFloor(20);
-//            if(fluidCenter == null){
-//                skip = true;
-//                return;
-//            }
 
             fluid = GenUtils.choice(rand, new Material[]{Material.WATER, Material.LAVA});
-            rX = -16 + rand.nextInt(33);
-            rY = -8 + rand.nextInt(17); //Squashed Y
-            rZ = -16 + rand.nextInt(33);
+            if(center.getY() < TerraformGeneratorPlugin.injector.getMinY() + 32) fluid = Material.LAVA;
+            rY = 3 + rand.nextInt(3);
         }
-
-/*        FastNoise fluidNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheHandler.NoiseCacheEntry.CAVE_CHEESE_NOISE, world -> {
-            FastNoise n = new FastNoise((int) (tw.getSeed() + 723891));
-            n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-            n.SetFrequency(0.03f);
-            n.SetFractalOctaves(2);
-            return n;
-        });
-
-        float fluidNoiseVal = fluidNoise.GetNoise(floor.getX(), floor.getY());*/
-        /*if(floor.getY() > fluidCenter.getY()
-                || Math.abs(floor.getX() - fluidCenter.getX()) > rX
-                || Math.abs(floor.getZ() - fluidCenter.getZ()) > rZ) return;
-*/
         Material original = floor.getType();
-        //floor = floor.getDown();
         for(int i = 0; i < rY; i++)
         {
-/*            if(i != 0 && !floor.getType().isSolid())
-            {
+            //If the floor is above the pinned water level, set it to cave air
+            //If not, set it to the solid boundary block, or the fluid
+            floor.setType(boundary ? original :
+                    floor.getY() > lowestYCenter.getY() ? Material.CAVE_AIR : fluid);
+            floor = floor.getDown();
+
+            //Fix floating fluids
+            if(!floor.getType().isSolid()){
                 floor.setType(original);
                 break;
-            }*/
-            floor.setType(fluid);
-            floor = floor.getDown();
+            }
         }
 
     }

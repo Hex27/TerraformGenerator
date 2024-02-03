@@ -73,12 +73,22 @@ public class BlockUtils {
     public static final BlockFace[] xzPlaneBlockFaces = new BlockFace[] {
             BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
     };
-    
+
+    public static final EnumSet<Material> fluids = EnumSet.of(Material.WATER, Material.LAVA);
     public static final EnumSet<Material> wetMaterials = EnumSet.of(
     		Material.WATER,
     		Material.KELP_PLANT,
     		Material.SEAGRASS,
     		Material.TALL_SEAGRASS
+    );
+
+    public static final EnumSet<Material> amethysts = EnumSet.of(
+            Material.AMETHYST_BLOCK,
+            Material.AMETHYST_CLUSTER,
+            Material.BUDDING_AMETHYST,
+            Material.LARGE_AMETHYST_BUD,
+            Material.MEDIUM_AMETHYST_BUD,
+            Material.SMALL_AMETHYST_BUD
     );
     
     public static final BlockFace[] flatBlockFaces3x3 = {

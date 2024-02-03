@@ -23,8 +23,8 @@ public enum CaveClusterRegistry {
 			),
     FLUID(
             79183628,
-            32,
-            TConfigOption.BIOME_CAVE_CRYSTALLINECLUSTER_MAXPERTUB.getFloat()
+            40,
+            0.2f
     ),
 	;
 	

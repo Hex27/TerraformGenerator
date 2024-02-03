@@ -74,8 +74,8 @@ public class GenUtils {
     /**
      * This will now use StoneLike, and not just any solid block.
      */
-    public static Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z) {
-        int y = getHighestGround(data, x, z);
+    public static Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z, int minimumHeight) {
+        int y = data instanceof PopulatorDataSpigotAPI ? getTransformedHeight(data.getTerraformWorld(),x,z) : getHighestGround(data, x, z);
         int[] pair = {TerraformGeneratorPlugin.injector.getMinY() - 1, TerraformGeneratorPlugin.injector.getMinY() - 1};
         List<int[]> list = new ArrayList<>();
 
@@ -83,9 +83,10 @@ public class GenUtils {
             Material type = data.getType(x, ny, z);
             if(BlockUtils.isStoneLike(type)) {
                 pair[1] = ny;
-                list.add(pair);
+                if(pair[0] - pair[1] >= minimumHeight) list.add(pair);
                 pair = new int[] {TerraformGeneratorPlugin.injector.getMinY() - 1,TerraformGeneratorPlugin.injector.getMinY() - 1};
-            } else if(pair[0] == TerraformGeneratorPlugin.injector.getMinY() - 1) pair[0] = ny;
+            } else if(pair[0] == TerraformGeneratorPlugin.injector.getMinY() - 1)
+                pair[0] = ny;
         }
 
         return list;

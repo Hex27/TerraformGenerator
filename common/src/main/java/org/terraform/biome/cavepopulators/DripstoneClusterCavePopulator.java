@@ -19,7 +19,7 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
 	}
 
 	@Override
-    protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+    protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
     	
     	//=========================
         //Upper decorations

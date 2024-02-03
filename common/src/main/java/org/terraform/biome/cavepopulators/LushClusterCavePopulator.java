@@ -27,7 +27,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 	}
 	
     @Override
-	public void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+	public void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
     	
     	//=========================
         //Upper decorations

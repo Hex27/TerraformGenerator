@@ -1,6 +1,8 @@
 package org.terraform.biome.cavepopulators;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -11,8 +13,8 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.Version;
 
 /**
  * This class will distribute ALL cave post-population to the right populators,
@@ -21,7 +23,7 @@ import org.terraform.utils.version.Version;
  *
  */
 public class MasterCavePopulatorDistributor{
-	
+
 	private static final ArrayList<Class<?>> populatedBefore = new ArrayList<>();
 	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 		HashMap<SimpleLocation, CaveClusterRegistry> clusters = calculateClusterLocations(random, tw, data.getChunkX(), data.getChunkZ());
@@ -31,62 +33,59 @@ public class MasterCavePopulatorDistributor{
                 
             	BiomeBank bank = tw.getBiomeBank(x, z);
             	int maxHeightForCaves = bank.getHandler().getMaxHeightForCaves(tw, x, z);
-                for (int[] pair : GenUtils.getCaveCeilFloors(data, x, z)) {
+
+                //Remove clusters when they're spawned.
+                CaveClusterRegistry reg = clusters.remove(new SimpleLocation(x,0,z));
+
+                Collection<int[]> pairs = GenUtils.getCaveCeilFloors(data, x, z, 4);
+
+                //This is the index to spawn the cluster in.
+                int clusterPair = pairs.size() > 0 ? random.nextInt(pairs.size()) : 0;
+
+                for (int[] pair : pairs) {
                 	
                 	//Biome disallows caves above this height
                 	if(pair[0] > maxHeightForCaves) continue;
-                	
-                	if(pair[0] - pair[1] <= 3) //Ceiling too short.
-                		continue;
-                	
+
                     SimpleBlock ceil = new SimpleBlock(data,x,pair[0],z); //non-solid
                     SimpleBlock floor = new SimpleBlock(data,x,pair[1],z); //solid
-                    
+
+                    //If this is wet, don't touch it.
                     //Don't populate inside amethysts
-                    if(Version.isAtLeast(17) 
-                    		&& (floor.getType() == Material.AMETHYST_BLOCK
-                    		|| floor.getType() == Material.AMETHYST_CLUSTER
-                    		|| ceil.getType() == Material.AMETHYST_BLOCK
-                    		|| ceil.getType() == Material.AMETHYST_CLUSTER)) {
-                    	continue;
+                    if(BlockUtils.amethysts.contains(floor.getType())
+                        || BlockUtils.fluids.contains(floor.getUp().getType())
+                        || BlockUtils.amethysts.contains(ceil.getDown().getType())) {
+                        continue;
                     }
-                    
-                    AbstractCavePopulator pop = null;
+
+                    AbstractCavePopulator pop;
+
+                    /*
+                     * Deep cave floors will use the deep cave populator.
+                     * This has to happen, as most surfaces
+                     * too low down will be lava. Hard to decorate.
+                     */
                     if(floor.getY() < TerraformGeneratorPlugin.injector.getMinY() + 32)
-                    	/*
-                    	 * Deep cave floors will use the deep cave populator.
-                    	 * This has to happen, as most surfaces
-                    	 * too low down will be lava. Hard to decorate.
-                    	 */
                     	pop = new DeepCavePopulator();
                     else 
                     {
-                    	/*
-                    	 * Cluster Populators won't just decorate one block, they
-                    	 * will populate the surrounding surfaces in a fuzzy 
-                    	 * radius.
-                    	 */
-                    	
-                    	for(SimpleLocation loc:clusters.keySet()) {
-                    		if(loc.getX() == x && loc.getZ() == z) {
-                    			pop = clusters.get(loc).getPopulator(random);
-                    		}
-                    	}
-                    	
-                		//If both clusters don't spawn, then revert to the
-                		//basic biome-based cave populator
-                    	if(pop == null)
-                    		pop = bank.getCavePop();
+                        /*
+                         * Cluster Populators won't just decorate one block, they
+                         * will populate the surrounding surfaces in a fuzzy
+                         * radius.
+                         */
+                        //If there is no cluster to spawn, then revert to the
+                        //basic biome-based cave populator
+                        pop = (clusterPair == 0 && reg != null) ? reg.getPopulator(random) : bank.getCavePop();
                     }
-                    
-                    if(pop != null) {
-                    	pop.populate(tw, random, ceil, floor);
-                    	
-                    	//Locating and debug print
-            			if(!populatedBefore.contains(pop.getClass())) {
-            				populatedBefore.add(pop.getClass());
-            	            TerraformGeneratorPlugin.logger.info("Spawning " + pop.getClass().getSimpleName() + " at " + floor);
-            			}
+                    clusterPair--;
+
+                    pop.populate(tw, random, ceil, floor);
+
+                    //Locating and debug print
+                    if(!populatedBefore.contains(pop.getClass())) {
+                        populatedBefore.add(pop.getClass());
+                        TerraformGeneratorPlugin.logger.info("Spawning " + pop.getClass().getSimpleName() + " at " + floor);
                     }
                 }
             }
@@ -98,7 +97,7 @@ public class MasterCavePopulatorDistributor{
 		
 		for(CaveClusterRegistry type:CaveClusterRegistry.values()) {
 			SimpleLocation[] positions =  GenUtils.randomObjectPositions(
-	    			tw.getHashedRand(type.getHashSeed(), chunkX, chunkZ).nextInt(99999), 
+	    			tw.getHashedRand(chunkX, type.getHashSeed(), chunkZ).nextInt(9999999),
 	    			chunkX, 
 	    			chunkZ, 
 	    			type.getSeparation(), 
