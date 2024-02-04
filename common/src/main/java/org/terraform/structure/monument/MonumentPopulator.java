@@ -186,7 +186,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new FishCageRoomPopulator(random, design, false, false));
         gen.registerRoomPopulator(new HollowPillarRoomPopulator(random, design, false, false));
         gen.registerRoomPopulator(new LanternPillarRoomPopulator(random, design, false, false));
-        gen.generate(false);
+        gen.calculateRoomPlacement(false);
         gen.fill(data, tw, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE);
 
         carveBaseHallways(tw, random, data, x, y, z, range);

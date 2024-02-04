@@ -47,7 +47,7 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new TrailRuinsTowerRoom(random, false, false));
         gen.registerRoomPopulator(new TrailRuinsHutRoom(random, false, false));
 
-        gen.generate();
+        gen.calculateRoomPlacement();
         gen.carvePathsOnly(data, tw, Material.BARRIER);
         gen.populatePathsOnly();
         gen.fillRoomsOnly(data, tw, Material.STONE_BRICKS);

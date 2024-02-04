@@ -80,7 +80,7 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new WarmOceanAltarRoom(random, false, false));
         gen.registerRoomPopulator(new WarmOceanWellRoom(random, false, false));
         gen.registerRoomPopulator(new WarmOceanLargeArcRoom(random, false, false));
-        gen.generate();
+        gen.calculateRoomPlacement();
         gen.fillRoomsOnly(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 
     }

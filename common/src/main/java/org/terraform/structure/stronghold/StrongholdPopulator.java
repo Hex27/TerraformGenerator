@@ -153,7 +153,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new SupplyRoomPopulator(random, false, false));
         gen.registerRoomPopulator(new TrapChestRoomPopulator(random, false, false));
         gen.registerRoomPopulator(new HallwayPopulator(random, false, false));
-        gen.generate();
+        gen.calculateRoomPlacement();
         gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 
         gen.reset();
@@ -175,7 +175,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         CubeRoom stairwayTwo = new CubeRoom(5, 5, 5, stairwayOne.getX(), y, stairwayOne.getZ());
         stairwayTwo.setRoomPopulator(new StairwayTopPopulator(random, false, false));
         gen.getRooms().add(stairwayTwo);
-        gen.generate();
+        gen.calculateRoomPlacement();
         gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
 
     }

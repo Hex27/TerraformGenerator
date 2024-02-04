@@ -20,6 +20,10 @@ import java.util.Random;
 
 public class MushroomCavePopulator extends GenericLargeCavePopulator {
 
+    public MushroomCavePopulator(Random rand, boolean forceSpawn, boolean unique) {
+        super(rand, forceSpawn, unique);
+    }
+/*
     public void createLargeCave(TerraformWorld tw, Random rand, PopulatorDataAbstract data, int rY, int x, int y, int z) {
         TerraformGeneratorPlugin.logger.info("Generating Large Mushroom Cave at " + x + "," + y + "," + z);
         int rX = GenUtils.randInt(rand, 30, 50);
@@ -130,5 +134,5 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
 	                }
             }
         }
-    }
+    }*/
 }

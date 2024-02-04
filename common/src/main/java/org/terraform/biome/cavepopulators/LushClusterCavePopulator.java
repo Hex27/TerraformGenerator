@@ -87,7 +87,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         //=========================
         
         //If floor is submerged, set it to clay, then don't touch it.
-        if(BlockUtils.isWet(floor.getRelative(0,1,0))) {
+        if(BlockUtils.isWet(floor.getUp())) {
         	if(!isForLargeCave) 
         		floor.setType(Material.CLAY);
         	return;
