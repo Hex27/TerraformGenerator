@@ -30,15 +30,9 @@ public class LargeCavePopulator extends SingleMegaChunkStructurePopulator {
         int rY = (highest - 20) / 2; //5 block padding bottom, 15 padding top.
 
         switch(rand.nextInt(3)) {
-        case 0:
-    		new GenericLargeCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
-    		break;
-        case 1:
-    		new MushroomCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
-    		break;
-    	default:
-    		new LargeLushCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
-    		break;
+            case 0 -> new GenericLargeCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
+            case 1 -> new MushroomCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
+            default -> new LargeLushCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
         }
     }
 
