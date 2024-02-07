@@ -2,8 +2,11 @@ package org.terraform.structure.caves;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.block.data.type.SeaPickle;
+import org.terraform.biome.cavepopulators.LushClusterCavePopulator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -23,116 +26,77 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
     public MushroomCavePopulator(Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
     }
-/*
-    public void createLargeCave(TerraformWorld tw, Random rand, PopulatorDataAbstract data, int rY, int x, int y, int z) {
-        TerraformGeneratorPlugin.logger.info("Generating Large Mushroom Cave at " + x + "," + y + "," + z);
-        int rX = GenUtils.randInt(rand, 30, 50);
-        int rZ = GenUtils.randInt(rand, 30, 50);
 
-        //Create main cave hole
-        carveCaveSphere(tw, rX, rY, rZ, new SimpleBlock(data, x, y, z));
+    /**
+     * Raise some patches of ground above the water.
+     * Set stuff to mycelium
+     */
+    @Override
+    protected void populateFloor(SimpleBlock floor, int waterLevel) {
+        TerraformWorld tw = floor.getPopData().getTerraformWorld();
+        if(floor.getY() <= waterLevel)
+        {
+            int waterDepth = waterLevel - floor.getY();
 
-        //Decrease radius to only spawn spikes away from corners
-        //rX -= 10;
-        //rZ -= 10;
+            FastNoise raisedGroundNoise = NoiseCacheHandler.getNoise(
+                    tw,
+                    NoiseCacheEntry.STRUCTURE_LARGECAVE_RAISEDGROUNDNOISE,
+                    world -> {
+                        FastNoise n = new FastNoise((int) (world.getSeed() * 5));
+                        n.SetNoiseType(NoiseType.SimplexFractal);
+                        n.SetFractalOctaves(3);
+                        n.SetFrequency(0.06f);
+                        return n;
+                    });
 
-
-        FastNoise mycelNoise = NoiseCacheHandler.getNoise(
-        		tw, 
-        		NoiseCacheEntry.STRUCTURE_LARGECAVE_RAISEDGROUNDNOISE, 
-        		world -> {
-        	        FastNoise n = new FastNoise((int) (world.getSeed() * 5));
-        	        n.SetNoiseType(NoiseType.SimplexFractal);
-        	        n.SetFractalOctaves(3);
-        	        n.SetFrequency(0.04f);
-        	        return n;
-        		});
-        
-
-        int lowestPoint = y - rY;
-
-        for (int nx = x - rX; nx <= x + rX; nx++) {
-            for (int nz = z - rZ; nz <= z + rZ; nz++) {
-                double noise = mycelNoise.GetNoise(nx, nz);
-                if (noise < 0) noise = 0;
-                if (noise > 0.5) noise = (noise - 0.5) * 0.5 + 0.5;
-                int h = (int) ((rY / 2) * noise) + 2;
-                if (h < 0) h = 0;
-                BlockUtils.spawnPillar(rand, data, nx, lowestPoint, nz, Material.DIRT, h, h);
-                BlockUtils.downPillar(nx, lowestPoint - 1, nz, 20, data, Material.DIRT);
-
-                if(data.getType(nx, lowestPoint + h + 1, nz) != Material.WATER)
-                	data.setType(nx, lowestPoint + h, nz, Material.MYCELIUM);
+            //Raise some ground up
+            double noise = raisedGroundNoise.GetNoise(floor.getX(), floor.getZ());
+            if (noise > 0){
+                int h = (int) Math.round(4.3f*waterDepth*noise);
+                if(h > waterDepth) h = (int) Math.round(waterDepth + Math.sqrt(h-waterDepth));
+                floor.getUp().RPillar(h, new Random(), Material.DIRT);
+                floor = floor.getUp(h-1);
             }
         }
-        
-        for (int nx = x - rX; nx <= x + rX; nx++) {
-            for (int nz = z - rZ; nz <= z + rZ; nz++) {
 
-
-                
-                int ground = getCaveFloor(data, nx, y, nz);
-                if (data.getType(nx, ground, nz).isSolid()) {
-                    if(data.getType(nx, ground + 1, nz) == Material.WATER) {
-                    	//Low luminosity sea pickles
-                        if (GenUtils.chance(rand, 4, 100)) {
-	                        SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
-	                        sp.setPickles(GenUtils.randInt(3, 4));
-	                        data.setBlockData(nx, ground + 1, nz, sp);
-                        }
-                    }
-                    else if(!data.getType(nx, ground+1, nz).isSolid())
-                    {
-                    	//Set most ground to mycelium
-                        data.setType(nx, ground, nz, Material.MYCELIUM);
-                    }
-                }
-                
-
-                //Medium Shrooms
-                if (GenUtils.chance(1, 150)) {
-                    if (data.getType(nx, ground, nz) == Material.MYCELIUM
-                            && data.getType(nx, ground + 1, nz) == Material.CAVE_AIR) {
-                    	FractalTypes.Mushroom type;
-                    	switch(rand.nextInt(6)) {
-                    	case 0:
-                    		type = FractalTypes.Mushroom.MEDIUM_RED_MUSHROOM;
-                    		break;
-                    	case 1:
-                    		type = FractalTypes.Mushroom.MEDIUM_BROWN_MUSHROOM;
-                    		break;
-                    	case 2:
-                    		type = FractalTypes.Mushroom.MEDIUM_BROWN_FUNNEL_MUSHROOM;
-                    		break;
-                    	case 3:
-                    		type = FractalTypes.Mushroom.SMALL_BROWN_MUSHROOM;
-                    		break;
-                    	case 4:
-                    		type = FractalTypes.Mushroom.SMALL_POINTY_RED_MUSHROOM;
-                    		break;
-                    	default:
-                    		type = FractalTypes.Mushroom.SMALL_RED_MUSHROOM;
-                    		break;
-                    	}
-                    	
-                        new MushroomBuilder(type).build(tw, data, nx, ground, nz);
-                    }
-                }
-
-                //Only Stalactites, no stalagmites.
-                if(nx <= x + rX - 10 && nx >= x - rX + 10
-                		&& nz <= z + rZ - 10 && nz >= z - rZ + 10)
-	                if (GenUtils.chance(rand, 3, 100)) {
-	                    if (rand.nextBoolean()) {
-	                        int ceil = getCaveCeiling(data, nx, y, nz);
-	                        if (ceil != -1) {
-	                            int r = 2;
-	                            int h = GenUtils.randInt(rand, rY / 2, (int) ((3f / 2f) * rY));
-	                            stalactite(tw, rand, data, nx, ceil, nz, r, h);
-	                        }
-	                    } 
-	                }
-            }
+        //Water decorations come after this
+        if(floor.getY() > waterLevel){
+            //Set mycelium if not underwater
+            floor.setType(Material.MYCELIUM);
+            return;
         }
-    }*/
+
+        //sea pickle
+        if (BlockUtils.isWet(floor.getUp()) && GenUtils.chance(rand, 7, 100)) {
+            SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
+            sp.setPickles(GenUtils.randInt(3, 4));
+            floor.getUp().setBlockData(sp);
+        }
+    }
+    @Override
+    protected void populateCeilFloorPair(SimpleBlock ceil, SimpleBlock floor, int height) {
+        TerraformWorld tw = ceil.getPopData().getTerraformWorld();
+
+        //Correct for mycelium ground raise
+        int cutoff = height;
+        while(cutoff > 0 && floor.getUp().isSolid()){
+            floor = floor.getUp();
+            cutoff--;
+        }
+        if(cutoff <= 0) return; //give up.
+
+
+        //Only stalactites
+        if(GenUtils.chance(rand, 1, 150))
+        {
+            int r = 2;
+            int h = GenUtils.randInt(rand, (int) (height/2.5f), (int) ((3f / 2f) * (height/2.5f)));
+            stalactite(ceil.getPopData().getTerraformWorld(), rand, ceil.getPopData(), ceil.getX(), ceil.getY(), ceil.getZ(), r, h);
+        }
+
+        //set biome
+        PopulatorDataICABiomeWriterAbstract biomeWriter = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
+        for(int ny = floor.getY(); ny <= ceil.getY(); ny++)
+            biomeWriter.setBiome(floor.getX(), ny, floor.getZ(), Biome.LUSH_CAVES);
+    }
 }

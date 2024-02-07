@@ -1,8 +1,12 @@
 package org.terraform.utils;
 
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Queue;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -55,11 +59,15 @@ public class StalactiteBuilder {
 			//Large stalactite (8+ blocks)
 			if(isFacingUp)
 			{
-				stalagmite(rand, w, GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),stalactiteHeight);
+				stalagmite(rand, w,
+                        GenUtils.randDouble(rand, stalactiteHeight/8.0, stalactiteHeight/6.0),
+                        stalactiteHeight);
 			}
 			else
 			{
-				stalactite(rand, w, GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),stalactiteHeight);
+				stalactite(rand, w,
+                        GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),
+                        stalactiteHeight);
 			}
 		}
 		
@@ -91,22 +99,43 @@ public class StalactiteBuilder {
 		return this;
 	}
 	
-	public void stalagmite(Random random, Wall w, double baseRadius, int height) {
+	public void stalagmite(Random random, Wall root, double baseRadius, int height) {
 		baseRadius = Math.max(baseRadius, minRadius);
-		//Vector one to two;
-		Vector base = new Vector(w.getX(),w.getY(),w.getZ());
-		Vector base2 = new Vector(w.getX(),w.getY()+height,w.getZ());
-		Vector v = base2.subtract(base);
-		v.clone().multiply(1 / v.length());
-		SimpleBlock one = w.get();
-		double radius = baseRadius;
-		for (int i = 0; i <= height; i++) {
-			Vector seg = v.clone().multiply((float) i / ((float) height));
-			SimpleBlock segment = one.getRelative(seg);
-			
-			BlockUtils.replaceSphere(random.nextInt(9999), (float) radius, 2, (float) radius, segment, false, false, solidBlockType);
-			radius = ((double) baseRadius) * (1 - ((double) i) / ((double) height));
-		}
+
+        //Perform a BFS against the cone 3d equation to prevent spheres from overwriting
+        //each other. Should reduce chunk r/w ops
+
+        Queue<Wall> queue = new ArrayDeque<>();
+        queue.add(root);
+        HashSet<Wall> seen = new HashSet<>();
+        seen.add(root);
+
+        while(!queue.isEmpty())
+        {
+            Wall v = queue.remove();
+            v.setType(solidBlockType);
+
+            //Place blocks for v
+            for(BlockFace rel:BlockUtils.sixBlockFaces)
+            {
+                Wall neighbour = v.getRelative(rel);
+                if(seen.contains(neighbour)) continue;
+
+                int yOffset = neighbour.getY()-root.getY();
+                if(yOffset>height
+                    || yOffset<0) continue;
+                /*
+                 * x^2 + z^2 - ((y-h)/baseRadius)^2 = 0
+                 */
+                double coneEqn = Math.pow(neighbour.getX()-root.getX(),2)
+                        + Math.pow(neighbour.getZ()-root.getZ(),2)
+                        - Math.pow((yOffset-height)/baseRadius, 2);
+                if(coneEqn > 0) continue;
+
+                queue.add(neighbour);
+                seen.add(neighbour);
+            }
+        }
 	}
 	
 	public void stalactite(Random random, Wall w, double baseRadius, int height) {
