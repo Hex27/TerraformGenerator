@@ -20,7 +20,6 @@ import java.util.Random;
 
 public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
 
-    boolean skip = false;
     Random rand;
     Material fluid;
     int rY;
@@ -30,7 +29,7 @@ public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
 	}
     @Override
 	public void oneUnit(TerraformWorld tw, Random doNotUse, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
-    	if(skip || ceil == null || floor == null) return;
+    	if(ceil == null || floor == null) return;
         if(rand == null)
         {
             rand = tw.getHashedRand(center.getX(),center.getY(),center.getZ());

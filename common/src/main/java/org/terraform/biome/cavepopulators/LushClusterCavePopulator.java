@@ -73,7 +73,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
             
             //Glow Berries
             int glowBerryChance = 5;
-            if(isForLargeCave) glowBerryChance = 15;
+            if(isForLargeCave) glowBerryChance = 7;
             if (GenUtils.chance(random, 1, glowBerryChance)) {
                 int h = caveHeight / 4;
                 if (h < 1) h = 1;
@@ -126,29 +126,31 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         //=========================
         //Attempt to replace close-by walls with moss. Also apply lichen.
         //=========================
-        
-        SimpleBlock target = floor;
-        while(target.getY() != ceil.getY()) {
-        	for(BlockFace face:BlockUtils.directBlockFaces) {
-        		SimpleBlock rel = target.getRelative(face);
-        		if(BlockUtils.isStoneLike(rel.getType())) {
-        			rel.setType(Material.MOSS_BLOCK);
-        			if(BlockUtils.isAir(target.getType()) && GenUtils.chance(random, 1, 5)) {
-        				new MultipleFacingBuilder(Material.GLOW_LICHEN)
-        				.setFace(face, true)
-        				.apply(target);
-        			}
-        		}
-        	}
-        	target = target.getRelative(0,1,0);
+        if(!isForLargeCave)
+        {
+            SimpleBlock target = floor;
+            while(target.getY() != ceil.getY()) {
+                for(BlockFace face:BlockUtils.directBlockFaces) {
+                    SimpleBlock rel = target.getRelative(face);
+                    if(BlockUtils.isStoneLike(rel.getType())) {
+                        rel.setType(Material.MOSS_BLOCK);
+                        if(BlockUtils.isAir(target.getType()) && GenUtils.chance(random, 1, 5)) {
+                            new MultipleFacingBuilder(Material.GLOW_LICHEN)
+                                    .setFace(face, true)
+                                    .apply(target);
+                        }
+                    }
+                }
+                target = target.getRelative(0,1,0);
+            }
         }
         
         //=========================
         //Biome Setter 
         //=========================
-        if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract) {
-        	PopulatorDataICABiomeWriterAbstract data = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
-        	while(floor.getY() < ceil.getY()) {
+        if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData())
+                instanceof PopulatorDataICABiomeWriterAbstract data) {
+            while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), Biome.LUSH_CAVES);
         		floor = floor.getRelative(0,1,0);
         	}

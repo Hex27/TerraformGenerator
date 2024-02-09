@@ -349,8 +349,7 @@ public class SimpleBlock {
     public void setType(Material type) {
         if (popData.getType(x, y, z) == Material.WATER) {
             BlockData data = Bukkit.createBlockData(type);
-            if (data instanceof Waterlogged) {
-                Waterlogged wl = (Waterlogged) data;
+            if (data instanceof Waterlogged wl) {
                 wl.setWaterlogged(true);
             }
             popData.setBlockData(x, y, z, data);

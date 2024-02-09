@@ -14,11 +14,13 @@ import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.StalactiteBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class MushroomCavePopulator extends GenericLargeCavePopulator {
@@ -55,14 +57,18 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
                 int h = (int) Math.round(4.3f*waterDepth*noise);
                 if(h > waterDepth) h = (int) Math.round(waterDepth + Math.sqrt(h-waterDepth));
                 floor.getUp().RPillar(h, new Random(), Material.DIRT);
-                floor = floor.getUp(h-1);
+                floor = floor.getUp(h); //????
             }
         }
 
         //Water decorations come after this
-        if(floor.getY() > waterLevel){
+        if(floor.getY() >= waterLevel){
             //Set mycelium if not underwater
             floor.setType(Material.MYCELIUM);
+
+            //chance to set small mushshrooms
+            if(GenUtils.chance(rand, 7, 100))
+                floor.getUp().lsetType(Material.RED_MUSHROOM,Material.BROWN_MUSHROOM);
             return;
         }
 
@@ -78,25 +84,29 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
         TerraformWorld tw = ceil.getPopData().getTerraformWorld();
 
         //Correct for mycelium ground raise
-        int cutoff = height;
-        while(cutoff > 0 && floor.getUp().isSolid()){
+        int newHeight = height;
+        while(newHeight > 0 && floor.getUp().isSolid()){
             floor = floor.getUp();
-            cutoff--;
+            newHeight--;
         }
-        if(cutoff <= 0) return; //give up.
-
+        if(newHeight <= 0) return; //give up.
 
         //Only stalactites
         if(GenUtils.chance(rand, 1, 150))
         {
             int r = 2;
             int h = GenUtils.randInt(rand, (int) (height/2.5f), (int) ((3f / 2f) * (height/2.5f)));
-            stalactite(ceil.getPopData().getTerraformWorld(), rand, ceil.getPopData(), ceil.getX(), ceil.getY(), ceil.getZ(), r, h);
+            new StalactiteBuilder(BlockUtils.stoneOrSlateWall(ceil.getY()))
+                    .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
+                    .makeSpike(rand, ceil, r, h, false);
         }
-
-        //set biome
-        PopulatorDataICABiomeWriterAbstract biomeWriter = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
-        for(int ny = floor.getY(); ny <= ceil.getY(); ny++)
-            biomeWriter.setBiome(floor.getX(), ny, floor.getZ(), Biome.LUSH_CAVES);
+        else if(floor.getType() == Material.MYCELIUM
+            && newHeight >= 15 && GenUtils.chance(rand, 1, 150))
+        {
+            //Big Mushrooms
+            new MushroomBuilder(Objects.requireNonNull(
+                    GenUtils.choice(rand, FractalTypes.Mushroom.values())))
+                .build(tw, floor.getPopData(), floor.getX(), floor.getY(), floor.getZ());
+        }
     }
 }

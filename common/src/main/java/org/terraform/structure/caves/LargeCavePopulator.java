@@ -23,6 +23,7 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
 
 public class LargeCavePopulator extends JigsawStructurePopulator {
@@ -71,17 +72,18 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
         //Random will be unused
         //All the arguments in gen are going to be unused too, as it won't be generating rooms
-        GenericLargeCavePopulator cavePopulator = GenUtils.choice(rand,
+        GenericLargeCavePopulator cavePopulator = Objects.requireNonNull(GenUtils.choice(rand,
             new GenericLargeCavePopulator[] {
+                    new MushroomCavePopulator(tw.getHashedRand(x, 13729804, z), false, false),
                     new GenericLargeCavePopulator(tw.getHashedRand(x, 13729804, z), false, false),
                     new LargeLushCavePopulator(tw.getHashedRand(x, 13729804, z), false, false)
-            });
+            }));
 
         RoomLayoutGenerator gen = new RoomLayoutGenerator(new Random(), RoomLayout.RANDOM_BRUTEFORCE, 10, x, y, z, 150);
         gen.setGenPaths(false);
         gen.roomCarver = new LargeCaveRoomCarver(GenUtils.randMaterial(rand, Material.LAVA, Material.WATER));
         SimpleLocation center = new SimpleLocation(x, y, z);
-        TerraformGeneratorPlugin.logger.info("Large Cave at " + center + " has water level > " + minY);
+        TerraformGeneratorPlugin.logger.info("Large Cave at " + center + " has water level > " + minY + " with populator " +cavePopulator.getClass().getSimpleName());
         HashMap<SimpleChunkLocation, LargeCaveRoomPiece> chunkToRoom = new HashMap<>();
 
         //BFS against center with "edges" as the noise equation
@@ -99,7 +101,10 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
             LargeCaveRoomPiece caveRoom = chunkToRoom.computeIfAbsent(
                 new SimpleChunkLocation(tw.getName(), v.getX()>>4, v.getZ()>>4),
                 (loc)->{
-                    LargeCaveRoomPiece newRoom = new LargeCaveRoomPiece(15, 15, 15, (v.getX()>>4)*16+8, y, (v.getZ()>>4)*16+8);
+                    //Each room is 48x48 blocks wide to ensure that rooms do not carve over
+                    //one another when writing outside their bounds.
+                    LargeCaveRoomPiece newRoom = new LargeCaveRoomPiece(47, 47, 15,
+                            ((v.getX()>>4)-1)*16+24, y, ((v.getZ()>>4)-1)*16+24);
                     newRoom.setRoomPopulator(cavePopulator);
                     gen.getRooms().add(newRoom);
                     return newRoom;
@@ -142,23 +147,6 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-/*        MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-
-        int[] spawnCoords = mc.getCenterBiomeSectionBlockCoords();
-
-        int x = spawnCoords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
-        Random rand = tw.getHashedRand(x, z, 999323);
-
-        int highest = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, x, z);
-        int rY = (highest - 20) / 2; //5 block padding bottom, 15 padding top.
-        int y = rY+6; //Center near 0,
-
-        switch(rand.nextInt(3)) {
-            case 0 -> new GenericLargeCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
-            case 1 -> new MushroomCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
-            default -> new LargeLushCavePopulator().createLargeCave(tw, rand, data, rY, x, rY + 6, z);
-        }*/
     }
 
     private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {

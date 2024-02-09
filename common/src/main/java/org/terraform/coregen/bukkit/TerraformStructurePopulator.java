@@ -71,6 +71,9 @@ public class TerraformStructurePopulator extends BlockPopulator {
             jigsawCache.put(mc, state);
         }
 
+        //Check if the room will be in range
+        if(!state.isInRange(chunkX, chunkZ)) return;
+
         PopulatorDataAbstract data = new PopulatorDataSpigotAPI(lr, tw, chunkX, chunkZ);
 
         //Carve each path

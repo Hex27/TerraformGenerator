@@ -119,8 +119,6 @@ public class SphereBuilder {
 
 	/**
 	 * Refers to minimum percentage radius (0.0 to 1.0)
-	 * @param minRadius
-	 * @return
 	 */
 	public SphereBuilder setMaxRadius(double maxRadius) {
 		this.maxRadius = maxRadius;

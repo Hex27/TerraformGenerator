@@ -8,12 +8,14 @@ import org.bukkit.block.data.type.SeaPickle;
 import org.bukkit.util.Vector;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.StalactiteBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -27,42 +29,6 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
         super(rand, forceSpawn, unique);
     }
 
-    public static void stalagmite(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
-
-        //Vector one to two;
-        Vector base = new Vector(x, y, z);
-        Vector base2 = new Vector(x, y + height, z);
-        Vector v = base2.subtract(base);
-        v.clone().multiply(1 / v.length());
-        SimpleBlock one = new SimpleBlock(data, x, y, z);
-        double radius = baseRadius;
-        for (int i = 0; i <= height; i++) {
-            Vector seg = v.clone().multiply((float) i / ((float) height));
-            SimpleBlock segment = one.getRelative(seg);
-
-            BlockUtils.replaceSphere((int) (tw.getSeed() * 12), (float) radius, 2, (float) radius, segment, false, false, BlockUtils.stoneOrSlate(y));
-            radius = ((double) baseRadius) * (1 - ((double) i) / ((double) height));
-        }
-    }
-
-    public static void stalactite(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
-
-        //Vector one to two;
-        Vector base = new Vector(x, y, z);
-        Vector base2 = new Vector(x, y - height, z);
-        Vector v = base2.subtract(base);
-        v.clone().multiply(1 / v.length());
-        SimpleBlock one = new SimpleBlock(data, x, y, z);
-        double radius = baseRadius;
-        for (int i = 0; i <= height; i++) {
-            Vector seg = v.clone().multiply((float) i / ((float) height));
-            SimpleBlock segment = one.getRelative(seg);
-
-            BlockUtils.replaceSphere((int) (tw.getSeed() * 12), (float) radius, 2, (float) radius, segment, false, false, Material.STONE);
-            radius = ((double) baseRadius) * (1 - ((double) i) / ((double) height));
-        }
-    }
-
     protected void populateFloor(SimpleBlock floor, int waterLevel){}
     protected void populateCeil(SimpleBlock ceil){}
     protected void populateCeilFloorPair(SimpleBlock ceil, SimpleBlock floor, int height){
@@ -71,7 +37,9 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
         {
             int r = 2;
             int h = GenUtils.randInt(rand, height/4, (int) ((3f / 2f) * (height/2f)));
-            stalactite(ceil.getPopData().getTerraformWorld(), rand, ceil.getPopData(), ceil.getX(), ceil.getY(), ceil.getZ(), r, h);
+            new StalactiteBuilder(BlockUtils.stoneOrSlateWall(ceil.getY()))
+                    .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
+                    .makeSpike(rand, ceil, r, h, false);
         }
 
         //Stalagmites
@@ -79,7 +47,9 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
         {
             int r = 2;
             int h = GenUtils.randInt(rand, height/4, (int) ((3f / 2f) * (height/2f)));
-            stalagmite(ceil.getPopData().getTerraformWorld(), rand, ceil.getPopData(), floor.getX(), floor.getY(), floor.getZ(), r, h);
+            new StalactiteBuilder(BlockUtils.stoneOrSlateWall(floor.getY()))
+                    .setSolidBlockType(BlockUtils.stoneOrSlate(floor.getY()))
+                    .makeSpike(rand, floor, r, h, true);
         }
 
         //Sea pickles

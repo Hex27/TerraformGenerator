@@ -1437,6 +1437,12 @@ public class BlockUtils {
                 y < -3 ? Material.DEEPSLATE :
                 GenUtils.randMaterial(Material.STONE, Material.DEEPSLATE);
     }
+    public static Material stoneOrSlateWall(int y)
+    {
+        return y > 0 ? Material.COBBLESTONE_WALL :
+                y < -3 ? Material.COBBLED_DEEPSLATE_WALL :
+                        GenUtils.randMaterial(Material.COBBLESTONE_WALL, Material.COBBLED_DEEPSLATE_WALL);
+    }
 
     public static void upLPointedDripstone(int height, SimpleBlock base) {
         int realHeight = 0;

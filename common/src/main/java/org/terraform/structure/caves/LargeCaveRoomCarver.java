@@ -3,7 +3,6 @@ package org.terraform.structure.caves;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Material;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.carver.RoomCarver;

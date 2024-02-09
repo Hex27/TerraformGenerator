@@ -13,6 +13,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
+import org.terraform.utils.StalactiteBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -78,7 +79,9 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
         {
             int r = 2;
             int h = GenUtils.randInt(rand, 6*waterDepth, (int) ((3f / 2f) * (6*waterDepth)));
-            stalagmite(floor.getPopData().getTerraformWorld(), rand, floor.getPopData(), floor.getX(), floor.getY(), floor.getZ(), r, h);
+            new StalactiteBuilder(BlockUtils.stoneOrSlateWall(floor.getY()))
+                    .setSolidBlockType(BlockUtils.stoneOrSlate(floor.getY()))
+                    .makeSpike(rand, floor, r, h, true);
         }
     }
     @Override
@@ -94,7 +97,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
         if(cutoff <= 0) return; //give up.
 
         //Invoke OneUnit from the lush cave populator
-        new LushClusterCavePopulator(10, false)
+        new LushClusterCavePopulator(10, true)
                 .oneUnit(tw, new Random(), ceil, floor, false);
 
         //Spawn potential stalactites and stalagmites
@@ -102,7 +105,9 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
         {
             int r = 2;
             int h = GenUtils.randInt(rand, (int) (height/2.5f), (int) ((3f / 2f) * (height/2.5f)));
-            stalactite(ceil.getPopData().getTerraformWorld(), rand, ceil.getPopData(), ceil.getX(), ceil.getY(), ceil.getZ(), r, h);
+            new StalactiteBuilder(BlockUtils.stoneOrSlateWall(ceil.getY()))
+                    .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
+                    .makeSpike(rand, ceil, r, h, false);
         }
 
         //set biome
