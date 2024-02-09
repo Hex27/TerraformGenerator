@@ -100,8 +100,14 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
                     .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
                     .makeSpike(rand, ceil, r, h, false);
         }
-        else if(floor.getType() == Material.MYCELIUM
-            && newHeight >= 15 && GenUtils.chance(rand, 1, 150))
+
+        This does not work properly. Come back and fucking fix this later
+        //Check boundaries - the mushrooms are huge and will cut into bordering areas
+        //and unlike stalactites, look especially fucking bad doing so
+        else if(floor.getChunkX() == floor.getPopData().getChunkX()
+            && floor.getChunkZ() == floor.getPopData().getChunkZ()
+            && floor.getType() == Material.MYCELIUM
+            && newHeight >= 15 && GenUtils.chance(rand, 1, 110))
         {
             //Big Mushrooms
             new MushroomBuilder(Objects.requireNonNull(

@@ -99,12 +99,17 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
             //Process v
             LargeCaveRoomPiece caveRoom = chunkToRoom.computeIfAbsent(
-                new SimpleChunkLocation(tw.getName(), v.getX()>>4, v.getZ()>>4),
+                new SimpleChunkLocation(tw.getName(),
+                        GenUtils.getTripleChunk(v.getX()>>4),
+                        GenUtils.getTripleChunk(v.getZ()>>4)),
                 (loc)->{
                     //Each room is 48x48 blocks wide to ensure that rooms do not carve over
                     //one another when writing outside their bounds.
-                    LargeCaveRoomPiece newRoom = new LargeCaveRoomPiece(47, 47, 15,
-                            ((v.getX()>>4)-1)*16+24, y, ((v.getZ()>>4)-1)*16+24);
+                    LargeCaveRoomPiece newRoom = new LargeCaveRoomPiece(
+                            15, 15, 15,
+                            GenUtils.getTripleChunk(v.getX()>>4)*16+8,
+                            y,
+                            GenUtils.getTripleChunk(v.getZ()>>4)*16+8);
                     newRoom.setRoomPopulator(cavePopulator);
                     gen.getRooms().add(newRoom);
                     return newRoom;

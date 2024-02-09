@@ -66,7 +66,9 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
     public void populate(PopulatorDataAbstract data, CubeRoom room) {
         if(!(room instanceof LargeCaveRoomPiece caveRoom))
             throw new NotImplementedException("room for LargeCavePopulator was not a LargeCaveRoomPiece");
-
+        assert data.getChunkX() == room.getX()>>4;
+        assert data.getChunkZ() == room.getZ()>>4;
+        //TerraformGeneratorPlugin.logger.info("Populating at " + room.getX() + " " + room.getZ());
         caveRoom.ceilFloorPairs.forEach((l, pair)->{
             if(pair[0] != null) populateCeil(new SimpleBlock(data, pair[0]));
             if(pair[1] != null) populateFloor(new SimpleBlock(data, pair[1]), caveRoom.waterLevel);

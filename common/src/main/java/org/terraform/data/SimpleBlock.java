@@ -268,11 +268,11 @@ public class SimpleBlock {
     }
 
     public int getChunkX() {
-        return x / 16;
+        return x >> 4;
     }
 
     public int getChunkZ() {
-        return z / 16;
+        return z >> 4;
     }
 
     public SimpleChunkLocation getSChunk(String world) {
