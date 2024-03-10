@@ -89,12 +89,17 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     }
 
     @Override
-    public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
-        //i trust this is in the region.
-        setType(rawX,rawY,rawZ,Material.SPAWNER);
-        CreatureSpawner spawner = (CreatureSpawner) lr.getBlockState(rawX,rawY,rawZ);
-        spawner.setSpawnedType(type);
-        spawner.update(true,false);
+    public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {        setType(rawX,rawY,rawZ,Material.SPAWNER);
+        try{
+            //This will give class cast exception sometimes. I'm not sure why.
+            //Additionally, if rawX/rawZ is outside the region, this will correctly
+            //throw an error
+            CreatureSpawner spawner = (CreatureSpawner) lr.getBlockState(rawX,rawY,rawZ);
+            spawner.setSpawnedType(type);
+            spawner.update(true,false);
+        }catch(ClassCastException e){
+            TerraformGeneratorPlugin.logger.info("Failed to set spawner at " + rawX + "," + rawY + "," + rawZ);
+        }
     }
 
     @Override
