@@ -856,7 +856,7 @@ public class FractalTreeBuilder {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
 
                     if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        rel.setType(type);
+                        rel.rsetType(fractalLeaves.material, type);
                         if(Tag.WALLS.isTagged(type))
                         	BlockUtils.correctMultifacingData(rel);
                         if (coralDecoration) {

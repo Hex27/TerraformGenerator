@@ -785,4 +785,8 @@ public class SimpleBlock {
     public String toString() {
     	return x + "," + y + "," + z;
     }
+
+    public void rsetType(Material[] toReplace, Material... type) {
+        popData.rsetType(this.toVector(),toReplace,type);
+    }
 }

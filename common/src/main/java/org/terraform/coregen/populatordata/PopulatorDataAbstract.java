@@ -1,5 +1,6 @@
 package org.terraform.coregen.populatordata;
 
+import java.util.EnumSet;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -19,6 +20,9 @@ public abstract class PopulatorDataAbstract {
      * @return
      */
     public abstract Material getType(int x, int y, int z);
+    public Material getType(Vector v){
+        return getType((int)Math.round(v.getX()),(int)Math.round(v.getY()),(int)Math.round(v.getZ()));
+    }
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
@@ -46,15 +50,40 @@ public abstract class PopulatorDataAbstract {
     /**
      * This method will ROUND vector coordinates. Be very aware of that.
      */
-    public void setType(Vector add, Material mat) {
+    public void setType(Vector add, Material... mat) {
         setType((int)Math.round(add.getX()),
                 (int)Math.round(add.getY()),
                 (int)Math.round(add.getZ()), mat);
     }
-    
-    public void lsetType(int x, int y, int z, Material type) {
-    	if(!getType(x,y,z).isSolid())
-    		setType(x,y,z,type);
+
+    public void lsetType(int x, int y, int z, Material... type) {
+        if(!getType(x,y,z).isSolid())
+            setType(x,y,z,type);
+    }
+    public void lsetType(Vector v, Material... type) {
+        if(!getType(v).isSolid())
+            setType(v,type);
+    }
+
+    /**
+     * Set the material at the location if the current material is in replaceable,
+     * or if the current material is not solid.
+     */
+    public void rsetType(Vector v, Material[] replaceable, Material... toSet)
+    {
+        Material mat = getType(v);
+        if(!mat.isSolid()){
+            setType(v,toSet);
+            return;
+        }
+
+        for(Material r:replaceable){
+            if(mat == r)
+            {
+                setType(v,toSet);
+                break;
+            }
+        }
     }
     
     /**

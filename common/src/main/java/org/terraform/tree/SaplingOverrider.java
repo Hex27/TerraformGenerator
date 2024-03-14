@@ -1,13 +1,16 @@
 package org.terraform.tree;
 
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.TreeType;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
@@ -17,7 +20,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SaplingOverrider implements Listener {
-    @EventHandler(ignoreCancelled = true)
+
+    /**
+     * Use priority highest to allow other plugins to modify event.getBlocks
+    */
+    @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTreeGrow(StructureGrowEvent event) {
         if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
         TerraformWorld tw = TerraformWorld.get(event.getWorld());
@@ -25,6 +32,7 @@ public class SaplingOverrider implements Listener {
         int x = event.getLocation().getBlockX();
         int y = event.getLocation().getBlockY();
         int z = event.getLocation().getBlockZ();
+        boolean wasCancelled = event.isCancelled();
         event.setCancelled(true);
 
         boolean isLarge = event.getBlocks().size() > 150;
@@ -47,9 +55,8 @@ public class SaplingOverrider implements Listener {
                         .build(tw, data, x, y, z);
                 break;
             case OAK_LEAVES:
-                new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL)
-                        .skipGradientCheck()
-                        .build(tw, data, x, y, z);
+                FractalTypes.Tree.NORMAL_SMALL
+                        .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
                 break;
             case BIRCH_LEAVES:
                 new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL)
@@ -67,14 +74,23 @@ public class SaplingOverrider implements Listener {
                     TreeDB.spawnSmallJungleTree(true, tw, data, x, y, z);
                 break;
             case DARK_OAK_LEAVES:
-                new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
-                        .skipGradientCheck()
-                        .build(tw, data, x, y, z);
+                FractalTypes.Tree.DARK_OAK_SMALL
+                        .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
                 break;
             case SPRUCE_LEAVES:
-                new FractalTreeBuilder(FractalTypes.Tree.TAIGA_SMALL)
-                        .skipGradientCheck()
-                        .build(tw, data, x, y, z);
+                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean()
+                        && isLarge)
+                {
+                    FractalTypes.Tree.TAIGA_BIG
+                            .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
+                    //Set the original podzol radius
+                    event.getBlocks().stream()
+                            .filter((b) -> b.getType() == Material.PODZOL)
+                            .forEach((b)->data.setType(b.getX(),b.getY(),b.getZ(),b.getType()));
+                }
+                else
+                    FractalTypes.Tree.TAIGA_SMALL
+                        .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
                 break;
             default:
                 if(baseBlock.getType() == OneTwentyBlockHandler.CHERRY_LEAVES)
@@ -85,7 +101,7 @@ public class SaplingOverrider implements Listener {
                     return;
                 }
                 //Not handled by TG
-                event.setCancelled(false);
+                event.setCancelled(wasCancelled);
                 break;
         }
     }

@@ -375,7 +375,7 @@ public class NewFractalTreeBuilder implements Cloneable {
     {
         if(radius <= 0.5f)
         {
-            data.setType(centre, branchMaterial);
+            data.rsetType(centre, fractalLeaves.material,  branchMaterial);
             return new SimpleBlock(data, centre);
         }
 
@@ -422,9 +422,10 @@ public class NewFractalTreeBuilder implements Cloneable {
                 {
                     //Re-convert coordinates from (A,B) to (x,y,z)
                     //As a recap, (1,1,A), (B,1,1)
-                    data.setType(centre.clone()
+                    data.rsetType(centre.clone()
                                     .add(A.clone().multiply(rA))
                                     .add(B.clone().multiply(rB)),
+                            fractalLeaves.material,
                             branchMaterial);
                     didNotGenerate = false;
 
@@ -441,7 +442,7 @@ public class NewFractalTreeBuilder implements Cloneable {
             }
 
         if(didNotGenerate)
-            data.setType(centre, branchMaterial);
+            data.rsetType(centre, fractalLeaves.material, branchMaterial);
 
         return new SimpleBlock(data, centre);
     }

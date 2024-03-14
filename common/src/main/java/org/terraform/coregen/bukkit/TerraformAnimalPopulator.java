@@ -107,6 +107,10 @@ public class TerraformAnimalPopulator extends BlockPopulator {
             new AnimalPopulator(EntityType.TROPICAL_FISH, TConfigOption.ANIMALS_TROPICALFISH_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_TROPICALFISH_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_TROPICALFISH_CHANCE.getInt(), true, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.CORAL_REEF_OCEAN, BiomeBank.DEEP_LUKEWARM_OCEAN, BiomeBank.WARM_OCEAN)
             .setAquatic(true),
+
+            new AnimalPopulator(EntityType.MUSHROOM_COW, TConfigOption.ANIMALS_MOOSHROOM_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_MOOSHROOM_MAXHERDSIZE.getInt(),
+                    TConfigOption.ANIMALS_MOOSHROOM_CHANCE.getInt(), true, BiomeBank.MUSHROOM_BEACH, BiomeBank.MUSHROOM_ISLANDS),
+
     };
     
     public TerraformAnimalPopulator(TerraformWorld tw) {
@@ -121,18 +125,12 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     public void populate(World world, Random random, Chunk chunk) {
        
     	PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
-        //ArrayList<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, chunk.getX(),chunk.getZ());
 
-    	//wtf was this set for
-        //Set<EntityType> spawned = EnumSet.noneOf(EntityType.class);
-        //TerraformGeneratorPlugin.logger.debug("animal-populator eval for " + data.getChunkX() + "," + data.getChunkZ());
-        for (AnimalPopulator pop : ANIMAL_POPULATORS) {
+    	for (AnimalPopulator pop : ANIMAL_POPULATORS) {
         	if(pop == null) continue;
             if (pop.canSpawn(tw.getHashedRand(chunk.getX(), pop.hashCode(), chunk.getZ()))) {
-                //TerraformGeneratorPlugin.logger.debug("animal populator proc");
                 pop.populate(tw, tw.getHashedRand(chunk.getX(), 111+pop.hashCode(), chunk.getZ()), data);
             }
         }
-        //spawned.clear();
     }
 }
