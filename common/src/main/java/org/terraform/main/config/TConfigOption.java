@@ -266,6 +266,10 @@ public enum TConfigOption {
     ANIMALS_COW_MINHERDSIZE("animals.cow.min-herd-size", 4),
     ANIMALS_COW_MAXHERDSIZE("animals.cow.max-herd-size", 12),
     ANIMALS_COW_CHANCE("animals.cow.chance", 2),
+    //MOOSHROOM
+    ANIMALS_MOOSHROOM_MINHERDSIZE("animals.mooshroom.min-herd-size", 2),
+    ANIMALS_MOOSHROOM_MAXHERDSIZE("animals.mooshroom.max-herd-size", 6),
+    ANIMALS_MOOSHROOM_CHANCE("animals.mooshroom.chance", 10),
     //SHEEP
     ANIMALS_SHEEP_MINHERDSIZE("animals.sheep.min-herd-size", 2),
     ANIMALS_SHEEP_MAXHERDSIZE("animals.sheep.max-herd-size", 8),

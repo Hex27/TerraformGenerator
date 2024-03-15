@@ -1,5 +1,6 @@
 package org.terraform.coregen.populatordata;
 
+import java.util.EnumSet;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -13,28 +14,19 @@ import org.terraform.data.TerraformWorld;
 public abstract class PopulatorDataAbstract {
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public abstract Material getType(int x, int y, int z);
+    public Material getType(Vector v){
+        return getType((int)Math.round(v.getX()),(int)Math.round(v.getY()),(int)Math.round(v.getZ()));
+    }
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public abstract BlockData getBlockData(int x, int y, int z);
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public abstract void setType(int x, int y, int z, Material type);
     
@@ -46,29 +38,52 @@ public abstract class PopulatorDataAbstract {
     /**
      * This method will ROUND vector coordinates. Be very aware of that.
      */
-    public void setType(Vector add, Material mat) {
+    public void setType(Vector add, Material... mat) {
         setType((int)Math.round(add.getX()),
                 (int)Math.round(add.getY()),
                 (int)Math.round(add.getZ()), mat);
     }
-    
-    public void lsetType(int x, int y, int z, Material type) {
-    	if(!getType(x,y,z).isSolid())
-    		setType(x,y,z,type);
+    public void setBlockData(Vector add, BlockData data) {
+        setBlockData((int)Math.round(add.getX()),
+                (int)Math.round(add.getY()),
+                (int)Math.round(add.getZ()), data);
+    }
+
+    public void lsetType(int x, int y, int z, Material... type) {
+        if(!getType(x,y,z).isSolid())
+            setType(x,y,z,type);
+    }
+    public void lsetType(Vector v, Material... type) {
+        if(!getType(v).isSolid())
+            setType(v,type);
+    }
+
+    /**
+     * Set the material at the location if the current material is in
+     * the enum set
+     */
+    public void rsetType(Vector v, EnumSet<Material> replaceable, Material... toSet)
+    {
+        if(!replaceable.contains(getType(v))) return;
+        setType(v, toSet);
+    }
+    /**
+     * Set the material at the location if the current material is in
+     * the enum set
+     */
+    public void rsetBlockData(Vector v, EnumSet<Material> replaceable, BlockData data)
+    {
+        if(!replaceable.contains(getType(v))) return;
+        setBlockData(v, data);
     }
     
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public abstract void setBlockData(int x, int y, int z, BlockData data);
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @return
      */
     public abstract Biome getBiome(int rawX, int rawZ);
 

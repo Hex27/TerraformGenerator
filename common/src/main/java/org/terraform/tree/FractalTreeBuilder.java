@@ -856,7 +856,7 @@ public class FractalTreeBuilder {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
 
                     if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        rel.setType(type);
+                        rel.rsetType(BlockUtils.replacableByTrees, type);
                         if(Tag.WALLS.isTagged(type))
                         	BlockUtils.correctMultifacingData(rel);
                         if (coralDecoration) {
@@ -938,14 +938,14 @@ public class FractalTreeBuilder {
         }
         for (int i = 1; i <= GenUtils.randInt(min, max); i++) {
             if (!block.getRelative(0, -i, 0).getType().isSolid())
-                block.getRelative(0, -i, 0).lsetBlockData(type);
+                block.getRelative(0, -i, 0).rsetBlockData(BlockUtils.replacableByTrees,type);
             else
                 break;
         }
 
         //Log for good measure, as well as some surrounding leaves.
         if (Tag.LEAVES.isTagged(material))
-            block.setType(this.trunkType);
+            block.rsetType(BlockUtils.replacableByTrees,this.trunkType);
         for (BlockFace face : BlockUtils.directBlockFaces) {
         	material = fractalLeaves.material[rand.nextInt(fractalLeaves.material.length)];
         	type = Bukkit.createBlockData(material);
@@ -954,9 +954,9 @@ public class FractalTreeBuilder {
             	leaf.setDistance(1);
         	}
             
-            block.getRelative(face).lsetBlockData(type);
+            block.getRelative(face).rsetBlockData(BlockUtils.replacableByTrees,type);
         }
-        block.getRelative(0, 1, 0).lsetBlockData(type);
+        block.getRelative(0, 1, 0).rsetBlockData(BlockUtils.replacableByTrees, type);
     }
 
     public FractalTreeBuilder setSnowyLeaves(boolean snowy) {

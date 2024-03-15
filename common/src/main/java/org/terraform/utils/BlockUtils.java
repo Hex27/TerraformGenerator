@@ -36,6 +36,7 @@ import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
@@ -67,7 +68,51 @@ public class BlockUtils {
     			glassPanes.add(mat);
     	}
 	}
-	
+
+    //This is needed as REPLACABLE_BY_TREES is a 1.20 tag.
+    //Also this has mushrooms and saplings.
+    public static final EnumSet<Material> replacableByTrees = EnumSet.of(
+            Material.ACACIA_SAPLING,
+            Material.DARK_OAK_SAPLING,
+            Material.BIRCH_SAPLING,
+            Material.SPRUCE_SAPLING,
+            Material.JUNGLE_SAPLING,
+            Material.OAK_SAPLING,
+            OneTwentyBlockHandler.CHERRY_SAPLING,
+            Material.ACACIA_LEAVES,
+            Material.AZALEA_LEAVES,
+            Material.DARK_OAK_LEAVES,
+            Material.BIRCH_LEAVES,
+            Material.SPRUCE_LEAVES,
+            Material.JUNGLE_LEAVES,
+            Material.OAK_LEAVES,
+            OneTwentyBlockHandler.CHERRY_LEAVES,
+            Material.FLOWERING_AZALEA_LEAVES,
+            Material.BROWN_MUSHROOM,
+            Material.RED_MUSHROOM,
+            Material.GRASS,
+            Material.FERN,
+            Material.DEAD_BUSH,
+            Material.VINE,
+            Material.GLOW_LICHEN,
+            Material.SUNFLOWER,
+            Material.LILAC,
+            Material.ROSE_BUSH,
+            Material.PEONY,
+            Material.TALL_GRASS,
+            Material.LARGE_FERN,
+            Material.HANGING_ROOTS,
+            OneTwentyBlockHandler.PITCHER_PLANT,
+            Material.WATER,
+            Material.AIR,
+            Material.CAVE_AIR,
+            Material.SEAGRASS,
+            Material.TALL_SEAGRASS,
+            Material.WARPED_ROOTS,
+            Material.NETHER_SPROUTS,
+            Material.CRIMSON_ROOTS
+    );
+
     // N
     //W E
     // S

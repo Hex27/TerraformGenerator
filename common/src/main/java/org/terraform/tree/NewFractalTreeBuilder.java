@@ -7,6 +7,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
@@ -375,7 +376,7 @@ public class NewFractalTreeBuilder implements Cloneable {
     {
         if(radius <= 0.5f)
         {
-            data.setType(centre, branchMaterial);
+            data.rsetType(centre, BlockUtils.replacableByTrees,  branchMaterial);
             return new SimpleBlock(data, centre);
         }
 
@@ -422,9 +423,10 @@ public class NewFractalTreeBuilder implements Cloneable {
                 {
                     //Re-convert coordinates from (A,B) to (x,y,z)
                     //As a recap, (1,1,A), (B,1,1)
-                    data.setType(centre.clone()
+                    data.rsetType(centre.clone()
                                     .add(A.clone().multiply(rA))
                                     .add(B.clone().multiply(rB)),
+                            BlockUtils.replacableByTrees,
                             branchMaterial);
                     didNotGenerate = false;
 
@@ -441,7 +443,7 @@ public class NewFractalTreeBuilder implements Cloneable {
             }
 
         if(didNotGenerate)
-            data.setType(centre, branchMaterial);
+            data.rsetType(centre, BlockUtils.replacableByTrees, branchMaterial);
 
         return new SimpleBlock(data, centre);
     }
