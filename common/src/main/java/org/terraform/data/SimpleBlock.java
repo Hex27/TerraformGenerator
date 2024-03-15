@@ -3,6 +3,7 @@ package org.terraform.data;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -786,7 +787,10 @@ public class SimpleBlock {
     	return x + "," + y + "," + z;
     }
 
-    public void rsetType(Material[] toReplace, Material... type) {
+    public void rsetType(EnumSet<Material> toReplace, Material... type) {
         popData.rsetType(this.toVector(),toReplace,type);
+    }
+    public void rsetBlockData(EnumSet<Material> toReplace, BlockData data) {
+        popData.rsetBlockData(this.toVector(),toReplace,data);
     }
 }

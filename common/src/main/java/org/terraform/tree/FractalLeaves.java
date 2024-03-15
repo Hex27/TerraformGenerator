@@ -103,10 +103,6 @@ public class FractalLeaves implements Cloneable{
 
         //Initialise noise to be used in randomising the sphere
         float noiseMultiplier = leafNoiseMultiplier;
-
-        double maxR = radiusX;
-        if (radiusX < radiusY) maxR = radiusY;
-        if (radiusY < radiusZ) maxR = radiusZ;
         int minRadiusY = -Math.round(radiusY);
         if(semiSphereLeaves) minRadiusY = 0;
         ArrayList<SimpleBlock> changed = new ArrayList<>();
@@ -157,7 +153,7 @@ public class FractalLeaves implements Cloneable{
 
                         if(mangrovePropagules && Version.isAtLeast(19) && !BlockUtils.isWet(relativeBlock.getDown())) {
                         	 if (GenUtils.chance(1, 50)) {
-                                 relativeBlock.getDown().lsetBlockData(OneOneNineBlockHandler.getHangingMangrovePropagule());
+                                 relativeBlock.getDown().rsetBlockData(BlockUtils.replacableByTrees, OneOneNineBlockHandler.getHangingMangrovePropagule());
                              }
                         }
 
@@ -231,9 +227,9 @@ public class FractalLeaves implements Cloneable{
         if (Tag.LEAVES.isTagged(material)) {
             Leaves leaf = (Leaves) Bukkit.createBlockData(material);
             leaf.setDistance(1);
-            relativeBlock.lsetBlockData(leaf);
+            relativeBlock.rsetBlockData(BlockUtils.replacableByTrees, leaf);
         } else {
-            relativeBlock.lsetType(material);
+            relativeBlock.rsetType(BlockUtils.replacableByTrees,material);
         }
     }
 
@@ -247,7 +243,7 @@ public class FractalLeaves implements Cloneable{
 
         for (int i = 1; i <= GenUtils.randInt(minDist, maxDist); i++) {
             if (BlockUtils.isAir(base.getRelative(0, -i, 0).getType()))
-                base.getRelative(0, -i, 0).lsetBlockData(type);
+                base.getRelative(0, -i, 0).rsetBlockData(BlockUtils.replacableByTrees, type);
             else
                 break;
         }
@@ -377,7 +373,6 @@ public class FractalLeaves implements Cloneable{
 
     @Override
     public FractalLeaves clone() throws CloneNotSupportedException{
-        FractalLeaves clone = (FractalLeaves) super.clone();
-        return clone;
+        return (FractalLeaves) super.clone();
     }
 }

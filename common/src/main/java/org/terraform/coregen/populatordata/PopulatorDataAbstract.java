@@ -14,10 +14,6 @@ import org.terraform.data.TerraformWorld;
 public abstract class PopulatorDataAbstract {
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public abstract Material getType(int x, int y, int z);
     public Material getType(Vector v){
@@ -26,19 +22,11 @@ public abstract class PopulatorDataAbstract {
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public abstract BlockData getBlockData(int x, int y, int z);
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public abstract void setType(int x, int y, int z, Material type);
     
@@ -55,6 +43,11 @@ public abstract class PopulatorDataAbstract {
                 (int)Math.round(add.getY()),
                 (int)Math.round(add.getZ()), mat);
     }
+    public void setBlockData(Vector add, BlockData data) {
+        setBlockData((int)Math.round(add.getX()),
+                (int)Math.round(add.getY()),
+                (int)Math.round(add.getZ()), data);
+    }
 
     public void lsetType(int x, int y, int z, Material... type) {
         if(!getType(x,y,z).isSolid())
@@ -66,38 +59,31 @@ public abstract class PopulatorDataAbstract {
     }
 
     /**
-     * Set the material at the location if the current material is in replaceable,
-     * or if the current material is not solid.
+     * Set the material at the location if the current material is in
+     * the enum set
      */
-    public void rsetType(Vector v, Material[] replaceable, Material... toSet)
+    public void rsetType(Vector v, EnumSet<Material> replaceable, Material... toSet)
     {
-        Material mat = getType(v);
-        if(!mat.isSolid()){
-            setType(v,toSet);
-            return;
-        }
-
-        for(Material r:replaceable){
-            if(mat == r)
-            {
-                setType(v,toSet);
-                break;
-            }
-        }
+        if(!replaceable.contains(getType(v))) return;
+        setType(v, toSet);
+    }
+    /**
+     * Set the material at the location if the current material is in
+     * the enum set
+     */
+    public void rsetBlockData(Vector v, EnumSet<Material> replaceable, BlockData data)
+    {
+        if(!replaceable.contains(getType(v))) return;
+        setBlockData(v, data);
     }
     
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     public abstract void setBlockData(int x, int y, int z, BlockData data);
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
-     * @return
      */
     public abstract Biome getBiome(int rawX, int rawZ);
 
