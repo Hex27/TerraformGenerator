@@ -505,6 +505,6 @@ public class GenUtils {
     public static int getTripleChunk(int chunkCoord){
         if(chunkCoord >= 0) return 1+3*(chunkCoord/3);
 
-        return -1+3*(-1+(chunkCoord+1)/3);
+        return 1+3*(-1+(chunkCoord+1)/3);
     }
 }

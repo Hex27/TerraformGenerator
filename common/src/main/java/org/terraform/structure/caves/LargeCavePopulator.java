@@ -106,10 +106,10 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
                     //Each room is 48x48 blocks wide to ensure that rooms do not carve over
                     //one another when writing outside their bounds.
                     LargeCaveRoomPiece newRoom = new LargeCaveRoomPiece(
-                            15, 15, 15,
-                            GenUtils.getTripleChunk(v.getX()>>4)*16+8,
+                            41, 41, 15,
+                            GenUtils.getTripleChunk(v.getX()>>4)*16+7,
                             y,
-                            GenUtils.getTripleChunk(v.getZ()>>4)*16+8);
+                            GenUtils.getTripleChunk(v.getZ()>>4)*16+7);
                     newRoom.setRoomPopulator(cavePopulator);
                     gen.getRooms().add(newRoom);
                     return newRoom;

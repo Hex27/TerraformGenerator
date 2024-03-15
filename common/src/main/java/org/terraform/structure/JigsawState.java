@@ -36,15 +36,15 @@ public class JigsawState {
                     int[] lowerCorner = room.getLowerCorner();
                     int[] upperCorner = room.getUpperCorner();
                     minChunkX = Math.min(minChunkX, lowerCorner[0]>>4);
-                    maxChunkX = Math.max(minChunkX, upperCorner[0]>>4);
+                    maxChunkX = Math.max(maxChunkX, upperCorner[0]>>4);
                     minChunkZ = Math.min(minChunkX, lowerCorner[1]>>4);
-                    maxChunkZ = Math.max(minChunkX, upperCorner[1]>>4);
+                    maxChunkZ = Math.max(maxChunkX, upperCorner[1]>>4);
                 });
 
                 minChunkX = Math.min(minChunkX, (gen.getCentX()-gen.getRange())>>4);
-                maxChunkX = Math.max(minChunkX, (gen.getCentX()+gen.getRange())>>4);
+                maxChunkX = Math.max(maxChunkX, (gen.getCentX()+gen.getRange())>>4);
                 minChunkZ = Math.min(minChunkZ, (gen.getCentZ()-gen.getRange())>>4);
-                maxChunkZ = Math.max(minChunkZ, (gen.getCentZ()+gen.getRange())>>4);
+                maxChunkZ = Math.max(maxChunkZ, (gen.getCentZ()+gen.getRange())>>4);
             });
         }
 

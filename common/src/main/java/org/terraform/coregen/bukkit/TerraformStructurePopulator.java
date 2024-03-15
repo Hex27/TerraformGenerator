@@ -94,7 +94,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         state.roomPopulatorStates.forEach(roomLayoutGenerator ->
                 roomLayoutGenerator.getRooms().stream()
                 //No rooms that have bounds beyond LR
-                .filter(room-> room.isInRegion(lr))
+                .filter(room->room.isInRegion(lr))
                 .forEach(room->
                 {
                     seenRooms.add(room);

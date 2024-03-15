@@ -101,7 +101,6 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
                     .makeSpike(rand, ceil, r, h, false);
         }
 
-        This does not work properly. Come back and fucking fix this later
         //Check boundaries - the mushrooms are huge and will cut into bordering areas
         //and unlike stalactites, look especially fucking bad doing so
         else if(floor.getChunkX() == floor.getPopData().getChunkX()

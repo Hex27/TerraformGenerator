@@ -1,13 +1,9 @@
 package org.terraform.structure.caves;
 
-import com.sun.source.tree.ArrayAccessTree;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.structure.room.CubeRoom;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class LargeCaveRoomPiece extends CubeRoom {
 

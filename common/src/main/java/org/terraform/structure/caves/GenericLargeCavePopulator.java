@@ -3,23 +3,14 @@ package org.terraform.structure.caves;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.SeaPickle;
-import org.bukkit.util.Vector;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleChunkLocation;
-import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StalactiteBuilder;
-import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.noise.NoiseCacheHandler;
-import org.terraform.utils.noise.FastNoise.NoiseType;
-import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
 
@@ -68,7 +59,7 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
             throw new NotImplementedException("room for LargeCavePopulator was not a LargeCaveRoomPiece");
         assert data.getChunkX() == room.getX()>>4;
         assert data.getChunkZ() == room.getZ()>>4;
-        //TerraformGeneratorPlugin.logger.info("Populating at " + room.getX() + " " + room.getZ());
+
         caveRoom.ceilFloorPairs.forEach((l, pair)->{
             if(pair[0] != null) populateCeil(new SimpleBlock(data, pair[0]));
             if(pair[1] != null) populateFloor(new SimpleBlock(data, pair[1]), caveRoom.waterLevel);
