@@ -101,7 +101,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         
         gen.setCarveRooms(true);
         gen.setCarveRoomsMultiplier(1.5f, 2f, 1.5f);
-        gen.generate();
+        gen.calculateRoomPlacement();
         //gen.fill(data, tw, Material.CAVE_AIR);
         gen.carvePathsOnly(data, tw, Material.CAVE_AIR);
         gen.carveRoomsOnly(data, tw, Material.CAVE_AIR);

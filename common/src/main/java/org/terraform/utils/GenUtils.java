@@ -497,4 +497,14 @@ public class GenUtils {
         if(array.length == 1) return array[0];
         return array[rand.nextInt(array.length)];
     }
+
+    /**
+     * Gets the center chunk of a hypothetically split limited region of 3x3 chunks
+     * @return a chunk coordinate
+     */
+    public static int getTripleChunk(int chunkCoord){
+        if(chunkCoord >= 0) return 1+3*(chunkCoord/3);
+
+        return 1+3*(-1+(chunkCoord+1)/3);
+    }
 }

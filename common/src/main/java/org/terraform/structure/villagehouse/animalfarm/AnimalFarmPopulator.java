@@ -104,7 +104,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
         gen.setRoomMaxHeight(1);
         gen.getRooms().add(new CubeRoom(20, 20, 30, x, y, z));
 
-        gen.generate();
+        gen.calculateRoomPlacement();
 
         FastNoise fieldNoise = new FastNoise(tw.getHashedRand(x, y, z, 23).nextInt(225));
         fieldNoise.SetNoiseType(NoiseType.Simplex);

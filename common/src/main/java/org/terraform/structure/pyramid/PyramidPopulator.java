@@ -183,7 +183,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         range -= 15;
 
         //Fill Rooms
-        level0.generate(false);
+        level0.calculateRoomPlacement(false);
         level0.fill(data, tw, Material.SANDSTONE, Material.CUT_SANDSTONE);
 
         //ALL LEVEL 0 FLOORING IS STONE/COBBLE/ANDESITE. 
@@ -213,11 +213,11 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
             }
         }
 
-        level1.generate(false);
+        level1.calculateRoomPlacement(false);
         //level1.setGenPaths(false);
         level1.fill(data, tw, Material.SANDSTONE, Material.CUT_SANDSTONE);
 
-        level2.generate(false);
+        level2.calculateRoomPlacement(false);
         level2.fill(data, tw, Material.SANDSTONE, Material.CUT_SANDSTONE);
     }
 

@@ -23,6 +23,8 @@ public abstract class JigsawStructurePopulator extends SingleMegaChunkStructureP
      * StructurePopulator to generate structures.
      */
     public abstract JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc);
+
+
     /**
      * Override this and do nothing for compatibility's sake
      */
@@ -30,5 +32,6 @@ public abstract class JigsawStructurePopulator extends SingleMegaChunkStructureP
     {
 
     }
+
 
 }

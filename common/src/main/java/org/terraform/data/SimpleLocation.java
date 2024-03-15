@@ -186,4 +186,7 @@ public class SimpleLocation {
     }
 
 
+    public SimpleLocation getAtY(int newy) {
+        return new SimpleLocation(x,newy,z);
+    }
 }

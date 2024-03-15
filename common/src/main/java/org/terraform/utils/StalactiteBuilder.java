@@ -1,11 +1,14 @@
 package org.terraform.utils;
 
-import java.util.Random;
-
 import org.bukkit.Material;
-import org.bukkit.util.Vector;
+import org.bukkit.block.BlockFace;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.Random;
 
 public class StalactiteBuilder {
 
@@ -13,7 +16,8 @@ public class StalactiteBuilder {
 	private Material[] wallType;
 	private boolean isFacingUp;
 	private int verticalSpace;
-	private int minRadius = 0;
+    private float minRadius = 0;
+    private float maxRadius = 3f;
 	
 	public StalactiteBuilder(Material... wallType) {
 		this.wallType = wallType;
@@ -55,11 +59,15 @@ public class StalactiteBuilder {
 			//Large stalactite (8+ blocks)
 			if(isFacingUp)
 			{
-				stalagmite(rand, w, GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),stalactiteHeight);
+				makeSpike(rand, w.getDown(),
+                        GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),
+                        stalactiteHeight, true);
 			}
 			else
 			{
-				stalactite(rand, w, GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),stalactiteHeight);
+                makeSpike(rand, w.getUp(),
+                        GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),
+                        stalactiteHeight, false);
 			}
 		}
 		
@@ -90,42 +98,66 @@ public class StalactiteBuilder {
 		this.verticalSpace = verticalSpace;
 		return this;
 	}
-	
-	public void stalagmite(Random random, Wall w, double baseRadius, int height) {
-		baseRadius = Math.max(baseRadius, minRadius);
-		//Vector one to two;
-		Vector base = new Vector(w.getX(),w.getY(),w.getZ());
-		Vector base2 = new Vector(w.getX(),w.getY()+height,w.getZ());
-		Vector v = base2.subtract(base);
-		v.clone().multiply(1 / v.length());
-		SimpleBlock one = w.get();
-		double radius = baseRadius;
-		for (int i = 0; i <= height; i++) {
-			Vector seg = v.clone().multiply((float) i / ((float) height));
-			SimpleBlock segment = one.getRelative(seg);
-			
-			BlockUtils.replaceSphere(random.nextInt(9999), (float) radius, 2, (float) radius, segment, false, false, solidBlockType);
-			radius = ((double) baseRadius) * (1 - ((double) i) / ((double) height));
-		}
-	}
-	
-	public void stalactite(Random random, Wall w, double baseRadius, int height) {
-		baseRadius = Math.max(baseRadius, minRadius);
-	
-	    //Vector one to two;
-		Vector base = new Vector(w.getX(),w.getY(),w.getZ());
-		Vector base2 = new Vector(w.getX(),w.getY()-height,w.getZ());
-		Vector v = base2.subtract(base);
-		v.clone().multiply(1 / v.length());
-		SimpleBlock one = w.get();
-	    double radius = baseRadius;
-	    for (int i = 0; i <= height; i++) {
-	        Vector seg = v.clone().multiply((float) i / ((float) height));
-	        SimpleBlock segment = one.getRelative(seg);
-	
-	        BlockUtils.replaceSphere(random.nextInt(9999), (float) radius, 2, (float) radius, segment, false, false, solidBlockType);
-	        radius = ((double) baseRadius) * (1 - ((double) i) / ((double) height));
-	    }
+
+    /**
+     * Responsible for generating a stalactite or stalagmite.
+     * @param facingUp generates stalagmites if true. If not, makes stalactites.
+     */
+	public void makeSpike(Random random, SimpleBlock root, double baseRadius, int height, boolean facingUp) {
+
+        //HEIGHT CANNOT BE LESS THAN 1. (1.0/0.0) DOES NOT THROW ARITHMETIC ERRORS
+        if(height < 8) return;
+/*        FastNoise noise = new FastNoise(random.nextInt(1239870));
+        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
+        noise.SetFrequency(0.13f);*/
+
+		baseRadius = Math.min(maxRadius, Math.max(baseRadius, minRadius));
+
+        //Perform a BFS against the cone 3d equation to prevent spheres from overwriting
+        //each other. Should reduce chunk r/w ops
+
+        //Assume that it will use slightly more than coneVolume blocks
+        Queue<SimpleBlock> queue = new ArrayDeque<>((int) (Math.PI*Math.pow(baseRadius,2)*(height/2.5)));
+        queue.add(root);
+        HashSet<SimpleBlock> seen = new HashSet<>();
+        seen.add(root);
+        while(!queue.isEmpty())
+        {
+            SimpleBlock v = queue.remove();
+            v.setType(solidBlockType);
+
+            //Place blocks for v
+            for(BlockFace rel:BlockUtils.sixBlockFaces)
+            {
+                SimpleBlock neighbour = v.getRelative(rel);
+                if(seen.contains(neighbour)) continue;
+
+                int yOffset = neighbour.getY()-root.getY();
+                if(facingUp && (yOffset>height
+                        || yOffset<0)) continue;
+                if(!facingUp && (yOffset<-height
+                        || yOffset>0)) continue;
+                /*
+                 * x^2 + z^2 - ((y-h)/baseRadius)^2 = 0
+                 */
+                double coneEqn = facingUp ?
+                        //Stalagmites. Minus as it grows up
+                        Math.pow(neighbour.getX()-root.getX(),2)
+                        + Math.pow(neighbour.getZ()-root.getZ(),2)
+                        - Math.pow((yOffset-height)/(height/baseRadius), 2)
+                        :
+                        //Stalactites. Plus as it grows down
+                        Math.pow(neighbour.getX()-root.getX(),2)
+                        + Math.pow(neighbour.getZ()-root.getZ(),2)
+                        - Math.pow((yOffset+height)/(height/baseRadius), 2);
+                //Only make cones larger, not smaller. This prevents blobs.
+                //coneEqn -= Math.abs(noise.GetNoise(neighbour.getX(), neighbour.getZ()));
+                if(coneEqn > 0) continue; //<=0 is within the spike
+
+                queue.add(neighbour);
+                seen.add(neighbour);
+            }
+        }
 	}
 	
 }

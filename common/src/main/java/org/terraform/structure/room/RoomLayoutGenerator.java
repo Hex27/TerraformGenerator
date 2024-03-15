@@ -34,6 +34,7 @@ public class RoomLayoutGenerator {
     private final int[] upperBound;
     private final int[] lowerBound;
     private final RoomLayout layout;
+
     boolean genPaths = true;
     private int numRooms;
     private int centX;
@@ -119,8 +120,8 @@ public class RoomLayoutGenerator {
         rooms.clear();
     }
 
-    public void generate() {
-        generate(true);
+    public void calculateRoomPlacement() {
+        calculateRoomPlacement(true);
     }
 
     public void setPyramid(boolean pyramidish) {
@@ -162,7 +163,7 @@ public class RoomLayoutGenerator {
      * Populate with room data.
      * @param normalise
      */
-    public void generate(boolean normalise) {
+    public void calculateRoomPlacement(boolean normalise) {
         for (int i = 0; i < numRooms; i++) {
             int widthX = GenUtils.randInt(rand, roomMinX, roomMaxX);
             int widthZ = GenUtils.randInt(rand, roomMinZ, roomMaxZ);
@@ -672,5 +673,8 @@ public class RoomLayoutGenerator {
 	        		return true;
 	    	}
     	return false;
+    }
+    public boolean genPaths() {
+        return genPaths;
     }
 }

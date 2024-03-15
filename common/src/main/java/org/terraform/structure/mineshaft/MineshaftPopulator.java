@@ -1,19 +1,15 @@
 package org.terraform.structure.mineshaft;
 
 import org.bukkit.Material;
-import org.bukkit.block.Jigsaw;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.bukkit.TerraformGenerator;
-import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.JigsawState;
 import org.terraform.structure.JigsawStructurePopulator;
-import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
@@ -113,7 +109,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
         gen.wallMaterials = new Material[]{Material.CAVE_AIR};
         gen.roomCarver = new CaveRoomCarver();
-        gen.generate();
+        gen.calculateRoomPlacement();
         PathState ps = gen.getOrCalculatePathState(tw);
         ps.writer = new CavePathWriter(0f, 1f, 0f, 0,1,0);
         gen.calculateRoomPopulators(tw);
@@ -148,7 +144,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
             secondGen.wallMaterials = new Material[]{Material.CAVE_AIR};
             secondGen.roomCarver = new CaveRoomCarver();
-            secondGen.generate();
+            secondGen.calculateRoomPlacement();
             ps = secondGen.getOrCalculatePathState(tw);
             ps.writer = new CavePathWriter(0f, 1f, 0f, 0,1,0);
             secondGen.calculateRoomPopulators(tw);

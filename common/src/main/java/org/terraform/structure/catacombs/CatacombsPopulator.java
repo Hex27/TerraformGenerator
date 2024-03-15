@@ -122,7 +122,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
             gen.registerRoomPopulator(new CatacombsStairwayPopulator(random, true, false));
             gen.registerRoomPopulator(new CatacombsDripstoneCavern(random, true, false));
         }
-        gen.generate();
+        gen.calculateRoomPlacement();
         gen.fill(data, tw, Material.CAVE_AIR);
         
         int catacombLevels = 1;
@@ -181,7 +181,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
            
            TerraformGeneratorPlugin.logger.info("Additional Catacombs Level at: " + x + "," + z);
        	
-           gen.generate();
+           gen.calculateRoomPlacement();
            gen.fill(data, tw, Material.CAVE_AIR);
         }
 	}

@@ -1476,6 +1476,19 @@ public class BlockUtils {
         }
     }
 
+    public static Material stoneOrSlate(int y)
+    {
+        return y > 0 ? Material.STONE :
+                y < -3 ? Material.DEEPSLATE :
+                GenUtils.randMaterial(Material.STONE, Material.DEEPSLATE);
+    }
+    public static Material stoneOrSlateWall(int y)
+    {
+        return y > 0 ? Material.COBBLESTONE_WALL :
+                y < -3 ? Material.COBBLED_DEEPSLATE_WALL :
+                        GenUtils.randMaterial(Material.COBBLESTONE_WALL, Material.COBBLED_DEEPSLATE_WALL);
+    }
+
     public static void upLPointedDripstone(int height, SimpleBlock base) {
         int realHeight = 0;
         while(!base.getRelative(0,realHeight,0).getType().isSolid() && height > 0) {

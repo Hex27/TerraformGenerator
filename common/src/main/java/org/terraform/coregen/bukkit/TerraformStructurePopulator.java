@@ -71,6 +71,9 @@ public class TerraformStructurePopulator extends BlockPopulator {
             jigsawCache.put(mc, state);
         }
 
+        //Check if the room will be in range
+        if(!state.isInRange(chunkX, chunkZ)) return;
+
         PopulatorDataAbstract data = new PopulatorDataSpigotAPI(lr, tw, chunkX, chunkZ);
 
         //Carve each path
@@ -91,7 +94,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         state.roomPopulatorStates.forEach(roomLayoutGenerator ->
                 roomLayoutGenerator.getRooms().stream()
                 //No rooms that have bounds beyond LR
-                .filter(room-> room.isInRegion(lr))
+                .filter(room->room.isInRegion(lr))
                 .forEach(room->
                 {
                     seenRooms.add(room);

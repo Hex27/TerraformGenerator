@@ -90,7 +90,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             
             //No paths
             propGenerator.setGenPaths(false);
-            propGenerator.generate();
+            propGenerator.calculateRoomPlacement();
             
             //Remove the placeholder room
             propGenerator.getRooms().remove(placeholder);

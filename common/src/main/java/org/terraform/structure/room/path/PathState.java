@@ -42,6 +42,8 @@ public class PathState {
     {
         this.generator = generator;
         this.tw = tw;
+        if(!generator.genPaths()) return;
+
         PathNode[] baseNodes = new PathNode[generator.getRooms().size()];
         ArrayList<CubeRoom> rooms = new ArrayList<>(generator.getRooms());
 
