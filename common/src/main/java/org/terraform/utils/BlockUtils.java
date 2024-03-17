@@ -70,7 +70,7 @@ public class BlockUtils {
 	}
 
     //This is needed as REPLACABLE_BY_TREES is a 1.20 tag.
-    //Also this has mushrooms and saplings.
+    //Also this has mushrooms and saplings, snow and coral fans
     public static final EnumSet<Material> replacableByTrees = EnumSet.of(
             Material.ACACIA_SAPLING,
             Material.DARK_OAK_SAPLING,
@@ -110,7 +110,28 @@ public class BlockUtils {
             Material.TALL_SEAGRASS,
             Material.WARPED_ROOTS,
             Material.NETHER_SPROUTS,
-            Material.CRIMSON_ROOTS
+            Material.CRIMSON_ROOTS,
+            Material.SNOW,
+            Material.BRAIN_CORAL_FAN,
+            Material.BUBBLE_CORAL_FAN,
+            Material.FIRE_CORAL_FAN,
+            Material.HORN_CORAL_FAN,
+            Material.TUBE_CORAL_FAN,
+            Material.BRAIN_CORAL_WALL_FAN,
+            Material.BUBBLE_CORAL_WALL_FAN,
+            Material.FIRE_CORAL_WALL_FAN,
+            Material.HORN_CORAL_WALL_FAN,
+            Material.TUBE_CORAL_WALL_FAN,
+            Material.DEAD_BRAIN_CORAL_FAN,
+            Material.DEAD_BUBBLE_CORAL_FAN,
+            Material.DEAD_FIRE_CORAL_FAN,
+            Material.DEAD_HORN_CORAL_FAN,
+            Material.DEAD_TUBE_CORAL_FAN,
+            Material.DEAD_BRAIN_CORAL_WALL_FAN,
+            Material.DEAD_BUBBLE_CORAL_WALL_FAN,
+            Material.DEAD_FIRE_CORAL_WALL_FAN,
+            Material.DEAD_HORN_CORAL_WALL_FAN,
+            Material.DEAD_TUBE_CORAL_WALL_FAN
     );
 
     // N
