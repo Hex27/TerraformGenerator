@@ -10,11 +10,58 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
+import org.terraform.utils.version.OneTwentyFiveBlockHandler;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class BannerUtils {
+
+    private static final PatternType[] PATTERNS = {
+            PatternType.BASE,
+            PatternType.BORDER,
+            PatternType.BRICKS,
+            OneTwentyFiveBlockHandler.CIRCLE,
+            PatternType.CREEPER,
+            PatternType.CROSS,
+            PatternType.CURLY_BORDER,
+            PatternType.DIAGONAL_LEFT,
+            PatternType.DIAGONAL_RIGHT,
+//            PatternType.DIAGONAL_UP_LEFT,
+//            PatternType.DIAGONAL_UP_RIGHT,
+//            PatternType.FLOW,
+            PatternType.FLOWER,
+            PatternType.GLOBE,
+            PatternType.GRADIENT,
+            PatternType.GRADIENT_UP,
+            //PatternType.GUSTER,
+            PatternType.HALF_HORIZONTAL,
+            //PatternType.HALF_HORIZONTAL_BOTTOM,
+            PatternType.HALF_VERTICAL,
+            //PatternType.HALF_VERTICAL_RIGHT,
+            PatternType.MOJANG,
+            PatternType.PIGLIN,
+            OneTwentyFiveBlockHandler.RHOMBUS,
+            PatternType.SKULL,
+            //PatternType.SMALL_STRIPES,
+            PatternType.SQUARE_BOTTOM_LEFT,
+            PatternType.SQUARE_BOTTOM_RIGHT,
+            PatternType.SQUARE_TOP_LEFT,
+            PatternType.SQUARE_TOP_RIGHT,
+            PatternType.STRAIGHT_CROSS,
+            PatternType.STRIPE_BOTTOM,
+            PatternType.STRIPE_CENTER,
+            PatternType.STRIPE_DOWNLEFT,
+            PatternType.STRIPE_DOWNRIGHT,
+            PatternType.STRIPE_LEFT,
+            PatternType.STRIPE_MIDDLE,
+            PatternType.STRIPE_RIGHT,
+            PatternType.STRIPE_TOP,
+            PatternType.TRIANGLE_BOTTOM,
+            PatternType.TRIANGLE_TOP,
+            PatternType.TRIANGLES_BOTTOM,
+            PatternType.TRIANGLES_TOP
+    };
     private static final Material[] BANNERS = {
             Material.RED_BANNER,
             Material.ORANGE_BANNER,
@@ -55,7 +102,7 @@ public class BannerUtils {
     
         Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
         if(patterns == null) {
-            patterns = new ArrayList<Pattern>();
+            patterns = new ArrayList<>();
         }
         
         banner.setPatterns(patterns);
@@ -82,12 +129,12 @@ public class BannerUtils {
         }
 
         Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
-        ArrayList<Pattern> patterns = new ArrayList<Pattern>();
+        ArrayList<Pattern> patterns = new ArrayList<>();
 
         for (int i = 1 + rand.nextInt(3); i < 4 + rand.nextInt(3); i++) {
             patterns.add(new Pattern(
                     DyeColor.values()[rand.nextInt(DyeColor.values().length)],
-                    PatternType.values()[rand.nextInt(PatternType.values().length)]
+                    PATTERNS[rand.nextInt(PATTERNS.length)]
             ));
         }
         banner.setPatterns(patterns);
@@ -97,7 +144,7 @@ public class BannerUtils {
     
     public static Banner generatePillagerBanner(SimpleBlock base, BlockFace facing, boolean wallBanner) {
 
-        Material type = null;
+        Material type;
         if (wallBanner)
             type = Material.WHITE_WALL_BANNER;
         else
@@ -142,14 +189,14 @@ public class BannerUtils {
 		Pattern:"bo",Color:BLACK
 	 */
     public static ArrayList<Pattern> getOminousBannerPatterns(){
-    	return new ArrayList<Pattern>() {{
-			add(new Pattern(DyeColor.CYAN, PatternType.RHOMBUS_MIDDLE));
+    	return new ArrayList<>() {{
+			add(new Pattern(DyeColor.CYAN, OneTwentyFiveBlockHandler.RHOMBUS));
 			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM));
 			add(new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER));
 			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER));
 			add(new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE));
 			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL));
-			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.CIRCLE_MIDDLE));
+			add(new Pattern(DyeColor.LIGHT_GRAY, OneTwentyFiveBlockHandler.CIRCLE)); //
 			add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
 		}};
     }

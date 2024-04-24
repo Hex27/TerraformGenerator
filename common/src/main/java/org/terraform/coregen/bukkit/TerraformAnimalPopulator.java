@@ -9,6 +9,7 @@ import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.populators.AnimalPopulator;
+import org.terraform.utils.version.OneTwentyFiveBlockHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.Random;
@@ -19,6 +20,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
 
     private static final AnimalPopulator[] ANIMAL_POPULATORS = {
     		null, //Slot for goat
+            null, //Slot for armadillo
     		
             new AnimalPopulator(EntityType.PIG, TConfigOption.ANIMALS_PIG_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_PIG_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_PIG_CHANCE.getInt(), false, BiomeBank.BLACK_OCEAN, BiomeBank.MUSHROOM_ISLANDS, BiomeBank.MUSHROOM_BEACH,BiomeBank.RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.FROZEN_OCEAN,
@@ -110,7 +112,6 @@ public class TerraformAnimalPopulator extends BlockPopulator {
 
             new AnimalPopulator(EntityType.MUSHROOM_COW, TConfigOption.ANIMALS_MOOSHROOM_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_MOOSHROOM_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_MOOSHROOM_CHANCE.getInt(), true, BiomeBank.MUSHROOM_BEACH, BiomeBank.MUSHROOM_ISLANDS),
-
     };
     
     public TerraformAnimalPopulator(TerraformWorld tw) {
@@ -118,6 +119,10 @@ public class TerraformAnimalPopulator extends BlockPopulator {
         if(Version.isAtLeast(17)) {
         	ANIMAL_POPULATORS[0] = new AnimalPopulator(EntityType.valueOf("GOAT"), TConfigOption.ANIMALS_GOAT_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_GOAT_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_GOAT_CHANCE.getInt(), true, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS);
+        }
+        if(Version.isAtLeast(20.4)) {
+            ANIMAL_POPULATORS[1] = new AnimalPopulator(OneTwentyFiveBlockHandler.ARMADILLO, TConfigOption.ANIMALS_ARMADILLO_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_ARMADILLO_MAXHERDSIZE.getInt(),
+                    TConfigOption.ANIMALS_ARMADILLO_CHANCE.getInt(), true, BiomeBank.SAVANNA, BiomeBank.SHATTERED_SAVANNA, BiomeBank.BADLANDS, BiomeBank.BADLANDS_CANYON);
         }
     }
 

@@ -66,6 +66,7 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
         
         for (SimpleLocation sLoc : largeCorals) {
         	int coralY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            if(coralY >= TerraformGenerator.seaLevel) continue;
             sLoc.setY(coralY);
             if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()) {
             	TreeDB.spawnRandomGiantCoral(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
@@ -78,6 +79,7 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
         
         for (SimpleLocation sLoc : smallCorals) {
         	int coralY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            if(coralY >= TerraformGenerator.seaLevel) continue;
             sLoc.setY(coralY);
             if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome()
             		&& !data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()).isSolid()) {

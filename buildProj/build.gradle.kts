@@ -1,5 +1,7 @@
 plugins {
-    id("com.github.johnrengelman.shadow").version("7.1.0")
+	//When ready, switch back to com.github.johnrengelman.shadow,
+	//it currently doesn't support java 21.
+    id("io.github.goooler.shadow").version("8.1.7")
 }
 
 dependencies {
@@ -9,6 +11,7 @@ dependencies {
     implementation(project(":implementation:v1_20_R1"))
     implementation(project(":implementation:v1_20_R2"))
     implementation(project(":implementation:v1_20_R3"))
+    implementation(project(":implementation:v1_20_R4"))
 }
 
 tasks.shadowJar {
