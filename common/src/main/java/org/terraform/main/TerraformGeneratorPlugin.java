@@ -1,5 +1,7 @@
 package org.terraform.main;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,9 +33,6 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.bstats.TerraformGeneratorMetricsHandler;
 import org.terraform.utils.version.Version;
 import org.terraform.watchdog.TfgWatchdogSuppressant;
-
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -121,8 +120,8 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         String version = Version.getVersionPackage();
         logger.stdout("Detected version: " + version + ", number: " + Version.DOUBLE);
         try {
-			injector = (NMSInjectorAbstract) Class.forName("org.terraform." + version + ".NMSInjector").getDeclaredConstructor().newInstance();
-
+			injector = Version.SupportedVersion.getInjector();
+            if(injector == null) throw new ClassNotFoundException();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             logger.stdout("&cNo support for this version has been made yet!");
@@ -131,7 +130,6 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         		| NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
             logger.stdout("&cSomething went wrong initiating the injector!");
-
         }
         
         injector.startupTasks();
@@ -190,9 +188,9 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     public void onWorldInit(WorldInitEvent event) {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
             logger.stdout("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
+            TerraformWorld tw = TerraformWorld.forceOverrideSeed(event.getWorld());
             if (injector.attemptInject(event.getWorld())) {
                 INJECTED_WORLDS.add(event.getWorld().getName());
-                TerraformWorld tw = TerraformWorld.get(event.getWorld());
                 tw.minY = injector.getMinY();
                 tw.maxY = injector.getMaxY();
                 

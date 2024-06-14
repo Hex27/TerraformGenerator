@@ -95,7 +95,7 @@ public class TerraSchematic {
         Scanner sc = new Scanner(is);    //file to be scanned
 
         String line = sc.nextLine(); //First line is the schematic's version.
-        schem.VERSION_VALUE = Version.toVersionDouble(line);
+        schem.VERSION_VALUE = Double.parseDouble(line);
         
         while (sc.hasNextLine()) {
             line = sc.nextLine();

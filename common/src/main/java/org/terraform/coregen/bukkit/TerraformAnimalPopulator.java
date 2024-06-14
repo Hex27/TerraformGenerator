@@ -120,7 +120,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
         	ANIMAL_POPULATORS[0] = new AnimalPopulator(EntityType.valueOf("GOAT"), TConfigOption.ANIMALS_GOAT_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_GOAT_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_GOAT_CHANCE.getInt(), true, BiomeBank.ROCKY_MOUNTAINS, BiomeBank.SNOWY_MOUNTAINS);
         }
-        if(Version.isAtLeast(20.4)) {
+        if(Version.isAtLeast(20.5)) {
             ANIMAL_POPULATORS[1] = new AnimalPopulator(OneTwentyFiveBlockHandler.ARMADILLO, TConfigOption.ANIMALS_ARMADILLO_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_ARMADILLO_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_ARMADILLO_CHANCE.getInt(), true, BiomeBank.SAVANNA, BiomeBank.SHATTERED_SAVANNA, BiomeBank.BADLANDS, BiomeBank.BADLANDS_CANYON);
         }
