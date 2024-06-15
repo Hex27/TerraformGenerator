@@ -11,6 +11,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.blockdata.BisectedBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
@@ -124,14 +125,31 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 
 
         //=========================
-        //Attempt to replace close-by walls with moss. Also apply lichen.
+        //Wall decorations
         //=========================
         if(!isForLargeCave)
         {
             SimpleBlock target = floor;
             while(target.getY() != ceil.getY()) {
+                //Place small pools of water for axolotls
+                if(target.getY()-floor.getY() < 3
+                        && GenUtils.chance(1,700))
+                {
+                    new SphereBuilder(random, target, Material.WATER)
+                            .setSphereType(SphereBuilder.SphereType.LOWER_SEMISPHERE)
+                            .setCointainmentMaterials(Material.CLAY)
+                            .setRX(3)
+                            .setRY(2)
+                            .setRZ(3)
+                            .setDoLiquidContainment(true)
+                            .setHardReplace(true)
+                            .build();
+                }
+
+                //Replace the walls with moss, and line with lichen
                 for(BlockFace face:BlockUtils.directBlockFaces) {
                     SimpleBlock rel = target.getRelative(face);
+
                     if(BlockUtils.isStoneLike(rel.getType())) {
                         rel.setType(Material.MOSS_BLOCK);
                         if(BlockUtils.isAir(target.getType()) && GenUtils.chance(random, 1, 5)) {
@@ -141,7 +159,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
                         }
                     }
                 }
-                target = target.getRelative(0,1,0);
+                target = target.getUp();
             }
         }
         

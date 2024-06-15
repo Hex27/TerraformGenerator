@@ -6,11 +6,16 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
+import org.terraform.structure.VanillaStructurePopulator;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
-public class TrialChamberPopulator extends SingleMegaChunkStructurePopulator {
+public class TrialChamberPopulator extends VanillaStructurePopulator {
+    public TrialChamberPopulator() {
+        super("trial_chambers");
+    }
+
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         return rollSpawnRatio(tw,chunkX,chunkZ);

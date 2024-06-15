@@ -10,6 +10,8 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.IRegistryCustom;
 import net.minecraft.core.SectionPosition;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.RegionLimitedWorldAccess;
 import net.minecraft.server.level.WorldServer;
@@ -43,12 +45,15 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructureLocator;
+import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
+import org.terraform.structure.VanillaStructurePopulator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.small.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.trialchamber.TrialChamberPopulator;
+import org.terraform.tree.VanillaMushroomBuilder;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -62,8 +67,9 @@ public class NMSChunkGenerator extends ChunkGenerator {
     private final TerraformWorld tw;
     private final MapRenderWorldProviderBiome mapRendererBS;
     private final TerraformWorldProviderBiome twBS;
-
-    public NMSChunkGenerator(String worldName, long seed, ChunkGenerator delegate) {
+    private final Method tryGenerateStructure;
+    private final ArrayList<MinecraftKey> possibleStructureSets = new ArrayList<>();
+    public NMSChunkGenerator(String worldName, long seed, ChunkGenerator delegate) throws NoSuchMethodException, SecurityException{
         super(
                 delegate.d(), //WorldChunkManager d() is getBiomeSource()
                 delegate.d); //Idk what generationSettingsGetter is
@@ -74,6 +80,28 @@ public class NMSChunkGenerator extends ChunkGenerator {
         //is initiated inside the cave carver
         mapRendererBS = new MapRenderWorldProviderBiome(tw, delegate.d());
         twBS = new TerraformWorldProviderBiome(TerraformWorld.get(worldName, seed), delegate.d());
+
+        //This is tryGenerateStructure
+        //Register VanillaStructurePopulators to allow Minecraft to properly
+        // handle them
+        for(StructurePopulator pop : StructureRegistry.getAllPopulators())
+        {
+            if(pop instanceof VanillaStructurePopulator vsp)
+            {
+                possibleStructureSets.add(MinecraftKey.a(vsp.structureRegistryKey)); //MinecraftKey.create
+            }
+        }
+        tryGenerateStructure = ChunkGenerator.class.getDeclaredMethod("a",
+                StructureSet.a.class,
+                StructureManager.class,
+                IRegistryCustom.class,
+                RandomState.class,
+                StructureTemplateManager.class,
+                long.class,
+                IChunkAccess.class,
+                ChunkCoordIntPair.class,
+                SectionPosition.class);
+        tryGenerateStructure.setAccessible(true);
     }
 
 
@@ -145,7 +173,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
     public void a(GeneratorAccessSeed generatoraccessseed, IChunkAccess ichunkaccess, StructureManager structuremanager) {
         delegate.a(generatoraccessseed, ichunkaccess, structuremanager);
 
-        //This triggers structure gen
+        //This triggers structure gen. Needed for VanillaStructurePopulator
         addVanillaDecorations(generatoraccessseed,ichunkaccess, structuremanager);
     }
 
@@ -170,62 +198,52 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return delegate.e();
     }
 
-    @Override //createStructures should be empty
+    /**
+     * Overridden to allow VanillaStructurePopulator to work.
+     * The code comes from createStructures, but with a lot of the in-built
+     * checks cut out and replaced with TFG code.
+     */
+    @Override
     public void a(IRegistryCustom iregistrycustom, ChunkGeneratorStructureState chunkgeneratorstructurestate, StructureManager structuremanager, IChunkAccess ichunkaccess, StructureTemplateManager structuretemplatemanager) {
-        //delegate.a(iregistrycustom, chunkgeneratorstructurestate, structuremanager, ichunkaccess, structuretemplatemanager);
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.f(); //getPos
         SectionPosition sectionposition = SectionPosition.a(ichunkaccess); //bottomOf
         RandomState randomstate = chunkgeneratorstructurestate.c(); //randomState
         MegaChunk mc = new MegaChunk(chunkcoordintpair.e, chunkcoordintpair.f);
         SingleMegaChunkStructurePopulator[] spops = StructureRegistry.getLargeStructureForMegaChunk(tw, mc);
+        int[] centerCoords = mc.getCenterBiomeSectionChunkCoords();
 
-        if(spops.length == 0) return;
-        SingleMegaChunkStructurePopulator pop = spops[0];
-        if(!(pop instanceof TrialChamberPopulator)) return;
-        //possibleStructureSets
-        new ArrayList<StructureSet>(){{
-            //aT is STRUCTURE_SET
-            //bc is registryAccess
-            //d is registryOrThrow
-            //BuiltinStructureSets.t is TRIAL_CHAMBER
-            add(MinecraftServer.getServer().bc().d(Registries.aT).a(BuiltinStructureSets.t));
-        }}
-        .forEach((structureSet) -> {
-            StructurePlacement structureplacement = structureSet.b(); //placement()
-            List<StructureSet.a> list = structureSet.a(); //structures()
-            //StructureSet.a == StructureSet.StructureSelectionEntry
-            Iterator<StructureSet.a> iterator = list.iterator();
+        for(SingleMegaChunkStructurePopulator pop:spops)
+        {
+            if(!(pop instanceof VanillaStructurePopulator vpop)) continue;
+            //possibleStructureSets
+            possibleStructureSets
+                .stream().filter((resourceLoc)->{
+                    return vpop.structureRegistryKey.equals(resourceLoc.a()); //MinecraftKey.getPath()
+                })
+                .map((resourceLoc)-> MinecraftServer.getServer().bc().d(Registries.aT).a(resourceLoc))
+                .forEach((structureSet) -> {
+                StructurePlacement structureplacement = structureSet.b(); //placement()
+                List<StructureSet.a> list = structureSet.a(); //structures()
 
-            //This will be true depending on the structure manager
-            if (mc.getCenterBiomeSectionChunkCoords()[0] == chunkcoordintpair.e
-                && mc.getCenterBiomeSectionChunkCoords()[1] == chunkcoordintpair.f) {
+                //This will be true depending on the structure manager
+                if (centerCoords[0] == chunkcoordintpair.e
+                        && centerCoords[1] == chunkcoordintpair.f) {
 
-                //this.a -> tryGenerateStructure
-                //d() -> getLevelSeed()
-                try{
-                    Method m = ChunkGenerator.class.getDeclaredMethod("a",
-                            list.get(0).getClass(),
-                            net.minecraft.world.level.StructureManager.class,
-                            net.minecraft.core.IRegistryCustom.class,
-                            net.minecraft.world.level.levelgen.RandomState.class,
-                            net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager.class,
-                            long.class,
-                            net.minecraft.world.level.chunk.IChunkAccess.class,
-                            net.minecraft.world.level.ChunkCoordIntPair.class,
-                            net.minecraft.core.SectionPosition.class);
-                    m.setAccessible(true);
-                    Object retVal = m.invoke(this, list.get(0), structuremanager, iregistrycustom, randomstate,
-                            structuretemplatemanager, chunkgeneratorstructurestate.d(),
-                            ichunkaccess, chunkcoordintpair, sectionposition);
-                    TerraformGeneratorPlugin.logger.info(chunkcoordintpair.e + "," + chunkcoordintpair.f + " will spawn a vanilla structure, with tryGenerateStructure == " + retVal);
+                    //d() -> getLevelSeed()
+                    try{
+                        Object retVal = tryGenerateStructure.invoke(this, list.get(0), structuremanager, iregistrycustom, randomstate,
+                                structuretemplatemanager, chunkgeneratorstructurestate.d(),
+                                ichunkaccess, chunkcoordintpair, sectionposition);
+                        TerraformGeneratorPlugin.logger.info(chunkcoordintpair.e + "," + chunkcoordintpair.f + " will spawn a vanilla structure, with tryGenerateStructure == " + retVal);
+                    }
+                    catch(Throwable t)
+                    {
+                        TerraformGeneratorPlugin.logger.info(chunkcoordintpair.e + "," + chunkcoordintpair.f + " Failed to generate a vanilla structure");
+                        t.printStackTrace();
+                    }
                 }
-                catch(Throwable t)
-                {
-                    TerraformGeneratorPlugin.logger.info(chunkcoordintpair.e + "," + chunkcoordintpair.f + " Failed to generate a vanilla structure");
-                    t.printStackTrace();
-                }
-            }
-        });
+            });
+        }
     }
     @Override //createReferences. Structure related
     public void a(GeneratorAccessSeed gas,StructureManager manager,IChunkAccess ica)

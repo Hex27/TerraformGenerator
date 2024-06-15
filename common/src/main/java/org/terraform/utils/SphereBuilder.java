@@ -193,14 +193,14 @@ public class SphereBuilder {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
                 if(this.doLiquidContainment)
-                	rel.replaceAdjacentNonLiquids(BlockUtils.sixBlockFaces, types[0], containmentMaterial);
+                	rel.replaceAdjacentNonLiquids(new BlockFace[]{BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}, types[0], containmentMaterial);
             }
 //    		else
 //    			return false;
     	} else if(replaceWhitelist.contains(rel.getType())) {
             rel.setType(GenUtils.randMaterial(random, types));
             if(this.doLiquidContainment)
-            	rel.replaceAdjacentNonLiquids(BlockUtils.sixBlockFaces, types[0], containmentMaterial);
+            	rel.replaceAdjacentNonLiquids(new BlockFace[]{BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}, types[0], containmentMaterial);
     	}
 //    	else
 //    		return false;

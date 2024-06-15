@@ -27,7 +27,11 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-    	//Mansions must spawn. Dark forests are rare enough. Ignore ground height.
+    	//Enforce minimum distance
+        if(Math.pow(chunkX*16,2) + Math.pow(chunkZ*16,2) < Math.pow(TConfigOption.STRUCTURES_MANSION_MINDISTANCE.getInt(),2))
+            return false;
+
+        //Mansions must spawn. Dark forests are rare enough. Ignore ground height.
     	if(biome == (BiomeBank.DARK_FOREST)) {
             return rollSpawnRatio(tw,chunkX,chunkZ);
         }

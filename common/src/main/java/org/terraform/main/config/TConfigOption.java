@@ -184,6 +184,7 @@ public enum TConfigOption {
     STRUCTURES_MEGACHUNK_MAXSTRUCTURES("structures.technical.megachunk.max-structures-per-megachunk", 3),
     STRUCTURES_MANSION_ENABLED("structures.mansion.enabled", true),
     STRUCTURES_MANSION_SIZE("structures.mansion.size", 80),
+    STRUCTURES_MANSION_MINDISTANCE("structures.mansion.min-distance-blocks", 5000),
     STRUCTURES_MANSION_SPAWNAGGRESSION("structures.mansion.pillager-spawn-aggression", 1),
     STRUCTURES_MANSION_SPAWNRATIO("structures.mansion.spawnratio", 0.3),
     STRUCTURES_MANSION_CHUNK_EXCLUSION_ZONE("structures.mansion.chunk-exclusion-zone", 4),

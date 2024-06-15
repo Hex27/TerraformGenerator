@@ -25,6 +25,7 @@ import org.terraform.structure.trialchamber.TrialChamberPopulator;
 import org.terraform.structure.village.VillagePopulator;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.structure.warmoceanruins.WarmOceanRuinsPopulator;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +57,7 @@ public class StructureRegistry {
         registerStructure(StructureType.MEGA_DUNGEON, new StrongholdPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new MansionPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new AncientCityPopulator());
-        registerStructure(StructureType.MEGA_DUNGEON, new TrialChamberPopulator());
+        if(Version.isAtLeast(21)) registerStructure(StructureType.MEGA_DUNGEON, new TrialChamberPopulator());
 
         registerStructure(StructureType.LARGE_CAVE, new LargeCavePopulator());
 

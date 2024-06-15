@@ -48,33 +48,33 @@ public class NMSInjector extends NMSInjectorAbstract {
 
     @Override
     public boolean attemptInject(World world) {
-        CraftWorld cw = (CraftWorld) world;
-        WorldServer ws = cw.getHandle();
-
-        //Force world to correct height
-        TerraformWorld.get(world).minY = -64;
-        TerraformWorld.get(world).maxY = 320;
-
-        //k is getChunkSource, g is getChunkGenerator()
-        ChunkGenerator delegate = ws.l().g();
-
-        TerraformGeneratorPlugin.logger.info("NMSChunkGenerator Delegate is of type " + delegate.getClass().getSimpleName());
-
-        //String worldname,
-        //int seed,
-        //WorldChunkManager worldchunkmanager,
-        //WorldChunkManager worldchunkmanager1,
-        //StructureSettings structuresettings,
-        //long i
-        NMSChunkGenerator bpg = new NMSChunkGenerator(
-                world.getName(),
-                (int) world.getSeed(),
-                delegate);
-
-		//Inject TerraformGenerator NMS chunk generator into playerchunkmap AND worldgencontext
-        PlayerChunkMap pcm = ws.l().a; //getChunkProvider().PlayerChunkMap
-        //worldGenContext stores chunkGenerator, not pcm
         try {
+            CraftWorld cw = (CraftWorld) world;
+            WorldServer ws = cw.getHandle();
+
+            //Force world to correct height
+            TerraformWorld.get(world).minY = -64;
+            TerraformWorld.get(world).maxY = 320;
+
+            //k is getChunkSource, g is getChunkGenerator()
+            ChunkGenerator delegate = ws.l().g();
+
+            TerraformGeneratorPlugin.logger.info("NMSChunkGenerator Delegate is of type " + delegate.getClass().getSimpleName());
+
+            //String worldname,
+            //int seed,
+            //WorldChunkManager worldchunkmanager,
+            //WorldChunkManager worldchunkmanager1,
+            //StructureSettings structuresettings,
+            //long i
+            NMSChunkGenerator bpg = new NMSChunkGenerator(
+                    world.getName(),
+                    (int) world.getSeed(),
+                    delegate);
+
+            //Inject TerraformGenerator NMS chunk generator into playerchunkmap AND worldgencontext
+            PlayerChunkMap pcm = ws.l().a; //getChunkProvider().PlayerChunkMap
+            //worldGenContext stores chunkGenerator, not pcm
             //O is worldGenContext
             Field wgc = pcm.getClass().getDeclaredField("P");
             wgc.setAccessible(true);
@@ -87,11 +87,11 @@ public class NMSInjector extends NMSInjectorAbstract {
                     worldGenContext.d(),
                     worldGenContext.e()
             ));
+            TerraformGeneratorPlugin.logger.info("Post injection: getChunkSource().getChunkGenerator() is of type " + ws.l().g().getClass().getSimpleName());
         } catch (Throwable e) {
             e.printStackTrace();
             return false;
         }
-        TerraformGeneratorPlugin.logger.info("Post injection: getChunkSource().getChunkGenerator() is of type " + ws.l().g().getClass().getSimpleName());
 
         return true;
     }
