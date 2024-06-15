@@ -243,7 +243,8 @@ public class TerraformGenerator extends ChunkGenerator {
         return false;
     }
 
+    //This is true as StructureManager is now being overridden.
     public boolean shouldGenerateStructures() {
-        return false;
+        return true;
     }
 }

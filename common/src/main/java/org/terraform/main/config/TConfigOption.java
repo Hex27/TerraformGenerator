@@ -203,6 +203,8 @@ public enum TConfigOption {
     STRUCTURES_ANIMALFARM_ENABLED("structures.animalfarm.enabled", true),
     STRUCTURES_TRAILRUINS_SPAWNRATIO("structures.trailruins.spawnratio", 0.5),
     STRUCTURES_TRAILRUINS_ENABLED("structures.trailruins.enabled", true),
+    STRUCTURES_TRIALCHAMBER_SPAWNRATIO("structures.trialchamber.spawnratio", 0.3),
+    STRUCTURES_TRIALCHAMBER_ENABLED("structures.trialchamber.enabled", true),
     STRUCTURES_WARMOCEANRUINS_SPAWNRATIO("structures.warmoceanruins.spawnratio", 1.0),
     STRUCTURES_WARMOCEANRUINS_ENABLED("structures.warmoceanruins.enabled", true),
     STRUCTURES_VILLAGE_SPAWNRATIO("structures.village.spawnratio", 1.0),
