@@ -10,6 +10,7 @@ import org.terraform.data.TerraformWorld;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 public class StructureLocator {
 	
@@ -123,35 +124,23 @@ public class StructureLocator {
                 //Right bitshift of 4 is conversion from block coords to chunk coords.
                 
                 if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
-
-                    //Mega Dungeons will always spawn if they can.
-                    if (StructureRegistry.getStructureType(populator.getClass()) == StructureType.MEGA_DUNGEON) {
-                        found = true;
-                        blockX = coords[0];
-                        blockZ = coords[1];
-                        break;
-                    } else {
-                        //If it is not a mega dungeon, the structure registry must be checked.
-                        for (SingleMegaChunkStructurePopulator availablePops : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
-                            if (availablePops == null) continue;
-                            
-                            
-                            if(availablePops.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
-                                if (availablePops.getClass().equals(populator.getClass())) {
-                                    //Can spawn
-                                    found = true;
-                                    blockX = coords[0];
-                                    blockZ = coords[1];
-                                }
-                                
-                                //Break either way, as the first structure that can spawn will spawn.
-                                //If the populator could spawn, but it isn't the target populator
-                                //we're looking for, then this megachunk didn't spawn our structure.
-                                break;
+                    for (SingleMegaChunkStructurePopulator availablePops : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
+                        if (availablePops == null) continue;
+                        if(availablePops.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
+                            if (availablePops.getClass().equals(populator.getClass())) {
+                                //Can spawn
+                                found = true;
+                                blockX = coords[0];
+                                blockZ = coords[1];
                             }
+
+                            //Break either way, as the first structure that can spawn will spawn.
+                            //If the populator could spawn, but it isn't the target populator
+                            //we're looking for, then this megachunk didn't spawn our structure.
+                            break;
                         }
-                        if (found) break;
                     }
+                    if (found) break;
                 }
             }
             radius++;

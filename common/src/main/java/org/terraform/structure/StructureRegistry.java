@@ -33,6 +33,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Random;
 
 public class StructureRegistry {
@@ -57,7 +58,8 @@ public class StructureRegistry {
         registerStructure(StructureType.MEGA_DUNGEON, new StrongholdPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new MansionPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new AncientCityPopulator());
-        if(Version.isAtLeast(21)) registerStructure(StructureType.MEGA_DUNGEON, new TrialChamberPopulator());
+        if(Version.isAtLeast(21))
+            registerStructure(StructureType.MEGA_DUNGEON, new TrialChamberPopulator());
 
         registerStructure(StructureType.LARGE_CAVE, new LargeCavePopulator());
 
@@ -232,7 +234,7 @@ public class StructureRegistry {
 
 	    @Override
 	    public int hashCode() {
-	        return tw.hashCode() ^ (mc.getX() + mc.getZ() * 31);
+	        return Objects.hash(tw.hashCode(),mc.getX(), mc.getZ());
 	    }
 
 	    @Override

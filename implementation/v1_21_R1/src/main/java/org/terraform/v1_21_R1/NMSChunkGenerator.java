@@ -34,6 +34,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.structures.BuriedTreasureStructure;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentStructure;
 import net.minecraft.world.level.levelgen.structure.structures.StrongholdStructure;
 import net.minecraft.world.level.levelgen.structure.structures.WoodlandMansionStructure;
@@ -154,6 +155,14 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 } else if (holder.a().getClass() == WoodlandMansionStructure.class) { //Mansion
 
                     int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
+
+                    return new Pair<BlockPosition, Holder<Structure>>
+                            (new BlockPosition(coords[0], 50, coords[1]), holder);
+                } else if (holder.a() instanceof JigsawStructure
+                        && MinecraftServer.getServer().bc().d(Registries.aR).a(MinecraftKey.a("trial_chambers")) == holder.a()
+                ) { //Trial Chamber
+
+                    int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new TrialChamberPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
                     return new Pair<BlockPosition, Holder<Structure>>
                             (new BlockPosition(coords[0], 50, coords[1]), holder);
