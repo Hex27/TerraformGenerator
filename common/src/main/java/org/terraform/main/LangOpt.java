@@ -2,6 +2,8 @@ package org.terraform.main;
 
 import org.bukkit.command.CommandSender;
 
+import java.util.Locale;
+
 public enum LangOpt {
     COMMAND_LOCATE_NOVANILLA("&c&lFor terraformgenerator worlds, use &e&l/terra locate &c&linstead!"),
     COMMAND_LOCATE_STRUCTURE_NOT_ENABLED("&cThe specified structure was not enabled!"),
@@ -19,7 +21,7 @@ public enum LangOpt {
 
     LangOpt(String lang) {
         this.value = lang;
-        this.path = this.toString().toLowerCase().replace('_', '.');
+        this.path = this.toString().toLowerCase(Locale.ENGLISH).replace('_', '.');
     }
 
     LangOpt(String path, String lang) {

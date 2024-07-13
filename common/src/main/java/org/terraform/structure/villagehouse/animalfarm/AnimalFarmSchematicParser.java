@@ -12,6 +12,7 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.WoodUtils;
 import org.terraform.utils.WoodUtils.WoodType;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class AnimalFarmSchematicParser extends SchematicParser {
@@ -38,7 +39,7 @@ public class AnimalFarmSchematicParser extends SchematicParser {
                     data.getAsString().replaceAll(
                             "cobblestone",
                             GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
-                                    .toString().toLowerCase()
+                                    .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
             super.applyData(block, data);
@@ -56,10 +57,10 @@ public class AnimalFarmSchematicParser extends SchematicParser {
         } else if (data.getMaterial().toString().contains("OAK")) {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
-                            data.getMaterial().toString().toLowerCase(),
+                            data.getMaterial().toString().toLowerCase(Locale.ENGLISH),
                             WoodUtils.getWoodForBiome(biome,
-                                    WoodType.parse(data.getMaterial())).toString().toLowerCase()
-                            ).toString().toLowerCase());
+                                    WoodType.parse(data.getMaterial())).toString().toLowerCase(Locale.ENGLISH)
+                            ).toString().toLowerCase(Locale.ENGLISH));
             super.applyData(block, data);
             return;
         } else if (data.getMaterial() == Material.CHEST) {

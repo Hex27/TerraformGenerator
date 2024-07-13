@@ -1,6 +1,7 @@
 package org.terraform.command.contants;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
 import org.terraform.tree.FractalTypes;
@@ -16,7 +17,7 @@ public class MushroomTypeArgument extends TerraCommandArgument<FractalTypes.Mush
     @Override
     public FractalTypes.Mushroom parse(CommandSender sender, String value) {
 
-        return FractalTypes.Mushroom.valueOf(value.toUpperCase());
+        return FractalTypes.Mushroom.valueOf(value.toUpperCase(Locale.ENGLISH));
     }
 
     @Override
@@ -36,12 +37,12 @@ public class MushroomTypeArgument extends TerraCommandArgument<FractalTypes.Mush
         ArrayList<String> values = new ArrayList<>();
 
 //        for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
-//        	if(spop.getClass().getSimpleName().toUpperCase().startsWith(args[1].toUpperCase()))
+//        	if(spop.getClass().getSimpleName().toUpperCase(Locale.ENGLISH).startsWith(args[1].toUpperCase(Locale.ENGLISH)))
 //        		values.add(spop.getClass().getSimpleName());
 //        }
         
         for(Mushroom type: FractalTypes.Mushroom.values()) {
-        	if(type.toString().startsWith(args[1].toUpperCase()))
+        	if(type.toString().startsWith(args[1].toUpperCase(Locale.ENGLISH)))
         		values.add(type.toString());
         }
         

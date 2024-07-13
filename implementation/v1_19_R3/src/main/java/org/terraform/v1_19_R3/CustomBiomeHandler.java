@@ -24,6 +24,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class CustomBiomeHandler {
@@ -70,7 +71,7 @@ public class CustomBiomeHandler {
 						registrywritable,
 						forestbiome
 						);
-				TerraformGeneratorPlugin.logger.info("Registered custom biome: " + type.toString().toLowerCase());
+				TerraformGeneratorPlugin.logger.info("Registered custom biome: " + type.toString().toLowerCase(Locale.ENGLISH));
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				TerraformGeneratorPlugin.logger.error("Failed to register custom biome: " + type.getKey());
 				e.printStackTrace();
@@ -94,7 +95,7 @@ public class CustomBiomeHandler {
 
 	private static void registerCustomBiomeBase(CustomBiomeType biomeType, DedicatedServer dedicatedserver, IRegistryWritable<BiomeBase> registrywritable, BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
-		ResourceKey<BiomeBase> newKey = ResourceKey.a(Registries.an, new MinecraftKey("terraformgenerator", biomeType.toString().toLowerCase()));
+		ResourceKey<BiomeBase> newKey = ResourceKey.a(Registries.an, new MinecraftKey("terraformgenerator", biomeType.toString().toLowerCase(Locale.ENGLISH)));
 
 		//BiomeBase.a is BiomeBuilder
 		BiomeBase.a newBiomeBuilder = new BiomeBase.a();

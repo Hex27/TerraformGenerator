@@ -15,6 +15,7 @@ import org.terraform.utils.WoodUtils;
 import org.terraform.utils.WoodUtils.WoodType;
 import org.terraform.utils.GenUtils;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class PlainsVillagePopulator extends VillagePopulator {
@@ -119,7 +120,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
         woodPressurePlate = WoodUtils.getWoodForBiome(biome, WoodType.PRESSURE_PLATE);
         woodDoor = WoodUtils.getWoodForBiome(biome, WoodType.DOOR);
         woodLeaves = WoodUtils.getWoodForBiome(biome, WoodType.LEAVES);
-        wood = woodLeaves.toString().toLowerCase().replace("leaves","");
+        wood = woodLeaves.toString().toLowerCase(Locale.ENGLISH).replace("leaves","");
         
         //Re-get x and z because they change after ensureFarmHouseEntrance.
         //13 because that's the width of the townhall.

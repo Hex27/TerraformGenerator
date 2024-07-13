@@ -131,7 +131,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     public Biome getBiome(int rawX, int rawZ) {
     	return parent.getBiome(rawX, rawZ);
         //return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf(ica
-        // .getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase());
+        // .getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase(Locale.ENGLISH));
     }
 
      @Override

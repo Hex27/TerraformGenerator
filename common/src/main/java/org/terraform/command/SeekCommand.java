@@ -22,6 +22,7 @@ import org.terraform.structure.StructureRegistry;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -174,7 +175,7 @@ public class SeekCommand extends TerraCommand implements Listener {
             ArrayList<String> values = new ArrayList<>();
 
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
-            	if(spop.getClass().getSimpleName().toUpperCase().startsWith(args[1].toUpperCase()))
+            	if(spop.getClass().getSimpleName().toUpperCase(Locale.ENGLISH).startsWith(args[1].toUpperCase(Locale.ENGLISH)))
             		values.add(spop.getClass().getSimpleName());
             }
 

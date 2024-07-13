@@ -33,6 +33,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 
@@ -58,7 +59,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         		if(type == EntityType.UNKNOWN) continue;
 				try {
                     //EntityTypes.byString
-					Optional<EntityTypes<?>> et = EntityTypes.a("minecraft:"+type.toString().toLowerCase());
+					Optional<EntityTypes<?>> et = EntityTypes.a("minecraft:"+type.toString().toLowerCase(Locale.ENGLISH));
                     //EntityTypes<?> et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(EntityTypeMapper.getObfsNameFromBukkitEntityType(type)).get(null);
                     //TerraformGeneratorPlugin.logger.info(type + ":" + et.isPresent());
                     et.ifPresent(entityTypes -> entityTypesDict.put(type, entityTypes));

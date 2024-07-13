@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -78,7 +79,7 @@ public class CustomBiomeHandler {
 						registrywritable,
 						forestbiome
 						);
-				TerraformGeneratorPlugin.logger.info("Registered custom biome: " + type.toString().toLowerCase());
+				TerraformGeneratorPlugin.logger.info("Registered custom biome: " + type.toString().toLowerCase(Locale.ENGLISH));
 			} catch (Throwable e) {
 				TerraformGeneratorPlugin.logger.error("Failed to register custom biome: " + type.getKey());
 				e.printStackTrace();
@@ -110,7 +111,7 @@ public class CustomBiomeHandler {
         Object regInfo = defaultRegInfoField.get(null);
 
         //az is BIOME
-		ResourceKey<BiomeBase> newKey = ResourceKey.a(Registries.aF, MinecraftKey.a("terraformgenerator", biomeType.toString().toLowerCase()));
+		ResourceKey<BiomeBase> newKey = ResourceKey.a(Registries.aF, MinecraftKey.a("terraformgenerator", biomeType.toString().toLowerCase(Locale.ENGLISH)));
 
 		//BiomeBase.a is BiomeBuilder
 		BiomeBase.a newBiomeBuilder = new BiomeBase.a();

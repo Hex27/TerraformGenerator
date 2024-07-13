@@ -2,6 +2,7 @@ package org.terraform.command.contants;
 
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Stack;
 
 import org.bukkit.command.CommandSender;
@@ -70,7 +71,7 @@ public abstract class TerraCommand {
 	}
 	
 	public boolean matchCommand(String command){
-		command = command.toLowerCase();
+		command = command.toLowerCase(Locale.ENGLISH);
 		return aliases.contains(command);
 	}
 
