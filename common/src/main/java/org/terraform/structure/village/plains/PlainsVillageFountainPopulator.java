@@ -16,6 +16,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import java.io.FileNotFoundException;
+import java.util.Locale;
 import java.util.Random;
 
 public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
@@ -99,7 +100,7 @@ public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
                         data.getAsString().replaceAll(
                                 "cobblestone",
                                 GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
-                                        .toString().toLowerCase()
+                                        .toString().toLowerCase(Locale.ENGLISH)
                         )
                 );
                 super.applyData(block, data);

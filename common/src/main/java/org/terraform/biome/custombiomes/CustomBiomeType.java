@@ -2,6 +2,8 @@ package org.terraform.biome.custombiomes;
 
 import org.terraform.utils.version.Version;
 
+import java.util.Locale;
+
 public enum CustomBiomeType {
     NONE,
     MUDDY_BOG("b8ad49","9c8046","b8ad49","d9cd62","ad8445","ad8445", 0.8f, false),
@@ -21,7 +23,7 @@ public enum CustomBiomeType {
     private boolean isCold = false;
 
     private CustomBiomeType() {
-        this.key = "terraformgenerator:" + this.toString().toLowerCase();
+        this.key = "terraformgenerator:" + this.toString().toLowerCase(Locale.ENGLISH);
         this.fogColor = "";
         this.waterColor = "";
         this.waterFogColor = "";
@@ -33,7 +35,7 @@ public enum CustomBiomeType {
     CustomBiomeType(String fogColor, String waterColor, String waterFogColor,
                     String skyColor, String foliageColor, String grassColor, float rainFall,
                     boolean isCold) {
-        this.key = "terraformgenerator:" + this.toString().toLowerCase();
+        this.key = "terraformgenerator:" + this.toString().toLowerCase(Locale.ENGLISH);
         this.fogColor = fogColor;
         this.waterColor = waterColor;
         this.waterFogColor = waterFogColor;

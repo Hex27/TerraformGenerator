@@ -17,6 +17,7 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Stack;
 import java.util.UUID;
 
@@ -94,7 +95,7 @@ public class LocateBiomeCommand extends TerraCommand {
         @Override
         public BiomeBank parse(CommandSender sender, String value) {
 
-            return BiomeBank.valueOf(value.toUpperCase());
+            return BiomeBank.valueOf(value.toUpperCase(Locale.ENGLISH));
         }
 
         @Override
@@ -113,7 +114,7 @@ public class LocateBiomeCommand extends TerraCommand {
             ArrayList<String> values = new ArrayList<>();
 
             for (BiomeBank bank : BiomeBank.values()) {
-            	if(bank.name().startsWith(args[1].toUpperCase()))
+            	if(bank.name().startsWith(args[1].toUpperCase(Locale.ENGLISH)))
             		values.add(bank.name());
             }
 

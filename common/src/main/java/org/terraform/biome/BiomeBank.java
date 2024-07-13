@@ -2,6 +2,7 @@ package org.terraform.biome;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Random;
 
 import org.terraform.biome.beach.*;
@@ -359,23 +360,23 @@ public enum BiomeBank {
 	//static BiomeBank singleBeach;
     public static void initSinglesConfig() {
     	try
-    	{ singleLand = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.getString().toUpperCase()); }
+    	{ singleLand = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.getString().toUpperCase(Locale.ENGLISH)); }
     	catch(IllegalArgumentException e)
     		{singleLand = null;}
     	try
-    	{ singleOcean = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_OCEAN_TYPE.getString().toUpperCase()); }
+    	{ singleOcean = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_OCEAN_TYPE.getString().toUpperCase(Locale.ENGLISH)); }
     	catch(IllegalArgumentException e)
     		{singleOcean = null;}
     	try
-    	{ singleDeepOcean = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_DEEPOCEAN_TYPE.getString().toUpperCase()); }
+    	{ singleDeepOcean = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_DEEPOCEAN_TYPE.getString().toUpperCase(Locale.ENGLISH)); }
     	catch(IllegalArgumentException e)
     		{singleDeepOcean = null;}
     	try
-    	{ singleMountain = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_MOUNTAIN_TYPE.getString().toUpperCase()); }
+    	{ singleMountain = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_MOUNTAIN_TYPE.getString().toUpperCase(Locale.ENGLISH)); }
     	catch(IllegalArgumentException e)
     		{singleMountain = null;}
     	try
-    	{ singleHighMountain = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_HIGHMOUNTAIN_TYPE.getString().toUpperCase()); }
+    	{ singleHighMountain = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_HIGHMOUNTAIN_TYPE.getString().toUpperCase(Locale.ENGLISH)); }
     	catch(IllegalArgumentException e)
     		{singleHighMountain = null;}
     }

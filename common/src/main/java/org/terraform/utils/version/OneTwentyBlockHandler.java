@@ -6,6 +6,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.terraform.utils.BlockUtils;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class OneTwentyBlockHandler {
@@ -30,7 +31,7 @@ public class OneTwentyBlockHandler {
 
     public static BlockData getPinkPetalData(int count)
     {
-        return Bukkit.createBlockData("pink_petals[flower_amount=" + count + ",facing=" + BlockUtils.getDirectBlockFace(new Random()).toString().toLowerCase() +  "]");
+        return Bukkit.createBlockData("pink_petals[flower_amount=" + count + ",facing=" + BlockUtils.getDirectBlockFace(new Random()).toString().toLowerCase(Locale.ENGLISH) +  "]");
     }
 
     private static EntityType getCamel(){

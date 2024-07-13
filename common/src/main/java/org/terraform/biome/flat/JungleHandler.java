@@ -24,6 +24,7 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class JungleHandler extends BiomeHandler {
@@ -232,7 +233,7 @@ public class JungleHandler extends BiomeHandler {
 	                            "cobblestone",
 	                            GenUtils.randMaterial(new Random(), 
 	                            		Material.COBBLESTONE, Material.ANDESITE, Material.STONE, Material.MOSSY_COBBLESTONE)
-	                                    .toString().toLowerCase()
+	                                    .toString().toLowerCase(Locale.ENGLISH)
 	                    )
 	            );
 	            super.applyData(block, data);

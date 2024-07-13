@@ -10,6 +10,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.GenUtils;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class MountainhouseSchematicParser extends SchematicParser {
@@ -32,7 +33,7 @@ public class MountainhouseSchematicParser extends SchematicParser {
                     data.getAsString().replaceAll(
                             "cobblestone",
                             GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.ANDESITE, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS, Material.COBBLESTONE, Material.ANDESITE)
-                                    .toString().toLowerCase()
+                                    .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
             super.applyData(block, data);
@@ -42,7 +43,7 @@ public class MountainhouseSchematicParser extends SchematicParser {
                     data.getAsString().replaceAll(
                             "bricks",
                             GenUtils.randMaterial(rand, Material.BRICKS, Material.GRANITE, Material.POLISHED_GRANITE)
-                                    .toString().toLowerCase()
+                                    .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
             super.applyData(block, data);
@@ -52,7 +53,7 @@ public class MountainhouseSchematicParser extends SchematicParser {
                     data.getAsString().replaceAll(
                             "white_concrete",
                             GenUtils.randMaterial(rand, Material.WHITE_CONCRETE, Material.WHITE_CONCRETE, Material.WHITE_WOOL, Material.DIORITE, Material.DIORITE)
-                                    .toString().toLowerCase()
+                                    .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
             super.applyData(block, data);
@@ -61,10 +62,10 @@ public class MountainhouseSchematicParser extends SchematicParser {
 //        else if (data.getMaterial().toString().contains("SPRUCE")) {
 //            data = Bukkit.createBlockData(
 //                    data.getAsString().replaceAll(
-//                            data.getMaterial().toString().toLowerCase(),
+//                            data.getMaterial().toString().toLowerCase(Locale.ENGLISH),
 //                            WoodUtils.getWoodForBiome(biome,
-//                                    WoodType.parse(data.getMaterial())).toString().toLowerCase()
-//                            ).toString().toLowerCase());
+//                                    WoodType.parse(data.getMaterial())).toString().toLowerCase(Locale.ENGLISH)
+//                            ).toString().toLowerCase(Locale.ENGLISH));
 //            super.applyData(block, data);
 //        } 
         else if (data.getMaterial() == Material.CHEST) {

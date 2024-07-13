@@ -16,6 +16,7 @@ import org.terraform.main.config.TConfigOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Stack;
 
 public class TerraformCommandManager implements TabExecutor {
@@ -137,7 +138,7 @@ public class TerraformCommandManager implements TabExecutor {
 			return false;
 		}
 		for(TerraCommand command:commands){
-			if(command.matchCommand(args[0].toLowerCase())){
+			if(command.matchCommand(args[0].toLowerCase(Locale.ENGLISH))){
 				Stack<String> stack = new Stack<String>();
 				//Push arguments from back to front, except the 1st arg
 				for(int i = args.length -1; i>=1; i--){
@@ -182,7 +183,7 @@ public class TerraformCommandManager implements TabExecutor {
             for (TerraCommand terraCommand : commands) {
                 if (terraCommand.hasPermission(commandSender))
                 	for(String a:terraCommand.aliases) {
-                		if(a.startsWith(args[0].toLowerCase())) {
+                		if(a.startsWith(args[0].toLowerCase(Locale.ENGLISH))) {
                 			options.add(terraCommand.aliases.get(0));
                 			break;
                 		}
@@ -190,7 +191,7 @@ public class TerraformCommandManager implements TabExecutor {
             }
         }else {
             for (TerraCommand terraCommand : commands) {
-                if (terraCommand.matchCommand(args[0].toLowerCase())) {
+                if (terraCommand.matchCommand(args[0].toLowerCase(Locale.ENGLISH))) {
                     for (TerraCommandArgument<?> arg : terraCommand.parameters) {
                         options.addAll(arg.getTabOptions(args));
                     }

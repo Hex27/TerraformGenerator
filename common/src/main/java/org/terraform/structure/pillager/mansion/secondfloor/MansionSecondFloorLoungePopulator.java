@@ -2,6 +2,7 @@ package org.terraform.structure.pillager.mansion.secondfloor;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -85,7 +86,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 	                    data.getAsString().replaceAll(
 	                            "black_glazed_terracotta",
 	                            terracottaType
-	                                    .toString().toLowerCase()
+	                                    .toString().toLowerCase(Locale.ENGLISH)
 	                    )
 	            );
 	            super.applyData(block, data);
