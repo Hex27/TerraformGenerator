@@ -33,7 +33,7 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
 	protected abstract void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean isBoundary);
 	@Override
     public void populate(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
-
+        if(this.radius <= 0) return;
 		ArrayList<SimpleBlock[]> ceilFloorPairs = new ArrayList<>();
         ArrayList<Boolean> boundaries = new ArrayList<>();
         
