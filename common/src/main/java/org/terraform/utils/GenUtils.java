@@ -78,8 +78,8 @@ public class GenUtils {
         int y = data instanceof PopulatorDataSpigotAPI ? getTransformedHeight(data.getTerraformWorld(),x,z) : getHighestGround(data, x, z);
         int[] pair = {TerraformGeneratorPlugin.injector.getMinY() - 1, TerraformGeneratorPlugin.injector.getMinY() - 1};
         List<int[]> list = new ArrayList<>();
-
-        for(int ny = y; ny > TerraformGeneratorPlugin.injector.getMinY(); ny--) {
+        //Subtract one as the first cave floor cannot be the surface
+        for(int ny = y-1; ny > TerraformGeneratorPlugin.injector.getMinY(); ny--) {
             Material type = data.getType(x, ny, z);
             if(BlockUtils.isStoneLike(type)) {
                 pair[1] = ny;
