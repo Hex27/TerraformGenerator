@@ -35,12 +35,16 @@ public class AnimalPopulator {
     //Instead, each query will just call getBiome per block. This sounds more
     //intensive, but it relies on the getBiome cache system to be faster.
     public boolean canSpawn(Random rand) {
+        if ( chance <= 0 ) return false;
+
         if (GenUtils.chance(rand, 100 - chance, 100))
             return false;
         return true;
     }
     
     private boolean canSpawnInBiome(BiomeBank b) {
+        if ( chance <= 0 ) return false;
+
     	if (whitelistedBiomes != null) {
             for (BiomeBank entr : whitelistedBiomes) {
                 if (entr == b) return true;
@@ -57,6 +61,7 @@ public class AnimalPopulator {
     }
 
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+        if ( chance <= 0 ) return;
 
         for (int i = 0; i < GenUtils.randInt(random, minNum, maxNum); i++) {
             int x = (data.getChunkX() << 4) + GenUtils.randInt(random, 5, 7);

@@ -63,6 +63,8 @@ public class OrePopulator {
     }
     
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+        if (baseChance <= 0.0) return;
+
     	if(requiredBiomes.length > 0) {
     		BiomeBank b = BiomeBank.getBiomeSectionFromChunk(world, data.getChunkX(), data.getChunkZ()).getBiomeBank();
     		boolean canPopulate = false;

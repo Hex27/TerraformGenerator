@@ -30,6 +30,8 @@ public class AmethystGeodePopulator {
     }
     
     public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+        if (frequency <= 0) return;
+
     	if(GenUtils.chance(random, (int) (frequency*10000.0), 10000)) {
 			int x = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
         	int z = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
