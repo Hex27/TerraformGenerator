@@ -712,6 +712,7 @@ public class FractalTreeBuilder {
 
         if (beeHive == null
                 && Version.isAtLeast(15.1)
+                && beeChance > 0
                 && GenUtils.chance(rand, (int) (beeChance * 1000.0), 1000)) {
             for (int i = 0; i < 3; i++) {
                 if (!two.getRelative(0, -i, 0).getType().isSolid()) {
