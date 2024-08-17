@@ -155,7 +155,7 @@ public class BoxBuilder {
     }
 
     public enum BoxType{
-    	UPPER_SEMIBOX, LOWER_SEMIBOX, FULL_BOX;
+    	UPPER_SEMIBOX, LOWER_SEMIBOX, FULL_BOX
     }
 
 }

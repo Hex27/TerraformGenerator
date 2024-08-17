@@ -219,7 +219,7 @@ public class SphereBuilder {
     }
 
     public enum SphereType{
-    	UPPER_SEMISPHERE, LOWER_SEMISPHERE, FULL_SPHERE;
+    	UPPER_SEMISPHERE, LOWER_SEMISPHERE, FULL_SPHERE
     }
 
 }
