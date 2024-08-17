@@ -12,7 +12,7 @@ import java.util.Random;
 public class MansionStandardSecondFloorPiece extends MansionStandardRoomPiece {
 
 	@SuppressWarnings("unused")
-	private MansionJigsawBuilder builder;
+	private final MansionJigsawBuilder builder;
     public MansionStandardSecondFloorPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
     	super(widthX, height, widthZ, type, validDirs);
         this.builder = builder;

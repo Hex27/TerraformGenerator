@@ -25,7 +25,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 	
 	private static boolean flushIsQueued = false;
     //SimpleChunkLocation to a collection of location:blockdata entries marked for repair.
-    public static @NotNull Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
+    public static final @NotNull Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
     //public static Map<Material, Integer> cacheContents = new ConcurrentHashMap<>();
     //private final TerraformWorld tw;
 

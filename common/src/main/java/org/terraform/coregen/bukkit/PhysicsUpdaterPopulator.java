@@ -27,7 +27,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
 	
 	private static boolean flushIsQueued = false;
     //SimpleChunkLocation to a collection of simplelocations
-    public static @NotNull Map<SimpleChunkLocation, Collection<SimpleLocation>> cache = new ConcurrentHashMap<>();
+    public static final @NotNull Map<SimpleChunkLocation, Collection<SimpleLocation>> cache = new ConcurrentHashMap<>();
     //private final TerraformWorld tw;
 
     public PhysicsUpdaterPopulator() {

@@ -91,10 +91,10 @@ public class TerraformCommandManager implements TabExecutor {
         this.registerCommand(new LocateBiomeCommand(plugin, "locatebiome", "lb"));
     }
     
-	private @NotNull ArrayList<TerraCommand> commands = new ArrayList<>();
+	private final @NotNull ArrayList<TerraCommand> commands = new ArrayList<>();
 
-	private TerraformGeneratorPlugin plugin;
-	public @NotNull ArrayList<String> bases = new ArrayList<String>();
+	private final TerraformGeneratorPlugin plugin;
+	public final @NotNull ArrayList<String> bases = new ArrayList<String>();
 	
 	public void unregisterCommand(@NotNull Class<?> clazz){
         commands.removeIf(clazz::isInstance);

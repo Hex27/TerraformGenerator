@@ -35,10 +35,10 @@ public class MansionJigsawBuilder extends JigsawBuilder {
 	
 	public static final int roomHeight = 7;
 	public static final int groundFloorRoomWidth = 9;
-	private @NotNull ArrayList<SimpleLocation> roofedLocations = new ArrayList<>();
+	private final @NotNull ArrayList<SimpleLocation> roofedLocations = new ArrayList<>();
 	
-	private MansionTowerPieceHandler towerPieceHandler;
-	private MansionSecondFloorHandler secondFloorHandler;
+	private final MansionTowerPieceHandler towerPieceHandler;
+	private final MansionSecondFloorHandler secondFloorHandler;
 	
     public MansionJigsawBuilder(int widthX, int widthZ, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);

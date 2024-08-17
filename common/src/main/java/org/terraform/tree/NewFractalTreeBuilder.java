@@ -49,7 +49,7 @@ public class NewFractalTreeBuilder implements Cloneable {
     private float noisePriority = 0.1f;
     private int leafSpawnDepth = 1;
     private FractalLeaves fractalLeaves;
-    private double displacementThetaDelta = 2*Math.PI;
+    private final double displacementThetaDelta = 2*Math.PI;
 
     /**
      * This function determines how branches will decrease in length
@@ -73,7 +73,7 @@ public class NewFractalTreeBuilder implements Cloneable {
      */
     private float bendChance = 0f;
     private float bendMaxAngle = 0f; //in radians. Max bend angle
-    int maxHeight = 9999;
+    final int maxHeight = 9999;
 
     private Material branchMaterial = Material.OAK_LOG;
     private Material rootMaterial = Material.OAK_WOOD;

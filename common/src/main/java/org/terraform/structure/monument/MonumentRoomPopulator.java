@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 public class MonumentRoomPopulator extends RoomPopulatorAbstract {
-    MonumentDesign design;
+    final MonumentDesign design;
 
     public MonumentRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);

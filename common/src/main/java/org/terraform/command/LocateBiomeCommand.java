@@ -124,11 +124,11 @@ public class LocateBiomeCommand extends TerraCommand {
     }
 
     private class Task extends BukkitRunnable {
-        UUID p;
-        BiomeBank b;
-        TerraformWorld tw;
-        int x;
-        int z;
+        final UUID p;
+        final BiomeBank b;
+        final TerraformWorld tw;
+        final int x;
+        final int z;
 
         public Task(UUID player, TerraformWorld tw, int x, int z, BiomeBank targetBiome) {
             this.p = player;

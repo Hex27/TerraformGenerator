@@ -9,7 +9,7 @@ import org.terraform.structure.village.plains.forge.PlainsVillageForgeWallPiece.
 
 public abstract class PlainsVillageForgePiece extends JigsawStructurePiece {
 
-	protected PlainsVillagePopulator plainsVillagePopulator;
+	protected final PlainsVillagePopulator plainsVillagePopulator;
 	private @Nullable PlainsVillageForgeWallType wallType = null;
 	
 	public PlainsVillageForgePiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {

@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class TWSimpleLocation extends SimpleLocation {
 
-	TerraformWorld tw;
+	final TerraformWorld tw;
 	public TWSimpleLocation(TerraformWorld tw, int x, int y, int z) {
 		super(x, y, z);
 		this.tw = tw;

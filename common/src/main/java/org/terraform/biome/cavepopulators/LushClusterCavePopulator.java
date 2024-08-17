@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 
-	private boolean isForLargeCave;
+	private final boolean isForLargeCave;
 	public LushClusterCavePopulator(float radius, boolean isForLargeCave) {
 		super(radius);
 		this.isForLargeCave = isForLargeCave;

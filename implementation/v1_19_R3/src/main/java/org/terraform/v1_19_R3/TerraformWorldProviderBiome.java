@@ -29,7 +29,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 
 	//Idk what this is for
 	public static class TerraformBiomeResolverProxy implements BiomeResolver{
-		TerraformWorldProviderBiome delegate;
+		final TerraformWorldProviderBiome delegate;
 		public TerraformBiomeResolverProxy(TerraformWorldProviderBiome delegate) {
 			this.delegate = delegate;
 		}
@@ -71,7 +71,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
         return Set.copyOf(biomeBases);
     }
 
-    private Set<Holder<BiomeBase>> biomeList;
+    private final Set<Holder<BiomeBase>> biomeList;
     @SuppressWarnings("deprecation")
 	public TerraformWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
         //super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));

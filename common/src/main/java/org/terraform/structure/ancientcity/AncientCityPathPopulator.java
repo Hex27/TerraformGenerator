@@ -27,7 +27,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 	//private int state = 0;
     private final Random rand;
     private final RoomLayoutGenerator gen;
-    private HashSet<SimpleLocation> occupied;
+    private final HashSet<SimpleLocation> occupied;
     public AncientCityPathPopulator(Random rand, RoomLayoutGenerator gen, HashSet<SimpleLocation> occupied) {
         this.rand = rand;
         this.gen = gen;

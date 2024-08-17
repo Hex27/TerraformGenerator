@@ -19,9 +19,9 @@ import java.util.Collection;
 public class BiomeBlender {
     private final TerraformWorld tw;
     double gridBlendingFactor = 1;
-    boolean blendBiomeGrid;
+    final boolean blendBiomeGrid;
     int riverThreshold = 5;
-    boolean blendWater;
+    final boolean blendWater;
     boolean blendBeachesToo = true;
     int smoothBlendTowardsRivers = -1;
 

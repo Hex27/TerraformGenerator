@@ -38,6 +38,7 @@ public class FractalLeaves implements Cloneable{
 
     boolean semiSphereLeaves = false;
     @NotNull
+    final
     Random rand = new Random();
     float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;

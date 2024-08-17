@@ -24,7 +24,7 @@ import java.util.Random;
 public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
 
 	public boolean isTentRoofFace = false;
-	private MansionJigsawBuilder builder;
+	private final MansionJigsawBuilder builder;
     public MansionSecondFloorWallPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
         this.builder = builder;

@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class MansionStandardTowerPiece extends JigsawStructurePiece {
 
-	private MansionJigsawBuilder builder;
+	private final MansionJigsawBuilder builder;
 	boolean isHighestPieceInTower = false;
     public MansionStandardTowerPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
     	super(widthX, height, widthZ, type, validDirs);

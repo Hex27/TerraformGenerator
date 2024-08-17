@@ -21,8 +21,8 @@ import java.util.Random;
 
 public class ErodedPlainsHandler extends BiomeHandler {
     static BiomeBlender biomeBlender;
-    static BiomeHandler plainsHandler = BiomeBank.PLAINS.getHandler();
-    static boolean slabs = TConfigOption.MISC_USE_SLABS_TO_SMOOTH.getBoolean();
+    static final BiomeHandler plainsHandler = BiomeBank.PLAINS.getHandler();
+    static final boolean slabs = TConfigOption.MISC_USE_SLABS_TO_SMOOTH.getBoolean();
 
     @Override
     public boolean isOcean() {

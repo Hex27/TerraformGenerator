@@ -194,9 +194,9 @@ public class StructureLocator {
 	}
 	
 	private static class StructureLocatorKey{
-		private MegaChunk mc;
-		private TerraformWorld tw;
-		private StructurePopulator pop;
+		private final MegaChunk mc;
+		private final TerraformWorld tw;
+		private final StructurePopulator pop;
 		public StructureLocatorKey(MegaChunk mc, TerraformWorld tw, StructurePopulator pop) {
 			super();
 			this.mc = mc;

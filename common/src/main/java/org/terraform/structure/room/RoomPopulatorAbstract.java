@@ -7,7 +7,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 public abstract class RoomPopulatorAbstract {
     private final boolean forceSpawn;
     private final boolean unique;
-    public Random rand;
+    public final Random rand;
 
     public RoomPopulatorAbstract(Random rand, boolean forceSpawn, boolean unique) {
         this.rand = rand;

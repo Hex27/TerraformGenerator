@@ -18,12 +18,12 @@ import org.terraform.utils.GenUtils;
 public class MansionTowerPieceHandler {
 
 	//Contains rooms in 3d.
-	public @NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
-    public @NotNull ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
+	public final @NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
+    public final @NotNull ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
     public static final int towerPieceWidth = 7; //2 less than groundFloorPiece
     
-	private MansionJigsawBuilder builder;
-	private PopulatorDataAbstract data;
+	private final MansionJigsawBuilder builder;
+	private final PopulatorDataAbstract data;
 	public MansionTowerPieceHandler(MansionJigsawBuilder builder, PopulatorDataAbstract data) {
 		super();
 		this.builder = builder;

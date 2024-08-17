@@ -7,9 +7,9 @@ import org.terraform.data.Wall;
 
 public class PathPopulatorData {
     public SimpleBlock base;
-    public BlockFace dir;
+    public final BlockFace dir;
     public boolean isOverlapped = false;
-    public int pathWidth;
+    public final int pathWidth;
     public boolean isTurn;
     public boolean isEnd = false;
 

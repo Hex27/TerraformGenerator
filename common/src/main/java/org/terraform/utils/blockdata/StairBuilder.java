@@ -69,6 +69,7 @@ public class StairBuilder {
     }
     
     @NotNull
+    final
     ArrayList<SimpleBlock> placed = new ArrayList<>();
     public @NotNull StairBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);

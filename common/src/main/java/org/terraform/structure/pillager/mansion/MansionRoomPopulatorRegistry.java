@@ -37,7 +37,8 @@ public enum MansionRoomPopulatorRegistry {
 	
 	;
   @NotNull
-	ArrayList<MansionRoomPopulator> populators = new ArrayList<>();
+  final
+  ArrayList<MansionRoomPopulator> populators = new ArrayList<>();
 	MansionRoomPopulatorRegistry(MansionRoomPopulator... populators){
         this.populators.addAll(Arrays.asList(populators));
 	}

@@ -7,7 +7,7 @@ import org.terraform.main.config.TConfigOption;
 public class TerraformGeneratorMetricsHandler {
 
 	@SuppressWarnings("unused")
-	private TerraformGeneratorPlugin plugin;
+	private final TerraformGeneratorPlugin plugin;
 	
 	public TerraformGeneratorMetricsHandler(@NotNull TerraformGeneratorPlugin plugin) {
 		this.plugin = plugin;

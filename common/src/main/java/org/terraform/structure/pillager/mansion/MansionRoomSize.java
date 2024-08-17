@@ -2,8 +2,8 @@ package org.terraform.structure.pillager.mansion;
 
 public class MansionRoomSize {
 
-	private int widthX;
-	private int widthZ;
+	private final int widthX;
+	private final int widthZ;
 	public MansionRoomSize(int widthX, int widthZ) {
 		super();
 		this.widthX = widthX;
