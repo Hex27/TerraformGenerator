@@ -7,6 +7,7 @@ import java.util.Random;
 
 public abstract class StructurePopulator {
 	
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public abstract boolean isEnabled();
 
     public abstract void populate(TerraformWorld world, PopulatorDataAbstract data);

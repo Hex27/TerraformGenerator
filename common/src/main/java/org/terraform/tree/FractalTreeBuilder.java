@@ -573,6 +573,7 @@ public class FractalTreeBuilder {
     }
 
     
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean checkGradient(PopulatorDataAbstract data, int x, int z) {
     	heightGradientChecked = true;
     	return (HeightMap.getTrueHeightGradient(data, x, z, 3) 

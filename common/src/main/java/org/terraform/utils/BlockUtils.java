@@ -1213,6 +1213,7 @@ public class BlockUtils {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private static boolean isMushroom(SimpleBlock target) {
         Material material = target.getType();
         return material == Material.BROWN_MUSHROOM_BLOCK || material == Material.RED_MUSHROOM_BLOCK;
@@ -1456,7 +1457,8 @@ public class BlockUtils {
     		((Rotatable) data).setRotation(BlockUtils.getXZPlaneBlockFace(rand));
     	}
     }
-    
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isOre(Material mat) {
     	for(Material ore:ores)
     		if(ore == mat) return true;

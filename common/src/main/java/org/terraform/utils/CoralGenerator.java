@@ -65,6 +65,7 @@ public class CoralGenerator {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isSaturatedCoral(SimpleBlock block) {
         for (BlockFace face : BlockUtils.directBlockFaces) {
             if (block.getRelative(face).getType() == Material.WATER) return true;

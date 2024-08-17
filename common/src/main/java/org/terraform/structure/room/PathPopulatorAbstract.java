@@ -26,6 +26,7 @@ public abstract class PathPopulatorAbstract {
      * @param pathWidth
      * @return
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
         return false;
     }
