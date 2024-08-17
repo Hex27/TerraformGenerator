@@ -32,7 +32,7 @@ public class AncientCityPillarSchematicParser extends SchematicParser {
     		failCount += 1;
     		return;
     	}
-    	else if(touchedOffsets.size() == 0 || touchedOffsets.get(0).getY() == block.getY())
+    	else if(touchedOffsets.isEmpty() || touchedOffsets.get(0).getY() == block.getY())
     	{
     		touchedOffsets.add(block);
     	}

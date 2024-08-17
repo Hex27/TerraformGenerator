@@ -139,7 +139,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
      * a larger room with bigger widthX and widthZ (same height)
      */
     public CubeRoom getExtendedRoom(int extraSize) {
-    	if(this.walledFaces.size() == 0) {
+    	if(this.walledFaces.isEmpty()) {
     		return this.room;
     	}else {
     		CubeRoom extendedRoom = new CubeRoom(

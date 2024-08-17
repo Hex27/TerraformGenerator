@@ -37,7 +37,7 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
         super.postBuildDecoration(random, data);
 
         //No walls :V
-        if (this.getWalledFaces().size() == 0) {
+        if (this.getWalledFaces().isEmpty()) {
             //Place a dining table or smt, idk
 
             SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());

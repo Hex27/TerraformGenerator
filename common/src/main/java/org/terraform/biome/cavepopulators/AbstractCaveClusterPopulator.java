@@ -59,7 +59,7 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
         seen.put(center, new Wall[]{new Wall(ceil), new Wall(floor)});
 
         //TerraformGeneratorPlugin.logger.info("Entering BFS for " + center);
-        while(queue.size() > 0)
+        while(!queue.isEmpty())
         {
             SimpleBlock v = queue.remove();
 

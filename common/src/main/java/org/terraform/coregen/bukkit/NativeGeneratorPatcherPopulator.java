@@ -58,7 +58,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     }
     
     public static void flushChanges() {
-    	if(cache.size() == 0)
+    	if(cache.isEmpty())
     		return;
     	TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Flushing repairs (" + cache.size() + " chunks), pushed by cache size");
 //        for(Material mat:cacheContents.keySet())

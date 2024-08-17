@@ -93,7 +93,7 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
         seen.add(center);
         queue.add(center);
 
-        while(queue.size() > 0)
+        while(!queue.isEmpty())
         {
             SimpleLocation v = queue.remove();
 

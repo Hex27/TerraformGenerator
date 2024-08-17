@@ -55,7 +55,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
     }
     
     public static void flushChanges() {
-    	if(cache.size() == 0)
+    	if(cache.isEmpty())
     		return;
     	TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Flushing repairs (" + cache.size() + " chunks)");
         ArrayList<SimpleChunkLocation> locs = new ArrayList<>();

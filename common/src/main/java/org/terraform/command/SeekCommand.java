@@ -53,7 +53,7 @@ public class SeekCommand extends TerraCommand implements Listener {
     public void execute(CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
         ArrayList<Object> params = this.parseArguments(sender, args);
-        if (params.size() == 0) {
+        if (params.isEmpty()) {
             sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_HEADER.parse());
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
                 sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_ENTRY.parse("%entry%", spop.getClass().getSimpleName().replace("Populator", "")));

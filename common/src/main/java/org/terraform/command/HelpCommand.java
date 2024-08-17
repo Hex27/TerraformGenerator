@@ -44,7 +44,7 @@ public class HelpCommand extends TerraCommand {
 		int maxPages =  (int) Math.ceil(cmds.size()/6);
 		int page = 0;
 		
-		if(args.size() > 0){
+		if(!args.isEmpty()){
 			try{
 				page = Integer.parseInt(args.pop());
 				if(page <= 0){
