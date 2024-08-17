@@ -3,15 +3,16 @@ package org.terraform.utils.blockdata;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.Slab;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.utils.GenUtils;
 
 public class SlabBuilder {
-    private final Slab blockData;
+    private final @NotNull Slab blockData;
 
-    public SlabBuilder(Material mat) {
+    public SlabBuilder(@NotNull Material mat) {
         this.blockData = (Slab) Bukkit.createBlockData(mat);
     }
 
@@ -20,53 +21,53 @@ public class SlabBuilder {
     }
 
 
-    public SlabBuilder setType(Slab.Type type) {
+    public @NotNull SlabBuilder setType(Slab.@NotNull Type type) {
         this.blockData.setType(type);
         return this;
     }
 
-    public SlabBuilder setWaterlogged(boolean bool) {
+    public @NotNull SlabBuilder setWaterlogged(boolean bool) {
         this.blockData.setWaterlogged(bool);
         return this;
     }
 
-    public SlabBuilder apply(SimpleBlock block) {
+    public @NotNull SlabBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public SlabBuilder apply(Wall block) {
+    public @NotNull SlabBuilder apply(@NotNull Wall block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public SlabBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull SlabBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         return this;
     }
 
-    public SlabBuilder lapply(SimpleBlock block) {
+    public @NotNull SlabBuilder lapply(@NotNull SimpleBlock block) {
     	if(block.getType().isSolid())
     		return this;
         block.setBlockData(blockData);
         return this;
     }
 
-    public SlabBuilder lapply(Wall block) {
+    public @NotNull SlabBuilder lapply(@NotNull Wall block) {
     	if(block.getType().isSolid())
     		return this;
         block.setBlockData(blockData);
         return this;
     }
 
-    public SlabBuilder lapply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull SlabBuilder lapply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	if(data.getType(x,y,z).isSolid())
     		return this;
         data.setBlockData(x, y, z, blockData);
         return this;
     }
     
-    public Slab get() {
+    public @NotNull Slab get() {
         return blockData;
     }
 }

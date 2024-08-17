@@ -3,6 +3,7 @@ package org.terraform.biome.mountainous;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.biome.BiomeType;
@@ -27,7 +28,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
 	
 	//Birch Mountains must be shorter to allow trees to populate.
 	@Override
-	protected double getPeakMultiplier(BiomeSection section, Random sectionRandom) {
+	protected double getPeakMultiplier(BiomeSection section, @NotNull Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.05, 1.1);
 	}
 	
@@ -37,12 +38,12 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.SAVANNA;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.ORANGE_TERRACOTTA,
         		Material.ORANGE_TERRACOTTA,
@@ -58,7 +59,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         correctDirt(new SimpleBlock(data,rawX,surfaceY,rawZ));
 
@@ -113,7 +114,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
 		SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25);
 
         for (SimpleLocation sLoc : trees) {
@@ -128,7 +129,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
         }
 	}
 
-    private void correctDirt(SimpleBlock start) {
+    private void correctDirt(@NotNull SimpleBlock start) {
     	for(int depth = 0; depth < 5; depth++) {
     		for(BlockFace face:BlockUtils.directBlockFaces) {
     			if(start.getRelative(face).getType() == Material.ORANGE_TERRACOTTA) {
@@ -141,7 +142,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     }
 	
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.SANDY_BEACH;
 	}
 	
@@ -149,7 +150,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
 	 * Savanna Mountains will not allow rivers to carve through them.
 	 */
 	@Override
-    public double calculateHeight(TerraformWorld tw, int x, int z) {
+    public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
         double height = HeightMap.CORE.getHeight(tw, x, z);//HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
         
         //Let mountains cut into adjacent sections.

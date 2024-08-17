@@ -1,13 +1,14 @@
 package org.terraform.structure.monument;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.Wall;
 
 public enum MonumentWallPattern {
     EYE,
     CROSS;
 
-    public void apply(Wall w) {
+    public void apply(@NotNull Wall w) {
         if (this == EYE) {
             //Eye brow
             for (int i = 0; i <= 4; i++) {

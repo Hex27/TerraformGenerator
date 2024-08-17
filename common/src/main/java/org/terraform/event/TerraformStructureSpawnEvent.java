@@ -2,6 +2,7 @@ package org.terraform.event;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Crappy event meant to allow another debug plugin to register structure locations
@@ -22,11 +23,11 @@ public final class TerraformStructureSpawnEvent extends Event {
     }
 
 
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
         return handlers;
     }
 

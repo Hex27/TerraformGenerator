@@ -7,6 +7,7 @@ import org.bukkit.block.data.type.Bell;
 import org.bukkit.block.data.type.Bell.Attachment;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -40,7 +41,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         int x = room.getX();
         int z = room.getZ();
         int y = GenUtils.getHighestGround(data, x, z);
@@ -133,7 +134,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.isHuge();
     }
 }

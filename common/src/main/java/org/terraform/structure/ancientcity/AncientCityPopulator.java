@@ -3,6 +3,7 @@ package org.terraform.structure.ancientcity;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -32,7 +33,7 @@ import java.util.Random;
 public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
         if (!TConfigOption.STRUCTURES_ANCIENTCITY_ENABLED.getBoolean())
             return false;
         
@@ -47,7 +48,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 123122),
                 (int) (TConfigOption.STRUCTURES_ANCIENTCITY_SPAWNRATIO
                         .getDouble() * 10000),
@@ -55,7 +56,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         if (!TConfigOption.STRUCTURES_ANCIENTCITY_ENABLED.getBoolean())
             return;
 
@@ -74,7 +75,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
                 data, x, y + 1, z);
     }
 
-    public void spawnAncientCity(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnAncientCity(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	TerraformGeneratorPlugin.logger.info("Spawning ancient city at: " + x + "," + y + "," + z);
     	
         //Level One
@@ -190,7 +191,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(318377, chunkX, chunkZ);
     }
 

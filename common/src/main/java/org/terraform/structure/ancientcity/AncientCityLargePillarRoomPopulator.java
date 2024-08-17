@@ -1,5 +1,6 @@
 package org.terraform.structure.ancientcity;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -26,7 +27,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
     }
     
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	//super.populate(data, room);
     	this.effectiveRoom = room;
     	
@@ -136,7 +137,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() <= 20 && room.getWidthZ() <= 20;
     }
 }

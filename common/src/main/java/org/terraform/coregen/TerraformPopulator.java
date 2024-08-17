@@ -184,7 +184,7 @@ public class TerraformPopulator extends BlockPopulator {
         this.populate(tw, random, data);
     }
 
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
     	random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
         //ores
         for (OrePopulator ore : ORE_POPS) {

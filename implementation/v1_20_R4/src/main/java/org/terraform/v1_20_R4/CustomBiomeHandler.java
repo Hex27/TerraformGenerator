@@ -23,6 +23,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_20_R4.CraftServer;
 import org.bukkit.craftbukkit.v1_20_R4.block.CraftBiome;
 import org.bukkit.craftbukkit.v1_20_R4.block.CraftBlock;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -104,7 +105,7 @@ public class CustomBiomeHandler {
 		
 	}
 
-	private static void registerCustomBiomeBase(CustomBiomeType biomeType, DedicatedServer dedicatedserver, IRegistryWritable<BiomeBase> registrywritable, BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+	private static void registerCustomBiomeBase(@NotNull CustomBiomeType biomeType, DedicatedServer dedicatedserver, @NotNull IRegistryWritable<BiomeBase> registrywritable, @NotNull BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         //be is reloadableRegistries()
         //a is get()
@@ -233,7 +234,7 @@ public class CustomBiomeHandler {
 	}
 
 
-    public static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(IRegistry<BiomeBase> registry) {
+    public static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(@NotNull IRegistry<BiomeBase> registry) {
 
         List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
 

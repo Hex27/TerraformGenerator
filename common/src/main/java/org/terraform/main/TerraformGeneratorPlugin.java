@@ -10,6 +10,7 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.ChunkCacheLoader;
@@ -45,8 +46,8 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
 	public static TLogger logger;
     public static final Set<String> INJECTED_WORLDS = new HashSet<>();
-    public static final PrivateFieldHandler privateFieldHandler;
-    public static NMSInjectorAbstract injector;
+    public static final @NotNull PrivateFieldHandler privateFieldHandler;
+    public static @Nullable NMSInjectorAbstract injector;
     private static TerraformGeneratorPlugin instance;
     public static TfgWatchdogSuppressant watchdogSuppressant;
     
@@ -154,7 +155,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
      */
     @Deprecated
     @EventHandler
-    public void onWorldLoad(WorldLoadEvent event) {
+    public void onWorldLoad(@NotNull WorldLoadEvent event) {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
             logger.stdout(event.getWorld().getName() + " loaded.");
             if (!TerraformGenerator.preWorldInitGen.isEmpty()) {
@@ -185,7 +186,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
     @SuppressWarnings("unused")
     @EventHandler
-    public void onWorldInit(WorldInitEvent event) {
+    public void onWorldInit(@NotNull WorldInitEvent event) {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
             logger.stdout("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
             TerraformWorld tw = TerraformWorld.forceOverrideSeed(event.getWorld());

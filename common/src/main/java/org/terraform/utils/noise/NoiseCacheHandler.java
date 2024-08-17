@@ -2,6 +2,8 @@ package org.terraform.utils.noise;
 
 import java.util.function.Function;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.data.TerraformWorld;
 
 import com.google.common.cache.CacheBuilder;
@@ -110,7 +112,7 @@ public class NoiseCacheHandler{
     		CacheBuilder.newBuilder()
     		.maximumSize(300).build(new NoiseCacheLoader());
 	
-    public static FastNoise getNoise(TerraformWorld world, NoiseCacheEntry entry, Function<TerraformWorld, FastNoise> noiseFunction) {
+    public static @NotNull FastNoise getNoise(TerraformWorld world, NoiseCacheEntry entry, @NotNull Function<TerraformWorld, FastNoise> noiseFunction) {
         NoiseCacheKey key = new NoiseCacheKey(world,entry);
         FastNoise noise = NOISE_CACHE.getIfPresent(key);
         if(noise == null) {
@@ -127,7 +129,7 @@ public class NoiseCacheHandler{
 		 * If this is null, the caller is responsible for inserting it.
 		 */
 		@Override
-		public FastNoise load(NoiseCacheKey key) throws Exception {
+		public @Nullable FastNoise load(NoiseCacheKey key) throws Exception {
 			return null;
 		}
 	}

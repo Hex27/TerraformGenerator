@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.StructureGrowEvent;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
@@ -25,7 +26,7 @@ public class SaplingOverrider implements Listener {
      * Use priority highest to allow other plugins to modify event.getBlocks
     */
     @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onTreeGrow(StructureGrowEvent event) {
+    public void onTreeGrow(@NotNull StructureGrowEvent event) {
         if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
         TerraformWorld tw = TerraformWorld.get(event.getWorld());
         PopulatorDataPostGen data = new PopulatorDataPostGen(event.getLocation().getChunk());

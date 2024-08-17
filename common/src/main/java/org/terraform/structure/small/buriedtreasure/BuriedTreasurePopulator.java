@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraLootTable;
@@ -20,7 +21,7 @@ import org.terraform.utils.blockdata.ChestBuilder;
 public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 	
 	@Override
-	public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+	public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
 	
 		if (!TConfigOption.STRUCTURES_BURIEDTREASURE_ENABLED.getBoolean())
 		    return;
@@ -44,7 +45,7 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 	}
 	
 	@Override
-	public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+	public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
 		int num = TConfigOption.STRUCTURES_BURIEDTREASURE_COUNT_PER_MEGACHUNK.getInt();
 		int[][] coords = new int[num][2];
 		for (int i = 0; i < num; i++)
@@ -52,7 +53,7 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 		return coords;
 	}
 	
-	public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+	public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
 		MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
 		
 		double minDistanceSquared = Integer.MAX_VALUE;
@@ -72,7 +73,7 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 	}
 	
 	
-	private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+	private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
 		return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12422),
 		        (int) (TConfigOption.STRUCTURES_BURIEDTREASURE_SPAWNRATIO
 		                .getDouble() * 10000),
@@ -80,8 +81,8 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 	}
 	
 	@Override
-	public boolean canSpawn(TerraformWorld tw, int chunkX,
-	                    int chunkZ) {
+	public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX,
+                            int chunkZ) {
 		MegaChunk mc = new MegaChunk(chunkX, chunkZ);
 		for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
 		    if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
@@ -98,7 +99,7 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 	}
 	
 	@Override
-	public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+	public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
 		return world.getHashedRand(82736921, chunkX, chunkZ);
 	}
 	

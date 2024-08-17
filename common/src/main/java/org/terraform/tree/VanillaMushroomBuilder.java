@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -17,7 +18,7 @@ public class VanillaMushroomBuilder {
 	public static final String RED_MUSHROOM_CAP = "redmushroomcap";
 	public static final String BROWN_MUSHROOM_CAP = "brownmushroomcap";
 	
-	public static void buildVanillaMushroom(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z, String capSchematic) {
+	public static void buildVanillaMushroom(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z, String capSchematic) {
 		Random rand = tw.getRand(16L * 16 * x + 16L * y + z);
 		
 		int height = GenUtils.randInt(rand, 5, 7);

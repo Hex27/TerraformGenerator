@@ -1,5 +1,6 @@
 package org.terraform.data;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.main.config.TConfigOption;
@@ -11,7 +12,7 @@ public class MegaChunk {
 	public static final int megaChunkBlockWidth = BiomeSection.sectionWidth*TConfigOption.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS.getInt(); 
     private int x, z;
 
-    public MegaChunk(SimpleChunkLocation sLoc) {
+    public MegaChunk(@NotNull SimpleChunkLocation sLoc) {
         this(sLoc.getX(), sLoc.getZ());
     }
 
@@ -30,7 +31,7 @@ public class MegaChunk {
         //this.z = chunkZ >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
     }
 
-    public MegaChunk getRelative(int x, int z) {
+    public @NotNull MegaChunk getRelative(int x, int z) {
         MegaChunk mc = new MegaChunk(0, 0);
         mc.x = this.x + x;
         mc.z = this.z + z;
@@ -41,7 +42,7 @@ public class MegaChunk {
      * @param rand
      * @return A random pair of xz block coords within the mega chunk
      */
-    public int[] getRandomCoords(Random rand) {
+    public int[] getRandomCoords(@NotNull Random rand) {
         
         int lowX = megaToBlockCoords(this.x);
         int lowZ = megaToBlockCoords(this.z);
@@ -58,7 +59,7 @@ public class MegaChunk {
      * @param rand
      * @return A random pair of xz block coords within the mega chunk. This pair of coords WILL be in the middle of a chunk.
      */
-    public int[] getRandomCenterChunkBlockCoords(Random rand) {
+    public int[] getRandomCenterChunkBlockCoords(@NotNull Random rand) {
         
         int lowX = this.getLowerCornerChunkCoords()[0];
         int lowZ = this.getLowerCornerChunkCoords()[1];
@@ -135,7 +136,7 @@ public class MegaChunk {
     	
     	return new int[] { coords[0] >> 4, coords[1] >> 4 };
     }
-    public BiomeSection getCenterBiomeSection(TerraformWorld tw) {
+    public @NotNull BiomeSection getCenterBiomeSection(TerraformWorld tw) {
     	int[] coords = getCenterBiomeSectionBlockCoords();
     	return BiomeBank.getBiomeSectionFromBlockCoords(tw,coords[0],coords[1]);
     }
@@ -174,7 +175,7 @@ public class MegaChunk {
     }
 
     @Override
-    public String toString(){
+    public @NotNull String toString(){
         return x + "," + z;
     }
     

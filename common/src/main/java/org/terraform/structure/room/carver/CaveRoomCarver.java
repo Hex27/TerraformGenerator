@@ -1,6 +1,7 @@
 package org.terraform.structure.room.carver;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.CubeRoom;
@@ -26,7 +27,7 @@ public class CaveRoomCarver extends RoomCarver{
     }
 
     @Override
-    public void carveRoom(PopulatorDataAbstract data, CubeRoom room, Material... wallMaterial) {
+    public void carveRoom(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room, Material... wallMaterial) {
         int heightOffset = room.getHeight() - (2 * room.getHeight() / 3);
         BlockUtils.carveCaveAir(data.getTerraformWorld().getHashedRand(room.getX(), room.getY(), room.getZ()).nextInt(9999291),
                 xMultiplier*(room.getWidthX() / 2f),

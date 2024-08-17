@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.jigsaw.JigsawType;
@@ -29,7 +30,7 @@ public class PlainsVillageForgeWallPiece extends PlainsVillageForgePiece {
     } 
     
     @Override
-    public void postBuildDecoration(Random rand, PopulatorDataAbstract data) {
+    public void postBuildDecoration(@NotNull Random rand, @NotNull PopulatorDataAbstract data) {
     	if(getWallType() == PlainsVillageForgeWallType.SOLID) { //Wall
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
     		Wall w = entry.getKey().getRelative(0, -1, 0);

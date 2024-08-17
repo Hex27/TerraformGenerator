@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -31,8 +33,8 @@ public class RoomLayoutGenerator {
      */
     private PathState pathState;
     private final HashSet<CubeRoom> rooms = new HashSet<>();
-    private final int[] upperBound;
-    private final int[] lowerBound;
+    private final int @NotNull [] upperBound;
+    private final int @NotNull [] lowerBound;
     private final RoomLayout layout;
 
     boolean genPaths = true;
@@ -41,7 +43,7 @@ public class RoomLayoutGenerator {
     private int centY;
     private int centZ;
     private PathPopulatorAbstract pathPop;
-    public RoomCarver roomCarver = null;
+    public @Nullable RoomCarver roomCarver = null;
     private int roomMaxHeight = 7;
     private int roomMinHeight = 5;
     private int roomMaxX = 15;
@@ -57,7 +59,7 @@ public class RoomLayoutGenerator {
     /**
      * For stupid transitory phase shit
      */
-    public Material[] wallMaterials = new Material[]{Material.CAVE_AIR};
+    public Material @NotNull [] wallMaterials = new Material[]{Material.CAVE_AIR};
 
     /**
      * LEGACY SHIT. Disorganised nonsense from a bygone era
@@ -87,7 +89,7 @@ public class RoomLayoutGenerator {
         this.lowerBound = new int[] {centX - range / 2, centZ - range / 2};
     }
 
-    public PathState getOrCalculatePathState(TerraformWorld tw){
+    public @NotNull PathState getOrCalculatePathState(@NotNull TerraformWorld tw){
         if(pathState == null)
             pathState = new PathState(this, tw);
 
@@ -128,7 +130,7 @@ public class RoomLayoutGenerator {
         this.pyramidish = pyramidish;
     }
 
-    public CubeRoom forceAddRoom(int widthX, int widthZ, int heightY) {
+    public @Nullable CubeRoom forceAddRoom(int widthX, int widthZ, int heightY) {
         if (layout == RoomLayout.RANDOM_BRUTEFORCE) {
             CubeRoom room = new CubeRoom(widthX, widthZ, heightY,
                     centX + GenUtils.randInt(rand, -range / 2, range / 2),
@@ -246,7 +248,7 @@ public class RoomLayoutGenerator {
      * @param coords
      * @return
      */
-    public boolean isInRoom(int[] coords) {
+    public boolean isInRoom(int @NotNull [] coords) {
         for (CubeRoom room : rooms) {
             if (room.isPointInside(coords))
                 return true;
@@ -263,7 +265,7 @@ public class RoomLayoutGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public void calculateRoomPopulators(TerraformWorld tw)
+    public void calculateRoomPopulators(@NotNull TerraformWorld tw)
     {
         //Set force spawn rooms
         Iterator<RoomPopulatorAbstract> it = roomPops.iterator();
@@ -312,7 +314,7 @@ public class RoomLayoutGenerator {
      * @Deprecated don't use this for new structures. Use the new jigsaw system
      */
     @Deprecated
-	public void runRoomPopulators(PopulatorDataAbstract data, TerraformWorld tw) {
+	public void runRoomPopulators(PopulatorDataAbstract data, @NotNull TerraformWorld tw) {
     	//Allocate room populators
         calculateRoomPopulators(tw);
 
@@ -325,7 +327,7 @@ public class RoomLayoutGenerator {
      * Links room populators to empty rooms and applies paths and room to the actual world.
      * @param mat Material to use for lining room walls.
      */
-    public void fill(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+    public void fill(@NotNull PopulatorDataAbstract data, @NotNull TerraformWorld tw, Material... mat) {
         //ArrayList<PathGenerator> pathGens = new ArrayList<>();
         //Carve Pathways
         if (genPaths) {
@@ -397,7 +399,7 @@ public class RoomLayoutGenerator {
 
     }
 
-    public void carveRoomsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+    public void carveRoomsOnly(@NotNull PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
     	//Create empty rooms
         for (CubeRoom room : rooms) {
             if (carveRooms) {
@@ -418,7 +420,7 @@ public class RoomLayoutGenerator {
 
     /**
      */
-    public void fillRoomsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+    public void fillRoomsOnly(@NotNull PopulatorDataAbstract data, @NotNull TerraformWorld tw, Material... mat) {
 
     	carveRoomsOnly(data,tw,mat);
 
@@ -428,7 +430,7 @@ public class RoomLayoutGenerator {
 
     }
 
-    public void carvePathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+    public void carvePathsOnly(@NotNull PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
         //ArrayList<PathGenerator> pathGens = new ArrayList<>();
         if (genPaths)
             for (CubeRoom room : rooms) {
@@ -454,7 +456,7 @@ public class RoomLayoutGenerator {
         }
     }
 
-    public void fillPathsOnly(PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
+    public void fillPathsOnly(@NotNull PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
         carvePathsOnly(data,tw,mat);
 
         populatePathsOnly();
@@ -519,7 +521,7 @@ public class RoomLayoutGenerator {
     /**
      * @return the rooms
      */
-    public HashSet<CubeRoom> getRooms() {
+    public @NotNull HashSet<CubeRoom> getRooms() {
         return rooms;
     }
 
@@ -650,7 +652,7 @@ public class RoomLayoutGenerator {
         this.mazePathGenerator = mazePathGenerator;
     }
 
-    public HashSet<PathPopulatorData> getPathPopulators(){
+    public @NotNull HashSet<PathPopulatorData> getPathPopulators(){
     	if(this.pathPopulators.isEmpty()) {
     		for(LegacyPathGenerator pGen:this.pathGens) {
     			this.pathPopulators.addAll(pGen.path);
@@ -659,7 +661,7 @@ public class RoomLayoutGenerator {
     	return this.pathPopulators;
     }
 
-    public boolean isPointInPath(Wall w, int rearOffset, int includeWidth) {
+    public boolean isPointInPath(@NotNull Wall w, int rearOffset, int includeWidth) {
     	if(getPathPopulators().contains(new PathPopulatorData(w.getRear(rearOffset).getAtY(centY), 3)))
     		return true;
     	if(includeWidth != 0)

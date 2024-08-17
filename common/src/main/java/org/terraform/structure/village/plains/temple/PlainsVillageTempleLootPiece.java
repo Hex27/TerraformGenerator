@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.temple;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
@@ -21,7 +22,7 @@ public class PlainsVillageTempleLootPiece extends PlainsVillageTempleStandardPie
 	
 	
 	@Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		super.postBuildDecoration(random,data);
 		for(BlockFace face:this.getWalledFaces()) {
 			SimpleEntry<Wall,Integer> entry = this.getRoom().getWall(data, face, 0);

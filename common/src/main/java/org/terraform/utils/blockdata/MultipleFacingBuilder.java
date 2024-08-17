@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -11,9 +12,9 @@ import org.terraform.utils.GenUtils;
 
 public class MultipleFacingBuilder {
 
-    private final MultipleFacing blockData;
+    private final @NotNull MultipleFacing blockData;
 
-    public MultipleFacingBuilder(Material mat) {
+    public MultipleFacingBuilder(@NotNull Material mat) {
         this.blockData = (MultipleFacing) Bukkit.createBlockData(mat);
     }
 
@@ -22,27 +23,27 @@ public class MultipleFacingBuilder {
     }
 
 
-    public MultipleFacingBuilder setFace(BlockFace face, boolean isEnabled) {
+    public @NotNull MultipleFacingBuilder setFace(@NotNull BlockFace face, boolean isEnabled) {
         this.blockData.setFace(face, isEnabled);
         return this;
     }
 
-    public MultipleFacingBuilder apply(SimpleBlock block) {
+    public @NotNull MultipleFacingBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public MultipleFacingBuilder apply(Wall block) {
+    public @NotNull MultipleFacingBuilder apply(@NotNull Wall block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public MultipleFacingBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull MultipleFacingBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         return this;
     }
 
-    public MultipleFacing get() {
+    public @NotNull MultipleFacing get() {
         return blockData;
     }
 }

@@ -3,6 +3,7 @@ package org.terraform.biome.mountainous;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -22,17 +23,17 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.SNOWY_SLOPES;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(Random rand) {
         return new Material[]{Material.STONE};
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         if(surfaceY < TerraformGenerator.seaLevel) return;
         //Dirt Fixer
@@ -75,7 +76,7 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
         }
     }
     
-    private void correctDirt(SimpleBlock start) {
+    private void correctDirt(@NotNull SimpleBlock start) {
     	for(int depth = 0; depth < 5; depth++) {
     		for(BlockFace face:BlockUtils.directBlockFaces) {
     			if(start.getRelative(face).getType() == Material.STONE) {
@@ -93,16 +94,16 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
 		
 	}
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.ICY_BEACH;
 	}
 
 	@Override
-	public BiomeBank getRiverType() {
+	public @NotNull BiomeBank getRiverType() {
 		return BiomeBank.FROZEN_RIVER;
 	}
 
-    private static void stoneStack(Material stoneType, PopulatorDataAbstract data, Random rand, int x, int y, int z) {
+    private static void stoneStack(Material stoneType, @NotNull PopulatorDataAbstract data, @NotNull Random rand, int x, int y, int z) {
         data.setType(x, y, z, stoneType);
         
         int depth = GenUtils.randInt(rand, 3, 7);

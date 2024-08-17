@@ -12,6 +12,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.generator.LimitedRegion;
 import org.bukkit.loot.Lootable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -51,7 +52,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     }
 
     @Override
-    public void setType(int x, int y, int z, Material type) {
+    public void setType(int x, int y, int z, @NotNull Material type) {
         if(!lr.isInRegion(x,y,z)){
             NativeGeneratorPatcherPopulator.pushChange(tw.getName(), x,y,z,Bukkit.createBlockData(type));
             return;
@@ -60,7 +61,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
         if(!lr.isInRegion(x,y,z)){
             NativeGeneratorPatcherPopulator.pushChange(tw.getName(), x,y,z,data);
             return;
@@ -74,7 +75,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     }
 
     @Override
-    public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
+    public void addEntity(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
         lr.spawnEntity(new Location(tw.getWorld(), rawX, rawY, rawZ), type);
     }
 
@@ -89,7 +90,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     }
 
     @Override
-    public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {        setType(rawX,rawY,rawZ,Material.SPAWNER);
+    public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {        setType(rawX,rawY,rawZ,Material.SPAWNER);
         try{
             //This will give class cast exception sometimes. I'm not sure why.
             //Additionally, if rawX/rawZ is outside the region, this will correctly
@@ -103,7 +104,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     }
 
     @Override
-    public void lootTableChest(int x, int y, int z, TerraLootTable table) {
+    public void lootTableChest(int x, int y, int z, @NotNull TerraLootTable table) {
         BlockState s = lr.getBlockState(x,y,z);
         if(s instanceof Lootable t){
             t.setLootTable(table.bukkit());
@@ -136,7 +137,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     }
 
     @Override
-    public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, Random random) {
+    public void spawnMinecartWithChest(int x, int y, int z, @NotNull TerraLootTable table, Random random) {
 
          StorageMinecart e = (StorageMinecart) lr.spawnEntity(new Location(tw.getWorld(), x+0.5f, y+0.5f, z+0.5f), EntityType.MINECART_CHEST);
          e.setLootTable(table.bukkit());

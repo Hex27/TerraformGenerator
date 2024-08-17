@@ -1,6 +1,7 @@
 package org.terraform.structure.pyramid;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
@@ -18,7 +19,7 @@ public class TerracottaRoom extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         //Decorate the walls with Terracotta
         ArrayList<Wall> entrances = new ArrayList<>();
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
@@ -69,7 +70,7 @@ public class TerracottaRoom extends RoomPopulatorAbstract {
 
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() % 2 == 1 && room.getWidthZ() % 2 == 1;
     }
 }

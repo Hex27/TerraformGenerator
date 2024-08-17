@@ -2,6 +2,8 @@ package org.terraform.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.cave.NoiseCaveRegistry;
 import org.terraform.coregen.ChunkCache;
@@ -25,9 +27,9 @@ public class TerraformWorld {
     private final long seed;
     public int minY = 0;
     public int maxY = 256;
-    private final TerraformBukkitBlockPopulator bukkitBlockPopulator;
+    private final @NotNull TerraformBukkitBlockPopulator bukkitBlockPopulator;
 
-    public final NoiseCaveRegistry noiseCaveRegistry;
+    public final @NotNull NoiseCaveRegistry noiseCaveRegistry;
     public TerraformWorld(String name, long seed) {
         TerraformGeneratorPlugin.logger.info("Creating TW instance: " + name + " - " + seed);
         this.worldName = name;
@@ -36,7 +38,7 @@ public class TerraformWorld {
         this.noiseCaveRegistry = new NoiseCaveRegistry(this);
     }
 
-    private TerraformWorld(World world) {
+    private TerraformWorld(@NotNull World world) {
         TerraformGeneratorPlugin.logger.info("Creating TW instance: " + world.getName() + " - " + world.getSeed());
         this.worldName = world.getName();
         this.seed = world.getSeed();
@@ -47,22 +49,22 @@ public class TerraformWorld {
     /**
      * For multiverse. Ignores the cache entry.
      */
-    public static TerraformWorld forceOverrideSeed(World world)
+    public static @NotNull TerraformWorld forceOverrideSeed(@NotNull World world)
     {
         TerraformWorld tw = new TerraformWorld(world);
         WORLDS.put(world.getName(), tw);
         return tw;
     }
 
-    public static TerraformWorld get(World world) {
+    public static @NotNull TerraformWorld get(@NotNull World world) {
         return WORLDS.computeIfAbsent(world.getName(), (k) -> new TerraformWorld(world));
     }
 
-    public static TerraformWorld get(String name, long seed) {
+    public static @NotNull TerraformWorld get(String name, long seed) {
         return WORLDS.computeIfAbsent(name, (k) -> new TerraformWorld(name, seed));
     }
 
-    public FastNoise getTemperatureOctave() {
+    public @NotNull FastNoise getTemperatureOctave() {
 
         return NoiseCacheHandler.getNoise(
         		this, 
@@ -75,7 +77,7 @@ public class TerraformWorld {
         		});
     }
 
-    public FastNoise getMoistureOctave() {
+    public @NotNull FastNoise getMoistureOctave() {
         return NoiseCacheHandler.getNoise(
         		this, 
         		NoiseCacheEntry.TW_MOISTURE, 
@@ -87,7 +89,7 @@ public class TerraformWorld {
         		});
     }
 
-    public FastNoise getOceanicNoise() {
+    public @NotNull FastNoise getOceanicNoise() {
         return NoiseCacheHandler.getNoise(
         		this, 
         		NoiseCacheEntry.TW_OCEANIC, 
@@ -99,7 +101,7 @@ public class TerraformWorld {
         		});
     }
 
-    public FastNoise getMountainousNoise() {
+    public @NotNull FastNoise getMountainousNoise() {
         return NoiseCacheHandler.getNoise(
         		this, 
         		NoiseCacheEntry.TW_MOUNTAINOUS, 
@@ -115,15 +117,15 @@ public class TerraformWorld {
         return seed;
     }
 
-    public Random getRand(long d) {
+    public @NotNull Random getRand(long d) {
         return new Random(seed/4 + 25981*d);
     }
 
-    public Random getHashedRand(long x, int y, int z) {
+    public @NotNull Random getHashedRand(long x, int y, int z) {
         return new Random(11*x + Objects.hash(seed, 127*y, 773*z));
     }
 
-    public Random getHashedRand(int x, int y, int z, long multiplier) {
+    public @NotNull Random getHashedRand(int x, int y, int z, long multiplier) {
         return new Random(Objects.hash(seed, 11*x, 127*y, 773*z) * multiplier);
     }
 
@@ -156,11 +158,11 @@ public class TerraformWorld {
         return worldName;
     }
 
-    public World getWorld() {
+    public @Nullable World getWorld() {
         return Bukkit.getWorld(worldName);
     }
 
-	public TerraformBukkitBlockPopulator getBukkitBlockPopulator() {
+	public @NotNull TerraformBukkitBlockPopulator getBukkitBlockPopulator() {
 		return bukkitBlockPopulator;
 	}
 }

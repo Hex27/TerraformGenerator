@@ -1,6 +1,7 @@
 package org.terraform.populators;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -62,7 +63,7 @@ public class OrePopulator {
         this.maxDistance = Math.max(Math.abs(minRange - peakSpawnChanceHeight), Math.abs(maxSpawnHeight - peakSpawnChanceHeight));
     }
     
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
     	if(requiredBiomes.length > 0) {
     		BiomeBank b = BiomeBank.getBiomeSectionFromChunk(world, data.getChunkX(), data.getChunkZ()).getBiomeBank();
     		boolean canPopulate = false;
@@ -127,7 +128,7 @@ public class OrePopulator {
     }
     
     //Don't use simpleblock to forcefully compress memory usage and GC invocations by this.
-    public void placeOre(int seed, PopulatorDataAbstract data, int coreX, int coreY, int coreZ) {
+    public void placeOre(int seed, @NotNull PopulatorDataAbstract data, int coreX, int coreY, int coreZ) {
     	double size = GenUtils.randDouble(new Random(seed), minOreSize, maxOreSize);
     	//Size is the volume of the sphere, so radius is:
     	double radius = Math.pow(((3.0/4.0)*size*(1.0/Math.PI)), 1.0/3.0);

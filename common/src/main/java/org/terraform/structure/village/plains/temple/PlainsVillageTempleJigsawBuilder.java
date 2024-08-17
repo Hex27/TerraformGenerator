@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.temple;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -18,7 +19,7 @@ import java.util.Random;
 public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
 
 	PlainsVillagePopulator plainsVillagePopulator;
-    public PlainsVillageTempleJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
+    public PlainsVillageTempleJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
         this.plainsVillagePopulator = plainsVillagePopulator;
         this.pieceRegistry = new JigsawStructurePiece[]{
@@ -32,13 +33,13 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
     }
     
     @Override
-    public JigsawStructurePiece getFirstPiece(Random random) {
+    public @NotNull JigsawStructurePiece getFirstPiece(Random random) {
         return new PlainsVillageTempleClericAltarPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, true, this, BlockUtils.directBlockFaces);
     	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
 
     @Override
-    public void build(Random random) {
+    public void build(@NotNull Random random) {
         super.build(random);
 
         //Make sure awkward corners are fixed
@@ -114,7 +115,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
      * @param overlapperPieces
      * @return
      */
-    protected static boolean hasAdjacentWall(JigsawStructurePiece piece, BlockFace face, ArrayList<JigsawStructurePiece> overlapperPieces) {
+    protected static boolean hasAdjacentWall(@NotNull JigsawStructurePiece piece, @NotNull BlockFace face, @NotNull ArrayList<JigsawStructurePiece> overlapperPieces) {
     	for(JigsawStructurePiece other:overlapperPieces) {
     		if(other.getRoom().getSimpleLocation()
     				.equals(piece.getRoom().getSimpleLocation().getRelative(face,5))) {
@@ -133,7 +134,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
      * @param overlapperPieces
      * @return
      */
-    protected static boolean hasAdjacentInwardWall(JigsawStructurePiece piece, BlockFace face, ArrayList<JigsawStructurePiece> overlapperPieces) {
+    protected static boolean hasAdjacentInwardWall(@NotNull JigsawStructurePiece piece, @NotNull BlockFace face, @NotNull ArrayList<JigsawStructurePiece> overlapperPieces) {
     	
     	for(JigsawStructurePiece other:overlapperPieces) {
     		if(other.getRoom().getSimpleLocation()
@@ -145,7 +146,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
     	return false;
     }
 
-    public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two) {
+    public void decorateAwkwardCorner(@NotNull Wall target, @NotNull Random random, @NotNull BlockFace one, @NotNull BlockFace two) {
         Material[] cobblestone = {Material.COBBLESTONE, Material.MOSSY_COBBLESTONE};
         Material[] stoneBricks = {Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
 

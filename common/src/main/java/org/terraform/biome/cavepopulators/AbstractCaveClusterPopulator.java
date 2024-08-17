@@ -10,6 +10,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -32,7 +33,7 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
 	
 	protected abstract void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean isBoundary);
 	@Override
-    public void populate(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+    public void populate(TerraformWorld tw, Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor) {
         if(this.radius <= 0) return;
 		ArrayList<SimpleBlock[]> ceilFloorPairs = new ArrayList<>();
         ArrayList<Boolean> boundaries = new ArrayList<>();

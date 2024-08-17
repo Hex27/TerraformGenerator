@@ -2,6 +2,7 @@ package org.terraform.biome.river;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -21,16 +22,16 @@ public class ScarletForestRiverHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.RIVER;
     }
     @Override
-    public CustomBiomeType getCustomBiome() {
+    public @NotNull CustomBiomeType getCustomBiome() {
         return CustomBiomeType.SCARLET_FOREST;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.DIRT,
                 Material.DIRT,
@@ -41,7 +42,7 @@ public class ScarletForestRiverHandler extends BiomeHandler {
 
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         boolean growsKelp = random.nextBoolean();
 
         if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land

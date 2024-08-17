@@ -2,6 +2,7 @@ package org.terraform.command;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -16,7 +17,7 @@ public class TimingsCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Shows timings of monitored functions";
     }
 
@@ -26,12 +27,12 @@ public class TimingsCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
         return sender.isOp();
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args) throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, Stack<String> args) throws InvalidArgumentException {
         sender.sendMessage("=====Avg Timings=====");
         for (Map.Entry<String, Long> entry : TickTimer.TIMINGS.entrySet()) {
             sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + entry.getKey() + ChatColor.DARK_GRAY + ": " + ChatColor.GOLD + entry.getValue());

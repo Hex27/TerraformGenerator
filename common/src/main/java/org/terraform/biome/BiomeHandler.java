@@ -3,6 +3,8 @@ package org.terraform.biome;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
@@ -15,7 +17,7 @@ import java.util.Random;
 public abstract class BiomeHandler {
     public abstract boolean isOcean();
 
-    public CustomBiomeType getCustomBiome() {
+    public @NotNull CustomBiomeType getCustomBiome() {
     	return CustomBiomeType.NONE;
     }
     public abstract Biome getBiome();
@@ -47,7 +49,7 @@ public abstract class BiomeHandler {
     
     public abstract void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data);
 
-    public int getMaxHeightForCaves(TerraformWorld tw, int x, int z) {
+    public int getMaxHeightForCaves(@NotNull TerraformWorld tw, int x, int z) {
     	return tw.maxY;
     }
     
@@ -58,7 +60,7 @@ public abstract class BiomeHandler {
      * This is to ensure that same transform
      * function is called only once per chunk.
      */
-    public BiomeHandler getTransformHandler() {
+    public @Nullable BiomeHandler getTransformHandler() {
         return null;
     }
 
@@ -79,12 +81,12 @@ public abstract class BiomeHandler {
     }
 
     //Beach type. This will be used instead if the height is too close to sea level.
-    public BiomeBank getBeachType() {
+    public @NotNull BiomeBank getBeachType() {
     	return BiomeBank.SANDY_BEACH;
     }
     
     //River type. This will be used instead if the heightmap got carved into a river.
-    public BiomeBank getRiverType() {
+    public @NotNull BiomeBank getRiverType() {
     	return BiomeBank.RIVER;
     }
     

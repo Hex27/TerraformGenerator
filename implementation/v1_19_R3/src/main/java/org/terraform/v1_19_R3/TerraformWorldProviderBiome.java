@@ -10,6 +10,8 @@ import net.minecraft.core.IRegistryWritable;
 import net.minecraft.core.registries.Registries;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_19_R3.block.CraftBlock;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.data.TerraformWorld;
@@ -36,7 +38,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 		}
 		
 		@Override
-		public Holder<BiomeBase> getNoiseBiome(int arg0, int arg1, int arg2, Sampler arg3) {
+		public @Nullable Holder<BiomeBase> getNoiseBiome(int arg0, int arg1, int arg2, Sampler arg3) {
 			return delegate.getNoiseBiome(arg0, arg1, arg2, arg3);
 		}
 	}
@@ -46,7 +48,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
     @SuppressWarnings("unused")
 	private final WorldChunkManager delegate;
     
-    private static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(IRegistry<BiomeBase> registry) {
+    private static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(@NotNull IRegistry<BiomeBase> registry) {
 
         List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
 
@@ -103,7 +105,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 	@SuppressWarnings("unused")
 	private static boolean debug = false;
 	@Override
-	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
+	public @Nullable Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
 		//For vanilla cave biome positioning. However, doesn't work now.
 //		BiomeBase delegateCandidate = delegate.getNoiseBiome(x, y, z, arg3);
 //		if(CraftBlock.biomeBaseToBiome(registry, delegateCandidate) == Biome.LUSH_CAVES 

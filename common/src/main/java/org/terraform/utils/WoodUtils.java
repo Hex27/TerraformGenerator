@@ -1,6 +1,8 @@
 package org.terraform.utils;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 
 public class WoodUtils {
@@ -44,7 +46,7 @@ public class WoodUtils {
 		 * @param oak material to convert to an WoodType enum
 		 * @return
 		 */
-		public static WoodType parse(Material oak) {
+		public static @NotNull WoodType parse(@NotNull Material oak) {
 			return WoodType.valueOf(oak.toString()
 					.replace("DARK_OAK","OAK")
 					.replace("OAK_",""));
@@ -52,12 +54,12 @@ public class WoodUtils {
 
 		//I am the pinnacle of optimisation
 		//Fear my absolutely unbeatable timings
-		public Material getWood(WoodSpecies species) {
+		public @Nullable Material getWood(@NotNull WoodSpecies species) {
 			return Material.getMaterial(template.replace("%WOOD%", species.toString()));
 		}
 	}
 	
-    public static Material getWoodForBiome(BiomeBank biome, WoodType wood) {
+    public static @Nullable Material getWoodForBiome(@NotNull BiomeBank biome, @NotNull WoodType wood) {
         switch (biome) {
             case BADLANDS:
     		case BADLANDS_RIVER:
