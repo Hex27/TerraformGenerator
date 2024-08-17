@@ -103,8 +103,7 @@ public class NoiseCacheHandler{
 		
 		FRACTALTREES_LEAVES_NOISE,
 		FRACTALTREES_BASE_NOISE,
-		;
-	}
+    }
 	
     private static final LoadingCache<NoiseCacheHandler.NoiseCacheKey, FastNoise> NOISE_CACHE = 
     		CacheBuilder.newBuilder()

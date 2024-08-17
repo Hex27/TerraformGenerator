@@ -6,8 +6,8 @@ import org.terraform.biome.BiomeBank;
 public class WoodUtils {
 	
 	public static enum WoodSpecies{
-		OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK;
-	}
+		OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK
+    }
 	
 	public static enum WoodType{
 		PLANKS("%WOOD%_PLANKS"),

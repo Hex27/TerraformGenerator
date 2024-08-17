@@ -47,8 +47,8 @@ public abstract class NMSInjectorAbstract {
      */
     public void updatePhysics(World world, org.bukkit.block.Block block) {
     	throw new UnsupportedOperationException("Tried to update physics without implementing.");
-    };
-    
+    }
+
     public int getMinY() {
     	return 0;
     }

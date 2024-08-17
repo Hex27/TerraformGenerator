@@ -117,9 +117,9 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 			w.getRight().setType(Material.BOOKSHELF);
 			w.getRight().getRelative(0,1,0).setType(Material.LANTERN);
 		}
-	};
+	}
 
-	@Override
+    @Override
 	public MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}

@@ -110,7 +110,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                         }else if(rel.getType().isSolid()) {
                         	//Lower half is water, if replaced block was solid.
                         	rel.setType(Material.WATER);
-                        	PhysicsUpdaterPopulator.pushChange(tw.getName(), new SimpleLocation(rel.getX(),rel.getY(),rel.getZ()));;
+                        	PhysicsUpdaterPopulator.pushChange(tw.getName(), new SimpleLocation(rel.getX(),rel.getY(),rel.getZ()));
                         }
                     }
                 }

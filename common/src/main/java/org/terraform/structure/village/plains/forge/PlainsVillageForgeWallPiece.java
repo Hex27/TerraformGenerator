@@ -102,6 +102,6 @@ public class PlainsVillageForgeWallPiece extends PlainsVillageForgePiece {
     }
     
     public static enum PlainsVillageForgeWallType {
-    	SOLID, FENCE;
+    	SOLID, FENCE
     }
 }
