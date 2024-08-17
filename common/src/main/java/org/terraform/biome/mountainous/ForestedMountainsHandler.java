@@ -3,7 +3,6 @@ package org.terraform.biome.mountainous;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.biome.BiomeBank;
 import org.terraform.biome.flat.JungleHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;

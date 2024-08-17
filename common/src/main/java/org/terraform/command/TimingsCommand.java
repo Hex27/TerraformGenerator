@@ -3,7 +3,6 @@ package org.terraform.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.TickTimer;

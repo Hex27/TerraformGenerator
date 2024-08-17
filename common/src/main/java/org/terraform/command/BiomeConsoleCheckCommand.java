@@ -5,7 +5,6 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;

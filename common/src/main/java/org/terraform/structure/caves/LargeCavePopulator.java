@@ -5,7 +5,6 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
-import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.SimpleLocation;

@@ -2,7 +2,6 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;

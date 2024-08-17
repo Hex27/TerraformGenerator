@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeSection;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;

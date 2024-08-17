@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.v1_20_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_20_R1.generator.CraftLimitedRegion;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;

@@ -7,7 +7,6 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeClimate;
 import org.terraform.biome.BiomeSection;
 import org.terraform.biome.BiomeType;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;

@@ -84,8 +84,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     	//This is in the middle of a plateau.
     	//This must extend out until the entrance is found.
         SimpleBlock spawnSpot = new SimpleBlock(data, spawnCoords[0],0,spawnCoords[1]).getGround();
-        if (spawnSpot == null) return;
-        
+
         //The plateau (by right,) should generate as a distorted circle.
         //As such, the direction can be random.
         inDir = BlockUtils.getDirectBlockFace(getHashedRandom(tw,data.getChunkX(),data.getChunkZ()));

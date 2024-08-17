@@ -15,7 +15,6 @@ import org.bukkit.craftbukkit.v1_20_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_20_R2.generator.CraftLimitedRegion;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;

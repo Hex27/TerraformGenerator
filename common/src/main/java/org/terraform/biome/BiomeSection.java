@@ -120,10 +120,7 @@ public class BiomeSection {
 			}
 
 		}
-		if (sections.size() != 4) {
-			TerraformGeneratorPlugin.logger.error("Section size was not 4.");
-		}
-		return sections;
+        return sections;
 	}
 	
 	public @NotNull Random getSectionRandom() {

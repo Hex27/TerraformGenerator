@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.ChunkCache;

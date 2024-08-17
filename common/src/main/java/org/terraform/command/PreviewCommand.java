@@ -21,7 +21,6 @@ import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;

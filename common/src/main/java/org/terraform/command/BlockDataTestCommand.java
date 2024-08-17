@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
 
