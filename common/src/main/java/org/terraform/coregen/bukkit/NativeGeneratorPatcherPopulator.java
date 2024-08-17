@@ -2,7 +2,6 @@ package org.terraform.coregen.bukkit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;

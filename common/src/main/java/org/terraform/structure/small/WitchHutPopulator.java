@@ -8,8 +8,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
-import org.terraform.biome.BiomeClimate;
-import org.terraform.biome.BiomeType;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;

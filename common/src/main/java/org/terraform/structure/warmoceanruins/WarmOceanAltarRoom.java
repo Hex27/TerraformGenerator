@@ -1,19 +1,13 @@
 package org.terraform.structure.warmoceanruins;
 
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.CubeRoom;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CylinderBuilder;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.blockdata.ChestBuilder;
 
 import java.util.Map;

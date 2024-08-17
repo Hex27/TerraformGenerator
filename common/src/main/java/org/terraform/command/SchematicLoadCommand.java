@@ -10,7 +10,6 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.utils.BlockUtils;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;

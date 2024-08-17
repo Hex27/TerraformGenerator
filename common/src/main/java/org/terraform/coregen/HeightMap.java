@@ -1,7 +1,5 @@
 package org.terraform.coregen;
 
-import java.util.ArrayList;
-
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;

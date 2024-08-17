@@ -11,10 +11,8 @@ import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 
-import java.util.Random;
 import java.util.Stack;
 
 public class NewTreeCommand extends TerraCommand {

@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import net.minecraft.core.IRegistryWritable;
-import net.minecraft.core.registries.Registries;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_19_R3.block.CraftBlock;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +20,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.IRegistry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.BiomeResolver;
 import net.minecraft.world.level.biome.Climate.Sampler;

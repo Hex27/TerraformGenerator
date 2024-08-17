@@ -1,6 +1,5 @@
 package org.terraform.cave;
 
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.noise.FastNoise;

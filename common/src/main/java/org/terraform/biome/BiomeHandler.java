@@ -9,7 +9,6 @@ import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.coregen.populatordata.PopulatorDataColumn;
 import org.terraform.data.TerraformWorld;
 
 import java.util.Random;

@@ -21,7 +21,6 @@ import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.JigsawState;
 import org.terraform.structure.JigsawStructurePopulator;
-import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.LegacyPathGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;

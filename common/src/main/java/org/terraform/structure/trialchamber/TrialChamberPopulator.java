@@ -3,10 +3,8 @@ package org.terraform.structure.trialchamber;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
-import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.VanillaStructurePopulator;
 import org.terraform.utils.GenUtils;
 

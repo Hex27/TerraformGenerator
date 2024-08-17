@@ -1,22 +1,12 @@
 package org.terraform.biome.cavepopulators;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Tag;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.MultipleFacing;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.blockdata.MultipleFacingBuilder;
-import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.noise.NoiseCacheHandler;
-import org.terraform.utils.version.OneOneNineBlockHandler;
 
 import java.util.Random;
 

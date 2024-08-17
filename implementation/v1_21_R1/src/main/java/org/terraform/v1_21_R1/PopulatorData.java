@@ -1,9 +1,6 @@
 package org.terraform.v1_21_R1;
 
 import net.minecraft.core.BlockPosition;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.GeneratorAccessSeed;

@@ -1,7 +1,6 @@
 package org.terraform.v1_19_R3;
 
 import com.mojang.serialization.Lifecycle;
-import net.minecraft.core.Holder;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.IRegistryWritable;
 import net.minecraft.core.RegistryMaterials;
@@ -26,7 +25,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class CustomBiomeHandler {
 	

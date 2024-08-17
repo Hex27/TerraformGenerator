@@ -1,16 +1,13 @@
 package org.terraform.v1_20_R2;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.entity.TileEntity;
-import net.minecraft.world.level.block.entity.TileEntityBeehive;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBiome;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_20_R2.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
@@ -18,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.TerraLootTable;
-import org.terraform.coregen.populatordata.IPopulatorDataBeehiveEditor;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.TerraformWorld;

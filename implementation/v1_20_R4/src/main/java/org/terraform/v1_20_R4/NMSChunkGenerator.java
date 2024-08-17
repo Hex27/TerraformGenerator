@@ -1,7 +1,6 @@
 package org.terraform.v1_20_R4;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.SystemUtils;
 import net.minecraft.core.BlockPosition;

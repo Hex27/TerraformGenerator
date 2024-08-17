@@ -1,9 +1,7 @@
 package org.terraform.biome.cavepopulators;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -14,12 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.Version;
 
 public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator {
 

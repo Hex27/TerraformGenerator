@@ -1,8 +1,6 @@
 package org.terraform.biome.beach;
 
 import org.bukkit.Material;
-import org.bukkit.block.Biome;
-import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;

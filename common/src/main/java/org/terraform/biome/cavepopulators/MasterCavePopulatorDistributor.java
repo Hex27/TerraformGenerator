@@ -2,11 +2,9 @@ package org.terraform.biome.cavepopulators;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;

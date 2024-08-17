@@ -8,7 +8,6 @@ import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.catacombs.CatacombsPopulator;
 import org.terraform.structure.warmoceanruins.WarmOceanRuinsPopulator;
 
 import java.util.Random;

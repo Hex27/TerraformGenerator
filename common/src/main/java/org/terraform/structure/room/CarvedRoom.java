@@ -6,7 +6,6 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
 
-import java.util.EnumSet;
 import java.util.Random;
 
 public class CarvedRoom extends CubeRoom {

@@ -2,7 +2,6 @@ package org.terraform.tree;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.TreeType;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,12 +12,10 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SaplingOverrider implements Listener {
 

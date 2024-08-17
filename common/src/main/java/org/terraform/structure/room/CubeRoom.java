@@ -9,7 +9,6 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.room.carver.RoomCarver;
 import org.terraform.structure.room.carver.StandardRoomCarver;
 import org.terraform.utils.GenUtils;
 
