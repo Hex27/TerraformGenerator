@@ -137,7 +137,7 @@ public class EntityTypeMapper {
 	public static @NotNull String getObfsNameFromBukkitEntityType(@NotNull EntityType e){
         String name = obsNames.get(e);
         if(name == null) {
-            TerraformGeneratorPlugin.logger.error("INVALID ENTITY REQUESTED: " + e.toString());
+            TerraformGeneratorPlugin.logger.error("INVALID ENTITY REQUESTED: " + e);
             return "";
         }
         return name;

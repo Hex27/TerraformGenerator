@@ -1513,7 +1513,7 @@ public class BlockUtils {
 
     private static final HashMap<String, Material> deepslateMap = new HashMap<>();
     public static @NotNull Material deepSlateVersion(@NotNull Material target) {
-        Material mat = deepslateMap.get("DEEPSLATE_"+target.toString());
+        Material mat = deepslateMap.get("DEEPSLATE_"+ target);
 
         if(mat == null) {
             mat =  Material.getMaterial("DEEPSLATE_"+ target);
