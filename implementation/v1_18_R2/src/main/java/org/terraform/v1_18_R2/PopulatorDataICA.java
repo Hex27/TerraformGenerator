@@ -203,7 +203,9 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         .WorldGenMonumentPiece1(new Random(), x0, z0,
         EnumDirection.a);
     	
-    	PiecesContainer container = new PiecesContainer(new ArrayList<StructurePiece>() {{add(customBoundPiece);}});
+    	PiecesContainer container = new PiecesContainer(new ArrayList<>() {{
+            add(customBoundPiece);
+        }});
 
 		StructureStart start = new StructureStart(
 				structureFeature,

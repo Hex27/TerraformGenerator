@@ -115,7 +115,7 @@ public class PlainsVillageForgeRoofHandler {
 	 * This rectangle may not be the largest in the provided hashmap.
 	 */
 	public static ArrayList<SimpleLocation> identifyRectangle(HashMap<SimpleLocation, JigsawStructurePiece> pieces){
-		ArrayList<SimpleLocation> rectangleList = new ArrayList<SimpleLocation>();
+		ArrayList<SimpleLocation> rectangleList = new ArrayList<>();
 		SimpleLocation cornerLoc = null;
 		for(SimpleLocation loc:pieces.keySet()) {
 			cornerLoc = loc;
@@ -154,7 +154,7 @@ public class PlainsVillageForgeRoofHandler {
 		}
 		
 		//Add all associated pieces to the list.
-		Collection<SimpleLocation> toAdd = new ArrayList<SimpleLocation>();
+		Collection<SimpleLocation> toAdd = new ArrayList<>();
 		for(SimpleLocation pLoc:rectangleList) {
 			JigsawStructurePiece piece = pieces.get(pLoc);
 			piece = getAdjacentPiece(pieces, piece.getRoom().getSimpleLocation(), sideToMove);

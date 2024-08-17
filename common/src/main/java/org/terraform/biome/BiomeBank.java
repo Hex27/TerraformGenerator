@@ -117,11 +117,11 @@ public enum BiomeBank {
  ;
     //public static final BiomeBank[] VALUES = values();
     public static boolean debugPrint = false;
-    public static final ArrayList<BiomeBank> FLAT = new ArrayList<BiomeBank>() {{
-    	for(BiomeBank b:values()) {
-    		if(b.getType() == BiomeType.FLAT)
-    			add(b);
-    	}
+    public static final ArrayList<BiomeBank> FLAT = new ArrayList<>() {{
+        for(BiomeBank b : values()) {
+            if(b.getType() == BiomeType.FLAT)
+                add(b);
+        }
     }};
     private final BiomeHandler handler;
     private final BiomeType type;

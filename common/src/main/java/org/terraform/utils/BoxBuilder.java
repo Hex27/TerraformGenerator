@@ -19,7 +19,7 @@ public class BoxBuilder {
 	private float rZ = 1f;
 	private SimpleBlock core;
 	private boolean hardReplace = false;
-	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
+	private Collection<Material> replaceWhitelist = new ArrayList<>();
 	private Material[] types;
 	private Material[] upperType;
 	private Material[] lowerType;

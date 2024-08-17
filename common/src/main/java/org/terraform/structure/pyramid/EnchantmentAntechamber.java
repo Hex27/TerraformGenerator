@@ -32,7 +32,7 @@ public class EnchantmentAntechamber extends Antechamber {
 
         SimpleBlock core = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
         //Place shelves and Lecterns
-        HashMap<Wall, Integer> tableWalls = new HashMap<Wall, Integer>() {{
+        HashMap<Wall, Integer> tableWalls = new HashMap<>() {{
             put(new Wall(core.getRelative(2, 0, -2), BlockFace.SOUTH), 5);
             put(new Wall(core.getRelative(-2, 0, 2), BlockFace.NORTH), 5);
             put(new Wall(core.getRelative(2, 0, 2), BlockFace.WEST), 5);

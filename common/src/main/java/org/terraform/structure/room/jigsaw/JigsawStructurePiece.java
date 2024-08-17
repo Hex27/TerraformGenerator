@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public abstract class JigsawStructurePiece implements Cloneable {
     protected CubeRoom room;
-    protected HashMap<BlockFace, Boolean> validDirections = new HashMap<BlockFace, Boolean>();
+    protected HashMap<BlockFace, Boolean> validDirections = new HashMap<>();
     protected ArrayList<BlockFace> walledFaces = new ArrayList<>();
     protected JigsawStructurePiece[] allowedPieces;
     protected JigsawType type;
@@ -97,7 +97,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
     }
 
     public HashMap<BlockFace, Boolean> getValidDirections() {
-        if (type == JigsawType.END) return new HashMap<BlockFace, Boolean>();
+        if (type == JigsawType.END) return new HashMap<>();
         return validDirections;
     }
 

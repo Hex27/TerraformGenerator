@@ -188,7 +188,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
         //ALL LEVEL 0 FLOORING IS STONE/COBBLE/ANDESITE. 
         //Facilitates traps as there is no sandstone pressure plate
-        ArrayList<Material> toReplace = new ArrayList<Material>() {{
+        ArrayList<Material> toReplace = new ArrayList<>() {{
             add(Material.SANDSTONE);
             add(Material.CUT_SANDSTONE);
         }};

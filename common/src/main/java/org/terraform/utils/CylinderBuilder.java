@@ -21,7 +21,7 @@ public class CylinderBuilder {
 	private boolean singleBlockY = false;
     private boolean startFromZero = false;
 	private boolean hardReplace = false;
-	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
+	private Collection<Material> replaceWhitelist = new ArrayList<>();
 	private Material[] types;
 	private Material[] upperType;
 	private Material[] lowerType;

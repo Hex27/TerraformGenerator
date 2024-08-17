@@ -30,7 +30,7 @@ public class StairwayBuilder {
 		this.stairTypes = stairTypes;
 
 		//Infer downTypes
-		ArrayList<Material> downTypes = new ArrayList<Material>();
+		ArrayList<Material> downTypes = new ArrayList<>();
 		for(Material mat:stairTypes) {
 			Material toAdd = Material.matchMaterial(
 					mat.toString().replace("_STAIRS", ""));

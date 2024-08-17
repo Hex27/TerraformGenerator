@@ -23,7 +23,7 @@ public class SphereBuilder {
 	private double maxRadius = 100;
 	private SimpleBlock core;
 	private boolean hardReplace = false;
-	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
+	private Collection<Material> replaceWhitelist = new ArrayList<>();
 	private Material[] types;
 	private Material[] containmentMaterial = new Material[] {Material.STONE};
 	private Material[] upperType;

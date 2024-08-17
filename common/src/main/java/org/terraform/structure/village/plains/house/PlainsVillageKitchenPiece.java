@@ -48,7 +48,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, primaryWall, 0);
         Wall w = entry.getKey();
-        ArrayList<Material> utilities = new ArrayList<Material>() {{
+        ArrayList<Material> utilities = new ArrayList<>() {{
             add(Material.SMOKER);
         }};
         for (int i = 0; i < numUtilities; i++) {

@@ -241,8 +241,8 @@ public class BiomeSection {
     public Collection<BiomeSection> getRelativeSurroundingSections(int radius) {
         if (radius == 0) {
         	BiomeSection target = this;
-        	return new ArrayList<BiomeSection>() {{
-            	add(target);
+        	return new ArrayList<>() {{
+                add(target);
             }};
         }
         //     xxxxx
@@ -250,7 +250,7 @@ public class BiomeSection {
         //xox  x o x
         //xxx  x   x
         //     xxxxx
-        ArrayList<BiomeSection> candidates = new ArrayList<BiomeSection>();
+        ArrayList<BiomeSection> candidates = new ArrayList<>();
         
         //Lock rX, iterate rZ
         for(int rx:new int[] {-radius,radius}) {

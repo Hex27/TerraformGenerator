@@ -156,7 +156,7 @@ public class StructureLocator {
     }
 	
 	private static Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
-        if (radius == 0) return new ArrayList<MegaChunk>() {{
+        if (radius == 0) return new ArrayList<>() {{
             add(center);
         }};
         //     xxxxx
@@ -164,7 +164,7 @@ public class StructureLocator {
         //xox  x o x
         //xxx  x   x
         //     xxxxx
-        ArrayList<MegaChunk> candidates = new ArrayList<MegaChunk>();
+        ArrayList<MegaChunk> candidates = new ArrayList<>();
       //Lock rX, iterate rZ
         for(int rx:new int[] {-radius,radius}) {
         	 for (int rz = -radius; rz <= radius; rz++) {

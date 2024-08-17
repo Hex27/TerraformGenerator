@@ -45,7 +45,7 @@ public class ConfigLoader {
 			}
 		}
 			
-		for(String key:new ArrayList<String>(configOptions.keySet())){
+		for(String key: new ArrayList<>(configOptions.keySet())){
 			if(!overwrite && plugin.getConfig().isSet(key)){
 				configOptions.put(key, plugin.getConfig().get(key));
 			}else{

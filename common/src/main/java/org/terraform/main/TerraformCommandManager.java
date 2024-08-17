@@ -94,7 +94,7 @@ public class TerraformCommandManager implements TabExecutor {
 	private ArrayList<TerraCommand> commands = new ArrayList<>();
 
 	private TerraformGeneratorPlugin plugin;
-	public ArrayList<String> bases = new ArrayList<String>();
+	public ArrayList<String> bases = new ArrayList<>();
 	
 	public void unregisterCommand(Class<?> clazz){
 		Iterator<TerraCommand> it = commands.iterator();
@@ -131,7 +131,7 @@ public class TerraformCommandManager implements TabExecutor {
 		if(args.length == 0){
 			sender.sendMessage(plugin.getLang().fetchLang("command.unknown"));
 			try {
-				new HelpCommand(plugin, this).execute(sender, new Stack<String>());
+				new HelpCommand(plugin, this).execute(sender, new Stack<>());
 			} catch (InvalidArgumentException e) {
 				sender.sendMessage(ChatColor.RED + e.getProblem());
 			}
@@ -139,7 +139,7 @@ public class TerraformCommandManager implements TabExecutor {
 		}
 		for(TerraCommand command:commands){
 			if(command.matchCommand(args[0].toLowerCase(Locale.ENGLISH))){
-				Stack<String> stack = new Stack<String>();
+				Stack<String> stack = new Stack<>();
 				//Push arguments from back to front, except the 1st arg
 				for(int i = args.length -1; i>=1; i--){
 					stack.push(args[i]);

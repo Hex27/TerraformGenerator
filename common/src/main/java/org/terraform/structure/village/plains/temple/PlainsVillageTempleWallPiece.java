@@ -20,16 +20,16 @@ import java.util.Random;
 public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
 
 
-    private static final ArrayList<Material> BRIGHT_STAINED_GLASS_PANES = new ArrayList<Material>(){{
-            add(Material.BLUE_STAINED_GLASS_PANE);
-            add(Material.CYAN_STAINED_GLASS_PANE);
-            add(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
-            add(Material.LIME_STAINED_GLASS_PANE);
-            add(Material.MAGENTA_STAINED_GLASS_PANE);
-            add(Material.PINK_STAINED_GLASS_PANE);
-            add(Material.PURPLE_STAINED_GLASS_PANE);
-            add(Material.RED_STAINED_GLASS_PANE);
-            add(Material.YELLOW_STAINED_GLASS_PANE);
+    private static final ArrayList<Material> BRIGHT_STAINED_GLASS_PANES = new ArrayList<>() {{
+        add(Material.BLUE_STAINED_GLASS_PANE);
+        add(Material.CYAN_STAINED_GLASS_PANE);
+        add(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+        add(Material.LIME_STAINED_GLASS_PANE);
+        add(Material.MAGENTA_STAINED_GLASS_PANE);
+        add(Material.PINK_STAINED_GLASS_PANE);
+        add(Material.PURPLE_STAINED_GLASS_PANE);
+        add(Material.RED_STAINED_GLASS_PANE);
+        add(Material.YELLOW_STAINED_GLASS_PANE);
     }};
 
 	

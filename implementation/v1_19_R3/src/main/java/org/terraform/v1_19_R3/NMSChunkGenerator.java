@@ -90,8 +90,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
             if (holder.a().getClass() == StrongholdStructure.class) { //stronghold
                 int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
-                return new Pair<BlockPosition, Holder<Structure>>
-                (new BlockPosition(coords[0], 20, coords[1]), holder);
+                return new Pair<>
+                        (new BlockPosition(coords[0], 20, coords[1]), holder);
             } 
             else if(!TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
             {
@@ -99,20 +99,20 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     
             		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
-                    return new Pair<BlockPosition, Holder<Structure>>
-                    (new BlockPosition(coords[0], 50, coords[1]), holder);
+                    return new Pair<>
+                            (new BlockPosition(coords[0], 50, coords[1]), holder);
                 } else if (holder.a().getClass() == WoodlandMansionStructure.class) { //Mansion
                         
             		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
-                    return new Pair<BlockPosition, Holder<Structure>>
-                    (new BlockPosition(coords[0], 50, coords[1]), holder);
+                    return new Pair<>
+                            (new BlockPosition(coords[0], 50, coords[1]), holder);
                 } else if (holder.a().getClass() == BuriedTreasureStructure.class) { 
                 	//Buried Treasure
                 	int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
                     if(coords == null) return null;
-                    return new Pair<BlockPosition, Holder<Structure>>
-                    (new BlockPosition(coords[0], 50, coords[1]), holder);
+                    return new Pair<>
+                            (new BlockPosition(coords[0], 50, coords[1]), holder);
                 }
             }
         }

@@ -39,7 +39,7 @@ public class PlainsPathRecursiveSpawner {
      */
     private double villageDensity = 1;
     private PathPopulatorAbstract pathPop;
-    private final ArrayList<RoomPopulatorAbstract> validRooms = new ArrayList<RoomPopulatorAbstract>();
+    private final ArrayList<RoomPopulatorAbstract> validRooms = new ArrayList<>();
 
     private final SimpleBlock core;
     private final HashMap<SimpleLocation, DirectionalCubeRoom> rooms = new HashMap<>();

@@ -49,7 +49,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
     	
         SimpleChunkLocation scl = new SimpleChunkLocation(world, loc.getX(), loc.getY(),loc.getZ());
         if (!cache.containsKey(scl))
-            cache.put(scl, new ArrayList<SimpleLocation>());
+            cache.put(scl, new ArrayList<>());
 
         cache.get(scl).add(loc);
     }

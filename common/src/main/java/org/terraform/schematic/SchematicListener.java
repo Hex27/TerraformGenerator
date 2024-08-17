@@ -23,8 +23,8 @@ public class SchematicListener implements Listener {
         ItemStack wand = new ItemStack(Material.GOLDEN_AXE);
         ItemMeta meta = wand.getItemMeta();
         meta.setDisplayName(WAND_NAME);
-        meta.setLore(new ArrayList<String>() {{
-        	add(ChatColor.RED + "-=[Developer's Tool]=-");
+        meta.setLore(new ArrayList<>() {{
+            add(ChatColor.RED + "-=[Developer's Tool]=-");
         }});
         wand.setItemMeta(meta);
         

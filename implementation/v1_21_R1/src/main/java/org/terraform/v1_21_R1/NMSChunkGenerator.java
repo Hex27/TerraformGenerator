@@ -150,13 +150,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
                     int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
-                    return new Pair<BlockPosition, Holder<Structure>>
+                    return new Pair<>
                             (new BlockPosition(coords[0], 50, coords[1]), holder);
                 } else if (holder.a().getClass() == WoodlandMansionStructure.class) { //Mansion
 
                     int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
-                    return new Pair<BlockPosition, Holder<Structure>>
+                    return new Pair<>
                             (new BlockPosition(coords[0], 50, coords[1]), holder);
                 } else if (holder.a() instanceof JigsawStructure
                         && MinecraftServer.getServer().bc().d(Registries.aR).a(MinecraftKey.a("trial_chambers")) == holder.a()
@@ -164,13 +164,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
                     int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new TrialChamberPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
-                    return new Pair<BlockPosition, Holder<Structure>>
+                    return new Pair<>
                             (new BlockPosition(coords[0], 50, coords[1]), holder);
                 } else if (holder.a().getClass() == BuriedTreasureStructure.class) {
                     //Buried Treasure
                     int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
                     if(coords == null) return null;
-                    return new Pair<BlockPosition, Holder<Structure>>
+                    return new Pair<>
                             (new BlockPosition(coords[0], 50, coords[1]), holder);
                 }
             }
