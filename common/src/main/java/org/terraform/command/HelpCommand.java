@@ -66,15 +66,16 @@ public class HelpCommand extends TerraCommand {
         for (int i = 0; i < 6; i++) {
             if (cmds.size() > page * 5 + i) {
             	TerraCommand cmd = cmds.get(page * 5 + i);
-                String subCmd = ChatColor.YELLOW + "/" + base + " " + String.join("/", cmd.aliases);
-				StringBuilder params = new StringBuilder(" ");
+                StringBuilder params = new StringBuilder();
+                params.append(ChatColor.YELLOW).append("/").append(base).append(" ").append(String.join("/", cmd.aliases)).append(' ');
 				for(TerraCommandArgument<?> param:cmd.parameters){
 					if(param.isOptional()){
-						params.append(ChatColor.GRAY + "<").append(param.getName()).append("> ");
+						params.append(ChatColor.GRAY).append("<").append(param.getName()).append("> ");
 					}else
-						params.append(ChatColor.AQUA + "[").append(param.getName()).append("] ");
+						params.append(ChatColor.AQUA).append("[").append(param.getName()).append("] ");
 				}
-				sender.sendMessage(subCmd + params + ChatColor.DARK_GRAY + "- " + ChatColor.YELLOW + plugin.getLang().fetchLang(cmd.getLangPath()));
+                params.append(ChatColor.DARK_GRAY).append("- ").append(ChatColor.YELLOW).append(plugin.getLang().fetchLang(cmd.getLangPath()));
+				sender.sendMessage(params.toString());
             }
         }
 		sender.sendMessage("");
