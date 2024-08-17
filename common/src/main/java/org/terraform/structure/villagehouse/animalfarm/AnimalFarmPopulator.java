@@ -39,7 +39,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
             EntityType.HORSE,
             EntityType.CHICKEN
     };
-    
+
 
     @Override
     public @NotNull Random getHashedRandom(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
@@ -128,28 +128,25 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                 double dist = Math.pow(nx, 2) + Math.pow(nz, 2);
                 double multiplier = Math.pow((1 / (dist - 2500)) + 1, 255);
                 if (multiplier < 0 || dist > 2500 + (radiusNoise.GetNoise(nx, nz) * 500.0)) multiplier = 0;
-                noise = noise * multiplier;
+                noise = Math.abs(noise * multiplier);
 
-                if (GenUtils.chance(random, (2500 - dist) > 0 ? (int) (2500 - dist) : 0, 2500))
-                    if (noise < -0.2) {
-
-                    } else if (noise > 0.2) {
-
-                    } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { //Grass hedges
+                if (GenUtils.chance(random, (2500 - dist) > 0 ? (int) (2500 - dist) : 0, 2500)) {
+                    if(0.1 < noise && noise < 0.2) { //Grass hedges
                         data.setType(nx + x, height, nz + z, GenUtils.randMaterial(
                                 random,
                                 Material.CHISELED_STONE_BRICKS,
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS));
-                    } else {
-                        if (GenUtils.chance(random, (int) (100 * Math.pow(multiplier, 3)), 100)) {
+                    } else if ( noise <= 0.1 ) {
+                        if(GenUtils.chance(random, (int) (100 * Math.pow(multiplier, 3)), 100)) {
                             data.setType(nx + x, height, nz + z, GenUtils.randMaterial(
                                     random,
                                     Material.COBBLESTONE_SLAB,
                                     Material.MOSSY_COBBLESTONE_SLAB));
                         }
                     }
+                }
             }
         }
 

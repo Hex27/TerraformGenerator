@@ -69,7 +69,7 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
             Wall w = entry.getKey().getRelative(0, 2, 0);
             for (int i = 0; i < entry.getValue(); i++) {
                 Material type = w.getType();
-                if (w.getRelative(0, 1, 0).getType() != plainsVillagePopulator.woodLog) ;
+                w.getRelative(0, 1, 0).getType();
                 w.getRelative(0, 1, 0).setType(type);
 
                 w = w.getLeft();

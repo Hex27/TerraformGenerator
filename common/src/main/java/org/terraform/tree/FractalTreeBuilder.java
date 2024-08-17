@@ -823,11 +823,6 @@ public class FractalTreeBuilder {
 
         float noiseMultiplier = branchNoiseMultiplier;
 
-        if (rX < rY) {
-        }
-        if (rY < rZ) {
-        }
-        
 
         FastNoise noiseGen = NoiseCacheHandler.getNoise(
         		tw, 

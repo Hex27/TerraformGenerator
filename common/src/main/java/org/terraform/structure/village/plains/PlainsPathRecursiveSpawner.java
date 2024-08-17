@@ -284,8 +284,6 @@ public class PlainsPathRecursiveSpawner {
                 TerraformGeneratorPlugin.logger.info("Registered: " + room.getPop().getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size "
                         + room.getWidthX() + "x" + room.getWidthZ());
                 room.populate(core.getPopData());
-            } else {
-                //Bukkit.getLogger().info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
             }
         }
 

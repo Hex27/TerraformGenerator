@@ -62,8 +62,6 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         if (GenUtils.chance(random, 1, 10*Math.max(3, caveHeight/4))) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
-            if (h > 4) {
-            }
             Wall w = new Wall(floor.getRelative(0,1,0));
             if (BlockUtils.isAir(w.getType()))
             	if(w.getDown().getType() == Material.DEEPSLATE)
