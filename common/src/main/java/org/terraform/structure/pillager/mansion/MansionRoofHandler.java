@@ -9,6 +9,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -34,7 +35,7 @@ public class MansionRoofHandler {
 	 * @param builder
 	 * @return
 	 */
-    public static int[][] getLargestRectangle(MansionJigsawBuilder builder) {
+    public static int[][] getLargestRectangle(@NotNull MansionJigsawBuilder builder) {
         int[] lowestCoords = null;
         int[] highestCoords = null;
         
@@ -123,7 +124,7 @@ public class MansionRoofHandler {
         return new int[][] {lowestCoords, highestCoords};
     }
     
-    private static int getNumberOfPiecesNotInRectangle(MansionJigsawBuilder builder, int[] lowestCoords, int[] highestCoords) {
+    private static int getNumberOfPiecesNotInRectangle(@NotNull MansionJigsawBuilder builder, int @NotNull [] lowestCoords, int @NotNull [] highestCoords) {
     	int y = builder.getCore().getY();
     	int notInRect = 0;
         for (int x = lowestCoords[0]; x <= highestCoords[0]; x += builder.getPieceWidth()) {
@@ -138,7 +139,7 @@ public class MansionRoofHandler {
         return notInRect;
     }
     
-    public static Axis getDominantAxis(int[] lowestCoords, int[] highestCoords) {
+    public static @NotNull Axis getDominantAxis(int @NotNull [] lowestCoords, int @NotNull [] highestCoords) {
     	Axis superiorAxis;
         //Longer axis is the superior one
         if (highestCoords[0] - lowestCoords[0] > highestCoords[1] - lowestCoords[1])
@@ -151,7 +152,7 @@ public class MansionRoofHandler {
         return superiorAxis;
     }
     
-    public static BlockFace getDominantBlockFace(int[] lowestCoords, int[] highestCoords) {
+    public static @NotNull BlockFace getDominantBlockFace(int @NotNull [] lowestCoords, int @NotNull [] highestCoords) {
     	BlockFace superiorAxis;
         //Longer axis is the superior one
         if (highestCoords[0] - lowestCoords[0] > highestCoords[1] - lowestCoords[1])
@@ -171,7 +172,7 @@ public class MansionRoofHandler {
      * @param bounds
      * @return the highest Y modified by the roof
      */
-    public static int placeTentRoof(Random rand, MansionJigsawBuilder builder, int[][] bounds) {
+    public static int placeTentRoof(Random rand, @NotNull MansionJigsawBuilder builder, int[][] bounds) {
         Axis superiorAxis = Axis.Z;
         PopulatorDataAbstract data = builder.getCore().getPopData();
         
@@ -317,7 +318,7 @@ public class MansionRoofHandler {
         return highestY;
     }
     
-    private static void attemptReplaceSlab(Material slabType, Wall w, Type type) {
+    private static void attemptReplaceSlab(@NotNull Material slabType, @NotNull Wall w, @NotNull Type type) {
     	if(!w.getType().isSolid()) {
         	if(w.findCeiling(5) != null) return;
 	    	new SlabBuilder(slabType)
@@ -327,7 +328,7 @@ public class MansionRoofHandler {
     		w.setType(Material.DARK_OAK_PLANKS);
     }
     
-    public static void atticDecorations(Random rand, PopulatorDataAbstract data, JigsawStructurePiece piece) {
+    public static void atticDecorations(@NotNull Random rand, @NotNull PopulatorDataAbstract data, @NotNull JigsawStructurePiece piece) {
     	SimpleBlock core = piece.getRoom().getCenterSimpleBlock(data).getRelative(0,8,0);
     	
     	if(!core.getType().isSolid()) {

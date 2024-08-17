@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -31,7 +32,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
 		TerraformGeneratorPlugin.logger.info("Lounge at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
@@ -57,7 +58,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 	private class MansionLoungeSchematicParser extends MansionRoomSchematicParser
 	{
 		private Material terracottaType;
-		public MansionLoungeSchematicParser(Random rand, PopulatorDataAbstract pop) {
+		public MansionLoungeSchematicParser(@NotNull Random rand, PopulatorDataAbstract pop) {
 			super(rand, pop);
 			terracottaType = GenUtils.randMaterial(rand,
             		Material.WHITE_GLAZED_TERRACOTTA,
@@ -80,7 +81,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 		}
 		
 	    @Override
-	    public void applyData(SimpleBlock block, BlockData data) {
+	    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 	        if (data.getMaterial() == Material.BLACK_GLAZED_TERRACOTTA) {
 	            data = Bukkit.createBlockData(
 	                    data.getAsString().replaceAll(
@@ -97,12 +98,12 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public void decorateExit(Random rand, Wall w) {		
+	public void decorateExit(Random rand, @NotNull Wall w) {
 		w.getRelative(0,6,0).setType(Material.DARK_OAK_PLANKS);
 	}
 	
 	@Override
-	public void decorateWindow(Random rand, Wall w) {		
+	public void decorateWindow(Random rand, @NotNull Wall w) {
 		for(int i = 0; i <= 3; i++) {
 			w.getLeft(i).setType(Material.POLISHED_DIORITE);
 			if(!w.getLeft(i).getFront().getType().isSolid()
@@ -128,7 +129,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(Random rand, @NotNull Wall w) {
 		for(int i = 0; i <= 3; i++) {
 			w.getLeft(i).setType(Material.POLISHED_ANDESITE);
 			
@@ -137,7 +138,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(1,2);
 	}
 }

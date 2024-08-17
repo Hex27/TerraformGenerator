@@ -3,6 +3,7 @@ package org.terraform.structure.stronghold;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -20,7 +21,7 @@ public class SilverfishDenPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         //Spawn a random sphere of silverfish eggs
         SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight() / 2 - 2, room.getZ());
         BlockUtils.replaceUpperSphere(rand.nextInt(9999), (room.getWidthX() - 2) / 2f, (room.getHeight() - 3), (room.getWidthZ() - 2) / 2f, base, false, Material.INFESTED_STONE,
@@ -51,7 +52,7 @@ public class SilverfishDenPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return !room.isBig();
     }
 }

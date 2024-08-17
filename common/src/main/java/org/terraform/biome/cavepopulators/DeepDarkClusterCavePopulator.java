@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -23,14 +25,14 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
 		//this.isForLargeCave = isForLargeCave;
 	}
 	
-	public static void oneUnit(TerraformWorld tw, Random random, SimpleBlock origin) {
+	public static void oneUnit(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock origin) {
 		if(origin.isSolid()) return;
 		new DeepDarkClusterCavePopulator(0f).oneUnit(tw, random, origin.findStonelikeCeiling(50), origin.findStonelikeFloor(50), false);
 		origin.setType(Material.GLASS);
 	}
 	
     @Override
-	public void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
+	public void oneUnit(TerraformWorld tw, @NotNull Random random, @Nullable SimpleBlock ceil, @Nullable SimpleBlock floor, boolean boundary) {
     	if(ceil == null || floor == null) return;
     	
     	//Already processed
@@ -120,9 +122,8 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         //=========================
         //Biome Setter 
         //=========================
-        if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract) {
-        	PopulatorDataICABiomeWriterAbstract data = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
-        	while(floor.getY() < ceil.getY()) {
+        if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract data) {
+            while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), OneOneNineBlockHandler.DEEP_DARK);
         		floor = floor.getRelative(0,1,0);
         	}

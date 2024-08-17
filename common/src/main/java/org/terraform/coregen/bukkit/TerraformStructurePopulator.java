@@ -5,10 +5,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Jigsaw;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.LimitedRegion;
 import org.bukkit.generator.WorldInfo;
@@ -25,16 +23,12 @@ import org.terraform.event.TerraformStructureSpawnEvent;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.JigsawState;
 import org.terraform.structure.JigsawStructurePopulator;
-import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
-import org.terraform.structure.StructurePopulator;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.structure.room.CubeRoom;
-import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.path.PathState;
 import org.terraform.structure.stronghold.StrongholdPopulator;
-import org.terraform.utils.BlockUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -120,7 +114,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
     //Used for large structures as they are too big and rely on a guaranteed write.
     //The older api allows guaranteed writes via cascasion. Slow, but guaranteed to work
     @Override
-    public void populate(World world, @NotNull Random random, @NotNull Chunk chunk) {
+    public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         //Structuregen will freeze for long periods
         TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
         //Don't attempt generation pre-injection.
@@ -166,7 +160,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         }
     }
 
-    public @Nullable SingleMegaChunkStructurePopulator getMegachunkStructure(MegaChunk mc, TerraformWorld tw, BiomeBank biome){
+    public @Nullable SingleMegaChunkStructurePopulator getMegachunkStructure(@NotNull MegaChunk mc, @NotNull TerraformWorld tw, BiomeBank biome){
         int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
         for(SingleMegaChunkStructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if(spop == null) continue;

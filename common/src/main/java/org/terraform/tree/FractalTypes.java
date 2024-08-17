@@ -1,15 +1,14 @@
 package org.terraform.tree;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneNineBlockHandler;
 
 import java.util.Objects;
-import java.util.Random;
 import java.util.function.Function;
 
 public class FractalTypes {
@@ -348,14 +347,14 @@ public class FractalTypes {
         private final NewFractalTreeBuilder[] builders;
         Tree(){builders = new NewFractalTreeBuilder[]{};}
         Tree(NewFractalTreeBuilder... builder){this.builders = builder;}
-        public boolean build(TerraformWorld tw, SimpleBlock base)
+        public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock base)
         {
             return build(tw,base,null);
         }
 
         //Use of treeMutator is currently not optimal as it makes a copy before every use
         //No idea how bad that is.
-        public boolean build(TerraformWorld tw, SimpleBlock base, Function<NewFractalTreeBuilder, Object> treeMutator){
+        public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock base, @Nullable Function<NewFractalTreeBuilder, Object> treeMutator){
             if(builders.length > 0) {
                 NewFractalTreeBuilder b = Objects.requireNonNull(
                         GenUtils.choice(
@@ -390,13 +389,13 @@ public class FractalTypes {
         MEDIUM_BROWN_FUNNEL_MUSHROOM,
         GIANT_BROWN_MUSHROOM,
         GIANT_BROWN_FUNNEL_MUSHROOM,
-        GIANT_RED_MUSHROOM;
+        GIANT_RED_MUSHROOM
     }
 
     public enum MushroomCap {
         ROUND,
         FLAT,
         FUNNEL,
-        POINTY;
+        POINTY
     }
 }

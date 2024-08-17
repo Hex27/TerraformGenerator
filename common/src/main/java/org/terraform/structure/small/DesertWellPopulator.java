@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeClimate;
 import org.terraform.biome.BiomeType;
@@ -18,7 +19,6 @@ import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;
@@ -31,7 +31,7 @@ import java.util.Random;
 public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         if (!isEnabled()) return;
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
@@ -45,8 +45,8 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
         }
     }
 
-    public void spawnDesertWell(TerraformWorld tw, Random random,
-                                PopulatorDataAbstract data, int x, int y, int z, boolean badlandsWell) {
+    public void spawnDesertWell(TerraformWorld tw, @NotNull Random random,
+                                @NotNull PopulatorDataAbstract data, int x, int y, int z, boolean badlandsWell) {
 
         SimpleBlock core = new SimpleBlock(data, x, y, z);
         TerraformGeneratorPlugin.logger.info("Spawning Desert Well at " + core.getCoords());
@@ -87,14 +87,14 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     }
 
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 8291374),
                 (int) (TConfigOption.STRUCTURES_DESERTWELL_SPAWNRATIO
                         .getDouble() * 10000),
                 10000);
     }
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
@@ -111,7 +111,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+    public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         int num = TConfigOption.STRUCTURES_DESERTWELL_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++)
@@ -120,7 +120,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+    public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
         MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
 
         double minDistanceSquared = Integer.MAX_VALUE;
@@ -147,7 +147,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(189821, chunkX, chunkZ);
     }
 
@@ -164,7 +164,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
         }
 
         @Override
-        public void applyData(SimpleBlock block, BlockData data) {
+        public void applyData(@NotNull SimpleBlock block, BlockData data) {
 
             if (this.badlandsWell) {
                 data = Bukkit.createBlockData(

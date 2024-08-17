@@ -2,6 +2,7 @@ package org.terraform.biome.ocean;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -27,7 +28,7 @@ public class OceansHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
     	if(this.oceanType == BiomeType.DEEP_OCEANIC)
     		return Biome.DEEP_OCEAN;
         return Biome.OCEAN;
@@ -42,7 +43,7 @@ public class OceansHandler extends AbstractOceanHandler {
 //	}
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.GRAVEL,
         		Material.GRAVEL,
@@ -52,7 +53,7 @@ public class OceansHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         boolean growsKelp = world.getHashedRand(rawX>>4,rawZ>>4,371412).nextBoolean();
         //Set ground near sea level to sand
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
@@ -72,14 +73,14 @@ public class OceansHandler extends AbstractOceanHandler {
         }
     }
 
-    private void generateKelp(int x, int y, int z, PopulatorDataAbstract data, Random random) {
+    private void generateKelp(int x, int y, int z, @NotNull PopulatorDataAbstract data, Random random) {
         for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(5, 15); ny++) {
             data.setType(x, ny, z, Material.KELP_PLANT);
         }
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
 		//Spawn rocks
 		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.4f);

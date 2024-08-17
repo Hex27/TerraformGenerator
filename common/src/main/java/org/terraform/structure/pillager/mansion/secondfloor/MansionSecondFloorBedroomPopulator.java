@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -33,7 +34,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	//Refers to the bedroom room width, not the width of one room cell.
 	private static final int roomWidth = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = BlockUtils.getDirectBlockFace(random);
 		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
@@ -90,7 +91,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(2);
         //Table
         if(choice == 0) { //Andesite table with banner and lectern
@@ -126,36 +127,38 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(2);
-        //Utility Block
-        if(choice == 0) { //Table with flowers
-            new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-                    .setHalf(Half.TOP)
-                    .setFacing(BlockUtils.getLeft(w.getDirection()))
-                    .apply(w.getLeft(2))
-                    .setFacing(BlockUtils.getRight(w.getDirection()))
-                    .apply(w.getRight(2));
+		switch(choice) {
+		case 0: //Table with flowers
+			new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
+			.setHalf(Half.TOP)
+			.setFacing(BlockUtils.getLeft(w.getDirection()))
+			.apply(w.getLeft(2))
+			.setFacing(BlockUtils.getRight(w.getDirection()))
+			.apply(w.getRight(2));
+			
+			new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
+			.setType(Type.TOP)
+			.apply(w)
+			.apply(w.getLeft())
+			.apply(w.getRight());
+			
+			w.getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
+			w.getLeft().getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
+			w.getRight().getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
+			break;
+		default://Utility Block
+			w.setType(
+					Material.CRAFTING_TABLE, Material.FLETCHING_TABLE, 
+					Material.CARTOGRAPHY_TABLE, Material.ENCHANTING_TABLE, 
+					Material.BREWING_STAND, Material.ANVIL,
+					Material.NOTE_BLOCK, Material.JUKEBOX);
+			break;
+		}
+	}
 
-            new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
-                    .setType(Type.TOP)
-                    .apply(w)
-                    .apply(w.getLeft())
-                    .apply(w.getRight());
-
-            w.getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
-            w.getLeft().getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
-            w.getRight().getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
-        } else {
-            w.setType(
-                    Material.CRAFTING_TABLE, Material.FLETCHING_TABLE,
-                    Material.CARTOGRAPHY_TABLE, Material.ENCHANTING_TABLE,
-                    Material.BREWING_STAND, Material.ANVIL,
-                    Material.NOTE_BLOCK, Material.JUKEBOX);
-        }
-	};
-
-	private void table(Random rand, Wall w) {
+	private void table(@NotNull Random rand, @NotNull Wall w) {
 		w.getLeft().getRear().Pillar(6, Material.DARK_OAK_LOG);
 		w.getRight().getRear().Pillar(6, Material.DARK_OAK_LOG);
 		
@@ -177,7 +180,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}
 }

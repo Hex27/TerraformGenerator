@@ -2,6 +2,8 @@ package org.terraform.utils.noise;
 
 import java.util.function.Function;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.data.TerraformWorld;
 
 import com.google.common.cache.CacheBuilder;
@@ -15,7 +17,7 @@ import com.google.common.cache.LoadingCache;
  */
 public class NoiseCacheHandler{
 	
-	public static enum NoiseCacheEntry{
+	public enum NoiseCacheEntry{
 		TW_TEMPERATURE,
 		TW_MOISTURE,
 		TW_OCEANIC,
@@ -103,14 +105,13 @@ public class NoiseCacheHandler{
 		
 		FRACTALTREES_LEAVES_NOISE,
 		FRACTALTREES_BASE_NOISE,
-		;
-	}
+    }
 	
     private static final LoadingCache<NoiseCacheHandler.NoiseCacheKey, FastNoise> NOISE_CACHE = 
     		CacheBuilder.newBuilder()
     		.maximumSize(300).build(new NoiseCacheLoader());
 	
-    public static FastNoise getNoise(TerraformWorld world, NoiseCacheEntry entry, Function<TerraformWorld, FastNoise> noiseFunction) {
+    public static @NotNull FastNoise getNoise(TerraformWorld world, NoiseCacheEntry entry, @NotNull Function<TerraformWorld, FastNoise> noiseFunction) {
         NoiseCacheKey key = new NoiseCacheKey(world,entry);
         FastNoise noise = NOISE_CACHE.getIfPresent(key);
         if(noise == null) {
@@ -127,7 +128,7 @@ public class NoiseCacheHandler{
 		 * If this is null, the caller is responsible for inserting it.
 		 */
 		@Override
-		public FastNoise load(NoiseCacheKey key) throws Exception {
+		public @Nullable FastNoise load(NoiseCacheKey key) throws Exception {
 			return null;
 		}
 	}
@@ -148,9 +149,8 @@ public class NoiseCacheHandler{
 		
 		@Override
 		public boolean equals(Object other) {
-			if(other instanceof NoiseCacheKey) {
-				NoiseCacheKey o = (NoiseCacheKey) other;
-				if(!o.tw.getName().equals(tw.getName()))
+			if(other instanceof NoiseCacheKey o) {
+                if(!o.tw.getName().equals(tw.getName()))
 					return false;
 				return entry == o.entry;
 			}

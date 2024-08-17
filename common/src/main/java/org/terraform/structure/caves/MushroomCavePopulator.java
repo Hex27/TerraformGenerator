@@ -2,14 +2,10 @@ package org.terraform.structure.caves;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Biome;
 import org.bukkit.block.data.type.SeaPickle;
-import org.terraform.biome.cavepopulators.LushClusterCavePopulator;
-import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
 import org.terraform.utils.BlockUtils;
@@ -34,7 +30,7 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
      * Set stuff to mycelium
      */
     @Override
-    protected void populateFloor(SimpleBlock floor, int waterLevel) {
+    protected void populateFloor(@NotNull SimpleBlock floor, int waterLevel) {
         TerraformWorld tw = floor.getPopData().getTerraformWorld();
         if(floor.getY() <= waterLevel)
         {
@@ -80,7 +76,7 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
         }
     }
     @Override
-    protected void populateCeilFloorPair(SimpleBlock ceil, SimpleBlock floor, int height) {
+    protected void populateCeilFloorPair(@NotNull SimpleBlock ceil, @NotNull SimpleBlock floor, int height) {
         TerraformWorld tw = ceil.getPopData().getTerraformWorld();
 
         //Correct for mycelium ground raise

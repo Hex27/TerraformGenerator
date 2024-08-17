@@ -1,6 +1,7 @@
 package org.terraform.structure.catacombs;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
@@ -21,7 +22,7 @@ import java.util.Random;
 public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
         	
@@ -52,7 +53,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 17261),
                 (int) (TConfigOption.STRUCTURES_CATACOMBS_SPAWNRATIO
                         .getDouble() * 10000),
@@ -60,7 +61,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         if (!TConfigOption.STRUCTURES_CATACOMBS_ENABLED.getBoolean())
             return;
 
@@ -80,15 +81,15 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
                 height - y > 25);
     }
 
-    public void spawnCatacombs(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnCatacombs(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	spawnCatacombs(tw, random, data, x, y, z, true);
     }
 
-    public void spawnCatacombs(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel) {
+    public void spawnCatacombs(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel) {
     	spawnCatacombs(tw, random, data, x, y, z, doubleLevel, 10, 50);
     }
     
-    private boolean canGoDeeper(TerraformWorld tw, int y, Random random) {
+    private boolean canGoDeeper(@NotNull TerraformWorld tw, int y, @NotNull Random random) {
     	TerraformGeneratorPlugin.logger.info("TW MinY: " + tw.minY + ", Rolling chance: " + ((int)(TConfigOption.STRUCTURES_CATACOMBS_SIZEROLLCHANCE.getDouble()*10000d)));
     	return y > tw.minY + 10
     			&& GenUtils.chance(
@@ -97,7 +98,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
     					10000);
     }
 
-    public void spawnCatacombs(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel, int numRooms, int range) {
+    public void spawnCatacombs(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, boolean doubleLevel, int numRooms, int range) {
     	TerraformGeneratorPlugin.logger.info("Spawning catacombs at: " + x + "," + z);
 
         
@@ -187,7 +188,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 	}
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(91829209, chunkX, chunkZ);
     }
 

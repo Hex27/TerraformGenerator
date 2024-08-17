@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs.Shape;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -30,7 +31,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		SimpleBlock center = this.getRoom().getCenterSimpleBlock(data);
 		
 		center.getRelative(0,1,0).setType(Material.RED_CARPET);
@@ -86,7 +87,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 		spawnSmallChandelier(center.getRelative(0,6,0));
 	}
 	
-	private void decorateHallwayWall(Random random, Wall center, boolean isWindow) {
+	private void decorateHallwayWall(@NotNull Random random, @NotNull Wall center, boolean isWindow) {
 		int decorationType = random.nextInt(3);
 		if(!isWindow) { //Solid wall decorations
 			switch(decorationType) {
@@ -190,7 +191,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 		}
 	}
 	
-	private void spawnSmallChandelier(SimpleBlock target) {
+	private void spawnSmallChandelier(@NotNull SimpleBlock target) {
 		target.setType(Material.DARK_OAK_FENCE);
 		target.getRelative(0,-1,0).setType(Material.DARK_OAK_FENCE);
 		target.getRelative(0,-2,0).setType(Material.DARK_OAK_FENCE);
@@ -204,7 +205,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 		BlockUtils.correctSurroundingMultifacingData(target);
 	}
 	
-	private void applyHallwaySmoothing(Wall w) {
+	private void applyHallwaySmoothing(@NotNull Wall w) {
 		w.Pillar(7, Material.DARK_OAK_PLANKS);
 		
 		w = w.getRear();
@@ -231,7 +232,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(1,1);
 	}
 }

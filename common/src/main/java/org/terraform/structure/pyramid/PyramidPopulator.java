@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -31,7 +32,7 @@ import java.util.Random;
 public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
 
         //Check biome
         if (biome != BiomeBank.DESERT)
@@ -40,7 +41,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         return rollSpawnRatio(tw, chunkX, chunkZ);
     }
 
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 163456),
                 (int) (TConfigOption.STRUCTURES_PYRAMID_SPAWNRATIO
                         .getDouble() * 10000),
@@ -48,7 +49,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
 
         int[] coords = new MegaChunk(data.getChunkX(), data.getChunkZ()).getCenterBiomeSectionBlockCoords();
         int x = coords[0];
@@ -62,7 +63,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         }
     }
 
-    public void spawnPyramid(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnPyramid(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         y -= 10;
     	TerraformGeneratorPlugin.logger.info("Spawning Pyramid at: " + x + "," + z);
         int numRooms = 1000;
@@ -188,7 +189,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
         //ALL LEVEL 0 FLOORING IS STONE/COBBLE/ANDESITE. 
         //Facilitates traps as there is no sandstone pressure plate
-        ArrayList<Material> toReplace = new ArrayList<Material>() {{
+        ArrayList<Material> toReplace = new ArrayList<>() {{
             add(Material.SANDSTONE);
             add(Material.CUT_SANDSTONE);
         }};
@@ -229,7 +230,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
      * @param y
      * @param z
      */
-    public void spawnSandBase(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnSandBase(TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         int squareRadius = 45;
 
         FastNoise noiseGenerator = NoiseCacheHandler.getNoise(
@@ -306,7 +307,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         }
     }
 
-    public void spawnPyramidBase(PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnPyramidBase(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         for (int height = 0; height < 40; height++) {
             int radius = 40 - height;
             for (int nx = -radius; nx <= +radius; nx++) {
@@ -395,7 +396,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(72917299, chunkX, chunkZ);
     }
 

@@ -4,6 +4,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -18,7 +19,7 @@ public class OreDitCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Calculates the percentages of each ore type within the chunk you're in";
     }
 
@@ -28,7 +29,7 @@ public class OreDitCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
 
         return sender.isOp();
     }
@@ -82,7 +83,7 @@ public class OreDitCommand extends TerraCommand {
         
         p.sendMessage("-----[Ore Count]-----");
         for(Material audit:auditMat) {
-        	p.sendMessage(audit.toString() + " - " + ores.get(audit));
+        	p.sendMessage(audit + " - " + ores.get(audit));
         }
         
     }

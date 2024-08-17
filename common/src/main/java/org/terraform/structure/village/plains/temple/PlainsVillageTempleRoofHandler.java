@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Lantern;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -22,7 +23,7 @@ import java.util.Random;
 public class PlainsVillageTempleRoofHandler {
 	//private static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
 
-	public static void handleTempleRoof(PlainsVillagePopulator plainsVillagePopulator, PopulatorDataAbstract data, JigsawStructurePiece piece, ArrayList<JigsawStructurePiece> wallPieces) {
+	public static void handleTempleRoof(@NotNull PlainsVillagePopulator plainsVillagePopulator, @NotNull PopulatorDataAbstract data, @NotNull JigsawStructurePiece piece, @NotNull ArrayList<JigsawStructurePiece> wallPieces) {
 		Wall base = new Wall(new SimpleBlock(data,
     			piece.getRoom().getX(),
     			piece.getRoom().getY()+5,
@@ -97,7 +98,7 @@ public class PlainsVillageTempleRoofHandler {
 		}
 	}
 	
-	public static void placeCeilingTerracotta(PopulatorDataAbstract data, Collection<JigsawStructurePiece> structurePieces) {
+	public static void placeCeilingTerracotta(@NotNull PopulatorDataAbstract data, @NotNull Collection<JigsawStructurePiece> structurePieces) {
 		Material glazedTerracotta = BlockUtils.GLAZED_TERRACOTTA[new Random().nextInt(BlockUtils.GLAZED_TERRACOTTA.length)];
 		for(JigsawStructurePiece piece:structurePieces) {
 			int[] lowerCorner = piece.getRoom().getLowerCorner();
@@ -123,7 +124,7 @@ public class PlainsVillageTempleRoofHandler {
 		}
 	}
 	
-    private static void placeGlazedTerracotta(SimpleBlock target, Material glazedTerracotta) {
+    private static void placeGlazedTerracotta(@NotNull SimpleBlock target, @NotNull Material glazedTerracotta) {
 //        Directional terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
 //        terracotta.setFacing(BlockFace.NORTH);
 //        data.setBlockData(x, y, z, terracotta);

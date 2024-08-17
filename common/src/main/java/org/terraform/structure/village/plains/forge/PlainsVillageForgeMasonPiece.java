@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.forge;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -22,9 +23,9 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
 	
 	//Use postBuildDecoration.
     @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
     	SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ());
-    	if(this.getWalledFaces().size() == 0) {
+    	if(this.getWalledFaces().isEmpty()) {
     		spawnCenteredPileOfRocks(random, new Wall(core));
     	}
     	
@@ -53,7 +54,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
      * @param random
      * @param core
      */
-    private void spawnCenteredPileOfRocks(Random random, Wall core) {
+    private void spawnCenteredPileOfRocks(@NotNull Random random, Wall core) {
     	core = core.getRelative(0,1,0);
     	Material[] ores = new Material[] {
     			Material.IRON_ORE,
@@ -104,7 +105,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
      * @param random
      * @param core
      */
-    private void spawnedWalledPileOfRocks(Random random, Wall core) {
+    private void spawnedWalledPileOfRocks(@NotNull Random random, Wall core) {
     	core = core.getRelative(0,1,0);
     	Material[] ores = new Material[] {
     			Material.IRON_ORE,

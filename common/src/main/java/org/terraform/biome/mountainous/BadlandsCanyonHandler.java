@@ -2,6 +2,7 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.HeightMap;
@@ -21,7 +22,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
     /**
      * Performs badlands plateau generation for one x/z coord.
      */
-    public static void oneUnit(TerraformWorld world, Random random, PopulatorDataAbstract data, int x, int z, boolean force) {
+    public static void oneUnit(TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int z, boolean force) {
         int highest = GenUtils.getHighestGround(data, x, z);
         int threshold = 65;
         if (force)
@@ -49,13 +50,13 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.ERODED_BADLANDS;
     }
 
     //Extra red sandstone padding required: Prevents exposed vertical surfaces.
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.RED_SAND,
         		Material.RED_SAND,
@@ -81,7 +82,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         if(surfaceY >
             10+HeightMap.CORE.getHeight(world, rawX, rawZ)) {
@@ -99,7 +100,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
 	}
 	
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.BADLANDS_BEACH;
 	}
     
@@ -108,7 +109,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
 	 * smooth out at a set Y level
 	 */
 	@Override
-    public double calculateHeight(TerraformWorld tw, int x, int z) {
+    public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
 		double baseHeight = HeightMap.CORE.getHeight(tw, x, z);
 		FastNoise duneNoise = NoiseCacheHandler.getNoise(
 		    		tw, 
@@ -178,7 +179,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
     }
 	
 	@Override
-	protected double getPeakMultiplier(BiomeSection section, Random sectionRandom)
+	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom)
 	{
 		return super.getPeakMultiplier(section, sectionRandom)*0.9;
 	}

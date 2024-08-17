@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
@@ -25,7 +26,7 @@ public class MansionBaseTowerWallPiece extends MansionTowerWallPiece {
 	}
 	
     @Override
-    public void build(PopulatorDataAbstract data, Random rand) {
+    public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
         Wall w = entry.getKey().getRelative(0, -1, 0);
@@ -44,7 +45,7 @@ public class MansionBaseTowerWallPiece extends MansionTowerWallPiece {
     }
     
     @Override
-    public void postBuildDecoration(Random rand, PopulatorDataAbstract data) {
+    public void postBuildDecoration(Random rand, @NotNull PopulatorDataAbstract data) {
     	
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
 

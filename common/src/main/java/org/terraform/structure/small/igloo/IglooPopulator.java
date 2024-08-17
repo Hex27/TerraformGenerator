@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeClimate;
 import org.terraform.biome.BiomeType;
@@ -37,7 +38,7 @@ import org.terraform.utils.blockdata.TrapdoorBuilder;
 public class IglooPopulator extends MultiMegaChunkStructurePopulator {
 	
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
 
         if (!TConfigOption.STRUCTURES_IGLOO_ENABLED.getBoolean())
             return;
@@ -54,7 +55,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
         }
     }
 
-    public void spawnIgloo(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnIgloo(TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	Wall core = new Wall(data,x,y,z,BlockUtils.getDirectBlockFace(random));
 
     	int size = GenUtils.randInt(random, 4, 7);
@@ -287,7 +288,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     	core.getUp().addEntity(EntityType.VILLAGER);
     }
     
-    private void spawnTrapdoorDecors(Wall w, int size) {
+    private void spawnTrapdoorDecors(@NotNull Wall w, int size) {
     	int lowest = 9999;
     	for(int i = 1; i < size; i++) {
     		Wall target = w.getFront(i);
@@ -338,7 +339,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     	
     }
     
-    private void spawnSpire(SimpleBlock block) {
+    private void spawnSpire(@NotNull SimpleBlock block) {
     	block.Pillar(3, Material.SPRUCE_LOG);
     	block.getUp(3).setType(Material.COBBLESTONE_WALL);
     	block.getUp(4).setType(Material.SPRUCE_FENCE);
@@ -356,7 +357,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     }
     
     @Override
-    public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+    public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         int num = TConfigOption.STRUCTURES_IGLOO_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++)
@@ -365,7 +366,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
 
     }
 
-    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+    public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
         MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
 
         double minDistanceSquared = Integer.MAX_VALUE;
@@ -384,7 +385,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
         return min;
     }
 
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 976123),
                 (int) (TConfigOption.STRUCTURES_IGLOO_SPAWNRATIO
                         .getDouble() * 10000),
@@ -392,7 +393,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     }
     
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX,
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX,
                             int chunkZ) {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
@@ -414,7 +415,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(823641811, chunkX, chunkZ);
     }
 

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -20,16 +21,16 @@ import java.util.Random;
 public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
 
 
-    private static final ArrayList<Material> BRIGHT_STAINED_GLASS_PANES = new ArrayList<Material>(){{
-            add(Material.BLUE_STAINED_GLASS_PANE);
-            add(Material.CYAN_STAINED_GLASS_PANE);
-            add(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
-            add(Material.LIME_STAINED_GLASS_PANE);
-            add(Material.MAGENTA_STAINED_GLASS_PANE);
-            add(Material.PINK_STAINED_GLASS_PANE);
-            add(Material.PURPLE_STAINED_GLASS_PANE);
-            add(Material.RED_STAINED_GLASS_PANE);
-            add(Material.YELLOW_STAINED_GLASS_PANE);
+    private static final ArrayList<Material> BRIGHT_STAINED_GLASS_PANES = new ArrayList<>() {{
+        add(Material.BLUE_STAINED_GLASS_PANE);
+        add(Material.CYAN_STAINED_GLASS_PANE);
+        add(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+        add(Material.LIME_STAINED_GLASS_PANE);
+        add(Material.MAGENTA_STAINED_GLASS_PANE);
+        add(Material.PINK_STAINED_GLASS_PANE);
+        add(Material.PURPLE_STAINED_GLASS_PANE);
+        add(Material.RED_STAINED_GLASS_PANE);
+        add(Material.YELLOW_STAINED_GLASS_PANE);
     }};
 
 	
@@ -39,7 +40,7 @@ public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
 
 
     @Override
-    public void build(PopulatorDataAbstract data, Random rand) {
+    public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
         Material[] stoneBricks = {Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
         Wall w = entry.getKey().getRelative(0, -1, 0);
@@ -80,7 +81,7 @@ public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
 
     }
 
-    public static void setLargeWindow(PopulatorDataAbstract data, BlockFace rotation, CubeRoom room, BlockFace face) {
+    public static void setLargeWindow(@NotNull PopulatorDataAbstract data, @NotNull BlockFace rotation, @NotNull CubeRoom room, @NotNull BlockFace face) {
     	Material pane;
     	Wall w = new Wall(new SimpleBlock(data,
     			room.getX(),

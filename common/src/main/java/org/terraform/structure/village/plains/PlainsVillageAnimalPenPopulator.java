@@ -3,6 +3,7 @@ package org.terraform.structure.village.plains;
 import org.bukkit.Material;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -34,7 +35,7 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	
     	//If terrain is adverse, 
     	//just forget it, animal pens don't fare well in hilly terrain.
@@ -216,7 +217,7 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() >= 15 && (room.getWidthX() < 18 || room.getWidthZ() < 18);
     }
 }

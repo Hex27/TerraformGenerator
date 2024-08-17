@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Lantern;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -32,7 +33,7 @@ public class MansionSecondFloorStudyPopulator extends MansionRoomPopulator {
 	//Refers to the bedroom room width, not the width of one room cell.
 	private static final int roomWidth = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = BlockUtils.getDirectBlockFace(random);
 		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
@@ -88,7 +89,7 @@ public class MansionSecondFloorStudyPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		w.getRear().Pillar(4, Material.BOOKSHELF);
 		w.getLeft().getRear().Pillar(3, Material.BOOKSHELF);
 		w.getRight().getRear().Pillar(3, Material.BOOKSHELF);
@@ -121,16 +122,16 @@ public class MansionSecondFloorStudyPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(Random rand, @NotNull Wall w) {
 		clearRoguePillar(w);
 	}
 	
 	@Override
-	public void decorateExit(Random rand, Wall w) { 
+	public void decorateExit(Random rand, @NotNull Wall w) {
 		clearRoguePillar(w);
 	}
 	
-	public void clearRoguePillar(Wall base) {
+	public void clearRoguePillar(@NotNull Wall base) {
 		Entry<Wall,Integer> entry = this.getRoom().getWall(base.get().getPopData(), base.getDirection().getOppositeFace(), 0);
 		Wall w = entry.getKey();
 		for(int i = 0; i < entry.getValue(); i++) {
@@ -153,7 +154,7 @@ public class MansionSecondFloorStudyPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}
 }

@@ -3,12 +3,11 @@ package org.terraform.biome.beach;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
-import org.terraform.biome.BiomeBank;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.biome.flat.MuddyBogHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.coregen.populatordata.PopulatorDataColumn;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -24,12 +23,12 @@ public class BogBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.SWAMP;
     }
 
     @Override
-    public CustomBiomeType getCustomBiome() {
+    public @NotNull CustomBiomeType getCustomBiome() {
         return CustomBiomeType.MUDDY_BOG;
     }
 
@@ -42,7 +41,7 @@ public class BogBeachHandler extends BiomeHandler {
 //	}
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.GRASS_BLOCK,
                 GenUtils.randMaterial(rand, Material.DIRT),
@@ -52,7 +51,7 @@ public class BogBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
         if(!BlockUtils.isWet(block.getRelative(0,1,0))) {
             if(GenUtils.chance(random, 1, 85))
@@ -76,7 +75,7 @@ public class BogBeachHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
     	new MuddyBogHandler().populateLargeItems(tw, random, data);
 	}
 }

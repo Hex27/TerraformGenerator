@@ -1,6 +1,7 @@
 package org.terraform.structure.mineshaft;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
@@ -23,7 +24,7 @@ import java.util.Random;
 public class MineshaftPopulator extends JigsawStructurePopulator {
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
         //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         //int[] coords = mc.getCenterBiomeSectionBlockCoords();
         	
@@ -46,7 +47,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
                 (int) (TConfigOption.STRUCTURES_MINESHAFT_SPAWNRATIO
                         .getDouble() * 10000),
@@ -54,10 +55,10 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
     }
 
     @Override
-    public JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc) {
+    public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         return calculateRoomPopulators(tw, mc, false);
     }
-    public JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc, boolean badlandsMineshaft) {
+    public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc, boolean badlandsMineshaft) {
         JigsawState state = new JigsawState();
 
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
@@ -156,7 +157,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(3929202, chunkX, chunkZ);
     }
 

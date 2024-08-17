@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -24,7 +26,7 @@ public class BiomeSection {
 	private float temperature;
 	private float moisture;
 	private int radius;
-	private BiomeBank biome;
+	private @Nullable BiomeBank biome;
 	private FastNoise shapeNoise;
 	
 	/**
@@ -57,7 +59,7 @@ public class BiomeSection {
 	/**
 	 * @return the width * width closest biome sections to this block point.
 	 */
-	public static Collection<BiomeSection> getSurroundingSections(TerraformWorld tw, int width, int blockX, int blockZ) {
+	public static @NotNull Collection<BiomeSection> getSurroundingSections(TerraformWorld tw, int width, int blockX, int blockZ) {
 	    BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, blockX, blockZ);
 	    Collection<BiomeSection> sections = new ArrayList<>();
 
@@ -88,7 +90,7 @@ public class BiomeSection {
 	 * @param blockZ
 	 * @return the four closest biome sections to this block point
 	 */
-	public static Collection<BiomeSection> getSurroundingSections(TerraformWorld tw, int blockX, int blockZ) {
+	public static @NotNull Collection<BiomeSection> getSurroundingSections(TerraformWorld tw, int blockX, int blockZ) {
 		Collection<BiomeSection> sections = new ArrayList<>();
 
 		BiomeSection homeBiome = BiomeBank.getBiomeSectionFromBlockCoords(tw, blockX, blockZ);
@@ -123,24 +125,24 @@ public class BiomeSection {
 		return sections;
 	}
 	
-	public Random getSectionRandom() {
+	public @NotNull Random getSectionRandom() {
 		return new Random(Objects.hash(tw.getSeed(), x, z));
 	}
 
-	public Random getSectionRandom(int multiplier) {
+	public @NotNull Random getSectionRandom(int multiplier) {
 		return new Random(multiplier*Objects.hash(tw.getSeed(), x, z));
 	}
 
-	public BiomeSection getRelative(int x, int z) {
+	public @NotNull BiomeSection getRelative(int x, int z) {
 		BiomeSection mc = BiomeBank.getBiomeSectionFromSectionCoords(this.tw, this.x + x, this.z + z, true);
 		return mc;
 	}
 
-	public BiomeBank getBiomeBank() {
+	public @Nullable BiomeBank getBiomeBank() {
 		return biome;
 	}
 	
-	private BiomeBank parseBiomeBank() {
+	private @Nullable BiomeBank parseBiomeBank() {
 		temperature = 3.0f*2.5f*tw.getTemperatureOctave().GetNoise(this.x, this.z);
     	moisture = 3.0f*2.5f*tw.getMoistureOctave().GetNoise(this.x, this.z);
     	
@@ -158,7 +160,7 @@ public class BiomeSection {
 	 * 
 	 * @return
 	 */
-	public float getDominance(SimpleLocation target) {
+	public float getDominance(@NotNull SimpleLocation target) {
 		return getDominanceBasedOnRadius(target.getX(), target.getZ());
 	}
 
@@ -179,7 +181,7 @@ public class BiomeSection {
 
 	}
 
-	public SimpleLocation getCenter() {
+	public @NotNull SimpleLocation getCenter() {
 		int x = ((this.x << bitshifts)) + sectionWidth / 2;
 		int z = ((this.z << bitshifts)) + sectionWidth / 2;
 		// TerraformGeneratorPlugin.logger.info("Center " + toString() + ": " + x + ","
@@ -192,7 +194,7 @@ public class BiomeSection {
 	 * 
 	 * @return Block coords of lowest coord pair in the section's square
 	 */
-	public SimpleLocation getLowerBounds() {
+	public @NotNull SimpleLocation getLowerBounds() {
 		int x = ((this.x << bitshifts));
 		int z = ((this.z << bitshifts));
 		return new SimpleLocation(x, 0, z);
@@ -202,13 +204,13 @@ public class BiomeSection {
 	 * 
 	 * @return Block coords of highest coord pair in the section's square
 	 */
-	public SimpleLocation getUpperBounds() {
+	public @NotNull SimpleLocation getUpperBounds() {
 		int x = ((this.x << bitshifts)) + sectionWidth;
 		int z = ((this.z << bitshifts)) + sectionWidth;
 		return new SimpleLocation(x, 0, z);
 	}
 	
-	public static BiomeSection getMostDominantSection(TerraformWorld tw, int x, int z) {
+	public static @NotNull BiomeSection getMostDominantSection(@NotNull TerraformWorld tw, int x, int z) {
 
         double dither = TConfigOption.BIOME_DITHER.getDouble();
     	Random locationBasedRandom  = new Random(Objects.hash(tw.getSeed(),x,z));
@@ -238,11 +240,11 @@ public class BiomeSection {
 	 * @param radius in biomesection coords
 	 * @return surrounding biome sections at radius distance away 
 	 */
-    public Collection<BiomeSection> getRelativeSurroundingSections(int radius) {
+    public @NotNull Collection<BiomeSection> getRelativeSurroundingSections(int radius) {
         if (radius == 0) {
         	BiomeSection target = this;
-        	return new ArrayList<BiomeSection>() {{
-            	add(target);
+        	return new ArrayList<>() {{
+                add(target);
             }};
         }
         //     xxxxx
@@ -250,7 +252,7 @@ public class BiomeSection {
         //xox  x o x
         //xxx  x   x
         //     xxxxx
-        ArrayList<BiomeSection> candidates = new ArrayList<BiomeSection>();
+        ArrayList<BiomeSection> candidates = new ArrayList<>();
         
         //Lock rX, iterate rZ
         for(int rx:new int[] {-radius,radius}) {
@@ -276,7 +278,7 @@ public class BiomeSection {
      * @return the subsection within this biome section that the coordinates belong in.
      * Works even if the coords are outside the biome section.
      */
-    public BiomeSubSection getSubSection(int rawX, int rawZ) {
+    public @NotNull BiomeSubSection getSubSection(int rawX, int rawZ) {
     	//if(new BiomeSection(tw, rawX, rawZ).equals(this)) {
     		SimpleLocation sectionCenter = this.getCenter();
     		int relXFromCenter = rawX - sectionCenter.getX();
@@ -324,9 +326,8 @@ public class BiomeSection {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof BiomeSection) {
-			BiomeSection BiomeSection = (BiomeSection) obj;
-			return this.tw.getName().equals(BiomeSection.tw.getName()) 
+		if (obj instanceof BiomeSection BiomeSection) {
+            return this.tw.getName().equals(BiomeSection.tw.getName())
 					&& this.x == BiomeSection.x 
 					&& this.z == BiomeSection.z;
 		}
@@ -342,11 +343,11 @@ public class BiomeSection {
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "(" + x + "," + z + ")";
 	}
 	
-	public BiomeClimate getClimate() {
+	public @NotNull BiomeClimate getClimate() {
 		return BiomeClimate.selectClimate(temperature, moisture);
 	}
 

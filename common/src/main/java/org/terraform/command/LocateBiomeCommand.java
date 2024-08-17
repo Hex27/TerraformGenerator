@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.command.contants.InvalidArgumentException;
@@ -29,7 +30,7 @@ public class LocateBiomeCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Tries to locate a certain biome";
     }
 
@@ -39,17 +40,17 @@ public class LocateBiomeCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
 
         return sender.isOp() || sender.hasPermission("terraformgenerator.locatebiome");
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
             throws InvalidArgumentException {
         Player p = (Player) sender;
 
-        if (args.size() != 0) {
+        if (!args.isEmpty()) {
             try {
                 new Task(
                         p.getUniqueId(),
@@ -76,7 +77,7 @@ public class LocateBiomeCommand extends TerraCommand {
         }
     }
 
-    private void syncSendMessage(UUID uuid, String message) {
+    private void syncSendMessage(UUID uuid, @NotNull String message) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.getUniqueId() == uuid) {
                 p.sendMessage(message);
@@ -93,13 +94,13 @@ public class LocateBiomeCommand extends TerraCommand {
         }
 
         @Override
-        public BiomeBank parse(CommandSender sender, String value) {
+        public @NotNull BiomeBank parse(CommandSender sender, @NotNull String value) {
 
             return BiomeBank.valueOf(value.toUpperCase(Locale.ENGLISH));
         }
 
         @Override
-        public String validate(CommandSender sender, String value) {
+        public @NotNull String validate(CommandSender sender, @NotNull String value) {
             try {
                 parse(sender, value);
             } catch (IllegalArgumentException e) {
@@ -109,7 +110,7 @@ public class LocateBiomeCommand extends TerraCommand {
         }
 
         @Override
-        public ArrayList<String> getTabOptions(String[] args) {
+        public @NotNull ArrayList<String> getTabOptions(String @NotNull [] args) {
             if (args.length != 2) return new ArrayList<>();
             ArrayList<String> values = new ArrayList<>();
 

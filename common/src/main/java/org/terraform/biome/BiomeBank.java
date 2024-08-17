@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.beach.*;
 import org.terraform.biome.cavepopulators.*;
 import org.terraform.biome.flat.*;
@@ -117,11 +119,11 @@ public enum BiomeBank {
  ;
     //public static final BiomeBank[] VALUES = values();
     public static boolean debugPrint = false;
-    public static final ArrayList<BiomeBank> FLAT = new ArrayList<BiomeBank>() {{
-    	for(BiomeBank b:values()) {
-    		if(b.getType() == BiomeType.FLAT)
-    			add(b);
-    	}
+    public static final ArrayList<BiomeBank> FLAT = new ArrayList<>() {{
+        for(BiomeBank b : values()) {
+            if(b.getType() == BiomeType.FLAT)
+                add(b);
+        }
     }};
     private final BiomeHandler handler;
     private final BiomeType type;
@@ -180,7 +182,7 @@ public enum BiomeBank {
      * @param x Block X
      * @param z Block Z
      */
-    public static BiomeSection getBiomeSectionFromBlockCoords(TerraformWorld tw, int x, int z) {
+    public static @NotNull BiomeSection getBiomeSectionFromBlockCoords(TerraformWorld tw, int x, int z) {
     	BiomeSection sect = new BiomeSection(tw,x,z);
 //		sect.doCalculations();
     	try {
@@ -199,7 +201,7 @@ public enum BiomeBank {
      * @param tw
      * @return the biome section that this chunk belongs to.
      */
-    public static BiomeSection getBiomeSectionFromChunk(TerraformWorld tw, int chunkX, int chunkZ) {
+    public static @NotNull BiomeSection getBiomeSectionFromChunk(TerraformWorld tw, int chunkX, int chunkZ) {
     	BiomeSection sect = new BiomeSection(tw,chunkX << 4, chunkZ << 4);
 //		sect.doCalculations();
     	try {
@@ -213,7 +215,7 @@ public enum BiomeBank {
     	return sect;
     }
     
-    public static BiomeSection getBiomeSectionFromSectionCoords(TerraformWorld tw, int x, int z, boolean useSectionCoords) {
+    public static @NotNull BiomeSection getBiomeSectionFromSectionCoords(TerraformWorld tw, int x, int z, boolean useSectionCoords) {
     	BiomeSection sect = new BiomeSection(tw,x,z,useSectionCoords);
 //		sect.doCalculations();
     	try {
@@ -234,7 +236,7 @@ public enum BiomeBank {
      * Use terraformWorld.getCache(...).getBiomeBank(x,y,z) instead.
      * @return exact biome that will appear at these coordinates
      */
-    public static BiomeBank calculateBiome(TerraformWorld tw, int rawX, int height, int rawZ) {
+    public static @NotNull BiomeBank calculateBiome(@NotNull TerraformWorld tw, int rawX, int height, int rawZ) {
     	if(debugPrint) 
     		TerraformGeneratorPlugin.logger.info("calculateBiome called with args: " + tw.getName() + "," + rawX + "," + height + "," + rawZ);
     	
@@ -337,7 +339,7 @@ public enum BiomeBank {
      * fetched from the cache, use calculateBiome(tw,x,y,z);
      * @return a biome type
      */
-    public static BiomeBank calculateHeightIndependentBiome(TerraformWorld tw, int x, int z) {
+    public static @NotNull BiomeBank calculateHeightIndependentBiome(TerraformWorld tw, int x, int z) {
     	TWSimpleLocation loc = new TWSimpleLocation(tw,x,0,z);
     	BiomeBank bank;
     	try {
@@ -351,11 +353,11 @@ public enum BiomeBank {
     	return bank;
     }
     
-	public static BiomeBank singleLand = null;
-	public static BiomeBank singleOcean = null;
-	public static BiomeBank singleDeepOcean = null;
-	public static BiomeBank singleMountain = null;
-	public static BiomeBank singleHighMountain = null;
+	public static @Nullable BiomeBank singleLand = null;
+	public static @Nullable BiomeBank singleOcean = null;
+	public static @Nullable BiomeBank singleDeepOcean = null;
+	public static @Nullable BiomeBank singleMountain = null;
+	public static @Nullable BiomeBank singleHighMountain = null;
 	//static BiomeBank singleRiver;
 	//static BiomeBank singleBeach;
     public static void initSinglesConfig() {
@@ -386,7 +388,7 @@ public enum BiomeBank {
      * @param bank
      * @return
      */
-    public static boolean isBiomeEnabled(BiomeBank bank) {
+    public static boolean isBiomeEnabled(@NotNull BiomeBank bank) {
     	
     	if(bank.getBiomeWeight() <= 0)
     		return false;
@@ -405,7 +407,7 @@ public enum BiomeBank {
     /**
      * Used to get a biomebank from temperature and moisture values.
      */
-    public static BiomeBank selectBiome(BiomeSection section, double temperature, double moisture) {
+    public static @Nullable BiomeBank selectBiome(@NotNull BiomeSection section, double temperature, double moisture) {
     	Random sectionRand = section.getSectionRandom();
     	
     	BiomeType targetType = null;
@@ -478,35 +480,41 @@ public enum BiomeBank {
 //    		debugged = true;
 //    	}
     	
-    	if(contenders.size() == 0) {
-    		switch(targetType) {
-			case BEACH:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for beach: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_BEACH.getString());
-			case DEEP_OCEANIC:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for deep oceanic: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_DEEPOCEANIC.getString());
-			case FLAT:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for flat: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
-			case MOUNTAINOUS:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_MOUNTAINOUS.getString());
-			case OCEANIC:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for ocean: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_OCEANIC.getString());
-			case RIVER:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for river: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_RIVER.getString());
-			//default:
-			//	return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
-			case HIGH_MOUNTAINOUS:
-				TerraformGeneratorPlugin.logger.info("Defaulted for high mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_HIGHMOUNTAINOUS.getString());
-			}
+    	if(contenders.isEmpty()) {
+            return switch(targetType) {
+                case BEACH -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for beach: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_BEACH.getString());
+                }
+                case DEEP_OCEANIC -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for deep oceanic: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_DEEPOCEANIC.getString());
+                }
+                case FLAT -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for flat: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
+                }
+                case MOUNTAINOUS -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_MOUNTAINOUS.getString());
+                }
+                case OCEANIC -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for ocean: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_OCEANIC.getString());
+                }
+                case RIVER -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for river: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_RIVER.getString());
+                }
+                //default:
+                //	return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
+                case HIGH_MOUNTAINOUS -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for high mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_HIGHMOUNTAINOUS.getString());
+                }
+            };
     	}else
     		return contenders.get(0);
-		return null;
     }
 
     /**

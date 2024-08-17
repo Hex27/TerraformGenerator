@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -29,7 +30,7 @@ public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator 
 	private static final int roomWidthX = 15;
 	private static final int roomWidthZ = 6;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
@@ -56,7 +57,7 @@ public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator 
 	}
 	
 	@Override
-	public void decorateExit(Random rand, Wall w) {
+	public void decorateExit(Random rand, @NotNull Wall w) {
 		OrientableBuilder builder = new OrientableBuilder(Material.DARK_OAK_LOG);
 		builder.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())));
 		for(int i = 0; i <= 4; i++) {
@@ -66,7 +67,7 @@ public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator 
 	}
 
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		decorateExit(rand, w); //same code to join the top to the ceiling decor
 		
 		//Pillars to connect ceiling decor to ground (less square)
@@ -82,7 +83,7 @@ public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator 
 	
 	//Decorate with paintings and wall texturing
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		
 		
 		PaintingUtils.placePainting(
@@ -101,7 +102,7 @@ public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator 
 	}
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,1);
 	}
 }

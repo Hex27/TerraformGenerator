@@ -1,5 +1,6 @@
 package org.terraform.biome.custombiomes;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.utils.version.Version;
 
 import java.util.Locale;
@@ -12,7 +13,7 @@ public enum CustomBiomeType {
     CRYSTALLINE_CLUSTER("e54fff","c599ff","e54fff","","","", 0.8f, false),
     ;
 
-    private final String key;
+    private final @NotNull String key;
     private final String fogColor;
     private final String waterColor;
     private final String waterFogColor;
@@ -22,7 +23,7 @@ public enum CustomBiomeType {
     private float rainFall = 0.8f;
     private boolean isCold = false;
 
-    private CustomBiomeType() {
+    CustomBiomeType() {
         this.key = "terraformgenerator:" + this.toString().toLowerCase(Locale.ENGLISH);
         this.fogColor = "";
         this.waterColor = "";
@@ -50,7 +51,7 @@ public enum CustomBiomeType {
 
     }
 
-    public String getKey() {
+    public @NotNull String getKey() {
         return key;
     }
 

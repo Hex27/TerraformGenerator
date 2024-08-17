@@ -1,6 +1,5 @@
 package org.terraform.utils.version;
 
-import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.EntityType;
 

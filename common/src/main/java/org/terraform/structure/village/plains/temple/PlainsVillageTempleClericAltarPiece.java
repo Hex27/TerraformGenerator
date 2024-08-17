@@ -3,6 +3,7 @@ package org.terraform.structure.village.plains.temple;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -32,14 +33,14 @@ public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStan
 	};
 	
 	@Override
-	public JigsawStructurePiece getInstance(Random rand, int depth) {
+	public @NotNull JigsawStructurePiece getInstance(@NotNull Random rand, int depth) {
 		PlainsVillageTempleClericAltarPiece p = (PlainsVillageTempleClericAltarPiece) super.getInstance(rand, depth);
 		p.builder = this.builder;
 		return p;
 	}
 	
 	@Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
 		
         Material stairType = stairTypes[random.nextInt(stairTypes.length)];
@@ -86,7 +87,7 @@ public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStan
         core.getRelative(dir).getRelative(0,-1,0).setType(Material.STONE_BRICKS);
         core.getRelative(dir,2).getRelative(0,-1,0).setType(Material.STONE_BRICKS);
         
-        for(int corner[]:this.getRoom().getAllCorners()) {
+        for(int[] corner :this.getRoom().getAllCorners()) {
         	data.setType(corner[0], getRoom().getY(), corner[1], Material.CHISELED_STONE_BRICKS);
         	data.setType(corner[0], getRoom().getY()+1, corner[1], Material.LANTERN);
         }

@@ -8,6 +8,7 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraLootTable;
@@ -20,7 +21,6 @@ import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.JigsawState;
 import org.terraform.structure.JigsawStructurePopulator;
-import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.LegacyPathGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -34,7 +34,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     static int shaftDepth = TConfigOption.STRUCTURES_BADLANDS_MINE_DEPTH.getInt();
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         if (biome != BiomeBank.BADLANDS_CANYON) return false;
 
         //what the fuck is this
@@ -50,7 +50,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }
     
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
                 (int) (TConfigOption.STRUCTURES_MINESHAFT_SPAWNRATIO
                         .getDouble() * 10000),
@@ -58,7 +58,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(18239211, chunkX, chunkZ);
     }
 
@@ -69,11 +69,11 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     }
 
     @Override
-    public JigsawState calculateRoomPopulators(TerraformWorld tw, MegaChunk mc) {
+    public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         return new MineshaftPopulator().calculateRoomPopulators(tw, mc, true);
     }
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         BlockFace outDir, inDir;
         SimpleBlock entrance, shaft;
 
@@ -154,7 +154,8 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
      * @param dir
      * @return
      */
-    SimpleBlock getSpawnEntrance(TerraformWorld tw, SimpleBlock query, BlockFace dir) {
+    @NotNull
+    SimpleBlock getSpawnEntrance(TerraformWorld tw, @NotNull SimpleBlock query, @NotNull BlockFace dir) {
     	while(query.getGround().getY() >= 100) {
     		query = query.getRelative(dir);
     	}
@@ -170,7 +171,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         return query.getGround();
     }
 
-    void spawnEntrance(SimpleBlock entrance, BlockFace direction) {
+    void spawnEntrance(SimpleBlock entrance, @NotNull BlockFace direction) {
         entrance = entrance.getRelative(direction.getModX(), -1, direction.getModZ());
 
         // Place support frame
@@ -186,13 +187,13 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         }
     }
 
-    void patchEntrance(SimpleBlock entrance, BlockFace direction) {
+    void patchEntrance(@NotNull SimpleBlock entrance, @NotNull BlockFace direction) {
         BlockFace nextDir = BlockUtils.getRight(direction);
         fillWithBlock(entrance.getRelative(nextDir.getModX() * 2, -1, nextDir.getModZ() * 2),
                 entrance.getRelative(-nextDir.getModX() * 2, -4, -nextDir.getModZ() * 2).getRelative(direction, 3), Material.RED_SAND);
     }
 
-    void fillWithBlock(SimpleBlock start, SimpleBlock end, Material material) {
+    void fillWithBlock(@NotNull SimpleBlock start, @NotNull SimpleBlock end, @NotNull Material material) {
         for(int x = Math.min(start.getX(), end.getX()); x <= Math.min(start.getX(), end.getX()) + Math.abs(start.getX() - end.getX()); x++) {
             for(int z = Math.min(start.getZ(), end.getZ()); z <= Math.min(start.getZ(), end.getZ()) + Math.abs(start.getZ() - end.getZ()); z++) {
                 for(int y = Math.min(start.getY(), end.getY()); y <= Math.min(start.getY(), end.getY()) + Math.abs(start.getY() - end.getY()); y++) {
@@ -202,7 +203,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         }
     }
 
-    private void spawnShaft(Random random, SimpleBlock shaft, BlockFace inDir) {
+    private void spawnShaft(@NotNull Random random, @NotNull SimpleBlock shaft, @NotNull BlockFace inDir) {
         BlockFace outDir = inDir.getOppositeFace();
         int mineshaftY = (int) (HeightMap.CORE.getHeight(shaft.getPopData().getTerraformWorld(), shaft.getX(), shaft.getZ()) - BadlandsMinePopulator.shaftDepth);
         int shaftStart = -5;
@@ -321,7 +322,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         }
     }
 
-    private void spawnShaftPlatform(SimpleBlock center) {
+    private void spawnShaftPlatform(@NotNull SimpleBlock center) {
         BlockUtils.carveCaveAir(new Random().nextInt(777123),
                 2.5f,
                 1.5f,
@@ -364,7 +365,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         }
     }
 
-    private void setLootBlock(SimpleBlock lootBlock) {
+    private void setLootBlock(@NotNull SimpleBlock lootBlock) {
         if (GenUtils.chance(1, 25) && !lootBlock.getType().isSolid()) {
             lootBlock.setType(Material.BARREL);
             lootBlock.setBlockData(BlockUtils.getRandomBarrel());

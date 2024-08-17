@@ -6,6 +6,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
@@ -28,7 +29,7 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         int[] lowerCorner = room.getLowerCorner(0);
         int[] upperCorner = room.getUpperCorner(0);
         float maxTotalDiff = room.getWidthX()/2f + room.getWidthZ()/2f;
@@ -129,7 +130,7 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
     //This has to be isolated into another method because
     //the chains interfere with lPillar by being solid.
     //Child classes are responsible for calling this.
-    protected void spawnHangingChains(PopulatorDataAbstract data, CubeRoom room) {
+    protected void spawnHangingChains(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	for(int i = 3; i <= 10; i++)
     	{
     		int[] coords = room.randomCoords(rand, 1);

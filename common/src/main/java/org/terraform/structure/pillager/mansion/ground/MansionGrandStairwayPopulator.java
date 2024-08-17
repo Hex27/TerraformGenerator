@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -31,7 +32,7 @@ public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		SimpleBlock target = this.getRoom().getCenterSimpleBlock(data);
 		try {
 			TerraSchematic schema = TerraSchematic.load("mansion/mansion-stairway", target);
@@ -44,7 +45,7 @@ public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		//Arch
 		
 		w.getLeft(3).Pillar(7, Material.DARK_OAK_LOG);
@@ -94,7 +95,7 @@ public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(Random rand, @NotNull Wall w) {
 		
 		Entry<Wall, Integer> entry = this.getRoom().getWall(w.get().getPopData(), w.getDirection().getOppositeFace(), 0);
 		w = entry.getKey();
@@ -111,7 +112,7 @@ public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(3,3);
 	}
 	

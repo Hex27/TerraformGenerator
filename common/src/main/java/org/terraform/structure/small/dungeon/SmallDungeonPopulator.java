@@ -1,5 +1,6 @@
 package org.terraform.structure.small.dungeon;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -12,7 +13,7 @@ import java.util.Random;
 
 public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
 //		ArrayList<BiomeBank> banks = new ArrayList<>();
 //		int numOceanic = 0;
         int totalHeight = 0;
@@ -35,7 +36,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
         }
     }
     
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
                 (int) (TConfigOption.STRUCTURES_DUNGEONS_SPAWNRATIO
                         .getDouble() * 10000),
@@ -43,7 +44,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
@@ -57,7 +58,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
 
     //Each mega chunk has config option dungeons
     @Override
-    public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+    public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
     	int num = TConfigOption.STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++)
@@ -66,7 +67,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+    public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
         MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
 
         double minDistanceSquared = Integer.MAX_VALUE;
@@ -86,7 +87,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(48772719, chunkX, chunkZ);
     }
 

@@ -9,5 +9,5 @@ public enum BiomeSubSection {
 	NEGATIVE_X,
 	POSITIVE_Z,
 	NEGATIVE_Z,
-	NONE;
+	NONE
 }

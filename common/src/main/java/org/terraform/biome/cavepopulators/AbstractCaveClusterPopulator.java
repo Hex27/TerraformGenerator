@@ -1,24 +1,21 @@
 package org.terraform.biome.cavepopulators;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.Version;
 
 public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator {
 
@@ -32,7 +29,7 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
 	
 	protected abstract void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean isBoundary);
 	@Override
-    public void populate(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+    public void populate(TerraformWorld tw, Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor) {
         if(this.radius <= 0) return;
 		ArrayList<SimpleBlock[]> ceilFloorPairs = new ArrayList<>();
         ArrayList<Boolean> boundaries = new ArrayList<>();
@@ -59,7 +56,7 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
         seen.put(center, new Wall[]{new Wall(ceil), new Wall(floor)});
 
         //TerraformGeneratorPlugin.logger.info("Entering BFS for " + center);
-        while(queue.size() > 0)
+        while(!queue.isEmpty())
         {
             SimpleBlock v = queue.remove();
 
