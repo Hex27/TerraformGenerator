@@ -336,10 +336,8 @@ public class MushroomBuilder {
                             + Math.pow(z / r, 2);
 
                     if (equationResult <= 1) {
-                        if (true || !rel.getType().isSolid()) {
-                            rel.setType(GenUtils.randMaterial(rand, type));
-                            BlockUtils.correctSurroundingMushroomData(rel);
-                        }
+                        rel.setType(GenUtils.randMaterial(rand, type));
+                        BlockUtils.correctSurroundingMushroomData(rel);
                     }
                 }
             }
