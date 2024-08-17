@@ -3,7 +3,6 @@ package org.terraform.tree;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -39,7 +38,7 @@ public class NewFractalTreeBuilder implements Cloneable {
     private int randomBranchClusterCount = 1; //Number of random branches to spawn per successful roll
 
     //Pitch rotates up or down, yaw rotates left/right
-    private Vector initialNormal = new Vector(0,1,0);//.normalize();
+    private final Vector initialNormal = new Vector(0,1,0);//.normalize();
     private double maxInitialNormalDelta = 0.3;
     private double minInitialNormalDelta = -0.3;
     private double minBranchHorizontalComponent = 0.5;
@@ -74,20 +73,12 @@ public class NewFractalTreeBuilder implements Cloneable {
 
     //[No more mutable fields. They caused concurrency problems]===================
 
-    //Dev use
-    private @Nullable Random forcedSeed = null;
-
-    public NewFractalTreeBuilder(@Nullable Random forcedSeed){
-        this.forcedSeed = forcedSeed;
-    }
-    public NewFractalTreeBuilder(){}
-
     public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock base)
     {
         //Clear and set mutable structures
         if(!checkGradient(base.getPopData(),base.getX(),base.getZ())) return false;
         int oriY = base.getY();
-        Random random = forcedSeed == null ? tw.getHashedRand(base.getX(), base.getY(), base.getZ()) : forcedSeed;
+        Random random = tw.getHashedRand(base.getX(), base.getY(), base.getZ());
         double displacementTheta = GenUtils.randDouble(random, 0,displacementThetaDelta);
         HashSet<SimpleBlock> prospectiveHives = new HashSet<>();
         double currentBranchTheta = GenUtils.randInt(random, 0, randomBranchSegmentCount);
@@ -146,7 +137,7 @@ public class NewFractalTreeBuilder implements Cloneable {
      * @param prospectiveHives a collection of possible beehive locations
      * @param currentBranchTheta a counter for getNextTheta to spawn cluster branches properly
      * @param oriY original tree base Y
-     * @param displacementTheta i forgot what this is
+     * @param displacementTheta I forgot what this is
      * @param length length of the branch
      * @param end is the percentage from 0.0 to 1.0 for where the branch is considered done
      * @param depth of the current recursion. Starts from 0 and stops at maxDepth
@@ -180,7 +171,7 @@ public class NewFractalTreeBuilder implements Cloneable {
             float randomBranchSpawnCooldownCurrent = 0;
 
             //This for loop places the branch.
-            //i is the branchIndex, and steps is the maximum steps the branch will
+            //I am the branchIndex, and steps is the maximum steps the branch will
             //take. Preferably, the radius of the branch will shrink as steps
             //increase.
             for(float i = 0; i < length-startingBranchIndex; i+=0.5f) {
@@ -356,7 +347,7 @@ public class NewFractalTreeBuilder implements Cloneable {
      * Theta will be defined as 0 to slightly less than 2 pi
      * <br><br>
      * Theta's step to 2pi must be larger if the circle is larger. There may be
-     * an equation for this, but for now i will stick with a small step.
+     * an equation for this, but for now I will stick with a small step.
      *
      * @param normal to the circle.
      * @param radius base radius of the circle. Actual radius may be larger or smaller
@@ -489,11 +480,6 @@ public class NewFractalTreeBuilder implements Cloneable {
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setInitialNormal(Vector initialNormal) {
-        this.initialNormal = initialNormal;
-        return this;
-    }
-
     public @NotNull NewFractalTreeBuilder setMaxInitialNormalDelta(double maxInitialNormalDelta) {
         this.maxInitialNormalDelta = maxInitialNormalDelta;
         return this;
@@ -549,21 +535,6 @@ public class NewFractalTreeBuilder implements Cloneable {
     public @NotNull NewFractalTreeBuilder setLengthVariance(float lengthVariance)
     {
         this.lengthVariance = lengthVariance;
-        return this;
-    }
-
-    public @NotNull NewFractalTreeBuilder setBendChance(float bendChance) {
-        /**
-         * A chance representing branch bending rates. 0 for no bends.
-         * When a branch bends, the branch() method will essentially break its
-         * iteration and call itself again with a higher base,
-         * but with a slightly different projection
-         */
-        return this;
-    }
-
-    public @NotNull NewFractalTreeBuilder setBendMaxAngle(float bendMaxAngle) {
-        //in radians. Max bend angle
         return this;
     }
 
