@@ -72,7 +72,7 @@ public class NMSInjector extends NMSInjectorAbstract {
         
         if(ws.k().g() instanceof CustomChunkGenerator) {
             try {
-            	ChunkGenerator delegate = null;
+            	ChunkGenerator delegate;
             	Field f = CustomChunkGenerator.class.getDeclaredField("delegate");
             	f.setAccessible(true);
             	delegate = (ChunkGenerator) f.get(ws.k().g());

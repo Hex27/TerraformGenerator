@@ -99,7 +99,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
      * @param data
      */
     public void thirdStageDecoration(Random random, @NotNull PopulatorDataAbstract data) {
-    	CubeRoom targetRoom = this.getRoom();
+    	CubeRoom targetRoom;
         if(!this.getWalledFaces().isEmpty()) {
         	targetRoom = this.getExtendedRoom(6);
         	//Decorate the top and bottom areas

@@ -24,10 +24,10 @@ public class OrePopulator {
     private final int maxNumberOfVeins; //Maximum number of veins per chunk
     private final int peakSpawnChanceHeight; //Optimal height for ore to spawn
     private final int maxSpawnHeight; //max y height where ore can be rarely found
-    private int minRange = 5; //min spawn height
+    private int minRange; //min spawn height
     private final BiomeBank[] requiredBiomes;
     private final int maxDistance;
-    private boolean ignorePeakSpawnChance = false;
+    private boolean ignorePeakSpawnChance;
 
     public OrePopulator(Material type, int baseChance, int maxOreSize,
                         int maxNumberOfVeins, int peakSpawnChanceHeight, int maxSpawnHeight, 

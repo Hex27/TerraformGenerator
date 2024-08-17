@@ -29,7 +29,7 @@ public class PlainsVillageTempleRoofHandler {
     			piece.getRoom().getY()+5,
     			piece.getRoom().getZ()),piece.getRotation());
 		for(BlockFace face:BlockUtils.getAdjacentFaces(piece.getRotation())) {
-			int multiplier = 0;
+			int multiplier;
 			
 			if(PlainsVillageTempleJigsawBuilder.hasAdjacentWall(piece, face, wallPieces)) {
 				multiplier = 0;//Wall leads to another wall, so all segments are equal
@@ -107,7 +107,7 @@ public class PlainsVillageTempleRoofHandler {
 			for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) 
 				for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
 					SimpleBlock b = new SimpleBlock(data, x, piece.getRoom().getY()+1,z);
-					int i = 0;
+					int i;
 					for(i = 0; i < 9; i++) {
 						if(!b.getType().isSolid()) {
 							b = b.getRelative(0,1,0);
@@ -140,7 +140,7 @@ public class PlainsVillageTempleRoofHandler {
 //        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
 //        terracotta.setFacing(BlockFace.SOUTH);
 //        data.setBlockData(x + 1, y, z + 1, terracotta);
-    	BlockFace dir = BlockFace.NORTH;
+    	BlockFace dir;
     	if(target.getX() % 2 == 0) {
     		if(target.getZ() % 2 == 0)
     			dir = BlockFace.SOUTH;

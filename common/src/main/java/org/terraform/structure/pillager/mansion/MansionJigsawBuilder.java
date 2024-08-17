@@ -218,7 +218,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         MansionMazeAlgoUtil.knockdownRandomWalls(secondFloorHandler.secondFloorPieces.values(), random);
         
         
-        MansionStandardRoomPiece secondFloorStairwayCenter = null;
+        MansionStandardRoomPiece secondFloorStairwayCenter;
         //Find the Stairway piece and (it extends to the second floor.)
         for (JigsawStructurePiece piece : pieces.values()){
         	if(((MansionStandardRoomPiece) piece).getRoomPopulator() instanceof MansionGrandStairwayPopulator && ((MansionStandardRoomPiece) piece).isPopulating()) {

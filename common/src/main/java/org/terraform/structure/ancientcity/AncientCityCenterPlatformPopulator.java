@@ -96,7 +96,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         //Direction the head faces
     	BlockFace facing = BlockUtils.getDirectBlockFace(this.getRand());
 
-    	int modX = 0; int modZ = 0; CubeRoom fireBox;
+    	int modX; int modZ; CubeRoom fireBox;
     	if(BlockUtils.getAxisFromBlockFace(facing) == Axis.X) {
     		modX = 3;
     		modZ = 17;

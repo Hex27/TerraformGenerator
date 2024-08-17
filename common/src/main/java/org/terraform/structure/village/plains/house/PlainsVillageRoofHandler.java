@@ -62,7 +62,7 @@ public class PlainsVillageRoofHandler {
 
 
     public static void placeTentRoof(@NotNull PlainsVillagePopulator plainsVillagePopulator, @NotNull Random rand, @NotNull PlainsVillageHouseJigsawBuilder builder) {
-        Axis superiorAxis = Axis.Z;
+        Axis superiorAxis;
         PopulatorDataAbstract data = builder.getCore().getPopData();
         int[] lowestCoords = null;
         int[] highestCoords = null;

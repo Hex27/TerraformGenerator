@@ -129,7 +129,7 @@ public class JigsawBuilder {
         }
         if (current.hasUnpopulatedDirections()) {
             BlockFace dir = current.getNextUnpopulatedBlockFace();
-            JigsawStructurePiece toAdd = null;
+            JigsawStructurePiece toAdd;
             int toAddX = current.getRoom().getX() + pieceWidth * dir.getModX();
             int toAddY = current.getRoom().getY() + pieceWidth * dir.getModY();
             int toAddZ = current.getRoom().getZ() + pieceWidth * dir.getModZ();

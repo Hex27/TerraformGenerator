@@ -173,7 +173,7 @@ public class MansionRoofHandler {
      * @return the highest Y modified by the roof
      */
     public static int placeTentRoof(Random rand, @NotNull MansionJigsawBuilder builder, int[][] bounds) {
-        Axis superiorAxis = Axis.Z;
+        Axis superiorAxis;
         PopulatorDataAbstract data = builder.getCore().getPopData();
         
         int highestY = -1;
