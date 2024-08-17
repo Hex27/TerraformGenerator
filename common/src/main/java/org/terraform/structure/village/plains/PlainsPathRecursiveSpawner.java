@@ -30,9 +30,9 @@ public class PlainsPathRecursiveSpawner {
     private final int range;
     private int minRoomWidth = 15;
     private int maxRoomWidth = 20;
-    private int smallRoomChance = 10;
-    private int minSmallRoomWidth = 7;
-    private int maxSmallRoomWidth = 10;
+    private final int smallRoomChance = 10;
+    private final int minSmallRoomWidth = 7;
+    private final int maxSmallRoomWidth = 10;
     
     /** 
      * 1 for max room density, 0 for no rooms.
@@ -339,9 +339,9 @@ public class PlainsPathRecursiveSpawner {
     }
 
     private class CrossRoad {
-        public SimpleLocation loc;
-        public BlockFace[] faces;
-        public ArrayList<BlockFace> satisfiedFaces = new ArrayList<>();
+        public final SimpleLocation loc;
+        public final BlockFace[] faces;
+        public final ArrayList<BlockFace> satisfiedFaces = new ArrayList<>();
 
         public CrossRoad(SimpleLocation loc, BlockFace[] faces) {
             this.loc = loc;

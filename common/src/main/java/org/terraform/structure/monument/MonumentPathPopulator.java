@@ -9,8 +9,8 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class MonumentPathPopulator extends PathPopulatorAbstract {
-    Random rand;
-    MonumentDesign design;
+    final Random rand;
+    final MonumentDesign design;
     private boolean light = true;
 
     public MonumentPathPopulator(MonumentDesign design, Random rand) {

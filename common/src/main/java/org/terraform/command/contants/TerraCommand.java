@@ -10,9 +10,9 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 public abstract class TerraCommand {
 	
-	public ArrayList<String> aliases = new ArrayList<>();
-	public ArrayList<TerraCommandArgument<?>> parameters = new ArrayList<TerraCommandArgument<?>>();
-	public TerraformGeneratorPlugin plugin;
+	public final ArrayList<String> aliases = new ArrayList<>();
+	public final ArrayList<TerraCommandArgument<?>> parameters = new ArrayList<TerraCommandArgument<?>>();
+	public final TerraformGeneratorPlugin plugin;
 	public TerraCommand(TerraformGeneratorPlugin plugin, String... aliases){
 		this.plugin = plugin;
 		for(String alias:aliases){

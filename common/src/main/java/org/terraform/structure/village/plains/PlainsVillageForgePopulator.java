@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class PlainsVillageForgePopulator extends PlainsVillageAbstractRoomPopulator {
 	
-	private PlainsVillagePopulator plainsVillagePopulator;
+	private final PlainsVillagePopulator plainsVillagePopulator;
     public PlainsVillageForgePopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
         this.plainsVillagePopulator = plainsVillagePopulator;

@@ -15,7 +15,7 @@ public class MansionTowerWallPiece extends JigsawStructurePiece {
 
 	public boolean isTentRoofFace = false;
 	@SuppressWarnings("unused")
-	private MansionJigsawBuilder builder;
+	private final MansionJigsawBuilder builder;
     public MansionTowerWallPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
         this.builder = builder;

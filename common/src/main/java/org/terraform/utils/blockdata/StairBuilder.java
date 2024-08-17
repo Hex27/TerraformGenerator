@@ -67,7 +67,7 @@ public class StairBuilder {
         return this;
     }
     
-    ArrayList<SimpleBlock> placed = new ArrayList<>();
+    final ArrayList<SimpleBlock> placed = new ArrayList<>();
     public StairBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         placed.add(new SimpleBlock(data,x,y,z));

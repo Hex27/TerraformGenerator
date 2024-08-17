@@ -28,9 +28,9 @@ public enum CaveClusterRegistry {
     ),
 	;
 	
-	int hashSeed;
-	int separation;
-	float pertub;
+	final int hashSeed;
+	final int separation;
+	final float pertub;
 	CaveClusterRegistry(int hashSeed, int separation, float pertub){
 		this.hashSeed = hashSeed;
 		this.separation = separation;

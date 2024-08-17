@@ -17,7 +17,7 @@ public class StalactiteBuilder {
 	private boolean isFacingUp;
 	private int verticalSpace;
     private float minRadius = 0;
-    private float maxRadius = 3f;
+    private final float maxRadius = 3f;
 	
 	public StalactiteBuilder(Material... wallType) {
 		this.wallType = wallType;

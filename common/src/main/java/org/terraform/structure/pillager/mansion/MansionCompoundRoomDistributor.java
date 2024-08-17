@@ -29,7 +29,7 @@ import org.terraform.utils.GenUtils;
 public class MansionCompoundRoomDistributor {
 	
 	//A map of populators and their respective room areas
-	public static HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators = 
+	public static final HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators =
 			new HashMap<>() {{
 				put(new MansionRoomSize(3,3), MansionRoomPopulatorRegistry.GROUND_3_3.getPopulators());
 				put(new MansionRoomSize(2,2), MansionRoomPopulatorRegistry.GROUND_2_2.getPopulators());
@@ -38,7 +38,7 @@ public class MansionCompoundRoomDistributor {
 				put(new MansionRoomSize(1,1), MansionRoomPopulatorRegistry.GROUND_1_1.getPopulators());
 			}};
 
-	public static HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> secondFloorPopulators = 
+	public static final HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> secondFloorPopulators =
 			new HashMap<>() {{
 				put(new MansionRoomSize(3,3), MansionRoomPopulatorRegistry.SECOND_3_3.getPopulators());
 				put(new MansionRoomSize(2,2), MansionRoomPopulatorRegistry.SECOND_2_2.getPopulators());

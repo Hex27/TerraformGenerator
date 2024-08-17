@@ -24,10 +24,10 @@ import java.util.Random;
 
 public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbstract {
 
-	TerraformWorld tw;
-	protected HashSet<SimpleLocation> occupied;
+	final TerraformWorld tw;
+	protected final HashSet<SimpleLocation> occupied;
 	protected int shrunkenWidth = 0;
-	protected RoomLayoutGenerator gen;
+	protected final RoomLayoutGenerator gen;
     public AncientCityAbstractRoomPopulator(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
         this.tw = tw;

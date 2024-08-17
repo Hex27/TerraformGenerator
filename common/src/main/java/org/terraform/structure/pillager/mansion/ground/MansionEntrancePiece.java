@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MansionEntrancePiece extends JigsawStructurePiece {
-	MansionJigsawBuilder builder;
+	final MansionJigsawBuilder builder;
     public MansionEntrancePiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
         this.builder = builder;

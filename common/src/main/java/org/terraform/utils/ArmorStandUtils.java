@@ -33,7 +33,7 @@ public class ArmorStandUtils {
 		IRON(Material.IRON_HELMET, Material.IRON_CHESTPLATE, Material.IRON_LEGGINGS, Material.IRON_BOOTS),
 		GOLD(Material.GOLDEN_HELMET, Material.GOLDEN_CHESTPLATE, Material.GOLDEN_LEGGINGS, Material.GOLDEN_BOOTS),
 		DIAMOND(Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS);
-		private Material[] pieces;
+		private final Material[] pieces;
 		ArmorStandQuality(Material... pieces){
 			this.pieces = pieces;
 		}

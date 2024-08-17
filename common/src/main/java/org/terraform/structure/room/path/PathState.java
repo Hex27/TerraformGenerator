@@ -23,7 +23,7 @@ public class PathState {
     */
 
     //This will contain some path nodes
-    public HashSet<PathNode> nodes = new HashSet<>();
+    public final HashSet<PathNode> nodes = new HashSet<>();
 
     /*
     /* General settings

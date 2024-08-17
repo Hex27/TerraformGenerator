@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class LanguageManager {
 	
 	private FileConfiguration langFile;
-	private File file;
+	private final File file;
 	
 	public LanguageManager(TerraformGeneratorPlugin plugin){
 		this.file = new File(plugin.getDataFolder(),plugin.getConfigLoader().getString("lang"));
@@ -19,7 +19,7 @@ public class LanguageManager {
 		loadDefaults();
 	}
 	
-	private HashMap<String,String> cache = new HashMap<>();
+	private final HashMap<String,String> cache = new HashMap<>();
 	
 	private void loadDefaults(){
 		fetchLang("permissions.insufficient","&cYou don't have enough permissions to perform this action!");

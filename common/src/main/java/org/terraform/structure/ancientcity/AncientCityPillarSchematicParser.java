@@ -14,7 +14,7 @@ public class AncientCityPillarSchematicParser extends SchematicParser {
 	
 	private int failCount = 0;
 	private int totalCount = 0;
-	ArrayList<SimpleBlock> touchedOffsets = new ArrayList<>();
+	final ArrayList<SimpleBlock> touchedOffsets = new ArrayList<>();
 	
 	public ArrayList<SimpleBlock> getTouchedOffsets() {
 		return touchedOffsets;

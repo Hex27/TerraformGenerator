@@ -21,7 +21,7 @@ import org.terraform.utils.GenUtils;
 
 public class MansionTowerStairwayPopulator extends MansionRoomPopulator {
 
-	private int towerHeight;
+	private final int towerHeight;
 	public MansionTowerStairwayPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls, int towerHeight) {
 		super(room, internalWalls);
 		this.towerHeight = towerHeight;

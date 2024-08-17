@@ -61,7 +61,7 @@ public class MansionSecondFloorStoreroomPopulator extends MansionRoomPopulator {
 	//be done differently for this room specifically.
 	private class MansionStoreroomSchematicParser extends SchematicParser
 	{
-		private Random rand;
+		private final Random rand;
 		public MansionStoreroomSchematicParser(Random rand) {
 			this.rand = rand;
 		}

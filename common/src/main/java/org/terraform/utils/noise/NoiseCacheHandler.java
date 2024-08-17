@@ -133,8 +133,8 @@ public class NoiseCacheHandler{
 	}
 	
 	public static class NoiseCacheKey {
-		private TerraformWorld tw;
-		private NoiseCacheEntry entry;
+		private final TerraformWorld tw;
+		private final NoiseCacheEntry entry;
 		
 		public NoiseCacheKey(TerraformWorld world, NoiseCacheEntry entry) {
 			this.tw = world;

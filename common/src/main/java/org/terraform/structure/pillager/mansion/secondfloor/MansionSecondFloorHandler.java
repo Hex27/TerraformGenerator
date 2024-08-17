@@ -17,9 +17,9 @@ import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
 
 public class MansionSecondFloorHandler {
-	public HashMap<SimpleLocation, JigsawStructurePiece> secondFloorPieces = new HashMap<>();
-    public ArrayList<JigsawStructurePiece> secondFloorOverlapperPieces = new ArrayList<>();
-	private MansionJigsawBuilder builder;
+	public final HashMap<SimpleLocation, JigsawStructurePiece> secondFloorPieces = new HashMap<>();
+    public final ArrayList<JigsawStructurePiece> secondFloorOverlapperPieces = new ArrayList<>();
+	private final MansionJigsawBuilder builder;
 	private Random random;
 
 	public MansionSecondFloorHandler(MansionJigsawBuilder builder) {

@@ -19,7 +19,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
     protected HashMap<BlockFace, Boolean> validDirections = new HashMap<BlockFace, Boolean>();
     protected ArrayList<BlockFace> walledFaces = new ArrayList<>();
     protected JigsawStructurePiece[] allowedPieces;
-    protected JigsawType type;
+    protected final JigsawType type;
     protected int depth = 0;
     protected BlockFace rotation = BlockFace.NORTH;
     protected boolean unique = false;

@@ -31,7 +31,7 @@ public class ShipwreckSchematicParser extends SchematicParser {
     private final BiomeBank biome;
     private final Random rand;
     private final PopulatorDataAbstract pop;
-    String woodType;
+    final String woodType;
 
     public ShipwreckSchematicParser(BiomeBank biome, Random rand,
                                     PopulatorDataAbstract pop) {

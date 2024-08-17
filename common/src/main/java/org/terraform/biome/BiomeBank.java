@@ -127,7 +127,7 @@ public enum BiomeBank {
     private final BiomeType type;
     private final AbstractCavePopulator cavePop;
     private final BiomeClimate climate;
-    private int biomeWeight;
+    private final int biomeWeight;
 
     private static final LoadingCache<BiomeSection, BiomeSection> BIOMESECTION_CACHE = 
     		CacheBuilder.newBuilder()

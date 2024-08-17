@@ -15,7 +15,7 @@ import java.util.Random;
  */
 public class StairwayBuilder {
 	
-	private Material[] stairTypes;
+	private final Material[] stairTypes;
 	private boolean carveAirSpace = true;
 	private BlockFace stairDirection = BlockFace.DOWN;
 	private Material[] downTypes;

@@ -56,7 +56,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 	
 	private class MansionLoungeSchematicParser extends MansionRoomSchematicParser
 	{
-		private Material terracottaType;
+		private final Material terracottaType;
 		public MansionLoungeSchematicParser(Random rand, PopulatorDataAbstract pop) {
 			super(rand, pop);
 			terracottaType = GenUtils.randMaterial(rand,

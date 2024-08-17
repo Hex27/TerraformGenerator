@@ -36,12 +36,12 @@ import java.util.Scanner;
 
 public class TerraSchematic {
 	public static final String SCHEMATIC_FOLDER = File.separator + "schematic";
-    public static HashMap<String, HashMap<Vector,BlockData>> cache = new HashMap<>();
+    public static final HashMap<String, HashMap<Vector,BlockData>> cache = new HashMap<>();
 
     private final File schematicFolder;
     public SchematicParser parser = new SchematicParser();
     HashMap<Vector, BlockData> data = new HashMap<>();
-    SimpleBlock refPoint;
+    final SimpleBlock refPoint;
     BlockFace face = BlockFace.NORTH;
     private double VERSION_VALUE;
 

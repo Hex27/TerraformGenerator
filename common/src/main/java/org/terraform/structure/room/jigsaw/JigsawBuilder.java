@@ -20,22 +20,22 @@ import java.util.Stack;
  * This class has nothing to do with the new system
  */
 public class JigsawBuilder {
-    protected int widthX;
-    protected int widthZ;
-    protected int[] lowerBounds = new int[2];
-    protected int[] upperBounds = new int[2];
-    protected int maxDepth = 5; //The amount of pieces before an end piece is forced.
+    protected final int widthX;
+    protected final int widthZ;
+    protected final int[] lowerBounds = new int[2];
+    protected final int[] upperBounds = new int[2];
+    protected final int maxDepth = 5; //The amount of pieces before an end piece is forced.
     protected int chanceToAddNewPiece = 60;
     protected int minimumPieces = 0;
     protected int pieceWidth = 5;
-    protected SimpleBlock core;
+    protected final SimpleBlock core;
     protected JigsawStructurePiece center;
     protected Wall entranceBlock;
-    protected Stack<JigsawStructurePiece> traverseStack = new Stack<>();
+    protected final Stack<JigsawStructurePiece> traverseStack = new Stack<>();
     //protected ArrayList<JigsawStructurePiece> pieces = new ArrayList<>();
     //protected ArrayList<SimpleLocation> usedLocations = new ArrayList<>();
-    protected HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
-    protected ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
+    protected final HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
+    protected final ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
     protected JigsawStructurePiece[] pieceRegistry;
     protected BlockFace entranceDir;
     int traversalIndex = 0;

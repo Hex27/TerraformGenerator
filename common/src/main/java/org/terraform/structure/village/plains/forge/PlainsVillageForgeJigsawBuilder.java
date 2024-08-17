@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
 
-	private PlainsVillagePopulator plainsVillagePopulator;
+	private final PlainsVillagePopulator plainsVillagePopulator;
     public PlainsVillageForgeJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
         this.plainsVillagePopulator = plainsVillagePopulator;

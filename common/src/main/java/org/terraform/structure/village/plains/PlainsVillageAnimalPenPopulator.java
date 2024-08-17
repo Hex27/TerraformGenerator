@@ -27,7 +27,7 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
             EntityType.CHICKEN
     };
 
-	private PlainsVillagePopulator plainsVillagePopulator;
+	private final PlainsVillagePopulator plainsVillagePopulator;
     public PlainsVillageAnimalPenPopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
         this.plainsVillagePopulator = plainsVillagePopulator;

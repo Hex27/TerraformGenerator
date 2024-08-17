@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Random;
 
 public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
-    TerraformWorld tw;
+    final TerraformWorld tw;
     private final Random random;
     private final Collection<DirectionalCubeRoom> knownRooms;
 

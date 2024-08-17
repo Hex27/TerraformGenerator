@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
-	private PopulatorDataAbstract parent;
+	private final PopulatorDataAbstract parent;
     private final IChunkAccess ica;
     private final int chunkX;
     private final int chunkZ;

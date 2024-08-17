@@ -224,8 +224,8 @@ public class StructureRegistry {
     }
     
     private static class MegaChunkKey {
-    	private TerraformWorld tw;
-    	private MegaChunk mc;
+    	private final TerraformWorld tw;
+    	private final MegaChunk mc;
 		public MegaChunkKey(TerraformWorld tw, MegaChunk mc) {
 			super();
 			this.tw = tw;

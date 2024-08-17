@@ -13,7 +13,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 public class HelpCommand extends TerraCommand {
 	
-	private TerraformCommandManager man;
+	private final TerraformCommandManager man;
 	public HelpCommand(TerraformGeneratorPlugin plugin, TerraformCommandManager man, String... string){
 		super(plugin, string);
 		this.man = man;

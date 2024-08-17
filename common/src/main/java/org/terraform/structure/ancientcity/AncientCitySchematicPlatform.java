@@ -29,16 +29,16 @@ public class AncientCitySchematicPlatform extends AncientCityAbstractRoomPopulat
         super(tw, occupied, gen, rand, forceSpawn, unique);
     }
 
-    private String[] smallSchematics = new String[] {
+    private final String[] smallSchematics = new String[] {
 		"ancient-city/ancient-city-wood-tower-1",
 		"ancient-city/ancient-city-rock-tower-1",
 		"ancient-city/ancient-city-lamp",
     };
-    private String[] mediumSchematics = new String[] {
+    private final String[] mediumSchematics = new String[] {
 		"ancient-city/ancient-city-hot-tub",
 		"ancient-city/ancient-city-warehouse",
     };
-    private String[] largeSchematics = new String[] {
+    private final String[] largeSchematics = new String[] {
 		"ancient-city/ancient-city-pantheon",
     };
     @Override

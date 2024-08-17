@@ -39,7 +39,7 @@ public class FractalLeaves implements Cloneable{
     //public FractalTreeBuilder builder;
 
     boolean semiSphereLeaves = false;
-    Random rand = new Random();
+    final Random rand = new Random();
     float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;
     double hollowLeaves = 0.0;

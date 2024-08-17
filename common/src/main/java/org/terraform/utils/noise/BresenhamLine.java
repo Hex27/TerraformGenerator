@@ -6,8 +6,8 @@ import java.util.List;
 import org.terraform.utils.Vector2f;
 
 public class BresenhamLine {
-    Vector2f point1;
-    Vector2f point2;
+    final Vector2f point1;
+    final Vector2f point2;
 
     public BresenhamLine(Vector2f point1, Vector2f point2) {
         this.point1 = point1;

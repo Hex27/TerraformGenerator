@@ -33,7 +33,7 @@ public enum MansionRoomPopulatorRegistry {
 	SECOND_1_1(new MansionSecondFloorHallwayPopulator(null,null)),
 	
 	;
-	ArrayList<MansionRoomPopulator> populators = new ArrayList<>();
+	final ArrayList<MansionRoomPopulator> populators = new ArrayList<>();
 	MansionRoomPopulatorRegistry(MansionRoomPopulator... populators){
 		for(MansionRoomPopulator populator:populators) {
 			this.populators.add(populator);

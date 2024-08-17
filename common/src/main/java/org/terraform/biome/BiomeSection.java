@@ -14,10 +14,11 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 
 public class BiomeSection {
-	private int x, z;
+	private final int x;
+    private final int z;
 	// A BiomeSection is 128 blocks wide (Default of bitshift 7).
 	public static final int bitshifts = TConfigOption.BIOME_SECTION_BITSHIFTS.getInt();
-	private TerraformWorld tw;
+	private final TerraformWorld tw;
 	public static final int sectionWidth = (int) (1 << bitshifts);
 	public static final int minSize = sectionWidth;
 	public static final int dominanceThreshold = (int)(0.35 * sectionWidth);

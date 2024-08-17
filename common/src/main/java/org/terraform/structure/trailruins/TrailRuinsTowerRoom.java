@@ -56,7 +56,7 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
     public static class TrailRuinsTowerParser extends SchematicParser{
         private final SimpleBlock destruction;
         private final Random random;
-        HashMap<Material, Material> newMapping = new HashMap<>();
+        final HashMap<Material, Material> newMapping = new HashMap<>();
         public TrailRuinsTowerParser(SimpleBlock core, Random rand) {
             this.random = rand;
             this.destruction = core.getRelative(

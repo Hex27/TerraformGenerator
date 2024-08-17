@@ -12,19 +12,19 @@ import org.terraform.utils.noise.FastNoise.NoiseType;
 
 public class BoxBuilder {
 	
-	private Random random;
-	private int seed;
+	private final Random random;
+	private final int seed;
 	private float rX = 1f;
 	private float rY = 1f;
 	private float rZ = 1f;
-	private SimpleBlock core;
+	private final SimpleBlock core;
 	private boolean hardReplace = false;
-	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
+	private final Collection<Material> replaceWhitelist = new ArrayList<Material>();
 	private Material[] types;
 	private Material[] upperType;
 	private Material[] lowerType;
 	private int staticWaterLevel = -9999;
-	private float fuzzMultiplier = 0.2f;
+	private final float fuzzMultiplier = 0.2f;
 	private BoxType boxType = BoxType.FULL_BOX;
 	
 	

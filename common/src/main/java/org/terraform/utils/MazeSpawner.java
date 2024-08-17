@@ -26,7 +26,7 @@ public class MazeSpawner {
      * NOT REAL IN-WORLD COORDS.
      */
     private final Map<SimpleLocation, MazeCell> cellGrid = new HashMap<>();
-    public List<PathPopulatorData> pathPopDatas = new ArrayList<>();
+    public final List<PathPopulatorData> pathPopDatas = new ArrayList<>();
     private SimpleBlock core; //Maze center
     private int widthX = -1; //Maze x width
     private int widthZ = -1; //Maze z width
@@ -294,8 +294,9 @@ public class MazeSpawner {
      * In the game, this is denoted by a square of side mazePathWidth.
      */
     private static class MazeCell {
-        protected int x, z;
-        protected Map<BlockFace, Boolean> walls = new EnumMap<>(BlockFace.class);
+        protected final int x;
+        protected final int z;
+        protected final Map<BlockFace, Boolean> walls = new EnumMap<>(BlockFace.class);
 
         public MazeCell(int x, int z) {
             this.x = x;

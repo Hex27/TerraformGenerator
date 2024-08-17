@@ -16,7 +16,7 @@ import java.util.Random;
 public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
 
 	private boolean isTower = false;
-	PlainsVillagePopulator plainsVillagePopulator;
+	final PlainsVillagePopulator plainsVillagePopulator;
 
     public PlainsVillageTempleStandardPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, unique, validDirs);

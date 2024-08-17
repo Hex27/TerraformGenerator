@@ -28,7 +28,7 @@ public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulat
 			"plainsvillage-well2"
 	};
 	
-	private PlainsVillagePopulator plainsVillagePopulator;
+	private final PlainsVillagePopulator plainsVillagePopulator;
     public PlainsVillageWellPopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
         this.plainsVillagePopulator = plainsVillagePopulator;

@@ -22,7 +22,7 @@ public enum MonumentDesign {
     PRISMARINE_LANTERNS(Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE),
     DARK_LIGHTLESS(Material.PRISMARINE, Material.DARK_PRISMARINE, Material.DARK_PRISMARINE, Material.DARK_PRISMARINE);
 
-    Material[] tileSet;
+    final Material[] tileSet;
 
     MonumentDesign(Material... tileSet) {
         this.tileSet = tileSet;

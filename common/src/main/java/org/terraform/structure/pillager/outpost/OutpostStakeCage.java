@@ -21,8 +21,8 @@ import java.util.Random;
 
 public class OutpostStakeCage extends RoomPopulatorAbstract {
 
-	private BiomeBank biome;
-	private Material[] stakeGravel;
+	private final BiomeBank biome;
+	private final Material[] stakeGravel;
     public OutpostStakeCage(Random rand, boolean forceSpawn, boolean unique, BiomeBank biome, Material... stakeGravel) {
         super(rand, forceSpawn, unique);
         this.biome = biome;

@@ -19,7 +19,7 @@ import java.util.Random;
 
 public class OutpostLogpile extends RoomPopulatorAbstract {
 
-	private BiomeBank biome;
+	private final BiomeBank biome;
     public OutpostLogpile(Random rand, boolean forceSpawn, boolean unique, BiomeBank biome) {
         super(rand, forceSpawn, unique);
         this.biome = biome;

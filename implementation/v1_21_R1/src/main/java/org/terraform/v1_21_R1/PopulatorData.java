@@ -42,8 +42,8 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     private final int chunkZ;
     private int radius = 1;
     private final NMSChunkGenerator gen;
-    GeneratorAccessSeed rlwa;
-    IChunkAccess ica;
+    final GeneratorAccessSeed rlwa;
+    final IChunkAccess ica;
     
     private static final HashMap<EntityType,EntityTypes<?>> entityTypesDict = new HashMap<>();
     
