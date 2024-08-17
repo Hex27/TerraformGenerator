@@ -71,8 +71,8 @@ public class BiomeDistribCommand extends TerraCommand {
 	        		climates.put(sect.getBiomeBank().getClimate(), climates.get(sect.getBiomeBank().getClimate())+1);
 	        }
         
-        sender.sendMessage("Temperature: " + temperature.toString());
-        sender.sendMessage("Moisture: " + moisture.toString());
+        sender.sendMessage("Temperature: " + temperature);
+        sender.sendMessage("Moisture: " + moisture);
         for(int val:counts.values()) total += val;
         
         
