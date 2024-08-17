@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
 import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
@@ -17,8 +18,8 @@ import org.terraform.utils.GenUtils;
 public class MansionTowerPieceHandler {
 
 	//Contains rooms in 3d.
-	public HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
-    public ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
+	public @NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
+    public @NotNull ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
     public static final int towerPieceWidth = 7; //2 less than groundFloorPiece
     
 	private MansionJigsawBuilder builder;
@@ -29,7 +30,7 @@ public class MansionTowerPieceHandler {
 		this.data = data;
 	}
 	
-	public int registerTowerPiece(Random rand, JigsawStructurePiece piece) {
+	public int registerTowerPiece(@NotNull Random rand, @NotNull JigsawStructurePiece piece) {
 		
 		int height = GenUtils.randInt(rand, 1, 2);
 		

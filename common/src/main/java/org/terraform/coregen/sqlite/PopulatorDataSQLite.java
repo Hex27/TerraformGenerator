@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -50,7 +51,7 @@ public class PopulatorDataSQLite extends PopulatorDataAbstract {
     }
 
     @Override
-    public Biome getBiome(int rawX, int rawZ) {
+    public @Nullable Biome getBiome(int rawX, int rawZ) {
         // TODO Auto-generated method stub
         return null;
     }

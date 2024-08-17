@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.house;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -16,7 +17,7 @@ import java.util.Random;
 public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
     PlainsVillageHouseVariant var;
     PlainsVillagePopulator plainsVillagePopulator;
-    public PlainsVillageHouseJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
+    public PlainsVillageHouseJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
         this.plainsVillagePopulator = plainsVillagePopulator;
         this.var = PlainsVillageHouseVariant.roll(new Random());
@@ -31,12 +32,12 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
     }
 
     @Override
-    public JigsawStructurePiece getFirstPiece(Random random) {
+    public @NotNull JigsawStructurePiece getFirstPiece(Random random) {
         return new PlainsVillageBedroomPiece(plainsVillagePopulator, var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
     }
     
     @Override
-    public void build(Random random) {
+    public void build(@NotNull Random random) {
         super.build(random);
 
         //Make sure awkward corners are fixed
@@ -90,7 +91,7 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
 
     }
 
-    public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two, Material cornerType, Material[] fenceType) {
+    public void decorateAwkwardCorner(@NotNull Wall target, @NotNull Random random, @NotNull BlockFace one, @NotNull BlockFace two, Material cornerType, Material[] fenceType) {
         target.Pillar(4, random, cornerType);
         target.getRelative(0, -1, 0).downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
         target = target.getRelative(0, 1, 0);

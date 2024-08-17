@@ -1,18 +1,13 @@
 package org.terraform.structure.warmoceanruins;
 
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.CubeRoom;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CylinderBuilder;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.blockdata.ChestBuilder;
 
 import java.util.Map;
@@ -25,7 +20,7 @@ public class WarmOceanAltarRoom extends WarmOceanBaseRoom{
 
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
         for(Map.Entry<Wall,Integer> entry:room.getFourWalls(data,3).entrySet())
@@ -60,7 +55,7 @@ public class WarmOceanAltarRoom extends WarmOceanBaseRoom{
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX()<25;
     }
 }

@@ -2,6 +2,7 @@ package org.terraform.structure.pillager.outpost;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.CubeRoom;
@@ -16,7 +17,7 @@ public class OutpostCampfire extends RoomPopulatorAbstract {
         super(rand, forceSpawn, unique);
     }
 
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	SimpleBlock core = new SimpleBlock(data,room.getX(),room.getY(),room.getZ()).getGroundOrSeaLevel();
     	
     	BlockUtils.replaceCircularPatch(
@@ -32,7 +33,7 @@ public class OutpostCampfire extends RoomPopulatorAbstract {
     	}
     }
     
-    private void unitCampfire(SimpleBlock block) {
+    private void unitCampfire(@NotNull SimpleBlock block) {
     	switch(rand.nextInt(3)) {
     	case 0:
     		block.setType(Material.CAMPFIRE);

@@ -27,6 +27,7 @@ import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.StructureGenerator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructureManager;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -42,11 +43,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class NMSChunkGenerator extends ChunkGenerator {
-	private final ChunkGenerator delegate;
-    private final TerraformWorld tw;
+	private final @NotNull ChunkGenerator delegate;
+    private final @NotNull TerraformWorld tw;
     
 	public NMSChunkGenerator(String worldname, long seed,
-    						ChunkGenerator delegate) {
+                             @NotNull ChunkGenerator delegate) {
     	super(
     			delegate.b,//b is structureSets
     			delegate.e,//e is structureOverrides
@@ -66,13 +67,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return this.d;
     }
     
-    public TerraformWorld getTerraformWorld() {
+    public @NotNull TerraformWorld getTerraformWorld() {
         return tw;
     }
 
     //createBiomes
     @Override
-    public CompletableFuture<IChunkAccess> a(IRegistry<BiomeBase> iregistry, Executor executor, Blender blender, StructureManager structuremanager, IChunkAccess ichunkaccess) {
+    public @NotNull CompletableFuture<IChunkAccess> a(IRegistry<BiomeBase> iregistry, Executor executor, Blender blender, StructureManager structuremanager, @NotNull IChunkAccess ichunkaccess) {
 
     	return CompletableFuture.supplyAsync(SystemUtils.a("init_biomes", () -> {
              return ichunkaccess; //Don't do any calculations here, biomes are set in applyCarvers
@@ -83,7 +84,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 //	//StructureManager is StructureFeatureManager, NOT StructureManager. Spigot remapped it.
 	//(spigot) StructureGenerator is (mojang) StructureFeature
 	//(spigot) StructureFeature is (mojang) ConfiguredStructureFeature
-    public Pair<BlockPosition, Holder<StructureFeature<?, ?>>> a(WorldServer worldserver, HolderSet<StructureFeature<?, ?>> holderset, BlockPosition blockposition, int i, boolean flag) 
+    public Pair<BlockPosition, Holder<StructureFeature<?, ?>>> a(WorldServer worldserver, @NotNull HolderSet<StructureFeature<?, ?>> holderset, @NotNull BlockPosition blockposition, int i, boolean flag)
     {
 //    	   net.minecraft.world.level.levelgen.feature.StructureFeature PILLAGER_OUTPOST -> b
 //    	    net.minecraft.world.level.levelgen.feature.StructureFeature MINESHAFT -> c
@@ -149,7 +150,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
     }
 
     @Override //applyCarvers
-    public void a(RegionLimitedWorldAccess regionlimitedworldaccess, long var2, BiomeManager var4, StructureManager var5, IChunkAccess ichunkaccess, WorldGenStage.Features var7) {
+    public void a(RegionLimitedWorldAccess regionlimitedworldaccess, long var2, BiomeManager var4, StructureManager var5, @NotNull IChunkAccess ichunkaccess, WorldGenStage.Features var7) {
 
     	//POPULATES BIOMES. IMPORTANT
     	//ichunkaccess.fillBiomesFromNoise(this.runtimeBiomeSource::getNoiseBiome, this.climateSampler())
@@ -203,7 +204,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 	}
 	
 	@Override //withSeed
-	public ChunkGenerator a(long seed) {
+	public @NotNull ChunkGenerator a(long seed) {
 		return new NMSChunkGenerator(this.tw.getName(), (int) seed, this.delegate);
 	}
 	

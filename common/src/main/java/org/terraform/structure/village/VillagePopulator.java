@@ -2,6 +2,7 @@ package org.terraform.structure.village;
 
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -13,11 +14,11 @@ import org.terraform.utils.GenUtils;
 public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
-    public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return tw.getHashedRand(11111199, chunkX, chunkZ);
     }
     
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12422),
                 (int) (TConfigOption.STRUCTURES_VILLAGE_SPAWNRATIO
                         .getDouble() * 10000),
@@ -25,7 +26,7 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
 
         //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         //int[] coords = mc.getCenterBiomeSectionBlockCoords();//getCoordsFromMegaChunk(tw, mc);
@@ -48,7 +49,7 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
     	//For now, don't check biomes. There is only plains village.
 //    	EnumSet<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 

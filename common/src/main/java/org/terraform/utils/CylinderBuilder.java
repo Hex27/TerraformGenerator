@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -21,69 +22,69 @@ public class CylinderBuilder {
 	private boolean singleBlockY = false;
     private boolean startFromZero = false;
 	private boolean hardReplace = false;
-	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
+	private @NotNull Collection<Material> replaceWhitelist = new ArrayList<>();
 	private Material[] types;
 	private Material[] upperType;
 	private Material[] lowerType;
 	private float noiseMagnitude = 0.7f;
 	
-	public CylinderBuilder(Random random, SimpleBlock core, Material... types) {
+	public CylinderBuilder(@NotNull Random random, SimpleBlock core, Material... types) {
 		this.random = random;
 		this.seed = random.nextInt(99999999);
 		this.types = types;
 		this.core = core;
 	}
 
-    public CylinderBuilder setStartFromZero(boolean startFromZero) {
+    public @NotNull CylinderBuilder setStartFromZero(boolean startFromZero) {
         this.startFromZero = startFromZero;
         return this;
     }
-	public CylinderBuilder setNoiseMagnitude(float mag) {
+	public @NotNull CylinderBuilder setNoiseMagnitude(float mag) {
 		this.noiseMagnitude = mag;
 		return this;
 	}
 	
-	public CylinderBuilder setUpperType(Material... upperType) {
+	public @NotNull CylinderBuilder setUpperType(Material... upperType) {
 		this.upperType = upperType;
 		return this;
 	}
 
-	public CylinderBuilder setLowerType(Material... lowerType) {
+	public @NotNull CylinderBuilder setLowerType(Material... lowerType) {
 		this.lowerType = lowerType;
 		return this;
 	}
 	
-	public CylinderBuilder setRadius(float radius) {
+	public @NotNull CylinderBuilder setRadius(float radius) {
 		this.rX = radius; this.rY = radius; this.rZ = radius;
 		return this;
 	}
 
-	public CylinderBuilder setMinRadius(float minRadius) {
+	public @NotNull CylinderBuilder setMinRadius(float minRadius) {
 		this.minRadius = minRadius;
 		return this;
 	}
-	public CylinderBuilder setRX(float rX) {
+	public @NotNull CylinderBuilder setRX(float rX) {
 		this.rX = rX;
 		return this;
 	}
-	public CylinderBuilder setRZ(float rZ) {
+	public @NotNull CylinderBuilder setRZ(float rZ) {
 		this.rZ = rZ;
 		return this;
 	}
-	public CylinderBuilder setRY(float rY) {
+	public @NotNull CylinderBuilder setRY(float rY) {
 		this.rY = rY;
 		return this;
 	}
-	public CylinderBuilder setSnowy() {
+	public @NotNull CylinderBuilder setSnowy() {
 		this.upperType = new Material[] {Material.SNOW};
 		return this;
 	}
-	public CylinderBuilder setHardReplace(boolean hardReplace) {
+	public @NotNull CylinderBuilder setHardReplace(boolean hardReplace) {
 		this.hardReplace = hardReplace;
 		return this;
 	}
 
-	public CylinderBuilder setSingleBlockY(boolean singleBlockY) {
+	public @NotNull CylinderBuilder setSingleBlockY(boolean singleBlockY) {
 		this.singleBlockY = singleBlockY;
 		return this;
 	}
@@ -130,8 +131,8 @@ public class CylinderBuilder {
         }
     }
     
-    private boolean unitReplace(SimpleBlock rel) {
-    	if(replaceWhitelist.size() == 0) {
+    private boolean unitReplace(@NotNull SimpleBlock rel) {
+    	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
             }else

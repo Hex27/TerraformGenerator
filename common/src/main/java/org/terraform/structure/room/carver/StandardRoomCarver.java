@@ -1,6 +1,7 @@
 package org.terraform.structure.room.carver;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.GenUtils;
@@ -18,7 +19,7 @@ public class StandardRoomCarver extends RoomCarver{
     }
 
     @Override
-    public void carveRoom(PopulatorDataAbstract data, CubeRoom room, Material... mat) {
+    public void carveRoom(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room, Material @NotNull ... mat) {
         //30/1/2024 God you really were a shit programmer what the fuck is this
         int tileIndex = 0;
         if (mat[0] != Material.BARRIER)

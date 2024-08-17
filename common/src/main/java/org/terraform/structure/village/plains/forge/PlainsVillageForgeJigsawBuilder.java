@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.forge;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -19,7 +20,7 @@ import java.util.Random;
 public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
 
 	private PlainsVillagePopulator plainsVillagePopulator;
-    public PlainsVillageForgeJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
+    public PlainsVillageForgeJigsawBuilder(PlainsVillagePopulator plainsVillagePopulator, int widthX, int widthZ, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
         this.plainsVillagePopulator = plainsVillagePopulator;
         this.pieceRegistry = new JigsawStructurePiece[]{
@@ -32,13 +33,13 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
     }
     
     @Override
-    public JigsawStructurePiece getFirstPiece(Random random) {
+    public @NotNull JigsawStructurePiece getFirstPiece(Random random) {
         return new PlainsVillageForgeChimneyPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
     	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
 
     @Override
-    public void build(Random random) {
+    public void build(@NotNull Random random) {
         super.build(random);
         ArrayList<SimpleLocation> rectanglePieces = PlainsVillageForgeRoofHandler.identifyRectangle(pieces);
         
@@ -107,7 +108,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
 
     }
     
-    public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two, PlainsVillageForgeWallType wallType) {
+    public void decorateAwkwardCorner(@NotNull Wall target, @NotNull Random random, BlockFace one, BlockFace two, PlainsVillageForgeWallType wallType) {
         if(wallType == PlainsVillageForgeWallType.SOLID) {
         	//Corner logs
             target.Pillar(4, random, plainsVillagePopulator.woodLog);

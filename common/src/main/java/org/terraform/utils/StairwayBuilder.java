@@ -2,6 +2,7 @@ package org.terraform.utils;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.blockdata.StairBuilder;
@@ -26,11 +27,11 @@ public class StairwayBuilder {
 	private boolean upwardsCarveUntilNotSolid = true;
 	private boolean upwardsCarveUntilSolid = false;
 	
-	public StairwayBuilder(Material... stairTypes) {
+	public StairwayBuilder(Material @NotNull ... stairTypes) {
 		this.stairTypes = stairTypes;
 
 		//Infer downTypes
-		ArrayList<Material> downTypes = new ArrayList<Material>();
+		ArrayList<Material> downTypes = new ArrayList<>();
 		for(Material mat:stairTypes) {
 			Material toAdd = Material.matchMaterial(
 					mat.toString().replace("_STAIRS", ""));
@@ -43,32 +44,32 @@ public class StairwayBuilder {
 		
 	}
 	
-	public StairwayBuilder setStopAtY(int y) {
+	public @NotNull StairwayBuilder setStopAtY(int y) {
 		this.stopAtY = y;
 		return this;
 	}
 	
-	public StairwayBuilder setCarveAirSpace(boolean carveAirSpace) {
+	public @NotNull StairwayBuilder setCarveAirSpace(boolean carveAirSpace) {
 		this.carveAirSpace = carveAirSpace;
 		return this;
 	}
 
-	public StairwayBuilder setUpwardsCarveUntilSolid(boolean carve) {
+	public @NotNull StairwayBuilder setUpwardsCarveUntilSolid(boolean carve) {
 		this.upwardsCarveUntilSolid = carve;
 		return this;
 	}
 
-	public StairwayBuilder setUpwardsCarveUntilNotSolid(boolean carve) {
+	public @NotNull StairwayBuilder setUpwardsCarveUntilNotSolid(boolean carve) {
 		this.upwardsCarveUntilNotSolid = carve;
 		return this;
 	}
 	
-	public StairwayBuilder setDownTypes(Material... mat) {
+	public @NotNull StairwayBuilder setDownTypes(Material... mat) {
 		this.downTypes = mat;
 		return this;
 	}
 	
-	public StairwayBuilder build(Wall start) {
+	public @NotNull StairwayBuilder build(@NotNull Wall start) {
 		if(stairDirection == BlockFace.DOWN) { //Stairway extends downwards
 			int threshold = 5;
 	        BlockFace extensionDir = start.getDirection();
@@ -156,7 +157,7 @@ public class StairwayBuilder {
     	return this;
     }
 	
-	private boolean continueCondition(Wall target) {
+	private boolean continueCondition(@NotNull Wall target) {
 		
 		if(this.stairDirection == BlockFace.DOWN) {
 			if(stopAtY != Short.MIN_VALUE)
@@ -190,22 +191,22 @@ public class StairwayBuilder {
 	 * @param extension
 	 * @return
 	 */
-	public StairwayBuilder setMaxExtensionForward(int extension) {
+	public @NotNull StairwayBuilder setMaxExtensionForward(int extension) {
 		this.maxExtensionForward = extension;
 		return this;
 	}
 
-	public StairwayBuilder setStairwayDirection(BlockFace stairDirection) {
+	public @NotNull StairwayBuilder setStairwayDirection(BlockFace stairDirection) {
 		this.stairDirection = stairDirection;
 		return this;
 	}
 	
-	public StairwayBuilder setStopAtWater(boolean stopAtWater) {
+	public @NotNull StairwayBuilder setStopAtWater(boolean stopAtWater) {
 		this.stopAtWater = stopAtWater;
 		return this;
 	}
 	
-	public StairwayBuilder setAngled(boolean angled) {
+	public @NotNull StairwayBuilder setAngled(boolean angled) {
 		this.angled = angled;
 		return this;
 	}

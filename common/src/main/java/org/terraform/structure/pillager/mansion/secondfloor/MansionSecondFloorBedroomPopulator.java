@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -33,7 +34,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	//Refers to the bedroom room width, not the width of one room cell.
 	private static final int roomWidth = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = BlockUtils.getDirectBlockFace(random);
 		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
@@ -90,7 +91,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(2);
 		switch(choice) {
 		case 0: //Andesite table with banner and lectern
@@ -128,7 +129,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(2);
 		switch(choice) {
 		case 0: //Table with flowers
@@ -159,7 +160,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 		}
 	}
 
-    private void table(Random rand, Wall w) {
+	private void table(@NotNull Random rand, @NotNull Wall w) {
 		w.getLeft().getRear().Pillar(6, Material.DARK_OAK_LOG);
 		w.getRight().getRear().Pillar(6, Material.DARK_OAK_LOG);
 		
@@ -181,7 +182,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}
 }

@@ -7,6 +7,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -31,7 +32,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
      * This parent function will take care of floor and ceiling decorations,
      * along with some basic wall decorations
      */
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         //Wall decorations
         //Buggy as all hell and also extremely ugly.
         //Screw wall pillars. Jesus.
@@ -109,7 +110,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
         center.setType(Material.BLUE_TERRACOTTA);
     }
 
-    protected void randomRoomPlacement(PopulatorDataAbstract data, CubeRoom room, int lowerbound, int upperbound, Material... types) {
+    protected void randomRoomPlacement(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room, int lowerbound, int upperbound, Material... types) {
 
         for (int i = 0; i < GenUtils.randInt(lowerbound, upperbound); i++) {
             int[] coords = room.randomCoords(rand, 1);
@@ -129,7 +130,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
      * @param roomHeight
      * @param patternIndex
      */
-    protected void placeWallDecoration(Wall w, int roomHeight, int patternIndex) {
+    protected void placeWallDecoration(@NotNull Wall w, int roomHeight, int patternIndex) {
         if (patternIndex == 0) { //Simple Chiselled Sandstone and stairs
             w.LPillar(roomHeight, rand, Material.CHISELED_SANDSTONE);
 

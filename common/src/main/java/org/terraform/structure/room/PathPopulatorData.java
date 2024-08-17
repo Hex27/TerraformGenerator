@@ -1,6 +1,7 @@
 package org.terraform.structure.room;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 
@@ -19,7 +20,7 @@ public class PathPopulatorData {
         this.isTurn = isTurn;
     }
 
-    public PathPopulatorData(Wall base, int pathWidth) {
+    public PathPopulatorData(@NotNull Wall base, int pathWidth) {
         this.base = base.get();
         this.dir = base.getDirection();
         this.pathWidth = pathWidth;
@@ -53,9 +54,8 @@ public class PathPopulatorData {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof PathPopulatorData)) return false;
-        PathPopulatorData other = (PathPopulatorData) obj;
-        return base.getX() == other.base.getX() 
+        if (!(obj instanceof PathPopulatorData other)) return false;
+        return base.getX() == other.base.getX()
         		&& base.getZ() == other.base.getZ() 
         		&& base.getY() == other.base.getY();
     }

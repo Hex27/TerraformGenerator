@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 
@@ -24,7 +25,7 @@ public class MansionEmptyRoomPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(1,1);
 	}
 	

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -35,7 +36,7 @@ import java.util.Random;
 public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 	private Material[] stakeGravel;
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
@@ -44,7 +45,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
         spawnOutpost(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, height + 1, z);
     }
 
-    public void spawnOutpost(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnOutpost(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         try {
         	TerraformGeneratorPlugin.logger.info("Spawning outpost at " + x + "," + y + "," + z);
 
@@ -111,7 +112,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
      * @param center
      * @param bank
      */
-    public void spawnStakes(Random rand, SimpleBlock center, BiomeBank bank) {
+    public void spawnStakes(@NotNull Random rand, @NotNull SimpleBlock center, @NotNull BiomeBank bank) {
     	int radius = 40;
     	Material planksMat = WoodUtils.getWoodForBiome(bank, WoodType.PLANKS);
     	
@@ -144,7 +145,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
         }
     }
     
-    public void spawnOneStake(Random rand, SimpleBlock base, BiomeBank bank, Material... stakeGravel) {
+    public void spawnOneStake(@NotNull Random rand, @NotNull SimpleBlock base, @NotNull BiomeBank bank, Material... stakeGravel) {
     	WoodType type = new WoodType[] {WoodType.LOG, WoodType.STRIPPED_LOG}[rand.nextInt(2)];
     	Wall w = new Wall(base);
     	//Don't spawn stake next to another one
@@ -164,7 +165,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
         w.getRelative(0,-2,0).downUntilSolid(rand, stakeGravel);
     }
     
-    public void spawnStairway(Random rand, BiomeBank biome, SimpleBlock core, int height) {
+    public void spawnStairway(Random rand, @NotNull BiomeBank biome, @NotNull SimpleBlock core, int height) {
     	Material pillarMat = GenUtils.randMaterial(
     			WoodUtils.getWoodForBiome(biome, WoodType.LOG),
     			Material.COBBLESTONE);
@@ -193,7 +194,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     	}
     }
     
-    private static void setupPillagerSpawns(PopulatorDataAbstract data, int range, int x, int y, int z) {
+    private static void setupPillagerSpawns(@NotNull PopulatorDataAbstract data, int range, int x, int y, int z) {
         int i = -5;
         ArrayList<Integer> done = new ArrayList<>();
         for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
@@ -215,7 +216,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
         if (!biome.getType().isDry())
             return false;
         if(biome == BiomeBank.DESERT ||
@@ -227,7 +228,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
         	return false;
     }
 
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 92992),
                 (int) (TConfigOption.STRUCTURES_OUTPOST_SPAWNRATIO
                         .getDouble() * 10000),
@@ -240,7 +241,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 	}
 
 	@Override
-	public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+	public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
 		return world.getHashedRand(81903212, chunkX, chunkZ);
 	}
 }

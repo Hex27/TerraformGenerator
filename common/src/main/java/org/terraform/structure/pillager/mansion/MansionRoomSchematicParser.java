@@ -2,6 +2,7 @@ package org.terraform.structure.pillager.mansion;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -22,7 +23,7 @@ public class MansionRoomSchematicParser extends SchematicParser {
     }
 
     @Override
-    public void applyData(SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
         if (data.getMaterial() == Material.CHEST||data.getMaterial() == Material.BARREL) {
             if (GenUtils.chance(rand, 2, 5)) {
                 block.setType(Material.AIR);

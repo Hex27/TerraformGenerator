@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.TrapDoor;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -12,9 +13,9 @@ import org.terraform.utils.GenUtils;
 
 public class TrapdoorBuilder {
 
-    private final TrapDoor blockData;
+    private final @NotNull TrapDoor blockData;
 
-    public TrapdoorBuilder(Material mat) {
+    public TrapdoorBuilder(@NotNull Material mat) {
         this.blockData = (TrapDoor) Bukkit.createBlockData(mat);
     }
 
@@ -23,53 +24,53 @@ public class TrapdoorBuilder {
     }
 
 
-    public TrapdoorBuilder setWaterlogged(boolean water) {
+    public @NotNull TrapdoorBuilder setWaterlogged(boolean water) {
         this.blockData.setWaterlogged(water);
         return this;
     }
 
-    public TrapdoorBuilder setHalf(Half h) {
+    public @NotNull TrapdoorBuilder setHalf(@NotNull Half h) {
         this.blockData.setHalf(h);
         return this;
     }
 
-    public TrapdoorBuilder setPowered(boolean powered) {
+    public @NotNull TrapdoorBuilder setPowered(boolean powered) {
         this.blockData.setPowered(powered);
         return this;
     }
 
-    public TrapdoorBuilder setOpen(boolean open) {
+    public @NotNull TrapdoorBuilder setOpen(boolean open) {
         this.blockData.setOpen(open);
         return this;
     }
 
-    public TrapdoorBuilder setFacing(BlockFace face) {
+    public @NotNull TrapdoorBuilder setFacing(@NotNull BlockFace face) {
         this.blockData.setFacing(face);
         return this;
     }
 
-    public TrapdoorBuilder apply(SimpleBlock block) {
+    public @NotNull TrapdoorBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public TrapdoorBuilder apply(Wall block) {
+    public @NotNull TrapdoorBuilder apply(@NotNull Wall block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public TrapdoorBuilder lapply(Wall block) {
+    public @NotNull TrapdoorBuilder lapply(@NotNull Wall block) {
     	if(!block.getType().isSolid())
     		block.setBlockData(blockData);
         return this;
     }
 
-    public TrapdoorBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull TrapdoorBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         return this;
     }
 
-    public TrapDoor get() {
+    public @NotNull TrapDoor get() {
         return blockData;
     }
 }

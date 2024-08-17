@@ -8,6 +8,7 @@ import org.bukkit.block.data.type.EndPortalFrame;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -25,14 +26,14 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
         super(rand, forceSpawn, unique);
     }
 
-    private Slab randTopSlab() {
+    private @NotNull Slab randTopSlab() {
         Slab slab = (Slab) Bukkit.createBlockData(BlockUtils.stoneBrickSlab(rand));
         slab.setType(Type.TOP);
         return slab;
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         int[] lowerBounds = room.getLowerCorner();
         int[] upperBounds = room.getUpperCorner();
 
@@ -190,7 +191,7 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
         }
     }
 
-    public void lavaPool(PopulatorDataAbstract data, int x, int y, int z, int height) {
+    public void lavaPool(@NotNull PopulatorDataAbstract data, int x, int y, int z, int height) {
         for (BlockFace face : BlockUtils.directBlockFaces) {
             Wall w = new Wall(new SimpleBlock(data, x, y, z), face).getFront().getFront();
             Stairs stairs = (Stairs) Bukkit.createBlockData(Material.POLISHED_ANDESITE_STAIRS);
@@ -215,7 +216,7 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
         }
     }
 
-    public void decoratedPillar(Random rand, PopulatorDataAbstract data, int x, int y, int z, int height) {
+    public void decoratedPillar(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z, int height) {
         BlockUtils.spawnPillar(rand, data, x, y, z, Material.CHISELED_STONE_BRICKS, height, height);
         BlockUtils.spawnPillar(rand, data, x + 1, y, z + 1, Material.COBBLESTONE_WALL, height, height);
         BlockUtils.spawnPillar(rand, data, x - 1, y, z + 1, Material.COBBLESTONE_WALL, height, height);
@@ -246,11 +247,11 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() == 25 && room.getWidthZ() == 25 && room.getHeight() == 15;
     }
 
-    private void ceilDecor(SimpleBlock ceil) {
+    private void ceilDecor(@NotNull SimpleBlock ceil) {
         ceil.setType(Material.CHISELED_STONE_BRICKS);
         ceil.getRelative(0, 0, -1).setType(Material.CHISELED_STONE_BRICKS);
         ceil.getRelative(0, 0, -2).setType(Material.MOSSY_STONE_BRICKS);

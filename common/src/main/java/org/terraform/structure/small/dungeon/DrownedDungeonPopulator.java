@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -28,7 +29,7 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
     private static final Material[][] sets = {cobbleSet, graniteSet, dioriteSet, andesiteSet, bricksSet};
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
         int[] spawnCoords = {data.getChunkX() * 16, data.getChunkZ() * 16};
@@ -50,8 +51,8 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
         spawnDungeonRoom(x, z, tw, rand, data);
     }
 
-    public void spawnDungeonRoom(int x, int z, TerraformWorld tw, Random rand,
-                                 PopulatorDataAbstract data) {
+    public void spawnDungeonRoom(int x, int z, TerraformWorld tw, @NotNull Random rand,
+                                 @NotNull PopulatorDataAbstract data) {
         TerraformGeneratorPlugin.logger.info("Spawning Drowned Dungeon at " + x + "," + z);
         int setIndex = rand.nextInt(sets.length);
         Material[] set = sets[setIndex];

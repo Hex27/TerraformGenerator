@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
@@ -20,7 +21,7 @@ public class HelpCommand extends TerraCommand {
 	}
 	
 	@Override
-	public boolean isInAcceptedParamRange(Stack<String> args){
+	public boolean isInAcceptedParamRange(@NotNull Stack<String> args){
 		return args.size() <= 1;
 	}
 
@@ -35,7 +36,7 @@ public class HelpCommand extends TerraCommand {
 	}
 
 	@Override
-	public void execute(CommandSender sender, Stack<String> args)
+	public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
 			throws InvalidArgumentException {
 		ArrayList<TerraCommand> cmds = new ArrayList<>();
 		for(TerraCommand cmd:man.getCommands()){
@@ -44,7 +45,7 @@ public class HelpCommand extends TerraCommand {
 		int maxPages =  (int) Math.ceil(cmds.size()/6);
 		int page = 0;
 		
-		if(args.size() > 0){
+		if(!args.isEmpty()){
 			try{
 				page = Integer.parseInt(args.pop());
 				if(page <= 0){
@@ -68,12 +69,12 @@ public class HelpCommand extends TerraCommand {
             if (cmds.size() > page * 5 + i) {
             	TerraCommand cmd = cmds.get(page * 5 + i);
                 String subCmd = ChatColor.YELLOW + "/" + base + " " + String.join("/", cmd.aliases);
-				String params = " ";
+				StringBuilder params = new StringBuilder(" ");
 				for(TerraCommandArgument<?> param:cmd.parameters){
 					if(param.isOptional()){
-						params += ChatColor.GRAY + "<" + param.getName() + "> ";
+						params.append(ChatColor.GRAY + "<").append(param.getName()).append("> ");
 					}else
-						params += ChatColor.AQUA + "[" + param.getName() + "] ";
+						params.append(ChatColor.AQUA + "[").append(param.getName()).append("] ");
 				}
 				sender.sendMessage(subCmd + params + ChatColor.DARK_GRAY + "- " + ChatColor.YELLOW + plugin.getLang().fetchLang(cmd.getLangPath()));
             }
@@ -88,7 +89,7 @@ public class HelpCommand extends TerraCommand {
 	}
 
 	@Override
-	public String getDefaultDescription() {
+	public @NotNull String getDefaultDescription() {
 		return "Displays a list of commands for this plugin.";
 	}
 

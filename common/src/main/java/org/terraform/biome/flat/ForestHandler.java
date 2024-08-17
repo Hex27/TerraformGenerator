@@ -2,6 +2,7 @@ package org.terraform.biome.flat;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -21,7 +22,7 @@ import java.util.Random;
 
 public class ForestHandler extends BiomeHandler {
 
-    private static void spawnRock(Random rand, PopulatorDataAbstract data, int x, int y, int z) {
+    private static void spawnRock(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         ArrayList<int[]> locations = new ArrayList<>(20);
         locations.add(new int[]{x, y, z});
 
@@ -64,12 +65,12 @@ public class ForestHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.FOREST;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.PODZOL, 3),
                 Material.DIRT,
                 Material.DIRT,
@@ -78,7 +79,7 @@ public class ForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         FastNoise pathNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_FOREST_PATHNOISE, 
@@ -111,7 +112,7 @@ public class ForestHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
         //Most forest chunks have a big tree
         if (TConfigOption.TREES_FOREST_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 6, 10)) {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;

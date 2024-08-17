@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
@@ -52,7 +53,7 @@ public class GorgeHandler extends BiomeHandler {
     public Material[] getSurfaceCrust(Random rand) { return plainsHandler.getSurfaceCrust(rand); }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         SimpleBlock target = new SimpleBlock(data,rawX,surfaceY+1,rawZ);
         boolean wasBelowSea = false;
@@ -95,7 +96,7 @@ public class GorgeHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+    public void transformTerrain(@NotNull ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
 
         FastNoise cliffNoise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -187,7 +188,7 @@ public class GorgeHandler extends BiomeHandler {
         }
     }
 
-    private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
+    private static @NotNull BiomeBlender getBiomeBlender(TerraformWorld tw) {
         if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
                 .setGridBlendingFactor(2)
                 .setSmoothBlendTowardsRivers(4);
@@ -195,7 +196,7 @@ public class GorgeHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		plainsHandler.populateLargeItems(tw, random, data);
 		
 		//Spawn rocks

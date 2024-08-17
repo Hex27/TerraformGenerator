@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -29,7 +30,7 @@ public class WarAntechamber extends Antechamber {
      * It represents the Pharoah's triumphs in battle.
      */
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
         //Decorate the walls with various banners
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
@@ -75,7 +76,7 @@ public class WarAntechamber extends Antechamber {
 
     
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() >= 6 && room.getWidthZ() >= 6;
     }
 }

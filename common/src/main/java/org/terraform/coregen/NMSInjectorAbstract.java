@@ -4,6 +4,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Beehive;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 
@@ -11,7 +12,7 @@ public abstract class NMSInjectorAbstract {
 	
 	public void startupTasks() {}
 	
-    public BlockDataFixerAbstract getBlockDataFixer() {
+    public @Nullable BlockDataFixerAbstract getBlockDataFixer() {
         return null;
     }
 
@@ -31,7 +32,7 @@ public abstract class NMSInjectorAbstract {
      * @param data must be instance of Version-specific PopulatorData
      * @return a populatorDataICA instance.
      */
-    public abstract PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data);
+    public abstract @Nullable PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data);
 
     /**
      * This was unironically the easiest way to add a bee to a

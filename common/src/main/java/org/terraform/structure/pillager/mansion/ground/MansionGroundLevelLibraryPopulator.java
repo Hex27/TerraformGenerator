@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Stairs.Shape;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -31,7 +32,7 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 	//Refers to the library room width, not the width of one room cell.
 	private static final int roomWidth = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = BlockUtils.getDirectBlockFace(random);
 		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
@@ -67,7 +68,7 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		w.getRear().Pillar(4, Material.BOOKSHELF);
 		w.getLeft().getRear().Pillar(3, Material.BOOKSHELF);
 		w.getRight().getRear().Pillar(3, Material.BOOKSHELF);
@@ -100,7 +101,7 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
 		.setFacing(w.getDirection().getOppositeFace())
 		.apply(w)
@@ -119,8 +120,8 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 		}
 	}
 
-    @Override
-	public MansionRoomSize getSize() {
+	@Override
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}
 }

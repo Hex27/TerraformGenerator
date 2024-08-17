@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -30,7 +31,7 @@ public class MansionSecondFloorPianoRoomPopulator extends MansionRoomPopulator {
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
 		TerraformGeneratorPlugin.logger.info("Piano at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
@@ -59,7 +60,7 @@ public class MansionSecondFloorPianoRoomPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(Random rand, @NotNull Wall w) {
 		w.setType(Material.DARK_OAK_LOG);
 		w.getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
 		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
@@ -70,7 +71,7 @@ public class MansionSecondFloorPianoRoomPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		PaintingUtils.placePainting(
 				w.getRelative(0,2,0).getLeft().get(), 
 				w.getDirection(), 
@@ -85,7 +86,7 @@ public class MansionSecondFloorPianoRoomPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(1,2);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -19,7 +20,7 @@ public class CatacombsPillarRoomPopulator extends CatacombsStandardPopulator {
 	
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	SimpleBlock center = room.getCenterSimpleBlock(data).getUp();
     	center.LPillar(room.getHeight(), new Random(), Material.BONE_BLOCK);

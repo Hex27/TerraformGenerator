@@ -5,10 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
@@ -28,7 +28,7 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         try {
             SimpleBlock core = room.getCenterSimpleBlock(data);
             BlockFace direction = BlockUtils.getDirectBlockFace(rand);
@@ -54,10 +54,11 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
     }
 
     public static class TrailRuinsTowerParser extends SchematicParser{
-        private final SimpleBlock destruction;
-        private final Random random;
+        private final @NotNull SimpleBlock destruction;
+        private final @NotNull Random random;
+        @NotNull
         HashMap<Material, Material> newMapping = new HashMap<>();
-        public TrailRuinsTowerParser(SimpleBlock core, Random rand) {
+        public TrailRuinsTowerParser(@NotNull SimpleBlock core, @NotNull Random rand) {
             this.random = rand;
             this.destruction = core.getRelative(
                     GenUtils.getSign(rand)*rand.nextInt(3),
@@ -73,7 +74,7 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
         }
 
         @Override
-        public void applyData(SimpleBlock block, BlockData data) {
+        public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             //If within destruction zone, don't place
             if(block.distance(destruction) < 3) return;
 

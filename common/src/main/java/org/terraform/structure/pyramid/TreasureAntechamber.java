@@ -3,6 +3,7 @@ package org.terraform.structure.pyramid;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.Chest;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
@@ -22,7 +23,7 @@ public class TreasureAntechamber extends Antechamber {
      * Contains a variety of Pyramid item loot
      */
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
         //Place chests against the walls

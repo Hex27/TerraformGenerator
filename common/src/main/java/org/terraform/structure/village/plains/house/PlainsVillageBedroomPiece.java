@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -28,16 +29,16 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
     }
 
     @Override
-    public void build(PopulatorDataAbstract data, Random rand) {
+    public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
         super.build(data, rand);
     }
 
     @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
 
         //No walls :V
-        if (this.getWalledFaces().size() == 0) {
+        if (this.getWalledFaces().isEmpty()) {
             //Place a dining table or smt, idk
 
             SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());

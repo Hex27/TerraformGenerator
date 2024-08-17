@@ -3,6 +3,7 @@ package org.terraform.biome.flat;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
@@ -29,27 +30,27 @@ public class MuddyBogHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.SWAMP;
     }
 
     @Override
-    public CustomBiomeType getCustomBiome() {
+    public @NotNull CustomBiomeType getCustomBiome() {
         return CustomBiomeType.MUDDY_BOG;
     }
     
     //Beach type. This will be used instead if the height is too close to sea level.
-    public BiomeBank getBeachType() {
+    public @NotNull BiomeBank getBeachType() {
     	return BiomeBank.BOG_BEACH;
     }
     
     //River type. This will be used instead if the heightmap got carved into a river.
-    public BiomeBank getRiverType() {
+    public @NotNull BiomeBank getRiverType() {
     	return BiomeBank.BOG_RIVER;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
@@ -58,7 +59,7 @@ public class MuddyBogHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
         if(block.getRelative(0,1,0).getType() == Material.AIR &&
@@ -85,7 +86,7 @@ public class MuddyBogHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		 //Small brown mushrooms on dry areas
         SimpleLocation[] shrooms = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
 

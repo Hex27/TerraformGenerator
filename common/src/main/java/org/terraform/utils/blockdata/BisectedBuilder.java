@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Bisected.Half;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -11,9 +12,9 @@ import org.terraform.utils.GenUtils;
 
 public class BisectedBuilder {
 
-    private final Bisected blockData;
+    private final @NotNull Bisected blockData;
 
-    public BisectedBuilder(Material mat) {
+    public BisectedBuilder(@NotNull Material mat) {
         this.blockData = (Bisected) Bukkit.createBlockData(mat);
     }
 
@@ -21,27 +22,27 @@ public class BisectedBuilder {
         this.blockData = (Bisected) Bukkit.createBlockData(GenUtils.randMaterial(mat));
     }
     
-    public BisectedBuilder setHalf(Bisected.Half half) {
+    public @NotNull BisectedBuilder setHalf(Bisected.@NotNull Half half) {
         this.blockData.setHalf(half);
         return this;
     }
 
-    public BisectedBuilder apply(SimpleBlock block) {
+    public @NotNull BisectedBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public BisectedBuilder apply(Wall block) {
+    public @NotNull BisectedBuilder apply(@NotNull Wall block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public BisectedBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull BisectedBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         return this;
     }
 
-    public BisectedBuilder placeBoth(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull BisectedBuilder placeBoth(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	Bisected upper = (Bisected) blockData.clone();
     	upper.setHalf(Half.TOP);
         Bisected lower = (Bisected) blockData.clone();
@@ -51,7 +52,7 @@ public class BisectedBuilder {
         return this;
     }
 
-    public BisectedBuilder placeBoth(SimpleBlock block) {
+    public @NotNull BisectedBuilder placeBoth(@NotNull SimpleBlock block) {
     	Bisected upper = (Bisected) blockData.clone();
     	upper.setHalf(Half.TOP);
         Bisected lower = (Bisected) blockData.clone();
@@ -61,7 +62,7 @@ public class BisectedBuilder {
         return this;
     }
     
-    public Bisected get() {
+    public @NotNull Bisected get() {
         return blockData;
     }
 }

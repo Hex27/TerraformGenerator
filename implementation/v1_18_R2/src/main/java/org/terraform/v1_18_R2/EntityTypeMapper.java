@@ -1,11 +1,12 @@
 package org.terraform.v1_18_R2;
 
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class EntityTypeMapper {
 
-	public static String getObfsNameFromBukkitEntityType(EntityType e){
+	public static @NotNull String getObfsNameFromBukkitEntityType(@NotNull EntityType e){
 		switch(e) {
 		case AREA_EFFECT_CLOUD: 
 		    return "b";

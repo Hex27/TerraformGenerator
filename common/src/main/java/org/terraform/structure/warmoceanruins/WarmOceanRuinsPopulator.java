@@ -1,6 +1,7 @@
 package org.terraform.structure.warmoceanruins;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -16,11 +17,11 @@ import java.util.Random;
 public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
-    public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return tw.getHashedRand(352341322, chunkX, chunkZ);
     }
     
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 65732),
                 (int) (TConfigOption.STRUCTURES_WARMOCEANRUINS_SPAWNRATIO
                         .getDouble() * 10000),
@@ -28,7 +29,7 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
 
     	if(biome == (BiomeBank.DEEP_WARM_OCEAN)
         		|| biome == (BiomeBank.WARM_OCEAN)
@@ -45,7 +46,7 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
@@ -58,7 +59,7 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
                 data,x,y,z);
     }
 
-    public void spawnWarmOceanRuins(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
+    public void spawnWarmOceanRuins(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z){
         int numRooms = 10;
         int range = 80;
 

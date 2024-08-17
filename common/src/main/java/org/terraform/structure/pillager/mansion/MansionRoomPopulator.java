@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
@@ -25,7 +26,7 @@ public abstract class MansionRoomPopulator {
 		return room;
 	}
 	
-	public MansionRoomPopulator getInstance(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
+	public @Nullable MansionRoomPopulator getInstance(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		MansionRoomPopulator pop;
 		try {
 			pop = (MansionRoomPopulator) this.getClass().getConstructors()[0].newInstance(room, internalWalls);

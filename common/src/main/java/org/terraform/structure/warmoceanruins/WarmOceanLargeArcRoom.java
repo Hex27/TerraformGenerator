@@ -7,6 +7,7 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -28,7 +29,7 @@ public class WarmOceanLargeArcRoom extends WarmOceanBaseRoom {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data,room);
 
         BlockFace facing = BlockUtils.getDirectBlockFace(rand);
@@ -248,7 +249,7 @@ public class WarmOceanLargeArcRoom extends WarmOceanBaseRoom {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() == 25;
     }
 }

@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -15,9 +16,9 @@ import java.util.ArrayList;
 
 public class StairBuilder {
 
-    private final Stairs blockData;
+    private final @NotNull Stairs blockData;
 
-    public StairBuilder(Material mat) {
+    public StairBuilder(@NotNull Material mat) {
         this.blockData = (Stairs) Bukkit.createBlockData(mat);
     }
 
@@ -26,33 +27,33 @@ public class StairBuilder {
     }
 
 
-    public StairBuilder setFacing(BlockFace face) {
+    public @NotNull StairBuilder setFacing(@NotNull BlockFace face) {
         this.blockData.setFacing(face);
         return this;
     }
 
-    public StairBuilder setHalf(Bisected.Half half) {
+    public @NotNull StairBuilder setHalf(Bisected.@NotNull Half half) {
         this.blockData.setHalf(half);
         return this;
     }
 
-    public StairBuilder setShape(Stairs.Shape shape) {
+    public @NotNull StairBuilder setShape(Stairs.@NotNull Shape shape) {
         this.blockData.setShape(shape);
         return this;
     }
 
-    public StairBuilder setWaterlogged(boolean bool) {
+    public @NotNull StairBuilder setWaterlogged(boolean bool) {
         this.blockData.setWaterlogged(bool);
         return this;
     }
 
-    public StairBuilder apply(SimpleBlock block) {
+    public @NotNull StairBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
         placed.add(block);
         return this;
     }
 
-    public StairBuilder lapply(SimpleBlock block) {
+    public @NotNull StairBuilder lapply(@NotNull SimpleBlock block) {
     	if(block.getType().isSolid())
     		return this;
     	
@@ -61,26 +62,27 @@ public class StairBuilder {
         return this;
     }
     
-    public StairBuilder apply(Wall block) {
+    public @NotNull StairBuilder apply(@NotNull Wall block) {
         block.setBlockData(blockData);
         placed.add(block.get());
         return this;
     }
     
+    @NotNull
     ArrayList<SimpleBlock> placed = new ArrayList<>();
-    public StairBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull StairBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         placed.add(new SimpleBlock(data,x,y,z));
         return this;
     }
     
-    public StairBuilder correct() {
+    public @NotNull StairBuilder correct() {
     	for(SimpleBlock b:placed)
     		BlockUtils.correctSurroundingStairData(b);
     	return this;
     }
 
-    public Stairs get() {
+    public @NotNull Stairs get() {
         return blockData;
     }
 }

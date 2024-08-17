@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -24,7 +25,7 @@ public class EnchantmentAntechamber extends Antechamber {
      * Contains a variety of Pyramid item loot
      */
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
         //Enchantment Table
@@ -32,7 +33,7 @@ public class EnchantmentAntechamber extends Antechamber {
 
         SimpleBlock core = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
         //Place shelves and Lecterns
-        HashMap<Wall, Integer> tableWalls = new HashMap<Wall, Integer>() {{
+        HashMap<Wall, Integer> tableWalls = new HashMap<>() {{
             put(new Wall(core.getRelative(2, 0, -2), BlockFace.SOUTH), 5);
             put(new Wall(core.getRelative(-2, 0, 2), BlockFace.NORTH), 5);
             put(new Wall(core.getRelative(2, 0, 2), BlockFace.WEST), 5);
@@ -63,7 +64,7 @@ public class EnchantmentAntechamber extends Antechamber {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() > 7 && room.getWidthZ() > 7;
     }
 

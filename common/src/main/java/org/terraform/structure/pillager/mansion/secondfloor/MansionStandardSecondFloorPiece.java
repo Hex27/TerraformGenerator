@@ -2,6 +2,7 @@ package org.terraform.structure.pillager.mansion.secondfloor;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.pillager.mansion.MansionStandardRoomPiece;
@@ -18,7 +19,7 @@ public class MansionStandardSecondFloorPiece extends MansionStandardRoomPiece {
     }
 
     @Override
-    public void build(PopulatorDataAbstract data, Random rand) {
+    public void build(@NotNull PopulatorDataAbstract data, Random rand) {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 

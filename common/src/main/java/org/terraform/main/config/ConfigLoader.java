@@ -6,14 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class ConfigLoader {
 	
-	private HashMap<String, Object> configOptions = new HashMap<>();
+	private @NotNull HashMap<String, Object> configOptions = new HashMap<>();
 	private TerraformGeneratorPlugin plugin;
 	private static final int configVersion = 3;
-	public ConfigLoader(TerraformGeneratorPlugin plugin){
+	public ConfigLoader(@NotNull TerraformGeneratorPlugin plugin){
 		this.plugin = plugin;
 		plugin.getConfig().options().copyDefaults(false);
 		plugin.saveConfig();
@@ -45,7 +46,7 @@ public class ConfigLoader {
 			}
 		}
 			
-		for(String key:new ArrayList<String>(configOptions.keySet())){
+		for(String key: new ArrayList<>(configOptions.keySet())){
 			if(!overwrite && plugin.getConfig().isSet(key)){
 				configOptions.put(key, plugin.getConfig().get(key));
 			}else{

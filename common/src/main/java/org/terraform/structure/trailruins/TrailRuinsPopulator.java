@@ -1,6 +1,7 @@
 package org.terraform.structure.trailruins;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -16,7 +17,7 @@ import java.util.Random;
 
 public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         if(biome == (BiomeBank.TAIGA)
                 || biome == (BiomeBank.SNOWY_TAIGA)
                 || biome == (BiomeBank.JUNGLE)) {
@@ -24,7 +25,7 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
         }
         return false;
     }
-    public void spawnTrailRuins(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
+    public void spawnTrailRuins(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z){
         int numRooms = 10;
         int range = 40;
 
@@ -55,7 +56,7 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
@@ -72,7 +73,7 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
 
 
     @Override
-    public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return tw.getHashedRand(217842323, chunkX, chunkZ);
     }
 
@@ -84,7 +85,7 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
                 && TConfigOption.STRUCTURES_TRAILRUINS_ENABLED.getBoolean();
     }
 
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 34122),
                 (int) (TConfigOption.STRUCTURES_TRAILRUINS_SPAWNRATIO
                         .getDouble() * 10000),
