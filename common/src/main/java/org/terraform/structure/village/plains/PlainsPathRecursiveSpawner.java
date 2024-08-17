@@ -332,7 +332,7 @@ public class PlainsPathRecursiveSpawner {
         this.villageDensity = villageDensity;
     }
 
-    private class CrossRoad {
+    private static class CrossRoad {
         public final SimpleLocation loc;
         public final BlockFace[] faces;
         public final @NotNull ArrayList<BlockFace> satisfiedFaces = new ArrayList<>();

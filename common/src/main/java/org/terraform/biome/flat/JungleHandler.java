@@ -217,7 +217,7 @@ public class JungleHandler extends BiomeHandler {
 	
 	}
 	
-	private class JungleStatueSchematicParser extends SchematicParser{
+	private static class JungleStatueSchematicParser extends SchematicParser{
 		
 		public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 			if (data.getMaterial().toString().contains("COBBLESTONE")) {

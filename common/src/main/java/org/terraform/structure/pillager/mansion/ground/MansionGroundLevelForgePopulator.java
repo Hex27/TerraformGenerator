@@ -98,7 +98,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 		
 	}
 	
-	private class MansionForgeSchematicParser extends MansionRoomSchematicParser
+	private static class MansionForgeSchematicParser extends MansionRoomSchematicParser
 	{
 		public MansionForgeSchematicParser(Random rand, PopulatorDataAbstract pop) {
 			super(rand, pop);

@@ -126,7 +126,7 @@ public class BiomeDistribCommand extends TerraCommand {
         }
     }
 
-    private class MathValues {
+    private static class MathValues {
         private double total = 0;
         private double lowest = 99999;
         private double highest = -99999;

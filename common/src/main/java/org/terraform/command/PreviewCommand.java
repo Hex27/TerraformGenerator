@@ -81,7 +81,7 @@ public class PreviewCommand extends TerraCommand {
         System.out.println("Done.");
     }
 
-    private class ImageChunkData implements ChunkGenerator.ChunkData{
+    private static class ImageChunkData implements ChunkGenerator.ChunkData{
         final BufferedImage img;
         final int chunkX,chunkZ,maxX,maxY;
         private final int[][] maxHeights = new int[16][16];
@@ -191,7 +191,7 @@ public class PreviewCommand extends TerraCommand {
         }
     }
 
-    private class ImageWorldInfo implements WorldInfo{
+    private static class ImageWorldInfo implements WorldInfo{
         private final String name;
         private final long seed;
 
