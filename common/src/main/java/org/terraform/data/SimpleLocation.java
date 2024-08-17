@@ -2,7 +2,6 @@ package org.terraform.data;
 
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.main.TerraformGeneratorPlugin;
 
 public class SimpleLocation {
 
