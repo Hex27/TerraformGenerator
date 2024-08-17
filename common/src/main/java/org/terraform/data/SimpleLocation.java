@@ -78,10 +78,6 @@ public class SimpleLocation {
     	}else { //S segment
     		return (float) (Math.atan((o.z-z)/(x-o.x))+3*Math.PI/2);
     	}
-    	
-    	// no way something else happens?
-    	TerraformGeneratorPlugin.logger.error("2D Angle calculation failed! Input Values: " + o.x + "," + o.z + ":" + x + "," + z);
-    	return 0.0f;
     }
     
     /**
