@@ -229,12 +229,10 @@ public class MansionRoofHandler {
                         if(i == 2 || i == length - 3) {
                         	//Lower Walls
                         	Wall bottom = target.getAtY(builder.getCore().getY() + 2*MansionJigsawBuilder.roomHeight+2);
-                        	if(bottom != null) {
-                        		if(BlockUtils.isAir(bottom.getType()) || Tag.STAIRS.isTagged(bottom.getType()) || Tag.SLABS.isTagged(bottom.getType())) {
-                        			bottom.setType(Material.DARK_OAK_PLANKS);
-                        		}
-                        		target.getRelative(0,-2,0).downPillar(new Random(), target.getY()-bottom.getY()-2, bottom.getType());
-                        	}
+                            if(BlockUtils.isAir(bottom.getType()) || Tag.STAIRS.isTagged(bottom.getType()) || Tag.SLABS.isTagged(bottom.getType())) {
+                                bottom.setType(Material.DARK_OAK_PLANKS);
+                            }
+                            target.getRelative(0,-2,0).downPillar(new Random(), target.getY()-bottom.getY()-2, bottom.getType());
                         }
                         else if(i != 1 && i != length-2)//Force set air for things below the roof within the walls
                         {

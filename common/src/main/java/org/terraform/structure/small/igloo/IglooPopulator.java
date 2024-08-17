@@ -197,7 +197,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     		
     		int threshold = size+1;
     		boolean found = false;
-    		while(threshold >= 0 && !found) {
+    		while(threshold >= 0) {
     			if(wall.getType() == Material.SPRUCE_LOG) {
     				found = true;
     				break;

@@ -168,7 +168,6 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
 
         //Refind ceiling. It could have been changed above.
         ceil = new Wall(ppd.base.getRelative(0, 1, 0), ppd.dir).findCeiling(10).get();
-        if (ceil == null) return;
 
         //Sometimes parts of the ceiling falls down
         if (GenUtils.chance(rand, 3, 25)) {

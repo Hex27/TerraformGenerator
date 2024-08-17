@@ -63,12 +63,8 @@ public class StructureLocator {
             }
             radius++;
         }
-        if (found) {
-        	STRUCTURELOCATION_CACHE.put(cacheKey, new int[] {blockX, blockZ});
-            return new int[] {blockX, blockZ};
-        }
-        else
-        	return null;
+        STRUCTURELOCATION_CACHE.put(cacheKey, new int[] {blockX, blockZ});
+        return new int[] {blockX, blockZ};
     }
 	
 	public static int[] locateSingleMegaChunkStructure(@NotNull TerraformWorld tw, int rawX, int rawZ, @NotNull SingleMegaChunkStructurePopulator populator, int timeoutMillis) {
@@ -146,13 +142,8 @@ public class StructureLocator {
             radius++;
             
         }
-        if (found) 
-        {
-        	STRUCTURELOCATION_CACHE.put(cacheKey, new int[] {blockX, blockZ});
-            return new int[] {blockX, blockZ};
-        }
-        else
-        	return null;
+        STRUCTURELOCATION_CACHE.put(cacheKey, new int[] {blockX, blockZ});
+        return new int[] {blockX, blockZ};
     }
 	
 	private static @NotNull Collection<MegaChunk> getSurroundingChunks(@NotNull MegaChunk center, int radius) {

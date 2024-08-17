@@ -61,7 +61,7 @@ public class SimpleLocation {
     		return 0.0f;
     	}else if(o.x == x && o.z > z){
     		return 0.0f;
-    	}else if(o.x == x && o.z < z){
+    	}else if(o.x == x){
     		return (float) Math.PI;
     	}else if(o.x > x && o.z == z){
     		return (float) Math.PI/2;
@@ -71,11 +71,11 @@ public class SimpleLocation {
     	//Handle CAST trigo calculations
     	else if(o.x > x && o.z > z) { //A segment
     		return (float) Math.atan((o.x-x)/(o.z-z));
-    	}else if(o.x > x && o.z < z) { //C segment
+    	}else if(o.x > x) { //C segment
     		return (float) (Math.atan((z-o.z)/(o.x-x)) + Math.PI/2);
-    	}else if(o.x < x && o.z < z) { //T segment
+    	}else if(o.z < z) { //T segment
     		return (float) (Math.atan((x-o.x)/(z-o.z)) + Math.PI);
-    	}else if(o.x < x && o.z > z) { //S segment
+    	}else { //S segment
     		return (float) (Math.atan((o.z-z)/(x-o.x))+3*Math.PI/2);
     	}
     	
@@ -97,7 +97,7 @@ public class SimpleLocation {
     		return 0.0f;
     	}else if(o.x == x && o.z > z){
     		return 0;
-    	}else if(o.x == x && o.z < z){
+    	}else if(o.x == x){
     		return (float) Math.PI;
     	}else if(o.x > x && o.z == z){
     		return (float) Math.PI/2;
@@ -106,18 +106,14 @@ public class SimpleLocation {
     	}
     	//Handle CAST trigo calculations
     	else if(o.x > x && o.z > z) { //A segment
-    		return (float) Math.atan((o.x-x)/(o.z-z));
-    	}else if(o.x > x && o.z < z) { //C segment
-    		return (float) (Math.atan((z-o.z)/(o.x-x)) + Math.PI/2);
-    	}else if(o.x < x && o.z < z) { //T segment
-    		return (float) (Math.atan((z-o.z)/(x-o.x)) + Math.PI/2);
-    	}else if(o.x < x && o.z > z) { //S segment
-    		return (float) Math.atan((x-o.x)/(o.z-z));
+    		return (float) Math.atan((double) (o.x - x) /(o.z-z));
+    	}else if(o.x > x) { //C segment
+    		return (float) (Math.atan((double) (z - o.z) /(o.x-x)) + Math.PI/2);
+    	}else if(o.z < z) { //T segment
+    		return (float) (Math.atan((double) (z - o.z) /(x-o.x)) + Math.PI/2);
+    	}else { //S segment
+    		return (float) Math.atan((double) (x - o.x) /(o.z-z));
     	}
-    	
-    	// no way something else happens?
-    	TerraformGeneratorPlugin.logger.error("2D Angle calculation failed! Input Values: " + o.x + "," + o.z + ":" + x + "," + z);
-    	return 0.0f;
     }
 
     @Override

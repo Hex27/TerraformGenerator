@@ -317,7 +317,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
                     //Corners have special decorations
                     if (Math.abs(nx) == radius && Math.abs(nz) == radius) {
-                        if (height < 40 && !data.getType(x + nx, y + height + 1, z + nz).isSolid())
+                        if (!data.getType(x + nx, y + height + 1, z + nz).isSolid())
                             data.setType(x + nx, y + height + 1, z + nz, Material.SANDSTONE_WALL);
 
                         if (height == 38)
