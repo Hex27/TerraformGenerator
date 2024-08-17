@@ -52,6 +52,7 @@ public class LegacyPathGenerator {
 //        this.mat = mat;
 //    }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDead() {
         return dead;
     }

@@ -80,8 +80,7 @@ public class ValuesCommand extends TerraCommand {
         		});
         
         int period = 4;
-        for (int i = 0; i < 9000000; i++) {
-            int x = i;
+        for (int x = 0; x < 9000000; x++) {
             int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
             vals.addValue(carverEntranceStandard.GetNoise(x, y, z));

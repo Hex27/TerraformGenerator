@@ -31,11 +31,10 @@ public class BlackOceansHandler extends AbstractOceanHandler {
         Vector base2 = new Vector(x + GenUtils.randInt(random, -2 * baseRadius, 2 * baseRadius), y + height, z + GenUtils.randInt(random, -2 * baseRadius, 2 * baseRadius));
         Vector v = base2.subtract(base);
 
-        int segments = height;
         SimpleBlock one = new SimpleBlock(data, x, y, z);
         double radius = baseRadius;
-        for (int i = 0; i <= segments; i++) {
-            Vector seg = v.clone().multiply((float) i / ((float) segments));
+        for (int i = 0; i <= height; i++) {
+            Vector seg = v.clone().multiply((float) i / ((float) height));
             SimpleBlock segment = one.getRelative(seg);
 //			segment.setHardReplace();
 //			segment.setType(type);
@@ -46,7 +45,7 @@ public class BlackOceansHandler extends AbstractOceanHandler {
                     Material.STONE);
 //			Block segment = one.getLocation().add(seg).getBlock();
 //			segment.setType(type);
-            radius = ((double) baseRadius) * (1 - ((double) i) / ((double) segments));
+            radius = ((double) baseRadius) * (1 - ((double) i) / ((double) height));
         }
     }
 
