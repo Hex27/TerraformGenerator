@@ -25,6 +25,7 @@ public class Wall extends SimpleBlock{
         this.direction = dir;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     public @NotNull Wall clone() {
         return new Wall(this.popData, this.getX(), this.getY(), this.getZ(), direction);
     }
