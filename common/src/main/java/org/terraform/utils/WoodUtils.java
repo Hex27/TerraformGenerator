@@ -44,8 +44,7 @@ public class WoodUtils {
 		 * The dark oak check is there because schematics only check for the 
 		 * keyword "oak"
 		 * @param oak material to convert to an WoodType enum
-		 * @return
-		 */
+         */
 		public static @NotNull WoodType parse(@NotNull Material oak) {
 			return WoodType.valueOf(oak.toString()
 					.replace("DARK_OAK","OAK")

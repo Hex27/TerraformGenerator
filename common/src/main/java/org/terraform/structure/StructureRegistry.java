@@ -82,8 +82,6 @@ public class StructureRegistry {
 
     /**
      * Assumes that the supplied type is a singlemegachunkstructurepopulator.
-     * @param populatorType
-     * @return
      */
     public static @Nullable StructureType getStructureType(@NotNull Class<? extends SingleMegaChunkStructurePopulator> populatorType) {
         for (Entry<StructureType, SingleMegaChunkStructurePopulator[]> entry : largeStructureRegistry.entrySet()) {
@@ -96,8 +94,6 @@ public class StructureRegistry {
     }
 
     /**
-     * @param tw
-     * @param mc
      * @return the structure types that can spawn in this mega chunk
      * Only one is meant to be picked.
      */
@@ -177,8 +173,6 @@ public class StructureRegistry {
 
     /**
      * Registers small or large structures. Must implement either SingleMegaChunkStructurePopulator or MultiMegaChunkStructurePopulator.
-     * @param type
-     * @param pop
      */
     public static void registerStructure(StructureType type, @NotNull StructurePopulator pop) {
         if (!pop.isEnabled()) return;//Don't register disabled features

@@ -118,11 +118,8 @@ public class MansionCompoundRoomDistributor {
 	/**
 	 * Also sets the needed rooms to empty room populator and knocks down relevant walls
 	 * if the return value is true.
-	 * @param piece
 	 * @param pieces NOT TO BE MODIFIED
-	 * @param roomSize
-	 * @return
-	 */
+     */
 	public static boolean canRoomSizeFitWithCenter(@NotNull MansionStandardRoomPiece piece, @NotNull Collection<JigsawStructurePiece> pieces, @NotNull MansionRoomSize roomSize, @NotNull MansionRoomPopulator defaultPopulator, boolean force) {
 		
 		SimpleLocation center = piece.getRoom().getSimpleLocation();

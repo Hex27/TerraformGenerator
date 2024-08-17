@@ -108,9 +108,6 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Spawns the surrounding stakes. Additionally, will raise ground levels up
      * with wood planks to make structures less floaty.
-     * @param rand
-     * @param center
-     * @param bank
      */
     public void spawnStakes(@NotNull Random rand, @NotNull SimpleBlock center, @NotNull BiomeBank bank) {
     	int radius = 40;

@@ -223,10 +223,6 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Used to ensure that the dungeon level never gets revealed above the surface by a river or something stupid.
      * This will ensure that all ground levels around those coords are at least roughly at y blocks
-     * @param data
-     * @param x
-     * @param y
-     * @param z
      */
     public void spawnSandBase(TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         int squareRadius = 45;

@@ -32,9 +32,7 @@ public class MansionRoofHandler {
 	/**
 	 * Gets the largest possible rectangle that the house's shape can offer
 	 * Doesn't seem to work all the time though
-	 * @param builder
-	 * @return
-	 */
+     */
     public static int[][] getLargestRectangle(@NotNull MansionJigsawBuilder builder) {
         int[] lowestCoords = null;
         int[] highestCoords = null;
@@ -165,9 +163,6 @@ public class MansionRoofHandler {
 
     /**
      * 
-     * @param rand
-     * @param builder
-     * @param bounds
      * @return the highest Y modified by the roof
      */
     public static int placeTentRoof(Random rand, @NotNull MansionJigsawBuilder builder, int[][] bounds) {

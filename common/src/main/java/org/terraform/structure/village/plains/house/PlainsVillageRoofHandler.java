@@ -207,7 +207,6 @@ public class PlainsVillageRoofHandler {
      * Essentially, this just moulds the same blunt pyramid on every room, then
      * changes the sides to stairs. Doesn't look very sophisticated, so it will be
      * used for the weirdly shaped houses that aren't rectangles.
-     * @param builder
      */
     public static void placeStandardRoof(@NotNull PlainsVillagePopulator plainsVillagePopulator, @NotNull PlainsVillageHouseJigsawBuilder builder) {
         PopulatorDataAbstract data = builder.getCore().getPopData();

@@ -135,7 +135,6 @@ public class PlainsPathRecursiveSpawner {
     
     /**
      * 
-     * @param loc
      * @return whether or not a location can hold a cuberoom (no overlaps, not too far etc)
      */
     private boolean isLocationValid(@NotNull SimpleLocation loc) {

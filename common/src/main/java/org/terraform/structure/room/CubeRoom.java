@@ -350,8 +350,6 @@ public class CubeRoom {
 
     /**
      * Forces all 3D coords in the room with the specified padding to be air.
-     * @param data
-     * @param padding
      */
     public void purgeRoomContents(@NotNull PopulatorDataAbstract data, int padding) {
     	int[] lowerCorner = getLowerCorner(padding);

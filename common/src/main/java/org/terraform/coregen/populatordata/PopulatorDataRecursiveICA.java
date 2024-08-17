@@ -26,8 +26,6 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
     }
 
     /**
-     * @param x
-     * @param z
      * @return The PopulatorDataICA related to those coords.
      */
     private @NotNull PopulatorDataICAAbstract getData(int x, int z) {

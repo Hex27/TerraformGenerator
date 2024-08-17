@@ -32,9 +32,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
     }
     
     /**
-     * 
-     * @param data
-     * @return new location where farmhouse has enough space to spawn
+     *
      */
     private void ensureFarmHouseEntrance(@NotNull Random rand, @NotNull DirectionalCubeRoom room, @NotNull PopulatorDataAbstract data) {
     	int frontSpaceGuarantee = 11;

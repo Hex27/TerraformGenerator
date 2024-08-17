@@ -152,9 +152,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 	
 	/**
 	 * For special wall decorations depending on the room populator.
-	 * @param random
-	 * @param data
-	 */
+     */
     public void decorateWalls(Random random, @NotNull PopulatorDataAbstract data) {
     	//UNLIKE ROOM POPULATOR, this will run even if isPopuating is false.
     	//This is because the other cells must decorate their walls.

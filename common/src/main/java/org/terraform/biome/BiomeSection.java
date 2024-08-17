@@ -32,10 +32,8 @@ public class BiomeSection {
 	
 	/**
 	 * Block x and z
-	 * 
-	 * @param x
-	 * @param z
-	 */
+	 *
+     */
 	protected BiomeSection(TerraformWorld tw, int x, int z) {
 		this.x = x >> bitshifts;
 		this.z = z >> bitshifts;
@@ -87,8 +85,6 @@ public class BiomeSection {
 
 	/**
 	 * 
-	 * @param blockX
-	 * @param blockZ
 	 * @return the four closest biome sections to this block point
 	 */
 	public static @NotNull Collection<BiomeSection> getSurroundingSections(TerraformWorld tw, int blockX, int blockZ) {
@@ -149,9 +145,8 @@ public class BiomeSection {
 	/**
 	 * Will be used to calculate which biome section has dominance in a certain
 	 * block
-	 * 
-	 * @return
-	 */
+	 *
+     */
 	public float getDominance(@NotNull SimpleLocation target) {
 		return getDominanceBasedOnRadius(target.getX(), target.getZ());
 	}
@@ -260,8 +255,6 @@ public class BiomeSection {
     
     /**
      * 
-     * @param rawX
-     * @param rawZ
      * @return the subsection within this biome section that the coordinates belong in.
      * Works even if the coords are outside the biome section.
      */

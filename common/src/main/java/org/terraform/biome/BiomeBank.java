@@ -198,7 +198,6 @@ public enum BiomeBank {
 
     /**
      * ChunkX, ChunkZ
-     * @param tw
      * @return the biome section that this chunk belongs to.
      */
     public static @NotNull BiomeSection getBiomeSectionFromChunk(TerraformWorld tw, int chunkX, int chunkZ) {
@@ -381,8 +380,6 @@ public enum BiomeBank {
     
     /**
      * Does not currently work for beach and river.
-     * @param bank
-     * @return
      */
     public static boolean isBiomeEnabled(@NotNull BiomeBank bank) {
     	

@@ -126,9 +126,6 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
 
     /**
      * To be called on a wall in front of the room's walls.
-     * @param w
-     * @param roomHeight
-     * @param patternIndex
      */
     protected void placeWallDecoration(@NotNull Wall w, int roomHeight, int patternIndex) {
         if (patternIndex == 0) { //Simple Chiselled Sandstone and stairs

@@ -286,7 +286,6 @@ public class TerraSchematic {
     /**
      * This doesn't appear to be used at all
      * lmao.
-     * @return
      */
 	public double getVersionValue() {
 		return VERSION_VALUE;

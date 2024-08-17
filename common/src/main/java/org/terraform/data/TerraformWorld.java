@@ -133,7 +133,6 @@ public class TerraformWorld {
      * Same as getBiomeBank(x,y,z), except y is autofilled to be HeightMap.getBlockHeight
      * @param x blockX
      * @param z blockZ
-     * @return
      */
     public BiomeBank getBiomeBank(int x, int z) {
         ChunkCache cache = TerraformGenerator.getCache(this, x, z);

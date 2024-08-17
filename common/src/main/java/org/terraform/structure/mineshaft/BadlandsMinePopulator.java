@@ -148,10 +148,6 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     /**
      * Keeps searching in the provided direction until the height of the block is roughly 
      * at the ground level outside the plateau's raised height.
-     * @param tw
-     * @param query
-     * @param dir
-     * @return
      */
     @NotNull
     SimpleBlock getSpawnEntrance(TerraformWorld tw, @NotNull SimpleBlock query, @NotNull BlockFace dir) {

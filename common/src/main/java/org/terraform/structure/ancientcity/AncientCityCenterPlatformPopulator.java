@@ -279,9 +279,6 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     
     /**
      * This method will replace rocks near the warden head.
-     * @param b
-     * @param height
-     * @param dir
      */
     private void airWardenBlocks(@NotNull SimpleBlock b, int height, @NotNull BlockFace dir) {
     	for(int i = 0; i < height; i++) {

@@ -68,10 +68,6 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     /**
      * Underwater checks are done here, as the portal being underwater will
      * override all these vegetation settings.
-     * @param tw
-     * @param random
-     * @param core
-     * @param overgrown
      */
     public void spawnRuinedPortal(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock core,
                                   int mossiness, boolean overgrown, boolean snowy) {

@@ -163,7 +163,6 @@ public class RoomLayoutGenerator {
 
     /**
      * Populate with room data.
-     * @param normalise
      */
     public void calculateRoomPlacement(boolean normalise) {
         for (int i = 0; i < numRooms; i++) {
@@ -245,8 +244,6 @@ public class RoomLayoutGenerator {
 
     /**
      * Please supply 2d (x,z) coordinates
-     * @param coords
-     * @return
      */
     public boolean isInRoom(int @NotNull [] coords) {
         for (CubeRoom room : rooms) {

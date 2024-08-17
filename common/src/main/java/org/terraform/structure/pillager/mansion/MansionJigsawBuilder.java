@@ -266,9 +266,6 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     
     /**
      * Used to check if there's a wall with an opposite facing within the same location
-     * @param piece
-     * @param face
-     * @return
      */
     private boolean areOtherWallsOverlapping(@NotNull JigsawStructurePiece piece, @NotNull BlockFace face) {
     	SimpleLocation other = new SimpleLocation(

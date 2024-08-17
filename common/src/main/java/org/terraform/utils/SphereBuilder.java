@@ -110,9 +110,7 @@ public class SphereBuilder {
 	
 	/**
 	 * Refers to minimum percentage radius (0.0 to 1.0)
-	 * @param minRadius
-	 * @return
-	 */
+     */
 	public @NotNull SphereBuilder setMinRadius(double minRadius) {
 		this.minRadius = minRadius;
 		return this;

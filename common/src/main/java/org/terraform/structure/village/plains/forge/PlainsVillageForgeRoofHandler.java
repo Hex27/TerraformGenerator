@@ -108,7 +108,6 @@ public class PlainsVillageForgeRoofHandler {
 	
 	/**
 	 * 
-	 * @param pieces
 	 * @return a list of structure piece simplelocations that are contained within a rectangle.
 	 * This rectangle may not be the largest in the provided hashmap.
 	 */

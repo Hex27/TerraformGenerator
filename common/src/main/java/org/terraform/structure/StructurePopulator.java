@@ -23,8 +23,7 @@ public abstract class StructurePopulator {
      * For underground structures, this should be "0" to denote NO buffer
      * <p>
      * Only works for SingleMegaChunkStructurePopulators
-     * @return
-     */
+	 */
     public int getChunkBufferDistance() {
     	return 3;
     }

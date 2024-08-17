@@ -53,7 +53,6 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     
     /**
      * 3x3 chimney spawned right in the middle of the room.
-     * @param random
      * @param core must contain the direction the chimney is to face.
      */
     private void spawnWallChimney(@NotNull Random random, Wall core) {
@@ -149,8 +148,6 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     
     /**
      * 3x3 chimney spawned right in the middle of the room.
-     * @param random
-     * @param core
      */
     private void spawnStraightChimney(@NotNull Random random, Wall core) {
     	core = core.getRelative(0,1,0);

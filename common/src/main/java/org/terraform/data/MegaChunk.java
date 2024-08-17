@@ -36,7 +36,6 @@ public class MegaChunk {
     }
 
     /**
-     * @param rand
      * @return A random pair of xz block coords within the mega chunk
      */
     public int[] getRandomCoords(@NotNull Random rand) {
@@ -53,7 +52,6 @@ public class MegaChunk {
     }
 
     /**
-     * @param rand
      * @return A random pair of xz block coords within the mega chunk. This pair of coords WILL be in the middle of a chunk.
      */
     public int[] getRandomCenterChunkBlockCoords(@NotNull Random rand) {
@@ -79,7 +77,6 @@ public class MegaChunk {
     
     /**
      * Used for structure spawning. They need the center of biome sections.
-     * @return
      */
     public int[] getCenterBiomeSectionBlockCoords() {
         
@@ -186,7 +183,6 @@ public class MegaChunk {
     }
 
     /**
-     * @param coord
      * @return lower bounds of block coords within the megachunk.
      */
     private static int megaToBlockCoords(int coord) {
