@@ -31,11 +31,6 @@ public class MansionStandardSecondFloorPiece extends MansionStandardRoomPiece {
             }
     }
 
-    @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
-
-    }
-    
     /**
      * Mansions are complex, and they need a third pass to properly ensure that
      * previous important details were planted before placing the final edge pieces.

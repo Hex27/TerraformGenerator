@@ -140,13 +140,8 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     		start = start.getRelative(0,-1,0);
     	}
     }
-	
-	@Override
-	public @NotNull BiomeBank getBeachType() {
-		return BiomeBank.SANDY_BEACH;
-	}
-	
-	/**
+
+    /**
 	 * Savanna Mountains will not allow rivers to carve through them.
 	 */
 	@Override

@@ -140,9 +140,5 @@ public class NMSInjector extends NMSInjectorAbstract {
 	public int getMaxY() {
 		return 320;
 	}
-	
-	@Override
-	public void debugTest(Player p) {
-	}
-	
+
 }

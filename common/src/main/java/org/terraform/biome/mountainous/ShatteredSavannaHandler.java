@@ -186,14 +186,5 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
 		    } 
         }
 	}
-	
-	@Override
-	public @NotNull BiomeBank getBeachType() {
-		return BiomeBank.SANDY_BEACH;
-	}
 
-	@Override
-	public @NotNull BiomeBank getRiverType() {
-		return BiomeBank.RIVER;
-	}
 }

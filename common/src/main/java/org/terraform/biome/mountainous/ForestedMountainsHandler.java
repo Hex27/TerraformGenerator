@@ -211,9 +211,5 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
             }
         }
     }
-	
-	@Override
-	public @NotNull BiomeBank getBeachType() {
-		return BiomeBank.SANDY_BEACH;
-	}
+
 }

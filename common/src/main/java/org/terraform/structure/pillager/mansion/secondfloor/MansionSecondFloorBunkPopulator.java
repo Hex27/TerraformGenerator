@@ -51,21 +51,6 @@ public class MansionSecondFloorBunkPopulator extends MansionRoomPopulator {
 		}
 	
 	}
-	
-	@Override
-	public void decorateExit(Random rand, Wall w) {
-		
-	}
-
-	@Override
-	public void decorateWindow(Random rand, Wall w) {
-		
-	}
-	
-	@Override
-	public void decorateWall(Random rand, Wall w) {
-		
-	}
 
 
 	@Override

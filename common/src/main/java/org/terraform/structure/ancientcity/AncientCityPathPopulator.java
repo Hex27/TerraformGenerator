@@ -256,8 +256,4 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         return true;
     }
 
-    @Override
-    public int getPathWidth() {
-        return 3;
-    }
 }

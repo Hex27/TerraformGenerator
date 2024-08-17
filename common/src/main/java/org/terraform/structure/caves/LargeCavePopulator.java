@@ -151,10 +151,6 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
         return state;
     }
 
-    @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
-    }
-
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12345),
                 (int) (TConfigOption.STRUCTURES_LARGECAVE_SPAWNRATIO

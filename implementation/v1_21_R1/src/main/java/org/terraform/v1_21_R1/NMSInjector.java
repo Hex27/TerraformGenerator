@@ -157,8 +157,4 @@ public class NMSInjector extends NMSInjectorAbstract {
 		return 320;
 	}
 
-	@Override
-	public void debugTest(Player p) {
-	}
-
 }

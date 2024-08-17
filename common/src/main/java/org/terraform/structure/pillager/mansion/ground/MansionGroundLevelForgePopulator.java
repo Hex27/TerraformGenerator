@@ -57,12 +57,8 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 			e.printStackTrace();
 		}
 	}
-	
 
-	@Override
-	public void decorateExit(Random rand, Wall w) {
-		
-	}
+
 	@Override
 	public void decorateWindow(Random rand, @NotNull Wall w) {
 		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
