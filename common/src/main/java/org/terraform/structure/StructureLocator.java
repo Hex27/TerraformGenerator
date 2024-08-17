@@ -188,7 +188,7 @@ public class StructureLocator {
 		 * If this is null, the caller is responsible for inserting it.
 		 */
 		@Override
-		public int[] load(StructureLocatorKey key) throws Exception {
+		public int @NotNull [] load(@NotNull StructureLocatorKey key) throws Exception {
 			return null;
 		}
 	}

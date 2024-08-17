@@ -85,7 +85,7 @@ public class NewFractalTreeBuilder implements Cloneable {
     //Dev use
     private @Nullable Random forcedSeed = null;
 
-    public NewFractalTreeBuilder(Random forcedSeed){
+    public NewFractalTreeBuilder(@Nullable Random forcedSeed){
         this.forcedSeed = forcedSeed;
     }
     public NewFractalTreeBuilder(){}

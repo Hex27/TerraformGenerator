@@ -114,7 +114,7 @@ public class TerraformCommandManager implements TabExecutor {
 	}
 	
 	@Override
-	public boolean onCommand(@NotNull CommandSender sender, Command cmd, String arg2,
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String arg2,
                              String @NotNull [] args) {
 		if(args.length == 0){
 			sender.sendMessage(plugin.getLang().fetchLang("command.unknown"));

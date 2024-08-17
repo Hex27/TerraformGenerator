@@ -33,7 +33,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
     }
     
     @Override
-    public @NotNull JigsawStructurePiece getFirstPiece(Random random) {
+    public @NotNull JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return new PlainsVillageTempleClericAltarPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, true, this, BlockUtils.directBlockFaces);
     	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }

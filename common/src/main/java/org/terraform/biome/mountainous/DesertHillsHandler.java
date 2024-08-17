@@ -24,7 +24,7 @@ public class DesertHillsHandler extends AbstractMountainHandler {
 
 	//Make these resemble dunes more, not massive mountains.
 	@Override
-	protected double getPeakMultiplier(BiomeSection section, @NotNull Random sectionRandom) {
+	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
 	}
 

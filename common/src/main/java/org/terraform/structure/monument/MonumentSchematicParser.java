@@ -9,7 +9,7 @@ import org.terraform.schematic.SchematicParser;
 
 public class MonumentSchematicParser extends SchematicParser {
     @Override
-    public void applyData(@NotNull SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
         if (data instanceof Waterlogged
                 && block.getY() <= TerraformGenerator.seaLevel) {
             ((Waterlogged) data).setWaterlogged(true);

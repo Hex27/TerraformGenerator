@@ -90,7 +90,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     }
     
     @Override
-    public void populate(@NotNull World world, Random random, @NotNull Chunk chunk) {
+    public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         SimpleChunkLocation scl = new SimpleChunkLocation(chunk);
         Collection<Object[]> changes = cache.remove(scl);
         if (changes != null) {

@@ -84,7 +84,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
     }
     
     @Override
-    public void populate(@NotNull World world, Random random, @NotNull Chunk chunk) {
+    public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         SimpleChunkLocation scl = new SimpleChunkLocation(chunk);
 		Collection<SimpleLocation> changes = cache.remove(scl);
         if (changes != null) {

@@ -26,7 +26,7 @@ public abstract class PlainsVillageForgePiece extends JigsawStructurePiece {
 		return wallType;
 	}
 
-	public void setWallType(PlainsVillageForgeWallType wallType) {
+	public void setWallType(@Nullable PlainsVillageForgeWallType wallType) {
 		this.wallType = wallType;
 	}
 	

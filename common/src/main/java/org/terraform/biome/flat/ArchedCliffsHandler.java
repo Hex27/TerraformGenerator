@@ -254,7 +254,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
 
 
     @Override
-    public int getMaxHeightForCaves(TerraformWorld tw, int x, int z) {
+    public int getMaxHeightForCaves(@NotNull TerraformWorld tw, int x, int z) {
     	return (int) HeightMap.CORE.getHeight(tw, x, z);
     }
     

@@ -55,12 +55,12 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
     }
 
     @Override
-    public void setType(int x, int y, int z, Material type) {
+    public void setType(int x, int y, int z, @NotNull Material type) {
         getData(x, z).setType(x, y, z, type);
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
         getData(x, z).setBlockData(x, y, z, data);
     }
 
@@ -70,7 +70,7 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
     }
 
     @Override
-    public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
+    public void addEntity(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
         getData(rawX, rawZ).addEntity(rawX, rawY, rawZ, type);
     }
 
@@ -85,7 +85,7 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
     }
 
     @Override
-    public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
+    public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
         getData(rawX, rawZ).setSpawner(rawX, rawY, rawZ, type);
     }
 

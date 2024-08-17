@@ -55,7 +55,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     }
 
     @Override
-    public JigsawStructurePiece getFirstPiece(Random random) {
+    public JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return new MansionGroundRoomPiece(groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.STANDARD, BlockUtils.directBlockFaces);
     }
     

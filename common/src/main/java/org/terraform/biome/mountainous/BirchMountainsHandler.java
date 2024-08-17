@@ -24,7 +24,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
 	
 	//Birch Mountains must be shorter to allow trees to populate.
 	@Override
-	protected double getPeakMultiplier(BiomeSection section, @NotNull Random sectionRandom) {
+	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
 	}
 	
