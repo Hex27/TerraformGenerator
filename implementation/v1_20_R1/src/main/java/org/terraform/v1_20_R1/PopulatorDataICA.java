@@ -195,23 +195,8 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     	{
     		e.printStackTrace();
     	}
-    	
-    	
-    	//ws.a() is getStructureManager
-    	//a is setStartForStructure
-    	/**setStartForStructure(
-    	 * SectionPosition sectionposition, 
-    	 * Structure structure, 
-    	 * StructureStart structurestart, 
-    	 * StructureAccess structureaccess)**/
-    	//ws.a().a(SectionPosition.a(x0,y0,z0), structureFeature, start, ica);
-    	
+
     	ica.a(structureFeature, start);
-//    	ws.a().a( //setStartForFeature
-//        		structureFeature,
-//        		start);
-        
-        //addReferenceForFeature
     	ica.a(structureFeature, new ChunkCoordIntPair(chunkX, chunkZ).a()); //a is toLong
     }
 

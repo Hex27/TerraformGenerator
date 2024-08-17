@@ -78,24 +78,6 @@ public class Vector3f implements java.io.Serializable {
 
 
     /**
-     * Constructs and initializes a Vector3f from the specified Vector3d.
-     * @param v1 the Vector3d containing the initialization x y z data
-     */
-
-
-    /**
-     * Constructs and initializes a Vector3f from the specified Tuple3f.
-     * @param t1 the Tuple3f containing the initialization x y z data
-     */
-
-
-    /**
-     * Constructs and initializes a Vector3f from the specified Tuple3d.
-     * @param t1 the Tuple3d containing the initialization x y z data
-     */
-
-
-    /**
      * Constructs and initializes a Vector3f to (0,0,0).
      */
     public Vector3f() {
