@@ -128,7 +128,7 @@ public class BiomeSection {
 	}
 
 	public @NotNull Random getSectionRandom(int multiplier) {
-		return new Random(multiplier*Objects.hash(tw.getSeed(), x, z));
+		return new Random((long) multiplier *Objects.hash(tw.getSeed(), x, z));
 	}
 
 	public @NotNull BiomeSection getRelative(int x, int z) {

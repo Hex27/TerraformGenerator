@@ -38,7 +38,7 @@ public class ValuesCommand extends TerraCommand {
     
     @SuppressWarnings("unused")
 	private double warpSine(double tempUnwarpedSineX, int period, int seed) {
-		double warp = GenUtils.randInt(new Random(3*seed),-3, 3);
+		double warp = GenUtils.randInt(new Random(3L *seed),-3, 3);
 		if(warp == 0) warp = 1;
 		if(warp < 0) {
 			warp = (10-2*warp)/10.0;
