@@ -1,6 +1,7 @@
 package org.terraform.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 
@@ -62,8 +63,7 @@ public class SphereBuilder {
 	}
 	
 	public SphereBuilder addToWhitelist(Material... mats) {
-		for(Material mat:mats)
-			replaceWhitelist.add(mat);
+        replaceWhitelist.addAll(Arrays.asList(mats));
 		return this;
 	}
 	

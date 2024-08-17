@@ -59,9 +59,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
     		return;
     	TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Flushing repairs (" + cache.size() + " chunks)");
         ArrayList<SimpleChunkLocation> locs = new ArrayList<>();
-    	for(SimpleChunkLocation scl:cache.keySet()) {
-    		locs.add(scl);
-    	}
+        locs.addAll(cache.keySet());
     	for(SimpleChunkLocation scl:locs) {
     		World w = Bukkit.getWorld(scl.getWorld());
     		if(w == null) continue;

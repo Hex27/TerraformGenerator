@@ -130,7 +130,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     
     public Collection<BlockFace> getShuffledInternalWalls(){
     	ArrayList<BlockFace> shuffled = new ArrayList<>();
-    	for(BlockFace face:internalWalls.keySet()) shuffled.add(face);
+        shuffled.addAll(internalWalls.keySet());
     	Collections.shuffle(shuffled);
     	return shuffled;
     }

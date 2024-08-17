@@ -1,6 +1,7 @@
 package org.terraform.structure.pillager.mansion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.terraform.structure.pillager.mansion.ground.*;
 import org.terraform.structure.pillager.mansion.secondfloor.*;
@@ -35,9 +36,7 @@ public enum MansionRoomPopulatorRegistry {
 	;
 	ArrayList<MansionRoomPopulator> populators = new ArrayList<>();
 	MansionRoomPopulatorRegistry(MansionRoomPopulator... populators){
-		for(MansionRoomPopulator populator:populators) {
-			this.populators.add(populator);
-		}
+        this.populators.addAll(Arrays.asList(populators));
 	}
 	
 	public ArrayList<MansionRoomPopulator> getPopulators(){

@@ -67,9 +67,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 //        }
 //        cacheContents.clear();
         ArrayList<SimpleChunkLocation> locs = new ArrayList<>();
-    	for(SimpleChunkLocation scl:cache.keySet()) {
-    		locs.add(scl);
-    	}
+        locs.addAll(cache.keySet());
     	for(SimpleChunkLocation scl:locs) {
     		World w = Bukkit.getWorld(scl.getWorld());
     		if(w == null) continue;

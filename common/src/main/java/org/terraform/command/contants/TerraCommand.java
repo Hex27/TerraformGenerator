@@ -2,6 +2,7 @@ package org.terraform.command.contants;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -15,9 +16,7 @@ public abstract class TerraCommand {
 	public TerraformGeneratorPlugin plugin;
 	public TerraCommand(TerraformGeneratorPlugin plugin, String... aliases){
 		this.plugin = plugin;
-		for(String alias:aliases){
-			this.aliases.add(alias);
-		}
+        this.aliases.addAll(Arrays.asList(aliases));
 	}
 	
 	public abstract String getDefaultDescription();
