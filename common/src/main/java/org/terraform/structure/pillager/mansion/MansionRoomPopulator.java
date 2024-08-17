@@ -12,8 +12,8 @@ import org.terraform.structure.room.CubeRoom;
 
 public abstract class MansionRoomPopulator {
 
-	private HashMap<BlockFace, MansionInternalWallState> internalWalls;
-	private CubeRoom room;
+	private final HashMap<BlockFace, MansionInternalWallState> internalWalls;
+	private final CubeRoom room;
 	public MansionRoomPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
 		super();
 		this.internalWalls = internalWalls;

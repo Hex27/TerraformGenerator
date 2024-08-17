@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class TerraformStructureSpawnEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private String structureName;
-    private int x;
-    private int z;
+    private final String structureName;
+    private final int x;
+    private final int z;
     
     public TerraformStructureSpawnEvent(int x, int z, String structureName) {
     	this.structureName = structureName;

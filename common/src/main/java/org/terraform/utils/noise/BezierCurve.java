@@ -6,8 +6,8 @@ import org.terraform.utils.Vector2f;
 // https://www.youtube.com/watch?v=dXECQRlmIaE :)
 public class BezierCurve {
     Vector2f point1 = new Vector2f(0, 0);
-    Vector2f control1;
-    Vector2f control2;
+    final Vector2f control1;
+    final Vector2f control2;
     Vector2f point2 = new Vector2f(1, 1);
 
     /**

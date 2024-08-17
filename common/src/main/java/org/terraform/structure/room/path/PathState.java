@@ -24,7 +24,7 @@ public class PathState {
     */
 
     //This will contain some path nodes
-    public @NotNull HashSet<PathNode> nodes = new HashSet<>();
+    public final @NotNull HashSet<PathNode> nodes = new HashSet<>();
 
     /*
     /* General settings

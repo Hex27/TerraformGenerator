@@ -28,14 +28,14 @@ public class MushroomBuilder {
     @Nullable
     SimpleBlock stemTop;
 
-    FractalTypes.Mushroom type;
+    final FractalTypes.Mushroom type;
     FractalTypes.MushroomCap capShape = FractalTypes.MushroomCap.ROUND;
     Material stemType = Material.MUSHROOM_STEM;
     Material capType = Material.RED_MUSHROOM_BLOCK;
     Material spotType = Material.MUSHROOM_STEM;
 
     int baseHeight = 18;
-    int heightVariation = 0;
+    final int heightVariation = 0;
     float baseThickness = 3.8f;
 
     float segmentFactor = 2;

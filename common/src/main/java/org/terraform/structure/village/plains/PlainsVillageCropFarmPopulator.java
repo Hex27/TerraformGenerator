@@ -33,7 +33,7 @@ public class PlainsVillageCropFarmPopulator extends PlainsVillageAbstractRoomPop
             Material.MELON_STEM
     };
 
-	private PlainsVillagePopulator plainsVillagePopulator;
+	private final PlainsVillagePopulator plainsVillagePopulator;
     public PlainsVillageCropFarmPopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
         this.plainsVillagePopulator = plainsVillagePopulator;

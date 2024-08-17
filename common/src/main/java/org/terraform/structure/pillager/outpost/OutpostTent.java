@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class OutpostTent extends RoomPopulatorAbstract {
 
-	Material @NotNull [] edgyWools = new Material[] {
+	final Material @NotNull [] edgyWools = new Material[] {
 			Material.BLACK_WOOL,
 			Material.GRAY_WOOL,
 			Material.BROWN_WOOL,
@@ -33,7 +33,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
 			Material.WHITE_WOOL
 	};
 	
-	BiomeBank biome;
+	final BiomeBank biome;
     public OutpostTent(Random rand, boolean forceSpawn, boolean unique, BiomeBank biome) {
         super(rand, forceSpawn, unique);
         this.biome = biome;

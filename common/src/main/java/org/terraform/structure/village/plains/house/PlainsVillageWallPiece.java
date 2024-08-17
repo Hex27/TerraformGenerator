@@ -20,8 +20,8 @@ import java.util.Random;
 
 public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
-    PlainsVillageHouseVariant var;
-    PlainsVillagePopulator plainsVillagePopulator;
+    final PlainsVillageHouseVariant var;
+    final PlainsVillagePopulator plainsVillagePopulator;
     public PlainsVillageWallPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant var, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
         this.var = var;

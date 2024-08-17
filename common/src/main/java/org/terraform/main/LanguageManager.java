@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class LanguageManager {
 	
 	private FileConfiguration langFile;
-	private File file;
+	private final File file;
 	
 	public LanguageManager(@NotNull TerraformGeneratorPlugin plugin){
 		this.file = new File(plugin.getDataFolder(),plugin.getConfigLoader().getString("lang"));
@@ -21,7 +21,7 @@ public class LanguageManager {
 		loadDefaults();
 	}
 	
-	private @NotNull HashMap<String,String> cache = new HashMap<>();
+	private final @NotNull HashMap<String,String> cache = new HashMap<>();
 	
 	private void loadDefaults(){
 		fetchLang("permissions.insufficient","&cYou don't have enough permissions to perform this action!");

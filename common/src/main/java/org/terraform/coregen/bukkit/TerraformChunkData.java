@@ -12,7 +12,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 @SuppressWarnings("deprecation")
 public class TerraformChunkData implements ChunkData {
 
-	private PopulatorDataAbstract popData;
+	private final PopulatorDataAbstract popData;
 	public TerraformChunkData(PopulatorDataAbstract popData)
 	{
 		this.popData = popData;

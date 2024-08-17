@@ -32,7 +32,7 @@ public class WoodUtils {
 		WALL_SIGN("%WOOD%_WALL_SIGN"),
 		BOAT("%WOOD%_BOAT"),
 		;
-		String template;
+		final String template;
 		WoodType(String template){
 			this.template = template;
 		}

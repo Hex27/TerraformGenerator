@@ -11,8 +11,8 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 public class ConfigLoader {
 	
-	private @NotNull HashMap<String, Object> configOptions = new HashMap<>();
-	private TerraformGeneratorPlugin plugin;
+	private final @NotNull HashMap<String, Object> configOptions = new HashMap<>();
+	private final TerraformGeneratorPlugin plugin;
 	private static final int configVersion = 3;
 	public ConfigLoader(@NotNull TerraformGeneratorPlugin plugin){
 		this.plugin = plugin;

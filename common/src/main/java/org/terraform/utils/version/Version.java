@@ -18,8 +18,8 @@ public class Version {
         V_1_20_R4("v1_20_R4",20.5,20.6),
         V_1_21_R1("v1_21_R1",21.0,21.1),
         ;
-        private double[] versionDouble;
-        private String packageName;
+        private final double[] versionDouble;
+        private final String packageName;
 
         SupportedVersion(String packageName, double... versionDouble) {
             this.versionDouble = versionDouble;

@@ -57,6 +57,7 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
         private final @NotNull SimpleBlock destruction;
         private final @NotNull Random random;
         @NotNull
+        final
         HashMap<Material, Material> newMapping = new HashMap<>();
         public TrailRuinsTowerParser(@NotNull SimpleBlock core, @NotNull Random rand) {
             this.random = rand;

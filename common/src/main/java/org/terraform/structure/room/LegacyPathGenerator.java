@@ -17,10 +17,11 @@ public class LegacyPathGenerator {
     private final int[] upperBound;
     private final int[] lowerBound;
     @NotNull
+    final
     HashSet<PathPopulatorData> path = new HashSet<>();
     PathPopulatorAbstract populator;
-    Random rand;
-    Material[] mat;
+    final Random rand;
+    final Material[] mat;
     private SimpleBlock base;
     private BlockFace dir;
     private int maxNoBend = 15;

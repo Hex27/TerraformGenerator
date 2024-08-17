@@ -13,9 +13,9 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 public abstract class TerraCommand {
 	
-	public  @NotNull ArrayList<String> aliases = new ArrayList<>();
-	public  @NotNull ArrayList<TerraCommandArgument<?>> parameters = new ArrayList<>();
-	public TerraformGeneratorPlugin plugin;
+	public final @NotNull ArrayList<String> aliases = new ArrayList<>();
+	public final @NotNull ArrayList<TerraCommandArgument<?>> parameters = new ArrayList<>();
+	public final TerraformGeneratorPlugin plugin;
 	public TerraCommand(TerraformGeneratorPlugin plugin, String @NotNull ... aliases){
 		this.plugin = plugin;
         this.aliases.addAll(Arrays.asList(aliases));
