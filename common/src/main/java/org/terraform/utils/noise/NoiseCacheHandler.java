@@ -15,7 +15,7 @@ import com.google.common.cache.LoadingCache;
  */
 public class NoiseCacheHandler{
 	
-	public static enum NoiseCacheEntry{
+	public enum NoiseCacheEntry{
 		TW_TEMPERATURE,
 		TW_MOISTURE,
 		TW_OCEANIC,

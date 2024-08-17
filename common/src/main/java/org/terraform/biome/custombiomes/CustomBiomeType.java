@@ -22,7 +22,7 @@ public enum CustomBiomeType {
     private float rainFall = 0.8f;
     private boolean isCold = false;
 
-    private CustomBiomeType() {
+    CustomBiomeType() {
         this.key = "terraformgenerator:" + this.toString().toLowerCase(Locale.ENGLISH);
         this.fogColor = "";
         this.waterColor = "";
