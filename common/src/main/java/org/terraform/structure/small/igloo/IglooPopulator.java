@@ -161,10 +161,10 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     	
     	for(BlockFace face:BlockUtils.xzPlaneBlockFaces) {
     		if(face.getModX() == offsetDir.getModX() || face.getModZ() == offsetDir.getModZ())
-    		for(int depth = 1; depth <= 2; depth++) {
-    			if(chimneyCore.getRelative(face,depth).distanceSquared(core) < size*size)
-    				chimneyCore.getRelative(face,depth).LPillar(size, new Random(), Material.STONE, Material.COBBLESTONE);
-    		}
+                for(int depth = 1; depth <= 2; depth++) {
+                    if(chimneyCore.getRelative(face,depth).distanceSquared(core) < size*size)
+                        chimneyCore.getRelative(face,depth).LPillar(size, new Random(), Material.STONE, Material.COBBLESTONE);
+                }
     	}
     	
     	//dril chimney

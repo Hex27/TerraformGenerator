@@ -254,12 +254,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         for (int nx = x - squareRadius; nx <= x + squareRadius; nx++) {
             for (int nz = z - squareRadius; nz <= z + squareRadius; nz++) {
                 int height = GenUtils.getHighestGround(data, nx, nz);
-                Material[] crust = new Material[4];
-                crust[0] = data.getType(nx, height, nz);
                 Material mat = data.getType(nx, height, nz);
                 int original = height;
-                //int height = HeightMap.getBlockHeight(tw, nx, nz);
-
 
                 //Raise ground according to noise levels.
                 int raiseDone = 0;
@@ -283,7 +279,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                     if (XdistanceFromCenter > squareRadius-10 || ZdistanceFromCenter > squareRadius-10) {
                         //Depress downwards
 
-                        int dist = XdistanceFromCenter > ZdistanceFromCenter ? XdistanceFromCenter : ZdistanceFromCenter;
+                        int dist = Math.max(XdistanceFromCenter, ZdistanceFromCenter);
                         //Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((50.0f-dist)/5.0f))));
                         float comp = original + ((raiseDone) * ((((float) squareRadius-5) - dist) / 5.0f)) + Math.abs(vertNoise.GetNoise(nx, nz) * 30);
                         if (comp < original) comp = original;
