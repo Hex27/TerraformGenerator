@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
@@ -32,7 +33,7 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
 	}
 
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		//Arch
 		
 		w.getLeft(3).Pillar(6, Material.DARK_OAK_LOG);
@@ -49,55 +50,51 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
 		.apply(w.getRelative(0,5,0).getRight(2))
 		.apply(w.getRelative(0,5,0).getRight());
 		int choice = rand.nextInt(2);
-		switch(choice) {
-		case 0: //Wall carving
-			w.getRear().Pillar(5, Material.DARK_OAK_LOG);
-			new OrientableBuilder(Material.DARK_OAK_LOG)
-			.setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
-			.apply(w.getRear().getRelative(0,2,0))
-			.apply(w.getRear().getRelative(0,1,0).getLeft())
-			.apply(w.getRear().getRelative(0,1,0).getRight())
-			.apply(w.getRear().getRelative(0,3,0).getLeft())
-			.apply(w.getRear().getRelative(0,3,0).getRight())
-			.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())))
-			.apply(w.getRear().getRelative(0,2,0).getLeft())
-			.apply(w.getRear().getRelative(0,2,0).getLeft(2))
-			.apply(w.getRear().getRelative(0,2,0).getRight())
-			.apply(w.getRear().getRelative(0,2,0).getRight(2));
-			
-			for(BlockFace face:BlockUtils.directBlockFaces)
-				new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-				.setFacing(face.getOppositeFace())
-				.lapply(w.getLeft(3).getRelative(face));
-			
-			for(BlockFace face:BlockUtils.directBlockFaces)
-				new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-				.setFacing(face.getOppositeFace())
-				.lapply(w.getRight(3).getRelative(face));
-			break;
-		default: //Armor stands
-			
-			BannerUtils.generatePillagerBanner(w.getRelative(0,4,0).get(), w.getDirection(), true);
-			
-			new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
-			.setType(Type.TOP)
-			.apply(w)
-			.apply(w.getLeft())
-			.apply(w.getLeft(2))
-			.apply(w.getRight())
-			.apply(w.getRight(2));
-			
-			ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).get(), w.getDirection(), rand);
-			ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).getLeft(2).get(), w.getDirection(), rand);
-			ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).getRight(2).get(), w.getDirection(), rand);
-			
-			break;
-		}
+        //Armor stands
+        if(choice == 0) { //Wall carving
+            w.getRear().Pillar(5, Material.DARK_OAK_LOG);
+            new OrientableBuilder(Material.DARK_OAK_LOG)
+                    .setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
+                    .apply(w.getRear().getRelative(0, 2, 0))
+                    .apply(w.getRear().getRelative(0, 1, 0).getLeft())
+                    .apply(w.getRear().getRelative(0, 1, 0).getRight())
+                    .apply(w.getRear().getRelative(0, 3, 0).getLeft())
+                    .apply(w.getRear().getRelative(0, 3, 0).getRight())
+                    .setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())))
+                    .apply(w.getRear().getRelative(0, 2, 0).getLeft())
+                    .apply(w.getRear().getRelative(0, 2, 0).getLeft(2))
+                    .apply(w.getRear().getRelative(0, 2, 0).getRight())
+                    .apply(w.getRear().getRelative(0, 2, 0).getRight(2));
+
+            for(BlockFace face : BlockUtils.directBlockFaces)
+                new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
+                        .setFacing(face.getOppositeFace())
+                        .lapply(w.getLeft(3).getRelative(face));
+
+            for(BlockFace face : BlockUtils.directBlockFaces)
+                new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
+                        .setFacing(face.getOppositeFace())
+                        .lapply(w.getRight(3).getRelative(face));
+        } else {
+            BannerUtils.generatePillagerBanner(w.getRelative(0, 4, 0).get(), w.getDirection(), true);
+
+            new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
+                    .setType(Type.TOP)
+                    .apply(w)
+                    .apply(w.getLeft())
+                    .apply(w.getLeft(2))
+                    .apply(w.getRight())
+                    .apply(w.getRight(2));
+
+            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).get(), w.getDirection(), rand);
+            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).getLeft(2).get(), w.getDirection(), rand);
+            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).getRight(2).get(), w.getDirection(), rand);
+        }
 	}
 	
 
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(Random rand, @NotNull Wall w) {
 		w.getRear().Pillar(6, Material.DARK_OAK_PLANKS);
 		w.Pillar(6, Material.DARK_OAK_LOG);
 		w.getLeft(3).Pillar(6, Material.DARK_OAK_LOG);
@@ -117,7 +114,7 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
 		.apply(w.getRight(2));
 	}
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(3,3);
 	}
 

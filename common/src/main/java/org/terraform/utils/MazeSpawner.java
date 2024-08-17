@@ -2,6 +2,7 @@ package org.terraform.utils;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
@@ -26,7 +27,7 @@ public class MazeSpawner {
      * NOT REAL IN-WORLD COORDS.
      */
     private final Map<SimpleLocation, MazeCell> cellGrid = new HashMap<>();
-    public List<PathPopulatorData> pathPopDatas = new ArrayList<>();
+    public @NotNull List<PathPopulatorData> pathPopDatas = new ArrayList<>();
     private SimpleBlock core; //Maze center
     private int widthX = -1; //Maze x width
     private int widthZ = -1; //Maze z width
@@ -56,7 +57,7 @@ public class MazeSpawner {
      * @param target
      * @return a hashmap of unvisited neighbours of that target MazeCell. The hashmap key is the blockface relative to the target MazeCell to the neighbour MazeCell
      */
-    private Map<BlockFace, MazeCell> getValidNeighbours(MazeCell target) {
+    private @NotNull Map<BlockFace, MazeCell> getValidNeighbours(@NotNull MazeCell target) {
         Map<BlockFace, MazeCell> neighbours = new EnumMap<>(BlockFace.class);
 
         //Loop NSEW
@@ -202,7 +203,7 @@ public class MazeSpawner {
      * Gets the adjacent maze cell to the target.
      * Returns null if there is no maze cell at that location (border)
      */
-    private MazeCell getAdjacentCell(MazeCell target, BlockFace face) {
+    private MazeCell getAdjacentCell(@NotNull MazeCell target, @NotNull BlockFace face) {
         int neighbourX = target.x + face.getModX();
         int neighbourZ = target.z + face.getModZ();
         //Bukkit.getLogger().info("Face: " + face.toString() + " - REL(" + face.getModX() + "," + face.getModZ() + ") === (" + neighbourX + "," + neighbourZ + ")" );
@@ -295,7 +296,7 @@ public class MazeSpawner {
      */
     private static class MazeCell {
         protected int x, z;
-        protected Map<BlockFace, Boolean> walls = new EnumMap<>(BlockFace.class);
+        protected @NotNull Map<BlockFace, Boolean> walls = new EnumMap<>(BlockFace.class);
 
         public MazeCell(int x, int z) {
             this.x = x;
@@ -307,7 +308,7 @@ public class MazeSpawner {
             walls.put(BlockFace.WEST, true);
         }
 
-        public Set<BlockFace> getWalllessFaces() {
+        public @NotNull Set<BlockFace> getWalllessFaces() {
             Set<BlockFace> faces = EnumSet.noneOf(BlockFace.class);
             for (Entry<BlockFace, Boolean> entry : walls.entrySet()) {
                 if (!entry.getValue()) faces.add(entry.getKey());
@@ -321,7 +322,7 @@ public class MazeSpawner {
             return true;
         }
 
-        public void knockDownWall(MazeCell other, BlockFace side) {
+        public void knockDownWall(@NotNull MazeCell other, @NotNull BlockFace side) {
             this.walls.put(side, false);
             other.walls.put(side.getOppositeFace(), false);
         }

@@ -1,6 +1,7 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -13,7 +14,7 @@ public class NMSChunkPacketRefreshCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Sets current biome you're on to muddy bog and forces a packet refresh for you for the chunk you're standing on";
     }
 
@@ -23,7 +24,7 @@ public class NMSChunkPacketRefreshCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
 
         return sender.isOp();
     }

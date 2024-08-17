@@ -11,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -35,7 +36,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	
     	//Generates outer walls
@@ -209,7 +210,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     	super.sculkUp(tw, data, this.effectiveRoom);
     }
     
-    private void spawnCentralHead(SimpleBlock core, BlockFace facing) {
+    private void spawnCentralHead(@NotNull SimpleBlock core, @NotNull BlockFace facing) {
     	
     	int headHeight = 11;
     	int headWidth = 15;
@@ -272,7 +273,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     	
     }
     
-    private void airWardenBlocks(SimpleBlock b, BlockFace dir) {
+    private void airWardenBlocks(@NotNull SimpleBlock b, @NotNull BlockFace dir) {
     	airWardenBlocks(b, 1, dir);
     }
     
@@ -282,7 +283,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
      * @param height
      * @param dir
      */
-    private void airWardenBlocks(SimpleBlock b, int height, BlockFace dir) {
+    private void airWardenBlocks(@NotNull SimpleBlock b, int height, @NotNull BlockFace dir) {
     	for(int i = 0; i < height; i++) {
     		//b.getUp(i).setType(Material.AIR);
 	    	for(int depth = 1; depth <= 3; depth++)
@@ -294,7 +295,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     }
     
     //Spawns in the corners of the center large platform
-    private void spawnLargePillar(SimpleBlock core, CubeRoom room) {
+    private void spawnLargePillar(@NotNull SimpleBlock core, @NotNull CubeRoom room) {
     		
     	//Hollow square with a pillar in the middle
     	for(int relX = -2; relX <= 2; relX++)

@@ -2,6 +2,8 @@ package org.terraform.structure.village.plains;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -20,7 +22,7 @@ import java.util.Random;
 
 public class PlainsVillagePopulator extends VillagePopulator {
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
@@ -34,7 +36,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
      * @param data
      * @return new location where farmhouse has enough space to spawn
      */
-    private void ensureFarmHouseEntrance(Random rand, DirectionalCubeRoom room, PopulatorDataAbstract data) {
+    private void ensureFarmHouseEntrance(@NotNull Random rand, @NotNull DirectionalCubeRoom room, @NotNull PopulatorDataAbstract data) {
     	int frontSpaceGuarantee = 11;
     	Wall w = new Wall(new SimpleBlock(data,room.getX(),room.getY(),room.getZ()).getGround(), room.getDirection())
     			.getRelative(0,4,0);
@@ -75,7 +77,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
     	((PlainsVillageTownhallPopulator) room.getPop()).setElevation(elevation);
     }
     
-    private boolean isFrontSpaceClear(Wall w, int space) {
+    private boolean isFrontSpaceClear(@NotNull Wall w, int space) {
     	for(int i = 0; i < space; i++) {
     		if(w.getFront(i).getType().isSolid())
     			return false;
@@ -83,20 +85,20 @@ public class PlainsVillagePopulator extends VillagePopulator {
     	return true;
     }
     
-    public Material woodSlab = Material.OAK_SLAB;
-    public Material woodPlank = Material.OAK_PLANKS;
-    public Material woodLog = Material.OAK_LOG;
-    public Material woodStrippedLog = Material.STRIPPED_OAK_LOG;
-    public Material woodFence = Material.OAK_FENCE;
-    public Material woodButton = Material.OAK_BUTTON;
-    public Material woodTrapdoor = Material.OAK_TRAPDOOR;
-    public Material woodDoor = Material.OAK_DOOR;
-    public Material woodStairs = Material.OAK_STAIRS;
-    public Material woodLeaves = Material.OAK_LEAVES;
-    public Material woodPressurePlate = Material.OAK_PRESSURE_PLATE;
-    public String wood = "oak_";
+    public @Nullable Material woodSlab = Material.OAK_SLAB;
+    public @Nullable Material woodPlank = Material.OAK_PLANKS;
+    public @Nullable Material woodLog = Material.OAK_LOG;
+    public @Nullable Material woodStrippedLog = Material.STRIPPED_OAK_LOG;
+    public @Nullable Material woodFence = Material.OAK_FENCE;
+    public @Nullable Material woodButton = Material.OAK_BUTTON;
+    public @Nullable Material woodTrapdoor = Material.OAK_TRAPDOOR;
+    public @Nullable Material woodDoor = Material.OAK_DOOR;
+    public @Nullable Material woodStairs = Material.OAK_STAIRS;
+    public @Nullable Material woodLeaves = Material.OAK_LEAVES;
+    public @Nullable Material woodPressurePlate = Material.OAK_PRESSURE_PLATE;
+    public @NotNull String wood = "oak_";
 
-    public void spawnPlainsVillage(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnPlainsVillage(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         
     	
     	BlockFace pathStart = BlockUtils.getDirectBlockFace(random);

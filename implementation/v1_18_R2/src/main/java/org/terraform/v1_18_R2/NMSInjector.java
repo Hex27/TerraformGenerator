@@ -2,40 +2,33 @@ package org.terraform.v1_18_R2;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.entity.TileEntityBeehive;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Beehive;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_18_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlockEntityState;
-import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_18_R2.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_18_R2.generator.CustomChunkGenerator;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
-import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import net.minecraft.server.level.PlayerChunkMap;
 import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.chunk.ChunkSection;
 import net.minecraft.world.level.chunk.IChunkAccess;
 
 public class NMSInjector extends NMSInjectorAbstract {
@@ -49,12 +42,12 @@ public class NMSInjector extends NMSInjectorAbstract {
 	}
 	
     @Override
-    public BlockDataFixerAbstract getBlockDataFixer() {
+    public @NotNull BlockDataFixerAbstract getBlockDataFixer() {
         return new BlockDataFixer();
     }
 
     @Override
-    public boolean attemptInject(World world) {
+    public boolean attemptInject(@NotNull World world) {
         CraftWorld cw = (CraftWorld) world;
         WorldServer ws = cw.getHandle();
         
@@ -111,7 +104,7 @@ public class NMSInjector extends NMSInjectorAbstract {
     }
 
     @Override
-    public PopulatorDataICAAbstract getICAData(Chunk chunk) {
+    public @NotNull PopulatorDataICAAbstract getICAData(@NotNull Chunk chunk) {
         IChunkAccess ica = ((CraftChunk) chunk).getHandle();
         CraftWorld cw = (CraftWorld) chunk.getWorld();
         WorldServer ws = cw.getHandle();
@@ -122,7 +115,7 @@ public class NMSInjector extends NMSInjectorAbstract {
     }
 
     @Override
-    public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
+    public @Nullable PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
         //This is for the damn bees
         if (data instanceof PopulatorDataSpigotAPI pdata) {
             GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
@@ -136,7 +129,7 @@ public class NMSInjector extends NMSInjectorAbstract {
         return null;
     }
 
-    private static Method getTileEntity = null;
+    private static @Nullable Method getTileEntity = null;
     @Override
     public void storeBee(Beehive hive) {
         try {

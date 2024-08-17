@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.utils.BlockUtils;
@@ -13,7 +14,7 @@ import org.terraform.utils.blockdata.StairBuilder;
 
 public class AncientCityPathMiniRoomPlacer {
 
-	public static void placeAltar(Wall origin, Random rand) {
+	public static void placeAltar(@NotNull Wall origin, Random rand) {
 		Material[] deepSlateBricks = new Material[] {Material.DEEPSLATE_BRICKS, Material.CRACKED_DEEPSLATE_BRICKS};
 		//Place cylinder below
 		cylinderDown(origin, 4, deepSlateBricks);
@@ -67,7 +68,7 @@ public class AncientCityPathMiniRoomPlacer {
 		
 	}
 	
-	private static void cylinderDown(SimpleBlock core, int radius, Material... mat) {
+	private static void cylinderDown(@NotNull SimpleBlock core, int radius, Material... mat) {
         for (float x = -radius; x <= radius; x++) {
             for (float z = -radius; z <= radius; z++) {
                 SimpleBlock rel = core.getRelative(Math.round(x), 0, Math.round(z));

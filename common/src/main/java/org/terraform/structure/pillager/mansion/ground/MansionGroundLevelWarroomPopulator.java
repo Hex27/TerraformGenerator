@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -26,7 +27,7 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 	//Refers to the library room width, not the width of one room cell.
 	private static final int roomWidth = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = BlockUtils.getDirectBlockFace(random);
 		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
@@ -61,7 +62,7 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(Random rand, @NotNull Wall w) {
 		BannerUtils.generatePillagerBanner(w.getLeft().getRelative(0,3,0).get(), w.getDirection(),true);
 		BannerUtils.generatePillagerBanner(w.getRight().getRelative(0,3,0).get(), w.getDirection(),true);
 	}
@@ -88,7 +89,7 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 	
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}
 

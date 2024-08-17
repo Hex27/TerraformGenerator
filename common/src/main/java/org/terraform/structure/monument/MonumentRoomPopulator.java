@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -24,7 +25,7 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
         this.design = design;
     }
 
-    protected static void setThickPillar(Random rand, MonumentDesign design, SimpleBlock base) {
+    protected static void setThickPillar(@NotNull Random rand, @NotNull MonumentDesign design, @NotNull SimpleBlock base) {
         Wall w = new Wall(base, BlockFace.NORTH);
         w.downUntilSolid(rand, Material.PRISMARINE);
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -52,7 +53,7 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         int[] upperBounds = room.getUpperCorner();
         int[] lowerBounds = room.getLowerCorner();
 

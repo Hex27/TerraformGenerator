@@ -2,6 +2,7 @@ package org.terraform.biome.river;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -20,7 +21,7 @@ public class RiverHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.RIVER;
     }
 
@@ -33,7 +34,7 @@ public class RiverHandler extends BiomeHandler {
 //	}
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.DIRT,
                 Material.DIRT,
@@ -44,7 +45,7 @@ public class RiverHandler extends BiomeHandler {
 
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
             return;
 
@@ -67,7 +68,7 @@ public class RiverHandler extends BiomeHandler {
         }
     }
 
-    public static void riverVegetation(TerraformWorld tw, Random random, PopulatorDataAbstract data, int rawX, int surfaceY, int rawZ){
+    public static void riverVegetation(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int rawX, int surfaceY, int rawZ){
         boolean growsKelp = tw.getHashedRand(rawX>>4, rawZ>>4, 97418).nextBoolean();
         if (GenUtils.chance(random, 10, 100)) {
             generateSeagrass(rawX, surfaceY + 1, rawZ, data);
@@ -77,16 +78,16 @@ public class RiverHandler extends BiomeHandler {
             generateKelp(rawX, surfaceY + 1, rawZ, data, random);
         }
     }
-    public static void generateSeagrass(int x, int y, int z, PopulatorDataAbstract data) {
+    public static void generateSeagrass(int x, int y, int z, @NotNull PopulatorDataAbstract data) {
         if(data.getType(x,y,z) != Material.WATER) return;
         data.setType(x,y,z,Material.SEAGRASS);
 
     }
-    public static void generateTallSeagrass(int x, int y, int z, PopulatorDataAbstract data) {
+    public static void generateTallSeagrass(int x, int y, int z, @NotNull PopulatorDataAbstract data) {
         if(data.getType(x,y,z) != Material.WATER || data.getType(x,y,z) != Material.WATER) return;
         BlockUtils.setDoublePlant(data, x,y,z, Material.TALL_SEAGRASS);
     }
-    private static void generateKelp(int x, int y, int z, PopulatorDataAbstract data, Random random) {
+    private static void generateKelp(int x, int y, int z, @NotNull PopulatorDataAbstract data, Random random) {
         for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(5, 15); ny++) {
             if(data.getType(x,ny,z) != Material.WATER) break;
             data.setType(x, ny, z, Material.KELP_PLANT);

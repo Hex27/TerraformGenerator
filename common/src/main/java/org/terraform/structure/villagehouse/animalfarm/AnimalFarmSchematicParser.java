@@ -3,6 +3,7 @@ package org.terraform.structure.villagehouse.animalfarm;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -29,7 +30,7 @@ public class AnimalFarmSchematicParser extends SchematicParser {
     }
 
     @Override
-    public void applyData(SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
         if (data.getMaterial() == Material.COBBLESTONE) {
             if (GenUtils.chance(rand, 1, 5)) data = Bukkit
                     .createBlockData(Material.STONE);

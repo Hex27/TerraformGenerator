@@ -9,6 +9,7 @@ import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -30,7 +31,7 @@ import java.util.Random;
 
 public class FarmhousePopulator extends VillageHousePopulator {
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
@@ -39,7 +40,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
         spawnFarmHouse(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, height + 1, z);
     }
 
-    public void spawnFarmHouse(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnFarmHouse(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         try {
             BiomeBank biome = tw.getBiomeBank(x, z);
             y += GenUtils.randInt(random, 1, 3);
@@ -95,7 +96,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
         }
     }
 
-    public void placeLamp(TerraformWorld tw, BiomeBank biome, Random rand, PopulatorDataAbstract data, int x, int y, int z) {
+    public void placeLamp(TerraformWorld tw, BiomeBank biome, @NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         SimpleBlock b = new SimpleBlock(data, x, y, z);
         b.setType(GenUtils.randMaterial(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
         b.getRelative(0, 1, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
@@ -112,7 +113,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
         }
     }
 
-    public void createFields(TerraformWorld tw, BiomeBank biome, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void createFields(@NotNull TerraformWorld tw, @NotNull BiomeBank biome, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         FastNoise fieldNoise = new FastNoise(tw.getHashedRand(x, y, z, 23).nextInt(225));
         fieldNoise.SetNoiseType(NoiseType.Simplex);
         fieldNoise.SetFrequency(0.05f);

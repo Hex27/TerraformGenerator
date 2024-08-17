@@ -13,6 +13,7 @@ import java.util.logging.SimpleFormatter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.main.config.TConfigOption;
 
 
@@ -36,7 +37,7 @@ public class TLogger {
                     private static final String format = "[%1$tF %1$tT] [%2$-7s] %3$s %n";
 
                     @Override
-                    public synchronized String format(LogRecord lr) {
+                    public synchronized @NotNull String format(@NotNull LogRecord lr) {
                         return String.format(format,
                                 new Date(lr.getMillis()),
                                 lr.getLevel().getLocalizedName(),
@@ -68,7 +69,7 @@ public class TLogger {
     	}
     }
 	
-    public void stdout(String message) {
+    public void stdout(@NotNull String message) {
     	Bukkit.getConsoleSender().sendMessage("[TerraformGenerator] "
     		+ ChatColor.translateAlternateColorCodes('&', message));
     	
@@ -77,7 +78,7 @@ public class TLogger {
     	}
     }
 
-    public void error(String message) {
+    public void error(@NotNull String message) {
     	if(suppressConsoleLogs) {
     		LOGGER.log(Level.SEVERE,"[!] " + message);
     	}else {
@@ -86,7 +87,7 @@ public class TLogger {
     	}
     }
 
-    public void info(String message) {
+    public void info(@NotNull String message) {
     	if(suppressConsoleLogs) {
     		LOGGER.log(Level.INFO,message);
     	}else
@@ -94,7 +95,7 @@ public class TLogger {
     			+ ChatColor.translateAlternateColorCodes('&', message));
     }
     
-    public void debug(String message) {
+    public void debug(@NotNull String message) {
         if (TConfigOption.DEVSTUFF_DEBUG_MODE.getBoolean())
         	if(suppressConsoleLogs) {
         		LOGGER.log(Level.INFO,"[v] "+message);

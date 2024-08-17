@@ -5,6 +5,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -30,7 +31,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
 
     }
     
-    public void buildIndividualRoofs(Random random, PopulatorDataAbstract data, int[] lowerBound, int[] upperBound) {
+    public void buildIndividualRoofs(Random random, @NotNull PopulatorDataAbstract data, int[] lowerBound, int[] upperBound) {
     	
     	//Don't build roofs for pieces that are in sink-ins
     	if(this.builder.countOverlappingPiecesAtLocation(
@@ -143,7 +144,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     }
 
     @Override
-    public void build(PopulatorDataAbstract data, Random rand) {
+    public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
         Wall w = entry.getKey().getRelative(0, -1, 0);
@@ -162,23 +163,17 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
      * Extra decorations like windows or walls, depending on the surrounding walls
      */
     @Override
-    public void postBuildDecoration(Random rand, PopulatorDataAbstract data) {
+    public void postBuildDecoration(@NotNull Random rand, @NotNull PopulatorDataAbstract data) {
     	
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
-    	MansionSecondFloorWallType type = MansionSecondFloorWallType.THIN_WINDOWS;
-    	switch(rand.nextInt(3)) {
-    	case 0:
-    		type = MansionSecondFloorWallType.LARGE_WINDOW;
-    		break;
-    	case 1:
-    		type = MansionSecondFloorWallType.THIN_WINDOWS;
-    		break;
-    	case 2:
-    		type = MansionSecondFloorWallType.BALCONY;
-    		break;
-    	}
-    	
-    	//Don't allow balconies in sink in areas
+    	MansionSecondFloorWallType type = switch(rand.nextInt(3)) {
+            case 0 -> MansionSecondFloorWallType.LARGE_WINDOW;
+            case 1 -> MansionSecondFloorWallType.THIN_WINDOWS;
+            case 2 -> MansionSecondFloorWallType.BALCONY;
+            default -> null;
+        };
+
+        //Don't allow balconies in sink in areas
     	if(type == MansionSecondFloorWallType.BALCONY) {
         	int overlappers = 0;
 	    	for(JigsawStructurePiece otherPiece:builder.getOverlapperPieces()) {
@@ -361,7 +356,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
         
     }
     
-    private void spawnWallSupportingPillar(Wall w, int height) {
+    private void spawnWallSupportingPillar(@NotNull Wall w, int height) {
     	w.Pillar(height, new Random(), Material.POLISHED_ANDESITE);
     	
     	new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
@@ -387,7 +382,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     	w.getRelative(0,2,0).CorrectMultipleFacing(3);
     }
     
-    private void spawnWindowOverhang(Wall w) {
+    private void spawnWindowOverhang(@NotNull Wall w) {
     	//log row
     	new OrientableBuilder(Material.DARK_OAK_LOG)
     	.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getRight(w.getDirection())))

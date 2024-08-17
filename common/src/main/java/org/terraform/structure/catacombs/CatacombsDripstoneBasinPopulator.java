@@ -3,6 +3,7 @@ package org.terraform.structure.catacombs;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.CubeRoom;
@@ -21,7 +22,7 @@ public class CatacombsDripstoneBasinPopulator extends CatacombsStandardPopulator
 	
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	SimpleBlock center = room.getCenterSimpleBlock(data).getUp();
 

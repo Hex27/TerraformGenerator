@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -22,7 +23,7 @@ public class FishCageRoomPopulator extends LevelledRoomPopulator {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
         //Fish Cage
         CubeRoom cage = new CubeRoom(room.getWidthX() - 6, room.getWidthZ() - 6, room.getHeight() - 11, room.getX(), room.getY() + 7, room.getZ());
@@ -65,7 +66,7 @@ public class FishCageRoomPopulator extends LevelledRoomPopulator {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getHeight() > 13;
     }
 }

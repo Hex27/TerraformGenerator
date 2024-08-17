@@ -2,7 +2,7 @@ package org.terraform.biome.beach;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.terraform.biome.BiomeBank;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -20,17 +20,17 @@ public class CherryGroveBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.BEACH;
     }
 
     @Override
-    public CustomBiomeType getCustomBiome() {
+    public @NotNull CustomBiomeType getCustomBiome() {
         return CustomBiomeType.CHERRY_GROVE;
     }
     
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.GRASS_BLOCK,
                 Material.DIRT,
@@ -40,7 +40,7 @@ public class CherryGroveBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         boolean hasSugarcane = GenUtils.chance(random, 1, 100);
 
@@ -56,9 +56,7 @@ public class CherryGroveBeachHandler extends BiomeHandler {
 
         //Spawn sugarcane
         if (hasSugarcane) {
-            boolean hasWater = false;
-            if (data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER)
-                hasWater = true;
+            boolean hasWater = data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER;
             if (data.getType(rawX - 1, surfaceY - 1, rawZ) == Material.WATER)
                 hasWater = true;
             if (data.getType(rawX, surfaceY - 1, rawZ + 1) == Material.WATER)

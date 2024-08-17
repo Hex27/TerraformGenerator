@@ -1,6 +1,7 @@
 package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
@@ -21,7 +22,7 @@ public class ValuesCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Shows a range of values for stuff";
     }
 
@@ -31,7 +32,7 @@ public class ValuesCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
 
         return sender.isOp();
     }
@@ -58,7 +59,7 @@ public class ValuesCommand extends TerraCommand {
 
     @SuppressWarnings("unused")
 	@Override
-    public void execute(CommandSender sender, Stack<String> args)
+    public void execute(@NotNull CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
     	
         MathValues vals = new MathValues();
@@ -121,7 +122,7 @@ public class ValuesCommand extends TerraCommand {
             return highest;
         }
 
-        public String toString() {
+        public @NotNull String toString() {
             return getLowest() + " to " + getHighest() + ": " + avg();
         }
     }

@@ -1,6 +1,8 @@
 package org.terraform.structure.room.jigsaw;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
@@ -16,7 +18,7 @@ import java.util.Random;
  */
 public abstract class JigsawStructurePiece implements Cloneable {
     protected CubeRoom room;
-    protected HashMap<BlockFace, Boolean> validDirections = new HashMap<BlockFace, Boolean>();
+    protected HashMap<BlockFace, Boolean> validDirections = new HashMap<>();
     protected ArrayList<BlockFace> walledFaces = new ArrayList<>();
     protected JigsawStructurePiece[] allowedPieces;
     protected JigsawType type;
@@ -25,7 +27,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
     protected boolean unique = false;
     protected int elevation = 0; //elevation of 0 is ground level.
 
-    public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace... validDirs) {
+    public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace @NotNull ... validDirs) {
         this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
         this.type = type;
         this.unique = unique;
@@ -33,7 +35,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
             validDirections.put(face, false);
     }
     
-    public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, BlockFace... validDirs) {
+    public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, BlockFace @NotNull ... validDirs) {
         this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
         this.type = type;
         for (BlockFace face : validDirs)
@@ -43,7 +45,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
     public void postBuildDecoration(Random random, PopulatorDataAbstract data) {}
 
     @SuppressWarnings("unchecked")
-    public JigsawStructurePiece getInstance(Random rand, int depth) {
+    public @Nullable JigsawStructurePiece getInstance(@NotNull Random rand, int depth) {
         JigsawStructurePiece clone;
         try {
             clone = (JigsawStructurePiece) this.clone();
@@ -66,7 +68,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
 
     public abstract void build(PopulatorDataAbstract data, Random rand);
 
-    public BlockFace getNextUnpopulatedBlockFace() {
+    public @Nullable BlockFace getNextUnpopulatedBlockFace() {
         for (Entry<BlockFace, Boolean> entry : validDirections.entrySet()) {
             if (!entry.getValue())
                 return entry.getKey();
@@ -97,7 +99,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
     }
 
     public HashMap<BlockFace, Boolean> getValidDirections() {
-        if (type == JigsawType.END) return new HashMap<BlockFace, Boolean>();
+        if (type == JigsawType.END) return new HashMap<>();
         return validDirections;
     }
 
@@ -139,7 +141,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
      * a larger room with bigger widthX and widthZ (same height)
      */
     public CubeRoom getExtendedRoom(int extraSize) {
-    	if(this.walledFaces.size() == 0) {
+    	if(this.walledFaces.isEmpty()) {
     		return this.room;
     	}else {
             return new CubeRoom(
@@ -150,10 +152,10 @@ public abstract class JigsawStructurePiece implements Cloneable {
     }
 
     @Override
-    public String toString() {
-        String directions = "";
+    public @NotNull String toString() {
+        StringBuilder directions = new StringBuilder();
         for (BlockFace face : this.validDirections.keySet()) {
-            directions += face + ",";
+            directions.append(face).append(",");
         }
         return this.getClass().getSimpleName()
                 + "::" + room.getX() + "," + room.getY() + "," + room.getZ()

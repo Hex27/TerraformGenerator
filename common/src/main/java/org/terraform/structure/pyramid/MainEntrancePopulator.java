@@ -2,6 +2,7 @@ package org.terraform.structure.pyramid;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -22,7 +23,7 @@ public class MainEntrancePopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 
     	int entranceHeightOffsetFromBase = room.getHeight() - 5;
         //Make the entrance pyramid shaped
@@ -107,7 +108,7 @@ public class MainEntrancePopulator extends RoomPopulatorAbstract {
 
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() >= 5 && room.getWidthZ() >= 5;
     }
 }

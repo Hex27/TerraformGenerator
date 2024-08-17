@@ -8,6 +8,8 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;
 
@@ -15,22 +17,22 @@ public abstract class PopulatorDataAbstract {
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
-    public abstract Material getType(int x, int y, int z);
-    public Material getType(Vector v){
+    public abstract @Nullable Material getType(int x, int y, int z);
+    public @Nullable Material getType(@NotNull Vector v){
         return getType((int)Math.round(v.getX()),(int)Math.round(v.getY()),(int)Math.round(v.getZ()));
     }
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
-    public abstract BlockData getBlockData(int x, int y, int z);
+    public abstract @Nullable BlockData getBlockData(int x, int y, int z);
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
     public abstract void setType(int x, int y, int z, Material type);
     
-    public void setType(int x, int y, int z, Material... type)
+    public void setType(int x, int y, int z, Material @NotNull ... type)
     {
     	setType(x,y,z,type[new Random().nextInt(type.length)]);
     }
@@ -38,12 +40,12 @@ public abstract class PopulatorDataAbstract {
     /**
      * This method will ROUND vector coordinates. Be very aware of that.
      */
-    public void setType(Vector add, Material... mat) {
+    public void setType(@NotNull Vector add, Material... mat) {
         setType((int)Math.round(add.getX()),
                 (int)Math.round(add.getY()),
                 (int)Math.round(add.getZ()), mat);
     }
-    public void setBlockData(Vector add, BlockData data) {
+    public void setBlockData(@NotNull Vector add, BlockData data) {
         setBlockData((int)Math.round(add.getX()),
                 (int)Math.round(add.getY()),
                 (int)Math.round(add.getZ()), data);
@@ -53,7 +55,7 @@ public abstract class PopulatorDataAbstract {
         if(!getType(x,y,z).isSolid())
             setType(x,y,z,type);
     }
-    public void lsetType(Vector v, Material... type) {
+    public void lsetType(@NotNull Vector v, Material... type) {
         if(!getType(v).isSolid())
             setType(v,type);
     }
@@ -62,7 +64,7 @@ public abstract class PopulatorDataAbstract {
      * Set the material at the location if the current material is in
      * the enum set
      */
-    public void rsetType(Vector v, EnumSet<Material> replaceable, Material... toSet)
+    public void rsetType(@NotNull Vector v, @NotNull EnumSet<Material> replaceable, Material... toSet)
     {
         if(!replaceable.contains(getType(v))) return;
         setType(v, toSet);
@@ -71,7 +73,7 @@ public abstract class PopulatorDataAbstract {
      * Set the material at the location if the current material is in
      * the enum set
      */
-    public void rsetBlockData(Vector v, EnumSet<Material> replaceable, BlockData data)
+    public void rsetBlockData(@NotNull Vector v, @NotNull EnumSet<Material> replaceable, BlockData data)
     {
         if(!replaceable.contains(getType(v))) return;
         setBlockData(v, data);
@@ -85,7 +87,7 @@ public abstract class PopulatorDataAbstract {
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
-    public abstract Biome getBiome(int rawX, int rawZ);
+    public abstract @Nullable Biome getBiome(int rawX, int rawZ);
 
     public abstract void addEntity(int rawX, int rawY, int rawZ, EntityType type);
 
@@ -97,7 +99,7 @@ public abstract class PopulatorDataAbstract {
 
     public abstract void lootTableChest(int x, int y, int z, TerraLootTable table);
 
-    public abstract TerraformWorld getTerraformWorld();
+    public abstract @Nullable TerraformWorld getTerraformWorld();
 
     /**
      * @Deprecated this shit is a meaningless hashcode
@@ -112,7 +114,7 @@ public abstract class PopulatorDataAbstract {
      * @Deprecated this shit is a meaningless comparison
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         return obj instanceof PopulatorDataAbstract;

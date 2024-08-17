@@ -8,6 +8,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -30,7 +31,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
     }
 
     @Override
-    public void populate(PathPopulatorData ppd) {
+    public void populate(@NotNull PathPopulatorData ppd) {
 
         //Find the ceiling for easier management later
         SimpleBlock ceil = ppd.base.getRelative(0, 1, 0);
@@ -190,7 +191,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
 
     }
 
-    private boolean verifyPathway(Wall base) {
+    private boolean verifyPathway(@NotNull Wall base) {
         for (int h = 0; h <= 5; h++) {
             for (int width = -2; width <= 2; width++) {
                 Wall rel = base.getRelative(0, h, 0);
@@ -212,7 +213,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         return true;
     }
 
-    private void decorateCrossroads(SimpleBlock core, Bisected.Half isCeil) {
+    private void decorateCrossroads(@NotNull SimpleBlock core, Bisected.@NotNull Half isCeil) {
         //Decorate the floor and ceiling
         core.RSolSetType(Material.CHISELED_STONE_BRICKS);
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -228,7 +229,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         }
     }
 
-    private void decoratePathways(SimpleBlock core, BlockFace dir, Bisected.Half isCeil) {
+    private void decoratePathways(@NotNull SimpleBlock core, @NotNull BlockFace dir, Bisected.@NotNull Half isCeil) {
         //Decorate the floor and ceiling
         core.RSolSetType(Material.CHISELED_STONE_BRICKS);
         for (BlockFace face : BlockUtils.getAdjacentFaces(dir)) {
@@ -242,7 +243,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         }
     }
 
-    private boolean setIronBars(PathPopulatorData ppd) {
+    private boolean setIronBars(@NotNull PathPopulatorData ppd) {
         Wall wall = new Wall(ppd.base, ppd.dir).getRelative(0, 4, 0);
 
         wall.setType(Material.IRON_BARS);
@@ -262,7 +263,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         return true;
     }
 
-    private void dropDownBlock(SimpleBlock block) {
+    private void dropDownBlock(@NotNull SimpleBlock block) {
         if (block.getType().isSolid()) {
             BlockData type = block.getBlockData();
             block.setType(Material.CAVE_AIR);

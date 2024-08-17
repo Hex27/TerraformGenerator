@@ -2,6 +2,7 @@ package org.terraform.structure.monument;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -18,12 +19,12 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getHeight() <= 13;
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
         //Make the hashtag room structure
@@ -54,7 +55,7 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
         tetrapod(center);
     }
 
-    public void tetrapod(Wall w) {
+    public void tetrapod(@NotNull Wall w) {
         for (int width = 0; width < 3; width++) {
             if (width % 2 == 1) {
                 w.getLeft(width).RPillar(5, rand, design.tileSet());

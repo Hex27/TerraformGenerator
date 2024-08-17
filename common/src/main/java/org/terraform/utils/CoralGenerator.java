@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.CoralWallFan;
 import org.bukkit.block.data.type.SeaPickle;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -48,7 +49,7 @@ public class CoralGenerator {
      * Creates a random coral
      * @param data refers to the block the coral will grow ON.
      */
-    public static void generateSingleCoral(PopulatorDataAbstract data, int x, int y, int z) {
+    public static void generateSingleCoral(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         BlockFace face = getRandomBlockFace();
 
         if (face == BlockFace.DOWN) face = BlockFace.UP;
@@ -57,8 +58,7 @@ public class CoralGenerator {
 
         attemptReplace(data, x + face.getModX(), y + face.getModY(), z + face.getModZ(), coral);
         if (face != BlockFace.UP) {
-            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan) {
-                CoralWallFan bdata = (CoralWallFan) data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ());
+            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan bdata) {
                 bdata.setFacing(face);
                 data.setBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ(), bdata);
             }
@@ -66,7 +66,7 @@ public class CoralGenerator {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isSaturatedCoral(SimpleBlock block) {
+    public static boolean isSaturatedCoral(@NotNull SimpleBlock block) {
         for (BlockFace face : BlockUtils.directBlockFaces) {
             if (block.getRelative(face).getType() == Material.WATER) return true;
         }
@@ -77,7 +77,7 @@ public class CoralGenerator {
      * Generates a coral on a surface.
      * @param data refers to the block the coral will grow ON.
      */
-    public static void generateSingleCoral(PopulatorDataAbstract data, int x, int y, int z, String coralType) {
+    public static void generateSingleCoral(@NotNull PopulatorDataAbstract data, int x, int y, int z, String coralType) {
         BlockFace face = getRandomBlockFace();
         coralType = StringUtils.remove(coralType, "_BLOCK");
         if (face == BlockFace.DOWN) face = BlockFace.UP;
@@ -93,8 +93,7 @@ public class CoralGenerator {
         }
         attemptReplace(data, x + face.getModX(), y + face.getModY(), z + face.getModZ(), coral);
         if (face != BlockFace.UP) {
-            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan) {
-                CoralWallFan bdata = (CoralWallFan) data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ());
+            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan bdata) {
                 bdata.setFacing(face);
                 data.setBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ(), bdata);
             }
@@ -105,11 +104,10 @@ public class CoralGenerator {
      * Creates a cluster of Sea Pickles.
      * @param data refers to the block to replace with sea pickles
      */
-    public static void generateSeaPickles(PopulatorDataAbstract data, int x, int y, int z) {
+    public static void generateSeaPickles(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         int fullSize = GenUtils.randInt(1, 4);
         if (attemptReplace(data, x, y, z, Material.SEA_PICKLE)) {
-            if (data.getBlockData(x, y, z) instanceof SeaPickle) {
-                SeaPickle state = (SeaPickle) data.getBlockData(x, y, z);
+            if (data.getBlockData(x, y, z) instanceof SeaPickle state) {
                 state.setPickles(fullSize);
                 data.setBlockData(x, y, z, state);
             }
@@ -120,7 +118,7 @@ public class CoralGenerator {
      * Generates a Kelp plant 3-10 blocks tall. Or sea grass.
      * @param data refers to the block ABOVE the floor (lowest block of the kelp plant)
      */
-    public static void generateKelpGrowth(PopulatorDataAbstract data, int x, int y, int z) {
+    public static void generateKelpGrowth(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         int fullSize = GenUtils.randInt(1, 2);
         if (new Random().nextBoolean()) fullSize += GenUtils.randInt(1, 20);
         if (fullSize == 1) {
@@ -141,7 +139,7 @@ public class CoralGenerator {
      * @param data    block to be replaced
      * @param newType type to replace with
      */
-    public static boolean attemptReplace(PopulatorDataAbstract data, int x, int y, int z, Material newType) {
+    public static boolean attemptReplace(@NotNull PopulatorDataAbstract data, int x, int y, int z, Material newType) {
         if (y >= TerraformGenerator.seaLevel) return false;
         Material type = data.getType(x, y, z);
         if (type != Material.WATER && type != Material.SEAGRASS && type != Material.TALL_SEAGRASS && type != Material.KELP_PLANT) return false;
@@ -153,7 +151,7 @@ public class CoralGenerator {
      * Generates a coral-ish structure at the location, of a random
      * length.
      */
-    public static void generateCoral(PopulatorDataAbstract data, int x, int y, int z) {
+    public static void generateCoral(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         Material coral = CORAL_BLOCKS[GenUtils.randInt(0, CORAL_BLOCKS.length - 1)];
         int fullSize = GenUtils.randInt(15, 35);
         int[] middle = {x, y, z};
@@ -171,7 +169,7 @@ public class CoralGenerator {
      * Generates a sea sponge at the location, of a random
      * length.
      */
-    public static void generateSponge(PopulatorDataAbstract data, int x, int y, int z) {
+    public static void generateSponge(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         int fullSize = GenUtils.randInt(15, 35);
         int[] middle = {x, y, z};
 
@@ -186,7 +184,7 @@ public class CoralGenerator {
     /**
      * Gets a random connecting side of the block.
      */
-    public static int[] getRandomRelative(int[] middle) {
+    public static int[] getRandomRelative(int @NotNull [] middle) {
         BlockFace face = getRandomBlockFace();
         middle[0] += face.getModX();
         middle[1] += face.getModY();

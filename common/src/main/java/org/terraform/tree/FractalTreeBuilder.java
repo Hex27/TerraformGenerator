@@ -10,6 +10,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -43,6 +45,7 @@ public class FractalTreeBuilder {
     int maxHeight = 999;
     float lengthDecrement = 1;
     float lengthDecrementMultiplier = 1;
+    @Nullable
     Material trunkType = Material.OAK_WOOD;
     FractalLeaves fractalLeaves = new FractalLeaves();
     Random rand;
@@ -79,7 +82,7 @@ public class FractalTreeBuilder {
 	private int initialHeight;
     private boolean heightGradientChecked = false;
 
-    public FractalTreeBuilder(FractalTypes.Tree type) {
+    public FractalTreeBuilder(FractalTypes.@NotNull Tree type) {
         switch (type) {
             case FOREST:
                 this
@@ -580,11 +583,11 @@ public class FractalTreeBuilder {
     			<= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
     }
     
-    public boolean build(TerraformWorld tw, SimpleBlock block) {
+    public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock block) {
     	return build(tw, block.getPopData(), block.getX(), block.getY(), block.getZ());
     }
     
-    public boolean build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public boolean build(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         fractalLeaves.purgeOccupiedLeavesCache();
     	//Terrain too steep, don't attempt tree generation, 
     	//lest it gets stuck in a wall.
@@ -664,7 +667,7 @@ public class FractalTreeBuilder {
         
     }
 
-    public void fractalBranch(Random rand, SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size) {
+    public void fractalBranch(@NotNull Random rand, @NotNull SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size) {
 
     	if(thickness < minThickness)
     		thickness = minThickness;
@@ -780,7 +783,7 @@ public class FractalTreeBuilder {
         }
     }
 
-    public void drawLine(SimpleBlock one, SimpleBlock two, int segments, double thickness) {
+    public void drawLine(@NotNull SimpleBlock one, @NotNull SimpleBlock two, int segments, double thickness) {
         if (one.equals(two)) return;
         //Vector one to two;
         Vector v = two.toVector().subtract(one.toVector());
@@ -791,7 +794,7 @@ public class FractalTreeBuilder {
         }
     }
 
-    private void replaceSphere(float radius, SimpleBlock base, Material type) {
+    private void replaceSphere(float radius, @NotNull SimpleBlock base, @NotNull Material type) {
         if (radius <= 0) {
             return;
         }
@@ -799,7 +802,7 @@ public class FractalTreeBuilder {
     }
 
     //private boolean debug = true;
-    private void replaceSphere(float rX, float rY, float rZ, SimpleBlock block, Material type) {
+    private void replaceSphere(float rX, float rY, float rZ, @NotNull SimpleBlock block, @NotNull Material type) {
 
         // Don't place anything if radius is nothing
         if (rX <= 0 &&
@@ -930,7 +933,7 @@ public class FractalTreeBuilder {
      * @param min minimum vine length
      * @param max maximum vine length
      */
-    void dangleLeavesDown(SimpleBlock block, int min, int max) {
+    void dangleLeavesDown(@NotNull SimpleBlock block, int min, int max) {
     	Material material = fractalLeaves.material[rand.nextInt(fractalLeaves.material.length)];
         BlockData type = Bukkit.createBlockData(material);
         if (Tag.LEAVES.isTagged(material)) {
@@ -960,72 +963,72 @@ public class FractalTreeBuilder {
         block.getRelative(0, 1, 0).rsetBlockData(BlockUtils.replacableByTrees, type);
     }
 
-    public FractalTreeBuilder setSnowyLeaves(boolean snowy) {
+    public @NotNull FractalTreeBuilder setSnowyLeaves(boolean snowy) {
         this.fractalLeaves.setSnowy(snowy);
         return this;
     }
 
-    public FractalTreeBuilder setVines(int vines) {
+    public @NotNull FractalTreeBuilder setVines(int vines) {
         this.vines = vines;
         return this;
     }
 
-    public FractalTreeBuilder setHeightVariation(int heightVariation) {
+    public @NotNull FractalTreeBuilder setHeightVariation(int heightVariation) {
         this.heightVariation = heightVariation;
         return this;
     }
 
-    public FractalTreeBuilder setMinBend(double bend) {
+    public @NotNull FractalTreeBuilder setMinBend(double bend) {
         this.minBend = bend;
         return this;
     }
 
-    public FractalTreeBuilder setMaxBend(double bend) {
+    public @NotNull FractalTreeBuilder setMaxBend(double bend) {
         this.maxBend = bend;
         return this;
     }
 
-    public FractalTreeBuilder setInitialTilt(double initialTilt) {
+    public @NotNull FractalTreeBuilder setInitialTilt(double initialTilt) {
         this.initialTilt = initialTilt;
         return this;
     }
 
-    public FractalTreeBuilder setMinInitialTilt(double minInitialTilt) {
+    public @NotNull FractalTreeBuilder setMinInitialTilt(double minInitialTilt) {
         this.minInitialTilt = minInitialTilt;
         return this;
     }
     
-    public FractalTreeBuilder setFractalLeaves(FractalLeaves fractalLeaves) {
+    public @NotNull FractalTreeBuilder setFractalLeaves(FractalLeaves fractalLeaves) {
         this.fractalLeaves = fractalLeaves;
         return this;
     }
 
-    public FractalTreeBuilder setTrunkType(Material log) {
+    public @NotNull FractalTreeBuilder setTrunkType(Material log) {
         this.trunkType = log;
         return this;
     }
 
-    public FractalTreeBuilder setLengthDecrement(float d) {
+    public @NotNull FractalTreeBuilder setLengthDecrement(float d) {
         this.lengthDecrement = d;
         return this;
     }
 
-    public FractalTreeBuilder setMaxDepth(int d) {
+    public @NotNull FractalTreeBuilder setMaxDepth(int d) {
         this.maxDepth = d;
         return this;
     }
 
-    public FractalTreeBuilder setAlwaysOneStraight(int val) {
+    public @NotNull FractalTreeBuilder setAlwaysOneStraight(int val) {
         this.alwaysOneStraight = val;
         return this;
     }
 
-    public FractalTreeBuilder setAlwaysOneStraightExtendedBranches(boolean bool) {
+    public @NotNull FractalTreeBuilder setAlwaysOneStraightExtendedBranches(boolean bool) {
         this.alwaysOneStraightExtendedBranches = bool;
         return this;
     }
 
-    public FractalTreeBuilder setNoMainStem(boolean bool) {
+    public @NotNull FractalTreeBuilder setNoMainStem(boolean bool) {
         this.noMainStem = bool;
         return this;
     }
@@ -1033,7 +1036,7 @@ public class FractalTreeBuilder {
     /**
      * @param beeChance the beeChance to set
      */
-    public FractalTreeBuilder setBeeChance(double beeChance) {
+    public @NotNull FractalTreeBuilder setBeeChance(double beeChance) {
         this.beeChance = beeChance;
         return this;
     }
@@ -1048,62 +1051,62 @@ public class FractalTreeBuilder {
     /**
      * @param cocoaBeans the cocabeans to set
      */
-    public FractalTreeBuilder setCocoaBeans(int cocoaBeans) {
+    public @NotNull FractalTreeBuilder setCocoaBeans(int cocoaBeans) {
         this.cocoaBeans = cocoaBeans;
         return this;
     }
 
-    public FractalTreeBuilder setThicknessDecrement(float d) {
+    public @NotNull FractalTreeBuilder setThicknessDecrement(float d) {
         this.thicknessDecrement = d;
         return this;
     }
 
-    public FractalTreeBuilder setBaseThickness(float baseThickness) {
+    public @NotNull FractalTreeBuilder setBaseThickness(float baseThickness) {
         this.baseThickness = baseThickness;
         return this;
     }
 
-    public FractalTreeBuilder setMinThickness(float minThickness) {
+    public @NotNull FractalTreeBuilder setMinThickness(float minThickness) {
         this.minThickness = minThickness;
         return this;
     }
 
-    public FractalTreeBuilder setBaseHeight(int h) {
+    public @NotNull FractalTreeBuilder setBaseHeight(int h) {
         this.baseHeight = h;
         return this;
     }
 
-    public FractalTreeBuilder setFractalThreshold(int i) {
+    public @NotNull FractalTreeBuilder setFractalThreshold(int i) {
         this.fractalThreshold = i;
         return this;
     }
 
-    public FractalTreeBuilder setMaxPitch(double max) {
+    public @NotNull FractalTreeBuilder setMaxPitch(double max) {
         this.maxPitch = max;
         return this;
     }
 
-    public FractalTreeBuilder setBranchNoiseMultiplier(float multiplier) {
+    public @NotNull FractalTreeBuilder setBranchNoiseMultiplier(float multiplier) {
         this.branchNoiseMultiplier = multiplier;
         return this;
     }
 
-    public FractalTreeBuilder setDepthPitchMultiplier(float depthPitchMultiplier) {
+    public @NotNull FractalTreeBuilder setDepthPitchMultiplier(float depthPitchMultiplier) {
         this.depthPitchMultiplier = depthPitchMultiplier;
         return this;
     }
     
-    public FractalTreeBuilder setLeafBranchFrequency(float freq) {
+    public @NotNull FractalTreeBuilder setLeafBranchFrequency(float freq) {
         this.branchNoiseFrequency = freq;
         return this;
     }
 
-    public FractalTreeBuilder setMaxHeight(int max) {
+    public @NotNull FractalTreeBuilder setMaxHeight(int max) {
         this.maxHeight = max;
         return this;
     }
     
-    public FractalTreeBuilder skipGradientCheck() {
+    public @NotNull FractalTreeBuilder skipGradientCheck() {
     	this.heightGradientChecked = true;
     	return this;
     }
@@ -1115,7 +1118,7 @@ public class FractalTreeBuilder {
         return height;
     }
 
-    public FractalTreeBuilder setMinPitch(double min) {
+    public @NotNull FractalTreeBuilder setMinPitch(double min) {
         this.minPitch = min;
         return this;
     }
@@ -1143,33 +1146,33 @@ public class FractalTreeBuilder {
         return GenUtils.randDouble(new Random(), lowerBound * base, upperBound * base);
     }
 
-    public FractalTreeBuilder setCoralDecoration(boolean d) {
+    public @NotNull FractalTreeBuilder setCoralDecoration(boolean d) {
         this.coralDecoration = d;
         this.fractalLeaves.coralDecoration = d;
         return this;
     }
     
-    public FractalTreeBuilder setAlwaysOneStraightBranchLength(int alwaysOneStraightBranchLength) {
+    public @NotNull FractalTreeBuilder setAlwaysOneStraightBranchLength(int alwaysOneStraightBranchLength) {
     	this.alwaysOneStraightBranchLength = alwaysOneStraightBranchLength;
     	return this;
     }
 
-	public FractalTreeBuilder setLengthDecrementMultiplier(float lengthDecrementMultiplier) {
+	public @NotNull FractalTreeBuilder setLengthDecrementMultiplier(float lengthDecrementMultiplier) {
 		this.lengthDecrementMultiplier = lengthDecrementMultiplier;
 		return this;
 	}
 
-	public FractalTreeBuilder setAlwaysOneStraightBranchYawLowerMultiplier(double alwaysOneStraightBranchYawLowerMultiplier) {
+	public @NotNull FractalTreeBuilder setAlwaysOneStraightBranchYawLowerMultiplier(double alwaysOneStraightBranchYawLowerMultiplier) {
 		this.alwaysOneStraightBranchYawLowerMultiplier = alwaysOneStraightBranchYawLowerMultiplier;
 		return this;
 	}
 
-	public FractalTreeBuilder setAlwaysOneStraightBranchYawUpperMultiplier(double alwaysOneStraightBranchYawUpperMultiplier) {
+	public @NotNull FractalTreeBuilder setAlwaysOneStraightBranchYawUpperMultiplier(double alwaysOneStraightBranchYawUpperMultiplier) {
 		this.alwaysOneStraightBranchYawUpperMultiplier = alwaysOneStraightBranchYawUpperMultiplier;
 		return this;
 	}
 	
-	public FractalTreeBuilder setAlwaysOneStraightBranchSpawningDepth(int alwaysOneStraightBranchSpawningDepth) {
+	public @NotNull FractalTreeBuilder setAlwaysOneStraightBranchSpawningDepth(int alwaysOneStraightBranchSpawningDepth) {
 		this.alwaysOneStraightBranchSpawningDepth = alwaysOneStraightBranchSpawningDepth;
 		return this;
 	}

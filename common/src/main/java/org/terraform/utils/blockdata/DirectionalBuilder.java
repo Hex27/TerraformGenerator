@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -11,9 +12,9 @@ import org.terraform.utils.GenUtils;
 
 public class DirectionalBuilder {
 
-    private final Directional blockData;
+    private final @NotNull Directional blockData;
 
-    public DirectionalBuilder(Material mat) {
+    public DirectionalBuilder(@NotNull Material mat) {
         this.blockData = (Directional) Bukkit.createBlockData(mat);
     }
 
@@ -22,27 +23,27 @@ public class DirectionalBuilder {
     }
 
 
-    public DirectionalBuilder setFacing(BlockFace face) {
+    public @NotNull DirectionalBuilder setFacing(@NotNull BlockFace face) {
         this.blockData.setFacing(face);
         return this;
     }
 
-    public DirectionalBuilder apply(SimpleBlock block) {
+    public @NotNull DirectionalBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public DirectionalBuilder apply(Wall block) {
+    public @NotNull DirectionalBuilder apply(@NotNull Wall block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public DirectionalBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull DirectionalBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         return this;
     }
 
-    public Directional get() {
+    public @NotNull Directional get() {
         return blockData;
     }
 }

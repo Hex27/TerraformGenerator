@@ -16,7 +16,6 @@ import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
 import java.util.Random;
@@ -184,7 +183,7 @@ public class TerraformPopulator extends BlockPopulator {
         this.populate(tw, random, data);
     }
 
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
     	random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
         //ores
         for (OrePopulator ore : ORE_POPS) {

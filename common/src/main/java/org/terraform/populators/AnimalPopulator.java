@@ -2,6 +2,7 @@ package org.terraform.populators;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -34,10 +35,8 @@ public class AnimalPopulator {
     //call GenUtils.getBiomesInChunk, which polls biomes for 256 blocks each.
     //Instead, each query will just call getBiome per block. This sounds more
     //intensive, but it relies on the getBiome cache system to be faster.
-    public boolean canSpawn(Random rand) {
-        if (GenUtils.chance(rand, 100 - chance, 100))
-            return false;
-        return true;
+    public boolean canSpawn(@NotNull Random rand) {
+        return !GenUtils.chance(rand, 100 - chance, 100);
     }
     
     private boolean canSpawnInBiome(BiomeBank b) {
@@ -56,7 +55,7 @@ public class AnimalPopulator {
         return false;
     }
 
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 
         for (int i = 0; i < GenUtils.randInt(random, minNum, maxNum); i++) {
             int x = (data.getChunkX() << 4) + GenUtils.randInt(random, 5, 7);
@@ -87,7 +86,7 @@ public class AnimalPopulator {
 		return aquatic;
 	}
 
-	public AnimalPopulator setAquatic(boolean aquatic) {
+	public @NotNull AnimalPopulator setAquatic(boolean aquatic) {
 		this.aquatic = aquatic;
 		return this;
 	}

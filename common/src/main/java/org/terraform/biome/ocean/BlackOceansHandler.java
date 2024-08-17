@@ -3,6 +3,7 @@ package org.terraform.biome.ocean;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
@@ -23,7 +24,7 @@ public class BlackOceansHandler extends AbstractOceanHandler {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void genSpike(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
+	public static void genSpike(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
         y -= height / 5;
         //Vector one to two;
         Vector base = new Vector(x, y, z);
@@ -54,19 +55,19 @@ public class BlackOceansHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
     	if(this.oceanType == BiomeType.DEEP_OCEANIC)
     		return Biome.DEEP_COLD_OCEAN;
         return Biome.COLD_OCEAN;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(Random rand) {
         return new Material[]{Material.STONE};
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         //Set ground near sea level to gravel
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
@@ -86,7 +87,7 @@ public class BlackOceansHandler extends AbstractOceanHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
         for (int x = data.getChunkX() * 16 + 3; x < data.getChunkX() * 16 + 16 - 3; x++) {
             for (int z = data.getChunkZ() * 16 + 3; z < data.getChunkZ() * 16 + 16 - 3; z++) {
                 
@@ -108,7 +109,7 @@ public class BlackOceansHandler extends AbstractOceanHandler {
 	}
 	
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.BLACK_OCEAN_BEACH;
 	}
 }

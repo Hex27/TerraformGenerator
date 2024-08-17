@@ -2,22 +2,20 @@ package org.terraform.tree;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.TreeType;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.StructureGrowEvent;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SaplingOverrider implements Listener {
 
@@ -25,7 +23,7 @@ public class SaplingOverrider implements Listener {
      * Use priority highest to allow other plugins to modify event.getBlocks
     */
     @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onTreeGrow(StructureGrowEvent event) {
+    public void onTreeGrow(@NotNull StructureGrowEvent event) {
         if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
         TerraformWorld tw = TerraformWorld.get(event.getWorld());
         PopulatorDataPostGen data = new PopulatorDataPostGen(event.getLocation().getChunk());
@@ -39,7 +37,7 @@ public class SaplingOverrider implements Listener {
         List<BlockState> baseBlocks = event.getBlocks().stream()
                 .filter((b) -> Tag.LEAVES.isTagged(b.getType()))
                 .toList();
-        if(baseBlocks.size() == 0)
+        if(baseBlocks.isEmpty())
         {   //Leafless trees are not trees
             event.setCancelled(false);
             return;

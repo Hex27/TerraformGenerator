@@ -3,6 +3,7 @@ package org.terraform.biome.flat;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
@@ -47,7 +48,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+    public void transformTerrain(@NotNull ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
 
         FastNoise noise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -104,7 +105,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
         if (detailsValue < 0.2 && GenUtils.chance(3, 4)) chunk.setBlock(x, newHeight, z, Material.GRASS_BLOCK);
     }
 
-    private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
+    private static @NotNull BiomeBlender getBiomeBlender(TerraformWorld tw) {
         if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
                 .setRiverThreshold(4).setBlendBeaches(false);
         return biomeBlender;
