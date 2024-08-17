@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_21_R1.block.CraftBiome;
-import org.bukkit.craftbukkit.v1_21_R1.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_21_R1.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
@@ -197,10 +196,10 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
         try {
             //Something's broken about EnumDirection's import. Might be a temporary thing.
-            Class enumDirectionClass = Class.forName("net.minecraft.core.EnumDirection");
+            Class<?> enumDirectionClass = Class.forName("net.minecraft.core.EnumDirection");
             Field enumDirectionA = enumDirectionClass.getField("a");
             enumDirectionA.setAccessible(true);
-            Class oceanMonumentPiecesHClass = OceanMonumentPieces.h.class;
+            Class<OceanMonumentPieces.h> oceanMonumentPiecesHClass = OceanMonumentPieces.h.class;
             StructurePiece customBoundPiece = (StructurePiece) oceanMonumentPiecesHClass
                 .getConstructor(RandomSource.class, int.class, int.class, enumDirectionClass)
                 .newInstance(
