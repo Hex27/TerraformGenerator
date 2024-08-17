@@ -40,8 +40,7 @@ public enum MansionRoomPopulatorRegistry {
 	}
 	
 	public ArrayList<MansionRoomPopulator> getPopulators(){
-		ArrayList<MansionRoomPopulator> clone = new ArrayList<>();
-		clone.addAll(populators);
+        ArrayList<MansionRoomPopulator> clone = new ArrayList<>(populators);
 		return clone;
 	}
 	
