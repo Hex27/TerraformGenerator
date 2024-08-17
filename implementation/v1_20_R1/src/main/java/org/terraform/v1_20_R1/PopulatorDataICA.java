@@ -76,7 +76,6 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         return CraftBlockData.fromData(ibd);
     }
     
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
 		IRegistry<BiomeBase> biomeRegistry = CustomBiomeHandler.getBiomeRegistry();

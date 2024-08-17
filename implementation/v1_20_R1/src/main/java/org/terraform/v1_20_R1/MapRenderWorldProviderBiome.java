@@ -21,8 +21,7 @@ public class MapRenderWorldProviderBiome extends WorldChunkManager {
     private final TerraformWorld tw;
 
     private final Set<Holder<BiomeBase>> biomeList;
-    @SuppressWarnings("deprecation")
-	public MapRenderWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
+    public MapRenderWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
         //super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = CustomBiomeHandler.biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
         this.tw = tw;

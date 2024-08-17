@@ -45,7 +45,6 @@ public class CustomBiomeHandler {
         return MinecraftServer.getServer().bc().d(Registries.aF);
     }
 
-	@SuppressWarnings("deprecation")
 	public static void init() {
 		CraftServer craftserver = (CraftServer)Bukkit.getServer();
 		DedicatedServer dedicatedserver = craftserver.getServer();

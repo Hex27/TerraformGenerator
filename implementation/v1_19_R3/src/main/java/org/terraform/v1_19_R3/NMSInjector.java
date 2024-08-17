@@ -44,7 +44,6 @@ public class NMSInjector extends NMSInjectorAbstract {
         return new BlockDataFixer();
     }
 
-    @SuppressWarnings("resource")
     @Override
     public boolean attemptInject(@NotNull World world) {
         CraftWorld cw = (CraftWorld) world;
