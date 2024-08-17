@@ -8,7 +8,6 @@ import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.Climate.Sampler;
 import net.minecraft.world.level.biome.WorldChunkManager;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBiome;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlock;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.data.TerraformWorld;

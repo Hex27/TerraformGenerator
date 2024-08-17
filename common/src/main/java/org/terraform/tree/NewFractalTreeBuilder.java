@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * This class isn't designed to run in a multithreaded environment

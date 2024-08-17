@@ -7,9 +7,7 @@ import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.mineshaft.MineshaftPopulator;
 
-import java.util.Random;
 import java.util.Stack;
 
 public class MineshaftCommand extends TerraCommand {

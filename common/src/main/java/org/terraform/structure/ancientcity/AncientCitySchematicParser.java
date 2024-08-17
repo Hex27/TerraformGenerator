@@ -5,12 +5,10 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.type.Candle;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 public class AncientCitySchematicParser extends SchematicParser {

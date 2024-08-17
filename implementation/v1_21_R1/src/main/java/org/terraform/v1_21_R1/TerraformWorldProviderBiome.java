@@ -1,6 +1,5 @@
 package org.terraform.v1_21_R1;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.IRegistry;
@@ -9,10 +8,8 @@ import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.Climate.Sampler;
 import net.minecraft.world.level.biome.WorldChunkManager;
 import org.bukkit.craftbukkit.v1_21_R1.block.CraftBiome;
-import org.bukkit.craftbukkit.v1_21_R1.block.CraftBlock;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.custombiomes.CustomBiomeType;
-import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 

@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Leaves;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -21,8 +20,6 @@ import org.terraform.utils.version.Version;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class FractalLeaves implements Cloneable{
 

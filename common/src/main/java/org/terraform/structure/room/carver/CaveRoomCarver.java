@@ -6,8 +6,6 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 
-import java.util.Random;
-
 public class CaveRoomCarver extends RoomCarver{
 
     private float xMultiplier = 1.0f;

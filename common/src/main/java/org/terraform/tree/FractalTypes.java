@@ -3,13 +3,10 @@ package org.terraform.tree;
 import org.bukkit.Material;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneNineBlockHandler;
 
 import java.util.Objects;
-import java.util.Random;
 import java.util.function.Function;
 
 public class FractalTypes {

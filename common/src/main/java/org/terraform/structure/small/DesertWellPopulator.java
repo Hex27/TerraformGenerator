@@ -18,7 +18,6 @@ import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 import org.terraform.utils.version.Version;

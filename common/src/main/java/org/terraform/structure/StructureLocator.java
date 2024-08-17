@@ -10,7 +10,6 @@ import org.terraform.data.TerraformWorld;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import org.terraform.main.TerraformGeneratorPlugin;
 
 public class StructureLocator {
 	

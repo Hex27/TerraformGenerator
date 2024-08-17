@@ -1,6 +1,5 @@
 package org.terraform.cave;
 
-import org.bukkit.Material;
 import org.terraform.data.TerraformWorld;
 
 /**

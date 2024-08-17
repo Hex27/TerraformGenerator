@@ -16,7 +16,6 @@ import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
 import java.util.Random;
