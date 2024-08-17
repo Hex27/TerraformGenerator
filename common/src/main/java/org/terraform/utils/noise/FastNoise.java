@@ -2224,22 +2224,9 @@ public class FastNoise {
 
     public enum CellularReturnType {CellValue, NoiseLookup, Distance, Distance2, Distance2Add, Distance2Sub, Distance2Mul, Distance2Div}
 
-    private static class Float2 {
-        public final float x, y;
-
-        public Float2(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
+    private record Float2(float x, float y) {
     }
 
-    private static class Float3 {
-        public final float x, y, z;
-
-        public Float3(float x, float y, float z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
+    private record Float3(float x, float y, float z) {
     }
 }
