@@ -98,7 +98,7 @@ public final class Range<T> implements Serializable {
      * @throws IllegalArgumentException if either element is null
      * @throws ClassCastException if using natural ordering and the elements are not {@code Comparable}
      */
-    public static <T> @NotNull Range<T> between(final @NotNull T fromInclusive, final @NotNull T toInclusive, final Comparator<T> comparator) {
+    public static <T> @NotNull Range<T> between(final @NotNull T fromInclusive, final @NotNull T toInclusive, @Nullable final Comparator<T> comparator) {
         return new Range<>(fromInclusive, toInclusive, comparator);
     }
 
@@ -172,7 +172,7 @@ public final class Range<T> implements Serializable {
     @SuppressWarnings("unchecked")
     private Range(final @NotNull T element1, final @NotNull T element2, final @Nullable Comparator<T> comp) {
         this.comparator = Objects.requireNonNullElse(comp, ComparableComparator.INSTANCE);
-        if (this.comparator == null || this.comparator.compare(element1, element2) < 1) {
+        if (this.comparator.compare(element1, element2) < 1) {
             this.minimum = element1;
             this.maximum = element2;
         } else {
