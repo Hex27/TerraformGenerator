@@ -92,71 +92,67 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	@Override
 	public void decorateWall(Random rand, Wall w) {
 		int choice = rand.nextInt(2);
-		switch(choice) {
-		case 0: //Andesite table with banner and lectern
-			w.getLeft(3).Pillar(6, Material.DARK_OAK_LOG);
-			w.getRight(3).Pillar(6, Material.DARK_OAK_LOG);
-			new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-			.setHalf(Half.TOP)
-			.setFacing(BlockUtils.getLeft(w.getDirection()))
-			.apply(w.getLeft(2))
-			.apply(w.getLeft(2).getRelative(0,4,0))
-			.apply(w.getLeft(2).getRelative(0,5,0))
-			.apply(w.getLeft().getRelative(0,5,0))
-			.setFacing(BlockUtils.getRight(w.getDirection()))
-			.apply(w.getRight(2))
-			.apply(w.getRight(2).getRelative(0,4,0))
-			.apply(w.getRight(2).getRelative(0,5,0))
-			.apply(w.getRight().getRelative(0,5,0));
-			
-			w.getRelative(0,5,0).setType(Material.POLISHED_ANDESITE);
-			BannerUtils.generatePillagerBanner(w.getRelative(0,3,0).get(), w.getDirection(), true);
-			
-			new DirectionalBuilder(Material.LECTERN)
-			.setFacing(w.getDirection()).apply(w);
-			
-			new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
-			.setType(Type.TOP)
-			.apply(w.getLeft())
-			.apply(w.getRight());
-			break;
-		default://Table
-			table(rand, w.getLeft(2));
-			table(rand, w.getRight(2));
-			break;
-		}
+        //Table
+        if(choice == 0) { //Andesite table with banner and lectern
+            w.getLeft(3).Pillar(6, Material.DARK_OAK_LOG);
+            w.getRight(3).Pillar(6, Material.DARK_OAK_LOG);
+            new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
+                    .setHalf(Half.TOP)
+                    .setFacing(BlockUtils.getLeft(w.getDirection()))
+                    .apply(w.getLeft(2))
+                    .apply(w.getLeft(2).getRelative(0, 4, 0))
+                    .apply(w.getLeft(2).getRelative(0, 5, 0))
+                    .apply(w.getLeft().getRelative(0, 5, 0))
+                    .setFacing(BlockUtils.getRight(w.getDirection()))
+                    .apply(w.getRight(2))
+                    .apply(w.getRight(2).getRelative(0, 4, 0))
+                    .apply(w.getRight(2).getRelative(0, 5, 0))
+                    .apply(w.getRight().getRelative(0, 5, 0));
+
+            w.getRelative(0, 5, 0).setType(Material.POLISHED_ANDESITE);
+            BannerUtils.generatePillagerBanner(w.getRelative(0, 3, 0).get(), w.getDirection(), true);
+
+            new DirectionalBuilder(Material.LECTERN)
+                    .setFacing(w.getDirection()).apply(w);
+
+            new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
+                    .setType(Type.TOP)
+                    .apply(w.getLeft())
+                    .apply(w.getRight());
+        } else {
+            table(rand, w.getLeft(2));
+            table(rand, w.getRight(2));
+        }
 	}
 	
 	@Override
 	public void decorateWindow(Random rand, Wall w) {
 		int choice = rand.nextInt(2);
-		switch(choice) {
-		case 0: //Table with flowers
-			new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-			.setHalf(Half.TOP)
-			.setFacing(BlockUtils.getLeft(w.getDirection()))
-			.apply(w.getLeft(2))
-			.setFacing(BlockUtils.getRight(w.getDirection()))
-			.apply(w.getRight(2));
-			
-			new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
-			.setType(Type.TOP)
-			.apply(w)
-			.apply(w.getLeft())
-			.apply(w.getRight());
-			
-			w.getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
-			w.getLeft().getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
-			w.getRight().getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
-			break;
-		default://Utility Block
-			w.setType(
-					Material.CRAFTING_TABLE, Material.FLETCHING_TABLE, 
-					Material.CARTOGRAPHY_TABLE, Material.ENCHANTING_TABLE, 
-					Material.BREWING_STAND, Material.ANVIL,
-					Material.NOTE_BLOCK, Material.JUKEBOX);
-			break;
-		}
+        //Utility Block
+        if(choice == 0) { //Table with flowers
+            new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
+                    .setHalf(Half.TOP)
+                    .setFacing(BlockUtils.getLeft(w.getDirection()))
+                    .apply(w.getLeft(2))
+                    .setFacing(BlockUtils.getRight(w.getDirection()))
+                    .apply(w.getRight(2));
+
+            new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
+                    .setType(Type.TOP)
+                    .apply(w)
+                    .apply(w.getLeft())
+                    .apply(w.getRight());
+
+            w.getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
+            w.getLeft().getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
+            w.getRight().getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
+        } else {
+            w.setType(
+                    Material.CRAFTING_TABLE, Material.FLETCHING_TABLE,
+                    Material.CARTOGRAPHY_TABLE, Material.ENCHANTING_TABLE,
+                    Material.BREWING_STAND, Material.ANVIL,
+                    Material.NOTE_BLOCK, Material.JUKEBOX);
+        }
 	};
 
 	private void table(Random rand, Wall w) {
