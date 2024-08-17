@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
@@ -34,19 +35,19 @@ public class BadlandsHandler extends BiomeHandler {
     static double plateauThreshold = TConfigOption.BIOME_BADLANDS_PLATEAU_THRESHOLD.getDouble();
     static double plateauCommonness = TConfigOption.BIOME_BADLANDS_PLATEAU_COMMONNESS.getDouble();
 
-    private static BiomeBlender getRiversBlender(TerraformWorld tw) {
+    private static @NotNull BiomeBlender getRiversBlender(TerraformWorld tw) {
         // Only one blender needed!
         if (riversBlender == null) riversBlender = new BiomeBlender(tw, true, false)
                 .setGridBlendingFactor(0.45);
         return riversBlender;
     }
 
-    private static BiomeBlender getPlateauBlender(TerraformWorld tw) {
+    private static @NotNull BiomeBlender getPlateauBlender(TerraformWorld tw) {
         if (plateauBlender == null) plateauBlender = new BiomeBlender(tw, true, true).setRiverThreshold(10);
         return plateauBlender;
     }
 
-    public static FastNoise getPlateauNoise(TerraformWorld tw) {
+    public static @NotNull FastNoise getPlateauNoise(TerraformWorld tw) {
     	return NoiseCacheHandler.getNoise(
     			tw, 
     			NoiseCacheEntry.BIOME_BADLANDS_PLATEAUNOISE, 
@@ -60,7 +61,7 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     @Override
-    public BiomeBank getRiverType() {
+    public @NotNull BiomeBank getRiverType() {
         return BiomeBank.BADLANDS_RIVER;
     }
 
@@ -70,12 +71,12 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.BADLANDS;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
                 Material.RED_SAND,
                 Material.RED_SAND,
@@ -85,7 +86,7 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         
     	//While not a small item, generatePlateaus is left in, as it
     	//transforms the terrain itself. Structures placed must account for
@@ -129,7 +130,7 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
 	@Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache, @NotNull TerraformWorld tw, Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
         //Badlands doesn't actually mutate height in here (WHY??).
         //Because of that, don't edit heightChanges
         //This is perpetuating the cycle of abuse and falsehood
@@ -204,7 +205,7 @@ public class BadlandsHandler extends BiomeHandler {
      * how the surrounding base sand is placed. transformTerrain is only supposed to access
      * one pair of x and z coordinates at a time.
      */
-    void generatePlateaus(TerraformWorld tw, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    void generatePlateaus(@NotNull TerraformWorld tw, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         FastNoise detailsNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_BADLANDS_WALLNOISE, 
@@ -283,7 +284,7 @@ public class BadlandsHandler extends BiomeHandler {
         return (int) Math.round(platformHeight);
     }
 
-    void spawnDeadTree(PopulatorDataAbstract data, int x, int y, int z) {
+    void spawnDeadTree(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         int height = GenUtils.randInt(5, 7);
         int branches = GenUtils.randInt(1, height == 5 ? 2 : 3);
 
@@ -320,7 +321,7 @@ public class BadlandsHandler extends BiomeHandler {
     //TODO: Seems like a mass of excessive calculation just to spawn dead trees
     //Look into optimisation here in future.
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -359,7 +360,7 @@ public class BadlandsHandler extends BiomeHandler {
 	}
 	
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.BADLANDS_BEACH;
 	}
 }

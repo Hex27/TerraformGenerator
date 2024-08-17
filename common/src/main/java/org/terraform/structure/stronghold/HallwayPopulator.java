@@ -7,6 +7,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -27,7 +28,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
             Wall w = entry.getKey();
@@ -97,7 +98,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
 
     }
 
-    private void dropDownBlock(SimpleBlock block) {
+    private void dropDownBlock(@NotNull SimpleBlock block) {
         if (block.getType().isSolid()) {
             BlockData type = block.getBlockData();
             block.setType(Material.CAVE_AIR);
@@ -123,7 +124,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         //Don't override prisons: Hallways are bloody dull.
         return !new PrisonRoomPopulator(new Random(), false, false).canPopulate(room)
                 && room.isBig()

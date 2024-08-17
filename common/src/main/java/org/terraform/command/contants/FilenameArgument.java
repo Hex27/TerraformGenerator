@@ -1,6 +1,7 @@
 package org.terraform.command.contants;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 
@@ -17,7 +18,7 @@ public class FilenameArgument extends TerraCommandArgument<String> {
     }
 
     @Override
-    public String validate(CommandSender sender, String value) {
+    public @NotNull String validate(CommandSender sender, @NotNull String value) {
         File schematicFolder = new File(TerraformGeneratorPlugin.get().getDataFolder(), TerraSchematic.SCHEMATIC_FOLDER);
         File file = new File(schematicFolder, value);
         try {

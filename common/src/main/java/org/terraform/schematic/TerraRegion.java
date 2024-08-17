@@ -1,13 +1,14 @@
 package org.terraform.schematic;
 
 import org.bukkit.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 public class TerraRegion {
     private Block one, two;
 
-    public ArrayList<Block> getBlocks() {
+    public @NotNull ArrayList<Block> getBlocks() {
         ArrayList<Block> blocks = new ArrayList<>();
 
         int topBlockX = (Math.max(one.getX(), two.getX()));

@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -23,7 +24,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 	}
 	
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	//Test the center and 4 corners to ensure that the ground is fairly stable
     	int roomY = this.calculateRoomY(data, room);
     	
@@ -41,7 +42,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
     	}
     }
 
-	public void placeFixerPlatform(int roomY, PopulatorDataAbstract data, CubeRoom room) {
+	public void placeFixerPlatform(int roomY, @NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 		
     	//Semisphere air and semisphere ground
 		SimpleBlock core = room.getCenterSimpleBlock(data);
@@ -74,7 +75,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 		return 12;
 	}
 	
-	protected int calculateRoomY(PopulatorDataAbstract data, CubeRoom room) {
+	protected int calculateRoomY(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 		int centerHeight = GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
     	int pathHeight = getPathHeight(data, room);
     	
@@ -85,7 +86,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
     	}
 	}
 	
-	protected boolean doesAreaFailTolerance(PopulatorDataAbstract data, CubeRoom room) {
+	protected boolean doesAreaFailTolerance(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 //		int centerHeight = GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
 //    	int pathHeight = getPathHeight(data, room);
 //    	
@@ -103,7 +104,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 		return false;
 	}
 	
-	protected int getPathHeight(PopulatorDataAbstract data, CubeRoom room) {
+	protected int getPathHeight(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 		int pathHeight; //This is the entry height for the house/object
     	
         BlockFace dir = ((DirectionalCubeRoom) room).getDirection();

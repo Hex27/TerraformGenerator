@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Candle;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
@@ -13,7 +14,7 @@ import org.terraform.utils.GenUtils;
 
 public class AncientCitySchematicParser extends SchematicParser {
     @Override
-    public void applyData(SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
     	Random rand = new Random();
     	if(data.getMaterial() == Material.DEEPSLATE_TILES)
     	{ //Crack deepslate tiles

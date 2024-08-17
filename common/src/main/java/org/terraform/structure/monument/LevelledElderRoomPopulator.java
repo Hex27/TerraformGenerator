@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
@@ -20,12 +21,12 @@ public class LevelledElderRoomPopulator extends LevelledRoomPopulator {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getHeight() > 12;
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
         //Decorated walls

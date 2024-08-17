@@ -2,13 +2,14 @@ package org.terraform.utils.version;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.IPopulatorDataBeehiveEditor;
 import org.terraform.data.SimpleBlock;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class BeeHiveSpawner {
 
-    public static void spawnFullBeeNest(SimpleBlock block) {
+    public static void spawnFullBeeNest(@NotNull SimpleBlock block) {
         try
         {
             if(block.getPopData() instanceof IPopulatorDataBeehiveEditor ipopdata)

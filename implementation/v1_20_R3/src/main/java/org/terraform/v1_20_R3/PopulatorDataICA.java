@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_20_R3.block.CraftBiome;
 import org.bukkit.craftbukkit.v1_20_R3.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.TerraLootTable;
@@ -103,7 +104,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 	}
 
     @Override
-    public void setType(int x, int y, int z, Material type) {
+    public void setType(int x, int y, int z, @NotNull Material type) {
     	//parent.setType(x, y, z, type);
     	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
 
@@ -111,7 +112,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
     	//parent.setBlockData(x, y, z, data);
     	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), false);
 
@@ -181,7 +182,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     @SuppressWarnings("deprecation")
 	@Override
-    public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
+    public void registerNaturalSpawns(@NotNull NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
     	ResourceKey<Structure> structureKey = switch(type) {
             case GUARDIAN -> BuiltinStructures.l; //Ocean Monument
             case PILLAGER -> BuiltinStructures.a; //Pillager Outpost
@@ -234,7 +235,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     @SuppressWarnings("deprecation")
 	@Override
-    public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, Random random) {
+    public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, @NotNull Random random) {
         EntityMinecartChest entityminecartchest = new EntityMinecartChest(
                 ws.getMinecraftWorld(),
                 (float) x + 0.5F,

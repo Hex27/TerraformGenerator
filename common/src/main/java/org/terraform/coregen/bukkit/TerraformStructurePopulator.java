@@ -114,7 +114,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
     //Used for large structures as they are too big and rely on a guaranteed write.
     //The older api allows guaranteed writes via cascasion. Slow, but guaranteed to work
     @Override
-    public void populate(World world, @NotNull Random random, @NotNull Chunk chunk) {
+    public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         //Structuregen will freeze for long periods
         TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
         //Don't attempt generation pre-injection.
@@ -160,7 +160,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         }
     }
 
-    public @Nullable SingleMegaChunkStructurePopulator getMegachunkStructure(MegaChunk mc, TerraformWorld tw, BiomeBank biome){
+    public @Nullable SingleMegaChunkStructurePopulator getMegachunkStructure(@NotNull MegaChunk mc, @NotNull TerraformWorld tw, BiomeBank biome){
         int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
         for(SingleMegaChunkStructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if(spop == null) continue;

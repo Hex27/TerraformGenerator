@@ -2,6 +2,8 @@ package org.terraform.structure.room;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.utils.BlockUtils;
@@ -14,6 +16,7 @@ import java.util.Random;
 public class LegacyPathGenerator {
     private final int[] upperBound;
     private final int[] lowerBound;
+    @NotNull
     HashSet<PathPopulatorData> path = new HashSet<>();
     PathPopulatorAbstract populator;
     Random rand;
@@ -27,7 +30,7 @@ public class LegacyPathGenerator {
     private int pathHeight = 3;
     private boolean dead = false;
 
-    public LegacyPathGenerator(SimpleBlock origin, Material[] mat, Random rand, int[] upperBound, int[] lowerBound, int maxNoBend) {
+    public LegacyPathGenerator(SimpleBlock origin, Material[] mat, @NotNull Random rand, int[] upperBound, int[] lowerBound, int maxNoBend) {
         this.base = origin;
         this.rand = rand;
         this.dir = BlockUtils.directBlockFaces[GenUtils.randInt(rand, 0, 3)];
@@ -53,7 +56,7 @@ public class LegacyPathGenerator {
         return dead;
     }
 
-    private boolean isOutOfBounds(SimpleBlock base) {
+    private boolean isOutOfBounds(@NotNull SimpleBlock base) {
 //		Bukkit.getLogger().info(base.getX() + "," + base.getZ() + ": " 
 //	+ upperBound[0] + "," + upperBound[1]
 //	+ " - " + lowerBound[0] + "," + lowerBound[1]);
@@ -216,7 +219,7 @@ public class LegacyPathGenerator {
      * @param direction Start direction. Can be null, when random direction is used.
      */
 
-    public void generateStraightPath(SimpleBlock start, BlockFace direction, int length) {
+    public void generateStraightPath(@Nullable SimpleBlock start, @Nullable BlockFace direction, int length) {
         ArrayList<PathPopulatorData> pathPopulatorDatas = new ArrayList<>();
         if (direction == null) direction = this.dir;
         if (start == null) start = this.base;
@@ -237,7 +240,7 @@ public class LegacyPathGenerator {
     /**
      * @param populator the populator to set
      */
-    public void setPopulator(PathPopulatorAbstract populator) {
+    public void setPopulator(@NotNull PathPopulatorAbstract populator) {
         this.populator = populator;
         this.pathWidth = populator.getPathWidth();
         this.pathHeight = populator.getPathHeight();

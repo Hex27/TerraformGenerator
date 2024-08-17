@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -23,7 +24,7 @@ public class CatacombsCasketRoomPopulator extends CatacombsStandardPopulator {
 	
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	SimpleBlock center = room.getCenterSimpleBlock(data).getUp();
     	
@@ -32,7 +33,7 @@ public class CatacombsCasketRoomPopulator extends CatacombsStandardPopulator {
     	super.spawnHangingChains(data, room);
     }
     
-    private void spawnCasket(Wall target, Random rand) {
+    private void spawnCasket(@NotNull Wall target, @NotNull Random rand) {
     	for(BlockFace face:BlockUtils.directBlockFaces) {
     		if(face == target.getDirection()) continue;
     		

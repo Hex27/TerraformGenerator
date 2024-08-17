@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -35,12 +36,12 @@ public class JungleHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.JUNGLE;
     }
 
     @Override
-    public BiomeBank getRiverType() {
+    public @NotNull BiomeBank getRiverType() {
         return BiomeBank.JUNGLE_RIVER;
     }
 
@@ -53,7 +54,7 @@ public class JungleHandler extends BiomeHandler {
 //	}
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.PODZOL, 5),
                 Material.DIRT,
                 Material.DIRT,
@@ -62,7 +63,7 @@ public class JungleHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
     	//Almost everything about jungle population is highly disruptive.
     	//Only grass spawning remains here. Mushrooms and everything else go to
     	//populateLargeItems
@@ -79,7 +80,7 @@ public class JungleHandler extends BiomeHandler {
          }
     }
 
-    public static void createBush(PopulatorDataAbstract data, float noiseIncrement, int oriX, int oriY, int oriZ) {
+    public static void createBush(@NotNull PopulatorDataAbstract data, float noiseIncrement, int oriX, int oriY, int oriZ) {
         // noiseIncrement is always < 0.5 and > 0
         float rX = 2.5f + (float) (noiseIncrement * Math.random());
         float rY = 1.3f + (float) (noiseIncrement * Math.random());
@@ -114,7 +115,7 @@ public class JungleHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
         
         FastNoise groundWoodNoise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -210,7 +211,7 @@ public class JungleHandler extends BiomeHandler {
         }
     }
 	
-	private void spawnStatue(Random random, PopulatorDataAbstract data, SimpleLocation sLoc) {
+	private void spawnStatue(@NotNull Random random, @NotNull PopulatorDataAbstract data, @NotNull SimpleLocation sLoc) {
 
 		try {
             TerraSchematic schema = TerraSchematic.load("jungle-statue1", 
@@ -226,7 +227,7 @@ public class JungleHandler extends BiomeHandler {
 	
 	private class JungleStatueSchematicParser extends SchematicParser{
 		
-		public void applyData(SimpleBlock block, BlockData data) {
+		public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 			if (data.getMaterial().toString().contains("COBBLESTONE")) {
 	            data = Bukkit.createBlockData(
 	                    data.getAsString().replaceAll(

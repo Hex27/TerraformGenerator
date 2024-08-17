@@ -2,6 +2,7 @@ package org.terraform.biome.cavepopulators;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -13,14 +14,14 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
-    private final MossyCavePopulator mossyCavePop;
+    private final @NotNull MossyCavePopulator mossyCavePop;
     
     public ForestedMountainsCavePopulator() {
     	mossyCavePop = new MossyCavePopulator();
     }
     
     @Override
-    public void populate(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+    public void populate(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor) {
 
         //Likely to be a river cave
         if(ceil.getY() > TerraformGenerator.seaLevel && floor.getY() < TerraformGenerator.seaLevel)

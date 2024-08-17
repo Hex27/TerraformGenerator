@@ -1,5 +1,6 @@
 package org.terraform.cave;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.noise.FastNoise;
@@ -11,7 +12,7 @@ public class NoiseRavine extends NoiseCaveAbstract{
      * Use similar logic to Rivers to carve ravines, filtered against Y-height relative to the sea.
      */
     @Override
-    public boolean canCarve(TerraformWorld tw, int rawX, int y, int rawZ, double height, float filter) {
+    public boolean canCarve(@NotNull TerraformWorld tw, int rawX, int y, int rawZ, double height, float filter) {
         if(height < TerraformGenerator.seaLevel) return false; //Hard filter.
         if(y < height-RAVINE_DEPTH) return false;
         FastNoise ravineNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheHandler.NoiseCacheEntry.CAVE_XRAVINE_NOISE, world -> {

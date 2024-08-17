@@ -3,6 +3,7 @@ package org.terraform.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.MushroomTypeArgument;
 import org.terraform.command.contants.TerraCommand;
@@ -23,7 +24,7 @@ public class MushroomCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Spawns a mushroom";
     }
 
@@ -33,13 +34,13 @@ public class MushroomCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
 
         return sender.isOp();
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
             throws InvalidArgumentException {
 
         Player p = (Player) sender;

@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
@@ -20,7 +21,7 @@ public class HelpCommand extends TerraCommand {
 	}
 	
 	@Override
-	public boolean isInAcceptedParamRange(Stack<String> args){
+	public boolean isInAcceptedParamRange(@NotNull Stack<String> args){
 		return args.size() <= 1;
 	}
 
@@ -35,7 +36,7 @@ public class HelpCommand extends TerraCommand {
 	}
 
 	@Override
-	public void execute(CommandSender sender, Stack<String> args)
+	public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
 			throws InvalidArgumentException {
 		ArrayList<TerraCommand> cmds = new ArrayList<>();
 		for(TerraCommand cmd:man.getCommands()){
@@ -88,7 +89,7 @@ public class HelpCommand extends TerraCommand {
 	}
 
 	@Override
-	public String getDefaultDescription() {
+	public @NotNull String getDefaultDescription() {
 		return "Displays a list of commands for this plugin.";
 	}
 

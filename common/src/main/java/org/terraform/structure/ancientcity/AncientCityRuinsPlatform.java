@@ -1,5 +1,6 @@
 package org.terraform.structure.ancientcity;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -21,7 +22,7 @@ public class AncientCityRuinsPlatform extends AncientCityAbstractRoomPopulator {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	
     	 FastNoise ruinsNoise = NoiseCacheHandler.getNoise(
@@ -52,7 +53,7 @@ public class AncientCityRuinsPlatform extends AncientCityAbstractRoomPopulator {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() < 20 || room.getWidthZ() < 20;
     }
 }

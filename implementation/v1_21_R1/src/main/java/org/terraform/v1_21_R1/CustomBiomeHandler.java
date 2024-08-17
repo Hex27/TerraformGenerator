@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_21_R1.block.CraftBiome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -97,7 +98,7 @@ public class CustomBiomeHandler {
 		
 	}
 
-	private static void registerCustomBiomeBase(CustomBiomeType biomeType, DedicatedServer dedicatedserver, IRegistryWritable<BiomeBase> registrywritable, BiomeBase forestbiome) throws Throwable {
+	private static void registerCustomBiomeBase(@NotNull CustomBiomeType biomeType, DedicatedServer dedicatedserver, @NotNull IRegistryWritable<BiomeBase> registrywritable, @NotNull BiomeBase forestbiome) throws Throwable {
 
         //be is reloadableRegistries()
         //a is get()
@@ -232,7 +233,7 @@ public class CustomBiomeHandler {
 	}
 
 
-    public static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(IRegistry<BiomeBase> registry) {
+    public static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(@NotNull IRegistry<BiomeBase> registry) {
 
         List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
 

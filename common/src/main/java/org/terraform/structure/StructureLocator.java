@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -18,7 +19,7 @@ public class StructureLocator {
     		CacheBuilder.newBuilder()
     		.maximumSize(300).build(new StructureLocatorCacheLoader());
 
-	public static int[] locateMultiMegaChunkStructure(TerraformWorld tw, MegaChunk center, MultiMegaChunkStructurePopulator populator, int timeoutMillis) {
+	public static int[] locateMultiMegaChunkStructure(TerraformWorld tw, @NotNull MegaChunk center, @NotNull MultiMegaChunkStructurePopulator populator, int timeoutMillis) {
 
 		if(!populator.isEnabled()) return null;
 		StructureLocatorKey cacheKey = new StructureLocatorKey(center,tw,populator);
@@ -70,13 +71,13 @@ public class StructureLocator {
         	return null;
     }
 	
-	public static int[] locateSingleMegaChunkStructure(TerraformWorld tw, int rawX, int rawZ, SingleMegaChunkStructurePopulator populator, int timeoutMillis) {
+	public static int[] locateSingleMegaChunkStructure(@NotNull TerraformWorld tw, int rawX, int rawZ, @NotNull SingleMegaChunkStructurePopulator populator, int timeoutMillis) {
 
         MegaChunk center = new MegaChunk(rawX, 0, rawZ);
         return locateSingleMegaChunkStructure(tw, center, populator, timeoutMillis);
 	}
 	
-	public static int[] locateSingleMegaChunkStructure(TerraformWorld tw, MegaChunk center, SingleMegaChunkStructurePopulator populator, int timeoutMillis) {
+	public static int[] locateSingleMegaChunkStructure(@NotNull TerraformWorld tw, @NotNull MegaChunk center, @NotNull SingleMegaChunkStructurePopulator populator, int timeoutMillis) {
         
 		if(!populator.isEnabled()) return null;
 		
@@ -154,7 +155,7 @@ public class StructureLocator {
         	return null;
     }
 	
-	private static Collection<MegaChunk> getSurroundingChunks(MegaChunk center, int radius) {
+	private static @NotNull Collection<MegaChunk> getSurroundingChunks(@NotNull MegaChunk center, int radius) {
         if (radius == 0) return new ArrayList<MegaChunk>() {{
             add(center);
         }};

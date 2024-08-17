@@ -1,6 +1,8 @@
 package org.terraform.main.config;
 
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -502,7 +504,7 @@ public enum TConfigOption {
         this.map = map;
     }
 
-    public static void loadValues(ConfigLoader conf) {
+    public static void loadValues(@NotNull ConfigLoader conf) {
         for (TConfigOption option : TConfigOption.values()) {
             conf.reg(option.path, option.map.apply(option.value));
         }
@@ -512,11 +514,11 @@ public enum TConfigOption {
         }
     }
 
-    public String getString() {
+    public @NotNull String getString() {
         return ChatColor.translateAlternateColorCodes('&', (String) value);
     }
 
-    public String parse(String... placeholders) {
+    public @NotNull String parse(String @NotNull ... placeholders) {
         String parsed = this.getString();
 
         String placeholder = "";
@@ -561,7 +563,7 @@ public enum TConfigOption {
         return (List<String>) value;
     }
 
-    public String[] getStringArray() {
+    public String @NotNull [] getStringArray() {
         String[] arr = new String[getStringList().size()];
         int i = 0;
         for (String item : getStringList()) {
@@ -571,7 +573,7 @@ public enum TConfigOption {
         return arr;
     }
 
-    public <T> T get(Class<T> clazz) {
+    public <T> T get(@NotNull Class<T> clazz) {
         return clazz.cast(value);
     }
 

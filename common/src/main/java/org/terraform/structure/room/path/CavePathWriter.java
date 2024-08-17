@@ -1,5 +1,6 @@
 package org.terraform.structure.room.path;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -23,7 +24,7 @@ public class CavePathWriter extends PathWriter{
     }
 
     @Override
-    public void apply(PopulatorDataAbstract popData, TerraformWorld tw, PathState.PathNode node) {
+    public void apply(@NotNull PopulatorDataAbstract popData, @NotNull TerraformWorld tw, PathState.@NotNull PathNode node) {
         BlockUtils.carveCaveAir((int) (node.center.hashCode() * tw.getSeed()),
                 node.pathWidth+rXMod, node.pathWidth+rYMod, node.pathWidth+rZMod,
                 new SimpleBlock(popData, node.center.getRelative(xOff,yOff,zOff)), false,

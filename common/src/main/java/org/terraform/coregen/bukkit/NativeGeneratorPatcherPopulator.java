@@ -10,6 +10,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
@@ -24,7 +25,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 	
 	private static boolean flushIsQueued = false;
     //SimpleChunkLocation to a collection of location:blockdata entries marked for repair.
-    public static Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
+    public static @NotNull Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
     //public static Map<Material, Integer> cacheContents = new ConcurrentHashMap<>();
     //private final TerraformWorld tw;
 
@@ -92,7 +93,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     }
     
     @Override
-    public void populate(World world, Random random, Chunk chunk) {
+    public void populate(@NotNull World world, Random random, @NotNull Chunk chunk) {
         SimpleChunkLocation scl = new SimpleChunkLocation(chunk);
         Collection<Object[]> changes = cache.remove(scl);
         if (changes != null) {
@@ -122,7 +123,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 //    }
 
     @EventHandler
-    public void onChunkLoad(ChunkLoadEvent event) {
+    public void onChunkLoad(@NotNull ChunkLoadEvent event) {
         SimpleChunkLocation scl = new SimpleChunkLocation(event.getChunk());
         Collection<Object[]> changes = cache.remove(scl);
         if (changes != null) {
@@ -137,7 +138,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     }
     
     @EventHandler
-    public void onWorldUnload(WorldUnloadEvent event) {
+    public void onWorldUnload(@NotNull WorldUnloadEvent event) {
     	TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Flushing repairs for " + event.getWorld().getName() + " (" + cache.size() + " chunks in cache), triggered by world unload");
         
     	int processed = 0;

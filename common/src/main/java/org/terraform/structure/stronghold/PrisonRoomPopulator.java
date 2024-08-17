@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -26,7 +27,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         super(rand, forceSpawn, unique);
     }
 
-    private static void dangleIronBarsDown(Random rand, int length, SimpleBlock base) {
+    private static void dangleIronBarsDown(Random rand, int length, @NotNull SimpleBlock base) {
         for (int i = 0; i < length; i++) {
             base.setType(Material.CHAIN);
             base = base.getRelative(0, -1, 0);
@@ -34,7 +35,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 
         int[] lowerCorner = room.getLowerCorner(1);
         int[] upperCorner = room.getUpperCorner(1);
@@ -175,7 +176,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         }
     }
 
-    public void placePrisonCell(SimpleBlock location, BlockFace doorDir) {
+    public void placePrisonCell(@NotNull SimpleBlock location, @NotNull BlockFace doorDir) {
         Wall w = new Wall(location);
 
         Material[] prisonMats = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS, Material.IRON_BARS};
@@ -200,7 +201,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getHeight() > 8
                 && room.getWidthX() > 14
                 && room.getWidthZ() > 14

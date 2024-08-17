@@ -17,6 +17,9 @@ package org.terraform.utils;
  * limitations under the License.
  */
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -45,7 +48,7 @@ public final class Range<T> implements Serializable {
          * @return negative, 0, positive comparison value
          */
         @Override
-        public int compare(final Object obj1, final Object obj2) {
+        public int compare(final @NotNull Object obj1, final @NotNull Object obj2) {
             return ((Comparable) obj1).compareTo(obj2);
         }
     }
@@ -73,7 +76,7 @@ public final class Range<T> implements Serializable {
      * @throws IllegalArgumentException if either element is null
      * @throws ClassCastException if the elements are not {@code Comparable}
      */
-    public static <T extends Comparable<? super T>> Range<T> between(final T fromInclusive, final T toInclusive) {
+    public static <T extends Comparable<? super T>> @NotNull Range<T> between(final @NotNull T fromInclusive, final @NotNull T toInclusive) {
         return between(fromInclusive, toInclusive, null);
     }
 
@@ -94,7 +97,7 @@ public final class Range<T> implements Serializable {
      * @throws IllegalArgumentException if either element is null
      * @throws ClassCastException if using natural ordering and the elements are not {@code Comparable}
      */
-    public static <T> Range<T> between(final T fromInclusive, final T toInclusive, final Comparator<T> comparator) {
+    public static <T> @NotNull Range<T> between(final @NotNull T fromInclusive, final @NotNull T toInclusive, final Comparator<T> comparator) {
         return new Range<>(fromInclusive, toInclusive, comparator);
     }
 
@@ -111,7 +114,7 @@ public final class Range<T> implements Serializable {
      * @throws IllegalArgumentException if the element is null
      * @throws ClassCastException if the element is not {@code Comparable}
      */
-    public static <T extends Comparable<? super T>> Range<T> is(final T element) {
+    public static <T extends Comparable<? super T>> @NotNull Range<T> is(final @NotNull T element) {
         return between(element, element, null);
     }
 
@@ -129,14 +132,14 @@ public final class Range<T> implements Serializable {
      * @throws IllegalArgumentException if the element is null
      * @throws ClassCastException if using natural ordering and the elements are not {@code Comparable}
      */
-    public static <T> Range<T> is(final T element, final Comparator<T> comparator) {
+    public static <T> @NotNull Range<T> is(final @NotNull T element, final Comparator<T> comparator) {
         return between(element, element, comparator);
     }
 
     /**
      * The ordering scheme used in this range.
      */
-    private final Comparator<T> comparator;
+    private final @NotNull Comparator<T> comparator;
 
     /**
      * Cached output hashCode (class is immutable).
@@ -146,12 +149,12 @@ public final class Range<T> implements Serializable {
     /**
      * The maximum value in this range (inclusive).
      */
-    private final T maximum;
+    private final @NotNull T maximum;
 
     /**
      * The minimum value in this range (inclusive).
      */
-    private final T minimum;
+    private final @NotNull T minimum;
 
     /**
      * Cached output toString (class is immutable).
@@ -166,7 +169,7 @@ public final class Range<T> implements Serializable {
      * @param comp  the comparator to be used, null for natural ordering
      */
     @SuppressWarnings("unchecked")
-    private Range(final T element1, final T element2, final Comparator<T> comp) {
+    private Range(final @NotNull T element1, final @NotNull T element2, final @Nullable Comparator<T> comp) {
         if (element1 == null || element2 == null) {
             throw new IllegalArgumentException("Elements in a range must not be null: element1=" +
                                                element1 + ", element2=" + element2);
@@ -191,7 +194,7 @@ public final class Range<T> implements Serializable {
      * @param element  the element to check for, null returns false
      * @return true if the specified element occurs within this range
      */
-    public boolean contains(final T element) {
+    public boolean contains(final @Nullable T element) {
         if (element == null) {
             return false;
         }
@@ -207,7 +210,7 @@ public final class Range<T> implements Serializable {
      * @return true if this range contains the specified range
      * @throws RuntimeException if ranges cannot be compared
      */
-    public boolean containsRange(final Range<T> otherRange) {
+    public boolean containsRange(final @Nullable Range<T> otherRange) {
         if (otherRange == null) {
             return false;
         }
@@ -247,7 +250,7 @@ public final class Range<T> implements Serializable {
      * @return true if this object is equal
      */
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(final @Nullable Object obj) {
         if (obj == this) {
             return true;
         }
@@ -282,7 +285,7 @@ public final class Range<T> implements Serializable {
      * @return the minimum, the element, or the maximum depending on the element's location relative to the range
      * @since 3.10
      */
-    public T fit(final T element) {
+    public @Nullable T fit(final T element) {
         // Comparable API says throw NPE on null
         //Validate.notNull(element, "element");
         if (isAfter(element)) {
@@ -302,7 +305,7 @@ public final class Range<T> implements Serializable {
      *
      * @return the comparator being used, not null
      */
-    public Comparator<T> getComparator() {
+    public @NotNull Comparator<T> getComparator() {
         return comparator;
     }
 
@@ -311,7 +314,7 @@ public final class Range<T> implements Serializable {
      *
      * @return the maximum value in this range, not null
      */
-    public T getMaximum() {
+    public @NotNull T getMaximum() {
         return maximum;
     }
 
@@ -320,7 +323,7 @@ public final class Range<T> implements Serializable {
      *
      * @return the minimum value in this range, not null
      */
-    public T getMinimum() {
+    public @NotNull T getMinimum() {
         return minimum;
     }
 
@@ -349,7 +352,7 @@ public final class Range<T> implements Serializable {
      * @throws IllegalArgumentException if {@code other} does not overlap {@code this}
      * @since 3.0.1
      */
-    public Range<T> intersectionWith(final Range<T> other) {
+    public @NotNull Range<T> intersectionWith(final @NotNull Range<T> other) {
         if (!this.isOverlappedBy(other)) {
             throw new IllegalArgumentException(String.format(
                 "Cannot calculate intersection with non-overlapping range %s", other));
@@ -368,7 +371,7 @@ public final class Range<T> implements Serializable {
      * @param element  the element to check for, null returns false
      * @return true if this range is entirely after the specified element
      */
-    public boolean isAfter(final T element) {
+    public boolean isAfter(final @Nullable T element) {
         if (element == null) {
             return false;
         }
@@ -384,7 +387,7 @@ public final class Range<T> implements Serializable {
      * @return true if this range is completely after the specified range
      * @throws RuntimeException if ranges cannot be compared
      */
-    public boolean isAfterRange(final Range<T> otherRange) {
+    public boolean isAfterRange(final @Nullable Range<T> otherRange) {
         if (otherRange == null) {
             return false;
         }
@@ -397,7 +400,7 @@ public final class Range<T> implements Serializable {
      * @param element  the element to check for, null returns false
      * @return true if this range is entirely before the specified element
      */
-    public boolean isBefore(final T element) {
+    public boolean isBefore(final @Nullable T element) {
         if (element == null) {
             return false;
         }
@@ -413,7 +416,7 @@ public final class Range<T> implements Serializable {
      * @return true if this range is completely before the specified range
      * @throws RuntimeException if ranges cannot be compared
      */
-    public boolean isBeforeRange(final Range<T> otherRange) {
+    public boolean isBeforeRange(final @Nullable Range<T> otherRange) {
         if (otherRange == null) {
             return false;
         }
@@ -426,7 +429,7 @@ public final class Range<T> implements Serializable {
      * @param element  the element to check for, null returns false
      * @return true if the specified element occurs within this range
      */
-    public boolean isEndedBy(final T element) {
+    public boolean isEndedBy(final @Nullable T element) {
         if (element == null) {
             return false;
         }
@@ -457,7 +460,7 @@ public final class Range<T> implements Serializable {
      *  range; otherwise, {@code false}
      * @throws RuntimeException if ranges cannot be compared
      */
-    public boolean isOverlappedBy(final Range<T> otherRange) {
+    public boolean isOverlappedBy(final @Nullable Range<T> otherRange) {
         if (otherRange == null) {
             return false;
         }
@@ -472,7 +475,7 @@ public final class Range<T> implements Serializable {
      * @param element  the element to check for, null returns false
      * @return true if the specified element occurs within this range
      */
-    public boolean isStartedBy(final T element) {
+    public boolean isStartedBy(final @Nullable T element) {
         if (element == null) {
             return false;
         }
@@ -487,7 +490,7 @@ public final class Range<T> implements Serializable {
      * @return the {@code String} representation of this range
      */
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         if (toString == null) {
             toString = "[" + minimum + ".." + maximum + "]";
         }
@@ -506,7 +509,7 @@ public final class Range<T> implements Serializable {
      * @param format  the format string, optionally containing {@code %1$s}, {@code %2$s} and  {@code %3$s}, not null
      * @return the formatted string, not null
      */
-    public String toString(final String format) {
+    public @NotNull String toString(final @NotNull String format) {
         return String.format(format, minimum, maximum, comparator);
     }
 

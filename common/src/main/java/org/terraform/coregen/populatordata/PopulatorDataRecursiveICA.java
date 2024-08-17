@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -14,11 +15,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
 
-    private final World w;
-    private final Chunk c;
+    private final @NotNull World w;
+    private final @NotNull Chunk c;
     private final ConcurrentHashMap<SimpleChunkLocation, PopulatorDataICAAbstract> loadedChunks = new ConcurrentHashMap<>();
 
-    public PopulatorDataRecursiveICA(Chunk c) {
+    public PopulatorDataRecursiveICA(@NotNull Chunk c) {
         super(c);
         this.c = c;
         this.w = c.getWorld();
@@ -29,7 +30,7 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
      * @param z
      * @return The PopulatorDataICA related to those coords.
      */
-    private PopulatorDataICAAbstract getData(int x, int z) {
+    private @NotNull PopulatorDataICAAbstract getData(int x, int z) {
         SimpleChunkLocation scl = new SimpleChunkLocation(w.getName(), x, z);
         synchronized(loadedChunks) {
             return loadedChunks.computeIfAbsent(scl, k -> {

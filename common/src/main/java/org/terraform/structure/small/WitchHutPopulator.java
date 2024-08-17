@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -30,7 +31,7 @@ import java.util.Random;
 public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         if (!isEnabled()) return;
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
@@ -48,8 +49,8 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
         }
     }
 
-    public void spawnSwampHut(TerraformWorld tw, Random random,
-                              PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnSwampHut(TerraformWorld tw, @NotNull Random random,
+                              @NotNull PopulatorDataAbstract data, int x, int y, int z) {
 
         //Refers to center of hut, above the water.
         SimpleBlock core = new SimpleBlock(data, x, y, z);
@@ -78,14 +79,14 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     }
 
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 8242112),
                 (int) (TConfigOption.STRUCTURES_SWAMPHUT_SPAWNRATIO
                         .getDouble() * 10000),
                 10000);
     }
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
@@ -102,7 +103,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+    public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         int num = TConfigOption.STRUCTURES_SWAMPHUT_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++)
@@ -111,7 +112,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+    public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
         MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
 
         double minDistanceSquared = Integer.MAX_VALUE;
@@ -138,7 +139,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(1211221, chunkX, chunkZ);
     }
 
@@ -153,7 +154,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
         }
 
         @Override
-        public void applyData(SimpleBlock block, BlockData data) {
+        public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             if (data.getMaterial().toString().contains("COBBLESTONE")) {
                 data = Bukkit.createBlockData(
                         StringUtils.replace(data.getAsString(), "cobblestone", GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE,

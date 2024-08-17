@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.Rotatable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -27,12 +28,12 @@ public class DarkForestHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.DARK_FOREST;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.GRASS_BLOCK,
                 Material.DIRT,
@@ -42,7 +43,7 @@ public class DarkForestHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
       
         boolean spawnHeads = TConfigOption.BIOME_DARK_FOREST_SPAWN_HEADS.getBoolean() 
         		&& GenUtils.chance(random, 1, 100);
@@ -75,7 +76,7 @@ public class DarkForestHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
 		SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 10);
 		SimpleLocation[] smallDecorations = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 7);
@@ -141,7 +142,7 @@ public class DarkForestHandler extends BiomeHandler {
         }
 	}
 	
-    private static void spawnRock(Random rand, PopulatorDataAbstract data, int x, int y, int z) {
+    private static void spawnRock(Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         ArrayList<int[]> locations = new ArrayList<>();
         locations.add(new int[]{x, y, z});
         locations.add(new int[]{x, y + 2, z});
@@ -176,12 +177,12 @@ public class DarkForestHandler extends BiomeHandler {
         }
     }
 
-    public BiomeBank getBeachType() {
+    public @NotNull BiomeBank getBeachType() {
     	return BiomeBank.DARK_FOREST_BEACH;
     }
     
     //River type. This will be used instead if the heightmap got carved into a river.
-    public BiomeBank getRiverType() {
+    public @NotNull BiomeBank getRiverType() {
     	return BiomeBank.DARK_FOREST_RIVER;
     }
     

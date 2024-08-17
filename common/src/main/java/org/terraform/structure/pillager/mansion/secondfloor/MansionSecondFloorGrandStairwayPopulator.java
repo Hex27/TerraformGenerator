@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
@@ -32,7 +33,7 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
 	}
 
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		//Arch
 		
 		w.getLeft(3).Pillar(6, Material.DARK_OAK_LOG);
@@ -97,7 +98,7 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
 	
 
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(Random rand, @NotNull Wall w) {
 		w.getRear().Pillar(6, Material.DARK_OAK_PLANKS);
 		w.Pillar(6, Material.DARK_OAK_LOG);
 		w.getLeft(3).Pillar(6, Material.DARK_OAK_LOG);
@@ -117,7 +118,7 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
 		.apply(w.getRight(2));
 	}
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(3,3);
 	}
 

@@ -1,6 +1,7 @@
 package org.terraform.biome.cavepopulators;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -12,6 +13,7 @@ import java.util.Random;
 public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
 
     Random rand;
+    @Nullable
     Material fluid;
     int rY;
 
@@ -19,7 +21,7 @@ public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
 		super(radius);
 	}
     @Override
-	public void oneUnit(TerraformWorld tw, Random doNotUse, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
+	public void oneUnit(@NotNull TerraformWorld tw, Random doNotUse, @Nullable SimpleBlock ceil, @Nullable SimpleBlock floor, boolean boundary) {
     	if(ceil == null || floor == null) return;
         if(rand == null)
         {

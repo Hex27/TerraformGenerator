@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
@@ -25,7 +26,7 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
 	}
 
 	@Override
-    protected void oneUnit(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
+    protected void oneUnit(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor, boolean boundary) {
 		//if (!genned) {
         //    genned = true;
         //}

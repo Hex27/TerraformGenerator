@@ -3,6 +3,7 @@ package org.terraform.structure.pyramid;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.Chest;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
@@ -23,7 +24,7 @@ public class GenericAntechamber extends Antechamber {
      * It can contain random items from anywhere
      */
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
         for (int i = 0; i < GenUtils.randInt(2, 5); i++) {
             int[] coords = room.randomCoords(rand, 2);

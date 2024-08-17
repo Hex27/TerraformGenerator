@@ -6,6 +6,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Leaves;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
@@ -36,6 +37,7 @@ public class FractalLeaves implements Cloneable{
     //public FractalTreeBuilder builder;
 
     boolean semiSphereLeaves = false;
+    @NotNull
     Random rand = new Random();
     float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;
@@ -56,7 +58,7 @@ public class FractalLeaves implements Cloneable{
     private final HashSet<SimpleBlock> occupiedLeaves = new HashSet<>();
     public void purgeOccupiedLeavesCache(){ occupiedLeaves.clear(); }
 
-    public void placeLeaves(SimpleBlock centre)
+    public void placeLeaves(@NotNull SimpleBlock centre)
     {
         placeLeaves(centre.getPopData().getTerraformWorld(), -999, 999, centre);
     }
@@ -64,7 +66,7 @@ public class FractalLeaves implements Cloneable{
      * This is a sphere algorithm
      * @param centre the centre of the sphere.
      */
-    public void placeLeaves(TerraformWorld tw, int oriY, int maxHeight, SimpleBlock centre) {
+    public void placeLeaves(TerraformWorld tw, int oriY, int maxHeight, @NotNull SimpleBlock centre) {
     	// Setup noise to be used in randomising the sphere
 
         this.tw = tw;
@@ -220,7 +222,7 @@ public class FractalLeaves implements Cloneable{
         }
     }
 
-    private void unitSet(SimpleBlock relativeBlock, Material material) {
+    private void unitSet(@NotNull SimpleBlock relativeBlock, @NotNull Material material) {
         if (Tag.LEAVES.isTagged(material)) {
             Leaves leaf = (Leaves) Bukkit.createBlockData(material);
             leaf.setDistance(1);
@@ -230,7 +232,7 @@ public class FractalLeaves implements Cloneable{
         }
     }
 
-    private void weepingLeaves(SimpleBlock base, int minDist, int maxDist) {
+    private void weepingLeaves(@NotNull SimpleBlock base, int minDist, int maxDist) {
     	Material material = this.material[rand.nextInt(this.material.length)];
         BlockData type = Bukkit.createBlockData(material);
         if (Tag.LEAVES.isTagged(material)) {
@@ -246,72 +248,72 @@ public class FractalLeaves implements Cloneable{
         }
     }
 
-    public FractalLeaves setMaterial(Material... material) {
+    public @NotNull FractalLeaves setMaterial(Material... material) {
         this.material = material;
         return this;
     }
 
-    public FractalLeaves setOffsetY(int offsetY) {
+    public @NotNull FractalLeaves setOffsetY(int offsetY) {
         this.offsetY = offsetY;
         return this;
     }
 
-    public FractalLeaves setRadiusX(float radiusX) {
+    public @NotNull FractalLeaves setRadiusX(float radiusX) {
         this.radiusX = radiusX;
         return this;
     }
 
-    public FractalLeaves setRadiusY(float radiusY) {
+    public @NotNull FractalLeaves setRadiusY(float radiusY) {
         this.radiusY = radiusY;
         this.numYSegments = (int) Math.ceil(radiusY*2+1);
         return this;
     }
 
-    public FractalLeaves setRadiusZ(float radiusZ) {
+    public @NotNull FractalLeaves setRadiusZ(float radiusZ) {
         this.radiusZ = radiusZ;
         return this;
     }
 
-    public FractalLeaves setRadius(float radius) {
+    public @NotNull FractalLeaves setRadius(float radius) {
         this.radiusX = radius;
         setRadiusY(radius);
         this.radiusZ = radius;
         return this;
     }
 
-    public FractalLeaves setRadius(float x, float y, float z) {
+    public @NotNull FractalLeaves setRadius(float x, float y, float z) {
         this.radiusX = x;
         setRadiusY(y);
         this.radiusZ = z;
         return this;
     }
 
-    public FractalLeaves setHollowLeaves(double hollow) {
+    public @NotNull FractalLeaves setHollowLeaves(double hollow) {
         this.hollowLeaves = hollow;
         return this;
     }
 
-    public FractalLeaves setConeLeaves(boolean coneLeaves) {
+    public @NotNull FractalLeaves setConeLeaves(boolean coneLeaves) {
         this.coneLeaves = coneLeaves;
         return this;
     }
 
-    public FractalLeaves setLeafNoiseMultiplier(float multiplier) {
+    public @NotNull FractalLeaves setLeafNoiseMultiplier(float multiplier) {
         this.leafNoiseMultiplier = multiplier;
         return this;
     }
 
-    public FractalLeaves setLeafNoiseFrequency(float freq) {
+    public @NotNull FractalLeaves setLeafNoiseFrequency(float freq) {
         this.leafNoiseFrequency = freq;
         return this;
     }
 
-    public FractalLeaves setSnowy(boolean snowy) {
+    public @NotNull FractalLeaves setSnowy(boolean snowy) {
         this.snowy = snowy;
         return this;
     }
 
-    public FractalLeaves setMangrovePropagules(boolean mangrovePropagules) {
+    public @NotNull FractalLeaves setMangrovePropagules(boolean mangrovePropagules) {
         this.mangrovePropagules = mangrovePropagules;
         return this;
     }
@@ -321,23 +323,23 @@ public class FractalLeaves implements Cloneable{
      * @param chance    chance of creating dangling leaves per block (0 - 1)
      * @param maxLength maximum length of dangling leaves
      */
-    public FractalLeaves setWeepingLeaves(float chance, int maxLength) {
+    public @NotNull FractalLeaves setWeepingLeaves(float chance, int maxLength) {
         this.weepingLeavesChance = chance;
         this.weepingLeavesLength = maxLength;
         return this;
     }
 
-    public FractalLeaves setUnitLeafChance(float unitLeafChance)
+    public @NotNull FractalLeaves setUnitLeafChance(float unitLeafChance)
     {
         this.unitLeafChance = unitLeafChance;
         return this;
     }
-    public FractalLeaves setUnitLeafSize(int unitSize)
+    public @NotNull FractalLeaves setUnitLeafSize(int unitSize)
     {
         this.unitLeafSize = unitSize;
         return this;
     }
-    public FractalLeaves setSemiSphereLeaves(boolean semiSphereLeaves)
+    public @NotNull FractalLeaves setSemiSphereLeaves(boolean semiSphereLeaves)
     {
         this.semiSphereLeaves = semiSphereLeaves;
         return this;
