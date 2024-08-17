@@ -35,9 +35,7 @@ public class AnimalPopulator {
     //Instead, each query will just call getBiome per block. This sounds more
     //intensive, but it relies on the getBiome cache system to be faster.
     public boolean canSpawn(Random rand) {
-        if (GenUtils.chance(rand, 100 - chance, 100))
-            return false;
-        return true;
+        return !GenUtils.chance(rand, 100 - chance, 100);
     }
     
     private boolean canSpawnInBiome(BiomeBank b) {
