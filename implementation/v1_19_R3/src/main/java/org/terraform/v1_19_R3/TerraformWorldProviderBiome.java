@@ -42,9 +42,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 	
     private final TerraformWorld tw;
     private final IRegistry<BiomeBase> registry;
-    @SuppressWarnings("unused")
-	private final WorldChunkManager delegate;
-    
+
     private static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(@NotNull IRegistry<BiomeBase> registry) {
 
         List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
@@ -77,7 +75,6 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
         //super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
         this.tw = tw;
-        this.delegate = delegate;
         this.registry = CustomBiomeHandler.getBiomeRegistry();
     }
 

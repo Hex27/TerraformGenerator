@@ -18,9 +18,8 @@ public class StalactiteBuilder {
 	private boolean isFacingUp;
 	private int verticalSpace;
     private float minRadius = 0;
-    private final float maxRadius = 3f;
-	
-	public StalactiteBuilder(Material... wallType) {
+
+    public StalactiteBuilder(Material... wallType) {
 		this.wallType = wallType;
 	}
 	
@@ -109,6 +108,7 @@ public class StalactiteBuilder {
         //HEIGHT CANNOT BE LESS THAN 1. (1.0/0.0) DOES NOT THROW ARITHMETIC ERRORS
         if(height < 8) return;
 
+        float maxRadius = 3f;
         baseRadius = Math.min(maxRadius, Math.max(baseRadius, minRadius));
 
         //Perform a BFS against the cone 3d equation to prevent spheres from overwriting

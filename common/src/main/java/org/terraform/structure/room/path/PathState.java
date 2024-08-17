@@ -37,12 +37,10 @@ public class PathState {
     //then set this to true.
     private final boolean ignoreWithinRooms = true;
     private final @NotNull RoomLayoutGenerator generator;
-    private final @NotNull TerraformWorld tw;
 
     public PathState(@NotNull RoomLayoutGenerator generator, @NotNull TerraformWorld tw)
     {
         this.generator = generator;
-        this.tw = tw;
         if(!generator.genPaths()) return;
 
         PathNode[] baseNodes = new PathNode[generator.getRooms().size()];

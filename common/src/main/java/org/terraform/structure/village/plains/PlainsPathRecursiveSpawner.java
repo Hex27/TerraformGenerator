@@ -32,10 +32,7 @@ public class PlainsPathRecursiveSpawner {
     private final int range;
     private int minRoomWidth = 15;
     private int maxRoomWidth = 20;
-    private final int smallRoomChance = 10;
-    private final int minSmallRoomWidth = 7;
-    private final int maxSmallRoomWidth = 10;
-    
+
     /** 
      * 1 for max room density, 0 for no rooms.
      */
@@ -77,9 +74,12 @@ public class PlainsPathRecursiveSpawner {
                             BlockFace rF = adjDir.getOppositeFace();
                             int minRoomWidth = this.minRoomWidth;
                             int maxRoomWidth = this.maxRoomWidth;
+                            int smallRoomChance = 10;
                             if(GenUtils.chance(random, smallRoomChance, 100)) {
-                            	minRoomWidth = this.minSmallRoomWidth;
-                            	maxRoomWidth = this.maxSmallRoomWidth;
+                                int minSmallRoomWidth = 7;
+                                minRoomWidth = minSmallRoomWidth;
+                                int maxSmallRoomWidth = 10;
+                                maxRoomWidth = maxSmallRoomWidth;
                             }
                             
                             int roomWidthX = GenUtils.randInt(minRoomWidth, maxRoomWidth);

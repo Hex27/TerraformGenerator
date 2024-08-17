@@ -65,14 +65,6 @@ public class NewFractalTreeBuilder implements Cloneable {
     private BiFunction<Float, Float, Float> getBranchWidth =
             (initialBranchWidth, branchRatio)
             -> initialBranchWidth*(1.0f-branchRatio/2.0f);
-    /**
-     * A chance representing branch bending rates. 0 for no bends.
-     * When a branch bends, the branch() method will essentially break its
-     * iteration and call itself again with a higher base,
-     * but with a slightly different projection
-     */
-    private float bendChance = 0f;
-    private float bendMaxAngle = 0f; //in radians. Max bend angle
     final int maxHeight = 9999;
 
     private Material branchMaterial = Material.OAK_LOG;
@@ -561,12 +553,17 @@ public class NewFractalTreeBuilder implements Cloneable {
     }
 
     public @NotNull NewFractalTreeBuilder setBendChance(float bendChance) {
-        this.bendChance = bendChance;
+        /**
+         * A chance representing branch bending rates. 0 for no bends.
+         * When a branch bends, the branch() method will essentially break its
+         * iteration and call itself again with a higher base,
+         * but with a slightly different projection
+         */
         return this;
     }
 
     public @NotNull NewFractalTreeBuilder setBendMaxAngle(float bendMaxAngle) {
-        this.bendMaxAngle = bendMaxAngle;
+        //in radians. Max bend angle
         return this;
     }
 

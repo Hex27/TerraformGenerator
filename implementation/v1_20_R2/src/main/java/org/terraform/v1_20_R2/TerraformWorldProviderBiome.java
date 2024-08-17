@@ -21,8 +21,6 @@ import java.util.stream.Stream;
 public class TerraformWorldProviderBiome extends WorldChunkManager {
     private final TerraformWorld tw;
     private final IRegistry<BiomeBase> registry;
-    @SuppressWarnings("unused")
-	private final WorldChunkManager delegate;
 
 
     private final Set<Holder<BiomeBase>> biomeList;
@@ -31,7 +29,6 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
         //super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = CustomBiomeHandler.biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
         this.tw = tw;
-        this.delegate = delegate;
         this.registry = CustomBiomeHandler.getBiomeRegistry();
     }
 

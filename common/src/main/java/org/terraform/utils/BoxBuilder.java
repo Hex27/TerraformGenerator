@@ -26,8 +26,7 @@ public class BoxBuilder {
 	private Material[] upperType;
 	private Material[] lowerType;
 	private int staticWaterLevel = -9999;
-	private final float fuzzMultiplier = 0.2f;
-	private BoxType boxType = BoxType.FULL_BOX;
+    private BoxType boxType = BoxType.FULL_BOX;
 	
 	
 	public BoxBuilder(@NotNull Random random, SimpleBlock core, Material... types) {
@@ -103,17 +102,18 @@ public class BoxBuilder {
         if(boxType == BoxType.UPPER_SEMIBOX) effectiveRYLower = 0;
         float effectiveRYUpper = rY;
         if(boxType == BoxType.LOWER_SEMIBOX) effectiveRYUpper = 0;
-        for (float y = effectiveRYLower*(1f+fuzzMultiplier); y <= effectiveRYUpper*(1f+fuzzMultiplier); y++) {
+        float fuzzMultiplier = 0.2f;
+        for (float y = effectiveRYLower*(1f+ fuzzMultiplier); y <= effectiveRYUpper*(1f+ fuzzMultiplier); y++) {
         	float yMultiplier = 1f - (Math.abs(y)/rY);
-        	for (float x = -rX*(1f+fuzzMultiplier)*yMultiplier; x <= rX*(1f+fuzzMultiplier)*yMultiplier; x++) {
-                for (float z = -rZ*(1f+fuzzMultiplier)*yMultiplier; z <= rZ*(1f+fuzzMultiplier)*yMultiplier; z++) {
+        	for (float x = -rX*(1f+ fuzzMultiplier)*yMultiplier; x <= rX*(1f+ fuzzMultiplier)*yMultiplier; x++) {
+                for (float z = -rZ*(1f+ fuzzMultiplier)*yMultiplier; z <= rZ*(1f+ fuzzMultiplier)*yMultiplier; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getY(), rel.getZ()));
                     
-                    if (Math.abs(x) <= rX * (1+(noiseVal*fuzzMultiplier))
-                    		&& Math.abs(y) <= rY  * (1+(noiseVal*fuzzMultiplier))
-                    		&& Math.abs(z) <= rZ  * (1+(noiseVal*fuzzMultiplier))) {
+                    if (Math.abs(x) <= rX * (1+(noiseVal* fuzzMultiplier))
+                    		&& Math.abs(y) <= rY  * (1+(noiseVal* fuzzMultiplier))
+                    		&& Math.abs(z) <= rZ  * (1+(noiseVal* fuzzMultiplier))) {
                         Material[] original = types;
                     	if(rel.getY() <= staticWaterLevel) {
                         	types = new Material[] {Material.WATER};

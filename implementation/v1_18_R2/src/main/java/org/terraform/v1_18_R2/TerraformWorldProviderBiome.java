@@ -28,9 +28,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 
     private final TerraformWorld tw;
     private final IRegistry<BiomeBase> registry;
-    @SuppressWarnings("unused")
-	private final WorldChunkManager delegate;
-    
+
     private static @NotNull List<Holder<BiomeBase>> biomeListToBiomeBaseList(@NotNull IRegistry<BiomeBase> registry) {
 
         List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
@@ -56,7 +54,6 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
     public TerraformWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
         super(biomeListToBiomeBaseList(((CraftServer) Bukkit.getServer()).getServer().aU().b(IRegistry.aP)));
         this.tw = tw;
-        this.delegate = delegate;
         this.registry = ((CraftServer) Bukkit.getServer()).getServer().aU().b(IRegistry.aP);
     }
 
