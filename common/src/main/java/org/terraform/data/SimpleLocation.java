@@ -82,7 +82,7 @@ public class SimpleLocation {
     /**
      * Returns a value between 0 and PI to represent a 180 degree angle
      * offset of the other location "o" compared to this location.
-     * 
+     * <p>
      * Will return the same value for segment CA and ST (mirrored)
      */
     public float twoDAngleWrapTo(@NotNull SimpleLocation o) {

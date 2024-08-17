@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Crappy event meant to allow another debug plugin to register structure locations
  * on plexmap.
- * 
+ * <p>
  * Does not accurately depict some structure's locations, not for production use.
  */
 public final class TerraformStructureSpawnEvent extends Event {

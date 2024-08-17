@@ -906,9 +906,9 @@ public class FractalTreeBuilder {
     /**
      * For a randomised length downwards, dangle a downward pillar of leaves
      * (up till a solid is hit)
-     *
+     * <p>
      * On top of the vine dangle, set 1 log, then surround that log with leaves.
-     *
+     * <p>
      * For some ungodly reason this is in this class instead of the leaf class.
      * That ungodly reason is that the branches run this
      *

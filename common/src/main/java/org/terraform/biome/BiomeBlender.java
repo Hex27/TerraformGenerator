@@ -148,7 +148,7 @@ public class BiomeBlender {
     
     /**
      * Use a slower algorithm to smooth towards rivers based on heightmap's getPreciseHeight
-     * 
+     * <p>
      * A higher number means a longer blend.
      * @param smoothBlendTowardsRivers
      * @return
