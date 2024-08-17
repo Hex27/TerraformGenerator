@@ -89,7 +89,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
             //state++;
         }
         else { //End
-        	AncientCityPathMiniRoomPlacer.placeAltar(core, rand);
+        	AncientCityPathMiniRoomPlacer.placeAltar(core);
         }
     }
     

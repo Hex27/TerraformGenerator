@@ -27,7 +27,7 @@ import java.util.Random;
 public class AncientCitySchematicPlatform extends AncientCityAbstractRoomPopulator {
 
     public AncientCitySchematicPlatform(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
-        super(tw, occupied, gen, rand, forceSpawn, unique);
+        super(tw, gen, rand, forceSpawn, unique);
     }
 
     private final String @NotNull [] smallSchematics = new String[] {
