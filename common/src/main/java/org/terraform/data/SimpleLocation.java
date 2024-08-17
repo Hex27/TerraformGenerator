@@ -70,13 +70,13 @@ public class SimpleLocation {
     	}
     	//Handle CAST trigo calculations
     	else if(o.x > x && o.z > z) { //A segment
-    		return (float) Math.atan((o.x-x)/(o.z-z));
+    		return (float) Math.atan((double) (o.x - x) /(o.z-z));
     	}else if(o.x > x) { //C segment
-    		return (float) (Math.atan((z-o.z)/(o.x-x)) + Math.PI/2);
+    		return (float) (Math.atan((double) (z - o.z) /(o.x-x)) + Math.PI/2);
     	}else if(o.z < z) { //T segment
-    		return (float) (Math.atan((x-o.x)/(z-o.z)) + Math.PI);
+    		return (float) (Math.atan((double) (x - o.x) /(z-o.z)) + Math.PI);
     	}else { //S segment
-    		return (float) (Math.atan((o.z-z)/(x-o.x))+3*Math.PI/2);
+    		return (float) (Math.atan((double) (o.z - z) /(x-o.x))+3*Math.PI/2);
     	}
     }
     

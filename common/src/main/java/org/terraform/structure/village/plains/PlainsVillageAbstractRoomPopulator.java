@@ -49,8 +49,8 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 		core = core.getAtY(roomY);
 		//Air
 		new SphereBuilder(this.rand, core.getUp(), Material.AIR)
-		.setRX(room.getWidthX()/2 - 1.5f)
-		.setRZ(room.getWidthZ()/2 - 1.5f)
+		.setRX((float) room.getWidthX() /2 - 1.5f)
+		.setRZ((float) room.getWidthZ() /2 - 1.5f)
 		.setRY(getRoomRoughNeededHeight())
 		.setHardReplace(true)
 		.setSphereType(SphereType.UPPER_SEMISPHERE)

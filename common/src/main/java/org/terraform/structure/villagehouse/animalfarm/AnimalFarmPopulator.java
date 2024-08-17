@@ -164,8 +164,8 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
 
             //Create fences
             for (int t = 0; t <= 360; t += 5) {
-                int ePX = room.getX() + (int) ((room.getWidthX() / 2) * Math.cos(Math.toRadians(t)));
-                int ePZ = room.getZ() + (int) ((room.getWidthZ() / 2) * Math.sin(Math.toRadians(t)));
+                int ePX = room.getX() + (int) (((double) room.getWidthX() / 2) * Math.cos(Math.toRadians(t)));
+                int ePZ = room.getZ() + (int) (((double) room.getWidthZ() / 2) * Math.sin(Math.toRadians(t)));
                 int highest = GenUtils.getHighestGround(data, ePX, ePZ);
 
                 data.setType(ePX, highest + 1, ePZ, Material.SPRUCE_FENCE);

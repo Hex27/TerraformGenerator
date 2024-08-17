@@ -131,7 +131,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
             CubeRoom stairway = level0.forceAddRoom(5, 5, 10);
 
             //Don't generate stairways too far from the center.
-            while (stairway.centralDistanceSquared(level1.getCenter()) > Math.pow(level1.getRange() / 2, 2)) {
+            while (stairway.centralDistanceSquared(level1.getCenter()) > Math.pow((double) level1.getRange() / 2, 2)) {
                 level0.getRooms().remove(stairway);
                 stairway = level0.forceAddRoom(5, 5, 10);
             }
@@ -168,7 +168,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         //Stairways (Level 1 to 2)
         for (int i = 0; i < 3; i++) {
             CubeRoom stairway = level1.forceAddRoom(5, 5, 10);//Don't generate stairways too far from the center.
-            while (stairway.centralDistanceSquared(level2.getCenter()) > Math.pow(level2.getRange() / 2, 2)) {
+            while (stairway.centralDistanceSquared(level2.getCenter()) > Math.pow((double) level2.getRange() / 2, 2)) {
                 level1.getRooms().remove(stairway);
                 stairway = level1.forceAddRoom(5, 5, 10);
             }

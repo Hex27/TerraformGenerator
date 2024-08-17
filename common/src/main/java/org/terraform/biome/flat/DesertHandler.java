@@ -103,7 +103,7 @@ public class DesertHandler extends BiomeHandler {
 	public void spawnRibCage(@NotNull Random random, @NotNull SimpleBlock target) {
 		BlockFace direction = BlockUtils.getDirectBlockFace(random);
 		int spineLength = GenUtils.randInt(random, 10, 14);
-		float ribWidthRadius = GenUtils.randInt(random, 1, 2) + spineLength/2;
+		float ribWidthRadius = GenUtils.randInt(random, 1, 2) + (float) spineLength /2;
 		float ribHeightRadius = 0.7f*ribWidthRadius; //GenUtils.randInt(random, 6, 8);
 		//eqn -> ((y-ribHeight)/(ribHeight))^2 + ((x)/(ribWidth))^2 = 1
 		int interval = 2;

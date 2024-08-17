@@ -63,9 +63,9 @@ public class MansionCompoundRoomDistributor {
 		}
 		potentialRoomSizes.add(new MansionRoomSize(2,2)); //At least one 2x2 room
 		
-		while(occupiedCells/pieces.size() < 0.7 || 
+		while((double) occupiedCells /pieces.size() < 0.7 ||
 				GenUtils.chance(random, pieces.size()-occupiedCells/4, pieces.size())) {
-			if(occupiedCells/pieces.size() < 0.5 && GenUtils.chance(random, 1, 3)) {
+			if((double) occupiedCells /pieces.size() < 0.5 && GenUtils.chance(random, 1, 3)) {
 				occupiedCells += 4;
 				potentialRoomSizes.add(new MansionRoomSize(2,2));
 			} else {
