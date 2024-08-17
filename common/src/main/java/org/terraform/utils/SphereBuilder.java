@@ -190,7 +190,7 @@ public class SphereBuilder {
     }
     
     private boolean unitReplace(@NotNull SimpleBlock rel, int effectiveRYUpper) {
-    	if(replaceWhitelist.size() == 0) {
+    	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
                 if(this.doLiquidContainment)

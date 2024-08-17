@@ -37,7 +37,7 @@ public class SaplingOverrider implements Listener {
         List<BlockState> baseBlocks = event.getBlocks().stream()
                 .filter((b) -> Tag.LEAVES.isTagged(b.getType()))
                 .toList();
-        if(baseBlocks.size() == 0)
+        if(baseBlocks.isEmpty())
         {   //Leafless trees are not trees
             event.setCancelled(false);
             return;

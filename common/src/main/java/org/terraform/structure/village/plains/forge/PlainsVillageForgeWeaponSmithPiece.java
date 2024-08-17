@@ -28,7 +28,7 @@ public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStanda
     @Override
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
     	//SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ());
-    	if(this.getWalledFaces().size() == 0) {
+    	if(this.getWalledFaces().isEmpty()) {
     		//Leave the room empty if you can't spawn anything.
     		return;
     	}

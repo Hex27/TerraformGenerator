@@ -50,7 +50,7 @@ public class MushroomCommand extends TerraCommand {
         int z = p.getLocation().getBlockZ();
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
 
-        if (args.size() != 0) {
+        if (!args.isEmpty()) {
             try {
                 new MushroomBuilder((FractalTypes.Mushroom) this.parseArguments(sender, args).get(0))
                         .build(tw, data, x, y, z);

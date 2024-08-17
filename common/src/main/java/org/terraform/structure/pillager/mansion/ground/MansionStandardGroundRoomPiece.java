@@ -60,7 +60,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     @Override
     public void postBuildDecoration(Random random, @NotNull PopulatorDataAbstract data) {
         CubeRoom targetRoom = this.getRoom();
-        if(this.getWalledFaces().size() > 0) 
+        if(!this.getWalledFaces().isEmpty())
         	targetRoom = this.getExtendedRoom(6);
         
     	int[] lowerCorner = targetRoom.getLowerCorner(0);
@@ -100,7 +100,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
      */
     public void thirdStageDecoration(Random random, @NotNull PopulatorDataAbstract data) {
     	CubeRoom targetRoom = this.getRoom();
-        if(this.getWalledFaces().size() > 0) {
+        if(!this.getWalledFaces().isEmpty()) {
         	targetRoom = this.getExtendedRoom(6);
         	//Decorate the top and bottom areas
             for(Entry<Wall, Integer> entry:this.getRoom().getFourWalls(data, -5).entrySet()) {

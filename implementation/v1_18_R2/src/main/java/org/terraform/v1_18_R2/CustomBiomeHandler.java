@@ -140,10 +140,12 @@ public class CustomBiomeHandler {
 		//Unnecessary values; can be removed safely if you don't want to change them
 		
 		//foliage color (leaves, fines and more)
+
 		newFog.e(biomeType.getFoliageColor().isEmpty() ? forestbiome.g():Integer.parseInt(biomeType.getFoliageColor(),16));
 		
 		//grass blocks color
 		newFog.f(biomeType.getGrassColor().isEmpty() ? Integer.parseInt("79C05A",16):Integer.parseInt(biomeType.getGrassColor(),16));
+
 		
 		newBiomeBuilder.a(newFog.a());
 		

@@ -50,7 +50,7 @@ public class LocateBiomeCommand extends TerraCommand {
             throws InvalidArgumentException {
         Player p = (Player) sender;
 
-        if (args.size() != 0) {
+        if (!args.isEmpty()) {
             try {
                 new Task(
                         p.getUniqueId(),

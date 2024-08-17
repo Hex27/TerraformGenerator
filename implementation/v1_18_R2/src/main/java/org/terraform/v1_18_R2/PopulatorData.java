@@ -52,7 +52,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         this.gen = gen;
         this.ica = ica;
         
-        if(entityTypesDict.size() == 0) {
+        if(entityTypesDict.isEmpty()) {
         	for(EntityType type:EntityType.values()) {
         		if(type == EntityType.ENDER_SIGNAL) continue;
         		if(type == EntityType.UNKNOWN) continue;

@@ -25,7 +25,7 @@ public abstract class TerraCommand {
 	
 	public boolean isInAcceptedParamRange(@NotNull Stack<String> args){
 		if(args.size() > this.parameters.size()) return false;
-		if(this.parameters.size() == 0) return true;
+		if(this.parameters.isEmpty()) return true;
 		int lowerBound = 0;
 		for(TerraCommandArgument<?> arg:parameters){
 			if(!arg.isOptional()) lowerBound++;
@@ -53,7 +53,7 @@ public abstract class TerraCommand {
 		ArrayList<Object> items = new ArrayList<>(args.size());
 		
 		int i = 0;
-		while(args.size() > 0){
+		while(!args.isEmpty()){
 			String arg = args.pop();
 			TerraCommandArgument<?> parser = parameters.get(i);
 			Object parsed = parser.parse(sender, arg);

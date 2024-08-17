@@ -39,7 +39,7 @@ public class MasterCavePopulatorDistributor{
                 Collection<int[]> pairs = GenUtils.getCaveCeilFloors(data, x, z, 4);
 
                 //This is the index to spawn the cluster in.
-                int clusterPair = pairs.size() > 0 ? random.nextInt(pairs.size()) : 0;
+                int clusterPair = !pairs.isEmpty() ? random.nextInt(pairs.size()) : 0;
 
                 for (int[] pair : pairs) {
                 	

@@ -132,7 +132,7 @@ public class CylinderBuilder {
     }
     
     private boolean unitReplace(@NotNull SimpleBlock rel) {
-    	if(replaceWhitelist.size() == 0) {
+    	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
             }else

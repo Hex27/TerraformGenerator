@@ -35,7 +35,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
         super.postBuildDecoration(random, data);
 
         //No walls :V
-        if (this.getWalledFaces().size() == 0) {
+        if (this.getWalledFaces().isEmpty()) {
             return;
         }
 

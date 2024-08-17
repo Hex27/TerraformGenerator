@@ -480,7 +480,7 @@ public enum BiomeBank {
 //    		debugged = true;
 //    	}
     	
-    	if(contenders.size() == 0) {
+    	if(contenders.isEmpty()) {
             return switch(targetType) {
                 case BEACH -> {
                     TerraformGeneratorPlugin.logger.info("Defaulted for beach: " + temperature + " : " + moisture + "," + climate + ":" + targetType);

@@ -93,7 +93,7 @@ public class JigsawBuilder {
         		TerraformGeneratorPlugin.logger.info("Found problem piece. Attempting to replace with room.");
         	}
         }
-        if(problemCells.size() > 0) {
+        if(!problemCells.isEmpty()) {
             overlapperPieces.removeIf(piece -> problemCells.contains(piece.getRoom().getSimpleLocation()));
             
             for(SimpleLocation loc:problemCells) {
@@ -116,7 +116,7 @@ public class JigsawBuilder {
     }
 
     public boolean traverseAndPopulatePieces(@NotNull Random random) {
-        if (traverseStack.size() == 0) {
+        if (traverseStack.isEmpty()) {
             TerraformGeneratorPlugin.logger.info("Jigsaw stack size empty!");
             return false;
         } 
@@ -330,7 +330,7 @@ public class JigsawBuilder {
             		validPieces.add(piece);
             }
         }
-        if (validPieces.size() == 0) {
+        if (validPieces.isEmpty()) {
             TerraformGeneratorPlugin.logger.error("Tried to query jigsaw type that doesn't exist: " + type);
             return null;
         }
