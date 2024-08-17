@@ -182,19 +182,12 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
                 sLoc.setY(treeY);
                 if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                         data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()).toString().endsWith("STONE")) {
-                    Tree treeType;
-                    switch(random.nextInt(3)) {
-                    case 0:
-                		treeType = FractalTypes.Tree.ANDESITE_PETRIFIED_SMALL;
-                		break;
-                    case 1:
-                		treeType = FractalTypes.Tree.GRANITE_PETRIFIED_SMALL;
-                		break;
-                	default:
-                		treeType = FractalTypes.Tree.DIORITE_PETRIFIED_SMALL;
-                		break;
-                    }
-                	new FractalTreeBuilder(treeType).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+                    Tree treeType = switch(random.nextInt(3)) {
+                        case 0 -> Tree.ANDESITE_PETRIFIED_SMALL;
+                        case 1 -> Tree.GRANITE_PETRIFIED_SMALL;
+                        default -> Tree.DIORITE_PETRIFIED_SMALL;
+                    };
+                    new FractalTreeBuilder(treeType).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
                 }
         	}            
         }

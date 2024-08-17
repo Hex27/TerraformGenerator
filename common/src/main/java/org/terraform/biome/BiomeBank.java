@@ -479,31 +479,38 @@ public enum BiomeBank {
 //    	}
     	
     	if(contenders.size() == 0) {
-    		switch(targetType) {
-			case BEACH:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for beach: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_BEACH.getString());
-			case DEEP_OCEANIC:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for deep oceanic: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_DEEPOCEANIC.getString());
-			case FLAT:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for flat: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
-			case MOUNTAINOUS:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_MOUNTAINOUS.getString());
-			case OCEANIC:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for ocean: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_OCEANIC.getString());
-			case RIVER:
-	    		TerraformGeneratorPlugin.logger.info("Defaulted for river: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_RIVER.getString());
-			//default:
-			//	return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
-			case HIGH_MOUNTAINOUS:
-				TerraformGeneratorPlugin.logger.info("Defaulted for high mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
-	    		return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_HIGHMOUNTAINOUS.getString());
-			}
+            return switch(targetType) {
+                case BEACH -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for beach: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_BEACH.getString());
+                }
+                case DEEP_OCEANIC -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for deep oceanic: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_DEEPOCEANIC.getString());
+                }
+                case FLAT -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for flat: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
+                }
+                case MOUNTAINOUS -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_MOUNTAINOUS.getString());
+                }
+                case OCEANIC -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for ocean: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_OCEANIC.getString());
+                }
+                case RIVER -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for river: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_RIVER.getString());
+                }
+                //default:
+                //	return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
+                case HIGH_MOUNTAINOUS -> {
+                    TerraformGeneratorPlugin.logger.info("Defaulted for high mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
+                    yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_HIGHMOUNTAINOUS.getString());
+                }
+            };
     	}else
     		return contenders.get(0);
 		return null;

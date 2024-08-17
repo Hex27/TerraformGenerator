@@ -377,15 +377,10 @@ public class BlockUtils {
     };
 
     public static boolean isDirectBlockFace(BlockFace facing) {
-        switch (facing) {
-            case NORTH:
-            case SOUTH:
-            case EAST:
-            case WEST:
-                return true;
-            default:
-                return false;
-        }
+        return switch(facing) {
+            case NORTH, SOUTH, EAST, WEST -> true;
+            default -> false;
+        };
     }
 
     /**
@@ -510,42 +505,28 @@ public class BlockUtils {
     }
     
     public static BlockFace getBlockFaceFromAxis(Axis ax) {
-    	switch(ax) {
-    	case X:
-    		return BlockFace.EAST;
-    	case Z:
-    		return BlockFace.SOUTH;
-    	case Y:
-    		return BlockFace.UP;
-    	}
-		return null;
+        return switch(ax) {
+            case X -> BlockFace.EAST;
+            case Z -> BlockFace.SOUTH;
+            case Y -> BlockFace.UP;
+        };
     }
 
     public static Axis getAxisFromBlockFace(BlockFace face) {
-        switch (face) {
-            case NORTH:
-            case SOUTH:
-                return Axis.Z;
-            case EAST:
-            case WEST:
-                return Axis.X;
-            case UP:
-            case DOWN:
-                return Axis.Y;
-            default:
-                throw new IllegalArgumentException("Invalid block facing for axis: " + face);
-        }
+        return switch(face) {
+            case NORTH, SOUTH -> Axis.Z;
+            case EAST, WEST -> Axis.X;
+            case UP, DOWN -> Axis.Y;
+            default -> throw new IllegalArgumentException("Invalid block facing for axis: " + face);
+        };
     }
     
     public static Axis getPerpendicularHorizontalPlaneAxis(Axis x) {
-    	switch(x) {
-    	case X:
-    		return Axis.Z;
-    	case Z:
-    		return Axis.X;
-    	default:
-    		return x;
-    	}
+        return switch(x) {
+            case X -> Axis.Z;
+            case Z -> Axis.X;
+            default -> x;
+        };
     }
 
     public static BlockFace getDirectBlockFace(Random rand) {
@@ -655,17 +636,11 @@ public class BlockUtils {
     }
 
     public static boolean isDirtLike(Material mat) {
-        switch (mat) {
-            case DIRT:
-            case GRASS_BLOCK:
-            case PODZOL:
-            case COARSE_DIRT:
-            case MYCELIUM:
-                return true;
-            default:
-                return mat == Material.DIRT_PATH ||
-                		mat == Material.ROOTED_DIRT;
-        }
+        return switch(mat) {
+            case DIRT, GRASS_BLOCK, PODZOL, COARSE_DIRT, MYCELIUM -> true;
+            default -> mat == Material.DIRT_PATH ||
+                    mat == Material.ROOTED_DIRT;
+        };
     }
 
     public static void setPersistentLeaves(PopulatorDataAbstract data, int x, int y, int z) {
@@ -1033,16 +1008,12 @@ public class BlockUtils {
         //   N
         //W    E
         //   S
-        switch (original) {
-            case EAST:
-                return new BlockFace[]{BlockFace.SOUTH, BlockFace.NORTH};
-            case NORTH:
-                return new BlockFace[]{BlockFace.EAST, BlockFace.WEST};
-            case SOUTH:
-                return new BlockFace[]{BlockFace.WEST, BlockFace.EAST};
-            default:
-                return new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH};
-        }
+        return switch(original) {
+            case EAST -> new BlockFace[] {BlockFace.SOUTH, BlockFace.NORTH};
+            case NORTH -> new BlockFace[] {BlockFace.EAST, BlockFace.WEST};
+            case SOUTH -> new BlockFace[] {BlockFace.WEST, BlockFace.EAST};
+            default -> new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH};
+        };
     }
 
     public static BlockFace getTurnBlockFace(Random rand, BlockFace original) {
@@ -1267,18 +1238,14 @@ public class BlockUtils {
     }
     
     public static BlockFace[] getDirectFacesFromDiagonal(BlockFace face) {
-    	switch(face) {
-    	case NORTH_EAST:
-    		return new BlockFace[] {BlockFace.NORTH, BlockFace.EAST};
-    	case NORTH_WEST:
-    		return new BlockFace[] {BlockFace.NORTH, BlockFace.WEST};
-    	case SOUTH_EAST:
-    		return new BlockFace[] {BlockFace.SOUTH, BlockFace.EAST};
-    	case SOUTH_WEST:
-    		return new BlockFace[] {BlockFace.SOUTH, BlockFace.EAST};
-		default:
-			throw new UnsupportedOperationException("getDirectFacesFromDiagonal can only be used for XZ-Plane diagonals");
-    	}
+        return switch(face) {
+            case NORTH_EAST -> new BlockFace[] {BlockFace.NORTH, BlockFace.EAST};
+            case NORTH_WEST -> new BlockFace[] {BlockFace.NORTH, BlockFace.WEST};
+            case SOUTH_EAST -> new BlockFace[] {BlockFace.SOUTH, BlockFace.EAST};
+            case SOUTH_WEST -> new BlockFace[] {BlockFace.SOUTH, BlockFace.EAST};
+            default ->
+                    throw new UnsupportedOperationException("getDirectFacesFromDiagonal can only be used for XZ-Plane diagonals");
+        };
     	
     }
 
@@ -1340,39 +1307,22 @@ public class BlockUtils {
     }
 
     public static boolean emitsLight(Material mat) {
-        switch (mat) {
-            case TORCH:
-            case SEA_PICKLE:
-            case SEA_LANTERN:
-            case GLOWSTONE:
-            case LANTERN:
-            case LAVA:
-            case CAMPFIRE:
-            case REDSTONE_LAMP:
-            case FIRE:
-                return true;
-            default:
-                return false;
-        }
+        return switch(mat) {
+            case TORCH, SEA_PICKLE, SEA_LANTERN, GLOWSTONE, LANTERN, LAVA, CAMPFIRE, REDSTONE_LAMP, FIRE -> true;
+            default -> false;
+        };
     }
 
     public static BlockData infestStone(BlockData mat) {
-        switch (mat.getMaterial()) {
-            case STONE_BRICKS:
-                return Bukkit.createBlockData(Material.INFESTED_STONE_BRICKS);
-            case MOSSY_STONE_BRICKS:
-                return Bukkit.createBlockData(Material.INFESTED_MOSSY_STONE_BRICKS);
-            case CRACKED_STONE_BRICKS:
-                return Bukkit.createBlockData(Material.INFESTED_CRACKED_STONE_BRICKS);
-            case CHISELED_STONE_BRICKS:
-                return Bukkit.createBlockData(Material.INFESTED_CHISELED_STONE_BRICKS);
-            case COBBLESTONE:
-                return Bukkit.createBlockData(Material.INFESTED_COBBLESTONE);
-            case STONE:
-                return Bukkit.createBlockData(Material.INFESTED_STONE);
-            default:
-                return mat;
-        }
+        return switch(mat.getMaterial()) {
+            case STONE_BRICKS -> Bukkit.createBlockData(Material.INFESTED_STONE_BRICKS);
+            case MOSSY_STONE_BRICKS -> Bukkit.createBlockData(Material.INFESTED_MOSSY_STONE_BRICKS);
+            case CRACKED_STONE_BRICKS -> Bukkit.createBlockData(Material.INFESTED_CRACKED_STONE_BRICKS);
+            case CHISELED_STONE_BRICKS -> Bukkit.createBlockData(Material.INFESTED_CHISELED_STONE_BRICKS);
+            case COBBLESTONE -> Bukkit.createBlockData(Material.INFESTED_COBBLESTONE);
+            case STONE -> Bukkit.createBlockData(Material.INFESTED_STONE);
+            default -> mat;
+        };
     }
 
     public static void stairwayUntilSolid(SimpleBlock start, BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
@@ -1434,18 +1384,13 @@ public class BlockUtils {
     }
     
     public static float yawFromBlockFace(BlockFace face) {
-    	switch(face) {
-		case EAST:
-			return -90.0f;
-		case NORTH:
-			return 180.0f;
-		case SOUTH:
-			return 0.0f;
-		case WEST:
-			return 90.0f;
-		default:
-			return 180.0f;
-    	}
+        return switch(face) {
+            case EAST -> -90.0f;
+            case NORTH -> 180.0f;
+            case SOUTH -> 0.0f;
+            case WEST -> 90.0f;
+            default -> 180.0f;
+        };
     }
 
     public static void randRotateBlockData(Random rand, BlockData data) {

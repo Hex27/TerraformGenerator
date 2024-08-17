@@ -188,17 +188,12 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     @Override
     public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
-    	ResourceKey<StructureFeature<?, ?>> structureKey = BuiltinStructures.l; //Monument
-    	switch(type) {
-    	case GUARDIAN:
-    		structureKey = BuiltinStructures.l; //Ocean Monument
-    		break;
-    	case PILLAGER:
-    		structureKey = BuiltinStructures.a; //Pillager Outpost
-    		break;
-    	}
+    	ResourceKey<StructureFeature<?, ?>> structureKey = switch(type) {
+            case GUARDIAN -> BuiltinStructures.l; //Ocean Monument
+            case PILLAGER -> BuiltinStructures.a; //Pillager Outpost
+        }; //Monument
 
-		CraftServer craftserver = (CraftServer)Bukkit.getServer();
+        CraftServer craftserver = (CraftServer)Bukkit.getServer();
 		DedicatedServer dedicatedserver = craftserver.getServer();
     	IRegistry<StructureFeature<?,?>> featureRegistry = dedicatedserver.aU().b(IRegistry.aL);
 		
@@ -248,81 +243,44 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     }
     
     private MinecraftKey getLootTable(TerraLootTable table) {
-        switch (table) {
-        case EMPTY:
-            return LootTables.a;
-        case SPAWN_BONUS_CHEST:
-            return LootTables.b;
-        case END_CITY_TREASURE:
-            return LootTables.c;
-        case SIMPLE_DUNGEON:
-            return LootTables.d;
-        case VILLAGE_WEAPONSMITH:
-            return LootTables.e;
-        case VILLAGE_TOOLSMITH:
-            return LootTables.f;
-        case VILLAGE_ARMORER:
-            return LootTables.g;
-        case VILLAGE_CARTOGRAPHER:
-            return LootTables.h;
-        case VILLAGE_MASON:
-            return LootTables.i;
-        case VILLAGE_SHEPHERD:
-            return LootTables.j;
-        case VILLAGE_BUTCHER:
-            return LootTables.k;
-        case VILLAGE_FLETCHER:
-            return LootTables.l;
-        case VILLAGE_FISHER:
-            return LootTables.m;
-        case VILLAGE_TANNERY:
-            return LootTables.n;
-        case VILLAGE_TEMPLE:
-            return LootTables.o;
-        case VILLAGE_DESERT_HOUSE:
-            return LootTables.p;
-        case VILLAGE_PLAINS_HOUSE:
-            return LootTables.q;
-        case VILLAGE_TAIGA_HOUSE:
-            return LootTables.r;
-        case VILLAGE_SNOWY_HOUSE:
-            return LootTables.s;
-        case VILLAGE_SAVANNA_HOUSE:
-            return LootTables.t;
-        case ABANDONED_MINESHAFT:
-            return LootTables.u;
-        case NETHER_BRIDGE:
-            return LootTables.v;
-        case STRONGHOLD_LIBRARY:
-            return LootTables.w;
-        case STRONGHOLD_CROSSING:
-            return LootTables.x;
-        case STRONGHOLD_CORRIDOR:
-            return LootTables.y;
-        case DESERT_PYRAMID:
-            return LootTables.z;
-        case JUNGLE_TEMPLE:
-            return LootTables.A;
-        case JUNGLE_TEMPLE_DISPENSER:
-            return LootTables.B;
-        case IGLOO_CHEST:
-            return LootTables.C;
-        case WOODLAND_MANSION:
-            return LootTables.D;
-        case UNDERWATER_RUIN_SMALL:
-            return LootTables.E;
-        case UNDERWATER_RUIN_BIG:
-            return LootTables.F;
-        case BURIED_TREASURE:
-            return LootTables.G;
-        case SHIPWRECK_MAP:
-            return LootTables.H;
-        case SHIPWRECK_SUPPLY:
-            return LootTables.I;
-        case SHIPWRECK_TREASURE:
-            return LootTables.J;
-        case PILLAGER_OUTPOST:
-            return LootTables.K;
+        return switch(table) {
+            case EMPTY -> LootTables.a;
+            case SPAWN_BONUS_CHEST -> LootTables.b;
+            case END_CITY_TREASURE -> LootTables.c;
+            case SIMPLE_DUNGEON -> LootTables.d;
+            case VILLAGE_WEAPONSMITH -> LootTables.e;
+            case VILLAGE_TOOLSMITH -> LootTables.f;
+            case VILLAGE_ARMORER -> LootTables.g;
+            case VILLAGE_CARTOGRAPHER -> LootTables.h;
+            case VILLAGE_MASON -> LootTables.i;
+            case VILLAGE_SHEPHERD -> LootTables.j;
+            case VILLAGE_BUTCHER -> LootTables.k;
+            case VILLAGE_FLETCHER -> LootTables.l;
+            case VILLAGE_FISHER -> LootTables.m;
+            case VILLAGE_TANNERY -> LootTables.n;
+            case VILLAGE_TEMPLE -> LootTables.o;
+            case VILLAGE_DESERT_HOUSE -> LootTables.p;
+            case VILLAGE_PLAINS_HOUSE -> LootTables.q;
+            case VILLAGE_TAIGA_HOUSE -> LootTables.r;
+            case VILLAGE_SNOWY_HOUSE -> LootTables.s;
+            case VILLAGE_SAVANNA_HOUSE -> LootTables.t;
+            case ABANDONED_MINESHAFT -> LootTables.u;
+            case NETHER_BRIDGE -> LootTables.v;
+            case STRONGHOLD_LIBRARY -> LootTables.w;
+            case STRONGHOLD_CROSSING -> LootTables.x;
+            case STRONGHOLD_CORRIDOR -> LootTables.y;
+            case DESERT_PYRAMID -> LootTables.z;
+            case JUNGLE_TEMPLE -> LootTables.A;
+            case JUNGLE_TEMPLE_DISPENSER -> LootTables.B;
+            case IGLOO_CHEST -> LootTables.C;
+            case WOODLAND_MANSION -> LootTables.D;
+            case UNDERWATER_RUIN_SMALL -> LootTables.E;
+            case UNDERWATER_RUIN_BIG -> LootTables.F;
+            case BURIED_TREASURE -> LootTables.G;
+            case SHIPWRECK_MAP -> LootTables.H;
+            case SHIPWRECK_SUPPLY -> LootTables.I;
+            case SHIPWRECK_TREASURE -> LootTables.J;
+            case PILLAGER_OUTPOST -> LootTables.K;
 //        case BASTION_TREASURE:
 //            return LootTables.L;
 //        case BASTION_OTHER:
@@ -331,8 +289,8 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 //            return LootTables.N;
 //        case BASTION_HOGLIN_STABLE:
 //            return LootTables.O;
-        case RUINED_PORTAL:
-            return LootTables.P;
+            case RUINED_PORTAL -> LootTables.P;
+            default ->
 //        case SHEEP_WHITE:
 //            return LootTables.Q;
 //        case SHEEP_ORANGE:
@@ -403,8 +361,8 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 //            return LootTables.ax;
 //        case PIGLIN_BARTERING:
 //            return LootTables.ay
-        }
-        return null;
+                    null;
+        };
     }
 
 	@Override

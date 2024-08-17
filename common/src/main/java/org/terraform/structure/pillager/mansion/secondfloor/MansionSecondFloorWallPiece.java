@@ -165,20 +165,14 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     public void postBuildDecoration(Random rand, PopulatorDataAbstract data) {
     	
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
-    	MansionSecondFloorWallType type = MansionSecondFloorWallType.THIN_WINDOWS;
-    	switch(rand.nextInt(3)) {
-    	case 0:
-    		type = MansionSecondFloorWallType.LARGE_WINDOW;
-    		break;
-    	case 1:
-    		type = MansionSecondFloorWallType.THIN_WINDOWS;
-    		break;
-    	case 2:
-    		type = MansionSecondFloorWallType.BALCONY;
-    		break;
-    	}
-    	
-    	//Don't allow balconies in sink in areas
+    	MansionSecondFloorWallType type = switch(rand.nextInt(3)) {
+            case 0 -> MansionSecondFloorWallType.LARGE_WINDOW;
+            case 1 -> MansionSecondFloorWallType.THIN_WINDOWS;
+            case 2 -> MansionSecondFloorWallType.BALCONY;
+            default -> type;
+        };
+
+        //Don't allow balconies in sink in areas
     	if(type == MansionSecondFloorWallType.BALCONY) {
         	int overlappers = 0;
 	    	for(JigsawStructurePiece otherPiece:builder.getOverlapperPieces()) {

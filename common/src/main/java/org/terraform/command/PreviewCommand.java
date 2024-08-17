@@ -239,21 +239,14 @@ public class PreviewCommand extends TerraCommand {
 	private Color getClimateColor(BiomeBank bank) {
     	if(bank.getType() == BiomeType.OCEANIC||bank.getType() == BiomeType.DEEP_OCEANIC)
     		return Color.blue;
-    	switch(bank.getClimate()) {
-    	case HUMID_VEGETATION:
-    		return new Color(118,163,3);
-    	case DRY_VEGETATION:
-    		return new Color(172,187,2);
-    	case HOT_BARREN:
-    		return Color.red;
-    	case COLD:
-    		return new Color(59, 255, 150);
-    	case SNOWY:
-    		return Color.white;
-		case TRANSITION:
-    		return new Color(59, 255, 59);
-    	}
-    	return Color.pink;
+        return switch(bank.getClimate()) {
+            case HUMID_VEGETATION -> new Color(118, 163, 3);
+            case DRY_VEGETATION -> new Color(172, 187, 2);
+            case HOT_BARREN -> Color.red;
+            case COLD -> new Color(59, 255, 150);
+            case SNOWY -> Color.white;
+            case TRANSITION -> new Color(59, 255, 59);
+        };
     }
 
     @SuppressWarnings("unused")

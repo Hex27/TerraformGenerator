@@ -157,18 +157,12 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         }
 
         //Place Spawner
-        EntityType type = EntityType.ZOMBIE;
-        switch (rand.nextInt(3)) {
-            case (0):
-                type = EntityType.ZOMBIE;
-                break;
-            case (1):
-                type = EntityType.SKELETON;
-                break;
-            case (2):
-                type = EntityType.SPIDER;
-                break;
-        }
+        EntityType type = switch(rand.nextInt(3)) {
+            case (0) -> EntityType.ZOMBIE;
+            case (1) -> EntityType.SKELETON;
+            case (2) -> EntityType.SPIDER;
+            default -> type;
+        };
         if(isWet) type = EntityType.DROWNED;
         
         data.setSpawner(x, y + 1, z, type);

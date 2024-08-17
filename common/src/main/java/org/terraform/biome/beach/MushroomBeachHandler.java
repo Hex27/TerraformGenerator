@@ -63,20 +63,13 @@ public class MushroomBeachHandler extends BiomeHandler {
             if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                 BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
             	int choice = random.nextInt(3);
-            	FractalTypes.Mushroom type;
-            	switch(choice) {
-            	case 0:
-            		type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
-            		break;
-            	case 1:
-            		type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
-            		break;
-            	default:
-            		type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
-            		break;
-            	}
-            	
-            	if(HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3) <=
+            	FractalTypes.Mushroom type = switch(choice) {
+                    case 0 -> FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
+                    case 1 -> FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                    default -> FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
+                };
+
+                if(HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3) <=
             			TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble())
             		new MushroomBuilder(type).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             }
