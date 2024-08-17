@@ -57,7 +57,7 @@ public abstract class TerraCommand {
 			Object parsed = parser.parse(sender, arg);
 			String val = parser.validate(sender, arg);
 			if(parsed == null) throw new InvalidArgumentException(val);
-			if(!val.equals("")) throw new InvalidArgumentException(val);
+			if(!val.isEmpty()) throw new InvalidArgumentException(val);
 			items.add(i, parsed);
 			i++;
 		}
