@@ -5,6 +5,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -26,19 +28,19 @@ import java.util.Random;
 
 public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 
-	public HashMap<BlockFace, MansionStandardRoomPiece> adjacentPieces = new HashMap<>();
-	public HashMap<BlockFace, MansionInternalWallState> internalWalls = new HashMap<>();
+	public @NotNull HashMap<BlockFace, MansionStandardRoomPiece> adjacentPieces = new HashMap<>();
+	public @NotNull HashMap<BlockFace, MansionInternalWallState> internalWalls = new HashMap<>();
 	
 	//Mansion standard pieces decorate themselves with a special populator.
 	//If it is null, it will not do anything.
-	private MansionRoomPopulator roomPopulator = null;
+	private @Nullable MansionRoomPopulator roomPopulator = null;
 	private boolean isPopulating = false;
 	
     public MansionStandardRoomPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
         super(widthX, height, widthZ, type, validDirs);
     }
     
-    public void setupInternalAttributes(PopulatorDataAbstract data, HashMap<SimpleLocation, JigsawStructurePiece> pieces) {
+    public void setupInternalAttributes(@NotNull PopulatorDataAbstract data, @NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces) {
     	for(BlockFace face:BlockUtils.directBlockFaces) {
     		SimpleLocation otherLoc = this.getRoom().getSimpleLocation().getRelative(face, MansionJigsawBuilder.groundFloorRoomWidth);
     		if(!pieces.containsKey(otherLoc)) {
@@ -56,7 +58,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     	}
     }
     
-    public void buildWalls(Random random, PopulatorDataAbstract data) {
+    public void buildWalls(Random random, @NotNull PopulatorDataAbstract data) {
     	for(BlockFace face:this.internalWalls.keySet()) {
     		if(internalWalls.get(face) == MansionInternalWallState.WINDOW
     				|| internalWalls.get(face) == MansionInternalWallState.EXIT)
@@ -120,7 +122,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     }
     
     @Override
-    public JigsawStructurePiece getInstance(Random rand, int depth) {
+    public @Nullable JigsawStructurePiece getInstance(@NotNull Random rand, int depth) {
     	MansionStandardRoomPiece clone = (MansionStandardRoomPiece) super.getInstance(rand, depth);
         if(clone == null) return null;
     	clone.adjacentPieces = new HashMap<>();
@@ -128,13 +130,13 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
         return clone;
     }
     
-    public Collection<BlockFace> getShuffledInternalWalls(){
+    public @NotNull Collection<BlockFace> getShuffledInternalWalls(){
         ArrayList<BlockFace> shuffled = new ArrayList<>(internalWalls.keySet());
     	Collections.shuffle(shuffled);
     	return shuffled;
     }
 
-	public MansionRoomPopulator getRoomPopulator() {
+	public @Nullable MansionRoomPopulator getRoomPopulator() {
 		return roomPopulator;
 	}
 
@@ -153,7 +155,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 	 * @param random
 	 * @param data
 	 */
-    public void decorateWalls(Random random, PopulatorDataAbstract data) {
+    public void decorateWalls(Random random, @NotNull PopulatorDataAbstract data) {
     	//UNLIKE ROOM POPULATOR, this will run even if isPopuating is false.
     	//This is because the other cells must decorate their walls.
     	if(this.roomPopulator == null) return; 
@@ -188,7 +190,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 	}
 	
 	public static int spawnedGuards = 0;
-	public void spawnGuards(Random rand, PopulatorDataAbstract data) {
+	public void spawnGuards(@NotNull Random rand, @NotNull PopulatorDataAbstract data) {
 		if(this.roomPopulator == null) return;
 		
 		EntityType type = EntityType.VINDICATOR;

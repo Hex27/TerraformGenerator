@@ -2,6 +2,7 @@ package org.terraform.biome.river;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -20,7 +21,7 @@ public class FrozenRiverHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.FROZEN_RIVER;
     }
 
@@ -33,7 +34,7 @@ public class FrozenRiverHandler extends BiomeHandler {
 //	}
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.DIRT,
                 Material.DIRT,
                 GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.DIRT),
@@ -43,7 +44,7 @@ public class FrozenRiverHandler extends BiomeHandler {
 
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         boolean growsKelp = world.getHashedRand(rawX>>4,rawZ>>4,14979813).nextBoolean();
 
         if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land

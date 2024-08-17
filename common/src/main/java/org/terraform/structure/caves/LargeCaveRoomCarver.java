@@ -2,6 +2,7 @@ package org.terraform.structure.caves;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
 import org.terraform.structure.room.CubeRoom;
@@ -17,7 +18,7 @@ public class LargeCaveRoomCarver extends RoomCarver {
     }
 
     @Override
-    public void carveRoom(PopulatorDataAbstract data, CubeRoom room, Material... wallMaterial) {
+    public void carveRoom(@NotNull PopulatorDataAbstract data, CubeRoom room, Material... wallMaterial) {
         if(!(room instanceof LargeCaveRoomPiece caveRoom))
             throw new NotImplementedException("room for LargeCaveRoomCarver was not a LargeCaveRoomPiece");
 

@@ -1,6 +1,7 @@
 package org.terraform.structure.stronghold;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -24,18 +25,18 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
      * @return x, z coords on the circumference of
      * a circle of the specified radius, center 0,0
      */
-    private static int[] randomCircleCoords(Random rand, int radius) {
+    private static int[] randomCircleCoords(@NotNull Random rand, int radius) {
         double angle = rand.nextDouble() * Math.PI * 2;
         int x = (int) (Math.cos(angle) * radius);
         int z = (int) (Math.sin(angle) * radius);
         return new int[]{x, z};
     }
 
-    private static boolean areCoordsEqual(int[] a, int x, int z) {
+    private static boolean areCoordsEqual(int @NotNull [] a, int x, int z) {
         return a[0] == x && a[1] == z;
     }
 
-    public int[][] strongholdPositions(TerraformWorld tw) {
+    public int[][] strongholdPositions(@NotNull TerraformWorld tw) {
         if (POSITIONS == null) {
             POSITIONS = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
             int pos = 0;
@@ -77,7 +78,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         int[][] positions = strongholdPositions(tw);
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
@@ -91,7 +92,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         //TerraformGeneratorPlugin.logger.debug("s-populate");
         if (!TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean()) return;
         int[][] positions = strongholdPositions(tw);
@@ -120,7 +121,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     }
 
-    public void spawnStronghold(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnStronghold(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         //TerraformGeneratorPlugin.logger.info("Spawning stronghold at: " + x + "," + z);
 
         int numRooms = 70;
@@ -181,7 +182,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     //This has to be kept. It is used to locate strongholds
-    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+    public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
         double minDistanceSquared = Double.MAX_VALUE;
         int[] min = null;
         for (int[] loc : strongholdPositions(tw)) {
@@ -202,7 +203,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
 
-    public int[] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+    public int[] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         int[][] positions = strongholdPositions(tw);
         for (int[] pos : positions) {
             if (mc.containsXZBlockCoords(pos[0], pos[1]))
@@ -213,7 +214,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(1999222, chunkX, chunkZ);
     }
 

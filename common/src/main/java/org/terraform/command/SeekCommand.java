@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
@@ -35,7 +36,7 @@ public class SeekCommand extends TerraCommand implements Listener {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Locates the nearest structure to 0,0 and requests a chunk from its coords, forcing its generation from console. Operates on world \"world\"";
     }
 
@@ -45,12 +46,12 @@ public class SeekCommand extends TerraCommand implements Listener {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
         return sender.isOp();
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
             throws InvalidArgumentException {
         ArrayList<Object> params = this.parseArguments(sender, args);
         if (params.size() == 0) {
@@ -85,7 +86,7 @@ public class SeekCommand extends TerraCommand implements Listener {
         }
     }
 
-    private void generateMultiMegaChunkStructure(World w, MultiMegaChunkStructurePopulator populator) {
+    private void generateMultiMegaChunkStructure(@NotNull World w, @NotNull MultiMegaChunkStructurePopulator populator) {
 
         MegaChunk center = new MegaChunk(0,0,0);
         TerraformWorld tw = TerraformWorld.get(w);
@@ -112,7 +113,7 @@ public class SeekCommand extends TerraCommand implements Listener {
         runnable.runTaskAsynchronously(plugin);
     }
 
-    private void generateSingleMegaChunkStructure(World w, SingleMegaChunkStructurePopulator populator) {
+    private void generateSingleMegaChunkStructure(@NotNull World w, @NotNull SingleMegaChunkStructurePopulator populator) {
 
         MegaChunk center = new MegaChunk(0,0,0);
         TerraformWorld tw = TerraformWorld.get(w);
@@ -150,7 +151,7 @@ public class SeekCommand extends TerraCommand implements Listener {
         }
 
         @Override
-        public StructurePopulator parse(CommandSender arg0, String arg1) {
+        public StructurePopulator parse(CommandSender arg0, @NotNull String arg1) {
             if(arg1.equalsIgnoreCase("stronghold")||arg1.equalsIgnoreCase("strongholdpopulator"))
                 return new StrongholdPopulator();
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
@@ -162,7 +163,7 @@ public class SeekCommand extends TerraCommand implements Listener {
         }
 
         @Override
-        public String validate(CommandSender arg0, String arg1) {
+        public @NotNull String validate(CommandSender arg0, @NotNull String arg1) {
             if (this.parse(arg0, arg1) != null)
                 return "";
             else
@@ -170,7 +171,7 @@ public class SeekCommand extends TerraCommand implements Listener {
         }
 
         @Override
-        public ArrayList<String> getTabOptions(String[] args) {
+        public @NotNull ArrayList<String> getTabOptions(String @NotNull [] args) {
             if (args.length != 2) return new ArrayList<>();
             ArrayList<String> values = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package org.terraform.biome.flat;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
@@ -18,7 +19,7 @@ import java.util.Random;
 public class SwampHandler extends BiomeHandler {
 
     @Override
-    public BiomeBank getRiverType(){ return BiomeBank.SWAMP; }
+    public @NotNull BiomeBank getRiverType(){ return BiomeBank.SWAMP; }
 
     @Override
     public boolean isOcean() {
@@ -26,11 +27,11 @@ public class SwampHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.SWAMP;
     }
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
                 GenUtils.randMaterial(rand, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.DIRT, Material.STONE),
@@ -48,7 +49,7 @@ public class SwampHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 
         int treeX, treeY, treeZ;
         if (GenUtils.chance(random, 8, 10)) {
@@ -76,7 +77,7 @@ public class SwampHandler extends BiomeHandler {
 	}
 
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.MUDFLATS;
 	}
 	

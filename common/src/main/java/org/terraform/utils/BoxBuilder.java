@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -20,7 +21,7 @@ public class BoxBuilder {
 	private float rZ = 1f;
 	private SimpleBlock core;
 	private boolean hardReplace = false;
-	private Collection<Material> replaceWhitelist = new ArrayList<Material>();
+	private @NotNull Collection<Material> replaceWhitelist = new ArrayList<Material>();
 	private Material[] types;
 	private Material[] upperType;
 	private Material[] lowerType;
@@ -29,60 +30,60 @@ public class BoxBuilder {
 	private BoxType boxType = BoxType.FULL_BOX;
 	
 	
-	public BoxBuilder(Random random, SimpleBlock core, Material... types) {
+	public BoxBuilder(@NotNull Random random, SimpleBlock core, Material... types) {
 		this.random = random;
 		this.seed = random.nextInt(99999999);
 		this.types = types;
 		this.core = core;
 	}
 	
-	public BoxBuilder setBoxType(BoxType sphereType) {
+	public @NotNull BoxBuilder setBoxType(BoxType sphereType) {
 		this.boxType = sphereType;
 		return this;
 	}
 	
-	public BoxBuilder setUpperType(Material... upperType) {
+	public @NotNull BoxBuilder setUpperType(Material... upperType) {
 		this.upperType = upperType;
 		return this;
 	}
 
-	public BoxBuilder setLowerType(Material... lowerType) {
+	public @NotNull BoxBuilder setLowerType(Material... lowerType) {
 		this.lowerType = lowerType;
 		return this;
 	}
 	
-	public BoxBuilder setStaticWaterLevel(int staticWaterLevel) {
+	public @NotNull BoxBuilder setStaticWaterLevel(int staticWaterLevel) {
 		this.staticWaterLevel = staticWaterLevel;
 		return this;
 	}
 	
-	public BoxBuilder addToWhitelist(Material... mats) {
+	public @NotNull BoxBuilder addToWhitelist(Material @NotNull ... mats) {
         replaceWhitelist.addAll(Arrays.asList(mats));
 		return this;
 	}
 	
-	public BoxBuilder setRadius(float radius) {
+	public @NotNull BoxBuilder setRadius(float radius) {
 		this.rX = radius; this.rY = radius; this.rZ = radius;
 		return this;
 	}
 	
-	public BoxBuilder setRX(float rX) {
+	public @NotNull BoxBuilder setRX(float rX) {
 		this.rX = rX;
 		return this;
 	}
-	public BoxBuilder setRZ(float rZ) {
+	public @NotNull BoxBuilder setRZ(float rZ) {
 		this.rZ = rZ;
 		return this;
 	}
-	public BoxBuilder setRY(float rY) {
+	public @NotNull BoxBuilder setRY(float rY) {
 		this.rY = rY;
 		return this;
 	}
-	public BoxBuilder setSnowy() {
+	public @NotNull BoxBuilder setSnowy() {
 		this.upperType = new Material[] {Material.SNOW};
 		return this;
 	}
-	public BoxBuilder setHardReplace(boolean hardReplace) {
+	public @NotNull BoxBuilder setHardReplace(boolean hardReplace) {
 		this.hardReplace = hardReplace;
 		return this;
 	}
@@ -131,7 +132,7 @@ public class BoxBuilder {
         }
     }
     
-    private boolean unitReplace(SimpleBlock rel) {
+    private boolean unitReplace(@NotNull SimpleBlock rel) {
     	if(replaceWhitelist.size() == 0) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));

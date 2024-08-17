@@ -12,6 +12,8 @@ import org.bukkit.block.data.Rail.Shape;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.IPopulatorDataMinecartSpawner;
 import org.terraform.data.SimpleBlock;
@@ -37,7 +39,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
      */
     @Deprecated
     @Override
-    public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
+    public boolean customCarve(@NotNull SimpleBlock base, BlockFace dir, int pathWidth) {
         Wall core = new Wall(base.getRelative(0, 1, 0), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
@@ -48,7 +50,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     }
 
     @Override
-    public void populate(PathPopulatorData ppd) {
+    public void populate(@NotNull PathPopulatorData ppd) {
         Wall core = new Wall(ppd.base, ppd.dir);
 
         if(ppd.dir == BlockFace.UP)
@@ -64,7 +66,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         legacyPopulate(core);
         legacyPopulate(core.getFront());
     }
-    public void legacyPopulate(Wall core) {
+    public void legacyPopulate(@NotNull Wall core) {
         //what the fuck is wrong with you
 
         //Was populated before.
@@ -241,7 +243,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         }
     }
 
-    public boolean setMineshaftSupport(Wall left, Wall right, Wall ceil) {
+    public boolean setMineshaftSupport(@Nullable Wall left, @Nullable Wall right, @Nullable Wall ceil) {
         if (left == null || right == null) {
             return false; //Lol wtf is this situation even
         }
@@ -310,7 +312,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         return true;
     }
     
-    private void placeSupportFences(Wall w) {
+    private void placeSupportFences(@NotNull Wall w) {
     	while(!w.getType().isSolid()) {
     		if(w.getType() == Material.LAVA)
     			w.setType(Material.COBBLESTONE);
@@ -325,7 +327,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         return 3;
     }
 
-    public Material[] getPathMaterial() {
+    public Material @NotNull [] getPathMaterial() {
         return new Material[] {
                 Material.OAK_PLANKS,
                 Material.OAK_SLAB,
@@ -335,11 +337,11 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         };
     }
 
-    public Material getFenceMaterial() {
+    public @NotNull Material getFenceMaterial() {
         return Material.OAK_FENCE;
     }
     
-    public Material getSupportMaterial() {
+    public @NotNull Material getSupportMaterial() {
         return Material.OAK_LOG;
     }
 }

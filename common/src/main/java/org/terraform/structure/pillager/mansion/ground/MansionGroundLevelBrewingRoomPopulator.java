@@ -11,6 +11,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs.Shape;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -35,7 +36,7 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 	private static final int roomWidthX = 15;
 	private static final int roomWidthZ = 6;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
@@ -67,7 +68,7 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 	}
 
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(1);
 		
 		switch(choice) {
@@ -91,7 +92,7 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 	
 	//Brewing stand and mini library
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(Random rand, @NotNull Wall w) {
 		w.setType(Material.CAULDRON);
 		w.getLeft().setType(Material.BARREL);
 		w.getLeft().lootTableChest(TerraLootTable.VILLAGE_TEMPLE);
@@ -139,7 +140,7 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 		
 	}
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,1);
 	}
 

@@ -1,9 +1,9 @@
 package org.terraform.structure.warmoceanruins;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.GenUtils;
@@ -24,7 +24,7 @@ public abstract class WarmOceanBaseRoom extends RoomPopulatorAbstract {
     //Partially sink the structure into the ground.
     // Set some suspicious sand around too
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         room.setY(GenUtils.getHighestGround(data, room.getX(), room.getZ()) + 1
                 //- rand.nextInt(2)
         );

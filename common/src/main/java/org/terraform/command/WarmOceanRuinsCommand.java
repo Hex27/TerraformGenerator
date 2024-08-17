@@ -2,12 +2,12 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.catacombs.CatacombsPopulator;
 import org.terraform.structure.warmoceanruins.WarmOceanRuinsPopulator;
 
 import java.util.Random;
@@ -20,7 +20,7 @@ public class WarmOceanRuinsCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Spawntest for warm ocean ruins";
     }
 
@@ -30,7 +30,7 @@ public class WarmOceanRuinsCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
 
         return sender.isOp();
     }

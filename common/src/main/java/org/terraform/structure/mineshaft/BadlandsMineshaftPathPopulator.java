@@ -1,6 +1,7 @@
 package org.terraform.structure.mineshaft;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -10,7 +11,7 @@ public class BadlandsMineshaftPathPopulator extends MineshaftPathPopulator {
     }
 
     @Override
-    public Material[] getPathMaterial() {
+    public Material @NotNull [] getPathMaterial() {
         return new Material[] {
                 Material.DARK_OAK_PLANKS,
                 Material.DARK_OAK_SLAB,
@@ -21,12 +22,12 @@ public class BadlandsMineshaftPathPopulator extends MineshaftPathPopulator {
     }
 
     @Override
-    public Material getFenceMaterial() {
+    public @NotNull Material getFenceMaterial() {
         return Material.DARK_OAK_FENCE;
     }
 
     @Override
-    public Material getSupportMaterial() {
+    public @NotNull Material getSupportMaterial() {
         return Material.DARK_OAK_LOG;
     }
 }

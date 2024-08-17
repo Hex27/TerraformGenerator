@@ -2,6 +2,7 @@ package org.terraform.biome.river;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -23,7 +24,7 @@ public class JungleRiverHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.RIVER;
     }
 
@@ -36,7 +37,7 @@ public class JungleRiverHandler extends BiomeHandler {
 //	}
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
                 Material.DIRT,
                 Material.DIRT,
@@ -47,7 +48,7 @@ public class JungleRiverHandler extends BiomeHandler {
 
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         boolean growsKelp = random.nextBoolean();
         if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
             return;
@@ -76,13 +77,13 @@ public class JungleRiverHandler extends BiomeHandler {
      * Generate random lily pads in jungle rivers
      * Deeper waters -> less pads. Noise makes sure they are in groups
      */
-    public static void generateLilyPad(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int z, int highestGround) {
+    public static void generateLilyPad(TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int z, int highestGround) {
         if (GenUtils.chance(random, 1, (int) (getLilyPadNoise(tw, x, z) * 7 + Math.pow(TerraformGenerator.seaLevel - highestGround, 3) + 18))) {
             data.setType(x, TerraformGenerator.seaLevel + 1, z, Material.LILY_PAD);
         }
     }
 
-    public static void generateKelp(int x, int y, int z, PopulatorDataAbstract data, Random random) {
+    public static void generateKelp(int x, int y, int z, @NotNull PopulatorDataAbstract data, @NotNull Random random) {
         for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(random, 0, 2); ny++) {
             data.setType(x, ny, z, Material.KELP_PLANT);
         }

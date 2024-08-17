@@ -27,6 +27,7 @@ package org.terraform.utils.noise;
 //off every 'zix'.)
 //
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.utils.Vector2f;
 import org.terraform.utils.Vector3f;
 
@@ -2152,11 +2153,11 @@ public class FastNoise {
         }
     }
 
-    public void GradientPerturb(Vector3f v3) {
+    public void GradientPerturb(@NotNull Vector3f v3) {
         SingleGradientPerturb(m_seed, m_gradientPerturbAmp, m_frequency, v3);
     }
 
-    public void GradientPerturbFractal(Vector3f v3) {
+    public void GradientPerturbFractal(@NotNull Vector3f v3) {
         int seed = m_seed;
         float amp = m_gradientPerturbAmp * m_fractalBounding;
         float freq = m_frequency;
@@ -2170,7 +2171,7 @@ public class FastNoise {
         }
     }
 
-    private void SingleGradientPerturb(int seed, float perturbAmp, float frequency, Vector3f v3) {
+    private void SingleGradientPerturb(int seed, float perturbAmp, float frequency, @NotNull Vector3f v3) {
         float xf = v3.x * frequency;
         float yf = v3.y * frequency;
         float zf = v3.z * frequency;
@@ -2239,11 +2240,11 @@ public class FastNoise {
         v3.z += Lerp(lz0y, Lerp(lz0x, lz1x, ys), zs) * perturbAmp;
     }
 
-    public void GradientPerturb(Vector2f v2) {
+    public void GradientPerturb(@NotNull Vector2f v2) {
         SingleGradientPerturb(m_seed, m_gradientPerturbAmp, m_frequency, v2);
     }
 
-    public void GradientPerturbFractal(Vector2f v2) {
+    public void GradientPerturbFractal(@NotNull Vector2f v2) {
         int seed = m_seed;
         float amp = m_gradientPerturbAmp * m_fractalBounding;
         float freq = m_frequency;
@@ -2257,7 +2258,7 @@ public class FastNoise {
         }
     }
 
-    private void SingleGradientPerturb(int seed, float perturbAmp, float frequency, Vector2f v2) {
+    private void SingleGradientPerturb(int seed, float perturbAmp, float frequency, @NotNull Vector2f v2) {
         float xf = v2.x * frequency;
         float yf = v2.y * frequency;
 

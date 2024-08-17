@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.temple;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.jigsaw.JigsawType;
@@ -52,7 +53,7 @@ public class PlainsVillageTempleRelicPiece extends PlainsVillageTempleStandardPi
 	};
 	
 	@Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
 		
         Material stairType = stairTypes[random.nextInt(stairTypes.length)];

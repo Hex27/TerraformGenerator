@@ -1,10 +1,8 @@
 package org.terraform.v1_20_R4;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.block.entity.TileEntityBeehive;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.chunk.status.WorldGenContext;
-import net.minecraft.world.level.levelgen.ChunkGeneratorAbstract;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Beehive;
@@ -12,8 +10,9 @@ import org.bukkit.craftbukkit.v1_20_R4.CraftChunk;
 import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R4.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_20_R4.generator.CraftLimitedRegion;
-import org.bukkit.craftbukkit.v1_20_R4.generator.CustomChunkGenerator;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -44,12 +43,12 @@ public class NMSInjector extends NMSInjectorAbstract {
 	}
 
     @Override
-    public BlockDataFixerAbstract getBlockDataFixer() {
+    public @NotNull BlockDataFixerAbstract getBlockDataFixer() {
         return new BlockDataFixer();
     }
 
     @Override
-    public boolean attemptInject(World world) {
+    public boolean attemptInject(@NotNull World world) {
         CraftWorld cw = (CraftWorld) world;
         WorldServer ws = cw.getHandle();
 
@@ -98,7 +97,7 @@ public class NMSInjector extends NMSInjectorAbstract {
     }
 
     @Override
-    public PopulatorDataICAAbstract getICAData(Chunk chunk) {
+    public @NotNull PopulatorDataICAAbstract getICAData(@NotNull Chunk chunk) {
         //ChunKStatus.FULL
         IChunkAccess ica = ((CraftChunk) chunk).getHandle(ChunkStatus.n);
         CraftWorld cw = (CraftWorld) chunk.getWorld();
@@ -110,7 +109,7 @@ public class NMSInjector extends NMSInjectorAbstract {
     }
 
     @Override
-    public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
+    public @Nullable PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
         //This is for the damn bees
         if (data instanceof PopulatorDataSpigotAPI pdata) {
             GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
@@ -124,7 +123,7 @@ public class NMSInjector extends NMSInjectorAbstract {
         return null;
     }
 
-    private static Method getTileEntity = null;
+    private static @Nullable Method getTileEntity = null;
     @Override
     public void storeBee(Beehive hive) {
         try {

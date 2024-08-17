@@ -11,6 +11,7 @@ import org.bukkit.block.data.type.RedstoneWire;
 import org.bukkit.block.data.type.RedstoneWire.Connection;
 import org.bukkit.block.data.type.Switch;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -30,7 +31,7 @@ public class CryptRoom extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 
         //Crypt entry
         BlockFace face = BlockUtils.getDirectBlockFace(rand);
@@ -137,7 +138,7 @@ public class CryptRoom extends RoomPopulatorAbstract {
 
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() >= 11 && room.getWidthZ() >= 11;
     }
 }

@@ -2,6 +2,7 @@ package org.terraform.biome.cavepopulators;
 
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.GenUtils;
 
@@ -37,7 +38,7 @@ public enum CaveClusterRegistry {
 		this.pertub = pertub;
 	}
 	
-	public AbstractCaveClusterPopulator getPopulator(Random random) {
+	public @NotNull AbstractCaveClusterPopulator getPopulator(@NotNull Random random) {
         return switch(this) {
             case LUSH -> new LushClusterCavePopulator(
                     GenUtils.randInt(random,

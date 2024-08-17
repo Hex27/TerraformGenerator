@@ -1,6 +1,7 @@
 package org.terraform.structure.ancientcity;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -29,20 +30,20 @@ public class AncientCitySchematicPlatform extends AncientCityAbstractRoomPopulat
         super(tw, occupied, gen, rand, forceSpawn, unique);
     }
 
-    private String[] smallSchematics = new String[] {
+    private String @NotNull [] smallSchematics = new String[] {
 		"ancient-city/ancient-city-wood-tower-1",
 		"ancient-city/ancient-city-rock-tower-1",
 		"ancient-city/ancient-city-lamp",
     };
-    private String[] mediumSchematics = new String[] {
+    private String @NotNull [] mediumSchematics = new String[] {
 		"ancient-city/ancient-city-hot-tub",
 		"ancient-city/ancient-city-warehouse",
     };
-    private String[] largeSchematics = new String[] {
+    private String @NotNull [] largeSchematics = new String[] {
 		"ancient-city/ancient-city-pantheon",
     };
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	
     	int platformSize = 0; //0 - small, 1 - medium, 2 - large

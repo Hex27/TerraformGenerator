@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.FractalTypes.Mushroom;
 
@@ -15,13 +16,13 @@ public class MushroomTypeArgument extends TerraCommandArgument<FractalTypes.Mush
     }
 
     @Override
-    public FractalTypes.Mushroom parse(CommandSender sender, String value) {
+    public FractalTypes.@NotNull Mushroom parse(CommandSender sender, @NotNull String value) {
 
         return FractalTypes.Mushroom.valueOf(value.toUpperCase(Locale.ENGLISH));
     }
 
     @Override
-    public String validate(CommandSender sender, String value) {
+    public @NotNull String validate(CommandSender sender, @NotNull String value) {
         try {
             parse(sender, value);
         } catch (IllegalArgumentException e) {
@@ -32,7 +33,7 @@ public class MushroomTypeArgument extends TerraCommandArgument<FractalTypes.Mush
     
 
     @Override
-    public ArrayList<String> getTabOptions(String[] args) {
+    public @NotNull ArrayList<String> getTabOptions(String @NotNull [] args) {
         if (args.length != 2) return new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 

@@ -4,15 +4,16 @@ import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.Orientable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.utils.GenUtils;
 
 public class OrientableBuilder {
-    private final Orientable blockData;
+    private final @NotNull Orientable blockData;
 
-    public OrientableBuilder(Material mat) {
+    public OrientableBuilder(@NotNull Material mat) {
         this.blockData = (Orientable) Bukkit.createBlockData(mat);
     }
 
@@ -21,46 +22,46 @@ public class OrientableBuilder {
     }
 
 
-    public OrientableBuilder setAxis(Axis axis) {
+    public @NotNull OrientableBuilder setAxis(@NotNull Axis axis) {
         this.blockData.setAxis(axis);
         return this;
     }
 
 
-    public OrientableBuilder apply(SimpleBlock block) {
+    public @NotNull OrientableBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public OrientableBuilder apply(Wall block) {
+    public @NotNull OrientableBuilder apply(@NotNull Wall block) {
         block.setBlockData(blockData);
         return this;
     }
 
-    public OrientableBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull OrientableBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         return this;
     }
 
-    public OrientableBuilder lapply(SimpleBlock block) {
+    public @NotNull OrientableBuilder lapply(@NotNull SimpleBlock block) {
     	if(!block.getType().isSolid())
     		block.setBlockData(blockData);
         return this;
     }
 
-    public OrientableBuilder lapply(Wall block) {
+    public @NotNull OrientableBuilder lapply(@NotNull Wall block) {
     	if(!block.getType().isSolid())
     		block.setBlockData(blockData);
         return this;
     }
 
-    public OrientableBuilder lapply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull OrientableBuilder lapply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	if(!data.getType(x, y, z).isSolid())
     		data.setBlockData(x, y, z, blockData);
         return this;
     }
 
-    public Orientable get() {
+    public @NotNull Orientable get() {
         return blockData;
     }
 }

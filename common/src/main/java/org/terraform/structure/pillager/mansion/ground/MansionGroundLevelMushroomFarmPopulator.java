@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -28,7 +29,7 @@ public class MansionGroundLevelMushroomFarmPopulator extends MansionRoomPopulato
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
 		//TerraformGeneratorPlugin.logger.info("Mushroom Farm at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
@@ -57,7 +58,7 @@ public class MansionGroundLevelMushroomFarmPopulator extends MansionRoomPopulato
 		
 	}
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(Random rand, @NotNull Wall w) {
 		Entry<Wall, Integer> entry = this.getRoom().getWall(w.get().getPopData(), w.getDirection().getOppositeFace(), 0);
 		w = entry.getKey();
 		for(int i = 0; i < entry.getValue(); i++) {
@@ -71,14 +72,14 @@ public class MansionGroundLevelMushroomFarmPopulator extends MansionRoomPopulato
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(Random rand, @NotNull Wall w) {
 		w.getLeft().setType(Material.COMPOSTER);
 		w.getRight().setType(Material.COMPOSTER);
 	}
 	
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(1,2);
 	}
 

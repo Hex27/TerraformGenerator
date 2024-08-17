@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
@@ -30,14 +32,14 @@ import java.util.UUID;
 
 public class LocateCommand extends TerraCommand implements Listener {
 
-    public LocateCommand(TerraformGeneratorPlugin plugin, String... aliases) {
+    public LocateCommand(@NotNull TerraformGeneratorPlugin plugin, String... aliases) {
         super(plugin, aliases);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.parameters.add(new StructurePopulatorArgument("structureType", true));
     }
 
     @EventHandler
-    public void onLocateCommand(PlayerCommandPreprocessEvent event) {
+    public void onLocateCommand(@NotNull PlayerCommandPreprocessEvent event) {
         if (event.getPlayer().getWorld().getGenerator() instanceof TerraformGenerator) {
             if (event.getMessage().startsWith("/locate")) {
                 event.getPlayer().sendMessage(LangOpt.COMMAND_LOCATE_NOVANILLA.parse());
@@ -47,7 +49,7 @@ public class LocateCommand extends TerraCommand implements Listener {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Locates nearest TerraformGenerator structures. Do /terra locate for all searchable structures.";
     }
 
@@ -57,12 +59,12 @@ public class LocateCommand extends TerraCommand implements Listener {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
         return sender.isOp() || sender.hasPermission("terraformgenerator.locate");
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
             throws InvalidArgumentException {
         ArrayList<Object> params = this.parseArguments(sender, args);
         if (params.size() == 0) {
@@ -102,7 +104,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         }
     }
 
-    private void locateMultiMegaChunkStructure(Player p, MultiMegaChunkStructurePopulator populator) {
+    private void locateMultiMegaChunkStructure(@NotNull Player p, @NotNull MultiMegaChunkStructurePopulator populator) {
 
         MegaChunk center = new MegaChunk(
                 p.getLocation().getBlockX(),
@@ -131,7 +133,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         runnable.runTaskAsynchronously(plugin);
     }
 
-    private void locateSingleMegaChunkStructure(Player p, SingleMegaChunkStructurePopulator populator) {
+    private void locateSingleMegaChunkStructure(@NotNull Player p, @NotNull SingleMegaChunkStructurePopulator populator) {
 
         MegaChunk center = new MegaChunk(
                 p.getLocation().getBlockX(),
@@ -161,7 +163,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         runnable.runTaskAsynchronously(plugin);
     }
 
-    private void syncSendMessage(UUID uuid, String message) {
+    private void syncSendMessage(UUID uuid, @NotNull String message) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.getUniqueId() == uuid) {
                 p.sendMessage(message);
@@ -178,7 +180,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         }
 
         @Override
-        public StructurePopulator parse(CommandSender arg0, String arg1) {
+        public @Nullable StructurePopulator parse(CommandSender arg0, @NotNull String arg1) {
             if(arg1.equalsIgnoreCase("stronghold")||arg1.equalsIgnoreCase("strongholdpopulator"))
                 return new StrongholdPopulator();
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
@@ -190,7 +192,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         }
 
         @Override
-        public String validate(CommandSender arg0, String arg1) {
+        public @NotNull String validate(CommandSender arg0, @NotNull String arg1) {
             if (this.parse(arg0, arg1) != null)
                 return "";
             else
@@ -198,7 +200,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         }
 
         @Override
-        public ArrayList<String> getTabOptions(String[] args) {
+        public @NotNull ArrayList<String> getTabOptions(String @NotNull [] args) {
             if (args.length != 2) return new ArrayList<>();
             ArrayList<String> values = new ArrayList<>();
 

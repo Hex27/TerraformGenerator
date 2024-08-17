@@ -1,5 +1,6 @@
 package org.terraform.reflection;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.lang.invoke.MethodHandle;
@@ -35,7 +36,7 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
     }
 
     @Override
-    public void injectField(Object obj, String field, Object value) throws Exception {
+    public void injectField(@NotNull Object obj, @NotNull String field, Object value) throws Exception {
         Field targetField = obj.getClass().getField(field);
         targetField.setAccessible(true);
         int mds = targetField.getModifiers();
@@ -53,7 +54,7 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
     }
     
     @Override
-    public void injectField(Object obj, Field targetField, Object value) throws IllegalArgumentException, IllegalAccessException {
+    public void injectField(Object obj, @NotNull Field targetField, Object value) throws IllegalArgumentException, IllegalAccessException {
 	    targetField.setAccessible(true);
 	    int mds = targetField.getModifiers();
 	

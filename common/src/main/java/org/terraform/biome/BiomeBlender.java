@@ -1,5 +1,6 @@
 package org.terraform.biome;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleLocation;
@@ -130,7 +131,7 @@ public class BiomeBlender {
      *                           by this value. Can be used to control how "steep"
      *                           the blending near biome edge is.
      */
-    public BiomeBlender setGridBlendingFactor(double gridBlendingFactor) {
+    public @NotNull BiomeBlender setGridBlendingFactor(double gridBlendingFactor) {
         this.gridBlendingFactor = gridBlendingFactor;
         return this;
     }
@@ -140,7 +141,7 @@ public class BiomeBlender {
      *                       linear blending happens when river
      *                       depth is more than -5 (0 > dep > -5).
      */
-    public BiomeBlender setRiverThreshold(int riverThreshold) {
+    public @NotNull BiomeBlender setRiverThreshold(int riverThreshold) {
         this.riverThreshold = riverThreshold;
         return this;
     }
@@ -152,7 +153,7 @@ public class BiomeBlender {
      * @param smoothBlendTowardsRivers
      * @return
      */
-    public BiomeBlender setSmoothBlendTowardsRivers(int smoothBlendTowardsRivers)
+    public @NotNull BiomeBlender setSmoothBlendTowardsRivers(int smoothBlendTowardsRivers)
     {
     	this.smoothBlendTowardsRivers = smoothBlendTowardsRivers;
     	return this;
@@ -163,7 +164,7 @@ public class BiomeBlender {
      *                        away from sea level instead of beach level. In other words,
      *                        controls if blending happens based on sea level or river depth.
      */
-    public BiomeBlender setBlendBeaches(boolean blendBeachesToo) {
+    public @NotNull BiomeBlender setBlendBeaches(boolean blendBeachesToo) {
         this.blendBeachesToo = blendBeachesToo;
         return this;
     }

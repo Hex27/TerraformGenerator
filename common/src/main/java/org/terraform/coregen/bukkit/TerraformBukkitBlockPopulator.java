@@ -18,10 +18,10 @@ import java.util.Random;
 public class TerraformBukkitBlockPopulator extends BlockPopulator{
 
     protected final TerraformWorld tw;
-    private final TerraformStructurePopulator structurePopulator;
-    private final NativeGeneratorPatcherPopulator nativePatcherPopulator;
-    private final PhysicsUpdaterPopulator physicsUpdaterPopulator;
-    private final TerraformAnimalPopulator animalPopulator;
+    private final @NotNull TerraformStructurePopulator structurePopulator;
+    private final @NotNull NativeGeneratorPatcherPopulator nativePatcherPopulator;
+    private final @NotNull PhysicsUpdaterPopulator physicsUpdaterPopulator;
+    private final @NotNull TerraformAnimalPopulator animalPopulator;
 
     public TerraformBukkitBlockPopulator(TerraformWorld tw) {
         this.tw = tw;
@@ -33,7 +33,7 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
     }
 
     @Override
-    public void populate(World world, Random random, Chunk chunk) {
+    public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         //Run the fixers first
         this.nativePatcherPopulator.populate(world, random, chunk);
         this.physicsUpdaterPopulator.populate(world, random, chunk);
@@ -50,7 +50,7 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
         this.structurePopulator.populate(worldInfo, random, chunkX, chunkZ, lr);
     }
 
-        public TerraformStructurePopulator getStructurePopulator() {
+        public @NotNull TerraformStructurePopulator getStructurePopulator() {
 		return structurePopulator;
 	}
     

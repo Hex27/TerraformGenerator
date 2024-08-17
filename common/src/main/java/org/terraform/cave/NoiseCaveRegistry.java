@@ -1,5 +1,6 @@
 package org.terraform.cave;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -7,8 +8,8 @@ import org.terraform.utils.noise.FastNoise;
 
 public class NoiseCaveRegistry {
     private final TerraformWorld tw;
-    private final NoiseCaveAbstract[] noiseCaveCarvers;
-    private final NoiseCaveAbstract[] generateCaveCarvers;
+    private final NoiseCaveAbstract @NotNull [] noiseCaveCarvers;
+    private final NoiseCaveAbstract @NotNull [] generateCaveCarvers;
 
     public NoiseCaveRegistry(TerraformWorld tw) {
         this.tw = tw;
@@ -47,7 +48,7 @@ public class NoiseCaveRegistry {
      * @return a value between 0 and 1 inclusive. 1 for all clear,
      * less than 1 to smooth an approach towards a barrier.
      */
-    public float yBarrier(TerraformWorld tw, float x, float y, float z, float v, float barrier, float limit){
+    public float yBarrier(@NotNull TerraformWorld tw, float x, float y, float z, float v, float barrier, float limit){
 
         FastNoise boundaryNoise = new FastNoise((int) tw.getSeed()*5);
         boundaryNoise.SetNoiseType(FastNoise.NoiseType.Simplex);

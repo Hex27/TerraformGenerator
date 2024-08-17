@@ -3,6 +3,7 @@ package org.terraform.structure.pillager.mansion.tower;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -25,7 +26,7 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
     }
 
     @Override
-    public void build(PopulatorDataAbstract data, Random rand) {
+    public void build(@NotNull PopulatorDataAbstract data, Random rand) {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
         
@@ -84,12 +85,12 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
         }
 	}
 
-	public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two) {
+	public void decorateAwkwardCorner(@NotNull Wall target, Random random, BlockFace one, BlockFace two) {
     	//Fill in gap in the corner
     	target.Pillar(MansionJigsawBuilder.roomHeight, Material.STONE_BRICKS);
     }
 	
-	public void placeTentRoof(PopulatorDataAbstract data, BlockFace roofFacing, Random random) {
+	public void placeTentRoof(@NotNull PopulatorDataAbstract data, BlockFace roofFacing, Random random) {
 		Wall core = new Wall(
 				this.getRoom().getCenterSimpleBlock(data).getRelative(0, MansionJigsawBuilder.roomHeight,0),
 				roofFacing
@@ -164,7 +165,7 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
 //	i <= 2+(MansionJigsawBuilder.groundFloorRoomWidth/2
 //	depth < 2 + MansionJigsawBuilder.groundFloorRoomWidth
 	
-	private Material getStairs(int i, int depth) {
+	private @NotNull Material getStairs(int i, int depth) {
 		if(i == 0 || i == 2+(MansionJigsawBuilder.groundFloorRoomWidth/2)
 				|| depth == 0 || depth == 1 + MansionJigsawBuilder.groundFloorRoomWidth){
 			return Material.COBBLESTONE_STAIRS;
@@ -172,7 +173,7 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
 		return Material.DARK_OAK_STAIRS;
 	}
 
-	private Material getSlab(int i, int depth) {
+	private @NotNull Material getSlab(int i, int depth) {
 		if(i == 0 || i == 2+(MansionJigsawBuilder.groundFloorRoomWidth/2)
 				|| depth == 0 || depth == 1 + MansionJigsawBuilder.groundFloorRoomWidth){
 			return Material.COBBLESTONE_SLAB;
@@ -180,7 +181,7 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
 		return Material.DARK_OAK_SLAB;
 	}
 
-	private Material getBlock(int i, int depth) {
+	private @NotNull Material getBlock(int i, int depth) {
 		if(i == 0 || i == 2+(MansionJigsawBuilder.groundFloorRoomWidth/2)
 				|| depth == 0 || depth == 1 + MansionJigsawBuilder.groundFloorRoomWidth){
 			return Material.COBBLESTONE;

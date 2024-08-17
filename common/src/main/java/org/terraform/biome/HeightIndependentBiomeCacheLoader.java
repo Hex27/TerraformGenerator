@@ -1,5 +1,7 @@
 package org.terraform.biome;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.data.TWSimpleLocation;
 import org.terraform.data.TerraformWorld;
 import com.google.common.cache.CacheLoader;
@@ -7,7 +9,7 @@ import com.google.common.cache.CacheLoader;
 public class HeightIndependentBiomeCacheLoader extends CacheLoader<TWSimpleLocation, BiomeBank> {
 
 	@Override
-	public BiomeBank load(TWSimpleLocation loc) throws Exception {
+	public @Nullable BiomeBank load(@NotNull TWSimpleLocation loc) throws Exception {
 		int x = loc.getX();
 		int z = loc.getZ();    	
 		

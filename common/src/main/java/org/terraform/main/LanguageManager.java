@@ -7,19 +7,21 @@ import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class LanguageManager {
 	
 	private FileConfiguration langFile;
 	private File file;
 	
-	public LanguageManager(TerraformGeneratorPlugin plugin){
+	public LanguageManager(@NotNull TerraformGeneratorPlugin plugin){
 		this.file = new File(plugin.getDataFolder(),plugin.getConfigLoader().getString("lang"));
 		reloadLangFile();
 		loadDefaults();
 	}
 	
-	private HashMap<String,String> cache = new HashMap<>();
+	private @NotNull HashMap<String,String> cache = new HashMap<>();
 	
 	private void loadDefaults(){
 		fetchLang("permissions.insufficient","&cYou don't have enough permissions to perform this action!");
@@ -29,11 +31,11 @@ public class LanguageManager {
 		fetchLang("permissions.console-cannot-exec","&cOnly players can execute this command.");
 	}
 	
-	public String fetchLang(String langKey){
+	public String fetchLang(@NotNull String langKey){
 		return fetchLang(langKey,null);
 	}
 	
-	public String fetchLang(String langKey, String def){
+	public String fetchLang(@NotNull String langKey, @Nullable String def){
 		if(cache.containsKey(langKey)){
 			return cache.get(langKey);
 		}

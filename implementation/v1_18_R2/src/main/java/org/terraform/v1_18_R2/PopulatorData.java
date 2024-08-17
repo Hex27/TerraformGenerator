@@ -9,6 +9,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_18_R2.util.CraftMagicNumbers;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
@@ -86,7 +88,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setType(int x, int y, int z, Material type) {
+    public void setType(int x, int y, int z, @NotNull Material type) {
     	if (Math.abs((x >> 4) - chunkX) > radius || Math.abs((z >> 4) - chunkZ) > radius) {
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
@@ -98,7 +100,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
     	if (Math.abs((x >> 4) - chunkX) > radius || Math.abs((z >> 4) - chunkZ) > radius) {
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
@@ -150,7 +152,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
+    public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
         BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
         
         setType(rawX, rawY, rawZ, Material.SPAWNER);
@@ -174,12 +176,12 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void lootTableChest(int x, int y, int z, TerraLootTable table) {
+    public void lootTableChest(int x, int y, int z, @NotNull TerraLootTable table) {
         BlockPosition pos = new BlockPosition(x, y, z);
         TileEntityLootable.a(rlwa, gen.getTerraformWorld().getHashedRand(x, y, z), pos, getLootTable(table));
     }
 
-    private MinecraftKey getLootTable(TerraLootTable table) {
+    private @Nullable MinecraftKey getLootTable(@NotNull TerraLootTable table) {
         switch (table) {
         case EMPTY:
             return LootTables.a;
