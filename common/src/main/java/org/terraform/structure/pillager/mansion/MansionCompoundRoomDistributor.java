@@ -78,29 +78,28 @@ public class MansionCompoundRoomDistributor {
 		}
 		
 		//Iterate this way because index 0 is the 3x3 room which we want.
-		for(int i = 0; i < potentialRoomSizes.size(); i++) {
-			MansionRoomSize roomSize = potentialRoomSizes.get(i);
-			Collections.shuffle(shuffledList);
-			for(JigsawStructurePiece piece:shuffledList) {
-				//Force every room to generate at least once before generating duplicate types
-				Collections.shuffle(activeRoomPool.get(roomSize), random);
-				ArrayList<MansionRoomPopulator> populators = activeRoomPool.get(roomSize);
-				if(populators.size() <= 0){
-					activeRoomPool.put(roomSize, MansionRoomPopulatorRegistry.getByRoomSize(roomSize, isGround).getPopulators());
-					populators = activeRoomPool.get(roomSize);
-				}
-				MansionRoomPopulator populator = populators.get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
-				if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize, populator, false)) {
-					//Shuffle and distribute populator
-					TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
-					((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
-					
-					//If successful, remove the populator from the active pool.
-					populators.remove(0);
-					break;
-				}
-			}
-		}
+        for(MansionRoomSize roomSize : potentialRoomSizes) {
+            Collections.shuffle(shuffledList);
+            for(JigsawStructurePiece piece : shuffledList) {
+                //Force every room to generate at least once before generating duplicate types
+                Collections.shuffle(activeRoomPool.get(roomSize), random);
+                ArrayList<MansionRoomPopulator> populators = activeRoomPool.get(roomSize);
+                if(populators.size() <= 0) {
+                    activeRoomPool.put(roomSize, MansionRoomPopulatorRegistry.getByRoomSize(roomSize, isGround).getPopulators());
+                    populators = activeRoomPool.get(roomSize);
+                }
+                MansionRoomPopulator populator = populators.get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
+                if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize, populator, false)) {
+                    //Shuffle and distribute populator
+                    TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
+                    ((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
+
+                    //If successful, remove the populator from the active pool.
+                    populators.remove(0);
+                    break;
+                }
+            }
+        }
 		
 		//Fill the rest of the rooms with 1x1 rooms
 		for(JigsawStructurePiece piece:pieces) {
