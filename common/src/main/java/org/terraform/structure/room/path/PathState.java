@@ -35,7 +35,7 @@ public class PathState {
     private int maxBend = -1;
     //If the path generator is not to run while inside room areas,
     //then set this to true.
-    private boolean ignoreWithinRooms = true;
+    private final boolean ignoreWithinRooms = true;
     private final @NotNull RoomLayoutGenerator generator;
     private final @NotNull TerraformWorld tw;
 

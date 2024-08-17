@@ -27,7 +27,7 @@ public class OrePopulator {
     private int minRange; //min spawn height
     private final BiomeBank[] requiredBiomes;
     private final int maxDistance;
-    private boolean ignorePeakSpawnChance;
+    private final boolean ignorePeakSpawnChance;
 
     public OrePopulator(Material type, int baseChance, int maxOreSize,
                         int maxNumberOfVeins, int peakSpawnChanceHeight, int maxSpawnHeight, 

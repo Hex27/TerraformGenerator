@@ -24,7 +24,7 @@ public class LegacyPathGenerator {
     final Material[] mat;
     private SimpleBlock base;
     private BlockFace dir;
-    private int maxNoBend;
+    private final int maxNoBend;
     private int straightInARow = 0;
     private int length = 0;
     private int pathWidth = 3;
