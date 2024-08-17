@@ -18,9 +18,8 @@ public class ArmorStandUtils {
 	}
 	
 	public static void placeArmorStand(SimpleBlock target, BlockFace facing, ArmorStandQuality quality) {
-		if(target.getPopData() instanceof PopulatorDataPostGen) {
-			PopulatorDataPostGen postGen = ((PopulatorDataPostGen) target.getPopData());
-			ArmorStand stand = (ArmorStand) postGen.getWorld().spawnEntity(new Location(postGen.getWorld(),
+		if(target.getPopData() instanceof PopulatorDataPostGen postGen) {
+            ArmorStand stand = (ArmorStand) postGen.getWorld().spawnEntity(new Location(postGen.getWorld(),
 					target.getX() + 0.5f, target.getY(), target.getZ() + 0.5f), EntityType.ARMOR_STAND);
 			stand.setRotation(BlockUtils.yawFromBlockFace(facing), 0);
 			quality.apply(stand);

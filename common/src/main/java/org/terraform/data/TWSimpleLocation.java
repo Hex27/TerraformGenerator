@@ -24,9 +24,8 @@ public class TWSimpleLocation extends SimpleLocation {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof TWSimpleLocation) {
-        	TWSimpleLocation sLoc = (TWSimpleLocation) obj;
-            return sLoc.x == x 
+        if (obj instanceof TWSimpleLocation sLoc) {
+            return sLoc.x == x
             		&& sLoc.y == y 
             		&& sLoc.z == z 
             		&& tw.getName().equals(sLoc.getTerraformWorld().getName());

@@ -324,9 +324,8 @@ public class BiomeSection {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof BiomeSection) {
-			BiomeSection BiomeSection = (BiomeSection) obj;
-			return this.tw.getName().equals(BiomeSection.tw.getName()) 
+		if (obj instanceof BiomeSection BiomeSection) {
+            return this.tw.getName().equals(BiomeSection.tw.getName())
 					&& this.x == BiomeSection.x 
 					&& this.z == BiomeSection.z;
 		}

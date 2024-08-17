@@ -1029,14 +1029,13 @@ public class BlockUtils {
     }
 
     public static void correctMultifacingData(SimpleBlock target) {
-        if (!(target.getBlockData() instanceof MultipleFacing)) {
+        if (!(target.getBlockData() instanceof MultipleFacing data)) {
             if (Tag.WALLS.isTagged(target.getType())) {
                 v1_16_R1_BlockDataFixer.correctSurroundingWallData(target);
             }
             return;
         }
 
-        MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
             Material type = target.getRelative(face).getType();
             boolean facing = type.isSolid()
@@ -1095,10 +1094,9 @@ public class BlockUtils {
         }
 
         correctMultifacingData(target);
-        if(!(target.getBlockData() instanceof MultipleFacing))
+        if(!(target.getBlockData() instanceof MultipleFacing data))
         	return;
-        
-        MultipleFacing data = (MultipleFacing) target.getBlockData();
+
         for (BlockFace face : data.getAllowedFaces()) {
             if (target.getRelative(face).getBlockData() instanceof MultipleFacing) {
                 correctMultifacingData(target.getRelative(face));
@@ -1107,11 +1105,10 @@ public class BlockUtils {
     }
 
     public static void correctStairData(SimpleBlock target) {
-        if (!(target.getBlockData() instanceof Stairs)) {
+        if (!(target.getBlockData() instanceof Stairs data)) {
             return;
         }
 
-        Stairs data = (Stairs) target.getBlockData();
         BlockFace left = BlockUtils.getLeft(data.getFacing());
         BlockFace right = BlockUtils.getRight(data.getFacing());
 
@@ -1171,12 +1168,11 @@ public class BlockUtils {
     }
 
     public static void correctSurroundingStairData(SimpleBlock target) {
-        if (!(target.getBlockData() instanceof Stairs)) {
+        if (!(target.getBlockData() instanceof Stairs data)) {
             return;
         }
 
         correctStairData(target);
-        Stairs data = (Stairs) target.getBlockData();
         for (BlockFace face : getAdjacentFaces(data.getFacing())) {
             if (target.getRelative(face).getBlockData() instanceof Stairs) {
                 correctStairData(target.getRelative(face));

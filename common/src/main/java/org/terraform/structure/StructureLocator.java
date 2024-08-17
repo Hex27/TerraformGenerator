@@ -206,9 +206,8 @@ public class StructureLocator {
 		
 		@Override
 		public boolean equals(Object obj) {
-			if(obj instanceof StructureLocatorKey) {
-				StructureLocatorKey other = (StructureLocatorKey) obj;
-				if(other.mc.equals(mc) && other.tw.getName().equals(tw.getName())) {
+			if(obj instanceof StructureLocatorKey other) {
+                if(other.mc.equals(mc) && other.tw.getName().equals(tw.getName())) {
 					return pop.getClass().isInstance(other.pop);
 				}
 			}

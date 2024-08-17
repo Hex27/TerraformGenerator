@@ -45,8 +45,7 @@ public class ShipwreckSchematicParser extends SchematicParser {
     public void applyData(SimpleBlock block, BlockData data) {
 
         //Water logging
-        if (data instanceof Waterlogged) {
-            Waterlogged logged = (Waterlogged) data;
+        if (data instanceof Waterlogged logged) {
             logged.setWaterlogged(BlockUtils.isWet(block));
         }
 

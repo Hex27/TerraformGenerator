@@ -148,9 +148,8 @@ public class NoiseCacheHandler{
 		
 		@Override
 		public boolean equals(Object other) {
-			if(other instanceof NoiseCacheKey) {
-				NoiseCacheKey o = (NoiseCacheKey) other;
-				if(!o.tw.getName().equals(tw.getName()))
+			if(other instanceof NoiseCacheKey o) {
+                if(!o.tw.getName().equals(tw.getName()))
 					return false;
 				return entry == o.entry;
 			}

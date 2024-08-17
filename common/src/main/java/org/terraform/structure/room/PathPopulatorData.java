@@ -53,9 +53,8 @@ public class PathPopulatorData {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof PathPopulatorData)) return false;
-        PathPopulatorData other = (PathPopulatorData) obj;
-        return base.getX() == other.base.getX() 
+        if (!(obj instanceof PathPopulatorData other)) return false;
+        return base.getX() == other.base.getX()
         		&& base.getZ() == other.base.getZ() 
         		&& base.getY() == other.base.getY();
     }

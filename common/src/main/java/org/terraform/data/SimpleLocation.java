@@ -131,8 +131,7 @@ public class SimpleLocation {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof SimpleLocation) {
-            SimpleLocation sLoc = (SimpleLocation) obj;
+        if (obj instanceof SimpleLocation sLoc) {
             return sLoc.x == x && sLoc.y == y && sLoc.z == z;
         }
         return false;

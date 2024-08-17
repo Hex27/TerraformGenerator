@@ -147,8 +147,7 @@ public class MegaChunk {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof MegaChunk) {
-            MegaChunk megaChunk = (MegaChunk) obj;
+        if (obj instanceof MegaChunk megaChunk) {
             return this.x == megaChunk.x && this.z == megaChunk.z;
         }
         return false;

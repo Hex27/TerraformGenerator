@@ -22,8 +22,7 @@ public class StructureBufferDistanceHandler {
         for (StructurePopulator structPop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if (structPop == null) continue;
             
-            if(!(structPop instanceof SingleMegaChunkStructurePopulator)) continue;
-            SingleMegaChunkStructurePopulator spop = (SingleMegaChunkStructurePopulator) structPop;
+            if(!(structPop instanceof SingleMegaChunkStructurePopulator spop)) continue;
             int chunkBufferRadius = spop.getChunkBufferDistance();
             if(chunkBufferRadius <= 0)
             	continue;

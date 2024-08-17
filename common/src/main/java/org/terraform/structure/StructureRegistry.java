@@ -239,9 +239,8 @@ public class StructureRegistry {
 
 	    @Override
 	    public boolean equals(Object obj) {
-	        if (!(obj instanceof MegaChunkKey)) return false;
-	        MegaChunkKey other = (MegaChunkKey) obj;
-	        return this.tw.equals(other.tw) && mc.getX() == other.mc.getX() && mc.getZ() == other.mc.getZ();
+	        if (!(obj instanceof MegaChunkKey other)) return false;
+            return this.tw.equals(other.tw) && mc.getX() == other.mc.getX() && mc.getZ() == other.mc.getZ();
 	    }
     }
 }

@@ -57,8 +57,7 @@ public class CoralGenerator {
 
         attemptReplace(data, x + face.getModX(), y + face.getModY(), z + face.getModZ(), coral);
         if (face != BlockFace.UP) {
-            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan) {
-                CoralWallFan bdata = (CoralWallFan) data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ());
+            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan bdata) {
                 bdata.setFacing(face);
                 data.setBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ(), bdata);
             }
@@ -92,8 +91,7 @@ public class CoralGenerator {
         }
         attemptReplace(data, x + face.getModX(), y + face.getModY(), z + face.getModZ(), coral);
         if (face != BlockFace.UP) {
-            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan) {
-                CoralWallFan bdata = (CoralWallFan) data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ());
+            if (data.getBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ()) instanceof CoralWallFan bdata) {
                 bdata.setFacing(face);
                 data.setBlockData(x + face.getModX(), y + face.getModY(), z + face.getModZ(), bdata);
             }
@@ -107,8 +105,7 @@ public class CoralGenerator {
     public static void generateSeaPickles(PopulatorDataAbstract data, int x, int y, int z) {
         int fullSize = GenUtils.randInt(1, 4);
         if (attemptReplace(data, x, y, z, Material.SEA_PICKLE)) {
-            if (data.getBlockData(x, y, z) instanceof SeaPickle) {
-                SeaPickle state = (SeaPickle) data.getBlockData(x, y, z);
+            if (data.getBlockData(x, y, z) instanceof SeaPickle state) {
                 state.setPickles(fullSize);
                 data.setBlockData(x, y, z, state);
             }

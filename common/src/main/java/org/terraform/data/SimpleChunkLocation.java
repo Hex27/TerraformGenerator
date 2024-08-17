@@ -90,8 +90,7 @@ public class SimpleChunkLocation implements Cloneable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof SimpleChunkLocation)) return false;
-        SimpleChunkLocation other = (SimpleChunkLocation) obj;
+        if (!(obj instanceof SimpleChunkLocation other)) return false;
         return this.x == other.x && this.z == other.z && Objects.equals(world, other.world);
     }
 

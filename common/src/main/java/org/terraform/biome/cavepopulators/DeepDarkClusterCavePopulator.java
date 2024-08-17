@@ -120,9 +120,8 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         //=========================
         //Biome Setter 
         //=========================
-        if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract) {
-        	PopulatorDataICABiomeWriterAbstract data = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
-        	while(floor.getY() < ceil.getY()) {
+        if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract data) {
+            while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), OneOneNineBlockHandler.DEEP_DARK);
         		floor = floor.getRelative(0,1,0);
         	}
