@@ -513,7 +513,6 @@ public enum BiomeBank {
             };
     	}else
     		return contenders.get(0);
-		return null;
     }
 
     /**
