@@ -180,8 +180,8 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     	 
     	 HashMap<SimpleBlock, Integer> lavaLocs = new HashMap<>();
     	 int lowestY = 9999;
-    	 for(int relx = - horRadius*3; relx <  + horRadius*3; relx++) {
-    		 for(int relz = - horRadius*3; relz < + horRadius*3; relz++) {
+    	 for(int relx = - horRadius*3; relx < horRadius*3; relx++) {
+    		 for(int relz = - horRadius*3; relz < horRadius*3; relz++) {
     	         double fissureNoise = (3 - 100 * Math.abs(noise.GetNoise(relx+core.getX(), relz + core.getZ())));
     	         if(fissureNoise > 0) {
     	        	 SimpleBlock target = core.getRelative(relx,0,relz).getGround();

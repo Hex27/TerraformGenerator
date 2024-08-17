@@ -308,8 +308,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     public void spawnPyramidBase(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         for (int height = 0; height < 40; height++) {
             int radius = 40 - height;
-            for (int nx = -radius; nx <= +radius; nx++) {
-                for (int nz = -radius; nz <= +radius; nz++) {
+            for (int nx = -radius; nx <= radius; nx++) {
+                for (int nz = -radius; nz <= radius; nz++) {
                     data.setType(x + nx, y + height, z + nz, GenUtils.randMaterial(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
                     //data.setType(x + nx, y + height, z + nz, Material.GLASS); //dEBUG.
 
