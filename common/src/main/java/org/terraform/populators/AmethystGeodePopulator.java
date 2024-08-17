@@ -2,6 +2,7 @@ package org.terraform.populators;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -29,7 +30,7 @@ public class AmethystGeodePopulator {
     	this.minDepthBelowSurface = minDepthBelowSurface;
     }
     
-    public void populate(TerraformWorld world, Random random, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
     	if(GenUtils.chance(random, (int) (frequency*10000.0), 10000)) {
 			int x = GenUtils.randInt(random, 0, 15) + data.getChunkX() * 16;
         	int z = GenUtils.randInt(random, 0, 15) + data.getChunkZ() * 16;
@@ -49,7 +50,7 @@ public class AmethystGeodePopulator {
     	}
     }
     
-    public static void placeGeode(int seed, float r, SimpleBlock block) {
+    public static void placeGeode(int seed, float r, @NotNull SimpleBlock block) {
         if (r <= 1) return;
         ArrayList<SimpleBlock> amethystBlocks = new ArrayList<>();
         FastNoise noise = new FastNoise(seed);

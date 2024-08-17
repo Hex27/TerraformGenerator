@@ -1,6 +1,8 @@
 package org.terraform.structure.room.jigsaw;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -22,26 +24,26 @@ import java.util.Stack;
 public class JigsawBuilder {
     protected int widthX;
     protected int widthZ;
-    protected int[] lowerBounds = new int[2];
-    protected int[] upperBounds = new int[2];
+    protected int @NotNull [] lowerBounds = new int[2];
+    protected int @NotNull [] upperBounds = new int[2];
     protected int maxDepth = 5; //The amount of pieces before an end piece is forced.
     protected int chanceToAddNewPiece = 60;
     protected int minimumPieces = 0;
     protected int pieceWidth = 5;
     protected SimpleBlock core;
-    protected JigsawStructurePiece center;
+    protected @Nullable JigsawStructurePiece center;
     protected Wall entranceBlock;
-    protected Stack<JigsawStructurePiece> traverseStack = new Stack<>();
+    protected @NotNull Stack<JigsawStructurePiece> traverseStack = new Stack<>();
     //protected ArrayList<JigsawStructurePiece> pieces = new ArrayList<>();
     //protected ArrayList<SimpleLocation> usedLocations = new ArrayList<>();
-    protected HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
-    protected ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
+    protected @NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
+    protected @NotNull ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
     protected JigsawStructurePiece[] pieceRegistry;
     protected BlockFace entranceDir;
     int traversalIndex = 0;
     protected boolean hasPlacedEntrance = false;
 
-    public JigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
+    public JigsawBuilder(int widthX, int widthZ, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         this.widthX = widthX;
         this.widthZ = widthZ;
         this.core = new SimpleBlock(data, x, y, z);
@@ -60,11 +62,11 @@ public class JigsawBuilder {
     	return entranceDir;
     }
 
-    public JigsawStructurePiece getFirstPiece(Random random) {
+    public @Nullable JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
 
-    public void generate(Random random) {
+    public void generate(@NotNull Random random) {
 
         center = getFirstPiece(random);
         center.getRoom().setX(core.getX());
@@ -113,7 +115,7 @@ public class JigsawBuilder {
         }
     }
 
-    public boolean traverseAndPopulatePieces(Random random) {
+    public boolean traverseAndPopulatePieces(@NotNull Random random) {
         if (traverseStack.size() == 0) {
             TerraformGeneratorPlugin.logger.info("Jigsaw stack size empty!");
             return false;
@@ -207,11 +209,11 @@ public class JigsawBuilder {
         return core;
     }
 
-    public HashMap<SimpleLocation, JigsawStructurePiece> getPieces() {
+    public @NotNull HashMap<SimpleLocation, JigsawStructurePiece> getPieces() {
         return pieces;
     }
 
-    public void build(Random random) {
+    public void build(@NotNull Random random) {
         for (JigsawStructurePiece piece : pieces.values()) {
 
         	//Force room to be air first
@@ -289,7 +291,7 @@ public class JigsawBuilder {
     	return count;
     }
 
-    public JigsawStructurePiece getAdjacentPiece(SimpleLocation loc, BlockFace face) {
+    public JigsawStructurePiece getAdjacentPiece(@NotNull SimpleLocation loc, @NotNull BlockFace face) {
         SimpleLocation other = new SimpleLocation(
                 loc.getX() + face.getModX() * pieceWidth,
                 loc.getY() + face.getModY() * pieceWidth,
@@ -297,7 +299,7 @@ public class JigsawBuilder {
         return pieces.get(other);
     }
     
-    public JigsawStructurePiece getAdjacentWall(SimpleLocation loc, BlockFace face) {
+    public @Nullable JigsawStructurePiece getAdjacentWall(@NotNull SimpleLocation loc, @NotNull BlockFace face) {
         SimpleLocation other = new SimpleLocation(
                 loc.getX() + face.getModX() * pieceWidth,
                 loc.getY() + face.getModY() * pieceWidth,
@@ -310,7 +312,7 @@ public class JigsawBuilder {
         return null;
     }
 
-    public JigsawStructurePiece getPiece(JigsawStructurePiece[] registry, JigsawType type, Random rand) {
+    public @Nullable JigsawStructurePiece getPiece(JigsawStructurePiece[] registry, JigsawType type, @NotNull Random rand) {
         ArrayList<JigsawStructurePiece> validPieces = new ArrayList<>();
         for (JigsawStructurePiece piece : pieceRegistry) {
         	boolean dontPlace = false;
@@ -336,7 +338,7 @@ public class JigsawBuilder {
         return validPieces.get(rand.nextInt(validPieces.size()));
     }
 
-    public JigsawStructurePiece getRelativePiece(JigsawStructurePiece current, JigsawType type, Random random) {
+    public @Nullable JigsawStructurePiece getRelativePiece(@Nullable JigsawStructurePiece current, JigsawType type, @NotNull Random random) {
         if (current == null || (current.getAllowedPieces() != null && current.getAllowedPieces().length == 0)) {
             return getPiece(pieceRegistry, type, random);
         } else {
@@ -352,7 +354,7 @@ public class JigsawBuilder {
         return entranceBlock;
     }
 
-	public ArrayList<JigsawStructurePiece> getOverlapperPieces() {
+	public @NotNull ArrayList<JigsawStructurePiece> getOverlapperPieces() {
 		return overlapperPieces;
 	}
 }

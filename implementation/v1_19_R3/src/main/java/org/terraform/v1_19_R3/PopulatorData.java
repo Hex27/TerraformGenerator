@@ -1,7 +1,6 @@
 package org.terraform.v1_19_R3;
 
 import net.minecraft.core.BlockPosition;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.util.RandomSource;
@@ -23,6 +22,8 @@ import org.bukkit.craftbukkit.v1_19_R3.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_19_R3.util.CraftMagicNumbers;
 import org.bukkit.craftbukkit.v1_19_R3.util.RandomSourceWrapper;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
@@ -91,7 +92,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setType(int x, int y, int z, Material type) {
+    public void setType(int x, int y, int z, @NotNull Material type) {
     	if (Math.abs((x >> 4) - chunkX) > radius || Math.abs((z >> 4) - chunkZ) > radius) {
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
@@ -103,7 +104,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
     	if (Math.abs((x >> 4) - chunkX) > radius || Math.abs((z >> 4) - chunkZ) > radius) {
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
@@ -131,7 +132,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
     
     @Override
-    public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
+    public void addEntity(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
     	if (Math.abs((rawX >> 4) - chunkX) > 1 || Math.abs((rawZ >> 4) - chunkZ) > 1) {
     		TerraformGeneratorPlugin.logger.info("Failed to spawn " + type + " as it was out of bounds.");
     		return;
@@ -173,12 +174,12 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void lootTableChest(int x, int y, int z, TerraLootTable table) {
+    public void lootTableChest(int x, int y, int z, @NotNull TerraLootTable table) {
         BlockPosition pos = new BlockPosition(x, y, z);
         TileEntityLootable.a(rlwa, RandomSource.a(gen.getTerraformWorld().getHashedRand(x, y, z).nextLong()), pos, getLootTable(table));
     }
 
-    private MinecraftKey getLootTable(TerraLootTable table) {
+    private @Nullable MinecraftKey getLootTable(@NotNull TerraLootTable table) {
         return switch(table) {
             case EMPTY -> LootTables.a;
             case SPAWN_BONUS_CHEST -> LootTables.b;

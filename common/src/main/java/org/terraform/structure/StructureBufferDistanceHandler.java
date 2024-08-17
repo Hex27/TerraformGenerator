@@ -1,5 +1,6 @@
 package org.terraform.structure;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.MegaChunk;
@@ -11,7 +12,7 @@ public class StructureBufferDistanceHandler {
 	 * can place large trees and obstructive decorations, or if
 	 * they must make way for structures.
 	 */
-	public static boolean canDecorateChunk(TerraformWorld tw, int chunkX, int chunkZ) {
+	public static boolean canDecorateChunk(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
 
         //Within radius
         if(Math.pow(chunkX*16,2) + Math.pow(chunkZ*16,2) < HeightMap.spawnFlatRadiusSquared)

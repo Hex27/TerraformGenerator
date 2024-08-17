@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.temple;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -29,7 +30,7 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
     }
 
     @Override
-    public void build(PopulatorDataAbstract data, Random rand) {
+    public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
@@ -60,7 +61,7 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
     }
 
     @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    public void postBuildDecoration(Random random, @NotNull PopulatorDataAbstract data) {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 

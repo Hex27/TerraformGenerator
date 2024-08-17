@@ -2,6 +2,7 @@ package org.terraform.structure.monument;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -19,7 +20,7 @@ public class LanternPillarRoomPopulator extends MonumentRoomPopulator {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
         int y = room.getY() + room.getHeight() - 1;
@@ -74,7 +75,7 @@ public class LanternPillarRoomPopulator extends MonumentRoomPopulator {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getHeight() > 12;
     }
 

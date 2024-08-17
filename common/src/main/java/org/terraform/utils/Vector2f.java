@@ -1,5 +1,7 @@
 package org.terraform.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Vector2f implements java.io.Serializable {
 
     // Combatible with 1.1
@@ -22,7 +24,7 @@ public class Vector2f implements java.io.Serializable {
      * Constructs and initializes a Vector2f from the specified array.
      * @param v the array of length 2 containing xy in order
      */
-    public Vector2f(float[] v) {
+    public Vector2f(float @NotNull [] v) {
         this.x = v[0];
         this.y = v[1];
     }
@@ -32,7 +34,7 @@ public class Vector2f implements java.io.Serializable {
      * Constructs and initializes a Vector2f from the specified Vector2f.
      * @param v1 the Vector2f containing the initialization x y data
      */
-    public Vector2f(Vector2f v1) {
+    public Vector2f(@NotNull Vector2f v1) {
         this.x = v1.x;
         this.y = v1.y;
     }
@@ -79,7 +81,7 @@ public class Vector2f implements java.io.Serializable {
      * Computes the dot product of the this vector and vector v1.
      * @param v1 the other vector
      */
-    public final float dot(Vector2f v1) {
+    public final float dot(@NotNull Vector2f v1) {
         return (this.x * v1.x + this.y * v1.y);
     }
 
@@ -104,7 +106,7 @@ public class Vector2f implements java.io.Serializable {
      * Sets the value of this vector to the normalization of vector v1.
      * @param v1 the un-normalized vector
      */
-    public final void normalize(Vector2f v1) {
+    public final void normalize(@NotNull Vector2f v1) {
         float norm = (float) (1.0 / Math.sqrt(v1.x * v1.x + v1.y * v1.y));
         this.x = v1.x * norm;
         this.y = v1.y * norm;
@@ -126,7 +128,7 @@ public class Vector2f implements java.io.Serializable {
      * @param v1 the other vector
      * @return the angle in radians in the range [0,PI]
      */
-    public final float angle(Vector2f v1) {
+    public final float angle(@NotNull Vector2f v1) {
         double vDot = this.dot(v1) / (this.length() * v1.length());
         if (vDot < -1.0) vDot = -1.0;
         if (vDot > 1.0) vDot = 1.0;

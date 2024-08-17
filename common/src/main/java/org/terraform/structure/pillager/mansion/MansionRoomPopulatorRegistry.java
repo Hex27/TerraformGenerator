@@ -1,7 +1,10 @@
 package org.terraform.structure.pillager.mansion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.structure.pillager.mansion.ground.*;
 import org.terraform.structure.pillager.mansion.secondfloor.*;
 
@@ -33,20 +36,18 @@ public enum MansionRoomPopulatorRegistry {
 	SECOND_1_1(new MansionSecondFloorHallwayPopulator(null,null)),
 	
 	;
+  @NotNull
 	ArrayList<MansionRoomPopulator> populators = new ArrayList<>();
 	MansionRoomPopulatorRegistry(MansionRoomPopulator... populators){
-		for(MansionRoomPopulator populator:populators) {
-			this.populators.add(populator);
-		}
+        this.populators.addAll(Arrays.asList(populators));
 	}
 	
-	public ArrayList<MansionRoomPopulator> getPopulators(){
-		ArrayList<MansionRoomPopulator> clone = new ArrayList<>();
-		clone.addAll(populators);
+	public @NotNull ArrayList<MansionRoomPopulator> getPopulators(){
+        ArrayList<MansionRoomPopulator> clone = new ArrayList<>(populators);
 		return clone;
 	}
 	
-	public static MansionRoomPopulatorRegistry getByRoomSize(MansionRoomSize size, boolean isGround) {
+	public static @Nullable MansionRoomPopulatorRegistry getByRoomSize(@NotNull MansionRoomSize size, boolean isGround) {
 		if(isGround) {
 			if(size.getWidthX() == 3 && size.getWidthZ() == 3)
 				return MansionRoomPopulatorRegistry.GROUND_3_3;

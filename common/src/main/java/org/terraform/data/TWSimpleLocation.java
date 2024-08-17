@@ -1,5 +1,7 @@
 package org.terraform.data;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 public class TWSimpleLocation extends SimpleLocation {
@@ -11,7 +13,7 @@ public class TWSimpleLocation extends SimpleLocation {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public TWSimpleLocation(TerraformWorld tw, SimpleLocation loc) {
+	public TWSimpleLocation(TerraformWorld tw, @NotNull SimpleLocation loc) {
 		super(loc);
 		this.tw = tw;
 	}

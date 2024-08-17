@@ -2,6 +2,7 @@ package org.terraform.biome.mountainous;
 
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.BiomeSection;
@@ -16,7 +17,7 @@ import org.terraform.utils.GenUtils;
 
 public abstract class AbstractMountainHandler extends BiomeHandler {
 
-	protected double getPeakMultiplier(BiomeSection section, Random sectionRandom)
+	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom)
 	{
 		//this is positive as this is a mountain.
 		//double elevation = section.getElevation();
@@ -48,7 +49,7 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
 	 * center, then multiplying current height to peak at that location.
 	 */
 	@Override
-    public double calculateHeight(TerraformWorld tw, int x, int z) {
+    public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
     	
         double height = HeightMap.CORE.getHeight(tw, x, z);//HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
         

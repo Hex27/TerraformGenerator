@@ -2,6 +2,7 @@ package org.terraform.structure.trailruins;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
@@ -23,7 +24,7 @@ public class TrailRuinsHutRoom extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         Material terracottaType = GenUtils.randMaterial(BlockUtils.TERRACOTTA);
         for(Map.Entry<Wall,Integer> entry:room.getFourWalls(data,1).entrySet())
         {

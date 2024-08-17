@@ -4,6 +4,7 @@ import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
@@ -22,7 +23,7 @@ import java.util.Random;
 public class PlainsVillageForgeRoofHandler {
 
 	
-	public static void placeRoof(PlainsVillagePopulator plainsVillagePopulator, SimpleBlock core, ArrayList<SimpleLocation> rectangleLocations) {
+	public static void placeRoof(@NotNull PlainsVillagePopulator plainsVillagePopulator, @NotNull SimpleBlock core, @NotNull ArrayList<SimpleLocation> rectangleLocations) {
 		SimpleLocation lowerBound = null;
 		SimpleLocation upperBound = null;
 		
@@ -114,7 +115,7 @@ public class PlainsVillageForgeRoofHandler {
 	 * @return a list of structure piece simplelocations that are contained within a rectangle.
 	 * This rectangle may not be the largest in the provided hashmap.
 	 */
-	public static ArrayList<SimpleLocation> identifyRectangle(HashMap<SimpleLocation, JigsawStructurePiece> pieces){
+	public static @NotNull ArrayList<SimpleLocation> identifyRectangle(@NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces){
 		ArrayList<SimpleLocation> rectangleList = new ArrayList<>();
 		SimpleLocation cornerLoc = null;
 		for(SimpleLocation loc:pieces.keySet()) {
@@ -169,7 +170,7 @@ public class PlainsVillageForgeRoofHandler {
 	}
 	
 	private static final int pieceWidth = 5;
-	private static JigsawStructurePiece getAdjacentPiece(HashMap<SimpleLocation, JigsawStructurePiece> pieces, SimpleLocation loc, BlockFace face) {
+	private static JigsawStructurePiece getAdjacentPiece(@NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces, @NotNull SimpleLocation loc, @NotNull BlockFace face) {
         SimpleLocation other = new SimpleLocation(
                 loc.getX() + face.getModX() * pieceWidth,
                 loc.getY() + face.getModY() * pieceWidth,

@@ -1,14 +1,11 @@
 package org.terraform.biome.beach;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.block.data.Rotatable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
-import org.terraform.structure.small.WitchHutPopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneNineBlockHandler;
@@ -23,7 +20,7 @@ public class MudflatsHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return OneOneNineBlockHandler.MANGROVE_SWAMP;
     }
 
@@ -36,7 +33,7 @@ public class MudflatsHandler extends BiomeHandler {
 //	}
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, OneOneNineBlockHandler.MUD, 35, Material.GRASS_BLOCK, 10),
                 GenUtils.randMaterial(rand, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT),
@@ -45,7 +42,7 @@ public class MudflatsHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         surfaceY++;
         if (data.getType(rawX, surfaceY, rawZ) != Material.AIR) return;
         if (GenUtils.chance(5, 100)) {

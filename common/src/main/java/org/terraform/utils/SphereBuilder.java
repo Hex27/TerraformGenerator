@@ -1,11 +1,13 @@
 package org.terraform.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -23,7 +25,7 @@ public class SphereBuilder {
 	private double maxRadius = 100;
 	private SimpleBlock core;
 	private boolean hardReplace = false;
-	private Collection<Material> replaceWhitelist = new ArrayList<>();
+	private @NotNull Collection<Material> replaceWhitelist = new ArrayList<>();
 	private Material[] types;
 	private Material[] containmentMaterial = new Material[] {Material.STONE};
 	private Material[] upperType;
@@ -34,75 +36,74 @@ public class SphereBuilder {
 	private SphereType sphereType = SphereType.FULL_SPHERE;
 	
 	
-	public SphereBuilder(Random random, SimpleBlock core, Material... types) {
+	public SphereBuilder(@NotNull Random random, SimpleBlock core, Material... types) {
 		this.random = random;
 		this.seed = random.nextInt(99999999);
 		this.types = types;
 		this.core = core;
 	}
 	
-	public SphereBuilder setSphereType(SphereType sphereType) {
+	public @NotNull SphereBuilder setSphereType(SphereType sphereType) {
 		this.sphereType = sphereType;
 		return this;
 	}
 	
-	public SphereBuilder setUpperType(Material... upperType) {
+	public @NotNull SphereBuilder setUpperType(Material... upperType) {
 		this.upperType = upperType;
 		return this;
 	}
 
-	public SphereBuilder setLowerType(Material... lowerType) {
+	public @NotNull SphereBuilder setLowerType(Material... lowerType) {
 		this.lowerType = lowerType;
 		return this;
 	}
 	
-	public SphereBuilder setStaticWaterLevel(int staticWaterLevel) {
+	public @NotNull SphereBuilder setStaticWaterLevel(int staticWaterLevel) {
 		this.staticWaterLevel = staticWaterLevel;
 		return this;
 	}
 	
-	public SphereBuilder addToWhitelist(Material... mats) {
-		for(Material mat:mats)
-			replaceWhitelist.add(mat);
+	public @NotNull SphereBuilder addToWhitelist(Material @NotNull ... mats) {
+        replaceWhitelist.addAll(Arrays.asList(mats));
 		return this;
 	}
 	
-	public SphereBuilder setRadius(float radius) {
+	public @NotNull SphereBuilder setRadius(float radius) {
 		this.rX = radius; this.rY = radius; this.rZ = radius;
 		return this;
 	}
 	
-	public SphereBuilder setSphereFrequency(float sphereFrequency) {
+	public @NotNull SphereBuilder setSphereFrequency(float sphereFrequency) {
 		this.sphereFrequency = sphereFrequency;
 		return this;
 	}
 	
-	public SphereBuilder setRX(float rX) {
+	public @NotNull SphereBuilder setRX(float rX) {
 		this.rX = rX;
 		return this;
 	}
-	public SphereBuilder setRZ(float rZ) {
+	public @NotNull SphereBuilder setRZ(float rZ) {
 		this.rZ = rZ;
 		return this;
 	}
-	public SphereBuilder setRY(float rY) {
+	public @NotNull SphereBuilder setRY(float rY) {
 		this.rY = rY;
 		return this;
 	}
-	public SphereBuilder setSnowy() {
+	public @NotNull SphereBuilder setSnowy() {
 		this.upperType = new Material[] {Material.SNOW};
 		return this;
 	}
-	public SphereBuilder setHardReplace(boolean hardReplace) {
+	public @NotNull SphereBuilder setHardReplace(boolean hardReplace) {
 		this.hardReplace = hardReplace;
 		return this;
 	}
-	public SphereBuilder setDoLiquidContainment(boolean doLiquidContainment) {
+	public @NotNull SphereBuilder setDoLiquidContainment(boolean doLiquidContainment) {
 		this.doLiquidContainment = doLiquidContainment;
 		return this;
 	}
 
-	public SphereBuilder setCointainmentMaterials(Material... containmentMaterial) {
+	public @NotNull SphereBuilder setCointainmentMaterials(Material... containmentMaterial) {
 		this.containmentMaterial = containmentMaterial;
 		return this;
 	}
@@ -112,7 +113,7 @@ public class SphereBuilder {
 	 * @param minRadius
 	 * @return
 	 */
-	public SphereBuilder setMinRadius(double minRadius) {
+	public @NotNull SphereBuilder setMinRadius(double minRadius) {
 		this.minRadius = minRadius;
 		return this;
 	}
@@ -120,17 +121,17 @@ public class SphereBuilder {
 	/**
 	 * Refers to minimum percentage radius (0.0 to 1.0)
 	 */
-	public SphereBuilder setMaxRadius(double maxRadius) {
+	public @NotNull SphereBuilder setMaxRadius(double maxRadius) {
 		this.maxRadius = maxRadius;
 		return this;
 	}
 	
-	public SphereBuilder setSmooth(boolean isSmooth) {
+	public @NotNull SphereBuilder setSmooth(boolean isSmooth) {
 		this.isSmooth = isSmooth;
 		return this;
 	}
 
-	public SphereBuilder setPadding(int padding) {
+	public @NotNull SphereBuilder setPadding(int padding) {
 		this.padding = padding;
 		return this;
 	}
@@ -188,7 +189,7 @@ public class SphereBuilder {
         }
     }
     
-    private boolean unitReplace(SimpleBlock rel, int effectiveRYUpper) {
+    private boolean unitReplace(@NotNull SimpleBlock rel, int effectiveRYUpper) {
     	if(replaceWhitelist.size() == 0) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));

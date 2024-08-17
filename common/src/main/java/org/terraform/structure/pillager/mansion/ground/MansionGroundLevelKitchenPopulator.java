@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -36,7 +37,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
 		TerraformGeneratorPlugin.logger.info("Kitchen at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
@@ -66,7 +67,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		}
 		
 	    @Override
-	    public void applyData(SimpleBlock block, BlockData data) {
+	    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 	        if (data.getMaterial() == Material.MELON) {
 	            block.setType(
             		Material.MELON,
@@ -81,11 +82,11 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public void decorateExit(Random rand, Wall w) {		
+	public void decorateExit(Random rand, @NotNull Wall w) {
 		w.getRelative(0,6,0).setType(Material.DARK_OAK_PLANKS);
 	}
 	@Override
-	public void decorateWindow(Random rand, Wall w) {		
+	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		w.getRelative(0,6,0).setType(Material.DARK_OAK_PLANKS);
 		int choice = rand.nextInt(3);
 		switch(choice) {
@@ -143,7 +144,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 	
 	//Decorate with paintings and wall texturing
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		
 		int choice = rand.nextInt(1);
 		switch(choice) {
@@ -171,7 +172,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		}
 	}
 	
-	private void shelfify(Random rand, Wall w) {
+	private void shelfify(@NotNull Random rand, @NotNull Wall w) {
 		new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
 		.setType(Type.TOP)
 		.apply(w.getRelative(0,1,0))
@@ -206,7 +207,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(1,2);
 	}
 }

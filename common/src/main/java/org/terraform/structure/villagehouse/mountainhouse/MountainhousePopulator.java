@@ -3,6 +3,7 @@ package org.terraform.structure.villagehouse.mountainhouse;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -20,7 +21,7 @@ import java.util.Random;
 
 public class MountainhousePopulator extends VillageHousePopulator {
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
@@ -34,7 +35,7 @@ public class MountainhousePopulator extends VillageHousePopulator {
         		data, x, height - sinkDown, z);
     }
 
-    public void spawnMountainhouse(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnMountainhouse(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         try {
         	
         	BlockFace face = BlockUtils.getDirectBlockFace(random);

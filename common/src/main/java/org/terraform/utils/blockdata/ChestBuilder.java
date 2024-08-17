@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Chest.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -14,10 +15,10 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class ChestBuilder {
-    private final Chest blockData;
+    private final @NotNull Chest blockData;
     private TerraLootTable lootTable;
 
-    public ChestBuilder(Material mat) {
+    public ChestBuilder(@NotNull Material mat) {
         this.blockData = (Chest) Bukkit.createBlockData(mat);
     }
 
@@ -25,30 +26,30 @@ public class ChestBuilder {
         this.blockData = (Chest) Bukkit.createBlockData(GenUtils.randMaterial(mat));
     }
 
-    public ChestBuilder setLootTable(TerraLootTable... loottable) {
+    public @NotNull ChestBuilder setLootTable(TerraLootTable @NotNull ... loottable) {
         this.lootTable = loottable[new Random().nextInt(loottable.length)];
         return this;
     }
 
-    public ChestBuilder setWaterlogged(boolean waterlogged)
+    public @NotNull ChestBuilder setWaterlogged(boolean waterlogged)
     {
         this.blockData.setWaterlogged(waterlogged);
         return this;
     }
 
-    public ChestBuilder setFacing(BlockFace face) {
+    public @NotNull ChestBuilder setFacing(@NotNull BlockFace face) {
         this.blockData.setFacing(face);
         return this;
     }
 
-    public ChestBuilder apply(SimpleBlock block) {
+    public @NotNull ChestBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
         if (lootTable != null)
             block.getPopData().lootTableChest(block.getX(), block.getY(), block.getZ(), lootTable);
         return this;
     }
     
-    public void extend(SimpleBlock original, SimpleBlock extended, boolean lootTableExtendedChest) {
+    public void extend(@NotNull SimpleBlock original, @NotNull SimpleBlock extended, boolean lootTableExtendedChest) {
     	extended.setBlockData(blockData);
     	Wall originalWall = new Wall(original, blockData.getFacing());
         Chest originalChest, extendedChest;
@@ -86,14 +87,14 @@ public class ChestBuilder {
         	extended.getPopData().lootTableChest(extended.getX(), extended.getY(), extended.getZ(), lootTable);
     }
 
-    public ChestBuilder apply(PopulatorDataAbstract data, int x, int y, int z) {
+    public @NotNull ChestBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
         if (lootTable != null)
             data.lootTableChest(x, y, z, lootTable);
         return this;
     }
 
-    public Chest get() {
+    public @NotNull Chest get() {
         return blockData;
     }
 }

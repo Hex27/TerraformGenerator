@@ -4,6 +4,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.generator.BlockPopulator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
@@ -127,7 +128,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     }
 
     @Override
-    public void populate(World world, Random random, Chunk chunk) {
+    public void populate(World world, Random random, @NotNull Chunk chunk) {
        
     	PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
 

@@ -1,5 +1,7 @@
 package org.terraform.command.contants;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -14,7 +16,7 @@ public abstract class TerraCommandArgument<T> {
 		this.isOptional = isOptional;
 	}
 
-	public abstract T parse(CommandSender sender,String value);
+	public abstract @Nullable T parse(CommandSender sender, String value);
 	
 	public abstract String validate(CommandSender sender, String value);
 
@@ -22,7 +24,7 @@ public abstract class TerraCommandArgument<T> {
      * Should return a list of valid parameters
      * to show when tab completing the command
      */
-	public ArrayList<String> getTabOptions(String[] args) {
+	public @NotNull ArrayList<String> getTabOptions(String[] args) {
 	    return new ArrayList<>();
     }
 

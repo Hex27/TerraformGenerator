@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -25,7 +27,7 @@ public class AncientCityUtils {
 			Material.CRACKED_DEEPSLATE_TILES
 	};
 	
-    public static void placeSupportPillar(SimpleBlock w) {
+    public static void placeSupportPillar(@NotNull SimpleBlock w) {
     	Random dud = new Random();
     	//w.getUp().lsetType(Material.GRAY_WOOL);
     	w.downUntilSolid(dud, Material.DEEPSLATE_BRICKS);
@@ -40,10 +42,10 @@ public class AncientCityUtils {
     	}
     }
     
-    private static Tag<Material> t = null;
+    private static @Nullable Tag<Material> t = null;
     
     @SuppressWarnings("unchecked")
-	public static void spreadSculk(FastNoise circleNoise, Random random, float radius, SimpleBlock center)
+	public static void spreadSculk(@NotNull FastNoise circleNoise, @NotNull Random random, float radius, @NotNull SimpleBlock center)
     {
     	if(t == null) {
     		try {

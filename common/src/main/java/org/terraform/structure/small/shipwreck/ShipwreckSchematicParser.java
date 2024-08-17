@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -29,11 +30,11 @@ public class ShipwreckSchematicParser extends SchematicParser {
             "JUNGLE"
     };
     private final BiomeBank biome;
-    private final Random rand;
+    private final @NotNull Random rand;
     private final PopulatorDataAbstract pop;
     String woodType;
 
-    public ShipwreckSchematicParser(BiomeBank biome, Random rand,
+    public ShipwreckSchematicParser(BiomeBank biome, @NotNull Random rand,
                                     PopulatorDataAbstract pop) {
         this.biome = biome;
         this.rand = rand;
@@ -42,7 +43,7 @@ public class ShipwreckSchematicParser extends SchematicParser {
     }
 
     @Override
-    public void applyData(SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, BlockData data) {
 
         //Water logging
         if (data instanceof Waterlogged logged) {

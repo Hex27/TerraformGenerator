@@ -2,11 +2,10 @@ package org.terraform.biome.cavepopulators;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -25,7 +24,7 @@ import org.terraform.utils.GenUtils;
 public class MasterCavePopulatorDistributor{
 
 	private static final ArrayList<Class<?>> populatedBefore = new ArrayList<>();
-	public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populate(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		HashMap<SimpleLocation, CaveClusterRegistry> clusters = calculateClusterLocations(random, tw, data.getChunkX(), data.getChunkZ());
 		
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
@@ -92,7 +91,7 @@ public class MasterCavePopulatorDistributor{
         }
 	}
 	
-	private HashMap<SimpleLocation, CaveClusterRegistry> calculateClusterLocations(Random rand, TerraformWorld tw, int chunkX, int chunkZ){
+	private @NotNull HashMap<SimpleLocation, CaveClusterRegistry> calculateClusterLocations(@NotNull Random rand, @NotNull TerraformWorld tw, int chunkX, int chunkZ){
 		HashMap<SimpleLocation, CaveClusterRegistry> locs = new HashMap<>();
 		
 		for(CaveClusterRegistry type:CaveClusterRegistry.values()) {

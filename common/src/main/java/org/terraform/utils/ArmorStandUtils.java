@@ -8,19 +8,21 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 
 public class ArmorStandUtils {
 
-	public static void placeArmorStand(SimpleBlock target, BlockFace facing, Random rand) {
+	public static void placeArmorStand(@NotNull SimpleBlock target, @NotNull BlockFace facing, @NotNull Random rand) {
 		placeArmorStand(target, facing, ArmorStandQuality.rollQuality(rand));
 	}
 	
-	public static void placeArmorStand(SimpleBlock target, BlockFace facing, ArmorStandQuality quality) {
+	public static void placeArmorStand(@NotNull SimpleBlock target, @NotNull BlockFace facing, @NotNull ArmorStandQuality quality) {
 		if(target.getPopData() instanceof PopulatorDataPostGen postGen) {
-            ArmorStand stand = (ArmorStand) postGen.getWorld().spawnEntity(new Location(postGen.getWorld(),
-					target.getX() + 0.5f, target.getY(), target.getZ() + 0.5f), EntityType.ARMOR_STAND);
+      ArmorStand stand = (ArmorStand) postGen.getWorld().spawnEntity(new Location(postGen.getWorld(),
+
+			target.getX() + 0.5f, target.getY(), target.getZ() + 0.5f), EntityType.ARMOR_STAND);
 			stand.setRotation(BlockUtils.yawFromBlockFace(facing), 0);
 			quality.apply(stand);
 		}
@@ -37,7 +39,7 @@ public class ArmorStandUtils {
 			this.pieces = pieces;
 		}
 		
-		public void apply(ArmorStand entity) {
+		public void apply(@NotNull ArmorStand entity) {
 			entity.getEquipment().setHelmet(new ItemStack(pieces[0]));
 			entity.getEquipment().setChestplate(new ItemStack(pieces[1]));
 			entity.getEquipment().setLeggings(new ItemStack(pieces[2]));
@@ -45,7 +47,7 @@ public class ArmorStandUtils {
 		}
 		
 		
-		public static ArmorStandQuality rollQuality(Random rand) {
+		public static @NotNull ArmorStandQuality rollQuality(@NotNull Random rand) {
 			int weight = rand.nextInt(100);
 			if(weight > 95) //15%
 				return ArmorStandQuality.DIAMOND;

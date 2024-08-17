@@ -8,6 +8,7 @@ import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -28,7 +29,7 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         //4 statues
         SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -96,7 +97,7 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
         }
     }
 
-    private void placeElderGuardianCage(SimpleBlock cageCenter) {
+    private void placeElderGuardianCage(@NotNull SimpleBlock cageCenter) {
         cageCenter.getRelative(0, -2, 0).setType(Material.CUT_SANDSTONE);
         cageCenter.getRelative(0, 2, 0).setType(Material.CUT_SANDSTONE);
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -125,7 +126,7 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
         cageCenter.getPopData().addEntity(cageCenter.getX(), cageCenter.getY(), cageCenter.getZ(), EntityType.ELDER_GUARDIAN);
     }
 
-    private void placePillar(Wall base, int height) {
+    private void placePillar(@NotNull Wall base, int height) {
 
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             base.getRelative(face).Pillar(height, rand, Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE);

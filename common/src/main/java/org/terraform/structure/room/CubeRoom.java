@@ -3,12 +3,12 @@ package org.terraform.structure.room;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.generator.LimitedRegion;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.room.carver.RoomCarver;
 import org.terraform.structure.room.carver.StandardRoomCarver;
 import org.terraform.utils.GenUtils;
 
@@ -38,7 +38,7 @@ public class CubeRoom {
      *                1 refers to one layer inside the room and so on.
      * @return The walls of one side of the room
      */
-    public SimpleEntry<Wall, Integer> getWall(PopulatorDataAbstract data, BlockFace face, int padding) {
+    public @NotNull SimpleEntry<Wall, Integer> getWall(@NotNull PopulatorDataAbstract data, @NotNull BlockFace face, int padding) {
         int[] lowerBounds = getLowerCorner();
         int[] upperBounds = getUpperCorner();
         Wall wall;
@@ -77,7 +77,7 @@ public class CubeRoom {
         return new SimpleEntry<>(wall, length);
     }
 
-    public HashMap<Wall, Integer> getFourWalls(PopulatorDataAbstract data, int padding) {
+    public @NotNull HashMap<Wall, Integer> getFourWalls(@NotNull PopulatorDataAbstract data, int padding) {
         int[] lowerBounds = getLowerCorner();
         int[] upperBounds = getUpperCorner();
         HashMap<Wall, Integer> walls = new HashMap<>();
@@ -109,7 +109,7 @@ public class CubeRoom {
         if (pop != null) pop.populate(data, this);
     }
 
-    public void fillRoom(PopulatorDataAbstract data, Material... mat) {
+    public void fillRoom(@NotNull PopulatorDataAbstract data, Material... mat) {
         fillRoom(data, -1, mat, Material.AIR);
     }
 
@@ -121,7 +121,7 @@ public class CubeRoom {
      * @param mat the array of materials for the walls, floor and ceiling of the room
      * @param fillMat material to use for the hollow area. Typically a fluid like air or water
      */
-    public void fillRoom(PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
+    public void fillRoom(@NotNull PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
 
         new StandardRoomCarver(tile, fillMat).carveRoom(data, this, mat);
     }
@@ -130,20 +130,20 @@ public class CubeRoom {
         return new int[]{x, y, z};
     }
 
-    public SimpleBlock getCenterSimpleBlock(PopulatorDataAbstract data) {
+    public @NotNull SimpleBlock getCenterSimpleBlock(@NotNull PopulatorDataAbstract data) {
         return new SimpleBlock(data, x, y, z);
     }
 
-    public double centralDistanceSquared(int[] other) {
+    public double centralDistanceSquared(int @NotNull [] other) {
         return Math.pow(x - other[0], 2) + Math.pow(y - other[1], 2) + Math.pow(z - other[2], 2);
     }
 
-    public CubeRoom getCloneSubsetRoom(int paddingX, int paddingZ)
+    public @NotNull CubeRoom getCloneSubsetRoom(int paddingX, int paddingZ)
     {
     	return new CubeRoom(this.widthX - paddingX*2, this.widthZ - paddingZ*2, this.height, this.x, this.y, this.z);
     }
     
-    public boolean isClone(CubeRoom other) {
+    public boolean isClone(@NotNull CubeRoom other) {
         return this.x == other.x
                 && this.y == other.y
                 && this.z == other.z
@@ -152,7 +152,7 @@ public class CubeRoom {
                 && this.widthZ == other.widthZ;
     }
 
-    public boolean isOverlapping(CubeRoom room) {
+    public boolean isOverlapping(@NotNull CubeRoom room) {
 //		int[][] corners = getAllCorners();
 //		int[][] otherCorners = room.getAllCorners();
 //		for(int i = 0; i < 4; i++){
@@ -169,14 +169,14 @@ public class CubeRoom {
     /**
      * @return random 3d coordinates from inside the room.
      */
-    public int[] randomCoords(Random rand) {
+    public int[] randomCoords(@NotNull Random rand) {
         return randomCoords(rand, 0);
     }
 
     /**
      * @return random 3d (xyz) coordinates from inside the room.
      */
-    public int[] randomCoords(Random rand, int pad) {
+    public int[] randomCoords(@NotNull Random rand, int pad) {
         return GenUtils.randomCoords(rand,
                 new int[]{x - widthX / 2 + pad, y + pad, z - widthZ / 2 + pad},
                 new int[]{x + widthX / 2 - pad, y + height - 1 - pad, z + widthZ / 2 - pad});
@@ -186,7 +186,7 @@ public class CubeRoom {
     /**
      * @param point 2d point (size 2 int array)
      */
-    public boolean isPointInside(int[] point, int pad) {
+    public boolean isPointInside(int @NotNull [] point, int pad) {
         int[] boundOne = getUpperCorner(pad);
         int[] boundTwo = getLowerCorner(pad);
 
@@ -202,7 +202,7 @@ public class CubeRoom {
     /**
      * @param point 2d point (size 2 int array)
      */
-    public boolean isPointInside(int[] point) {
+    public boolean isPointInside(int @NotNull [] point) {
         int[] boundOne = getUpperCorner();
         int[] boundTwo = getLowerCorner();
 
@@ -218,7 +218,7 @@ public class CubeRoom {
     /**
      * 2D comparison.
      */
-    public boolean isPointInside(SimpleLocation loc) {
+    public boolean isPointInside(@NotNull SimpleLocation loc) {
         int[] boundOne = getUpperCorner();
         int[] boundTwo = getLowerCorner();
 
@@ -231,7 +231,7 @@ public class CubeRoom {
         return false;
     }
     
-    public SimpleLocation getSimpleLocation() {
+    public @NotNull SimpleLocation getSimpleLocation() {
     	return new SimpleLocation(getX(),getY(),getZ());
     }
 
@@ -239,7 +239,7 @@ public class CubeRoom {
      * IGNORES Y AXIS.
      * @param point 2d point (size 2 int array)
      */
-    public boolean isPointInside(SimpleBlock point) {
+    public boolean isPointInside(@NotNull SimpleBlock point) {
         int[] boundOne = getUpperCorner();
         int[] boundTwo = getLowerCorner();
 
@@ -252,7 +252,7 @@ public class CubeRoom {
         return false;
     }
 
-    public boolean isInside(CubeRoom other) {
+    public boolean isInside(@NotNull CubeRoom other) {
         for (int[] corner : getAllCorners()) {
             if (!other.isPointInside(corner))
                 return false;
@@ -260,7 +260,7 @@ public class CubeRoom {
         return true;
     }
 
-    public boolean envelopesOrIsInside(CubeRoom other) {
+    public boolean envelopesOrIsInside(@NotNull CubeRoom other) {
         return isInside(other) || other.isInside(this);
     }
 
@@ -333,7 +333,7 @@ public class CubeRoom {
         return new int[]{x - widthX / 2, z - widthZ / 2};
     }
 
-    public boolean isInRegion(LimitedRegion region)
+    public boolean isInRegion(@NotNull LimitedRegion region)
     {
         return region.isInRegion(x-widthX / 2, y,z-widthZ / 2)
                 && region.isInRegion(x+widthX / 2, y, z+widthZ / 2);
@@ -362,7 +362,7 @@ public class CubeRoom {
      * @param data
      * @param padding
      */
-    public void purgeRoomContents(PopulatorDataAbstract data, int padding) {
+    public void purgeRoomContents(@NotNull PopulatorDataAbstract data, int padding) {
     	int[] lowerCorner = getLowerCorner(padding);
     	int[] upperCorner = getUpperCorner(padding);
     	int lowestY = y + padding;
@@ -474,7 +474,7 @@ public class CubeRoom {
         this.z = z;
     }
     
-    public void debugRedGround(PopulatorDataAbstract data) {
+    public void debugRedGround(@NotNull PopulatorDataAbstract data) {
     	int[] lowerCorner = getLowerCorner();
     	int[] upperCorner = getUpperCorner();
     	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {

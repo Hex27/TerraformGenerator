@@ -7,13 +7,15 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.noise.FastNoise;
 
 public class BadlandsMineEntranceParser extends SchematicParser {
-    static FastNoise noise = null;
+    static @Nullable FastNoise noise = null;
     private boolean didPlaceLantern = false;
     
     //Don't cache, as it does not change based on terraformworld.
@@ -29,7 +31,7 @@ public class BadlandsMineEntranceParser extends SchematicParser {
     }
 
     @Override
-    public void applyData(SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
         double noiseValue = getNoise(block.getX(), block.getY(), block.getZ());
 
         switch(data.getMaterial()) {
@@ -96,7 +98,7 @@ public class BadlandsMineEntranceParser extends SchematicParser {
         }
     }
 
-    boolean willPlaceFence(SimpleBlock block) {
+    boolean willPlaceFence(@NotNull SimpleBlock block) {
         return getNoise(block.getX(), block.getY(), block.getZ()) < 0.4;
     }
 }

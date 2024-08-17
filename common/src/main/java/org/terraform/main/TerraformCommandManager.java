@@ -21,7 +21,7 @@ import java.util.Stack;
 
 public class TerraformCommandManager implements TabExecutor {
 
-    public TerraformCommandManager(TerraformGeneratorPlugin plugin, String... bases) {
+    public TerraformCommandManager(@NotNull TerraformGeneratorPlugin plugin, String @NotNull ... bases) {
         
     	this.plugin = plugin;
 		for(String base:bases){
@@ -91,12 +91,12 @@ public class TerraformCommandManager implements TabExecutor {
         this.registerCommand(new LocateBiomeCommand(plugin, "locatebiome", "lb"));
     }
     
-	private ArrayList<TerraCommand> commands = new ArrayList<>();
+	private @NotNull ArrayList<TerraCommand> commands = new ArrayList<>();
 
 	private TerraformGeneratorPlugin plugin;
-	public ArrayList<String> bases = new ArrayList<>();
+	public @NotNull ArrayList<String> bases = new ArrayList<String>();
 	
-	public void unregisterCommand(Class<?> clazz){
+	public void unregisterCommand(@NotNull Class<?> clazz){
         commands.removeIf(clazz::isInstance);
 	}
 	
@@ -104,18 +104,18 @@ public class TerraformCommandManager implements TabExecutor {
         commands.removeIf(cmd -> cmd.matchCommand(alias));
 	}
 	
-	public ArrayList<TerraCommand> getCommands(){
+	public @NotNull ArrayList<TerraCommand> getCommands(){
 		return commands;
 	}
 	
-	public void registerCommand(TerraCommand cmd){
+	public void registerCommand(@NotNull TerraCommand cmd){
 		this.commands.add(cmd);
 		plugin.getLang().fetchLang("command." + cmd.aliases.get(0) + ".desc",cmd.getDefaultDescription());
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String arg2,
-			String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, Command cmd, String arg2,
+                             String @NotNull [] args) {
 		if(args.length == 0){
 			sender.sendMessage(plugin.getLang().fetchLang("command.unknown"));
 			try {
@@ -160,7 +160,7 @@ public class TerraformCommandManager implements TabExecutor {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String alias, @NotNull String @NotNull [] args) {
 	    List<String> options = new ArrayList<>();
         if (args.length == 0) {
             for (TerraCommand terraCommand : commands) {

@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Lantern;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
@@ -34,7 +35,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     }
 
     @Override
-    public void populate(PathPopulatorData ppd) {
+    public void populate(@NotNull PathPopulatorData ppd) {
         
         Wall core = new Wall(ppd.base, ppd.dir);
         
@@ -92,7 +93,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         }
     }
     
-    private void placeWallArc(Wall core, int state) {
+    private void placeWallArc(@NotNull Wall core, int state) {
     	if(occupied.contains(core.getLoc()) 
     			|| occupied.contains(core.getRight().getLoc())
     			|| occupied.contains(core.getLeft().getLoc())) 
@@ -240,7 +241,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     }
 
     @Override
-    public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
+    public boolean customCarve(@NotNull SimpleBlock base, BlockFace dir, int pathWidth) {
         Wall core = new Wall(base.getRelative(0, 1, 0), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         EnumSet<Material> carveMaterials = BlockUtils.stoneLike.clone();

@@ -3,6 +3,7 @@ package org.terraform.coregen;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.loot.LootTable;
+import org.jetbrains.annotations.Nullable;
 
 public enum TerraLootTable {
     EMPTY("empty"), //Not a valid key
@@ -126,7 +127,7 @@ public enum TerraLootTable {
     TerraLootTable(String key) {
         this.key = key;
     }
-    public LootTable bukkit(){
+    public @Nullable LootTable bukkit(){
         return Bukkit.getLootTable(NamespacedKey.minecraft(this.key));
     }
 }

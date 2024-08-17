@@ -3,6 +3,7 @@ package org.terraform.structure.villagehouse.animalfarm;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeClimate;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -41,13 +42,13 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
     
 
     @Override
-    public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return tw.getHashedRand(425332, chunkX, chunkZ);
     }
 
     @Override
-    public void populate(TerraformWorld tw,
-                         PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw,
+                         @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
@@ -56,7 +57,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
         spawnAnimalFarm(tw, data, x, height + 1, z);
     }
 
-    public void spawnAnimalFarm(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnAnimalFarm(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         try {
             Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
             BiomeBank biome = tw.getBiomeBank(x, z);
@@ -96,7 +97,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
         }
     }
 
-    private void createSurroundingFences(TerraformWorld tw, BiomeBank biome, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    private void createSurroundingFences(@NotNull TerraformWorld tw, @NotNull BiomeBank biome, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         RoomLayoutGenerator gen = new RoomLayoutGenerator(random, RoomLayout.RANDOM_BRUTEFORCE, 50, x, y, z, 75);
         gen.setPathPopulator(new AnimalFarmPathPopulator(gen, tw.getHashedRand(x, y, z, 1234)));
         gen.setRoomMaxX(17);

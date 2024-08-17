@@ -2,6 +2,7 @@ package org.terraform.biome.flat;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
@@ -28,17 +29,17 @@ public class CherryGroveHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.PLAINS;
     }
     
     @Override
-    public CustomBiomeType getCustomBiome() {
+    public @NotNull CustomBiomeType getCustomBiome() {
         return CustomBiomeType.CHERRY_GROVE;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
@@ -47,7 +48,7 @@ public class CherryGroveHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
 
@@ -69,7 +70,7 @@ public class CherryGroveHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
 		//Small trees or grass poffs
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
@@ -111,11 +112,11 @@ public class CherryGroveHandler extends BiomeHandler {
         }
 	}
 	
-    public BiomeBank getBeachType() {
+    public @NotNull BiomeBank getBeachType() {
     	return BiomeBank.CHERRY_GROVE_BEACH;
     }
     
-    public BiomeBank getRiverType() {
+    public @NotNull BiomeBank getRiverType() {
     	return BiomeBank.CHERRY_GROVE_RIVER;
     }
 

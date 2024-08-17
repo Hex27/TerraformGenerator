@@ -3,10 +3,10 @@ package org.terraform.structure.warmoceanruins;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CylinderBuilder;
@@ -23,7 +23,7 @@ public class WarmOceanDomeHutRoom extends WarmOceanBaseRoom{
 
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
         Material decorator = new Material[]{
@@ -99,7 +99,7 @@ public class WarmOceanDomeHutRoom extends WarmOceanBaseRoom{
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX()<25;
     }
 }

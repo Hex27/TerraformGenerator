@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.SimpleLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -26,7 +27,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
 	
 	private static boolean flushIsQueued = false;
     //SimpleChunkLocation to a collection of simplelocations
-    public static Map<SimpleChunkLocation, Collection<SimpleLocation>> cache = new ConcurrentHashMap<>();
+    public static @NotNull Map<SimpleChunkLocation, Collection<SimpleLocation>> cache = new ConcurrentHashMap<>();
     //private final TerraformWorld tw;
 
     public PhysicsUpdaterPopulator() {
@@ -34,7 +35,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
     	Bukkit.getPluginManager().registerEvents(this, TerraformGeneratorPlugin.get());
     }
     
-    public static void pushChange(String world, SimpleLocation loc) {
+    public static void pushChange(String world, @NotNull SimpleLocation loc) {
     	
     	if(!flushIsQueued && cache.size() > TConfigOption.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY.getInt()) {
 			flushIsQueued = true;
@@ -58,10 +59,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
     	if(cache.size() == 0)
     		return;
     	TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Flushing repairs (" + cache.size() + " chunks)");
-        ArrayList<SimpleChunkLocation> locs = new ArrayList<>();
-    	for(SimpleChunkLocation scl:cache.keySet()) {
-    		locs.add(scl);
-    	}
+        ArrayList<SimpleChunkLocation> locs = new ArrayList<>(cache.keySet());
     	for(SimpleChunkLocation scl:locs) {
     		World w = Bukkit.getWorld(scl.getWorld());
     		if(w == null) continue;
@@ -86,7 +84,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
     }
     
     @Override
-    public void populate(World world, Random random, Chunk chunk) {
+    public void populate(@NotNull World world, Random random, @NotNull Chunk chunk) {
         SimpleChunkLocation scl = new SimpleChunkLocation(chunk);
 		Collection<SimpleLocation> changes = cache.remove(scl);
         if (changes != null) {
@@ -120,7 +118,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
 //    }
 //    
     @EventHandler
-    public void onWorldUnload(WorldUnloadEvent event) {
+    public void onWorldUnload(@NotNull WorldUnloadEvent event) {
     	TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Flushing repairs for " + event.getWorld().getName() + " (" + cache.size() + " chunks in cache)");
         
     	int processed = 0;

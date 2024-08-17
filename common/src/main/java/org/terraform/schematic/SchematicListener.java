@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public class SchematicListener implements Listener {
     public static final ConcurrentHashMap<UUID, TerraRegion> rgs = new ConcurrentHashMap<>();
     private static final String WAND_NAME = ChatColor.AQUA + "Terra Wand";
 
-    public static ItemStack getWand() {
+    public static @NotNull ItemStack getWand() {
         ItemStack wand = new ItemStack(Material.GOLDEN_AXE);
         ItemMeta meta = wand.getItemMeta();
         meta.setDisplayName(WAND_NAME);
@@ -32,7 +33,7 @@ public class SchematicListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockClick(PlayerInteractEvent event) {
+    public void onBlockClick(@NotNull PlayerInteractEvent event) {
         if (event.getHand() == EquipmentSlot.OFF_HAND) return;
         if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         ItemStack item = event.getPlayer().getEquipment().getItemInMainHand();
