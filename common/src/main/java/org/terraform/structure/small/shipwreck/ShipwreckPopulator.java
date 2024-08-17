@@ -2,6 +2,7 @@ package org.terraform.structure.small.shipwreck;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
@@ -21,7 +22,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     private static final String[] SCHEMATICS = {"upright-shipwreck-1",
             "tilted-shipwreck-1"};
 
-    private static void dropDownBlock(SimpleBlock block) {
+    private static void dropDownBlock(@NotNull SimpleBlock block) {
         if (block.getType().isSolid()) {
             Material type = block.getType();
             if (type == Material.CHEST) return;
@@ -38,7 +39,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
 
         if (!TConfigOption.STRUCTURES_SHIPWRECK_ENABLED.getBoolean())
             return;
@@ -55,7 +56,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
         }
     }
 
-    public void spawnShipwreck(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnShipwreck(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         try {
         	//If the ground is dry, force the whole ship down into the ground to bury it.
         	if(!BlockUtils.isWet(new SimpleBlock(data,x,0,z).getGround().getRelative(0,1,0))) {
@@ -96,7 +97,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     }
 
     @Override
-    public int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc) {
+    public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         int num = TConfigOption.STRUCTURES_SHIPWRECK_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++)
@@ -105,7 +106,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
 
     }
 
-    public int[] getNearestFeature(TerraformWorld tw, int rawX, int rawZ) {
+    public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
         MegaChunk mc = new MegaChunk(rawX, 0, rawZ);
 
         double minDistanceSquared = Integer.MAX_VALUE;
@@ -125,7 +126,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     }
 
 
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12422),
                 (int) (TConfigOption.STRUCTURES_SHIPWRECK_SPAWNRATIO
                         .getDouble() * 10000),
@@ -133,7 +134,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     }
     
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX,
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX,
                             int chunkZ) {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
@@ -156,7 +157,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     
     
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(221819019, chunkX, chunkZ);
     }
 

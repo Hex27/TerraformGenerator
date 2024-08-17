@@ -2,6 +2,7 @@ package org.terraform.command.contants;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.TerraSchematic;
 
@@ -14,7 +15,7 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
     }
 
     @Override
-    public TerraSchematic parse(CommandSender sender, String value) {
+    public TerraSchematic parse(@NotNull CommandSender sender, String value) {
 
         try {
             return TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
@@ -25,7 +26,7 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
     }
 
     @Override
-    public String validate(CommandSender sender, String value) {
+    public @NotNull String validate(@NotNull CommandSender sender, String value) {
         try {
             //Path validation is done inside TerraSchematic.load
             TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));

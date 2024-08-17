@@ -38,7 +38,7 @@ public class TerraformGenerator extends ChunkGenerator {
     /**
      * Refers to raw X and raw Z (block coords). NOT chunk coords.
      */
-    public static ChunkCache getCache(TerraformWorld tw, int x, int z) {
+    public static @NotNull ChunkCache getCache(TerraformWorld tw, int x, int z) {
         ChunkCache cache = new ChunkCache(tw, x, 0, z);
 		//Note how it DOES NOT initInternalCache here
         //Cos this is the damn key
@@ -171,7 +171,7 @@ public class TerraformGenerator extends ChunkGenerator {
 
     //This method ONLY fills transformedHeight with meaningful values,
     // and writes nothing.
-    public static void buildFilledCache(TerraformWorld tw, int chunkX, int chunkZ, ChunkCache cache){
+    public static void buildFilledCache(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull ChunkCache cache){
         //TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog(); don't unnecessarily tick this shit
 
         //Ensure that this shit is the same as the one in generateSurface

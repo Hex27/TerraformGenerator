@@ -29,6 +29,7 @@ import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentStru
 import net.minecraft.world.level.levelgen.structure.structures.StrongholdStructure;
 import net.minecraft.world.level.levelgen.structure.structures.WoodlandMansionStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -45,12 +46,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class NMSChunkGenerator extends ChunkGenerator {
-    private final ChunkGenerator delegate;
-    private final TerraformWorld tw;
-    private final MapRenderWorldProviderBiome mapRendererBS;
-    private final TerraformWorldProviderBiome twBS;
+    private final @NotNull ChunkGenerator delegate;
+    private final @NotNull TerraformWorld tw;
+    private final @NotNull MapRenderWorldProviderBiome mapRendererBS;
+    private final @NotNull TerraformWorldProviderBiome twBS;
 
-    public NMSChunkGenerator(String worldName, long seed, ChunkGenerator delegate) {
+    public NMSChunkGenerator(String worldName, long seed, @NotNull ChunkGenerator delegate) {
         super(
                 delegate.d(), //WorldChunkManager d() is getBiomeSource()
                 delegate.d); //Idk what generationSettingsGetter is
@@ -65,21 +66,21 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
 
     @Override //getBiomeSource
-    public WorldChunkManager d() {
+    public @NotNull WorldChunkManager d() {
         return mapRendererBS;
     }
 
-    public TerraformWorld getTerraformWorld() {
+    public @NotNull TerraformWorld getTerraformWorld() {
         return tw;
     }
 
     @Override
-    protected MapCodec<? extends ChunkGenerator> b() {
+    protected @NotNull MapCodec<? extends ChunkGenerator> b() {
         return MapCodec.unit(null);
     }
 
     @Override //createBiomes
-    public CompletableFuture<IChunkAccess> a(Executor executor, RandomState randomstate, Blender blender, StructureManager structuremanager, IChunkAccess ichunkaccess)
+    public @NotNull CompletableFuture<IChunkAccess> a(Executor executor, RandomState randomstate, Blender blender, StructureManager structuremanager, @NotNull IChunkAccess ichunkaccess)
     {
         return CompletableFuture.supplyAsync(SystemUtils.a("init_biomes", () -> {
             return ichunkaccess; //Don't do any calculations here, biomes are set in applyCarvers
@@ -87,8 +88,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
     }
 
     @Override //findNearestMapFeature
-    public Pair<BlockPosition, Holder<Structure>> a(WorldServer worldserver, HolderSet<Structure> holderset,
-                                                    BlockPosition blockposition, int i, boolean flag) {
+    public Pair<BlockPosition, Holder<Structure>> a(WorldServer worldserver, @NotNull HolderSet<Structure> holderset,
+                                                    @NotNull BlockPosition blockposition, int i, boolean flag) {
 
         int pX = blockposition.u(); //getX
         int pZ = blockposition.w(); //getZ
@@ -136,7 +137,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
     @Override //applyCarvers
     public void a(RegionLimitedWorldAccess regionlimitedworldaccess, long seed,
                   RandomState randomstate, BiomeManager biomemanager,
-                  StructureManager structuremanager, IChunkAccess ichunkaccess,
+                  StructureManager structuremanager, @NotNull IChunkAccess ichunkaccess,
                   WorldGenStage.Features worldgenstage_features)
     {
         //POPULATES BIOMES. IMPORTANT

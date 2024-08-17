@@ -34,7 +34,7 @@ public class PreviewCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Shows a preview of a specified generation technique";
     }
 
@@ -44,7 +44,7 @@ public class PreviewCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
 
         return sender.isOp();
     }
@@ -236,7 +236,7 @@ public class PreviewCommand extends TerraCommand {
         }
     }
     @SuppressWarnings("unused")
-	private Color getClimateColor(BiomeBank bank) {
+	private Color getClimateColor(@NotNull BiomeBank bank) {
     	if(bank.getType() == BiomeType.OCEANIC||bank.getType() == BiomeType.DEEP_OCEANIC)
     		return Color.blue;
     	switch(bank.getClimate()) {
@@ -257,7 +257,7 @@ public class PreviewCommand extends TerraCommand {
     }
 
     @SuppressWarnings("unused")
-    private Color getBiomeColor(BiomeBank bank) {
+    private Color getBiomeColor(@NotNull BiomeBank bank) {
     	switch(bank) {
     	case SNOWY_WASTELAND:
     		return Color.white;
@@ -295,7 +295,7 @@ public class PreviewCommand extends TerraCommand {
     
     
     @SuppressWarnings("unused")
-	private Color getHeightColorFromNoise(int noise) {
+	private @NotNull Color getHeightColorFromNoise(int noise) {
         if (noise <= 62) { //Sea level
             return new Color(50, 50, 100 + (noise * 2));//Blue
         } else if (noise < 62 + 4) { //Beaches?

@@ -8,6 +8,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.block.data.type.Wall.Height;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
@@ -15,7 +17,7 @@ import org.terraform.utils.BlockUtils;
 public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
 
     //TODO: Investigate what this class is for. Seems quite random to have this around.
-    public static void correctWallData(SimpleBlock target) {
+    public static void correctWallData(@NotNull SimpleBlock target) {
         if (!(target.getBlockData() instanceof Wall data)) return;
         for (BlockFace face : BlockUtils.directBlockFaces) {
         	Material relType = target.getRelative(face).getType();
@@ -50,7 +52,7 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
         target.setBlockData(data);
     }
 
-    public static void correctSurroundingWallData(SimpleBlock target) {
+    public static void correctSurroundingWallData(@NotNull SimpleBlock target) {
         if (!(target.getBlockData() instanceof Wall)) return;
 
         correctWallData(target);
@@ -77,7 +79,7 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
     }
 
     @Override
-    public void correctFacing(Vector v, SimpleBlock b, BlockData data, BlockFace face) {
+    public void correctFacing(Vector v, @Nullable SimpleBlock b, @Nullable BlockData data, BlockFace face) {
         if (data == null && b != null) data = b.getBlockData();
 
         if (!hasFlushed && data instanceof Wall) {

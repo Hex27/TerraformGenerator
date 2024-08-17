@@ -3,6 +3,7 @@ package org.terraform.utils.noise;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.utils.Vector2f;
 
 public class BresenhamLine {
@@ -14,11 +15,11 @@ public class BresenhamLine {
         this.point2 = point2;
     }
 
-    public List<Vector2f> getPoints() {
+    public @NotNull List<Vector2f> getPoints() {
         return genLine(Math.round(point1.x), Math.round(point1.y), Math.round(point2.x), Math.round(point2.y));
     }
 
-    public List<Vector2f> genLine(int x0, int y0, int x1, int y1) {
+    public @NotNull List<Vector2f> genLine(int x0, int y0, int x1, int y1) {
         List<Vector2f> line = new ArrayList<>(16);
 
         int dx = Math.abs(x1 - x0);

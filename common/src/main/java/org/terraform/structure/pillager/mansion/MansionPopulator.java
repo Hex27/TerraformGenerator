@@ -2,6 +2,7 @@ package org.terraform.structure.pillager.mansion;
 
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -14,11 +15,11 @@ import org.terraform.utils.GenUtils;
 public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
-    public Random getHashedRandom(TerraformWorld tw, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return tw.getHashedRand(717281012, chunkX, chunkZ);
     }
     
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 99572),
                 (int) (TConfigOption.STRUCTURES_MANSION_SPAWNRATIO
                         .getDouble() * 10000),
@@ -26,7 +27,7 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
     	//Enforce minimum distance
         if(Math.pow(chunkX*16,2) + Math.pow(chunkZ*16,2) < Math.pow(TConfigOption.STRUCTURES_MANSION_MINDISTANCE.getInt(),2))
             return false;
@@ -39,7 +40,7 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
 

@@ -1,5 +1,6 @@
 package org.terraform.utils.bstats;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 
@@ -8,7 +9,7 @@ public class TerraformGeneratorMetricsHandler {
 	@SuppressWarnings("unused")
 	private TerraformGeneratorPlugin plugin;
 	
-	public TerraformGeneratorMetricsHandler(TerraformGeneratorPlugin plugin) {
+	public TerraformGeneratorMetricsHandler(@NotNull TerraformGeneratorPlugin plugin) {
 		this.plugin = plugin;
 		
 		int pluginId = 13968;

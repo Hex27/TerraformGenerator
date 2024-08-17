@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 
 public class SchematicParser {
@@ -28,7 +29,7 @@ public class SchematicParser {
 				Material.KELP
 			);
 	
-    public void applyData(SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
     	if(isDelayedApply || !fragile.contains(data.getMaterial()))
 	    	block.setBlockData(data);
     	else

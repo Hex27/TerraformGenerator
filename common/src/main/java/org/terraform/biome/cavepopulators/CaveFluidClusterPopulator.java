@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -21,6 +23,7 @@ import java.util.Random;
 public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
 
     Random rand;
+    @Nullable
     Material fluid;
     int rY;
 
@@ -28,7 +31,7 @@ public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
 		super(radius);
 	}
     @Override
-	public void oneUnit(TerraformWorld tw, Random doNotUse, SimpleBlock ceil, SimpleBlock floor, boolean boundary) {
+	public void oneUnit(@NotNull TerraformWorld tw, Random doNotUse, @Nullable SimpleBlock ceil, @Nullable SimpleBlock floor, boolean boundary) {
     	if(ceil == null || floor == null) return;
         if(rand == null)
         {

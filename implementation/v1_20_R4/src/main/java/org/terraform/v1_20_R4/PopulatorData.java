@@ -23,6 +23,7 @@ import org.bukkit.craftbukkit.v1_20_R4.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_20_R4.util.CraftMagicNumbers;
 import org.bukkit.craftbukkit.v1_20_R4.util.RandomSourceWrapper;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
@@ -91,7 +92,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setType(int x, int y, int z, Material type) {
+    public void setType(int x, int y, int z, @NotNull Material type) {
     	if (Math.abs((x >> 4) - chunkX) > radius || Math.abs((z >> 4) - chunkZ) > radius) {
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
@@ -103,7 +104,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
     	if (Math.abs((x >> 4) - chunkX) > radius || Math.abs((z >> 4) - chunkZ) > radius) {
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
@@ -131,7 +132,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
     
     @Override
-    public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
+    public void addEntity(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
     	if (Math.abs((rawX >> 4) - chunkX) > 1 || Math.abs((rawZ >> 4) - chunkZ) > 1) {
     		TerraformGeneratorPlugin.logger.info("Failed to spawn " + type + " as it was out of bounds.");
     		return;

@@ -5,6 +5,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.Snowable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -18,7 +19,7 @@ import java.util.Random;
 
 public class IceSpikesHandler extends BiomeHandler {
     
-	public static void genSpike(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
+	public static void genSpike(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
         y -= height / 5;
         //Vector one to two;
         Vector base = new Vector(x, y, z);
@@ -47,12 +48,12 @@ public class IceSpikesHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.ICE_SPIKES;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.SNOW_BLOCK, 5, Material.SNOW_BLOCK, 25),
                 Material.SNOW_BLOCK,
                 GenUtils.randMaterial(rand, Material.SNOW_BLOCK, Material.DIRT),
@@ -61,7 +62,7 @@ public class IceSpikesHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         if (data.getType(rawX, surfaceY + 1, rawZ) == Material.AIR
                 && !Tag.ICE.isTagged(data.getType(rawX, surfaceY, rawZ))) {
@@ -74,7 +75,7 @@ public class IceSpikesHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 
 		//Ice Spikes
         SimpleLocation[] spikes = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16, 0.5f);
@@ -100,12 +101,12 @@ public class IceSpikesHandler extends BiomeHandler {
 	
 
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.ICY_BEACH;
 	}
 
 	@Override
-	public BiomeBank getRiverType() {
+	public @NotNull BiomeBank getRiverType() {
 		return BiomeBank.FROZEN_RIVER;
 	}
 }

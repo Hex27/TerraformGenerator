@@ -1,6 +1,7 @@
 package org.terraform.structure.room;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
@@ -18,7 +19,7 @@ public class CarvedRoom extends CubeRoom {
         super(widthX, widthZ, height, x, y, z);
     }
 
-    public CarvedRoom(CubeRoom room) {
+    public CarvedRoom(@NotNull CubeRoom room) {
         super(room.getWidthX(), room.getWidthZ(), room.getHeight(), room.getX(), room.getY(), room.getZ());
     }
 
@@ -26,7 +27,7 @@ public class CarvedRoom extends CubeRoom {
      * Fillmat is always CAVE_AIR no matter what's being put lol.
      */
     @Override
-    public void fillRoom(PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
+    public void fillRoom(@NotNull PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
         int heightOffset = height - (2 * height / 3);
         BlockUtils.carveCaveAir(new Random().nextInt(9999291),
                 xMultiplier*(widthX / 2f), 

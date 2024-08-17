@@ -3,6 +3,7 @@ package org.terraform.biome.beach;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -57,7 +58,7 @@ public class OasisBeach {
      * @param targetBiome the biome this function is called from.
      *                    Prevents code from running twice when biome overlap
      */
-    public static void generateOasisBeach(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int z, BiomeBank targetBiome) {
+    public static void generateOasisBeach(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int z, BiomeBank targetBiome) {
         if (!isOasisBeach(tw, x, z, targetBiome)) return;
 
         int y = GenUtils.getHighestGround(data, x, z);
@@ -90,7 +91,7 @@ public class OasisBeach {
     }
 
     // TODO: I feel like this is the 10th time I implement this in some form, should all game "objects" like rocks etc. be stored in one class as static functions?
-    public static void createBush(Random random, PopulatorDataAbstract data, int x, int y, int z, double xRadius, double yRadius, double zRadius, Material leaves, Material stem, double density) {
+    public static void createBush(@NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, double xRadius, double yRadius, double zRadius, Material leaves, Material stem, double density) {
         for (int ny = y; ny < y + yRadius / 2; ny++)
             data.setType(x, ny, z, stem);
         for (int xr = (int) -Math.ceil(xRadius); xr < Math.ceil(xRadius); xr++) {

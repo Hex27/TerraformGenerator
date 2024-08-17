@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -30,7 +31,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
         this.knownRooms = collection;
     }
 
-    public static void placeLamp(Random rand, SimpleBlock b) {
+    public static void placeLamp(@NotNull Random rand, @NotNull SimpleBlock b) {
         b.setType(GenUtils.randMaterial(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
         b.getRelative(0, 1, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
         b.getRelative(0, 2, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
@@ -53,7 +54,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
 	 * @param target the block where the base of the lamp is.
 	 * @return whether or not the lamp has enough space to be placed here.
 	 */
-    public static boolean canPlaceLamp(SimpleBlock target) {
+    public static boolean canPlaceLamp(@NotNull SimpleBlock target) {
     	
     	if(target.getType() == Material.WATER)
     		return false;
@@ -67,7 +68,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
     }
     
     @Override
-    public void populate(PathPopulatorData ppd) {
+    public void populate(@NotNull PathPopulatorData ppd) {
 
         //Find the ground level to place pathways
         ppd.base = new SimpleBlock(

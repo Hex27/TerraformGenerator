@@ -1,6 +1,7 @@
 package org.terraform.structure.small;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -13,7 +14,7 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public class GiantPumpkinPopulator {
-    public void populate(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
         if (!TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()) return;
         int x = data.getChunkX() * 16 + random.nextInt(16);
         int z = data.getChunkZ() * 16 + random.nextInt(16);
@@ -22,7 +23,7 @@ public class GiantPumpkinPopulator {
         spawnGiantPumpkin(tw, random, data, x, height, z);
     }
 
-    public void spawnGiantPumpkin(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnGiantPumpkin(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         //Spawn the biggest pumpkin
         new FractalTreeBuilder(FractalTypes.Tree.GIANT_PUMPKIN)
                 .build(tw, data, x, y + 1, z);

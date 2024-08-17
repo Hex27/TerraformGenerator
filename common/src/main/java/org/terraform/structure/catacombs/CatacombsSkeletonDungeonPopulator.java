@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -21,7 +22,7 @@ public class CatacombsSkeletonDungeonPopulator extends CatacombsStandardPopulato
 	
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	SimpleBlock center = room.getCenterSimpleBlock(data).getUp();
     	

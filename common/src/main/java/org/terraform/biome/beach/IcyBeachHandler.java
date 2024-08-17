@@ -2,6 +2,7 @@ package org.terraform.biome.beach;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
@@ -11,7 +12,7 @@ import java.util.Random;
 
 public class IcyBeachHandler extends BiomeHandler {
 
-    private static void makeIceSheet(int x, int y, int z, PopulatorDataAbstract data, Random random) {
+    private static void makeIceSheet(int x, int y, int z, @NotNull PopulatorDataAbstract data, @NotNull Random random) {
         int length = GenUtils.randInt(6, 16);
         int nx = x;
         int nz = z;
@@ -37,12 +38,12 @@ public class IcyBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.SNOWY_BEACH;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
                 GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
                 GenUtils.randMaterial(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL),
@@ -50,7 +51,7 @@ public class IcyBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         if (GenUtils.chance(random, 7, 100)) {
             makeIceSheet(rawX, surfaceY, rawZ, data, random);

@@ -3,6 +3,7 @@ package org.terraform.biome.mountainous;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
@@ -44,12 +45,12 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.SAVANNA_PLATEAU;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(Random rand) {
         return new Material[]{
         		Material.GRASS_BLOCK,
         		Material.DIRT,
@@ -60,14 +61,14 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public BiomeHandler getTransformHandler(){ return this; }
+    public @NotNull BiomeHandler getTransformHandler(){ return this; }
 
     /**
      * One 2D noise value to handle whether or not to carve
      * One 1D noise value as a Y-multiplier
      */
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+    public void transformTerrain(@NotNull ChunkCache cache, @NotNull TerraformWorld tw, Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
 //        BiomeSection b = BiomeBank.getBiomeSectionFromBlockCoords(tw,x,z);
 //        int peakHeight = TerraformGenerator.seaLevel
 //                + GenUtils.randInt(tw.getHashedRand(b.getX(),b.getZ(),7312849),
@@ -130,7 +131,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
     }
 
     static BiomeBlender biomeBlender;
-    private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
+    private static @NotNull BiomeBlender getBiomeBlender(TerraformWorld tw) {
         if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
                 .setGridBlendingFactor(4)
                 .setSmoothBlendTowardsRivers(2);
@@ -145,7 +146,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
 //    }
     
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ,  PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         if(surfaceY < TerraformGenerator.seaLevel) return;
 
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
@@ -158,7 +159,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
         //Small trees
 	    SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 34);
         for (SimpleLocation sLoc : trees) {
@@ -188,12 +189,12 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
 	}
 	
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.SANDY_BEACH;
 	}
 
 	@Override
-	public BiomeBank getRiverType() {
+	public @NotNull BiomeBank getRiverType() {
 		return BiomeBank.RIVER;
 	}
 }

@@ -5,6 +5,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.material.MaterialData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 
@@ -27,12 +28,12 @@ public class TerraformChunkData implements ChunkData {
 	}
 	
 	@Override
-	public Biome getBiome(int x, int y, int z) {
+	public @NotNull Biome getBiome(int x, int y, int z) {
 		return popData.getBiome(x + (popData.getChunkX()*16), z + (popData.getChunkZ()*16));
 	}
 
 	@Override
-	public BlockData getBlockData(int x, int y, int z) {
+	public @NotNull BlockData getBlockData(int x, int y, int z) {
 		return popData.getBlockData(x + (popData.getChunkX()*16), y, z + (popData.getChunkZ()*16));
 	}
 
@@ -52,12 +53,12 @@ public class TerraformChunkData implements ChunkData {
 	}
 
 	@Override
-	public Material getType(int x, int y, int z) {
+	public @NotNull Material getType(int x, int y, int z) {
 		return popData.getType(x + (popData.getChunkX()*16), y, z + (popData.getChunkZ()*16));
 	}
 
 	@Override
-	public MaterialData getTypeAndData(int x, int y, int z) {
+	public @NotNull MaterialData getTypeAndData(int x, int y, int z) {
 		throw new UnsupportedOperationException("getTypeAndData was called on TerraformChunkData with MaterialData!");
 	}
 

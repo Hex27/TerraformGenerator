@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -17,7 +18,7 @@ public class BlockDataTestCommand extends TerraCommand {
     }
 
     @Override
-    public String getDefaultDescription() {
+    public @NotNull String getDefaultDescription() {
         return "Shows some new blockdata values in 1.16";
     }
 
@@ -27,13 +28,13 @@ public class BlockDataTestCommand extends TerraCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean hasPermission(@NotNull CommandSender sender) {
 
         return sender.isOp();
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
+    public void execute(@NotNull CommandSender sender, Stack<String> args)
             throws InvalidArgumentException {
         Wall facing = (Wall) Bukkit.createBlockData(Material.COBBLESTONE_WALL);
         sender.sendMessage(facing.getAsString());

@@ -1,5 +1,6 @@
 package org.terraform.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
 
@@ -47,7 +48,7 @@ public class BiomePainter extends JFrame {
             draw(i.getGraphics());
         }
 
-        void draw(Graphics g) {
+        void draw(@NotNull Graphics g) {
             TerraformWorld world = TerraformWorld.get("world", seed);
 
             for(int x = 0; x < windowWidth; x++) {
@@ -105,7 +106,7 @@ public class BiomePainter extends JFrame {
             }
         }
 
-        public void paintComponent(Graphics g) {
+        public void paintComponent(@NotNull Graphics g) {
             g.drawImage(i, 0, 0, null);
         }
     }

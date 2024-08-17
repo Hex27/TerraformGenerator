@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlock;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.data.TerraformWorld;
@@ -29,7 +31,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
     @SuppressWarnings("unused")
 	private final WorldChunkManager delegate;
     
-    private static List<Holder<BiomeBase>> biomeListToBiomeBaseList(IRegistry<BiomeBase> registry) {
+    private static @NotNull List<Holder<BiomeBase>> biomeListToBiomeBaseList(@NotNull IRegistry<BiomeBase> registry) {
 
         List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
 
@@ -71,7 +73,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 	@SuppressWarnings("unused")
 	private static boolean debug = false;
 	@Override
-	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
+	public @Nullable Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
 		//For vanilla cave biome positioning. However, doesn't work now.
 //		BiomeBase delegateCandidate = delegate.getNoiseBiome(x, y, z, arg3);
 //		if(CraftBlock.biomeBaseToBiome(registry, delegateCandidate) == Biome.LUSH_CAVES 

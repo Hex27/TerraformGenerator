@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.NaturalSpawnType;
@@ -30,7 +31,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
-    public static void arch(Wall w, MonumentDesign design, Random random, int archHalfLength, int height) {
+    public static void arch(@NotNull Wall w, @NotNull MonumentDesign design, @NotNull Random random, int archHalfLength, int height) {
         Wall arch = w.getRelative(0, height, 0);
         BlockFace left = BlockUtils.getAdjacentFaces(w.getDirection())[1];
         BlockFace right = BlockUtils.getAdjacentFaces(w.getDirection())[0];
@@ -82,7 +83,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Create a small platform.
      */
-    private static void lightPlatform(PopulatorDataAbstract data, int x, int y, int z) {
+    private static void lightPlatform(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         for (int nx = -2; nx <= 2; nx++) {
             for (int nz = -2; nz <= 2; nz++) {
                 data.setType(x + nx, y, z + nz, Material.PRISMARINE_BRICKS);
@@ -90,7 +91,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         }
     }
 
-    private static void vegetateNearby(Random rand, PopulatorDataAbstract data, int range, int x, int z) {
+    private static void vegetateNearby(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int range, int x, int z) {
         int i = 25;
         for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
             for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
@@ -112,7 +113,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         }
     }
 
-    private static void setupGuardianSpawns(PopulatorDataAbstract data, int range, int x, int y, int z) {
+    private static void setupGuardianSpawns(@NotNull PopulatorDataAbstract data, int range, int x, int y, int z) {
         int i = -5;
         ArrayList<Integer> done = new ArrayList<>();
         for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
@@ -134,14 +135,14 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+    public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
         if (biome.getType() != BiomeType.DEEP_OCEANIC || 
         		biome == BiomeBank.MUSHROOM_ISLANDS)
             return false;
         return rollSpawnRatio(tw, chunkX, chunkZ);
     }
 
-    private boolean rollSpawnRatio(TerraformWorld tw, int chunkX, int chunkZ) {
+    private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 92992),
                 (int) (TConfigOption.STRUCTURES_MONUMENT_SPAWNRATIO
                         .getDouble() * 10000),
@@ -149,7 +150,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
 
         int[] coords = new MegaChunk(data.getChunkX(),data.getChunkZ()).getCenterBiomeSectionBlockCoords();
         int x = coords[0];
@@ -159,7 +160,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         spawnMonument(tw, tw.getHashedRand(x, y, z, 9299724), data, x, y, z);
     }
 
-    public void spawnMonument(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnMonument(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         TerraformGeneratorPlugin.logger.info("Spawning Monument at: " + x + "," + z);
         MonumentDesign design = MonumentDesign.values()[random.nextInt(MonumentDesign.values().length)];
         int numRooms = 1000;
@@ -195,7 +196,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         setupGuardianSpawns(data, range, x, y, z);
     }
 
-    private void entranceSegment(Wall w, Random random, MonumentDesign design) {
+    private void entranceSegment(@NotNull Wall w, @NotNull Random random, MonumentDesign design) {
         //Entrance hole
         for (int i = 0; i < 12; i++) {
             w.getRear(i).Pillar(6, random, Material.WATER);
@@ -211,7 +212,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Carve a monument entrance.
      */
-    public void spawnMonumentEntrance(TerraformWorld tw, MonumentDesign design, Random random, PopulatorDataAbstract data, int x, int y, int z, int range) {
+    public void spawnMonumentEntrance(TerraformWorld tw, @NotNull MonumentDesign design, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, int range) {
         range += 38;
         BlockFace dir = BlockUtils.getDirectBlockFace(random);
         SimpleBlock base = new SimpleBlock(data, x, y + 1, z);
@@ -250,7 +251,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Spawns a pyramid-ish base
      */
-    public void spawnMonumentBase(TerraformWorld tw, MonumentDesign design, Random random, PopulatorDataAbstract data, int x, int y, int z, int range) {
+    public void spawnMonumentBase(TerraformWorld tw, @NotNull MonumentDesign design, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, int range) {
         range += 30;
         for (int i = 6; i >= 0; i--) {
             for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
@@ -287,7 +288,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Carves a main hallway in the monument
      */
-    public void carveBaseHallways(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z, int range) {
+    public void carveBaseHallways(TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, int range) {
         range += 29;
         for (int ny = y + 1; ny <= y + 4; ny++) {
             for (int nx = x - range / 2; nx <= x + range / 2; nx++) {
@@ -317,7 +318,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public Random getHashedRandom(TerraformWorld world, int chunkX, int chunkZ) {
+    public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(888271981, chunkX, chunkZ);
     }
     

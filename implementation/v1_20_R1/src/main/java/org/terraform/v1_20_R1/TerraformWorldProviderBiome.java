@@ -9,6 +9,7 @@ import net.minecraft.world.level.biome.Climate.Sampler;
 import net.minecraft.world.level.biome.WorldChunkManager;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.HeightMap;
@@ -58,7 +59,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 	@SuppressWarnings("unused")
 	private static boolean debug = false;
 	@Override
-	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
+	public @Nullable Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
         //Used for biome generation in NMSChunkGenerator.
         //Left shift x and z
         BiomeBank bank = tw.getBiomeBank(x << 2, z << 2);

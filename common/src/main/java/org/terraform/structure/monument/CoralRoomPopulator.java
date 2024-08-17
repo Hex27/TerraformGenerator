@@ -1,5 +1,6 @@
 package org.terraform.structure.monument;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
@@ -17,7 +18,7 @@ public class CoralRoomPopulator extends LevelledRoomPopulator {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
             Wall w = entry.getKey().getRelative(0, 5, 0);

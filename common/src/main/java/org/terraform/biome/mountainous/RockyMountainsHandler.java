@@ -2,6 +2,7 @@ package org.terraform.biome.mountainous;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.PhysicsUpdaterPopulator;
@@ -21,7 +22,7 @@ import java.util.Random;
 
 public class RockyMountainsHandler extends AbstractMountainHandler {
 
-    private static void dirtStack(PopulatorDataAbstract data, Random rand, int x, int y, int z) {
+    private static void dirtStack(@NotNull PopulatorDataAbstract data, @NotNull Random rand, int x, int y, int z) {
         data.setType(x, y, z, Material.GRASS_BLOCK);
 
         if (GenUtils.chance(rand, 1, 10))
@@ -52,12 +53,12 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 //	}
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.JAGGED_PEAKS;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.randMaterial(rand, Material.STONE, Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE),
                 GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
                 GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
@@ -66,7 +67,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         //Don't touch submerged blocks
         if(surfaceY < TerraformGenerator.seaLevel)
             return;
@@ -87,7 +88,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 
     }
     
-    public static void placeWaterFall(TerraformWorld tw, int seed, SimpleBlock base) {
+    public static void placeWaterFall(@NotNull TerraformWorld tw, int seed, @NotNull SimpleBlock base) {
     	float radius = 4.0f;
 
         FastNoise noise = new FastNoise(seed);
@@ -118,7 +119,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
         }
     }
     
-    public boolean checkWaterfallSpace(SimpleBlock b) {
+    public boolean checkWaterfallSpace(@NotNull SimpleBlock b) {
     	//Only bother if the waterfall is at least 15 blocks up
     	if(b.getY() < TerraformGenerator.seaLevel + 15)
     		return false;
@@ -130,7 +131,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
 
         //Waterfalls only spawn 1 in 30 times (rolled after checking position.).
         for(int rawX = data.getChunkX()*16; rawX < data.getChunkX()*16+16; rawX++)
@@ -167,7 +168,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 	}
 	
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.ROCKY_BEACH;
 	}
 }

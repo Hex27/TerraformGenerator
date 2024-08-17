@@ -6,14 +6,16 @@ import java.util.Locale;
 import java.util.Stack;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public abstract class TerraCommand {
 	
-	public ArrayList<String> aliases = new ArrayList<>();
-	public ArrayList<TerraCommandArgument<?>> parameters = new ArrayList<TerraCommandArgument<?>>();
+	public @NotNull ArrayList<String> aliases = new ArrayList<>();
+	public @NotNull ArrayList<TerraCommandArgument<?>> parameters = new ArrayList<TerraCommandArgument<?>>();
 	public TerraformGeneratorPlugin plugin;
-	public TerraCommand(TerraformGeneratorPlugin plugin, String... aliases){
+	public TerraCommand(TerraformGeneratorPlugin plugin, String @NotNull ... aliases){
 		this.plugin = plugin;
 		for(String alias:aliases){
 			this.aliases.add(alias);
@@ -22,7 +24,7 @@ public abstract class TerraCommand {
 	
 	public abstract String getDefaultDescription();
 	
-	public boolean isInAcceptedParamRange(Stack<String> args){
+	public boolean isInAcceptedParamRange(@NotNull Stack<String> args){
 		if(args.size() > this.parameters.size()) return false;
 		if(this.parameters.size() == 0) return true;
 		int lowerBound = 0;
@@ -32,7 +34,7 @@ public abstract class TerraCommand {
 		return args.size() >= lowerBound;
 	}
 	
-	public String getLangPath(){
+	public @NotNull String getLangPath(){
 		return "command." + aliases.get(0) + ".desc";
 	}
 	public abstract boolean canConsoleExec();
@@ -48,7 +50,7 @@ public abstract class TerraCommand {
 	 * @return
 	 * @throws InvalidArgumentException
 	 */
-	public ArrayList<Object> parseArguments(CommandSender sender, Stack<String> args) throws InvalidArgumentException{
+	public @NotNull ArrayList<Object> parseArguments(CommandSender sender, @NotNull Stack<String> args) throws InvalidArgumentException{
 		ArrayList<Object> items = new ArrayList<>(args.size());
 		
 		int i = 0;
@@ -65,7 +67,7 @@ public abstract class TerraCommand {
 		return items;
 	}
 	
-	public String getNextArg(Stack<String> args){
+	public @Nullable String getNextArg(@NotNull Stack<String> args){
 		if(args.empty()) return null;
 		return args.pop();
 	}

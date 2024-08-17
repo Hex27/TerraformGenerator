@@ -2,6 +2,7 @@ package org.terraform.structure.mineshaft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
@@ -20,7 +21,7 @@ public class OreLiftSchematicParser extends SchematicParser {
 	}
 	
     @Override
-    public void applyData(SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
         if (BlockUtils.ores.contains(data.getMaterial())) {
             data = Bukkit.createBlockData(GenUtils.randMaterial(BlockUtils.ores));
         }

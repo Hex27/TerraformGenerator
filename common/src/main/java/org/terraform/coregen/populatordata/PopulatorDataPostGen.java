@@ -16,6 +16,8 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.TerraLootTable;
@@ -24,10 +26,10 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract implements IPopulatorDataPhysicsCapable {
-    private final World w;
-    private final Chunk c;
+    private final @NotNull World w;
+    private final @NotNull Chunk c;
 
-    public PopulatorDataPostGen(Chunk c) {
+    public PopulatorDataPostGen(@NotNull Chunk c) {
         this.w = c.getWorld();
         this.c = c;
     }
@@ -35,7 +37,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     /**
      * @return the w
      */
-    public World getWorld() {
+    public @NotNull World getWorld() {
         return w;
     }
 
@@ -43,23 +45,23 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     /**
      * @return the c
      */
-    public Chunk getChunk() {
+    public @NotNull Chunk getChunk() {
         return c;
     }
 
 
     @Override
-    public Material getType(int x, int y, int z) {
+    public @Nullable Material getType(int x, int y, int z) {
         return w.getBlockAt(x, y, z).getType();
     }
 
     @Override
-    public BlockData getBlockData(int x, int y, int z) {
+    public @Nullable BlockData getBlockData(int x, int y, int z) {
         return w.getBlockAt(x, y, z).getBlockData();
     }
 
     @Override
-    public void setType(int x, int y, int z, Material type) {
+    public void setType(int x, int y, int z, @NotNull Material type) {
         boolean isFragile = Tag.DOORS.isTagged(type) ||
         		Tag.CARPETS.isTagged(type) ||
                 type == Material.FARMLAND ||
@@ -69,7 +71,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
         boolean isFragile = Tag.DOORS.isTagged(data.getMaterial()) ||
         		Tag.CARPETS.isTagged(data.getMaterial()) ||
                 data.getMaterial() == Material.FARMLAND ||
@@ -79,13 +81,13 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     }
     
     @Override
-    public void setType(int x, int y, int z, Material type, boolean updatePhysics) {
+    public void setType(int x, int y, int z, @NotNull Material type, boolean updatePhysics) {
         Block b = w.getBlockAt(x, y, z);
         b.setType(type, updatePhysics);
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data, boolean updatePhysics) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data, boolean updatePhysics) {
         Block b = w.getBlockAt(x, y, z);
         b.setBlockData(data.clone(), updatePhysics);
     }
@@ -93,23 +95,23 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     /**
      * Blockstates are mutable, so just edit them. There is no method to directly set them.
      */
-    public BlockState getBlockState(int x, int y, int z) {
+    public @NotNull BlockState getBlockState(int x, int y, int z) {
         Block b = w.getBlockAt(x, y, z);
         return b.getState();
     }
 
-    public void noPhysicsUpdateForce(int x, int y, int z, BlockData data) {
+    public void noPhysicsUpdateForce(int x, int y, int z, @NotNull BlockData data) {
         Block b = w.getBlockAt(x, y, z);
         b.setBlockData(data.clone(), false);
     }
 
     @Override
-    public Biome getBiome(int rawX, int rawZ) {
+    public @Nullable Biome getBiome(int rawX, int rawZ) {
         return w.getBlockAt(rawX, TerraformGenerator.seaLevel, rawZ).getBiome();
     }
 
     @Override
-    public void setBiome(int rawX, int rawY, int rawZ, Biome biome) {
+    public void setBiome(int rawX, int rawY, int rawZ, @NotNull Biome biome) {
         w.setBiome(rawX, rawY, rawZ, biome);
     }
 
@@ -124,7 +126,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     }
 
     @Override
-    public void addEntity(int x, int y, int z, EntityType type) {
+    public void addEntity(int x, int y, int z, @NotNull EntityType type) {
     	//Always offset by 0.5 to prevent them spawning in corners.
     	//Y is offset by a small bit to prevent falling through weird spawning areas
         Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),x+0.5,y+0.3,z+0.5), type);
@@ -135,7 +137,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     
     private static int spawnerRetries = 0;
     @Override
-    public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
+    public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
         Block b = w.getBlockAt(rawX, rawY, rawZ);
         b.setType(Material.SPAWNER, false);
         try {

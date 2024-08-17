@@ -8,19 +8,21 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 public class MansionMazeAlgoUtil {
 
-	private static MansionStandardRoomPiece getStartingPiece(Collection<JigsawStructurePiece> pieces) {
+	private static @Nullable MansionStandardRoomPiece getStartingPiece(@NotNull Collection<JigsawStructurePiece> pieces) {
 		for(JigsawStructurePiece p:pieces)
 			return (MansionStandardRoomPiece) p;
 		return null;
 	}
 	
-	public static void setupPathways(Collection<JigsawStructurePiece> pieces, Random rand) {
+	public static void setupPathways(@NotNull Collection<JigsawStructurePiece> pieces, @NotNull Random rand) {
         //Total number of cells
         int n = pieces.size();
 
@@ -70,7 +72,7 @@ public class MansionMazeAlgoUtil {
 	 * @param builder
 	 * @param rand
 	 */
-	public static void knockdownRandomWalls(Collection<JigsawStructurePiece> pieces, Random rand) {
+	public static void knockdownRandomWalls(@NotNull Collection<JigsawStructurePiece> pieces, @NotNull Random rand) {
 		for(JigsawStructurePiece piece:pieces) {
 			MansionStandardRoomPiece spiece = (MansionStandardRoomPiece) piece;
 			for(BlockFace face:spiece.getShuffledInternalWalls()) {
@@ -92,7 +94,7 @@ public class MansionMazeAlgoUtil {
 	 * @param piece
 	 * @return
 	 */
-    private static Map<BlockFace, MansionStandardRoomPiece> getValidNeighbours(Collection<JigsawStructurePiece> pieces, MansionStandardRoomPiece piece) {
+    private static @NotNull Map<BlockFace, MansionStandardRoomPiece> getValidNeighbours(Collection<JigsawStructurePiece> pieces, @NotNull MansionStandardRoomPiece piece) {
         Map<BlockFace, MansionStandardRoomPiece> neighbours = new EnumMap<>(BlockFace.class);
 
         //Loop NSEW
