@@ -28,8 +28,6 @@ public class WarmOceansHandler extends AbstractOceanHandler {
 
     @Override
     public @NotNull Biome getBiome() {
-    	if(this.oceanType == BiomeType.DEEP_OCEANIC)
-    		return Biome.WARM_OCEAN;
         return Biome.WARM_OCEAN;
     }
 

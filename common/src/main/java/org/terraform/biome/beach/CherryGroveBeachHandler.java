@@ -56,9 +56,7 @@ public class CherryGroveBeachHandler extends BiomeHandler {
 
         //Spawn sugarcane
         if (hasSugarcane) {
-            boolean hasWater = false;
-            if (data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER)
-                hasWater = true;
+            boolean hasWater = data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER;
             if (data.getType(rawX - 1, surfaceY - 1, rawZ) == Material.WATER)
                 hasWater = true;
             if (data.getType(rawX, surfaceY - 1, rawZ + 1) == Material.WATER)

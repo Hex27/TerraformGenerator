@@ -62,41 +62,36 @@ public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 		.apply(w.getRelative(0,6,0).getRight(2))
 		.apply(w.getRelative(0,6,0).getRight());
 		int choice = rand.nextInt(2);
-		switch(choice) {
-		case 0: //Wall carving
-			w.getRear().getRelative(0,1,0).Pillar(5, Material.DARK_OAK_LOG);
-			new OrientableBuilder(Material.DARK_OAK_LOG)
-			.setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
-			.apply(w.getRear().getRelative(0,3,0))
-			.apply(w.getRear().getRelative(0,2,0).getLeft())
-			.apply(w.getRear().getRelative(0,2,0).getRight())
-			.apply(w.getRear().getRelative(0,4,0).getLeft())
-			.apply(w.getRear().getRelative(0,4,0).getRight())
-			.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())))
-			.apply(w.getRear().getRelative(0,3,0).getLeft())
-			.apply(w.getRear().getRelative(0,3,0).getLeft(2))
-			.apply(w.getRear().getRelative(0,3,0).getRight())
-			.apply(w.getRear().getRelative(0,3,0).getRight(2));
-			
-			break;
-		default: //Armor stands
-			
-			BannerUtils.generatePillagerBanner(w.getRelative(0,4,0).get(), w.getDirection(), true);
-			
-			new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
-			.setType(Type.TOP)
-			.apply(w)
-			.apply(w.getLeft())
-			.apply(w.getLeft(2))
-			.apply(w.getRight())
-			.apply(w.getRight(2));
-			
-			ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).get(), w.getDirection(), rand);
-			ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).getLeft(2).get(), w.getDirection(), rand);
-			ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).getRight(2).get(), w.getDirection(), rand);
-			
-			break;
-		}
+        //Armor stands
+        if(choice == 0) { //Wall carving
+            w.getRear().getRelative(0, 1, 0).Pillar(5, Material.DARK_OAK_LOG);
+            new OrientableBuilder(Material.DARK_OAK_LOG)
+                    .setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
+                    .apply(w.getRear().getRelative(0, 3, 0))
+                    .apply(w.getRear().getRelative(0, 2, 0).getLeft())
+                    .apply(w.getRear().getRelative(0, 2, 0).getRight())
+                    .apply(w.getRear().getRelative(0, 4, 0).getLeft())
+                    .apply(w.getRear().getRelative(0, 4, 0).getRight())
+                    .setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())))
+                    .apply(w.getRear().getRelative(0, 3, 0).getLeft())
+                    .apply(w.getRear().getRelative(0, 3, 0).getLeft(2))
+                    .apply(w.getRear().getRelative(0, 3, 0).getRight())
+                    .apply(w.getRear().getRelative(0, 3, 0).getRight(2));
+        } else {
+            BannerUtils.generatePillagerBanner(w.getRelative(0, 4, 0).get(), w.getDirection(), true);
+
+            new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
+                    .setType(Type.TOP)
+                    .apply(w)
+                    .apply(w.getLeft())
+                    .apply(w.getLeft(2))
+                    .apply(w.getRight())
+                    .apply(w.getRight(2));
+
+            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).get(), w.getDirection(), rand);
+            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).getLeft(2).get(), w.getDirection(), rand);
+            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).getRight(2).get(), w.getDirection(), rand);
+        }
 	}
 	
 	@Override

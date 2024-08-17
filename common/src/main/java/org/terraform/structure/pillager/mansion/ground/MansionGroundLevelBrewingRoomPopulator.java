@@ -69,26 +69,21 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 
 	@Override
 	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
-		int choice = rand.nextInt(1);
-		
-		switch(choice) {
-		default: //table with potted mushrooms
-			new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-			.setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
-			.apply(w)
-			.setShape(Shape.OUTER_RIGHT)
-			.apply(w.getLeft())
-			.setShape(Shape.OUTER_LEFT)
-			.apply(w.getRight());
-			if(rand.nextBoolean())
-				w.getUp().setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM);
-			if(rand.nextBoolean())
-				w.getRight().getUp().setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM);
-			if(rand.nextBoolean())
-				w.getLeft().getUp().setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM);
-			break;
-		}
-	}
+        //table with potted mushrooms
+        new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
+                .setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
+                .apply(w)
+                .setShape(Shape.OUTER_RIGHT)
+                .apply(w.getLeft())
+                .setShape(Shape.OUTER_LEFT)
+                .apply(w.getRight());
+        if(rand.nextBoolean())
+            w.getUp().setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM);
+        if(rand.nextBoolean())
+            w.getRight().getUp().setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM);
+        if(rand.nextBoolean())
+            w.getLeft().getUp().setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM);
+    }
 	
 	//Brewing stand and mini library
 	@Override

@@ -145,32 +145,27 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 	//Decorate with paintings and wall texturing
 	@Override
 	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
-		
-		int choice = rand.nextInt(1);
-		switch(choice) {
-		default://Shelves
-			w.getRear().getLeft().Pillar(7, Material.DARK_OAK_LOG);
-			if(rand.nextBoolean()) {
-				new DirectionalBuilder(Material.FURNACE)
-				.setFacing(w.getDirection())
-				.apply(w.getLeft());
-				w.getLeft().getRelative(0,1,0).Pillar(6, Material.COBBLESTONE_WALL);
-				w.getLeft().getRelative(0,1,0).CorrectMultipleFacing(6);
-			}
-			w.getRear().getRight().Pillar(7, Material.DARK_OAK_LOG);
-			if(rand.nextBoolean()) {
-				new DirectionalBuilder(Material.FURNACE)
-				.setFacing(w.getDirection())
-				.apply(w.getRight());
-				w.getRight().getRelative(0,1,0).Pillar(6, Material.COBBLESTONE_WALL);
-				w.getRight().getRelative(0,1,0).CorrectMultipleFacing(6);
-			}
-			shelfify(rand, w.getRear());
-			shelfify(rand, w.getLeft(2).getRear());
-			shelfify(rand, w.getRight(2).getRear());
-			break;
-		}
-	}
+        //Shelves
+        w.getRear().getLeft().Pillar(7, Material.DARK_OAK_LOG);
+        if(rand.nextBoolean()) {
+            new DirectionalBuilder(Material.FURNACE)
+                    .setFacing(w.getDirection())
+                    .apply(w.getLeft());
+            w.getLeft().getRelative(0, 1, 0).Pillar(6, Material.COBBLESTONE_WALL);
+            w.getLeft().getRelative(0, 1, 0).CorrectMultipleFacing(6);
+        }
+        w.getRear().getRight().Pillar(7, Material.DARK_OAK_LOG);
+        if(rand.nextBoolean()) {
+            new DirectionalBuilder(Material.FURNACE)
+                    .setFacing(w.getDirection())
+                    .apply(w.getRight());
+            w.getRight().getRelative(0, 1, 0).Pillar(6, Material.COBBLESTONE_WALL);
+            w.getRight().getRelative(0, 1, 0).CorrectMultipleFacing(6);
+        }
+        shelfify(rand, w.getRear());
+        shelfify(rand, w.getLeft(2).getRear());
+        shelfify(rand, w.getRight(2).getRear());
+    }
 	
 	private void shelfify(@NotNull Random rand, @NotNull Wall w) {
 		new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)

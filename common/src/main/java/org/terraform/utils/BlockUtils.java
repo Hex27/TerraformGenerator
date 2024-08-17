@@ -1051,10 +1051,7 @@ public class BlockUtils {
             data.setFace(face, facing);
             if(Tag.STAIRS.isTagged(type)) {
             	Stairs stairs = (Stairs) target.getRelative(face).getBlockData();
-            	if(stairs.getFacing() == face.getOppositeFace())
-            		data.setFace(face, true);
-            	else
-            		data.setFace(face, false);
+                data.setFace(face, stairs.getFacing() == face.getOppositeFace());
             }
         }
         target.setBlockData(data);
