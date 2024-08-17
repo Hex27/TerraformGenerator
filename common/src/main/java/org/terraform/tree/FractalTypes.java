@@ -389,13 +389,13 @@ public class FractalTypes {
         MEDIUM_BROWN_FUNNEL_MUSHROOM,
         GIANT_BROWN_MUSHROOM,
         GIANT_BROWN_FUNNEL_MUSHROOM,
-        GIANT_RED_MUSHROOM;
+        GIANT_RED_MUSHROOM
     }
 
     public enum MushroomCap {
         ROUND,
         FLAT,
         FUNNEL,
-        POINTY;
+        POINTY
     }
 }

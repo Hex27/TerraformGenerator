@@ -17,7 +17,7 @@ import com.google.common.cache.LoadingCache;
  */
 public class NoiseCacheHandler{
 	
-	public static enum NoiseCacheEntry{
+	public enum NoiseCacheEntry{
 		TW_TEMPERATURE,
 		TW_MOISTURE,
 		TW_OCEANIC,
@@ -105,8 +105,7 @@ public class NoiseCacheHandler{
 		
 		FRACTALTREES_LEAVES_NOISE,
 		FRACTALTREES_BASE_NOISE,
-		;
-	}
+    }
 	
     private static final LoadingCache<NoiseCacheHandler.NoiseCacheKey, FastNoise> NOISE_CACHE = 
     		CacheBuilder.newBuilder()

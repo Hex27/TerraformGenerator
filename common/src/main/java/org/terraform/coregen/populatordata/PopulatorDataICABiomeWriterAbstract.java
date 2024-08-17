@@ -11,7 +11,8 @@ public abstract class PopulatorDataICABiomeWriterAbstract extends PopulatorDataI
 	public void setBiome(int rawX, int rawY, int rawZ, @NotNull BiomeBank biomebank)
 	{
 		setBiome(rawX,rawY,rawZ,biomebank.getHandler().getCustomBiome(), biomebank.getHandler().getBiome());
-	};
-	public abstract void setBiome(int rawX, int rawY, int rawZ, Biome biome);
+	}
+
+    public abstract void setBiome(int rawX, int rawY, int rawZ, Biome biome);
 	
 }

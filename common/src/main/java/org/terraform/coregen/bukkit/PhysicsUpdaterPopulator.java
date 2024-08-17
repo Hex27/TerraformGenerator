@@ -71,7 +71,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener{
     	        		//Set block physics by calling setBlockData
     	        		//Note that this should not be used for complex blocks.
     	        		BlockData old = target.getBlockData();
-    	        		TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] " + target.getLocation().toString());
+    	        		TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] " + target.getLocation());
     	                target.setType(Material.AIR);
     	        		target.setBlockData(old, true);
     	        	}

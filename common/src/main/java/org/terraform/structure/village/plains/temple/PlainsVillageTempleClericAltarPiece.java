@@ -87,7 +87,7 @@ public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStan
         core.getRelative(dir).getRelative(0,-1,0).setType(Material.STONE_BRICKS);
         core.getRelative(dir,2).getRelative(0,-1,0).setType(Material.STONE_BRICKS);
         
-        for(int corner[]:this.getRoom().getAllCorners()) {
+        for(int[] corner :this.getRoom().getAllCorners()) {
         	data.setType(corner[0], getRoom().getY(), corner[1], Material.CHISELED_STONE_BRICKS);
         	data.setType(corner[0], getRoom().getY()+1, corner[1], Material.LANTERN);
         }

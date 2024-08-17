@@ -9,6 +9,6 @@ public enum JigsawType {
     END,
     UPPERCONNECTOR,
     //LOWERCONNECTOR, Lower connectors are considered standard.
-    ENTRANCE;
+    ENTRANCE
 
 }

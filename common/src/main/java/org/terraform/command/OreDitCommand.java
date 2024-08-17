@@ -83,7 +83,7 @@ public class OreDitCommand extends TerraCommand {
         
         p.sendMessage("-----[Ore Count]-----");
         for(Material audit:auditMat) {
-        	p.sendMessage(audit.toString() + " - " + ores.get(audit));
+        	p.sendMessage(audit + " - " + ores.get(audit));
         }
         
     }

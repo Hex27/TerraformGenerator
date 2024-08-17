@@ -158,7 +158,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 					Material.NOTE_BLOCK, Material.JUKEBOX);
 			break;
 		}
-	};
+	}
 
 	private void table(@NotNull Random rand, @NotNull Wall w) {
 		w.getLeft().getRear().Pillar(6, Material.DARK_OAK_LOG);

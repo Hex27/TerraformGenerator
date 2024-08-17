@@ -37,12 +37,15 @@ public abstract class MansionRoomPopulator {
 		}
 	}
 	
-	public void decorateWall(Random rand, Wall w) {};
-	public void decorateWindow(Random rand, Wall w) {};
-	public void decorateEntrance(Random rand, Wall w) {};
-	public void decorateExit(Random rand, Wall w) {};
+	public void decorateWall(Random rand, Wall w) {}
 
-	public HashMap<BlockFace, MansionInternalWallState> getInternalWalls() {
+    public void decorateWindow(Random rand, Wall w) {}
+
+    public void decorateEntrance(Random rand, Wall w) {}
+
+    public void decorateExit(Random rand, Wall w) {}
+
+    public HashMap<BlockFace, MansionInternalWallState> getInternalWalls() {
 		return internalWalls;
 	}
 	

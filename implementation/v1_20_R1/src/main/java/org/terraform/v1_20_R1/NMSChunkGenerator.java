@@ -47,7 +47,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
     private final @NotNull ChunkGenerator delegate;
     private final @NotNull TerraformWorld tw;
     private final @NotNull MapRenderWorldProviderBiome mapRendererBS;
-    private final @NotNull TerraformWorldProviderBiome twBS;;
+    private final @NotNull TerraformWorldProviderBiome twBS;
 
     public NMSChunkGenerator(String worldName, long seed,
                              @NotNull ChunkGenerator delegate) {
