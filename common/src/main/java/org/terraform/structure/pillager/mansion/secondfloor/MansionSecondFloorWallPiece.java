@@ -169,7 +169,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
             case 0 -> MansionSecondFloorWallType.LARGE_WINDOW;
             case 1 -> MansionSecondFloorWallType.THIN_WINDOWS;
             case 2 -> MansionSecondFloorWallType.BALCONY;
-            default -> type;
+            default -> null;
         };
 
         //Don't allow balconies in sink in areas

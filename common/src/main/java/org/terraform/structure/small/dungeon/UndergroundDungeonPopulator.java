@@ -161,7 +161,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             case (0) -> EntityType.ZOMBIE;
             case (1) -> EntityType.SKELETON;
             case (2) -> EntityType.SPIDER;
-            default -> type;
+            default -> null;
         };
         if(isWet) type = EntityType.DROWNED;
         
