@@ -3,6 +3,7 @@ package org.terraform.biome.cavepopulators;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -15,7 +16,7 @@ import java.util.Random;
 public class DeepCavePopulator extends AbstractCavePopulator {
     
     @Override
-    public void populate(TerraformWorld tw, Random random, SimpleBlock ceil, SimpleBlock floor) {
+    public void populate(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor) {
         
         int caveHeight = ceil.getY() - floor.getY();
         

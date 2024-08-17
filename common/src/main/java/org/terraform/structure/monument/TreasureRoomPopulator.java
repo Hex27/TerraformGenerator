@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Stairs;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.TerraSchematic;
@@ -23,7 +24,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
         // TODO Auto-generated constructor stub
     }
 
-    private static void spawnLowerClaw(PopulatorDataAbstract data, int x, int y, int z) {
+    private static void spawnLowerClaw(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
 
         SimpleBlock block = new SimpleBlock(data, x, y, z);
         block.setType(Material.SEA_LANTERN);
@@ -48,7 +49,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
         block.getRelative(-1, 1, 1).setType(Material.PRISMARINE_BRICK_SLAB);
     }
 
-    private static void spawnUpperClaw(PopulatorDataAbstract data, int x, int y, int z) {
+    private static void spawnUpperClaw(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
 
         SimpleBlock block = new SimpleBlock(data, x, y, z);
         block.setType(Material.SEA_LANTERN);
@@ -78,7 +79,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
         int x = room.getX();
         int y = room.getY() + room.getHeight() / 2;
@@ -106,7 +107,7 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getHeight() > 10;
     }
 

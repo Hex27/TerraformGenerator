@@ -1,6 +1,7 @@
 package org.terraform.structure.room.path;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.structure.room.CubeRoom;
@@ -23,22 +24,22 @@ public class PathState {
     */
 
     //This will contain some path nodes
-    public HashSet<PathNode> nodes = new HashSet<>();
+    public @NotNull HashSet<PathNode> nodes = new HashSet<>();
 
     /*
     /* General settings
     */
-    public PathWriter writer = new CavePathWriter(0,0,0,0,0,0);
+    public @NotNull PathWriter writer = new CavePathWriter(0,0,0,0,0,0);
     private int pathWidth = 3;
     private int pathHeight = 3;
     private int maxBend = -1;
     //If the path generator is not to run while inside room areas,
     //then set this to true.
     private boolean ignoreWithinRooms = true;
-    private final RoomLayoutGenerator generator;
-    private final TerraformWorld tw;
+    private final @NotNull RoomLayoutGenerator generator;
+    private final @NotNull TerraformWorld tw;
 
-    public PathState(RoomLayoutGenerator generator, TerraformWorld tw)
+    public PathState(@NotNull RoomLayoutGenerator generator, @NotNull TerraformWorld tw)
     {
         this.generator = generator;
         this.tw = tw;
@@ -64,7 +65,7 @@ public class PathState {
     }
 
     //Connects the two nodes with new nodes added to toAdd
-    private void connectNodes(PathNode one, PathNode two, TerraformWorld tw, HashSet<PathNode> toAdd)
+    private void connectNodes(@NotNull PathNode one, @NotNull PathNode two, @NotNull TerraformWorld tw, @NotNull HashSet<PathNode> toAdd)
     {
         BlockFace oneConn;
         //Set connected state
@@ -126,11 +127,11 @@ public class PathState {
 
     public static class PathNode{
         public final int pathWidth;
-        public final SimpleLocation center;
+        public final @NotNull SimpleLocation center;
         public final PathPopulatorAbstract populator;
         public final HashSet<BlockFace> connected = new HashSet<>();
         //Assumes input is new
-        public PathNode(SimpleLocation center, int pathWidth, PathPopulatorAbstract populator, BlockFace... connections) {
+        public PathNode(@NotNull SimpleLocation center, int pathWidth, PathPopulatorAbstract populator, BlockFace... connections) {
             this.pathWidth = pathWidth;
             this.center = center;
             //Lock path nodes to a grid-like structure which will allow

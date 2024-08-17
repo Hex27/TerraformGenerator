@@ -5,6 +5,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -24,7 +25,7 @@ import java.util.Random;
 
 public class OutpostTent extends RoomPopulatorAbstract {
 
-	Material[] edgyWools = new Material[] {
+	Material @NotNull [] edgyWools = new Material[] {
 			Material.BLACK_WOOL,
 			Material.GRAY_WOOL,
 			Material.BROWN_WOOL,
@@ -38,7 +39,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
         this.biome = biome;
     }
 
-    private void placeProp(int size, SimpleBlock core, BlockFace facing, Material cloth) {
+    private void placeProp(int size, @NotNull SimpleBlock core, @NotNull BlockFace facing, @NotNull Material cloth) {
     	Material fenceMat = WoodUtils.getWoodForBiome(biome, WoodType.FENCE);
     	new Wall(core).Pillar(size, rand, fenceMat);
     	
@@ -83,7 +84,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
     	}
     }
     
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	Material planks = WoodUtils.getWoodForBiome(biome, WoodType.PLANKS);
     	Material fence = WoodUtils.getWoodForBiome(biome, WoodType.FENCE);
     	Material cloth = GenUtils.randMaterial(rand, edgyWools);

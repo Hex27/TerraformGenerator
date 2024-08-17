@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -34,12 +35,12 @@ public class MansionJigsawBuilder extends JigsawBuilder {
 	
 	public static final int roomHeight = 7;
 	public static final int groundFloorRoomWidth = 9;
-	private ArrayList<SimpleLocation> roofedLocations = new ArrayList<>();
+	private @NotNull ArrayList<SimpleLocation> roofedLocations = new ArrayList<>();
 	
 	private MansionTowerPieceHandler towerPieceHandler;
 	private MansionSecondFloorHandler secondFloorHandler;
 	
-    public MansionJigsawBuilder(int widthX, int widthZ, PopulatorDataAbstract data, int x, int y, int z) {
+    public MansionJigsawBuilder(int widthX, int widthZ, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         super(widthX, widthZ, data, x, y, z);
         towerPieceHandler = new MansionTowerPieceHandler(this, data);
         secondFloorHandler = new MansionSecondFloorHandler(this);
@@ -59,7 +60,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     }
     
     @Override
-    public void build(Random random) {
+    public void build(@NotNull Random random) {
 
         for (JigsawStructurePiece piece : this.pieces.values()) {
             ((MansionStandardGroundRoomPiece) piece).purgeMinimalArea(this.core.getPopData());
@@ -272,7 +273,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
      * @param face
      * @return
      */
-    private boolean areOtherWallsOverlapping(JigsawStructurePiece piece, BlockFace face) {
+    private boolean areOtherWallsOverlapping(@NotNull JigsawStructurePiece piece, @NotNull BlockFace face) {
     	SimpleLocation other = new SimpleLocation(
                 piece.getRoom().getSimpleLocation().getX() + face.getModX() * pieceWidth,
                 piece.getRoom().getSimpleLocation().getY() + face.getModY() * pieceWidth,
@@ -287,7 +288,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     	return false;
     }
 
-    public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two, boolean isSinkIn) {
+    public void decorateAwkwardCorner(@NotNull Wall target, @NotNull Random random, @NotNull BlockFace one, @NotNull BlockFace two, boolean isSinkIn) {
         
     	//Build a large pillar (supports second floor and provides more depth
     	if(!isSinkIn) {
@@ -394,7 +395,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
 				&& this.countOverlappingPiecesAtLocation(pieceLoc) != 2;
 	}
 
-	public ArrayList<SimpleLocation> getRoofedLocations() {
+	public @NotNull ArrayList<SimpleLocation> getRoofedLocations() {
 		return roofedLocations;
 	}
 

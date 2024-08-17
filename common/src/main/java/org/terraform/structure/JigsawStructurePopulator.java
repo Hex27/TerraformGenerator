@@ -3,9 +3,6 @@ package org.terraform.structure;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.structure.room.RoomPopulatorAbstract;
-
-import java.util.ArrayList;
 
 /**
  * Idea: Split RoomPopulatorAbstract into a way to reason about chunk divisions.

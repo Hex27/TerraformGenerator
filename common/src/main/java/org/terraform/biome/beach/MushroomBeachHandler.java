@@ -2,6 +2,7 @@ package org.terraform.biome.beach;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -24,12 +25,12 @@ public class MushroomBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.MUSHROOM_FIELDS;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.MYCELIUM,
                 Material.DIRT,
@@ -39,7 +40,7 @@ public class MushroomBeachHandler extends BiomeHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         if(surfaceY < TerraformGenerator.seaLevel) return;
                 
         // Generate small shrooms
@@ -52,7 +53,7 @@ public class MushroomBeachHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 33, 0.15f);
 		SimpleLocation[] smallDecorations = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 15, 0.30f);
 		
@@ -63,20 +64,13 @@ public class MushroomBeachHandler extends BiomeHandler {
             if (data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                 BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
             	int choice = random.nextInt(3);
-            	FractalTypes.Mushroom type;
-            	switch(choice) {
-            	case 0:
-            		type = FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
-            		break;
-            	case 1:
-            		type = FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
-            		break;
-            	default:
-            		type = FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
-            		break;
-            	}
-            	
-            	if(HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3) <=
+            	FractalTypes.Mushroom type = switch(choice) {
+                    case 0 -> FractalTypes.Mushroom.GIANT_RED_MUSHROOM;
+                    case 1 -> FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM;
+                    default -> FractalTypes.Mushroom.GIANT_BROWN_FUNNEL_MUSHROOM;
+                };
+
+                if(HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3) <=
             			TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble())
             		new MushroomBuilder(type).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
             }

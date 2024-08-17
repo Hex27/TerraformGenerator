@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -84,7 +85,7 @@ public class CustomBiomeHandler {
 		
 	}
 	
-	private static void registerCustomBiomeBase(CustomBiomeType biomeType, DedicatedServer dedicatedserver, IRegistryWritable<BiomeBase> registrywritable, BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	private static void registerCustomBiomeBase(@NotNull CustomBiomeType biomeType, @NotNull DedicatedServer dedicatedserver, IRegistryWritable<BiomeBase> registrywritable, @NotNull BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
 		ResourceKey<BiomeBase> newKey = ResourceKey.a(IRegistry.aP, new MinecraftKey("terraformgenerator", biomeType.toString().toLowerCase(Locale.ENGLISH)));
 
@@ -128,21 +129,23 @@ public class CustomBiomeHandler {
 		newFog.a(biomeType.getFogColor().isEmpty() ? forestbiome.f():Integer.parseInt(biomeType.getFogColor(),16));
 		
 		//water color
-		newFog.b(biomeType.getWaterColor().isEmpty() ? forestbiome.k():Integer.parseInt(biomeType.getWaterColor(),16)); 
+		newFog.b(biomeType.getWaterColor().isEmpty() ? forestbiome.k():Integer.parseInt(biomeType.getWaterColor(),16));
 		
 		//water fog color
-		newFog.c(biomeType.getWaterFogColor().isEmpty() ? forestbiome.l():Integer.parseInt(biomeType.getWaterFogColor(),16)); 
+		newFog.c(biomeType.getWaterFogColor().isEmpty() ? forestbiome.l():Integer.parseInt(biomeType.getWaterFogColor(),16));
 		
 		//sky color
-		newFog.d(biomeType.getSkyColor().isEmpty() ? forestbiome.a():Integer.parseInt(biomeType.getSkyColor(),16)); 
+		newFog.d(biomeType.getSkyColor().isEmpty() ? forestbiome.a():Integer.parseInt(biomeType.getSkyColor(),16));
 
 		//Unnecessary values; can be removed safely if you don't want to change them
 		
 		//foliage color (leaves, fines and more)
-		newFog.e(biomeType.getFoliageColor().isEmpty() ? forestbiome.g():Integer.parseInt(biomeType.getFoliageColor(),16)); 
+
+		newFog.e(biomeType.getFoliageColor().isEmpty() ? forestbiome.g():Integer.parseInt(biomeType.getFoliageColor(),16));
 		
 		//grass blocks color
-		newFog.f(biomeType.getGrassColor().isEmpty() ? Integer.parseInt("79C05A",16):Integer.parseInt(biomeType.getGrassColor(),16)); 
+		newFog.f(biomeType.getGrassColor().isEmpty() ? Integer.parseInt("79C05A",16):Integer.parseInt(biomeType.getGrassColor(),16));
+
 		
 		newBiomeBuilder.a(newFog.a());
 		

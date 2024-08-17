@@ -2,6 +2,7 @@ package org.terraform.structure.village.plains.forge;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
@@ -25,7 +26,7 @@ public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStanda
 	
 	//Use postBuildDecoration.
     @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
     	//SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ());
     	if(this.getWalledFaces().isEmpty()) {
     		//Leave the room empty if you can't spawn anything.

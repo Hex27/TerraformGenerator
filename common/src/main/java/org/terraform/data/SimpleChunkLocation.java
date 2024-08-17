@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -28,22 +30,22 @@ public class SimpleChunkLocation implements Cloneable {
         this.z = z >> 4;
     }
 
-    public SimpleChunkLocation(Chunk chunk) {
+    public SimpleChunkLocation(@NotNull Chunk chunk) {
         this.world = chunk.getWorld().getName();
         this.x = chunk.getX();
         this.z = chunk.getZ();
     }
 
-    public static SimpleChunkLocation of(Block block) {
+    public static @NotNull SimpleChunkLocation of(@NotNull Block block) {
         return new SimpleChunkLocation(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
     }
 
-    public static Chunk toChunk(SimpleChunkLocation loc) {
+    public static @NotNull Chunk toChunk(@NotNull SimpleChunkLocation loc) {
         return Bukkit.getWorld(loc.world).getChunkAt(loc.x, loc.z);
     }
 
     //world , x, z
-    public static SimpleChunkLocation chunkStrToLoc(String chunk) {
+    public static SimpleChunkLocation chunkStrToLoc(@Nullable String chunk) {
         if (chunk == null) return null;
         String[] split = StringUtils.split(StringUtils.deleteWhitespace(chunk), ',');
 
@@ -66,12 +68,12 @@ public class SimpleChunkLocation implements Cloneable {
         return z;
     }
 
-    public SimpleChunkLocation getRelative(int nx, int nz) {
+    public @NotNull SimpleChunkLocation getRelative(int nx, int nz) {
         return new SimpleChunkLocation(world, nx + x, nz + z);
     }
 
     @Override
-    public SimpleChunkLocation clone() {
+    public @NotNull SimpleChunkLocation clone() {
         return new SimpleChunkLocation(world, x, z);
     }
 
@@ -90,17 +92,16 @@ public class SimpleChunkLocation implements Cloneable {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof SimpleChunkLocation)) return false;
-        SimpleChunkLocation other = (SimpleChunkLocation) obj;
+        if (!(obj instanceof SimpleChunkLocation other)) return false;
         return this.x == other.x && this.z == other.z && Objects.equals(world, other.world);
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return world + ", " + x + ", " + z;
     }
 
-    public Chunk toChunk() {
+    public @NotNull Chunk toChunk() {
         return Bukkit.getWorld(world).getChunkAt(x, z);
     }
 

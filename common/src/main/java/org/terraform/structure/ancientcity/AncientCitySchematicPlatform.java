@@ -1,6 +1,7 @@
 package org.terraform.structure.ancientcity;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
@@ -29,20 +30,20 @@ public class AncientCitySchematicPlatform extends AncientCityAbstractRoomPopulat
         super(tw, occupied, gen, rand, forceSpawn, unique);
     }
 
-    private String[] smallSchematics = new String[] {
+    private String @NotNull [] smallSchematics = new String[] {
 		"ancient-city/ancient-city-wood-tower-1",
 		"ancient-city/ancient-city-rock-tower-1",
 		"ancient-city/ancient-city-lamp",
     };
-    private String[] mediumSchematics = new String[] {
+    private String @NotNull [] mediumSchematics = new String[] {
 		"ancient-city/ancient-city-hot-tub",
 		"ancient-city/ancient-city-warehouse",
     };
-    private String[] largeSchematics = new String[] {
+    private String @NotNull [] largeSchematics = new String[] {
 		"ancient-city/ancient-city-pantheon",
     };
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	
     	int platformSize = 0; //0 - small, 1 - medium, 2 - large
@@ -53,25 +54,23 @@ public class AncientCitySchematicPlatform extends AncientCityAbstractRoomPopulat
     			&& this.effectiveRoom.getWidthZ() >= 16)
     		platformSize = 2;
     	
-    	String chosenSchema = null;
-    	switch(platformSize)
-    	{
-    	case 0:
-    		TerraformGeneratorPlugin.logger.info("Small Schematic");
-    		chosenSchema = smallSchematics[rand.nextInt(smallSchematics.length)];
-    		break;
-    	case 1:
-    		TerraformGeneratorPlugin.logger.info("Medium Schematic");
-    		chosenSchema = mediumSchematics[rand.nextInt(mediumSchematics.length)];
-    		break;
-    	case 2:
-    		TerraformGeneratorPlugin.logger.info("Large Schematic");
-    		chosenSchema = largeSchematics[rand.nextInt(largeSchematics.length)];
-    		break;
-    		
-    	}
-    	
-    	try {
+    	String chosenSchema = switch(platformSize) {
+            case 0 -> {
+                TerraformGeneratorPlugin.logger.info("Small Schematic");
+                yield smallSchematics[rand.nextInt(smallSchematics.length)];
+            }
+            case 1 -> {
+                TerraformGeneratorPlugin.logger.info("Medium Schematic");
+                yield mediumSchematics[rand.nextInt(mediumSchematics.length)];
+            }
+            case 2 -> {
+                TerraformGeneratorPlugin.logger.info("Large Schematic");
+                yield largeSchematics[rand.nextInt(largeSchematics.length)];
+            }
+            default -> null;
+        };
+
+        try {
     		SimpleBlock center = this.effectiveRoom.getCenterSimpleBlock(data).getUp();
 			TerraSchematic schema = TerraSchematic.load(chosenSchema, center);
             schema.parser = new AncientCitySchematicParser();

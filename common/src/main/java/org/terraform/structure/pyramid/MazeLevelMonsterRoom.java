@@ -2,6 +2,7 @@ package org.terraform.structure.pyramid;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
@@ -17,7 +18,7 @@ public class MazeLevelMonsterRoom extends RoomPopulatorAbstract {
 
     //Basically just spawns monsters tbh. A boring room otherwise.
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         //Feeble attempt to decorate the room
         data.setType(room.getX(), room.getY(), room.getZ(), Material.RED_TERRACOTTA);
 

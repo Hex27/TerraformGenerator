@@ -1,6 +1,7 @@
 package org.terraform.main;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -29,13 +30,13 @@ public enum LangOpt {
         this.value = lang;
     }
 
-    public static void init(TerraformGeneratorPlugin plugin) {
+    public static void init(@NotNull TerraformGeneratorPlugin plugin) {
         for (LangOpt lang : LangOpt.values()) {
             lang.value = plugin.getLang().fetchLang(lang.path, lang.value);
         }
     }
 
-    public static String fetchLang(String path) {
+    public static String fetchLang(@NotNull String path) {
         TerraformGeneratorPlugin plugin = TerraformGeneratorPlugin.get();
         return plugin.getLang().fetchLang(path);
     }
@@ -52,7 +53,7 @@ public enum LangOpt {
         this.value = value;
     }
 
-    public String parse(String... placeholders) {
+    public String parse(String @NotNull ... placeholders) {
         String parsed = this.value;
         String placeholder = "";
 
@@ -66,7 +67,7 @@ public enum LangOpt {
         return parsed;
     }
 
-    public void send(CommandSender sender, String... placeholders) {
+    public void send(@NotNull CommandSender sender, String... placeholders) {
         sender.sendMessage(parse(placeholders));
     }
 }

@@ -3,6 +3,7 @@ package org.terraform.biome.ocean;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.biome.BiomeType;
@@ -34,7 +35,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
 	}
     
 	@Override
-    public double calculateHeight(TerraformWorld tw, int x, int z) {
+    public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
 		
         double height = super.calculateHeight(tw, x, z);
         BiomeSection currentSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
@@ -105,12 +106,12 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.MUSHROOM_FIELDS;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
         		Material.GRAVEL,
         		Material.GRAVEL,
@@ -120,7 +121,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         if(rawX >= TerraformGenerator.seaLevel) return;
 
         if (!BlockUtils.isStoneLike(data.getType(rawX, rawX, rawZ))) return;
@@ -131,7 +132,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
 		//Spawn rocks
 		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.4f);
@@ -163,7 +164,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
 	}
 
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.MUSHROOM_BEACH;
 	}
 	

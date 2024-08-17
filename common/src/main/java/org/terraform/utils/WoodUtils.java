@@ -1,6 +1,8 @@
 package org.terraform.utils;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 
 public class WoodUtils {
@@ -44,7 +46,7 @@ public class WoodUtils {
 		 * @param oak material to convert to an WoodType enum
 		 * @return
 		 */
-		public static WoodType parse(Material oak) {
+		public static @NotNull WoodType parse(@NotNull Material oak) {
 			return WoodType.valueOf(oak.toString()
 					.replace("DARK_OAK","OAK")
 					.replace("OAK_",""));
@@ -52,72 +54,27 @@ public class WoodUtils {
 
 		//I am the pinnacle of optimisation
 		//Fear my absolutely unbeatable timings
-		public Material getWood(WoodSpecies species) {
+		public @Nullable Material getWood(@NotNull WoodSpecies species) {
 			return Material.getMaterial(template.replace("%WOOD%", species.toString()));
 		}
 	}
 	
-    public static Material getWoodForBiome(BiomeBank biome, WoodType wood) {
-        switch (biome) {
-            case BADLANDS:
-    		case BADLANDS_RIVER:
-            case SAVANNA:
-            case DESERT_MOUNTAINS:
-            case DESERT:
-    		case DESERT_RIVER:
-    		case BADLANDS_BEACH:
-            case BADLANDS_CANYON:
-                return wood.getWood(WoodSpecies.ACACIA);
-            case BIRCH_MOUNTAINS:
-            case SCARLET_FOREST:
-                return wood.getWood(WoodSpecies.BIRCH);
-            case COLD_OCEAN:
-            case WARM_OCEAN:
-            case SWAMP:
-            case PLAINS:
-            case OCEAN:
-            case MUDFLATS:
-            case CORAL_REEF_OCEAN:
-    		case DEEP_LUKEWARM_OCEAN:
-    		case DEEP_OCEAN:
-    		case DEEP_WARM_OCEAN:
-    		case DEEP_DRY_OCEAN:
-    		case DEEP_HUMID_OCEAN:
-    		case DRY_OCEAN:
-    		case HUMID_OCEAN:
-    		case RIVER:
-    		case ERODED_PLAINS:
-            case FOREST:
-                return wood.getWood(WoodSpecies.OAK);
-            case FROZEN_OCEAN:
-            case TAIGA:
-            case SNOWY_WASTELAND:
-            case SNOWY_TAIGA:
-            case SNOWY_MOUNTAINS:
-            case ROCKY_MOUNTAINS:
-            case ROCKY_BEACH:
-    		case FROZEN_RIVER:
-    		case DEEP_COLD_OCEAN:
-    		case DEEP_FROZEN_OCEAN:
-    		case ICY_BEACH:
-            case ICE_SPIKES:
-                return wood.getWood(WoodSpecies.SPRUCE);
-            case SANDY_BEACH:
-            case JUNGLE:
-    		case JUNGLE_RIVER:
-    		case BAMBOO_FOREST:
-                return wood.getWood(WoodSpecies.JUNGLE);
-			case BLACK_OCEAN:
-			case DEEP_BLACK_OCEAN:
-			case CHERRY_GROVE:
-			case DARK_FOREST:
-			case DARK_FOREST_RIVER:
-			case DARK_FOREST_BEACH:
-                return wood.getWood(WoodSpecies.DARK_OAK);
-		default:
-			break;
-        }
-        return wood.getWood(WoodSpecies.OAK);
+    public static @Nullable Material getWoodForBiome(@NotNull BiomeBank biome, @NotNull WoodType wood) {
+        return switch(biome) {
+            case BADLANDS, BADLANDS_RIVER, SAVANNA, DESERT_MOUNTAINS, DESERT, DESERT_RIVER, BADLANDS_BEACH,
+                 BADLANDS_CANYON -> wood.getWood(WoodSpecies.ACACIA);
+            case BIRCH_MOUNTAINS, SCARLET_FOREST -> wood.getWood(WoodSpecies.BIRCH);
+            case COLD_OCEAN, WARM_OCEAN, SWAMP, PLAINS, OCEAN, MUDFLATS, CORAL_REEF_OCEAN, DEEP_LUKEWARM_OCEAN,
+                 DEEP_OCEAN, DEEP_WARM_OCEAN, DEEP_DRY_OCEAN, DEEP_HUMID_OCEAN, DRY_OCEAN, HUMID_OCEAN, RIVER,
+                 ERODED_PLAINS, FOREST -> wood.getWood(WoodSpecies.OAK);
+            case FROZEN_OCEAN, TAIGA, SNOWY_WASTELAND, SNOWY_TAIGA, SNOWY_MOUNTAINS, ROCKY_MOUNTAINS, ROCKY_BEACH,
+                 FROZEN_RIVER, DEEP_COLD_OCEAN, DEEP_FROZEN_OCEAN, ICY_BEACH, ICE_SPIKES ->
+                    wood.getWood(WoodSpecies.SPRUCE);
+            case SANDY_BEACH, JUNGLE, JUNGLE_RIVER, BAMBOO_FOREST -> wood.getWood(WoodSpecies.JUNGLE);
+            case BLACK_OCEAN, DEEP_BLACK_OCEAN, CHERRY_GROVE, DARK_FOREST, DARK_FOREST_RIVER, DARK_FOREST_BEACH ->
+                    wood.getWood(WoodSpecies.DARK_OAK);
+            default -> wood.getWood(WoodSpecies.OAK);
+        };
     }
 
 }

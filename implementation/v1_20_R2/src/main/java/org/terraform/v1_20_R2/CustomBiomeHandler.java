@@ -20,7 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_20_R2.block.CraftBiome;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlock;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -29,10 +29,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -103,7 +101,7 @@ public class CustomBiomeHandler {
 		
 	}
 
-	private static void registerCustomBiomeBase(CustomBiomeType biomeType, DedicatedServer dedicatedserver, IRegistryWritable<BiomeBase> registrywritable, BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+	private static void registerCustomBiomeBase(@NotNull CustomBiomeType biomeType, DedicatedServer dedicatedserver, @NotNull IRegistryWritable<BiomeBase> registrywritable, @NotNull BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
 		ResourceKey<BiomeBase> newKey = ResourceKey.a(Registries.ap, new MinecraftKey("terraformgenerator", biomeType.toString().toLowerCase(Locale.ENGLISH)));
 
@@ -162,7 +160,8 @@ public class CustomBiomeHandler {
 		newFog.c(biomeType.getWaterFogColor().isEmpty() ? forestbiome.j():Integer.parseInt(biomeType.getWaterFogColor(),16));
 		
 		//sky color
-		newFog.d(biomeType.getSkyColor().isEmpty() ? forestbiome.a():Integer.parseInt(biomeType.getSkyColor(),16)); 
+		newFog.d(biomeType.getSkyColor().isEmpty() ? forestbiome.a():Integer.parseInt(biomeType.getSkyColor(),16));
+
 
 		//Unnecessary values; can be removed safely if you don't want to change them
 		
@@ -170,7 +169,8 @@ public class CustomBiomeHandler {
 		newFog.e(biomeType.getFoliageColor().isEmpty() ? forestbiome.f():Integer.parseInt(biomeType.getFoliageColor(),16));
 		
 		//grass blocks color
-		newFog.f(biomeType.getGrassColor().isEmpty() ? Integer.parseInt("79C05A",16):Integer.parseInt(biomeType.getGrassColor(),16)); 
+		newFog.f(biomeType.getGrassColor().isEmpty() ? Integer.parseInt("79C05A",16):Integer.parseInt(biomeType.getGrassColor(),16));
+
 		
 		newBiomeBuilder.a(newFog.a());
 		
@@ -222,7 +222,7 @@ public class CustomBiomeHandler {
 	}
 
 
-    public static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(IRegistry<BiomeBase> registry) {
+    public static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(@NotNull IRegistry<BiomeBase> registry) {
 
         List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
 

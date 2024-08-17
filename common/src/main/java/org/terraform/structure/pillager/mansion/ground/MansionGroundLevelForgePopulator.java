@@ -10,6 +10,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Slab.Type;
 import org.bukkit.block.data.type.Stairs.Shape;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -34,7 +35,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
-	public void decorateRoom(PopulatorDataAbstract data, Random random) {
+	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
 		//TerraformGeneratorPlugin.logger.info("Mushroom Farm at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
@@ -63,7 +64,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 		
 	}
 	@Override
-	public void decorateWindow(Random rand, Wall w) {
+	public void decorateWindow(Random rand, @NotNull Wall w) {
 		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
 		.setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
 		.apply(w.getLeft())
@@ -78,7 +79,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 	}
 	
 	@Override
-	public void decorateWall(Random rand, Wall w) {
+	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		
 		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
 		.setHalf(Half.TOP)
@@ -108,7 +109,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 		}
 		
 	    @Override
-	    public void applyData(SimpleBlock block, BlockData data) {
+	    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             super.applyData(block, data);
 	        if (data.getMaterial() == Material.POLISHED_DIORITE) {
 	            ArmorStandUtils.placeArmorStand(block.getRelative(0,1,0), BlockUtils.getDirectBlockFace(rand), rand);
@@ -117,7 +118,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 	}
 
 	@Override
-	public MansionRoomSize getSize() {
+	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(1,2);
 	}
 }

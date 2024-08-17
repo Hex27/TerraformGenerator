@@ -8,6 +8,7 @@ import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -21,7 +22,7 @@ import org.terraform.utils.version.OneOneNineBlockHandler;
 
 public class AncientCityResearchBasementHandler {
 
-	public static void populate(Random random, PopulatorDataAbstract data, CubeRoom room, BlockFace headFacing) {
+	public static void populate(@NotNull Random random, @NotNull PopulatorDataAbstract data, @NotNull CubeRoom room, @NotNull BlockFace headFacing) {
 		
 		//Clear out the room and place floor
 		int[] lowerCorner = room.getLowerCorner();

@@ -1,5 +1,6 @@
 package org.terraform.utils.noise;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.utils.Vector2f;
 
 // https://www.youtube.com/watch?v=dXECQRlmIaE :)
@@ -37,7 +38,7 @@ public class BezierCurve {
      * @param control1 1st control point
      * @param point2   2nd point
      */
-    public static Vector2f quadratic(float progress, Vector2f point1, Vector2f control1, Vector2f point2) {
+    public static @NotNull Vector2f quadratic(float progress, @NotNull Vector2f point1, @NotNull Vector2f control1, @NotNull Vector2f point2) {
         float progressBw = 1 - progress;
 
         double x = Math.pow(progressBw, 2) * point1.x +
@@ -58,7 +59,7 @@ public class BezierCurve {
      * @param control2 2nd control point
      * @param point2   2nd point
      */
-    public static Vector2f cubic(float progress, Vector2f point1, Vector2f control1, Vector2f control2, Vector2f point2) {
+    public static @NotNull Vector2f cubic(float progress, @NotNull Vector2f point1, @NotNull Vector2f control1, @NotNull Vector2f control2, @NotNull Vector2f point2) {
         float progressBw = 1 - progress;
 
         double x = Math.pow(progressBw, 3) * point1.x +
@@ -73,7 +74,7 @@ public class BezierCurve {
         return new Vector2f((float) x, (float) y);
     }
 
-    public Vector2f calculate(float progress) {
+    public @NotNull Vector2f calculate(float progress) {
         return cubic(progress, point1, control1, control2, point2);
     }
 }

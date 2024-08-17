@@ -1,6 +1,7 @@
 package org.terraform.structure.villagehouse.animalfarm;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorAbstract;
@@ -20,7 +21,7 @@ public class AnimalFarmPathPopulator extends PathPopulatorAbstract {
     }
 
     @Override
-    public void populate(PathPopulatorData ppd) {
+    public void populate(@NotNull PathPopulatorData ppd) {
         Wall w = new Wall(ppd.base, ppd.dir);
         for (CubeRoom room : gen.getRooms()) {
             if (room.isPointInside(new int[]{w.get().getX(), w.get().getZ()}))

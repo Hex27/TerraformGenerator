@@ -2,6 +2,7 @@ package org.terraform.structure.pyramid;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -19,7 +20,7 @@ public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 
         //Delete all surface pressure plates in this room placed by the pyramid dungeon path populator
         //We don't want any mobs stepping on bombs here. The whole room explodes.
@@ -59,7 +60,7 @@ public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
 
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() >= 5 && room.getWidthZ() >= 5;
     }
 

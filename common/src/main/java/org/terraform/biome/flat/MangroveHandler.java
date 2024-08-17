@@ -3,6 +3,7 @@ package org.terraform.biome.flat;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.ChunkCache;
@@ -28,7 +29,7 @@ import java.util.Random;
 public class MangroveHandler extends BiomeHandler {
 
     @Override
-    public BiomeBank getRiverType(){ return BiomeBank.MANGROVE; }
+    public @NotNull BiomeBank getRiverType(){ return BiomeBank.MANGROVE; }
 
     @Override
     public boolean isOcean() {
@@ -36,11 +37,11 @@ public class MangroveHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return OneOneNineBlockHandler.MANGROVE_SWAMP;
     }
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
                 GenUtils.randMaterial(rand, Material.DIRT),
                 GenUtils.randMaterial(rand, Material.DIRT, Material.DIRT, Material.STONE),
@@ -49,11 +50,11 @@ public class MangroveHandler extends BiomeHandler {
     }
 
     @Override
-    public BiomeHandler getTransformHandler(){
+    public @NotNull BiomeHandler getTransformHandler(){
         return this;
     }
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+    public void transformTerrain(@NotNull ChunkCache cache, TerraformWorld tw, @NotNull Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
         int surfaceY = cache.getTransformedHeight(x,z);
         if(surfaceY < TerraformGenerator.seaLevel)
         {
@@ -88,7 +89,7 @@ public class MangroveHandler extends BiomeHandler {
         }
     }
     @Override
-    public void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         int seaLevel = TerraformGenerator.seaLevel;
 
         if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
@@ -117,7 +118,7 @@ public class MangroveHandler extends BiomeHandler {
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 
         int treeX, treeY, treeZ;
         if (GenUtils.chance(random, 8, 10)) {
@@ -138,7 +139,7 @@ public class MangroveHandler extends BiomeHandler {
 	}
 
 	@Override
-	public BiomeBank getBeachType() {
+	public @NotNull BiomeBank getBeachType() {
 		return BiomeBank.MUDFLATS;
 	}
 	

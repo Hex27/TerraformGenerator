@@ -6,6 +6,7 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.version.OneOneNineBlockHandler;
@@ -14,9 +15,10 @@ public class AncientCityPillarSchematicParser extends SchematicParser {
 	
 	private int failCount = 0;
 	private int totalCount = 0;
-	ArrayList<SimpleBlock> touchedOffsets = new ArrayList<>();
+	@NotNull
+    ArrayList<SimpleBlock> touchedOffsets = new ArrayList<>();
 	
-	public ArrayList<SimpleBlock> getTouchedOffsets() {
+	public @NotNull ArrayList<SimpleBlock> getTouchedOffsets() {
 		return touchedOffsets;
 	}
 
@@ -25,7 +27,7 @@ public class AncientCityPillarSchematicParser extends SchematicParser {
 	}
 	
     @Override
-    public void applyData(SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
     	Random rand = new Random();
     	totalCount += 1;
     	if(block.isSolid() && block.getType() != OneOneNineBlockHandler.SCULK_VEIN) {

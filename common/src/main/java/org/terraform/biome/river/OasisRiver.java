@@ -1,6 +1,7 @@
 package org.terraform.biome.river;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.beach.OasisBeach;
 import org.terraform.coregen.HeightMap;
@@ -29,7 +30,7 @@ public class OasisRiver {
                 targetBiome == biome;
     }
 
-    public static void generateOasisRiver(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int z, BiomeBank targetBiome) {
+    public static void generateOasisRiver(TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int z, BiomeBank targetBiome) {
         if (!isOasisRiver(tw, x, z, targetBiome)) return;
 
         int riverBottom = GenUtils.getHighestGround(data, x, z);

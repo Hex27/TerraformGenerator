@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Slab.Type;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.data.Wall;
 import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawType;
@@ -19,7 +20,7 @@ public class MansionBaseTowerPiece extends MansionStandardTowerPiece {
 	}
 	
 	@Override
-	public void decorateAwkwardCorner(Wall target, Random random, BlockFace one, BlockFace two) {
+	public void decorateAwkwardCorner(@NotNull Wall target, Random random, @NotNull BlockFace one, @NotNull BlockFace two) {
     	//Fill in gap in the corner
     	target.Pillar(MansionJigsawBuilder.roomHeight, Material.STONE_BRICKS);
     	target.getRelative(one).getRelative(two).setType(Material.COBBLESTONE_SLAB);

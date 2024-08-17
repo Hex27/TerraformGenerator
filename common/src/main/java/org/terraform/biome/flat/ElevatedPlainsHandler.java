@@ -3,6 +3,7 @@ package org.terraform.biome.flat;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeHandler;
@@ -29,17 +30,17 @@ public class ElevatedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public Biome getBiome() {
+    public @NotNull Biome getBiome() {
         return Biome.PLAINS;
     }
 
     @Override
-    public Material[] getSurfaceCrust(Random rand) {
+    public Material @NotNull [] getSurfaceCrust(Random rand) {
     	return new Material[] {Material.STONE};
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         boolean gradient = HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3)
                 <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble();
         if(gradient) {
@@ -73,7 +74,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
     }
 
     @Override
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+    public void transformTerrain(@NotNull ChunkCache cache, TerraformWorld tw, @NotNull Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
 
         int heightFactor = 15;
         int rawX = chunkX * 16 + x;
@@ -99,18 +100,18 @@ public class ElevatedPlainsHandler extends BiomeHandler {
     		Material.ANDESITE, Material.ANDESITE, Material.ANDESITE,
     		Material.DIORITE, Material.DIORITE, Material.DIORITE
     		};
-    private Material getRockAt(Random rand, int rawX, int y, int rawZ) {
+    private @NotNull Material getRockAt(@NotNull Random rand, int rawX, int y, int rawZ) {
     	return rocks[((int)Math.round(0.7*rawX + 0.7*(GenUtils.randInt(rand, -1, 1)+y) + 0.7*rawZ)) % rocks.length];
     }
 
-    private static BiomeBlender getBiomeBlender(TerraformWorld tw) {
+    private static @NotNull BiomeBlender getBiomeBlender(TerraformWorld tw) {
         if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
                 .setRiverThreshold(4).setBlendBeaches(false);
         return biomeBlender;
     }
 
 	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 18);
 
         for (SimpleLocation sLoc : trees) {

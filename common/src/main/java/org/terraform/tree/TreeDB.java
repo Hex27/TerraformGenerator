@@ -2,6 +2,7 @@ package org.terraform.tree;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
@@ -25,7 +26,7 @@ public class TreeDB {
     /**
      * Spawns an Azalea tree, complete with rooted dirt.
      */
-    public static void spawnAzalea(Random random, TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public static void spawnAzalea(@NotNull Random random, @NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	FractalTreeBuilder builder = new FractalTreeBuilder(FractalTypes.Tree.AZALEA_TOP);
     	builder.build(tw, data, x, y, z);
         
@@ -48,7 +49,7 @@ public class TreeDB {
     	rooter.setType(Material.HANGING_ROOTS);
     }
 
-    public static void spawnCoconutTree(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public static void spawnCoconutTree(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         FractalTreeBuilder builder = new FractalTreeBuilder(FractalTypes.Tree.COCONUT_TOP);
         
@@ -65,7 +66,7 @@ public class TreeDB {
         builder.build(tw, data, x, y, z);
     }
 
-    public static void spawnSmallJungleTree(boolean skipGradientCheck, TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public static void spawnSmallJungleTree(boolean skipGradientCheck, @NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	FractalTreeBuilder ftb;
     	if (GenUtils.chance(1, 8))
     		ftb = new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_EXTRA_SMALL);
@@ -80,7 +81,7 @@ public class TreeDB {
      * Corals will always dig 2 blocks deeper first.
      * Grows a random giant coral (fire, tube, etc)
      */
-    public static void spawnRandomGiantCoral(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public static void spawnRandomGiantCoral(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         FractalTypes.Tree type = FRACTAL_CORAL_TYPES[tw.getHashedRand(x, y, z).nextInt(5)];
         FractalTreeBuilder ftb = new FractalTreeBuilder(type);
         ftb.setMaxHeight(TerraformGenerator.seaLevel - y - 1); //Max height is one below sea level
@@ -93,7 +94,7 @@ public class TreeDB {
      * <br>
      * Roots will extend at least a little above sea level
      */
-    public static void spawnBreathingRoots(TerraformWorld tw, SimpleBlock centre, Material type){
+    public static void spawnBreathingRoots(@NotNull TerraformWorld tw, @NotNull SimpleBlock centre, Material type){
         Random rand = tw.getHashedRand(centre.getX(),centre.getY(),centre.getZ(),178782);
         for(int i = 0; i < 4+rand.nextInt(8); i++)
         {

@@ -3,6 +3,7 @@ package org.terraform.structure.catacombs;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -30,7 +31,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     }
 
     @Override
-    public void populate(PathPopulatorData ppd) {
+    public void populate(@NotNull PathPopulatorData ppd) {
         Wall core = new Wall(ppd.base, ppd.dir);
         
         //Was populated before.
@@ -138,7 +139,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     }
     
     @Override
-    public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
+    public boolean customCarve(@NotNull SimpleBlock base, BlockFace dir, int pathWidth) {
         Wall core = new Wall(base.getRelative(0, 2, 0), dir);
         int seed = 2293 + 5471*core.getX() + 9817*core.getY() ^ 2 + 1049*core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
@@ -160,11 +161,11 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
         Material.DRIPSTONE_BLOCK
     };
 
-    public Material getFenceMaterial() {
+    public @NotNull Material getFenceMaterial() {
         return Material.OAK_FENCE;
     }
     
-    public Material getSupportMaterial() {
+    public @NotNull Material getSupportMaterial() {
         return Material.OAK_LOG;
     }
     

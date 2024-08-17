@@ -1,5 +1,6 @@
 package org.terraform.biome;
 
+import org.jetbrains.annotations.NotNull;
 import org.terraform.utils.Range;
 import org.terraform.main.config.TConfigOption;
 
@@ -66,11 +67,11 @@ public enum BiomeClimate {
 		return moistureRange;
 	}
 	
-	private static boolean isInRange(double val, Range<Double> r) {
+	private static boolean isInRange(double val, @NotNull Range<Double> r) {
 		return r.getMaximum() >= val && r.getMinimum() <= val;
 	}
 	
-	public static BiomeClimate selectClimate(double temp, double moist) {
+	public static @NotNull BiomeClimate selectClimate(double temp, double moist) {
 		
 		BiomeClimate candidate = BiomeClimate.TRANSITION;
 		

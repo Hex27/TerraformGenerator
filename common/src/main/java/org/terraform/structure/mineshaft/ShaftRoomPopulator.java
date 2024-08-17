@@ -1,6 +1,7 @@
 package org.terraform.structure.mineshaft;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -19,7 +20,7 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         //Carve upward shaft. Replace stone-like objects and cave decorations.
         for (int i = 8; i < 20; i++) {
             BlockUtils.carveCaveAir(new Random().nextInt(777123),

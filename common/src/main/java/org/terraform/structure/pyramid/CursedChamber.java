@@ -7,6 +7,7 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -26,7 +27,7 @@ public class CursedChamber extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         int[] lowerCorner = room.getLowerCorner(3);
         int[] upperCorner = room.getUpperCorner(3);
 
@@ -81,7 +82,7 @@ public class CursedChamber extends RoomPopulatorAbstract {
             data.addEntity(room.getX() - room.getWidthX() / 2 + 1, room.getY() + 1, room.getZ(), EntityType.SKELETON);
     }
 
-    public void spawnSkullPillar(Wall w, CubeRoom room) {
+    public void spawnSkullPillar(@NotNull Wall w, @NotNull CubeRoom room) {
         //Skull Pillar
         w.LPillar(room.getHeight() - 1, rand, Material.SANDSTONE, Material.CHISELED_SANDSTONE);
 
@@ -117,7 +118,7 @@ public class CursedChamber extends RoomPopulatorAbstract {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         //13, as that's the size for crypt rooms. Don't compete with crypt rooms.
         return room.getWidthX() > 6 && room.getWidthZ() > 6;
         //6, as the pad for pillars is 3.

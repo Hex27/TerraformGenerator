@@ -3,6 +3,7 @@ package org.terraform.structure.village.plains;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -22,7 +23,7 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public void populate(PopulatorDataAbstract data, CubeRoom room) {
+    public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	
     	//Check if this area is flat enough to be a pond
     	int[] lowerCorner = room.getLowerCorner();
@@ -120,7 +121,7 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
     	
     }
     
-    private ArrayList<SimpleBlock> getLakeWaterBlocks(SimpleBlock core, int[] lowerCorner, int[] upperCorner, int lowestPoint){
+    private @NotNull ArrayList<SimpleBlock> getLakeWaterBlocks(@NotNull SimpleBlock core, int @NotNull [] lowerCorner, int @NotNull [] upperCorner, int lowestPoint){
     	int layer = 0;
     	ArrayList<SimpleBlock> lakeBlocks = new ArrayList<>();
     	while(true) {
@@ -163,7 +164,7 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
     }
 
     @Override
-    public boolean canPopulate(CubeRoom room) {
+    public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() <= 10 && 
         		(room.getWidthZ() > 5 && room.getWidthX() > 5);
     }

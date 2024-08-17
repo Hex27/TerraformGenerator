@@ -3,6 +3,7 @@ package org.terraform.structure.pillager.mansion.ground;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
@@ -23,7 +24,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     }
     
     @Override
-    public void build(PopulatorDataAbstract data, Random rand) {
+    public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
@@ -42,7 +43,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     /**
      * For forcefully removing anything in the area before any building.
      */
-    public void purgeMinimalArea(PopulatorDataAbstract data) {
+    public void purgeMinimalArea(@NotNull PopulatorDataAbstract data) {
     	
     	int[] lowerCorner = this.getRoom().getLowerCorner(-5);
         int[] upperCorner = this.getRoom().getUpperCorner(-5);
@@ -57,7 +58,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     }
 
     @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
+    public void postBuildDecoration(Random random, @NotNull PopulatorDataAbstract data) {
         CubeRoom targetRoom = this.getRoom();
         if(!this.getWalledFaces().isEmpty())
         	targetRoom = this.getExtendedRoom(6);
@@ -97,7 +98,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
      * @param random
      * @param data
      */
-    public void thirdStageDecoration(Random random, PopulatorDataAbstract data) {
+    public void thirdStageDecoration(Random random, @NotNull PopulatorDataAbstract data) {
     	CubeRoom targetRoom = this.getRoom();
         if(!this.getWalledFaces().isEmpty()) {
         	targetRoom = this.getExtendedRoom(6);

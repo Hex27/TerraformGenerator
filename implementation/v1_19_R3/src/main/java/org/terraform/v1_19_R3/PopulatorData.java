@@ -1,7 +1,6 @@
 package org.terraform.v1_19_R3;
 
 import net.minecraft.core.BlockPosition;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.util.RandomSource;
@@ -23,6 +22,8 @@ import org.bukkit.craftbukkit.v1_19_R3.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_19_R3.util.CraftMagicNumbers;
 import org.bukkit.craftbukkit.v1_19_R3.util.RandomSourceWrapper;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
@@ -91,7 +92,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setType(int x, int y, int z, Material type) {
+    public void setType(int x, int y, int z, @NotNull Material type) {
     	if (Math.abs((x >> 4) - chunkX) > radius || Math.abs((z >> 4) - chunkZ) > radius) {
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
@@ -103,7 +104,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
     	if (Math.abs((x >> 4) - chunkX) > radius || Math.abs((z >> 4) - chunkZ) > radius) {
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
@@ -131,7 +132,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
     
     @Override
-    public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
+    public void addEntity(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
     	if (Math.abs((rawX >> 4) - chunkX) > 1 || Math.abs((rawZ >> 4) - chunkZ) > 1) {
     		TerraformGeneratorPlugin.logger.info("Failed to spawn " + type + " as it was out of bounds.");
     		return;
@@ -173,87 +174,50 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public void lootTableChest(int x, int y, int z, TerraLootTable table) {
+    public void lootTableChest(int x, int y, int z, @NotNull TerraLootTable table) {
         BlockPosition pos = new BlockPosition(x, y, z);
         TileEntityLootable.a(rlwa, RandomSource.a(gen.getTerraformWorld().getHashedRand(x, y, z).nextLong()), pos, getLootTable(table));
     }
 
-    private MinecraftKey getLootTable(TerraLootTable table) {
-        switch (table) {
-        case EMPTY:
-            return LootTables.a;
-        case SPAWN_BONUS_CHEST:
-            return LootTables.b;
-        case END_CITY_TREASURE:
-            return LootTables.c;
-        case SIMPLE_DUNGEON:
-            return LootTables.d;
-        case VILLAGE_WEAPONSMITH:
-            return LootTables.e;
-        case VILLAGE_TOOLSMITH:
-            return LootTables.f;
-        case VILLAGE_ARMORER:
-            return LootTables.g;
-        case VILLAGE_CARTOGRAPHER:
-            return LootTables.h;
-        case VILLAGE_MASON:
-            return LootTables.i;
-        case VILLAGE_SHEPHERD:
-            return LootTables.j;
-        case VILLAGE_BUTCHER:
-            return LootTables.k;
-        case VILLAGE_FLETCHER:
-            return LootTables.l;
-        case VILLAGE_FISHER:
-            return LootTables.m;
-        case VILLAGE_TANNERY:
-            return LootTables.n;
-        case VILLAGE_TEMPLE:
-            return LootTables.o;
-        case VILLAGE_DESERT_HOUSE:
-            return LootTables.p;
-        case VILLAGE_PLAINS_HOUSE:
-            return LootTables.q;
-        case VILLAGE_TAIGA_HOUSE:
-            return LootTables.r;
-        case VILLAGE_SNOWY_HOUSE:
-            return LootTables.s;
-        case VILLAGE_SAVANNA_HOUSE:
-            return LootTables.t;
-        case ABANDONED_MINESHAFT:
-            return LootTables.u;
-        case NETHER_BRIDGE:
-            return LootTables.v;
-        case STRONGHOLD_LIBRARY:
-            return LootTables.w;
-        case STRONGHOLD_CROSSING:
-            return LootTables.x;
-        case STRONGHOLD_CORRIDOR:
-            return LootTables.y;
-        case DESERT_PYRAMID:
-            return LootTables.z;
-        case JUNGLE_TEMPLE:
-            return LootTables.A;
-        case JUNGLE_TEMPLE_DISPENSER:
-            return LootTables.B;
-        case IGLOO_CHEST:
-            return LootTables.C;
-        case WOODLAND_MANSION:
-            return LootTables.D;
-        case UNDERWATER_RUIN_SMALL:
-            return LootTables.E;
-        case UNDERWATER_RUIN_BIG:
-            return LootTables.F;
-        case BURIED_TREASURE:
-            return LootTables.G;
-        case SHIPWRECK_MAP:
-            return LootTables.H;
-        case SHIPWRECK_SUPPLY:
-            return LootTables.I;
-        case SHIPWRECK_TREASURE:
-            return LootTables.J;
-        case PILLAGER_OUTPOST:
-            return LootTables.K;
+    private @Nullable MinecraftKey getLootTable(@NotNull TerraLootTable table) {
+        return switch(table) {
+            case EMPTY -> LootTables.a;
+            case SPAWN_BONUS_CHEST -> LootTables.b;
+            case END_CITY_TREASURE -> LootTables.c;
+            case SIMPLE_DUNGEON -> LootTables.d;
+            case VILLAGE_WEAPONSMITH -> LootTables.e;
+            case VILLAGE_TOOLSMITH -> LootTables.f;
+            case VILLAGE_ARMORER -> LootTables.g;
+            case VILLAGE_CARTOGRAPHER -> LootTables.h;
+            case VILLAGE_MASON -> LootTables.i;
+            case VILLAGE_SHEPHERD -> LootTables.j;
+            case VILLAGE_BUTCHER -> LootTables.k;
+            case VILLAGE_FLETCHER -> LootTables.l;
+            case VILLAGE_FISHER -> LootTables.m;
+            case VILLAGE_TANNERY -> LootTables.n;
+            case VILLAGE_TEMPLE -> LootTables.o;
+            case VILLAGE_DESERT_HOUSE -> LootTables.p;
+            case VILLAGE_PLAINS_HOUSE -> LootTables.q;
+            case VILLAGE_TAIGA_HOUSE -> LootTables.r;
+            case VILLAGE_SNOWY_HOUSE -> LootTables.s;
+            case VILLAGE_SAVANNA_HOUSE -> LootTables.t;
+            case ABANDONED_MINESHAFT -> LootTables.u;
+            case NETHER_BRIDGE -> LootTables.v;
+            case STRONGHOLD_LIBRARY -> LootTables.w;
+            case STRONGHOLD_CROSSING -> LootTables.x;
+            case STRONGHOLD_CORRIDOR -> LootTables.y;
+            case DESERT_PYRAMID -> LootTables.z;
+            case JUNGLE_TEMPLE -> LootTables.A;
+            case JUNGLE_TEMPLE_DISPENSER -> LootTables.B;
+            case IGLOO_CHEST -> LootTables.C;
+            case WOODLAND_MANSION -> LootTables.D;
+            case UNDERWATER_RUIN_SMALL -> LootTables.E;
+            case UNDERWATER_RUIN_BIG -> LootTables.F;
+            case BURIED_TREASURE -> LootTables.G;
+            case SHIPWRECK_MAP -> LootTables.H;
+            case SHIPWRECK_SUPPLY -> LootTables.I;
+            case SHIPWRECK_TREASURE -> LootTables.J;
+            case PILLAGER_OUTPOST -> LootTables.K;
 //        case BASTION_TREASURE:
 //            return LootTables.L;
 //        case BASTION_OTHER:
@@ -332,16 +296,11 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 //            return LootTables.ax;
 //        case PIGLIN_BARTERING:
 //            return LootTables.ay
-		case ANCIENT_CITY:
-			return LootTables.P;
-		case ANCIENT_CITY_ICE_BOX:
-			return LootTables.Q;
-        case RUINED_PORTAL:
-            return LootTables.R;
-		default:
-			break;
-        }
-        return null;
+            case ANCIENT_CITY -> LootTables.P;
+            case ANCIENT_CITY_ICE_BOX -> LootTables.Q;
+            case RUINED_PORTAL -> LootTables.R;
+            default -> null;
+        };
     }
 
 	@Override

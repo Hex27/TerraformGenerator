@@ -2,6 +2,8 @@ package org.terraform.tree;
 
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -23,6 +25,7 @@ public class MushroomBuilder {
     Random rand;
     FastNoise noiseGen;
 
+    @Nullable
     SimpleBlock stemTop;
 
     FractalTypes.Mushroom type;
@@ -50,7 +53,7 @@ public class MushroomBuilder {
     double maxTilt = Math.PI / 20;
     boolean fourAxisRotationOnly = false;
 
-    public MushroomBuilder(FractalTypes.Mushroom type) {
+    public MushroomBuilder(FractalTypes.@NotNull Mushroom type) {
         this.type = type;
         switch (type) {
             case GIANT_BROWN_FUNNEL_MUSHROOM:
@@ -153,7 +156,7 @@ public class MushroomBuilder {
         }
     }
 
-    private void replaceSphere(float radius, SimpleBlock base, Material type) {
+    private void replaceSphere(float radius, @NotNull SimpleBlock base, @NotNull Material type) {
         if (radius < 0.5) {
             if (!base.getType().isSolid())
                 base.setType(type);
@@ -182,7 +185,7 @@ public class MushroomBuilder {
         }
     }
 
-    public void spawnSphericalCap(int seed, float r, float ry, SimpleBlock base, boolean hardReplace, Material... type) {
+    public void spawnSphericalCap(int seed, float r, float ry, @NotNull SimpleBlock base, boolean hardReplace, Material... type) {
         Random rand = new Random(seed);
         //FastNoise noise = new FastNoise(seed);
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
@@ -219,7 +222,7 @@ public class MushroomBuilder {
         }
     }
 
-    public void build(TerraformWorld tw, PopulatorDataAbstract data, int x, int y, int z) {
+    public void build(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         if(TConfigOption.DEVSTUFF_VANILLA_MUSHROOMS.getBoolean()) {
         	String schemName;
         	if(this.type.toString().contains("RED"))
@@ -268,7 +271,7 @@ public class MushroomBuilder {
         }
     }
 
-    public void createStem(SimpleBlock base, double tilt, double yaw, double thickness, double length) {
+    public void createStem(@NotNull SimpleBlock base, double tilt, double yaw, double thickness, double length) {
         int totalSegments = (int) (length * segmentFactor);
         // If only one block wide, only place one block per y level = looks more natural
         boolean oneBlockWide = thickness == 0;
@@ -306,7 +309,7 @@ public class MushroomBuilder {
         stemTop = lastSegment;
     }
 
-    private void spawnFunnelCap(int seed, float r, float height, float thickness, SimpleBlock base, boolean hardReplace, Material... type) {
+    private void spawnFunnelCap(int seed, float r, float height, float thickness, @NotNull SimpleBlock base, boolean hardReplace, Material... type) {
         Random rand = new Random(seed);
         //FastNoise noise = new FastNoise(seed);
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
@@ -375,47 +378,47 @@ public class MushroomBuilder {
         }
     }
 
-    public MushroomBuilder setBaseThickness(float baseThickness) {
+    public @NotNull MushroomBuilder setBaseThickness(float baseThickness) {
         this.baseThickness = baseThickness;
         return this;
     }
 
-    public MushroomBuilder setBaseHeight(int h) {
+    public @NotNull MushroomBuilder setBaseHeight(int h) {
         this.baseHeight = h;
         return this;
     }
 
-    public MushroomBuilder setStemType(Material stemType) {
+    public @NotNull MushroomBuilder setStemType(Material stemType) {
         this.stemType = stemType;
         return this;
     }
 
-    public MushroomBuilder setCapType(Material capType) {
+    public @NotNull MushroomBuilder setCapType(Material capType) {
         this.capType = capType;
         return this;
     }
 
-    public MushroomBuilder setSpotType(Material spotType) {
+    public @NotNull MushroomBuilder setSpotType(Material spotType) {
         this.spotType = spotType;
         return this;
     }
 
-    public MushroomBuilder setMinTilt(double minTilt) {
+    public @NotNull MushroomBuilder setMinTilt(double minTilt) {
         this.minTilt = minTilt;
         return this;
     }
 
-    public MushroomBuilder setMaxTilt(double maxTilt) {
+    public @NotNull MushroomBuilder setMaxTilt(double maxTilt) {
         this.maxTilt = maxTilt;
         return this;
     }
 
-    public MushroomBuilder setCapRadius(float capRadius) {
+    public @NotNull MushroomBuilder setCapRadius(float capRadius) {
         this.capRadius = capRadius;
         return this;
     }
 
-    public MushroomBuilder setCapYOffset(int capYOffset) {
+    public @NotNull MushroomBuilder setCapYOffset(int capYOffset) {
         this.capYOffset = capYOffset;
         return this;
     }
@@ -426,7 +429,7 @@ public class MushroomBuilder {
      * Default value is 2.0. Generally you want to touch this only if
      * your mushroom is **very** curvy.
      */
-    public MushroomBuilder setSegmentFactor(float segmentFactor) {
+    public @NotNull MushroomBuilder setSegmentFactor(float segmentFactor) {
         this.segmentFactor = segmentFactor;
         return this;
     }
@@ -440,7 +443,7 @@ public class MushroomBuilder {
      * The start and end points of the curve will always
      * be (0, 0) and (1, 1), so control points should be close by.
      */
-    public MushroomBuilder setStemCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
+    public @NotNull MushroomBuilder setStemCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
         this.curvatureControlPoint1 = controlPoint1;
         this.curvatureControlPoint2 = controlPoint2;
         return this;
@@ -449,7 +452,7 @@ public class MushroomBuilder {
     /**
      * @see MushroomBuilder#setStemCurve(Vector2f, Vector2f)
      */
-    public MushroomBuilder setStemCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+    public @NotNull MushroomBuilder setStemCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
         return setStemCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
     }
 
@@ -459,7 +462,7 @@ public class MushroomBuilder {
      * level the width of the stem will be (width + 2 * thicknessIncrement).
      * @param thicknessIncrement Thickness increment towards the ground.
      */
-    public MushroomBuilder setThicknessIncrement(double thicknessIncrement) {
+    public @NotNull MushroomBuilder setThicknessIncrement(double thicknessIncrement) {
         this.thicknessIncrement = thicknessIncrement;
         return this;
     }
@@ -473,7 +476,7 @@ public class MushroomBuilder {
      * <p>
      * The curve is linear by default (=both control points are (0.5, 0.5))
      */
-    public MushroomBuilder setThicknessIncrementCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
+    public @NotNull MushroomBuilder setThicknessIncrementCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
         this.thicknessControlPoint1 = controlPoint1;
         this.thicknessControlPoint2 = controlPoint2;
         return this;
@@ -482,16 +485,16 @@ public class MushroomBuilder {
     /**
      * @see MushroomBuilder#setThicknessIncrementCurve(Vector2f, Vector2f)
      */
-    public MushroomBuilder setThicknessIncrementCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+    public @NotNull MushroomBuilder setThicknessIncrementCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
         return setThicknessIncrementCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
     }
 
-    public MushroomBuilder setCapShape(FractalTypes.MushroomCap capShape) {
+    public @NotNull MushroomBuilder setCapShape(FractalTypes.MushroomCap capShape) {
         this.capShape = capShape;
         return this;
     }
 
-    public MushroomBuilder setFourAxisRotationOnly(boolean fourAxisRotationOnly) {
+    public @NotNull MushroomBuilder setFourAxisRotationOnly(boolean fourAxisRotationOnly) {
         this.fourAxisRotationOnly = fourAxisRotationOnly;
         return this;
     }

@@ -1,6 +1,8 @@
 package org.terraform.coregen.sqlite;
 
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.sql.Connection;
@@ -20,7 +22,7 @@ public class SQLiteDB {
      */
     private static SQLiteDB i;
 
-    public static SQLiteDB get() {
+    public static @NotNull SQLiteDB get() {
         if (i == null) i = new SQLiteDB();
         return i;
     }
@@ -67,7 +69,7 @@ public class SQLiteDB {
         }
     }
 
-    private static void closeConn(Connection conn) {
+    private static void closeConn(@Nullable Connection conn) {
         try {
             if (conn != null) {
                 conn.close();
@@ -80,7 +82,7 @@ public class SQLiteDB {
     /**
      * Create an entry in the BlocData table
      */
-    public void updateBlockData(Connection c, Statement stmt, String world, int chunkX, int chunkZ, int x, int y, int z, BlockData data) {
+    public void updateBlockData(Connection c, Statement stmt, String world, int chunkX, int chunkZ, int x, int y, int z, @NotNull BlockData data) {
         createTableIfNotExists(world);
         String dir = "plugins"
                 + File.separator

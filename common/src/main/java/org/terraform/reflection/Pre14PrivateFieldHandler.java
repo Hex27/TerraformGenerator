@@ -5,10 +5,12 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class Pre14PrivateFieldHandler extends PrivateFieldHandler {
-    private static final MethodHandle FIELD_MODIFIERS;
+    private static final @Nullable MethodHandle FIELD_MODIFIERS;
 
     static {
         MethodHandles.Lookup lookup = MethodHandles.lookup();
@@ -26,7 +28,7 @@ public class Pre14PrivateFieldHandler extends PrivateFieldHandler {
     }
 
     @Override
-    public void injectField(Object obj, String field, Object value) throws Throwable {
+    public void injectField(@NotNull Object obj, @NotNull String field, Object value) throws Throwable {
         Field targetField = obj.getClass().getField(field);
         targetField.setAccessible(true);
         FIELD_MODIFIERS.invoke(targetField, targetField.getModifiers() & ~Modifier.FINAL);
