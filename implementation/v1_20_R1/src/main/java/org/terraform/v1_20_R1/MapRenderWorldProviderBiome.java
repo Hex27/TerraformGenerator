@@ -61,7 +61,7 @@ public class MapRenderWorldProviderBiome extends WorldChunkManager {
 	private final Holder<BiomeBase> river;
     private final Holder<BiomeBase> plains;
 	@SuppressWarnings("unused")
-	private static boolean debug = false;
+	private static final boolean debug = false;
 	@Override
 	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
 		//Used to be attempted for cave gen. That didn't work, so now, this is

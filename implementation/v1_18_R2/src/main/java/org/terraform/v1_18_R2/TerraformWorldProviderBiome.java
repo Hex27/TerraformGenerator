@@ -69,7 +69,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 	}
 	
 	@SuppressWarnings("unused")
-	private static boolean debug = false;
+	private static final boolean debug = false;
 	@Override
 	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
 		//For vanilla cave biome positioning. However, doesn't work now.

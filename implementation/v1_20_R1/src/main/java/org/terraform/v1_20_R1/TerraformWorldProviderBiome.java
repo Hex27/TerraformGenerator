@@ -56,7 +56,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 		throw new UnsupportedOperationException("Cannot serialize TerraformWorldProviderBiome");
 	}
 	@SuppressWarnings("unused")
-	private static boolean debug = false;
+	private static final boolean debug = false;
 	@Override
 	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
         //Used for biome generation in NMSChunkGenerator.
