@@ -95,7 +95,7 @@ public class BannerUtils {
             Material.WHITE_WALL_BANNER,
     };
     
-    public static @NotNull Banner generateBanner(@NotNull SimpleBlock base, @NotNull BlockFace facing, @NotNull Material type, @Nullable ArrayList<Pattern> patterns) {
+    public static void generateBanner(@NotNull SimpleBlock base, @NotNull BlockFace facing, @NotNull Material type, @Nullable ArrayList<Pattern> patterns) {
 
         base.setType(type);
         Directional bd = ((Directional) base.getBlockData());
@@ -109,10 +109,9 @@ public class BannerUtils {
         
         banner.setPatterns(patterns);
         banner.update();
-        return banner;
     }
     
-    public static @NotNull Banner generateBanner(@NotNull Random rand, @NotNull SimpleBlock base, @NotNull BlockFace facing, boolean wallBanner) {
+    public static void generateBanner(@NotNull Random rand, @NotNull SimpleBlock base, @NotNull BlockFace facing, boolean wallBanner) {
 
         Material type = null;
         if (wallBanner)
@@ -141,10 +140,9 @@ public class BannerUtils {
         }
         banner.setPatterns(patterns);
         banner.update();
-        return banner;
     }
     
-    public static @NotNull Banner generatePillagerBanner(@NotNull SimpleBlock base, @NotNull BlockFace facing, boolean wallBanner) {
+    public static void generatePillagerBanner(@NotNull SimpleBlock base, @NotNull BlockFace facing, boolean wallBanner) {
 
         Material type;
         if (wallBanner)
@@ -166,12 +164,11 @@ public class BannerUtils {
         
         banner.setPatterns(getOminousBannerPatterns());
         banner.update();
-        return banner;
     }
 
 
-    public static @NotNull Material randomBannerMaterial(@NotNull Random rand) {
-        return BANNERS[rand.nextInt(BANNERS.length)];
+    public static void randomBannerMaterial(@NotNull Random rand) {
+        rand.nextInt(BANNERS.length);
     }
 
     public static @NotNull Material randomWallBannerMaterial(@NotNull Random rand) {

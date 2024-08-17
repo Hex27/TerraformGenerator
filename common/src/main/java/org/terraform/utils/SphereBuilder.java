@@ -187,7 +187,7 @@ public class SphereBuilder {
         }
     }
     
-    private boolean unitReplace(@NotNull SimpleBlock rel, int effectiveRYUpper) {
+    private void unitReplace(@NotNull SimpleBlock rel, int effectiveRYUpper) {
     	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
@@ -207,9 +207,8 @@ public class SphereBuilder {
 	    	if(lowerType != null)
 	    		rel.getRelative(0,-1,0).setType(lowerType);
     	}
-    	
-    	
-    	return true;
+
+
     }
 
     public enum SphereType{

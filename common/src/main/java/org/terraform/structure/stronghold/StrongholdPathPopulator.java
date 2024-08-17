@@ -242,7 +242,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         }
     }
 
-    private boolean setIronBars(@NotNull PathPopulatorData ppd) {
+    private void setIronBars(@NotNull PathPopulatorData ppd) {
         Wall wall = new Wall(ppd.base, ppd.dir).getRelative(0, 4, 0);
 
         wall.setType(Material.IRON_BARS);
@@ -259,7 +259,6 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             BlockUtils.correctSurroundingMultifacingData(temp.getRight().get());
         }
 
-        return true;
     }
 
     private void dropDownBlock(@NotNull SimpleBlock block) {

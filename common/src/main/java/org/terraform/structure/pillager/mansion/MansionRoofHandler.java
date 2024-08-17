@@ -162,10 +162,9 @@ public class MansionRoofHandler {
     }
 
     /**
-     * 
-     * @return the highest Y modified by the roof
+     *
      */
-    public static int placeTentRoof(Random rand, @NotNull MansionJigsawBuilder builder, int[][] bounds) {
+    public static void placeTentRoof(Random rand, @NotNull MansionJigsawBuilder builder, int[][] bounds) {
         Axis superiorAxis;
         PopulatorDataAbstract data = builder.getCore().getPopData();
         
@@ -306,7 +305,6 @@ public class MansionRoofHandler {
             w = w.getFront();
         }
 
-        return highestY;
     }
     
     private static void attemptReplaceSlab(@NotNull Material slabType, @NotNull Wall w, @NotNull Type type) {

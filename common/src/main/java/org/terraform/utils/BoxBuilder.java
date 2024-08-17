@@ -132,18 +132,18 @@ public class BoxBuilder {
         }
     }
     
-    private boolean unitReplace(@NotNull SimpleBlock rel) {
+    private void unitReplace(@NotNull SimpleBlock rel) {
     	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
             }
     		else
-    			return false;
+    			return;
     	} else if(replaceWhitelist.contains(rel.getType())) {
             rel.setType(GenUtils.randMaterial(random, types));
     	}
     	else
-    		return false;
+    		return;
     	
     	if(rel.getRelative(0,-1,0).getType().isSolid()) {
 	    	if(upperType != null)
@@ -151,7 +151,6 @@ public class BoxBuilder {
 	    	if(lowerType != null)
 	    		rel.getRelative(0,-1,0).setType(lowerType);
     	}
-    	return true;
     }
 
     public enum BoxType{

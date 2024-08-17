@@ -177,12 +177,10 @@ public class SimpleBlock {
         return false;
     }
 
-    public boolean lsetBlockData(BlockData data) {
+    public void lsetBlockData(BlockData data) {
         if (!getType().isSolid()) {
             setBlockData(data);
-            return true;
         }
-        return false;
     }
 
     public @org.jetbrains.annotations.Nullable BlockData getBlockData() {
@@ -615,10 +613,9 @@ public class SimpleBlock {
 
     /**
      * Replaces until a solid block is reached.
-     * @return height of pillar created
      */
-    public int LPillar(int height, Material... types) {
-        return LPillar(height, false, new Random(), types);
+    public void LPillar(int height, Material... types) {
+        LPillar(height, false, new Random(), types);
     }
 
     /**
