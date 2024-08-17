@@ -133,12 +133,7 @@ public class MansionSecondFloorHandler {
         }
 
         //Remove pieces that weren't placed and replace the unused wall with the entrance.        
-        Iterator<JigsawStructurePiece> it = secondFloorOverlapperPieces.iterator();
-        while(it.hasNext()) {
-        	JigsawStructurePiece piece = it.next();
-        	if(toRemove.contains(piece))
-        		it.remove();
-        }
+        secondFloorOverlapperPieces.removeIf(toRemove::contains);
     }
     
     public void setRandom(Random random) {

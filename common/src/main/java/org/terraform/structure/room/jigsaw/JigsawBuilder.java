@@ -92,12 +92,7 @@ public class JigsawBuilder {
         	}
         }
         if(problemCells.size() > 0) {
-        	Iterator<JigsawStructurePiece> it = overlapperPieces.iterator();
-            while(it.hasNext()) {
-            	JigsawStructurePiece piece = it.next();
-            	if(problemCells.contains(piece.getRoom().getSimpleLocation()))
-            		it.remove();
-            }
+            overlapperPieces.removeIf(piece -> problemCells.contains(piece.getRoom().getSimpleLocation()));
             
             for(SimpleLocation loc:problemCells) {
 

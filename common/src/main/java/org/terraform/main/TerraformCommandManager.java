@@ -97,23 +97,11 @@ public class TerraformCommandManager implements TabExecutor {
 	public ArrayList<String> bases = new ArrayList<>();
 	
 	public void unregisterCommand(Class<?> clazz){
-		Iterator<TerraCommand> it = commands.iterator();
-		while(it.hasNext()){
-			TerraCommand cmd = it.next();
-			if(clazz.isInstance(cmd)){
-				it.remove();
-			}
-		}
+        commands.removeIf(clazz::isInstance);
 	}
 	
 	public void unregisterCommand(String alias){
-		Iterator<TerraCommand> it = commands.iterator();
-		while(it.hasNext()){
-			TerraCommand cmd = it.next();
-			if(cmd.matchCommand(alias)){
-				it.remove();
-			}
-		}
+        commands.removeIf(cmd -> cmd.matchCommand(alias));
 	}
 	
 	public ArrayList<TerraCommand> getCommands(){
