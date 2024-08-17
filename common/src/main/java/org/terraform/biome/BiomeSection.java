@@ -132,8 +132,7 @@ public class BiomeSection {
 	}
 
 	public BiomeSection getRelative(int x, int z) {
-		BiomeSection mc = BiomeBank.getBiomeSectionFromSectionCoords(this.tw, this.x + x, this.z + z, true);
-		return mc;
+        return BiomeBank.getBiomeSectionFromSectionCoords(this.tw, this.x + x, this.z + z, true);
 	}
 
 	public BiomeBank getBiomeBank() {

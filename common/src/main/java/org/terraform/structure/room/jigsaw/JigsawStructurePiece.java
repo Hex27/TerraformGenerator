@@ -142,11 +142,10 @@ public abstract class JigsawStructurePiece implements Cloneable {
     	if(this.walledFaces.size() == 0) {
     		return this.room;
     	}else {
-    		CubeRoom extendedRoom = new CubeRoom(
+            return new CubeRoom(
     				this.room.getWidthX()+extraSize*2, this.room.getWidthZ()+extraSize*2, this.room.getHeight(),
-    				this.room.getX(),this.room.getY(),this.room.getZ()
+    				this.room.getX(), this.room.getY(), this.room.getZ()
     				);
-    		return extendedRoom;
     	}
     }
 
