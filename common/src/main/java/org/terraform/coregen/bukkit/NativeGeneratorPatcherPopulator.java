@@ -66,10 +66,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 //            TerraformGeneratorPlugin.logger.info(mat + " : " + cacheContents.get(mat));
 //        }
 //        cacheContents.clear();
-        ArrayList<SimpleChunkLocation> locs = new ArrayList<>();
-    	for(SimpleChunkLocation scl:cache.keySet()) {
-    		locs.add(scl);
-    	}
+        ArrayList<SimpleChunkLocation> locs = new ArrayList<>(cache.keySet());
     	for(SimpleChunkLocation scl:locs) {
     		World w = Bukkit.getWorld(scl.getWorld());
     		if(w == null) continue;

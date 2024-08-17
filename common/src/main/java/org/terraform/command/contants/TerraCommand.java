@@ -2,6 +2,7 @@ package org.terraform.command.contants;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -17,9 +18,7 @@ public abstract class TerraCommand {
 	public TerraformGeneratorPlugin plugin;
 	public TerraCommand(TerraformGeneratorPlugin plugin, String @NotNull ... aliases){
 		this.plugin = plugin;
-		for(String alias:aliases){
-			this.aliases.add(alias);
-		}
+        this.aliases.addAll(Arrays.asList(aliases));
 	}
 	
 	public abstract String getDefaultDescription();
@@ -60,7 +59,7 @@ public abstract class TerraCommand {
 			Object parsed = parser.parse(sender, arg);
 			String val = parser.validate(sender, arg);
 			if(parsed == null) throw new InvalidArgumentException(val);
-			if(!val.equals("")) throw new InvalidArgumentException(val);
+			if(!val.isEmpty()) throw new InvalidArgumentException(val);
 			items.add(i, parsed);
 			i++;
 		}

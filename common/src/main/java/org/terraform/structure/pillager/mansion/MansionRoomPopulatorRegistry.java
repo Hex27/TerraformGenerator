@@ -1,6 +1,7 @@
 package org.terraform.structure.pillager.mansion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,17 +36,14 @@ public enum MansionRoomPopulatorRegistry {
 	SECOND_1_1(new MansionSecondFloorHallwayPopulator(null,null)),
 	
 	;
-	@NotNull
-    ArrayList<MansionRoomPopulator> populators = new ArrayList<>();
-	MansionRoomPopulatorRegistry(MansionRoomPopulator @NotNull ... populators){
-		for(MansionRoomPopulator populator:populators) {
-			this.populators.add(populator);
-		}
+  @NotNull
+	ArrayList<MansionRoomPopulator> populators = new ArrayList<>();
+	MansionRoomPopulatorRegistry(MansionRoomPopulator... populators){
+        this.populators.addAll(Arrays.asList(populators));
 	}
 	
 	public @NotNull ArrayList<MansionRoomPopulator> getPopulators(){
-		ArrayList<MansionRoomPopulator> clone = new ArrayList<>();
-		clone.addAll(populators);
+        ArrayList<MansionRoomPopulator> clone = new ArrayList<>(populators);
 		return clone;
 	}
 	

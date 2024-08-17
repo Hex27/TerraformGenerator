@@ -51,8 +51,7 @@ public class MansionCompoundRoomDistributor {
 	public static void distributeRooms(@NotNull Collection<JigsawStructurePiece> pieces, @NotNull Random random, boolean isGround) {
 		
 		HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> activeRoomPool;
-		ArrayList<JigsawStructurePiece> shuffledList = new ArrayList<>();
-		shuffledList.addAll(pieces);
+        ArrayList<JigsawStructurePiece> shuffledList = new ArrayList<>(pieces);
 		
 		ArrayList<MansionRoomSize> potentialRoomSizes = new ArrayList<>();
 		int occupiedCells = 13;

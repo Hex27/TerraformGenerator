@@ -154,9 +154,9 @@ public abstract class JigsawStructurePiece implements Cloneable {
 
     @Override
     public @NotNull String toString() {
-        String directions = "";
+        StringBuilder directions = new StringBuilder();
         for (BlockFace face : this.validDirections.keySet()) {
-            directions += face + ",";
+            directions.append(face).append(",");
         }
         return this.getClass().getSimpleName()
                 + "::" + room.getX() + "," + room.getY() + "," + room.getZ()

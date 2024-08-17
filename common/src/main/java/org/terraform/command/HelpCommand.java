@@ -69,12 +69,12 @@ public class HelpCommand extends TerraCommand {
             if (cmds.size() > page * 5 + i) {
             	TerraCommand cmd = cmds.get(page * 5 + i);
                 String subCmd = ChatColor.YELLOW + "/" + base + " " + String.join("/", cmd.aliases);
-				String params = " ";
+				StringBuilder params = new StringBuilder(" ");
 				for(TerraCommandArgument<?> param:cmd.parameters){
 					if(param.isOptional()){
-						params += ChatColor.GRAY + "<" + param.getName() + "> ";
+						params.append(ChatColor.GRAY + "<").append(param.getName()).append("> ");
 					}else
-						params += ChatColor.AQUA + "[" + param.getName() + "] ";
+						params.append(ChatColor.AQUA + "[").append(param.getName()).append("] ");
 				}
 				sender.sendMessage(subCmd + params + ChatColor.DARK_GRAY + "- " + ChatColor.YELLOW + plugin.getLang().fetchLang(cmd.getLangPath()));
             }

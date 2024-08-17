@@ -244,7 +244,7 @@ public class TerraSchematic {
     public void export(@NotNull String path) throws IOException {
         //Validate it again.
         String validation = new FilenameArgument("schem-name", false).validate(null,path);
-        if(!validation.equals(""))
+        if(!validation.isEmpty())
             throw new IOException(validation);
 
         File outputFile = new File(schematicFolder, path);
