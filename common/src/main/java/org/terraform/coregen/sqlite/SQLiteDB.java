@@ -82,7 +82,7 @@ public class SQLiteDB {
     /**
      * Create an entry in the BlocData table
      */
-    public void updateBlockData(Connection c, Statement stmt, String world, int chunkX, int chunkZ, int x, int y, int z, @NotNull BlockData data) {
+    public void updateBlockData(String world, int chunkX, int chunkZ, int x, int y, int z, @NotNull BlockData data) {
         createTableIfNotExists(world);
         String dir = "plugins"
                 + File.separator
@@ -94,10 +94,10 @@ public class SQLiteDB {
         String DATA = data.toString();
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:" + dir);
+            Connection c = DriverManager.getConnection("jdbc:sqlite:" + dir);
             c.setAutoCommit(false);
 
-            stmt = c.createStatement();
+			Statement stmt = c.createStatement();
             String sql = "DELETE from BLOCKDATA where CHUNK='" + CHUNK + "' and"
                     + " COORDS='" + COORDS + "';";
             stmt.executeUpdate(sql);

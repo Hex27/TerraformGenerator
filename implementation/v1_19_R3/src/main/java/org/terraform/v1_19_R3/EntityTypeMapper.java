@@ -6,6 +6,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.HashMap;
 
+@SuppressWarnings("UnstableApiUsage")
 public class EntityTypeMapper {
 
     private static final HashMap<EntityType, String> obsNames = new HashMap<>(){{
