@@ -44,8 +44,7 @@ public enum MansionRoomPopulatorRegistry {
 	}
 	
 	public @NotNull ArrayList<MansionRoomPopulator> getPopulators(){
-        ArrayList<MansionRoomPopulator> clone = new ArrayList<>(populators);
-		return clone;
+        return new ArrayList<>(populators);
 	}
 	
 	public static @Nullable MansionRoomPopulatorRegistry getByRoomSize(@NotNull MansionRoomSize size, boolean isGround) {

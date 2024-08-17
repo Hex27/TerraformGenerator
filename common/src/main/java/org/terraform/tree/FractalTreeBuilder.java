@@ -823,7 +823,6 @@ public class FractalTreeBuilder {
 
         float noiseMultiplier = branchNoiseMultiplier;
 
-        double maxR = rX;
         if (rX < rY) {
         }
         if (rY < rZ) {
