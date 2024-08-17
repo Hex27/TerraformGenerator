@@ -201,7 +201,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                 //Base branches are thicker at the bottom for roots.
                 Material temp = this.branchMaterial;
                 if(depth == 0 && i < treeRootThreshold) {
-                    appliedWidth *= treeRootMultiplier + ((1.0-treeRootMultiplier)/treeRootThreshold)*i;
+                    appliedWidth *= (float) (treeRootMultiplier + ((1.0-treeRootMultiplier)/treeRootThreshold)*i);
                     appliedNoisePriority = (float) (0.7 + ((this.noisePriority-0.4)/treeRootThreshold)*i);
                     appliedNormal = new Vector(0,1,0);
                     this.branchMaterial = this.rootMaterial;
@@ -221,7 +221,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                 //TerraformGeneratorPlugin.logger.info("CWidth: " + currentWidth);
 
                 //Tick cooldown down by the loop step
-                randomBranchSpawnCooldownCurrent -= 0.5;
+                randomBranchSpawnCooldownCurrent -= 0.5F;
                 //Spawn more branches. These branches are random in nature.
                 if((i/length) > minBranchSpawnLength
                         && GenUtils.chance(random, (int) (100*branchSpawnChance), 100)

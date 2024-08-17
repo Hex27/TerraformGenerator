@@ -124,7 +124,7 @@ public class DesertHandler extends BiomeHandler {
 				ribSizeMultiplier -= 0.05f;
 			
 			if(segmentIndex % interval == 0 && segmentIndex > spineLength/6) {
-				for(float nHor = 1; nHor <= ribWidthRadius*ribSizeMultiplier; nHor+=0.01) {
+				for(float nHor = 1; nHor <= ribWidthRadius*ribSizeMultiplier; nHor+= 0.01F) {
 					
 					int[] multipliers = {-1};
 					if(nHor > ribWidthRadius*ribSizeMultiplier/3)

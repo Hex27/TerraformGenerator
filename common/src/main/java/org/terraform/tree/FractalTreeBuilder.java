@@ -751,7 +751,7 @@ public class FractalTreeBuilder {
         }
 
         if (alwaysOneStraight > 0) {
-            alwaysOneStraightBranchLength -= this.lengthDecrement;
+            alwaysOneStraightBranchLength -= (int) this.lengthDecrement;
             this.lengthDecrement *= this.lengthDecrementMultiplier;
             //Extend a central trunk and make more branches.
             

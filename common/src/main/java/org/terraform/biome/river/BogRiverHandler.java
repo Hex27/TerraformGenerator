@@ -79,7 +79,7 @@ public class BogRiverHandler extends BiomeHandler {
                 if (tw.getBiomeBank(rawX,rawZ) != BiomeBank.BOG_RIVER
                         && tw.getBiomeBank(rawX,rawZ) != BiomeBank.MUDDY_BOG
                         && tw.getBiomeBank(rawX,rawZ) != BiomeBank.BOG_BEACH)
-                    height *= 0.5;
+                    height *= (int) 0.5;
 
                 for(int newHeight = 1; newHeight <= height; newHeight++)
                     chunk.setBlock(x,cache.getTransformedHeight(x,z)+newHeight,z,Material.DIRT);

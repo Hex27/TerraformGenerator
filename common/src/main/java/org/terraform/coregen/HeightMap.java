@@ -233,7 +233,7 @@ public enum HeightMap {
 
                         //Note, this may accidentally blur twice for some Z values if
                         //chunks generate in a specific weird order. That's (probably) fine.
-                        lineTotalHeight += queryCache.getIntermediateBlurHeight(relX, relZ + offsetZ);
+                        lineTotalHeight += (float) queryCache.getIntermediateBlurHeight(relX, relZ + offsetZ);
                     }
                     //final blurred value
                     targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
