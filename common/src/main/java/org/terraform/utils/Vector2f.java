@@ -44,30 +44,18 @@ public class Vector2f implements java.io.Serializable {
      * Constructs and initializes a Vector2f from the specified Vector2d.
      * @param v1 the Vector2d containing the initialization x y data
      */
-//    public Vector2f(Vector2d v1)
-//    {
-//       super(v1);
-//    }
 
 
     /**
      * Constructs and initializes a Vector2f from the specified Tuple2f.
      * @param t1 the Tuple2f containing the initialization x y data
      */
-//    public Vector2f(Tuple2f t1)
-//    {
-//       super(t1);
-//    }
 
 
     /**
      * Constructs and initializes a Vector2f from the specified Tuple2d.
      * @param t1 the Tuple2d containing the initialization x y data
      */
-//    public Vector2f(Tuple2d t1)
-//    {
-//       super(t1);
-//    }
 
 
     /**

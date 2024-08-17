@@ -38,10 +38,6 @@ public class NoiseRavine extends NoiseCaveAbstract{
         //Multiply by a filter that varies with depth relative to height.
         //At depth 50 blocks, force to 0
         ravine *= (float) (filter*0.5885*Math.log(RAVINE_DEPTH+1-(height-y))); //ASSUMPTION: y <= height.
-//        if(ravine < smallest){
-//            smallest = ravine;
-//            TerraformGeneratorPlugin.logger.info("SMALLEST: " + smallest);
-//        }
         return ravine <= -1.3f;
     }
 //    private static float smallest = 0;

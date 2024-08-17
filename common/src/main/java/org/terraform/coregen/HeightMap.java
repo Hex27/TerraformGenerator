@@ -50,10 +50,6 @@ public enum HeightMap {
             }
 
             //This is fucking nonsense
-//            //Ensure that height doesn't automatically go too deep
-//            if (height < defaultSeaLevel - 30) {
-//                height = -(defaultSeaLevel - 30 - height) * 0.1 + defaultSeaLevel - 30;
-//            }
 
             return height;
         }
@@ -93,8 +89,6 @@ public enum HeightMap {
                 totalChangeInGradient += Math.abs(getBlockHeight(tw, x + nx, z + nz) - centerNoise);
                 count++;
             }
-        //Bukkit.getLogger().info("Count: " + count);
-        //Bukkit.getLogger().info("Total: " + totalChangeInGradient);
 
         return totalChangeInGradient / count;
     }
@@ -118,8 +112,6 @@ public enum HeightMap {
                 totalChangeInGradient += Math.abs(GenUtils.getHighestGround(data, x+nx, z+nz) - centerNoise);
                 count++;
             }
-        //Bukkit.getLogger().info("Count: " + count);
-        //Bukkit.getLogger().info("Total: " + totalChangeInGradient);
 
         return totalChangeInGradient / count;
     }

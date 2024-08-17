@@ -38,9 +38,7 @@ public class MansionRoofHandler {
     public static int[][] getLargestRectangle(@NotNull MansionJigsawBuilder builder) {
         int[] lowestCoords = null;
         int[] highestCoords = null;
-        
-        //SimpleLocation lowestCoords = new SimpleLocation();
-        //SimpleLocation highestCoords = new SimpleLocation();
+
         for (JigsawStructurePiece piece : builder.getPieces().values()) {
             if (lowestCoords == null) {
                 lowestCoords = new int[]{piece.getRoom().getX(), piece.getRoom().getZ()};

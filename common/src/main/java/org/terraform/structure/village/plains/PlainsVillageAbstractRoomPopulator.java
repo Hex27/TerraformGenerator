@@ -87,11 +87,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 	}
 	
 	protected boolean doesAreaFailTolerance(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-//		int centerHeight = GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
-//    	int pathHeight = getPathHeight(data, room);
-//    	
-//    	return Math.abs(centerHeight-pathHeight) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt();
-		int roomY = calculateRoomY(data,room);
+        int roomY = calculateRoomY(data,room);
 		int worldHeight = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY() + 1;
     	for(int[] corner:room.getAllCorners(2)) {
     		SimpleBlock sb = new SimpleBlock(data,corner[0],roomY,corner[1]);

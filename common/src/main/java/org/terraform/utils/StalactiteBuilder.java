@@ -108,11 +108,8 @@ public class StalactiteBuilder {
 
         //HEIGHT CANNOT BE LESS THAN 1. (1.0/0.0) DOES NOT THROW ARITHMETIC ERRORS
         if(height < 8) return;
-/*        FastNoise noise = new FastNoise(random.nextInt(1239870));
-        noise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        noise.SetFrequency(0.13f);*/
 
-		baseRadius = Math.min(maxRadius, Math.max(baseRadius, minRadius));
+        baseRadius = Math.min(maxRadius, Math.max(baseRadius, minRadius));
 
         //Perform a BFS against the cone 3d equation to prevent spheres from overwriting
         //each other. Should reduce chunk r/w ops

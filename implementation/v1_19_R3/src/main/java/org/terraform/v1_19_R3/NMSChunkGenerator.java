@@ -185,13 +185,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
 	public BlockColumn a(int i, int j, LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
 		return this.delegate.a(i,j,levelheightaccessor,randomstate);
 	}
-	
-//	@Override //withSeed
-//	public ChunkGenerator a(long seed) {
-//		return new NMSChunkGenerator(this.tw.getName(), (int) seed, this.delegate);
-//	}
-	
-	//spawnOriginalMobs
+
+    //spawnOriginalMobs
 	public void a(RegionLimitedWorldAccess regionlimitedworldaccess) {
 		this.delegate.a(regionlimitedworldaccess);
 	}

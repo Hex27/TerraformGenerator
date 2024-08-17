@@ -32,22 +32,6 @@ public class NMSChunkQueryCommand extends TerraCommand {
     public void execute(CommandSender sender, Stack<String> args)
 	{
     	//Commented out to prevent runtime errors for older versions
-//
-//        Player p = (Player) sender;
-//        
-//        net.minecraft.world.level.chunk.Chunk chunk = ((CraftChunk) p.getLocation().getChunk()).getHandle();
-//        p.sendMessage("BiomeStorage class: "+chunk.getBiomeIndex().getClass().getName());
-//        
-//    	int x = (int) p.getLocation().getX();
-//        int y = (int) p.getLocation().getY();
-//        int z = (int) p.getLocation().getZ();
-//        
-//        for(int i = -5; i <= 5; i++) {
-//        	p.sendMessage("Current Biome Color: " + Integer.toHexString(chunk.getBiomeIndex().getBiome(x >> 2, (y+i) >> 2, z >> 2).g()));
-//        }
-//        p.sendMessage("Finished query");
-//        
-//        
     }
 
 }

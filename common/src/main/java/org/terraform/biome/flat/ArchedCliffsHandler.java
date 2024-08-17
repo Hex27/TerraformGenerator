@@ -257,15 +257,6 @@ public class ArchedCliffsHandler extends BiomeHandler {
     public int getMaxHeightForCaves(@NotNull TerraformWorld tw, int x, int z) {
     	return (int) HeightMap.CORE.getHeight(tw, x, z);
     }
-    
-    
 
-//	@Override
-//	public BiomeBank getRiverType() {
-//		return BiomeBank.ARCHED_CLIFFS_RIVER;
-//	}
-//	@Override
-//	public BiomeBank getBeachType() {
-//		return BiomeBank.ARCHED_CLIFFS_BEACH;
-//	}
+
 }

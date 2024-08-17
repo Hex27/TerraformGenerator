@@ -104,17 +104,8 @@ public class OrePopulator {
                 	int distance = Math.abs(y - peakSpawnChanceHeight);
                 	
                 	if(!GenUtils.chance((int) Math.round(100.0*(1.0 - ((float)distance)/((float)maxDistance))), 100)) {
-//                		TerraformGeneratorPlugin.logger.info(" ====== ORE [" + this.type + "]======\n"
-//                				+ "Distance: " + distance + "\n"
-//                				+ "MaxDistance: " + maxDistance + "\n"
-//                				+ "Status: FAIL\n"
-//                				+ "minRange: " + minRange + "\n"
-//                				+ "maxRange: " + range + "\n"
-//                				+ "peakHeight: " + peakSpawnChanceHeight + "\n"
-//                				+ "Calculated Chance: " + (Math.round(100.0*(1.0 - ((float)distance)/((float)maxDistance)))) + "\n"
-//                				+ "==========\n");
-                		
-                		continue;
+
+                        continue;
                 	}
             	}
             	

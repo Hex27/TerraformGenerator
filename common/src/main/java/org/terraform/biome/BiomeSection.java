@@ -142,13 +142,8 @@ public class BiomeSection {
 	private @Nullable BiomeBank parseBiomeBank() {
 		temperature = 3.0f*2.5f*tw.getTemperatureOctave().GetNoise(this.x, this.z);
     	moisture = 3.0f*2.5f*tw.getMoistureOctave().GetNoise(this.x, this.z);
-    	
-    	//if(temperature > 2.5f) temperature = 2.5f;
-    	//if(temperature < -2.5f) temperature = -2.5f;
-    	//if(moisture > 2.5f) moisture = 2.5f;
-    	//if(moisture < -2.5f) moisture = -2.5f;
-    	
-		return BiomeBank.selectBiome(this, temperature, moisture);//BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
+
+        return BiomeBank.selectBiome(this, temperature, moisture);//BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
 	}
 
 	/**
@@ -171,19 +166,14 @@ public class BiomeSection {
 				+ Math.pow(zOffset, 2) / Math.pow(radius, 2)
 				+ 0.7 * shapeNoise.GetNoise(xOffset, zOffset);
 
-		// if(1 -1*(equationResult) < 0)
-		// TerraformGeneratorPlugin.logger.info("Radius Dominance: (" + blockX + "," +
-		// blockZ + ") "+ xOffset + "," + zOffset + ": " + equationResult);
-		return (float) (1 - 1 * (equationResult));
+        return (float) (1 - 1 * (equationResult));
 
 	}
 
 	public @NotNull SimpleLocation getCenter() {
 		int x = ((this.x << bitshifts)) + sectionWidth / 2;
 		int z = ((this.z << bitshifts)) + sectionWidth / 2;
-		// TerraformGeneratorPlugin.logger.info("Center " + toString() + ": " + x + ","
-		// + z);
-		return new SimpleLocation(x, 0, z);
+        return new SimpleLocation(x, 0, z);
 	}
 	
 	
@@ -304,9 +294,7 @@ public class BiomeSection {
     		return BiomeSubSection.NONE;
     		
     	//}
-    	
-    	//TerraformGeneratorPlugin.logger.info("Mismatch in biomesection! " + new BiomeSection(tw, rawX, rawZ).toString() + " vs " + this.toString());
-    	//return BiomeSubSection.NONE;
+
     }
 
 	@Override

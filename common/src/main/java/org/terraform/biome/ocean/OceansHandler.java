@@ -34,14 +34,6 @@ public class OceansHandler extends AbstractOceanHandler {
         return Biome.OCEAN;
     }
 
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
-//		gen.setScale(0.005);
-//		
-//		return (int) (gen.noise(x, z, 0.5, 0.5)*7D+50D);
-//	}
-
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{

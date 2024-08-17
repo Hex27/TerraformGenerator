@@ -14,8 +14,6 @@ import java.util.Random;
 public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-//		ArrayList<BiomeBank> banks = new ArrayList<>();
-//		int numOceanic = 0;
         int totalHeight = 0;
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {

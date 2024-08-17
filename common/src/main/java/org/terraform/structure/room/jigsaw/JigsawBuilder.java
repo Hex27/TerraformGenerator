@@ -34,8 +34,6 @@ public class JigsawBuilder {
     protected @Nullable JigsawStructurePiece center;
     protected Wall entranceBlock;
     protected final @NotNull Stack<JigsawStructurePiece> traverseStack = new Stack<>();
-    //protected ArrayList<JigsawStructurePiece> pieces = new ArrayList<>();
-    //protected ArrayList<SimpleLocation> usedLocations = new ArrayList<>();
     protected final @NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
     protected final @NotNull ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
     protected JigsawStructurePiece[] pieceRegistry;

@@ -38,12 +38,6 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 		
 		//Do height and space checks
 		//In the interest of optimisation, this check will not be performed.
-//        int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
-//        if (height < TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt() + 15) {
-//            //Way too little space. Abort generation.
-//            //TerraformGeneratorPlugin.logger.info("Aborting Mineshaft generation: Not enough space (Y=" + height + ")");
-//            return false;
-//        }
 
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }

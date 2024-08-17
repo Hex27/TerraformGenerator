@@ -218,10 +218,7 @@ public class TerraSchematic {
                 if (bdfa != null)
                     bdfa.correctFacing(pos, null, bd, face);
             }
-            
-//            if(pos.getBlockX() == 0 && pos.getBlockZ() == 0) {
-//            	Bukkit.getLogger().info("DEBUG SCHEMATIC: " + refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()).toVector().toString());
-//            }
+
             parser.applyData(refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()), bd);
         }
         

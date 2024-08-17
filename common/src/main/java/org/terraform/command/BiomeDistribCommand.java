@@ -84,12 +84,8 @@ public class BiomeDistribCommand extends TerraCommand {
         			count = ChatColor.RED + count;
         		if(100*counts.getOrDefault(b, 0)/total < 5)
         			percent = ChatColor.RED + percent;
-        		
-//            	sender.sendMessage(b + 
-//            			" (" + b.getClimate().getTemperatureRange() + "," + b.getClimate().getMoistureRange() + "): \t\t\t\t" 
-//            			+ count 
-//            			+ "\t" + percent + "%)");
-        		sender.sendMessage("%-35s(%-10s, %-10s): %-10s%s)"
+
+                sender.sendMessage("%-35s(%-10s, %-10s): %-10s%s)"
         				.formatted(b.toString(), b.getClimate().getTemperatureRange(), b.getClimate().getMoistureRange(),
         						count, percent+"%)"));
         	}

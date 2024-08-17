@@ -123,11 +123,6 @@ public class PlainsPathRecursiveSpawner {
                 }
             }
             edgeTurns = 0;
-//            BlockFace[] valid = new BlockFace[3];
-//            valid[0] = BlockUtils.getLeft(direction);
-//            valid[1] = BlockUtils.getRight(direction);
-//            valid[2] = direction;
-//            direction = valid[random.nextInt(3)];
             direction = BlockUtils.getTurnBlockFace(random, direction);
             loc = loc.getRelative(direction);
         }

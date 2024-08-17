@@ -147,10 +147,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         }
         
         //Debug code for showing roof bounds.
-//        for(int nx = lowerBounds[0]; nx <= upperBounds[0]; nx++)
-//            for(int nz = lowerBounds[1]; nz <= upperBounds[1]; nz++)
-//            	core.getPopData().setType(nx, 77, nz, Material.PURPLE_STAINED_GLASS);
-        
+
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorOverlapperPieces) {
             if(piece instanceof MansionSecondFloorWallPiece) {
             	((MansionSecondFloorWallPiece) piece).buildIndividualRoofs(random, this.core.getPopData(), lowerBounds, upperBounds);

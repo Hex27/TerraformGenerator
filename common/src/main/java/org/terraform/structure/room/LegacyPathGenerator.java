@@ -43,15 +43,6 @@ public class LegacyPathGenerator {
         else
             this.maxNoBend = (int) ((upperBound[0] - lowerBound[0]) * 0.5);
     }
-    
-//    public PathGenerator(SimpleBlock origin, Material[] mat, Random rand, int[] upperBound, int[] lowerBound) {
-//        this.base = origin;
-//        this.rand = rand;
-//        this.dir = BlockUtils.directBlockFaces[GenUtils.randInt(rand, 0, 3)];
-//        this.upperBound = upperBound;
-//        this.lowerBound = lowerBound;
-//        this.mat = mat;
-//    }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDead() {
@@ -59,9 +50,6 @@ public class LegacyPathGenerator {
     }
 
     private boolean isOutOfBounds(@NotNull SimpleBlock base) {
-//		Bukkit.getLogger().info(base.getX() + "," + base.getZ() + ": " 
-//	+ upperBound[0] + "," + upperBound[1]
-//	+ " - " + lowerBound[0] + "," + lowerBound[1]);
         return base.getX() >= upperBound[0] + 10
                 || base.getZ() >= upperBound[1] + 10
                 || base.getX() <= lowerBound[0] - 10

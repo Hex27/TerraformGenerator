@@ -35,10 +35,6 @@ public class SimpleBlock {
 
     @NotNull
     final PopulatorDataAbstract popData;
-//	
-//	public Location getLocation(){
-//		return new Location(Bukkit.getWorld(world),x,y,z);
-//	}
 
     public SimpleBlock(@NotNull Location loc) {
         this.popData = new PopulatorDataPostGen(loc.getChunk());

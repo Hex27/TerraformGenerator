@@ -101,11 +101,8 @@ public class PlainsVillageForgeRoofHandler {
 						.apply(target);
 					}
 				}
-				
-//				if(BlockUtils.isStoneLike(core.getPopData().getType(x, core.getY()+3,z))) {
-//					new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
-//				}
-			}
+
+            }
 		}
 	}
 	

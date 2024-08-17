@@ -91,11 +91,8 @@ public class PlainsVillageTempleRoofHandler {
 			}
 			
 			//Do more corner related cleaning and decorations
-//			if(multiplier == -1) {
-//				
-//			}
-		
-		}
+
+        }
 	}
 	
 	public static void placeCeilingTerracotta(@NotNull PopulatorDataAbstract data, @NotNull Collection<JigsawStructurePiece> structurePieces) {
@@ -125,22 +122,7 @@ public class PlainsVillageTempleRoofHandler {
 	}
 	
     private static void placeGlazedTerracotta(@NotNull SimpleBlock target, @NotNull Material glazedTerracotta) {
-//        Directional terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
-//        terracotta.setFacing(BlockFace.NORTH);
-//        data.setBlockData(x, y, z, terracotta);
-//
-//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
-//        terracotta.setFacing(BlockFace.EAST);
-//        data.setBlockData(x + 1, y, z, terracotta);
-//
-//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
-//        terracotta.setFacing(BlockFace.WEST);
-//        data.setBlockData(x, y, z + 1, terracotta);
-//
-//        terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
-//        terracotta.setFacing(BlockFace.SOUTH);
-//        data.setBlockData(x + 1, y, z + 1, terracotta);
-    	BlockFace dir;
+        BlockFace dir;
     	if(target.getX() % 2 == 0) {
     		if(target.getZ() % 2 == 0)
     			dir = BlockFace.SOUTH;

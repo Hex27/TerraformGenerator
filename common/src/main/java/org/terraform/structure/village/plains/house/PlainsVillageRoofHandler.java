@@ -26,8 +26,6 @@ public class PlainsVillageRoofHandler {
         int[] lowestCoords = null;
         int[] highestCoords = null;
         int y = 0;
-        //SimpleLocation lowestCoords = new SimpleLocation();
-        //SimpleLocation highestCoords = new SimpleLocation();
         for (JigsawStructurePiece piece : builder.getPieces().values()) {
             if (lowestCoords == null) {
                 y = piece.getRoom().getY();
@@ -254,9 +252,6 @@ public class PlainsVillageRoofHandler {
 
                         for (BlockFace face : BlockUtils.directBlockFaces) {
                             if (!target.getRelative(face).getType().isSolid()) {
-                                //Material[] mats = new Material[] {plainsVillagePopulator.woodStairs};
-                                //if(depth == -2 || depth == 0)
-                                //	mats = new Material[] {Material.COBBLESTONE_STAIRS,Material.MOSSY_COBBLESTONE_STAIRS};
                                 new StairBuilder(stairMat)
                                         .setFacing(face.getOppositeFace())
                                         .apply(target);

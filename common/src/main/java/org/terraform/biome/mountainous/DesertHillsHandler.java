@@ -32,14 +32,6 @@ public class DesertHillsHandler extends AbstractMountainHandler {
     public @NotNull Biome getBiome() {
         return Biome.DESERT;
     }
-//
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 8);
-//		gen.setScale(0.005);
-//		
-//		return (int) ((gen.noise(x, z, 0.5, 0.5)*7D+50D)*1.5);
-//	}
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {

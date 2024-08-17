@@ -117,13 +117,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     	//parent.setBlockData(x, y, z, data);
     	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), false);
 
-    	//ica.setType(new BlockPosition(x, y, z)
-        //        , ((CraftBlockData) data).getState(), false);
     }
-
-//	public Biome getBiome(int rawX, int rawY, int rawZ){
-//		return CraftBlock.biomeBaseToBiome(gen.getBiome(ica.d(), new BlockPosition(rawX,rawY,rawZ)));
-//	}
 
     public Biome getBiome(int rawX, int rawZ) {
     	return parent.getBiome(rawX, rawZ);
@@ -148,22 +142,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
-//        BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
-//        ica.setType(pos, Blocks.bV.getBlockData(), true); //Spawner
-//        TileEntity tileentity = ica.getTileEntity(pos);
-//
-//        if (tileentity instanceof TileEntityMobSpawner) {
-//            try {
-//                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-//            } catch (IllegalArgumentException | IllegalAccessException
-//                    | NoSuchFieldException | SecurityException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            TerraformGeneratorPlugin.logger.error("Failed to fetch mob spawner entity at (" + "," + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")");
-//            //WorldGenDungeons.LOGGER.error("Failed to fetch mob spawner entity at ({}, {}, {})", blockposition.getX(), blockposition.getY(), blockposition.getZ());
-//        }
-    	parent.setSpawner(rawX, rawY, rawZ, type);
+        parent.setSpawner(rawX, rawY, rawZ, type);
     }
 
     @Override

@@ -39,10 +39,6 @@ public class CrappyDebugStructureCommand extends TerraCommand {
     public void execute(CommandSender sender, Stack<String> args) {
 
         Player p = (Player) sender;
-//		PopulatorDataAbstract gen = 
-//				new org.terraform.coregen.v1_15_R1.PopulatorData(
-//						((org.bukkit.craftbukkit.v1_15_R1.CraftChunk)p.getChunk()).getHandle(),
-//						null,p.getLocation().getChunk().getX(),p.getLocation().getChunk().getZ());
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
         int x = p.getLocation().getBlockX() + 1000;
         int y = -24;

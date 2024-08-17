@@ -67,10 +67,6 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
      */
     @Override
     public void transformTerrain(@NotNull ChunkCache cache, @NotNull TerraformWorld tw, Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
-//        BiomeSection b = BiomeBank.getBiomeSectionFromBlockCoords(tw,x,z);
-//        int peakHeight = TerraformGenerator.seaLevel
-//                + GenUtils.randInt(tw.getHashedRand(b.getX(),b.getZ(),7312849),
-//                40, 60);
 
         FastNoise creviceNoise = NoiseCacheHandler.getNoise(
             tw,
@@ -136,13 +132,6 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         return biomeBlender;
     }
 
-//    @Override
-//    public double calculateHeight(TerraformWorld tw, int x, int z) {
-//    	BiomeSection b = BiomeBank.getBiomeSectionFromBlockCoords(tw,x,z);
-//        return super.calculateHeight(tw,x,z) + GenUtils.randInt(tw.getHashedRand(b.getX(),b.getZ(),7312849),
-//                40, 60);
-//    }
-    
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         if(surfaceY < TerraformGenerator.seaLevel) return;

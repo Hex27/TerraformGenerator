@@ -145,8 +145,6 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     	core.getRelative(0,-1,0).setType(Material.CAMPFIRE);
     	core.getRelative(0,-2,0).setType(Material.HAY_BLOCK);
     	core.setType(Material.LAVA);
-    	//core.getRelative(0,chimneyCoreHeight+2,0).Pillar(2, random, Material.COBBLESTONE);
-    	//core.getRelative(0,chimneyCoreHeight+4,0).Pillar(2, random, Material.COBBLESTONE_WALL);
     }
     
     /**
@@ -191,9 +189,7 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     	core.getRelative(0,-1,0).setType(Material.CAMPFIRE);
     	core.getRelative(0,-2,0).setType(Material.HAY_BLOCK);
     	core.setType(Material.LAVA);
-    	
-    	//core.getRelative(0,chimneyCoreHeight+2,0).Pillar(2, random, Material.COBBLESTONE);
-    	//core.getRelative(0,chimneyCoreHeight+4,0).Pillar(2, random, Material.COBBLESTONE_WALL);
+
     }
 
 }

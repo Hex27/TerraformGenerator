@@ -77,10 +77,6 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
         }
 
         //Place lanterns (At least one per room)
-        //for(int i = 0; i < GenUtils.randInt(random, 1, 4); i++) {
-        //	int[] coords = room.randomCoords(random,1);
-        //	genLanterns(data,coords[0],coords[2]);
-        //}
         genLanterns(data, this.getRoom().getX(), this.getRoom().getZ());
     }
 

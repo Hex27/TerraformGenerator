@@ -117,13 +117,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     	//parent.setBlockData(x, y, z, data);
     	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), false);
 
-    	//ica.setType(new BlockPosition(x, y, z)
-        //        , ((CraftBlockData) data).getState(), false);
     }
-
-//	public Biome getBiome(int rawX, int rawY, int rawZ){
-//		return CraftBlock.biomeBaseToBiome(gen.getBiome(ica.d(), new BlockPosition(rawX,rawY,rawZ)));
-//	}
 
     public Biome getBiome(int rawX, int rawZ) {
     	return parent.getBiome(rawX, rawZ);
@@ -143,42 +137,12 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     @Override
     public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-//        EntityTypes<?> et;
-//        try {
-//            et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(EntityTypeMapper.getObfsNameFromBukkitEntityType(type)).get(null);
-//            Entity e = et.a(ws.getMinecraftWorld());
-//            e.setPositionRotation((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
-//            if (e instanceof EntityInsentient) {
-//                ((EntityInsentient) e).setPersistent();
-//                ((EntityInsentient) e).prepare(ws, ws.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.d, null, null); //EnumMobSpawn.STRUCTURE
-//            }
-//
-//            ws.addEntity(e);
-//        } catch (IllegalArgumentException | IllegalAccessException
-//                | NoSuchFieldException | SecurityException e1) {
-//            e1.printStackTrace();
-//        }
-    	parent.addEntity(rawX, rawY, rawZ, type);
+        parent.addEntity(rawX, rawY, rawZ, type);
     }
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
-//        BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
-//        ica.setType(pos, Blocks.bV.getBlockData(), true); //Spawner
-//        TileEntity tileentity = ica.getTileEntity(pos);
-//
-//        if (tileentity instanceof TileEntityMobSpawner) {
-//            try {
-//                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-//            } catch (IllegalArgumentException | IllegalAccessException
-//                    | NoSuchFieldException | SecurityException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            TerraformGeneratorPlugin.logger.error("Failed to fetch mob spawner entity at (" + "," + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")");
-//            //WorldGenDungeons.LOGGER.error("Failed to fetch mob spawner entity at ({}, {}, {})", blockposition.getX(), blockposition.getY(), blockposition.getZ());
-//        }
-    	parent.setSpawner(rawX, rawY, rawZ, type);
+        parent.setSpawner(rawX, rawY, rawZ, type);
     }
 
     @Override
@@ -293,87 +257,9 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
             case SHIPWRECK_SUPPLY -> LootTables.I;
             case SHIPWRECK_TREASURE -> LootTables.J;
             case PILLAGER_OUTPOST -> LootTables.K;
-//            case BASTION_TREASURE:
-//                return LootTables.L;
-//            case BASTION_OTHER:
-//                return LootTables.M;
-//            case BASTION_BRIDGE:
-//                return LootTables.N;
-//            case BASTION_HOGLIN_STABLE:
-//                return LootTables.O;
             case ANCIENT_CITY -> LootTables.P;
             case ANCIENT_CITY_ICE_BOX -> LootTables.Q;
             case RUINED_PORTAL -> LootTables.R;
-//            case SHEEP_WHITE:
-//                return LootTables.S;
-//            case SHEEP_ORANGE:
-//                return LootTables.T;
-//            case SHEEP_MAGENTA:
-//                return LootTables.U;
-//            case SHEEP_LIGHT_BLUE:
-//                return LootTables.V;
-//            case SHEEP_YELLOW:
-//                return LootTables.W;
-//            case SHEEP_LIME:
-//                return LootTables.X;
-//            case SHEEP_PINK:
-//                return LootTables.Y;
-//            case SHEEP_GRAY:
-//                return LootTables.Z;
-//            case SHEEP_LIGHT_GRAY:
-//                return LootTables.aa;
-//            case SHEEP_CYAN:
-//                return LootTables.ab;
-//            case SHEEP_PURPLE:
-//                return LootTables.ac;
-//            case SHEEP_BLUE:
-//                return LootTables.ad;
-//            case SHEEP_BROWN:
-//                return LootTables.ae;
-//            case SHEEP_GREEN:
-//                return LootTables.af;
-//            case SHEEP_RED:
-//                return LootTables.ag;
-//            case SHEEP_BLACK:
-//                return LootTables.ah;
-//            case FISHING:
-//                return LootTables.ai;
-//            case FISHING_JUNK:
-//                return LootTables.aj;
-//            case FISHING_TREASURE:
-//                return LootTables.ak;
-//            case FISHING_FISH:
-//                return LootTables.al;
-//            case CAT_MORNING_GIFT:
-//                return LootTables.am;
-//            case ARMORER_GIFT:
-//                return LootTables.an;
-//            case BUTCHER_GIFT:
-//                return LootTables.ao;
-//            case CARTOGRAPHER_GIFT:
-//                return LootTables.ap;
-//            case CLERIC_GIFT:
-//                return LootTables.aq;
-//            case FARMER_GIFT:
-//                return LootTables.ar;
-//            case FISHERMAN_GIFT:
-//                return LootTables.as;
-//            case FLETCHER_GIFT:
-//                return LootTables.at;
-//            case LEATHERWORKER_GIFT:
-//                return LootTables.au;
-//            case LIBRARIAN_GIFT:
-//                return LootTables.av;
-//            case MASON_GIFT:
-//                return LootTables.aw;
-//            case SHEPHERD_GIFT:
-//                return LootTables.ax;
-//            case TOOLSMITH_GIFT:
-//                return LootTables.ay;
-//            case WEAPONSMITH_GIFT:
-//                return LootTables.az;
-//            case PIGLIN_BARTERING:
-//                return LootTables.aA;
             default -> LootTables.a;
         };
     }

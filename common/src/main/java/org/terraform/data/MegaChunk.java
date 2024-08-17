@@ -25,10 +25,7 @@ public class MegaChunk {
     //The big structures spawn right in the middle of them.
     public MegaChunk(int chunkX, int chunkZ) {
         this(chunkX*16,0,chunkZ*16);
-    	//this((chunkX << 4) | 15, 0, (chunkZ << 4) | 15);
-    	
-    	//this.x = chunkX >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
-        //this.z = chunkZ >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+
     }
 
     public @NotNull MegaChunk getRelative(int x, int z) {
