@@ -76,10 +76,8 @@ public class PlainsPathRecursiveSpawner {
                             int maxRoomWidth = this.maxRoomWidth;
                             int smallRoomChance = 10;
                             if(GenUtils.chance(random, smallRoomChance, 100)) {
-                                int minSmallRoomWidth = 7;
-                                minRoomWidth = minSmallRoomWidth;
-                                int maxSmallRoomWidth = 10;
-                                maxRoomWidth = maxSmallRoomWidth;
+                                minRoomWidth = 7;
+                                maxRoomWidth = 10;
                             }
                             
                             int roomWidthX = GenUtils.randInt(minRoomWidth, maxRoomWidth);
