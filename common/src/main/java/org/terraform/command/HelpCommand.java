@@ -41,7 +41,7 @@ public class HelpCommand extends TerraCommand {
 		for(TerraCommand cmd:man.getCommands()){
 			if(cmd.hasPermission(sender)) cmds.add(cmd);
 		}
-		int maxPages =  (int) Math.ceil(cmds.size()/6);
+		int maxPages =  (int) (double) (cmds.size() / 6);
 		int page = 0;
 		
 		if(!args.isEmpty()){
