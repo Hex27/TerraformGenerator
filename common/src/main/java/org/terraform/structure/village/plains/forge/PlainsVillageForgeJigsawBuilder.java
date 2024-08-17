@@ -115,7 +115,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
             
             target.getRelative(0, -1, 0).downUntilSolid(random, plainsVillagePopulator.woodLog);
 
-            target = target.getRelative(0, 1, 0);
+            target.getRelative(0, 1, 0);
         }
         else
         {

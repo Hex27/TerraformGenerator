@@ -32,7 +32,6 @@ public class NoiseRavine extends NoiseCaveAbstract{
 
         float xzStretcher = ravineFilter.GetNoise(rawX,rawZ);
         float sign = xzStretcher/Math.abs(xzStretcher);
-        xzStretcher = sign*0.5f*Math.min(1, Math.max(0,Math.abs(xzStretcher)));
 
         //Stretch caves vertically so that they're not excessively spherical
         float ravine = ravineNoise.GetNoise(3*rawX,y*0.4f,3*rawZ);

@@ -115,7 +115,6 @@ public class TerraSchematic {
                     
                 } else {
                     //GG
-                    value = null;
                     throw e;
                 }
             }

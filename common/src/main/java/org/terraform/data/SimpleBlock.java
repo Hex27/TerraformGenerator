@@ -65,17 +65,17 @@ public class SimpleBlock {
     	BlockFace dir = BlockFace.NORTH;
     	int max = -1;
     	if(target.getX() - this.getX() > max) {
-    		max = target.getX() - this.getX(); //east
-    		dir = BlockFace.EAST;
+            //east
+            dir = BlockFace.EAST;
     	}else if(this.getX() - target.getX() > max) {
-    		max = this.getX() - target.getX(); //west
-    		dir = BlockFace.WEST;
+            //west
+            dir = BlockFace.WEST;
     	}else if(this.getZ() - target.getZ() > max) {
-    		max = this.getZ() - target.getZ(); //north
-    		dir = BlockFace.NORTH;
+            //north
+            dir = BlockFace.NORTH;
     	}else if(target.getZ() - this.getZ() > max) {
-    		max = target.getZ() - this.getZ(); //south
-    		dir = BlockFace.SOUTH;
+            //south
+            dir = BlockFace.SOUTH;
     	}
     	
     	SimpleBlock base = this;

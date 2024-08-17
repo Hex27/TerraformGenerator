@@ -159,8 +159,7 @@ public class LegacyPathGenerator {
         	candidate.isOverlapped = true;
         	path.add(candidate);
         }
-        
-        oldDir = dir;
+
         base = base.getRelative(dir);
         length++;
     }

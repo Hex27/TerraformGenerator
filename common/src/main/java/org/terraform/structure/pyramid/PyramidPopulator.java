@@ -181,8 +181,6 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         //Remove tombroom placeholder to allow other rooms to spawn there.
         level1.getRooms().remove(placeholder);
 
-        range -= 15;
-
         //Fill Rooms
         level0.calculateRoomPlacement(false);
         level0.fill(data, tw, Material.SANDSTONE, Material.CUT_SANDSTONE);

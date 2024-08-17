@@ -40,7 +40,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
 
         Wall ceiling = core.findCeiling(10);
         if (ceiling != null) {
-            ceiling = ceiling.getRelative(0, -1, 0);
+            ceiling.getRelative(0, -1, 0);
         }
         Wall floor = core.getDown();
         if(!floor.isSolid()) return; //Don't populate a path if there's no floor
