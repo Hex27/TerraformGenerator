@@ -69,7 +69,7 @@ public class MansionMazeAlgoUtil {
 	
 	/**
 	 * Based on chance, randomly open a few walls
-	 * @param builder
+	 * @param pieces
 	 * @param rand
 	 */
 	public static void knockdownRandomWalls(@NotNull Collection<JigsawStructurePiece> pieces, @NotNull Random rand) {
@@ -90,7 +90,7 @@ public class MansionMazeAlgoUtil {
 	
 	/**
 	 * Returns a map of adjacent mansion pieces aren't connected to anything.
-	 * @param builder
+	 * @param pieces
 	 * @param piece
 	 * @return
 	 */
