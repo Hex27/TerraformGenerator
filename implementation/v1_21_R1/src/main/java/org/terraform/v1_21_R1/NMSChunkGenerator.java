@@ -240,7 +240,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
                     //d() -> getLevelSeed()
                     try{
-                        Object retVal = tryGenerateStructure.invoke(this, list.get(0), structuremanager, iregistrycustom, randomstate,
+                        Object retVal = tryGenerateStructure.invoke(this, list.getFirst(), structuremanager, iregistrycustom, randomstate,
                                 structuretemplatemanager, chunkgeneratorstructurestate.d(),
                                 ichunkaccess, chunkcoordintpair, sectionposition);
                         TerraformGeneratorPlugin.logger.info(chunkcoordintpair.e + "," + chunkcoordintpair.f + " will spawn a vanilla structure, with tryGenerateStructure == " + retVal);
