@@ -179,17 +179,17 @@ public class BannerUtils {
     }
 
 	/**
-	 * kms
-	 * https://minecraft.fandom.com/wiki/Banner/Patterns
-		Pattern:"mr",Color:CYAN
-		Pattern:"bs",Color:LIGHT_GRAY
-		Pattern:"cs",Color:GRAY
-		Pattern:"bo",Color:LIGHT_GRAY
-		Pattern:"ms",Color:BLACK
-		Pattern:"hh",Color:LIGHT_GRAY
-		Pattern:"mc",Color:LIGHT_GRAY
-		Pattern:"bo",Color:BLACK
-	 */
+     * kms
+     * <a href="https://minecraft.fandom.com/wiki/Banner/Patterns">...</a>
+     Pattern:"mr",Color:CYAN
+     Pattern:"bs",Color:LIGHT_GRAY
+     Pattern:"cs",Color:GRAY
+     Pattern:"bo",Color:LIGHT_GRAY
+     Pattern:"ms",Color:BLACK
+     Pattern:"hh",Color:LIGHT_GRAY
+     Pattern:"mc",Color:LIGHT_GRAY
+     Pattern:"bo",Color:BLACK
+     */
     public static @NotNull ArrayList<Pattern> getOminousBannerPatterns(){
     	return new ArrayList<>() {{
 			add(new Pattern(DyeColor.CYAN, OneTwentyFiveBlockHandler.RHOMBUS));

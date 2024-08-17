@@ -438,7 +438,7 @@ public class MushroomBuilder {
      * Curvature is calculated with cubic Bezier curve.
      * Here you can set the control points to control the curve.
      * I also created a handy tool for testing your curves:
-     * https://www.geogebra.org/classic/hg7ckgwz
+     * <a href="https://www.geogebra.org/classic/hg7ckgwz">...</a>
      * <p>
      * The start and end points of the curve will always
      * be (0, 0) and (1, 1), so control points should be close by.

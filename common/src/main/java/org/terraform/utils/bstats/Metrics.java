@@ -38,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Written by bStats author, pasted here because fuck shading
- * https://raw.githubusercontent.com/Bastian/bStats-Metrics/single-file/bukkit/Metrics.java
+ * <a href="https://raw.githubusercontent.com/Bastian/bStats-Metrics/single-file/bukkit/Metrics.java">...</a>
  *
  */
 public class Metrics {
@@ -790,7 +790,7 @@ public class Metrics {
     }
 
     /**
-     * Escapes the given string like stated in https://www.ietf.org/rfc/rfc4627.txt.
+     * Escapes the given string like stated in <a href="https://www.ietf.org/rfc/rfc4627.txt">...</a>.
      *
      * <p>This method escapes only the necessary characters '"', '\'. and '\u0000' - '\u001F'.
      * Compact escapes are not used (e.g., '\n' is escaped as "\u000a" and not as "\n").
