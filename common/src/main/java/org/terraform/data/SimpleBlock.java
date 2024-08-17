@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -403,7 +404,7 @@ public class SimpleBlock {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof SimpleBlock other)) return false;
-        return popData.getTerraformWorld().equals(other.getPopData().getTerraformWorld())
+        return Objects.equals(popData.getTerraformWorld(), other.getPopData().getTerraformWorld())
                 && x == other.x && z == other.z && y == other.y;
     }
 
