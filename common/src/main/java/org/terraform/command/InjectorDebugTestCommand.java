@@ -34,8 +34,7 @@ public class InjectorDebugTestCommand extends TerraCommand {
     public void execute(CommandSender sender, Stack<String> args) {
 
         Player p = (Player) sender;
-        TerraformGeneratorPlugin.injector.debugTest(p);
-        
+
         World w = p.getWorld();
         
         for(int y = -64; y < 320; y++) {

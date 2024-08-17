@@ -66,13 +66,9 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 		BannerUtils.generatePillagerBanner(w.getLeft().getRelative(0,3,0).get(), w.getDirection(),true);
 		BannerUtils.generatePillagerBanner(w.getRight().getRelative(0,3,0).get(), w.getDirection(),true);
 	}
-	
-	@Override
-	public void decorateWindow(Random rand, Wall w) {
-    }
-	
 
-	@Override
+
+    @Override
 	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}

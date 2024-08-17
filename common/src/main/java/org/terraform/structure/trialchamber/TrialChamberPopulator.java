@@ -19,9 +19,6 @@ public class TrialChamberPopulator extends VanillaStructurePopulator {
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }
-    public void spawnTrialChamber(TerraformWorld tw, Random random, PopulatorDataAbstract data, int x, int y, int z){
-
-    }
 
     @Override
     public void populate(TerraformWorld tw, PopulatorDataAbstract data) {

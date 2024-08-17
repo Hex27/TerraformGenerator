@@ -55,6 +55,4 @@ public abstract class NMSInjectorAbstract {
     public int getMaxY() {
     	return 256;
     }
-    
-    public void debugTest(Player p) {}
 }

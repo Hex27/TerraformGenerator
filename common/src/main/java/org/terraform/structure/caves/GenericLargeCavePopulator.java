@@ -22,7 +22,7 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
     }
 
     protected void populateFloor(SimpleBlock floor, int waterLevel){}
-    protected void populateCeil(SimpleBlock ceil){}
+
     protected void populateCeilFloorPair(@NotNull SimpleBlock ceil, @NotNull SimpleBlock floor, int height){
         //Stalactites
         if(GenUtils.chance(rand, 1, 200))
@@ -62,7 +62,6 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
         assert data.getChunkZ() == room.getZ()>>4;
 
         caveRoom.ceilFloorPairs.forEach((l, pair)->{
-            if(pair[0] != null) populateCeil(new SimpleBlock(data, pair[0]));
             if(pair[1] != null) populateFloor(new SimpleBlock(data, pair[1]), caveRoom.waterLevel);
             if(pair[0] != null && pair[1] != null)
             {
