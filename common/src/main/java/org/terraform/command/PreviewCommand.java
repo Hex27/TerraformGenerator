@@ -50,8 +50,7 @@ public class PreviewCommand extends TerraCommand {
     }
     
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(CommandSender sender, Stack<String> args) {
         //int seed = GenUtils.randInt(1, 1000000);
         int maxX = 16*10;
         int maxY = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY();

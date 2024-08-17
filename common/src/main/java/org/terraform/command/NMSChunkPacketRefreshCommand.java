@@ -31,7 +31,7 @@ public class NMSChunkPacketRefreshCommand extends TerraCommand {
 
     @Override
     public void execute(CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+	{
 //Commented out to prevent runtime errors for older versions
 //        Player p = (Player) sender;
 //        

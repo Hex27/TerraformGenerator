@@ -34,8 +34,7 @@ public class WandCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(CommandSender sender, Stack<String> args) {
         Player p = (Player) sender;
         p.getInventory().addItem(SchematicListener.getWand());
         p.sendMessage(ChatColor.GREEN + "Wand added.");

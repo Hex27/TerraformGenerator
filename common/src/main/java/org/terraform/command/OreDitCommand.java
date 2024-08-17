@@ -35,8 +35,7 @@ public class OreDitCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(CommandSender sender, Stack<String> args) {
 
     	Material[] auditMat = new Material[] {
     			Material.DIORITE,

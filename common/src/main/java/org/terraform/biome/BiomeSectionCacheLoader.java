@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class BiomeSectionCacheLoader extends CacheLoader<BiomeSection, BiomeSection> {
 
 	@Override
-	public @NotNull BiomeSection load(@NotNull BiomeSection key) throws Exception {
+	public @NotNull BiomeSection load(@NotNull BiomeSection key) {
 		key.doCalculations();
 		return key;
 	}

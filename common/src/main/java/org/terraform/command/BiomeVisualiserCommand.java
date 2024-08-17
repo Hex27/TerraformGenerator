@@ -36,8 +36,7 @@ public class BiomeVisualiserCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(CommandSender sender, Stack<String> args) {
     	Player p = (Player) sender;
     	World world = Bukkit.getWorld("world");
     	//idk wtf im doing tbh this doesn't work

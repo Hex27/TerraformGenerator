@@ -32,8 +32,7 @@ public class InjectorDebugTestCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(CommandSender sender, Stack<String> args) {
 
         Player p = (Player) sender;
         TerraformGeneratorPlugin.injector.debugTest(p);

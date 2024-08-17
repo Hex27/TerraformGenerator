@@ -9,7 +9,7 @@ import com.google.common.cache.CacheLoader;
 public class HeightIndependentBiomeCacheLoader extends CacheLoader<TWSimpleLocation, BiomeBank> {
 
 	@Override
-	public @Nullable BiomeBank load(@NotNull TWSimpleLocation loc) throws Exception {
+	public @Nullable BiomeBank load(@NotNull TWSimpleLocation loc) {
 		int x = loc.getX();
 		int z = loc.getZ();    	
 		

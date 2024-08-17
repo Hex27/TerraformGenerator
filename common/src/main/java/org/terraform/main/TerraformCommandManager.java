@@ -118,12 +118,8 @@ public class TerraformCommandManager implements TabExecutor {
                              String @NotNull [] args) {
 		if(args.length == 0){
 			sender.sendMessage(plugin.getLang().fetchLang("command.unknown"));
-			try {
-				new HelpCommand(plugin, this).execute(sender, new Stack<>());
-			} catch (InvalidArgumentException e) {
-				sender.sendMessage(ChatColor.RED + e.getProblem());
-			}
-			return false;
+            new HelpCommand(plugin, this).execute(sender, new Stack<>());
+            return false;
 		}
 		for(TerraCommand command:commands){
 			if(command.matchCommand(args[0].toLowerCase(Locale.ENGLISH))){

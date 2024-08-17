@@ -59,8 +59,7 @@ public class ValuesCommand extends TerraCommand {
 
     @SuppressWarnings("unused")
 	@Override
-    public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, Stack<String> args) {
     	
         MathValues vals = new MathValues();
         MathValues unwarped = new MathValues();

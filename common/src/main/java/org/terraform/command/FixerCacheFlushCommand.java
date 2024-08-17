@@ -34,7 +34,7 @@ public class FixerCacheFlushCommand extends TerraCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+	{
     	NativeGeneratorPatcherPopulator.flushChanges();
     	PhysicsUpdaterPopulator.flushChanges();
     	sender.sendMessage("Flushing changes.");

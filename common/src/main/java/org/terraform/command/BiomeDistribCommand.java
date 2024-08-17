@@ -38,8 +38,7 @@ public class BiomeDistribCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, Stack<String> args) {
     	HashMap<BiomeBank, Integer> counts = new HashMap<>();
     	HashMap<BiomeClimate, Integer> climates = new HashMap<>();
         MathValues temperature = new MathValues();

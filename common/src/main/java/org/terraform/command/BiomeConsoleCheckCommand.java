@@ -37,7 +37,7 @@ public class BiomeConsoleCheckCommand extends TerraCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+	{
     	World world = Bukkit.getWorld("world");
 		for(int i = 0; i < 10; i++) {
     	   int x = new Random().nextInt(1000);

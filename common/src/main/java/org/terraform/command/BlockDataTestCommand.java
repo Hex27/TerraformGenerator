@@ -34,8 +34,7 @@ public class BlockDataTestCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, Stack<String> args) {
         Wall facing = (Wall) Bukkit.createBlockData(Material.COBBLESTONE_WALL);
         sender.sendMessage(facing.getAsString());
     }

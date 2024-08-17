@@ -36,8 +36,7 @@ public class HelpCommand extends TerraCommand {
 	}
 
 	@Override
-	public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
-			throws InvalidArgumentException {
+	public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args) {
 		ArrayList<TerraCommand> cmds = new ArrayList<>();
 		for(TerraCommand cmd:man.getCommands()){
 			if(cmd.hasPermission(sender)) cmds.add(cmd);

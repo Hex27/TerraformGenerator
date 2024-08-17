@@ -32,7 +32,7 @@ public class CaveCommand extends TerraCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+	{
         sender.sendMessage("Unimplemented.");
     }
 }
