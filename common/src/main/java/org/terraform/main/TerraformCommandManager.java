@@ -14,7 +14,6 @@ import org.terraform.command.contants.TerraCommandArgument;
 import org.terraform.main.config.TConfigOption;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;

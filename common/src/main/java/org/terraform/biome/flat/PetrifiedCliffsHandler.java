@@ -15,7 +15,6 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTypes;
 import org.terraform.tree.FractalTypes.Tree;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
