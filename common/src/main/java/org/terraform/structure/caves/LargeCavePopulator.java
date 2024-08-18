@@ -159,6 +159,8 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
+        if ( !isEnabled()) return false;
+
 		if(biome.getType() == BiomeType.DEEP_OCEANIC)
 			return false;
         return rollSpawnRatio(tw,chunkX,chunkZ);
@@ -171,7 +173,7 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean();
+        return TConfigOption.areCavesEnabled() && TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean();
     }
 
     @Override

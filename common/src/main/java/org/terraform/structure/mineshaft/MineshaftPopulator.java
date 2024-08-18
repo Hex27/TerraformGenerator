@@ -25,9 +25,11 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
+        if (!isEnabled()) return false;
+
         //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         //int[] coords = mc.getCenterBiomeSectionBlockCoords();
-        	
+
 		//Do not spawn mineshafts under deep oceans, there's no space.
 		if(biome.getType() == BiomeType.DEEP_OCEANIC)
 			return false;
@@ -35,7 +37,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 		//Don't compete with badlandsmine for space
 		if(biome == BiomeBank.BADLANDS_CANYON)
 			return false;
-		
+
 		//Do height and space checks
 		//In the interest of optimisation, this check will not be performed.
 
@@ -157,9 +159,9 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean();
     }
-    
+
     @Override
     public int getChunkBufferDistance() {
     	return 0;

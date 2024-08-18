@@ -37,6 +37,8 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 	private Material[] stakeGravel;
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
@@ -214,6 +216,8 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
+        if (!isEnabled()) return false;
+
         if (!biome.isDry())
             return false;
         if(biome == BiomeBank.DESERT ||
@@ -234,7 +238,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 
 	@Override
 	public boolean isEnabled() {
-		return TConfigOption.STRUCTURES_OUTPOST_ENABLED.getBoolean();
+		return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_OUTPOST_ENABLED.getBoolean();
 	}
 
 	@Override

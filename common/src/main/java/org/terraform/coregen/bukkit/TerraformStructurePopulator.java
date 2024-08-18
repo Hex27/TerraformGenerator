@@ -21,6 +21,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.event.TerraformStructureSpawnEvent;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.JigsawState;
 import org.terraform.structure.JigsawStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
@@ -131,7 +132,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
 
         //Special Case
-        if(new StrongholdPopulator().canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
+        if(!TConfigOption.areStructuresEnabled() && new StrongholdPopulator().canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
             TerraformGeneratorPlugin.logger.info("Generating Stronghold at chunk: " + data.getChunkX() + "," + data.getChunkZ());
             new StrongholdPopulator().populate(tw, data);
         }
@@ -148,7 +149,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
                 if(spop == null) continue;
                 if(!spop.isEnabled()) continue;
                 if(spop instanceof StrongholdPopulator) continue;
-                if(spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
+                if(TConfigOption.areStructuresEnabled() && spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
                     TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
                     Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(blockCoords[0], blockCoords[1], spop.getClass().getName()));
                     spop.populate(tw, data);
@@ -165,7 +166,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
             if(!spop.isEnabled()) continue;
             if(spop instanceof StrongholdPopulator) continue;
             //TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
-            if(spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
+            if(TConfigOption.areStructuresEnabled() && spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
                 return spop;
             }
         }

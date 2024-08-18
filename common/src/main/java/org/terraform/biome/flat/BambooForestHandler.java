@@ -94,7 +94,7 @@ public class BambooForestHandler extends BiomeHandler {
                         data.getType(x, y, z) == Material.PODZOL) {
                 	
                     //Small grass poffs
-                    if (GenUtils.chance(random, 1, 50)) {
+                    if (TConfigOption.arePlantsEnabled() && GenUtils.chance(random, 1, 50)) {
                         BlockUtils.replaceSphere(
                                 random.nextInt(424444),
                                 2, 3, 2,

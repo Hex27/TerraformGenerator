@@ -22,9 +22,9 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 	
 	@Override
 	public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-	
-		if (!TConfigOption.STRUCTURES_BURIEDTREASURE_ENABLED.getBoolean())
+        if (!isEnabled())
 		    return;
+
 		Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 		MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 		for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
@@ -83,6 +83,8 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 	@Override
 	public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX,
                             int chunkZ) {
+        if (!isEnabled()) return false;
+
 		MegaChunk mc = new MegaChunk(chunkX, chunkZ);
 		for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
 		    if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
@@ -105,7 +107,8 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator{
 	
 	@Override
 	public boolean isEnabled() {
-		return TConfigOption.STRUCTURES_BURIEDTREASURE_ENABLED.getBoolean();
+		return TConfigOption.areStructuresEnabled()
+        && TConfigOption.STRUCTURES_BURIEDTREASURE_ENABLED.getBoolean();
 	}
 	
 	@Override

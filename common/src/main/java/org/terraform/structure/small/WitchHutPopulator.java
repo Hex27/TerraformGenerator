@@ -33,6 +33,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         if (!isEnabled()) return;
+
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
@@ -87,6 +88,8 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     }
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
+        if (!isEnabled()) return false;
+
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
@@ -133,7 +136,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()
+        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()
                 && (TConfigOption.BIOME_SWAMP_WEIGHT.getInt() > 0||
                 TConfigOption.BIOME_MANGROVE_WEIGHT.getInt() > 0);
     }

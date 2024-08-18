@@ -28,6 +28,8 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+        if (!isEnabled()) return false;
+
     	//Enforce minimum distance
         if(Math.pow(chunkX*16,2) + Math.pow(chunkZ*16,2) < Math.pow(TConfigOption.STRUCTURES_MANSION_MINDISTANCE.getInt(),2))
             return false;
@@ -41,6 +43,8 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
 
@@ -67,7 +71,8 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return BiomeBank.isBiomeEnabled(BiomeBank.DARK_FOREST) 
-        		&& TConfigOption.STRUCTURES_MANSION_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled()
+               && BiomeBank.isBiomeEnabled(BiomeBank.DARK_FOREST)
+               && TConfigOption.STRUCTURES_MANSION_ENABLED.getBoolean();
     }
 }

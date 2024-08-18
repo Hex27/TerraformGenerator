@@ -5,6 +5,8 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
+
 public class StructureBufferDistanceHandler {
 	
 	/**
@@ -32,7 +34,7 @@ public class StructureBufferDistanceHandler {
             
             //Grab the center chunk, where the structure will spawn
         	int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
-            if (spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
+            if (TConfigOption.areStructuresEnabled() && spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
             	//If the structure will spawn, calculate distance to it.
             	int dist = (int) (Math.pow(chunkCoords[0] - chunkX,2) + Math.pow(chunkCoords[1] - chunkZ,2));
             	if(Math.sqrt(dist) <= chunkBufferRadius) {

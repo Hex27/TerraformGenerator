@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.ancientcity.AncientCityPopulator;
 import org.terraform.structure.catacombs.CatacombsPopulator;
 import org.terraform.structure.caves.LargeCavePopulator;
@@ -120,7 +121,7 @@ public class StructureRegistry {
                 int[] coords = mc.getCenterBiomeSectionBlockCoords(); //pop.getCoordsFromMegaChunk(tw, mc);
                 if (coords == null) continue;
 
-                if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
+                if (TConfigOption.areStructuresEnabled() && pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
                     pops[size] = pop;
                     size++;
                     break; //ONLY ONE MEGA DUNGEON.
@@ -136,7 +137,7 @@ public class StructureRegistry {
             if (largeStructureRegistry.containsKey(type))
                 for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(type)) {
                     int[] coords = mc.getCenterBiomeSectionBlockCoords();
-                    if (pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
+                    if (TConfigOption.areStructuresEnabled() && pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
                         pops[size] = pop;
                         size++;
                         break; //ONLY ONE OF EACH TYPE. Do not try to spawn multiple.

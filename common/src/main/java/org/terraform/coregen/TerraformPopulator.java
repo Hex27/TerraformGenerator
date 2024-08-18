@@ -224,7 +224,7 @@ public class TerraformPopulator extends BlockPopulator {
 
 		//Multi-megachunk structures
         for (MultiMegaChunkStructurePopulator spop : StructureRegistry.smallStructureRegistry) {
-            if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
+            if (TConfigOption.areStructuresEnabled() && spop.canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
                 TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
                 
                 //No async events

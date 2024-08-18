@@ -30,6 +30,7 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+        if (!isEnabled()) return false;
 
     	if(biome == (BiomeBank.DEEP_WARM_OCEAN)
         		|| biome == (BiomeBank.WARM_OCEAN)
@@ -47,6 +48,7 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
@@ -95,14 +97,14 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
     //spawn everywhere.
     @Override
     public boolean isEnabled() {
-        return (BiomeBank.isBiomeEnabled(BiomeBank.DEEP_WARM_OCEAN)
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.WARM_OCEAN)
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.DEEP_LUKEWARM_OCEAN)
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.CORAL_REEF_OCEAN)
-                || BiomeBank.isBiomeEnabled(BiomeBank.COLD_OCEAN)
-                || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_COLD_OCEAN)
-                || BiomeBank.isBiomeEnabled(BiomeBank.FROZEN_OCEAN)
-                || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_FROZEN_OCEAN))
-        		&& TConfigOption.STRUCTURES_WARMOCEANRUINS_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled() && (BiomeBank.isBiomeEnabled(BiomeBank.DEEP_WARM_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.WARM_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_LUKEWARM_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.CORAL_REEF_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.COLD_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_COLD_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.FROZEN_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_FROZEN_OCEAN))
+               && TConfigOption.STRUCTURES_WARMOCEANRUINS_ENABLED.getBoolean();
     }
 }

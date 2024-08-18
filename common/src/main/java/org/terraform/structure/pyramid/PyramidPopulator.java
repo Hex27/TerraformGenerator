@@ -33,6 +33,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+        if (!isEnabled()) return false;
 
         //Check biome
         if (biome != BiomeBank.DESERT)
@@ -50,6 +51,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
 
         int[] coords = new MegaChunk(data.getChunkX(), data.getChunkZ()).getCenterBiomeSectionBlockCoords();
         int x = coords[0];
@@ -393,8 +395,9 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public boolean isEnabled() {
         // TODO Auto-generated method stub
-        return BiomeBank.isBiomeEnabled(BiomeBank.DESERT) 
-        		&& TConfigOption.STRUCTURES_PYRAMID_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled()
+               && BiomeBank.isBiomeEnabled(BiomeBank.DESERT)
+               && TConfigOption.STRUCTURES_PYRAMID_ENABLED.getBoolean();
     }
 
 

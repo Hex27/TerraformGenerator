@@ -136,7 +136,9 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
-        if (biome.getType() != BiomeType.DEEP_OCEANIC || 
+        if (!isEnabled()) return false;
+
+        if (biome.getType() != BiomeType.DEEP_OCEANIC ||
         		biome == BiomeBank.MUSHROOM_ISLANDS)
             return false;
         return rollSpawnRatio(tw, chunkX, chunkZ);
@@ -151,6 +153,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
 
         int[] coords = new MegaChunk(data.getChunkX(),data.getChunkZ()).getCenterBiomeSectionBlockCoords();
         int x = coords[0];
@@ -316,6 +319,6 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_MONUMENT_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_MONUMENT_ENABLED.getBoolean();
     }
 }

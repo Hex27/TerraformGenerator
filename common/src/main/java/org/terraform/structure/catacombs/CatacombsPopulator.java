@@ -23,6 +23,8 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
+        if ( !isEnabled()) return false;
+
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
         	
@@ -62,8 +64,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if (!TConfigOption.STRUCTURES_CATACOMBS_ENABLED.getBoolean())
-            return;
+        if ( !isEnabled()) return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
@@ -194,7 +195,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_CATACOMBS_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_CATACOMBS_ENABLED.getBoolean();
     }
     
     //Underground structures don't need a decorative buffer

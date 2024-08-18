@@ -32,6 +32,7 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
+        if (!isEnabled()) return false;
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
@@ -62,6 +63,8 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
         //On ground, spawn dry village houses
@@ -95,15 +98,15 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return  (BiomeBank.isBiomeEnabled(BiomeBank.DESERT) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.BADLANDS) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.ICE_SPIKES) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_TAIGA) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_WASTELAND) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.ROCKY_MOUNTAINS) )
-        		&& (TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean() 
-        				|| TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean()
-        				|| TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean());
+        return TConfigOption.areStructuresEnabled() && (BiomeBank.isBiomeEnabled(BiomeBank.DESERT)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.BADLANDS)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.ICE_SPIKES)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_TAIGA)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_WASTELAND)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.ROCKY_MOUNTAINS)) && (
+                       TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean()
+                       || TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean()
+                       || TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean());
     }
 }

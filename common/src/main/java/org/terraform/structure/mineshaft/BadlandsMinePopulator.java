@@ -35,6 +35,8 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+        if (!isEnabled()) return false;
+
         if (biome != BiomeBank.BADLANDS_CANYON) return false;
 
         //what the fuck is this
@@ -64,8 +66,9 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return BiomeBank.isBiomeEnabled(BiomeBank.BADLANDS_CANYON) 
-        		&& TConfigOption.STRUCTURES_BADLANDS_MINE_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled()
+               && BiomeBank.isBiomeEnabled(BiomeBank.BADLANDS_CANYON)
+               && TConfigOption.STRUCTURES_BADLANDS_MINE_ENABLED.getBoolean();
     }
 
     @Override
@@ -74,6 +77,8 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     }
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
+
         BlockFace outDir, inDir;
         SimpleBlock entrance, shaft;
 

@@ -33,6 +33,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         if (!isEnabled()) return;
+
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
@@ -95,6 +96,8 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
     }
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
+        if (!isEnabled()) return false;
+
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
@@ -141,9 +144,9 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()
-                && (TConfigOption.BIOME_DESERT_WEIGHT.getInt() > 0||
-                TConfigOption.BIOME_BADLANDS_WEIGHT.getInt() > 0);
+        return TConfigOption.areStructuresEnabled()
+               && TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()
+               && (TConfigOption.BIOME_DESERT_WEIGHT.getInt() > 0 || TConfigOption.BIOME_BADLANDS_WEIGHT.getInt() > 0);
     }
 
     @Override

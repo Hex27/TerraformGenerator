@@ -79,6 +79,8 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+        if (!isEnabled()) return false;
+
         int[][] positions = strongholdPositions(tw);
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
@@ -93,8 +95,8 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        //TerraformGeneratorPlugin.logger.debug("s-populate");
-        if (!TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean()) return;
+        if (!isEnabled()) return;
+
         int[][] positions = strongholdPositions(tw);
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -221,7 +223,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean();
     }
     
     @Override

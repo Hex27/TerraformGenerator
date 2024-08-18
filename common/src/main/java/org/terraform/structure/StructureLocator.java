@@ -11,6 +11,7 @@ import org.terraform.data.TerraformWorld;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.terraform.main.config.TConfigOption;
 
 public class StructureLocator {
 	
@@ -52,7 +53,7 @@ public class StructureLocator {
                 for (int[] coords : populator.getCoordsFromMegaChunk(tw, mc)) {
                     if (coords == null) continue;
 
-                    if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4)) {
+                    if (TConfigOption.areStructuresEnabled() && populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4)) {
                         found = true;
                         blockX = coords[0];
                         blockZ = coords[1];
@@ -119,10 +120,10 @@ public class StructureLocator {
                 BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
                 //Right bitshift of 4 is conversion from block coords to chunk coords.
                 
-                if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
+                if (TConfigOption.areStructuresEnabled() && populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
                     for (SingleMegaChunkStructurePopulator availablePops : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
                         if (availablePops == null) continue;
-                        if(availablePops.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
+                        if(TConfigOption.areStructuresEnabled() && availablePops.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
                             if (availablePops.getClass().equals(populator.getClass())) {
                                 //Can spawn
                                 found = true;
