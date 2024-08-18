@@ -59,7 +59,7 @@ public class MonumentPathPopulator extends PathPopulatorAbstract {
 
         //Small spires on the top
         if (GenUtils.chance(rand, 1, 50)) {
-            if (w.getUp(6).getType().isSolid()
+            if (w.getUp(6).isSolid()
                     && !w.getUp(7).getType().isSolid())
                 design.spire(w.getUp(7), rand);
         }

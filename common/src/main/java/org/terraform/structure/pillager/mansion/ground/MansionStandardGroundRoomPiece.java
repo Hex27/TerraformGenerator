@@ -108,7 +108,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
             			if(w.getRear().getRelative(0,targetRoom.getHeight(),0).getType() == Material.COBBLESTONE)
             			{
             				//Lower decorations
-            				if(!w.getType().isSolid() || w.getType() == Material.POLISHED_ANDESITE) {
+            				if(!w.isSolid() || w.getType() == Material.POLISHED_ANDESITE) {
             					
             					new StairBuilder(Material.STONE_BRICK_STAIRS)
             					.setFacing(BlockUtils.getRight(w.getDirection()))

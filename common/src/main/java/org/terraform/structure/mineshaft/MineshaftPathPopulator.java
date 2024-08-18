@@ -111,7 +111,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
             Wall target = core.getLeft(i);
             //Checks if there's space on the ground
             if (!Tag.SLABS.isTagged(target.getType())
-                    && target.getType().isSolid()
+                    && target.isSolid()
                     && target.getType() != Material.GRAVEL
                     && target.getUp().getType() == Material.CAVE_AIR) {
                 if (GenUtils.chance(1, 10)) { //Pebble
@@ -125,7 +125,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         }
 
         //Rails
-        if (TConfigOption.areDecorationsEnabled() && core.getType().isSolid() && rand.nextBoolean()) {
+        if (TConfigOption.areDecorationsEnabled() && core.isSolid() && rand.nextBoolean()) {
             Rail rail = (Rail) Bukkit.createBlockData(Material.RAIL);
             switch(core.getDirection()) {
                 case NORTH, SOUTH -> rail.setShape(Shape.NORTH_SOUTH);
@@ -291,7 +291,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
                 for (int i = 0; i < dist + 2; i++) {
                     Wall support = ceil.getRight(i);
-                    if (!support.getType().isSolid() ||
+                    if (!support.isSolid() ||
                             support.getType() == getFenceMaterial()) {
                         if (support.getUp().getType() != getSupportMaterial()
                                 && support.getDown().getType() != getSupportMaterial()) {

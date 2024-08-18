@@ -37,7 +37,7 @@ public class WarAntechamber extends Antechamber {
             Wall w = entry.getKey().getUp(2);
             for (int i = 0; i < entry.getValue(); i++) {
 
-                if (w.getRear().getType().isSolid() && !w.getType().isSolid()
+                if (w.getRear().isSolid() && !w.isSolid()
                         && GenUtils.chance(rand, 3, 10)) {
                     BannerUtils.generateBanner(rand, w.get(), w.getDirection(), true);
                 }

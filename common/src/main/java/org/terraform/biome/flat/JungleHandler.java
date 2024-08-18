@@ -98,7 +98,7 @@ public class JungleHandler extends BiomeHandler {
                         if (Math.random() < equationResult - 0.5)
                             continue;
 
-                        if (!block.getType().isSolid() && !BlockUtils.isWet(block)) {
+                        if (!block.isSolid() && !BlockUtils.isWet(block)) {
                             block.setType(Material.JUNGLE_LEAVES);
                         }
                     }

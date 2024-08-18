@@ -863,7 +863,7 @@ public class FractalTreeBuilder {
                                     dir.setFacing(face.getOppositeFace());
                                     ((Ageable) dir).setAge(GenUtils.randInt(rand, 0, ((Ageable) dir).getMaximumAge()));
                                     SimpleBlock beans = rel.getRelative(face);
-                                    if (beans.getType().isSolid() ||
+                                    if (beans.isSolid() ||
                                             beans.getType() == Material.WATER) continue;
 
                                     beans.setBlockData(dir);

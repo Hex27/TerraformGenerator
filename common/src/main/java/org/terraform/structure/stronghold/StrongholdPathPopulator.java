@@ -144,7 +144,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
                     int i = GenUtils.randInt(rand, 0, 1);
                     Wall w = base.getUp();
                     depth = 0;
-                    while (!w.get().getType().isSolid() && depth < 10) {
+                    while (!w.get().isSolid() && depth < 10) {
                         if (i == 0) w = w.getLeft();
                         if (i == 1) w = w.getRight();
                         depth++;

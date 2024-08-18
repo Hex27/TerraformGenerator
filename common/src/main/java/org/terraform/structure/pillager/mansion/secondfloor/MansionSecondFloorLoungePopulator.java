@@ -106,22 +106,22 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 	public void decorateWindow(Random rand, @NotNull Wall w) {
 		for(int i = 0; i <= 3; i++) {
 			w.getLeft(i).setType(Material.POLISHED_DIORITE);
-			if(!w.getLeft(i).getFront().getType().isSolid()
+			if(!w.getLeft(i).getFront().isSolid()
 					|| w.getLeft(i).getFront().getType() == Material.POLISHED_ANDESITE_STAIRS)
 				w.getLeft(i).getFront().setType(Material.POLISHED_ANDESITE);
 			
 			w.getRight(i).setType(Material.POLISHED_DIORITE);
-			if(!w.getRight(i).getFront().getType().isSolid()
+			if(!w.getRight(i).getFront().isSolid()
 					|| w.getRight(i).getFront().getType() == Material.POLISHED_ANDESITE_STAIRS)
 				w.getRight(i).getFront().setType(Material.POLISHED_ANDESITE);
 		}
 		
-		if(!w.getRight(4).getFront().getType().isSolid()
+		if(!w.getRight(4).getFront().isSolid()
 					|| w.getRight(4).getFront().getType() == Material.POLISHED_ANDESITE_STAIRS)
 		{
 			w.getRight(4).Pillar(6, Material.DARK_OAK_LOG);
 		}
-		if(!w.getLeft(4).getFront().getType().isSolid()
+		if(!w.getLeft(4).getFront().isSolid()
 				|| w.getLeft(4).getFront().getType() == Material.POLISHED_ANDESITE_STAIRS)
 	{
 		w.getLeft(4).Pillar(6, Material.DARK_OAK_LOG);

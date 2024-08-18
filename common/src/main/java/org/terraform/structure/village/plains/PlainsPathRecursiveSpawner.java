@@ -214,10 +214,10 @@ public class PlainsPathRecursiveSpawner {
             }
             
             //Remove foilage before placement
-            if(!w.getUp(2).getType().isSolid() && w.getUp(2).getType() != Material.AIR)
+            if(!w.getUp(2).isSolid() && w.getUp(2).getType() != Material.AIR)
             	w.getUp(2).setType(Material.AIR);
             
-            if(!w.getUp().getType().isSolid() && w.getUp().getType() != Material.AIR)
+            if(!w.getUp().isSolid() && w.getUp().getType() != Material.AIR)
             	w.getUp().setType(Material.AIR);
 
             
@@ -227,10 +227,10 @@ public class PlainsPathRecursiveSpawner {
                 Wall target = w.getRelative(face).getGround();
                 //Remove foilage before placement
                 if (random.nextInt(3) != 0) {
-                    if(!target.getUp(2).getType().isSolid() && target.getUp(2).getType() != Material.AIR)
+                    if(!target.getUp(2).isSolid() && target.getUp(2).getType() != Material.AIR)
                     	target.getUp(2).setType(Material.AIR);
                     
-                    if(!target.getUp().getType().isSolid() && target.getUp().getType() != Material.AIR)
+                    if(!target.getUp().isSolid() && target.getUp().getType() != Material.AIR)
                     	target.getUp().setType(Material.AIR);
 
                     target.setType(Material.DIRT_PATH);

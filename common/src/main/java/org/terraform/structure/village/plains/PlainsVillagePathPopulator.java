@@ -97,7 +97,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
     	for(BlockFace face:BlockUtils.getAdjacentFaces(ppd.dir)) {
             for(int i = 0; i < 4; i++) {
         		Wall target = pathCore.getRelative(face,i).getGround();
-            	if(!target.getUp().getType().isSolid()
+            	if(!target.getUp().isSolid()
             			&& target.getUp().getType() != Material.WATER
             			&& BlockUtils.isDirtLike(target.getType()) 
             			&& target.getType() != Material.DIRT_PATH) {

@@ -69,7 +69,7 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
 
             //First pass, place beds
             for (int i = 0; i < entry.getValue(); i++) {
-                if (!w.getFront().getType().isSolid()
+                if (!w.getFront().isSolid()
                         && placedBeds < 2
                         && w.getRear().getType() != plainsVillagePopulator.woodDoor) {
                     if ((GenUtils.chance(random, 2, 5) && placedBeds == 0)

@@ -32,7 +32,7 @@ public class TreasureAntechamber extends Antechamber {
             for (int i = 0; i < entry.getValue(); i++) {
 
                 if (i != 0 && i != entry.getValue() - 1)
-                    if (w.getRear().getType().isSolid() && !w.getType().isSolid()
+                    if (w.getRear().isSolid() && !w.isSolid()
                             && GenUtils.chance(rand, 1, 4)) {
                         Chest chest = (Chest) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());

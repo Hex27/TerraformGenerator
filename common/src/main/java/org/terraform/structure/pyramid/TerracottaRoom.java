@@ -28,7 +28,7 @@ public class TerracottaRoom extends RoomPopulatorAbstract {
                 if (i != 0 && i != entry.getValue() - 1) {
                     if (w.getRear().getType().isSolid()) {
                         if(i != 1 && i != entry.getValue() - 2) { //Terracotta
-                            if (!w.getRear().getLeft().getType().isSolid() ||
+                            if (!w.getRear().getLeft().isSolid() ||
                                     !w.getRear().getRight().getType().isSolid()) {
                                 w.Pillar(room.getHeight(), rand, Material.CHISELED_SANDSTONE);
                             } else {

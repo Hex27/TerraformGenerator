@@ -80,7 +80,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
             for (int i = 0; i < 7; i++)
                 w = w.getFront();
             //while(w.getType() != Material.DIRT){
-            while (!w.getType().isSolid() ||
+            while (!w.isSolid() ||
                     w.getType().toString().contains("PLANKS")) {
                 Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(this.rand, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
                         Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS));

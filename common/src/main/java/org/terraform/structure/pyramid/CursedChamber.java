@@ -36,7 +36,7 @@ public class CursedChamber extends RoomPopulatorAbstract {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
                 for (int h = 0; h < room.getHeight() - 2; h++)
-                    if (w.getRelative(0, h, 0).getRear().getType().isSolid() && GenUtils.chance(rand, 1, 5)) {
+                    if (w.getRelative(0, h, 0).getRear().isSolid() && GenUtils.chance(rand, 1, 5)) {
                         Directional head = (Directional) Bukkit.createBlockData(Material.SKELETON_WALL_SKULL);
                         head.setFacing(w.getDirection());
                         w.getRelative(0, h, 0).setBlockData(head);

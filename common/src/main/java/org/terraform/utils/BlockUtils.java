@@ -1416,7 +1416,7 @@ public class BlockUtils {
         if ( !TConfigOption.areDecorationsEnabled()) return;
 
         int realHeight = 0;
-        while(!base.getRelative(0,-realHeight,0).getType().isSolid() && height > 0) {
+        while(!base.getRelative(0,-realHeight,0).isSolid() && height > 0) {
             realHeight++;
             height--;
         }
@@ -1458,7 +1458,7 @@ public class BlockUtils {
         if ( !TConfigOption.areDecorationsEnabled()) return;
 
         int realHeight = 0;
-        while(!base.getRelative(0,realHeight,0).getType().isSolid() && height > 0) {
+        while(!base.getRelative(0,realHeight,0).isSolid() && height > 0) {
             realHeight++;
             height--;
         }
@@ -1503,7 +1503,7 @@ public class BlockUtils {
         if ( !TConfigOption.arePlantsEnabled()) return;
 
         int realHeight = 0;
-        while(!base.getRelative(0,-realHeight,0).getType().isSolid() && height > 0) {
+        while(!base.getRelative(0,-realHeight,0).isSolid() && height > 0) {
             realHeight++;
             height--;
         }

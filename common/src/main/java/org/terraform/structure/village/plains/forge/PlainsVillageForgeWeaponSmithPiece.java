@@ -57,7 +57,7 @@ public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStanda
     						break;
     					w.setType(Material.CRAFTING_TABLE);
     					w.getUp().setType(Material.LANTERN);
-    					if(w.getUp().getRear().getType().isSolid() && !placedJobBlock) {
+    					if(w.getUp().getRear().isSolid() && !placedJobBlock) {
     						placedJobBlock = true;
     						new DirectionalBuilder(Material.GRINDSTONE)
         					.setFacing(w.getDirection())

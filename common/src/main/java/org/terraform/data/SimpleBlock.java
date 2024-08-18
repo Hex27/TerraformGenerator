@@ -448,7 +448,7 @@ public class SimpleBlock {
     public @Nullable @org.jetbrains.annotations.Nullable SimpleBlock findCeiling(int cutoff) {
     	SimpleBlock ceil = this.getUp();
         while (cutoff > 0) {
-            if (ceil.getType().isSolid() && ceil.getType() != Material.LANTERN) {
+            if (ceil.isSolid() && ceil.getType() != Material.LANTERN) {
                 return ceil;
             }
             cutoff--;
@@ -464,7 +464,7 @@ public class SimpleBlock {
     public @Nullable @org.jetbrains.annotations.Nullable SimpleBlock findFloor(int cutoff) {
     	SimpleBlock floor = this.getDown();
         while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
-            if (floor.getType().isSolid() && floor.getType() != Material.LANTERN) {
+            if (floor.isSolid() && floor.getType() != Material.LANTERN) {
                 return floor;
             }
             cutoff--;

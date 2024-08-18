@@ -38,7 +38,7 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
     public static void correctWallData(@NotNull SimpleBlock target) {
         if (!(target.getBlockData() instanceof Wall data)) return;
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            if (target.getRelative(face).getType().isSolid() &&
+            if (target.getRelative(face).isSolid() &&
                     !target.getRelative(face).getType().toString().contains("PRESSURE_PLATE")) {
                 data.setHeight(face, Height.LOW);
                 if (target.getRelative(BlockFace.UP).getType().isSolid()) {

@@ -166,7 +166,7 @@ public class StairwayBuilder {
 			if(stopAtWater && BlockUtils.isWet(target.get()))
 				return false;
 			
-			return !target.getType().isSolid();
+			return !target.isSolid();
 		}else { 
 			if(stopAtY != Short.MIN_VALUE)
 				if(target.getY() == stopAtY+1) 
@@ -174,11 +174,11 @@ public class StairwayBuilder {
 
 			//Continue carving upwards until the area isn't solid anymore.
 			if (upwardsCarveUntilNotSolid)
-				return target.getType().isSolid();
+				return target.isSolid();
 
 			//Continue carving upwards until the area is solid anymore.
 			if(upwardsCarveUntilSolid) 
-				return !target.getType().isSolid();
+				return !target.isSolid();
 			
 			return true;
 		}

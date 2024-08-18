@@ -149,7 +149,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
         				corner.setType(cloth);
         				//Empty out tent area
     					SimpleBlock target = corner.getRelative(face.getOppositeFace());
-        				if(!target.getType().isSolid() && GenUtils.chance(rand, 1,2)) {
+        				if(!target.isSolid() && GenUtils.chance(rand, 1,2)) {
     						switch(rand.nextInt(4)) {
     						case 0:
     							target.setType(Material.CRAFTING_TABLE);
