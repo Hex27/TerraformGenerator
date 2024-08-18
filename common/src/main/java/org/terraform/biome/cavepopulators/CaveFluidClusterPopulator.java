@@ -50,7 +50,7 @@ public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
             floor = floor.getDown();
 
             //Fix floating fluids
-            if(!floor.getType().isSolid()){
+            if(!floor.isSolid()){
                 floor.setType(original);
                 break;
             }

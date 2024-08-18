@@ -75,7 +75,7 @@ public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulat
 				if(i > 0)
 					for(BlockFace face:BlockUtils.flatBlockFaces3x3) {
 						//no solid ground beneath. Do not place water.
-						if(!core.getRelative(face).getDown(depth+1).getType().isSolid()) {
+						if(!core.getRelative(face).getDown(depth+1).isSolid()) {
 							breakOut = true;
 							break;
 						}

@@ -86,7 +86,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                         boolean hitCeiling = false;
                         int chimneyHeight = 0;
                         while (chimneyHeight < 4) {
-                            if (chimneyWall.getType().isSolid()) {
+                            if (chimneyWall.isSolid()) {
                                 hitCeiling = true;
                             } else if (hitCeiling) {
                                 chimneyHeight++;
@@ -117,7 +117,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 
             for (int i = 0; i < entry.getValue(); i++) {
                 if (w.getRear().getType() != plainsVillagePopulator.woodDoor
-                        && !w.getType().isSolid()) {
+                        && !w.isSolid()) {
                     int decor = random.nextInt(5);
                     switch (decor) {
                         case 0: //Counter

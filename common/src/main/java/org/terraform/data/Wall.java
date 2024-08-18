@@ -109,7 +109,7 @@ public class Wall extends SimpleBlock{
     public @Nullable Wall findRight(int cutoff) {
         Wall ceil = this.getRight();
         while (cutoff > 0) {
-            if (ceil.getType().isSolid()) {
+            if (ceil.isSolid()) {
                 return ceil;
             }
             cutoff--;
@@ -125,7 +125,7 @@ public class Wall extends SimpleBlock{
     public @Nullable Wall findDir(@NotNull BlockFace face, int cutoff) {
         Wall ceil = this.getRelative(face);
         while (cutoff > 0) {
-            if (ceil.getType().isSolid()) {
+            if (ceil.isSolid()) {
                 return ceil;
             }
             cutoff--;
@@ -140,7 +140,7 @@ public class Wall extends SimpleBlock{
     public @Nullable Wall findLeft(int cutoff) {
         Wall ceil = this.getLeft();
         while (cutoff > 0) {
-            if (ceil.getType().isSolid()) {
+            if (ceil.isSolid()) {
                 return ceil;
             }
             cutoff--;

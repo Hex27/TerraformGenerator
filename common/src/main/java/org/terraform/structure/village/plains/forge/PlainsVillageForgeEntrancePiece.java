@@ -41,7 +41,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
         
         //Stairway down
 
-        if(core.getFront().getType().isSolid()) {
+        if(core.getFront().isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
 	        .setAngled(true)
 	        .setStopAtWater(true)

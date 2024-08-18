@@ -53,7 +53,7 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
                 w.getX(), w.getY(), w.getZ(), w.getDirection().getOppositeFace());
 
 
-        if(w.getFront().getType().isSolid()) {
+        if(w.getFront().isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
 	        .setAngled(true)
 	        .setStopAtWater(true)

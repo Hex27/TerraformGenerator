@@ -169,7 +169,7 @@ public class FractalLeaves implements Cloneable{
                         }
 
                         // Leaves do not replace solid blocks.
-                        if (!relativeBlock.getType().isSolid()) {
+                        if (!relativeBlock.isSolid()) {
                             unitSet(relativeBlock, material);
 
                             //Handle placing random cubes in the leaves
@@ -187,7 +187,7 @@ public class FractalLeaves implements Cloneable{
 
                         //Set snow
                         if (snowy) {
-                            if (!relativeBlock.getUp().getType().isSolid()) {
+                            if (!relativeBlock.getUp().isSolid()) {
                                 relativeBlock.getUp().setType(Material.SNOW);
                             }
                         }

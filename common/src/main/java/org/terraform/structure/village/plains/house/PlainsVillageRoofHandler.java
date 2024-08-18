@@ -250,7 +250,7 @@ public class PlainsVillageRoofHandler {
                         //ArrayList<BlockFace> exposedFaces = new ArrayList<BlockFace>();
 
                         for (BlockFace face : BlockUtils.directBlockFaces) {
-                            if (!target.getRelative(face).getType().isSolid()) {
+                            if (!target.getRelative(face).isSolid()) {
                                 new StairBuilder(stairMat)
                                         .setFacing(face.getOppositeFace())
                                         .apply(target);

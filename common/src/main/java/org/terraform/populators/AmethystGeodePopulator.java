@@ -91,7 +91,7 @@ public class AmethystGeodePopulator {
                     	else
                     		rel.setType(Material.CAVE_AIR);
                         //Only do the other stuff if this isn't air.
-                    }else if(rel.getType().isSolid())
+                    }else if(rel.isSolid())
 	                    if (amethystCrust <= noiseVal) {
 	                        rel.setType(Material.AMETHYST_BLOCK,Material.BUDDING_AMETHYST);
 	                        amethystBlocks.add(rel);

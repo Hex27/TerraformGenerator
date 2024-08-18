@@ -53,7 +53,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             ArrayList<Wall> walls = new ArrayList<>();
             for (BlockFace face : BlockUtils.directBlockFaces) {
                 if (ppd.base.getRelative(face.getModX() * 2, 2, face.getModZ() * 2)
-                        .getType().isSolid()) {
+                        .isSolid()) {
                     isCrossroad = false;
                     walls.add(new Wall(
                             ppd.base.getRelative(face.getModX() * 2, 1, face.getModZ() * 2),
@@ -195,14 +195,14 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             for (int width = -2; width <= 2; width++) {
                 Wall rel = base.getRelative(0, h, 0);
                 if (h == 0 || h == 5 || width == -2 || width == 2) {
-                    if (!rel.getLeft(width).getType().isSolid())
+                    if (!rel.getLeft(width).isSolid())
                         return false;
-                    if (!rel.getRight(width).getType().isSolid())
+                    if (!rel.getRight(width).isSolid())
                         return false;
                 } else {
-                    if (rel.getLeft(width).getType().isSolid())
+                    if (rel.getLeft(width).isSolid())
                         return false;
-                    if (rel.getRight(width).getType().isSolid())
+                    if (rel.getRight(width).isSolid())
                         return false;
                 }
             }
@@ -262,11 +262,11 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
     }
 
     private void dropDownBlock(@NotNull SimpleBlock block) {
-        if (block.getType().isSolid()) {
+        if (block.isSolid()) {
             BlockData type = block.getBlockData();
             block.setType(Material.CAVE_AIR);
             int depth = 0;
-            while (!block.getType().isSolid()) {
+            while (!block.isSolid()) {
                 block = block.getDown();
                 depth++;
                 if (depth > 50) return;

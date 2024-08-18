@@ -77,7 +77,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
     
     private boolean isFrontSpaceClear(@NotNull Wall w, int space) {
     	for(int i = 0; i < space; i++) {
-    		if(w.getFront(i).getType().isSolid())
+    		if(w.getFront(i).isSolid())
     			return false;
     	}
     	return true;

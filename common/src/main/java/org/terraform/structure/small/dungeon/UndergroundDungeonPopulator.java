@@ -27,11 +27,11 @@ import java.util.Random;
 public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
 
     private static void dropDownBlock(@NotNull SimpleBlock block, @NotNull Material fluid) {
-        if (block.getType().isSolid()) {
+        if (block.isSolid()) {
             Material type = block.getType();
             block.setType(fluid);
             int depth = 0;
-            while (!block.getType().isSolid()) {
+            while (!block.isSolid()) {
                 block = block.getDown();
                 depth++;
                 if (depth > 50) return;

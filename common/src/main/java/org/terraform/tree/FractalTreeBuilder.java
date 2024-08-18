@@ -644,7 +644,7 @@ public class FractalTreeBuilder {
         
         if(beeHive != null)
 	        for (int i = 0; i < 8; i++) {
-	            if (!beeHive.getType().isSolid()) {
+	            if (!beeHive.isSolid()) {
 	                BeeHiveSpawner.spawnFullBeeNest(beeHive);
 	            	//TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
 	                break;
@@ -707,7 +707,7 @@ public class FractalTreeBuilder {
                 && Version.isAtLeast(15.1)
                 && GenUtils.chance(rand, (int) (beeChance * 1000.0), 1000)) {
             for (int i = 0; i < 3; i++) {
-                if (!two.getRelative(0, -i, 0).getType().isSolid()) {
+                if (!two.getRelative(0, -i, 0).isSolid()) {
                     beeHive = two.getRelative(0,-i,0);
                     break;
                     //TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
@@ -926,7 +926,7 @@ public class FractalTreeBuilder {
             leaf.setDistance(1);
         }
         for (int i = 1; i <= GenUtils.randInt(min, max); i++) {
-            if (!block.getRelative(0, -i, 0).getType().isSolid())
+            if (!block.getRelative(0, -i, 0).isSolid())
                 block.getRelative(0, -i, 0).rsetBlockData(BlockUtils.replacableByTrees,type);
             else
                 break;

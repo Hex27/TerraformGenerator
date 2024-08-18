@@ -63,7 +63,7 @@ public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
         core.getFront().getDown().downUntilSolid(rand, stoneBricks);
 
         Wall doorAdj = core.getFront().getRight();
-        if (!doorAdj.getUp(2).getType().isSolid()) {
+        if (!doorAdj.getUp(2).isSolid()) {
             new StairBuilder(Material.STONE_BRICK_STAIRS)
                     .setFacing(doorAdj.getDirection().getOppositeFace())
                     .apply(doorAdj.getUp(2));

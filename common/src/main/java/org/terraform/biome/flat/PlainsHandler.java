@@ -67,7 +67,7 @@ public class PlainsHandler extends BiomeHandler {
                 int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
                 if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
                 SimpleBlock target = new SimpleBlock(data, loc[0], GenUtils.getHighestGround(data, loc[0], loc[2])+1, loc[2]);
-                if(!target.getType().isSolid())
+                if(!target.isSolid())
                     PlantBuilder.PUMPKIN.build(target);
             }
         }
@@ -78,7 +78,7 @@ public class PlainsHandler extends BiomeHandler {
                 int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
                 if (data.getBiome(loc[0], loc[2]) != getBiome()) continue;
                 SimpleBlock target = new SimpleBlock(data, loc[0], GenUtils.getHighestGround(data, loc[0], loc[2])+1, loc[2]);
-                if(!target.getType().isSolid())
+                if(!target.isSolid())
                     PlantBuilder.MELON.build(target);
             }
         }

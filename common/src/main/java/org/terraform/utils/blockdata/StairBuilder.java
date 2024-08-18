@@ -54,7 +54,7 @@ public class StairBuilder {
     }
 
     public @NotNull StairBuilder lapply(@NotNull SimpleBlock block) {
-    	if(block.getType().isSolid())
+    	if(block.isSolid())
     		return this;
     	
         block.setBlockData(blockData);

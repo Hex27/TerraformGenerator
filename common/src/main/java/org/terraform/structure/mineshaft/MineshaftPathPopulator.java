@@ -230,7 +230,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                 } else if (GenUtils.chance(rand, 1, 10)) {
                     //Slabbing
                     for (BlockFace face : BlockUtils.directBlockFaces) {
-                        if (floor.getRelative(face).getType().isSolid()) {
+                        if (floor.getRelative(face).isSolid()) {
                             Slab slab = (Slab) Bukkit.createBlockData(GenUtils.randChoice(Material.COBBLESTONE_SLAB, Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB));
                             slab.setType(Type.BOTTOM);
                             floor.setBlockData(slab);
@@ -318,7 +318,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     }
     
     private void placeSupportFences(@NotNull Wall w) {
-    	while(!w.getType().isSolid()) {
+    	while(!w.isSolid()) {
     		if(w.getType() == Material.LAVA)
     			w.setType(Material.COBBLESTONE);
     		else

@@ -27,7 +27,7 @@ public class SilverfishNestPopulator extends RoomPopulatorAbstract {
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
-                if (w.getType().isSolid()) { //Don't block off pathways
+                if (w.isSolid()) { //Don't block off pathways
                     w.Pillar(room.getHeight() - 1, rand,
                             Material.ANDESITE,
                             Material.ANDESITE,

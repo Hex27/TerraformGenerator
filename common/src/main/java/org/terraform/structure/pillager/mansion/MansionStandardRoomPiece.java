@@ -47,7 +47,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     			//This is likely to be a window. However, do checks to ensure that this 
     			//isn't the main entrance or a balcony entrance.
     			SimpleBlock center = this.getRoom().getCenterSimpleBlock(data).getUp();
-    			if(center.getRelative(face,5).getType().isSolid())
+    			if(center.getRelative(face,5).isSolid())
     				this.internalWalls.put(face, MansionInternalWallState.WINDOW);
     			else
     				this.internalWalls.put(face, MansionInternalWallState.EXIT);

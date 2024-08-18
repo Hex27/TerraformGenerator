@@ -104,7 +104,7 @@ public class StairwayBuilder {
 	    			&& start.get().getType() != Material.OAK_SLAB 
 	    			&& BlockUtils.isWet(start.get())) {
 	    		for(int i = 0; i < maxExtensionForward; i++) {
-	    			if(start.getType().isSolid())
+	    			if(start.isSolid())
 	    				break;
 	    			
 	    			start.downUntilSolid(new Random(), downTypes);

@@ -116,7 +116,7 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
                                         .apply(w);
                             } else if (GenUtils.chance(random, 1, 5)) {
                                 //Study table, if there's enough space
-                                if (!w.getFront().getType().isSolid()) {
+                                if (!w.getFront().isSolid()) {
                                     new SlabBuilder(Material.SMOOTH_STONE_SLAB, Material.POLISHED_ANDESITE_SLAB)
                                             .setType(Slab.Type.TOP)
                                             .apply(w);

@@ -129,7 +129,7 @@ public class CylinderBuilder {
     }
 
     private void unitReplace(@NotNull SimpleBlock rel) {
-        if(!hardReplace && rel.getType().isSolid()) {
+        if(!hardReplace && rel.isSolid()) {
             return;
         }
 

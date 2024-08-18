@@ -26,7 +26,7 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
                     && !Tag.TRAPDOORS.isTagged(relType)
                     && !Tag.SLABS.isTagged(relType)) {
                 data.setHeight(face, Height.LOW);
-                if (target.getRelative(BlockFace.UP).getType().isSolid()) {
+                if (target.getRelative(BlockFace.UP).isSolid()) {
                     data.setHeight(face, Height.TALL);
                 }
 

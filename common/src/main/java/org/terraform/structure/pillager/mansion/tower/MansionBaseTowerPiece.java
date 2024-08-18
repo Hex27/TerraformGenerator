@@ -42,9 +42,9 @@ public class MansionBaseTowerPiece extends MansionStandardTowerPiece {
     	
     	target.getRelative(one).setType(Material.COBBLESTONE);
     	target.getRelative(two).setType(Material.COBBLESTONE);
-    	if(target.getRelative(two).getDown(2).getType().isSolid())
+    	if(target.getRelative(two).getDown(2).isSolid())
     		target.getRelative(two).getDown().setType(Material.COBBLESTONE);
-    	if(target.getRelative(one).getDown(2).getType().isSolid())
+    	if(target.getRelative(one).getDown(2).isSolid())
     		target.getRelative(one).getDown().setType(Material.COBBLESTONE);
     	
     }

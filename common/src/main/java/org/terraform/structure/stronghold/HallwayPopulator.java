@@ -39,12 +39,12 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
                         .setHalf(Bisected.Half.TOP)
                         .apply(w.getUp(4));
                 w.getUp(5).LPillar(room.getHeight(), rand, BlockUtils.stoneBricks);
-                if (!w.getRear().getUp().getType().isSolid()) {
+                if (!w.getRear().getUp().isSolid()) {
                     wasAir = true;
                     w.getUp(5).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
                 } else {
                     //Right or left wall is part of an entrance
-                    if (wasAir || !w.getLeft().getRear().getUp().getType().isSolid()) {
+                    if (wasAir || !w.getLeft().getRear().getUp().isSolid()) {
                         w.getRear().Pillar(5, rand, Material.STONE, Material.SMOOTH_STONE);
                     }
                     wasAir = false;
@@ -90,7 +90,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
                 for (int j = 0; j < GenUtils.randInt(rand, 0, 3); j++) {
                     BlockFace face = CoralGenerator.getRandomBlockFace();
                     if (face == BlockFace.UP) face = BlockFace.SELF;
-                    if (!webBase.getRelative(face).getType().isSolid())
+                    if (!webBase.getRelative(face).isSolid())
                         webBase.getRelative(face).setType(Material.COBWEB);
                 }
             }
@@ -99,11 +99,11 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
     }
 
     private void dropDownBlock(@NotNull SimpleBlock block) {
-        if (block.getType().isSolid()) {
+        if (block.isSolid()) {
             BlockData type = block.getBlockData();
             block.setType(Material.CAVE_AIR);
             int depth = 0;
-            while (!block.getType().isSolid()) {
+            while (!block.isSolid()) {
                 block = block.getDown();
                 depth++;
                 if (depth > 50) return;

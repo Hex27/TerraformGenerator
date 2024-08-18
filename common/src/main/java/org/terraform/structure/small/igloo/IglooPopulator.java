@@ -135,7 +135,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     	
     	//Stairway out the entrance.
 
-        if(entranceCore.getFront(2).getType().isSolid()) {
+        if(entranceCore.getFront(2).isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
 	        .setAngled(true)
 	        .setStopAtWater(true)
@@ -226,7 +226,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
         			case 2: 
         			case 3: //Solid interactable blocks and tables
         				for(int i = 0; i < 5; i++) {
-        					if(decoCore.getRelative(side,i).getType().isSolid())
+        					if(decoCore.getRelative(side,i).isSolid())
         						break;
         					
         					switch(random.nextInt(3)) {
@@ -259,7 +259,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
         				break;
         			default: //Barrels of stuff
         				for(int i = 0; i < 5; i++) {
-        					if(decoCore.getRelative(side,i).getType().isSolid()) break;
+        					if(decoCore.getRelative(side,i).isSolid()) break;
         					if(random.nextBoolean()) continue;
         					new BarrelBuilder()
         					.setFacing(BlockUtils.getSixBlockFace(random))
@@ -305,7 +305,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     		}
     		
     		target = target.getDown(i-3);
-    		if(!target.getType().isSolid()) {
+    		if(!target.isSolid()) {
 				new StairBuilder(Material.SPRUCE_STAIRS)
 				.setFacing(target.getDirection().getOppositeFace())
 				.apply(target);

@@ -83,7 +83,7 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
             Wall w = walls.getKey().getRelative(0, room.getHeight() - 1, 0);
             int length = walls.getValue();
             for (int j = 0; j < length; j++) {
-                if (!w.getUp().getType().isSolid()) {
+                if (!w.getUp().isSolid()) {
                     Stairs stair = (Stairs) Bukkit.createBlockData(design.stairs());
                     stair.setFacing(w.getDirection());
                     if (w.get().getY() < TerraformGenerator.seaLevel)

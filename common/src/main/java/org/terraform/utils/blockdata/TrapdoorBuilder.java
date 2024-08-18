@@ -60,7 +60,7 @@ public class TrapdoorBuilder {
     }
 
     public @NotNull TrapdoorBuilder lapply(@NotNull Wall block) {
-    	if(!block.getType().isSolid())
+    	if(!block.isSolid())
     		block.setBlockData(blockData);
         return this;
     }

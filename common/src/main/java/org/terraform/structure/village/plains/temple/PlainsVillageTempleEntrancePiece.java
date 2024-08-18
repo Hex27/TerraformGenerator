@@ -47,7 +47,7 @@ public class PlainsVillageTempleEntrancePiece extends JigsawStructurePiece {
 
         //Stairway down
 
-        if(core.getFront().getType().isSolid()) {
+        if(core.getFront().isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
 	        .setAngled(true)
 	        .setStopAtWater(true)

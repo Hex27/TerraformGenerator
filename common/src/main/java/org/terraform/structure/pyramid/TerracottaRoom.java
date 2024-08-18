@@ -26,10 +26,10 @@ public class TerracottaRoom extends RoomPopulatorAbstract {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
                 if (i != 0 && i != entry.getValue() - 1) {
-                    if (w.getRear().getType().isSolid()) {
+                    if (w.getRear().isSolid()) {
                         if(i != 1 && i != entry.getValue() - 2) { //Terracotta
                             if (!w.getRear().getLeft().isSolid() ||
-                                    !w.getRear().getRight().getType().isSolid()) {
+                                    !w.getRear().getRight().isSolid()) {
                                 w.Pillar(room.getHeight(), rand, Material.CHISELED_SANDSTONE);
                             } else {
                                 if (i % 3 == 0) {

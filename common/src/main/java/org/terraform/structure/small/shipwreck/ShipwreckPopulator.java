@@ -23,12 +23,12 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
             "tilted-shipwreck-1"};
 
     private static void dropDownBlock(@NotNull SimpleBlock block) {
-        if (block.getType().isSolid()) {
+        if (block.isSolid()) {
             Material type = block.getType();
             if (type == Material.CHEST) return;
             block.setType(Material.WATER);
             int depth = 0;
-            while (!block.getType().isSolid()) {
+            while (!block.isSolid()) {
                 block = block.getDown();
                 depth++;
                 if (depth > 50) return;

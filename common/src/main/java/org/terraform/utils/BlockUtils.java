@@ -564,11 +564,11 @@ public class BlockUtils {
         dropDownBlock(block, Material.CAVE_AIR);
     }
     public static void dropDownBlock(@NotNull SimpleBlock block, @NotNull Material fluid) {
-        if (block.getType().isSolid()) {
+        if (block.isSolid()) {
             Material type = block.getType();
             block.setType(fluid);
             int depth = 0;
-            while (!block.getType().isSolid()) {
+            while (!block.isSolid()) {
                 block = block.getDown();
                 depth++;
                 if (depth > 50) return;
@@ -603,7 +603,7 @@ public class BlockUtils {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
             dir.setFace(face.getOppositeFace(), true);
             SimpleBlock vine = rel.getRelative(face);
-            if (vine.getType().isSolid()) continue;
+            if (vine.isSolid()) continue;
 
             vine.setType(Material.VINE);
             vine.setBlockData(dir);
@@ -718,7 +718,7 @@ public class BlockUtils {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
             dir.setFace(face.getOppositeFace(), true);
             SimpleBlock vine = base.getRelative(face);
-            if (vine.getType().isSolid()) continue;
+            if (vine.isSolid()) continue;
 
             vine.setType(Material.VINE);
             vine.setBlockData(dir);
@@ -887,7 +887,7 @@ public class BlockUtils {
                             if (!isWet(rel) || waterToAir)
                                 rel.physicsSetType(Material.CAVE_AIR, false);
 
-                        } else if (!rel.getType().isSolid()) {
+                        } else if (!rel.isSolid()) {
                             if (!isWet(rel) || waterToAir)
                                 rel.physicsSetType(Material.CAVE_AIR, false);
                         }
@@ -933,7 +933,7 @@ public class BlockUtils {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.getType().isSolid()) {
+                        if (hardReplace || !rel.isSolid()) {
                             rel.setType(GenUtils.randChoice(rand, type));
                             if (snowy) {
                                 rel.getUp().lsetType(Material.SNOW);
@@ -968,7 +968,7 @@ public class BlockUtils {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randChoice(rand, type));
+                        if (hardReplace || !rel.isSolid()) rel.setType(GenUtils.randChoice(rand, type));
                         //rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
@@ -999,7 +999,7 @@ public class BlockUtils {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randChoice(rand, type));
+                        if (hardReplace || !rel.isSolid()) rel.setType(GenUtils.randChoice(rand, type));
                         //rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
@@ -1061,7 +1061,7 @@ public class BlockUtils {
     
     public static boolean isExposedToNonSolid(@NotNull SimpleBlock target) {
     	for(BlockFace face:directBlockFaces) {
-    		if(!target.getRelative(face).getType().isSolid())
+    		if(!target.getRelative(face).isSolid())
     			return true;
     	}
     	return false;
@@ -1322,7 +1322,7 @@ public class BlockUtils {
     }
 
     public static void stairwayUntilSolid(@NotNull SimpleBlock start, @NotNull BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
-        while (!start.getType().isSolid()) {
+        while (!start.isSolid()) {
             new StairBuilder(stairTypes)
                     .setFacing(extensionDir.getOppositeFace())
                     .apply(start);
@@ -1348,7 +1348,7 @@ public class BlockUtils {
     
     public static void angledStairwayUntilSolid(@NotNull SimpleBlock start, BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
         int threshold = 5;
-    	while (!start.getType().isSolid()) {
+    	while (!start.isSolid()) {
     		
     		if(threshold == 0)
     			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
@@ -1420,7 +1420,7 @@ public class BlockUtils {
             realHeight++;
             height--;
         }
-        if(base.getRelative(0,-realHeight,0).getType().isSolid())
+        if(base.getRelative(0,-realHeight,0).isSolid())
             realHeight--;
 
         if(realHeight <= 0) return;
@@ -1462,7 +1462,7 @@ public class BlockUtils {
             realHeight++;
             height--;
         }
-        if(base.getRelative(0,realHeight,0).getType().isSolid())
+        if(base.getRelative(0,realHeight,0).isSolid())
             realHeight--;
 
         if(realHeight <= 0) return;
@@ -1507,7 +1507,7 @@ public class BlockUtils {
             realHeight++;
             height--;
         }
-        if(base.getRelative(0,-realHeight,0).getType().isSolid())
+        if(base.getRelative(0,-realHeight,0).isSolid())
             realHeight--;
 
         if(realHeight <= 0) return;

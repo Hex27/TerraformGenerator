@@ -47,7 +47,7 @@ public class OutpostCampfire extends RoomPopulatorAbstract {
     		block.getUp().setType(Material.CAMPFIRE);
     		for(BlockFace face:BlockUtils.directBlockFaces) {
     			SimpleBlock target = block.getRelative(face).getGround().getUp();
-    			if(!target.getType().isSolid())
+    			if(!target.isSolid())
     				target.setType(Material.CAMPFIRE);
     		}
     		break;

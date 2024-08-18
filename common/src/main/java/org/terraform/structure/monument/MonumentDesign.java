@@ -68,7 +68,7 @@ public enum MonumentDesign {
     }
 
     public void upSpire(@NotNull SimpleBlock base, @NotNull Random rand) {
-        while (base.isSolid() || base.getUp().getType().isSolid()) {
+        while (base.isSolid() || base.getUp().isSolid()) {
             base = base.getUp();
             if (base.getY() > TerraformGenerator.seaLevel)
                 return;

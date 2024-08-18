@@ -158,7 +158,7 @@ public class MushroomBuilder {
 
     private void replaceSphere(float radius, @NotNull SimpleBlock base, @NotNull Material type) {
         if (radius < 0.5) {
-            if (!base.getType().isSolid())
+            if (!base.isSolid())
                 base.setType(type);
 
             return;
@@ -176,7 +176,7 @@ public class MushroomBuilder {
                             Math.pow(y, 2) / Math.pow(radius, 2) +
                             Math.pow(z, 2) / Math.pow(radius, 2)
                             <= 1 + 0.7 * noiseGen.GetNoise(block.getX(), block.getY(), block.getZ())) {
-                        if (!block.getType().isSolid()) {
+                        if (!block.isSolid()) {
                             block.setType(type);
                         }
                     }
@@ -212,7 +212,7 @@ public class MushroomBuilder {
                     if (equationResult <= 1 + 0.25 * Math.abs(noiseGen.GetNoise(x / r, y / ry, z / r))
                             && equationResult >= lowThreshold) {
 
-                        if (hardReplace || !rel.getType().isSolid()) {
+                        if (hardReplace || !rel.isSolid()) {
                             rel.setType(GenUtils.randChoice(rand, type));
                             BlockUtils.correctSurroundingMushroomData(rel);
                         }
@@ -362,7 +362,7 @@ public class MushroomBuilder {
                 SimpleBlock pointBase = base.getRelative(Math.round(point.x), 0, Math.round(point.y));
 
                 while (true) {
-                    if (pointBase.getType().isSolid()) {
+                    if (pointBase.isSolid()) {
                         if (BlockUtils.isAir(pointBase.getDown().getType()))
                             pointBase.getDown().setType(Material.MUSHROOM_STEM);
                         continue points;

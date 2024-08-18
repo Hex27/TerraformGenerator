@@ -55,7 +55,7 @@ public class PyramidDungeonPathPopulator extends PathPopulatorAbstract {
 
         //Cobwebs
         if (GenUtils.chance(this.rand, 1, 100)) {
-            if (ppd.base.getRelative(0, height + 1, 0).getType().isSolid()) {
+            if (ppd.base.getRelative(0, height + 1, 0).isSolid()) {
                 ppd.base.getRelative(0, height, 0).setType(Material.COBWEB);
             }
         }

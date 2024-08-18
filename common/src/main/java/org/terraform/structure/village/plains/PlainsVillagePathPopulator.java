@@ -62,7 +62,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
     		return false;
         for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
             for (int i = 0; i < 6; i++)
-                if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
+                if (target.getRelative(face).getRelative(0, i, 0).isSolid())
                     return false;
         }
 
@@ -129,7 +129,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                     ppd.base.getZ() + side.getModZ() * 3);
             if (target.getType() == Material.DIRT_PATH) return;
             for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
-                if (target.getRelative(face).getGround().getUp().getType().isSolid())
+                if (target.getRelative(face).getGround().getUp().isSolid())
                     return;
             }
 

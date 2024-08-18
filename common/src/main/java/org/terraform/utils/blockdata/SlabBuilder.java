@@ -47,14 +47,14 @@ public class SlabBuilder {
     }
 
     public @NotNull SlabBuilder lapply(@NotNull SimpleBlock block) {
-    	if(block.getType().isSolid())
+    	if(block.isSolid())
     		return this;
         block.setBlockData(blockData);
         return this;
     }
 
     public @NotNull SlabBuilder lapply(@NotNull Wall block) {
-    	if(block.getType().isSolid())
+    	if(block.isSolid())
     		return this;
         block.setBlockData(blockData);
         return this;

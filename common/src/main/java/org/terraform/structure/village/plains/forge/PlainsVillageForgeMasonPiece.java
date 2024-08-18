@@ -80,7 +80,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	
     	//Place stone cutter
     	Wall target = core.getRelative(BlockUtils.getXZPlaneBlockFace(random));
-    	while(target.getType().isSolid()) {
+    	while(target.isSolid()) {
     		target = target.getUp();
     	}
     	new DirectionalBuilder(Material.STONECUTTER)
@@ -90,7 +90,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	//Place one or two lamps next to the cutter
     	for(int i = 0; i < random.nextInt(2)+1; i++) {
     		target = target.getAtY(core.getY()+1).getRelative(BlockUtils.getDirectBlockFace(random));
-    		while(target.getType().isSolid()) {
+    		while(target.isSolid()) {
         		target = target.getUp();
         	}
     		if(target.getDown().getType() != Material.LANTERN)
@@ -147,7 +147,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	//Place one or two lamps next to the cutter
     	for(int i = 0; i < random.nextInt(2)+1; i++) {
     		Wall target = core.getRelative(core.getDirection().getOppositeFace(), 2).getRelative(BlockUtils.getDirectBlockFace(random));
-    		while(target.getType().isSolid()) {
+    		while(target.isSolid()) {
         		target = target.getUp();
         	}
     		target.setType(Material.LANTERN);

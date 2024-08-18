@@ -46,7 +46,7 @@ public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
             Wall w = walls.getKey();
             int length = walls.getValue();
             for (int j = 0; j < length; j++) {
-                if (!w.getRear().getType().isSolid()) {
+                if (!w.getRear().isSolid()) {
                     Wall wall = w.getUp(4);
                     wall.LPillar(room.getHeight() - 4, true, rand, Material.SEA_LANTERN, Material.DARK_PRISMARINE);
                 } else {

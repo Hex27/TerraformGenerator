@@ -136,7 +136,7 @@ public class MansionSecondFloorStudyPopulator extends MansionRoomPopulator {
 		Entry<Wall,Integer> entry = this.getRoom().getWall(base.get().getPopData(), base.getDirection().getOppositeFace(), 0);
 		Wall w = entry.getKey();
 		for(int i = 0; i < entry.getValue(); i++) {
-			if(!w.getType().isSolid()) w.setType(Material.RED_CARPET);
+			if(!w.isSolid()) w.setType(Material.RED_CARPET);
 			if(w.getFront().getType() == Material.POLISHED_ANDESITE) {
 				w.getFront().Pillar(6, Material.AIR);
 				w.getFront().setType(Material.RED_CARPET);

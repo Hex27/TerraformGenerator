@@ -101,7 +101,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                         if(y > 0) { //Upper half of sphere is air
                         	rel.setType(Material.AIR);
-                        }else if(rel.getType().isSolid()) {
+                        }else if(rel.isSolid()) {
                         	//Lower half is water, if replaced block was solid.
                         	rel.setType(Material.WATER);
                         	PhysicsUpdaterPopulator.pushChange(tw.getName(), new SimpleLocation(rel.getX(),rel.getY(),rel.getZ()));
@@ -117,7 +117,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
     	if(b.getY() < TerraformGenerator.seaLevel + 15)
     		return false;
     	for(int i = 0; i < 5; i++) {
-    		if(!b.getRelative(0,-i,0).getType().isSolid())
+    		if(!b.getRelative(0,-i,0).isSolid())
     			return false;
     	}
     	return BlockUtils.isExposedToNonSolid(b.getDown(4));

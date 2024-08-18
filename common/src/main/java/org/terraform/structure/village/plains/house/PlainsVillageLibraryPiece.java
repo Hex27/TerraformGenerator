@@ -49,7 +49,7 @@ public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
                         Ladder ladder = (Ladder) Bukkit.createBlockData(Material.LADDER);
                         ladder.setFacing(w.getDirection());
                         for (int h = 0; h < 25; h++) {
-                            if (w.getFront().getRelative(0, h, 0).getType().isSolid())
+                            if (w.getFront().getRelative(0, h, 0).isSolid())
                                 break;
                             w.getFront().getRelative(0, h, 0).setBlockData(ladder);
                         }

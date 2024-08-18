@@ -55,11 +55,11 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 					
 					//Room is connected to a window.
 					//Spawn the arch and block out the window.
-					if(!target.getRight(4).getUp().getType().isSolid()) {
+					if(!target.getRight(4).getUp().isSolid()) {
 						applyHallwaySmoothing(target.getRight(4));
 						target.getRight(5).Pillar(6, Material.DARK_OAK_PLANKS);
 					}
-					if(!target.getLeft(4).getUp().getType().isSolid()) {
+					if(!target.getLeft(4).getUp().isSolid()) {
 						applyHallwaySmoothing(target.getLeft(4));
 						target.getLeft(5).Pillar(6, Material.DARK_OAK_PLANKS);
 					}

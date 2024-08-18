@@ -84,7 +84,7 @@ public class DeepCavePopulator extends AbstractCavePopulator {
             //Only next to spots where there's some kind of solid block.
             if (BlockUtils.isAir(base.getType()))
                 for (BlockFace face : BlockUtils.directBlockFaces) {
-                    if (base.getRelative(face).getType().isSolid()) {
+                    if (base.getRelative(face).isSolid()) {
                     	if(base.getDown().getType() == Material.DEEPSLATE)
                     		base.setType(Material.COBBLED_DEEPSLATE_SLAB);
                     	else

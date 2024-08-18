@@ -308,7 +308,7 @@ public class MansionRoofHandler {
     }
     
     private static void attemptReplaceSlab(@NotNull Material slabType, @NotNull Wall w, @NotNull Type type) {
-    	if(!w.getType().isSolid()) {
+    	if(!w.isSolid()) {
         	if(w.findCeiling(5) != null) return;
 	    	new SlabBuilder(slabType)
 	    	.setType(type)
@@ -320,7 +320,7 @@ public class MansionRoofHandler {
     public static void atticDecorations(@NotNull Random rand, @NotNull PopulatorDataAbstract data, @NotNull JigsawStructurePiece piece) {
     	SimpleBlock core = piece.getRoom().getCenterSimpleBlock(data).getUp(8);
     	
-    	if(!core.getType().isSolid()) {
+    	if(!core.isSolid()) {
     		Wall ceiling = new Wall(core).getUp().findCeiling(15);
     		if(ceiling == null) return;
     		if(ceiling.getType().toString().contains("DARK_OAK")) {
@@ -365,7 +365,7 @@ public class MansionRoofHandler {
     			if(GenUtils.chance(rand, 1, 20))
     			{
     				BlockFace f = BlockUtils.getDirectBlockFace(rand);
-    				if(!target.getRelative(f).getType().isSolid())
+    				if(!target.getRelative(f).isSolid())
     					new ChestBuilder(Material.CHEST)
     					.setFacing(f).setLootTable(TerraLootTable.WOODLAND_MANSION)
     					.apply(target.getRelative(f));

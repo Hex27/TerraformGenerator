@@ -303,7 +303,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
                             BlockUtils.correctSurroundingMultifacingData(b);
 
                             if (GenUtils.chance(random, 1, 12) &&
-                                    !b.getDown().getType().isSolid()) {
+                                    !b.getDown().isSolid()) {
                                 Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
                                 l.setHanging(true);
                                 b.getDown().setBlockData(l);
@@ -361,7 +361,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     }
 
     private void setLootBlock(@NotNull SimpleBlock lootBlock) {
-        if (GenUtils.chance(1, 25) && !lootBlock.getType().isSolid()) {
+        if (GenUtils.chance(1, 25) && !lootBlock.isSolid()) {
             lootBlock.setType(Material.BARREL);
             lootBlock.setBlockData(BlockUtils.getRandomBarrel());
             lootBlock.getPopData().lootTableChest(lootBlock.getX(), lootBlock.getY(), lootBlock.getZ(), TerraLootTable.ABANDONED_MINESHAFT);

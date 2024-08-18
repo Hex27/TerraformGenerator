@@ -91,7 +91,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
             Wall w = entry.getKey()
                     .getRelative(0, room.getHeight() / 2, 0);
             for (int i = 0; i < entry.getValue(); i++) {
-                if (!w.getType().isSolid()) {
+                if (!w.isSolid()) {
 
                     if (i != entry.getValue() / 2)
                         w.setType(

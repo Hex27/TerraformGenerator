@@ -134,7 +134,7 @@ public class BoxBuilder {
     
     private void unitReplace(@NotNull SimpleBlock rel) {
     	if(replaceWhitelist.isEmpty()) {
-    		if (hardReplace || !rel.getType().isSolid()) {
+    		if (hardReplace || !rel.isSolid()) {
                 rel.setType(GenUtils.randChoice(random, types));
             }
     		else
@@ -145,7 +145,7 @@ public class BoxBuilder {
     	else
     		return;
     	
-    	if(rel.getDown().getType().isSolid()) {
+    	if(rel.getDown().isSolid()) {
 	    	if(upperType != null)
 	    		rel.getUp().lsetType(upperType);
 	    	if(lowerType != null)

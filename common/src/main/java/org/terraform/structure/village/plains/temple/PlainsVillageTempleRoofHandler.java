@@ -106,14 +106,14 @@ public class PlainsVillageTempleRoofHandler {
 					SimpleBlock b = new SimpleBlock(data, x, piece.getRoom().getY()+1,z);
 					int i;
 					for(i = 0; i < 9; i++) {
-						if(!b.getType().isSolid()) {
+						if(!b.isSolid()) {
 							b = b.getUp();
 						}else {
 							break;
 						}
 					}
 					
-					if(i == 9 && !b.getType().isSolid()) {
+					if(i == 9 && !b.isSolid()) {
 						placeGlazedTerracotta(b, glazedTerracotta);
 						b.getUp().setType(Material.POLISHED_ANDESITE);
 					}
