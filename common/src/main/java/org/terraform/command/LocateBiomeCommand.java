@@ -1,6 +1,5 @@
 package org.terraform.command;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,20 +45,19 @@ public class LocateBiomeCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args) throws InvalidArgumentException {
         Player p = (Player) sender;
 
         if (!args.isEmpty()) {
             try {
-                new Task(
-                        p.getUniqueId(),
+                new Task(p.getUniqueId(),
                         TerraformWorld.get(p.getWorld()),
                         p.getLocation().getBlockX(),
                         p.getLocation().getBlockZ(),
-                        (BiomeBank) this.parseArguments(sender, args).get(0))
-                        .runTaskAsynchronously(TerraformGeneratorPlugin.get());
-            } catch (IllegalArgumentException e) {
+                        (BiomeBank) this.parseArguments(sender, args).get(0)
+                ).runTaskAsynchronously(TerraformGeneratorPlugin.get());
+            }
+            catch (IllegalArgumentException e) {
                 sender.sendMessage(LangOpt.COMMAND_LOCATEBIOME_INVALIDBIOME.parse());
 
                 StringBuilder types = new StringBuilder();
@@ -67,7 +65,9 @@ public class LocateBiomeCommand extends TerraCommand {
 
                 for (BiomeBank type : BiomeBank.values()) {
                     ChatColor col = ChatColor.RED;
-                    if (b) col = ChatColor.DARK_RED;
+                    if (b) {
+                        col = ChatColor.DARK_RED;
+                    }
                     b = !b;
                     types.append(col).append(type).append(' ');
                 }
@@ -77,14 +77,12 @@ public class LocateBiomeCommand extends TerraCommand {
         }
     }
 
-    private void syncSendMessage(UUID uuid, @NotNull String message) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getUniqueId() == uuid) {
-                p.sendMessage(message);
-                break;
-            }
-        }
-        TerraformGeneratorPlugin.logger.info("[Locate Command] " + message);
+    private void syncSendMessage(UUID uuid, String msg) {
+        super.syncSendMessage(uuid, "Locate Biome", msg);
+    }
+
+    private void syncSendMessage(UUID uuid, String msg, int x, int y, int z) {
+        super.syncSendMessageTP(uuid, "Locate Biome", msg, x, y, z);
     }
 
     private static class LocateBiomeTypeArgument extends TerraCommandArgument<BiomeBank> {
@@ -103,7 +101,8 @@ public class LocateBiomeCommand extends TerraCommand {
         public @NotNull String validate(CommandSender sender, @NotNull String value) {
             try {
                 parse(sender, value);
-            } catch (IllegalArgumentException e) {
+            }
+            catch (IllegalArgumentException e) {
                 return "That biome type does not exist!";
             }
             return "";
@@ -111,12 +110,15 @@ public class LocateBiomeCommand extends TerraCommand {
 
         @Override
         public @NotNull ArrayList<String> getTabOptions(String @NotNull [] args) {
-            if (args.length != 2) return new ArrayList<>();
+            if (args.length != 2) {
+                return new ArrayList<>();
+            }
             ArrayList<String> values = new ArrayList<>();
 
             for (BiomeBank bank : BiomeBank.values()) {
-            	if(bank.name().startsWith(args[1].toUpperCase(Locale.ENGLISH)))
-            		values.add(bank.name());
+                if (bank.name().startsWith(args[1].toUpperCase(Locale.ENGLISH))) {
+                    values.add(bank.name());
+                }
             }
 
             return values;
@@ -140,22 +142,29 @@ public class LocateBiomeCommand extends TerraCommand {
 
         @Override
         public void run() {
-        	Vector2f location;
-        	if(b.getType() == BiomeType.BEACH || b.getType() == BiomeType.RIVER) {
-                location = GenUtils.locateHeightDependentBiome(tw, b,
-                        new Vector2f(x, z), 5000, 25);
-                if (location == null)
+            Vector2f location;
+            if (b.getType() == BiomeType.BEACH || b.getType() == BiomeType.RIVER) {
+                location = GenUtils.locateHeightDependentBiome(tw, b, new Vector2f(x, z), 5000, 25);
+                if (location == null) {
                     syncSendMessage(p, LangOpt.COMMAND_LOCATEBIOME_NOT_IN_5000.parse());
-        	}else {
-        		location = GenUtils.locateHeightIndependentBiome(tw, b, new Vector2f(x, z));
-        	}
-        	
-        	if(location != null)
-        		syncSendMessage(p, LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", location.x + "", "%z%", location.y + ""));
-        	else
-        		syncSendMessage(p, LangOpt.COMMAND_LOCATEBIOME_DISABLED.parse());
+                }
+            }
+            else {
+                location = GenUtils.locateHeightIndependentBiome(tw, b, new Vector2f(x, z));
+            }
+
+            if (location != null) {
+                int x = (int) location.x;
+                int z = (int) location.y;
+
+                final String message = LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", x + "", "%z%", z + "");
+
+                syncSendMessage(p, message, x, getHighestY(tw, x, z), z);
+            }
+            else {
+                syncSendMessage(p, LangOpt.COMMAND_LOCATEBIOME_DISABLED.parse());
+            }
 
         }
     }
-
 }
