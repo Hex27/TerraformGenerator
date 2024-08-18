@@ -215,7 +215,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
             ica.a(structureFeature, new ChunkCoordIntPair(chunkX, chunkZ).a()); //a is toLong
         }
     	catch(NoSuchMethodException | InstantiationException | InvocationTargetException | ClassNotFoundException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 

@@ -44,7 +44,7 @@ public class ConfigLoader {
                     );
 				}
 			}catch(Exception e) {
-				e.printStackTrace();
+				TerraformGeneratorPlugin.logger.stackTrace(e);
 				Bukkit.getLogger().info("Failed to backup old config before overwrite.");
 			}
 		}

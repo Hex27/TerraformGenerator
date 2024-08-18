@@ -61,7 +61,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
             clone.setDepth(depth);
             return clone;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
         return null;
     }

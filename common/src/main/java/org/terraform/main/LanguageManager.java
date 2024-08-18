@@ -59,7 +59,7 @@ public class LanguageManager {
         try {
         	langFile.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 

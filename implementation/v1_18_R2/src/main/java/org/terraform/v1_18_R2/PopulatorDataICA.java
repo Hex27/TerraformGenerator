@@ -182,7 +182,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         }
     	catch(NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     	}
     	
     	IStructureAccess sa = ica; //IStructureAccess is FeatureAccess

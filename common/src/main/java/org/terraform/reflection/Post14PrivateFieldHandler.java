@@ -27,7 +27,7 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
             findVarHandle = publicLookup.findVirtual(MethodHandles.Lookup.class, "findVarHandle", MethodType.methodType(varHandle, Class.class, String.class, Class.class));
             varHandleSet = publicLookup.findVirtual(varHandle, "set", MethodType.methodType(void.class, Object[].class));
         } catch (NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 
         LOOKUP = lookup;
@@ -46,7 +46,7 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
             Object varHandleModifiers = FIND_VAR_HANDLE.invoke(lookup, Field.class, "modifiers", int.class);
             VAR_HANDLE_SET.invoke(varHandleModifiers, new Object[]{targetField, mds & ~Modifier.FINAL});
         } catch (Throwable throwable) {
-	    	//throwable.printStackTrace();
+	    	// TerraformGeneratorPlugin.TerraformGeneratorPlugin.logger.stackTrace(throwable);
             TerraformGeneratorPlugin.logger.info("Java 14+ detected.");
         }
 
@@ -63,7 +63,7 @@ public class Post14PrivateFieldHandler extends PrivateFieldHandler {
 	        Object varHandleModifiers = FIND_VAR_HANDLE.invoke(lookup, Field.class, "modifiers", int.class);
 	        VAR_HANDLE_SET.invoke(varHandleModifiers, new Object[]{targetField, mds & ~Modifier.FINAL});
 	    } catch (Throwable throwable) {
-	    	//throwable.printStackTrace();
+	    	// TerraformGeneratorPlugin.TerraformGeneratorPlugin.logger.stackTrace(throwable);
 	        TerraformGeneratorPlugin.logger.info("Java 14+ detected.");
 	    }
 	    targetField.set(obj, value);

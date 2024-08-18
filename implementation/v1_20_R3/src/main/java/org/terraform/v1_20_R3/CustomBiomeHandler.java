@@ -59,7 +59,7 @@ public class CustomBiomeHandler {
 			frozen.set(registrywritable, false);
 			TerraformGeneratorPlugin.logger.info("Unfreezing biome registry...");
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 		
 		BiomeBase forestbiome = registrywritable.a(Biomes.i); //forest
@@ -80,7 +80,7 @@ public class CustomBiomeHandler {
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException |
                      NoSuchMethodException | InvocationTargetException e) {
 				TerraformGeneratorPlugin.logger.error("Failed to register custom biome: " + type.getKey());
-				e.printStackTrace();
+				TerraformGeneratorPlugin.logger.stackTrace(e);
 			}
 		}
 		
@@ -90,7 +90,7 @@ public class CustomBiomeHandler {
 			frozen.set(registrywritable, true);
 			TerraformGeneratorPlugin.logger.info("Freezing biome registry");
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 
     }

@@ -87,7 +87,7 @@ public class AncientCitySchematicPlatform extends AncientCityAbstractRoomPopulat
             	.build();
             }
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
     	super.sculkUp(tw, data, this.effectiveRoom);
     }

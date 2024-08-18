@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 
 import java.io.FileNotFoundException;
@@ -20,7 +21,7 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
         try {
             return TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
         return null;
     }
@@ -31,7 +32,7 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
             //Path validation is done inside TerraSchematic.load
             TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             return "Problem loading schematic. Check console for error";
         }
         return "";

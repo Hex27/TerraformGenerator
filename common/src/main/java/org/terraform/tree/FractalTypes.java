@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneNineBlockHandler;
 
@@ -367,7 +368,7 @@ public class FractalTypes {
                         treeMutator.apply(b);
                     }catch(CloneNotSupportedException e){
                         //good luck m8
-                        e.printStackTrace();
+                        TerraformGeneratorPlugin.logger.stackTrace(e);
                         return b.build(tw,base);
                     }
                 }

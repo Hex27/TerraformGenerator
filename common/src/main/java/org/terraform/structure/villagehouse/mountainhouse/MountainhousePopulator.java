@@ -114,7 +114,7 @@ public class MountainhousePopulator extends VillageHousePopulator {
             
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place mountain house at " + x + "," + y + "," + z + "!");
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 }

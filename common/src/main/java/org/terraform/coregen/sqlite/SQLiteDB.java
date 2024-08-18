@@ -3,6 +3,7 @@ package org.terraform.coregen.sqlite;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.io.File;
 import java.sql.Connection;
@@ -63,7 +64,7 @@ public class SQLiteDB {
             stmt.close();
             PREPARED_WORLDS.add(world);
         } catch (SQLException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         } finally {
             closeConn(conn);
         }
@@ -75,7 +76,7 @@ public class SQLiteDB {
                 conn.close();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(ex);
         }
     }
 
@@ -112,7 +113,7 @@ public class SQLiteDB {
             c.commit();
             c.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 
@@ -145,7 +146,7 @@ public class SQLiteDB {
             stmt.close();
             c.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             //Bukkit.getLogger().severe(e.getClass().getName() + "[" + e.getCause() +"]" + ":" + e.getMessage() );
         }
 
@@ -181,7 +182,7 @@ public class SQLiteDB {
             c.commit();
             c.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 }

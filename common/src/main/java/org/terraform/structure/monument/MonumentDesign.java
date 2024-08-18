@@ -11,6 +11,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -62,7 +63,7 @@ public enum MonumentDesign {
             schema.setFace(BlockFace.NORTH);
             schema.apply();
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 

@@ -82,7 +82,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                 }
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 
     }

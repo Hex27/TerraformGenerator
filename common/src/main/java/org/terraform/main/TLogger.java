@@ -103,4 +103,16 @@ public class TLogger {
         		Bukkit.getConsoleSender().sendMessage("[TerraformGenerator][v] "
         				+ ChatColor.translateAlternateColorCodes('&', message));
     }
+
+    public void stackTrace(@NotNull Throwable e) {
+        for(StackTraceElement stackTraceElement : e.getStackTrace()) {
+            final String message = stackTraceElement.toString();
+
+            if(suppressConsoleLogs) {
+                LOGGER.log(Level.SEVERE, "[!] " + message);
+            } else {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[TerraformGenerator][!] " + message);
+            }
+        }
+    }
 }
