@@ -183,7 +183,7 @@ public class SimpleBlock {
         }
     }
 
-    public @org.jetbrains.annotations.Nullable BlockData getBlockData() {
+    public @Nullable BlockData getBlockData() {
         return popData.getBlockData(x, y, z);//Bukkit.createBlockData(getType());
     }
 
@@ -287,7 +287,7 @@ public class SimpleBlock {
         return z;
     }
 
-    public @org.jetbrains.annotations.Nullable Material getType() {
+    public @Nullable Material getType() {
         return popData.getType(x, y, z);
     }
     
@@ -445,7 +445,7 @@ public class SimpleBlock {
      * @param cutoff number of iterations before stopping and returning null
      * @return first solid block above this one
      */
-    public @Nullable @org.jetbrains.annotations.Nullable SimpleBlock findCeiling(int cutoff) {
+    public @Nullable SimpleBlock findCeiling(int cutoff) {
     	SimpleBlock ceil = this.getUp();
         while (cutoff > 0) {
             if (ceil.isSolid() && ceil.getType() != Material.LANTERN) {
@@ -461,7 +461,7 @@ public class SimpleBlock {
      * @param cutoff number of iterations before stopping and returning null
      * @return first solid block below this one
      */
-    public @Nullable @org.jetbrains.annotations.Nullable SimpleBlock findFloor(int cutoff) {
+    public @Nullable SimpleBlock findFloor(int cutoff) {
     	SimpleBlock floor = this.getDown();
         while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
             if (floor.isSolid() && floor.getType() != Material.LANTERN) {
@@ -495,7 +495,7 @@ public class SimpleBlock {
      * If not solid, find nearest floor.
      * @param cutoff number of iterations before stopping and returning null
      */
-    public @Nullable @org.jetbrains.annotations.Nullable SimpleBlock findNearestAirPocket(int cutoff) {
+    public @Nullable SimpleBlock findNearestAirPocket(int cutoff) {
     	if(this.isSolid()) {
     		SimpleBlock rel = this.getUp();
             while (cutoff > 0) {
@@ -519,7 +519,7 @@ public class SimpleBlock {
      * @param cutoff number of iterations before stopping and returning null
      * @return first stone-like block below this one
      */
-    public @Nullable @org.jetbrains.annotations.Nullable SimpleBlock findStonelikeFloor(int cutoff) {
+    public @Nullable SimpleBlock findStonelikeFloor(int cutoff) {
     	SimpleBlock floor = this.getDown();
         while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
         	//floor.getUp().setType(Material.CYAN_STAINED_GLASS);
@@ -536,7 +536,7 @@ public class SimpleBlock {
      * @param cutoff the number of iterations before stopping and returning null
      * @return first stone-like block above this one
      */
-    public @Nullable @org.jetbrains.annotations.Nullable SimpleBlock findStonelikeCeiling(int cutoff) {
+    public @Nullable SimpleBlock findStonelikeCeiling(int cutoff) {
     	SimpleBlock ceil = this.getUp();
         while (cutoff > 0) {
             if (BlockUtils.isStoneLike(ceil.getType())) {
