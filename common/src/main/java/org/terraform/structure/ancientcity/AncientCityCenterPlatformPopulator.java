@@ -32,7 +32,7 @@ import org.terraform.utils.version.Version;
 public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomPopulator {
 
     public AncientCityCenterPlatformPopulator(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
-        super(tw, occupied, gen, rand, forceSpawn, unique);
+        super(tw, gen, rand, forceSpawn, unique);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         //Direction the head faces
     	BlockFace facing = BlockUtils.getDirectBlockFace(this.getRand());
 
-    	int modX = 0; int modZ = 0; CubeRoom fireBox;
+    	int modX; int modZ; CubeRoom fireBox;
     	if(BlockUtils.getAxisFromBlockFace(facing) == Axis.X) {
     		modX = 3;
     		modZ = 17;
@@ -279,9 +279,6 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     
     /**
      * This method will replace rocks near the warden head.
-     * @param b
-     * @param height
-     * @param dir
      */
     private void airWardenBlocks(@NotNull SimpleBlock b, int height, @NotNull BlockFace dir) {
     	for(int i = 0; i < height; i++) {

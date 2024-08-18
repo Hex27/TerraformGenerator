@@ -23,13 +23,11 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class AncientCityPathPopulator extends PathPopulatorAbstract {
-	
-	//private int state = 0;
-    private final Random rand;
+
     private final RoomLayoutGenerator gen;
     private final HashSet<SimpleLocation> occupied;
     public AncientCityPathPopulator(Random rand, RoomLayoutGenerator gen, HashSet<SimpleLocation> occupied) {
-        this.rand = rand;
+        //private int state = 0;
         this.gen = gen;
         this.occupied = occupied;
     }
@@ -89,7 +87,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
             //state++;
         }
         else { //End
-        	AncientCityPathMiniRoomPlacer.placeAltar(core, rand);
+        	AncientCityPathMiniRoomPlacer.placeAltar(core);
         }
     }
     
@@ -256,8 +254,4 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         return true;
     }
 
-    @Override
-    public int getPathWidth() {
-        return 3;
-    }
 }

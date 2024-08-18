@@ -2,7 +2,6 @@ package org.terraform.command;
 
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -39,7 +38,7 @@ public class ValuesCommand extends TerraCommand {
     
     @SuppressWarnings("unused")
 	private double warpSine(double tempUnwarpedSineX, int period, int seed) {
-		double warp = GenUtils.randInt(new Random(3*seed),-3, 3);
+		double warp = GenUtils.randInt(new Random(3L *seed),-3, 3);
 		if(warp == 0) warp = 1;
 		if(warp < 0) {
 			warp = (10-2*warp)/10.0;
@@ -59,8 +58,7 @@ public class ValuesCommand extends TerraCommand {
 
     @SuppressWarnings("unused")
 	@Override
-    public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, Stack<String> args) {
     	
         MathValues vals = new MathValues();
         MathValues unwarped = new MathValues();
@@ -94,7 +92,7 @@ public class ValuesCommand extends TerraCommand {
         sender.sendMessage("Unwarped" + unwarped);
     }
 
-    private class MathValues {
+    private static class MathValues {
         private double total = 0;
         private double lowest = 99999;
         private double highest = -99999;

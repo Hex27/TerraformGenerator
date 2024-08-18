@@ -14,7 +14,6 @@ import org.terraform.command.contants.TerraCommandArgument;
 import org.terraform.main.config.TConfigOption;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
@@ -114,16 +113,12 @@ public class TerraformCommandManager implements TabExecutor {
 	}
 	
 	@Override
-	public boolean onCommand(@NotNull CommandSender sender, Command cmd, String arg2,
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String arg2,
                              String @NotNull [] args) {
 		if(args.length == 0){
 			sender.sendMessage(plugin.getLang().fetchLang("command.unknown"));
-			try {
-				new HelpCommand(plugin, this).execute(sender, new Stack<>());
-			} catch (InvalidArgumentException e) {
-				sender.sendMessage(ChatColor.RED + e.getProblem());
-			}
-			return false;
+            new HelpCommand(plugin, this).execute(sender, new Stack<>());
+            return false;
 		}
 		for(TerraCommand command:commands){
 			if(command.matchCommand(args[0].toLowerCase(Locale.ENGLISH))){

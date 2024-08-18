@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeBlender;
 import org.terraform.biome.BiomeSection;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
@@ -43,8 +42,7 @@ public class CheckHeightCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(CommandSender sender, Stack<String> args) {
 
         Player p = (Player) sender;
         int x = p.getLocation().getBlockX();
@@ -70,8 +68,8 @@ public class CheckHeightCommand extends TerraCommand {
         p.sendMessage("Mega Chunk Center: " + mc.getCenterBlockCoords()[0] + "," + mc.getCenterBlockCoords()[1]);
         p.sendMessage("Mega Chunk BiomeSection Center: " + mc.getCenterBiomeSectionBlockCoords()[0] + "," + mc.getCenterBiomeSectionBlockCoords()[1]);
         
-        p.sendMessage("Biome Section: " + section.toString());
-        p.sendMessage("Biome Section Climate: " + section.getClimate().toString());
+        p.sendMessage("Biome Section: " + section);
+        p.sendMessage("Biome Section Climate: " + section.getClimate());
         p.sendMessage("Biome Section Elevation: " +  section.getOceanLevel());
         p.sendMessage("Surrounding Sections:");
         for(BiomeSection sect:BiomeSection.getSurroundingSections(tw, x, z)) {

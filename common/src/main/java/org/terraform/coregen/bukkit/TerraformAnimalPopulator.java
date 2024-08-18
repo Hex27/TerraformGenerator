@@ -128,7 +128,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     }
 
     @Override
-    public void populate(World world, Random random, @NotNull Chunk chunk) {
+    public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
        
     	PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
 

@@ -3,7 +3,6 @@ package org.terraform.biome.mountainous;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.biome.BiomeBank;
 import org.terraform.biome.flat.JungleHandler;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -49,14 +48,6 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
     public boolean isOcean() {
         return false;
     }
-//
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 8);
-//		gen.setScale(0.005);
-//		
-//		return (int) ((gen.noise(x, z, 0.5, 0.5)*7D+50D)*1.5);
-//	}
 
     @Override
     public @NotNull Biome getBiome() {
@@ -211,9 +202,5 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
             }
         }
     }
-	
-	@Override
-	public @NotNull BiomeBank getBeachType() {
-		return BiomeBank.SANDY_BEACH;
-	}
+
 }

@@ -12,7 +12,7 @@ public class OneOneNineBlockHandler {
 
 	//public static final EntityType FROG = getEntityType("FROG", "FISH");
 
-	public static final EntityType ALLAY = getEntityType("ALLAY", "CHICKEN");
+	public static final EntityType ALLAY = getEntityType();
 	
 	public static final @Nullable Material MUD = !Version.isAtLeast(19) ?
 			Material.getMaterial("PODZOL") : Material.getMaterial("MUD");
@@ -60,12 +60,12 @@ public class OneOneNineBlockHandler {
 			return Biome.valueOf(fallback);
 		}
 	}
-	private static @NotNull EntityType getEntityType(String name, String fallback) {
+	private static @NotNull EntityType getEntityType() {
 		try {
-			return EntityType.valueOf(name);
+			return EntityType.valueOf("ALLAY");
 		}
 		catch(IllegalArgumentException e) {
-			return EntityType.valueOf(fallback);
+			return EntityType.valueOf("CHICKEN");
 		}
 	}
 	

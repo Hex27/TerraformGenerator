@@ -11,11 +11,8 @@ import java.util.Random;
 
 public class MansionStandardSecondFloorPiece extends MansionStandardRoomPiece {
 
-	@SuppressWarnings("unused")
-	private final MansionJigsawBuilder builder;
     public MansionStandardSecondFloorPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
     	super(widthX, height, widthZ, type, validDirs);
-        this.builder = builder;
     }
 
     @Override
@@ -31,20 +28,5 @@ public class MansionStandardSecondFloorPiece extends MansionStandardRoomPiece {
             }
     }
 
-    @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
-
-    }
-    
-    /**
-     * Mansions are complex, and they need a third pass to properly ensure that
-     * previous important details were planted before placing the final edge pieces.
-     * @param random
-     * @param data
-     */
-    public void thirdStageDecoration(Random random, PopulatorDataAbstract data) {
-    	
-    }
-    
 
 }

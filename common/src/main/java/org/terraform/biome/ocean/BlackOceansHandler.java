@@ -36,15 +36,11 @@ public class BlackOceansHandler extends AbstractOceanHandler {
         for (int i = 0; i <= height; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) height));
             SimpleBlock segment = one.getRelative(seg);
-//			segment.setHardReplace();
-//			segment.setType(type);
             BlockUtils.replaceSphere(
                     (int) (tw.getSeed() * 12),
                     (float) radius, 2, (float) radius,
                     segment, false, false,
                     Material.STONE);
-//			Block segment = one.getLocation().add(seg).getBlock();
-//			segment.setType(type);
             radius = ((double) baseRadius) * (1 - ((double) i) / ((double) height));
         }
     }

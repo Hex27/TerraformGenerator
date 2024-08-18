@@ -184,12 +184,11 @@ public class CoralGenerator {
     /**
      * Gets a random connecting side of the block.
      */
-    public static int[] getRandomRelative(int @NotNull [] middle) {
+    public static void getRandomRelative(int @NotNull [] middle) {
         BlockFace face = getRandomBlockFace();
         middle[0] += face.getModX();
         middle[1] += face.getModY();
         middle[2] += face.getModZ();
-        return middle;
     }
 
     public static BlockFace getRandomBlockFace() {

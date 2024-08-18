@@ -3,10 +3,8 @@ package org.terraform.structure.pyramid;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
-import org.bukkit.block.data.type.Stairs;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -33,23 +31,6 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
      * along with some basic wall decorations
      */
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Wall decorations
-        //Buggy as all hell and also extremely ugly.
-        //Screw wall pillars. Jesus.
-//    	int patternIndex = rand.nextInt(3); //0,1,2
-//    	for(Entry<Wall,Integer> entry:room.getFourWalls(data, 1).entrySet()) {
-//    		Wall w = entry.getKey();
-//    		//Don't touch the corners, as the decorations are designed for non-corners
-//    		//Step of 2 as we don't want wall decorators to take up the entire space.
-//    		for(int i = 0; i < entry.getValue(); i+=2) {
-//    			if(i != 0 && i < entry.getValue()-2) {
-//	    			if(w.getRear().getType().isSolid())  //Don't block entrances.
-//	    				placeWallDecoration(w,room.getHeight(),patternIndex);
-//    			}
-//    			w = w.getLeft(2);
-//    		}
-//    	}
-
         //Ceiling Corner Decorations
         int[][] corners = room.getAllCorners(1);
         for (int[] corner : corners) {
@@ -123,45 +104,6 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
                 data.setBlockData(coords[0], room.getY() + 2, coords[2], bd);
         }
     }
-
-    /**
-     * To be called on a wall in front of the room's walls.
-     * @param w
-     * @param roomHeight
-     * @param patternIndex
-     */
-    protected void placeWallDecoration(@NotNull Wall w, int roomHeight, int patternIndex) {
-        if (patternIndex == 0) { //Simple Chiselled Sandstone and stairs
-            w.LPillar(roomHeight, rand, Material.CHISELED_SANDSTONE);
-
-            Stairs stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
-            stair.setFacing(w.getDirection().getOppositeFace());
-            w.getFront().setBlockData(stair);
-
-            stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
-            stair.setHalf(Half.TOP);
-            stair.setFacing(w.getDirection().getOppositeFace());
-            w.getFront().getRelative(0, roomHeight - 2, 0).setBlockData(stair);
-        } else if (patternIndex == 1) { //Stairs inside the pillars.
-            w.LPillar(roomHeight, rand, Material.CHISELED_SANDSTONE);
-
-            Stairs stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
-            stair.setFacing(w.getDirection().getOppositeFace());
-            w.setBlockData(stair);
-
-            stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
-            stair.setHalf(Half.TOP);
-            stair.setFacing(w.getDirection().getOppositeFace());
-            w.getRelative(0, roomHeight - 2, 0).setBlockData(stair);
-        } else if (patternIndex == 2) { //Sandstone wall.
-            w.LPillar(roomHeight, rand, Material.SANDSTONE_WALL);
-            for (int i = 0; i < roomHeight; i++) {
-                //Make sure the walls are connected properly
-                BlockUtils.correctMultifacingData(w.getRelative(0, i, 0).get());
-            }
-        }
-    }
-
 
     @Override
     public boolean canPopulate(CubeRoom room) {

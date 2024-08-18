@@ -128,7 +128,7 @@ public class NoiseCacheHandler{
 		 * If this is null, the caller is responsible for inserting it.
 		 */
 		@Override
-		public @Nullable FastNoise load(NoiseCacheKey key) throws Exception {
+		public @Nullable FastNoise load(@NotNull NoiseCacheKey key) {
 			return null;
 		}
 	}

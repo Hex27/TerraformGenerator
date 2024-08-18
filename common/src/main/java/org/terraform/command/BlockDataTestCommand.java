@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
 
@@ -34,8 +33,7 @@ public class BlockDataTestCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, Stack<String> args) {
         Wall facing = (Wall) Bukkit.createBlockData(Material.COBBLESTONE_WALL);
         sender.sendMessage(facing.getAsString());
     }

@@ -45,7 +45,6 @@ public class CustomBiomeHandler {
         return MinecraftServer.getServer().bc().d(Registries.aF);
     }
 
-	@SuppressWarnings("deprecation")
 	public static void init() {
 		CraftServer craftserver = (CraftServer)Bukkit.getServer();
 		DedicatedServer dedicatedserver = craftserver.getServer();
@@ -92,11 +91,7 @@ public class CustomBiomeHandler {
 			e1.printStackTrace();
 		}
 
-//		getBiomeRegistry().forEach(biomeBase -> {
-//			TerraformGeneratorPlugin.logger.info("biome id " + getBiomeRegistry().b(biomeBase));
-//        });
-		
-	}
+    }
 
 	private static void registerCustomBiomeBase(@NotNull CustomBiomeType biomeType, DedicatedServer dedicatedserver, @NotNull IRegistryWritable<BiomeBase> registrywritable, @NotNull BiomeBase forestbiome) throws Throwable {
 
@@ -121,10 +116,7 @@ public class CustomBiomeHandler {
 //		temperatureModififierField.setAccessible(true);
 
 		//i is climateSettings
-		//Field f = BiomeBase.class.getDeclaredField("i");
-		//f.setAccessible(true);
-		//newBiomeBuilder.a((BiomeBase.TemperatureModifier) temperatureModififierField.get(f.get(forestbiome)));
-		newBiomeBuilder.a(forestbiome.c()); //c is getPrecipitation
+        newBiomeBuilder.a(forestbiome.c()); //c is getPrecipitation
 
 		//k is mobSettings
 		Field biomeSettingMobsField = BiomeBase.class.getDeclaredField("k");
@@ -137,10 +129,8 @@ public class CustomBiomeHandler {
 		biomeSettingGenField.setAccessible(true);
 		BiomeSettingsGeneration biomeSettingGen = (BiomeSettingsGeneration) biomeSettingGenField.get(forestbiome);
 		newBiomeBuilder.a(biomeSettingGen);
-		
-		//newBiome.a(0.2F); //Depth of biome (Obsolete?)
-		//newBiome.b(0.05F); //Scale of biome (Obsolete?)
-		newBiomeBuilder.a(0.7F); //Temperature of biome
+
+        newBiomeBuilder.a(0.7F); //Temperature of biome
 		newBiomeBuilder.b(biomeType.getRainFall()); //Downfall of biome
 
 		//BiomeBase.TemperatureModifier.a will make your biome normal

@@ -28,8 +28,6 @@ public class PathPopulatorData {
 
     /**
      * This is mainly used for creating repeating patterns.
-     * @param multiplier
-     * @return
      */
     public int calcRemainder(int multiplier) {
         if (dir.getModX() != 0) {

@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CarvedRoom;
@@ -21,19 +20,16 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Map.Entry;
-import java.util.HashSet;
 import java.util.Random;
 
 public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbstract {
 
 	final TerraformWorld tw;
-	protected final HashSet<SimpleLocation> occupied;
-	protected int shrunkenWidth = 0;
+    protected int shrunkenWidth = 0;
 	protected final RoomLayoutGenerator gen;
-    public AncientCityAbstractRoomPopulator(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
+    public AncientCityAbstractRoomPopulator(TerraformWorld tw, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
         super(rand, forceSpawn, unique);
         this.tw = tw;
-        this.occupied = occupied;
         this.gen = gen;
     }
 

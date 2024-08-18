@@ -61,13 +61,8 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 		}
 	
 	}
-	
-	@Override
-	public void decorateExit(Random rand, Wall w) {
-		
-	}
 
-	@Override
+    @Override
 	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
         //table with potted mushrooms
         new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)

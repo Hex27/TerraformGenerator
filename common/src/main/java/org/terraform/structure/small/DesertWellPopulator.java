@@ -164,7 +164,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
         }
 
         @Override
-        public void applyData(@NotNull SimpleBlock block, BlockData data) {
+        public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 
             if (this.badlandsWell) {
                 data = Bukkit.createBlockData(

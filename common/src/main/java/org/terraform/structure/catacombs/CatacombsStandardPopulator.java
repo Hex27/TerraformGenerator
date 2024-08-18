@@ -37,15 +37,8 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
         int y = room.getY();
         
         //Flooring
-//		new BoxBuilder(this.rand, room.getCenterSimpleBlock(data), CatacombsPathPopulator.pathMaterial)
-//		.setRX(room.getWidthX()/2f)
-//		.setRZ(room.getWidthZ()/2f)
-//		.setRY(room.getHeight()/3f)
-//		.setHardReplace(true)
-//		.setBoxType(BoxType.LOWER_SEMIBOX)
-//		.build(); 
 
-		new SphereBuilder(this.rand, room.getCenterSimpleBlock(data), CatacombsPathPopulator.pathMaterial)
+        new SphereBuilder(this.rand, room.getCenterSimpleBlock(data), CatacombsPathPopulator.pathMaterial)
 		.setRX(room.getWidthX()/2f)
 		.setRZ(room.getWidthZ()/2f)
 		.setRY(room.getWidthX()/3f)

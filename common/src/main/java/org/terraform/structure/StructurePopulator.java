@@ -19,12 +19,11 @@ public abstract class StructurePopulator {
      * with the default value.
      * This buffer will force biome populators to stop populating 
      * certain things for that chunk radius.
-     * 
+     * <p>
      * For underground structures, this should be "0" to denote NO buffer
-     * 
+     * <p>
      * Only works for SingleMegaChunkStructurePopulators
-     * @return
-     */
+	 */
     public int getChunkBufferDistance() {
     	return 3;
     }

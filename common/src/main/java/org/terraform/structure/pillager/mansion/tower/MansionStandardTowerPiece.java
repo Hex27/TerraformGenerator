@@ -38,22 +38,7 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
             }
     }
 
-    @Override
-    public void postBuildDecoration(Random random, PopulatorDataAbstract data) {
-
-    }
-    
-    /**
-     * Mansions are complex, and they need a third pass to properly ensure that
-     * previous important details were planted before placing the final edge pieces.
-     * @param random
-     * @param data
-     */
-    public void thirdStageDecoration(Random random, PopulatorDataAbstract data) {
-    	
-    }
-    
-	public void decorateAwkwardCorners(Random random)
+    public void decorateAwkwardCorners(Random random)
 	{
         //Make sure awkward corners are fixed
         SimpleBlock core = new SimpleBlock(

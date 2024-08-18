@@ -115,7 +115,6 @@ public class TerraSchematic {
                     
                 } else {
                     //GG
-                    value = null;
                     throw e;
                 }
             }
@@ -219,10 +218,7 @@ public class TerraSchematic {
                 if (bdfa != null)
                     bdfa.correctFacing(pos, null, bd, face);
             }
-            
-//            if(pos.getBlockX() == 0 && pos.getBlockZ() == 0) {
-//            	Bukkit.getLogger().info("DEBUG SCHEMATIC: " + refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()).toVector().toString());
-//            }
+
             parser.applyData(refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ()), bd);
         }
         
@@ -290,7 +286,6 @@ public class TerraSchematic {
     /**
      * This doesn't appear to be used at all
      * lmao.
-     * @return
      */
 	public double getVersionValue() {
 		return VERSION_VALUE;

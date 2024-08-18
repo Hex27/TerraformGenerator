@@ -75,14 +75,7 @@ public class AnimalPopulator {
         }
     }
 
-    /**
-     * @return the animalType
-     */
-    public EntityType getAnimalType() {
-        return animalType;
-    }
-
-	public boolean isAquatic() {
+    public boolean isAquatic() {
 		return aquatic;
 	}
 

@@ -45,14 +45,6 @@ public class JungleHandler extends BiomeHandler {
         return BiomeBank.JUNGLE_RIVER;
     }
 
-    //	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
-//		gen.setScale(0.005);
-//
-//		return (int) (gen.noise(x, z, 0.5, 0.5)*7D+50D);
-//	}
-
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.PODZOL, 5),
@@ -225,7 +217,7 @@ public class JungleHandler extends BiomeHandler {
 	
 	}
 	
-	private class JungleStatueSchematicParser extends SchematicParser{
+	private static class JungleStatueSchematicParser extends SchematicParser{
 		
 		public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 			if (data.getMaterial().toString().contains("COBBLESTONE")) {

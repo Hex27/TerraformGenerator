@@ -98,7 +98,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             
             //Only run room populators. We don't want any room space carving.
             propGenerator.runRoomPopulators(data,tw);
-            setupPillagerSpawns(data, 80, x, y, z);
+            setupPillagerSpawns(data, x, y, z);
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place outpost at " + x + "," + y + "," + z + "!");
             e.printStackTrace();
@@ -108,9 +108,6 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     /**
      * Spawns the surrounding stakes. Additionally, will raise ground levels up
      * with wood planks to make structures less floaty.
-     * @param rand
-     * @param center
-     * @param bank
      */
     public void spawnStakes(@NotNull Random rand, @NotNull SimpleBlock center, @NotNull BiomeBank bank) {
     	int radius = 40;
@@ -194,11 +191,11 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     	}
     }
     
-    private static void setupPillagerSpawns(@NotNull PopulatorDataAbstract data, int range, int x, int y, int z) {
+    private static void setupPillagerSpawns(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         int i = -5;
         ArrayList<Integer> done = new ArrayList<>();
-        for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
-            for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
+        for (int nx = x - 80 / 2 - i; nx <= x + 80 / 2 + i; nx++) {
+            for (int nz = z - 80 / 2 - i; nz <= z + 80 / 2 + i; nz++) {
                 int chunkX = nx >> 4;
                 int chunkZ = nz >> 4;
                 int hash = Objects.hash(chunkX, chunkZ);
@@ -209,8 +206,8 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
                 done.add(hash);
 
                 TerraformGeneratorPlugin.injector.getICAData(((PopulatorDataPostGen) data).getWorld().getChunkAt(chunkX, chunkZ))
-                        .registerNaturalSpawns(NaturalSpawnType.PILLAGER, x - range / 2, y, z - range / 2,
-                                x + range / 2, 255, z + range / 2);
+                        .registerNaturalSpawns(NaturalSpawnType.PILLAGER, x - 80 / 2, y, z - 80 / 2,
+                                x + 80 / 2, 255, z + 80 / 2);
             }
         }
     }

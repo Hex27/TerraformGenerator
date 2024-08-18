@@ -26,8 +26,7 @@ public class BoxBuilder {
 	private Material[] upperType;
 	private Material[] lowerType;
 	private int staticWaterLevel = -9999;
-	private final float fuzzMultiplier = 0.2f;
-	private BoxType boxType = BoxType.FULL_BOX;
+    private BoxType boxType = BoxType.FULL_BOX;
 	
 	
 	public BoxBuilder(@NotNull Random random, SimpleBlock core, Material... types) {
@@ -103,17 +102,18 @@ public class BoxBuilder {
         if(boxType == BoxType.UPPER_SEMIBOX) effectiveRYLower = 0;
         float effectiveRYUpper = rY;
         if(boxType == BoxType.LOWER_SEMIBOX) effectiveRYUpper = 0;
-        for (float y = effectiveRYLower*(1f+fuzzMultiplier); y <= effectiveRYUpper*(1f+fuzzMultiplier); y++) {
+        float fuzzMultiplier = 0.2f;
+        for (float y = effectiveRYLower*(1f+ fuzzMultiplier); y <= effectiveRYUpper*(1f+ fuzzMultiplier); y++) {
         	float yMultiplier = 1f - (Math.abs(y)/rY);
-        	for (float x = -rX*(1f+fuzzMultiplier)*yMultiplier; x <= rX*(1f+fuzzMultiplier)*yMultiplier; x++) {
-                for (float z = -rZ*(1f+fuzzMultiplier)*yMultiplier; z <= rZ*(1f+fuzzMultiplier)*yMultiplier; z++) {
+        	for (float x = -rX*(1f+ fuzzMultiplier)*yMultiplier; x <= rX*(1f+ fuzzMultiplier)*yMultiplier; x++) {
+                for (float z = -rZ*(1f+ fuzzMultiplier)*yMultiplier; z <= rZ*(1f+ fuzzMultiplier)*yMultiplier; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getY(), rel.getZ()));
                     
-                    if (Math.abs(x) <= rX * (1+(noiseVal*fuzzMultiplier))
-                    		&& Math.abs(y) <= rY  * (1+(noiseVal*fuzzMultiplier))
-                    		&& Math.abs(z) <= rZ  * (1+(noiseVal*fuzzMultiplier))) {
+                    if (Math.abs(x) <= rX * (1+(noiseVal* fuzzMultiplier))
+                    		&& Math.abs(y) <= rY  * (1+(noiseVal* fuzzMultiplier))
+                    		&& Math.abs(z) <= rZ  * (1+(noiseVal* fuzzMultiplier))) {
                         Material[] original = types;
                     	if(rel.getY() <= staticWaterLevel) {
                         	types = new Material[] {Material.WATER};
@@ -132,18 +132,18 @@ public class BoxBuilder {
         }
     }
     
-    private boolean unitReplace(@NotNull SimpleBlock rel) {
+    private void unitReplace(@NotNull SimpleBlock rel) {
     	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randMaterial(random, types));
             }
     		else
-    			return false;
+    			return;
     	} else if(replaceWhitelist.contains(rel.getType())) {
             rel.setType(GenUtils.randMaterial(random, types));
     	}
     	else
-    		return false;
+    		return;
     	
     	if(rel.getRelative(0,-1,0).getType().isSolid()) {
 	    	if(upperType != null)
@@ -151,11 +151,10 @@ public class BoxBuilder {
 	    	if(lowerType != null)
 	    		rel.getRelative(0,-1,0).setType(lowerType);
     	}
-    	return true;
     }
 
-    public static enum BoxType{
-    	UPPER_SEMIBOX, LOWER_SEMIBOX, FULL_BOX;
+    public enum BoxType{
+    	UPPER_SEMIBOX, LOWER_SEMIBOX, FULL_BOX
     }
 
 }

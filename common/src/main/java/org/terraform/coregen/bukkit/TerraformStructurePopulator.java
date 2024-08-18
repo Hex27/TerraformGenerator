@@ -148,8 +148,6 @@ public class TerraformStructurePopulator extends BlockPopulator {
                 if(spop == null) continue;
                 if(!spop.isEnabled()) continue;
                 if(spop instanceof StrongholdPopulator) continue;
-                //if(spop instanceof JigsawStructurePopulator) continue;
-                //TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
                 if(spop.canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
                     TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
                     Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(blockCoords[0], blockCoords[1], spop.getClass().getName()));

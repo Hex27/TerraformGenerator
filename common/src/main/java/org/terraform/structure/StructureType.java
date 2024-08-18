@@ -7,8 +7,9 @@ public enum StructureType {
     SMALL, //Shipwrecks, Witch huts, Desert Wells. Overlap generally allowed.
     LARGE_MISC //Mineshafts fall under here for now.
 
-    /**Structures of the same type cannot overlap.
-     * Structure type will also be used in the Structure Registry to determine whether or
-     * not certain things should spawn in the same megachunk.
-     **/
+    /*
+      Structures of the same type cannot overlap.
+      Structure type will also be used in the Structure Registry to determine whether
+      certain things should spawn in the same megachunk.
+     */
 }

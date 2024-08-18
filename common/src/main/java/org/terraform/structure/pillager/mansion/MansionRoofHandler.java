@@ -32,15 +32,11 @@ public class MansionRoofHandler {
 	/**
 	 * Gets the largest possible rectangle that the house's shape can offer
 	 * Doesn't seem to work all the time though
-	 * @param builder
-	 * @return
-	 */
+     */
     public static int[][] getLargestRectangle(@NotNull MansionJigsawBuilder builder) {
         int[] lowestCoords = null;
         int[] highestCoords = null;
-        
-        //SimpleLocation lowestCoords = new SimpleLocation();
-        //SimpleLocation highestCoords = new SimpleLocation();
+
         for (JigsawStructurePiece piece : builder.getPieces().values()) {
             if (lowestCoords == null) {
                 lowestCoords = new int[]{piece.getRoom().getX(), piece.getRoom().getZ()};
@@ -166,14 +162,10 @@ public class MansionRoofHandler {
     }
 
     /**
-     * 
-     * @param rand
-     * @param builder
-     * @param bounds
-     * @return the highest Y modified by the roof
+     *
      */
-    public static int placeTentRoof(Random rand, @NotNull MansionJigsawBuilder builder, int[][] bounds) {
-        Axis superiorAxis = Axis.Z;
+    public static void placeTentRoof(Random rand, @NotNull MansionJigsawBuilder builder, int[][] bounds) {
+        Axis superiorAxis;
         PopulatorDataAbstract data = builder.getCore().getPopData();
         
         int highestY = -1;
@@ -229,12 +221,10 @@ public class MansionRoofHandler {
                         if(i == 2 || i == length - 3) {
                         	//Lower Walls
                         	Wall bottom = target.getAtY(builder.getCore().getY() + 2*MansionJigsawBuilder.roomHeight+2);
-                        	if(bottom != null) {
-                        		if(BlockUtils.isAir(bottom.getType()) || Tag.STAIRS.isTagged(bottom.getType()) || Tag.SLABS.isTagged(bottom.getType())) {
-                        			bottom.setType(Material.DARK_OAK_PLANKS);
-                        		}
-                        		target.getRelative(0,-2,0).downPillar(new Random(), target.getY()-bottom.getY()-2, bottom.getType());
-                        	}
+                            if(BlockUtils.isAir(bottom.getType()) || Tag.STAIRS.isTagged(bottom.getType()) || Tag.SLABS.isTagged(bottom.getType())) {
+                                bottom.setType(Material.DARK_OAK_PLANKS);
+                            }
+                            target.getRelative(0,-2,0).downPillar(new Random(), target.getY()-bottom.getY()-2, bottom.getType());
                         }
                         else if(i != 1 && i != length-2)//Force set air for things below the roof within the walls
                         {
@@ -315,7 +305,6 @@ public class MansionRoofHandler {
             w = w.getFront();
         }
 
-        return highestY;
     }
     
     private static void attemptReplaceSlab(@NotNull Material slabType, @NotNull Wall w, @NotNull Type type) {

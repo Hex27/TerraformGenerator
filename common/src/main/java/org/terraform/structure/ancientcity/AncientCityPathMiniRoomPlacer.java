@@ -14,7 +14,7 @@ import org.terraform.utils.blockdata.StairBuilder;
 
 public class AncientCityPathMiniRoomPlacer {
 
-	public static void placeAltar(@NotNull Wall origin, Random rand) {
+	public static void placeAltar(@NotNull Wall origin) {
 		Material[] deepSlateBricks = new Material[] {Material.DEEPSLATE_BRICKS, Material.CRACKED_DEEPSLATE_BRICKS};
 		//Place cylinder below
 		cylinderDown(origin, 4, deepSlateBricks);

@@ -60,7 +60,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		}
 	}
 	
-	private class MansionKitchenSchematicParser extends MansionRoomSchematicParser
+	private static class MansionKitchenSchematicParser extends MansionRoomSchematicParser
 	{
 		public MansionKitchenSchematicParser(Random rand, PopulatorDataAbstract pop) {
 			super(rand, pop);

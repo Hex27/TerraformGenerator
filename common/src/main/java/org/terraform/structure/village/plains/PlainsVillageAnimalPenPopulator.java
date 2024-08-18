@@ -64,10 +64,8 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     					int wallHeight = 3;
         				if(target.getY() < roomY) 
         					wallHeight = 2 + (roomY - target.getY());
-//        				else if(target.getY() > roomY) 
-//        					wallHeight -= 1;
-        				
-        				if(i % 2 == 0) {
+
+                        if(i % 2 == 0) {
         					target.Pillar(wallHeight, plainsVillagePopulator.woodLog);
         					target.getUp(wallHeight).setType(Material.COBBLESTONE_SLAB);
         					target.getDown(2).getRight().CorrectMultipleFacing(wallHeight+2);

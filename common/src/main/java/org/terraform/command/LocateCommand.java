@@ -81,10 +81,6 @@ public class LocateCommand extends TerraCommand implements Listener {
         }
         StructurePopulator spop = (StructurePopulator) params.get(0); //TODO: Get populator by name
 
-//		if(!(p.getWorld().getGenerator() instanceof TerraformGenerator)) {
-//			p.sendMessage(ChatColor.RED + "Can only be used in TerraformGenerator worlds!");
-//			return;
-//		}
         if (!spop.isEnabled() && !(spop instanceof StrongholdPopulator)) {
             p.sendMessage(LangOpt.COMMAND_LOCATE_STRUCTURE_NOT_ENABLED.parse());
             return;

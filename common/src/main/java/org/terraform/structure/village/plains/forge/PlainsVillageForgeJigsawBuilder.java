@@ -33,7 +33,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
     }
     
     @Override
-    public @NotNull JigsawStructurePiece getFirstPiece(Random random) {
+    public @NotNull JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return new PlainsVillageForgeChimneyPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
     	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
@@ -115,7 +115,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
             
             target.getRelative(0, -1, 0).downUntilSolid(random, plainsVillagePopulator.woodLog);
 
-            target = target.getRelative(0, 1, 0);
+            target.getRelative(0, 1, 0);
         }
         else
         {

@@ -3,7 +3,6 @@ package org.terraform.coregen;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Beehive;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
@@ -17,13 +16,11 @@ public abstract class NMSInjectorAbstract {
     }
 
     /**
-     * @param world
      * @return whether or not the injection was a success
      */
     public abstract boolean attemptInject(World world);
 
     /**
-     * @param chunk
      * @return a populatorDataICA instance.
      */
     public abstract PopulatorDataICAAbstract getICAData(Chunk chunk);
@@ -57,6 +54,4 @@ public abstract class NMSInjectorAbstract {
     public int getMaxY() {
     	return 256;
     }
-    
-    public void debugTest(Player p) {}
 }

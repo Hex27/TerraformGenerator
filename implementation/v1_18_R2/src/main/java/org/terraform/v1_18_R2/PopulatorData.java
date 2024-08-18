@@ -164,8 +164,6 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
             	@SuppressWarnings("deprecation")
             	//W is ENTITY_TYPE
             	EntityTypes<?> nmsEntity = IRegistry.W.a(new MinecraftKey(type.getName()));
-            	//EntityTypes<?> nmsEntity = (EntityTypes<?>)IRegistry.Z.a(new MinecraftKey(type.getName()));
-            	//IRegistry.m.a(new MinecraftKey(type.getKey().getKey()));
                 ((TileEntityMobSpawner) tileentity).d().a(nmsEntity);
             } catch (IllegalArgumentException | SecurityException e) {
                 e.printStackTrace();
@@ -220,14 +218,6 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
             case SHIPWRECK_SUPPLY -> LootTables.I;
             case SHIPWRECK_TREASURE -> LootTables.J;
             case PILLAGER_OUTPOST -> LootTables.K;
-//        case BASTION_TREASURE:
-//            return LootTables.L;
-//        case BASTION_OTHER:
-//            return LootTables.M;
-//        case BASTION_BRIDGE:
-//            return LootTables.N;
-//        case BASTION_HOGLIN_STABLE:
-//            return LootTables.O;
             case RUINED_PORTAL -> LootTables.P;
             default ->
 //        case SHEEP_WHITE:

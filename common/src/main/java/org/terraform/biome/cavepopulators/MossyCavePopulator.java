@@ -66,7 +66,6 @@ public class MossyCavePopulator extends AbstractCavePopulator {
         if (GenUtils.chance(random, 1, 35)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
-            if (h > 4) h = 4;
             Wall w = new Wall(floor.getRelative(0,1,0), BlockFace.NORTH);
             if (BlockUtils.isAir(w.getType())) {
                 if (w.getRelative(0, -1, 0).getType() == Material.SAND || w.getRelative(0, 1, 0).getType() == Material.SANDSTONE)
