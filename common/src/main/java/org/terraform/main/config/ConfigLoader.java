@@ -41,7 +41,7 @@ public class ConfigLoader {
 				    		new File("./plugins/TerraformGenerator/config.yml-" + System.currentTimeMillis() + ".bak"));
 				}
 			}catch(Exception e) {
-				e.printStackTrace();
+				TerraformGeneratorPlugin.logger.stackTrace(e);
 				Bukkit.getLogger().info("Failed to backup old config before overwrite.");
 			}
 		}

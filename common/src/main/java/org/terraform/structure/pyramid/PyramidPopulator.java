@@ -59,7 +59,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         try {
             spawnPyramid(tw, tw.getHashedRand(x, y, z, 1211222), data, x, y, z);
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 

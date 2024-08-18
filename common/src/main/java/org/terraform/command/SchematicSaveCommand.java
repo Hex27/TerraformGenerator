@@ -72,7 +72,7 @@ public class SchematicSaveCommand extends TerraCommand {
             p.sendMessage(ChatColor.GREEN + "Schematic saved with name " + name);
         } catch (IOException e) {
             p.sendMessage(ChatColor.RED + "A problem occurred.");
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 }

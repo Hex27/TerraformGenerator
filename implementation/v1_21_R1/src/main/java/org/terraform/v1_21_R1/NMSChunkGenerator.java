@@ -243,7 +243,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     catch(Throwable t)
                     {
                         TerraformGeneratorPlugin.logger.info(chunkcoordintpair.e + "," + chunkcoordintpair.f + " Failed to generate a vanilla structure");
-                        t.printStackTrace();
+                        TerraformGeneratorPlugin.logger.stackTrace(t);
                     }
                 }
             });

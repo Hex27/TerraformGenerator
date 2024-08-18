@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
@@ -83,7 +84,7 @@ public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
 			}
 			
         } catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 
     }

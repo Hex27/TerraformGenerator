@@ -124,12 +124,12 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 			injector = Version.SupportedVersion.getInjector();
             if(injector == null) throw new ClassNotFoundException();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             logger.stdout("&cNo support for this version has been made yet!");
         } catch (InstantiationException | IllegalAccessException 
         		| IllegalArgumentException | InvocationTargetException 
         		| NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             logger.stdout("&cSomething went wrong initiating the injector!");
         }
         

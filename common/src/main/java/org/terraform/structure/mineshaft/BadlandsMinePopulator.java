@@ -140,7 +140,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
                 schema.setFace(BlockFace.NORTH);
                 schema.apply();
             } catch(FileNotFoundException e) {
-                e.printStackTrace();
+                TerraformGeneratorPlugin.logger.stackTrace(e);
             }
         }
     }
@@ -183,7 +183,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
             entranceSchematic.apply();
         } catch(Exception e) {
             TerraformGeneratorPlugin.logger.error("An error occurred reading Badlands Mine Entrance schematic file.");
-        	e.printStackTrace();
+        	TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 

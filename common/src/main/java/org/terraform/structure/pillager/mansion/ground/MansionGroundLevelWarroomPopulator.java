@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
@@ -57,7 +58,7 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 		        schema.apply();
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
 	

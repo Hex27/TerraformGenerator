@@ -190,7 +190,7 @@ public enum BiomeBank {
     	}
     	catch(Throwable e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     		sect.doCalculations();
     	}
     	return sect;
@@ -209,7 +209,7 @@ public enum BiomeBank {
     	}
     	catch(Throwable e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     		sect.doCalculations();
     	}
     	return sect;
@@ -223,7 +223,7 @@ public enum BiomeBank {
     	}
     	catch(Throwable e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     		sect.doCalculations();
     	}
     	return sect;
@@ -347,7 +347,7 @@ public enum BiomeBank {
     	}
     	catch(Throwable e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     		bank = BiomeBank.PLAINS;
     	}
     	return bank;

@@ -91,7 +91,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             ));
             TerraformGeneratorPlugin.logger.info("Post injection: getChunkSource().getChunkGenerator() is of type " + ws.l().g().getClass().getSimpleName());
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             return false;
         }
 

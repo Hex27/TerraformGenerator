@@ -92,7 +92,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
 
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place shipwreck at " + x + ", " + y + ", " + z);
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 

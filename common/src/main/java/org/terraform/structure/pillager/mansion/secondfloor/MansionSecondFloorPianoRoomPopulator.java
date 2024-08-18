@@ -50,7 +50,7 @@ public class MansionSecondFloorPianoRoomPopulator extends MansionRoomPopulator {
 		        schema.apply();
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
 	

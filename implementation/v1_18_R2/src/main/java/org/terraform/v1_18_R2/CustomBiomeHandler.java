@@ -46,7 +46,7 @@ public class CustomBiomeHandler {
 			frozen.set(registrywritable, false);
 			TerraformGeneratorPlugin.logger.info("Unfreezing biome registry...");
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 		
 		BiomeBase forestbiome = registrywritable.a(Biomes.h); //forest
@@ -65,7 +65,7 @@ public class CustomBiomeHandler {
 				TerraformGeneratorPlugin.logger.info("Registered custom biome: " + type.toString().toLowerCase(Locale.ENGLISH));
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				TerraformGeneratorPlugin.logger.error("Failed to register custom biome: " + type.getKey());
-				e.printStackTrace();
+				TerraformGeneratorPlugin.logger.stackTrace(e);
 			}
 		}
 		
@@ -75,7 +75,7 @@ public class CustomBiomeHandler {
 			frozen.set(registrywritable, true);
 			TerraformGeneratorPlugin.logger.info("Freezing biome registry");
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 
 //		MinecraftServer ms = DedicatedServer.getServer();

@@ -74,7 +74,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
             data.addEntity(x, y + 1, z, EntityType.WITCH);
             data.addEntity(x, y + 1, z, EntityType.CAT);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 
     }

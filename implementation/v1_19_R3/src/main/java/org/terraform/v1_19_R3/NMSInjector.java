@@ -82,7 +82,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
                     pcm, "u", bpg); //chunkGenerator
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             return false;
         }
         

@@ -130,7 +130,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
         	}
             
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
     	
     	super.sculkUp(tw, data, room);

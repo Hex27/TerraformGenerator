@@ -80,7 +80,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             	TerraformGeneratorPlugin.logger.info("CustomChunkGenerator Delegate is of type " + delegate.getClass().getSimpleName());
             }
             catch(Exception e) {
-            	e.printStackTrace();
+            	TerraformGeneratorPlugin.logger.stackTrace(e);
             }
         }
         //For Changing DimensionManager height
@@ -96,7 +96,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
                     pcm, "u", bpg); //chunkGenerator
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             return false;
         }
         

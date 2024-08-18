@@ -62,7 +62,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
                     //TerraformGeneratorPlugin.logger.info(type + ":" + et.isPresent());
                     et.ifPresent(entityTypes -> entityTypesDict.put(type, entityTypes));
 				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
+					TerraformGeneratorPlugin.logger.stackTrace(e);
 				}
         	}
         }
@@ -78,7 +78,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         	return CraftMagicNumbers.getMaterial(rlwa.a_(new BlockPosition(x, y, z)).b());
     	}catch(Exception e) {
         	Bukkit.getLogger().info("Error chunk: " + chunkX + "," + chunkZ + "--- Block Coords: " + 16*chunkX + "," + 16*chunkZ + " for coords " + x + "," + y + "," + z);
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     	return null;
     }
@@ -94,7 +94,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
     		else
-    			new Exception("Tried to call adjacent chunk with populator radius 0: (" + x + "," + y + "," + z  + ") for chunk (" + chunkX + "," + chunkZ + ")").printStackTrace();
+    			TerraformGeneratorPlugin.logger.stackTrace(new Exception("Tried to call adjacent chunk with populator radius 0: (" + x + "," + y + "," + z  + ") for chunk (" + chunkX + "," + chunkZ + ")"));
         } else {
             rlwa.a(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0);
     	}
@@ -106,7 +106,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
     		else
-    			new Exception("Tried to call adjacent chunk with populator radius 0: (" + x + "," + y + "," + z  + ") for chunk (" + chunkX + "," + chunkZ + ")").printStackTrace();
+    			TerraformGeneratorPlugin.logger.stackTrace(new Exception("Tried to call adjacent chunk with populator radius 0: (" + x + "," + y + "," + z  + ") for chunk (" + chunkX + "," + chunkZ + ")"));
         } else {
         	rlwa.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), 0);
         }
@@ -165,7 +165,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
                 if(nmsEntity == null) TerraformGeneratorPlugin.logger.error(type + " was not present in the entityTypesDict.");
                 ((TileEntityMobSpawner) tileentity).a(nmsEntity, new RandomSourceWrapper(new Random()));
             } catch (IllegalArgumentException | SecurityException e) {
-                e.printStackTrace();
+                TerraformGeneratorPlugin.logger.stackTrace(e);
             }
         } else {
             TerraformGeneratorPlugin.logger.error("Failed to fetch mob spawner entity at (" + "," + rawX + "," + rawY + "," + rawZ + ")");
@@ -222,7 +222,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
             //TileEntityBeehive.Occupant.create(1)
             tileentity.a(TileEntityBeehive.c.a(GenUtils.RANDOMIZER.nextInt(599)));
         } catch (NullPointerException | IllegalArgumentException | SecurityException e) {
-             e.printStackTrace();
+             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 	}
 }

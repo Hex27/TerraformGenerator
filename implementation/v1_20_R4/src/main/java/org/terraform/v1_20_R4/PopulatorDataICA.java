@@ -156,7 +156,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 //                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
 //            } catch (IllegalArgumentException | IllegalAccessException
 //                    | NoSuchFieldException | SecurityException e) {
-//                e.printStackTrace();
+//                TerraformGeneratorPlugin.logger.stackTrace(e);
 //            }
 //        } else {
 //            TerraformGeneratorPlugin.logger.error("Failed to fetch mob spawner entity at (" + "," + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")");
@@ -238,7 +238,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
             ica.a(structureFeature, new ChunkCoordIntPair(chunkX, chunkZ).a()); //a is toLong
         }
     	catch(NoSuchMethodException | InstantiationException | InvocationTargetException | ClassNotFoundException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 

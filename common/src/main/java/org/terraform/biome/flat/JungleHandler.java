@@ -12,6 +12,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
@@ -220,7 +221,7 @@ public class JungleHandler extends BiomeHandler {
             schema.setFace(BlockUtils.getDirectBlockFace(random));
             schema.apply();
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 	
 	}

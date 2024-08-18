@@ -43,7 +43,7 @@ public class TfgWatchdogSuppressant {
 			}
 	        catch(SecurityException | NoSuchFieldException | ClassNotFoundException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException e) {
 	        	TerraformGeneratorPlugin.logger.info("Watchdog instance could not be found.");
-	        	e.printStackTrace();
+	        	TerraformGeneratorPlugin.logger.stackTrace(e);
 	        	instanceField = null;
 	        	lastTickField = null;
 	        	watchdogThreadClass = null;
@@ -59,7 +59,7 @@ public class TfgWatchdogSuppressant {
             	tickMethod.invoke(watchdogThreadInstance);
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-        	e.printStackTrace();
+        	TerraformGeneratorPlugin.logger.stackTrace(e);
             TerraformGeneratorPlugin.logger.info("Failed to tick watchdog");
         }
     }

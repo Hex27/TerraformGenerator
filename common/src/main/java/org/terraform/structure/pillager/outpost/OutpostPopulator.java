@@ -101,7 +101,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             setupPillagerSpawns(data, 80, x, y, z);
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place outpost at " + x + "," + y + "," + z + "!");
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
     

@@ -373,8 +373,9 @@ public class GenUtils {
         if(y <= TerraformGeneratorPlugin.injector.getMinY()) {
             TerraformGeneratorPlugin.logger.error("GetHighestGround returned less than " + TerraformGeneratorPlugin.injector.getMinY() + "! (" + y + ")");
             try { throw new Exception("GetHighestGround returned less than " + TerraformGeneratorPlugin.injector.getMinY() + "! (" + y + ")"); }
-            catch (Exception e) 
-            {e.printStackTrace();}
+            catch (Exception e) {
+                TerraformGeneratorPlugin.logger.stackTrace(e);
+            }
         }
         
         //Y can be stored as a short, as there's no way world height will be 32k.
