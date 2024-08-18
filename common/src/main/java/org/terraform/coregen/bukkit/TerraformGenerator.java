@@ -98,7 +98,7 @@ public class TerraformGenerator extends ChunkGenerator {
                         stoneType = GenUtils.randMaterial(Material.DEEPSLATE, Material.STONE);
 
                     //Set stone if a cave CANNOT be carved here
-                    if(!TConfigOption.FEATURE_CAVES_ENABLED.getBoolean() || !tw.noiseCaveRegistry.canNoiseCarve(rawX,y,rawZ,height))
+                    if(!tw.noiseCaveRegistry.canNoiseCarve(rawX,y,rawZ,height))
                         chunkData.setBlock(x, y, z, stoneType);
 
                 }
