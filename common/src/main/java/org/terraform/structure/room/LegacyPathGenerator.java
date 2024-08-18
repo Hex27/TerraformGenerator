@@ -169,7 +169,7 @@ public class LegacyPathGenerator {
         if (mat[0] == Material.BARRIER) return;
         for (int h = 1; h <= pathHeight; h++)
             if (base.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
-                base.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
+                base.getRelative(0, h, 0).setType(GenUtils.randChoice(mat));
 
         for (BlockFace f : BlockUtils.getAdjacentFaces(dir)) {
             SimpleBlock rel = base;
@@ -177,7 +177,7 @@ public class LegacyPathGenerator {
                 rel = rel.getRelative(f);
                 for (int h = 1; h <= pathHeight; h++)
                     if (rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
-                        rel.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
+                        rel.getRelative(0, h, 0).setType(GenUtils.randChoice(mat));
             }
         }
     }
@@ -186,12 +186,12 @@ public class LegacyPathGenerator {
         if (mat[0] == Material.BARRIER) return;
 
         if (base.getType() != Material.CAVE_AIR)
-            base.setType(GenUtils.randMaterial(mat));
+            base.setType(GenUtils.randChoice(mat));
 
-        Wall w = new Wall(base).getRelative(0, 1, 0);
+        Wall w = new Wall(base).getUp();
         w.Pillar(pathHeight, rand, Material.CAVE_AIR);
         if (base.getRelative(0, pathHeight + 1, 0).getType() != Material.CAVE_AIR)
-            base.getRelative(0, pathHeight + 1, 0).setType(GenUtils.randMaterial(mat));
+            base.getRelative(0, pathHeight + 1, 0).setType(GenUtils.randChoice(mat));
 
         for (BlockFace f : BlockUtils.getAdjacentFaces(dir)) {
             SimpleBlock rel = base;
@@ -201,15 +201,15 @@ public class LegacyPathGenerator {
                 if (i == pathWidth / 2) { //Walls
                     for (int h = 1; h <= pathHeight; h++)
                         if (rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
-                            rel.getRelative(0, h, 0).setType(GenUtils.randMaterial(mat));
+                            rel.getRelative(0, h, 0).setType(GenUtils.randChoice(mat));
                 } else { //Air in hallway (And floor and ceiling)
                     if (rel.getType() != Material.CAVE_AIR)
-                        rel.setType(GenUtils.randMaterial(mat));
+                        rel.setType(GenUtils.randChoice(mat));
                     
-                    w = new Wall(rel).getRelative(0, 1, 0);
+                    w = new Wall(rel).getUp();
                     w.Pillar(pathHeight, rand, Material.CAVE_AIR);
                     if (rel.getRelative(0, pathHeight + 1, 0).getType() != Material.CAVE_AIR)
-                        rel.getRelative(0, pathHeight + 1, 0).setType(GenUtils.randMaterial(mat));
+                        rel.getRelative(0, pathHeight + 1, 0).setType(GenUtils.randChoice(mat));
                 }
             }
         }

@@ -43,9 +43,9 @@ public class CherryGroveRiverHandler extends BiomeHandler {
         return new Material[]{
         		Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
 

@@ -10,6 +10,8 @@ import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StalactiteBuilder;
@@ -59,7 +61,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
         if(floor.getY() > waterLevel) return;
 
         //sea pickle
-        if (BlockUtils.isWet(floor.getUp()) && GenUtils.chance(rand, 7, 100)) {
+        if (TConfigOption.arePlantsEnabled() && BlockUtils.isWet(floor.getUp()) && GenUtils.chance(rand, 7, 100)) {
             SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
             sp.setPickles(GenUtils.randInt(3, 4));
             floor.getUp().setBlockData(sp);
@@ -70,7 +72,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
             && BlockUtils.isWet(floor.getAtY(waterLevel))
             && floor.getAtY(waterLevel+1).isAir())
         {
-            floor.getAtY(waterLevel+1).setType(Material.LILY_PAD);
+            PlantBuilder.LILY_PAD.build(floor.getAtY(waterLevel+1));
         }
 
         //Stalagmites
@@ -80,7 +82,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
             int h = GenUtils.randInt(rand, 6*waterDepth, (int) ((3f / 2f) * (6*waterDepth)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(floor.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(floor.getY()))
-                    .makeSpike(rand, floor, r, h, true);
+                    .makeSpike(floor, r, h, true);
         }
     }
     @Override
@@ -106,7 +108,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
             int h = GenUtils.randInt(rand, (int) (height/2.5f), (int) ((3f / 2f) * (height/2.5f)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(ceil.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
-                    .makeSpike(rand, ceil, r, h, false);
+                    .makeSpike(ceil, r, h, false);
         }
 
         //set biome

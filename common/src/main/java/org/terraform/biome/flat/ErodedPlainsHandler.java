@@ -94,7 +94,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
 
         cache.writeTransformedHeight (x,z,(short) ((int)Math.round(platformHeight)+height));
         for (int y = height+1; y <= newHeight; y++) {
-            Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
+            Material material = GenUtils.randChoice(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
                     Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.ANDESITE);
             if (slabs && material != Material.GRASS_BLOCK && y == newHeight &&
                     platformHeight - (int) platformHeight >= 0.5)

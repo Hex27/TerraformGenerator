@@ -47,14 +47,14 @@ public class WarmOceanLargeArcRoom extends WarmOceanBaseRoom {
 
         //Create a 3x3 pattern to use in the arc's walls
         Material[] centrePattern = new Material[]{
-                GenUtils.randMaterial(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
-                GenUtils.randMaterial(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
-                GenUtils.randMaterial(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
+                GenUtils.randChoice(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
+                GenUtils.randChoice(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
+                GenUtils.randChoice(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
         };
         Material[] sidePattern = new Material[]{
-                GenUtils.randMaterial(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
-                GenUtils.randMaterial(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
-                GenUtils.randMaterial(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
+                GenUtils.randChoice(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
+                GenUtils.randChoice(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
+                GenUtils.randChoice(Material.POLISHED_DIORITE, Material.POLISHED_GRANITE, Material.POLISHED_ANDESITE),
         };
 
         //Create another 3x3 slab pattern to overlay

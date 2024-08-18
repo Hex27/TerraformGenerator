@@ -219,7 +219,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
 				rightCorner.getLeft(i).setType(getFluid(rightCorner.getLeft(i)));
     			BlockUtils.dropDownBlock(rightCorner.getLeft(i).getUp(), getFluid(rightCorner.getLeft(i).getUp()));
 			}
-			if(overgrown && leftCorner.getRight().isSolid()) {
+			if(overgrown && TConfigOption.arePlantsEnabled() && leftCorner.getRight().isSolid()) {
 				leftCorner.getRight().getRear().downLPillar(random, GenUtils.randInt(vertHeight/2,vertHeight-1), Material.OAK_LEAVES);
 				leftCorner.getRight().getFront().downLPillar(random, GenUtils.randInt(vertHeight/2,vertHeight-1), Material.OAK_LEAVES);
 			}
@@ -233,7 +233,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
 				leftCorner.getRight(i).setType(getFluid(leftCorner.getRight(i)));
     			BlockUtils.dropDownBlock(leftCorner.getRight(i).getUp(), getFluid(leftCorner.getRight(i).getUp()));
 			}
-			if(overgrown && rightCorner.getLeft().isSolid()) {
+			if(overgrown && TConfigOption.arePlantsEnabled() && rightCorner.getLeft().isSolid()) {
 				rightCorner.getLeft().getRear().downLPillar(random, GenUtils.randInt(vertHeight/2,vertHeight-1), Material.OAK_LEAVES);
 				rightCorner.getLeft().getFront().downLPillar(random, GenUtils.randInt(vertHeight/2,vertHeight-1), Material.OAK_LEAVES);
 			}

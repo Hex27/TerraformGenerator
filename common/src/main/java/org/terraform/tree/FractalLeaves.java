@@ -187,8 +187,8 @@ public class FractalLeaves implements Cloneable{
 
                         //Set snow
                         if (snowy) {
-                            if (!relativeBlock.getRelative(0, 1, 0).getType().isSolid()) {
-                                relativeBlock.getRelative(0, 1, 0).setType(Material.SNOW);
+                            if (!relativeBlock.getUp().getType().isSolid()) {
+                                relativeBlock.getUp().setType(Material.SNOW);
                             }
                         }
 
@@ -211,9 +211,9 @@ public class FractalLeaves implements Cloneable{
                 }
 
                 // No levitating sea pickles & fans
-                if (sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
-                        Tag.CORAL_PLANTS.isTagged(sb.getRelative(0, 1, 0).getType())) {
-                    sb.getRelative(0, 1, 0).setType(Material.WATER);
+                if (sb.getUp().getType() == Material.SEA_PICKLE ||
+                        Tag.CORAL_PLANTS.isTagged(sb.getUp().getType())) {
+                    sb.getUp().setType(Material.WATER);
                 }
                 sb.setType(Material.WATER);
 

@@ -44,7 +44,7 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
                         || b.getType() == Material.OAK_PLANKS
                         || b.getType() == Material.OAK_SLAB
                         || b.getType() == Material.GRAVEL) {
-                    b.setType(GenUtils.randMaterial(
+                    b.setType(GenUtils.randChoice(
                             Material.STONE_BRICKS,
                             Material.CRACKED_STONE_BRICKS,
                             Material.MOSSY_STONE_BRICKS,
@@ -60,7 +60,7 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
             int x = corner[0];
             int z = corner[1];
             Wall w = new Wall(new SimpleBlock(data, x, room.getY() + 1, z));
-            w.getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_LOG);
+            w.getDown().downUntilSolid(rand, Material.OAK_LOG);
         }
     }
 

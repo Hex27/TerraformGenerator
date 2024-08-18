@@ -35,7 +35,7 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
         if (GenUtils.chance(rand, 3, 5)) return;
 
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
-            Wall w = entry.getKey().getRelative(0, 7, 0);
+            Wall w = entry.getKey().getUp(7);
             int length = entry.getValue();
             for (int i = 0; i < length; i++) {
                 if (i % 2 == 0) {

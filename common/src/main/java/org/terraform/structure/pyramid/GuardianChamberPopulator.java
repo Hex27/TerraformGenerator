@@ -25,7 +25,7 @@ public class GuardianChamberPopulator extends RoomPopulatorAbstract {
                 //Leave some stepping stones
                 if (GenUtils.chance(rand, 1, 30)) {
                     if (rand.nextBoolean()) {
-                        data.setType(x, room.getY() + 1, z, GenUtils.randMaterial(
+                        data.setType(x, room.getY() + 1, z, GenUtils.randChoice(
                                 Material.STONE,
                                 Material.ANDESITE,
                                 Material.ANDESITE_WALL,

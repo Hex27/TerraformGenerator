@@ -50,7 +50,7 @@ public class OutpostSchematicParser extends SchematicParser {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "cobblestone",
-                            GenUtils.randMaterial(rand, toReplace)
+                            GenUtils.randChoice(rand, toReplace)
                                     .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
@@ -94,7 +94,7 @@ public class OutpostSchematicParser extends SchematicParser {
         }
         
         if(block.getY() == baseY) {
-        	new Wall(block.getRelative(0,-1,0)).downUntilSolid(new Random(), toReplace);
+        	new Wall(block.getDown()).downUntilSolid(new Random(), toReplace);
         }
     }
 

@@ -16,7 +16,6 @@ public class SimpleLocation {
         this.z = z;
     }
 
-
     public SimpleLocation(@NotNull SimpleLocation other) {
         this.x = other.x;
         this.y = other.y;
@@ -185,8 +184,23 @@ public class SimpleLocation {
     	return this.x + "," + this.y + "," + this.z;
     }
 
-
     public @NotNull SimpleLocation getAtY(int newy) {
         return new SimpleLocation(x,newy,z);
+    }
+
+    public @NotNull SimpleLocation getUp(int n) {
+        return getRelative(0, n, 0);
+    }
+
+    public @NotNull SimpleLocation getUp() {
+        return getRelative(0, 1, 0);
+    }
+
+    public @NotNull SimpleLocation getDown(int n) {
+        return getRelative(0, -n, 0);
+    }
+
+    public @NotNull SimpleLocation getDown() {
+        return getRelative(0, -1, 0);
     }
 }

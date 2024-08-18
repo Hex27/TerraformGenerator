@@ -5,6 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -24,8 +25,10 @@ public class StalactiteBuilder {
 		this.wallType = wallType;
 	}
 	
-	public @NotNull StalactiteBuilder build(@NotNull Random rand, @NotNull Wall w) {
-		if(verticalSpace < 6) return this;
+	public void build(@NotNull Random rand, @NotNull Wall w) {
+        if (TConfigOption.areDecorationsEnabled()) return;
+
+		if(verticalSpace < 6) return;
 		
 		int stalactiteHeight;
 		if(verticalSpace > 60) //massive cave
@@ -60,19 +63,17 @@ public class StalactiteBuilder {
 			//Large stalactite (8+ blocks)
 			if(isFacingUp)
 			{
-				makeSpike(rand, w.getDown(),
+				makeSpike(w.getDown(),
                         GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),
                         stalactiteHeight, true);
 			}
 			else
 			{
-                makeSpike(rand, w.getUp(),
+                makeSpike(w.getUp(),
                         GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),
                         stalactiteHeight, false);
 			}
 		}
-		
-		return this;
 	}
 
 	public @NotNull StalactiteBuilder setSolidBlockType(Material... solidBlockType) {
@@ -104,7 +105,7 @@ public class StalactiteBuilder {
      * Responsible for generating a stalactite or stalagmite.
      * @param facingUp generates stalagmites if true. If not, makes stalactites.
      */
-	public void makeSpike(Random random, @NotNull SimpleBlock root, double baseRadius, int height, boolean facingUp) {
+	public void makeSpike(@NotNull SimpleBlock root, double baseRadius, int height, boolean facingUp) {
 
         //HEIGHT CANNOT BE LESS THAN 1. (1.0/0.0) DOES NOT THROW ARITHMETIC ERRORS
         if(height < 8) return;

@@ -11,6 +11,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -39,8 +40,8 @@ public class ScarletForestHandler extends BiomeHandler {
         return new Material[]{Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -49,15 +50,15 @@ public class ScarletForestHandler extends BiomeHandler {
 
             if (GenUtils.chance(random, 1, 10)) { //Grass
                 if (GenUtils.chance(random, 6, 10)) {
-                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     if (random.nextBoolean()) {
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                        PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     }
                 } else {
                     if (GenUtils.chance(random, 7, 10))
-                        data.setType(rawX, surfaceY + 1, rawZ, Material.POPPY);
+                        PlantBuilder.POPPY.build(data, rawX, surfaceY + 1, rawZ);
                     else
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.ROSE_BUSH);
+                        PlantBuilder.ROSE_BUSH.build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }

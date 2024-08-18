@@ -196,7 +196,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         for (int nx = -50; nx <= 50; nx++) {
             for (int nz = -50; nz <= 50; nz++) {
                 if (toReplace.contains(data.getType(x + nx, y - 8, z + nz)))
-                    data.setType(x + nx, y - 8, z + nz, GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE, Material.ANDESITE));
+                    data.setType(x + nx, y - 8, z + nz, GenUtils.randChoice(Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE, Material.ANDESITE));
 
                 //Dither. Include infested stone here.
                 if (random.nextBoolean()) {
@@ -312,7 +312,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
             int radius = 40 - height;
             for (int nx = -radius; nx <= +radius; nx++) {
                 for (int nz = -radius; nz <= +radius; nz++) {
-                    data.setType(x + nx, y + height, z + nz, GenUtils.randMaterial(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
+                    data.setType(x + nx, y + height, z + nz, GenUtils.randChoice(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
                     //data.setType(x + nx, y + height, z + nz, Material.GLASS); //dEBUG.
 
                     //Corners have special decorations
@@ -336,7 +336,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                             dir = BlockFace.NORTH;
                         }
                         if (dir != null) {
-                            Stairs s = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(Material.SANDSTONE_STAIRS, Material.SMOOTH_SANDSTONE_STAIRS));
+                            Stairs s = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(Material.SANDSTONE_STAIRS, Material.SMOOTH_SANDSTONE_STAIRS));
                             s.setFacing(dir);
                             data.setBlockData(x + nx, y + height, z + nz, s);
                         }
@@ -376,7 +376,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                                 if (height == elevation) {
                                     w.getFront().setType(Material.SANDSTONE_WALL);
                                 } else if (height == elevation + 16) {
-                                    w.getRear().getRelative(0, 2, 0).setType(Material.SANDSTONE_WALL);
+                                    w.getRear().getUp(2).setType(Material.SANDSTONE_WALL);
                                 }
                             }
                             w.getLeft(i).setType(Material.AIR);
@@ -386,8 +386,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                             w.getRight(i).getRear().setType(Material.CUT_RED_SANDSTONE);
 
                             if (i == carveLength) {
-                                w.getRight(i + 1).getRelative(0, 1, 0).setType(Material.SANDSTONE_WALL);
-                                w.getLeft(i + 1).getRelative(0, 1, 0).setType(Material.SANDSTONE_WALL);
+                                w.getRight(i + 1).getUp().setType(Material.SANDSTONE_WALL);
+                                w.getLeft(i + 1).getUp().setType(Material.SANDSTONE_WALL);
                             }
                         }
                 }

@@ -45,7 +45,7 @@ public class TerracottaRoom extends RoomPopulatorAbstract {
                         }
                     } else {
                         entrances.add(w.clone());
-                        w.getRelative(0, 3, 0).Pillar(room.getHeight() - 3, rand, Material.CHISELED_SANDSTONE);
+                        w.getUp(3).Pillar(room.getHeight() - 3, rand, Material.CHISELED_SANDSTONE);
                     }
                 }
 

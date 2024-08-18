@@ -52,7 +52,7 @@ public class LevelledRoomPopulator extends CageRoomPopulator {
         //Some prismarine at the bottom
         Wall cent = new Wall(new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ()), BlockFace.NORTH);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
-            cent.getRelative(0, 1, 0).getRelative(face).getRelative(face)
+            cent.getUp().getRelative(face).getRelative(face)
                     .Pillar(2, rand, Material.DARK_PRISMARINE);
             cent.getRelative(face).setType(Material.DARK_PRISMARINE);
         }

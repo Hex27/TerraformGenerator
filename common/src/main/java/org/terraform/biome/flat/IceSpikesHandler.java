@@ -56,9 +56,9 @@ public class IceSpikesHandler extends BiomeHandler {
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.SNOW_BLOCK, 5, Material.SNOW_BLOCK, 25),
                 Material.SNOW_BLOCK,
-                GenUtils.randMaterial(rand, Material.SNOW_BLOCK, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SNOW_BLOCK, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override

@@ -68,7 +68,7 @@ public class PlainsVillageTempleRelicPiece extends PlainsVillageTempleStandardPi
         for(BlockFace face:BlockUtils.xzDiagonalPlaneBlockFaces) {
         	core.getRelative(face).setType(slab);
         }
-        core.getRelative(0,1,0).setType(relics[random.nextInt(relics.length)]);
+        core.getUp().setType(relics[random.nextInt(relics.length)]);
     }
 
 }

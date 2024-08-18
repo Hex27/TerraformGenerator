@@ -34,8 +34,8 @@ public class ScarletForestBeachHandler extends BiomeHandler {
         		Material.WHITE_CONCRETE,
                 Material.WHITE_CONCRETE,
                 Material.WHITE_CONCRETE,
-                GenUtils.randMaterial(rand, Material.WHITE_CONCRETE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.WHITE_CONCRETE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.WHITE_CONCRETE, Material.STONE),
+                GenUtils.randChoice(rand, Material.WHITE_CONCRETE, Material.STONE)};
     }
 
     @Override

@@ -55,7 +55,7 @@ public class MansionTowerStairwayPopulator extends MansionRoomPopulator {
         }
         
         //7 blocks above, place some chests and decorations at the stairs
-        b = b.getRelative(0,8,0);
+        b = b.getUp(8);
         
         for(Entry<Wall, Integer> entry:this.getRoom().getFourWalls(data, 2).entrySet()) {
         	Wall w = entry.getKey().getAtY(b.getY());

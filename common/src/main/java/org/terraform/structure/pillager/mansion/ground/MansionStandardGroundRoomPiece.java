@@ -85,7 +85,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     					b.setType(Material.COBBLESTONE);
         			}
             		
-            		new Wall(b.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+            		new Wall(b.getDown()).downUntilSolid(new Random(), Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             		
             		b.getRelative(0,targetRoom.getHeight()+1,0).setType(Material.STONE_BRICKS);
         		}	
@@ -119,11 +119,11 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
             					new StairBuilder(Material.STONE_BRICK_STAIRS)
             					.setFacing(BlockUtils.getRight(w.getDirection()))
             					.setHalf(Half.TOP)
-            					.apply(w.getRelative(0,1,0));
+            					.apply(w.getUp());
             					
             					w.getLeft().get().lsetType(Material.POLISHED_ANDESITE);
-            					w.getLeft().getRelative(0,1,0).get().lsetType(Material.POLISHED_ANDESITE);
-            					w.getRight().getRelative(0,1,0).get().lsetType(Material.POLISHED_ANDESITE);
+            					w.getLeft().getUp().get().lsetType(Material.POLISHED_ANDESITE);
+            					w.getRight().getUp().get().lsetType(Material.POLISHED_ANDESITE);
             					w.getRight().get().lsetType(Material.POLISHED_ANDESITE);
             				}
             				//Upper decorations

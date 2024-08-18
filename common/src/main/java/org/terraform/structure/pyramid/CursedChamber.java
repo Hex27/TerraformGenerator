@@ -88,12 +88,12 @@ public class CursedChamber extends RoomPopulatorAbstract {
 
         //Stair base and ceiling
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            Stairs stair = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(Material.SANDSTONE_STAIRS, Material.STONE_STAIRS, Material.COBBLESTONE_STAIRS));
+            Stairs stair = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(Material.SANDSTONE_STAIRS, Material.STONE_STAIRS, Material.COBBLESTONE_STAIRS));
             stair.setFacing(face.getOppositeFace());
             w.getRelative(face).setBlockData(stair);
 
 
-            stair = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(Material.SANDSTONE_STAIRS, Material.STONE_STAIRS, Material.COBBLESTONE_STAIRS));
+            stair = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(Material.SANDSTONE_STAIRS, Material.STONE_STAIRS, Material.COBBLESTONE_STAIRS));
             stair.setFacing(face.getOppositeFace());
             stair.setHalf(Half.TOP);
             w.getRelative(face).getRelative(0, room.getHeight() - 2, 0).setBlockData(stair);
@@ -113,7 +113,7 @@ public class CursedChamber extends RoomPopulatorAbstract {
         //Corrupt Ceiling
         for (int nz = -2; nz <= 2; nz++)
             for (int nx = -2; nx <= 2; nx++) {
-                w.getRelative(nx, room.getHeight() - 1, nz).setType(GenUtils.randMaterial(Material.ANDESITE, Material.COBBLESTONE, Material.SANDSTONE));
+                w.getRelative(nx, room.getHeight() - 1, nz).setType(GenUtils.randChoice(Material.ANDESITE, Material.COBBLESTONE, Material.SANDSTONE));
             }
     }
 

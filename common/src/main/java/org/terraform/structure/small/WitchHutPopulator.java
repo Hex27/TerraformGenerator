@@ -61,7 +61,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
             swamphut.parser = new WitchHutSchematicParser(random, data);
             swamphut.setFace(face);
             swamphut.apply();
-            Wall w = new Wall(core.getRelative(0, -2, 0), face).getRear();
+            Wall w = new Wall(core.getDown(2), face).getRear();
 
             //Pillars down
             w.getFront().getRight().downUntilSolid(random, Material.OAK_LOG);
@@ -157,7 +157,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
         public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             if (data.getMaterial().toString().contains("COBBLESTONE")) {
                 data = Bukkit.createBlockData(
-                        StringUtils.replace(data.getAsString(), "cobblestone", GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE,
+                        StringUtils.replace(data.getAsString(), "cobblestone", GenUtils.randChoice(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE,
                                 Material.MOSSY_COBBLESTONE).name().toLowerCase(Locale.ENGLISH))
                 );
                 super.applyData(block, data);

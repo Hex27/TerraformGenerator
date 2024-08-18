@@ -44,9 +44,9 @@ public class WarmOceansHandler extends AbstractOceanHandler {
         return new Material[]{
         		Material.GRAVEL,
         		Material.GRAVEL,
-                GenUtils.randMaterial(rand, Material.STONE, Material.GRAVEL, Material.STONE),
-                GenUtils.randMaterial(rand, Material.STONE),
-                GenUtils.randMaterial(rand, Material.STONE)};
+                GenUtils.randChoice(rand, Material.STONE, Material.GRAVEL, Material.STONE),
+                GenUtils.randChoice(rand, Material.STONE),
+                GenUtils.randChoice(rand, Material.STONE)};
     }
 
     @Override
@@ -88,7 +88,7 @@ public class WarmOceansHandler extends AbstractOceanHandler {
                 		(float) GenUtils.randDouble(random, 3, 7), 
                 		new SimpleBlock(data,sLoc), 
                 		true, 
-                		GenUtils.randMaterial(
+                		GenUtils.randChoice(
                 				Material.STONE,
                 				Material.GRANITE,
                 				Material.ANDESITE,

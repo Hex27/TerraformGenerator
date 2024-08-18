@@ -49,7 +49,7 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
                     GenUtils.randInt(rand, 1, 3),
                     GenUtils.randInt(rand, 1, 3),
                     new SimpleBlock(data, x, y, z), false,
-                    GenUtils.randMaterial(rand,
+                    GenUtils.randChoice(rand,
                             Material.IRON_ORE,
                             Material.HAY_BLOCK,
                             Material.CHISELED_STONE_BRICKS,
@@ -68,7 +68,7 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
             }
             if (ny == room.getHeight() + room.getY()) continue;
 
-            Material type = GenUtils.randMaterial(rand, Material.CRAFTING_TABLE,
+            Material type = GenUtils.randChoice(rand, Material.CRAFTING_TABLE,
                     Material.ANVIL,
                     Material.CAULDRON,
                     Material.FLETCHING_TABLE,

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.CylinderBuilder;
@@ -58,12 +59,15 @@ public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
                 
                 //Spore blossom
             	if(GenUtils.chance(random, 1, 30))
-            		ceil.setType(Material.SPORE_BLOSSOM);
-                
+                    PlantBuilder.SPORE_BLOSSOM.build(ceil);
+
                 //WATER DECORATIONS
                 //Lily pads
                 if(GenUtils.chance(random, 1, 50)) {
-                	ceil.getAtY(TerraformGenerator.seaLevel + 1).lsetType(Material.LILY_PAD);
+                    var at = ceil.getAtY(TerraformGenerator.seaLevel + 1);
+                    if (!at.isSolid()) {
+                        PlantBuilder.LILY_PAD.build(at);
+                    }
                 }
 
                 //Don't touch slabbed floors or stalagmites

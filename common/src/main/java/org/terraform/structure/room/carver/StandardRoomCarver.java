@@ -29,7 +29,7 @@ public class StandardRoomCarver extends RoomCarver{
                     for (int nz = room.getZ() - room.getWidthZ() / 2; nz <= room.getZ() + room.getWidthZ() / 2; nz++) {
                         if (data.getType(nx, ny, nz) == Material.CAVE_AIR)
                             continue;
-                        if (tile == -1) data.setType(nx, ny, nz, GenUtils.randMaterial(mat));
+                        if (tile == -1) data.setType(nx, ny, nz, GenUtils.randChoice(mat));
                         else {
                             data.setType(nx, ny, nz, mat[(Math.abs(nz + room.getWidthZ() / 2 + ny + nx + room.getWidthX() / 2 - tileIndex)) % mat.length]);
                             tileIndex += 1;

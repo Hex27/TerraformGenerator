@@ -242,7 +242,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 
     @Override
     public boolean customCarve(@NotNull SimpleBlock base, BlockFace dir, int pathWidth) {
-        Wall core = new Wall(base.getRelative(0, 1, 0), dir);
+        Wall core = new Wall(base.getUp(), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         EnumSet<Material> carveMaterials = BlockUtils.stoneLike.clone();
         carveMaterials.addAll(BlockUtils.caveDecoratorMaterials);

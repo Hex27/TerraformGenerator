@@ -68,10 +68,10 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
             );
 
             //Shuffle terracotta types
-            this.newMapping.put(Material.YELLOW_GLAZED_TERRACOTTA, GenUtils.randMaterial(BlockUtils.GLAZED_TERRACOTTA));
-            this.newMapping.put(Material.LIGHT_BLUE_TERRACOTTA, GenUtils.randMaterial(BlockUtils.TERRACOTTA));
-            this.newMapping.put(Material.CYAN_GLAZED_TERRACOTTA, GenUtils.randMaterial(BlockUtils.GLAZED_TERRACOTTA));
-            this.newMapping.put(Material.CYAN_TERRACOTTA, GenUtils.randMaterial(BlockUtils.TERRACOTTA));
+            this.newMapping.put(Material.YELLOW_GLAZED_TERRACOTTA, GenUtils.randChoice(BlockUtils.GLAZED_TERRACOTTA));
+            this.newMapping.put(Material.LIGHT_BLUE_TERRACOTTA, GenUtils.randChoice(BlockUtils.TERRACOTTA));
+            this.newMapping.put(Material.CYAN_GLAZED_TERRACOTTA, GenUtils.randChoice(BlockUtils.GLAZED_TERRACOTTA));
+            this.newMapping.put(Material.CYAN_TERRACOTTA, GenUtils.randChoice(BlockUtils.TERRACOTTA));
         }
 
         @Override

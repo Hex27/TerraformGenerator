@@ -82,29 +82,29 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
             //while(w.getType() != Material.DIRT){
             while (!w.getType().isSolid() ||
                     w.getType().toString().contains("PLANKS")) {
-                Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
+                Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(this.rand, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
                         Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS));
                 stairs.setFacing(w.getDirection().getOppositeFace());
                 w.getRight().setBlockData(stairs);
                 w.setBlockData(stairs);
                 w.getLeft().setBlockData(stairs);
 
-                w.getLeft(2).getRelative(0, 1, 0).downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
-                w.getLeft(2).getRelative(0, 2, 0).setType(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
+                w.getLeft(2).getUp().downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
+                w.getLeft(2).getUp(2).setType(GenUtils.randChoice(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.MOSSY_COBBLESTONE_WALL));
 
-                w.getRight(2).getRelative(0, 1, 0).downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
-                w.getRight(2).getRelative(0, 2, 0).setType(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
+                w.getRight(2).getUp().downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
+                w.getRight(2).getUp(2).setType(GenUtils.randChoice(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
 
-                w = w.getFront().getRelative(0, -1, 0);
+                w = w.getFront().getDown();
             }
 
             //Place a bell. The townhall acts as the village center.
             Bell bell = (Bell) Bukkit.createBlockData(Material.BELL);
             bell.setAttachment(Attachment.SINGLE_WALL);
             bell.setFacing(w.getDirection().getOppositeFace());
-            w.getLeft(2).getRelative(0, 2, 0).setBlockData(bell);
+            w.getLeft(2).getUp(2).setBlockData(bell);
 
             Wall entrance = w.getGround();
             int maxDepth = 5;

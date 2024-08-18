@@ -28,7 +28,7 @@ public class GenericAntechamber extends Antechamber {
         super.populate(data, room);
         for (int i = 0; i < GenUtils.randInt(2, 5); i++) {
             int[] coords = room.randomCoords(rand, 2);
-            data.setType(coords[0], room.getY() + 1, coords[2], GenUtils.randMaterial(Material.CHISELED_SANDSTONE, Material.CHISELED_SANDSTONE, Material.CHISELED_SANDSTONE,
+            data.setType(coords[0], room.getY() + 1, coords[2], GenUtils.randChoice(Material.CHISELED_SANDSTONE, Material.CHISELED_SANDSTONE, Material.CHISELED_SANDSTONE,
                     Material.BONE_BLOCK));
         }
 

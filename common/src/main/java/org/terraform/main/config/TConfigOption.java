@@ -487,6 +487,14 @@ public enum TConfigOption {
     ORE_DEEPSLATE_MAXSPAWNHEIGHT("ore.deepslate.max-spawn-height", 15),
     ORE_DEEPSLATE_MINSPAWNHEIGHT("ore.deepslate.min-spawn-height", 0),
 
+    FEATURE_ANIMALS_ENABLED("feature_toggle.animals", true),
+    FEATURE_ORES_ENABLED("feature_toggle.ores", true),
+    FEATURE_TREES_ENABLED("feature_toggle.trees", true),
+    FEATURE_TALL_MUSHROOMS_ENABLED("feature_toggle.tall_mushrooms", true),
+    FEATURE_PLANTS_ENABLED("feature_toggle.plants", true),
+    FEATURE_STRUCTURES_ENABLED("feature_toggle.structures", true),
+    FEATURE_DECORATIONS_ENABLED("feature_toggle.decorations", true),
+
     ;
     private final String path;
     private Object value;
@@ -576,5 +584,18 @@ public enum TConfigOption {
     public <T> T get(@NotNull Class<T> clazz) {
         return clazz.cast(value);
     }
+
+    public static boolean areTreesEnabled() {
+        return TConfigOption.FEATURE_TREES_ENABLED.getBoolean();
+    }
+    public static boolean areTallMushroomsEnabled() { return TConfigOption.FEATURE_TALL_MUSHROOMS_ENABLED.getBoolean(); }
+    public static boolean arePlantsEnabled() {
+        return TConfigOption.FEATURE_PLANTS_ENABLED.getBoolean();
+    }
+    public static boolean areStructuresEnabled() {
+        return TConfigOption.FEATURE_STRUCTURES_ENABLED.getBoolean();
+    }
+    public static boolean areAnimalsEnabled() { return TConfigOption.FEATURE_ANIMALS_ENABLED.getBoolean(); }
+    public static boolean areDecorationsEnabled() { return TConfigOption.FEATURE_DECORATIONS_ENABLED.getBoolean(); }
 
 }

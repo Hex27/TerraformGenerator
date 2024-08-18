@@ -23,7 +23,7 @@ public class ChestBuilder {
     }
 
     public ChestBuilder(Material... mat) {
-        this.blockData = (Chest) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Chest) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
     public @NotNull ChestBuilder setLootTable(TerraLootTable @NotNull ... loottable) {

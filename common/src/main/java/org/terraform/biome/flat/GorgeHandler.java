@@ -76,14 +76,14 @@ public class GorgeHandler extends BiomeHandler {
 
         target = target.getGround();
 
-        if(!BlockUtils.isWet(target.getRelative(0,1,0)) && target.getType() == Material.STONE) {
+        if(!BlockUtils.isWet(target.getUp()) && target.getType() == Material.STONE) {
             //Make the ground more dynamic
             target.setType(Material.GRASS_BLOCK);
-            target.getRelative(0,-1,0).setType(Material.DIRT);
+            target.getDown().setType(Material.DIRT);
             if(random.nextBoolean()) {
-                target.getRelative(0,-2,0).setType(Material.DIRT);
+                target.getDown(2).setType(Material.DIRT);
                 if(random.nextBoolean())
-                    target.getRelative(0,-3,0).setType(Material.DIRT);
+                    target.getDown(3).setType(Material.DIRT);
             }
         }
 
@@ -143,7 +143,7 @@ public class GorgeHandler extends BiomeHandler {
             if(Math.round(platformHeight) >= 1)
                 cache.writeTransformedHeight(x, z, (short) (Math.round(platformHeight) + height));
             for(int y = 1; y <= (int) Math.round(platformHeight); y++) {
-                Material material = GenUtils.randMaterial(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
+                Material material = GenUtils.randChoice(Material.STONE, Material.STONE, Material.STONE, Material.STONE,
                         Material.COBBLESTONE, Material.COBBLESTONE, Material.ANDESITE, Material.ANDESITE);
 
                 if(slabs
@@ -216,7 +216,7 @@ public class GorgeHandler extends BiomeHandler {
                 		(float) GenUtils.randDouble(random, 3, 6), 
                 		new SimpleBlock(data,sLoc), 
                 		true, 
-                		GenUtils.randMaterial(
+                		GenUtils.randChoice(
                 				Material.GRANITE,
                 				Material.ANDESITE,
                 				Material.DIORITE

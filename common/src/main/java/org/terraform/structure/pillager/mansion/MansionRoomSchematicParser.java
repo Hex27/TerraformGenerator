@@ -32,7 +32,7 @@ public class MansionRoomSchematicParser extends SchematicParser {
             super.applyData(block, data);
             pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.WOODLAND_MANSION);
         } else if (data.getMaterial() == Material.POTTED_POPPY) {
-            block.setType(BlockUtils.pickPottedPlant());
+            BlockUtils.pickPottedPlant().build(block);
             return;
         } else {
             super.applyData(block, data);

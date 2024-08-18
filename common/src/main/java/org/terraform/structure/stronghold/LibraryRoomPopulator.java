@@ -42,14 +42,14 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
             for (int i = 0; i < entry.getValue(); i++) {
                 //Tis' an entrance. Don't cover. Decorate it a bit.
                 if (!wall.getRear().get().getType().toString().endsWith("STONE_BRICKS")) {
-                    Wall temp = wall.getRelative(0, 1, 0);
+                    Wall temp = wall.getUp();
                     for (int t = 0; t < room.getHeight(); t++) {
-                        temp = temp.getRelative(0, 1, 0);
+                        temp = temp.getUp();
                         if (temp.getRear().get().getType().toString().endsWith("STONE_BRICKS"))
                             break;
                     }
                     temp.setType(Material.CHISELED_STONE_BRICKS);
-                    temp.getRelative(0, 1, 0).LPillar(room.getHeight(), rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+                    temp.getUp().LPillar(room.getHeight(), rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
 
                 } else { //If it isn't an entrance, make bookshelves
@@ -88,7 +88,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
 
                     //Spawn loot chest
                     if (GenUtils.chance(rand, 5, 100)) {
-                        SimpleBlock cBlock = pWall.getRelative(0, 1, 0).get();
+                        SimpleBlock cBlock = pWall.getUp().get();
                         cBlock.setType(Material.CHEST);
 
                         org.bukkit.block.data.type.Chest chest = (org.bukkit.block.data.type.Chest) Bukkit.createBlockData(Material.CHEST);
@@ -124,7 +124,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
                 wall.setType(Material.OAK_FENCE);
                 BlockUtils.correctSurroundingMultifacingData(wall.get());
                 if (GenUtils.chance(rand, 1, 10))
-                    wall.getRelative(0, 1, 0).setType(Material.TORCH);
+                    wall.getUp().setType(Material.TORCH);
                 wall = wall.getLeft();
             }
         }
@@ -155,8 +155,8 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
         for (int s = 0; s < i; s++) {
             Wall stairWall = stairWalls.get(s);
             //Remove the fences there
-            stairWall.getRight().getRelative(0, 1, 0).setType(Material.AIR);
-            stairWall.getFront().getRight().getRelative(0, 1, 0).setType(Material.AIR);
+            stairWall.getRight().getUp().setType(Material.AIR);
+            stairWall.getFront().getRight().getUp().setType(Material.AIR);
 
             //Place stairs
             while (stairWall.get().getY() > room.getY()) {
@@ -168,7 +168,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
                 stairWall.getFront().setType(Material.OAK_STAIRS);
                 stairWall.getFront().get().setBlockData(d);
 
-                stairWall = stairWall.getLeft().getRelative(0, -1, 0);
+                stairWall = stairWall.getLeft().getDown();
             }
         }
 

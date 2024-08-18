@@ -11,6 +11,8 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.DecorationsBuilder;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
@@ -55,7 +57,7 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
                         .apply(core.getRelative(face, 2));
             }
 
-            core.getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
+            BlockUtils.pickPottedPlant().build(core.getUp());
             return;
         }
 
@@ -98,10 +100,10 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
                                         .setFacing(w.getDirection().getOppositeFace())
                                         .setHalf(Half.TOP)
                                         .apply(w);
-                                w.getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
+                                BlockUtils.pickPottedPlant().build(w.getUp());
                             } else {
                                 //Place Crafting Table
-                                w.setType(Material.CRAFTING_TABLE);
+                                DecorationsBuilder.CRAFTING_TABLE.build(w);
                             }
 
                         } else { //Not next to a bed

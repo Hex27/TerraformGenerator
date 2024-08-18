@@ -27,12 +27,14 @@ public class TreeDB {
      * Spawns an Azalea tree, complete with rooted dirt.
      */
     public static void spawnAzalea(@NotNull Random random, @NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if (!TConfigOption.areTreesEnabled()) return;
+
     	FractalTreeBuilder builder = new FractalTreeBuilder(FractalTypes.Tree.AZALEA_TOP);
     	builder.build(tw, data, x, y, z);
         
     	SimpleBlock rooter = new SimpleBlock(data,x,y-1,z);
     	rooter.setType(Material.ROOTED_DIRT);
-    	rooter = rooter.getRelative(0,-1,0);
+    	rooter = rooter.getDown();
     	
     	while(!BlockUtils.isAir(rooter.getType())) {
     		rooter.setType(Material.ROOTED_DIRT);
@@ -40,16 +42,18 @@ public class TreeDB {
     			SimpleBlock rel = rooter.getRelative(face);
     			if(random.nextBoolean() && BlockUtils.isStoneLike(rel.getType())) {
     				rel.setType(Material.ROOTED_DIRT);
-    				if(BlockUtils.isAir(rel.getRelative(0,-1,0).getType()))
-    					rel.getRelative(0,-1,0).setType(Material.HANGING_ROOTS);
+    				if(BlockUtils.isAir(rel.getDown().getType()))
+    					rel.getDown().setType(Material.HANGING_ROOTS);
     			}
     		}
-    		rooter = rooter.getRelative(0,-1,0);
+    		rooter = rooter.getDown();
     	}
     	rooter.setType(Material.HANGING_ROOTS);
     }
 
     public static void spawnCoconutTree(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if (!TConfigOption.areTreesEnabled()) return;
+
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         FractalTreeBuilder builder = new FractalTreeBuilder(FractalTypes.Tree.COCONUT_TOP);
         
@@ -67,6 +71,8 @@ public class TreeDB {
     }
 
     public static void spawnSmallJungleTree(boolean skipGradientCheck, @NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if (!TConfigOption.areTreesEnabled()) return;
+
     	FractalTreeBuilder ftb;
     	if (GenUtils.chance(1, 8))
     		ftb = new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_EXTRA_SMALL);
@@ -95,6 +101,8 @@ public class TreeDB {
      * Roots will extend at least a little above sea level
      */
     public static void spawnBreathingRoots(@NotNull TerraformWorld tw, @NotNull SimpleBlock centre, Material type){
+        if (!TConfigOption.areTreesEnabled()) return;
+
         Random rand = tw.getHashedRand(centre.getX(),centre.getY(),centre.getZ(),178782);
         for(int i = 0; i < 4+rand.nextInt(8); i++)
         {

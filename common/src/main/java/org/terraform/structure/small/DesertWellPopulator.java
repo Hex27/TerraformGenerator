@@ -187,7 +187,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                             StringUtils.replace(
                                     data.getAsString(),
                                     "red_sandstone",
-                                    GenUtils.randMaterial(
+                                    GenUtils.randChoice(
                                             rand,
                                             Material.RED_SANDSTONE,
                                             Material.SMOOTH_RED_SANDSTONE,
@@ -225,7 +225,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                             StringUtils.replace(
                                     data.getAsString(),
                                     "sandstone",
-                                    GenUtils.randMaterial(
+                                    GenUtils.randChoice(
                                             rand,
                                             Material.SANDSTONE,
                                             Material.SMOOTH_SANDSTONE,

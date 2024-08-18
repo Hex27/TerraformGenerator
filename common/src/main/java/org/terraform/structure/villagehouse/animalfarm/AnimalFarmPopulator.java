@@ -136,7 +136,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                     } else if (noise > 0.2) {
 
                     } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { //Grass hedges
-                        data.setType(nx + x, height, nz + z, GenUtils.randMaterial(
+                        data.setType(nx + x, height, nz + z, GenUtils.randChoice(
                                 random,
                                 Material.CHISELED_STONE_BRICKS,
                                 Material.STONE_BRICKS,
@@ -144,7 +144,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                                 Material.STONE_BRICKS));
                     } else {
                         if (GenUtils.chance(random, (int) (100 * Math.pow(multiplier, 3)), 100)) {
-                            data.setType(nx + x, height, nz + z, GenUtils.randMaterial(
+                            data.setType(nx + x, height, nz + z, GenUtils.randChoice(
                                     random,
                                     Material.COBBLESTONE_SLAB,
                                     Material.MOSSY_COBBLESTONE_SLAB));
@@ -173,9 +173,9 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                 //General lighting
                 if (GenUtils.chance(random, 1, 30)) {
                     data.setType(ePX, highest + 1, ePZ, Material.CHISELED_STONE_BRICKS);
-                    data.setType(ePX, highest + 2, ePZ, GenUtils.randMaterial(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-                    data.setType(ePX, highest + 3, ePZ, GenUtils.randMaterial(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-                    data.setType(ePX, highest + 4, ePZ, GenUtils.randMaterial(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+                    data.setType(ePX, highest + 2, ePZ, GenUtils.randChoice(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+                    data.setType(ePX, highest + 3, ePZ, GenUtils.randChoice(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+                    data.setType(ePX, highest + 4, ePZ, GenUtils.randChoice(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
                     data.setType(ePX, highest + 5, ePZ, Material.CAMPFIRE);
                 }
                 BlockUtils.correctSurroundingMultifacingData(new SimpleBlock(data, ePX, highest + 1, ePZ));
@@ -192,7 +192,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                     if (GenUtils.chance(random, 1, 50)) {
                         SimpleBlock rear = w.getRear().get();
                         int highest = GenUtils.getHighestGround(data, rear.getX(), rear.getZ());
-                        data.setType(rear.getX(), highest + 1, rear.getZ(), GenUtils.randMaterial(
+                        data.setType(rear.getX(), highest + 1, rear.getZ(), GenUtils.randChoice(
                                 Material.CAULDRON,
                                 Material.SMOKER,
                                 Material.LOOM
@@ -226,7 +226,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                     if (Math.pow((nx - room.getX()) / (room.getWidthX() / 2f), 2)
                             + Math.pow((nz - room.getZ()) / (room.getWidthZ() / 2f), 2) <= 1) {
 
-                        data.setType(nx, highest, nz, GenUtils.randMaterial(random,
+                        data.setType(nx, highest, nz, GenUtils.randChoice(random,
                                 Material.GRASS_BLOCK,
                                 Material.PODZOL,
                                 Material.GRASS_BLOCK,

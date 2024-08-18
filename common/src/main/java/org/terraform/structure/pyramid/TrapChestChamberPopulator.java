@@ -35,16 +35,16 @@ public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
         center.setType(Material.BLUE_TERRACOTTA);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             center.getRelative(face).setType(Material.ORANGE_TERRACOTTA);
-            new Wall(center.getRelative(face).getRelative(face).getRelative(0, 1, 0))
+            new Wall(center.getRelative(face).getRelative(face).getUp())
                     .Pillar(room.getHeight(), rand, Material.CUT_SANDSTONE);
         }
         for (BlockFace face : BlockUtils.directBlockFaces)
             center.getRelative(face).getRelative(face)
                     .setType(Material.ORANGE_TERRACOTTA);
 
-        center.getRelative(0, 1, 0).setType(Material.TRAPPED_CHEST);
+        center.getUp().setType(Material.TRAPPED_CHEST);
         data.lootTableChest(center.getX(), center.getY() + 1, center.getZ(), TerraLootTable.DESERT_PYRAMID);
-        center = center.getRelative(0, -1, 0);
+        center = center.getDown();
 
         //Underground tnt network
 
@@ -55,7 +55,7 @@ public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
             }
         }
         //Ensure that center tnt is stone.
-        center.getRelative(0, -1, 0).setType(Material.STONE);
+        center.getDown().setType(Material.STONE);
     }
 
 

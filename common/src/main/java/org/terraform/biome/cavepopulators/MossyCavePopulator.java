@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StalactiteBuilder;
@@ -32,7 +33,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
         //Stalactites
         if (GenUtils.chance(random, 1, 35)) {
             Wall w = new Wall(ceil);
-            if (w.getRelative(0, 1, 0).getType() == Material.SAND || w.getRelative(0, 1, 0).getType() == Material.SANDSTONE)
+            if (w.getUp().getType() == Material.SAND || w.getUp().getType() == Material.SANDSTONE)
                 new StalactiteBuilder(Material.SANDSTONE_WALL)
                 .setSolidBlockType(Material.SANDSTONE)
                 .setFacingUp(false)
@@ -67,9 +68,9 @@ public class MossyCavePopulator extends AbstractCavePopulator {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;
-            Wall w = new Wall(floor.getRelative(0,1,0), BlockFace.NORTH);
+            Wall w = new Wall(floor.getUp(), BlockFace.NORTH);
             if (BlockUtils.isAir(w.getType())) {
-                if (w.getRelative(0, -1, 0).getType() == Material.SAND || w.getRelative(0, 1, 0).getType() == Material.SANDSTONE)
+                if (w.getDown().getType() == Material.SAND || w.getUp().getType() == Material.SANDSTONE)
                     new StalactiteBuilder(Material.SANDSTONE_WALL)
                     .setSolidBlockType(Material.SANDSTONE)
                     .setFacingUp(true)
@@ -97,14 +98,14 @@ public class MossyCavePopulator extends AbstractCavePopulator {
 
         } 
         else if (GenUtils.chance(random, 1, 25) 
-        		&& BlockUtils.isStoneLike(floor.getRelative(0,1,0).getType())) 
+        		&& BlockUtils.isStoneLike(floor.getUp().getType())) 
         { //Slabbing
-            SimpleBlock base = floor.getRelative(0,1,0);
+            SimpleBlock base = floor.getUp();
             //Only next to spots where there's some kind of solid block.
             if (BlockUtils.isAir(base.getType()))
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (base.getRelative(face).getType().isSolid()) {
-                    	if(base.getRelative(0,-1,0).getType() == Material.DEEPSLATE)
+                    	if(base.getDown().getType() == Material.DEEPSLATE)
                     		base.setType(Material.COBBLED_DEEPSLATE_SLAB);
                     	else
                     		base.setType(Material.STONE_SLAB);
@@ -112,14 +113,10 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                     }
                 }
         } 
-        else if (GenUtils.chance(random, 1, 35) && BlockUtils.isStoneLike(floor.getRelative(0,1,0).getType())) 
+        else if (GenUtils.chance(random, 1, 35) && BlockUtils.isStoneLike(floor.getUp().getType())) 
         { //Shrooms
-            if (BlockUtils.isAir(floor.getRelative(0,1,0).getType()))
-                floor.getRelative(0,1,0).setType(
-                		GenUtils.randMaterial(
-                				Material.RED_MUSHROOM,
-                				Material.BROWN_MUSHROOM)
-                		);
+            if (BlockUtils.isAir(floor.getUp().getType()))
+                PlantBuilder.build(floor.getUp(), PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
         }
         
     }

@@ -6,7 +6,8 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
@@ -79,7 +80,7 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
     			SimpleBlock target = new SimpleBlock(core.getPopData(),x,0,z).getGround();
     			
     			//Decorate side of the pond
-    			if(target.getRelative(0,1,0).getType() == Material.AIR) {
+    			if(target.getUp().getType() == Material.AIR) {
     				
     				//Make sure it's the side of the pond
     				boolean valid = false;
@@ -88,30 +89,29 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
     						valid = true;
     				if(!valid) continue;
     				
-    				target = target.getRelative(0,1,0);
+    				target = target.getUp();
     				if(GenUtils.chance(1, 4)) { //Sugar Canes
-    					new Wall(target).LPillar(GenUtils.randInt(2, 5), rand, Material.SUGAR_CANE);
+                        PlantBuilder.SUGAR_CANE.build(target, rand, 2, 5);
     				}else if(GenUtils.chance(1, 4)) { //Leaves
-    					target.setType(Material.OAK_LEAVES);
+                        PlantBuilder.OAK_LEAVES.build(target);
     				}else if(GenUtils.chance(1, 4)) { //Double Plants
-    					BlockUtils.setDoublePlant(core.getPopData(), target.getX(), target.getY(), target.getZ(), 
-    							GenUtils.randMaterial(Material.LARGE_FERN, Material.TALL_GRASS));
-    				}else if(!placedJobBlock && GenUtils.chance(2, 5)) {
+                        PlantBuilder.build(core.getPopData(), target.getX(), target.getY(), target.getZ(), PlantBuilder.LARGE_FERN, PlantBuilder.TALL_GRASS);
+    				}else if(!placedJobBlock && TConfigOption.areDecorationsEnabled() && GenUtils.chance(2, 5)) {
     					target.setType(Material.BARREL);
     					placedJobBlock = true;
     				}
     			}
-    			else if(target.getRelative(0,1,0).getType() == Material.WATER) //Decorate pond surface and pond floor
+    			else if(target.getUp().getType() == Material.WATER) //Decorate pond surface and pond floor
     			{
-    				target = target.getRelative(0,1,0);
+    				target = target.getUp();
     				if(GenUtils.chance(1,5)) //Lily pads
-    					target.getAtY(pondSurface).getRelative(0,1,0).setType(Material.LILY_PAD);
+                        PlantBuilder.LILY_PAD.build(target.getAtY(pondSurface).getUp());
     				else if(GenUtils.chance(1, 5)) //Kelp growth
     					CoralGenerator.generateKelpGrowth(data, x, target.getY(), z);
     				else if(GenUtils.chance(1, 7)) //sea pickle growth
     					CoralGenerator.generateSeaPickles(data, x, target.getY(), z);
     				
-    				if(GenUtils.chance(1,20)) { //spawn fish
+    				if(TConfigOption.areAnimalsEnabled() && GenUtils.chance(1,20)) { //spawn fish
     					core.getPopData().addEntity(target.getX(), target.getY(), target.getZ(), EntityType.TROPICAL_FISH);
     				}
     			}

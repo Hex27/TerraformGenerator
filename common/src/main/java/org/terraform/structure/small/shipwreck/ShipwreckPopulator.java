@@ -29,12 +29,12 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
             block.setType(Material.WATER);
             int depth = 0;
             while (!block.getType().isSolid()) {
-                block = block.getRelative(0, -1, 0);
+                block = block.getDown();
                 depth++;
                 if (depth > 50) return;
             }
 
-            block.getRelative(0, 1, 0).setType(type);
+            block.getUp().setType(type);
         }
     }
 
@@ -59,7 +59,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
     public void spawnShipwreck(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         try {
         	//If the ground is dry, force the whole ship down into the ground to bury it.
-        	if(!BlockUtils.isWet(new SimpleBlock(data,x,0,z).getGround().getRelative(0,1,0))) {
+        	if(!BlockUtils.isWet(new SimpleBlock(data,x,0,z).getGround().getUp())) {
         		y -= GenUtils.randInt(random, 4, 7);
         	}
             y += GenUtils.randInt(random, -1, 1);

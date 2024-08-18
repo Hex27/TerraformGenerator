@@ -13,6 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -54,13 +55,12 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
         		Material.ORANGE_TERRACOTTA,
         		Material.ORANGE_TERRACOTTA,
         		Material.ORANGE_TERRACOTTA,
-                GenUtils.randMaterial(rand, Material.ORANGE_TERRACOTTA, Material.STONE),
-                GenUtils.randMaterial(rand, Material.ORANGE_TERRACOTTA, Material.STONE)};
+                GenUtils.randChoice(rand, Material.ORANGE_TERRACOTTA, Material.STONE),
+                GenUtils.randChoice(rand, Material.ORANGE_TERRACOTTA, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-
         correctDirt(new SimpleBlock(data,rawX,surfaceY,rawZ));
 
         FastNoise paintNoise = NoiseCacheHandler.getNoise(
@@ -83,11 +83,11 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
                 data.setType(rawX, surfaceY-1, rawZ, Material.DIRT);
 
             if (GenUtils.chance(random, 1, 30)) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 if (random.nextBoolean()) {
-                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                    PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 } else {
-                    data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                    PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -137,7 +137,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     				break;
     			}
     		}
-    		start = start.getRelative(0,-1,0);
+    		start = start.getDown();
     	}
     }
 	

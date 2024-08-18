@@ -9,6 +9,8 @@ import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -38,7 +40,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         int caveHeight = ceil.getY() - floor.getY();
 
         //Don't decorate wet areas
-        if(!BlockUtils.isWet(ceil.getRelative(0,-1,0))) {
+        if(!BlockUtils.isWet(ceil.getDown())) {
         	//Don't touch slabbed floors or stalagmites
             if (Tag.SLABS.isTagged(floor.getType()) ||
             		Tag.WALLS.isTagged(floor.getType()))
@@ -49,8 +51,8 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
             	//This part doesn't spawn Azaleas
         		ceil.setType(Material.ROOTED_DIRT);
             	if(random.nextBoolean())
-            		ceil.getRelative(0,-1,0).setType(Material.HANGING_ROOTS);
-            	
+                    PlantBuilder.HANGING_ROOTS.build(ceil.getDown());
+
             }
             else //If not, it's moss
             {
@@ -61,7 +63,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
             	
             	//Spore blossom
             	if(GenUtils.chance(random, 1, 15))
-            		ceil.getRelative(0,-1,0).setType(Material.SPORE_BLOSSOM);
+                    PlantBuilder.SPORE_BLOSSOM.build(ceil.getDown());
             }
             
             //Spawn these on the surface, and let the roots go downwards.
@@ -69,7 +71,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
             //and this cave hole.
             if(isForLargeCave && GenUtils.chance(random, 1, 300)) {
             	SimpleBlock base = ceil.getGround();
-            	if(BlockUtils.isDirtLike(base.getType()) && !BlockUtils.isWet(base.getRelative(0,1,0)))
+            	if(BlockUtils.isDirtLike(base.getType()) && !BlockUtils.isWet(base.getUp()))
             		TreeDB.spawnAzalea(random, tw, base.getPopData(), base.getX(), base.getY()+1, base.getZ());
             }
             
@@ -80,7 +82,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
                 int h = caveHeight / 4;
                 if (h < 1) h = 1;
                 if (h > 6) h = 6;
-                BlockUtils.downLCaveVines(h, ceil.getRelative(0,-1,0));
+                BlockUtils.downLCaveVines(h, ceil.getDown());
             }
         }
 
@@ -102,27 +104,29 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         if (GenUtils.chance(random, 1, 15)) 
         { //Azaleas
         	if(random.nextBoolean())
-        		floor.getRelative(0,1,0).setType(Material.AZALEA);
+                PlantBuilder.AZALEA.build(floor.getUp());
         	else
-        		floor.getRelative(0,1,0).setType(Material.FLOWERING_AZALEA);
+                PlantBuilder.FLOWERING_AZALEA.build(floor.getUp());
         }
         else if (Version.isAtLeast(17) && GenUtils.chance(random, 1, 7)) 
         { //Dripleaves
-        	if(random.nextBoolean())
-	        	new DirectionalBuilder(Material.BIG_DRIPLEAF)
-	        	.setFacing(BlockUtils.getDirectBlockFace(random))
-	        	.apply(floor.getRelative(0,1,0));
-        	else
-        		new BisectedBuilder(Material.SMALL_DRIPLEAF)
-        		.placeBoth(floor.getRelative(0,1,0));
+            if (TConfigOption.arePlantsEnabled()) {
+                if(random.nextBoolean())
+                    new DirectionalBuilder(Material.BIG_DRIPLEAF)
+                            .setFacing(BlockUtils.getDirectBlockFace(random))
+                            .apply(floor.getUp());
+                else
+                    new BisectedBuilder(Material.SMALL_DRIPLEAF)
+                            .placeBoth(floor.getUp());
+            }
         }
         else if(GenUtils.chance(random, 1, 6))
         	//Grass
-    		floor.getRelative(0,1,0).setType(Material.GRASS);
+            PlantBuilder.GRASS.build(floor.getUp());
         else if(GenUtils.chance(random, 1, 7))
-        	//Moss carpets
-    		floor.getRelative(0,1,0).setType(Material.MOSS_CARPET);
-        
+            //Moss carpets
+            PlantBuilder.MOSS_CARPET.build(floor.getUp());
+
 
 
         //=========================
@@ -153,7 +157,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 
                     if(BlockUtils.isStoneLike(rel.getType())) {
                         rel.setType(Material.MOSS_BLOCK);
-                        if(BlockUtils.isAir(target.getType()) && GenUtils.chance(random, 1, 5)) {
+                        if(TConfigOption.arePlantsEnabled() && BlockUtils.isAir(target.getType()) && GenUtils.chance(random, 1, 5)) {
                             new MultipleFacingBuilder(Material.GLOW_LICHEN)
                                     .setFace(face, true)
                                     .apply(target);
@@ -171,7 +175,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
                 instanceof PopulatorDataICABiomeWriterAbstract data) {
             while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), Biome.LUSH_CAVES);
-        		floor = floor.getRelative(0,1,0);
+        		floor = floor.getUp();
         	}
         }
     }

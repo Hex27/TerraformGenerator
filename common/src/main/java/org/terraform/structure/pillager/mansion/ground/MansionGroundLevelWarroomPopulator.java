@@ -63,8 +63,8 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 	
 	@Override
 	public void decorateWall(Random rand, @NotNull Wall w) {
-		BannerUtils.generatePillagerBanner(w.getLeft().getRelative(0,3,0).get(), w.getDirection(),true);
-		BannerUtils.generatePillagerBanner(w.getRight().getRelative(0,3,0).get(), w.getDirection(),true);
+		BannerUtils.generatePillagerBanner(w.getLeft().getUp(3).get(), w.getDirection(),true);
+		BannerUtils.generatePillagerBanner(w.getRight().getUp(3).get(), w.getDirection(),true);
 	}
 	
 	@Override
@@ -80,10 +80,10 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 //		.apply(w.getRight());
 //		if(rand.nextBoolean()) {
 //			w.getLeft().setType(Material.BOOKSHELF);
-//			w.getLeft().getRelative(0,1,0).setType(Material.LANTERN);
+//			w.getLeft().getUp().setType(Material.LANTERN);
 //		}else if(rand.nextBoolean()) {
 //			w.getRight().setType(Material.BOOKSHELF);
-//			w.getRight().getRelative(0,1,0).setType(Material.LANTERN);
+//			w.getRight().getUp().setType(Material.LANTERN);
 //		}
 	}
 	

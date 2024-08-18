@@ -10,6 +10,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -41,9 +42,9 @@ public class SnowyWastelandHandler extends BiomeHandler {
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.SNOW_BLOCK,
                 Material.SNOW_BLOCK,
-                GenUtils.randMaterial(rand, Material.SNOW_BLOCK, Material.SNOW_BLOCK, Material.DIRT, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SNOW_BLOCK, Material.SNOW_BLOCK, Material.DIRT, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -73,7 +74,8 @@ public class SnowyWastelandHandler extends BiomeHandler {
         	sLoc.setY(GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ()));
             if (data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) != Material.SNOW_BLOCK) continue;
 
-            BlockUtils.spawnPillar(random, data, sLoc.getX(),sLoc.getY(),sLoc.getZ(), Material.SPRUCE_LOG, 6, 8);
+            if (!TConfigOption.areTreesEnabled())
+                BlockUtils.spawnPillar(random, data, sLoc.getX(),sLoc.getY(),sLoc.getZ(), Material.SPRUCE_LOG, 6, 8);
 
             if (GenUtils.chance(1, 3))
                 new FractalTreeBuilder(FractalTypes.Tree.FROZEN_TREE_SMALL)

@@ -13,6 +13,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
@@ -42,11 +43,11 @@ public class MangroveHandler extends BiomeHandler {
     }
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
-                GenUtils.randMaterial(rand, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+        return new Material[]{GenUtils.randChoice(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
+                GenUtils.randChoice(rand, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -97,7 +98,7 @@ public class MangroveHandler extends BiomeHandler {
 
             if (data.getType(rawX,TerraformGenerator.seaLevel,rawZ) == Material.WATER) {
                 if (GenUtils.chance(random, 1, 30))
-                    data.setType(rawX, TerraformGenerator.seaLevel + 1, rawZ, Material.LILY_PAD);
+                    PlantBuilder.LILY_PAD.build(data, rawX, TerraformGenerator.seaLevel + 1, rawZ);
             }
         }
 

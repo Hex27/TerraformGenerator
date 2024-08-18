@@ -308,10 +308,10 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
                             BlockUtils.correctSurroundingMultifacingData(b);
 
                             if (GenUtils.chance(random, 1, 12) &&
-                                    !b.getRelative(0, -1, 0).getType().isSolid()) {
+                                    !b.getDown().getType().isSolid()) {
                                 Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
                                 l.setHanging(true);
-                                b.getRelative(0, -1, 0).setBlockData(l);
+                                b.getDown().setBlockData(l);
                             }
                         }
                     }
@@ -327,31 +327,31 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
                 2.5f,
                 1.5f,
                 2.5f,
-                center.getRelative(0, 2, 0),
+                center.getUp(2),
                 true,
                 BlockUtils.badlandsStoneLike);
 
         center.setType(Material.DARK_OAK_PLANKS);
         ArrayList<SimpleBlock> lootBlocks = new ArrayList<>();
-        lootBlocks.add(center.getRelative(0, 1, 0));
+        lootBlocks.add(center.getUp());
 
         for (BlockFace face : BlockUtils.directBlockFaces) {
             center.getRelative(face).setType(Material.DARK_OAK_PLANKS);
-            lootBlocks.add(center.getRelative(face).getRelative(0, 1, 0));
+            lootBlocks.add(center.getRelative(face).getUp());
 
             Stairs stairs = (Stairs) Bukkit.createBlockData(Material.DARK_OAK_STAIRS);
             stairs.setHalf(Bisected.Half.TOP);
             stairs.setFacing(face.getOppositeFace());
             center.getRelative(face, 2).setBlockData(stairs);
 
-            SimpleBlock lantern = center.getRelative(face, 2).getRelative(0, 1, 0);
+            SimpleBlock lantern = center.getRelative(face, 2).getUp();
             if (BlockUtils.isAir(lantern.getType()) && GenUtils.chance(1, 4))
                 lantern.setType(Material.LANTERN);
 
             Slab slab = (Slab) Bukkit.createBlockData(Material.DARK_OAK_SLAB);
             slab.setType(Slab.Type.TOP);
             center.getRelative(face).getRelative(BlockUtils.getRight(face)).setBlockData(slab);
-            lootBlocks.add(center.getRelative(face).getRelative(BlockUtils.getRight(face)).getRelative(0, 1, 0));
+            lootBlocks.add(center.getRelative(face).getRelative(BlockUtils.getRight(face)).getUp());
         }
 
         for (SimpleBlock lootBlock : lootBlocks) {
@@ -359,7 +359,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
                 setLootBlock(lootBlock);
 
                 if (GenUtils.chance(4, 10)) {
-                    setLootBlock(lootBlock.getRelative(0, 1, 0));
+                    setLootBlock(lootBlock.getUp());
                 }
             }
         }
@@ -371,7 +371,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
             lootBlock.setBlockData(BlockUtils.getRandomBarrel());
             lootBlock.getPopData().lootTableChest(lootBlock.getX(), lootBlock.getY(), lootBlock.getZ(), TerraLootTable.ABANDONED_MINESHAFT);
         } else {
-            lootBlock.lsetType(GenUtils.randMaterial(BlockUtils.ores));
+            lootBlock.lsetType(GenUtils.randChoice(BlockUtils.ores));
         }
     }
 }

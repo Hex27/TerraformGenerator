@@ -60,7 +60,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 		private final Material terracottaType;
 		public MansionLoungeSchematicParser(@NotNull Random rand, PopulatorDataAbstract pop) {
 			super(rand, pop);
-			terracottaType = GenUtils.randMaterial(rand,
+			terracottaType = GenUtils.randChoice(rand,
             		Material.WHITE_GLAZED_TERRACOTTA,
             		Material.ORANGE_GLAZED_TERRACOTTA,
             		Material.MAGENTA_GLAZED_TERRACOTTA,
@@ -99,7 +99,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 
 	@Override
 	public void decorateExit(Random rand, @NotNull Wall w) {
-		w.getRelative(0,6,0).setType(Material.DARK_OAK_PLANKS);
+		w.getUp(6).setType(Material.DARK_OAK_PLANKS);
 	}
 	
 	@Override

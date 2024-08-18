@@ -46,7 +46,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
     	for(BlockFace face:BlockUtils.getAdjacentFaces(facing)) {
     		SimpleBlock corner = core.getRelative(face,size-1);
     		corner.getRelative(facing.getOppositeFace()).setType(cloth);
-    		corner.getRelative(facing.getOppositeFace()).getRelative(0,1,0).setType(fenceMat);
+    		corner.getRelative(facing.getOppositeFace()).getUp().setType(fenceMat);
     		//Place corner. Cache the builder to prevent recalculation from woodutils
     		StairBuilder builder = new StairBuilder(WoodUtils.getWoodForBiome(biome, WoodType.STAIRS));
     		
@@ -55,7 +55,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
     		.setFacing(face)
     		.setHalf(Half.TOP)
     		.apply(corner.getRelative(face.getOppositeFace()));
-    		corner = corner.getRelative(face.getOppositeFace()).getRelative(0,1,0);
+    		corner = corner.getRelative(face.getOppositeFace()).getUp();
     		
     		builder.setHalf(Half.BOTTOM).setFacing(face.getOppositeFace());
     		
@@ -78,8 +78,8 @@ public class OutpostTent extends RoomPopulatorAbstract {
     					target.getAtY(j).setType(Material.AIR);
     			}
     			
-    			target.getRelative(0,1,0).setType(fenceMat);
-        		corner = corner.getRelative(0,1,0).getRelative(face.getOppositeFace());
+    			target.getUp().setType(fenceMat);
+        		corner = corner.getUp().getRelative(face.getOppositeFace());
     		}
     	}
     }
@@ -87,7 +87,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	Material planks = WoodUtils.getWoodForBiome(biome, WoodType.PLANKS);
     	Material fence = WoodUtils.getWoodForBiome(biome, WoodType.FENCE);
-    	Material cloth = GenUtils.randMaterial(rand, edgyWools);
+    	Material cloth = GenUtils.randChoice(rand, edgyWools);
     	
     	int height = GenUtils.randInt(rand, 4, 6);
     	int length = GenUtils.randInt(rand, 5, 9);
@@ -97,8 +97,8 @@ public class OutpostTent extends RoomPopulatorAbstract {
     			.getRelative(facing,length/2).getGroundOrSeaLevel();
     	
     	//Tent props
-    	placeProp(height, firstProp.getRelative(0,1,0), facing, cloth);
-    	placeProp(height, firstProp.getRelative(0,1,0).getRelative(facing.getOppositeFace(),length), facing.getOppositeFace(), cloth);
+    	placeProp(height, firstProp.getUp(), facing, cloth);
+    	placeProp(height, firstProp.getUp().getRelative(facing.getOppositeFace(),length), facing.getOppositeFace(), cloth);
     	
     	//Tent ground to account for water or potential uneven ground.
     	Wall wallProp = new Wall(firstProp, facing);
@@ -106,12 +106,12 @@ public class OutpostTent extends RoomPopulatorAbstract {
     		for(int relLen = 0; relLen <= length; relLen++) {
         		Wall target = wallProp.getLeft(relWidth).getRelative(facing.getOppositeFace(),relLen);
         		target.get().lsetType(planks);
-        		target.getRelative(0,-1,0).downUntilSolid(getRand(), fence);
-        		//target.getRelative(0,1,0).get().lsetType(Material.WHITE_CARPET);
+        		target.getDown().downUntilSolid(getRand(), fence);
+        		//target.getUp().get().lsetType(Material.WHITE_CARPET);
         		target = wallProp.getRight(relWidth).getRelative(facing.getOppositeFace(),relLen);
         		target.get().lsetType(planks);
-        		target.getRelative(0,-1,0).downUntilSolid(getRand(), fence);
-        		//target.getRelative(0,1,0).get().lsetType(Material.WHITE_CARPET);
+        		target.getDown().downUntilSolid(getRand(), fence);
+        		//target.getUp().get().lsetType(Material.WHITE_CARPET);
     		}
     	}
     	
@@ -137,7 +137,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
     			SimpleBlock corner = firstProp
     					.getRelative(face,height-1)
     					.getRelative(facing.getOppositeFace(),relLen)
-    					.getRelative(0,1,0); //Off the ground
+    					.getUp(); //Off the ground
     		    for(int relWidth = height-2; relWidth >= 0; relWidth--) {
 
     				for(int i = corner.getY(); i > firstProp.getY(); i--) {
@@ -173,8 +173,8 @@ public class OutpostTent extends RoomPopulatorAbstract {
 						}
         				
         			}
-            		corner.getRelative(0,1,0).setType(cloth);
-            		corner = corner.getRelative(face.getOppositeFace()).getRelative(0,1,0);
+            		corner.getUp().setType(cloth);
+            		corner = corner.getRelative(face.getOppositeFace()).getUp();
         		}
     		}
     	}

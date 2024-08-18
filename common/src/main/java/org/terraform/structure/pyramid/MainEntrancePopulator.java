@@ -44,7 +44,7 @@ public class MainEntrancePopulator extends RoomPopulatorAbstract {
                     if (h == 2)
                         data.setType(x, room.getY() + entranceHeightOffsetFromBase + 2, z, Material.CHISELED_RED_SANDSTONE);
                     else
-                        data.setType(x, room.getY() + entranceHeightOffsetFromBase + h, z, GenUtils.randMaterial(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
+                        data.setType(x, room.getY() + entranceHeightOffsetFromBase + h, z, GenUtils.randChoice(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
                     
                     //Down until solid to cover potential gaps
                     if (h == 0) {

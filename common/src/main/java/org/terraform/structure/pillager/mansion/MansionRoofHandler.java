@@ -218,12 +218,12 @@ public class MansionRoofHandler {
                                 .setHalf(Half.TOP)
                                 .setOpen(true)
                                 .setFacing(i == 0 ? target.getDirection().getOppositeFace() : target.getDirection())
-                                .lapply(target.getRelative(0, -1, 0));
+                                .lapply(target.getDown());
                     } else {
-                    	if(target.getRelative(0, -2, 0).getType() != Material.DARK_OAK_PLANKS)
+                    	if(target.getDown(2).getType() != Material.DARK_OAK_PLANKS)
                     		new OrientableBuilder(Material.DARK_OAK_LOG)
                                 .setAxis(superiorAxis)
-                                .apply(target.getRelative(0, -1, 0).get());
+                                .apply(target.getDown().get());
                         
                         //Connect the roof to the walls below
                         if(i == 2 || i == length - 3) {
@@ -233,12 +233,12 @@ public class MansionRoofHandler {
                         		if(BlockUtils.isAir(bottom.getType()) || Tag.STAIRS.isTagged(bottom.getType()) || Tag.SLABS.isTagged(bottom.getType())) {
                         			bottom.setType(Material.DARK_OAK_PLANKS);
                         		}
-                        		target.getRelative(0,-2,0).downPillar(new Random(), target.getY()-bottom.getY()-2, bottom.getType());
+                        		target.getDown(2).downPillar(new Random(), target.getY()-bottom.getY()-2, bottom.getType());
                         	}
                         }
                         else if(i != 1 && i != length-2)//Force set air for things below the roof within the walls
                         {
-                        	target.getRelative(0,-2,0).downPillar(new Random(), target.getY()-y+1, Material.AIR);
+                        	target.getDown(2).downPillar(new Random(), target.getY()-y+1, Material.AIR);
                         }
                     }
                 }
@@ -254,7 +254,7 @@ public class MansionRoofHandler {
                         //Slope down
                     	attemptReplaceSlab(slabType,target,ascendBlock? Type.BOTTOM : Type.DOUBLE);
                     	if(ascendBlock) {
-                    		target = target.getRight().getRelative(0, -1, 0);
+                    		target = target.getRight().getDown();
                     		ascendBlock = false;
                     	}else{
                     		target = target.getRight();
@@ -264,7 +264,7 @@ public class MansionRoofHandler {
                         //Slope up
                     	attemptReplaceSlab(slabType,target,ascendBlock? Type.DOUBLE : Type.BOTTOM);
                     	if(ascendBlock) {
-                    		target = target.getRight().getRelative(0, 1, 0);
+                    		target = target.getRight().getUp();
                     		ascendBlock = false;
                     	}else{
                     		target = target.getRight();
@@ -275,7 +275,7 @@ public class MansionRoofHandler {
                     	highestY = target.getY();
                         target.setType(slabType);
                     	if(ascendBlock) {
-                    		target = target.getRight().getRelative(0, -1, 0);
+                    		target = target.getRight().getDown();
                     		ascendBlock = false;
                     	}else{
                     		target = target.getRight();
@@ -293,7 +293,7 @@ public class MansionRoofHandler {
                         //Slope down
                     	attemptReplaceSlab(slabType,target,ascendBlock? Type.BOTTOM : Type.DOUBLE);
                     	if(ascendBlock) {
-                    		target = target.getRight().getRelative(0, -1, 0);
+                    		target = target.getRight().getDown();
                     		ascendBlock = false;
                     	}else{
                     		target = target.getRight();
@@ -303,7 +303,7 @@ public class MansionRoofHandler {
                         //Slope up
                     	attemptReplaceSlab(slabType,target,ascendBlock? Type.DOUBLE : Type.BOTTOM);
                     	if(ascendBlock) {
-                    		target = target.getRight().getRelative(0, 1, 0);
+                    		target = target.getRight().getUp();
                     		ascendBlock = false;
                     	}else{
                     		target = target.getRight();
@@ -329,7 +329,7 @@ public class MansionRoofHandler {
     }
     
     public static void atticDecorations(@NotNull Random rand, @NotNull PopulatorDataAbstract data, @NotNull JigsawStructurePiece piece) {
-    	SimpleBlock core = piece.getRoom().getCenterSimpleBlock(data).getRelative(0,8,0);
+    	SimpleBlock core = piece.getRoom().getCenterSimpleBlock(data).getUp(8);
     	
     	if(!core.getType().isSolid()) {
     		Wall ceiling = new Wall(core).getUp().findCeiling(15);

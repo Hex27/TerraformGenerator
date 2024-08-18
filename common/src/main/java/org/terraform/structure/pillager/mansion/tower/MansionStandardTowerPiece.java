@@ -104,41 +104,41 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
 					Wall w = core.getRear(depth).getRelative(dir,i);
 					
 					if(i == 0) { //Center
-						w.getRelative(0,5,0).Pillar(2, Material.COBBLESTONE);
-						w.getRelative(0,7,0).setType(Material.COBBLESTONE_WALL);
-						w.getRelative(0,7,0).CorrectMultipleFacing(1);
+						w.getUp(5).Pillar(2, Material.COBBLESTONE);
+						w.getUp(7).setType(Material.COBBLESTONE_WALL);
+						w.getUp(7).CorrectMultipleFacing(1);
 					}
 					else if(i == 1)
 					{
 						new StairBuilder(getStairs(i, depth))
 						.setFacing(dir.getOppositeFace())
-						.apply(w.getRelative(0,5,0));
-						w.getRelative(0,3,0).Pillar(2, getBlock(i,depth));
+						.apply(w.getUp(5));
+						w.getUp(3).Pillar(2, getBlock(i,depth));
 					}
 					else if(i == 2)
 					{
 						new StairBuilder(getStairs(i, depth))
 						.setFacing(dir.getOppositeFace())
-						.apply(w.getRelative(0,3,0));
-						w.getRelative(0,2,0).setType(getBlock(i,depth));
+						.apply(w.getUp(3));
+						w.getUp(2).setType(getBlock(i,depth));
 					}
 					else if(i == 3)
 					{
 						new StairBuilder(getStairs(i, depth))
 						.setFacing(dir.getOppositeFace())
-						.apply(w.getRelative(0,2,0));
+						.apply(w.getUp(2));
 						
 						new SlabBuilder(getSlab(i,depth))
 						.setType(Type.TOP)
-						.apply(w.getRelative(0,1,0));
+						.apply(w.getUp());
 					}
 					else if(i == 4)
 					{
-						w.getRelative(0,1,0).setType(getBlock(i,depth));
+						w.getUp().setType(getBlock(i,depth));
 					}
 					else if(i == 5)
 					{
-						w.getRelative(0,1,0).setType(getSlab(i,depth));
+						w.getUp().setType(getSlab(i,depth));
 						new SlabBuilder(getSlab(i,depth))
 						.setType(Type.TOP)
 						.apply(w);
@@ -152,8 +152,8 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
 					if(i <= 3)
 						if(depth == 1 || depth == MansionJigsawBuilder.groundFloorRoomWidth)
 						{
-							w.getRelative(0,1,0).setType(Material.DARK_OAK_PLANKS);
-							w.getRelative(0,2,0).LPillar(4, new Random(), Material.DARK_OAK_PLANKS);	
+							w.getUp().setType(Material.DARK_OAK_PLANKS);
+							w.getUp(2).LPillar(4, new Random(), Material.DARK_OAK_PLANKS);	
 						}
 					
 				}

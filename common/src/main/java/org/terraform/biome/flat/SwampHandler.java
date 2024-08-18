@@ -32,11 +32,11 @@ public class SwampHandler extends BiomeHandler {
     }
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
-                GenUtils.randMaterial(rand, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+        return new Material[]{GenUtils.randChoice(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
+                GenUtils.randChoice(rand, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override

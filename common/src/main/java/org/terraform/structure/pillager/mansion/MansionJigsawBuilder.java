@@ -169,7 +169,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         
         for(JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()) {
         	if(!getRoofedLocations().contains(piece.getRoom().getSimpleLocation())) {
-        		SimpleLocation loc = piece.getRoom().getSimpleLocation().getRelative(0,13,0);
+        		SimpleLocation loc = piece.getRoom().getSimpleLocation().getUp(13);
         		if(this.core.getPopData().getType(loc.getX(),loc.getY(),loc.getZ()) 
         				!= Material.COBBLESTONE_SLAB) {
         			int towerHeight = towerPieceHandler.registerTowerPiece(random, piece);
@@ -294,15 +294,15 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     	if(!isSinkIn) {
     		Wall largePillar = target.getRelative(one, 4).getRelative(two, 4);
     		largePillar.Pillar(roomHeight, Material.STONE_BRICKS);
-    		largePillar.getRelative(0,-1,0).downUntilSolid(new Random(),Material.COBBLESTONE);
+    		largePillar.getDown().downUntilSolid(new Random(),Material.COBBLESTONE);
     		largePillar.getRelative(one).downUntilSolid(new Random(),Material.COBBLESTONE);
     		largePillar.getRelative(two).downUntilSolid(new Random(),Material.COBBLESTONE);
     		
     		//Side stone walls
-    		largePillar.getRelative(one).getRelative(0,1,0).Pillar(roomHeight-2, Material.COBBLESTONE_WALL);
-    		largePillar.getRelative(one).getRelative(0,1,0).CorrectMultipleFacing(roomHeight-2);
-    		largePillar.getRelative(two).getRelative(0,1,0).Pillar(roomHeight-2, Material.COBBLESTONE_WALL);
-    		largePillar.getRelative(two).getRelative(0,1,0).CorrectMultipleFacing(roomHeight-2);
+    		largePillar.getRelative(one).getUp().Pillar(roomHeight-2, Material.COBBLESTONE_WALL);
+    		largePillar.getRelative(one).getUp().CorrectMultipleFacing(roomHeight-2);
+    		largePillar.getRelative(two).getUp().Pillar(roomHeight-2, Material.COBBLESTONE_WALL);
+    		largePillar.getRelative(two).getUp().CorrectMultipleFacing(roomHeight-2);
     		
     		//Cobblestone at the top
     		largePillar.getRelative(one).getRelative(0,roomHeight-1,0).Pillar(3, Material.COBBLESTONE);
@@ -327,12 +327,12 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     	//Fill in gap in the corner
     	target.Pillar(roomHeight, Material.POLISHED_ANDESITE);
 
-    	target.getRelative(0,2,0).setType(Material.STONE_BRICK_WALL);
-    	target.getRelative(0,3,0).setType(Material.POLISHED_DIORITE);
-    	target.getRelative(0,4,0).setType(Material.STONE_BRICK_WALL);
-    	target.getRelative(0,2,0).CorrectMultipleFacing(3);
+    	target.getUp(2).setType(Material.STONE_BRICK_WALL);
+    	target.getUp(3).setType(Material.POLISHED_DIORITE);
+    	target.getUp(4).setType(Material.STONE_BRICK_WALL);
+    	target.getUp(2).CorrectMultipleFacing(3);
     	
-    	target.getRelative(0, -1, 0).downUntilSolid(random, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+    	target.getDown().downUntilSolid(random, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
         
     	//Small stair base
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
@@ -362,29 +362,29 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(one.getOppositeFace())
     	.setHalf(Half.TOP)
-    	.apply(target.getRelative(0,6,0).getRelative(one));
+    	.apply(target.getUp(6).getRelative(one));
     	
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(two.getOppositeFace())
     	.setHalf(Half.TOP)
-    	.apply(target.getRelative(0,6,0).getRelative(two));
+    	.apply(target.getUp(6).getRelative(two));
     	
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(two.getOppositeFace())
     	.setHalf(Half.TOP)
-    	.apply(target.getRelative(0,6,0).getRelative(two).getRelative(one))
+    	.apply(target.getUp(6).getRelative(two).getRelative(one))
     	.correct();
     	
     	//Two more slabs at the corner
     	new SlabBuilder(Material.COBBLESTONE_SLAB)
     	.setType(Type.TOP)
-    	.lapply(target.getRelative(0,6,0).getRelative(one).getRelative(BlockUtils.getRight(one)))
-    	.lapply(target.getRelative(0,6,0).getRelative(one).getRelative(BlockUtils.getLeft(one)));
+    	.lapply(target.getUp(6).getRelative(one).getRelative(BlockUtils.getRight(one)))
+    	.lapply(target.getUp(6).getRelative(one).getRelative(BlockUtils.getLeft(one)));
     	
     	new SlabBuilder(Material.COBBLESTONE_SLAB)
     	.setType(Type.TOP)
-    	.lapply(target.getRelative(0,6,0).getRelative(two).getRelative(BlockUtils.getRight(two)))
-    	.lapply(target.getRelative(0,6,0).getRelative(two).getRelative(BlockUtils.getLeft(two)));
+    	.lapply(target.getUp(6).getRelative(two).getRelative(BlockUtils.getRight(two)))
+    	.lapply(target.getUp(6).getRelative(two).getRelative(BlockUtils.getLeft(two)));
     }
     
     @Override

@@ -7,7 +7,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.BlockUtils;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -35,8 +35,8 @@ public class CherryGroveBeachHandler extends BiomeHandler {
         		Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CherryGroveBeachHandler extends BiomeHandler {
             if (data.getType(rawX, surfaceY - 1, rawZ - 1) == Material.WATER)
                 hasWater = true;
 
-            if (hasWater) BlockUtils.spawnPillar(random, data, rawX, surfaceY, rawZ, Material.SUGAR_CANE, 3, 7);
+            if (hasWater) PlantBuilder.SUGAR_CANE.build(random, data, rawX, surfaceY, rawZ, 3, 7);
         }
     }
 

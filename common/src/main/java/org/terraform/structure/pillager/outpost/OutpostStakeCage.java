@@ -49,7 +49,7 @@ public class OutpostStakeCage extends RoomPopulatorAbstract {
     		}
     	
     	for(Entry<Wall, Integer> entry:room.getFourWalls(data, 2).entrySet()) {
-    		Wall w = entry.getKey().getGroundOrSeaLevel().getRelative(0,1,0);
+    		Wall w = entry.getKey().getGroundOrSeaLevel().getUp();
     		for(int i = 0; i < entry.getValue(); i++) {
     			int baseHeight = 4 + highestHeight - w.getY();
     			if(i % 2 == 0)
@@ -59,7 +59,7 @@ public class OutpostStakeCage extends RoomPopulatorAbstract {
     				w.RPillar(fenceHeight, rand, fenceMat);
     				w.CorrectMultipleFacing(fenceHeight);
     			}
-    			w = w.getLeft().getGroundOrSeaLevel().getRelative(0,1,0);	
+    			w = w.getLeft().getGroundOrSeaLevel().getUp();	
     		}
     		
     	}

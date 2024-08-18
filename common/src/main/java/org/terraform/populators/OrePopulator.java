@@ -6,6 +6,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
@@ -53,7 +54,7 @@ public class OrePopulator {
         this.baseChance = baseChance;
         this.maxOreSize = maxOreSize;
         this.minOreSize = maxOreSize/2;
-        this.maxNumberOfVeins = maxNumberOfVeins;
+        this.maxNumberOfVeins = TConfigOption.FEATURE_ORES_ENABLED.getBoolean() ? maxNumberOfVeins : 0;
         this.minRange = minRange;
         this.peakSpawnChanceHeight = peakSpawnChanceHeight;
         this.maxSpawnHeight = maxSpawnHeight;
@@ -136,7 +137,7 @@ public class OrePopulator {
         if (radius <= 0) return;
         if (radius <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            data.setType(coreX,coreY,coreZ,GenUtils.randMaterial(new Random(seed), type));
+            data.setType(coreX,coreY,coreZ,GenUtils.randChoice(new Random(seed), type));
             return;
         }
         

@@ -35,7 +35,7 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY(), z,
-                        GenUtils.randMaterial(
+                        GenUtils.randChoice(
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,
@@ -66,11 +66,11 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
         //Fix weird walling for standard roofs.
         for (BlockFace face : this.getWalledFaces()) {
             SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, -1);
-            Wall w = entry.getKey().getRelative(0, 2, 0);
+            Wall w = entry.getKey().getUp(2);
             for (int i = 0; i < entry.getValue(); i++) {
                 Material type = w.getType();
-                if (w.getRelative(0, 1, 0).getType() != plainsVillagePopulator.woodLog) ;
-                w.getRelative(0, 1, 0).setType(type);
+                if (w.getUp().getType() != plainsVillagePopulator.woodLog) ;
+                w.getUp().setType(type);
 
                 w = w.getLeft();
             }
@@ -92,7 +92,7 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
             return;
         }
 
-        w = w.getRelative(0, -1, 0);
+        w = w.getDown();
         int space = w.getY() - room.getY() - 3;
         if (space <= 0) {
             return; //Ceiling too low.
@@ -105,7 +105,7 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
                 w.setBlockData(lantern);
             } else {
                 w.setType(Material.CHAIN);
-                w = w.getRelative(0, -1, 0);
+                w = w.getDown();
             }
         }
     }

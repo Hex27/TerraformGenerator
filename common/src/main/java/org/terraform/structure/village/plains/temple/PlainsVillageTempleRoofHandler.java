@@ -57,19 +57,19 @@ public class PlainsVillageTempleRoofHandler {
 						//Add lantern decorations to the interior corners
 						//if(height != 0) {
 							pillar = w.getRear(height+3).getRelative(0,(height+1)*2,0);
-							pillar.getRelative(0,-2,0).setType(plainsVillagePopulator.woodLog);
+							pillar.getDown(2).setType(plainsVillagePopulator.woodLog);
 							Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
 							l.setHanging(true);
-							pillar.getRelative(0,-3,0).setBlockData(l);
+							pillar.getDown(3).setBlockData(l);
 						//}
 					}else if(multiplier == 1 && horDepth == 2+height*multiplier) {
 						Wall pillar = w.getRelative(face,1).getRear(height+3).getRelative(0,(height+1)*2,0);
 						//Add lantern decorations to the interior corners
-						pillar.getRelative(0,-1,0).get().lsetType(plainsVillagePopulator.woodLog);
-						pillar.getRelative(0,-2,0).setType(plainsVillagePopulator.woodLog);
+						pillar.getDown().get().lsetType(plainsVillagePopulator.woodLog);
+						pillar.getDown(2).setType(plainsVillagePopulator.woodLog);
 						Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
 						l.setHanging(true);
-						pillar.getRelative(0,-3,0).setBlockData(l);
+						pillar.getDown(3).setBlockData(l);
 					}
 					
 					//Don't place stairs where the roof ends.
@@ -110,7 +110,7 @@ public class PlainsVillageTempleRoofHandler {
 					int i = 0;
 					for(i = 0; i < 9; i++) {
 						if(!b.getType().isSolid()) {
-							b = b.getRelative(0,1,0);
+							b = b.getUp();
 						}else {
 							break;
 						}
@@ -118,7 +118,7 @@ public class PlainsVillageTempleRoofHandler {
 					
 					if(i == 9 && !b.getType().isSolid()) {
 						placeGlazedTerracotta(b, glazedTerracotta);
-						b.getRelative(0,1,0).setType(Material.POLISHED_ANDESITE);
+						b.getUp().setType(Material.POLISHED_ANDESITE);
 					}
 				}
 		}

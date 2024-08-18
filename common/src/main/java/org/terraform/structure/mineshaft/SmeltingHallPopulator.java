@@ -37,7 +37,7 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
                         || b.getType() == Material.OAK_PLANKS
                         || b.getType() == Material.OAK_SLAB
                         || b.getType() == Material.GRAVEL) {
-                    b.setType(GenUtils.randMaterial(
+                    b.setType(GenUtils.randChoice(
                             Material.STONE_BRICKS,
                             Material.CRACKED_STONE_BRICKS,
                             Material.MOSSY_STONE_BRICKS,
@@ -46,8 +46,8 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
                             Material.CAVE_AIR));
                     //Small chance to set a lantern
                     if (GenUtils.chance(rand, 1, 150)) {
-                        b.getRelative(0, 1, 0).setType(Material.COBBLESTONE);
-                        b.getRelative(0, 2, 0).setType(Material.LANTERN);
+                        b.getUp().setType(Material.COBBLESTONE);
+                        b.getUp(2).setType(Material.LANTERN);
                     }
                 }
             }
@@ -61,7 +61,7 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
             if (w.findCeiling(50) != null)
                 w.LPillar(50, rand, Material.IRON_BARS);
             else
-                w.getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_LOG);
+                w.getDown().downUntilSolid(rand, Material.OAK_LOG);
         }
 
         //Furnaces & Chests

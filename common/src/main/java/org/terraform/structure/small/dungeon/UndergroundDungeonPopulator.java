@@ -32,12 +32,12 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             block.setType(fluid);
             int depth = 0;
             while (!block.getType().isSolid()) {
-                block = block.getRelative(0, -1, 0);
+                block = block.getDown();
                 depth++;
                 if (depth > 50) return;
             }
 
-            block.getRelative(0, 1, 0).setType(type);
+            block.getUp().setType(type);
         }
     }
 
@@ -81,7 +81,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         Material fluid = Material.CAVE_AIR;
         
         SimpleBlock center = room.getCenterSimpleBlock(data);
-        if(BlockUtils.isWet(center.getRelative(0,1,0)))
+        if(BlockUtils.isWet(center.getUp()))
         {
         	fluid = Material.WATER;
         	isWet = true;
@@ -95,7 +95,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
 
         //Make some fence pattern.
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
-            Wall w = entry.getKey().getRelative(0, 1, 0);
+            Wall w = entry.getKey().getUp();
             int length = entry.getValue();
             while (length >= 0) {
                 if (length % 2 == 0 || length == entry.getValue()) {
@@ -138,7 +138,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
                 int ny = room.getHeight() - 1;
                 if (GenUtils.chance(9, 10)) continue;
                 for (int i = 0; i < GenUtils.randInt(rand, 1, room.getHeight() - 3); i++) {
-                    data.setType(x + nx, y + ny, z + nz, GenUtils.randMaterial(Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.COBBLESTONE_WALL,
+                    data.setType(x + nx, y + ny, z + nz, GenUtils.randChoice(Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.COBBLESTONE_WALL,
                             Material.MOSSY_COBBLESTONE_WALL));
                     BlockUtils.correctSurroundingMultifacingData(new SimpleBlock(data, x + nx, y + ny, z + nz));
                 }

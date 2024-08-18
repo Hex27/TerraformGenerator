@@ -56,7 +56,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
             Wall w = new Wall(new SimpleBlock(data, corner[0], room.getY() + room.getHeight() - 1, corner[1]));
             w.downLPillar(rand, 2, Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE);
             for (BlockFace face : BlockUtils.directBlockFaces)
-                w.getRelative(face).setType(GenUtils.randMaterial(Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE));
+                w.getRelative(face).setType(GenUtils.randChoice(Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE));
         }
 
         //Create randomised patterns
@@ -114,7 +114,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
 
         for (int i = 0; i < GenUtils.randInt(lowerbound, upperbound); i++) {
             int[] coords = room.randomCoords(rand, 1);
-            BlockData bd = Bukkit.createBlockData(GenUtils.randMaterial(types));
+            BlockData bd = Bukkit.createBlockData(GenUtils.randChoice(types));
             if (bd instanceof Waterlogged)
                 ((Waterlogged) bd).setWaterlogged(false);
             if (!data.getType(coords[0], room.getY() + 1, coords[2]).isSolid())

@@ -43,7 +43,7 @@ public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
         
         try {
             SimpleBlock core = new SimpleBlock(data, x,y+1,z);
-			TerraSchematic schem = TerraSchematic.load(villageFountainSchems[rand.nextInt(villageFountainSchems.length)], core.getRelative(0,-1,0));
+			TerraSchematic schem = TerraSchematic.load(villageFountainSchems[rand.nextInt(villageFountainSchems.length)], core.getDown());
 			schem.parser = new PlainsVillageFountainSchematicParser();
 			schem.apply();
 			
@@ -52,9 +52,9 @@ public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
 					Wall target = new Wall(core.getRelative(nx,0,nz));
 					if(target.getType() == Material.COBBLESTONE
 							||target.getType() == Material.MOSSY_COBBLESTONE) {
-						target.getRelative(0,-1,0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+						target.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 					}else if(target.getType() == Material.POLISHED_ANDESITE) {
-						target.getRelative(0,-1,0).downUntilSolid(rand, Material.POLISHED_ANDESITE);
+						target.getDown().downUntilSolid(rand, Material.POLISHED_ANDESITE);
 					}
 				}
 			}
@@ -72,8 +72,8 @@ public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
 				
 				if(GenUtils.chance(rand, 1, 10)) {
 					BlockFace lampFace = BlockUtils.getTurnBlockFace(rand, roomDir);
-					SimpleBlock target = w.getRelative(lampFace,2).getGround().getRelative(0,1,0).get();
-					if(target.getRelative(0,-1,0).getType() != Material.DIRT_PATH
+					SimpleBlock target = w.getRelative(lampFace,2).getGround().getUp().get();
+					if(target.getDown().getType() != Material.DIRT_PATH
 							&& PlainsVillagePathPopulator.canPlaceLamp(target)) {
 						PlainsVillagePathPopulator.placeLamp(rand, target);
 					}
@@ -100,7 +100,7 @@ public class PlainsVillageFountainPopulator extends RoomPopulatorAbstract {
                 data = Bukkit.createBlockData(
                         data.getAsString().replaceAll(
                                 "cobblestone",
-                                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
+                                GenUtils.randChoice(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
                                         .toString().toLowerCase(Locale.ENGLISH)
                         )
                 );

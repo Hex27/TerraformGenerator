@@ -192,14 +192,14 @@ public class SphereBuilder {
     private boolean unitReplace(@NotNull SimpleBlock rel, int effectiveRYUpper) {
     	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
-                rel.setType(GenUtils.randMaterial(random, types));
+                rel.setType(GenUtils.randChoice(random, types));
                 if(this.doLiquidContainment)
                 	rel.replaceAdjacentNonLiquids(new BlockFace[]{BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}, types[0], containmentMaterial);
             }
 //    		else
 //    			return false;
     	} else if(replaceWhitelist.contains(rel.getType())) {
-            rel.setType(GenUtils.randMaterial(random, types));
+            rel.setType(GenUtils.randChoice(random, types));
             if(this.doLiquidContainment)
             	rel.replaceAdjacentNonLiquids(new BlockFace[]{BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}, types[0], containmentMaterial);
     	}
@@ -208,10 +208,10 @@ public class SphereBuilder {
     	
     	if(rel.getType().isSolid()) {
 	    	if(upperType != null && rel.getY() == effectiveRYUpper) {
-	    		rel.getRelative(0,1,0).lsetType(upperType);
+	    		rel.getUp().lsetType(upperType);
 	    	}
 	    	if(lowerType != null)
-	    		rel.getRelative(0,-1,0).setType(lowerType);
+	    		rel.getDown().setType(lowerType);
     	}
     	
     	

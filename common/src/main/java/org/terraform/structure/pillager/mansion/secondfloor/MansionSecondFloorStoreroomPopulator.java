@@ -70,7 +70,7 @@ public class MansionSecondFloorStoreroomPopulator extends MansionRoomPopulator {
 	    @Override
 	    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 	    	if (data.getMaterial() == Material.CHEST) {
-	    		Material replacement = GenUtils.randMaterial(rand, 
+	    		Material replacement = GenUtils.randChoice(rand,
 	    				Material.CHEST, 
 	    				Material.CHEST, 
 	    				Material.CHEST, 

@@ -137,7 +137,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
                 		//Rocky ground
                     	BlockUtils.replaceCircularPatch(rand.nextInt(4211), 1.5f, rel, stakeGravel);
                     	
-                    	spawnOneStake(rand,rel.getRelative(0,1,0),bank,stakeGravel);
+                    	spawnOneStake(rand,rel.getUp(),bank,stakeGravel);
                 	}
                 	
                 }
@@ -161,12 +161,12 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     	}
         w.Pillar(h, rand, WoodUtils.getWoodForBiome(bank, type));
         w.getRelative(0,h,0).Pillar(GenUtils.randInt(1,2), rand, WoodUtils.getWoodForBiome(bank, WoodType.FENCE));
-        w.getRelative(0,-1,0).downUntilSolid(rand, stakeGravel);
-        w.getRelative(0,-2,0).downUntilSolid(rand, stakeGravel);
+        w.getDown().downUntilSolid(rand, stakeGravel);
+        w.getDown(2).downUntilSolid(rand, stakeGravel);
     }
     
     public void spawnStairway(Random rand, @NotNull BiomeBank biome, @NotNull SimpleBlock core, int height) {
-    	Material pillarMat = GenUtils.randMaterial(
+    	Material pillarMat = GenUtils.randChoice(
     			WoodUtils.getWoodForBiome(biome, WoodType.LOG),
     			Material.COBBLESTONE);
     	Material stair = WoodUtils.getWoodForBiome(biome, WoodType.STAIRS);
@@ -189,7 +189,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     			.setType(Type.TOP)
     			.apply(core.getRelative(BlockUtils.rotateXZPlaneBlockFace(face, 1)));
     		
-    		core = core.getRelative(0,1,0);
+    		core = core.getUp();
     		face = BlockUtils.rotateFace(face, 1);
     	}
     }

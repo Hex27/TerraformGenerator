@@ -15,6 +15,8 @@ import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -53,8 +55,8 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         return new Material[]{
         		Material.GRASS_BLOCK,
         		Material.DIRT,
-        		GenUtils.randMaterial(Material.DIRT, Material.STONE),
-        		GenUtils.randMaterial(Material.DIRT, Material.STONE),
+        		GenUtils.randChoice(Material.DIRT, Material.STONE),
+        		GenUtils.randChoice(Material.DIRT, Material.STONE),
         		Material.STONE
         		};
     }
@@ -152,7 +154,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
                 && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
             //Dense grass
             if (GenUtils.chance(random, 2, 10)) {
-                data.setType(rawX, surfaceY+1, rawZ, Material.GRASS);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY+1, rawZ);
             }
         }
     }
@@ -175,7 +177,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         for (SimpleLocation sLoc : poffs) {
      	   int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
 		   sLoc.setY(treeY);
-		   if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+		   if(TConfigOption.arePlantsEnabled() && data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
 		           BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())) &&
 		           !data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()).isSolid()) {
                SimpleBlock base = new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());

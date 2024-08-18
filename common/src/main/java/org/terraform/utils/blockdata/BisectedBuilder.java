@@ -19,7 +19,7 @@ public class BisectedBuilder {
     }
 
     public BisectedBuilder(Material... mat) {
-        this.blockData = (Bisected) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Bisected) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
     
     public @NotNull BisectedBuilder setHalf(Bisected.@NotNull Half half) {
@@ -58,7 +58,7 @@ public class BisectedBuilder {
         Bisected lower = (Bisected) blockData.clone();
         lower.setHalf(Half.BOTTOM);
         block.setBlockData(lower);
-        block.getRelative(0,1,0).setBlockData(upper);
+        block.getUp().setBlockData(upper);
         return this;
     }
     

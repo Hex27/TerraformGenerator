@@ -95,7 +95,7 @@ public class TerraformGenerator extends ChunkGenerator {
                     if(y < 0)
                         stoneType = Material.DEEPSLATE;
                     else if(y <= 2)
-                        stoneType = GenUtils.randMaterial(Material.DEEPSLATE, Material.STONE);
+                        stoneType = GenUtils.randChoice(Material.DEEPSLATE, Material.STONE);
 
                     //Set stone if a cave CANNOT be carved here
                     if(!tw.noiseCaveRegistry.canNoiseCarve(rawX,y,rawZ,height))

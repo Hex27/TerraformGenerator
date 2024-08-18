@@ -9,6 +9,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -53,7 +54,7 @@ public class ForestHandler extends BiomeHandler {
             int Tz = coords[2];
             if (!data.getType(Tx, Ty, Tz).isSolid() ||
                     data.getType(Tx, Ty, Tz).toString().contains("LEAVES")) {
-                data.setType(Tx, Ty, Tz, GenUtils.randMaterial(rand,
+                data.setType(Tx, Ty, Tz, GenUtils.randChoice(rand,
                         Material.COBBLESTONE, Material.STONE, Material.MOSSY_COBBLESTONE));
             }
         }
@@ -74,8 +75,8 @@ public class ForestHandler extends BiomeHandler {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.PODZOL, 3),
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -101,11 +102,11 @@ public class ForestHandler extends BiomeHandler {
             if (GenUtils.chance(random, 1, 10)) {
                 if (data.getType(rawX, surfaceY + 1, rawZ) != Material.AIR) return;
                 //Grass & Flowers
-                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 if (random.nextBoolean()) {
-                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                    PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 } else {
-                    data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                    BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }

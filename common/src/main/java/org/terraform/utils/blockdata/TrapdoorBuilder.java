@@ -20,7 +20,7 @@ public class TrapdoorBuilder {
     }
 
     public TrapdoorBuilder(Material... mat) {
-        this.blockData = (TrapDoor) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (TrapDoor) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 

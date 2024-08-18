@@ -11,6 +11,8 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -43,8 +45,8 @@ public class CherryGroveHandler extends BiomeHandler {
         return new Material[]{Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -55,15 +57,15 @@ public class CherryGroveHandler extends BiomeHandler {
             if (GenUtils.chance(random, 2, 10)) { //Grass
                 if (GenUtils.chance(random, 8, 10)) {
                     //Pink petals. No longer generate tall grass.
-                    if (Version.isAtLeast(20) && GenUtils.chance(random, 6, 10)) {
+                    if (Version.isAtLeast(20) && TConfigOption.arePlantsEnabled() && GenUtils.chance(random, 6, 10)) {
                         data.setBlockData(rawX,surfaceY+1,rawZ, OneTwentyBlockHandler.getPinkPetalData(GenUtils.randInt(1,4)));
                     }else
-                        data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                        PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 } else {
                     if (GenUtils.chance(random, 7, 10))
-                        data.setType(rawX, surfaceY + 1, rawZ, Material.ALLIUM);
+                        PlantBuilder.ALLIUM.build(data, rawX, surfaceY + 1, rawZ);
                     else
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.PEONY);
+                        PlantBuilder.PEONY.build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -101,7 +103,7 @@ public class CherryGroveHandler extends BiomeHandler {
                                     Wall ceil = new Wall(new SimpleBlock(data, rX, sLoc.getY(), rZ)).findCeiling(15);
                                     if(ceil != null && GenUtils.chance(random, 1, 30)) {
                                         if(ceil.getType() == Material.DARK_OAK_LEAVES) {
-                                            ceil.getRelative(0, -1, 0).setType(Material.SPORE_BLOSSOM);
+                                            PlantBuilder.SPORE_BLOSSOM.build(ceil.getDown());
                                         }
                                     }
                                 }

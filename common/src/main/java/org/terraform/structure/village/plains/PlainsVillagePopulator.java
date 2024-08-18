@@ -39,7 +39,7 @@ public class PlainsVillagePopulator extends VillagePopulator {
     private void ensureFarmHouseEntrance(@NotNull Random rand, @NotNull DirectionalCubeRoom room, @NotNull PopulatorDataAbstract data) {
     	int frontSpaceGuarantee = 11;
     	Wall w = new Wall(new SimpleBlock(data,room.getX(),room.getY(),room.getZ()).getGround(), room.getDirection())
-    			.getRelative(0,4,0);
+    			.getUp(4);
     	
     	
     	int elevation = GenUtils.randInt(rand, 2,4);

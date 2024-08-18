@@ -29,7 +29,7 @@ public class BrokenShaftPopulator extends RoomPopulatorAbstract {
                         || b.getType() == Material.OAK_PLANKS
                         || b.getType() == Material.OAK_SLAB
                         || b.getType() == Material.GRAVEL) {
-                    b.setType(GenUtils.randMaterial(
+                    b.setType(GenUtils.randChoice(
                             Material.STONE_BRICKS,
                             Material.CRACKED_STONE_BRICKS,
                             Material.MOSSY_STONE_BRICKS,

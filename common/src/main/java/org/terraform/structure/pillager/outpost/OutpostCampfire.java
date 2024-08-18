@@ -26,10 +26,10 @@ public class OutpostCampfire extends RoomPopulatorAbstract {
     			Material.STONE,
     			Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT);
     	
-    	core = core.getRelative(0,1,0);
+    	core = core.getUp();
 		unitCampfire(core);
     	for(BlockFace face:BlockUtils.xzDiagonalPlaneBlockFaces) {
-    		unitCampfire(core.getRelative(face).getGround().getRelative(0,1,0));
+    		unitCampfire(core.getRelative(face).getGround().getUp());
     	}
     }
     
@@ -40,13 +40,13 @@ public class OutpostCampfire extends RoomPopulatorAbstract {
     		break;
     	case 1:
     		block.setType(Material.CAMPFIRE);
-    		block.getRelative(0,-1,0).setType(Material.HAY_BLOCK);
+    		block.getDown().setType(Material.HAY_BLOCK);
     		break;
     	case 2:
     		block.setType(Material.HAY_BLOCK);
-    		block.getRelative(0,1,0).setType(Material.CAMPFIRE);
+    		block.getUp().setType(Material.CAMPFIRE);
     		for(BlockFace face:BlockUtils.directBlockFaces) {
-    			SimpleBlock target = block.getRelative(face).getGround().getRelative(0,1,0);
+    			SimpleBlock target = block.getRelative(face).getGround().getUp();
     			if(!target.getType().isSolid())
     				target.setType(Material.CAMPFIRE);
     		}

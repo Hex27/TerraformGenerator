@@ -57,22 +57,22 @@ public class CryptRoom extends RoomPopulatorAbstract {
                         wire = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
                         wire.setFace(BlockUtils.getAdjacentFaces(face)[0], Connection.SIDE);
                         wire.setFace(face.getOppositeFace(), Connection.UP);
-                        w.getFront(2).getRelative(0, -1, 0).setBlockData(wire);
+                        w.getFront(2).getDown().setBlockData(wire);
 
                         wire = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
                         wire.setFace(BlockUtils.getAdjacentFaces(face)[0], Connection.SIDE);
                         wire.setFace(BlockUtils.getAdjacentFaces(face)[1].getOppositeFace(), Connection.SIDE);
-                        w.getFront().getRelative(0, 3, 0).setBlockData(wire);
+                        w.getFront().getUp(3).setBlockData(wire);
 
                         RedstoneWallTorch rTorch = (RedstoneWallTorch) Bukkit.createBlockData(Material.REDSTONE_WALL_TORCH);
                         rTorch.setFacing(face);
-                        w.getFront().getRelative(0, 1, 0).setBlockData(rTorch);
+                        w.getFront().getUp().setBlockData(rTorch);
 
                         Switch lever = (Switch) Bukkit.createBlockData(Material.LEVER);
                         lever.setAttachedFace(AttachedFace.WALL);
                         lever.setFacing(face.getOppositeFace());
                         lever.setPowered(false);
-                        w.getRear().getRelative(0, 1, 0).setBlockData(lever);
+                        w.getRear().getUp().setBlockData(lever);
 
                         //Cover
                         w.getFront(3).Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
@@ -81,17 +81,17 @@ public class CryptRoom extends RoomPopulatorAbstract {
                         RedstoneWire wire = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
                         wire.setFace(BlockUtils.getAdjacentFaces(face)[1], Connection.SIDE);
                         wire.setFace(face.getOppositeFace(), Connection.SIDE);
-                        w.getFront(2).getRelative(0, -1, 0).setBlockData(wire);
+                        w.getFront(2).getDown().setBlockData(wire);
 
                         wire = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
                         wire.setFace(face, Connection.SIDE);
                         wire.setFace(face.getOppositeFace(), Connection.SIDE);
-                        w.getFront().getRelative(0, -1, 0).setBlockData(wire);
+                        w.getFront().getDown().setBlockData(wire);
 
                         wire = (RedstoneWire) Bukkit.createBlockData(Material.REDSTONE_WIRE);
                         wire.setFace(BlockUtils.getAdjacentFaces(face)[0], Connection.SIDE);
                         wire.setFace(BlockUtils.getAdjacentFaces(face)[1].getOppositeFace(), Connection.SIDE);
-                        w.getFront().getRelative(0, 3, 0).setBlockData(wire);
+                        w.getFront().getUp(3).setBlockData(wire);
 
                         //Cover
                         w.getFront(3).Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
@@ -105,12 +105,12 @@ public class CryptRoom extends RoomPopulatorAbstract {
                         //Pistons
                         Piston faceDown = (Piston) Bukkit.createBlockData(Material.STICKY_PISTON);
                         faceDown.setFacing(BlockFace.DOWN);
-                        w.getFront().getRelative(0, 3, 0).setBlockData(faceDown);
+                        w.getFront().getUp(3).setBlockData(faceDown);
 
                         Piston faceUp = (Piston) Bukkit.createBlockData(Material.STICKY_PISTON);
                         faceUp.setFacing(BlockFace.UP);
-                        w.getFront().getRelative(0, -2, 0).setBlockData(faceUp);
-                        w.getRelative(0, 2, 0).getFront(2).Pillar(room.getHeight() - 2, rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
+                        w.getFront().getDown(2).setBlockData(faceUp);
+                        w.getUp(2).getFront(2).Pillar(room.getHeight() - 2, rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);
 
                     } else { //even thicker layer
                         w.getFront(2).Pillar(room.getHeight(), rand, Material.SANDSTONE, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE);

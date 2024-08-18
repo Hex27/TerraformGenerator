@@ -39,6 +39,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
 	
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if ( !TConfigOption.areStructuresEnabled() ) return;
 
         if (!TConfigOption.STRUCTURES_IGLOO_ENABLED.getBoolean())
             return;
@@ -146,7 +147,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
 	        .setAngled(true)
 	        .setStopAtWater(true)
-	        .build(entranceCore.getFront(2).getRelative(0, -1, 0));
+	        .build(entranceCore.getFront(2).getDown());
     	
     	//By this point, the entire exterior of the igloo has been placed.
     	//The below area handles interior placement

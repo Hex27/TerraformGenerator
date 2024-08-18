@@ -37,9 +37,9 @@ public class FrozenRiverHandler extends BiomeHandler {
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
 

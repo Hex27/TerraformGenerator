@@ -13,6 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
@@ -46,13 +47,13 @@ public class DesertHandler extends BiomeHandler {
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.SAND,
                 Material.SAND,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)};
     }
 
     @Override
@@ -76,9 +77,9 @@ public class DesertHandler extends BiomeHandler {
                         canSpawn = false;
                 }
                 if (canSpawn)
-                    BlockUtils.spawnPillar(random, data, rawX, surfaceY + 1, rawZ, Material.CACTUS, 3, 5);
+                    PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 3, 5);
             } else if (GenUtils.chance(random, 1, 80)) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
             }
         }
     }

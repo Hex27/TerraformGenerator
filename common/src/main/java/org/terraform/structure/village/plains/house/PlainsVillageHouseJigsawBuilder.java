@@ -93,13 +93,13 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
 
     public void decorateAwkwardCorner(@NotNull Wall target, @NotNull Random random, @NotNull BlockFace one, @NotNull BlockFace two, Material cornerType, Material[] fenceType) {
         target.Pillar(4, random, cornerType);
-        target.getRelative(0, -1, 0).downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-        target = target.getRelative(0, 1, 0);
+        target.getDown().downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        target = target.getUp();
         target.getRelative(one).Pillar(3, random, fenceType);
         target.getRelative(two).Pillar(3, random, fenceType);
         target.getRelative(one).CorrectMultipleFacing(3);
         target.getRelative(two).CorrectMultipleFacing(3);
-        target = target.getRelative(0, -1, 0);
+        target = target.getDown();
         target.getRelative(one).downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
         target.getRelative(two).downUntilSolid(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     }

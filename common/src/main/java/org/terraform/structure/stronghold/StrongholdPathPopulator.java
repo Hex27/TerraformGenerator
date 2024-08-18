@@ -34,10 +34,10 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
     public void populate(@NotNull PathPopulatorData ppd) {
 
         //Find the ceiling for easier management later
-        SimpleBlock ceil = ppd.base.getRelative(0, 1, 0);
+        SimpleBlock ceil = ppd.base.getUp();
         int depth = 0;
         while (!ceil.getType().isSolid()) {
-            ceil = ceil.getRelative(0, 1, 0);
+            ceil = ceil.getUp();
             depth++;
             if (depth > 10) return;
         }
@@ -65,7 +65,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
 
             if (isCrossroad) { //This is a crossroad (Has 4 pathways)
                 for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
-                    new Wall(ppd.base.getRelative(0, 1, 0).getRelative(face))
+                    new Wall(ppd.base.getUp().getRelative(face))
                             .LPillar(10, rand, Material.COBBLESTONE_WALL, Material.ANDESITE_WALL, Material.STONE_BRICK_WALL);
                 }
             } else //this is a turn
@@ -73,10 +73,10 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
                 //Decorate the walls
                 for (Wall wall : walls) {
                     wall.setType(Material.STONE, Material.SMOOTH_STONE, Material.ANDESITE);
-                    wall.getRelative(0, 1, 0).setType(Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
-                    wall.getRelative(0, 2, 0).setType(Material.STONE, Material.SMOOTH_STONE, Material.ANDESITE);
-                    wall.getRelative(0, 1, 0).getLeft().setType(Material.STONE, Material.SMOOTH_STONE, Material.ANDESITE);
-                    wall.getRelative(0, 1, 0).getRight().setType(Material.STONE, Material.SMOOTH_STONE, Material.ANDESITE);
+                    wall.getUp().setType(Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
+                    wall.getUp(2).setType(Material.STONE, Material.SMOOTH_STONE, Material.ANDESITE);
+                    wall.getUp().getLeft().setType(Material.STONE, Material.SMOOTH_STONE, Material.ANDESITE);
+                    wall.getUp().getRight().setType(Material.STONE, Material.SMOOTH_STONE, Material.ANDESITE);
 
                     new StairBuilder(Material.ANDESITE_STAIRS, Material.POLISHED_ANDESITE_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
                             .setFacing(BlockUtils.getLeft(wall.getDirection()))
@@ -91,12 +91,12 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
                     new StairBuilder(Material.STONE_BRICK_STAIRS, Material.POLISHED_ANDESITE_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
                             .setFacing(BlockUtils.getLeft(wall.getDirection()))
                             .setHalf(Half.BOTTOM)
-                            .apply(wall.getRight().getRelative(0, 2, 0));
+                            .apply(wall.getRight().getUp(2));
 
                     new StairBuilder(Material.STONE_BRICK_STAIRS, Material.POLISHED_ANDESITE_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
                             .setFacing(BlockUtils.getRight(wall.getDirection()))
                             .setHalf(Half.BOTTOM)
-                            .apply(wall.getLeft().getRelative(0, 2, 0));
+                            .apply(wall.getLeft().getUp(2));
                 }
             }
         } else //This is a pathway
@@ -108,22 +108,22 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             if (ppd.calcRemainder(2) == 0) { //arch
                 decoratePathways(ppd.base, ppd.dir, Half.BOTTOM);
                 Wall base = new Wall(ppd.base, ppd.dir);
-                base.getRelative(0, 1, 0).getLeft(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
-                base.getRelative(0, 1, 0).getRight(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
-                base.getRelative(0, 2, 0).getLeft(2).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
-                base.getRelative(0, 2, 0).getRight(2).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
-                base.getRelative(0, 3, 0).getLeft(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
-                base.getRelative(0, 4, 0).getRight(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
+                base.getUp().getLeft(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
+                base.getUp().getRight(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
+                base.getUp(2).getLeft(2).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
+                base.getUp(2).getRight(2).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
+                base.getUp(3).getLeft(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
+                base.getUp(4).getRight(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
 
                 new StairBuilder(Material.STONE_BRICK_STAIRS, Material.COBBLESTONE_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS, Material.ANDESITE_STAIRS)
                         .setFacing(BlockUtils.getLeft(ppd.dir))
                         .setHalf(Half.TOP)
-                        .apply(base.getRelative(0, 4, 0).getLeft());
+                        .apply(base.getUp(4).getLeft());
 
                 new StairBuilder(Material.STONE_BRICK_STAIRS, Material.COBBLESTONE_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS, Material.ANDESITE_STAIRS)
                         .setFacing(BlockUtils.getRight(ppd.dir))
                         .setHalf(Half.TOP)
-                        .apply(base.getRelative(0, 4, 0).getRight());
+                        .apply(base.getUp(4).getRight());
 
                 ceil.setType(Material.CHISELED_STONE_BRICKS);
             } else //not-arch
@@ -132,17 +132,17 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
 
                 new SlabBuilder(BlockUtils.stoneBrickSlabs)
                         .setType(Slab.Type.TOP)
-                        .apply(base.getRelative(0, 4, 0).getLeft());
+                        .apply(base.getUp(4).getLeft());
 
                 new SlabBuilder(BlockUtils.stoneBrickSlabs)
                         .setType(Slab.Type.TOP)
-                        .apply(base.getRelative(0, 4, 0).getRight());
+                        .apply(base.getUp(4).getRight());
 
                 //Loot chests
                 if (GenUtils.chance(rand, 1, 50)) {
                     //Left or right
                     int i = GenUtils.randInt(rand, 0, 1);
-                    Wall w = base.getRelative(0, 1, 0);
+                    Wall w = base.getUp();
                     depth = 0;
                     while (!w.get().getType().isSolid() && depth < 10) {
                         if (i == 0) w = w.getLeft();
@@ -167,7 +167,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         }
 
         //Refind ceiling. It could have been changed above.
-        ceil = new Wall(ppd.base.getRelative(0, 1, 0), ppd.dir).findCeiling(10).get();
+        ceil = new Wall(ppd.base.getUp(), ppd.dir).findCeiling(10).get();
         if (ceil == null) return;
 
         //Sometimes parts of the ceiling falls down
@@ -179,7 +179,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
 
         //Cobwebs
         if (GenUtils.chance(rand, 1, 25)) {
-            SimpleBlock webBase = ceil.getRelative(0, -1, 0);
+            SimpleBlock webBase = ceil.getDown();
             webBase.setType(Material.COBWEB);
 
             for (int i = 0; i < GenUtils.randInt(rand, 0, 3); i++) {
@@ -244,7 +244,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
     }
 
     private boolean setIronBars(@NotNull PathPopulatorData ppd) {
-        Wall wall = new Wall(ppd.base, ppd.dir).getRelative(0, 4, 0);
+        Wall wall = new Wall(ppd.base, ppd.dir).getUp(4);
 
         wall.setType(Material.IRON_BARS);
         wall.getLeft().setType(Material.IRON_BARS);
@@ -269,7 +269,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             block.setType(Material.CAVE_AIR);
             int depth = 0;
             while (!block.getType().isSolid()) {
-                block = block.getRelative(0, -1, 0);
+                block = block.getDown();
                 depth++;
                 if (depth > 50) return;
             }
@@ -281,9 +281,9 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             }
 
             if (GenUtils.chance(1, 3)) {
-                block.getRelative(0, 1, 0).setBlockData(BlockUtils.infestStone(type));
+                block.getUp().setBlockData(BlockUtils.infestStone(type));
             } else {
-                block.getRelative(0, 1, 0).setBlockData(type);
+                block.getUp().setBlockData(type);
             }
         }
     }

@@ -196,7 +196,7 @@ public class PlainsPathRecursiveSpawner {
         for (SimpleLocation loc : path.keySet()) {
             Wall w = new Wall(new SimpleBlock(core.getPopData(), loc.getX(), loc.getY(), loc.getZ()), path.get(loc));
             w = w.getGround();
-            if (BlockUtils.isWet(w.getRelative(0,1,0).get())) {
+            if (BlockUtils.isWet(w.getUp().get())) {
             	
                 //Paths underwater are wood planks.            	
             	if(BlockUtils.isWet(w.getAtY(TerraformGenerator.seaLevel)))

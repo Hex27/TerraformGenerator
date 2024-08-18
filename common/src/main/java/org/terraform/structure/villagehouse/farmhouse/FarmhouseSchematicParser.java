@@ -35,7 +35,7 @@ public class FarmhouseSchematicParser extends SchematicParser {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "cobblestone",
-                            GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
+                            GenUtils.randChoice(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
                                     .toString().toLowerCase(Locale.ENGLISH)
                     )
             );

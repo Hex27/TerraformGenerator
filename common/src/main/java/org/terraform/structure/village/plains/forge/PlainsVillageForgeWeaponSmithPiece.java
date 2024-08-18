@@ -42,7 +42,7 @@ public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStanda
     		for(int i = 0; i < entry.getValue(); i++) {
     			
     			//Ensure that you don't place anything against the entrance
-    			if(w.getRear().getRelative(0,-1,0).getType() != Material.CHISELED_STONE_BRICKS)
+    			if(w.getRear().getDown().getType() != Material.CHISELED_STONE_BRICKS)
     			{
     				int choice = random.nextInt(4);
     				switch(choice) {
@@ -56,12 +56,12 @@ public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStanda
     					if(GenUtils.chance(random, 3, 4))
     						break;
     					w.setType(Material.CRAFTING_TABLE);
-    					w.getRelative(0,1,0).setType(Material.LANTERN);
-    					if(w.getRelative(0,1,0).getRear().getType().isSolid() && !placedJobBlock) {
+    					w.getUp().setType(Material.LANTERN);
+    					if(w.getUp().getRear().getType().isSolid() && !placedJobBlock) {
     						placedJobBlock = true;
     						new DirectionalBuilder(Material.GRINDSTONE)
         					.setFacing(w.getDirection())
-        					.apply(w.getRelative(0,1,0));
+        					.apply(w.getUp());
     					}
     					break;
     				case 2: //Anvil

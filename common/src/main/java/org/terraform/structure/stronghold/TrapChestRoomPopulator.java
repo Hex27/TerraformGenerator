@@ -45,19 +45,19 @@ public class TrapChestRoomPopulator extends RoomPopulatorAbstract {
         SimpleBlock core = new SimpleBlock(data, x, y, z);
         for (BlockFace face : BlockUtils.directBlockFaces) {
             core.getRelative(face).setType(Material.SMOOTH_STONE);
-            core.getRelative(face).getRelative(0, 1, 0).setType(Material.STONE_BRICK_STAIRS);
+            core.getRelative(face).getUp().setType(Material.STONE_BRICK_STAIRS);
             Directional rot = (Directional) Bukkit.createBlockData(Material.STONE_BRICK_STAIRS);
             rot.setFacing(face.getOppositeFace());
-            core.getRelative(face).getRelative(0, 1, 0).setBlockData(rot);
+            core.getRelative(face).getUp().setBlockData(rot);
 
             for (BlockFace f : BlockUtils.directBlockFaces) {
                 core.getRelative(face).getRelative(f).lsetType(Material.SMOOTH_STONE_SLAB);
             }
         }
 
-        core.getRelative(0, 1, 0).setType(Material.CHISELED_STONE_BRICKS);
+        core.getUp().setType(Material.CHISELED_STONE_BRICKS);
 
-        y = core.getRelative(0, 2, 0).getY();
+        y = core.getUp(2).getY();
         org.bukkit.block.data.type.Chest chest = (org.bukkit.block.data.type.Chest) Bukkit.createBlockData(Material.TRAPPED_CHEST);
         chest.setFacing(BlockUtils.getDirectBlockFace(rand));
         data.setBlockData(x, y, z, chest);

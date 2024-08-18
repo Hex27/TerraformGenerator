@@ -64,8 +64,8 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         		Material.RED_SAND,
         		Material.RED_SAND,
         		Material.RED_SAND,
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.RED_SAND),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.RED_SAND),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.RED_SAND),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.RED_SAND),
                 Material.RED_SANDSTONE,
                 Material.RED_SANDSTONE,
                 Material.RED_SANDSTONE,
@@ -77,8 +77,8 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
                 Material.RED_SANDSTONE,
                 Material.RED_SANDSTONE,
                 Material.RED_SANDSTONE,
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE)};
     }
 
     @Override

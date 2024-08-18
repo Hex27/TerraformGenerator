@@ -39,9 +39,9 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
         return new Material[]{
         		Material.SAND,
         		Material.SAND,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.SAND),
-                GenUtils.randMaterial(rand, Material.STONE),
-                GenUtils.randMaterial(rand, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND, Material.SAND),
+                GenUtils.randChoice(rand, Material.STONE),
+                GenUtils.randChoice(rand, Material.STONE)};
     }
 
     @Override
@@ -107,7 +107,7 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
                 		(float) GenUtils.randDouble(random, 3, 7), 
                 		new SimpleBlock(data,sLoc), 
                 		true, 
-                		GenUtils.randMaterial(
+                		GenUtils.randChoice(
                 				Material.STONE,
                 				Material.GRANITE,
                 				Material.ANDESITE,

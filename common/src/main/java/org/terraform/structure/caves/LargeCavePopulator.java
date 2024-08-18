@@ -82,7 +82,7 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
         RoomLayoutGenerator gen = new RoomLayoutGenerator(new Random(), RoomLayout.RANDOM_BRUTEFORCE, 10, x, y, z, 150);
         gen.setGenPaths(false);
-        gen.roomCarver = new LargeCaveRoomCarver(GenUtils.randMaterial(rand, Material.LAVA, Material.WATER));
+        gen.roomCarver = new LargeCaveRoomCarver(GenUtils.randChoice(rand, Material.LAVA, Material.WATER));
         SimpleLocation center = new SimpleLocation(x, y, z);
         TerraformGeneratorPlugin.logger.info("Large Cave at " + center + " has water level > " + minY + " with populator " +cavePopulator.getClass().getSimpleName());
         HashMap<SimpleChunkLocation, LargeCaveRoomPiece> chunkToRoom = new HashMap<>();

@@ -56,28 +56,28 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         }
 
         //Top decor
-        arch.getRelative(0, 1, 0).setType(Material.SEA_LANTERN);
-        arch.getRelative(0, 2, 0).setType(design.slab());
-        arch.getRelative(0, 1, 0).getLeft(1).setType(design.mat(random));
-        arch.getRelative(0, 1, 0).getRight(1).setType(design.mat(random));
-        arch.getRelative(0, 1, 0).getLeft(2).setBlockData(ls);
-        arch.getRelative(0, 1, 0).getRight(2).setBlockData(rs);
+        arch.getUp().setType(Material.SEA_LANTERN);
+        arch.getUp(2).setType(design.slab());
+        arch.getUp().getLeft(1).setType(design.mat(random));
+        arch.getUp().getRight(1).setType(design.mat(random));
+        arch.getUp().getLeft(2).setBlockData(ls);
+        arch.getUp().getRight(2).setBlockData(rs);
 
         //Bending sides
         arch.getLeft(archHalfLength - 2).setBlockData(ls);
-        arch.getRelative(0, -1, 0).getLeft(archHalfLength).setBlockData(ls);
+        arch.getDown().getLeft(archHalfLength).setBlockData(ls);
 
         arch.getRight(archHalfLength - 2).setBlockData(rs);
-        arch.getRelative(0, -1, 0).getRight(archHalfLength).setBlockData(rs);
+        arch.getDown().getRight(archHalfLength).setBlockData(rs);
 
         arch.getLeft(archHalfLength - 1).setType(design.slab());
         arch.getRight(archHalfLength - 1).setType(design.slab());
-        arch.getLeft(archHalfLength - 1).getRelative(0, -1, 0).setType(Material.SEA_LANTERN);
-        arch.getRight(archHalfLength - 1).getRelative(0, -1, 0).setType(Material.SEA_LANTERN);
+        arch.getLeft(archHalfLength - 1).getDown().setType(Material.SEA_LANTERN);
+        arch.getRight(archHalfLength - 1).getDown().setType(Material.SEA_LANTERN);
 
         //Vertical area
-        arch.getLeft(archHalfLength).getRelative(0, -2, 0).downUntilSolid(random, design.tileSet);
-        arch.getRight(archHalfLength).getRelative(0, -2, 0).downUntilSolid(random, design.tileSet);
+        arch.getLeft(archHalfLength).getDown(2).downUntilSolid(random, design.tileSet);
+        arch.getRight(archHalfLength).getDown(2).downUntilSolid(random, design.tileSet);
     }
 
     /**
@@ -205,7 +205,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         stair.setWaterlogged(true);
         stair.setHalf(Half.TOP);
         stair.setFacing(w.getDirection().getOppositeFace());
-        w.getRear(11).getRelative(0, 5, 0).setBlockData(stair);
+        w.getRear(11).getUp(5).setBlockData(stair);
         w.getFront().Pillar(6, random, Material.WATER);
     }
 
@@ -237,8 +237,8 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
 //		for(int i = 0; i < 5; i++){
 //			if(i % 2 == 0){
-//				design.upSpire(rightClone.getRelative(0,6,0).get(), random);
-//				design.upSpire(leftClone.getRelative(0,6,0).get(), random);
+//				design.upSpire(rightClone.getUp(6).get(), random);
+//				design.upSpire(leftClone.getUp(6).get(), random);
 //			}
 //
 //			//rightClone.Pillar(6, random, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE);
@@ -265,7 +265,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
                             }
                         }
 
-                    data.setType(nx, y + (6 - i), nz, GenUtils.randMaterial(random, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE));
+                    data.setType(nx, y + (6 - i), nz, GenUtils.randChoice(random, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE));
                 }
             }
         }

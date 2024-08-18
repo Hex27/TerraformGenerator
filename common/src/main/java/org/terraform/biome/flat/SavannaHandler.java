@@ -9,6 +9,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -58,12 +59,12 @@ public class SavannaHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK,
+        return new Material[]{GenUtils.randChoice(rand, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK,
                 Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.GRASS_BLOCK, Material.COARSE_DIRT),
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -75,7 +76,7 @@ public class SavannaHandler extends BiomeHandler {
                 && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
             //Dense grass
             if (GenUtils.chance(random, 5, 10)) {
-                BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
             }
         }
     }
@@ -113,19 +114,21 @@ public class SavannaHandler extends BiomeHandler {
         }
        
         //Grass Poffs
-        SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 31);
-        for (SimpleLocation sLoc : poffs) {
-     	   int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-		   sLoc.setY(treeY);
-		   if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
-		           BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())) &&
-		           !data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()).isSolid()) {
-               SimpleBlock base = new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());
-               int rX = GenUtils.randInt(random, 2, 4);
-               int rY = GenUtils.randInt(random, 2, 4);
-               int rZ = GenUtils.randInt(random, 2, 4);
-               BlockUtils.replaceSphere(random.nextInt(999), rX, rY, rZ, base, false, Material.ACACIA_LEAVES);
-		    } 
+        if ( TConfigOption.arePlantsEnabled()) {
+            SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 31);
+            for(SimpleLocation sLoc : poffs) {
+                int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
+                sLoc.setY(treeY);
+                if(data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() &&
+                        BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())) &&
+                        !data.getType(sLoc.getX(), sLoc.getY() + 1, sLoc.getZ()).isSolid()) {
+                    SimpleBlock base = new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());
+                    int rX = GenUtils.randInt(random, 2, 4);
+                    int rY = GenUtils.randInt(random, 2, 4);
+                    int rZ = GenUtils.randInt(random, 2, 4);
+                    BlockUtils.replaceSphere(random.nextInt(999), rX, rY, rZ, base, false, Material.ACACIA_LEAVES);
+                }
+            }
         }
 	}
 }

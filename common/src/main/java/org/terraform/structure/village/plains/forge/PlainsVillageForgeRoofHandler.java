@@ -27,7 +27,7 @@ public class PlainsVillageForgeRoofHandler {
 		SimpleLocation lowerBound = null;
 		SimpleLocation upperBound = null;
 		
-		Material roofCornerMaterial = GenUtils.randMaterial(Material.STONE_BRICKS, Material.COBBLESTONE);
+		Material roofCornerMaterial = GenUtils.randChoice(Material.STONE_BRICKS, Material.COBBLESTONE);
 		Material roofSlabCornerMaterial = Material.STONE_BRICK_SLAB;
 		if(roofCornerMaterial == Material.COBBLESTONE)
 			roofSlabCornerMaterial = Material.COBBLESTONE_SLAB;
@@ -87,8 +87,8 @@ public class PlainsVillageForgeRoofHandler {
 								||(roofAxis == Axis.Z && (x == lowerBound.getX()+1||x == upperBound.getX()-1))) {
 							
 							//Fill the holes between the walls and the roof
-							if(BlockUtils.isStoneLike(target.getRelative(0,-2,0).getType()) || target.getRelative(0,-2,0).getType() == plainsVillagePopulator.woodDoor)
-								new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
+							if(BlockUtils.isStoneLike(target.getDown(2).getType()) || target.getDown(2).getType() == plainsVillagePopulator.woodDoor)
+								new Wall(target.getDown()).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
 						}
 					}
 				
@@ -103,7 +103,7 @@ public class PlainsVillageForgeRoofHandler {
 				}
 				
 //				if(BlockUtils.isStoneLike(core.getPopData().getType(x, core.getY()+3,z))) {
-//					new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
+//					new Wall(target.getDown()).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
 //				}
 			}
 		}

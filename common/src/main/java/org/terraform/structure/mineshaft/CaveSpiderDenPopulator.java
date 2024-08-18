@@ -26,7 +26,7 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
         int[] upperCorner = room.getUpperCorner(3);
 
         //If the room has any sunlight or water, don't build this.
-        SimpleBlock center = room.getCenterSimpleBlock(data).getRelative(0,1,0);
+        SimpleBlock center = room.getCenterSimpleBlock(data).getUp();
         if(BlockUtils.isWet(center) 
     		|| GenUtils.getHighestGround(data, center.getX(), center.getZ()) <= center.getY())
         	return;
@@ -37,7 +37,7 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 if (b.getType() == Material.CAVE_AIR) {
-                    b.setType(GenUtils.randMaterial(
+                    b.setType(GenUtils.randChoice(
                             Material.OAK_PLANKS,
                             Material.OAK_SLAB,
                             Material.OAK_PLANKS,
@@ -55,7 +55,7 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 int limit = 10;
                 while (limit > 0 && b.getType() != Material.CAVE_AIR) {
-                    b = b.getRelative(0, 1, 0);
+                    b = b.getUp();
                     limit--;
                 }
                 if (limit < 0) continue; //No space above.

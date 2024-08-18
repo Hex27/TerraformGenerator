@@ -11,6 +11,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -26,8 +27,8 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
         data.setType(x, y, z, Material.GRASS_BLOCK);
 
         if (GenUtils.chance(rand, 1, 10))
-            data.setType(x, y + 1, z, Material.GRASS);
-        
+            PlantBuilder.GRASS.build(data, x, y + 1, z);
+
         int depth = GenUtils.randInt(rand, 3, 7);
         for (int i = 1; i < depth; i++) {
         	if(!BlockUtils.isStoneLike(data.getType(x, y-i, z)))
@@ -59,11 +60,11 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.STONE, Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),};
+        return new Material[]{GenUtils.randChoice(rand, Material.STONE, Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE),
+							  GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+							  GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+							  GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+							  GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),};
     }
 
     @Override
@@ -127,7 +128,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
     		if(!b.getRelative(0,-i,0).getType().isSolid())
     			return false;
     	}
-    	return BlockUtils.isExposedToNonSolid(b.getRelative(0,-4,0));
+    	return BlockUtils.isExposedToNonSolid(b.getDown(4));
     }
 
 	@Override
@@ -144,7 +145,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                         SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
                         if(checkWaterfallSpace(block)
                                 && GenUtils.chance(tw.getHashedRand(rawX, surfaceY, rawZ), 1, 30)) {
-                            block = block.getRelative(0,-4,0);
+                            block = block.getDown(4);
                             placeWaterFall(tw, rawX + 11*rawZ + 31*surfaceY, block);
                             break;
                         }

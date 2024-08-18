@@ -77,7 +77,7 @@ public class StairwayBuilder {
 	    		
 	    		if(threshold == 0) {
 	    			start.setType(downTypes);
-		    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
+		    		start.getDown().downUntilSolid(new Random(), downTypes);
 	    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
 	    			start = start.getRelative(extensionDir);
 	    		}
@@ -90,11 +90,11 @@ public class StairwayBuilder {
 	    		else
 	    			start.setType(stairType);
 	            
-	    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
+	    		start.getDown().downUntilSolid(new Random(), downTypes);
 
 	    		if(angled) 
 	        		threshold--;
-	    		start = start.getRelative(extensionDir).getRelative(0,-1,0);
+	    		start = start.getRelative(extensionDir).getDown();
 	        }
 
 	    	//If it is on water, build a pathway forward. 
@@ -118,13 +118,13 @@ public class StairwayBuilder {
 	    	while (continueCondition(start)) {
 	    		
 	    		if(threshold == 0) {
-	    			start = start.getRelative(0,-1,0);
+	    			start = start.getDown();
 	    			if(carveAirSpace)
-	    				start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
+	    				start.getUp().Pillar(3, new Random(), Material.AIR);
 	    			start.setType(downTypes);
-		    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
+		    		start.getDown().downUntilSolid(new Random(), downTypes);
 	    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
-	    			start = start.getRelative(extensionDir).getRelative(0,1,0);
+	    			start = start.getRelative(extensionDir).getUp();
 	    		}
 	    		
 	    		Material stairType = stairTypes[new Random().nextInt(stairTypes.length)];
@@ -135,18 +135,18 @@ public class StairwayBuilder {
 	    		else
 	    			start.setType(stairType);
 	            
-	    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
+	    		start.getDown().downUntilSolid(new Random(), downTypes);
 	    		
 	    		//This space is required for movement
 	    		if(carveAirSpace)
 	    		{
-	    			start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
-		    		start.getRelative(0,2,0).getRelative(extensionDir).setType(Material.AIR);
+	    			start.getUp().Pillar(3, new Random(), Material.AIR);
+		    		start.getUp(2).getRelative(extensionDir).setType(Material.AIR);
 		    	}
 	    		
 	    		if(angled) 
 	        		threshold--;
-	    		start = start.getRelative(extensionDir).getRelative(0, 1, 0);
+	    		start = start.getRelative(extensionDir).getUp();
 	        }
 			
 		}else {

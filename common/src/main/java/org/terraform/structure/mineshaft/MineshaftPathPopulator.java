@@ -19,6 +19,8 @@ import org.terraform.coregen.populatordata.IPopulatorDataMinecartSpawner;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
@@ -40,7 +42,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     @Deprecated
     @Override
     public boolean customCarve(@NotNull SimpleBlock base, BlockFace dir, int pathWidth) {
-        Wall core = new Wall(base.getRelative(0, 1, 0), dir);
+        Wall core = new Wall(base.getUp(), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
                 pathWidth, pathWidth + 1, pathWidth, core.get(), false,
@@ -75,33 +77,33 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
         Wall ceiling = core.findCeiling(10);
         if (ceiling != null) {
-            ceiling = ceiling.getRelative(0, -1, 0);
+            ceiling = ceiling.getDown();
         }
         Wall left = core.findLeft(10);
         Wall right = core.findRight(10);
 
         //Central Pathway
-        core.setType(GenUtils.randMaterial(
+        core.setType(GenUtils.randChoice(
                 Material.COBBLESTONE,
                 Material.COBBLESTONE,
                 Material.COBBLESTONE,
                 Material.ANDESITE,
                 Material.DIORITE,
                 Material.MOSSY_COBBLESTONE));
-        core.getRight().setType(GenUtils.randMaterial(getPathMaterial()));
-        core.getLeft().setType(GenUtils.randMaterial(getPathMaterial()));
+        core.getRight().setType(GenUtils.randChoice(getPathMaterial()));
+        core.getLeft().setType(GenUtils.randChoice(getPathMaterial()));
 
         //Pillars supporting the mineshaft area
         if (GenUtils.chance(rand, 1, 5)) {
-            core.getRelative(0, -1, 0).getRight().downUntilSolid(rand, getFenceMaterial());
-            core.getRelative(0, -1, 0).getLeft().downUntilSolid(rand, getFenceMaterial());
+            core.getDown().getRight().downUntilSolid(rand, getFenceMaterial());
+            core.getDown().getLeft().downUntilSolid(rand, getFenceMaterial());
         }
 
         //Broken feel
         if (rand.nextBoolean()) core.getRight(2)
-                .setType(GenUtils.randMaterial(getPathMaterial()));
+                .setType(GenUtils.randChoice(getPathMaterial()));
         if (rand.nextBoolean()) core.getLeft(2)
-                .setType(GenUtils.randMaterial(getPathMaterial()));
+                .setType(GenUtils.randChoice(getPathMaterial()));
 
         //Decorate with pebbles n shit lol
         for (int i = -2; i <= 2; i++) {
@@ -111,19 +113,19 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
             if (!Tag.SLABS.isTagged(target.getType())
                     && target.getType().isSolid()
                     && target.getType() != Material.GRAVEL
-                    && target.getRelative(0, 1, 0).getType() == Material.CAVE_AIR) {
+                    && target.getUp().getType() == Material.CAVE_AIR) {
                 if (GenUtils.chance(1, 10)) { //Pebble
                     Directional pebble = (Directional) Material.STONE_BUTTON.createBlockData("[face=floor]");
                     pebble.setFacing(BlockUtils.getDirectBlockFace(rand));
-                    target.getRelative(0, 1, 0).setBlockData(pebble);
+                    target.getUp().setBlockData(pebble);
                 } else if (GenUtils.chance(1, 10)) { //Mushroom
-                    target.getRelative(0, 1, 0).setType(GenUtils.randMaterial(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM));
+                    PlantBuilder.build(target.getUp(), PlantBuilder.BROWN_MUSHROOM, PlantBuilder.RED_MUSHROOM);
                 }
             }
         }
 
         //Rails
-        if (core.getType().isSolid() && rand.nextBoolean()) {
+        if (TConfigOption.areDecorationsEnabled() && core.getType().isSolid() && rand.nextBoolean()) {
             Rail rail = (Rail) Bukkit.createBlockData(Material.RAIL);
             switch(core.getDirection()) {
                 case NORTH, SOUTH -> rail.setShape(Shape.NORTH_SOUTH);
@@ -131,11 +133,11 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
             }
             
             //Check if rails are wet.
-            if(BlockUtils.isWet(core.getRelative(0,1,0).get()))
+            if(BlockUtils.isWet(core.getUp().get()))
             	rail.setWaterlogged(true);
             
-            core.getRelative(0, 1, 0).setBlockData(rail);
-            //BlockUtils.correctSurroundingRails(core.getRelative(0, 1, 0).get());
+            core.getUp().setBlockData(rail);
+            //BlockUtils.correctSurroundingRails(core.getUp().get());
             if (GenUtils.chance(rand, 1, 100)) {
                 TerraformGeneratorPlugin.logger.info("Minecart with chest at: " + core.getX() + ", " + core.getY() + ", " + core.getZ());
                 IPopulatorDataMinecartSpawner ms = (IPopulatorDataMinecartSpawner) core.get().getPopData();
@@ -166,7 +168,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                         if (target != null) {
                             if (target.getType() == Material.STONE) {
                                 if (GenUtils.chance(1, 10)) {
-                                    target.setType(GenUtils.randMaterial(
+                                    target.setType(GenUtils.randChoice(
                                             Material.COBBLESTONE,
                                             Material.MOSSY_COBBLESTONE
                                     ));
@@ -181,7 +183,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
             //Vertical decorations
             if (ceil != null && !Tag.SLABS.isTagged(ceil.getType()) && !Tag.LOGS.isTagged(ceil.getType())) {
-                ceil = ceil.getRelative(0, -1, 0);
+                ceil = ceil.getDown();
                 if (GenUtils.chance(rand, 1, 10)) {
                     //Stalactites
                     boolean canSpawn = true;
@@ -199,16 +201,17 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
 
                 } else if (GenUtils.chance(rand, 1, 6)) {
                     //Cobweb
-                    ceil.setType(Material.COBWEB);
+                    if (TConfigOption.areDecorationsEnabled())
+                        ceil.setType(Material.COBWEB);
                 } else if (GenUtils.chance(rand, 1, 10)) {
                     //Slabbing
-                    Slab slab = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(Material.COBBLESTONE_SLAB, Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB));
+                    Slab slab = (Slab) Bukkit.createBlockData(GenUtils.randChoice(Material.COBBLESTONE_SLAB, Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB));
                     slab.setType(Type.TOP);
                     ceil.setBlockData(slab);
                 }
             }
             if (floor != null && !Tag.SLABS.isTagged(floor.getType()) && !Tag.LOGS.isTagged(floor.getType())) {
-                floor = floor.getRelative(0, 1, 0);
+                floor = floor.getUp();
                 if (GenUtils.chance(rand, 1, 10)) {
                     //Stalagmites
                     boolean canSpawn = true;
@@ -228,7 +231,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                     //Slabbing
                     for (BlockFace face : BlockUtils.directBlockFaces) {
                         if (floor.getRelative(face).getType().isSolid()) {
-                            Slab slab = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(Material.COBBLESTONE_SLAB, Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB));
+                            Slab slab = (Slab) Bukkit.createBlockData(GenUtils.randChoice(Material.COBBLESTONE_SLAB, Material.STONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB));
                             slab.setType(Type.BOTTOM);
                             floor.setBlockData(slab);
                             break;
@@ -236,7 +239,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                     }
 
                 } else if (GenUtils.chance(1, 15)) { //Mushroom
-                    floor.setType(GenUtils.randMaterial(Material.BROWN_MUSHROOM, Material.RED_MUSHROOM));
+                    PlantBuilder.build(floor, PlantBuilder.BROWN_MUSHROOM, PlantBuilder.RED_MUSHROOM);
                 }
 
             }
@@ -244,6 +247,8 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     }
 
     public boolean setMineshaftSupport(@Nullable Wall left, @Nullable Wall right, @Nullable Wall ceil) {
+        if (!TConfigOption.areDecorationsEnabled()) return true;
+
         if (left == null || right == null) {
             return false; //Lol wtf is this situation even
         }
@@ -264,11 +269,11 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         if (dist >= 3) {
             if (left.LPillar(10, false, rand, Material.BARRIER) != 10) {
                 left.LPillar(10, false, rand, getFenceMaterial());
-                placeSupportFences(left.getRelative(0, -1, 0));//.downUntilSolid(rand, getFenceMaterial());
+                placeSupportFences(left.getDown());//.downUntilSolid(rand, getFenceMaterial());
             }
             if (right.LPillar(10, false, rand, Material.BARRIER) != 10) {
                 right.LPillar(10, false, rand, getFenceMaterial());
-                placeSupportFences(right.getRelative(0, -1, 0));//.downUntilSolid(rand, getFenceMaterial());
+                placeSupportFences(right.getDown());//.downUntilSolid(rand, getFenceMaterial());
             }
 
 
@@ -288,13 +293,13 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                     Wall support = ceil.getRight(i);
                     if (!support.getType().isSolid() ||
                             support.getType() == getFenceMaterial()) {
-                        if (support.getRelative(0, 1, 0).getType() != getSupportMaterial()
-                                && support.getRelative(0, -1, 0).getType() != getSupportMaterial()) {
+                        if (support.getUp().getType() != getSupportMaterial()
+                                && support.getDown().getType() != getSupportMaterial()) {
                             support.setBlockData(log);
 
                             //L A M P
                             if (GenUtils.chance(rand, 1, 100)) {
-                                support.getRelative(0, -1, 0).get()
+                                support.getDown().get()
                                         .lsetBlockData(lantern);
                             }
 
@@ -318,7 +323,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     			w.setType(Material.COBBLESTONE);
     		else
     			w.setType(getFenceMaterial());
-    		w = w.getRelative(0,-1,0);
+    		w = w.getDown();
     	}
     }
 

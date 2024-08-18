@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
 import org.terraform.structure.pillager.mansion.MansionRoomSize;
@@ -34,9 +35,9 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		SimpleBlock center = this.getRoom().getCenterSimpleBlock(data);
 		
-		center.getRelative(0,1,0).setType(Material.RED_CARPET);
+		center.getUp().setType(Material.RED_CARPET);
 		for(BlockFace face:BlockUtils.xzPlaneBlockFaces)
-			center.getRelative(0,1,0).getRelative(face).setType(Material.RED_CARPET);
+			center.getUp().getRelative(face).setType(Material.RED_CARPET);
 		
 		for(BlockFace face:BlockUtils.directBlockFaces) {
 			if(getInternalWalls().get(face) != MansionInternalWallState.WINDOW) {
@@ -54,21 +55,21 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 					
 					//Room is connected to a window.
 					//Spawn the arch and block out the window.
-					if(!target.getRight(4).getRelative(0,1,0).getType().isSolid()) {
+					if(!target.getRight(4).getUp().getType().isSolid()) {
 						applyHallwaySmoothing(target.getRight(4));
 						target.getRight(5).Pillar(6, Material.DARK_OAK_PLANKS);
 					}
-					if(!target.getLeft(4).getRelative(0,1,0).getType().isSolid()) {
+					if(!target.getLeft(4).getUp().getType().isSolid()) {
 						applyHallwaySmoothing(target.getLeft(4));
 						target.getLeft(5).Pillar(6, Material.DARK_OAK_PLANKS);
 					}
-					decorateHallwayWall(random, new Wall(target.getRear().getRelative(0,1,0).get(), w.getDirection().getOppositeFace()), false);
+					decorateHallwayWall(random, new Wall(target.getRear().getUp().get(), w.getDirection().getOppositeFace()), false);
 				}
 				else if(getInternalWalls().get(face) == MansionInternalWallState.ROOM_ENTRANCE) 
 					//This wall opens to another room somewhere. Connect a red carpet to it
 				{
 					for(int length = 2; length < 6; length++) {
-						Wall target = w.getFront(length).getRelative(0,1,0);
+						Wall target = w.getFront(length).getUp();
 						target.setType(Material.RED_CARPET);
 						if(length < 5) {
 							target.getLeft().setType(Material.RED_CARPET);
@@ -79,12 +80,12 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 			}
 			else //This face connects to a window
 			{
-				center.getRelative(0,1,0).getRelative(face,2).setType(Material.RED_CARPET);
-				decorateHallwayWall(random, new Wall(center.getRelative(face, 3).getRelative(0,1,0), face.getOppositeFace()), true);
+				center.getUp().getRelative(face,2).setType(Material.RED_CARPET);
+				decorateHallwayWall(random, new Wall(center.getRelative(face, 3).getUp(), face.getOppositeFace()), true);
 			}
 		}
 		
-		spawnSmallChandelier(center.getRelative(0,6,0));
+		spawnSmallChandelier(center.getUp(6));
 	}
 	
 	private void decorateHallwayWall(@NotNull Random random, @NotNull Wall center, boolean isWindow) {
@@ -92,9 +93,9 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 		if(!isWindow) { //Solid wall decorations
 			switch(decorationType) {
 			case 0: //3 1x2 paintings
-				PaintingUtils.placePainting(center.getRelative(0,1,0).get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
-				PaintingUtils.placePainting(center.getRight(2).getRelative(0,1,0).get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
-				PaintingUtils.placePainting(center.getLeft(2).getRelative(0,1,0).get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
+				PaintingUtils.placePainting(center.getUp().get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
+				PaintingUtils.placePainting(center.getRight(2).getUp().get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
+				PaintingUtils.placePainting(center.getLeft(2).getUp().get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
 			
 				new StairBuilder(Material.DARK_OAK_STAIRS)
 				.setFacing(center.getDirection().getOppositeFace())
@@ -102,24 +103,24 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 				.apply(center.getLeft())
 				.apply(center.getRight());
 				
-				center.getLeft().getRelative(0,1,0).Pillar(3, Material.DARK_OAK_FENCE);
-				center.getLeft().getRelative(0,1,0).CorrectMultipleFacing(3);
-				center.getRight().getRelative(0,1,0).Pillar(3, Material.DARK_OAK_FENCE);
-				center.getRight().getRelative(0,1,0).CorrectMultipleFacing(3);
-				center.getRight().getRelative(0,4,0).setType(Material.DARK_OAK_PLANKS);
-				center.getLeft().getRelative(0,4,0).setType(Material.DARK_OAK_PLANKS);
+				center.getLeft().getUp().Pillar(3, Material.DARK_OAK_FENCE);
+				center.getLeft().getUp().CorrectMultipleFacing(3);
+				center.getRight().getUp().Pillar(3, Material.DARK_OAK_FENCE);
+				center.getRight().getUp().CorrectMultipleFacing(3);
+				center.getRight().getUp(4).setType(Material.DARK_OAK_PLANKS);
+				center.getLeft().getUp(4).setType(Material.DARK_OAK_PLANKS);
 				break;
 			case 1: //3 banners
-				BannerUtils.generateBanner(random, center.getRelative(0,2,0).get(), center.getDirection(), true);
-				BannerUtils.generateBanner(random, center.getRight(2).getRelative(0,2,0).get(), center.getDirection(), true);
-				BannerUtils.generateBanner(random, center.getLeft(2).getRelative(0,2,0).get(), center.getDirection(), true);
+				BannerUtils.generateBanner(random, center.getUp(2).get(), center.getDirection(), true);
+				BannerUtils.generateBanner(random, center.getRight(2).getUp(2).get(), center.getDirection(), true);
+				BannerUtils.generateBanner(random, center.getLeft(2).getUp(2).get(), center.getDirection(), true);
 				
 				center.getLeft().getRear().Pillar(4, Material.DARK_OAK_LOG);
 				center.getRight().getRear().Pillar(4, Material.DARK_OAK_LOG);
 				new DirectionalBuilder(Material.WALL_TORCH)
 				.setFacing(center.getDirection())
-				.apply(center.getLeft().getRelative(0,2,0))
-				.apply(center.getRight().getRelative(0,2,0));
+				.apply(center.getLeft().getUp(2))
+				.apply(center.getRight().getUp(2));
 				break;
 			case 2: //chair
 				new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
@@ -135,9 +136,9 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 				center.getLeft(2).setType(Material.DARK_OAK_LOG);
 				center.getRight(2).setType(Material.DARK_OAK_LOG);
 				if(random.nextBoolean())
-					center.getLeft(2).getRelative(0,1,0).setType(Material.LANTERN);
+					center.getLeft(2).getUp().setType(Material.LANTERN);
 				if(random.nextBoolean())
-					center.getRight(2).getRelative(0,1,0).setType(Material.LANTERN);
+					center.getRight(2).getUp().setType(Material.LANTERN);
 				break;
 			default:
 				break;
@@ -159,11 +160,11 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 				center.setType(Material.DARK_OAK_PLANKS);
 				center.getLeft().setType(Material.GRASS_BLOCK);
 				center.getRight().setType(Material.GRASS_BLOCK);
-				center.getLeft().getRelative(0,1,0).setType(Material.OAK_FENCE);
-				center.getRight().getRelative(0,1,0).setType(Material.OAK_FENCE);
-				center.getLeft().getRelative(0,2,0).setType(Material.OAK_LEAVES);
-				center.getRight().getRelative(0,2,0).setType(Material.OAK_LEAVES);
-				
+				center.getLeft().getUp().setType(Material.OAK_FENCE);
+				center.getRight().getUp().setType(Material.OAK_FENCE);
+                PlantBuilder.OAK_LEAVES.build(center.getLeft().getUp(2));
+                PlantBuilder.OAK_LEAVES.build(center.getRight().getUp(2));
+
 				//Pot
 				new TrapdoorBuilder(Material.DARK_OAK_TRAPDOOR)
 				.setFacing(center.getDirection())
@@ -193,13 +194,13 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 	
 	private void spawnSmallChandelier(@NotNull SimpleBlock target) {
 		target.setType(Material.DARK_OAK_FENCE);
-		target.getRelative(0,-1,0).setType(Material.DARK_OAK_FENCE);
-		target.getRelative(0,-2,0).setType(Material.DARK_OAK_FENCE);
+		target.getDown().setType(Material.DARK_OAK_FENCE);
+		target.getDown(2).setType(Material.DARK_OAK_FENCE);
 		
-		target = target.getRelative(0,-2,0);
+		target = target.getDown(2);
 		for(BlockFace face:BlockUtils.directBlockFaces) {
 			target.getRelative(face).setType(Material.DARK_OAK_FENCE);
-			target.getRelative(face).getRelative(0,1,0).setType(Material.TORCH);
+			target.getRelative(face).getUp().setType(Material.TORCH);
 			
 		}
 		BlockUtils.correctSurroundingMultifacingData(target);
@@ -212,23 +213,23 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 		new StairBuilder(Material.DARK_OAK_STAIRS)
 		.setFacing(w.getDirection())
 		.setHalf(Half.TOP)
-		.lapply(w.getRelative(0,5,0));
-		w.getRelative(0,6,0).Pillar(2, Material.DARK_OAK_PLANKS);
+		.lapply(w.getUp(5));
+		w.getUp(6).Pillar(2, Material.DARK_OAK_PLANKS);
 
 		w = w.getRear();
-		w.getRelative(0,6,0).Pillar(2, Material.DARK_OAK_PLANKS);
+		w.getUp(6).Pillar(2, Material.DARK_OAK_PLANKS);
 		
 		w = w.getRear();
 		new SlabBuilder(Material.DARK_OAK_SLAB)
 		.setType(Type.TOP)
-		.lapply(w.getRelative(0,6,0));
-		w.getRelative(0,7,0).setType(Material.DARK_OAK_PLANKS);
+		.lapply(w.getUp(6));
+		w.getUp(7).setType(Material.DARK_OAK_PLANKS);
 		
 		w = w.getRear();
 		new StairBuilder(Material.DARK_OAK_STAIRS)
 		.setFacing(w.getDirection())
 		.setHalf(Half.TOP)
-		.lapply(w.getRelative(0,7,0));
+		.lapply(w.getUp(7));
 	}
 
 	@Override

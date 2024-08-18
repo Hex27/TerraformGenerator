@@ -49,19 +49,19 @@ public class MonumentPathPopulator extends PathPopulatorAbstract {
             w.RPillar(5, rand, GenUtils.mergeArr(design.tileSet, new Material[]{Material.SEA_LANTERN}));
         }
 //		else if(GenUtils.chance(rand, 1, 50)){
-//			MonumentRoomPopulator.setThickPillar(rand, design, w.get().getRelative(0,3,0));
+//			MonumentRoomPopulator.setThickPillar(rand, design, w.get().getUp(3));
 //		}
 
         //Thick pillars
         if (GenUtils.chance(rand, 1, 50)) {
-            MonumentRoomPopulator.setThickPillar(rand, design, w.get().getRelative(0, -1, 0));
+            MonumentRoomPopulator.setThickPillar(rand, design, w.get().getDown());
         }
 
         //Small spires on the top
         if (GenUtils.chance(rand, 1, 50)) {
-            if (w.getRelative(0, 6, 0).getType().isSolid()
-                    && !w.getRelative(0, 7, 0).getType().isSolid())
-                design.spire(w.getRelative(0, 7, 0), rand);
+            if (w.getUp(6).getType().isSolid()
+                    && !w.getUp(7).getType().isSolid())
+                design.spire(w.getUp(7), rand);
         }
     }
 

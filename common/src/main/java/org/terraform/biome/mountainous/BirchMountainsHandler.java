@@ -13,6 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -44,23 +45,22 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
         		Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-
         setRock(new SimpleBlock(data,rawX,0,rawZ).getGround());
 
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
 
             if (GenUtils.chance(random, 1, 10)) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 if (random.nextBoolean()) {
-                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                    PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 } else {
-                    data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                    BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -78,7 +78,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
     			rock = Material.DIORITE;
     		while(BlockUtils.isExposedToNonSolid(target)) {
     			target.setType(rock);
-    			target = target.getRelative(0,-1,0);
+    			target = target.getDown();
     		}
     	}
     }

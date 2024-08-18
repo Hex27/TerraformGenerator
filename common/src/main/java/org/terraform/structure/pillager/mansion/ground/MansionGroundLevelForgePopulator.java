@@ -96,9 +96,9 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 		.apply(w.getRight())
 		.apply(w.getRight(2));
 		
-		ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).get(), w.getDirection(), rand);
-		ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).getLeft(2).get(), w.getDirection(), rand);
-		ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).getRight(2).get(), w.getDirection(), rand);
+		ArmorStandUtils.placeArmorStand(w.getUp(2).get(), w.getDirection(), rand);
+		ArmorStandUtils.placeArmorStand(w.getUp(2).getLeft(2).get(), w.getDirection(), rand);
+		ArmorStandUtils.placeArmorStand(w.getUp(2).getRight(2).get(), w.getDirection(), rand);
 		
 	}
 	
@@ -112,7 +112,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 	    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             super.applyData(block, data);
 	        if (data.getMaterial() == Material.POLISHED_DIORITE) {
-	            ArmorStandUtils.placeArmorStand(block.getRelative(0,1,0), BlockUtils.getDirectBlockFace(rand), rand);
+	            ArmorStandUtils.placeArmorStand(block.getUp(), BlockUtils.getDirectBlockFace(rand), rand);
 	        }
 	    }
 	}

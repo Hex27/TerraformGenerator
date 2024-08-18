@@ -40,7 +40,7 @@ public class HollowPillarRoomPopulator extends CageRoomPopulator {
             Wall w = entry.getKey();
             int length = entry.getValue();
             for (int i = 0; i < length; i++) {
-                w.getRelative(0, -1, 0).setType(design.mat(rand));
+                w.getDown().setType(design.mat(rand));
                 w.getRelative(0, cage.getHeight() - 1, 0).setType(design.mat(rand));
                 w = w.getLeft();
             }

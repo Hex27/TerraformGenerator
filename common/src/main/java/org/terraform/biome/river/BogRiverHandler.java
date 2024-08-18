@@ -45,9 +45,9 @@ public class BogRiverHandler extends BiomeHandler {
         return new Material[]{
         		Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -101,7 +101,7 @@ public class BogRiverHandler extends BiomeHandler {
     	//Water decorations
                 
         SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
-        if(BlockUtils.isWet(block.getRelative(0,1,0)))
+        if(BlockUtils.isWet(block.getUp()))
         {
 
             // SEA GRASS/KELP

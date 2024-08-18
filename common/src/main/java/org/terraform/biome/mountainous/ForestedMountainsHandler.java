@@ -12,6 +12,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
@@ -32,7 +33,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
         data.setType(x, y, z, Material.GRASS_BLOCK);
 
         if (GenUtils.chance(rand, 1, 10))
-            data.setType(x, y + 1, z, Material.GRASS);
+            PlantBuilder.GRASS.build(data, x, y + 1, z);
         
         int depth = GenUtils.randInt(rand, 3, 7);
         for (int i = 1; i < depth; i++) {
@@ -65,11 +66,11 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.STONE, Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),};
+        return new Material[]{GenUtils.randChoice(rand, Material.STONE, Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE),
+                              GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+                              GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+                              GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+                              GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),};
     }
 
     @Override
@@ -205,7 +206,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
                     if (data.getType(x, y + 1, z) == Material.JUNGLE_WOOD
                             && BlockUtils.isAir(data.getType(x, y + 2, z))
                             && GenUtils.chance(2, 9)) {
-                        data.setType(x, y + 2, z, GenUtils.randMaterial(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM));
+                        PlantBuilder.build(data, x, y + 2, z, PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
                     }
                 }
             }

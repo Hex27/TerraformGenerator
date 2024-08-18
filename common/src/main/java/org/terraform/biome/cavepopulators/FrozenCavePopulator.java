@@ -35,7 +35,7 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
         if (GenUtils.chance(random, 1, 24)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
-            Wall w = new Wall(ceil.getRelative(0,-1,0), BlockFace.NORTH);
+            Wall w = new Wall(ceil.getDown(), BlockFace.NORTH);
             //w.downLPillar(random, h, Material.ICE);
 
             new StalactiteBuilder(Material.ICE)
@@ -50,13 +50,13 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
         //=========================
 
         //Lower Ice
-        floor.getRelative(0,1,0).setType(Material.ICE);
+        floor.getUp().setType(Material.ICE);
 
         //Stalagmites
         if (GenUtils.chance(random, 1, 25)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
-            Wall w = new Wall(floor.getRelative(0,2,0));
+            Wall w = new Wall(floor.getUp(2));
             if (w.getType() == Material.CAVE_AIR)
                 //w.LPillar(h, random, Material.ICE);
                 new StalactiteBuilder(Material.ICE)

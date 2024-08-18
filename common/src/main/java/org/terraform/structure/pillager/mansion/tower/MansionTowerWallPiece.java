@@ -27,13 +27,13 @@ public class MansionTowerWallPiece extends JigsawStructurePiece {
     public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
-        Wall w = entry.getKey().getRelative(0, -1, 0);
+        Wall w = entry.getKey().getDown();
         
         for (int i = 0; i < entry.getValue(); i++) {
             
         	//Primary Wall and wooden stair decorations
-        	//w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-            w.getRelative(0, 1, 0).Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
+        	//w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+            w.getUp().Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
             
             w = w.getLeft();
         }

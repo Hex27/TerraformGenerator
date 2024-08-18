@@ -64,12 +64,12 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
         wall.getRight().Pillar(5, rand, blocks);
         wall.getLeft().Pillar(5, rand, blocks);
 
-        wall.getRelative(0, 4, 0).getRight().getRight().setType(Material.CHISELED_STONE_BRICKS);
-        wall.getRelative(0, 4, 0).getLeft().setType(Material.CHISELED_STONE_BRICKS);
+        wall.getUp(4).getRight().getRight().setType(Material.CHISELED_STONE_BRICKS);
+        wall.getUp(4).getLeft().setType(Material.CHISELED_STONE_BRICKS);
         wall.getRight().getRight().setType(Material.CHISELED_STONE_BRICKS);
         wall.getLeft().setType(Material.CHISELED_STONE_BRICKS);
 
-        wall = wall.getRelative(0, 1, 0);
+        wall = wall.getUp();
 
         wall.Pillar(3, rand, Material.CAVE_AIR);
         wall.getRight().Pillar(3, rand, Material.CAVE_AIR);

@@ -16,6 +16,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
@@ -80,9 +81,9 @@ public class BadlandsHandler extends BiomeHandler {
         return new Material[]{
                 Material.RED_SAND,
                 Material.RED_SAND,
-                GenUtils.randMaterial(rand, Material.RED_SAND, Material.RED_SANDSTONE),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.RED_SAND, Material.RED_SANDSTONE),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE)};
     }
 
     @Override
@@ -117,9 +118,9 @@ public class BadlandsHandler extends BiomeHandler {
                 if (canSpawn && GenUtils.chance(1, 50))
                     spawnDeadTree(data, rawX, surfaceY, rawZ);
                 else if (canSpawn)
-                    BlockUtils.spawnPillar(random, data, rawX, surfaceY + 1, rawZ, Material.CACTUS, 2, 5);
+                    PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 2, 5);
             } else if (GenUtils.chance(random, 1, 80) && surfaceY > TerraformGenerator.seaLevel) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
             }
         }
     }
@@ -231,9 +232,9 @@ public class BadlandsHandler extends BiomeHandler {
                     if ((int) graduated * plateauHeight == y)
                         material = Material.RED_SAND;
                     else if ((int) graduated * plateauHeight == y + 1)
-                        material = GenUtils.randMaterial(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y));
+                        material = GenUtils.randChoice(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y));
                     else if ((int) graduated * plateauHeight == y + 2)
-                        material = GenUtils.randMaterial(Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y),
+                        material = GenUtils.randChoice(Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y),
                                 BlockUtils.getTerracotta(surfaceY + y));
                     else
                         material = BlockUtils.getTerracotta(surfaceY + y);
@@ -285,6 +286,8 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     void spawnDeadTree(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if ( !TConfigOption.areTreesEnabled()) return;
+
         int height = GenUtils.randInt(5, 7);
         int branches = GenUtils.randInt(1, height == 5 ? 2 : 3);
 

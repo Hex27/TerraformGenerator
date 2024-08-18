@@ -45,17 +45,17 @@ public class DesertHillsHandler extends AbstractMountainHandler {
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.SAND,
                 Material.SAND,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.STONE),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND, Material.STONE),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)};
     }
 
     @Override

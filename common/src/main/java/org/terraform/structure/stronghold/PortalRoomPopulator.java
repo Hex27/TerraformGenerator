@@ -39,13 +39,13 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
 
         //Bookshelves and entrance decor
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
-            Wall wall = entry.getKey().getRelative(0, 3, 0);
+            Wall wall = entry.getKey().getUp(3);
             for (int i = 1; i <= entry.getValue(); i++) {
                 wall.setType(Material.CHISELED_STONE_BRICKS);
                 if (i % 5 == 2 || i % 5 == 4)
-                    wall.getRelative(0, 1, 0).Pillar(15 - 7, rand, Material.CHISELED_STONE_BRICKS);
+                    wall.getUp().Pillar(15 - 7, rand, Material.CHISELED_STONE_BRICKS);
                 if (i % 5 == 3)
-                    wall.getRelative(0, 1, 0).Pillar(15 - 7, rand, Material.COBBLESTONE_WALL);
+                    wall.getUp().Pillar(15 - 7, rand, Material.COBBLESTONE_WALL);
 
                 for (int h = 1; h < 15 - 7; h++) {
                     BlockUtils.correctSurroundingMultifacingData(wall.getRelative(0, h, 0).get());
@@ -104,7 +104,7 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             w.getLeft().getLeft().setType(Material.CHISELED_STONE_BRICKS);
             w.getRight().getRight().setType(Material.CHISELED_STONE_BRICKS);
 
-            w = w.getRelative(0, -1, 0);
+            w = w.getDown();
             w.setType(BlockUtils.stoneBrick(rand));
             w.getLeft().setType(BlockUtils.stoneBrick(rand));
             w.getRight().setType(BlockUtils.stoneBrick(rand));
@@ -128,9 +128,9 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             w.getLeft().getLeft().setType(BlockUtils.stoneBrick(rand));
             w.getRight().getRight().setType(BlockUtils.stoneBrick(rand));
 
-            w.getRelative(0, 1, 0).setType(BlockUtils.stoneBrickSlab(rand));
-            w.getRelative(0, 1, 0).getLeft().setType(BlockUtils.stoneBrickSlab(rand));
-            w.getRelative(0, 1, 0).getRight().setType(BlockUtils.stoneBrickSlab(rand));
+            w.getUp().setType(BlockUtils.stoneBrickSlab(rand));
+            w.getUp().getLeft().setType(BlockUtils.stoneBrickSlab(rand));
+            w.getUp().getRight().setType(BlockUtils.stoneBrickSlab(rand));
 
             w.getLeft().getLeft().getLeft().setType(BlockUtils.stoneBrickSlab(rand));
             w.getRight().getRight().getRight().setType(BlockUtils.stoneBrickSlab(rand));

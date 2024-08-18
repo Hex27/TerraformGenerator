@@ -31,7 +31,7 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
             int h = GenUtils.randInt(rand, height/4, (int) ((3f / 2f) * (height/2f)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(ceil.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
-                    .makeSpike(rand, ceil, r, h, false);
+                    .makeSpike(ceil, r, h, false);
         }
 
         //Stalagmites
@@ -41,7 +41,7 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
             int h = GenUtils.randInt(rand, height/4, (int) ((3f / 2f) * (height/2f)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(floor.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(floor.getY()))
-                    .makeSpike(rand, floor, r, h, true);
+                    .makeSpike(floor, r, h, true);
         }
 
         //Sea pickles

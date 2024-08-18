@@ -16,6 +16,8 @@ import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
@@ -56,8 +58,8 @@ public class ArchedCliffsHandler extends BiomeHandler {
         return new Material[]{Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -67,17 +69,15 @@ public class ArchedCliffsHandler extends BiomeHandler {
         //Highest Ground decorations: grass and flowers
         if (GenUtils.chance(random, 1, 10)) { //Grass
             if (GenUtils.chance(random, 6, 10)) {
-                target.getUp().setType(Material.GRASS);
+                PlantBuilder.GRASS.build(target.getUp());
                 if (random.nextBoolean()) {
-                    BlockUtils.setDoublePlant(target.getPopData(), target.getX(), target.getY()+1, target.getZ(),
-                            Material.TALL_GRASS);
+                    PlantBuilder.TALL_GRASS.build(target.getUp());
                 }
             } else {
                 if (GenUtils.chance(random, 7, 10))
-                    target.getUp().setType(BlockUtils.pickFlower());
+                    BlockUtils.pickFlower().build(target.getUp());
                 else
-                    BlockUtils.setDoublePlant(target.getPopData(), target.getX(), target.getY()+1, target.getZ(),
-                            BlockUtils.pickTallFlower());
+                    BlockUtils.pickTallFlower().build(target.getUp());
             }
         }
 
@@ -91,14 +91,15 @@ public class ArchedCliffsHandler extends BiomeHandler {
                     //Indicates that this area is valid for population
 
                     if (GenUtils.chance(random, 1, 10)) {
-                        grassBottom.getUp().setType(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM);
+                        PlantBuilder.build(grassBottom.getUp(), PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
                     }
 
                     //If an underside was valid, you can check the upper area for
                     //decorating overhangs
                     for(BlockFace face:BlockUtils.directBlockFaces) {
-                        if(target.getRelative(face).getType() == Material.AIR) {
+                        if(TConfigOption.arePlantsEnabled() && target.getRelative(face).getType() == Material.AIR) {
                             if(GenUtils.chance(random, 1, 5))
+                                //TODO:PlantBuilder
                                 target.getRelative(face).downLPillar(random, random.nextInt(8), Material.OAK_LEAVES);
                         }
                     }

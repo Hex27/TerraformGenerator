@@ -10,6 +10,8 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
@@ -36,8 +38,8 @@ public class BambooForestHandler extends BiomeHandler {
         return new Material[]{Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -67,15 +69,15 @@ public class BambooForestHandler extends BiomeHandler {
             //Grass and shrubbery
             if (GenUtils.chance(random, 1, 3)) {
                 if (GenUtils.chance(random, 6, 10)) {
-                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     if (random.nextBoolean()) {
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                        PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     }
                 } else {
                     if (GenUtils.chance(random, 7, 10))
-                        data.setType(rawX, surfaceY + 1, rawZ, Material.FERN);
+                        PlantBuilder.FERN.build(data, rawX, surfaceY + 1, rawZ);
                     else
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.LARGE_FERN);
+                        PlantBuilder.LARGE_FERN.build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -100,7 +102,7 @@ public class BambooForestHandler extends BiomeHandler {
                     }
 
                     //Bamboo
-                    if (GenUtils.chance(random, 1, 3) && BlockUtils.isDirtLike(data.getType(x, y, z))) {
+                    if (TConfigOption.arePlantsEnabled() && GenUtils.chance(random, 1, 3) && BlockUtils.isDirtLike(data.getType(x, y, z))) {
                         int h = BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.BAMBOO, 12, 16);
                         Bamboo bambooHead = (Bamboo) Bukkit.createBlockData(Material.BAMBOO);
                         bambooHead.setLeaves(Leaves.LARGE);

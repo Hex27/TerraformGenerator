@@ -40,12 +40,12 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
 
                 //Center hole
                 if (i == l / 2) {
-                    w.getRelative(0, 2, 0).setType(Material.WATER);
+                    w.getUp(2).setType(Material.WATER);
                 }
 
                 //Side holes
                 if (i == l + 2) {
-                    w.getRelative(0, 2, 0).setType(Material.WATER);
+                    w.getUp(2).setType(Material.WATER);
                 }
                 w = w.getLeft();
             }
@@ -61,14 +61,14 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
                 w.getLeft(width).RPillar(5, rand, design.tileSet());
                 w.getRight(width).RPillar(5, rand, design.tileSet());
             } else {
-                w.getLeft(width).getRelative(0, 2, 0).setType(design.mat(rand));
-                w.getRight(width).getRelative(0, 2, 0).setType(design.mat(rand));
+                w.getLeft(width).getUp(2).setType(design.mat(rand));
+                w.getRight(width).getUp(2).setType(design.mat(rand));
             }
         }
-        w.getLeft().getRear().getRelative(0, 2, 0).setType(Material.SEA_LANTERN);
-        w.getLeft().getFront().getRelative(0, 2, 0).setType(Material.SEA_LANTERN);
-        w.getRight().getRear().getRelative(0, 2, 0).setType(Material.SEA_LANTERN);
-        w.getRight().getFront().getRelative(0, 2, 0).setType(Material.SEA_LANTERN);
+        w.getLeft().getRear().getUp(2).setType(Material.SEA_LANTERN);
+        w.getLeft().getFront().getUp(2).setType(Material.SEA_LANTERN);
+        w.getRight().getRear().getUp(2).setType(Material.SEA_LANTERN);
+        w.getRight().getFront().getUp(2).setType(Material.SEA_LANTERN);
     }
 
 }

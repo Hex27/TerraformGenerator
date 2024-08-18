@@ -53,12 +53,12 @@ public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStan
         	dir = BlockUtils.getDirectBlockFace(random);
         
         core.setType(Material.CHISELED_STONE_BRICKS);
-        core.getRelative(0,1,0).setType(Material.BREWING_STAND);
+        core.getUp().setType(Material.BREWING_STAND);
         
         for(Entry<Wall,Integer> entry:this.getRoom().getFourWalls(data, 0).entrySet()) {
-        	Wall w = entry.getKey().getRelative(0,-1,0);
+        	Wall w = entry.getKey().getDown();
         	for(int i = 0; i < entry.getValue(); i++) {
-        		w.getRelative(0,1,0).setType(Material.AIR);
+        		w.getUp().setType(Material.AIR);
         		
         		new StairBuilder(stairType)
         		.setFacing(w.getDirection().getOppositeFace())
@@ -66,9 +66,9 @@ public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStan
         		.apply(w);
         		
         		if(!Tag.STAIRS.isTagged(w.getFront().getType())) {
-            		w.getFront().getRelative(0,1,0).setType(Material.AIR);
+            		w.getFront().getUp().setType(Material.AIR);
             		w.getFront().setType(Material.WATER);
-            		w.getFront().getRelative(0,-1,0).setType(Material.CHISELED_STONE_BRICKS);
+            		w.getFront().getDown().setType(Material.CHISELED_STONE_BRICKS);
             		
             		//Sometimes the pond will have corals.
             		if(random.nextBoolean())
@@ -83,9 +83,9 @@ public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStan
         .setFacing(dir.getOppositeFace())
         .apply(core.getRelative(dir));
         
-        core.getRelative(0,-1,0).setType(Material.STONE_BRICKS);
-        core.getRelative(dir).getRelative(0,-1,0).setType(Material.STONE_BRICKS);
-        core.getRelative(dir,2).getRelative(0,-1,0).setType(Material.STONE_BRICKS);
+        core.getDown().setType(Material.STONE_BRICKS);
+        core.getRelative(dir).getDown().setType(Material.STONE_BRICKS);
+        core.getRelative(dir,2).getDown().setType(Material.STONE_BRICKS);
         
         for(int[] corner :this.getRoom().getAllCorners()) {
         	data.setType(corner[0], getRoom().getY(), corner[1], Material.CHISELED_STONE_BRICKS);

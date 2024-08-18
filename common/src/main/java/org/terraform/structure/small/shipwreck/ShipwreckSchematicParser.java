@@ -54,7 +54,7 @@ public class ShipwreckSchematicParser extends SchematicParser {
         if (data.getMaterial().toString().contains("COBBLESTONE")) {
             data = Bukkit.createBlockData(
                     StringUtils.replace(data.getAsString(), "cobblestone",
-                            GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
+                            GenUtils.randChoice(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
                                     .name().toLowerCase(Locale.ENGLISH)
                     )
             );

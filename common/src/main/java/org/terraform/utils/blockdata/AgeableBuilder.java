@@ -20,7 +20,7 @@ public class AgeableBuilder {
     }
 
     public AgeableBuilder(Material... mat) {
-        this.blockData = (Ageable) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Ageable) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
     public @NotNull AgeableBuilder setAge(int age) {

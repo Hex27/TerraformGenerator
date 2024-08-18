@@ -40,7 +40,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
 
         Wall ceiling = core.findCeiling(10);
         if (ceiling != null) {
-            ceiling = ceiling.getRelative(0, -1, 0);
+            ceiling = ceiling.getDown();
         }
         Wall floor = core.getDown();
         if(!floor.isSolid()) return; //Don't populate a path if there's no floor
@@ -140,7 +140,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     
     @Override
     public boolean customCarve(@NotNull SimpleBlock base, BlockFace dir, int pathWidth) {
-        Wall core = new Wall(base.getRelative(0, 2, 0), dir);
+        Wall core = new Wall(base.getUp(2), dir);
         int seed = 2293 + 5471*core.getX() + 9817*core.getY() ^ 2 + 1049*core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
                 pathWidth, pathWidth, pathWidth, core.get(), false, 

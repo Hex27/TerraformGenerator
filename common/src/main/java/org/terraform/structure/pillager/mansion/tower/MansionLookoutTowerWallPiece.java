@@ -35,7 +35,7 @@ public class MansionLookoutTowerWallPiece extends MansionTowerWallPiece {
     	
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
 
-    	Wall w = entry.getKey().getRelative(0, -1, 0);
+    	Wall w = entry.getKey().getDown();
 
     	
     	//Carving
@@ -43,13 +43,13 @@ public class MansionLookoutTowerWallPiece extends MansionTowerWallPiece {
             
         	//sides
         	if(i == 0 || i == entry.getValue()-1) {
-        		w.getRelative(0,1,0).Pillar(8, Material.DARK_OAK_LOG);
+        		w.getUp().Pillar(8, Material.DARK_OAK_LOG);
         		new SlabBuilder(Material.STONE_BRICK_SLAB)
         		.setType(Type.TOP)
-        		.apply(w.getFront().getRelative(0,4,0));
+        		.apply(w.getFront().getUp(4));
         		
         	}else if(i == 1 || i == entry.getValue()-2) {
-        		w.getRelative(0,1,0).Pillar(3, Material.AIR);
+        		w.getUp().Pillar(3, Material.AIR);
         		
         		new StairBuilder(Material.STONE_BRICK_STAIRS)
         		.setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
@@ -57,57 +57,57 @@ public class MansionLookoutTowerWallPiece extends MansionTowerWallPiece {
         		
         		new OrientableBuilder(Material.STRIPPED_DARK_OAK_LOG)
         		.setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
-        		.apply(w.getRelative(0,1,0))
-        		.apply(w.getRelative(0,1,0).getFront());
+        		.apply(w.getUp())
+        		.apply(w.getUp().getFront());
         		
-        		w.getRelative(0,2,0).getFront().Pillar(3, Material.STONE_BRICK_WALL);
-        		w.getRelative(0,2,0).getFront().CorrectMultipleFacing(3);
+        		w.getUp(2).getFront().Pillar(3, Material.STONE_BRICK_WALL);
+        		w.getUp(2).getFront().CorrectMultipleFacing(3);
         		
-        		w.getRelative(0,5,0).getFront().setType(Material.STONE_BRICK_SLAB);
+        		w.getUp(5).getFront().setType(Material.STONE_BRICK_SLAB);
         		
         	}else if(i == 2 || i == entry.getValue()-3) {
-        		w.getRelative(0,1,0).Pillar(4, Material.AIR);
+        		w.getUp().Pillar(4, Material.AIR);
 
         		new StairBuilder(Material.STONE_BRICK_STAIRS)
         		.setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
-        		.apply(w.getRelative(0,1,0).getFront());
+        		.apply(w.getUp().getFront());
         		new DirectionalBuilder(Material.DARK_OAK_FENCE_GATE)
         		.setFacing(w.getDirection())
-        		.apply(w.getRelative(0,2,0).getFront());
-        		w.getRelative(0,2,0).getFront().CorrectMultipleFacing(1);
+        		.apply(w.getUp(2).getFront());
+        		w.getUp(2).getFront().CorrectMultipleFacing(1);
 
         		new SlabBuilder(Material.STONE_BRICK_SLAB)
         		.setType(Type.TOP)
-        		.apply(w.getFront().getRelative(0,5,0));
+        		.apply(w.getFront().getUp(5));
 
         		new StairBuilder(Material.DARK_OAK_STAIRS)
         		.setFacing(w.getDirection())
-        		.apply(w.getRelative(0,1,0));
+        		.apply(w.getUp());
         	}else { //center
-        		w.getRelative(0,1,0).Pillar(5, Material.AIR);
+        		w.getUp().Pillar(5, Material.AIR);
 
         		new StairBuilder(Material.STONE_BRICK_STAIRS)
         		.setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
-        		.apply(w.getRelative(0,1,0).getFront());
-        		w.getRelative(0,2,0).getFront().setType(Material.STONE_BRICK_WALL);
-        		w.getRelative(0,2,0).getFront().CorrectMultipleFacing(1);
+        		.apply(w.getUp().getFront());
+        		w.getUp(2).getFront().setType(Material.STONE_BRICK_WALL);
+        		w.getUp(2).getFront().CorrectMultipleFacing(1);
 
         		new StairBuilder(Material.DARK_OAK_STAIRS)
         		.setFacing(w.getDirection())
-        		.apply(w.getRelative(0,1,0));
+        		.apply(w.getUp());
         		
         		//Edit stairs on the left and right
 
         		new StairBuilder(Material.DARK_OAK_STAIRS)
         		.setHalf(Half.TOP)
         		.setFacing(BlockUtils.getLeft(w.getDirection()))
-        		.apply(w.getRelative(0,5,0).getLeft())
-        		.apply(w.getRelative(0,4,0).getLeft(2))
+        		.apply(w.getUp(5).getLeft())
+        		.apply(w.getUp(4).getLeft(2))
         		.setFacing(BlockUtils.getRight(w.getDirection()))
-        		.apply(w.getRelative(0,5,0).getRight())
-        		.apply(w.getRelative(0,4,0).getRight(2));
+        		.apply(w.getUp(5).getRight())
+        		.apply(w.getUp(4).getRight(2));
 
-        		w.getRelative(0,6,0).getFront().setType(Material.STONE_BRICK_SLAB);
+        		w.getUp(6).getFront().setType(Material.STONE_BRICK_SLAB);
         	}
         	
         	

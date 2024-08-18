@@ -15,6 +15,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.noise.FastNoise;
 
 import java.util.ArrayList;
@@ -173,34 +174,49 @@ public class GenUtils {
     	}
     }
 
-    public static Material weightedRandomMaterial(@NotNull Random rand, Object @NotNull ... candidates) {
+    public static Object weightedChoice(@NotNull Random rand, Object @NotNull ... candidates) {
         if(candidates.length % 2 != 0) throw new IllegalArgumentException();
-        ArrayList<Material> types = new ArrayList<>(50);
-        for(int i = 0; i < candidates.length; i++) {
-            Material type = (Material) candidates[i++];
-            int freq = (int) candidates[i];
+        ArrayList<Object> types = new ArrayList<>(50);
+        for(int i = 0; i < candidates.length; i+=2) {
+            Object type = candidates[i];
+            int freq = (int) candidates[i+1];
             for(int z = 0; z < freq; z++) types.add(type);
         }
 
         return types.get(randInt(rand, 0, types.size() - 1));
     }
 
-    public static Material randMaterial(@NotNull Random rand, Material @NotNull ... candidates) {
+    public static PlantBuilder weightedRandomSmallItem(@NotNull Random rand, Object @NotNull ... candidates) {
+        return (PlantBuilder) weightedChoice(rand, candidates);
+    }
+
+    public static Material weightedRandomMaterial(@NotNull Random rand, Object @NotNull ... candidates) {
+        return (Material) weightedChoice(rand, candidates);
+    }
+
+    @SafeVarargs
+    public static <T> T randChoice(@NotNull Random rand, T @NotNull ... candidates) {
         if(candidates.length == 1) return candidates[0]; //avoid invocation to randInt
         return candidates[randInt(rand, 0, candidates.length - 1)];
     }
 
-    public static Material randMaterial(Material... candidates) {
-        return randMaterial(RANDOMIZER, candidates);
+    @SafeVarargs
+    public static <T> T randChoice(T... candidates) {
+        return randChoice(RANDOMIZER, candidates);
     }
-    public static Material randMaterial(@NotNull EnumSet<Material> candidates) {
-    	Material[] temp = new Material[candidates.size()];
-    	int pointer = 0;
-    	for(Material candidate:candidates) {
-    		temp[pointer] = candidate;
-    		pointer++;
-    	}
-        return randMaterial(RANDOMIZER, temp);
+
+    public static <T extends Enum<T>> T randChoice(@NotNull EnumSet<T> candidates) {
+        int index = randInt(RANDOMIZER, 0, candidates.size() - 1);
+        int i = 0;
+        for (T candidate : candidates) {
+            if (i == index) {
+                return candidate;
+            }
+            i++;
+        }
+
+        // This should never happen due to EnumSet constraints
+        throw new IllegalArgumentException("EnumSet is empty");
     }
 
     public static int[] randomSurfaceCoordinates(@NotNull Random rand, @NotNull PopulatorDataAbstract data) {

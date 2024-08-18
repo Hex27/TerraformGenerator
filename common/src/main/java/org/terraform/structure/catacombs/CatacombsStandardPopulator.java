@@ -57,9 +57,9 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
 //            	//Flooring
             	if(rand.nextInt(5) < 4)
-            		data.setType(x,y,z,GenUtils.randMaterial(CatacombsPathPopulator.pathMaterial));
+            		data.setType(x,y,z,GenUtils.randChoice(CatacombsPathPopulator.pathMaterial));
             	else if(!data.getType(x, y, z).isSolid()) {
-            		data.setType(x,y,z,GenUtils.randMaterial(Material.STONE, Material.ANDESITE, Material.CRACKED_STONE_BRICKS));
+            		data.setType(x,y,z,GenUtils.randChoice(Material.STONE, Material.ANDESITE, Material.CRACKED_STONE_BRICKS));
             	}
             	
             	//Ceiling is a fuzzed dome.

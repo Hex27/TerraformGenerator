@@ -27,7 +27,7 @@ public class DarkForestBeachHandler extends BiomeHandler {
         return new Material[]{
         		Material.COARSE_DIRT,
                 Material.COARSE_DIRT,
-                GenUtils.randMaterial(rand, Material.STONE, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT),
+                GenUtils.randChoice(rand, Material.STONE, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT),
                 Material.STONE,
                 Material.STONE
                 };

@@ -24,6 +24,8 @@ public class SaplingOverrider implements Listener {
     */
     @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTreeGrow(@NotNull StructureGrowEvent event) {
+        if (!TConfigOption.areTreesEnabled()) return;
+
         if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
         TerraformWorld tw = TerraformWorld.get(event.getWorld());
         PopulatorDataPostGen data = new PopulatorDataPostGen(event.getLocation().getChunk());

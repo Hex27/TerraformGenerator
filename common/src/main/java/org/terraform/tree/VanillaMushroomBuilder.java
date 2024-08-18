@@ -9,6 +9,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.utils.GenUtils;
 
@@ -19,6 +20,8 @@ public class VanillaMushroomBuilder {
 	public static final String BROWN_MUSHROOM_CAP = "brownmushroomcap";
 	
 	public static void buildVanillaMushroom(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z, String capSchematic) {
+        if ( !TConfigOption.areTallMushroomsEnabled()) return;
+
 		Random rand = tw.getRand(16L * 16 * x + 16L * y + z);
 		
 		int height = GenUtils.randInt(rand, 5, 7);

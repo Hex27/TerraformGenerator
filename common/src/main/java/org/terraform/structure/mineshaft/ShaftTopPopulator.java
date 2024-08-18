@@ -32,15 +32,15 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 //Use scaffolding instead of fences for top area
-                if (b.getRelative(0, -1, 0).getType() == Material.OAK_FENCE) {
+                if (b.getDown().getType() == Material.OAK_FENCE) {
                     //Find lowest block
-                    while (b.getRelative(0, -1, 0).getType() == Material.OAK_FENCE) {
-                        b = b.getRelative(0, -1, 0);
+                    while (b.getDown().getType() == Material.OAK_FENCE) {
+                        b = b.getDown();
                     }
                     //Start replacing upwards
                     while (b.getY() <= y) {
                         b.setType(Material.SCAFFOLDING);
-                        b = b.getRelative(0, 1, 0);
+                        b = b.getUp();
                     }
                 }
             }

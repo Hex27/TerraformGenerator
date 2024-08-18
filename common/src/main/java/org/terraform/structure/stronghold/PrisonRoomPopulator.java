@@ -30,7 +30,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
     private static void dangleIronBarsDown(Random rand, int length, @NotNull SimpleBlock base) {
         for (int i = 0; i < length; i++) {
             base.setType(Material.CHAIN);
-            base = base.getRelative(0, -1, 0);
+            base = base.getDown();
         }
     }
 
@@ -121,7 +121,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
 
             //Remove wall at that area.
             w.getRear().getRelative(0, room.getHeight() / 2, 0).setType(Material.AIR);
-            BlockUtils.correctSurroundingMultifacingData(w.getRear().getRelative(0, 1, 0).get());
+            BlockUtils.correctSurroundingMultifacingData(w.getRear().getUp().get());
 
             for (int i = 0; i < room.getHeight() / 2; i++) {
                 w.Pillar(room.getHeight() / 2 - i, rand, BlockUtils.stoneBricks);
@@ -152,7 +152,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
             for (int i = 0; i < entry.getValue(); i++) {
 
                 if (i == entry.getValue() / 2) { //Entrance
-                    w.getRelative(0, 3, 0).LPillar(room.getHeight() / 2 - 2, rand, BlockUtils.stoneBricks);
+                    w.getUp(3).LPillar(room.getHeight() / 2 - 2, rand, BlockUtils.stoneBricks);
 
                     //chance for skeletons
                     if (rand.nextBoolean())

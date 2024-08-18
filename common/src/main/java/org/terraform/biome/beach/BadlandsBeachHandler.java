@@ -27,9 +27,9 @@ public class BadlandsBeachHandler extends BiomeHandler {
         return new Material[]{
                 Material.RED_SAND,
                 Material.RED_SAND,
-                GenUtils.randMaterial(rand, Material.RED_SAND, Material.RED_SANDSTONE),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.RED_SAND, Material.RED_SANDSTONE),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE)};
     }
 
     @Override

@@ -51,7 +51,7 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
             if (GenUtils.chance(random, 1, 5)) {
                 new DirectionalBuilder(Material.AMETHYST_CLUSTER)
                 .setFacing(BlockFace.DOWN)
-                .apply(ceil.getRelative(0,-1,0));
+                .apply(ceil.getDown());
             }
         }
 
@@ -68,10 +68,10 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
             if (GenUtils.chance(random, 1, 5)) {
                 new DirectionalBuilder(Material.AMETHYST_CLUSTER)
                 .setFacing(BlockFace.UP)
-                .apply(floor.getRelative(0,1,0));
+                .apply(floor.getUp());
             }else if(GenUtils.chance(random, 1, 20)) { //Calcite Pillars
             	floor.setType(Material.CALCITE);
-            	floor.getRelative(0,1,0).LPillar(2*caveHeight, new Random(), Material.CALCITE);
+            	floor.getUp().LPillar(2*caveHeight, new Random(), Material.CALCITE);
             }
         }
         
@@ -94,7 +94,7 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
         			}
         		}
         	}
-        	target = target.getRelative(0,1,0);
+        	target = target.getUp();
         }
 
         //=========================
@@ -104,7 +104,7 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
         if(d instanceof PopulatorDataICABiomeWriterAbstract data) {
             while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), CustomBiomeType.CRYSTALLINE_CLUSTER, Biome.DRIPSTONE_CAVES);
-        		floor = floor.getRelative(0,1,0);
+        		floor = floor.getUp();
         	}
         }
     }

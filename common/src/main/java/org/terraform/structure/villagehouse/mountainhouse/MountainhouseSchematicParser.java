@@ -33,7 +33,7 @@ public class MountainhouseSchematicParser extends SchematicParser {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "cobblestone",
-                            GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.ANDESITE, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS, Material.COBBLESTONE, Material.ANDESITE)
+                            GenUtils.randChoice(rand, Material.COBBLESTONE, Material.ANDESITE, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS, Material.COBBLESTONE, Material.ANDESITE)
                                     .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
@@ -43,7 +43,7 @@ public class MountainhouseSchematicParser extends SchematicParser {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "bricks",
-                            GenUtils.randMaterial(rand, Material.BRICKS, Material.GRANITE, Material.POLISHED_GRANITE)
+                            GenUtils.randChoice(rand, Material.BRICKS, Material.GRANITE, Material.POLISHED_GRANITE)
                                     .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
@@ -53,7 +53,7 @@ public class MountainhouseSchematicParser extends SchematicParser {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "white_concrete",
-                            GenUtils.randMaterial(rand, Material.WHITE_CONCRETE, Material.WHITE_CONCRETE, Material.WHITE_WOOL, Material.DIORITE, Material.DIORITE)
+                            GenUtils.randChoice(rand, Material.WHITE_CONCRETE, Material.WHITE_CONCRETE, Material.WHITE_WOOL, Material.DIORITE, Material.DIORITE)
                                     .toString().toLowerCase(Locale.ENGLISH)
                     )
             );

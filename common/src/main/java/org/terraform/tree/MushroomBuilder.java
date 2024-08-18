@@ -185,7 +185,7 @@ public class MushroomBuilder {
         }
     }
 
-    public void spawnSphericalCap(int seed, float r, float ry, @NotNull SimpleBlock base, boolean hardReplace, Material... type) {
+    private void spawnSphericalCap(int seed, float r, float ry, @NotNull SimpleBlock base, boolean hardReplace, Material... type) {
         Random rand = new Random(seed);
         //FastNoise noise = new FastNoise(seed);
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
@@ -213,7 +213,7 @@ public class MushroomBuilder {
                             && equationResult >= lowThreshold) {
 
                         if (hardReplace || !rel.getType().isSolid()) {
-                            rel.setType(GenUtils.randMaterial(rand, type));
+                            rel.setType(GenUtils.randChoice(rand, type));
                             BlockUtils.correctSurroundingMushroomData(rel);
                         }
                     }
@@ -223,6 +223,8 @@ public class MushroomBuilder {
     }
 
     public void build(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if (!TConfigOption.areTallMushroomsEnabled()) return;
+
         if(TConfigOption.DEVSTUFF_VANILLA_MUSHROOMS.getBoolean()) {
         	String schemName;
         	if(this.type.toString().contains("RED"))
@@ -271,7 +273,7 @@ public class MushroomBuilder {
         }
     }
 
-    public void createStem(@NotNull SimpleBlock base, double tilt, double yaw, double thickness, double length) {
+    private void createStem(@NotNull SimpleBlock base, double tilt, double yaw, double thickness, double length) {
         int totalSegments = (int) (length * segmentFactor);
         // If only one block wide, only place one block per y level = looks more natural
         boolean oneBlockWide = thickness == 0;
@@ -320,7 +322,7 @@ public class MushroomBuilder {
                 for (int z = Math.round(-r); z <= Math.round(r); z++) {
                     // Replace blocks in the middle
                     if (stemTop.getRelative(0, y, 0).getType() == stemType)
-                        stemTop.getRelative(0, y, 0).setType(GenUtils.randMaterial(rand, type));
+                        stemTop.getRelative(0, y, 0).setType(GenUtils.randChoice(rand, type));
 
                     double distToCenter = Math.sqrt(x * x + z * z) / r;
 
@@ -337,7 +339,7 @@ public class MushroomBuilder {
 
                     if (equationResult <= 1) {
                         if (hardReplace || !rel.getType().isSolid()) {
-                            rel.setType(GenUtils.randMaterial(rand, type));
+                            rel.setType(GenUtils.randChoice(rand, type));
                             BlockUtils.correctSurroundingMushroomData(rel);
                         }
                     }
@@ -363,11 +365,11 @@ public class MushroomBuilder {
 
                 while (true) {
                     if (pointBase.getType().isSolid()) {
-                        if (BlockUtils.isAir(pointBase.getRelative(0, -1, 0).getType()))
-                            pointBase.getRelative(0, -1, 0).setType(Material.MUSHROOM_STEM);
+                        if (BlockUtils.isAir(pointBase.getDown().getType()))
+                            pointBase.getDown().setType(Material.MUSHROOM_STEM);
                         continue points;
                     } else {
-                        pointBase = pointBase.getRelative(0, 1, 0);
+                        pointBase = pointBase.getUp();
                     }
 
                     if (pointBase.getY() > heightLimit) {
@@ -378,47 +380,47 @@ public class MushroomBuilder {
         }
     }
 
-    public @NotNull MushroomBuilder setBaseThickness(float baseThickness) {
+    private @NotNull MushroomBuilder setBaseThickness(float baseThickness) {
         this.baseThickness = baseThickness;
         return this;
     }
 
-    public @NotNull MushroomBuilder setBaseHeight(int h) {
+    private @NotNull MushroomBuilder setBaseHeight(int h) {
         this.baseHeight = h;
         return this;
     }
 
-    public @NotNull MushroomBuilder setStemType(Material stemType) {
+    private @NotNull MushroomBuilder setStemType(Material stemType) {
         this.stemType = stemType;
         return this;
     }
 
-    public @NotNull MushroomBuilder setCapType(Material capType) {
+    private @NotNull MushroomBuilder setCapType(Material capType) {
         this.capType = capType;
         return this;
     }
 
-    public @NotNull MushroomBuilder setSpotType(Material spotType) {
+    private @NotNull MushroomBuilder setSpotType(Material spotType) {
         this.spotType = spotType;
         return this;
     }
 
-    public @NotNull MushroomBuilder setMinTilt(double minTilt) {
+    private @NotNull MushroomBuilder setMinTilt(double minTilt) {
         this.minTilt = minTilt;
         return this;
     }
 
-    public @NotNull MushroomBuilder setMaxTilt(double maxTilt) {
+    private @NotNull MushroomBuilder setMaxTilt(double maxTilt) {
         this.maxTilt = maxTilt;
         return this;
     }
 
-    public @NotNull MushroomBuilder setCapRadius(float capRadius) {
+    private @NotNull MushroomBuilder setCapRadius(float capRadius) {
         this.capRadius = capRadius;
         return this;
     }
 
-    public @NotNull MushroomBuilder setCapYOffset(int capYOffset) {
+    private @NotNull MushroomBuilder setCapYOffset(int capYOffset) {
         this.capYOffset = capYOffset;
         return this;
     }
@@ -429,7 +431,7 @@ public class MushroomBuilder {
      * Default value is 2.0. Generally you want to touch this only if
      * your mushroom is **very** curvy.
      */
-    public @NotNull MushroomBuilder setSegmentFactor(float segmentFactor) {
+    private @NotNull MushroomBuilder setSegmentFactor(float segmentFactor) {
         this.segmentFactor = segmentFactor;
         return this;
     }
@@ -443,7 +445,7 @@ public class MushroomBuilder {
      * The start and end points of the curve will always
      * be (0, 0) and (1, 1), so control points should be close by.
      */
-    public @NotNull MushroomBuilder setStemCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
+    private @NotNull MushroomBuilder setStemCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
         this.curvatureControlPoint1 = controlPoint1;
         this.curvatureControlPoint2 = controlPoint2;
         return this;
@@ -452,7 +454,7 @@ public class MushroomBuilder {
     /**
      * @see MushroomBuilder#setStemCurve(Vector2f, Vector2f)
      */
-    public @NotNull MushroomBuilder setStemCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+    private @NotNull MushroomBuilder setStemCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
         return setStemCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
     }
 
@@ -462,7 +464,7 @@ public class MushroomBuilder {
      * level the width of the stem will be (width + 2 * thicknessIncrement).
      * @param thicknessIncrement Thickness increment towards the ground.
      */
-    public @NotNull MushroomBuilder setThicknessIncrement(double thicknessIncrement) {
+    private @NotNull MushroomBuilder setThicknessIncrement(double thicknessIncrement) {
         this.thicknessIncrement = thicknessIncrement;
         return this;
     }
@@ -476,7 +478,7 @@ public class MushroomBuilder {
      * <p>
      * The curve is linear by default (=both control points are (0.5, 0.5))
      */
-    public @NotNull MushroomBuilder setThicknessIncrementCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
+    private @NotNull MushroomBuilder setThicknessIncrementCurve(Vector2f controlPoint1, Vector2f controlPoint2) {
         this.thicknessControlPoint1 = controlPoint1;
         this.thicknessControlPoint2 = controlPoint2;
         return this;
@@ -485,16 +487,16 @@ public class MushroomBuilder {
     /**
      * @see MushroomBuilder#setThicknessIncrementCurve(Vector2f, Vector2f)
      */
-    public @NotNull MushroomBuilder setThicknessIncrementCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+    private @NotNull MushroomBuilder setThicknessIncrementCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
         return setThicknessIncrementCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
     }
 
-    public @NotNull MushroomBuilder setCapShape(FractalTypes.MushroomCap capShape) {
+    private @NotNull MushroomBuilder setCapShape(FractalTypes.MushroomCap capShape) {
         this.capShape = capShape;
         return this;
     }
 
-    public @NotNull MushroomBuilder setFourAxisRotationOnly(boolean fourAxisRotationOnly) {
+    private @NotNull MushroomBuilder setFourAxisRotationOnly(boolean fourAxisRotationOnly) {
         this.fourAxisRotationOnly = fourAxisRotationOnly;
         return this;
     }

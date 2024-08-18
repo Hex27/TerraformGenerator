@@ -46,7 +46,7 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     		if(!pieces.containsKey(otherLoc)) {
     			//This is likely to be a window. However, do checks to ensure that this 
     			//isn't the main entrance or a balcony entrance.
-    			SimpleBlock center = this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0);
+    			SimpleBlock center = this.getRoom().getCenterSimpleBlock(data).getUp();
     			if(center.getRelative(face,5).getType().isSolid())
     				this.internalWalls.put(face, MansionInternalWallState.WINDOW);
     			else
@@ -85,14 +85,14 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     			
     			new SlabBuilder(Material.DARK_OAK_SLAB)
     			.setType(Type.TOP)
-    			.apply(center.getRelative(0,5,0));
+    			.apply(center.getUp(5));
     			
     			new StairBuilder(Material.DARK_OAK_STAIRS)
     			.setHalf(Half.TOP)
     			.setFacing(BlockUtils.getLeft(center.getDirection()))
-    			.apply(center.getRelative(0,4,0).getLeft(2))
+    			.apply(center.getUp(4).getLeft(2))
     			.setFacing(BlockUtils.getRight(center.getDirection()))
-    			.apply(center.getRelative(0,4,0).getRight(2));
+    			.apply(center.getUp(4).getRight(2));
     			
     			center.getLeft(3).Pillar(this.getRoom().getHeight(), Material.DARK_OAK_LOG);
     			center.getRight(3).Pillar(this.getRoom().getHeight(), Material.DARK_OAK_LOG);
@@ -166,19 +166,19 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
     			continue;
     		switch(this.internalWalls.get(face)) {
 			case EXIT:
-				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0), face.getOppositeFace());
+				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getUp(), face.getOppositeFace());
     			this.roomPopulator.decorateExit(random, target.getRear(4));
 				break;
 			case ROOM_ENTRANCE:
-				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0), face.getOppositeFace());
+				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getUp(), face.getOppositeFace());
 				this.roomPopulator.decorateEntrance(random, target.getRear(3));
 				break;
 			case SOLID:
-				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0), face.getOppositeFace());
+				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getUp(), face.getOppositeFace());
 				this.roomPopulator.decorateWall(random, target.getRear(3));
 				break;
 			case WINDOW:
-				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getRelative(0,1,0), face.getOppositeFace());
+				target = new Wall(this.getRoom().getCenterSimpleBlock(data).getUp(), face.getOppositeFace());
     			this.roomPopulator.decorateWindow(random, target.getRear(4));
 				break;
     		}
@@ -214,8 +214,8 @@ public abstract class MansionStandardRoomPiece extends JigsawStructurePiece {
 		while(limit > 0 &&
 				((target.getType() != Material.AIR
 						&& target.getType() != Material.RED_CARPET)
-						|| (target.getRelative(0,1,0).getType() != Material.AIR))) {
-			target = target.getRelative(dir).getRelative(0,1,0);
+						|| (target.getUp().getType() != Material.AIR))) {
+			target = target.getRelative(dir).getUp();
 			limit--;
 		}
 		

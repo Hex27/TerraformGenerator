@@ -38,7 +38,7 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY(), z,
-                        GenUtils.randMaterial(
+                        GenUtils.randChoice(
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,

@@ -6,6 +6,7 @@ import org.bukkit.block.data.type.SeaPickle;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
 import org.terraform.utils.BlockUtils;
@@ -63,14 +64,18 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
             floor.setType(Material.MYCELIUM);
 
             //chance to set small mushshrooms
-            if(GenUtils.chance(rand, 7, 100))
-                floor.getUp().lsetType(Material.RED_MUSHROOM,Material.BROWN_MUSHROOM);
+            if(GenUtils.chance(rand, 7, 100)) {
+                SimpleBlock up = floor.getUp();
+                if (!up.isSolid())
+                    PlantBuilder.build(up, PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
+            }
+
             return;
         }
 
         //sea pickle
         if (BlockUtils.isWet(floor.getUp()) && GenUtils.chance(rand, 7, 100)) {
-            SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
+            SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE); // TODO: PlantBuilder
             sp.setPickles(GenUtils.randInt(3, 4));
             floor.getUp().setBlockData(sp);
         }
@@ -94,7 +99,7 @@ public class MushroomCavePopulator extends GenericLargeCavePopulator {
             int h = GenUtils.randInt(rand, (int) (height/2.5f), (int) ((3f / 2f) * (height/2.5f)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(ceil.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
-                    .makeSpike(rand, ceil, r, h, false);
+                    .makeSpike(ceil, r, h, false);
         }
 
         //Check boundaries - the mushrooms are huge and will cut into bordering areas

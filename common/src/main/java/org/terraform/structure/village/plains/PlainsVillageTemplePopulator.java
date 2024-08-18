@@ -50,9 +50,9 @@ public class PlainsVillageTemplePopulator extends PlainsVillageAbstractRoomPopul
             if (!placedLamp && GenUtils.chance(this.rand, 3, 5)) {
                 SimpleBlock target;
                 if (this.rand.nextBoolean())
-                    target = entrance.getLeft(2).getGround().getRelative(0, 1, 0).get();
+                    target = entrance.getLeft(2).getGround().getUp().get();
                 else
-                    target = entrance.getRight(2).getGround().getRelative(0, 1, 0).get();
+                    target = entrance.getRight(2).getGround().getUp().get();
                 if (PlainsVillagePathPopulator.canPlaceLamp(target)) {
                     placedLamp = true;
                     PlainsVillagePathPopulator.placeLamp(rand, target);

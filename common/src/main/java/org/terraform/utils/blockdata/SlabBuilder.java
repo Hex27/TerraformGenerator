@@ -17,7 +17,7 @@ public class SlabBuilder {
     }
 
     public SlabBuilder(Material... mat) {
-        this.blockData = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Slab) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 

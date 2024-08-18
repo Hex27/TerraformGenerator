@@ -23,7 +23,7 @@ public class StairBuilder {
     }
 
     public StairBuilder(Material... mat) {
-        this.blockData = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 

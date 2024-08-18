@@ -61,8 +61,8 @@ public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator 
 		OrientableBuilder builder = new OrientableBuilder(Material.DARK_OAK_LOG);
 		builder.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())));
 		for(int i = 0; i <= 4; i++) {
-			builder.lapply(w.getRelative(0,6,0).getLeft(i));
-			builder.lapply(w.getRelative(0,6,0).getRight(i));
+			builder.lapply(w.getUp(6).getLeft(i));
+			builder.lapply(w.getUp(6).getRight(i));
 		}
 	}
 
@@ -71,7 +71,7 @@ public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator 
 		decorateExit(rand, w); //same code to join the top to the ceiling decor
 		
 		//Pillars to connect ceiling decor to ground (less square)
-		w = w.getRelative(0,6,0).getRight(4);
+		w = w.getUp(6).getRight(4);
 		for(int i = 0; i <= 8; i++) {
 			if(w.getFront().getType() == Material.POLISHED_ANDESITE_STAIRS) {
 				w.downPillar(rand, 7, Material.DARK_OAK_LOG);
@@ -87,12 +87,12 @@ public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator 
 		
 		
 		PaintingUtils.placePainting(
-				w.getRelative(0,2,0).get(), 
+				w.getUp(2).get(), 
 				w.getDirection(), 
 				PaintingUtils.getArtFromDimensions(rand, 4, 4));
 	
 		
-		w = w.getRelative(0,6,0).getRight(4);
+		w = w.getUp(6).getRight(4);
 		for(int i = 0; i <= 8; i++) {
 			if(w.getType() == Material.POLISHED_ANDESITE_STAIRS) {
 				w.getRear().downPillar(rand, 7, Material.DARK_OAK_LOG);

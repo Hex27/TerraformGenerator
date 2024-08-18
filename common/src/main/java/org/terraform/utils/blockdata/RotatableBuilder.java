@@ -19,7 +19,7 @@ public class RotatableBuilder {
     }
 
     public RotatableBuilder(Material... mat) {
-        this.blockData = (Rotatable) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Rotatable) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 

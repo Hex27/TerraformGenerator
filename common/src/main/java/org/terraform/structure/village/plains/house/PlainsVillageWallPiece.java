@@ -33,24 +33,24 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
     public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
-        Wall w = entry.getKey().getRelative(0, -1, 0);
+        Wall w = entry.getKey().getDown();
         for (int i = 0; i < entry.getValue(); i++) {
-            w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+            w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(2, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
             if (this.var == PlainsVillageHouseVariant.CLAY)
-                w.getRelative(0, 2, 0).Pillar(2, rand, Material.WHITE_TERRACOTTA);
+                w.getUp(2).Pillar(2, rand, Material.WHITE_TERRACOTTA);
             else
-                w.getRelative(0, 2, 0).Pillar(2, rand, plainsVillagePopulator.woodPlank);
+                w.getUp(2).Pillar(2, rand, plainsVillagePopulator.woodPlank);
 
             w = w.getLeft();
         }
-        w.getRight(2).getRelative(0, 2, 0).setType(plainsVillagePopulator.woodLog);
-        w.getRight(3).getRelative(0, 2, 0).setType(Material.GLASS_PANE);
-        w.getRight(4).getRelative(0, 2, 0).setType(plainsVillagePopulator.woodLog);
-        BlockUtils.correctSurroundingMultifacingData(w.getRight(3).getRelative(0, 2, 0).get());
+        w.getRight(2).getUp(2).setType(plainsVillagePopulator.woodLog);
+        w.getRight(3).getUp(2).setType(Material.GLASS_PANE);
+        w.getRight(4).getUp(2).setType(plainsVillagePopulator.woodLog);
+        BlockUtils.correctSurroundingMultifacingData(w.getRight(3).getUp(2).get());
 
-        w = w.getRight(3).getFront().getRelative(0, 1, 0);
+        w = w.getRight(3).getFront().getUp();
 
         //Variant Wooden
         Material[] slabType = {plainsVillagePopulator.woodSlab};
@@ -73,17 +73,17 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
         new SlabBuilder(slabType)
                 .setType(Slab.Type.TOP)
-                .apply(w.getRelative(0, 2, 0));
+                .apply(w.getUp(2));
 
         new SlabBuilder(slabType)
                 .setType(Slab.Type.BOTTOM)
-                .apply(w.getRelative(0, 2, 0).getLeft())
-                .apply(w.getRelative(0, 2, 0).getRight());
+                .apply(w.getUp(2).getLeft())
+                .apply(w.getUp(2).getRight());
 
-        w.getRelative(0, 1, 0).getLeft().setType(fenceType);
-        w.getRelative(0, 1, 0).getLeft().CorrectMultipleFacing(1);
-        w.getRelative(0, 1, 0).getRight().setType(fenceType);
-        w.getRelative(0, 1, 0).getRight().CorrectMultipleFacing(1);
+        w.getUp().getLeft().setType(fenceType);
+        w.getUp().getLeft().CorrectMultipleFacing(1);
+        w.getUp().getRight().setType(fenceType);
+        w.getUp().getRight().CorrectMultipleFacing(1);
 
         w.getLeft().setType(baseType);
         w.getRight().setType(baseType);
@@ -94,15 +94,15 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
             trapdoor.setFacing(w.getDirection());
             trapdoor.setOpen(true);
             w.getFront().setBlockData(trapdoor);
-            w.getRelative(0, 1, 0).setType(BlockUtils.pickFlower());
+            BlockUtils.pickFlower().build(w.getUp());
         } else { //Stairs
             new StairBuilder(stairType).setFacing(w.getDirection().getOppositeFace())
                     .apply(w);
         }
 
-        w.getLeft().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-        w.getRight().getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-        w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        w.getLeft().getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        w.getRight().getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
     }
 

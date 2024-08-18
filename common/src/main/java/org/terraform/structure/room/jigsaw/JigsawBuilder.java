@@ -8,6 +8,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 

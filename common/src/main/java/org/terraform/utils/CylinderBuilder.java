@@ -134,19 +134,19 @@ public class CylinderBuilder {
     private boolean unitReplace(@NotNull SimpleBlock rel) {
     	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
-                rel.setType(GenUtils.randMaterial(random, types));
+                rel.setType(GenUtils.randChoice(random, types));
             }else
             	return false;
     	} else if(replaceWhitelist.contains(rel.getType())) {
-            rel.setType(GenUtils.randMaterial(random, types));
+            rel.setType(GenUtils.randChoice(random, types));
     	}
     	else
     		return false;
     	
     	if(upperType != null)
-    		rel.getRelative(0,1,0).lsetType(upperType);
-    	if(lowerType != null && rel.getRelative(0,-1,0).getType().isSolid())
-    		rel.getRelative(0,-1,0).setType(lowerType);
+    		rel.getUp().lsetType(upperType);
+    	if(lowerType != null && rel.getDown().getType().isSolid())
+    		rel.getDown().setType(lowerType);
     	
     	return true;
     }

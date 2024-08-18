@@ -8,6 +8,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -38,9 +39,9 @@ public class RiverHandler extends BiomeHandler {
         return new Material[]{
         		Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
 
@@ -80,17 +81,17 @@ public class RiverHandler extends BiomeHandler {
     }
     public static void generateSeagrass(int x, int y, int z, @NotNull PopulatorDataAbstract data) {
         if(data.getType(x,y,z) != Material.WATER) return;
-        data.setType(x,y,z,Material.SEAGRASS);
+        PlantBuilder.SEAGRASS.build(data, x,y,z);
 
     }
     public static void generateTallSeagrass(int x, int y, int z, @NotNull PopulatorDataAbstract data) {
         if(data.getType(x,y,z) != Material.WATER || data.getType(x,y,z) != Material.WATER) return;
-        BlockUtils.setDoublePlant(data, x,y,z, Material.TALL_SEAGRASS);
+        PlantBuilder.TALL_SEAGRASS.build(data, x,y,z);
     }
     private static void generateKelp(int x, int y, int z, @NotNull PopulatorDataAbstract data, Random random) {
         for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(5, 15); ny++) {
             if(data.getType(x,ny,z) != Material.WATER) break;
-            data.setType(x, ny, z, Material.KELP_PLANT);
+            PlantBuilder.KELP_PLANT.build(data, x,ny,z);
         }
     }
 

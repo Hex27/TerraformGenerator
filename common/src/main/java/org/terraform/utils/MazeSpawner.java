@@ -143,15 +143,15 @@ public class MazeSpawner {
             int realWorldX = cell.x * (mazePathWidth + mazePeriod);
             int realWorldZ = cell.z * (mazePathWidth + mazePeriod);
             Wall cellCore = new Wall(core.getRelative(realWorldX, 0, realWorldZ));
-            pathPopDatas.add(new PathPopulatorData(cellCore.getRelative(0, -1, 0).get(), BlockFace.UP, mazePathWidth, false));
+            pathPopDatas.add(new PathPopulatorData(cellCore.getDown().get(), BlockFace.UP, mazePathWidth, false));
 
             //Carve 1 cell
             for (int nx = -cellRadius; nx <= cellRadius; nx++) {
                 for (int nz = -cellRadius; nz <= cellRadius; nz++) {
                     cellCore.getRelative(nx, 0, nz).Pillar(mazeHeight, rand, Material.CAVE_AIR);
                     if (covered) {
-                        cellCore.getRelative(nx, mazeHeight, nz).setType(GenUtils.randMaterial(materials));
-                        cellCore.getRelative(nx, -1, nz).setType(GenUtils.randMaterial(materials));
+                        cellCore.getRelative(nx, mazeHeight, nz).setType(GenUtils.randChoice(materials));
+                        cellCore.getRelative(nx, -1, nz).setType(GenUtils.randChoice(materials));
                     }
                 }
             }
@@ -167,21 +167,21 @@ public class MazeSpawner {
                 //Carve Pathway
                 if (wallllllllless.contains(dir)) {
                     for (int i = 0; i < Math.ceil(((float) this.mazePeriod) / 2.0f); i++) {
-                        pathPopDatas.add(new PathPopulatorData(startPoint.getRelative(0, -1, 0).get(), dir, mazePathWidth, false));
+                        pathPopDatas.add(new PathPopulatorData(startPoint.getDown().get(), dir, mazePathWidth, false));
 
                         startPoint.Pillar(mazeHeight, rand, Material.CAVE_AIR);
                         if (covered) {
-                            startPoint.getRelative(0, mazeHeight, 0).setType(GenUtils.randMaterial(materials));
-                            startPoint.getRelative(0, -1, 0).setType(GenUtils.randMaterial(materials));
+                            startPoint.getRelative(0, mazeHeight, 0).setType(GenUtils.randChoice(materials));
+                            startPoint.getDown().setType(GenUtils.randChoice(materials));
                         }
                         for (int w = 1; w <= cellRadius; w++) {
                             startPoint.getLeft(w).Pillar(mazeHeight, rand, Material.CAVE_AIR);
                             startPoint.getRight(w).Pillar(mazeHeight, rand, Material.CAVE_AIR);
                             if (covered) {
-                                startPoint.getLeft(w).getRelative(0, -1, 0).setType(GenUtils.randMaterial(materials));
-                                startPoint.getRight(w).getRelative(0, -1, 0).setType(GenUtils.randMaterial(materials));
-                                startPoint.getLeft(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randMaterial(materials));
-                                startPoint.getRight(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randMaterial(materials));
+                                startPoint.getLeft(w).getDown().setType(GenUtils.randChoice(materials));
+                                startPoint.getRight(w).getDown().setType(GenUtils.randChoice(materials));
+                                startPoint.getLeft(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randChoice(materials));
+                                startPoint.getRight(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randChoice(materials));
                             }
                         }
                         startPoint.getLeft(cellRadius + 1).Pillar(mazeHeight, rand, materials);

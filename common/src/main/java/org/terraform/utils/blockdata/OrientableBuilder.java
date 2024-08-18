@@ -18,7 +18,7 @@ public class OrientableBuilder {
     }
 
     public OrientableBuilder(Material... mat) {
-        this.blockData = (Orientable) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Orientable) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 

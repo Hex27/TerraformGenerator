@@ -102,8 +102,8 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 		w.getLeft(2).getRear().Pillar(7, Material.DARK_OAK_LOG);
 		w.getRight(2).getRear().Pillar(7, Material.DARK_OAK_LOG);
 		
-		w.getLeft(2).getRelative(0,4,0).setType(Material.POLISHED_ANDESITE_SLAB);
-		w.getRight(2).getRelative(0,4,0).setType(Material.POLISHED_ANDESITE_SLAB);
+		w.getLeft(2).getUp(4).setType(Material.POLISHED_ANDESITE_SLAB);
+		w.getRight(2).getUp(4).setType(Material.POLISHED_ANDESITE_SLAB);
 		
 		w.getUp(5).setType(Material.POLISHED_ANDESITE_SLAB);
 		new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)

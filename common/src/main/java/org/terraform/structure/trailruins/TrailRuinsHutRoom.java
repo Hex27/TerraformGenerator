@@ -25,7 +25,7 @@ public class TrailRuinsHutRoom extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        Material terracottaType = GenUtils.randMaterial(BlockUtils.TERRACOTTA);
+        Material terracottaType = GenUtils.randChoice(BlockUtils.TERRACOTTA);
         for(Map.Entry<Wall,Integer> entry:room.getFourWalls(data,1).entrySet())
         {
             Wall w = entry.getKey();

@@ -37,14 +37,14 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
                 new StairBuilder(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
                         .setFacing(w.getDirection().getOppositeFace())
                         .setHalf(Bisected.Half.TOP)
-                        .apply(w.getRelative(0, 4, 0));
-                w.getRelative(0, 5, 0).LPillar(room.getHeight(), rand, BlockUtils.stoneBricks);
-                if (!w.getRear().getRelative(0, 1, 0).getType().isSolid()) {
+                        .apply(w.getUp(4));
+                w.getUp(5).LPillar(room.getHeight(), rand, BlockUtils.stoneBricks);
+                if (!w.getRear().getUp().getType().isSolid()) {
                     wasAir = true;
-                    w.getRelative(0, 5, 0).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
+                    w.getUp(5).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
                 } else {
                     //Right or left wall is part of an entrance
-                    if (wasAir || !w.getLeft().getRear().getRelative(0, 1, 0).getType().isSolid()) {
+                    if (wasAir || !w.getLeft().getRear().getUp().getType().isSolid()) {
                         w.getRear().Pillar(5, rand, Material.STONE, Material.SMOOTH_STONE);
                     }
                     wasAir = false;
@@ -84,7 +84,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
 
             //Cobwebs
             if (GenUtils.chance(rand, 1, 5)) {
-                SimpleBlock webBase = ceil.getRelative(0, -1, 0);
+                SimpleBlock webBase = ceil.getDown();
                 webBase.setType(Material.COBWEB);
 
                 for (int j = 0; j < GenUtils.randInt(rand, 0, 3); j++) {
@@ -104,7 +104,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
             block.setType(Material.CAVE_AIR);
             int depth = 0;
             while (!block.getType().isSolid()) {
-                block = block.getRelative(0, -1, 0);
+                block = block.getDown();
                 depth++;
                 if (depth > 50) return;
             }
@@ -116,9 +116,9 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
             }
 
             if (GenUtils.chance(1, 3)) {
-                block.getRelative(0, 1, 0).setBlockData(BlockUtils.infestStone(type));
+                block.getUp().setBlockData(BlockUtils.infestStone(type));
             } else {
-                block.getRelative(0, 1, 0).setBlockData(type);
+                block.getUp().setBlockData(type);
             }
         }
     }

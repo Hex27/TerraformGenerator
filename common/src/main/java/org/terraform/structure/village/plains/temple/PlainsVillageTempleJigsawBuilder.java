@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.jigsaw.JigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
@@ -40,6 +41,8 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
 
     @Override
     public void build(@NotNull Random random) {
+        if ( !TConfigOption.areStructuresEnabled()) return;
+
         super.build(random);
 
         //Make sure awkward corners are fixed
@@ -153,23 +156,23 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
         //Corner and corner spires
         target.Pillar(5, random, BlockUtils.stoneBricks);
         
-        target.getRelative(0, -1, 0).downUntilSolid(random, cobblestone);
+        target.getDown().downUntilSolid(random, cobblestone);
 
-        target = target.getRelative(0, 1, 0);
+        target = target.getUp();
 
         //Areas next to the corner. Decorative.
         target.getRelative(one).Pillar(3, random, stoneBricks);
         new StairBuilder(Material.STONE_BRICK_STAIRS)
                 .setFacing(one.getOppositeFace())
-                .apply(target.getRelative(one).getRelative(0, 3, 0));
+                .apply(target.getRelative(one).getUp(3));
 
         target.getRelative(two).Pillar(3, random, stoneBricks);
         new StairBuilder(Material.STONE_BRICK_STAIRS)
                 .setFacing(two.getOppositeFace())
-                .apply(target.getRelative(two).getRelative(0, 3, 0));
+                .apply(target.getRelative(two).getUp(3));
 
         //Solid platform underneath in case of uneven ground.
-        target = target.getRelative(0, -1, 0);
+        target = target.getDown();
         target.getRelative(one).downUntilSolid(random, cobblestone);
         target.getRelative(two).downUntilSolid(random, cobblestone);
     }

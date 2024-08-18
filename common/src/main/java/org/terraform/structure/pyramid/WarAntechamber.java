@@ -34,7 +34,7 @@ public class WarAntechamber extends Antechamber {
         super.populate(data, room);
         //Decorate the walls with various banners
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
-            Wall w = entry.getKey().getRelative(0, 2, 0);
+            Wall w = entry.getKey().getUp(2);
             for (int i = 0; i < entry.getValue(); i++) {
 
                 if (w.getRear().getType().isSolid() && !w.getType().isSolid()
@@ -65,7 +65,7 @@ public class WarAntechamber extends Antechamber {
         }
 
         //Central Precious Block
-        w.getRelative(0, room.getHeight() / 2 - 1, 0).setType(GenUtils.randMaterial(rand,
+        w.getRelative(0, room.getHeight() / 2 - 1, 0).setType(GenUtils.randChoice(rand,
                 Material.GOLD_BLOCK,
                 Material.LAPIS_BLOCK,
                 Material.LAPIS_BLOCK,

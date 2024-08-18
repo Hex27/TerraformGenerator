@@ -44,7 +44,7 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         //int caveHeight = ceil.getY() - floor.getY();
 
         //Don't decorate wet areas
-        if(!BlockUtils.isWet(ceil.getRelative(0,-1,0))) {
+        if(!BlockUtils.isWet(ceil.getDown())) {
         	//Don't touch slabbed floors or stalagmites
             if (Tag.SLABS.isTagged(floor.getType()) ||
             		Tag.WALLS.isTagged(floor.getType()))
@@ -116,7 +116,7 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         			}
         		}
         	}
-        	target = target.getRelative(0,1,0);
+        	target = target.getUp();
         }
         
         //=========================
@@ -125,7 +125,7 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract data) {
             while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), OneOneNineBlockHandler.DEEP_DARK);
-        		floor = floor.getRelative(0,1,0);
+        		floor = floor.getUp();
         	}
         }
     }

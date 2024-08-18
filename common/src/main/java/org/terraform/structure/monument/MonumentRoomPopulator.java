@@ -83,7 +83,7 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
             Wall w = walls.getKey().getRelative(0, room.getHeight() - 1, 0);
             int length = walls.getValue();
             for (int j = 0; j < length; j++) {
-                if (!w.getRelative(0, 1, 0).getType().isSolid()) {
+                if (!w.getUp().getType().isSolid()) {
                     Stairs stair = (Stairs) Bukkit.createBlockData(design.stairs());
                     stair.setFacing(w.getDirection());
                     if (w.get().getY() < TerraformGenerator.seaLevel)
@@ -95,7 +95,7 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
                     if (room.getHeight() >= 16 && room.getWidthX() >= 10 && room.getWidthZ() >= 10) {
 
                         MonumentWallPattern.values()[rand.nextInt(MonumentWallPattern.values().length)]
-                                .apply(w.getRelative(0, -4, 0));
+                                .apply(w.getDown(4));
                     }
                 }
                 w = w.getLeft();
@@ -134,7 +134,7 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
                         if (j % 2 == 0) {
                             w.RPillar(4, rand, Material.PRISMARINE_WALL);
                         }
-                        w.getRelative(0, 4, 0).setType(design.slab());
+                        w.getUp(4).setType(design.slab());
                         w = w.getLeft();
                     }
                 }
@@ -151,8 +151,8 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
                     for (int j = 0; j < length; j++) {
                         if (j % 2 == 0) {
                             w.setType(design.mat(rand));
-                            w.getRelative(0, 1, 0).setType(Material.PRISMARINE_WALL);
-                            w.getRelative(0, 2, 0).setType(design.slab());
+                            w.getUp().setType(Material.PRISMARINE_WALL);
+                            w.getUp(2).setType(design.slab());
                         } else {
                             w.setType(design.slab());
                         }

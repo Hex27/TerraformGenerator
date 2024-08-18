@@ -8,6 +8,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -109,10 +110,10 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
 				BlockUtils.setDownUntilSolid(x, highest, z, data, Material.DIRT);
 
     			if(rand.nextBoolean()) {
-    				data.setType(x, highest, z, GenUtils.randMaterial(Material.PODZOL, Material.COARSE_DIRT, Material.GRASS_BLOCK));
+    				data.setType(x, highest, z, GenUtils.randChoice(Material.PODZOL, Material.COARSE_DIRT, Material.GRASS_BLOCK));
     			}else if(rand.nextBoolean()) {
     				if(!data.getType(x, highest+1, z).isSolid())
-	    				BlockUtils.setDoublePlant(data, x, highest+1, z, Material.TALL_GRASS);
+	    				PlantBuilder.TALL_GRASS.build(data, x, highest+1, z);
     			}
     		}
     	
@@ -129,7 +130,7 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     					Wall core = new Wall(new SimpleBlock(data, x,0,z),BlockUtils.getDirectBlockFace(rand));
 
 //    		            if(!areaFailedTolerance) {
-    		                core = core.getGroundOrSeaLevel().getRelative(0,1,0);
+    		                core = core.getGroundOrSeaLevel().getUp();
 //    		            }
 //    		            else
 //    		            	core.getAtY(roomY+1);
@@ -154,8 +155,8 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     					.setWaterlogged(true)
     					.apply(core).apply(core.getFront());
     					
-    					core.getRelative(0,-1,0).downUntilSolid(new Random(),Material.DIRT);
-    					core.getFront().getRelative(0,-1,0).downUntilSolid(new Random(),Material.DIRT);
+    					core.getDown().downUntilSolid(new Random(),Material.DIRT);
+    					core.getFront().getDown().downUntilSolid(new Random(),Material.DIRT);
     					break;
     				} else { //Haybales
     					SimpleBlock core = new SimpleBlock(data, x, roomY, z).findAirPocket(15);

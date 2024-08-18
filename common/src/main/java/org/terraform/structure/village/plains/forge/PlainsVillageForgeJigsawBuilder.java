@@ -113,16 +113,16 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
         	//Corner logs
             target.Pillar(4, random, plainsVillagePopulator.woodLog);
             
-            target.getRelative(0, -1, 0).downUntilSolid(random, plainsVillagePopulator.woodLog);
+            target.getDown().downUntilSolid(random, plainsVillagePopulator.woodLog);
 
-            target = target.getRelative(0, 1, 0);
+            target = target.getUp();
         }
         else
         {
         	//Fence stubs
             target.Pillar(2, random, plainsVillagePopulator.woodLog);
-            target.getRelative(0,2,0).setType(Material.STONE_SLAB,Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB);
-            target.getRelative(0, -1, 0).downUntilSolid(random,plainsVillagePopulator.woodLog);
+            target.getUp(2).setType(Material.STONE_SLAB,Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB);
+            target.getDown().downUntilSolid(random,plainsVillagePopulator.woodLog);
         }
         
     }

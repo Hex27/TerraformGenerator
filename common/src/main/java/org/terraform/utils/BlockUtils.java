@@ -32,6 +32,7 @@ import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
@@ -249,36 +250,34 @@ public class BlockUtils {
     //This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> glassPanes = EnumSet.noneOf(Material.class);
     
-    private static final Material[] TALL_FLOWER = {Material.LILAC, Material.ROSE_BUSH, Material.PEONY, Material.LARGE_FERN, Material.SUNFLOWER};
-    private static final Material[] FLOWER = {Material.DANDELION,
-            Material.POPPY,
-            Material.WHITE_TULIP,
-            Material.ORANGE_TULIP,
-            Material.RED_TULIP,
-            Material.PINK_TULIP,
-            Material.BLUE_ORCHID,
-            Material.ALLIUM,
-            Material.AZURE_BLUET,
-            Material.OXEYE_DAISY,
-            Material.CORNFLOWER,
-            Material.LILY_OF_THE_VALLEY,
-            Material.PINK_TULIP
+    private static final PlantBuilder[] TALL_FLOWER = {PlantBuilder.LILAC, PlantBuilder.ROSE_BUSH, PlantBuilder.PEONY, PlantBuilder.LARGE_FERN, PlantBuilder.SUNFLOWER};
+    private static final PlantBuilder[] FLOWER = {PlantBuilder.DANDELION,
+            PlantBuilder.POPPY,
+            PlantBuilder.WHITE_TULIP,
+            PlantBuilder.ORANGE_TULIP,
+            PlantBuilder.RED_TULIP,
+            PlantBuilder.PINK_TULIP,
+            PlantBuilder.BLUE_ORCHID,
+            PlantBuilder.ALLIUM,
+            PlantBuilder.AZURE_BLUET,
+            PlantBuilder.OXEYE_DAISY,
+            PlantBuilder.CORNFLOWER,
+            PlantBuilder.LILY_OF_THE_VALLEY,
     };
 
-    private static final Material[] POTTED = {
-            Material.POTTED_DANDELION,
-            Material.POTTED_POPPY,
-            Material.POTTED_WHITE_TULIP,
-            Material.POTTED_ORANGE_TULIP,
-            Material.POTTED_RED_TULIP,
-            Material.POTTED_PINK_TULIP,
-            Material.POTTED_BLUE_ORCHID,
-            Material.POTTED_ALLIUM,
-            Material.POTTED_AZURE_BLUET,
-            Material.POTTED_OXEYE_DAISY,
-            Material.POTTED_CORNFLOWER,
-            Material.POTTED_LILY_OF_THE_VALLEY,
-            Material.POTTED_PINK_TULIP
+    private static final PlantBuilder[] POTTED = {
+            PlantBuilder.POTTED_DANDELION,
+            PlantBuilder.POTTED_POPPY,
+            PlantBuilder.POTTED_WHITE_TULIP,
+            PlantBuilder.POTTED_ORANGE_TULIP,
+            PlantBuilder.POTTED_RED_TULIP,
+            PlantBuilder.POTTED_PINK_TULIP,
+            PlantBuilder.POTTED_BLUE_ORCHID,
+            PlantBuilder.POTTED_ALLIUM,
+            PlantBuilder.POTTED_AZURE_BLUET,
+            PlantBuilder.POTTED_OXEYE_DAISY,
+            PlantBuilder.POTTED_CORNFLOWER,
+            PlantBuilder.POTTED_LILY_OF_THE_VALLEY,
     };
 
     private static final Material[] CARPETS = {
@@ -493,11 +492,11 @@ public class BlockUtils {
     }
 
     public static Material stoneBrick(@NotNull Random rand) {
-        return GenUtils.randMaterial(rand, stoneBricks);
+        return GenUtils.randChoice(rand, stoneBricks);
     }
 
     public static Material stoneBrickSlab(@NotNull Random rand) {
-        return GenUtils.randMaterial(rand, stoneBrickSlabs);
+        return GenUtils.randChoice(rand, stoneBrickSlabs);
     }
 
     public static BlockFace getXZPlaneBlockFace(@NotNull Random rand) {
@@ -539,26 +538,26 @@ public class BlockUtils {
     }
 
     public static Material pickCarpet() {
-        return GenUtils.randMaterial(CARPETS);
+        return GenUtils.randChoice(CARPETS);
     }
     public static Material pickWool() {
-        return GenUtils.randMaterial(WOOLS);
+        return GenUtils.randChoice(WOOLS);
     }
 
     public static Material pickBed() {
-        return GenUtils.randMaterial(BED);
+        return GenUtils.randChoice(BED);
     }
 
-    public static Material pickFlower() {
-        return GenUtils.randMaterial(FLOWER);
+    public static PlantBuilder pickFlower() {
+        return GenUtils.randChoice(FLOWER);
     }
 
-    public static Material pickPottedPlant() {
-        return GenUtils.randMaterial(POTTED);
+    public static PlantBuilder pickPottedPlant() {
+        return GenUtils.randChoice(POTTED);
     }
 
-    public static Material pickTallFlower() {
-        return GenUtils.randMaterial(TALL_FLOWER);
+    public static PlantBuilder pickTallFlower() {
+        return GenUtils.randChoice(TALL_FLOWER);
     }
 
     public static void dropDownBlock(@NotNull SimpleBlock block) {
@@ -570,11 +569,11 @@ public class BlockUtils {
             block.setType(fluid);
             int depth = 0;
             while (!block.getType().isSolid()) {
-                block = block.getRelative(0, -1, 0);
+                block = block.getDown();
                 depth++;
                 if (depth > 50) return;
             }
-            block.getRelative(0, 1, 0).setType(type);
+            block.getUp().setType(type);
         }
     }
 
@@ -597,6 +596,8 @@ public class BlockUtils {
     }
 
     public static void setVines(@NotNull PopulatorDataAbstract data, int x, int y, int z, int maxLength) {
+        if ( !TConfigOption.arePlantsEnabled()) return;
+
         SimpleBlock rel = new SimpleBlock(data, x, y, z);
         for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
@@ -619,14 +620,14 @@ public class BlockUtils {
 
     public static void setDownUntilSolid(int x, int y, int z, @NotNull PopulatorDataAbstract data, Material... type) {
         while (!data.getType(x, y, z).isSolid()) {
-            data.setType(x, y, z, GenUtils.randMaterial(type));
+            data.setType(x, y, z, GenUtils.randChoice(type));
             y--;
         }
     }
 
     public static void downPillar(int x, int y, int z, int height, @NotNull PopulatorDataAbstract data, Material... type) {
         while (!data.getType(x, y, z).isSolid() && height > TerraformGeneratorPlugin.injector.getMinY()) {
-            data.setType(x, y, z, GenUtils.randMaterial(type));
+            data.setType(x, y, z, GenUtils.randChoice(type));
             height--;
             y--;
         }
@@ -645,10 +646,14 @@ public class BlockUtils {
     }
 
     public static void setPersistentLeaves(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if ( !TConfigOption.arePlantsEnabled()) return;
+
         setPersistentLeaves(data, x, y, z, Material.OAK_LEAVES);
     }
 
     public static void setPersistentLeaves(@NotNull PopulatorDataAbstract data, int x, int y, int z, @NotNull Material type) {
+        if ( !TConfigOption.arePlantsEnabled()) return;
+
         data.setType(x, y, z, Material.OAK_LEAVES);
         Leaves bd = (Leaves) Bukkit.createBlockData(type);
         bd.setPersistent(true);
@@ -656,6 +661,8 @@ public class BlockUtils {
     }
 
     public static void setDoublePlant(@NotNull PopulatorDataAbstract data, int x, int y, int z, @NotNull Material doublePlant) {
+        if ( !TConfigOption.arePlantsEnabled()) return;
+
         Bisected d = ((Bisected) Bukkit.createBlockData(doublePlant));
         d.setHalf(Half.BOTTOM);
         data.setBlockData(x, y, z, d);
@@ -692,6 +699,7 @@ public class BlockUtils {
     }
 
     public static int spawnPillar(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z, Material type, int minHeight, int maxHeight) {
+        // TODO: PlantBuilder
         int height = GenUtils.randInt(rand, minHeight, maxHeight);
         for (int i = 0; i < height; i++) data.setType(x, y + i, z, type);
         return height;
@@ -704,6 +712,8 @@ public class BlockUtils {
     }
 
     public static void vineUp(@NotNull SimpleBlock base, int maxLength) {
+        if (!TConfigOption.arePlantsEnabled()) return;
+
         for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
             dir.setFace(face.getOppositeFace(), true);
@@ -732,7 +742,7 @@ public class BlockUtils {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            base.setType(GenUtils.randMaterial(new Random(seed), type));
+            base.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
         
@@ -749,7 +759,7 @@ public class BlockUtils {
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
                     //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
-                    rel.lsetType(GenUtils.randMaterial(type));
+                    rel.lsetType(GenUtils.randChoice(type));
                 }
             }
         }
@@ -771,7 +781,7 @@ public class BlockUtils {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            base.setType(GenUtils.randMaterial(new Random(seed), type));
+            base.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
         
@@ -789,7 +799,7 @@ public class BlockUtils {
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
                     //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
-                    rel.setType(GenUtils.randMaterial(type));
+                    rel.setType(GenUtils.randChoice(type));
                     if(snowy && rel.getUp().isAir())
                     	rel.getUp().setType(Material.SNOW);
                 }
@@ -912,7 +922,7 @@ public class BlockUtils {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            block.setType(GenUtils.randMaterial(new Random(seed), type));
+            block.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
 
@@ -932,9 +942,9 @@ public class BlockUtils {
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                         if (hardReplace || !rel.getType().isSolid()) {
-                            rel.setType(GenUtils.randMaterial(rand, type));
+                            rel.setType(GenUtils.randChoice(rand, type));
                             if (snowy) {
-                                rel.getRelative(0, 1, 0).lsetType(Material.SNOW);
+                                rel.getUp().lsetType(Material.SNOW);
                             }
                         }
                     }
@@ -947,7 +957,7 @@ public class BlockUtils {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            block.setType(GenUtils.randMaterial(new Random(seed), type));
+            block.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
 
@@ -966,7 +976,7 @@ public class BlockUtils {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randMaterial(rand, type));
+                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randChoice(rand, type));
                         //rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
@@ -978,7 +988,7 @@ public class BlockUtils {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             //block.setReplaceType(ReplaceType.ALL);
-            block.setType(GenUtils.randMaterial(new Random(seed), type));
+            block.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
 
@@ -997,7 +1007,7 @@ public class BlockUtils {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randMaterial(rand, type));
+                        if (hardReplace || !rel.getType().isSolid()) rel.setType(GenUtils.randChoice(rand, type));
                         //rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
@@ -1295,8 +1305,8 @@ public class BlockUtils {
             SimpleBlock relative = target.getRelative(face);
             if (relative.getBlockData() instanceof Rail)
                 placeRail(relative, relative.getType());
-            if (target.getRelative(face).getRelative(0, -1, 0).getBlockData() instanceof Rail)
-                placeRail(relative.getRelative(0, -1, 0), target.getRelative(0, -1, 0).getRelative(face).getType());
+            if (target.getRelative(face).getDown().getBlockData() instanceof Rail)
+                placeRail(relative.getDown(), target.getDown().getRelative(face).getType());
         }
     }
 
@@ -1330,7 +1340,7 @@ public class BlockUtils {
                     start.getZ(),
                     start.getPopData(),
                     downTypes);
-            start = start.getRelative(extensionDir).getRelative(0, -1, 0);
+            start = start.getRelative(extensionDir).getDown();
         }
     }
     
@@ -1361,7 +1371,7 @@ public class BlockUtils {
                     start.getPopData(),
                     downTypes);
             threshold--;
-            start = start.getRelative(extensionDir).getRelative(0, -1, 0);
+            start = start.getRelative(extensionDir).getDown();
         }
     }
     
@@ -1403,6 +1413,8 @@ public class BlockUtils {
     	return false;
     }
     public static void placeCandle(@NotNull SimpleBlock block, int numCandles, boolean lit) {
+        if ( !TConfigOption.areDecorationsEnabled()) return;
+
         Candle candle = (Candle) Bukkit.createBlockData(Material.CANDLE);
         candle.setLit(lit);
 
@@ -1411,6 +1423,8 @@ public class BlockUtils {
     }
 
     public static void downLPointedDripstone(int height, @NotNull SimpleBlock base) {
+        if ( !TConfigOption.areDecorationsEnabled()) return;
+
         int realHeight = 0;
         while(!base.getRelative(0,-realHeight,0).getType().isSolid() && height > 0) {
             realHeight++;
@@ -1441,16 +1455,18 @@ public class BlockUtils {
     {
         return y > 0 ? Material.STONE :
                 y < -3 ? Material.DEEPSLATE :
-                GenUtils.randMaterial(Material.STONE, Material.DEEPSLATE);
+                GenUtils.randChoice(Material.STONE, Material.DEEPSLATE);
     }
     public static Material stoneOrSlateWall(int y)
     {
         return y > 0 ? Material.COBBLESTONE_WALL :
                 y < -3 ? Material.COBBLED_DEEPSLATE_WALL :
-                        GenUtils.randMaterial(Material.COBBLESTONE_WALL, Material.COBBLED_DEEPSLATE_WALL);
+                        GenUtils.randChoice(Material.COBBLESTONE_WALL, Material.COBBLED_DEEPSLATE_WALL);
     }
 
     public static void upLPointedDripstone(int height, @NotNull SimpleBlock base) {
+        if ( !TConfigOption.areDecorationsEnabled()) return;
+
         int realHeight = 0;
         while(!base.getRelative(0,realHeight,0).getType().isSolid() && height > 0) {
             realHeight++;
@@ -1494,6 +1510,8 @@ public class BlockUtils {
     }
 
     public static void downLCaveVines(int height, @NotNull SimpleBlock base) {
+        if ( !TConfigOption.arePlantsEnabled()) return;
+
         int realHeight = 0;
         while(!base.getRelative(0,-realHeight,0).getType().isSolid() && height > 0) {
             realHeight++;

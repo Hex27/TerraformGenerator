@@ -55,7 +55,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
      * @param core
      */
     private void spawnCenteredPileOfRocks(@NotNull Random random, Wall core) {
-    	core = core.getRelative(0,1,0);
+    	core = core.getUp();
     	Material[] ores = new Material[] {
     			Material.IRON_ORE,
     			Material.COAL_ORE,
@@ -83,7 +83,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	//Place stone cutter
     	Wall target = core.getRelative(BlockUtils.getXZPlaneBlockFace(random));
     	while(target.getType().isSolid()) {
-    		target = target.getRelative(0,1,0);
+    		target = target.getUp();
     	}
     	new DirectionalBuilder(Material.STONECUTTER)
     	.setFacing(BlockUtils.getDirectBlockFace(new Random()))
@@ -93,9 +93,9 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	for(int i = 0; i < random.nextInt(2)+1; i++) {
     		target = target.getAtY(core.getY()+1).getRelative(BlockUtils.getDirectBlockFace(random));
     		while(target.getType().isSolid()) {
-        		target = target.getRelative(0,1,0);
+        		target = target.getUp();
         	}
-    		if(target.getRelative(0,-1,0).getType() != Material.LANTERN)
+    		if(target.getDown().getType() != Material.LANTERN)
     			target.setType(Material.LANTERN);
     	}
     }
@@ -106,7 +106,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
      * @param core
      */
     private void spawnedWalledPileOfRocks(@NotNull Random random, Wall core) {
-    	core = core.getRelative(0,1,0);
+    	core = core.getUp();
     	Material[] ores = new Material[] {
     			Material.IRON_ORE,
     			Material.COAL_ORE,
@@ -152,7 +152,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	for(int i = 0; i < random.nextInt(2)+1; i++) {
     		Wall target = core.getRelative(core.getDirection().getOppositeFace(), 2).getRelative(BlockUtils.getDirectBlockFace(random));
     		while(target.getType().isSolid()) {
-        		target = target.getRelative(0,1,0);
+        		target = target.getUp();
         	}
     		target.setType(Material.LANTERN);
     	}

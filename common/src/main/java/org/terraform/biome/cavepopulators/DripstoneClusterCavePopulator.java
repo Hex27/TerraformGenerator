@@ -41,7 +41,7 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;
-            BlockUtils.downLPointedDripstone(GenUtils.randInt(1, h), ceil.getRelative(0,-1,0));
+            BlockUtils.downLPointedDripstone(GenUtils.randInt(1, h), ceil.getDown());
         }
 
         //=========================
@@ -56,7 +56,7 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             if (h > 4) h = 4;
-            BlockUtils.upLPointedDripstone(GenUtils.randInt(1,h), floor.getRelative(0,1,0));
+            BlockUtils.upLPointedDripstone(GenUtils.randInt(1,h), floor.getUp());
         }
 
         //=========================
@@ -65,7 +65,7 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
         if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract data) {
             while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), Biome.DRIPSTONE_CAVES);
-        		floor = floor.getRelative(0,1,0);
+        		floor = floor.getUp();
         	}
         }
     }

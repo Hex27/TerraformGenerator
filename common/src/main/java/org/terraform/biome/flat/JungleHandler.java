@@ -15,6 +15,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
@@ -58,8 +59,8 @@ public class JungleHandler extends BiomeHandler {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.PODZOL, 5),
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.STONE)};
     }
 
     @Override
@@ -71,16 +72,18 @@ public class JungleHandler extends BiomeHandler {
          if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
              if (BlockUtils.isAir(data.getType(rawX, surfaceY + 1, rawZ)) && GenUtils.chance(2, 3)) {
                  if (random.nextBoolean()) {
-                     data.setType(rawX, surfaceY + 1, rawZ, GenUtils.weightedRandomMaterial(random, Material.GRASS, 5, BlockUtils.pickFlower(), 1));
+                     GenUtils.weightedRandomSmallItem(random, PlantBuilder.GRASS, 5, BlockUtils.pickFlower(), 1).build(data, rawX, surfaceY + 1, rawZ);
                  } else {
                      if (BlockUtils.isAir(data.getType(rawX, surfaceY + 2, rawZ)))
-                         BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                         PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                  }
              }
          }
     }
 
     public static void createBush(@NotNull PopulatorDataAbstract data, float noiseIncrement, int oriX, int oriY, int oriZ) {
+        if ( !TConfigOption.arePlantsEnabled()) return;
+
         // noiseIncrement is always < 0.5 and > 0
         float rX = 2.5f + (float) (noiseIncrement * Math.random());
         float rY = 1.3f + (float) (noiseIncrement * Math.random());
@@ -204,7 +207,7 @@ public class JungleHandler extends BiomeHandler {
                     if (data.getType(x, y + 1, z) == Material.JUNGLE_WOOD
                             && BlockUtils.isAir(data.getType(x, y + 2, z))
                             && GenUtils.chance(2, 9)) {
-                        data.setType(x, y + 2, z, GenUtils.randMaterial(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM));
+                        PlantBuilder.build(data, x, y+2, z, PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
                     }
                 }
             }
@@ -212,6 +215,7 @@ public class JungleHandler extends BiomeHandler {
     }
 	
 	private void spawnStatue(@NotNull Random random, @NotNull PopulatorDataAbstract data, @NotNull SimpleLocation sLoc) {
+        if ( !TConfigOption.areStructuresEnabled()) return;
 
 		try {
             TerraSchematic schema = TerraSchematic.load("jungle-statue1", 
@@ -225,14 +229,14 @@ public class JungleHandler extends BiomeHandler {
 	
 	}
 	
-	private class JungleStatueSchematicParser extends SchematicParser{
+	private static class JungleStatueSchematicParser extends SchematicParser{
 		
 		public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 			if (data.getMaterial().toString().contains("COBBLESTONE")) {
 	            data = Bukkit.createBlockData(
 	                    data.getAsString().replaceAll(
 	                            "cobblestone",
-	                            GenUtils.randMaterial(new Random(), 
+	                            GenUtils.randChoice(new Random(),
 	                            		Material.COBBLESTONE, Material.ANDESITE, Material.STONE, Material.MOSSY_COBBLESTONE)
 	                                    .toString().toLowerCase(Locale.ENGLISH)
 	                    )

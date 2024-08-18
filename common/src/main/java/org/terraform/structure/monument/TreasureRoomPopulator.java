@@ -33,13 +33,13 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
             stair.setWaterlogged(true);
 
             stair.setFacing(face);
-            block.getRelative(0, 1, 0).getRelative(face).setBlockData(stair);
-            block.getRelative(0, 2, 0).getRelative(face).getRelative(face)
+            block.getUp().getRelative(face).setBlockData(stair);
+            block.getUp(2).getRelative(face).getRelative(face)
                     .setBlockData(stair);
 
             stair.setFacing(face.getOppositeFace());
             stair.setHalf(Half.TOP);
-            block.getRelative(0, 1, 0).getRelative(face).getRelative(face)
+            block.getUp().getRelative(face).getRelative(face)
                     .setBlockData(stair);
         }
 
@@ -59,13 +59,13 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
             stair.setWaterlogged(true);
 
             stair.setFacing(face);
-            block.getRelative(0, -1, 0).getRelative(face).setBlockData(stair);
-            block.getRelative(0, -2, 0).getRelative(face).getRelative(face)
+            block.getDown().getRelative(face).setBlockData(stair);
+            block.getDown(2).getRelative(face).getRelative(face)
                     .setBlockData(stair);
 
             stair.setFacing(face.getOppositeFace());
             stair.setHalf(Half.BOTTOM);
-            block.getRelative(0, -1, 0).getRelative(face).getRelative(face)
+            block.getDown().getRelative(face).getRelative(face)
                     .setBlockData(stair);
         }
 

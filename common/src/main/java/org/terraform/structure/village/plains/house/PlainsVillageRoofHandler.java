@@ -133,17 +133,17 @@ public class PlainsVillageRoofHandler {
                                 .setHalf(Half.TOP)
                                 .setOpen(true)
                                 .setFacing(target.getDirection().getOppositeFace())
-                                .apply(target.getRelative(0, -1, 0));
+                                .apply(target.getDown());
                     } else if (i == length - 1) {
                         new TrapdoorBuilder(plainsVillagePopulator.woodTrapdoor)
                                 .setHalf(Half.TOP)
                                 .setOpen(true)
                                 .setFacing(target.getDirection())
-                                .apply(target.getRelative(0, -1, 0));
+                                .apply(target.getDown());
                     } else {
                         new OrientableBuilder(plainsVillagePopulator.woodLog)
                                 .setAxis(superiorAxis)
-                                .apply(target.getRelative(0, -1, 0).get());
+                                .apply(target.getDown().get());
                     }
                 }
 
@@ -160,17 +160,17 @@ public class PlainsVillageRoofHandler {
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getLeft(target.getDirection()))
                                 .apply(target);
-                        target = target.getRight().getRelative(0, -1, 0);
+                        target = target.getRight().getDown();
                     } else if (right < breadth / 2) {
                         //Slope up
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getRight(target.getDirection()))
                                 .apply(target);
-                        target = target.getRight().getRelative(0, 1, 0);
+                        target = target.getRight().getUp();
                     } else {
                         //Top (Only exists when the breadth is odd.
                         target.setType(slabType);
-                        target = target.getRight().getRelative(0, -1, 0);
+                        target = target.getRight().getDown();
                     }
                 } else { //For even breadth
                     if (right == breadth / 2 - 1) {
@@ -183,13 +183,13 @@ public class PlainsVillageRoofHandler {
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getLeft(target.getDirection()))
                                 .apply(target);
-                        target = target.getRight().getRelative(0, -1, 0);
+                        target = target.getRight().getDown();
                     } else if (right < breadth / 2) {
                         //Slope up
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getRight(target.getDirection()))
                                 .apply(target);
-                        target = target.getRight().getRelative(0, 1, 0);
+                        target = target.getRight().getUp();
                     }
                 }
             }
@@ -231,7 +231,7 @@ public class PlainsVillageRoofHandler {
                 for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
                     for (int z = lowerCorner[1]; z <= upperCorner[1]; z++)
                         data.setType(x, piece.getRoom().getY() + piece.getRoom().getHeight() + 3 + depth, z,
-                                GenUtils.randMaterial(solidMat));
+                                GenUtils.randChoice(solidMat));
             }
 
         }
