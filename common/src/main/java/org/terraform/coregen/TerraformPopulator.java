@@ -207,7 +207,7 @@ public class TerraformPopulator extends BlockPopulator {
                 banks.add(bank);
 
                 //Don't populate wet stuff in places that aren't wet
-                if(!bank.getType().isDry() && data.getType(rawX,surfaceY+1,rawZ) != Material.WATER)
+                if(!bank.isDry() && data.getType(rawX,surfaceY+1,rawZ) != Material.WATER)
                     continue;
                 bank.getHandler().populateSmallItems(tw, random, rawX, surfaceY, rawZ, data);
             }

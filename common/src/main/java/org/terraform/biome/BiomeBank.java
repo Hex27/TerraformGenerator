@@ -275,7 +275,7 @@ public enum BiomeBank {
         if(bank != BiomeBank.SWAMP
                 && bank != BiomeBank.MANGROVE
         		&& height < TerraformGenerator.seaLevel 
-        		&& bank.getType().isDry()){
+        		&& bank.isDry()){
         	bank = bank.getHandler().getRiverType();
         	if(debugPrint) 
         		TerraformGeneratorPlugin.logger.info("calculateBiome -> Biome is submerged, defaulting to river");
@@ -284,7 +284,7 @@ public enum BiomeBank {
         //Oceanic biomes that are above water level 
         //should be handled as the closest, most dominant dry biome, or be a beach
         
-        if(!bank.getType().isDry() && height >= TerraformGenerator.seaLevel) {
+        if(!bank.isDry() && height >= TerraformGenerator.seaLevel) {
         	if(debugPrint) 
         		TerraformGeneratorPlugin.logger.info("calculateBiome -> Submerged biome above ground detected");
         	BiomeBank replacement = null;
@@ -296,7 +296,7 @@ public enum BiomeBank {
             	for(BiomeSection sect:BiomeSection.getSurroundingSections(tw, rawX, rawZ)) {
                 	if(debugPrint) 
                 		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> Comparison Section: " + sect.toString());
-            		if(sect.getBiomeBank().getType().isDry()) {
+            		if(sect.getBiomeBank().isDry()) {
             			int compDist = (int) sect.getDominanceBasedOnRadius(rawX, rawZ);
                     	if(debugPrint) 
                     		TerraformGeneratorPlugin.logger.info("calculateBiome -> -> -> Dominance: " + compDist);
@@ -529,4 +529,7 @@ public enum BiomeBank {
 		return biomeWeight;
 	}
 
+    public boolean isDry() {
+        return getType().isDry();
+    }
 }

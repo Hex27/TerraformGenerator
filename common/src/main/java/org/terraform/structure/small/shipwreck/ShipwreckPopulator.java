@@ -143,7 +143,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
                 double numWet = 0;
                 double numDry = 0;
             	for(BiomeBank b:biomes)
-                	if(b.getType().isDry())
+                	if(b.isDry())
                 		numDry++;
                 	else
                 		numWet++;

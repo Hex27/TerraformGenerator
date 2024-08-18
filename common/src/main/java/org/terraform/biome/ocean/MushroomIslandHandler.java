@@ -51,7 +51,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
         float islandRadius = BiomeSection.sectionWidth/2.5f;
         for(BlockFace face:BlockUtils.directBlockFaces) {
         	if(currentSection.getRelative(face.getModX(), face.getModZ())
-        			.getBiomeBank().getType().isDry())
+        			.getBiomeBank().isDry())
         	{
         		islandRadius *= 0.65f;
         		break;

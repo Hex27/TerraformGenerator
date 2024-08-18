@@ -214,7 +214,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
-        if (!biome.getType().isDry())
+        if (!biome.isDry())
             return false;
         if(biome == BiomeBank.DESERT ||
         		biome == BiomeBank.SNOWY_WASTELAND ||

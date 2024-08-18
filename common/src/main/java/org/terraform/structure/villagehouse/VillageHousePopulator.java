@@ -37,7 +37,7 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
         int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
             
-        		if(!biome.getType().isDry())
+        		if(!biome.isDry())
         			return false;
         	
             //If it is below sea level, DON'T SPAWN IT.

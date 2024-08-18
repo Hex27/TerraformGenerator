@@ -170,7 +170,7 @@ public class SimpleBlock {
      * @return if the set was a success.
      */
     public boolean lsetType(@NotNull Material type) {
-        if (!getType().isSolid()) {
+        if (!isSolid()) {
             setType(type);
             return true;
         }
@@ -178,7 +178,7 @@ public class SimpleBlock {
     }
 
     public void lsetBlockData(BlockData data) {
-        if (!getType().isSolid()) {
+        if (!isSolid()) {
             setBlockData(data);
         }
     }
@@ -197,7 +197,7 @@ public class SimpleBlock {
     }
 
     public void RSolSetBlockData(BlockData data) {
-        if (getType().isSolid())
+        if (isSolid())
             setBlockData(data);
     }
 
@@ -372,7 +372,7 @@ public class SimpleBlock {
     }
 
     public void RSolSetType(@NotNull Material type) {
-        if (getType().isSolid())
+        if (isSolid())
             setType(type);
     }
 

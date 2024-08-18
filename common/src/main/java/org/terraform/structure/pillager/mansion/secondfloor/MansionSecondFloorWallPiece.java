@@ -334,17 +334,17 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
             	
             	if(!isTentRoofFace)
             	//Spawn slightly overhanging roof
-    	        	if(spawnedHeight == 0 && target.getUp().getFront().getType().isAir() &&  Tag.STAIRS.isTagged(target.getUp().getType())) {
+    	        	if(spawnedHeight == 0 && target.getUp().getFront().isAir() &&  Tag.STAIRS.isTagged(target.getUp().getType())) {
     	        		StairBuilder builder = new StairBuilder(Material.COBBLESTONE_STAIRS)
     	        		.setFacing(target.getDirection().getOppositeFace())
     	        		.lapply(target.getFront());
     	        		
     	        		for(int depth = 1; depth <= 2; depth++) {
     	        			if(Tag.STAIRS.isTagged(target.getLeft(depth).getUp().getType())
-    	        					 && target.getLeft(depth).getUp().getFront().getType().isAir())
+    	        					 && target.getLeft(depth).getUp().getFront().isAir())
     	        				builder.lapply(target.getLeft(depth).getFront());
     	        			if(Tag.STAIRS.isTagged(target.getRight(depth).getUp().getType())
-    	       					 && target.getRight(depth).getUp().getFront().getType().isAir())
+    	       					 && target.getRight(depth).getUp().getFront().isAir())
     	        				builder.lapply(target.getRight(depth).getFront());
     	        		}
             			
