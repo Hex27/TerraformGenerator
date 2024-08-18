@@ -33,7 +33,7 @@ public class NoiseCaveRegistry {
 
     public boolean canGenerateCarve(int x, int y, int z, double height){
 
-        //The sea filter is special, pass in HEIGHT as its about scaling towards the sea
+        //The sea filter is special, pass in HEIGHT as it's about scaling towards the sea
         float filterSea = yBarrier(tw, x,(int)height,z, TerraformGenerator.seaLevel, 5, 1);
         for(NoiseCaveAbstract carver:generateCaveCarvers) {
             if(carver.canCarve(tw, x, y, z, height, filterSea)) return true;
