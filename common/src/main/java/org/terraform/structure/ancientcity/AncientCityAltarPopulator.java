@@ -19,7 +19,7 @@ import org.terraform.structure.room.RoomLayoutGenerator;
 public class AncientCityAltarPopulator extends AncientCityAbstractRoomPopulator {
 
     public AncientCityAltarPopulator(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
-        super(tw, occupied, gen, rand, forceSpawn, unique);
+        super(tw, gen, rand, forceSpawn, unique);
     }
 
     @Override

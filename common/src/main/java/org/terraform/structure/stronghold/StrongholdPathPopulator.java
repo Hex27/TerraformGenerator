@@ -106,7 +106,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             if (!verifyPathway(new Wall(ppd.base, ppd.dir))) return;
 
             if (ppd.calcRemainder(2) == 0) { //arch
-                decoratePathways(ppd.base, ppd.dir, Half.BOTTOM);
+                decoratePathways(ppd.base, ppd.dir);
                 Wall base = new Wall(ppd.base, ppd.dir);
                 base.getRelative(0, 1, 0).getLeft(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
                 base.getRelative(0, 1, 0).getRight(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
@@ -168,7 +168,6 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
 
         //Refind ceiling. It could have been changed above.
         ceil = new Wall(ppd.base.getRelative(0, 1, 0), ppd.dir).findCeiling(10).get();
-        if (ceil == null) return;
 
         //Sometimes parts of the ceiling falls down
         if (GenUtils.chance(rand, 3, 25)) {
@@ -229,7 +228,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         }
     }
 
-    private void decoratePathways(@NotNull SimpleBlock core, @NotNull BlockFace dir, Bisected.@NotNull Half isCeil) {
+    private void decoratePathways(@NotNull SimpleBlock core, @NotNull BlockFace dir) {
         //Decorate the floor and ceiling
         core.RSolSetType(Material.CHISELED_STONE_BRICKS);
         for (BlockFace face : BlockUtils.getAdjacentFaces(dir)) {
@@ -237,13 +236,13 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             core.getRelative(face).RSolSetBlockData(
                     new StairBuilder(Material.STONE_BRICK_STAIRS, Material.COBBLESTONE_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS, Material.ANDESITE_STAIRS)
                             .setFacing(face)
-                            .setHalf(isCeil)
+                            .setHalf(Half.BOTTOM)
                             .get()
             );
         }
     }
 
-    private boolean setIronBars(@NotNull PathPopulatorData ppd) {
+    private void setIronBars(@NotNull PathPopulatorData ppd) {
         Wall wall = new Wall(ppd.base, ppd.dir).getRelative(0, 4, 0);
 
         wall.setType(Material.IRON_BARS);
@@ -260,7 +259,6 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
             BlockUtils.correctSurroundingMultifacingData(temp.getRight().get());
         }
 
-        return true;
     }
 
     private void dropDownBlock(@NotNull SimpleBlock block) {

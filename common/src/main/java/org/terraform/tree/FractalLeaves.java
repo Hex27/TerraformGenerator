@@ -111,7 +111,7 @@ public class FractalLeaves implements Cloneable{
             for (int x = -Math.round(radiusX); x <= radiusX; x++) {
                 for (int z = -Math.round(radiusZ); z <= radiusZ; z++) {
                 	Material material = this.material[rand.nextInt(this.material.length)];
-                    SimpleBlock relativeBlock = centre.getRelative(Math.round(x), Math.round(y) + offsetY, Math.round(z));
+                    SimpleBlock relativeBlock = centre.getRelative(x, y + offsetY, z);
 
                     if (relativeBlock.getY() - oriY > maxHeight) {
                         return;

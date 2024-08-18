@@ -54,7 +54,6 @@ public class MazeSpawner {
     }
 
     /**
-     * @param target
      * @return a hashmap of unvisited neighbours of that target MazeCell. The hashmap key is the blockface relative to the target MazeCell to the neighbour MazeCell
      */
     private @NotNull Map<BlockFace, MazeCell> getValidNeighbours(@NotNull MazeCell target) {

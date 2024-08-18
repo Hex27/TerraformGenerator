@@ -84,8 +84,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     	//This is in the middle of a plateau.
     	//This must extend out until the entrance is found.
         SimpleBlock spawnSpot = new SimpleBlock(data, spawnCoords[0],0,spawnCoords[1]).getGround();
-        if (spawnSpot == null) return;
-        
+
         //The plateau (by right,) should generate as a distorted circle.
         //As such, the direction can be random.
         inDir = BlockUtils.getDirectBlockFace(getHashedRandom(tw,data.getChunkX(),data.getChunkZ()));
@@ -149,10 +148,6 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     /**
      * Keeps searching in the provided direction until the height of the block is roughly 
      * at the ground level outside the plateau's raised height.
-     * @param tw
-     * @param query
-     * @param dir
-     * @return
      */
     @NotNull
     SimpleBlock getSpawnEntrance(TerraformWorld tw, @NotNull SimpleBlock query, @NotNull BlockFace dir) {
@@ -190,14 +185,14 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     void patchEntrance(@NotNull SimpleBlock entrance, @NotNull BlockFace direction) {
         BlockFace nextDir = BlockUtils.getRight(direction);
         fillWithBlock(entrance.getRelative(nextDir.getModX() * 2, -1, nextDir.getModZ() * 2),
-                entrance.getRelative(-nextDir.getModX() * 2, -4, -nextDir.getModZ() * 2).getRelative(direction, 3), Material.RED_SAND);
+                entrance.getRelative(-nextDir.getModX() * 2, -4, -nextDir.getModZ() * 2).getRelative(direction, 3));
     }
 
-    void fillWithBlock(@NotNull SimpleBlock start, @NotNull SimpleBlock end, @NotNull Material material) {
+    void fillWithBlock(@NotNull SimpleBlock start, @NotNull SimpleBlock end) {
         for(int x = Math.min(start.getX(), end.getX()); x <= Math.min(start.getX(), end.getX()) + Math.abs(start.getX() - end.getX()); x++) {
             for(int z = Math.min(start.getZ(), end.getZ()); z <= Math.min(start.getZ(), end.getZ()) + Math.abs(start.getZ() - end.getZ()); z++) {
                 for(int y = Math.min(start.getY(), end.getY()); y <= Math.min(start.getY(), end.getY()) + Math.abs(start.getY() - end.getY()); y++) {
-                    new SimpleBlock(start.getPopData(), x, y, z).lsetType(material);
+                    new SimpleBlock(start.getPopData(), x, y, z).lsetType(Material.RED_SAND);
                 }
             }
         }

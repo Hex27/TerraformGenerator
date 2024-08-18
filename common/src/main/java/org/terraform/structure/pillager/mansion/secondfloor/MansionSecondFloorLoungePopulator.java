@@ -55,7 +55,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 		}
 	}
 	
-	private class MansionLoungeSchematicParser extends MansionRoomSchematicParser
+	private static class MansionLoungeSchematicParser extends MansionRoomSchematicParser
 	{
 		private final Material terracottaType;
 		public MansionLoungeSchematicParser(@NotNull Random rand, PopulatorDataAbstract pop) {

@@ -14,7 +14,6 @@ import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_18_R2.generator.CraftLimitedRegion;
 import org.bukkit.craftbukkit.v1_18_R2.generator.CustomChunkGenerator;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;
@@ -73,7 +72,7 @@ public class NMSInjector extends NMSInjectorAbstract {
         
         if(ws.k().g() instanceof CustomChunkGenerator) {
             try {
-            	ChunkGenerator delegate = null;
+            	ChunkGenerator delegate;
             	Field f = CustomChunkGenerator.class.getDeclaredField("delegate");
             	f.setAccessible(true);
             	delegate = (ChunkGenerator) f.get(ws.k().g());
@@ -159,9 +158,5 @@ public class NMSInjector extends NMSInjectorAbstract {
 	public int getMaxY() {
 		return 320;
 	}
-	
-	@Override
-	public void debugTest(Player p) {
-	}
-	
+
 }

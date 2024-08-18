@@ -55,7 +55,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     }
 
     @Override
-    public JigsawStructurePiece getFirstPiece(Random random) {
+    public JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return new MansionGroundRoomPiece(groundFloorRoomWidth, roomHeight, groundFloorRoomWidth, JigsawType.STANDARD, BlockUtils.directBlockFaces);
     }
     
@@ -147,10 +147,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         }
         
         //Debug code for showing roof bounds.
-//        for(int nx = lowerBounds[0]; nx <= upperBounds[0]; nx++)
-//            for(int nz = lowerBounds[1]; nz <= upperBounds[1]; nz++)
-//            	core.getPopData().setType(nx, 77, nz, Material.PURPLE_STAINED_GLASS);
-        
+
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorOverlapperPieces) {
             if(piece instanceof MansionSecondFloorWallPiece) {
             	((MansionSecondFloorWallPiece) piece).buildIndividualRoofs(random, this.core.getPopData(), lowerBounds, upperBounds);
@@ -218,7 +215,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         MansionMazeAlgoUtil.knockdownRandomWalls(secondFloorHandler.secondFloorPieces.values(), random);
         
         
-        MansionStandardRoomPiece secondFloorStairwayCenter = null;
+        MansionStandardRoomPiece secondFloorStairwayCenter;
         //Find the Stairway piece and (it extends to the second floor.)
         for (JigsawStructurePiece piece : pieces.values()){
         	if(((MansionStandardRoomPiece) piece).getRoomPopulator() instanceof MansionGrandStairwayPopulator && ((MansionStandardRoomPiece) piece).isPopulating()) {
@@ -269,9 +266,6 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     
     /**
      * Used to check if there's a wall with an opposite facing within the same location
-     * @param piece
-     * @param face
-     * @return
      */
     private boolean areOtherWallsOverlapping(@NotNull JigsawStructurePiece piece, @NotNull BlockFace face) {
     	SimpleLocation other = new SimpleLocation(

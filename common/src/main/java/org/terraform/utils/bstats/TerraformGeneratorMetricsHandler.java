@@ -6,13 +6,9 @@ import org.terraform.main.config.TConfigOption;
 
 public class TerraformGeneratorMetricsHandler {
 
-	@SuppressWarnings("unused")
-	private final TerraformGeneratorPlugin plugin;
-	
-	public TerraformGeneratorMetricsHandler(@NotNull TerraformGeneratorPlugin plugin) {
-		this.plugin = plugin;
-		
-		int pluginId = 13968;
+    public TerraformGeneratorMetricsHandler(@NotNull TerraformGeneratorPlugin plugin) {
+
+        int pluginId = 13968;
         Metrics metrics = new Metrics(plugin, pluginId);
         
         if(metrics.isEnabled()) {

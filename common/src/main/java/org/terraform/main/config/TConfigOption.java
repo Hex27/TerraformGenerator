@@ -487,6 +487,8 @@ public enum TConfigOption {
     ORE_DEEPSLATE_MAXSPAWNHEIGHT("ore.deepslate.max-spawn-height", 15),
     ORE_DEEPSLATE_MINSPAWNHEIGHT("ore.deepslate.min-spawn-height", 0),
 
+    FEATURE_CAVES_ENABLED("feature.caves.enabled", true),
+
     ;
     private final String path;
     private Object value;

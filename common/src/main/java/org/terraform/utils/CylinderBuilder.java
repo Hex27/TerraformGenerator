@@ -1,7 +1,5 @@
 package org.terraform.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -22,7 +20,6 @@ public class CylinderBuilder {
 	private boolean singleBlockY = false;
     private boolean startFromZero = false;
 	private boolean hardReplace = false;
-	private final @NotNull Collection<Material> replaceWhitelist = new ArrayList<>();
 	private final Material[] types;
 	private Material[] upperType;
 	private Material[] lowerType;
@@ -130,26 +127,17 @@ public class CylinderBuilder {
             }
         }
     }
-    
-    private boolean unitReplace(@NotNull SimpleBlock rel) {
-    	if(replaceWhitelist.isEmpty()) {
-    		if (hardReplace || !rel.getType().isSolid()) {
-                rel.setType(GenUtils.randMaterial(random, types));
-            }else
-            	return false;
-    	} else if(replaceWhitelist.contains(rel.getType())) {
-            rel.setType(GenUtils.randMaterial(random, types));
-    	}
-    	else
-    		return false;
-    	
-    	if(upperType != null)
-    		rel.getRelative(0,1,0).lsetType(upperType);
-    	if(lowerType != null && rel.getRelative(0,-1,0).getType().isSolid())
-    		rel.getRelative(0,-1,0).setType(lowerType);
-    	
-    	return true;
+
+    private void unitReplace(@NotNull SimpleBlock rel) {
+        if(!hardReplace && rel.getType().isSolid()) {
+            return;
+        }
+
+        rel.setType(GenUtils.randMaterial(random, types));
+
+        if(upperType != null)
+            rel.getRelative(0, 1, 0).lsetType(upperType);
+        if(lowerType != null && rel.getRelative(0, -1, 0).getType().isSolid())
+            rel.getRelative(0, -1, 0).setType(lowerType);
     }
-
-
 }

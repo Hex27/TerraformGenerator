@@ -130,33 +130,31 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	@Override
 	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(2);
-		switch(choice) {
-		case 0: //Table with flowers
-			new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-			.setHalf(Half.TOP)
-			.setFacing(BlockUtils.getLeft(w.getDirection()))
-			.apply(w.getLeft(2))
-			.setFacing(BlockUtils.getRight(w.getDirection()))
-			.apply(w.getRight(2));
-			
-			new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
-			.setType(Type.TOP)
-			.apply(w)
-			.apply(w.getLeft())
-			.apply(w.getRight());
-			
-			w.getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
-			w.getLeft().getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
-			w.getRight().getRelative(0,1,0).setType(BlockUtils.pickPottedPlant());
-			break;
-		default://Utility Block
-			w.setType(
-					Material.CRAFTING_TABLE, Material.FLETCHING_TABLE, 
-					Material.CARTOGRAPHY_TABLE, Material.ENCHANTING_TABLE, 
-					Material.BREWING_STAND, Material.ANVIL,
-					Material.NOTE_BLOCK, Material.JUKEBOX);
-			break;
-		}
+        //Utility Block
+        if(choice == 0) { //Table with flowers
+            new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
+                    .setHalf(Half.TOP)
+                    .setFacing(BlockUtils.getLeft(w.getDirection()))
+                    .apply(w.getLeft(2))
+                    .setFacing(BlockUtils.getRight(w.getDirection()))
+                    .apply(w.getRight(2));
+
+            new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
+                    .setType(Type.TOP)
+                    .apply(w)
+                    .apply(w.getLeft())
+                    .apply(w.getRight());
+
+            w.getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
+            w.getLeft().getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
+            w.getRight().getRelative(0, 1, 0).setType(BlockUtils.pickPottedPlant());
+        } else {
+            w.setType(
+                    Material.CRAFTING_TABLE, Material.FLETCHING_TABLE,
+                    Material.CARTOGRAPHY_TABLE, Material.ENCHANTING_TABLE,
+                    Material.BREWING_STAND, Material.ANVIL,
+                    Material.NOTE_BLOCK, Material.JUKEBOX);
+        }
 	}
 
 	private void table(@NotNull Random rand, @NotNull Wall w) {

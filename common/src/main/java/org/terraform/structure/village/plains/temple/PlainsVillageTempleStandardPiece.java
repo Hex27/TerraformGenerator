@@ -93,11 +93,6 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
         
         //Commented out because it's ugly af
         //Random pattern on floor
-//        for(BlockFace dir:BlockUtils.directBlockFaces) {
-//        	Wall core = new Wall(new SimpleBlock(data,getRoom().getX(),getRoom().getY()+1,getRoom().getZ()), dir);
-//        	for(int step = 0; step < 3; step++)
-//        		core.getFront(step).getLeft(steps[step]).setType(other);
-//        }
     }
 
 	public boolean isTower() {

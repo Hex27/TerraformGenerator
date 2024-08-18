@@ -7,7 +7,7 @@ import org.terraform.data.TerraformWorld;
  * Represents larger structures that will only spawn once per megachunk.
  * This will ALWAYS spawn structures in the center of the mega chunk, and 
  * query the biome type from the center coord's biomesection.
- * 
+ * <p>
  * SingleMegaChunkStructures CANNOT overlap.
  */
 public abstract class SingleMegaChunkStructurePopulator extends StructurePopulator {

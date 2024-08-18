@@ -81,10 +81,8 @@ public enum BiomeClimate {
 				
 				//If there are multiple climate ranges that apply to this, then
 				//the climate with the highest priority will win.
-				if(candidate == null)
-					candidate = climate;
-				else if(candidate.priority < climate.priority)
-					candidate = climate;
+                if(candidate.priority < climate.priority)
+                    candidate = climate;
 			}
 		
 		return candidate;

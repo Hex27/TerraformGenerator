@@ -53,12 +53,7 @@ public class MansionSecondFloorPianoRoomPopulator extends MansionRoomPopulator {
 			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
-	
-	@Override
-	public void decorateExit(Random rand, Wall w) {
-		
-	}
-	
+
 	@Override
 	public void decorateWindow(Random rand, @NotNull Wall w) {
 		w.setType(Material.DARK_OAK_LOG);

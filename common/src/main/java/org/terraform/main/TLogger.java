@@ -25,8 +25,8 @@ public class TLogger {
 	public TLogger() {
 		suppressConsoleLogs = TConfigOption.DEVSTUFF_SUPPRESS_CONSOLE_LOGS.getBoolean();
     	if(suppressConsoleLogs) {
-            Handler consoleHandler = null;
-            Handler fileHandler  = null;
+            Handler consoleHandler;
+            Handler fileHandler;
             try{
                 //Creating consoleHandler and fileHandler
                 consoleHandler = new ConsoleHandler();

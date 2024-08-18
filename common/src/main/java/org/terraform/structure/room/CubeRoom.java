@@ -153,15 +153,6 @@ public class CubeRoom {
     }
 
     public boolean isOverlapping(@NotNull CubeRoom room) {
-//		int[][] corners = getAllCorners();
-//		int[][] otherCorners = room.getAllCorners();
-//		for(int i = 0; i < 4; i++){
-//			if(room.isPointInside(corners[i]))
-//				return true;
-//			if(isPointInside(otherCorners[i]))
-//				return true;
-//		}
-//		
         return Math.abs(room.x - this.x) < (Math.abs(room.widthX + this.widthX) / 2)
                 && (Math.abs(room.z - this.z) < (Math.abs(room.widthZ + this.widthZ) / 2));
     }
@@ -359,8 +350,6 @@ public class CubeRoom {
 
     /**
      * Forces all 3D coords in the room with the specified padding to be air.
-     * @param data
-     * @param padding
      */
     public void purgeRoomContents(@NotNull PopulatorDataAbstract data, int padding) {
     	int[] lowerCorner = getLowerCorner(padding);

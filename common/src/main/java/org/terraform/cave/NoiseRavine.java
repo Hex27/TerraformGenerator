@@ -32,17 +32,12 @@ public class NoiseRavine extends NoiseCaveAbstract{
 
         float xzStretcher = ravineFilter.GetNoise(rawX,rawZ);
         float sign = xzStretcher/Math.abs(xzStretcher);
-        xzStretcher = sign*0.5f*Math.min(1, Math.max(0,Math.abs(xzStretcher)));
 
         //Stretch caves vertically so that they're not excessively spherical
         float ravine = ravineNoise.GetNoise(3*rawX,y*0.4f,3*rawZ);
         //Multiply by a filter that varies with depth relative to height.
         //At depth 50 blocks, force to 0
-        ravine *= filter*0.5885*Math.log(RAVINE_DEPTH+1-(height-y)); //ASSUMPTION: y <= height.
-//        if(ravine < smallest){
-//            smallest = ravine;
-//            TerraformGeneratorPlugin.logger.info("SMALLEST: " + smallest);
-//        }
+        ravine *= (float) (filter*0.5885*Math.log(RAVINE_DEPTH+1-(height-y))); //ASSUMPTION: y <= height.
         return ravine <= -1.3f;
     }
 //    private static float smallest = 0;

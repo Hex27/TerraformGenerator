@@ -723,10 +723,6 @@ public class BlockUtils {
     
     /**
      * Places a noise-fuzzed circle of the defined material
-     * @param seed
-     * @param radius
-     * @param base
-     * @param type
      */
     public static void replaceCircle(int seed, float radius, @NotNull SimpleBlock base, Material... type) {
     	if (radius <= 0) return;
@@ -762,10 +758,6 @@ public class BlockUtils {
 
     /**
      * Replaces the highest ground with a noise-fuzzed circle of the defined material
-     * @param seed
-     * @param radius
-     * @param base
-     * @param type
      */
     public static void replaceCircularPatch(int seed, float radius, @NotNull SimpleBlock base, boolean snowy, Material... type) {
     	if (radius <= 0) return;
@@ -1368,8 +1360,6 @@ public class BlockUtils {
     /**
      * Checks if the target is in a wet material, or if the material it is
      * in is waterlogged.
-     * @param target
-     * @return
      */
     public static boolean isWet(@NotNull SimpleBlock target) {
     	return BlockUtils.wetMaterials.contains(target.getType()) || 
@@ -1513,7 +1503,7 @@ public class BlockUtils {
 
     private static final HashMap<String, Material> deepslateMap = new HashMap<>();
     public static @NotNull Material deepSlateVersion(@NotNull Material target) {
-        Material mat = deepslateMap.get("DEEPSLATE_"+target.toString());
+        Material mat = deepslateMap.get("DEEPSLATE_"+ target);
 
         if(mat == null) {
             mat =  Material.getMaterial("DEEPSLATE_"+ target);

@@ -247,7 +247,7 @@ public class AncientCityResearchBasementHandler {
 					.getRelative(BlockUtils.getLeft(face), 2);
 			
 			try {
-				String schematic = null;
+				String schematic;
 				
 				//This aligns the rooms with the head's piston entrance, as the 
 				//rooms are of an unequal size.

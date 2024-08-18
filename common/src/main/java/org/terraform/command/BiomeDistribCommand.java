@@ -7,7 +7,6 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeClimate;
 import org.terraform.biome.BiomeSection;
 import org.terraform.biome.BiomeType;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -38,8 +37,7 @@ public class BiomeDistribCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, Stack<String> args) {
     	HashMap<BiomeBank, Integer> counts = new HashMap<>();
     	HashMap<BiomeClimate, Integer> climates = new HashMap<>();
         MathValues temperature = new MathValues();
@@ -86,12 +84,8 @@ public class BiomeDistribCommand extends TerraCommand {
         			count = ChatColor.RED + count;
         		if(100*counts.getOrDefault(b, 0)/total < 5)
         			percent = ChatColor.RED + percent;
-        		
-//            	sender.sendMessage(b + 
-//            			" (" + b.getClimate().getTemperatureRange() + "," + b.getClimate().getMoistureRange() + "): \t\t\t\t" 
-//            			+ count 
-//            			+ "\t" + percent + "%)");
-        		sender.sendMessage("%-35s(%-10s, %-10s): %-10s%s)"
+
+                sender.sendMessage("%-35s(%-10s, %-10s): %-10s%s)"
         				.formatted(b.toString(), b.getClimate().getTemperatureRange(), b.getClimate().getMoistureRange(),
         						count, percent+"%)"));
         	}
@@ -132,7 +126,7 @@ public class BiomeDistribCommand extends TerraCommand {
         }
     }
 
-    private class MathValues {
+    private static class MathValues {
         private double total = 0;
         private double lowest = 99999;
         private double highest = -99999;

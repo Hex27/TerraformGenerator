@@ -25,12 +25,6 @@ public class ChunkCache {
      * blurredHeightCache will hold intermediate height blurring values
      * (calculated after dominantBiomeHeightCache)
      */
-//    float[][] dominantBiomeHeightCache; //KEY 0
-//    float[][] blurredHeightCache; //KEY 1
-//    float[][] intermediateBlurCache; //KEY 2
-//    double[][] heightMapCache; //KEY 3
-//    short[][] highestGroundCache; //KEY 4
-//    short[][] transformedHeightCache; //KEY 5
     float[] arrayCache; //These 6 arrays are now one big array. No more nested pointers
     BiomeBank[] biomeCache;
 

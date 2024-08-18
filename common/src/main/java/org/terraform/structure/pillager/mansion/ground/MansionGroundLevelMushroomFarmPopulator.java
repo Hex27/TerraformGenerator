@@ -52,12 +52,8 @@ public class MansionGroundLevelMushroomFarmPopulator extends MansionRoomPopulato
 			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
-	
 
-	@Override
-	public void decorateExit(Random rand, Wall w) {
-		
-	}
+
 	@Override
 	public void decorateWindow(Random rand, @NotNull Wall w) {
 		Entry<Wall, Integer> entry = this.getRoom().getWall(w.get().getPopData(), w.getDirection().getOppositeFace(), 0);

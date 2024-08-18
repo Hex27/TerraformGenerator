@@ -15,7 +15,6 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTypes;
 import org.terraform.tree.FractalTypes.Tree;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -105,7 +104,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
     }
     
     @Override
-    public int getMaxHeightForCaves(TerraformWorld tw, int x, int z) {
+    public int getMaxHeightForCaves(@NotNull TerraformWorld tw, int x, int z) {
     	return (int) HeightMap.CORE.getHeight(tw, x, z);
     }
     
@@ -128,7 +127,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
         		tw, 
         		NoiseCacheEntry.BIOME_PETRIFIEDCLIFFS_INNERNOISE, 
         		world -> {
-        	    	FastNoise n = new FastNoise(tw.getHashedRand(111, 0102, 1).nextInt(99999));
+        	    	FastNoise n = new FastNoise(tw.getHashedRand(111, 102, 1).nextInt(99999));
         	        n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
         	        n.SetFractalOctaves(3);
         	        n.SetFrequency(0.05f);

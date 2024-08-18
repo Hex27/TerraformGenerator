@@ -322,11 +322,6 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     	}
     }
 
-    @Override
-    public int getPathWidth() {
-        return 3;
-    }
-
     public Material @NotNull [] getPathMaterial() {
         return new Material[] {
                 Material.OAK_PLANKS,

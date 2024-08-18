@@ -9,11 +9,9 @@ import org.terraform.structure.room.PathPopulatorData;
 import java.util.Random;
 
 public class TrailRuinsPathPopulator extends PathPopulatorAbstract {
-    private final Random rand;
 
-    public TrailRuinsPathPopulator(Random rand) {
-        this.rand = rand;
-    }
+	public TrailRuinsPathPopulator(Random rand) {
+	}
 
     @Override
     public void populate(@NotNull PathPopulatorData ppd) {

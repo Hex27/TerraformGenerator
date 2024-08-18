@@ -180,11 +180,11 @@ public class TerraformPopulator extends BlockPopulator {
     {
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(),worldInfo.getSeed());
         PopulatorDataAbstract data = new PopulatorDataSpigotAPI(limitedRegion, tw, chunkX, chunkZ);
-        this.populate(tw, random, data);
+        this.populate(tw, data);
     }
 
-    public void populate(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
-    	random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
+    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        Random random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
         //ores
         for (OrePopulator ore : ORE_POPS) {
             ore.populate(tw, random, data);

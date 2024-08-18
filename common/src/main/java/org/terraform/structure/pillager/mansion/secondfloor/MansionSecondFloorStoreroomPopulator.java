@@ -61,7 +61,7 @@ public class MansionSecondFloorStoreroomPopulator extends MansionRoomPopulator {
 
 	//Do not extend MansionRoomSchematicParser, as we want the looting to
 	//be done differently for this room specifically.
-	private class MansionStoreroomSchematicParser extends SchematicParser
+	private static class MansionStoreroomSchematicParser extends SchematicParser
 	{
 		private final Random rand;
 		public MansionStoreroomSchematicParser(Random rand) {

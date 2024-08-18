@@ -211,7 +211,7 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             for (int nz = -1; nz <= 1; nz++) {
                 data.setType(x + nx, y + height, z + nz, Material.CHISELED_STONE_BRICKS);
                 if (nx == 0 && nz == 0)
-                    data.setType(x + 0, y + height, z + 0, Material.LAVA);
+                    data.setType(x, y + height, z, Material.LAVA);
             }
         }
     }
@@ -263,22 +263,22 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
         ceil.getRelative(0, 0, 3).setType(Material.MOSSY_COBBLESTONE);
         ceil.getRelative(0, 0, 4).setBlockData(randTopSlab());
         for (int i : new int[]{-1, 1}) {
-            ceil.getRelative(1 * i, 0, -1).setType(Material.MOSSY_STONE_BRICKS);
-            ceil.getRelative(1 * i, 0, 0).setType(Material.MOSSY_STONE_BRICKS);
-            ceil.getRelative(1 * i, 0, 1).setType(Material.MOSSY_STONE_BRICKS);
+            ceil.getRelative(i, 0, -1).setType(Material.MOSSY_STONE_BRICKS);
+            ceil.getRelative(i, 0, 0).setType(Material.MOSSY_STONE_BRICKS);
+            ceil.getRelative(i, 0, 1).setType(Material.MOSSY_STONE_BRICKS);
 
             ceil.getRelative(2 * i, 0, -1).setType(Material.MOSSY_COBBLESTONE);
             ceil.getRelative(2 * i, 0, 0).setType(Material.MOSSY_COBBLESTONE);
             ceil.getRelative(2 * i, 0, 1).setType(Material.MOSSY_COBBLESTONE);
-            ceil.getRelative(1 * i, 0, -2).setType(Material.MOSSY_COBBLESTONE);
-            ceil.getRelative(1 * i, 0, 2).setType(Material.MOSSY_COBBLESTONE);
+            ceil.getRelative(i, 0, -2).setType(Material.MOSSY_COBBLESTONE);
+            ceil.getRelative(i, 0, 2).setType(Material.MOSSY_COBBLESTONE);
 
             SimpleBlock[] blocks = new SimpleBlock[7];
             blocks[0] = ceil.getRelative(3 * i, 0, -1);
             blocks[1] = ceil.getRelative(3 * i, 0, 0);
             blocks[2] = ceil.getRelative(3 * i, 0, 1);
-            blocks[3] = ceil.getRelative(1 * i, 0, 3);
-            blocks[4] = ceil.getRelative(1 * i, 0, -3);
+            blocks[3] = ceil.getRelative(i, 0, 3);
+            blocks[4] = ceil.getRelative(i, 0, -3);
             blocks[5] = ceil.getRelative(2 * i, 0, 2);
             blocks[6] = ceil.getRelative(2 * i, 0, -2);
             for (SimpleBlock b : blocks) {

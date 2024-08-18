@@ -67,29 +67,9 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 		BannerUtils.generatePillagerBanner(w.getLeft().getRelative(0,3,0).get(), w.getDirection(),true);
 		BannerUtils.generatePillagerBanner(w.getRight().getRelative(0,3,0).get(), w.getDirection(),true);
 	}
-	
-	@Override
-	public void decorateWindow(Random rand, Wall w) {
-//		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-//		.setFacing(w.getDirection().getOppositeFace())
-//		.apply(w)
-//		.setFacing(BlockUtils.getLeft(w.getDirection()))
-//		.setShape(Shape.INNER_RIGHT)
-//		.apply(w.getLeft())
-//		.setFacing(BlockUtils.getRight(w.getDirection()))
-//		.setShape(Shape.INNER_LEFT)
-//		.apply(w.getRight());
-//		if(rand.nextBoolean()) {
-//			w.getLeft().setType(Material.BOOKSHELF);
-//			w.getLeft().getRelative(0,1,0).setType(Material.LANTERN);
-//		}else if(rand.nextBoolean()) {
-//			w.getRight().setType(Material.BOOKSHELF);
-//			w.getRight().getRelative(0,1,0).setType(Material.LANTERN);
-//		}
-	}
-	
 
-	@Override
+
+    @Override
 	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}

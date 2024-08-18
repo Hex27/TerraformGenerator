@@ -43,7 +43,7 @@ public class ShipwreckSchematicParser extends SchematicParser {
     }
 
     @Override
-    public void applyData(@NotNull SimpleBlock block, BlockData data) {
+    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 
         //Water logging
         if (data instanceof Waterlogged logged) {

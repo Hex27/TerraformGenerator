@@ -28,7 +28,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
 	
 	//Birch Mountains must be shorter to allow trees to populate.
 	@Override
-	protected double getPeakMultiplier(BiomeSection section, @NotNull Random sectionRandom) {
+	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.05, 1.1);
 	}
 	
@@ -140,13 +140,8 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     		start = start.getRelative(0,-1,0);
     	}
     }
-	
-	@Override
-	public @NotNull BiomeBank getBeachType() {
-		return BiomeBank.SANDY_BEACH;
-	}
-	
-	/**
+
+    /**
 	 * Savanna Mountains will not allow rivers to carve through them.
 	 */
 	@Override

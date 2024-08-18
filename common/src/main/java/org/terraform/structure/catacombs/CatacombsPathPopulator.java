@@ -40,7 +40,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
 
         Wall ceiling = core.findCeiling(10);
         if (ceiling != null) {
-            ceiling = ceiling.getRelative(0, -1, 0);
+            ceiling.getRelative(0, -1, 0);
         }
         Wall floor = core.getDown();
         if(!floor.isSolid()) return; //Don't populate a path if there's no floor
@@ -55,11 +55,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
         boolean spawnSupports = true;
     	for(BlockFace dir:BlockUtils.getAdjacentFaces(core.getDirection())) {
     		Wall relPillar = core.getUp().findDir(dir, 2);
-            if(floor == null 
-            		|| relPillar == null
-            		|| !relPillar.getDown().isSolid() 
-            		|| !relPillar.getUp().isSolid() 
-            		|| !relPillar.getUp(3).getRelative(dir.getOppositeFace()).isSolid()) {
+            if(relPillar == null || !relPillar.getDown().isSolid() || !relPillar.getUp().isSolid() || !relPillar.getUp(3).getRelative(dir.getOppositeFace()).isSolid()) {
             	spawnSupports = false;
             }
             else

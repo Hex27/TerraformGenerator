@@ -58,8 +58,6 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 				try {
                     //EntityTypes.byString
 					Optional<EntityTypes<?>> et = EntityTypes.a("minecraft:"+type.toString().toLowerCase(Locale.ENGLISH));
-                    //EntityTypes<?> et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(EntityTypeMapper.getObfsNameFromBukkitEntityType(type)).get(null);
-                    //TerraformGeneratorPlugin.logger.info(type + ":" + et.isPresent());
                     et.ifPresent(entityTypes -> entityTypesDict.put(type, entityTypes));
 				} catch (IllegalArgumentException e) {
 					TerraformGeneratorPlugin.logger.stackTrace(e);

@@ -224,14 +224,6 @@ public class GorgeHandler extends BiomeHandler {
             }
         }
 	}
-	
 
-//	@Override
-//	public BiomeBank getRiverType() {
-//		return BiomeBank.GORGE_RIVER;
-//	}
-//	@Override
-//	public BiomeBank getBeachType() {
-//		return BiomeBank.GORGE_BEACH;
-//	}
+
 }

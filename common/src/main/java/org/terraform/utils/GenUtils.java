@@ -406,7 +406,7 @@ public class GenUtils {
      * @param distanceBetween Initial distance between objects in a grid.
      *                        (aka. density)
      * @param maxPerturbation Max amount a point can move in each axis
-     * @return List of points
+     * @return Array of points
      */
     public static Vector2f @NotNull [] vectorRandomObjectPositions(int seed, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
 
