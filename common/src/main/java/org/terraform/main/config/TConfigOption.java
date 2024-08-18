@@ -12,36 +12,36 @@ public enum TConfigOption {
     HEIGHT_MAP_RIVER_FREQUENCY("heightmap.river-frequency", 0.005f),
     HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER("heightmap.land-height-amplifier", 1f),
     HEIGHT_MAP_SEA_LEVEL("heightmap.sea-level", 62),
-    HEIGHT_MAP_BEDROCK_HEIGHT("heightmap.bedrock-height",5),
-    HEIGHT_MAP_BEDROCK_DENSITY("heightmap.bedrock-density",70),
-    HEIGHT_MAP_SPAWN_FLAT_RADIUS("heightmap.spawn-flat-radius",-1),
+    HEIGHT_MAP_BEDROCK_HEIGHT("heightmap.bedrock-height", 5),
+    HEIGHT_MAP_BEDROCK_DENSITY("heightmap.bedrock-density", 70),
+    HEIGHT_MAP_SPAWN_FLAT_RADIUS("heightmap.spawn-flat-radius", -1),
 
     //-=[CLIMATES]=-
-    CLIMATE_HUMIDVEGETATION_MINTEMP("climate.humid-vegetation.minimum-temperature",-0.35d),
-    CLIMATE_HUMIDVEGETATION_MAXTEMP("climate.humid-vegetation.maximum-temperature",4.0d),
-    CLIMATE_HUMIDVEGETATION_MINMOIST("climate.humid-vegetation.minimum-moisture",0d),
-    CLIMATE_HUMIDVEGETATION_MAXMOIST("climate.humid-vegetation.maximum-moisture",4.0d),
+    CLIMATE_HUMIDVEGETATION_MINTEMP("climate.humid-vegetation.minimum-temperature", -0.35d),
+    CLIMATE_HUMIDVEGETATION_MAXTEMP("climate.humid-vegetation.maximum-temperature", 4.0d),
+    CLIMATE_HUMIDVEGETATION_MINMOIST("climate.humid-vegetation.minimum-moisture", 0d),
+    CLIMATE_HUMIDVEGETATION_MAXMOIST("climate.humid-vegetation.maximum-moisture", 4.0d),
 
-    CLIMATE_DRYVEGETATION_MINTEMP("climate.dry-vegetation.minimum-temperature",-0.35d),
-    CLIMATE_DRYVEGETATION_MAXTEMP("climate.dry-vegetation.maximum-temperature",4.0d),
-    CLIMATE_DRYVEGETATION_MINMOIST("climate.dry-vegetation.minimum-moisture",-4.0d),
-    CLIMATE_DRYVEGETATION_MAXMOIST("climate.dry-vegetation.maximum-moisture",0d),
+    CLIMATE_DRYVEGETATION_MINTEMP("climate.dry-vegetation.minimum-temperature", -0.35d),
+    CLIMATE_DRYVEGETATION_MAXTEMP("climate.dry-vegetation.maximum-temperature", 4.0d),
+    CLIMATE_DRYVEGETATION_MINMOIST("climate.dry-vegetation.minimum-moisture", -4.0d),
+    CLIMATE_DRYVEGETATION_MAXMOIST("climate.dry-vegetation.maximum-moisture", 0d),
 
-    CLIMATE_HOTBARREN_MINTEMP("climate.hot-barren.minimum-temperature",1d),
-    CLIMATE_HOTBARREN_MAXTEMP("climate.hot-barren.maximum-temperature",4.0d),
-    CLIMATE_HOTBARREN_MINMOIST("climate.hot-barren.minimum-moisture",-4.0d),
-    CLIMATE_HOTBARREN_MAXMOIST("climate.hot-barren.maximum-moisture",-1.0d),
+    CLIMATE_HOTBARREN_MINTEMP("climate.hot-barren.minimum-temperature", 1d),
+    CLIMATE_HOTBARREN_MAXTEMP("climate.hot-barren.maximum-temperature", 4.0d),
+    CLIMATE_HOTBARREN_MINMOIST("climate.hot-barren.minimum-moisture", -4.0d),
+    CLIMATE_HOTBARREN_MAXMOIST("climate.hot-barren.maximum-moisture", -1.0d),
 
-    CLIMATE_COLD_MINTEMP("climate.cold.minimum-temperature",-4.0d),
-    CLIMATE_COLD_MAXTEMP("climate.cold.maximum-temperature",-0.5d),
-    CLIMATE_COLD_MINMOIST("climate.cold.minimum-moisture",-4.0d),
-    CLIMATE_COLD_MAXMOIST("climate.cold.maximum-moisture",4.0d),
+    CLIMATE_COLD_MINTEMP("climate.cold.minimum-temperature", -4.0d),
+    CLIMATE_COLD_MAXTEMP("climate.cold.maximum-temperature", -0.5d),
+    CLIMATE_COLD_MINMOIST("climate.cold.minimum-moisture", -4.0d),
+    CLIMATE_COLD_MAXMOIST("climate.cold.maximum-moisture", 4.0d),
 
-    CLIMATE_SNOWY_MINTEMP("climate.snowy.minimum-temperature",-4.0d),
-    CLIMATE_SNOWY_MAXTEMP("climate.snowy.maximum-temperature",-2.7d),
-    CLIMATE_SNOWY_MINMOIST("climate.snowy.minimum-moisture",-4.0d),
-    CLIMATE_SNOWY_MAXMOIST("climate.snowy.maximum-moisture",4.0d),
-    
+    CLIMATE_SNOWY_MINTEMP("climate.snowy.minimum-temperature", -4.0d),
+    CLIMATE_SNOWY_MAXTEMP("climate.snowy.maximum-temperature", -2.7d),
+    CLIMATE_SNOWY_MINMOIST("climate.snowy.minimum-moisture", -4.0d),
+    CLIMATE_SNOWY_MAXMOIST("climate.snowy.maximum-moisture", 4.0d),
+
     //-=[BIOMES]=-
     //Biome globals
     BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency", 0.03f),
@@ -75,14 +75,14 @@ public enum TConfigOption {
     BIOME_SINGLE_HIGHMOUNTAIN_TYPE("biome.single.highmountain", "disabled"),
     //BIOME_SINGLE_RIVER_TYPE("biome.single.river", "disabled"),
     //BIOME_SINGLE_BEACH_TYPE("biome.single.beach", "disabled"),
-    BIOME_DEFAULT_FLAT("biome.defaults.flat","PLAINS"),
-    BIOME_DEFAULT_OCEANIC("biome.defaults.oceanic","OCEAN"),
-    BIOME_DEFAULT_DEEPOCEANIC("biome.defaults.deepoceanic","DEEP_OCEAN"),
-    BIOME_DEFAULT_MOUNTAINOUS("biome.defaults.mountainous","ROCKY_MOUNTAINS"),
-    BIOME_DEFAULT_HIGHMOUNTAINOUS("biome.defaults.highmountainous","JAGGED_PEAKS"),
-    BIOME_DEFAULT_RIVER("biome.defaults.river","RIVER"),
-    BIOME_DEFAULT_BEACH("biome.defaults.beach","SANDY_BEACH"),
-    
+    BIOME_DEFAULT_FLAT("biome.defaults.flat", "PLAINS"),
+    BIOME_DEFAULT_OCEANIC("biome.defaults.oceanic", "OCEAN"),
+    BIOME_DEFAULT_DEEPOCEANIC("biome.defaults.deepoceanic", "DEEP_OCEAN"),
+    BIOME_DEFAULT_MOUNTAINOUS("biome.defaults.mountainous", "ROCKY_MOUNTAINS"),
+    BIOME_DEFAULT_HIGHMOUNTAINOUS("biome.defaults.highmountainous", "JAGGED_PEAKS"),
+    BIOME_DEFAULT_RIVER("biome.defaults.river", "RIVER"),
+    BIOME_DEFAULT_BEACH("biome.defaults.beach", "SANDY_BEACH"),
+
     //Biome specific
     BIOME_ROCKY_MOUNTAINS_WEIGHT("biome.rockymountains.weight", 1),
     BIOME_FORESTED_MOUNTAINS_WEIGHT("biome.forestedmountains.weight", 1),
@@ -138,13 +138,13 @@ public enum TConfigOption {
     BIOME_SNOWY_WASTELAND_WEIGHT("biome.snowywasteland.weight", 4),
     BIOME_ICE_SPIKES_WEIGHT("biome.icespikes.weight", 2),
     BIOME_DARK_FOREST_WEIGHT("biome.darkforest.weight", 5),
-    BIOME_DARK_FOREST_SPAWN_HEADS("biome.darkforest.spawn-heads",true),
+    BIOME_DARK_FOREST_SPAWN_HEADS("biome.darkforest.spawn-heads", true),
     BIOME_SWAMP_WEIGHT("biome.swamp.weight", 5),
     BIOME_MANGROVE_WEIGHT("biome.mangrove.weight", 5),
     BIOME_OASIS_COMMONNESS("biome.oasis.commonness", 1.0),
     BIOME_OASIS_FREQUENCY("biome.oasis.frequency", 0.012f),
 
-    
+
     //-=[TREES]=-
     TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),
     TREES_TAIGA_BIG_ENABLED("trees.big-taiga-trees.enabled", true),
@@ -162,21 +162,21 @@ public enum TConfigOption {
     MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood", false),
     MISC_TREES_GRADIENT_LIMIT("misc.trees.ground-gradient-limit", 1.3d),
     MISC_USE_SLABS_TO_SMOOTH("misc.use-slabs-to-smooth-terrain", true),
-    
+
     //-=[DEVSTUFF]=-
-    DEVSTUFF_SUPPRESS_WATCHDOG("dev-stuff.suppress-watchdog",true),
+    DEVSTUFF_SUPPRESS_WATCHDOG("dev-stuff.suppress-watchdog", true),
     DEVSTUFF_CHUNKCACHE_SIZE("dev-stuff.chunk-cache-size", 6000),
     DEVSTUFF_CHUNKBIOMES_SIZE("dev-stuff.biomecache-size", 3000),
     //DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
-    DEVSTUFF_VANILLA_MUSHROOMS("dev-stuff.force-only-vanilla-mushrooms",false),
+    DEVSTUFF_VANILLA_MUSHROOMS("dev-stuff.force-only-vanilla-mushrooms", false),
     DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY("dev-stuff.patcher-cache-max-size", 100),
     DEVSTUFF_EXTENDED_COMMANDS("dev-stuff.extended-commands", false),
     DEVSTUFF_SUPPRESS_CONSOLE_LOGS("dev-stuff.suppress-terraform-console-logs", true),
     DEVSTUFF_ATTEMPT_FIXING_PREMATURE("dev-stuff.attempt-fixing-premature-generations", true),
     DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS("dev-stuff.vanilla-structure-locate-timeoutmillis", 5000),
     DEVSTUFF_VANILLA_LOCATE_DISABLE("dev-stuff.vanilla-disable-locate", false),
-    
+
     //-=[CAVES]=-
     CAVES_ALLOW_FLOODED_CAVES("caves.allow-flooded-caves", false),
     //CAVES_ALLOW_FLOODED_RAVINES("caves.allow-flooded-ravines",true),
@@ -244,7 +244,7 @@ public enum TConfigOption {
     STRUCTURES_MINESHAFT_MAX_Y("structures.mineshaft.max-y", 30),
     STRUCTURES_CATACOMBS_ENABLED("structures.catacombs.enabled", true),
     STRUCTURES_CATACOMBS_SPAWNRATIO("structures.catacombs.spawnratio", 0.6),
-    STRUCTURES_CATACOMBS_SIZEROLLCHANCE("structures.catacombs.sizerollchance",0.40),
+    STRUCTURES_CATACOMBS_SIZEROLLCHANCE("structures.catacombs.sizerollchance", 0.40),
     STRUCTURES_CATACOMBS_MAX_LEVELS("structures.catacombs.max-levels", 5),
     STRUCTURES_CATACOMBS_MIN_Y("structures.catacombs.min-y", 0),
     STRUCTURES_CATACOMBS_MAX_Y("structures.catacombs.max-y", 30),
@@ -366,7 +366,7 @@ public enum TConfigOption {
     ORE_AMETHYST_GEODE_SIZE("ore.amethyst.geode-size", 7),
     ORE_AMETHYST_MIN_DEPTH("ore.amethyst.min-depth", 70),
     ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE("ore.amethyst.min-depth-below-surface", 15),
-    
+
     //COAL
     ORE_COAL_CHANCE("ore.coal.chance-per-chunk", 50),
     ORE_COAL_VEINSIZE("ore.coal.max-vein-size", 25),
@@ -414,7 +414,7 @@ public enum TConfigOption {
     ORE_EMERALD_COMMONSPAWNHEIGHT("ore.emerald.common-spawn-height", 12),
     ORE_EMERALD_MAXSPAWNHEIGHT("ore.emerald.max-spawn-height", 256),
     ORE_EMERALD_MINSPAWNHEIGHT("ore.emerald.min-spawn-height", -16),
-    
+
     //LAPIS
     ORE_LAPIS_CHANCE("ore.lapis.chance-per-chunk", 30),
     ORE_LAPIS_VEINSIZE("ore.lapis.max-vein-size", 6),
@@ -438,7 +438,7 @@ public enum TConfigOption {
     ORE_COPPER_COMMONSPAWNHEIGHT("ore.copper.common-spawn-height", 48),
     ORE_COPPER_MAXSPAWNHEIGHT("ore.copper.max-spawn-height", 104),
     ORE_COPPER_MINSPAWNHEIGHT("ore.copper.min-spawn-height", -16),
-    
+
     //GRAVEL
     ORE_GRAVEL_CHANCE("ore.gravel.chance-per-chunk", 75),
     ORE_GRAVEL_VEINSIZE("ore.gravel.max-vein-size", 45),
@@ -535,7 +535,8 @@ public enum TConfigOption {
         for (int i = 0; i < placeholders.length; i++) {
             if (i % 2 == 0) {
                 placeholder = placeholders[i];
-            } else {
+            }
+            else {
                 parsed = parsed.replaceAll(placeholder, placeholders[i]);
             }
         }
@@ -586,17 +587,39 @@ public enum TConfigOption {
         return clazz.cast(value);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areCavesEnabled() {
+        return TConfigOption.FEATURE_CAVES_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean areTreesEnabled() {
         return TConfigOption.FEATURE_TREES_ENABLED.getBoolean();
     }
-    public static boolean areTallMushroomsEnabled() { return TConfigOption.FEATURE_TALL_MUSHROOMS_ENABLED.getBoolean(); }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areTallMushroomsEnabled() {
+        return TConfigOption.FEATURE_TALL_MUSHROOMS_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean arePlantsEnabled() {
         return TConfigOption.FEATURE_PLANTS_ENABLED.getBoolean();
     }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean areStructuresEnabled() {
         return TConfigOption.FEATURE_STRUCTURES_ENABLED.getBoolean();
     }
-    public static boolean areAnimalsEnabled() { return TConfigOption.FEATURE_ANIMALS_ENABLED.getBoolean(); }
-    public static boolean areDecorationsEnabled() { return TConfigOption.FEATURE_DECORATIONS_ENABLED.getBoolean(); }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areAnimalsEnabled() {
+        return TConfigOption.FEATURE_ANIMALS_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areDecorationsEnabled() {
+        return TConfigOption.FEATURE_DECORATIONS_ENABLED.getBoolean();
+    }
 
 }

@@ -23,7 +23,7 @@ public class NoiseCaveRegistry {
     }
 
     public boolean canNoiseCarve(int x, int y, int z, double height){
-        if(!TConfigOption.FEATURE_CAVES_ENABLED.getBoolean()) return false;
+        if(!TConfigOption.areCavesEnabled()) return false;
 
         float filterHeight = yBarrier(tw, x,y,z, (float)height, 10, 5);
         float filterGround = yBarrier(tw, x,y,z, (float) TerraformGeneratorPlugin.injector.getMinY(), 20, 5);
@@ -35,7 +35,7 @@ public class NoiseCaveRegistry {
     }
 
     public boolean canGenerateCarve(int x, int y, int z, double height){
-        if(!TConfigOption.FEATURE_CAVES_ENABLED.getBoolean()) return false;
+        if(!TConfigOption.areCavesEnabled()) return false;
 
         //The sea filter is special, pass in HEIGHT as it's about scaling towards the sea
         float filterSea = yBarrier(tw, x,(int)height,z, TerraformGenerator.seaLevel, 5, 1);
