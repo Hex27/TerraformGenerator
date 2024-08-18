@@ -43,11 +43,6 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
             	data.setHeight(face, Height.NONE);
         }
 
-//		if(target.getRelative(BlockFace.UP).getBlockData() instanceof Wall&&
-//				((Wall) target.getRelative(BlockFace.UP).getBlockData()).isUp()) {
-//			data.setUp(true);
-//		}
-        //TerraformGeneratorPlugin.logger.info("Changed wall at " + target.toVector().toString());
         target.setBlockData(data);
     }
 
@@ -63,17 +58,6 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
 
     @Override
     public String updateSchematic(double schematicVersion, String schematic) {
-//        if(schematicVersion < 16)
-//            if (schematic.contains("_wall[")) {
-//                schematic = StringUtils.replace(schematic, "north=false", "north=none");
-//                schematic = StringUtils.replace(schematic, "south=false", "south=none");
-//                schematic = StringUtils.replace(schematic, "east=false", "east=none");
-//                schematic = StringUtils.replace(schematic, "west=false", "west=none");
-//                schematic = StringUtils.replace(schematic, "north=true", "north=low");
-//                schematic = StringUtils.replace(schematic, "south=true", "south=low");
-//                schematic = StringUtils.replace(schematic, "east=true", "east=low");
-//                schematic = StringUtils.replace(schematic, "west=true", "west=low");
-//            }
         return schematic;
     }
 

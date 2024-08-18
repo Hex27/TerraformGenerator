@@ -53,7 +53,7 @@ public class CustomBiomeHandler {
 			frozen.set(registrywritable, false);
 			TerraformGeneratorPlugin.logger.info("Unfreezing biome registry...");
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 		
 		BiomeBase forestbiome = registrywritable.a(Biomes.i); //forest
@@ -73,7 +73,7 @@ public class CustomBiomeHandler {
 				TerraformGeneratorPlugin.logger.info("Registered custom biome: " + type.toString().toLowerCase(Locale.ENGLISH));
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				TerraformGeneratorPlugin.logger.error("Failed to register custom biome: " + type.getKey());
-				e.printStackTrace();
+				TerraformGeneratorPlugin.logger.stackTrace(e);
 			}
 		}
 		
@@ -83,14 +83,10 @@ public class CustomBiomeHandler {
 			frozen.set(registrywritable, true);
 			TerraformGeneratorPlugin.logger.info("Freezing biome registry");
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 
-//		getBiomeRegistry().forEach(biomeBase -> {
-//			TerraformGeneratorPlugin.logger.info("biome id " + getBiomeRegistry().b(biomeBase));
-//        });
-		
-	}
+    }
 
 	private static void registerCustomBiomeBase(@NotNull CustomBiomeType biomeType, DedicatedServer dedicatedserver, @NotNull IRegistryWritable<BiomeBase> registrywritable, @NotNull BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
@@ -107,10 +103,7 @@ public class CustomBiomeHandler {
 //		temperatureModififierField.setAccessible(true);
 
 		//i is climateSettings
-		//Field f = BiomeBase.class.getDeclaredField("i");
-		//f.setAccessible(true);
-		//newBiomeBuilder.a((BiomeBase.TemperatureModifier) temperatureModififierField.get(f.get(forestbiome)));
-		newBiomeBuilder.a(forestbiome.c()); //c is getPrecipitation
+        newBiomeBuilder.a(forestbiome.c()); //c is getPrecipitation
 
 		//k is mobSettings
 		Field biomeSettingMobsField = BiomeBase.class.getDeclaredField("k");
@@ -123,10 +116,8 @@ public class CustomBiomeHandler {
 		biomeSettingGenField.setAccessible(true);
 		BiomeSettingsGeneration biomeSettingGen = (BiomeSettingsGeneration) biomeSettingGenField.get(forestbiome);
 		newBiomeBuilder.a(biomeSettingGen);
-		
-		//newBiome.a(0.2F); //Depth of biome (Obsolete?)
-		//newBiome.b(0.05F); //Scale of biome (Obsolete?)
-		newBiomeBuilder.a(0.7F); //Temperature of biome
+
+        newBiomeBuilder.a(0.7F); //Temperature of biome
 		newBiomeBuilder.b(biomeType.getRainFall()); //Downfall of biome
 
 		//BiomeBase.TemperatureModifier.a will make your biome normal

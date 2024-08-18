@@ -25,8 +25,8 @@ public class TLogger {
 	public TLogger() {
 		suppressConsoleLogs = TConfigOption.DEVSTUFF_SUPPRESS_CONSOLE_LOGS.getBoolean();
     	if(suppressConsoleLogs) {
-            Handler consoleHandler = null;
-            Handler fileHandler  = null;
+            Handler consoleHandler;
+            Handler fileHandler;
             try{
                 //Creating consoleHandler and fileHandler
                 consoleHandler = new ConsoleHandler();
@@ -102,5 +102,17 @@ public class TLogger {
         	}else
         		Bukkit.getConsoleSender().sendMessage("[TerraformGenerator][v] "
         				+ ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public void stackTrace(@NotNull Throwable e) {
+        for(StackTraceElement stackTraceElement : e.getStackTrace()) {
+            final String message = stackTraceElement.toString();
+
+            if(suppressConsoleLogs) {
+                LOGGER.log(Level.SEVERE, "[!] " + message);
+            } else {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[TerraformGenerator][!] " + message);
+            }
+        }
     }
 }

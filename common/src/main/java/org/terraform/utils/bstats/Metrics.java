@@ -38,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Written by bStats author, pasted here because fuck shading
- * https://raw.githubusercontent.com/Bastian/bStats-Metrics/single-file/bukkit/Metrics.java
+ * <a href="https://raw.githubusercontent.com/Bastian/bStats-Metrics/single-file/bukkit/Metrics.java">...</a>
  *
  */
 public class Metrics {
@@ -306,7 +306,7 @@ public class Metrics {
 
     private void sendData(JsonObjectBuilder.@NotNull JsonObject data) throws Exception {
       if (logSentData) {
-        infoLogger.accept("Sent bStats metrics data: " + data.toString());
+        infoLogger.accept("Sent bStats metrics data: " + data);
       }
       String url = String.format(REPORT_URL, platform);
       HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
@@ -529,10 +529,7 @@ public class Metrics {
     private final @NotNull String chartId;
 
     protected CustomChart(@NotNull String chartId) {
-      if (chartId == null) {
-        throw new IllegalArgumentException("chartId must not be null");
-      }
-      this.chartId = chartId;
+        this.chartId = chartId;
     }
 
     public JsonObjectBuilder.@Nullable JsonObject getRequestJsonObject(
@@ -689,10 +686,7 @@ public class Metrics {
      * @return A reference to this object.
      */
     public @NotNull JsonObjectBuilder appendField(@NotNull String key, @NotNull String value) {
-      if (value == null) {
-        throw new IllegalArgumentException("JSON value must not be null");
-      }
-      appendFieldUnescaped(key, "\"" + escape(value) + "\"");
+        appendFieldUnescaped(key, "\"" + escape(value) + "\"");
       return this;
     }
 
@@ -716,10 +710,7 @@ public class Metrics {
      * @return A reference to this object.
      */
     public @NotNull JsonObjectBuilder appendField(@NotNull String key, @NotNull JsonObject object) {
-      if (object == null) {
-        throw new IllegalArgumentException("JSON object must not be null");
-      }
-      appendFieldUnescaped(key, object.toString());
+        appendFieldUnescaped(key, object.toString());
       return this;
     }
 
@@ -731,10 +722,7 @@ public class Metrics {
      * @return A reference to this object.
      */
     public @NotNull JsonObjectBuilder appendField(@NotNull String key, String @NotNull [] values) {
-      if (values == null) {
-        throw new IllegalArgumentException("JSON values must not be null");
-      }
-      String escapedValues =
+        String escapedValues =
           Arrays.stream(values)
               .map(value -> "\"" + escape(value) + "\"")
               .collect(Collectors.joining(","));
@@ -750,10 +738,7 @@ public class Metrics {
      * @return A reference to this object.
      */
     public @NotNull JsonObjectBuilder appendField(@NotNull String key, int @NotNull [] values) {
-      if (values == null) {
-        throw new IllegalArgumentException("JSON values must not be null");
-      }
-      String escapedValues =
+        String escapedValues =
           Arrays.stream(values).mapToObj(String::valueOf).collect(Collectors.joining(","));
       appendFieldUnescaped(key, "[" + escapedValues + "]");
       return this;
@@ -767,10 +752,7 @@ public class Metrics {
      * @return A reference to this object.
      */
     public @NotNull JsonObjectBuilder appendField(@NotNull String key, JsonObject @NotNull [] values) {
-      if (values == null) {
-        throw new IllegalArgumentException("JSON values must not be null");
-      }
-      String escapedValues =
+        String escapedValues =
           Arrays.stream(values).map(JsonObject::toString).collect(Collectors.joining(","));
       appendFieldUnescaped(key, "[" + escapedValues + "]");
       return this;
@@ -786,10 +768,7 @@ public class Metrics {
       if (builder == null) {
         throw new IllegalStateException("JSON has already been built");
       }
-      if (key == null) {
-        throw new IllegalArgumentException("JSON key must not be null");
-      }
-      if (hasAtLeastOneField) {
+        if (hasAtLeastOneField) {
         builder.append(",");
       }
       builder.append("\"").append(escape(key)).append("\":").append(escapedValue);
@@ -811,7 +790,7 @@ public class Metrics {
     }
 
     /**
-     * Escapes the given string like stated in https://www.ietf.org/rfc/rfc4627.txt.
+     * Escapes the given string like stated in <a href="https://www.ietf.org/rfc/rfc4627.txt">...</a>.
      *
      * <p>This method escapes only the necessary characters '"', '\'. and '\u0000' - '\u001F'.
      * Compact escapes are not used (e.g., '\n' is escaped as "\u000a" and not as "\n").

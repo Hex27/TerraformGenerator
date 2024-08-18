@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.v1_19_R3.CraftChunk;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R3.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_19_R3.generator.CraftLimitedRegion;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;
@@ -45,7 +44,6 @@ public class NMSInjector extends NMSInjectorAbstract {
         return new BlockDataFixer();
     }
 
-    @SuppressWarnings("resource")
     @Override
     public boolean attemptInject(@NotNull World world) {
         CraftWorld cw = (CraftWorld) world;
@@ -82,7 +80,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
                     pcm, "u", bpg); //chunkGenerator
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             return false;
         }
         
@@ -147,9 +145,5 @@ public class NMSInjector extends NMSInjectorAbstract {
 	public int getMaxY() {
 		return 320;
 	}
-	
-	@Override
-	public void debugTest(Player p) {
-	}
-	
+
 }

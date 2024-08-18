@@ -3,6 +3,7 @@ package org.terraform.coregen.sqlite;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.io.File;
 import java.sql.Connection;
@@ -63,7 +64,7 @@ public class SQLiteDB {
             stmt.close();
             PREPARED_WORLDS.add(world);
         } catch (SQLException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         } finally {
             closeConn(conn);
         }
@@ -75,14 +76,14 @@ public class SQLiteDB {
                 conn.close();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(ex);
         }
     }
 
     /**
      * Create an entry in the BlocData table
      */
-    public void updateBlockData(Connection c, Statement stmt, String world, int chunkX, int chunkZ, int x, int y, int z, @NotNull BlockData data) {
+    public void updateBlockData(String world, int chunkX, int chunkZ, int x, int y, int z, @NotNull BlockData data) {
         createTableIfNotExists(world);
         String dir = "plugins"
                 + File.separator
@@ -94,10 +95,10 @@ public class SQLiteDB {
         String DATA = data.toString();
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:" + dir);
+            Connection c = DriverManager.getConnection("jdbc:sqlite:" + dir);
             c.setAutoCommit(false);
 
-            stmt = c.createStatement();
+			Statement stmt = c.createStatement();
             String sql = "DELETE from BLOCKDATA where CHUNK='" + CHUNK + "' and"
                     + " COORDS='" + COORDS + "';";
             stmt.executeUpdate(sql);
@@ -112,7 +113,7 @@ public class SQLiteDB {
             c.commit();
             c.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 
@@ -145,7 +146,7 @@ public class SQLiteDB {
             stmt.close();
             c.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             //Bukkit.getLogger().severe(e.getClass().getName() + "[" + e.getCause() +"]" + ":" + e.getMessage() );
         }
 
@@ -181,7 +182,7 @@ public class SQLiteDB {
             c.commit();
             c.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 }

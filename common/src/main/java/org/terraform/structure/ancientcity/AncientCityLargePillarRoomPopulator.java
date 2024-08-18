@@ -21,7 +21,7 @@ import java.util.Random;
 public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoomPopulator {
 
     public AncientCityLargePillarRoomPopulator(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
-        super(tw, occupied, gen, rand, forceSpawn, unique);
+        super(tw, gen, rand, forceSpawn, unique);
         
         
     }
@@ -130,7 +130,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
         	}
             
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
     	
     	super.sculkUp(tw, data, room);

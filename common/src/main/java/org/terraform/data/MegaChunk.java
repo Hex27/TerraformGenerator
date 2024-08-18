@@ -25,10 +25,7 @@ public class MegaChunk {
     //The big structures spawn right in the middle of them.
     public MegaChunk(int chunkX, int chunkZ) {
         this(chunkX*16,0,chunkZ*16);
-    	//this((chunkX << 4) | 15, 0, (chunkZ << 4) | 15);
-    	
-    	//this.x = chunkX >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
-        //this.z = chunkZ >> TConfigOption.STRUCTURES_MEGACHUNK_BITSHIFTS.getInt();
+
     }
 
     public @NotNull MegaChunk getRelative(int x, int z) {
@@ -39,7 +36,6 @@ public class MegaChunk {
     }
 
     /**
-     * @param rand
      * @return A random pair of xz block coords within the mega chunk
      */
     public int[] getRandomCoords(@NotNull Random rand) {
@@ -56,7 +52,6 @@ public class MegaChunk {
     }
 
     /**
-     * @param rand
      * @return A random pair of xz block coords within the mega chunk. This pair of coords WILL be in the middle of a chunk.
      */
     public int[] getRandomCenterChunkBlockCoords(@NotNull Random rand) {
@@ -82,7 +77,6 @@ public class MegaChunk {
     
     /**
      * Used for structure spawning. They need the center of biome sections.
-     * @return
      */
     public int[] getCenterBiomeSectionBlockCoords() {
         
@@ -180,7 +174,7 @@ public class MegaChunk {
     
     private static int blockCoordsToMega(int coord) {
     	if(coord >= 0) {
-    		return (int) Math.floor(coord/megaChunkBlockWidth);
+    		return (int) (double) (coord / megaChunkBlockWidth);
     	}
     	else
     	{
@@ -189,7 +183,6 @@ public class MegaChunk {
     }
 
     /**
-     * @param coord
      * @return lower bounds of block coords within the megachunk.
      */
     private static int megaToBlockCoords(int coord) {

@@ -21,17 +21,13 @@ import java.util.stream.Stream;
 public class TerraformWorldProviderBiome extends WorldChunkManager {
     private final TerraformWorld tw;
     private final IRegistry<BiomeBase> registry;
-    @SuppressWarnings("unused")
-	private final WorldChunkManager delegate;
 
 
     private final Set<Holder<BiomeBase>> biomeList;
-    @SuppressWarnings("deprecation")
-	public TerraformWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
+    public TerraformWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
         //super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = CustomBiomeHandler.biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
         this.tw = tw;
-        this.delegate = delegate;
         this.registry = CustomBiomeHandler.getBiomeRegistry();
     }
 
@@ -53,7 +49,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
     }
 
 	@SuppressWarnings("unused")
-	private static boolean debug = false;
+	private static final boolean debug = false;
 	@Override
 	public @Nullable Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
         //Used for biome generation in NMSChunkGenerator.

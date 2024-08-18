@@ -44,11 +44,7 @@ public abstract class TerraCommand {
 	
 	/**
 	 * Call this method to parse an arraylist of objects parsed by the argument handler
-	 * @param sender
-	 * @param args
-	 * @return
-	 * @throws InvalidArgumentException
-	 */
+     */
 	public @NotNull ArrayList<Object> parseArguments(CommandSender sender, @NotNull Stack<String> args) throws InvalidArgumentException{
 		ArrayList<Object> items = new ArrayList<>(args.size());
 		

@@ -190,7 +190,7 @@ public enum BiomeBank {
     	}
     	catch(Throwable e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     		sect.doCalculations();
     	}
     	return sect;
@@ -198,7 +198,6 @@ public enum BiomeBank {
 
     /**
      * ChunkX, ChunkZ
-     * @param tw
      * @return the biome section that this chunk belongs to.
      */
     public static @NotNull BiomeSection getBiomeSectionFromChunk(TerraformWorld tw, int chunkX, int chunkZ) {
@@ -209,7 +208,7 @@ public enum BiomeBank {
     	}
     	catch(Throwable e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     		sect.doCalculations();
     	}
     	return sect;
@@ -223,7 +222,7 @@ public enum BiomeBank {
     	}
     	catch(Throwable e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     		sect.doCalculations();
     	}
     	return sect;
@@ -244,10 +243,8 @@ public enum BiomeBank {
     	
     	//Bitshift rawX and rawZ. Biome storage is done every 4 blocks,
     	//so there's no need to recalculate for every block.
-    	//rawX = (rawX >> 2) << 2; rawZ = (rawZ >> 2) << 2;
-    	
-    	//locationBasedRandom  = tw.getHashedRand(rawX, 0, rawZ);
-    	FastNoise beachNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_BEACH_HEIGHT, (world)->{
+
+        FastNoise beachNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_BEACH_HEIGHT, (world)->{
     		FastNoise n = new FastNoise((int) world.getSeed());
     		n.SetNoiseType(NoiseType.PerlinFractal);
     		n.SetFrequency(0.01f);
@@ -347,7 +344,7 @@ public enum BiomeBank {
     	}
     	catch(Throwable e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     		bank = BiomeBank.PLAINS;
     	}
     	return bank;
@@ -358,9 +355,7 @@ public enum BiomeBank {
 	public static @Nullable BiomeBank singleDeepOcean = null;
 	public static @Nullable BiomeBank singleMountain = null;
 	public static @Nullable BiomeBank singleHighMountain = null;
-	//static BiomeBank singleRiver;
-	//static BiomeBank singleBeach;
-    public static void initSinglesConfig() {
+	public static void initSinglesConfig() {
     	try
     	{ singleLand = BiomeBank.valueOf(TConfigOption.BIOME_SINGLE_TERRESTRIAL_TYPE.getString().toUpperCase(Locale.ENGLISH)); }
     	catch(IllegalArgumentException e)
@@ -385,8 +380,6 @@ public enum BiomeBank {
     
     /**
      * Does not currently work for beach and river.
-     * @param bank
-     * @return
      */
     public static boolean isBiomeEnabled(@NotNull BiomeBank bank) {
     	
@@ -473,14 +466,8 @@ public enum BiomeBank {
     	
     	
     	Collections.shuffle(contenders, sectionRand);
-//    	if(!debugged && contenders.contains(BiomeBank.LUKEWARM_OCEAN)) {
-//    		TerraformGeneratorPlugin.logger.info("Biomes in contenders:");
-//    		for(BiomeBank b:contenders)
-//    			TerraformGeneratorPlugin.logger.info(" - - - " + b);
-//    		debugged = true;
-//    	}
-    	
-    	if(contenders.isEmpty()) {
+
+        if(contenders.isEmpty()) {
             return switch(targetType) {
                 case BEACH -> {
                     TerraformGeneratorPlugin.logger.info("Defaulted for beach: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
@@ -506,8 +493,6 @@ public enum BiomeBank {
                     TerraformGeneratorPlugin.logger.info("Defaulted for river: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
                     yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_RIVER.getString());
                 }
-                //default:
-                //	return BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_FLAT.getString());
                 case HIGH_MOUNTAINOUS -> {
                     TerraformGeneratorPlugin.logger.info("Defaulted for high mountainous: " + temperature + " : " + moisture + "," + climate + ":" + targetType);
                     yield BiomeBank.valueOf(TConfigOption.BIOME_DEFAULT_HIGHMOUNTAINOUS.getString());

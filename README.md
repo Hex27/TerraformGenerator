@@ -11,7 +11,7 @@
 <details open="open">
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#support">Building</a></li>
+    <li><a href="#building">Building</a></li>
     <li><a href="#support">Support</a></li>
     <li><a href="#about">About Project & Wiki</a></li>
     <li><a href="#getting-started">Getting started</a></li>
@@ -24,7 +24,7 @@
   </ol>
 </details>
 
-<h2 name="support">Building</h2>
+<h2 name="building">Building</h2>
 
 ```bash
 git clone https://github.com/Hex27/TerraformGenerator.git

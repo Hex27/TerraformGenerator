@@ -123,10 +123,10 @@ public class OutpostTent extends RoomPopulatorAbstract {
     		ob.apply(wallProp);
     		
     		if(relLen != 0 && relLen != length)
-			for(int i = wallProp.getY()-1; i > firstProp.getY(); i--) {
-				if(!Tag.BEDS.isTagged(wallProp.getAtY(i).getType()))
-					wallProp.getAtY(i).setType(Material.AIR);
-			}
+                for(int i = wallProp.getY()-1; i > firstProp.getY(); i--) {
+                    if(!Tag.BEDS.isTagged(wallProp.getAtY(i).getType()))
+                        wallProp.getAtY(i).setType(Material.AIR);
+                }
     		wallProp = wallProp.getRelative(facing.getOppositeFace());
     	}
     	

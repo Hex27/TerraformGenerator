@@ -39,7 +39,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
@@ -124,12 +123,12 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 			injector = Version.SupportedVersion.getInjector();
             if(injector == null) throw new ClassNotFoundException();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             logger.stdout("&cNo support for this version has been made yet!");
         } catch (InstantiationException | IllegalAccessException 
         		| IllegalArgumentException | InvocationTargetException 
         		| NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             logger.stdout("&cSomething went wrong initiating the injector!");
         }
         
@@ -175,7 +174,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
                     if (!sc.getWorld().equals(event.getWorld().getName())) continue;
                     logger.stdout("Populating " + sc);
                     PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
-                    new TerraformPopulator(tw).populate(tw, new Random(), data);
+                    new TerraformPopulator(tw).populate(tw, data);
                     fixed++;
                 }
                 logger.stdout("&aSuccessfully finished fixing " + fixed + " pre-mature chunks!");

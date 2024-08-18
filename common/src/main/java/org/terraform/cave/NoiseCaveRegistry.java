@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.noise.FastNoise;
 
 public class NoiseCaveRegistry {
@@ -22,6 +23,8 @@ public class NoiseCaveRegistry {
     }
 
     public boolean canNoiseCarve(int x, int y, int z, double height){
+        if(!TConfigOption.FEATURE_CAVES_ENABLED.getBoolean()) return false;
+
         float filterHeight = yBarrier(tw, x,y,z, (float)height, 10, 5);
         float filterGround = yBarrier(tw, x,y,z, (float) TerraformGeneratorPlugin.injector.getMinY(), 20, 5);
         float filter = filterHeight*filterGround;
@@ -32,8 +35,9 @@ public class NoiseCaveRegistry {
     }
 
     public boolean canGenerateCarve(int x, int y, int z, double height){
+        if(!TConfigOption.FEATURE_CAVES_ENABLED.getBoolean()) return false;
 
-        //The sea filter is special, pass in HEIGHT as its about scaling towards the sea
+        //The sea filter is special, pass in HEIGHT as it's about scaling towards the sea
         float filterSea = yBarrier(tw, x,(int)height,z, TerraformGenerator.seaLevel, 5, 1);
         for(NoiseCaveAbstract carver:generateCaveCarvers) {
             if(carver.canCarve(tw, x, y, z, height, filterSea)) return true;

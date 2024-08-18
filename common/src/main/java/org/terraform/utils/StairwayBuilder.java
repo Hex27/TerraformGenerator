@@ -188,9 +188,7 @@ public class StairwayBuilder {
 	 * Only used when stopAtWater is true.
 	 * Refers to the maximum length of the pathway generated when
 	 * the stairway hits water.
-	 * @param extension
-	 * @return
-	 */
+     */
 	public @NotNull StairwayBuilder setMaxExtensionForward(int extension) {
 		this.maxExtensionForward = extension;
 		return this;

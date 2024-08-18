@@ -99,7 +99,7 @@ public class BadlandsHandler extends BiomeHandler {
         OasisBeach.generateOasisBeach(world, random, data, rawX, rawZ, BiomeBank.BADLANDS);
 
         if (HeightMap.getNoiseGradient(world, rawX, rawZ, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
-            BadlandsCanyonHandler.oneUnit(world, random, data, rawX, rawZ, true);
+            BadlandsCanyonHandler.oneUnit(random, data, rawX, rawZ, true);
             return;
         }
 
@@ -264,15 +264,6 @@ public class BadlandsHandler extends BiomeHandler {
                 }
     }
 
-    public static boolean containsPlateau(TerraformWorld tw, int x, int z) {
-        return getPlateauHeight(tw, x, z) > 0;
-    }
-
-    public static boolean mineCanSpawn(TerraformWorld tw, int x, int z) {
-        int h = getPlateauHeight(tw, x, z);
-        return (h < plateauHeight - 1 && h > plateauHeight / 3);
-    }
-
     // This is for optimizing sand, ew
     static int getPlateauHeight(TerraformWorld tw, int x, int z) {
         double rawValue = Math.max(0, getPlateauNoise(tw).GetNoise(x, z) + plateauCommonness);
@@ -336,7 +327,7 @@ public class BadlandsHandler extends BiomeHandler {
                         currentBiome != BiomeBank.BADLANDS_CANYON) continue;
 
                 if (HeightMap.getNoiseGradient(tw, x, z, 3) >= 1.5 && GenUtils.chance(random, 49, 50)) {
-                    BadlandsCanyonHandler.oneUnit(tw, random, data, x, z, true);
+                    BadlandsCanyonHandler.oneUnit(random, data, x, z, true);
                     continue;
                 }
 

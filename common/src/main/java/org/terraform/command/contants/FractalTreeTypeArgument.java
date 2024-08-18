@@ -36,11 +36,6 @@ public class FractalTreeTypeArgument extends TerraCommandArgument<FractalTypes.T
         if (args.length != 2) return new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 
-//        for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
-//        	if(spop.getClass().getSimpleName().toUpperCase(Locale.ENGLISH).startsWith(args[1].toUpperCase(Locale.ENGLISH)))
-//        		values.add(spop.getClass().getSimpleName());
-//        }
-        
         for(Tree type: FractalTypes.Tree.values()) {
         	if(type.toString().startsWith(args[1].toUpperCase(Locale.ENGLISH)))
         		values.add(type.toString());

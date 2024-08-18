@@ -110,7 +110,7 @@ public class PrisonRoomPopulator extends RoomPopulatorAbstract {
         }
 
         //Stairs leading to the second level
-        BlockFace dir = BlockFace.NORTH;
+        BlockFace dir;
         if (room.getWidthX() > room.getWidthZ())
             dir = new BlockFace[]{BlockFace.WEST, BlockFace.EAST}[rand.nextInt(1)];
         else

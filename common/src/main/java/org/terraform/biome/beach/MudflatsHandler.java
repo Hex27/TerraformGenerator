@@ -24,15 +24,7 @@ public class MudflatsHandler extends BiomeHandler {
         return OneOneNineBlockHandler.MANGROVE_SWAMP;
     }
 
-//	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
-//		gen.setScale(0.005);
-//		
-//		return (int) (gen.noise(x, z, 0.5, 0.5)*7D+50D);
-//	}
-
-    @Override
+	@Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, OneOneNineBlockHandler.MUD, 35, Material.GRASS_BLOCK, 10),
                 GenUtils.randChoice(rand, Material.DIRT),

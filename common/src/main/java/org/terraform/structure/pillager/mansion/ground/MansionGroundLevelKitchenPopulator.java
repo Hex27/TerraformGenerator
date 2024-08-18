@@ -57,11 +57,11 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		        schema.apply();
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
 	
-	private class MansionKitchenSchematicParser extends MansionRoomSchematicParser
+	private static class MansionKitchenSchematicParser extends MansionRoomSchematicParser
 	{
 		public MansionKitchenSchematicParser(Random rand, PopulatorDataAbstract pop) {
 			super(rand, pop);

@@ -142,8 +142,4 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
         }
     }
 
-    @Override
-    public int getPathWidth() {
-        return 3;
-    }
 }

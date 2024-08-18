@@ -32,10 +32,7 @@ public class PlainsPathRecursiveSpawner {
     private final int range;
     private int minRoomWidth = 15;
     private int maxRoomWidth = 20;
-    private final int smallRoomChance = 10;
-    private final int minSmallRoomWidth = 7;
-    private final int maxSmallRoomWidth = 10;
-    
+
     /** 
      * 1 for max room density, 0 for no rooms.
      */
@@ -77,9 +74,10 @@ public class PlainsPathRecursiveSpawner {
                             BlockFace rF = adjDir.getOppositeFace();
                             int minRoomWidth = this.minRoomWidth;
                             int maxRoomWidth = this.maxRoomWidth;
+                            int smallRoomChance = 10;
                             if(GenUtils.chance(random, smallRoomChance, 100)) {
-                            	minRoomWidth = this.minSmallRoomWidth;
-                            	maxRoomWidth = this.maxSmallRoomWidth;
+                                minRoomWidth = 7;
+                                maxRoomWidth = 10;
                             }
                             
                             int roomWidthX = GenUtils.randInt(minRoomWidth, maxRoomWidth);
@@ -123,11 +121,6 @@ public class PlainsPathRecursiveSpawner {
                 }
             }
             edgeTurns = 0;
-//            BlockFace[] valid = new BlockFace[3];
-//            valid[0] = BlockUtils.getLeft(direction);
-//            valid[1] = BlockUtils.getRight(direction);
-//            valid[2] = direction;
-//            direction = valid[random.nextInt(3)];
             direction = BlockUtils.getTurnBlockFace(random, direction);
             loc = loc.getRelative(direction);
         }
@@ -140,7 +133,6 @@ public class PlainsPathRecursiveSpawner {
     
     /**
      * 
-     * @param loc
      * @return whether or not a location can hold a cuberoom (no overlaps, not too far etc)
      */
     private boolean isLocationValid(@NotNull SimpleLocation loc) {
@@ -284,8 +276,6 @@ public class PlainsPathRecursiveSpawner {
                 TerraformGeneratorPlugin.logger.info("Registered: " + room.getPop().getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size "
                         + room.getWidthX() + "x" + room.getWidthZ());
                 room.populate(core.getPopData());
-            } else {
-                //Bukkit.getLogger().info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
             }
         }
 
@@ -340,7 +330,7 @@ public class PlainsPathRecursiveSpawner {
         this.villageDensity = villageDensity;
     }
 
-    private class CrossRoad {
+    private static class CrossRoad {
         public final SimpleLocation loc;
         public final BlockFace[] faces;
         public final @NotNull ArrayList<BlockFace> satisfiedFaces = new ArrayList<>();

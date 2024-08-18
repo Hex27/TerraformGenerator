@@ -65,8 +65,4 @@ public class MonumentPathPopulator extends PathPopulatorAbstract {
         }
     }
 
-    @Override
-    public int getPathWidth() {
-        return 3;
-    }
 }

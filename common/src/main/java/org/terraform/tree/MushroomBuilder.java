@@ -268,7 +268,7 @@ public class MushroomBuilder {
                 break;
             case FUNNEL: // Implement funnel algorithm
                 spawnFunnelCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-                        capRadius, capRadius * 0.7f, capRadius * 0.1f, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                        capRadius, capRadius * 0.7f, capRadius * 0.1f, stemTop.getRelative(0, capYOffset, 0), capType);
                 break;
         }
     }
@@ -311,7 +311,7 @@ public class MushroomBuilder {
         stemTop = lastSegment;
     }
 
-    private void spawnFunnelCap(int seed, float r, float height, float thickness, @NotNull SimpleBlock base, boolean hardReplace, Material... type) {
+    private void spawnFunnelCap(int seed, float r, float height, float thickness, @NotNull SimpleBlock base, Material... type) {
         Random rand = new Random(seed);
         //FastNoise noise = new FastNoise(seed);
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
@@ -338,10 +338,8 @@ public class MushroomBuilder {
                             + Math.pow(z / r, 2);
 
                     if (equationResult <= 1) {
-                        if (hardReplace || !rel.getType().isSolid()) {
-                            rel.setType(GenUtils.randChoice(rand, type));
-                            BlockUtils.correctSurroundingMushroomData(rel);
-                        }
+                        rel.setType(GenUtils.randChoice(rand, type));
+                        BlockUtils.correctSurroundingMushroomData(rel);
                     }
                 }
             }
@@ -440,7 +438,7 @@ public class MushroomBuilder {
      * Curvature is calculated with cubic Bezier curve.
      * Here you can set the control points to control the curve.
      * I also created a handy tool for testing your curves:
-     * https://www.geogebra.org/classic/hg7ckgwz
+     * <a href="https://www.geogebra.org/classic/hg7ckgwz">...</a>
      * <p>
      * The start and end points of the curve will always
      * be (0, 0) and (1, 1), so control points should be close by.

@@ -25,10 +25,10 @@ public class OrePopulator {
     private final int maxNumberOfVeins; //Maximum number of veins per chunk
     private final int peakSpawnChanceHeight; //Optimal height for ore to spawn
     private final int maxSpawnHeight; //max y height where ore can be rarely found
-    private int minRange = 5; //min spawn height
+    private int minRange; //min spawn height
     private final BiomeBank[] requiredBiomes;
     private final int maxDistance;
-    private boolean ignorePeakSpawnChance = false;
+    private final boolean ignorePeakSpawnChance;
 
     public OrePopulator(Material type, int baseChance, int maxOreSize,
                         int maxNumberOfVeins, int peakSpawnChanceHeight, int maxSpawnHeight, 
@@ -105,17 +105,8 @@ public class OrePopulator {
                 	int distance = Math.abs(y - peakSpawnChanceHeight);
                 	
                 	if(!GenUtils.chance((int) Math.round(100.0*(1.0 - ((float)distance)/((float)maxDistance))), 100)) {
-//                		TerraformGeneratorPlugin.logger.info(" ====== ORE [" + this.type + "]======\n"
-//                				+ "Distance: " + distance + "\n"
-//                				+ "MaxDistance: " + maxDistance + "\n"
-//                				+ "Status: FAIL\n"
-//                				+ "minRange: " + minRange + "\n"
-//                				+ "maxRange: " + range + "\n"
-//                				+ "peakHeight: " + peakSpawnChanceHeight + "\n"
-//                				+ "Calculated Chance: " + (Math.round(100.0*(1.0 - ((float)distance)/((float)maxDistance)))) + "\n"
-//                				+ "==========\n");
-                		
-                		continue;
+
+                        continue;
                 	}
             	}
             	

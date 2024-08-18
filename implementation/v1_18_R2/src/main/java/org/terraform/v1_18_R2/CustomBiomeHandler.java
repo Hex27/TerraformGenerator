@@ -46,7 +46,7 @@ public class CustomBiomeHandler {
 			frozen.set(registrywritable, false);
 			TerraformGeneratorPlugin.logger.info("Unfreezing biome registry...");
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 		
 		BiomeBase forestbiome = registrywritable.a(Biomes.h); //forest
@@ -65,7 +65,7 @@ public class CustomBiomeHandler {
 				TerraformGeneratorPlugin.logger.info("Registered custom biome: " + type.toString().toLowerCase(Locale.ENGLISH));
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				TerraformGeneratorPlugin.logger.error("Failed to register custom biome: " + type.getKey());
-				e.printStackTrace();
+				TerraformGeneratorPlugin.logger.stackTrace(e);
 			}
 		}
 		
@@ -75,15 +75,10 @@ public class CustomBiomeHandler {
 			frozen.set(registrywritable, true);
 			TerraformGeneratorPlugin.logger.info("Freezing biome registry");
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 
-//		MinecraftServer ms = DedicatedServer.getServer();
-//		ms.getCustomRegistry().d(IRegistry.aR).forEach(biomeBase -> {
-//			TerraformGeneratorPlugin.logger.info("biome id " + ms.getCustomRegistry().d(IRegistry.aR).getKey(biomeBase) + " " +  ms.getCustomRegistry().d(IRegistry.aR).getId(biomeBase) );
-//        });
-		
-	}
+    }
 	
 	private static void registerCustomBiomeBase(@NotNull CustomBiomeType biomeType, @NotNull DedicatedServer dedicatedserver, IRegistryWritable<BiomeBase> registrywritable, @NotNull BiomeBase forestbiome) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
@@ -107,10 +102,8 @@ public class CustomBiomeHandler {
 		biomeSettingGenField.setAccessible(true);
 		BiomeSettingsGeneration biomeSettingGen = (BiomeSettingsGeneration) biomeSettingGenField.get(forestbiome);
 		newBiomeBuilder.a(biomeSettingGen);
-		
-		//newBiome.a(0.2F); //Depth of biome (Obsolete?)
-		//newBiome.b(0.05F); //Scale of biome (Obsolete?)
-		newBiomeBuilder.a(0.7F); //Temperature of biome
+
+        newBiomeBuilder.a(0.7F); //Temperature of biome
 		newBiomeBuilder.b(biomeType.getRainFall()); //Downfall of biome
 
 		//BiomeBase.TemperatureModifier.a will make your biome normal

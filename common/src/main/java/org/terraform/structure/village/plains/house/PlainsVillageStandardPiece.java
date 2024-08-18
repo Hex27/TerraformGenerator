@@ -69,7 +69,7 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
             Wall w = entry.getKey().getUp(2);
             for (int i = 0; i < entry.getValue(); i++) {
                 Material type = w.getType();
-                if (w.getUp().getType() != plainsVillagePopulator.woodLog) ;
+                w.getUp().getType();
                 w.getUp().setType(type);
 
                 w = w.getLeft();
@@ -77,10 +77,6 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
         }
 
         //Place lanterns (At least one per room)
-        //for(int i = 0; i < GenUtils.randInt(random, 1, 4); i++) {
-        //	int[] coords = room.randomCoords(random,1);
-        //	genLanterns(data,coords[0],coords[2]);
-        //}
         genLanterns(data, this.getRoom().getX(), this.getRoom().getZ());
     }
 

@@ -110,9 +110,7 @@ public class SphereBuilder {
 	
 	/**
 	 * Refers to minimum percentage radius (0.0 to 1.0)
-	 * @param minRadius
-	 * @return
-	 */
+     */
 	public @NotNull SphereBuilder setMinRadius(double minRadius) {
 		this.minRadius = minRadius;
 		return this;
@@ -189,37 +187,32 @@ public class SphereBuilder {
         }
     }
     
-    private boolean unitReplace(@NotNull SimpleBlock rel, int effectiveRYUpper) {
+    private void unitReplace(@NotNull SimpleBlock rel, int effectiveRYUpper) {
     	if(replaceWhitelist.isEmpty()) {
     		if (hardReplace || !rel.getType().isSolid()) {
                 rel.setType(GenUtils.randChoice(random, types));
                 if(this.doLiquidContainment)
                 	rel.replaceAdjacentNonLiquids(new BlockFace[]{BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}, types[0], containmentMaterial);
             }
-//    		else
-//    			return false;
-    	} else if(replaceWhitelist.contains(rel.getType())) {
+        } else if(replaceWhitelist.contains(rel.getType())) {
             rel.setType(GenUtils.randChoice(random, types));
             if(this.doLiquidContainment)
             	rel.replaceAdjacentNonLiquids(new BlockFace[]{BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}, types[0], containmentMaterial);
     	}
-//    	else
-//    		return false;
-    	
-    	if(rel.getType().isSolid()) {
+
+        if(rel.getType().isSolid()) {
 	    	if(upperType != null && rel.getY() == effectiveRYUpper) {
 	    		rel.getUp().lsetType(upperType);
 	    	}
 	    	if(lowerType != null)
 	    		rel.getDown().setType(lowerType);
     	}
-    	
-    	
-    	return true;
+
+
     }
 
-    public static enum SphereType{
-    	UPPER_SEMISPHERE, LOWER_SEMISPHERE, FULL_SPHERE;
+    public enum SphereType{
+    	UPPER_SEMISPHERE, LOWER_SEMISPHERE, FULL_SPHERE
     }
 
 }

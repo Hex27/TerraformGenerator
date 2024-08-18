@@ -63,33 +63,33 @@ public class TerraformChunkData implements ChunkData {
 	}
 
 	@Override
-	public void setBlock(int x, int y, int z, Material arg3) {
+	public void setBlock(int x, int y, int z, @NotNull Material arg3) {
 		//TerraformGeneratorPlugin.logger.info("Called setBlock at " + x + "," + y + "," + z);
 		popData.setType(x + (popData.getChunkX()*16), y, z + (popData.getChunkZ()*16), arg3);
 	}
 
 	@Override
-	public void setBlock(int x, int y, int z, MaterialData arg3) {
+	public void setBlock(int x, int y, int z, @NotNull MaterialData arg3) {
 		throw new UnsupportedOperationException("setBlock was called on TerraformChunkData with MaterialData!");
 	}
 
 	@Override
-	public void setBlock(int x, int y, int z, BlockData arg3) {
+	public void setBlock(int x, int y, int z, @NotNull BlockData arg3) {
 		popData.setBlockData(x + (popData.getChunkX()*16), y, z + (popData.getChunkZ()*16), arg3);
 	}
 
 	@Override
-	public void setRegion(int x, int y, int z,int x2, int y2, int z2, Material arg6) {
+	public void setRegion(int x, int y, int z, int x2, int y2, int z2, @NotNull Material arg6) {
 		throw new UnsupportedOperationException("setRegion was called on TerraformChunkData!");
 	}
 
 	@Override
-	public void setRegion(int x, int y, int z, int x2, int y2, int z2, MaterialData arg6) {
+	public void setRegion(int x, int y, int z, int x2, int y2, int z2, @NotNull MaterialData arg6) {
 		throw new UnsupportedOperationException("setRegion was called on TerraformChunkData with MaterialData!");
 	}
 
 	@Override
-	public void setRegion(int x, int y, int z, int x2, int y2, int z2, BlockData arg6) {
+	public void setRegion(int x, int y, int z, int x2, int y2, int z2, @NotNull BlockData arg6) {
 		throw new UnsupportedOperationException("setRegion was called on TerraformChunkData!");
 	}
 

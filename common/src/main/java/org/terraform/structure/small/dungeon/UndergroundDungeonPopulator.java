@@ -98,13 +98,12 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             Wall w = entry.getKey().getUp();
             int length = entry.getValue();
             while (length >= 0) {
-                if (length % 2 == 0 || length == entry.getValue()) {
-
-                } else {
+                if(length % 2 != 0 && length != entry.getValue()) {
                     w.CAPillar(room.getHeight() - 3, rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
                     if(isWet)
                     	w.waterlog(room.getHeight()-3);
                 }
+
                 for (int h = 0; h < room.getHeight() - 3; h++) {
                     BlockUtils.correctSurroundingMultifacingData(w.getRelative(0, h, 0).get());
                 }

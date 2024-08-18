@@ -67,7 +67,6 @@ public class MossyCavePopulator extends AbstractCavePopulator {
         if (GenUtils.chance(random, 1, 35)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
-            if (h > 4) h = 4;
             Wall w = new Wall(floor.getUp(), BlockFace.NORTH);
             if (BlockUtils.isAir(w.getType())) {
                 if (w.getDown().getType() == Material.SAND || w.getUp().getType() == Material.SANDSTONE)
@@ -98,7 +97,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
 
         } 
         else if (GenUtils.chance(random, 1, 25) 
-        		&& BlockUtils.isStoneLike(floor.getUp().getType())) 
+        		&& BlockUtils.isStoneLike(floor.getUp().getType()))
         { //Slabbing
             SimpleBlock base = floor.getUp();
             //Only next to spots where there's some kind of solid block.
@@ -113,7 +112,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                     }
                 }
         } 
-        else if (GenUtils.chance(random, 1, 35) && BlockUtils.isStoneLike(floor.getUp().getType())) 
+        else if (GenUtils.chance(random, 1, 35) && BlockUtils.isStoneLike(floor.getUp().getType()))
         { //Shrooms
             if (BlockUtils.isAir(floor.getUp().getType()))
                 PlantBuilder.build(floor.getUp(), PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);

@@ -51,11 +51,11 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 		        schema.apply();
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
 	
-	private class MansionLoungeSchematicParser extends MansionRoomSchematicParser
+	private static class MansionLoungeSchematicParser extends MansionRoomSchematicParser
 	{
 		private final Material terracottaType;
 		public MansionLoungeSchematicParser(@NotNull Random rand, PopulatorDataAbstract pop) {

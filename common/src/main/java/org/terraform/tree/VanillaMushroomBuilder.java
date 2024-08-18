@@ -10,6 +10,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.utils.GenUtils;
 
@@ -32,7 +33,7 @@ public class VanillaMushroomBuilder {
 			TerraSchematic capSchem = TerraSchematic.load(capSchematic, new SimpleBlock(data, x, y + height - 2, z));
 			capSchem.apply();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 		
 	}

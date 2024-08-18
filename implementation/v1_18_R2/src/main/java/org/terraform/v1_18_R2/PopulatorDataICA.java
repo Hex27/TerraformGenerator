@@ -89,10 +89,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 			targetBiome = biomeRegistry.g(rkey); //getHolderOrThrow
 	        if(targetBiome == null) {
 	        	TerraformGeneratorPlugin.logger.error("Custom biome was not found in the vanilla registry!");
-//	        	String[] split = cbt.getKey().split(":");
-//	            ResourceKey<BiomeBase> newrkey = ResourceKey.a(IRegistry.aP, new MinecraftKey(split[0],split[1]));
-//	            base = biomeRegistry.a(newrkey);
-	        	targetBiome =  CraftBlock.biomeToBiomeBase(ica.biomeRegistry, fallback);
+                targetBiome =  CraftBlock.biomeToBiomeBase(ica.biomeRegistry, fallback);
 	        }
 		}
 		
@@ -118,13 +115,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     	//parent.setBlockData(x, y, z, data);
     	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), false);
 
-    	//ica.setType(new BlockPosition(x, y, z)
-        //        , ((CraftBlockData) data).getState(), false);
     }
-
-//	public Biome getBiome(int rawX, int rawY, int rawZ){
-//		return CraftBlock.biomeBaseToBiome(gen.getBiome(ica.d(), new BlockPosition(rawX,rawY,rawZ)));
-//	}
 
     public Biome getBiome(int rawX, int rawZ) {
     	return parent.getBiome(rawX, rawZ);
@@ -144,42 +135,12 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     @Override
     public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
-//        EntityTypes<?> et;
-//        try {
-//            et = (EntityTypes<?>) EntityTypes.class.getDeclaredField(EntityTypeMapper.getObfsNameFromBukkitEntityType(type)).get(null);
-//            Entity e = et.a(ws.getMinecraftWorld());
-//            e.setPositionRotation((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D, 0.0F, 0.0F);
-//            if (e instanceof EntityInsentient) {
-//                ((EntityInsentient) e).setPersistent();
-//                ((EntityInsentient) e).prepare(ws, ws.getDamageScaler(new BlockPosition(rawX, rawY, rawZ)), EnumMobSpawn.d, null, null); //EnumMobSpawn.STRUCTURE
-//            }
-//
-//            ws.addEntity(e);
-//        } catch (IllegalArgumentException | IllegalAccessException
-//                | NoSuchFieldException | SecurityException e1) {
-//            e1.printStackTrace();
-//        }
-    	parent.addEntity(rawX, rawY, rawZ, type);
+        parent.addEntity(rawX, rawY, rawZ, type);
     }
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
-//        BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
-//        ica.setType(pos, Blocks.bV.getBlockData(), true); //Spawner
-//        TileEntity tileentity = ica.getTileEntity(pos);
-//
-//        if (tileentity instanceof TileEntityMobSpawner) {
-//            try {
-//                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName((EntityTypes<?>) EntityTypes.class.getField(type.toString()).get(null));
-//            } catch (IllegalArgumentException | IllegalAccessException
-//                    | NoSuchFieldException | SecurityException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            TerraformGeneratorPlugin.logger.error("Failed to fetch mob spawner entity at (" + "," + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")");
-//            //WorldGenDungeons.LOGGER.error("Failed to fetch mob spawner entity at ({}, {}, {})", blockposition.getX(), blockposition.getY(), blockposition.getZ());
-//        }
-    	parent.setSpawner(rawX, rawY, rawZ, type);
+        parent.setSpawner(rawX, rawY, rawZ, type);
     }
 
     @Override
@@ -221,7 +182,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         }
     	catch(NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) 
     	{
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
     	}
     	
     	IStructureAccess sa = ica; //IStructureAccess is FeatureAccess
@@ -285,14 +246,6 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
             case SHIPWRECK_SUPPLY -> LootTables.I;
             case SHIPWRECK_TREASURE -> LootTables.J;
             case PILLAGER_OUTPOST -> LootTables.K;
-//        case BASTION_TREASURE:
-//            return LootTables.L;
-//        case BASTION_OTHER:
-//            return LootTables.M;
-//        case BASTION_BRIDGE:
-//            return LootTables.N;
-//        case BASTION_HOGLIN_STABLE:
-//            return LootTables.O;
             case RUINED_PORTAL -> LootTables.P;
             default ->
 //        case SHEEP_WHITE:

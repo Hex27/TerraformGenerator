@@ -101,17 +101,13 @@ public class PlainsVillageForgeRoofHandler {
 						.apply(target);
 					}
 				}
-				
-//				if(BlockUtils.isStoneLike(core.getPopData().getType(x, core.getY()+3,z))) {
-//					new Wall(target.getDown()).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
-//				}
-			}
+
+            }
 		}
 	}
 	
 	/**
-	 * 
-	 * @param pieces
+	 *
 	 * @return a list of structure piece simplelocations that are contained within a rectangle.
 	 * This rectangle may not be the largest in the provided hashmap.
 	 */

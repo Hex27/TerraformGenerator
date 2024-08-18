@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
@@ -57,7 +58,7 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 		        schema.apply();
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
 	
@@ -66,29 +67,9 @@ public class MansionGroundLevelWarroomPopulator extends MansionRoomPopulator {
 		BannerUtils.generatePillagerBanner(w.getLeft().getUp(3).get(), w.getDirection(),true);
 		BannerUtils.generatePillagerBanner(w.getRight().getUp(3).get(), w.getDirection(),true);
 	}
-	
-	@Override
-	public void decorateWindow(Random rand, Wall w) {
-//		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
-//		.setFacing(w.getDirection().getOppositeFace())
-//		.apply(w)
-//		.setFacing(BlockUtils.getLeft(w.getDirection()))
-//		.setShape(Shape.INNER_RIGHT)
-//		.apply(w.getLeft())
-//		.setFacing(BlockUtils.getRight(w.getDirection()))
-//		.setShape(Shape.INNER_LEFT)
-//		.apply(w.getRight());
-//		if(rand.nextBoolean()) {
-//			w.getLeft().setType(Material.BOOKSHELF);
-//			w.getLeft().getUp().setType(Material.LANTERN);
-//		}else if(rand.nextBoolean()) {
-//			w.getRight().setType(Material.BOOKSHELF);
-//			w.getRight().getUp().setType(Material.LANTERN);
-//		}
-	}
-	
 
-	@Override
+
+    @Override
 	public @NotNull MansionRoomSize getSize() {
 		return new MansionRoomSize(2,2);
 	}

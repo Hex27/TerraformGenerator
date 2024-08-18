@@ -95,11 +95,9 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     /**
      * Mansions are complex, and they need a third pass to properly ensure that
      * previous important details were planted before placing the final edge pieces.
-     * @param random
-     * @param data
      */
     public void thirdStageDecoration(Random random, @NotNull PopulatorDataAbstract data) {
-    	CubeRoom targetRoom = this.getRoom();
+    	CubeRoom targetRoom;
         if(!this.getWalledFaces().isEmpty()) {
         	targetRoom = this.getExtendedRoom(6);
         	//Decorate the top and bottom areas

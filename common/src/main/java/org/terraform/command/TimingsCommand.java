@@ -3,7 +3,6 @@ package org.terraform.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.TickTimer;
@@ -32,7 +31,7 @@ public class TimingsCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, Stack<String> args) throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, Stack<String> args) {
         sender.sendMessage("=====Avg Timings=====");
         for (Map.Entry<String, Long> entry : TickTimer.TIMINGS.entrySet()) {
             sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + entry.getKey() + ChatColor.DARK_GRAY + ": " + ChatColor.GOLD + entry.getValue());

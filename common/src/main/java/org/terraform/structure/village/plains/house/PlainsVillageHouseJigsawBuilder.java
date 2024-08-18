@@ -32,7 +32,7 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
     }
 
     @Override
-    public @NotNull JigsawStructurePiece getFirstPiece(Random random) {
+    public @NotNull JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return new PlainsVillageBedroomPiece(plainsVillagePopulator, var, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
     }
     

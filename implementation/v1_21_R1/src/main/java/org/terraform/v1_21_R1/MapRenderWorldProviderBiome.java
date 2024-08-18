@@ -17,18 +17,13 @@ import java.util.stream.Stream;
 
 public class MapRenderWorldProviderBiome extends WorldChunkManager {
     private final TerraformWorld tw;
-    private final IRegistry<BiomeBase> registry;
-    @SuppressWarnings("unused")
-	private final WorldChunkManager delegate;
 
     private final Set<Holder<BiomeBase>> biomeList;
-    @SuppressWarnings("deprecation")
-	public MapRenderWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
+    public MapRenderWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
         //super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = CustomBiomeHandler.biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
         this.tw = tw;
-        this.delegate = delegate;
-        this.registry = CustomBiomeHandler.getBiomeRegistry();
+        IRegistry<BiomeBase> registry = CustomBiomeHandler.getBiomeRegistry();
         this.river = CraftBiome.bukkitToMinecraftHolder(Biome.RIVER);
         this.plains = CraftBiome.bukkitToMinecraftHolder(Biome.PLAINS);
     }
@@ -53,7 +48,7 @@ public class MapRenderWorldProviderBiome extends WorldChunkManager {
 	private final Holder<BiomeBase> river;
     private final Holder<BiomeBase> plains;
 	@SuppressWarnings("unused")
-	private static boolean debug = false;
+	private static final boolean debug = false;
 	@Override
 	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
 		//Used to be attempted for cave gen. That didn't work, so now, this is

@@ -32,9 +32,6 @@ public class DeepCavePopulator extends AbstractCavePopulator {
 
         //Stalactites
         if (GenUtils.chance(random, 1, 10*Math.max(3, caveHeight/4))) {
-//            int h = caveHeight / 4;
-//            if (h < 1) h = 1;
-//            if (h > 4) h = 4;
             Wall w = new Wall(ceil, BlockFace.NORTH);
             if(w.getUp().getType() == Material.DEEPSLATE) {
                 new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL)
@@ -63,7 +60,6 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         if (GenUtils.chance(random, 1, 10*Math.max(3, caveHeight/4))) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
-            if (h > 4) h = 4;
             Wall w = new Wall(floor.getUp());
             if (BlockUtils.isAir(w.getType()))
             	if(w.getDown().getType() == Material.DEEPSLATE)

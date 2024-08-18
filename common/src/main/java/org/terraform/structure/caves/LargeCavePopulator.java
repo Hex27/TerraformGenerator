@@ -5,7 +5,6 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
-import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.SimpleLocation;
@@ -149,10 +148,6 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
         state.roomPopulatorStates.add(gen);
 
         return state;
-    }
-
-    @Override
-    public void populate(TerraformWorld tw, PopulatorDataAbstract data) {
     }
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {

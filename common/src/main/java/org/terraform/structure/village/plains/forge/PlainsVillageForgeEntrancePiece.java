@@ -40,12 +40,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
         core = core.getRear(2);
         
         //Stairway down
-//        BlockUtils.angledStairwayUntilSolid(core.getFront().getDown().get(), core.getDirection(),
-//                new Material[]{
-//                        Material.COBBLESTONE, Material.MOSSY_COBBLESTONE
-//                },
-//                Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS);
-        
+
         if(core.getFront().getType().isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
 	        .setAngled(true)

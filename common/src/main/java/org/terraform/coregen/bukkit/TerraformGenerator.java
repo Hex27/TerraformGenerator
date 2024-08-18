@@ -46,8 +46,8 @@ public class TerraformGenerator extends ChunkGenerator {
         try {
 			return CHUNK_CACHE.get(cache);
 		} catch (ExecutionException e) {
-			e.printStackTrace();
-			e.getCause().printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
+			TerraformGeneratorPlugin.logger.stackTrace(e.getCause());
 			cache.initInternalCache();
 			return cache;
 		}

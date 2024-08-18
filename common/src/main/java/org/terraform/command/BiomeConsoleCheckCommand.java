@@ -5,7 +5,6 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -37,7 +36,7 @@ public class BiomeConsoleCheckCommand extends TerraCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+	{
     	World world = Bukkit.getWorld("world");
 		for(int i = 0; i < 10; i++) {
     	   int x = new Random().nextInt(1000);

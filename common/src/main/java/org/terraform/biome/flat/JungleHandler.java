@@ -12,6 +12,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
@@ -45,14 +46,6 @@ public class JungleHandler extends BiomeHandler {
     public @NotNull BiomeBank getRiverType() {
         return BiomeBank.JUNGLE_RIVER;
     }
-
-    //	@Override
-//	public int getHeight(int x, int z, Random rand) {
-//		SimplexOctaveGenerator gen = new SimplexOctaveGenerator(rand, 2);
-//		gen.setScale(0.005);
-//
-//		return (int) (gen.noise(x, z, 0.5, 0.5)*7D+50D);
-//	}
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
@@ -224,7 +217,7 @@ public class JungleHandler extends BiomeHandler {
             schema.setFace(BlockUtils.getDirectBlockFace(random));
             schema.apply();
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 	
 	}

@@ -22,7 +22,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
     /**
      * Performs badlands plateau generation for one x/z coord.
      */
-    public static void oneUnit(TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int z, boolean force) {
+    public static void oneUnit(@NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int z, boolean force) {
         int highest = GenUtils.getHighestGround(data, x, z);
         int threshold = 65;
         if (force)
@@ -86,7 +86,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
 
         if(surfaceY >
             10+HeightMap.CORE.getHeight(world, rawX, rawZ)) {
-            oneUnit(world, random, data, rawX, rawZ, false);
+            oneUnit(random, data, rawX, rawZ, false);
         }
         if(HeightMap.getTrueHeightGradient(data, rawX, rawZ, 2) < 2) {
             data.setType(rawX, surfaceY, rawZ, Material.RED_SAND);

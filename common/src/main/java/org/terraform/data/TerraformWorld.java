@@ -121,8 +121,8 @@ public class TerraformWorld {
         return new Random(seed/4 + 25981*d);
     }
 
-    public @NotNull Random getHashedRand(long x, int y, int z) {
-        return new Random(11*x + Objects.hash(seed, 127*y, 773*z));
+    public @NotNull Random getHashedRand(long a, int b, int c) {
+        return new Random(11*a + Objects.hash(seed, 127*b, 773*c));
     }
 
     public @NotNull Random getHashedRand(int x, int y, int z, long multiplier) {
@@ -133,7 +133,6 @@ public class TerraformWorld {
      * Same as getBiomeBank(x,y,z), except y is autofilled to be HeightMap.getBlockHeight
      * @param x blockX
      * @param z blockZ
-     * @return
      */
     public BiomeBank getBiomeBank(int x, int z) {
         ChunkCache cache = TerraformGenerator.getCache(this, x, z);

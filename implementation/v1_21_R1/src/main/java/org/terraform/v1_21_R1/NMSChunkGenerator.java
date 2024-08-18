@@ -243,7 +243,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                     catch(Throwable t)
                     {
                         TerraformGeneratorPlugin.logger.info(chunkcoordintpair.e + "," + chunkcoordintpair.f + " Failed to generate a vanilla structure");
-                        t.printStackTrace();
+                        TerraformGeneratorPlugin.logger.stackTrace(t);
                     }
                 }
             });
@@ -280,11 +280,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
     public BlockColumn a(int i, int j, LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
         return this.delegate.a(i,j,levelheightaccessor,randomstate);
     }
-
-//	@Override //withSeed
-//	public ChunkGenerator a(long seed) {
-//		return new NMSChunkGenerator(this.tw.getName(), (int) seed, this.delegate);
-//	}
 
     //spawnOriginalMobs
     public void a(RegionLimitedWorldAccess regionlimitedworldaccess) {

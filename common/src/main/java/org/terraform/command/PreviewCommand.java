@@ -21,7 +21,6 @@ import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
@@ -50,8 +49,7 @@ public class PreviewCommand extends TerraCommand {
     }
     
     @Override
-    public void execute(CommandSender sender, Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(CommandSender sender, Stack<String> args) {
         //int seed = GenUtils.randInt(1, 1000000);
         int maxX = 16*10;
         int maxY = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY();
@@ -83,7 +81,7 @@ public class PreviewCommand extends TerraCommand {
         System.out.println("Done.");
     }
 
-    private class ImageChunkData implements ChunkGenerator.ChunkData{
+    private static class ImageChunkData implements ChunkGenerator.ChunkData{
         final BufferedImage img;
         final int chunkX,chunkZ,maxX,maxY;
         private final int[][] maxHeights = new int[16][16];
@@ -193,7 +191,7 @@ public class PreviewCommand extends TerraCommand {
         }
     }
 
-    private class ImageWorldInfo implements WorldInfo{
+    private static class ImageWorldInfo implements WorldInfo{
         private final String name;
         private final long seed;
 

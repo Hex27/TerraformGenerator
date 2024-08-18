@@ -25,6 +25,7 @@ public class Wall extends SimpleBlock{
         this.direction = dir;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     public @NotNull Wall clone() {
         return new Wall(this.popData, this.getX(), this.getY(), this.getZ(), direction);
     }
@@ -59,8 +60,6 @@ public class Wall extends SimpleBlock{
 
     /**
      * Gets the first solid block above this one
-     * @param cutoff
-     * @return
      */
     public Wall findCeiling(int cutoff) {
     	SimpleBlock sb = super.findCeiling(cutoff);
@@ -70,8 +69,6 @@ public class Wall extends SimpleBlock{
 
     /**
      * Gets the first solid block below this one
-     * @param cutoff
-     * @return
      */
     public Wall findFloor(int cutoff) {
     	SimpleBlock sb = super.findFloor(cutoff);
@@ -81,8 +78,6 @@ public class Wall extends SimpleBlock{
 
     /**
      * Gets the first solid block below this one
-     * @param cutoff
-     * @return
      */
     public Wall findNearestAirPocket(int cutoff) {
     	SimpleBlock sb = super.findNearestAirPocket(cutoff);
@@ -92,8 +87,6 @@ public class Wall extends SimpleBlock{
 
     /**
      * Gets the first stone-like block below this one
-     * @param cutoff
-     * @return
      */
     public Wall findStonelikeFloor(int cutoff) {
     	SimpleBlock sb = super.findStonelikeFloor(cutoff);
@@ -103,8 +96,6 @@ public class Wall extends SimpleBlock{
     
     /**
      * Gets the first stone-like block above this one
-     * @param cutoff
-     * @return
      */
     public Wall findStonelikeCeiling(int cutoff) {
     	SimpleBlock sb = super.findStonelikeCeiling(cutoff);
@@ -114,8 +105,6 @@ public class Wall extends SimpleBlock{
 
     /**
      * Gets the first solid block right from this one
-     * @param cutoff
-     * @return
      */
     public @Nullable Wall findRight(int cutoff) {
         Wall ceil = this.getRight();
@@ -132,8 +121,6 @@ public class Wall extends SimpleBlock{
 
     /**
      * Gets the first solid block towards that blockface
-     * @param cutoff
-     * @return
      */
     public @Nullable Wall findDir(@NotNull BlockFace face, int cutoff) {
         Wall ceil = this.getRelative(face);
@@ -149,8 +136,6 @@ public class Wall extends SimpleBlock{
 
     /**
      * Gets the first solid block above this one
-     * @param cutoff
-     * @return
      */
     public @Nullable Wall findLeft(int cutoff) {
         Wall ceil = this.getLeft();
@@ -184,7 +169,6 @@ public class Wall extends SimpleBlock{
 
     /**
      * @Deprecated Not needed anymore. Wall extends SimpleBlock now.
-     * @return
      */
     public @NotNull SimpleBlock get() {
         return this;
@@ -235,11 +219,6 @@ public class Wall extends SimpleBlock{
     public @NotNull Wall getRelative(@NotNull BlockFace face, int depth) {
         // TODO Auto-generated method stub
         return new Wall(super.getRelative(face, depth), direction);
-    }
-
-    @Override
-    public int hashCode() {
-    	return super.hashCode();
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -44,14 +45,6 @@ public enum MonumentDesign {
     }
 
     public @NotNull Material stairs() {
-//		switch(this){
-//		case DARK_LIGHTLESS:
-//			return Material.DARK_PRISMARINE_STAIRS;
-//		case DARK_PRISMARINE_CORNERS:
-//			return GenUtils.randChoice(Material.DARK_PRISMARINE_STAIRS,Material.DARK_PRISMARINE_STAIRS,Material.DARK_PRISMARINE_STAIRS,Material.PRISMARINE_BRICK_STAIRS);
-//		case PRISMARINE_LANTERNS:
-//			return GenUtils.randChoice(Material.PRISMARINE_STAIRS,Material.PRISMARINE_BRICK_STAIRS);
-//		}
         return Material.DARK_PRISMARINE_STAIRS;
     }
 
@@ -70,7 +63,7 @@ public enum MonumentDesign {
             schema.setFace(BlockFace.NORTH);
             schema.apply();
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 

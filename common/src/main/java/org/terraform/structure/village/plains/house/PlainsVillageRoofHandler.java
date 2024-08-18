@@ -26,8 +26,6 @@ public class PlainsVillageRoofHandler {
         int[] lowestCoords = null;
         int[] highestCoords = null;
         int y = 0;
-        //SimpleLocation lowestCoords = new SimpleLocation();
-        //SimpleLocation highestCoords = new SimpleLocation();
         for (JigsawStructurePiece piece : builder.getPieces().values()) {
             if (lowestCoords == null) {
                 y = piece.getRoom().getY();
@@ -62,7 +60,7 @@ public class PlainsVillageRoofHandler {
 
 
     public static void placeTentRoof(@NotNull PlainsVillagePopulator plainsVillagePopulator, @NotNull Random rand, @NotNull PlainsVillageHouseJigsawBuilder builder) {
-        Axis superiorAxis = Axis.Z;
+        Axis superiorAxis;
         PopulatorDataAbstract data = builder.getCore().getPopData();
         int[] lowestCoords = null;
         int[] highestCoords = null;
@@ -209,7 +207,6 @@ public class PlainsVillageRoofHandler {
      * Essentially, this just moulds the same blunt pyramid on every room, then
      * changes the sides to stairs. Doesn't look very sophisticated, so it will be
      * used for the weirdly shaped houses that aren't rectangles.
-     * @param builder
      */
     public static void placeStandardRoof(@NotNull PlainsVillagePopulator plainsVillagePopulator, @NotNull PlainsVillageHouseJigsawBuilder builder) {
         PopulatorDataAbstract data = builder.getCore().getPopData();
@@ -254,9 +251,6 @@ public class PlainsVillageRoofHandler {
 
                         for (BlockFace face : BlockUtils.directBlockFaces) {
                             if (!target.getRelative(face).getType().isSolid()) {
-                                //Material[] mats = new Material[] {plainsVillagePopulator.woodStairs};
-                                //if(depth == -2 || depth == 0)
-                                //	mats = new Material[] {Material.COBBLESTONE_STAIRS,Material.MOSSY_COBBLESTONE_STAIRS};
                                 new StairBuilder(stairMat)
                                         .setFacing(face.getOppositeFace())
                                         .apply(target);

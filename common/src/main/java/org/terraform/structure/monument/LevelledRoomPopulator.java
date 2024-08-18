@@ -22,11 +22,6 @@ public class LevelledRoomPopulator extends CageRoomPopulator {
     }
 
     @Override
-    public boolean canPopulate(@NotNull CubeRoom room) {
-        return room.getHeight() > 9;
-    }
-
-    @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
         int[] lowerBounds = room.getLowerCorner();

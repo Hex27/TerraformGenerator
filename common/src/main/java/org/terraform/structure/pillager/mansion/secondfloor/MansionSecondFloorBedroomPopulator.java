@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.small_items.DecorationsBuilder;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
@@ -67,7 +68,7 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 			}
 		} catch (FileNotFoundException e) {	
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
 
@@ -130,34 +131,32 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	@Override
 	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(2);
-		switch(choice) {
-		case 0: //Table with flowers
+        //Utility Block
+        if(choice == 0) { //Table with flowers
 			new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
 			.setHalf(Half.TOP)
 			.setFacing(BlockUtils.getLeft(w.getDirection()))
 			.apply(w.getLeft(2))
 			.setFacing(BlockUtils.getRight(w.getDirection()))
 			.apply(w.getRight(2));
-			
+
 			new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
 			.setType(Type.TOP)
 			.apply(w)
 			.apply(w.getLeft())
 			.apply(w.getRight());
-			
+
             BlockUtils.pickPottedPlant().build(w.getUp());
             BlockUtils.pickPottedPlant().build(w.getLeft());
             BlockUtils.pickPottedPlant().build(w.getRight());
-			w.getRight().getUp().setType();
-			break;
-		default://Utility Block
+            w.getRight().getUp().setType();
+        } else {
             DecorationsBuilder.build(w,
-					DecorationsBuilder.CRAFTING_TABLE, DecorationsBuilder.FLETCHING_TABLE,
+                    DecorationsBuilder.CRAFTING_TABLE, DecorationsBuilder.FLETCHING_TABLE,
 					DecorationsBuilder.CARTOGRAPHY_TABLE, DecorationsBuilder.ENCHANTING_TABLE,
 					DecorationsBuilder.BREWING_STAND, DecorationsBuilder.ANVIL,
-					DecorationsBuilder.NOTE_BLOCK, DecorationsBuilder.JUKEBOX);
-			break;
-		}
+                    DecorationsBuilder.NOTE_BLOCK, DecorationsBuilder.JUKEBOX);
+        }
 	}
 
 	private void table(@NotNull Random rand, @NotNull Wall w) {

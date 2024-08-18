@@ -46,11 +46,6 @@ public class PlainsVillageTempleEntrancePiece extends JigsawStructurePiece {
         BlockUtils.placeDoor(data, plainsVillagePopulator.woodDoor, core.getX(), core.getY(), core.getZ(), core.getDirection());
 
         //Stairway down
-//        BlockUtils.angledStairwayUntilSolid(core.getFront().getDown().get(), core.getDirection(),
-//                new Material[]{
-//                        Material.COBBLESTONE, Material.MOSSY_COBBLESTONE
-//                },
-//                Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS);
 
         if(core.getFront().getType().isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)

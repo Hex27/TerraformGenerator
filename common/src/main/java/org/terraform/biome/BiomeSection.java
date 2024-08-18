@@ -32,10 +32,8 @@ public class BiomeSection {
 	
 	/**
 	 * Block x and z
-	 * 
-	 * @param x
-	 * @param z
-	 */
+	 *
+     */
 	protected BiomeSection(TerraformWorld tw, int x, int z) {
 		this.x = x >> bitshifts;
 		this.z = z >> bitshifts;
@@ -87,8 +85,6 @@ public class BiomeSection {
 
 	/**
 	 * 
-	 * @param blockX
-	 * @param blockZ
 	 * @return the four closest biome sections to this block point
 	 */
 	public static @NotNull Collection<BiomeSection> getSurroundingSections(TerraformWorld tw, int blockX, int blockZ) {
@@ -120,10 +116,7 @@ public class BiomeSection {
 			}
 
 		}
-		if (sections.size() != 4) {
-			TerraformGeneratorPlugin.logger.error("Section size was not 4.");
-		}
-		return sections;
+        return sections;
 	}
 	
 	public @NotNull Random getSectionRandom() {
@@ -131,7 +124,7 @@ public class BiomeSection {
 	}
 
 	public @NotNull Random getSectionRandom(int multiplier) {
-		return new Random(multiplier*Objects.hash(tw.getSeed(), x, z));
+		return new Random((long) multiplier *Objects.hash(tw.getSeed(), x, z));
 	}
 
 	public @NotNull BiomeSection getRelative(int x, int z) {
@@ -145,21 +138,15 @@ public class BiomeSection {
 	private @Nullable BiomeBank parseBiomeBank() {
 		temperature = 3.0f*2.5f*tw.getTemperatureOctave().GetNoise(this.x, this.z);
     	moisture = 3.0f*2.5f*tw.getMoistureOctave().GetNoise(this.x, this.z);
-    	
-    	//if(temperature > 2.5f) temperature = 2.5f;
-    	//if(temperature < -2.5f) temperature = -2.5f;
-    	//if(moisture > 2.5f) moisture = 2.5f;
-    	//if(moisture < -2.5f) moisture = -2.5f;
-    	
-		return BiomeBank.selectBiome(this, temperature, moisture);//BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
+
+        return BiomeBank.selectBiome(this, temperature, moisture);//BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
 	}
 
 	/**
 	 * Will be used to calculate which biome section has dominance in a certain
 	 * block
-	 * 
-	 * @return
-	 */
+	 *
+     */
 	public float getDominance(@NotNull SimpleLocation target) {
 		return getDominanceBasedOnRadius(target.getX(), target.getZ());
 	}
@@ -174,19 +161,14 @@ public class BiomeSection {
 				+ Math.pow(zOffset, 2) / Math.pow(radius, 2)
 				+ 0.7 * shapeNoise.GetNoise(xOffset, zOffset);
 
-		// if(1 -1*(equationResult) < 0)
-		// TerraformGeneratorPlugin.logger.info("Radius Dominance: (" + blockX + "," +
-		// blockZ + ") "+ xOffset + "," + zOffset + ": " + equationResult);
-		return (float) (1 - 1 * (equationResult));
+        return (float) (1 - 1 * (equationResult));
 
 	}
 
 	public @NotNull SimpleLocation getCenter() {
 		int x = ((this.x << bitshifts)) + sectionWidth / 2;
 		int z = ((this.z << bitshifts)) + sectionWidth / 2;
-		// TerraformGeneratorPlugin.logger.info("Center " + toString() + ": " + x + ","
-		// + z);
-		return new SimpleLocation(x, 0, z);
+        return new SimpleLocation(x, 0, z);
 	}
 	
 	
@@ -273,8 +255,6 @@ public class BiomeSection {
     
     /**
      * 
-     * @param rawX
-     * @param rawZ
      * @return the subsection within this biome section that the coordinates belong in.
      * Works even if the coords are outside the biome section.
      */
@@ -307,9 +287,7 @@ public class BiomeSection {
     		return BiomeSubSection.NONE;
     		
     	//}
-    	
-    	//TerraformGeneratorPlugin.logger.info("Mismatch in biomesection! " + new BiomeSection(tw, rawX, rawZ).toString() + " vs " + this.toString());
-    	//return BiomeSubSection.NONE;
+
     }
 
 	@Override

@@ -11,13 +11,10 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 
 public class PopulatorDataSQLite extends PopulatorDataAbstract {
-    @SuppressWarnings("unused")
-	private final ChunkData c;
-    private final int chunkX;
+	private final int chunkX;
     private final int chunkZ;
 
     public PopulatorDataSQLite(int chunkX, int chunkZ, ChunkData c) {
-        this.c = c;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
     }

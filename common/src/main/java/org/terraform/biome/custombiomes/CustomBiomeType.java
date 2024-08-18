@@ -7,10 +7,10 @@ import java.util.Locale;
 
 public enum CustomBiomeType {
     NONE,
-    MUDDY_BOG("b8ad49","9c8046","b8ad49","d9cd62","ad8445","ad8445", 0.8f, false),
-    CHERRY_GROVE("","69faff","","87fffb","ffa1fc","acff96", 0.8f, false),
-    SCARLET_FOREST("","","","","fc3103","ff7700", 0.8f, false),
-    CRYSTALLINE_CLUSTER("e54fff","c599ff","e54fff","","","", 0.8f, false),
+    MUDDY_BOG("b8ad49","9c8046","b8ad49","d9cd62","ad8445","ad8445"),
+    CHERRY_GROVE("","69faff","","87fffb","ffa1fc","acff96"),
+    SCARLET_FOREST("","","","","fc3103","ff7700"),
+    CRYSTALLINE_CLUSTER("e54fff","c599ff","e54fff","","",""),
     ;
 
     private final @NotNull String key;
@@ -34,8 +34,7 @@ public enum CustomBiomeType {
     }
 
     CustomBiomeType(String fogColor, String waterColor, String waterFogColor,
-                    String skyColor, String foliageColor, String grassColor, float rainFall,
-                    boolean isCold) {
+                    String skyColor, String foliageColor, String grassColor) {
         this.key = "terraformgenerator:" + this.toString().toLowerCase(Locale.ENGLISH);
         this.fogColor = fogColor;
         this.waterColor = waterColor;
@@ -43,8 +42,8 @@ public enum CustomBiomeType {
         this.skyColor = skyColor;
         this.foliageColor = foliageColor;
         this.grassColor = grassColor;
-        this.rainFall = rainFall;
-        this.isCold = isCold;
+        this.rainFall = 0.8f;
+        this.isCold = false;
         //In 1.20, cherry trees no longer need the pink.
         if(Version.isAtLeast(20) && this.foliageColor.equals("ffa1fc"))
             this.foliageColor = "acff96";

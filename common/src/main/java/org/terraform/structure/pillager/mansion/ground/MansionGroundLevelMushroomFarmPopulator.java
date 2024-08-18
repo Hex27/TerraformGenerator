@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
@@ -48,15 +49,11 @@ public class MansionGroundLevelMushroomFarmPopulator extends MansionRoomPopulato
 		        schema.apply();
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
-	
 
-	@Override
-	public void decorateExit(Random rand, Wall w) {
-		
-	}
+
 	@Override
 	public void decorateWindow(Random rand, @NotNull Wall w) {
 		Entry<Wall, Integer> entry = this.getRoom().getWall(w.get().getPopData(), w.getDirection().getOppositeFace(), 0);

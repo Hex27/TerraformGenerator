@@ -6,7 +6,6 @@ import java.util.Stack;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
 import org.terraform.main.TerraformCommandManager;
@@ -36,13 +35,12 @@ public class HelpCommand extends TerraCommand {
 	}
 
 	@Override
-	public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
-			throws InvalidArgumentException {
+	public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args) {
 		ArrayList<TerraCommand> cmds = new ArrayList<>();
 		for(TerraCommand cmd:man.getCommands()){
 			if(cmd.hasPermission(sender)) cmds.add(cmd);
 		}
-		int maxPages =  (int) Math.ceil(cmds.size()/6);
+		int maxPages =  (int) (double) (cmds.size() / 6);
 		int page = 0;
 		
 		if(!args.isEmpty()){
@@ -68,15 +66,16 @@ public class HelpCommand extends TerraCommand {
         for (int i = 0; i < 6; i++) {
             if (cmds.size() > page * 5 + i) {
             	TerraCommand cmd = cmds.get(page * 5 + i);
-                String subCmd = ChatColor.YELLOW + "/" + base + " " + String.join("/", cmd.aliases);
-				StringBuilder params = new StringBuilder(" ");
+                StringBuilder params = new StringBuilder();
+                params.append(ChatColor.YELLOW).append("/").append(base).append(" ").append(String.join("/", cmd.aliases)).append(' ');
 				for(TerraCommandArgument<?> param:cmd.parameters){
 					if(param.isOptional()){
-						params.append(ChatColor.GRAY + "<").append(param.getName()).append("> ");
+						params.append(ChatColor.GRAY).append("<").append(param.getName()).append("> ");
 					}else
-						params.append(ChatColor.AQUA + "[").append(param.getName()).append("] ");
+						params.append(ChatColor.AQUA).append("[").append(param.getName()).append("] ");
 				}
-				sender.sendMessage(subCmd + params + ChatColor.DARK_GRAY + "- " + ChatColor.YELLOW + plugin.getLang().fetchLang(cmd.getLangPath()));
+                params.append(ChatColor.DARK_GRAY).append("- ").append(ChatColor.YELLOW).append(plugin.getLang().fetchLang(cmd.getLangPath()));
+				sender.sendMessage(params.toString());
             }
         }
 		sender.sendMessage("");

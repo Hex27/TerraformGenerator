@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.v1_20_R4.CraftChunk;
 import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R4.block.CraftBlockEntityState;
 import org.bukkit.craftbukkit.v1_20_R4.generator.CraftLimitedRegion;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;
@@ -88,7 +87,7 @@ public class NMSInjector extends NMSInjectorAbstract {
                     worldGenContext.d()
             ));
         } catch (Throwable e) {
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
             return false;
         }
         TerraformGeneratorPlugin.logger.info("Post injection: getChunkSource().getChunkGenerator() is of type " + ws.l().g().getClass().getSimpleName());
@@ -153,10 +152,6 @@ public class NMSInjector extends NMSInjectorAbstract {
 	@Override
 	public int getMaxY() {
 		return 320;
-	}
-
-	@Override
-	public void debugTest(Player p) {
 	}
 
 }

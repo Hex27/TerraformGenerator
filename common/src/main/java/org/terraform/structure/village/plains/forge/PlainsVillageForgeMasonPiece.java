@@ -51,8 +51,6 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     
     /**
      * Force 3x3 size
-     * @param random
-     * @param core
      */
     private void spawnCenteredPileOfRocks(@NotNull Random random, Wall core) {
     	core = core.getUp();
@@ -102,8 +100,6 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     
     /**
      * No such limitation
-     * @param random
-     * @param core
      */
     private void spawnedWalledPileOfRocks(@NotNull Random random, Wall core) {
     	core = core.getUp();

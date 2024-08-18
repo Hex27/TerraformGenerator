@@ -1,6 +1,8 @@
 package org.terraform.main.config;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,12 +38,13 @@ public class ConfigLoader {
 			try {
 				if(new File("./plugins/TerraformGenerator/config.yml").exists()) {
 					Bukkit.getLogger().info("New config version detected. Overwriting old config. A backup will be made");
-				    com.google.common.io.Files.copy(
-				    		new File("./plugins/TerraformGenerator/config.yml"),
-				    		new File("./plugins/TerraformGenerator/config.yml-" + System.currentTimeMillis() + ".bak"));
+                    Files.copy(
+				    		new File("./plugins/TerraformGenerator/config.yml").toPath(),
+				    		new File("./plugins/TerraformGenerator/config.yml-" + System.currentTimeMillis() + ".bak").toPath()
+                    );
 				}
 			}catch(Exception e) {
-				e.printStackTrace();
+				TerraformGeneratorPlugin.logger.stackTrace(e);
 				Bukkit.getLogger().info("Failed to backup old config before overwrite.");
 			}
 		}

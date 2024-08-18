@@ -52,11 +52,6 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
         BlockUtils.placeDoor(data, plainsVillagePopulator.woodDoor,
                 w.getX(), w.getY(), w.getZ(), w.getDirection().getOppositeFace());
 
-//        BlockUtils.angledStairwayUntilSolid(
-//                w.getFront().getDown().get(), w.getDirection(),
-//                new Material[]{Material.COBBLESTONE, Material.MOSSY_COBBLESTONE},
-//                Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS);
-        
 
         if(w.getFront().getType().isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)

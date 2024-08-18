@@ -61,7 +61,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 	        		entityTypesDict.put(type, et);
 				} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
 						| SecurityException e) {
-					e.printStackTrace();
+					TerraformGeneratorPlugin.logger.stackTrace(e);
 				}
         	}
         }
@@ -77,7 +77,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         	return CraftMagicNumbers.getMaterial(rlwa.a_(new BlockPosition(x, y, z)).b());
     	}catch(Exception e) {
         	Bukkit.getLogger().info("Error chunk: " + chunkX + "," + chunkZ + "--- Block Coords: " + 16*chunkX + "," + 16*chunkZ + " for coords " + x + "," + y + "," + z);
-    		e.printStackTrace();
+    		TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     	return null;
     }
@@ -93,7 +93,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, Bukkit.createBlockData(type));
     		else
-    			new Exception("Tried to call adjacent chunk with populator radius 0: (" + x + "," + y + "," + z  + ") for chunk (" + chunkX + "," + chunkZ + ")").printStackTrace();
+    			TerraformGeneratorPlugin.logger.stackTrace(new Exception("Tried to call adjacent chunk with populator radius 0: (" + x + "," + y + "," + z  + ") for chunk (" + chunkX + "," + chunkZ + ")"));
         } else {
             rlwa.a(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0);
     	}
@@ -105,7 +105,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     		if(radius > 0)
     			NativeGeneratorPatcherPopulator.pushChange(rlwa.getMinecraftWorld().getWorld().getName(), x, y, z, data);
     		else
-    			new Exception("Tried to call adjacent chunk with populator radius 0: (" + x + "," + y + "," + z  + ") for chunk (" + chunkX + "," + chunkZ + ")").printStackTrace();
+    			TerraformGeneratorPlugin.logger.stackTrace(new Exception("Tried to call adjacent chunk with populator radius 0: (" + x + "," + y + "," + z  + ") for chunk (" + chunkX + "," + chunkZ + ")"));
         } else {
         	rlwa.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), 0);
         }
@@ -145,7 +145,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 	    	//b is addFreshEntity
 	    	rlwa.b(e);
 		} catch (IllegalArgumentException | SecurityException e1) {
-			e1.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
          
     	//rlwa.spawnEntity(new Location(gen.getTerraformWorld().getWorld(), rawX, rawY, rawZ), type);
@@ -164,11 +164,9 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
             	@SuppressWarnings("deprecation")
             	//W is ENTITY_TYPE
             	EntityTypes<?> nmsEntity = IRegistry.W.a(new MinecraftKey(type.getName()));
-            	//EntityTypes<?> nmsEntity = (EntityTypes<?>)IRegistry.Z.a(new MinecraftKey(type.getName()));
-            	//IRegistry.m.a(new MinecraftKey(type.getKey().getKey()));
                 ((TileEntityMobSpawner) tileentity).d().a(nmsEntity);
             } catch (IllegalArgumentException | SecurityException e) {
-                e.printStackTrace();
+                TerraformGeneratorPlugin.logger.stackTrace(e);
             }
         } else {
             TerraformGeneratorPlugin.logger.error("Failed to fetch mob spawner entity at (" + "," + rawX + "," + rawY + "," + rawZ + ")");
@@ -220,14 +218,6 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
             case SHIPWRECK_SUPPLY -> LootTables.I;
             case SHIPWRECK_TREASURE -> LootTables.J;
             case PILLAGER_OUTPOST -> LootTables.K;
-//        case BASTION_TREASURE:
-//            return LootTables.L;
-//        case BASTION_OTHER:
-//            return LootTables.M;
-//        case BASTION_BRIDGE:
-//            return LootTables.N;
-//        case BASTION_HOGLIN_STABLE:
-//            return LootTables.O;
             case RUINED_PORTAL -> LootTables.P;
             default ->
 //        case SHEEP_WHITE:

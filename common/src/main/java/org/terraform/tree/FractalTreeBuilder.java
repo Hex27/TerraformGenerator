@@ -438,19 +438,6 @@ public class FractalTreeBuilder {
                         .setMinPitch(0)
                         .setFractalLeaves(new FractalLeaves().setRadius(6, 2, 6).setMaterial(Material.DARK_OAK_LEAVES).setOffsetY(1));
                 break;
-//            case DARK_OAK_BIG_BOTTOM:
-//                this.setBaseHeight(4)
-//                        .setBaseThickness(4)
-//                        .setThicknessDecrement(0f)
-//                        .setMaxDepth(3)
-//                        .setTrunkType(Material.DARK_OAK_WOOD)
-//                        .setLengthDecrement(-1)
-//                        .setHeightVariation(1)
-//                        .setFractalThreshold(5)
-//                        .setMaxBend(2.3 * Math.PI / 6)
-//                        .setMinBend(2.0 * Math.PI / 6)
-//                        .setFractalLeaves(new FractalLeaves().setRadius(0).setMaterial(Material.DARK_OAK_LEAVES));
-//                break;
             case FROZEN_TREE_BIG:
                 this.setBaseHeight(4)
                         .setBaseThickness(4)
@@ -753,7 +740,7 @@ public class FractalTreeBuilder {
         }
 
         if (alwaysOneStraight > 0) {
-            alwaysOneStraightBranchLength -= this.lengthDecrement;
+            alwaysOneStraightBranchLength -= (int) this.lengthDecrement;
             this.lengthDecrement *= this.lengthDecrementMultiplier;
             //Extend a central trunk and make more branches.
             
@@ -825,10 +812,6 @@ public class FractalTreeBuilder {
 
         float noiseMultiplier = branchNoiseMultiplier;
 
-        double maxR = rX;
-        if (rX < rY) maxR = rY;
-        if (rY < rZ) maxR = rZ;
-        
 
         FastNoise noiseGen = NoiseCacheHandler.getNoise(
         		tw, 
@@ -925,9 +908,9 @@ public class FractalTreeBuilder {
     /**
      * For a randomised length downwards, dangle a downward pillar of leaves
      * (up till a solid is hit)
-     *
+     * <p>
      * On top of the vine dangle, set 1 log, then surround that log with leaves.
-     *
+     * <p>
      * For some ungodly reason this is in this class instead of the leaf class.
      * That ungodly reason is that the branches run this
      *

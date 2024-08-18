@@ -55,11 +55,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
         boolean spawnSupports = true;
     	for(BlockFace dir:BlockUtils.getAdjacentFaces(core.getDirection())) {
     		Wall relPillar = core.getUp().findDir(dir, 2);
-            if(floor == null 
-            		|| relPillar == null
-            		|| !relPillar.getDown().isSolid() 
-            		|| !relPillar.getUp().isSolid() 
-            		|| !relPillar.getUp(3).getRelative(dir.getOppositeFace()).isSolid()) {
+            if(relPillar == null || !relPillar.getDown().isSolid() || !relPillar.getUp().isSolid() || !relPillar.getUp(3).getRelative(dir.getOppositeFace()).isSolid()) {
             	spawnSupports = false;
             }
             else

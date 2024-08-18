@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
 
 public abstract class MansionRoomPopulator {
@@ -32,7 +33,7 @@ public abstract class MansionRoomPopulator {
 			pop = (MansionRoomPopulator) this.getClass().getConstructors()[0].newInstance(room, internalWalls);
 			return pop;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 			return null;
 		}
 	}

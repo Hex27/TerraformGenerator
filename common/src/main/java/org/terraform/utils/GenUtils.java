@@ -389,8 +389,9 @@ public class GenUtils {
         if(y <= TerraformGeneratorPlugin.injector.getMinY()) {
             TerraformGeneratorPlugin.logger.error("GetHighestGround returned less than " + TerraformGeneratorPlugin.injector.getMinY() + "! (" + y + ")");
             try { throw new Exception("GetHighestGround returned less than " + TerraformGeneratorPlugin.injector.getMinY() + "! (" + y + ")"); }
-            catch (Exception e) 
-            {e.printStackTrace();}
+            catch (Exception e) {
+                TerraformGeneratorPlugin.logger.stackTrace(e);
+            }
         }
         
         //Y can be stored as a short, as there's no way world height will be 32k.
@@ -421,7 +422,7 @@ public class GenUtils {
      * @param distanceBetween Initial distance between objects in a grid.
      *                        (aka. density)
      * @param maxPerturbation Max amount a point can move in each axis
-     * @return List of points
+     * @return Array of points
      */
     public static Vector2f @NotNull [] vectorRandomObjectPositions(int seed, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
 

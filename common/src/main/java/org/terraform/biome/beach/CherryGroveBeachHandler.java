@@ -70,19 +70,6 @@ public class CherryGroveBeachHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        
-//		SimpleLocation[] coconutTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
-//
-//		// Big trees and giant mushrooms
-//        for (SimpleLocation sLoc : coconutTrees) {
-//            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-//            sLoc.setY(treeY);
-//            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() &&
-//                    (BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))
-//                    || data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) == Material.SAND)) {
-//                TreeDB.spawnCoconutTree(tw, data, sLoc.getX(), sLoc.getY()+1 ,sLoc.getZ());
-//            }
-//        }
-		
-	}
+
+    }
 }

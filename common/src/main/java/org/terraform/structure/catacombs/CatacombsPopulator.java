@@ -127,7 +127,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
         gen.fill(data, tw, Material.CAVE_AIR);
         
         int catacombLevels = 1;
-        RoomLayoutGenerator previousGen = gen;
+        RoomLayoutGenerator previousGen;
         while (canGoDeeper) {
         	if(catacombLevels >= TConfigOption.STRUCTURES_CATACOMBS_MAX_LEVELS.getInt())
         		break;

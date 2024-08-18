@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -34,10 +35,6 @@ public class SimpleBlock {
 
     @NotNull
     final PopulatorDataAbstract popData;
-//	
-//	public Location getLocation(){
-//		return new Location(Bukkit.getWorld(world),x,y,z);
-//	}
 
     public SimpleBlock(@NotNull Location loc) {
         this.popData = new PopulatorDataPostGen(loc.getChunk());
@@ -65,17 +62,17 @@ public class SimpleBlock {
     	BlockFace dir = BlockFace.NORTH;
     	int max = -1;
     	if(target.getX() - this.getX() > max) {
-    		max = target.getX() - this.getX(); //east
-    		dir = BlockFace.EAST;
+            //east
+            dir = BlockFace.EAST;
     	}else if(this.getX() - target.getX() > max) {
-    		max = this.getX() - target.getX(); //west
-    		dir = BlockFace.WEST;
+            //west
+            dir = BlockFace.WEST;
     	}else if(this.getZ() - target.getZ() > max) {
-    		max = this.getZ() - target.getZ(); //north
-    		dir = BlockFace.NORTH;
+            //north
+            dir = BlockFace.NORTH;
     	}else if(target.getZ() - this.getZ() > max) {
-    		max = target.getZ() - this.getZ(); //south
-    		dir = BlockFace.SOUTH;
+            //south
+            dir = BlockFace.SOUTH;
     	}
     	
     	SimpleBlock base = this;
@@ -180,12 +177,10 @@ public class SimpleBlock {
         return false;
     }
 
-    public boolean lsetBlockData(BlockData data) {
+    public void lsetBlockData(BlockData data) {
         if (!getType().isSolid()) {
             setBlockData(data);
-            return true;
         }
-        return false;
     }
 
     public @org.jetbrains.annotations.Nullable BlockData getBlockData() {
@@ -403,7 +398,7 @@ public class SimpleBlock {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof SimpleBlock other)) return false;
-        return popData.getTerraformWorld().equals(other.getPopData().getTerraformWorld())
+        return Objects.equals(popData.getTerraformWorld(), other.getPopData().getTerraformWorld())
                 && x == other.x && z == other.z && y == other.y;
     }
 
@@ -618,10 +613,9 @@ public class SimpleBlock {
 
     /**
      * Replaces until a solid block is reached.
-     * @return height of pillar created
      */
-    public int LPillar(int height, Material... types) {
-        return LPillar(height, false, new Random(), types);
+    public void LPillar(int height, Material... types) {
+        LPillar(height, false, new Random(), types);
     }
 
     /**

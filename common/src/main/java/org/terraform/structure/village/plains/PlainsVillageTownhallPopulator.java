@@ -128,7 +128,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
 
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.error("Something went wrong trying to place farmhouse at " + x + "," + y + "," + z + "!");
-            e.printStackTrace();
+            TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 
     }

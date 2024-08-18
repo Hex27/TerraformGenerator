@@ -27,12 +27,6 @@ public class PlainsVillageStandardHousePopulator extends PlainsVillageAbstractRo
         //GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
         
         //Debug squares
-//    	int[] lowerCorner = room.getLowerCorner();
-//    	int[] upperCorner = room.getUpperCorner();
-//    	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-//    		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-//    			data.setType(x, height, z, Material.RED_WOOL);
-//    		}
 
         PlainsVillageHouseJigsawBuilder builder = new PlainsVillageHouseJigsawBuilder(
         		plainsVillagePopulator,

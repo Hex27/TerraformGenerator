@@ -68,10 +68,6 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     /**
      * Underwater checks are done here, as the portal being underwater will
      * override all these vegetation settings.
-     * @param tw
-     * @param random
-     * @param core
-     * @param overgrown
      */
     public void spawnRuinedPortal(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock core,
                                   int mossiness, boolean overgrown, boolean snowy) {
@@ -180,8 +176,8 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     	 
     	 HashMap<SimpleBlock, Integer> lavaLocs = new HashMap<>();
     	 int lowestY = 9999;
-    	 for(int relx = - horRadius*3; relx <  + horRadius*3; relx++) {
-    		 for(int relz = - horRadius*3; relz < + horRadius*3; relz++) {
+    	 for(int relx = - horRadius*3; relx < horRadius*3; relx++) {
+    		 for(int relz = - horRadius*3; relz < horRadius*3; relz++) {
     	         double fissureNoise = (3 - 100 * Math.abs(noise.GetNoise(relx+core.getX(), relz + core.getZ())));
     	         if(fissureNoise > 0) {
     	        	 SimpleBlock target = core.getRelative(relx,0,relz).getGround();

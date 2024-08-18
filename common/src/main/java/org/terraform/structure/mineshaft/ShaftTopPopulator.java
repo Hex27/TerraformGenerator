@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
@@ -69,7 +70,7 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
                 schema.apply();
                 target.LPillar(w.getY() - target.getY(), rand, Material.OAK_FENCE);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                TerraformGeneratorPlugin.logger.stackTrace(e);
             }
         }
     }

@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
@@ -54,15 +55,11 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 		        schema.apply();
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 	}
-	
 
-	@Override
-	public void decorateExit(Random rand, Wall w) {
-		
-	}
+
 	@Override
 	public void decorateWindow(Random rand, @NotNull Wall w) {
 		new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
@@ -102,7 +99,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 		
 	}
 	
-	private class MansionForgeSchematicParser extends MansionRoomSchematicParser
+	private static class MansionForgeSchematicParser extends MansionRoomSchematicParser
 	{
 		public MansionForgeSchematicParser(Random rand, PopulatorDataAbstract pop) {
 			super(rand, pop);

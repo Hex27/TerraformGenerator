@@ -69,9 +69,7 @@ public class MansionMazeAlgoUtil {
 	
 	/**
 	 * Based on chance, randomly open a few walls
-	 * @param builder
-	 * @param rand
-	 */
+     */
 	public static void knockdownRandomWalls(@NotNull Collection<JigsawStructurePiece> pieces, @NotNull Random rand) {
 		for(JigsawStructurePiece piece:pieces) {
 			MansionStandardRoomPiece spiece = (MansionStandardRoomPiece) piece;
@@ -90,10 +88,7 @@ public class MansionMazeAlgoUtil {
 	
 	/**
 	 * Returns a map of adjacent mansion pieces aren't connected to anything.
-	 * @param builder
-	 * @param piece
-	 * @return
-	 */
+     */
     private static @NotNull Map<BlockFace, MansionStandardRoomPiece> getValidNeighbours(Collection<JigsawStructurePiece> pieces, @NotNull MansionStandardRoomPiece piece) {
         Map<BlockFace, MansionStandardRoomPiece> neighbours = new EnumMap<>(BlockFace.class);
 

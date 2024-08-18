@@ -177,8 +177,6 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         gen.setRoomMinZ(10);
         gen.setRoomMaxHeight(22);
         gen.setRoomMinHeight(9);
-        //gen.setPyramid(false);
-        //gen.setAllowOverlaps(false);
         gen.registerRoomPopulator(new TreasureRoomPopulator(random, design, true, true));
         gen.registerRoomPopulator(new LevelledElderRoomPopulator(random, design, true, true));
         gen.registerRoomPopulator(new LevelledElderRoomPopulator(random, design, true, true));
@@ -235,17 +233,6 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             arch(w.getRear(i), design, random, halfLength + 2, 10);
         }
 
-//		for(int i = 0; i < 5; i++){
-//			if(i % 2 == 0){
-//				design.upSpire(rightClone.getUp(6).get(), random);
-//				design.upSpire(leftClone.getUp(6).get(), random);
-//			}
-//
-//			//rightClone.Pillar(6, random, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE);
-//			rightClone = rightClone.getRear();
-//			//leftClone.Pillar(6, random, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE);
-//			leftClone = leftClone.getRear();
-//		}
     }
 
     /**

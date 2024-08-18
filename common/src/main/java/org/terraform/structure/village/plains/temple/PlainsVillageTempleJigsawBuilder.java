@@ -34,7 +34,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
     }
     
     @Override
-    public @NotNull JigsawStructurePiece getFirstPiece(Random random) {
+    public @NotNull JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return new PlainsVillageTempleClericAltarPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, true, this, BlockUtils.directBlockFaces);
     	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
@@ -113,10 +113,6 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
     /**
      * Refers to walls that are parallel and directly connected are in the form:
      * __
-     * @param piece
-     * @param face
-     * @param overlapperPieces
-     * @return
      */
     protected static boolean hasAdjacentWall(@NotNull JigsawStructurePiece piece, @NotNull BlockFace face, @NotNull ArrayList<JigsawStructurePiece> overlapperPieces) {
     	for(JigsawStructurePiece other:overlapperPieces) {
@@ -132,10 +128,6 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
     /**
      * Refers to walls that are directly connected and perpendicular on the same location.
      * I.e. the wall must turn inwards instead of outwards (NORTH and WEST facing walls connected)
-     * @param piece
-     * @param face
-     * @param overlapperPieces
-     * @return
      */
     protected static boolean hasAdjacentInwardWall(@NotNull JigsawStructurePiece piece, @NotNull BlockFace face, @NotNull ArrayList<JigsawStructurePiece> overlapperPieces) {
     	

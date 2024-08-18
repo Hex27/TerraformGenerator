@@ -487,6 +487,7 @@ public enum TConfigOption {
     ORE_DEEPSLATE_MAXSPAWNHEIGHT("ore.deepslate.max-spawn-height", 15),
     ORE_DEEPSLATE_MINSPAWNHEIGHT("ore.deepslate.min-spawn-height", 0),
 
+    FEATURE_CAVES_ENABLED("feature_toggle.caves", true),
     FEATURE_ANIMALS_ENABLED("feature_toggle.animals", true),
     FEATURE_ORES_ENABLED("feature_toggle.ores", true),
     FEATURE_TREES_ENABLED("feature_toggle.trees", true),
