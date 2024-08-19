@@ -16,7 +16,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
@@ -63,7 +63,7 @@ public class FractalTreeBuilder {
     double alwaysOneStraightBranchYawLowerMultiplier = 0.9;
     double alwaysOneStraightBranchYawUpperMultiplier = 1.1;
     boolean noMainStem = false;
-    double beeChance = 0.0f;
+    double beeChance = 0f;
     int vines = 0;
     int cocoaBeans = 0;
     int fractalThreshold = 1;
@@ -84,9 +84,9 @@ public class FractalTreeBuilder {
     public FractalTreeBuilder(FractalTypes.@NotNull Tree type) {
         switch (type) {
             case FOREST:
-                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                this.setBeeChance(TConfig.c.ANIMALS_BEE_HIVEFREQUENCY)
                     .setBaseHeight(9)
-                    .setBaseThickness(3.0f)
+                    .setBaseThickness(3f)
                     .setThicknessDecrement(0.3f)
                     .setLengthDecrement(1.3f)
                     .setMinBend(0.7 * Math.PI / 6)
@@ -95,22 +95,22 @@ public class FractalTreeBuilder {
                     .setHeightVariation(2)
                     .setLeafBranchFrequency(0.05f)
                     .setFractalLeaves(new FractalLeaves().setRadius(3)
-                                                         .setLeafNoiseFrequency(1.0f)
-                                                         .setLeafNoiseMultiplier(1.0f));
+                                                         .setLeafNoiseFrequency(1f)
+                                                         .setLeafNoiseMultiplier(1f));
                 break;
             case NORMAL_SMALL:
-                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                this.setBeeChance(TConfig.c.ANIMALS_BEE_HIVEFREQUENCY)
                     .setBaseHeight(5)
                     .setBaseThickness(1)
                     .setThicknessDecrement(1f)
                     .setMaxDepth(1)
                     .setFractalLeaves(new FractalLeaves().setRadius(3)
-                                                         .setLeafNoiseFrequency(1.0f)
-                                                         .setLeafNoiseMultiplier(1.0f))
+                                                         .setLeafNoiseFrequency(1f)
+                                                         .setLeafNoiseMultiplier(1f))
                     .setHeightVariation(1);
                 break;
             case AZALEA_TOP:
-                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                this.setBeeChance(TConfig.c.ANIMALS_BEE_HIVEFREQUENCY)
                     .setBaseHeight(3)
                     .setBaseThickness(1)
                     .setThicknessDecrement(0.3f)
@@ -123,8 +123,8 @@ public class FractalTreeBuilder {
                                                          .setRadiusX(3)
                                                          .setRadiusZ(3)
                                                          .setRadiusY(1.5f)
-                                                         .setLeafNoiseFrequency(1.0f)
-                                                         .setLeafNoiseMultiplier(1.0f)
+                                                         .setLeafNoiseFrequency(1f)
+                                                         .setLeafNoiseMultiplier(1f)
                                                          .setWeepingLeaves(0.3f, 3))
                     .setVines(3)
                     .setMinBend(0.9 * Math.PI / 6)
@@ -166,7 +166,7 @@ public class FractalTreeBuilder {
                     .setMinBend(0.9 * Math.PI / 6)
                     .setMaxBend(1.1 * Math.PI / 6)
                     .setLengthDecrement(-0.5f)
-                    .setMinThickness(1.0f)
+                    .setMinThickness(1f)
                     .setTrunkType(OneTwentyBlockHandler.CHERRY_LOG)
                     .setFractalLeaves(new FractalLeaves().setMaterial(OneTwentyBlockHandler.CHERRY_LEAVES)
                                                          .setRadius(3, 2f, 3));
@@ -183,7 +183,7 @@ public class FractalTreeBuilder {
                     .setMinBend(0.9 * Math.PI / 6)
                     .setMaxBend(1.1 * Math.PI / 6)
                     .setLengthDecrement(0.3f)
-                    .setMinThickness(1.0f)
+                    .setMinThickness(1f)
                     .setTrunkType(OneTwentyBlockHandler.CHERRY_WOOD)
                     .setFractalLeaves(new FractalLeaves().setMaterial(OneTwentyBlockHandler.CHERRY_LEAVES)
                                                          .setRadius(3, 2f, 3)
@@ -587,7 +587,7 @@ public class FractalTreeBuilder {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean checkGradient(PopulatorDataAbstract data, int x, int z) {
         heightGradientChecked = true;
-        return (HeightMap.getTrueHeightGradient(data, x, z, 3) <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
+        return (HeightMap.getTrueHeightGradient(data, x, z, 3) <= TConfig.c.MISC_TREES_GRADIENT_LIMIT);
     }
 
     public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock block) {
@@ -595,7 +595,7 @@ public class FractalTreeBuilder {
     }
 
     public boolean build(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return false;
         }
 
@@ -608,7 +608,7 @@ public class FractalTreeBuilder {
             }
         }
 
-        if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
+        if (TConfig.c.MISC_TREES_FORCE_LOGS) {
             this.trunkType = Material.getMaterial(StringUtils.replace(this.trunkType.toString(), "WOOD", "LOG"));
         }
         this.oriX = x;

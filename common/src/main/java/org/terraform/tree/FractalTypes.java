@@ -21,7 +21,7 @@ public class FractalTypes {
                                            .setInitialBranchRadius(1.6f)
                                            .setMinBranchHorizontalComponent(0.7)
                                            .setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth
-                                                                                                   * (1.0f
+                                                                                                   * (1f
                                                                                                       - branchRatio
                                                                                                         / 1.7f))
                                            .setBranchDecrement((currentBranchLength, totalTreeHeight) ->
@@ -37,7 +37,7 @@ public class FractalTypes {
                 new NewFractalTreeBuilder().setOriginalTrunkLength(18)
                                            .setInitialBranchRadius(2f)
                                            .setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth
-                                                                                                   * (1.0f
+                                                                                                   * (1f
                                                                                                       - branchRatio
                                                                                                         / 2f))
                                            .setBranchDecrement((currentBranchLength, totalTreeHeight) ->
@@ -55,7 +55,7 @@ public class FractalTypes {
                                            .setMaxDepth(2)
                                            .setMinBranchHorizontalComponent(0.7)
                                            .setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth
-                                                                                                   * (1.0f
+                                                                                                   * (1f
                                                                                                       - branchRatio
                                                                                                         / 1.5f))
                                            .setBranchDecrement((currentBranchLength, totalTreeHeight) ->
@@ -74,7 +74,7 @@ public class FractalTypes {
                                                 .setCrownBranches(3)
                                                 .setInitialBranchRadius(0.8f)
                                                 .setNoisePriority(0.05f)
-                                                .setFirstEnd(1.0f)
+                                                .setFirstEnd(1f)
                                                 .setMinBranchHorizontalComponent(1.2)
                                                 .setMaxBranchHorizontalComponent(2)
                                                 .setMaxInitialNormalDelta(0)
@@ -100,7 +100,7 @@ public class FractalTypes {
                                               .setCrownBranches(3)
                                               .setInitialBranchRadius(0.8f)
                                               .setNoisePriority(0.05f)
-                                              .setFirstEnd(1.0f)
+                                              .setFirstEnd(1f)
                                               .setMinBranchHorizontalComponent(1.2)
                                               .setMaxBranchHorizontalComponent(2)
                                               .setMaxInitialNormalDelta(0)
@@ -121,7 +121,7 @@ public class FractalTypes {
                                                                                            Material.AZALEA_LEAVES,
                                                                                            Material.FLOWERING_AZALEA_LEAVES
                                                                                    ))),
-        TAIGA_BIG(new NewFractalTreeBuilder().setFirstEnd(1.0f)
+        TAIGA_BIG(new NewFractalTreeBuilder().setFirstEnd(1f)
                                              .setTreeRootThreshold(2)
                                              .setTreeRootMultiplier(1.3f)
                                              .setBranchMaterial(Material.SPRUCE_LOG)
@@ -226,7 +226,7 @@ public class FractalTypes {
                                              .setMaxDepth(4)
                                              .setInitialBranchRadius(2f)
                                              .setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth
-                                                                                                     * (1.0f
+                                                                                                     * (1f
                                                                                                         - branchRatio
                                                                                                           / 2f))
                                              .setBranchDecrement((currentBranchLength, totalTreeHeight) ->
@@ -263,7 +263,7 @@ public class FractalTypes {
                                                   .setMaxBranchHorizontalComponent(0.9f)
                                                   .setGetBranchWidth((initialBranchWidth, branchRatio) ->
                                                           initialBranchWidth
-                                                          * (1.0f - branchRatio / 2f))
+                                                          * (1f - branchRatio / 2f))
                                                   .setBranchDecrement((currentBranchLength, totalTreeHeight) ->
                                                           currentBranchLength
                                                           - 1)
@@ -287,7 +287,7 @@ public class FractalTypes {
                                                     .setMaxBranchHorizontalComponent(1.2f)
                                                     .setGetBranchWidth((initialBranchWidth, branchRatio) ->
                                                             initialBranchWidth
-                                                            * (1.0f - branchRatio / 3f))
+                                                            * (1f - branchRatio / 3f))
                                                     .setBranchDecrement((currentBranchLength, totalTreeHeight) ->
                                                             currentBranchLength
                                                             - 0.5f)

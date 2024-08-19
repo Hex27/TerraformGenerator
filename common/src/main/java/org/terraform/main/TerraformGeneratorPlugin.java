@@ -17,8 +17,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.ConfigLoader;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.reflection.Post14PrivateFieldHandler;
 import org.terraform.reflection.Pre14PrivateFieldHandler;
 import org.terraform.reflection.PrivateFieldHandler;
@@ -31,6 +30,8 @@ import org.terraform.utils.bstats.TerraformGeneratorMetricsHandler;
 import org.terraform.utils.version.Version;
 import org.terraform.watchdog.TfgWatchdogSuppressant;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.EnumSet;
@@ -58,7 +59,6 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         privateFieldHandler = handler;
     }
 
-    private ConfigLoader config;
     private LanguageManager lang;
 
     public static TerraformGeneratorPlugin get() {
@@ -71,12 +71,21 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         GenUtils.initGenUtils();
         BlockUtils.initBlockUtils();
         instance = this;
-        config = new ConfigLoader(this);
-        lang = new LanguageManager(this);
-        TConfigOption.loadValues(config);
+
+        try {
+            TConfig.init(new File(getDataFolder(), "config.yml"));
+        }
+        catch (IOException e) {
+            getLogger().severe("Failed to load config.yml: " + e.getMessage());
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        logger = new TLogger();
+        lang = new LanguageManager(this, TConfig.c);
 
         // Initiate the height map flat radius value
-        HeightMap.spawnFlatRadiusSquared = TConfigOption.HEIGHT_MAP_SPAWN_FLAT_RADIUS.getInt();
+        HeightMap.spawnFlatRadiusSquared = TConfig.c.HEIGHT_MAP_SPAWN_FLAT_RADIUS;
         if (HeightMap.spawnFlatRadiusSquared > 0) {
             HeightMap.spawnFlatRadiusSquared *= HeightMap.spawnFlatRadiusSquared;
         }
@@ -85,12 +94,12 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
         // Initialize chunk cache based on config size
         TerraformGenerator.CHUNK_CACHE = CacheBuilder.newBuilder()
-                                                     .maximumSize(TConfigOption.DEVSTUFF_CHUNKCACHE_SIZE.getInt())
+                                                     .maximumSize(TConfig.c.DEVSTUFF_CHUNKCACHE_SIZE)
                                                      .build(new ChunkCacheLoader());
 
         // Initialize biome query cache based on config size
         GenUtils.biomeQueryCache = CacheBuilder.newBuilder()
-                                               .maximumSize(TConfigOption.DEVSTUFF_CHUNKBIOMES_SIZE.getInt())
+                                               .maximumSize(TConfig.c.DEVSTUFF_CHUNKBIOMES_SIZE)
                                                .build(new CacheLoader<>() {
                                                    @Override
                                                    public @NotNull EnumSet<BiomeBank> load(@NotNull ChunkCache key) {
@@ -110,7 +119,6 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
                                                });
 
         LangOpt.init(this);
-        logger = new TLogger();
         watchdogSuppressant = new TfgWatchdogSuppressant();
         new TerraformGeneratorMetricsHandler(this); // bStats
 
@@ -122,8 +130,8 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         logger.stdout("Detected version: " + version + ", number: " + Version.DOUBLE);
         try {
             injector = Version.SupportedVersion.getInjector();
-            if (injector == null) {
-                throw new ClassNotFoundException();
+            if (injector != null) {
+                injector.startupTasks();
             }
         }
         catch (ClassNotFoundException e) {
@@ -140,9 +148,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
             logger.stdout("&cSomething went wrong initiating the injector!");
         }
 
-        injector.startupTasks();
-
-        if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_ENABLED.getBoolean()) {
+        if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_ENABLED) {
             Bukkit.getPluginManager().registerEvents(new SaplingOverrider(), this);
         }
 
@@ -167,7 +173,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
             logger.stdout(event.getWorld().getName() + " loaded.");
             if (!TerraformGenerator.preWorldInitGen.isEmpty()) {
-                if (!TConfigOption.DEVSTUFF_ATTEMPT_FIXING_PREMATURE.getBoolean()) {
+                if (!TConfig.c.DEVSTUFF_ATTEMPT_FIXING_PREMATURE) {
                     logger.stdout("&cIgnoring "
                                   + TerraformGenerator.preWorldInitGen.size()
                                   + " pre-maturely generated chunks."
@@ -200,7 +206,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         if (event.getWorld().getGenerator() instanceof TerraformGenerator) {
             logger.stdout("Detected world: " + event.getWorld().getName() + ", commencing injection... ");
             TerraformWorld tw = TerraformWorld.forceOverrideSeed(event.getWorld());
-            if (injector.attemptInject(event.getWorld())) {
+            if (injector != null && injector.attemptInject(event.getWorld())) {
                 INJECTED_WORLDS.add(event.getWorld().getName());
                 tw.minY = injector.getMinY();
                 tw.maxY = injector.getMaxY();
@@ -217,10 +223,6 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     @Override
     public ChunkGenerator getDefaultWorldGenerator(@NotNull String worldName, String id) {
         return new TerraformGenerator();
-    }
-
-    public ConfigLoader getConfigLoader() {
-        return config;
     }
 
     public LanguageManager getLang() {

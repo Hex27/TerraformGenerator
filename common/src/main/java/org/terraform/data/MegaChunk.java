@@ -3,14 +3,14 @@ package org.terraform.data;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
 
 public class MegaChunk {
     public static final int megaChunkBlockWidth = BiomeSection.sectionWidth
-                                                  * TConfigOption.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS.getInt();
+                                                  * TConfig.c.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS;
     private int x, z;
 
     public MegaChunk(@NotNull SimpleChunkLocation sLoc) {

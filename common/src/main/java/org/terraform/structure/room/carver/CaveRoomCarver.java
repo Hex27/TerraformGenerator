@@ -9,9 +9,9 @@ import org.terraform.utils.BlockUtils;
 
 public class CaveRoomCarver extends RoomCarver {
 
-    private float xMultiplier = 1.0f;
-    private float yMultiplier = 1.0f;
-    private float zMultiplier = 1.0f;
+    private float xMultiplier = 1f;
+    private float yMultiplier = 1f;
+    private float zMultiplier = 1f;
     private float frequency = 0.09f;
     private float largeRoomFrequency = 0.03f;
 

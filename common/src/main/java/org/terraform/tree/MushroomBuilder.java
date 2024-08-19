@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
@@ -232,11 +232,11 @@ public class MushroomBuilder {
     }
 
     public void build(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.areTallMushroomsEnabled()) {
+        if (!TConfig.areTallMushroomsEnabled()) {
             return;
         }
 
-        if (TConfigOption.DEVSTUFF_VANILLA_MUSHROOMS.getBoolean()) {
+        if (TConfig.c.DEVSTUFF_VANILLA_MUSHROOMS) {
             String schemName;
             if (this.type.toString().contains("RED")) {
                 schemName = VanillaMushroomBuilder.RED_MUSHROOM_CAP;

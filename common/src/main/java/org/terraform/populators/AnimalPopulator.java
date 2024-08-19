@@ -7,7 +7,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 
 import java.util.Random;
@@ -46,11 +46,11 @@ public class AnimalPopulator {
     // Instead, each query will just call getBiome per block. This sounds more
     // intensive, but it relies on the getBiome cache system to be faster.
     public boolean canSpawn(@NotNull Random rand) {
-        return TConfigOption.areAnimalsEnabled() && !GenUtils.chance(rand, 100 - chance, 100);
+        return TConfig.areAnimalsEnabled() && !GenUtils.chance(rand, 100 - chance, 100);
     }
 
     private boolean canSpawnInBiome(BiomeBank b) {
-        if (!TConfigOption.areAnimalsEnabled()) {
+        if (!TConfig.areAnimalsEnabled()) {
             return false;
         }
 
@@ -74,7 +74,7 @@ public class AnimalPopulator {
     }
 
     public void populate(@NotNull TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-        if (!TConfigOption.areAnimalsEnabled()) {
+        if (!TConfig.areAnimalsEnabled()) {
             return;
         }
 

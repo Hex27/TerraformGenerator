@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 
 import java.util.Random;
 
@@ -137,7 +137,7 @@ public class CoralGenerator {
      * @param data refers to the block to replace with sea pickles
      */
     public static void generateSeaPickles(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -156,7 +156,7 @@ public class CoralGenerator {
      * @param data refers to the block ABOVE the floor (lowest block of the kelp plant)
      */
     public static void generateKelpGrowth(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 

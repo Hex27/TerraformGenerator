@@ -9,7 +9,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
@@ -54,7 +54,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
         // Do height and space checks
         int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
-        if (height < TConfigOption.STRUCTURES_CATACOMBS_MAX_Y.getInt() + 15) {
+        if (height < TConfig.c.STRUCTURES_CATACOMBS_MAX_Y + 15) {
             // Way too little space. Abort generation.
             return false;
         }
@@ -64,7 +64,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 17261),
-                (int) (TConfigOption.STRUCTURES_CATACOMBS_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_CATACOMBS_SPAWNRATIO * 10000),
                 10000
         );
     }
@@ -80,11 +80,11 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
         int x = coords[0];
         int z = coords[1];
         int height = HeightMap.getBlockHeight(tw, x, z);
-        int minY = TConfigOption.STRUCTURES_CATACOMBS_MIN_Y.getInt();
+        int minY = TConfig.c.STRUCTURES_CATACOMBS_MIN_Y;
         if (!Version.isAtLeast(18) && minY < 0) {
             minY = 8;
         }
-        int y = GenUtils.randInt(minY, TConfigOption.STRUCTURES_CATACOMBS_MAX_Y.getInt());
+        int y = GenUtils.randInt(minY, TConfig.c.STRUCTURES_CATACOMBS_MAX_Y);
 
 
         spawnCatacombs(tw, tw.getHashedRand(x, y, z, 1928374), data, x, y + 1, z, height - y > 25);
@@ -115,10 +115,10 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
         TerraformGeneratorPlugin.logger.info("TW MinY: "
                                              + tw.minY
                                              + ", Rolling chance: "
-                                             + ((int) (TConfigOption.STRUCTURES_CATACOMBS_SIZEROLLCHANCE.getDouble()
+                                             + ((int) (TConfig.c.STRUCTURES_CATACOMBS_SIZEROLLCHANCE
                                                        * 10000d)));
         return y > tw.minY + 10 && GenUtils.chance(random,
-                (int) (TConfigOption.STRUCTURES_CATACOMBS_SIZEROLLCHANCE.getDouble() * 10000d),
+                (int) (TConfig.c.STRUCTURES_CATACOMBS_SIZEROLLCHANCE * 10000d),
                 10000
         );
     }
@@ -171,7 +171,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
         int catacombLevels = 1;
         RoomLayoutGenerator previousGen;
         while (canGoDeeper) {
-            if (catacombLevels >= TConfigOption.STRUCTURES_CATACOMBS_MAX_LEVELS.getInt()) {
+            if (catacombLevels >= TConfig.c.STRUCTURES_CATACOMBS_MAX_LEVELS) {
                 break;
             }
             y -= 15;
@@ -244,7 +244,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_CATACOMBS_ENABLED.getBoolean();
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_CATACOMBS_ENABLED;
     }
 
     // Underground structures don't need a decorative buffer

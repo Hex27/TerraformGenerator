@@ -8,7 +8,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.JigsawState;
 import org.terraform.structure.JigsawStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
@@ -50,7 +50,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
-                (int) (TConfigOption.STRUCTURES_MINESHAFT_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_MINESHAFT_SPAWNRATIO * 10000),
                 10000
         );
     }
@@ -73,8 +73,8 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
         int y;
         if (!badlandsMineshaft) {
             y = GenUtils.randInt(
-                    TConfigOption.STRUCTURES_MINESHAFT_MIN_Y.getInt(),
-                    TConfigOption.STRUCTURES_MINESHAFT_MAX_Y.getInt()
+                    TConfig.c.STRUCTURES_MINESHAFT_MIN_Y,
+                    TConfig.c.STRUCTURES_MINESHAFT_MAX_Y
             );
             if (y < TerraformGeneratorPlugin.injector.getMinY()) {
                 y = TerraformGeneratorPlugin.injector.getMinY() + 15;
@@ -200,7 +200,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean();
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_MINESHAFT_ENABLED;
     }
 
     @Override

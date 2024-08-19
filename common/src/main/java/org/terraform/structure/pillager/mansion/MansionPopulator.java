@@ -8,7 +8,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.utils.GenUtils;
 
@@ -22,7 +22,7 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(
                 tw.getHashedRand(chunkX, chunkZ, 99572),
-                (int) (TConfigOption.STRUCTURES_MANSION_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_MANSION_SPAWNRATIO * 10000),
                 10000
         );
     }
@@ -35,7 +35,7 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
         // Enforce minimum distance
         if (Math.pow(chunkX * 16, 2) + Math.pow(chunkZ * 16, 2)
-            < Math.pow(TConfigOption.STRUCTURES_MANSION_MINDISTANCE.getInt(), 2))
+            < Math.pow(TConfig.c.STRUCTURES_MANSION_MINDISTANCE, 2))
         {
             return false;
         }
@@ -65,8 +65,8 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
 
         MansionJigsawBuilder builder = new MansionJigsawBuilder(
-                TConfigOption.STRUCTURES_MANSION_SIZE.getInt(),
-                TConfigOption.STRUCTURES_MANSION_SIZE.getInt(),
+                TConfig.c.STRUCTURES_MANSION_SIZE,
+                TConfig.c.STRUCTURES_MANSION_SIZE,
                 data,
                 coords[0],
                 y,
@@ -79,13 +79,13 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public int getChunkBufferDistance() {
-        return TConfigOption.STRUCTURES_MANSION_CHUNK_EXCLUSION_ZONE.getInt();
+        return TConfig.c.STRUCTURES_MANSION_CHUNK_EXCLUSION_ZONE;
     }
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled()
+        return TConfig.areStructuresEnabled()
                && BiomeBank.isBiomeEnabled(BiomeBank.DARK_FOREST)
-               && TConfigOption.STRUCTURES_MANSION_ENABLED.getBoolean();
+               && TConfig.c.STRUCTURES_MANSION_ENABLED;
     }
 }

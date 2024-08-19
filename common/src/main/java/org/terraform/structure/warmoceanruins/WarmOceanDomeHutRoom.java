@@ -32,7 +32,7 @@ public class WarmOceanDomeHutRoom extends WarmOceanBaseRoom {
 
         // This is just a cylinder with an ellipse on it
         SimpleBlock centre = room.getCenterSimpleBlock(data);
-        float radius = Math.min(room.getWidthX(), room.getWidthZ()) / 3.0f;
+        float radius = Math.min(room.getWidthX(), room.getWidthZ()) / 3f;
         int cylSize = GenUtils.randInt(rand, 3, 5);
 
         // Carves the actual dome, with sandstone flooring

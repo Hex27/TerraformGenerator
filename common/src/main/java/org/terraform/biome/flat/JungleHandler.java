@@ -13,7 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.small_items.PlantBuilder;
@@ -38,7 +38,7 @@ public class JungleHandler extends BiomeHandler {
                                   int oriY,
                                   int oriZ)
     {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -156,7 +156,7 @@ public class JungleHandler extends BiomeHandler {
 
         SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
 
-        if (TConfigOption.TREES_JUNGLE_BIG_ENABLED.getBoolean()) {
+        if (TConfig.c.TREES_JUNGLE_BIG_ENABLED) {
             for (SimpleLocation sLoc : bigTrees) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
                 sLoc.setY(treeY);
@@ -185,7 +185,7 @@ public class JungleHandler extends BiomeHandler {
                     sLoc.getY(),
                     sLoc.getZ())))
             {
-                if (GenUtils.chance(random, 1000 - TConfigOption.BIOME_JUNGLE_STATUE_CHANCE.getInt(), 1000)) {
+                if (GenUtils.chance(random, 1000 - TConfig.c.BIOME_JUNGLE_STATUE_CHANCE, 1000)) {
                     TreeDB.spawnSmallJungleTree(false, tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
                 }
                 else {
@@ -243,7 +243,7 @@ public class JungleHandler extends BiomeHandler {
                              @NotNull PopulatorDataAbstract data,
                              @NotNull SimpleLocation sLoc)
     {
-        if (!TConfigOption.areStructuresEnabled()) {
+        if (!TConfig.areStructuresEnabled()) {
             return;
         }
 

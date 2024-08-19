@@ -10,7 +10,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
@@ -79,7 +79,7 @@ public class MushroomBeachHandler extends BiomeHandler {
                 data.getChunkX(),
                 data.getChunkZ(),
                 15,
-                0.30f
+                0.3f
         );
 
         // Giant mushrooms
@@ -98,7 +98,7 @@ public class MushroomBeachHandler extends BiomeHandler {
                 };
 
                 if (HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3)
-                    <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble())
+                    <= TConfig.c.MISC_TREES_GRADIENT_LIMIT)
                 {
                     new MushroomBuilder(type).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
                 }

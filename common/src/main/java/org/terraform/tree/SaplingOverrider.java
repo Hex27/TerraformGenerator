@@ -12,7 +12,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class SaplingOverrider implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTreeGrow(@NotNull StructureGrowEvent event) {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return;
         }
 
@@ -68,7 +68,7 @@ public class SaplingOverrider implements Listener {
                 break;
             case JUNGLE_LEAVES:
 
-                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean() && isLarge) {
+                if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES && isLarge) {
                     new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).skipGradientCheck().build(tw, data, x, y, z);
                 }
                 else {
@@ -83,7 +83,7 @@ public class SaplingOverrider implements Listener {
                 );
                 break;
             case SPRUCE_LEAVES:
-                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean() && isLarge) {
+                if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES && isLarge) {
                     FractalTypes.Tree.TAIGA_BIG.build(tw,
                             new SimpleBlock(data, x, y, z),
                             (nt -> nt.setCheckGradient(false))

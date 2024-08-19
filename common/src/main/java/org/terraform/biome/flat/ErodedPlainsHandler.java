@@ -11,7 +11,7 @@ import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
@@ -21,7 +21,7 @@ import java.util.Random;
 
 public class ErodedPlainsHandler extends BiomeHandler {
     static final BiomeHandler plainsHandler = BiomeBank.PLAINS.getHandler();
-    static final boolean slabs = TConfigOption.MISC_USE_SLABS_TO_SMOOTH.getBoolean();
+    static final boolean slabs = TConfig.c.MISC_USE_SLABS_TO_SMOOTH;
     static BiomeBlender biomeBlender;
 
     private static @NotNull BiomeBlender getBiomeBlender(TerraformWorld tw) {

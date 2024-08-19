@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
@@ -123,7 +123,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
                     if (i == 1) {
                         if (GenUtils.chance(rand, 1, 60)) {
                             // Chests
-                            if (TConfigOption.areDecorationsEnabled()) {
+                            if (TConfig.areDecorationsEnabled()) {
                                 new ChestBuilder(Material.CHEST).setFacing(dir.getOppositeFace())
                                                                 .setLootTable(TerraLootTable.SIMPLE_DUNGEON)
                                                                 .apply(rel.getRelative(dir.getOppositeFace()));
@@ -146,7 +146,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
                     }
                     else if (rel.getRelative(dir.getOppositeFace()).getUp().isSolid() && GenUtils.chance(rand, 1, 10)) {
                         // Cobwebs
-                        if (TConfigOption.areDecorationsEnabled()) {
+                        if (TConfig.areDecorationsEnabled()) {
                             rel.getRelative(dir.getOppositeFace()).setType(Material.COBWEB);
                         }
                     }

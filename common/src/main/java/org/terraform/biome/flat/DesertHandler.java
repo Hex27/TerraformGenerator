@@ -13,7 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -117,7 +117,7 @@ public class DesertHandler extends BiomeHandler {
     }
 
     public void spawnRibCage(@NotNull Random random, @NotNull SimpleBlock target) {
-        if (!TConfigOption.areStructuresEnabled()) {
+        if (!TConfig.areStructuresEnabled()) {
             return;
         }
 
@@ -131,7 +131,7 @@ public class DesertHandler extends BiomeHandler {
             interval += 1;
         }
 
-        float ribSizeMultiplier = 1.0f;
+        float ribSizeMultiplier = 1f;
 
         for (int segmentIndex = 0; segmentIndex < spineLength; segmentIndex++) {
             Wall seg = new Wall(target.getRelative(direction, segmentIndex), direction);

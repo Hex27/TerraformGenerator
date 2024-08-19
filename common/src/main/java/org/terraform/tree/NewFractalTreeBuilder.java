@@ -7,7 +7,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
@@ -67,8 +67,8 @@ public class NewFractalTreeBuilder implements Cloneable {
      * each recursion.
      */
     private BiFunction<Float, Float, Float> getBranchWidth = (initialBranchWidth, branchRatio) -> initialBranchWidth * (
-            1.0f
-            - branchRatio / 2.0f);
+            1f
+            - branchRatio / 2f);
     private Material branchMaterial = Material.OAK_LOG;
     private Material rootMaterial = Material.OAK_WOOD;
 
@@ -78,7 +78,7 @@ public class NewFractalTreeBuilder implements Cloneable {
 
     public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock base)
     {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return false;
         }
 
@@ -136,7 +136,7 @@ public class NewFractalTreeBuilder implements Cloneable {
 
     boolean checkGradient(PopulatorDataAbstract data, int x, int z) {
         return !checkGradient || (HeightMap.getTrueHeightGradient(data, x, z, 3)
-                                  <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
+                                  <= TConfig.c.MISC_TREES_GRADIENT_LIMIT);
     }
 
     public @NotNull NewFractalTreeBuilder setCheckGradient(boolean checkGradient)
@@ -269,7 +269,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                                 oriY,
                                 displacementTheta,
                                 branchDecrement.apply(length, (float) (lastOperatedCentre.getY() - oriY)),
-                                1.0f,
+                                1f,
                                 depth + 1,
                                 currentWidth,
                                 0
@@ -293,7 +293,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                             oriY,
                             displacementTheta,
                             branchDecrement.apply(length, (float) (lastOperatedCentre.getY() - oriY)),
-                            1.0f,
+                            1f,
                             depth + 1,
                             currentWidth,
                             0

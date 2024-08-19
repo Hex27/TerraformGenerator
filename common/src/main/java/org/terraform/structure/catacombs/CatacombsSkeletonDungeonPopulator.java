@@ -10,7 +10,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
@@ -38,7 +38,7 @@ public class CatacombsSkeletonDungeonPopulator extends CatacombsStandardPopulato
                 break;
             }
             for (int i = 0; i < entry.getValue(); i++) {
-                if (TConfigOption.areDecorationsEnabled() && GenUtils.chance(rand, 1, 40)) {
+                if (TConfig.areDecorationsEnabled() && GenUtils.chance(rand, 1, 40)) {
                     new ChestBuilder(Material.CHEST).setFacing(w.getDirection())
                                                     .setLootTable(TerraLootTable.SIMPLE_DUNGEON)
                                                     .apply(w);

@@ -12,7 +12,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -79,11 +79,11 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
      */
     private void setRock(@NotNull SimpleBlock target) {
         if (HeightMap.getTrueHeightGradient(target.getPopData(), target.getX(), target.getZ(), 3)
-            > TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble())
+            > TConfig.c.MISC_TREES_GRADIENT_LIMIT)
         {
             Material rock = Material.ANDESITE;
             if (HeightMap.getTrueHeightGradient(target.getPopData(), target.getX(), target.getZ(), 3)
-                > TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble() * 2)
+                > TConfig.c.MISC_TREES_GRADIENT_LIMIT * 2)
             {
                 rock = Material.DIORITE;
             }
@@ -106,7 +106,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
                 sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
-                if (TConfigOption.TREES_BIRCH_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20)) {
+                if (TConfig.c.TREES_BIRCH_BIG_ENABLED && GenUtils.chance(random, 1, 20)) {
                     new FractalTreeBuilder(FractalTypes.Tree.BIRCH_BIG).build(
                             tw,
                             data,

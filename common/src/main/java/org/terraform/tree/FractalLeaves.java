@@ -126,12 +126,12 @@ public class FractalLeaves implements Cloneable {
                         effectiveY += radiusY / 2; // Shift center area downwards
                         // Compress negative y
                         if (effectiveY < 0) {
-                            effectiveY = effectiveY * 2.0f;
+                            effectiveY = effectiveY * 2f;
                         }
 
                         // Extend positive y and multiply it by a power to make it sharp
                         if (effectiveY > 0) {
-                            effectiveY = effectiveY * (2.0f / 3.0f);
+                            effectiveY = effectiveY * (2f / 3f);
                             effectiveY = (float) Math.pow(effectiveY, 1.3);
                             if (effectiveY > radiusY) {
                                 effectiveY = radiusY;

@@ -10,7 +10,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
@@ -73,7 +73,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
 
         // If at 1.20, spawn suspicious sand in the floor
         if (Version.isAtLeast(20)) {
-            for (int i = 0; i < TConfigOption.STRUCTURES_PYRAMID_SUSPICIOUS_SAND_COUNT_PER_ANTECHAMBER.getInt(); i++) {
+            for (int i = 0; i < TConfig.c.STRUCTURES_PYRAMID_SUSPICIOUS_SAND_COUNT_PER_ANTECHAMBER; i++) {
                 SimpleBlock target = center.getRelative(GenUtils.getSign(rand) * GenUtils.randInt(rand,
                                 1,
                                 room.getWidthX() / 2 - 1

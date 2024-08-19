@@ -10,9 +10,9 @@ import java.util.Random;
 
 public class CarvedRoom extends CubeRoom {
 
-    private float xMultiplier = 1.0f;
-    private float yMultiplier = 1.0f;
-    private float zMultiplier = 1.0f;
+    private float xMultiplier = 1f;
+    private float yMultiplier = 1f;
+    private float zMultiplier = 1f;
     private float frequency = 0.09f;
 
     public CarvedRoom(int widthX, int widthZ, int height, int x, int y, int z) {

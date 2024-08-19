@@ -7,7 +7,7 @@ import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -72,14 +72,14 @@ public class DesertHillsHandler extends AbstractMountainHandler {
         for (int y = surfaceY; y > HeightMap.CORE.getHeight(world, rawX, rawZ); y--) {
             if (duneNoise.GetNoise(rawX, y, rawZ) > 0) {
                 if (data.getType(rawX, y, rawZ) == Material.SAND || data.getType(rawX, y, rawZ) == Material.RED_SAND) {
-                    if (TConfigOption.BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE_POWDER.getBoolean()) {
+                    if (TConfig.c.BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE_POWDER) {
                         data.setType(rawX, y, rawZ, Material.YELLOW_CONCRETE_POWDER);
                     }
                 }
                 else if (data.getType(rawX, y, rawZ) == Material.SANDSTONE
                          || data.getType(rawX, y, rawZ) == Material.RED_SANDSTONE)
                 {
-                    if (TConfigOption.BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE.getBoolean()) {
+                    if (TConfig.c.BIOME_DESERT_MOUNTAINS_YELLOW_CONCRETE) {
                         data.setType(rawX, y, rawZ, Material.YELLOW_CONCRETE);
                     }
                 }

@@ -11,7 +11,7 @@ import org.terraform.command.*;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class TerraformCommandManager implements TabExecutor {
         }
         registerCommand(new HelpCommand(plugin, this, "help", "h", "?"));
 
-        if (TConfigOption.DEVSTUFF_EXTENDED_COMMANDS.getBoolean()) {
+        if (TConfig.c.DEVSTUFF_EXTENDED_COMMANDS) {
             this.registerCommand(new PreviewCommand(plugin, "preview"));
             this.registerCommand(new TimingsCommand(plugin, "timings", "lag"));
             this.registerCommand(new CoconutCommand(plugin, "coconut"));

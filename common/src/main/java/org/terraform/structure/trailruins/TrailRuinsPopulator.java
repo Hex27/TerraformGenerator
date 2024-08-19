@@ -6,7 +6,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
@@ -101,16 +101,16 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled()
+        return TConfig.areStructuresEnabled()
                && (BiomeBank.isBiomeEnabled(BiomeBank.TAIGA)
                    || BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_TAIGA)
                    || BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE))
-               && TConfigOption.STRUCTURES_TRAILRUINS_ENABLED.getBoolean();
+               && TConfig.c.STRUCTURES_TRAILRUINS_ENABLED;
     }
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 34122),
-                (int) (TConfigOption.STRUCTURES_TRAILRUINS_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_TRAILRUINS_SPAWNRATIO * 10000),
                 10000
         );
     }

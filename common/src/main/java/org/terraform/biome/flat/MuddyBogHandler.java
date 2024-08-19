@@ -12,7 +12,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
@@ -85,7 +85,7 @@ public class MuddyBogHandler extends BiomeHandler {
             else if (GenUtils.chance(random, 1, 85)) {
                 PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
             }
-            else if (TConfigOption.areDecorationsEnabled() && GenUtils.chance(random, 1, 300)) {// Dripstone Cluster
+            else if (TConfig.areDecorationsEnabled() && GenUtils.chance(random, 1, 300)) {// Dripstone Cluster
                 BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.5f, block, Material.DRIPSTONE_BLOCK);
                 if (GenUtils.chance(random, 1, 7)) {
                     BlockUtils.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getUp());

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.GenUtils;
@@ -21,7 +21,7 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(
                 tw.getHashedRand(chunkX, chunkZ, 12422),
-                (int) (TConfigOption.STRUCTURES_VILLAGE_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_VILLAGE_SPAWNRATIO * 10000),
                 10000
         );
     }
@@ -83,18 +83,18 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public int getChunkBufferDistance() {
-        return TConfigOption.STRUCTURES_VILLAGE_CHUNK_EXCLUSION_ZONE.getInt();
+        return TConfig.c.STRUCTURES_VILLAGE_CHUNK_EXCLUSION_ZONE;
     }
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled()
+        return TConfig.areStructuresEnabled()
                && (BiomeBank.isBiomeEnabled(BiomeBank.PLAINS)
                    || BiomeBank.isBiomeEnabled(BiomeBank.FOREST)
                    || BiomeBank.isBiomeEnabled(BiomeBank.SAVANNA)
                    || BiomeBank.isBiomeEnabled(BiomeBank.TAIGA)
                    || BiomeBank.isBiomeEnabled(BiomeBank.SCARLET_FOREST)
                    || BiomeBank.isBiomeEnabled(BiomeBank.CHERRY_GROVE))
-               && TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean();
+               && TConfig.c.STRUCTURES_PLAINSVILLAGE_ENABLED;
     }
 }

@@ -43,14 +43,14 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
     }
 
     public static void placeWaterFall(@NotNull TerraformWorld tw, int seed, @NotNull SimpleBlock base) {
-        float radius = 4.0f;
+        float radius = 4f;
 
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(0.09f);
 
         for (float x = -radius; x <= radius; x++) {
-            for (float y = -radius / 2.0f; y <= radius / 2.0f; y++) {
+            for (float y = -radius / 2f; y <= radius / 2f; y++) {
                 for (float z = -radius; z <= radius; z++) {
 
                     SimpleBlock rel = base.getRelative(Math.round(x), Math.round(y), Math.round(z));

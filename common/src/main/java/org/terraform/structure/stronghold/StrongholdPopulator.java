@@ -7,7 +7,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
@@ -126,15 +126,15 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
                         // Strongholds no longer calculate from the surface.
                         // Just pick a directly underground location.
                         int y = GenUtils.randInt(
-                                TConfigOption.STRUCTURES_STRONGHOLD_MIN_Y.getInt(),
-                                TConfigOption.STRUCTURES_STRONGHOLD_MAX_Y.getInt()
+                                TConfig.c.STRUCTURES_STRONGHOLD_MIN_Y,
+                                TConfig.c.STRUCTURES_STRONGHOLD_MAX_Y
                         );
 
                         // Attempt to force strongholds further underground if
                         // they're above the surface.
                         if (y + 18 > GenUtils.getHighestGround(data, x, z)) {
-                            if (y > TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt()) {
-                                y = TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt();
+                            if (y > TConfig.c.STRUCTURES_STRONGHOLD_FAILSAFE_Y) {
+                                y = TConfig.c.STRUCTURES_STRONGHOLD_FAILSAFE_Y;
                             }
                         }
 
@@ -284,7 +284,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean();
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_STRONGHOLD_ENABLED;
     }
 
     @Override

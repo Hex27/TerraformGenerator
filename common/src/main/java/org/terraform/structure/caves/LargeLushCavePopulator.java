@@ -10,7 +10,7 @@ import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -67,7 +67,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator {
         }
 
         // sea pickle
-        if (TConfigOption.arePlantsEnabled() && BlockUtils.isWet(floor.getUp()) && GenUtils.chance(rand, 7, 100)) {
+        if (TConfig.arePlantsEnabled() && BlockUtils.isWet(floor.getUp()) && GenUtils.chance(rand, 7, 100)) {
             SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
             sp.setPickles(GenUtils.randInt(3, 4));
             floor.getUp().setBlockData(sp);

@@ -19,7 +19,7 @@ import org.terraform.coregen.populatordata.IPopulatorDataMinecartSpawner;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
@@ -139,7 +139,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
         }
 
         // Rails
-        if (TConfigOption.areDecorationsEnabled() && core.isSolid() && rand.nextBoolean()) {
+        if (TConfig.areDecorationsEnabled() && core.isSolid() && rand.nextBoolean()) {
             Rail rail = (Rail) Bukkit.createBlockData(Material.RAIL);
             switch (core.getDirection()) {
                 case NORTH, SOUTH -> rail.setShape(Shape.NORTH_SOUTH);
@@ -227,7 +227,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
                 }
                 else if (GenUtils.chance(rand, 1, 6)) {
                     // Cobweb
-                    if (TConfigOption.areDecorationsEnabled()) {
+                    if (TConfig.areDecorationsEnabled()) {
                         ceil.setType(Material.COBWEB);
                     }
                 }
@@ -288,7 +288,7 @@ public class MineshaftPathPopulator extends PathPopulatorAbstract {
     }
 
     public boolean setMineshaftSupport(@Nullable Wall left, @Nullable Wall right, @Nullable Wall ceil) {
-        if (!TConfigOption.areDecorationsEnabled()) {
+        if (!TConfig.areDecorationsEnabled()) {
             return true;
         }
 

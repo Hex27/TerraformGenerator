@@ -10,7 +10,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -109,7 +109,7 @@ public class TaigaHandler extends BiomeHandler {
         if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
 
             // Generate sweet berry bushes
-            if (TConfigOption.arePlantsEnabled()
+            if (TConfig.arePlantsEnabled()
                 && sweetBerriesNoise.GetNoise(rawX, rawZ) > 0.3
                 && sweetBerriesNoise.GetNoise(rawX, rawZ) * random.nextFloat() > 0.35)
             {
@@ -158,7 +158,7 @@ public class TaigaHandler extends BiomeHandler {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
                 sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
-                if (TConfigOption.TREES_TAIGA_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 1, 20)) {
+                if (TConfig.c.TREES_TAIGA_BIG_ENABLED && GenUtils.chance(random, 1, 20)) {
                     if (FractalTypes.Tree.TAIGA_BIG.build(tw,
                             new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ())
                     ))

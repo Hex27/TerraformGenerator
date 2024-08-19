@@ -10,7 +10,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
@@ -50,7 +50,7 @@ public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulat
         for (int[] corner : room.getAllCorners()) {
             SimpleBlock sb = new SimpleBlock(data, corner[0], y, corner[1]);
             int lowSb = sb.findFloor(worldHeight).getY();
-            if (Math.abs(lowSb - y) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt()) {
+            if (Math.abs(lowSb - y) > TConfig.c.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE) {
                 // place platform as uneven ground was detected.
                 this.placeFixerPlatform(y, data, room);
                 break;

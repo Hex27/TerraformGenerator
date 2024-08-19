@@ -16,7 +16,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
@@ -93,7 +93,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 8242112),
-                (int) (TConfigOption.STRUCTURES_SWAMPHUT_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_SWAMPHUT_SPAWNRATIO * 10000),
                 10000
         );
     }
@@ -122,7 +122,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-        int num = TConfigOption.STRUCTURES_SWAMPHUT_COUNT_PER_MEGACHUNK.getInt();
+        int num = TConfig.c.STRUCTURES_SWAMPHUT_COUNT_PER_MEGACHUNK;
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++) {
             coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 819227 * (1 + i)));
@@ -152,9 +152,9 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean() && (
-                TConfigOption.BIOME_SWAMP_WEIGHT.getInt() > 0
-                || TConfigOption.BIOME_MANGROVE_WEIGHT.getInt() > 0);
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_SWAMPHUT_ENABLED && (
+                TConfig.c.BIOME_SWAMP_WEIGHT > 0
+                || TConfig.c.BIOME_MANGROVE_WEIGHT > 0);
     }
 
     @Override

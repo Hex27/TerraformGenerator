@@ -10,7 +10,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -105,7 +105,7 @@ public class BambooForestHandler extends BiomeHandler {
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK || data.getType(x, y, z) == Material.PODZOL) {
 
                     // Small grass poffs
-                    if (TConfigOption.arePlantsEnabled() && GenUtils.chance(random, 1, 50)) {
+                    if (TConfig.arePlantsEnabled() && GenUtils.chance(random, 1, 50)) {
                         BlockUtils.replaceSphere(random.nextInt(424444),
                                 2,
                                 3,
@@ -117,7 +117,7 @@ public class BambooForestHandler extends BiomeHandler {
                     }
 
                     // Bamboo
-                    if (TConfigOption.arePlantsEnabled()
+                    if (TConfig.arePlantsEnabled()
                         && GenUtils.chance(random, 1, 3)
                         && BlockUtils.isDirtLike(data.getType(x, y, z)))
                     {

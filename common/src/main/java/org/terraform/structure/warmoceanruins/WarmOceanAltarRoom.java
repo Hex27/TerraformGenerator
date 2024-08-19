@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
@@ -41,7 +41,7 @@ public class WarmOceanAltarRoom extends WarmOceanBaseRoom {
                     new ChestBuilder(Material.CHEST).setFacing(w.getDirection())
                                                     .setLootTable(TerraLootTable.UNDERWATER_RUIN_SMALL)
                                                     .setWaterlogged(w.getUp().getY()
-                                                                    <= TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt())
+                                                                    <= TConfig.c.HEIGHT_MAP_SEA_LEVEL)
                                                     .apply(w.getFront().getRight().getUp());
                 }
                 w = w.getLeft().getGround();

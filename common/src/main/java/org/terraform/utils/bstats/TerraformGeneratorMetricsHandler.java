@@ -2,7 +2,7 @@ package org.terraform.utils.bstats;
 
 import org.jetbrains.annotations.NotNull;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 
 public class TerraformGeneratorMetricsHandler {
 
@@ -13,13 +13,13 @@ public class TerraformGeneratorMetricsHandler {
 
         if (metrics.isEnabled()) {
             metrics.addCustomChart(new Metrics.SimplePie("onlyUseLogsNoWood",
-                    () -> TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean() + ""
+                    () -> TConfig.c.MISC_TREES_FORCE_LOGS + ""
             ));
             metrics.addCustomChart(new Metrics.SimplePie("megaChunkNumBiomeSections",
-                    () -> TConfigOption.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS.getInt() + ""
+                    () -> TConfig.c.STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS + ""
             ));
             metrics.addCustomChart(new Metrics.SimplePie("biomeSectionBitshifts",
-                    () -> TConfigOption.BIOME_SECTION_BITSHIFTS.getInt() + ""
+                    () -> TConfig.c.BIOME_SECTION_BITSHIFTS + ""
             ));
             TerraformGeneratorPlugin.logger.stdout("&abStats Metrics enabled.");
         }

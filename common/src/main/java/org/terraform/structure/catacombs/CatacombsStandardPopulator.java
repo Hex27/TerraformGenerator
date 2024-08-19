@@ -11,7 +11,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
@@ -81,7 +81,7 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
                            );
 
                     // Cobwebs
-                    if (TConfigOption.areDecorationsEnabled() && rand.nextInt(10) == 0) {
+                    if (TConfig.areDecorationsEnabled() && rand.nextInt(10) == 0) {
                         ceiling.getDown(extend + 1)
                                .getRelative(BlockUtils.getDirectBlockFace(rand))
                                .lsetType(Material.COBWEB);
@@ -147,7 +147,7 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
     // the chains interfere with lPillar by being solid.
     // Child classes are responsible for calling this.
     protected void spawnHangingChains(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        if (!TConfigOption.areDecorationsEnabled()) {
+        if (!TConfig.areDecorationsEnabled()) {
             return;
         }
 

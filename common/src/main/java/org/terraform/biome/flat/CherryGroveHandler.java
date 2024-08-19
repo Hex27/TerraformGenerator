@@ -11,7 +11,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -65,7 +65,7 @@ public class CherryGroveHandler extends BiomeHandler {
             if (GenUtils.chance(random, 2, 10)) { // Grass
                 if (GenUtils.chance(random, 8, 10)) {
                     // Pink petals. No longer generate tall grass.
-                    if (Version.isAtLeast(20) && TConfigOption.arePlantsEnabled() && GenUtils.chance(random, 6, 10)) {
+                    if (Version.isAtLeast(20) && TConfig.arePlantsEnabled() && GenUtils.chance(random, 6, 10)) {
                         data.setBlockData(
                                 rawX,
                                 surfaceY + 1,

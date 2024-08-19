@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.ancientcity.AncientCityPopulator;
 import org.terraform.structure.catacombs.CatacombsPopulator;
 import org.terraform.structure.caves.LargeCavePopulator;
@@ -116,7 +116,7 @@ public class StructureRegistry {
         }
 
         Random structRand = tw.getHashedRand(9, mc.getX(), mc.getZ());
-        int maxStructures = 3; // GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
+        int maxStructures = 3; // GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES);
         SingleMegaChunkStructurePopulator[] pops = new SingleMegaChunkStructurePopulator[maxStructures];
         int size = 0;
 
@@ -135,7 +135,7 @@ public class StructureRegistry {
                     continue;
                 }
 
-                if (TConfigOption.areStructuresEnabled() && pop.canSpawn(
+                if (TConfig.areStructuresEnabled() && pop.canSpawn(
                         tw,
                         coords[0] >> 4,
                         coords[1] >> 4,
@@ -157,7 +157,7 @@ public class StructureRegistry {
             if (largeStructureRegistry.containsKey(type)) {
                 for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(type)) {
                     int[] coords = mc.getCenterBiomeSectionBlockCoords();
-                    if (TConfigOption.areStructuresEnabled() && pop.canSpawn(tw,
+                    if (TConfig.areStructuresEnabled() && pop.canSpawn(tw,
                             coords[0] >> 4,
                             coords[1] >> 4,
                             mc.getCenterBiomeSection(tw).getBiomeBank()
