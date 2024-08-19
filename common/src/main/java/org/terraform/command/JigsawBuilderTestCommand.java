@@ -42,9 +42,13 @@ public class JigsawBuilderTestCommand extends TerraCommand {
         int x = p.getLocation().getBlockX();
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
-        PlainsVillageForgeJigsawBuilder builder = new PlainsVillageForgeJigsawBuilder(
-                new PlainsVillagePopulator(),
-        		15, 15, data, x, y - 1, z
+        PlainsVillageForgeJigsawBuilder builder = new PlainsVillageForgeJigsawBuilder(new PlainsVillagePopulator(),
+                15,
+                15,
+                data,
+                x,
+                y - 1,
+                z
         );
         builder.generate(new Random());
         builder.build(new Random());

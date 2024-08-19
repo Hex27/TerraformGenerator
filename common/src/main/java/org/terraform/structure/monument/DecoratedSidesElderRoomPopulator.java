@@ -16,8 +16,7 @@ import java.util.Random;
 
 public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
 
-    public DecoratedSidesElderRoomPopulator(Random rand, MonumentDesign design,
-                                            boolean forceSpawn, boolean unique) {
+    public DecoratedSidesElderRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
     }
 
@@ -49,9 +48,11 @@ public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
                 if (!w.getRear().isSolid()) {
                     Wall wall = w.getUp(4);
                     wall.LPillar(room.getHeight() - 4, true, rand, Material.SEA_LANTERN, Material.DARK_PRISMARINE);
-                } else {
-                    if (j % 2 == 0)
+                }
+                else {
+                    if (j % 2 == 0) {
                         w.LPillar(room.getHeight() - 1, rand, Material.PRISMARINE_BRICKS);
+                    }
                     else {
                         w.LPillar(room.getHeight() - 1, rand, Material.PRISMARINE);
                         w.getUp(3).Pillar(4, rand, Material.SEA_LANTERN);
@@ -64,10 +65,7 @@ public class DecoratedSidesElderRoomPopulator extends MonumentRoomPopulator {
         }
 
         // Elder
-        data.addEntity(room.getX(),
-                room.getY() + room.getHeight() / 2,
-                room.getZ(),
-                EntityType.ELDER_GUARDIAN);
+        data.addEntity(room.getX(), room.getY() + room.getHeight() / 2, room.getZ(), EntityType.ELDER_GUARDIAN);
 
         // Corners are sea lanterns
         Waterlogged wall = (Waterlogged) Bukkit.createBlockData(Material.PRISMARINE_WALL);

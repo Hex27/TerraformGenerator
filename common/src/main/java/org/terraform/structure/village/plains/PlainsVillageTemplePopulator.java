@@ -14,8 +14,13 @@ import java.util.Random;
 
 public class PlainsVillageTemplePopulator extends PlainsVillageAbstractRoomPopulator {
 
-	private final PlainsVillagePopulator plainsVillagePopulator;
-    public PlainsVillageTemplePopulator(PlainsVillagePopulator plainsVillagePopulator, Random rand, boolean forceSpawn, boolean unique) {
+    private final PlainsVillagePopulator plainsVillagePopulator;
+
+    public PlainsVillageTemplePopulator(PlainsVillagePopulator plainsVillagePopulator,
+                                        Random rand,
+                                        boolean forceSpawn,
+                                        boolean unique)
+    {
         super(rand, forceSpawn, unique);
         this.plainsVillagePopulator = plainsVillagePopulator;
     }
@@ -23,17 +28,23 @@ public class PlainsVillageTemplePopulator extends PlainsVillageAbstractRoomPopul
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 
-    	super.populate(data, room);
+        super.populate(data, room);
         int height = super.calculateRoomY(data, room);
         // GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
-        
+
         // 1 is added to height because temples need a small bit of elevation to look better
         PlainsVillageTempleJigsawBuilder builder = new PlainsVillageTempleJigsawBuilder(
-        		plainsVillagePopulator,
-        		room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height+1, room.getZ()
+                plainsVillagePopulator,
+                room.getWidthX() - 3,
+                room.getWidthZ() - 3,
+                data,
+                room.getX(),
+                height + 1,
+                room.getZ()
         );
-        if (room instanceof DirectionalCubeRoom)
+        if (room instanceof DirectionalCubeRoom) {
             builder.forceEntranceDirection(((DirectionalCubeRoom) room).getDirection());
+        }
 
         builder.generate(this.rand);
         builder.build(this.rand);
@@ -44,15 +55,18 @@ public class PlainsVillageTemplePopulator extends PlainsVillageAbstractRoomPopul
         boolean placedLamp = false;
         // Connect front to the nearest path.
         while (entrance.getType() != Material.DIRT_PATH && maxDepth > 0) {
-            if (BlockUtils.isDirtLike(entrance.getType()))
+            if (BlockUtils.isDirtLike(entrance.getType())) {
                 entrance.setType(Material.DIRT_PATH);
+            }
 
             if (!placedLamp && GenUtils.chance(this.rand, 3, 5)) {
                 SimpleBlock target;
-                if (this.rand.nextBoolean())
+                if (this.rand.nextBoolean()) {
                     target = entrance.getLeft(2).getGround().getUp().get();
-                else
+                }
+                else {
                     target = entrance.getRight(2).getGround().getUp().get();
+                }
                 if (PlainsVillagePathPopulator.canPlaceLamp(target)) {
                     placedLamp = true;
                     PlainsVillagePathPopulator.placeLamp(rand, target);

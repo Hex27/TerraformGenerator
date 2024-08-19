@@ -1,10 +1,10 @@
 package org.terraform.utils.noise;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 import org.terraform.utils.Vector2f;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BresenhamLine {
     final Vector2f point1;
@@ -34,7 +34,9 @@ public class BresenhamLine {
         while (true) {
             line.add(new Vector2f(x0, y0));
 
-            if (x0 == x1 && y0 == y1) break;
+            if (x0 == x1 && y0 == y1) {
+                break;
+            }
 
             e2 = 2 * err;
             if (e2 > -dy) {

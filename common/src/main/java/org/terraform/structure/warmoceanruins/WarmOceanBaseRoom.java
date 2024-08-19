@@ -30,27 +30,34 @@ public abstract class WarmOceanBaseRoom extends RoomPopulatorAbstract {
         );
         // Spawn suspicious sand relative to room size
         // Sprinkle some magma blocks too
-        for(int i = 0; i < (room.getWidthX()*room.getWidthZ())/70; i++)
-        {
+        for (int i = 0; i < (room.getWidthX() * room.getWidthZ()) / 70; i++) {
             int[] coords = room.randomCoords(rand);
             coords[1] = GenUtils.getHighestGround(data, coords[0], coords[2]);
-            if(data.getType(coords[0],coords[1],coords[2]) == Material.SAND
-            || data.getType(coords[0],coords[1],coords[2]) == Material.GRAVEL) {
-                if(Version.isAtLeast(20)
-                        && GenUtils.chance(rand, 3, 4)) {
-                    if(data.getType(coords[0],coords[1],coords[2]) == Material.SAND) {
+            if (data.getType(coords[0], coords[1], coords[2]) == Material.SAND
+                || data.getType(coords[0], coords[1], coords[2]) == Material.GRAVEL)
+            {
+                if (Version.isAtLeast(20) && GenUtils.chance(rand, 3, 4)) {
+                    if (data.getType(coords[0], coords[1], coords[2]) == Material.SAND) {
                         data.setType(coords[0], coords[1], coords[2], OneTwentyBlockHandler.SUSPICIOUS_SAND);
-                        data.lootTableChest(coords[0], coords[1], coords[2], TerraLootTable.OCEAN_RUIN_WARM_ARCHAEOLOGY);
+                        data.lootTableChest(coords[0],
+                                coords[1],
+                                coords[2],
+                                TerraLootTable.OCEAN_RUIN_WARM_ARCHAEOLOGY
+                        );
                     }
-                    else
-                    {
+                    else {
                         data.setType(coords[0], coords[1], coords[2], OneTwentyBlockHandler.SUSPICIOUS_GRAVEL);
-                        data.lootTableChest(coords[0], coords[1], coords[2], TerraLootTable.OCEAN_RUIN_COLD_ARCHAEOLOGY);
+                        data.lootTableChest(coords[0],
+                                coords[1],
+                                coords[2],
+                                TerraLootTable.OCEAN_RUIN_COLD_ARCHAEOLOGY
+                        );
                     }
                 }
             }
-            else
-                data.setType(coords[0],coords[1],coords[2],Material.MAGMA_BLOCK);
+            else {
+                data.setType(coords[0], coords[1], coords[2], Material.MAGMA_BLOCK);
+            }
         }
     }
 

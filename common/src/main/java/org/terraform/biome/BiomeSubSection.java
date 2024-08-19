@@ -5,9 +5,5 @@ package org.terraform.biome;
 
 // Currently for mountains to detect their lowerbound heights.
 public enum BiomeSubSection {
-	POSITIVE_X,
-	NEGATIVE_X,
-	POSITIVE_Z,
-	NEGATIVE_Z,
-	NONE
+    POSITIVE_X, NEGATIVE_X, POSITIVE_Z, NEGATIVE_Z, NONE
 }

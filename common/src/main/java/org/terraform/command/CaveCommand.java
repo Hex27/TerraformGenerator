@@ -31,7 +31,7 @@ public class CaveCommand extends TerraCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, Stack<String> args)
-	{
+    {
         sender.sendMessage("Unimplemented.");
     }
 }

@@ -34,7 +34,9 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             while (!block.isSolid()) {
                 block = block.getDown();
                 depth++;
-                if (depth > 50) return;
+                if (depth > 50) {
+                    return;
+                }
             }
 
             block.getUp().setType(type);
@@ -58,9 +60,15 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         int z = spawnCoords[1];// data.getChunkZ()*16 + random.nextInt(16);
         Random rand = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 
-        int y = HeightMap.getBlockHeight(tw, x, z) - GenUtils.randInt(rand, 15, 50);// GenUtils.getHighestGround(data, x, z)
+        int y = HeightMap.getBlockHeight(tw, x, z) - GenUtils.randInt(
+                rand,
+                15,
+                50
+        );// GenUtils.getHighestGround(data, x, z)
 
-        if (y < 10) y = 10;
+        if (y < 10) {
+            y = 10;
+        }
 
         while (!data.getType(x, y, z).isSolid()) {
             y--;
@@ -69,39 +77,46 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         spawnDungeonRoom(x, y, z, tw, rand, data);
     }
 
-    public void spawnDungeonRoom(int x, int y, int z, TerraformWorld tw, @NotNull Random rand,
-                                 @NotNull PopulatorDataAbstract data) {
+    public void spawnDungeonRoom(int x,
+                                 int y,
+                                 int z,
+                                 TerraformWorld tw,
+                                 @NotNull Random rand,
+                                 @NotNull PopulatorDataAbstract data)
+    {
         TerraformGeneratorPlugin.logger.info("Spawning Underground Dungeon at " + x + "," + y + "," + z);
         CubeRoom room = new CubeRoom(GenUtils.randOddInt(rand, 9, 15),
                 GenUtils.randOddInt(rand, 9, 15),
                 GenUtils.randInt(rand, 5, 7),
-                x, y, z);
+                x,
+                y,
+                z
+        );
         boolean isWet = false;
-        
+
         Material fluid = Material.CAVE_AIR;
-        
+
         SimpleBlock center = room.getCenterSimpleBlock(data);
-        if(BlockUtils.isWet(center.getUp()))
-        {
-        	fluid = Material.WATER;
-        	isWet = true;
+        if (BlockUtils.isWet(center.getUp())) {
+            fluid = Material.WATER;
+            isWet = true;
         }
 
         // Fill with water if the room is wet. If not, use cave air.
-        room.fillRoom(data, -1, new Material[]{
-                        Material.COBBLESTONE,
-                        Material.MOSSY_COBBLESTONE},
-        		fluid);
+        room.fillRoom(data, -1, new Material[] {
+                Material.COBBLESTONE, Material.MOSSY_COBBLESTONE
+        }, fluid);
 
         // Make some fence pattern.
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey().getUp();
             int length = entry.getValue();
             while (length >= 0) {
-                if(length % 2 != 0 && length != entry.getValue()) {
+                if (length % 2 != 0 && length != entry.getValue()) {
                     w.CAPillar(room.getHeight() - 3, rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
-                    if(isWet)
-                    	w.waterlog(room.getHeight()-3);
+                    if (isWet) {
+                        w.waterlog(room.getHeight() - 3);
+                    }
                 }
 
                 for (int h = 0; h < room.getHeight() - 3; h++) {
@@ -119,14 +134,22 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             int nX = coords[0];
             int nY = coords[1];
             int nZ = coords[2];
-            BlockUtils.replaceSphere(rand.nextInt(992), GenUtils.randInt(rand, 1, 3), new SimpleBlock(data, nX, nY, nZ), true, fluid);
+            BlockUtils.replaceSphere(
+                    rand.nextInt(992),
+                    GenUtils.randInt(rand, 1, 3),
+                    new SimpleBlock(data, nX, nY, nZ),
+                    true,
+                    fluid
+            );
         }
 
         // Dropdown blocks
         for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
             for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
                 int ny = room.getHeight();
-                if (GenUtils.chance(10, 13)) continue;
+                if (GenUtils.chance(10, 13)) {
+                    continue;
+                }
                 dropDownBlock(new SimpleBlock(data, x + nx, y + ny, z + nz), fluid);
             }
         }
@@ -135,10 +158,15 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
             for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
                 int ny = room.getHeight() - 1;
-                if (GenUtils.chance(9, 10)) continue;
+                if (GenUtils.chance(9, 10)) {
+                    continue;
+                }
                 for (int i = 0; i < GenUtils.randInt(rand, 1, room.getHeight() - 3); i++) {
-                    data.setType(x + nx, y + ny, z + nz, GenUtils.randChoice(Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.COBBLESTONE_WALL,
-                            Material.MOSSY_COBBLESTONE_WALL));
+                    data.setType(x + nx, y + ny, z + nz, GenUtils.randChoice(Material.COBBLESTONE,
+                            Material.MOSSY_COBBLESTONE,
+                            Material.COBBLESTONE_WALL,
+                            Material.MOSSY_COBBLESTONE_WALL
+                    ));
                     BlockUtils.correctSurroundingMultifacingData(new SimpleBlock(data, x + nx, y + ny, z + nz));
                 }
             }
@@ -147,24 +175,35 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         // Make spikes on the floor
         for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
             for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
-                if (GenUtils.chance(9, 10)) continue;
+                if (GenUtils.chance(9, 10)) {
+                    continue;
+                }
                 for (int i = 0; i < GenUtils.randInt(rand, 1, room.getHeight() - 3); i++) {
                     Wall w = new Wall(new SimpleBlock(data, x + nx, y + 1, z + nz), BlockFace.NORTH);
-                    w.LPillar(room.getHeight() - 2, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
+                    w.LPillar(
+                            room.getHeight() - 2,
+                            rand,
+                            Material.COBBLESTONE,
+                            Material.MOSSY_COBBLESTONE,
+                            Material.COBBLESTONE_WALL,
+                            Material.MOSSY_COBBLESTONE_WALL
+                    );
                     BlockUtils.correctSurroundingMultifacingData(w.get());
                 }
             }
         }
 
         // Place Spawner
-        EntityType type = switch(rand.nextInt(3)) {
+        EntityType type = switch (rand.nextInt(3)) {
             case (0) -> EntityType.ZOMBIE;
             case (1) -> EntityType.SKELETON;
             case (2) -> EntityType.SPIDER;
             default -> null;
         };
-        if(isWet) type = EntityType.DROWNED;
-        
+        if (isWet) {
+            type = EntityType.DROWNED;
+        }
+
         data.setSpawner(x, y + 1, z, type);
 
         // Spawn chests
@@ -184,10 +223,11 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
                 if (length == chest) {
                     Directional dir = (Directional) Bukkit.createBlockData(Material.CHEST);
                     dir.setFacing(w.getDirection());
-                    
-                    if(isWet && dir instanceof Waterlogged) 
-                    	((Waterlogged) dir).setWaterlogged(true);
-                    
+
+                    if (isWet && dir instanceof Waterlogged) {
+                        ((Waterlogged) dir).setWaterlogged(true);
+                    }
+
                     w.setBlockData(dir);
                     data.lootTableChest(w.get().getX(), w.get().getY(), w.get().getZ(), TerraLootTable.SIMPLE_DUNGEON);
                 }

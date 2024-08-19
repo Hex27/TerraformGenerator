@@ -16,16 +16,18 @@ import java.util.ArrayList;
 
 public class StairBuilder {
 
+    @NotNull
+    final ArrayList<SimpleBlock> placed = new ArrayList<>();
     private final @NotNull Stairs blockData;
 
     public StairBuilder(@NotNull Material mat) {
         this.blockData = (Stairs) Bukkit.createBlockData(mat);
     }
 
+
     public StairBuilder(Material... mat) {
         this.blockData = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
-
 
     public @NotNull StairBuilder setFacing(@NotNull BlockFace face) {
         this.blockData.setFacing(face);
@@ -54,33 +56,32 @@ public class StairBuilder {
     }
 
     public @NotNull StairBuilder lapply(@NotNull SimpleBlock block) {
-    	if(block.isSolid())
-    		return this;
-    	
+        if (block.isSolid()) {
+            return this;
+        }
+
         block.setBlockData(blockData);
         placed.add(block);
         return this;
     }
-    
+
     public @NotNull StairBuilder apply(@NotNull Wall block) {
         block.setBlockData(blockData);
         placed.add(block.get());
         return this;
     }
-    
-    @NotNull
-    final
-    ArrayList<SimpleBlock> placed = new ArrayList<>();
+
     public @NotNull StairBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
-        placed.add(new SimpleBlock(data,x,y,z));
+        placed.add(new SimpleBlock(data, x, y, z));
         return this;
     }
-    
+
     public @NotNull StairBuilder correct() {
-    	for(SimpleBlock b:placed)
-    		BlockUtils.correctSurroundingStairData(b);
-    	return this;
+        for (SimpleBlock b : placed) {
+            BlockUtils.correctSurroundingStairData(b);
+        }
+        return this;
     }
 
     public @NotNull Stairs get() {

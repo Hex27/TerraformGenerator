@@ -11,7 +11,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 
 public class PopulatorDataSQLite extends PopulatorDataAbstract {
-	private final int chunkX;
+    private final int chunkX;
     private final int chunkZ;
 
     public PopulatorDataSQLite(int chunkX, int chunkZ, ChunkData c) {
@@ -21,9 +21,15 @@ public class PopulatorDataSQLite extends PopulatorDataAbstract {
 
     @SuppressWarnings("unused")
     private boolean isInBounds(int x, int z) {
-        if (x < chunkX * 16) return false;
-        if (x > (chunkX * 16) + 15) return false;
-        if (z < chunkZ * 16) return false;
+        if (x < chunkX * 16) {
+            return false;
+        }
+        if (x > (chunkX * 16) + 15) {
+            return false;
+        }
+        if (z < chunkZ * 16) {
+            return false;
+        }
         return z <= (chunkZ * 16) + 15;
     }
 
@@ -83,9 +89,9 @@ public class PopulatorDataSQLite extends PopulatorDataAbstract {
 
     }
 
-	@Override
-	public TerraformWorld getTerraformWorld() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public TerraformWorld getTerraformWorld() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

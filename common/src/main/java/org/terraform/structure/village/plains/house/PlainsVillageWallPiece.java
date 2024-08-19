@@ -22,7 +22,15 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
     final PlainsVillageHouseVariant var;
     final PlainsVillagePopulator plainsVillagePopulator;
-    public PlainsVillageWallPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant var, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+
+    public PlainsVillageWallPiece(PlainsVillagePopulator plainsVillagePopulator,
+                                  PlainsVillageHouseVariant var,
+                                  int widthX,
+                                  int height,
+                                  int widthZ,
+                                  JigsawType type,
+                                  BlockFace[] validDirs)
+    {
         super(widthX, height, widthZ, type, validDirs);
         this.var = var;
         this.plainsVillagePopulator = plainsVillagePopulator;
@@ -38,10 +46,12 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
             w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(2, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
-            if (this.var == PlainsVillageHouseVariant.CLAY)
+            if (this.var == PlainsVillageHouseVariant.CLAY) {
                 w.getUp(2).Pillar(2, rand, Material.WHITE_TERRACOTTA);
-            else
+            }
+            else {
                 w.getUp(2).Pillar(2, rand, plainsVillagePopulator.woodPlank);
+            }
 
             w = w.getLeft();
         }
@@ -60,25 +70,21 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
         // Variant Cobblestone
         if (var == PlainsVillageHouseVariant.COBBLESTONE) {
-            slabType = new Material[]{Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
-            fenceType = new Material[]{Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
-            baseType = new Material[]{plainsVillagePopulator.woodLog};
-            stairType = new Material[]{plainsVillagePopulator.woodStairs};
-        } else if (var == PlainsVillageHouseVariant.CLAY) {
+            slabType = new Material[] {Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
+            fenceType = new Material[] {Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
+            baseType = new Material[] {plainsVillagePopulator.woodLog};
+            stairType = new Material[] {plainsVillagePopulator.woodStairs};
+        }
+        else if (var == PlainsVillageHouseVariant.CLAY) {
             slabType = BlockUtils.stoneBrickSlabs;
-            fenceType = new Material[]{Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
-            baseType = new Material[]{plainsVillagePopulator.woodStrippedLog};
-            stairType = new Material[]{plainsVillagePopulator.woodStairs};
+            fenceType = new Material[] {Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL};
+            baseType = new Material[] {plainsVillagePopulator.woodStrippedLog};
+            stairType = new Material[] {plainsVillagePopulator.woodStairs};
         }
 
-        new SlabBuilder(slabType)
-                .setType(Slab.Type.TOP)
-                .apply(w.getUp(2));
+        new SlabBuilder(slabType).setType(Slab.Type.TOP).apply(w.getUp(2));
 
-        new SlabBuilder(slabType)
-                .setType(Slab.Type.BOTTOM)
-                .apply(w.getUp(2).getLeft())
-                .apply(w.getUp(2).getRight());
+        new SlabBuilder(slabType).setType(Slab.Type.BOTTOM).apply(w.getUp(2).getLeft()).apply(w.getUp(2).getRight());
 
         w.getUp().getLeft().setType(fenceType);
         w.getUp().getLeft().CorrectMultipleFacing(1);
@@ -95,9 +101,9 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
             trapdoor.setOpen(true);
             w.getFront().setBlockData(trapdoor);
             BlockUtils.pickFlower().build(w.getUp());
-        } else { // Stairs
-            new StairBuilder(stairType).setFacing(w.getDirection().getOppositeFace())
-                    .apply(w);
+        }
+        else { // Stairs
+            new StairBuilder(stairType).setFacing(w.getDirection().getOppositeFace()).apply(w);
         }
 
         w.getLeft().getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);

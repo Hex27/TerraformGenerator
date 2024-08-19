@@ -29,7 +29,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         double angle = rand.nextDouble() * Math.PI * 2;
         int x = (int) (Math.cos(angle) * radius);
         int z = (int) (Math.sin(angle) * radius);
-        return new int[]{x, z};
+        return new int[] {x, z};
     }
 
     private static boolean areCoordsEqual(int @NotNull [] a, int x, int z) {
@@ -52,25 +52,39 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
             }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("sp-1");
-            for (int i = 0; i < 6; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            for (int i = 0; i < 6; i++) {
+                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("sp-2");
-            for (int i = 0; i < 10; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            for (int i = 0; i < 10; i++) {
+                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("sp-3");
-            for (int i = 0; i < 15; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            for (int i = 0; i < 15; i++) {
+                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("s-pop-4");
-            for (int i = 0; i < 21; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            for (int i = 0; i < 21; i++) {
+                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("s-pop-5");
-            for (int i = 0; i < 28; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            for (int i = 0; i < 28; i++) {
+                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("s-pop-6");
-            for (int i = 0; i < 36; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            for (int i = 0; i < 36; i++) {
+                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("s-pop-7");
-            for (int i = 0; i < 9; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            for (int i = 0; i < 9; i++) {
+                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+            }
             // TerraformGeneratorPlugin.logger.debug("s-pop-8");
 
         }
@@ -79,13 +93,17 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-        if (!isEnabled()) return false;
+        if (!isEnabled()) {
+            return false;
+        }
 
         int[][] positions = strongholdPositions(tw);
         for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
             for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
                 for (int[] pos : positions) {
-                    if (areCoordsEqual(pos, x, z)) return true;
+                    if (areCoordsEqual(pos, x, z)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -95,25 +113,39 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if (!isEnabled()) return;
+        if (!isEnabled()) {
+            return;
+        }
 
         int[][] positions = strongholdPositions(tw);
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
                 for (int[] pos : positions) {
                     if (areCoordsEqual(pos, x, z)) {
-                        
-                    	// Strongholds no longer calculate from the surface.
-                    	// Just pick a directly underground location.
-                        int y = GenUtils.randInt(TConfigOption.STRUCTURES_STRONGHOLD_MIN_Y.getInt(), TConfigOption.STRUCTURES_STRONGHOLD_MAX_Y.getInt());
-                        
+
+                        // Strongholds no longer calculate from the surface.
+                        // Just pick a directly underground location.
+                        int y = GenUtils.randInt(
+                                TConfigOption.STRUCTURES_STRONGHOLD_MIN_Y.getInt(),
+                                TConfigOption.STRUCTURES_STRONGHOLD_MAX_Y.getInt()
+                        );
+
                         // Attempt to force strongholds further underground if
                         // they're above the surface.
-                        if(y + 18 > GenUtils.getHighestGround(data, x, z)) {
-                        	if(y > TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt()) y = TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt();
+                        if (y + 18 > GenUtils.getHighestGround(data, x, z)) {
+                            if (y > TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt()) {
+                                y = TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt();
+                            }
                         }
-                        
-                        spawnStronghold(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, y, z);
+
+                        spawnStronghold(
+                                tw,
+                                this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()),
+                                data,
+                                x,
+                                y,
+                                z
+                        );
                         break;
                     }
                 }
@@ -123,7 +155,13 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     }
 
-    public void spawnStronghold(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnStronghold(@NotNull TerraformWorld tw,
+                                Random random,
+                                @NotNull PopulatorDataAbstract data,
+                                int x,
+                                int y,
+                                int z)
+    {
         // TerraformGeneratorPlugin.logger.info("Spawning stronghold at: " + x + "," + z);
 
         int numRooms = 70;
@@ -131,7 +169,15 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
         // Level One
         Random hashedRand = tw.getHashedRand(x, y, z);
-        RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range);
+        RoomLayoutGenerator gen = new RoomLayoutGenerator(
+                hashedRand,
+                RoomLayout.RANDOM_BRUTEFORCE,
+                numRooms,
+                x,
+                y,
+                z,
+                range
+        );
 
         MazeSpawner mazeSpawner = new MazeSpawner();
         mazeSpawner.setMazePeriod(10);
@@ -157,7 +203,14 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new TrapChestRoomPopulator(random, false, false));
         gen.registerRoomPopulator(new HallwayPopulator(random, false, false));
         gen.calculateRoomPlacement();
-        gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
+        gen.fill(
+                data,
+                tw,
+                Material.STONE_BRICKS,
+                Material.STONE_BRICKS,
+                Material.MOSSY_STONE_BRICKS,
+                Material.CRACKED_STONE_BRICKS
+        );
 
         gen.reset();
         mazeSpawner = new MazeSpawner();
@@ -179,7 +232,14 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         stairwayTwo.setRoomPopulator(new StairwayTopPopulator(random, false, false));
         gen.getRooms().add(stairwayTwo);
         gen.calculateRoomPlacement();
-        gen.fill(data, tw, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
+        gen.fill(
+                data,
+                tw,
+                Material.STONE_BRICKS,
+                Material.STONE_BRICKS,
+                Material.MOSSY_STONE_BRICKS,
+                Material.CRACKED_STONE_BRICKS
+        );
 
     }
 
@@ -190,26 +250,27 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         for (int[] loc : strongholdPositions(tw)) {
             double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
 
-        	if(min == null) {
+            if (min == null) {
                 minDistanceSquared = distSqr;
-        		min = loc;
-        		continue;
-        	}
-        	
+                min = loc;
+                continue;
+            }
+
             if (distSqr < minDistanceSquared) {
                 minDistanceSquared = distSqr;
                 min = loc;
             }
         }
-        return new int[]{min[0], min[1]};
+        return new int[] {min[0], min[1]};
     }
 
 
     public int[] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         int[][] positions = strongholdPositions(tw);
         for (int[] pos : positions) {
-            if (mc.containsXZBlockCoords(pos[0], pos[1]))
+            if (mc.containsXZBlockCoords(pos[0], pos[1])) {
                 return pos;
+            }
         }
 
         return null;
@@ -225,9 +286,9 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     public boolean isEnabled() {
         return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_STRONGHOLD_ENABLED.getBoolean();
     }
-    
+
     @Override
     public int getChunkBufferDistance() {
-    	return 0;
+        return 0;
     }
 }

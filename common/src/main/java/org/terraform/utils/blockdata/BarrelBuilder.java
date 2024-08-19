@@ -8,6 +8,7 @@ import org.bukkit.block.data.Directional;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
+
 import java.util.Random;
 
 public class BarrelBuilder {
@@ -30,8 +31,9 @@ public class BarrelBuilder {
 
     public @NotNull BarrelBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
-        if (lootTable != null)
+        if (lootTable != null) {
             block.getPopData().lootTableChest(block.getX(), block.getY(), block.getZ(), lootTable);
+        }
         return this;
     }
 

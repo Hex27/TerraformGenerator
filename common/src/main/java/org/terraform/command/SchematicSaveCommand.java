@@ -41,8 +41,7 @@ public class SchematicSaveCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, @NotNull Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(CommandSender sender, @NotNull Stack<String> args) throws InvalidArgumentException {
         Player p = (Player) sender;
         TerraRegion rg = SchematicListener.rgs.get(p.getUniqueId());
 
@@ -60,17 +59,20 @@ public class SchematicSaveCommand extends TerraCommand {
 
         TerraSchematic s = new TerraSchematic(p.getLocation().clone());
         for (Block b : rg.getBlocks()) {
-            if (b.getType() == Material.AIR)
+            if (b.getType() == Material.AIR) {
                 continue;
-            if (b.getType() == Material.BARRIER)
+            }
+            if (b.getType() == Material.BARRIER) {
                 b.setType(Material.AIR);
+            }
             s.registerBlock(b);
         }
 
         try {
             s.export(name + ".terra");
             p.sendMessage(ChatColor.GREEN + "Schematic saved with name " + name);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             p.sendMessage(ChatColor.RED + "A problem occurred.");
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }

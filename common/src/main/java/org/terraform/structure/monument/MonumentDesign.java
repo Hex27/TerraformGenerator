@@ -36,7 +36,7 @@ public enum MonumentDesign {
     }
 
     public @Nullable Material slab() {
-        return switch(this) {
+        return switch (this) {
             case DARK_LIGHTLESS -> Material.DARK_PRISMARINE_SLAB;
             case DARK_PRISMARINE_CORNERS ->
                     GenUtils.randChoice(Material.DARK_PRISMARINE_SLAB, Material.PRISMARINE_BRICK_SLAB);
@@ -58,11 +58,15 @@ public enum MonumentDesign {
             z++;
             y++;
             // World w = ((PopulatorDataPostGen) data).getWorld();
-            TerraSchematic schema = TerraSchematic.load(this.toString().toLowerCase(Locale.ENGLISH) + "-largelight", new SimpleBlock(data,x,y,z));
+            TerraSchematic schema = TerraSchematic.load(
+                    this.toString().toLowerCase(Locale.ENGLISH) + "-largelight",
+                    new SimpleBlock(data, x, y, z)
+            );
             schema.parser = new MonumentSchematicParser();
             schema.setFace(BlockFace.NORTH);
             schema.apply();
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
@@ -70,8 +74,9 @@ public enum MonumentDesign {
     public void upSpire(@NotNull SimpleBlock base, @NotNull Random rand) {
         while (base.isSolid() || base.getUp().isSolid()) {
             base = base.getUp();
-            if (base.getY() > TerraformGenerator.seaLevel)
+            if (base.getY() > TerraformGenerator.seaLevel) {
                 return;
+            }
         }
         spire(new Wall(base, BlockFace.NORTH), rand);
     }
@@ -84,8 +89,12 @@ public enum MonumentDesign {
         switch (this) {
             case DARK_LIGHTLESS:
                 for (int i = 0; i < height; i++) {
-                    if (i == 0) w.setType(Material.DARK_PRISMARINE);
-                    else if (i > height - 3) w.setType(Material.PRISMARINE_WALL);
+                    if (i == 0) {
+                        w.setType(Material.DARK_PRISMARINE);
+                    }
+                    else if (i > height - 3) {
+                        w.setType(Material.PRISMARINE_WALL);
+                    }
                     else {
                         w.setType(GenUtils.randChoice(Material.DARK_PRISMARINE, Material.PRISMARINE_WALL));
                         if (rand.nextBoolean()) {
@@ -101,8 +110,12 @@ public enum MonumentDesign {
                 break;
             case DARK_PRISMARINE_CORNERS:
                 for (int i = 0; i < height; i++) {
-                    if (i == 0) w.setType(Material.DARK_PRISMARINE);
-                    else if (i == 3) w.setType(Material.SEA_LANTERN);
+                    if (i == 0) {
+                        w.setType(Material.DARK_PRISMARINE);
+                    }
+                    else if (i == 3) {
+                        w.setType(Material.SEA_LANTERN);
+                    }
                     else {
                         w.setType(GenUtils.randChoice(Material.DARK_PRISMARINE, Material.PRISMARINE_WALL));
                         if (rand.nextBoolean()) {
@@ -117,9 +130,15 @@ public enum MonumentDesign {
                 break;
             case PRISMARINE_LANTERNS:
                 for (int i = 0; i < height; i++) {
-                    if (i == 0) w.setType(Material.PRISMARINE_BRICKS);
-                    else if (i > height - 2) w.setType(Material.PRISMARINE_WALL);
-                    else if (i == height - 2) w.setType(Material.PRISMARINE_BRICKS);
+                    if (i == 0) {
+                        w.setType(Material.PRISMARINE_BRICKS);
+                    }
+                    else if (i > height - 2) {
+                        w.setType(Material.PRISMARINE_WALL);
+                    }
+                    else if (i == height - 2) {
+                        w.setType(Material.PRISMARINE_BRICKS);
+                    }
                     else {
                         w.setType(Material.PRISMARINE_WALL);
                         if (i == 3) {

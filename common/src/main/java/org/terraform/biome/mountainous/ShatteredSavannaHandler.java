@@ -38,7 +38,16 @@ import java.util.Random;
  * The real interest in the biome lies in its transformer
  */
 public class ShatteredSavannaHandler extends AbstractMountainHandler {
-	
+
+    static BiomeBlender biomeBlender;
+
+    private static @NotNull BiomeBlender getBiomeBlender(TerraformWorld tw) {
+        if (biomeBlender == null) {
+            biomeBlender = new BiomeBlender(tw, true, true).setGridBlendingFactor(4).setSmoothBlendTowardsRivers(2);
+        }
+        return biomeBlender;
+    }
+
     @Override
     public boolean isOcean() {
         return false;
@@ -51,130 +60,153 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(Random rand) {
-        return new Material[]{
-        		Material.GRASS_BLOCK,
-        		Material.DIRT,
-        		GenUtils.randChoice(Material.DIRT, Material.STONE),
-        		GenUtils.randChoice(Material.DIRT, Material.STONE),
-        		Material.STONE
-        		};
+        return new Material[] {
+                Material.GRASS_BLOCK,
+                Material.DIRT,
+                GenUtils.randChoice(Material.DIRT, Material.STONE),
+                GenUtils.randChoice(Material.DIRT, Material.STONE),
+                Material.STONE
+        };
     }
 
     @Override
-    public @NotNull BiomeHandler getTransformHandler(){ return this; }
+    public @NotNull BiomeHandler getTransformHandler() {
+        return this;
+    }
 
     /**
      * One 2D noise value to handle whether or not to carve
      * One 1D noise value as a Y-multiplier
      */
     @Override
-    public void transformTerrain(@NotNull ChunkCache cache, @NotNull TerraformWorld tw, Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+    public void transformTerrain(@NotNull ChunkCache cache,
+                                 @NotNull TerraformWorld tw,
+                                 Random random,
+                                 ChunkGenerator.@NotNull ChunkData chunk,
+                                 int x,
+                                 int z,
+                                 int chunkX,
+                                 int chunkZ)
+    {
 
-        FastNoise creviceNoise = NoiseCacheHandler.getNoise(
-            tw,
-            NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE,
-            world -> {
-                FastNoise n = new FastNoise(tw.getHashedRand(181234,32189,16342134).nextInt());
-                n.SetNoiseType(NoiseType.SimplexFractal);
-                n.SetFractalType(FastNoise.FractalType.Billow);
-                n.SetFractalOctaves(1);
-                n.SetFrequency(0.02f);
-                return n;
+        FastNoise creviceNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE, world -> {
+            FastNoise n = new FastNoise(tw.getHashedRand(181234, 32189, 16342134).nextInt());
+            n.SetNoiseType(NoiseType.SimplexFractal);
+            n.SetFractalType(FastNoise.FractalType.Billow);
+            n.SetFractalOctaves(1);
+            n.SetFrequency(0.02f);
+            return n;
         });
-        FastNoise yScaleNoise = NoiseCacheHandler.getNoise(
-            tw,
-            NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE,
-            world -> {
-                FastNoise n = new FastNoise(tw.getHashedRand(982374,18723,1983701).nextInt());
-                n.SetNoiseType(NoiseType.Simplex);
-                n.SetFrequency(0.06f);
-                return n;
-            });
-        int rawX = chunkX*16+x;
-        int rawZ = chunkZ*16+z;
-        double crevice = Math.abs(creviceNoise.GetNoise(rawX,rawZ));
+        FastNoise yScaleNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_SHATTERED_SAVANNANOISE, world -> {
+            FastNoise n = new FastNoise(tw.getHashedRand(982374, 18723, 1983701).nextInt());
+            n.SetNoiseType(NoiseType.Simplex);
+            n.SetFrequency(0.06f);
+            return n;
+        });
+        int rawX = chunkX * 16 + x;
+        int rawZ = chunkZ * 16 + z;
+        double crevice = Math.abs(creviceNoise.GetNoise(rawX, rawZ));
         // peakHeight *= getBiomeBlender(tw).getEdgeFactor(BiomeBank.SHATTERED_SAVANNA, rawX, rawZ);
-        if(crevice < 0.40f) return;
+        if (crevice < 0.40f) {
+            return;
+        }
 
-        short baseHeight = cache.getTransformedHeight(x,z);
-        int low = (int) HeightMap.CORE.getHeight(tw,rawX,rawZ);
+        short baseHeight = cache.getTransformedHeight(x, z);
+        int low = (int) HeightMap.CORE.getHeight(tw, rawX, rawZ);
         boolean updateHeight = true;
-        for(int y = baseHeight; y > low; y--)
-        {
+        for (int y = baseHeight; y > low; y--) {
             // Noise meant to scale with y while making terraces every 10 blocks
             // Additionally, add a small curve to make the land bend a bit
             // Make the pillars connect around baseHeight+0.5*(peakHeight-baseHeight)
             // by multiplying a factor that approaches lower values there
-            double scale = (1f - 0.4*Math.abs(yScaleNoise.GetNoise(y,0)));
-            if(crevice*scale < 0.40f){
+            double scale = (1f - 0.4 * Math.abs(yScaleNoise.GetNoise(y, 0)));
+            if (crevice * scale < 0.40f) {
                 updateHeight = false;
                 continue;
             }
-            chunk.setBlock(x,y,z,Material.CAVE_AIR);
-            if(updateHeight) cache.writeTransformedHeight(x,z, (short) (y-1));
+            chunk.setBlock(x, y, z, Material.CAVE_AIR);
+            if (updateHeight) {
+                cache.writeTransformedHeight(x, z, (short) (y - 1));
+            }
         }
 
         // Make write changes
-        if(chunk instanceof DudChunkData) return;
+        if (chunk instanceof DudChunkData) {
+            return;
+        }
 
         Material[] crust = getSurfaceCrust(new Random());
-        for(int i = 0; i < crust.length; i++)
-        {
-            if(BlockUtils.isAir(chunk.getType(x,cache.getTransformedHeight(x,z)-i,z)))
+        for (int i = 0; i < crust.length; i++) {
+            if (BlockUtils.isAir(chunk.getType(x, cache.getTransformedHeight(x, z) - i, z))) {
                 return;
-            chunk.setBlock(x,cache.getTransformedHeight(x,z)-i,z,crust[i]);
+            }
+            chunk.setBlock(x, cache.getTransformedHeight(x, z) - i, z, crust[i]);
         }
     }
 
-    static BiomeBlender biomeBlender;
-    private static @NotNull BiomeBlender getBiomeBlender(TerraformWorld tw) {
-        if (biomeBlender == null) biomeBlender = new BiomeBlender(tw, true, true)
-                .setGridBlendingFactor(4)
-                .setSmoothBlendTowardsRivers(2);
-        return biomeBlender;
-    }
-
     @Override
-    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-        if(surfaceY < TerraformGenerator.seaLevel) return;
+    public void populateSmallItems(TerraformWorld world,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
+        if (surfaceY < TerraformGenerator.seaLevel) {
+            return;
+        }
 
-        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
-                && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK && !data.getType(rawX, surfaceY + 1, rawZ)
+                                                                               .isSolid())
+        {
             // Dense grass
             if (GenUtils.chance(random, 2, 10)) {
-                PlantBuilder.GRASS.build(data, rawX, surfaceY+1, rawZ);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
             }
         }
     }
 
-	@Override
-	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
+    @Override
+    public void populateLargeItems(@NotNull TerraformWorld tw,
+                                   @NotNull Random random,
+                                   @NotNull PopulatorDataAbstract data)
+    {
         // Small trees
-	    SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 34);
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 34);
         for (SimpleLocation sLoc : trees) {
-     	    int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-		    sLoc.setY(treeY);
-		    if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
-		           BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
-		           new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
-		    }
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
+            sLoc.setY(treeY);
+            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
+                    sLoc.getY(),
+                    sLoc.getZ())))
+            {
+                new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).build(
+                        tw,
+                        data,
+                        sLoc.getX(),
+                        sLoc.getY(),
+                        sLoc.getZ()
+                );
+            }
         }
 
         // Grass Poffs
         SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 35);
         for (SimpleLocation sLoc : poffs) {
-     	   int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-		   sLoc.setY(treeY);
-		   if(TConfigOption.arePlantsEnabled() && data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
-		           BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())) &&
-		           !data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()).isSolid()) {
-               SimpleBlock base = new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());
-               int rX = GenUtils.randInt(random, 2, 4);
-               int rY = GenUtils.randInt(random, 2, 4);
-               int rZ = GenUtils.randInt(random, 2, 4);
-               BlockUtils.replaceSphere(random.nextInt(999), rX, rY, rZ, base, false, Material.ACACIA_LEAVES);
-		    } 
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
+            sLoc.setY(treeY);
+            if (TConfigOption.arePlantsEnabled()
+                && data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
+                && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()))
+                && !data.getType(sLoc.getX(), sLoc.getY() + 1, sLoc.getZ()).isSolid())
+            {
+                SimpleBlock base = new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());
+                int rX = GenUtils.randInt(random, 2, 4);
+                int rY = GenUtils.randInt(random, 2, 4);
+                int rZ = GenUtils.randInt(random, 2, 4);
+                BlockUtils.replaceSphere(random.nextInt(999), rX, rY, rZ, base, false, Material.ACACIA_LEAVES);
+            }
         }
-	}
+    }
 
 }

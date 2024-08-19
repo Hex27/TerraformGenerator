@@ -28,54 +28,76 @@ public class SandyBeachHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{
-        		Material.SAND,
+        return new Material[] {
                 Material.SAND,
-                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND),
+                Material.SAND,
+                GenUtils.randChoice(rand,
+                        Material.SANDSTONE,
+                        Material.SAND,
+                        Material.SAND,
+                        Material.SAND,
+                        Material.SAND,
+                        Material.SAND
+                ),
                 GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE),
-                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)
+        };
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
 
         boolean hasSugarcane = GenUtils.chance(random, 1, 100);
 
         Material base = data.getType(rawX, surfaceY, rawZ);
-        if (base != Material.SAND && base != Material.GRASS_BLOCK) return;
+        if (base != Material.SAND && base != Material.GRASS_BLOCK) {
+            return;
+        }
 
         surfaceY++;
 
         // Spawn sugarcane
         if (hasSugarcane) {
             boolean hasWater = data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER;
-            if (data.getType(rawX - 1, surfaceY - 1, rawZ) == Material.WATER)
+            if (data.getType(rawX - 1, surfaceY - 1, rawZ) == Material.WATER) {
                 hasWater = true;
-            if (data.getType(rawX, surfaceY - 1, rawZ + 1) == Material.WATER)
+            }
+            if (data.getType(rawX, surfaceY - 1, rawZ + 1) == Material.WATER) {
                 hasWater = true;
-            if (data.getType(rawX, surfaceY - 1, rawZ - 1) == Material.WATER)
+            }
+            if (data.getType(rawX, surfaceY - 1, rawZ - 1) == Material.WATER) {
                 hasWater = true;
+            }
 
-            if (hasWater) PlantBuilder.SUGAR_CANE.build(random, data, rawX, surfaceY, rawZ, 3, 7);
+            if (hasWater) {
+                PlantBuilder.SUGAR_CANE.build(random, data, rawX, surfaceY, rawZ, 3, 7);
+            }
         }
 
     }
 
-	@Override
-	public void populateLargeItems(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
-        
-		SimpleLocation[] coconutTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
+    @Override
+    public void populateLargeItems(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
 
-		// Big trees and giant mushrooms
+        SimpleLocation[] coconutTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
+
+        // Big trees and giant mushrooms
         for (SimpleLocation sLoc : coconutTrees) {
-            int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
             sLoc.setY(treeY);
-            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() &&
-                    (BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))
-                    || data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) == Material.SAND)) {
-                TreeDB.spawnCoconutTree(tw, data, sLoc.getX(), sLoc.getY()+1 ,sLoc.getZ());
+            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
+                && (BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()))
+                    || data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) == Material.SAND))
+            {
+                TreeDB.spawnCoconutTree(tw, data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());
             }
         }
-		
-	}
+
+    }
 }

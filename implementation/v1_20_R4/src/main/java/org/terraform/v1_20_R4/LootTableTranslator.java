@@ -11,7 +11,7 @@ public class LootTableTranslator {
 
     // I am indeed formally trained to properly structure my code
     // I have however elected to completely ignore said training here
-    public static final HashMap<TerraLootTable, ResourceKey<LootTable>> translationMap = new HashMap<>(){{
+    public static final HashMap<TerraLootTable, ResourceKey<LootTable>> translationMap = new HashMap<>() {{
         put(TerraLootTable.EMPTY, LootTables.a);
         put(TerraLootTable.SPAWN_BONUS_CHEST, LootTables.b);
         put(TerraLootTable.END_CITY_TREASURE, LootTables.c);

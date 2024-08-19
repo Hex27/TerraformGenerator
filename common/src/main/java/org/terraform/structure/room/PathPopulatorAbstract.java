@@ -12,6 +12,7 @@ public abstract class PathPopulatorAbstract {
     public int getPathHeight() {
         return 3;
     }
+
     public int getPathMaxBend() {
         return -1;
     }

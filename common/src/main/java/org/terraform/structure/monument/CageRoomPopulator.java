@@ -17,8 +17,7 @@ import java.util.Random;
 
 public class CageRoomPopulator extends MonumentRoomPopulator {
 
-    public CageRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn,
-                             boolean unique) {
+    public CageRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
     }
 
@@ -32,7 +31,9 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
         super.populate(data, room);
 
         // Not always a cage room
-        if (GenUtils.chance(rand, 3, 5)) return;
+        if (GenUtils.chance(rand, 3, 5)) {
+            return;
+        }
 
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey().getUp(7);
@@ -45,8 +46,15 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
                         w.getRelative(0, j, 0).setBlockData(wall);
                     }
                     // w.Pillar(room.getHeight()-9, rand, Material.PRISMARINE_WALL);
-                } else {
-                    w.Pillar(room.getHeight() - 9, rand, Material.DARK_PRISMARINE_SLAB, Material.PRISMARINE_SLAB, Material.PRISMARINE_BRICK_SLAB);
+                }
+                else {
+                    w.Pillar(
+                            room.getHeight() - 9,
+                            rand,
+                            Material.DARK_PRISMARINE_SLAB,
+                            Material.PRISMARINE_SLAB,
+                            Material.PRISMARINE_BRICK_SLAB
+                    );
                     Stairs s = (Stairs) Bukkit.createBlockData(design.stairs());
                     s.setFacing(w.getDirection());
                     s.setWaterlogged(w.get().getY() <= TerraformGenerator.seaLevel);

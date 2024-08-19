@@ -14,11 +14,24 @@ import java.util.Random;
 
 public class PlainsVillageForgeStandardPiece extends PlainsVillageForgePiece {
 
-    public PlainsVillageForgeStandardPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
+    public PlainsVillageForgeStandardPiece(PlainsVillagePopulator plainsVillagePopulator,
+                                           int widthX,
+                                           int height,
+                                           int widthZ,
+                                           JigsawType type,
+                                           boolean unique,
+                                           BlockFace[] validDirs)
+    {
         super(plainsVillagePopulator, widthX, height, widthZ, type, unique, validDirs);
     }
-	
-    public PlainsVillageForgeStandardPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+
+    public PlainsVillageForgeStandardPiece(PlainsVillagePopulator plainsVillagePopulator,
+                                           int widthX,
+                                           int height,
+                                           int widthZ,
+                                           JigsawType type,
+                                           BlockFace[] validDirs)
+    {
         super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
     }
 
@@ -28,31 +41,30 @@ public class PlainsVillageForgeStandardPiece extends PlainsVillageForgePiece {
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
         // Place flooring.
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-                data.setType(x, this.getRoom().getY(), z,
-                        GenUtils.randChoice(
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.CRACKED_STONE_BRICKS
-                        ));
-                new Wall(new SimpleBlock(data, x, this.getRoom().getY() - 1, z))
-                        .downUntilSolid(rand,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.CRACKED_STONE_BRICKS
-                        );
+                data.setType(x, this.getRoom().getY(), z, GenUtils.randChoice(
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.CRACKED_STONE_BRICKS
+                ));
+                new Wall(new SimpleBlock(data, x, this.getRoom().getY() - 1, z)).downUntilSolid(
+                        rand,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.CRACKED_STONE_BRICKS
+                );
             }
+        }
     }
-
 
 
 }

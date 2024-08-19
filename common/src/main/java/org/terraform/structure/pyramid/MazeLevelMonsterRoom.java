@@ -23,10 +23,8 @@ public class MazeLevelMonsterRoom extends RoomPopulatorAbstract {
         data.setType(room.getX(), room.getY(), room.getZ(), Material.RED_TERRACOTTA);
 
         int choice = rand.nextInt(3); // 0,1,2
-        EntityType monster = new EntityType[]{
-                EntityType.HUSK,
-                EntityType.CAVE_SPIDER,
-                EntityType.SILVERFISH
+        EntityType monster = new EntityType[] {
+                EntityType.HUSK, EntityType.CAVE_SPIDER, EntityType.SILVERFISH
         }[choice];
         for (int i = 0; i < GenUtils.randInt(1, 5); i++) {
             data.addEntity(room.getX(), room.getY() + 1, room.getZ(), monster);

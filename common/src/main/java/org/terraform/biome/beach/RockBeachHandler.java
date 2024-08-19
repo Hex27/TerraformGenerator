@@ -24,20 +24,28 @@ public class RockBeachHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.STONE, 5, Material.GRAVEL, 35, Material.COBBLESTONE, 10),
+        return new Material[] {
+                GenUtils.weightedRandomMaterial(rand, Material.STONE, 5, Material.GRAVEL, 35, Material.COBBLESTONE, 10),
                 GenUtils.weightedRandomMaterial(rand, Material.STONE, 5, Material.GRAVEL, 35, Material.COBBLESTONE, 10),
                 GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL),
-                GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)};
+                GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)
+        };
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world,
+                                   Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   PopulatorDataAbstract data)
+    {
 
     }
 
-	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        // TODO Auto-generated method stub
+
+    }
 }

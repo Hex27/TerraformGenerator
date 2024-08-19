@@ -1,12 +1,6 @@
 package org.terraform.data;
 
 import com.google.gson.annotations.SerializedName;
-
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Objects;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,13 +22,16 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Objects;
+import java.util.Random;
 
 public class SimpleBlock {
-    @SerializedName("w") // wtf is this for
-    private final int x, y, z;
-
     @NotNull
     final PopulatorDataAbstract popData;
+    @SerializedName("w") // wtf is this for
+    private final int x, y, z;
 
     public SimpleBlock(@NotNull Location loc) {
         this.popData = new PopulatorDataPostGen(loc.getChunk());
@@ -57,37 +54,6 @@ public class SimpleBlock {
         this.y = y;
         this.z = z;
     }
-    
-    public void pathTowards(int width, int maxLength, @NotNull SimpleBlock target, Material... types) {
-    	BlockFace dir = BlockFace.NORTH;
-    	int max = -1;
-    	if(target.getX() - this.getX() > max) {
-            // east
-            dir = BlockFace.EAST;
-    	}else if(this.getX() - target.getX() > max) {
-            // west
-            dir = BlockFace.WEST;
-    	}else if(this.getZ() - target.getZ() > max) {
-            // north
-            dir = BlockFace.NORTH;
-    	}else if(target.getZ() - this.getZ() > max) {
-            // south
-            dir = BlockFace.SOUTH;
-    	}
-    	
-    	SimpleBlock base = this;
-    	for(int i = 0; i < maxLength; i++) {
-    		if(!base.lsetType(types))
-    			break;
-    		
-    		for(int w = 0; w < width; w++)
-    			for(BlockFace adj:BlockUtils.getAdjacentFaces(dir))
-    				base.getRelative(adj).setType(types);
-    		base = base.getRelative(dir);
-    	}
-    	
-    }
-    
 
     public SimpleBlock(@NotNull PopulatorDataAbstract data, @NotNull SimpleLocation sLoc) {
         // this.world = world;
@@ -97,6 +63,7 @@ public class SimpleBlock {
         this.z = sLoc.getZ();
 
     }
+
 
     public SimpleBlock(@NotNull PopulatorDataAbstract data, @NotNull Location loc) {
         // this.world = loc.getWorld().getName();
@@ -115,13 +82,49 @@ public class SimpleBlock {
         this.z = b.getZ();
         // this.data = b.getBlockData().getAsString();
     }
-    
-    public @NotNull SimpleLocation getLoc() {
-    	return new SimpleLocation(x,y,z);
+
+    public void pathTowards(int width, int maxLength, @NotNull SimpleBlock target, Material... types) {
+        BlockFace dir = BlockFace.NORTH;
+        int max = -1;
+        if (target.getX() - this.getX() > max) {
+            // east
+            dir = BlockFace.EAST;
+        }
+        else if (this.getX() - target.getX() > max) {
+            // west
+            dir = BlockFace.WEST;
+        }
+        else if (this.getZ() - target.getZ() > max) {
+            // north
+            dir = BlockFace.NORTH;
+        }
+        else if (target.getZ() - this.getZ() > max) {
+            // south
+            dir = BlockFace.SOUTH;
+        }
+
+        SimpleBlock base = this;
+        for (int i = 0; i < maxLength; i++) {
+            if (!base.lsetType(types)) {
+                break;
+            }
+
+            for (int w = 0; w < width; w++) {
+                for (BlockFace adj : BlockUtils.getAdjacentFaces(dir)) {
+                    base.getRelative(adj).setType(types);
+                }
+            }
+            base = base.getRelative(dir);
+        }
+
     }
-    
+
+    public @NotNull SimpleLocation getLoc() {
+        return new SimpleLocation(x, y, z);
+    }
+
     public @NotNull SimpleBlock getAtY(int y) {
-    	return new SimpleBlock(popData,x,y,z);
+        return new SimpleBlock(popData, x, y, z);
     }
 
     public double distanceSquared(@NotNull SimpleBlock other) {
@@ -134,17 +137,18 @@ public class SimpleBlock {
 
         return Math.pow(selfX - oX, 2) + Math.pow(selfY - oY, 2) + Math.pow(selfZ - oZ, 2);
     }
-    
+
     public boolean isConnected(SimpleBlock other) {
-    	for(BlockFace face:BlockUtils.sixBlockFaces) {
-    		if(this.getRelative(face).equals(other))
-    			return true;
-    	}
-    	return false;
+        for (BlockFace face : BlockUtils.sixBlockFaces) {
+            if (this.getRelative(face).equals(other)) {
+                return true;
+            }
+        }
+        return false;
     }
-    
+
     public double distance(@NotNull SimpleBlock other) {
-    	
+
         return Math.sqrt(distanceSquared(other));
     }
 
@@ -158,8 +162,9 @@ public class SimpleBlock {
 
     public @NotNull SimpleBlock untilSolid(@NotNull BlockFace face) {
         SimpleBlock rel = this.getRelative(face);
-        while (!rel.isSolid())
+        while (!rel.isSolid()) {
             rel = rel.getRelative(face);
+        }
 
         return rel;
     }
@@ -167,6 +172,7 @@ public class SimpleBlock {
 
     /**
      * Lenient set. Only replaces non-solid blocks.
+     *
      * @return if the set was a success.
      */
     public boolean lsetType(@NotNull Material type) {
@@ -197,8 +203,9 @@ public class SimpleBlock {
     }
 
     public void RSolSetBlockData(BlockData data) {
-        if (isSolid())
+        if (isSolid()) {
             setBlockData(data);
+        }
     }
 
     public @NotNull SimpleBlock getRelative(int nx, int ny, int nz) {
@@ -209,7 +216,8 @@ public class SimpleBlock {
         return new SimpleBlock(popData,
                 (int) Math.round(x + v.getX()),
                 (int) Math.round(y + v.getY()),
-                (int) Math.round(z + v.getZ()));
+                (int) Math.round(z + v.getZ())
+        );
     }
 
     public @NotNull String getCoords() {
@@ -221,46 +229,57 @@ public class SimpleBlock {
     }
 
     public @NotNull SimpleBlock getRelative(@NotNull BlockFace face, int count) {
-        return new SimpleBlock(popData, x + face.getModX() * count, y + face.getModY() * count, z + face.getModZ() * count);
+        return new SimpleBlock(
+                popData,
+                x + face.getModX() * count,
+                y + face.getModY() * count,
+                z + face.getModZ() * count
+        );
     }
-    
+
     public void addEntity(EntityType type) {
-    	popData.addEntity(x, y, z, type);
-    }
-    
-
-    public int countAdjacentsThatMatchType(BlockFace @NotNull [] faces, Material @NotNull ...types) {
-    	int i = 0;
-    	for(BlockFace face:faces) {
-    		for(Material type:types)
-    			if(getRelative(face).getType() == type)
-    				i++;
-    	}
-    	return i;
-    }
-    
-    public boolean doAdjacentsMatchType(BlockFace @NotNull [] faces, Material @NotNull ...types) {
-    	for(BlockFace face:faces) {
-    		for(Material type:types)
-    			if(getRelative(face).getType() == type)
-    				return true;
-    	}
-    	return false;
+        popData.addEntity(x, y, z, type);
     }
 
-    public void replaceAdjacentNonLiquids(BlockFace @NotNull [] faces, Material liquid, Material...types) {
-    	for(BlockFace face:faces) {
-			if(!getRelative(face).isSolid() && getRelative(face).getType() != liquid)
-				getRelative(face).setType(types);
-    	}
+
+    public int countAdjacentsThatMatchType(BlockFace @NotNull [] faces, Material @NotNull ... types) {
+        int i = 0;
+        for (BlockFace face : faces) {
+            for (Material type : types) {
+                if (getRelative(face).getType() == type) {
+                    i++;
+                }
+            }
+        }
+        return i;
     }
-    
+
+    public boolean doAdjacentsMatchType(BlockFace @NotNull [] faces, Material @NotNull ... types) {
+        for (BlockFace face : faces) {
+            for (Material type : types) {
+                if (getRelative(face).getType() == type) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void replaceAdjacentNonLiquids(BlockFace @NotNull [] faces, Material liquid, Material... types) {
+        for (BlockFace face : faces) {
+            if (!getRelative(face).isSolid() && getRelative(face).getType() != liquid) {
+                getRelative(face).setType(types);
+            }
+        }
+    }
+
     public boolean hasAdjacentSolid(BlockFace @NotNull [] faces) {
-    	for(BlockFace face:faces) {
-			if(getRelative(face).isSolid())
-				return true;
-    	}
-    	return false;
+        for (BlockFace face : faces) {
+            if (getRelative(face).isSolid()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getChunkX() {
@@ -290,57 +309,6 @@ public class SimpleBlock {
     public @Nullable Material getType() {
         return popData.getType(x, y, z);
     }
-    
-    public boolean isAir() {
-    	return popData.getType(x, y, z) == Material.AIR || popData.getType(x, y, z) == Material.CAVE_AIR;
-    }
-
-    public boolean isSolid() {
-    	return popData.getType(x, y, z).isSolid();
-    }
-    
-    public void physicsSetType(@NotNull Material type, boolean updatePhysics)
-    {
-    	if(this.popData instanceof IPopulatorDataPhysicsCapable)
-    	{
-            if (popData.getType(x, y, z) == Material.WATER) {
-                BlockData data = Bukkit.createBlockData(type);
-                if (data instanceof Waterlogged wl) {
-                    wl.setWaterlogged(true);
-                }
-                ((IPopulatorDataPhysicsCapable) popData).setBlockData(x, y, z, data, updatePhysics);
-            } else
-            	((IPopulatorDataPhysicsCapable) popData).setType(x, y, z, type, updatePhysics);
-
-            // Setting leaves with setType will be persistent
-            if (Tag.LEAVES.isTagged(type)) {
-                // if (type.toString().contains("LEAVES")) {
-                BlockData l = Bukkit.createBlockData(type);
-                if(l instanceof Leaves)
-                    ((Leaves) l).setPersistent(true);
-
-                ((IPopulatorDataPhysicsCapable) popData).setBlockData(x,y,z,l, updatePhysics);
-            }
-        
-    	}
-    	else
-    		setType(type);
-    }
-    
-    public void physicsSetBlockData(BlockData dat, boolean updatePhysics)
-    {
-    	if(this.popData instanceof IPopulatorDataPhysicsCapable)
-    	{
-	        if (popData.getType(x, y, z) == Material.WATER) {
-	            if (dat instanceof Waterlogged wl) {
-                    wl.setWaterlogged(true);
-	            }
-	        }
-	        ((IPopulatorDataPhysicsCapable) popData).setBlockData(x, y, z, dat, updatePhysics);
-    	}
-    	else
-    		setBlockData(dat);
-    }
 
     public void setType(@NotNull Material type) {
         if (popData.getType(x, y, z) == Material.WATER) {
@@ -349,15 +317,18 @@ public class SimpleBlock {
                 wl.setWaterlogged(true);
             }
             popData.setBlockData(x, y, z, data);
-        } else
+        }
+        else {
             popData.setType(x, y, z, type);
+        }
 
         // Setting leaves with setType will be persistent
         if (Tag.LEAVES.isTagged(type)) {
             // if (type.toString().contains("LEAVES")) {
             BlockData l = Bukkit.createBlockData(type);
-            if(l instanceof Leaves)
+            if (l instanceof Leaves) {
                 ((Leaves) l).setPersistent(true);
+            }
 
             setBlockData(l);
         }
@@ -367,13 +338,68 @@ public class SimpleBlock {
         setType(GenUtils.randChoice(types));
     }
 
+    public boolean isAir() {
+        return popData.getType(x, y, z) == Material.AIR || popData.getType(x, y, z) == Material.CAVE_AIR;
+    }
+
+    public boolean isSolid() {
+        return popData.getType(x, y, z).isSolid();
+    }
+
+    public void physicsSetType(@NotNull Material type, boolean updatePhysics)
+    {
+        if (this.popData instanceof IPopulatorDataPhysicsCapable) {
+            if (popData.getType(x, y, z) == Material.WATER) {
+                BlockData data = Bukkit.createBlockData(type);
+                if (data instanceof Waterlogged wl) {
+                    wl.setWaterlogged(true);
+                }
+                ((IPopulatorDataPhysicsCapable) popData).setBlockData(x, y, z, data, updatePhysics);
+            }
+            else {
+                ((IPopulatorDataPhysicsCapable) popData).setType(x, y, z, type, updatePhysics);
+            }
+
+            // Setting leaves with setType will be persistent
+            if (Tag.LEAVES.isTagged(type)) {
+                // if (type.toString().contains("LEAVES")) {
+                BlockData l = Bukkit.createBlockData(type);
+                if (l instanceof Leaves) {
+                    ((Leaves) l).setPersistent(true);
+                }
+
+                ((IPopulatorDataPhysicsCapable) popData).setBlockData(x, y, z, l, updatePhysics);
+            }
+
+        }
+        else {
+            setType(type);
+        }
+    }
+
+    public void physicsSetBlockData(BlockData dat, boolean updatePhysics)
+    {
+        if (this.popData instanceof IPopulatorDataPhysicsCapable) {
+            if (popData.getType(x, y, z) == Material.WATER) {
+                if (dat instanceof Waterlogged wl) {
+                    wl.setWaterlogged(true);
+                }
+            }
+            ((IPopulatorDataPhysicsCapable) popData).setBlockData(x, y, z, dat, updatePhysics);
+        }
+        else {
+            setBlockData(dat);
+        }
+    }
+
     public boolean lsetType(Material... types) {
         return lsetType(GenUtils.randChoice(types));
     }
 
     public void RSolSetType(@NotNull Material type) {
-        if (isSolid())
+        if (isSolid()) {
             setType(type);
+        }
     }
 
     /**
@@ -396,57 +422,55 @@ public class SimpleBlock {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof SimpleBlock other)) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof SimpleBlock other)) {
+            return false;
+        }
         return Objects.equals(popData.getTerraformWorld(), other.getPopData().getTerraformWorld())
-                && x == other.x && z == other.z && y == other.y;
+               && x == other.x
+               && z == other.z
+               && y == other.y;
     }
 
     public @NotNull SimpleBlock getGround() {
-        return new SimpleBlock(
-                popData,
-                x,
-                GenUtils.getHighestGround(popData, x, z),
-                z);
+        return new SimpleBlock(popData, x, GenUtils.getHighestGround(popData, x, z), z);
     }
 
     public @NotNull SimpleBlock getGroundOrSeaLevel() {
-    	int y = GenUtils.getHighestGround(popData, x, z);
-    	if(y < TerraformGenerator.seaLevel) y = TerraformGenerator.seaLevel;
-        return new SimpleBlock(
-                popData,
-                x,
-                y,
-                z);
+        int y = GenUtils.getHighestGround(popData, x, z);
+        if (y < TerraformGenerator.seaLevel) {
+            y = TerraformGenerator.seaLevel;
+        }
+        return new SimpleBlock(popData, x, y, z);
     }
 
     public @NotNull SimpleBlock getGroundOrDry() {
-    	int y = GenUtils.getHighestGround(popData, x, z);
-    	
-    	while(y < TerraformGeneratorPlugin.injector.getMaxY() 
-    			&& (BlockUtils.isWet(this.getAtY(y+1))||
-    			Tag.ICE.isTagged(this.getAtY(y+1).getType()))) y++;
-        return new SimpleBlock(
-                popData,
-                x,
-                y,
-                z);
+        int y = GenUtils.getHighestGround(popData, x, z);
+
+        while (y < TerraformGeneratorPlugin.injector.getMaxY() && (BlockUtils.isWet(this.getAtY(y + 1))
+                                                                   || Tag.ICE.isTagged(this.getAtY(y + 1).getType()))) {
+            y++;
+        }
+        return new SimpleBlock(popData, x, y, z);
     }
 
 
-	public @NotNull SimpleBlock getUp() {
-		return this.getRelative(0, 1, 0);
-	}
-	public @NotNull SimpleBlock getUp(int i) {
+    public @NotNull SimpleBlock getUp() {
+        return this.getRelative(0, 1, 0);
+    }
+
+    public @NotNull SimpleBlock getUp(int i) {
         return this.getRelative(0, i, 0);
-	}
+    }
 
     /**
      * @param cutoff number of iterations before stopping and returning null
      * @return first solid block above this one
      */
     public @Nullable SimpleBlock findCeiling(int cutoff) {
-    	SimpleBlock ceil = this.getUp();
+        SimpleBlock ceil = this.getUp();
         while (cutoff > 0) {
             if (ceil.isSolid() && ceil.getType() != Material.LANTERN) {
                 return ceil;
@@ -462,7 +486,7 @@ public class SimpleBlock {
      * @return first solid block below this one
      */
     public @Nullable SimpleBlock findFloor(int cutoff) {
-    	SimpleBlock floor = this.getDown();
+        SimpleBlock floor = this.getDown();
         while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
             if (floor.isSolid() && floor.getType() != Material.LANTERN) {
                 return floor;
@@ -476,10 +500,11 @@ public class SimpleBlock {
     /**
      * If solid, find nearest air pocket upwards.
      * If not solid, find nearest floor.
+     *
      * @param cutoff number of iterations before stopping and returning null
      */
     public @Nullable SimpleBlock findAirPocket(int cutoff) {
-    	SimpleBlock floor = this.getDown();
+        SimpleBlock floor = this.getDown();
         while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
             if (!floor.isSolid()) {
                 return floor;
@@ -489,15 +514,16 @@ public class SimpleBlock {
         }
         return null;
     }
-    
+
     /**
      * If solid, find nearest air pocket upwards.
      * If not solid, find nearest floor.
+     *
      * @param cutoff number of iterations before stopping and returning null
      */
     public @Nullable SimpleBlock findNearestAirPocket(int cutoff) {
-    	if(this.isSolid()) {
-    		SimpleBlock rel = this.getUp();
+        if (this.isSolid()) {
+            SimpleBlock rel = this.getUp();
             while (cutoff > 0) {
                 if (!rel.isSolid()) {
                     return rel;
@@ -506,23 +532,24 @@ public class SimpleBlock {
                 rel = rel.getUp();
             }
             return null;
-    	}
-    	else
-    	{
-    		SimpleBlock candidate = this.findFloor(cutoff);
-    		if(candidate != null) candidate = candidate.getUp();
-    		return candidate;
-    	}
+        }
+        else {
+            SimpleBlock candidate = this.findFloor(cutoff);
+            if (candidate != null) {
+                candidate = candidate.getUp();
+            }
+            return candidate;
+        }
     }
-    
+
     /**
      * @param cutoff number of iterations before stopping and returning null
      * @return first stone-like block below this one
      */
     public @Nullable SimpleBlock findStonelikeFloor(int cutoff) {
-    	SimpleBlock floor = this.getDown();
+        SimpleBlock floor = this.getDown();
         while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
-        	// floor.getUp().setType(Material.CYAN_STAINED_GLASS);
+            // floor.getUp().setType(Material.CYAN_STAINED_GLASS);
             if (BlockUtils.isStoneLike(floor.getType())) {
                 return floor;
             }
@@ -531,13 +558,13 @@ public class SimpleBlock {
         }
         return null;
     }
-    
+
     /**
      * @param cutoff the number of iterations before stopping and returning null
      * @return first stone-like block above this one
      */
     public @Nullable SimpleBlock findStonelikeCeiling(int cutoff) {
-    	SimpleBlock ceil = this.getUp();
+        SimpleBlock ceil = this.getUp();
         while (cutoff > 0) {
             if (BlockUtils.isStoneLike(ceil.getType())) {
                 return ceil;
@@ -547,43 +574,47 @@ public class SimpleBlock {
         }
         return null;
     }
-    
+
 
     /**
      * Replaces everything in its way
      */
     public void Pillar(int height, Material... types) {
-    	Random rand = new Random();
+        Random rand = new Random();
         for (int i = 0; i < height; i++) {
             this.getRelative(0, i, 0).setType(GenUtils.randChoice(rand, types));
         }
     }
-    
+
     /**
      * Replaces the block's material with either air or water or lava depending
      * on the block's surrounding fluid (same y).
      */
     public void fluidize()
     {
-    	Material fluid = Material.AIR;
-    	if(!BlockUtils.isWet(this))
-	    	for(BlockFace face:BlockUtils.directBlockFaces) {
-	    		if(getRelative(face).getType() == Material.WATER)
-	    			fluid = Material.WATER;
-	    		else if(getRelative(face).getType() == Material.LAVA)
-	    			fluid = Material.LAVA;
-	    	}
-    	else
-    		fluid = Material.WATER;
-    	setType(fluid);
+        Material fluid = Material.AIR;
+        if (!BlockUtils.isWet(this)) {
+            for (BlockFace face : BlockUtils.directBlockFaces) {
+                if (getRelative(face).getType() == Material.WATER) {
+                    fluid = Material.WATER;
+                }
+                else if (getRelative(face).getType() == Material.LAVA) {
+                    fluid = Material.LAVA;
+                }
+            }
+        }
+        else {
+            fluid = Material.WATER;
+        }
+        setType(fluid);
     }
-    
+
     /**
      * Replaces everything in its way
      */
     public void Pillar(int height, @NotNull Random rand, Material... types) {
         for (int i = 0; i < height; i++) {
-        	this.getRelative(0, i, 0).setType(GenUtils.randChoice(rand, types));
+            this.getRelative(0, i, 0).setType(GenUtils.randChoice(rand, types));
         }
     }
 
@@ -592,14 +623,18 @@ public class SimpleBlock {
      */
     public void Pillar(int height, boolean pattern, @NotNull Random rand, Material @NotNull ... types) {
         for (int i = 0; i < height; i++) {
-            if (Arrays.equals(new Material[]{Material.BARRIER}, types)) continue;
-            if (!pattern)
-            	this.getRelative(0, i, 0).setType(GenUtils.randChoice(rand, types));
-            else if (types[i % types.length] != Material.BARRIER)
-            	this.getRelative(0, i, 0).setType(types[i % types.length]);
+            if (Arrays.equals(new Material[] {Material.BARRIER}, types)) {
+                continue;
+            }
+            if (!pattern) {
+                this.getRelative(0, i, 0).setType(GenUtils.randChoice(rand, types));
+            }
+            else if (types[i % types.length] != Material.BARRIER) {
+                this.getRelative(0, i, 0).setType(types[i % types.length]);
+            }
         }
     }
-    
+
 
     /**
      * Corrects all multiple facing block data in a pillar
@@ -620,6 +655,7 @@ public class SimpleBlock {
 
     /**
      * Replaces until a solid block is reached.
+     *
      * @return height of pillar created
      */
     public int LPillar(int height, @NotNull Random rand, Material... types) {
@@ -628,16 +664,23 @@ public class SimpleBlock {
 
     /**
      * Replaces until a solid block is reached.
+     *
      * @return height of pillar created
      */
     public int LPillar(int height, boolean pattern, @NotNull Random rand, Material @NotNull ... types) {
         for (int i = 0; i < height; i++) {
-            if (this.getRelative(0, i, 0).isSolid()) return i;
-            if (Arrays.equals(new Material[]{Material.BARRIER}, types)) continue;
-            if (!pattern)
+            if (this.getRelative(0, i, 0).isSolid()) {
+                return i;
+            }
+            if (Arrays.equals(new Material[] {Material.BARRIER}, types)) {
+                continue;
+            }
+            if (!pattern) {
                 this.getRelative(0, i, 0).setType(GenUtils.randChoice(rand, types));
-            else
+            }
+            else {
                 this.getRelative(0, i, 0).setType(types[i % types.length]);
+            }
         }
         return height;
     }
@@ -647,44 +690,49 @@ public class SimpleBlock {
      */
     public void RPillar(int height, @NotNull Random rand, Material... types) {
         for (int i = 0; i < height; i++) {
-            if (!this.getRelative(0, i, 0).isSolid())
+            if (!this.getRelative(0, i, 0).isSolid()) {
                 this.getRelative(0, i, 0).setType(GenUtils.randChoice(rand, types));
+            }
         }
     }
 
     /**
      * Replaces solid blocks only
+     *
      * @param height pillar height. This height will be reached.
-     * @param types materials the pillar consists of
+     * @param types  materials the pillar consists of
      */
     public void ReplacePillar(int height, Material... types) {
         for (int i = 0; i < height; i++) {
-            if (this.getRelative(0, i, 0).isSolid())
+            if (this.getRelative(0, i, 0).isSolid()) {
                 this.getRelative(0, i, 0).setType(GenUtils.randChoice(types));
+            }
         }
     }
 
     /**
      * Replaces non-cave air only
+     *
      * @param height of pillar
-     * @param rand to use for choosing random material types
-     * @param types actual materials to use
+     * @param rand   to use for choosing random material types
+     * @param types  actual materials to use
      */
     public void CAPillar(int height, @NotNull Random rand, Material... types) {
         for (int i = 0; i < height; i++) {
-            if (this.getRelative(0, i, 0).getType() != Material.CAVE_AIR)
+            if (this.getRelative(0, i, 0).getType() != Material.CAVE_AIR) {
                 this.getRelative(0, i, 0).setType(GenUtils.randChoice(rand, types));
+            }
         }
     }
-    
+
     public void waterlog(int height) {
-    	for (int i = 0; i < height; i++) {
-    		if(this.getRelative(0,i,0).getBlockData() instanceof Waterlogged) {
-    			Waterlogged log = (Waterlogged) (this.getRelative(0,i,0).getBlockData());
-    			log.setWaterlogged(true);
-    			this.getRelative(0,i,0).setBlockData(log);
-    		}
-    	}
+        for (int i = 0; i < height; i++) {
+            if (this.getRelative(0, i, 0).getBlockData() instanceof Waterlogged) {
+                Waterlogged log = (Waterlogged) (this.getRelative(0, i, 0).getBlockData());
+                log.setWaterlogged(true);
+                this.getRelative(0, i, 0).setBlockData(log);
+            }
+        }
     }
 
     public int downUntilSolid(@NotNull Random rand, Material... types) {
@@ -692,7 +740,10 @@ public class SimpleBlock {
         for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
             if (!this.getRelative(0, -depth, 0).isSolid()) {
                 this.getRelative(0, -depth, 0).setType(GenUtils.randChoice(rand, types));
-            } else break;
+            }
+            else {
+                break;
+            }
             depth++;
         }
 
@@ -704,7 +755,10 @@ public class SimpleBlock {
         while (depth <= maxDepth) {
             if (!this.getRelative(face).isSolid()) {
                 this.getRelative(face).setType(GenUtils.randChoice(rand, types));
-            } else break;
+            }
+            else {
+                break;
+            }
             depth++;
         }
 
@@ -720,15 +774,17 @@ public class SimpleBlock {
 
         return depth;
     }
-    
+
     public void downPillar(int h, Material... types) {
-    	downPillar(new Random(),h,types);
+        downPillar(new Random(), h, types);
     }
 
     public void downPillar(@NotNull Random rand, int h, Material... types) {
         int depth = 0;
         for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
-            if (depth >= h) break;
+            if (depth >= h) {
+                break;
+            }
             this.getRelative(0, -depth, 0).setType(GenUtils.randChoice(rand, types));
             depth++;
         }
@@ -737,10 +793,15 @@ public class SimpleBlock {
     public void downLPillar(@NotNull Random rand, int h, Material... types) {
         int depth = 0;
         for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
-            if (depth >= h) break;
+            if (depth >= h) {
+                break;
+            }
             if (!this.getRelative(0, -depth, 0).isSolid()) {
                 this.getRelative(0, -depth, 0).setType(GenUtils.randChoice(rand, types));
-            } else break;
+            }
+            else {
+                break;
+            }
             depth++;
         }
     }
@@ -748,7 +809,9 @@ public class SimpleBlock {
     public void downRPillar(@NotNull Random rand, int h, Material... types) {
         int depth = 0;
         for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
-            if (depth >= h) break;
+            if (depth >= h) {
+                break;
+            }
             if (!this.getRelative(0, -depth, 0).isSolid()) {
                 this.getRelative(0, -depth, 0).setType(GenUtils.randChoice(rand, types));
             }
@@ -759,10 +822,15 @@ public class SimpleBlock {
     public void directionalLPillar(@NotNull Random rand, @NotNull BlockFace face, int h, Material... types) {
         int depth = 0;
         for (int y = this.y; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
-            if (depth >= h) break;
+            if (depth >= h) {
+                break;
+            }
             if (!this.getRelative(face, depth).isSolid()) {
                 this.getRelative(face, depth).setType(GenUtils.randChoice(rand, types));
-            } else break;
+            }
+            else {
+                break;
+            }
             depth++;
         }
     }
@@ -770,19 +838,20 @@ public class SimpleBlock {
     public @NotNull SimpleBlock getDown(int i) {
         return this.getRelative(0, -i, 0);
     }
-    
+
     public @NotNull SimpleBlock getDown() {
         return this.getRelative(0, -1, 0);
     }
 
     public @NotNull String toString() {
-    	return x + "," + y + "," + z;
+        return x + "," + y + "," + z;
     }
 
     public void rsetType(@NotNull EnumSet<Material> toReplace, Material... type) {
-        popData.rsetType(this.toVector(),toReplace,type);
+        popData.rsetType(this.toVector(), toReplace, type);
     }
+
     public void rsetBlockData(@NotNull EnumSet<Material> toReplace, BlockData data) {
-        popData.rsetBlockData(this.toVector(),toReplace,data);
+        popData.rsetBlockData(this.toVector(), toReplace, data);
     }
 }

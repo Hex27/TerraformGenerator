@@ -15,34 +15,32 @@ public final class TerraformStructureSpawnEvent extends Event {
     private final String structureName;
     private final int x;
     private final int z;
-    
+
     public TerraformStructureSpawnEvent(int x, int z, String structureName) {
-    	this.structureName = structureName;
-    	this.x = x;
-    	this.z = z;
-    }
-
-
-    public @NotNull HandlerList getHandlers() {
-        return handlers;
+        this.structureName = structureName;
+        this.x = x;
+        this.z = z;
     }
 
     public static @NotNull HandlerList getHandlerList() {
         return handlers;
     }
 
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
+    }
 
-	public String getStructureName() {
-		return structureName;
-	}
-
-
-	public int getX() {
-		return x;
-	}
+    public String getStructureName() {
+        return structureName;
+    }
 
 
-	public int getZ() {
-		return z;
-	}
+    public int getX() {
+        return x;
+    }
+
+
+    public int getZ() {
+        return z;
+    }
 }

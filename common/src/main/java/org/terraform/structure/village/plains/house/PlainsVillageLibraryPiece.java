@@ -23,7 +23,14 @@ import java.util.Random;
 
 public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
 
-    public PlainsVillageLibraryPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+    public PlainsVillageLibraryPiece(PlainsVillagePopulator plainsVillagePopulator,
+                                     PlainsVillageHouseVariant variant,
+                                     int widthX,
+                                     int height,
+                                     int widthZ,
+                                     JigsawType type,
+                                     BlockFace[] validDirs)
+    {
         super(plainsVillagePopulator, variant, widthX, height, widthZ, type, validDirs);
     }
 
@@ -32,10 +39,13 @@ public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
         super.postBuildDecoration(random, data);
 
         // In the center, place a single lectern
-        SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
-        new DirectionalBuilder(Material.LECTERN)
-                .setFacing(BlockUtils.getDirectBlockFace(random))
-                .apply(core);
+        SimpleBlock core = new SimpleBlock(
+                data,
+                this.getRoom().getX(),
+                this.getRoom().getY() + 1,
+                this.getRoom().getZ()
+        );
+        new DirectionalBuilder(Material.LECTERN).setFacing(BlockUtils.getDirectBlockFace(random)).apply(core);
 
         // Populate for walled areas
         for (BlockFace face : this.getWalledFaces()) {
@@ -49,28 +59,29 @@ public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
                         Ladder ladder = (Ladder) Bukkit.createBlockData(Material.LADDER);
                         ladder.setFacing(w.getDirection());
                         for (int h = 0; h < 25; h++) {
-                            if (w.getFront().getRelative(0, h, 0).isSolid())
+                            if (w.getFront().getRelative(0, h, 0).isSolid()) {
                                 break;
+                            }
                             w.getFront().getRelative(0, h, 0).setBlockData(ladder);
                         }
                     }
-                } else if (i == 1 || i == 3) {
-                    new StairBuilder(plainsVillagePopulator.woodStairs)
-                            .setFacing(w.getDirection().getOppositeFace())
-                            .apply(w);
-                    new StairBuilder(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
-                            .setFacing(w.getDirection().getOppositeFace())
-                            .setHalf(Half.TOP)
-                            .apply(w.getUp(2));
+                }
+                else if (i == 1 || i == 3) {
+                    new StairBuilder(plainsVillagePopulator.woodStairs).setFacing(w.getDirection().getOppositeFace())
+                                                                       .apply(w);
+                    new StairBuilder(
+                            Material.STONE_BRICK_STAIRS,
+                            Material.MOSSY_STONE_BRICK_STAIRS
+                    ).setFacing(w.getDirection().getOppositeFace()).setHalf(Half.TOP).apply(w.getUp(2));
                     w.getUp(3).LPillar(25, random, Material.BOOKSHELF);
-                } else {
-                    if (w.getRear().getType() != plainsVillagePopulator.woodDoor)
-                        new SlabBuilder(plainsVillagePopulator.woodSlab)
-                                .apply(w);
+                }
+                else {
+                    if (w.getRear().getType() != plainsVillagePopulator.woodDoor) {
+                        new SlabBuilder(plainsVillagePopulator.woodSlab).apply(w);
+                    }
 
-                    new SlabBuilder(Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB)
-                            .setType(Slab.Type.TOP)
-                            .apply(w.getUp(2));
+                    new SlabBuilder(Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB).setType(Slab.Type.TOP)
+                                                                                               .apply(w.getUp(2));
 
                     w.getUp(3).LPillar(25, random, Material.BOOKSHELF);
                 }

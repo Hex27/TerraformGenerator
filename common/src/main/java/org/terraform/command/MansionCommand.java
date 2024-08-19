@@ -43,9 +43,12 @@ public class MansionCommand extends TerraCommand {
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
         MansionJigsawBuilder builder = new MansionJigsawBuilder(
-        		TConfigOption.STRUCTURES_MANSION_SIZE.getInt(), 
-        		TConfigOption.STRUCTURES_MANSION_SIZE.getInt(), 
-        		data, x, y, z
+                TConfigOption.STRUCTURES_MANSION_SIZE.getInt(),
+                TConfigOption.STRUCTURES_MANSION_SIZE.getInt(),
+                data,
+                x,
+                y,
+                z
         );
         builder.generate(new Random());
         builder.build(new Random());

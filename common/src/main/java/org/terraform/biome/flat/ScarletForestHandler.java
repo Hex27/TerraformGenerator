@@ -16,6 +16,7 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
 import java.util.Random;
 
 public class ScarletForestHandler extends BiomeHandler {
@@ -29,7 +30,7 @@ public class ScarletForestHandler extends BiomeHandler {
     public @NotNull Biome getBiome() {
         return Biome.FOREST;
     }
-    
+
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
         return CustomBiomeType.SCARLET_FOREST;
@@ -37,15 +38,23 @@ public class ScarletForestHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{Material.GRASS_BLOCK,
+        return new Material[] {
+                Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
                 GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
-                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)
+        };
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
 
             if (GenUtils.chance(random, 1, 10)) { // Grass
@@ -54,62 +63,84 @@ public class ScarletForestHandler extends BiomeHandler {
                     if (random.nextBoolean()) {
                         PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     }
-                } else {
-                    if (GenUtils.chance(random, 7, 10))
+                }
+                else {
+                    if (GenUtils.chance(random, 7, 10)) {
                         PlantBuilder.POPPY.build(data, rawX, surfaceY + 1, rawZ);
-                    else
+                    }
+                    else {
                         PlantBuilder.ROSE_BUSH.build(data, rawX, surfaceY + 1, rawZ);
+                    }
                 }
             }
         }
     }
 
-	@Override
-	public void populateLargeItems(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
-		
-        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
-        
-        for (SimpleLocation sLoc : trees) {
-        	
-    		int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
-            sLoc.setY(treeY);
-            
-            if(tw.getBiomeBank(sLoc.getX(),sLoc.getZ()) == BiomeBank.SCARLET_FOREST &&
-                    BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
-            {
-                if(TConfigOption.TREES_SCARLET_BIG_ENABLED.getBoolean())
-                    new FractalTreeBuilder(FractalTypes.Tree.SCARLET_BIG).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
-                else
-                    new FractalTreeBuilder(FractalTypes.Tree.SCARLET_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
+    @Override
+    public void populateLargeItems(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
 
-                TaigaHandler.replacePodzol(
-                            tw.getHashedRand(sLoc.getX(),sLoc.getY(),sLoc.getZ()).nextInt(9999),
-                            7f,
-                            new SimpleBlock(data,sLoc.getX(),sLoc.getY(),sLoc.getZ()));
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
+
+        for (SimpleLocation sLoc : trees) {
+
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
+            sLoc.setY(treeY);
+
+            if (tw.getBiomeBank(sLoc.getX(), sLoc.getZ()) == BiomeBank.SCARLET_FOREST
+                && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))
+            {
+                if (TConfigOption.TREES_SCARLET_BIG_ENABLED.getBoolean()) {
+                    new FractalTreeBuilder(FractalTypes.Tree.SCARLET_BIG).build(tw,
+                            data,
+                            sLoc.getX(),
+                            sLoc.getY(),
+                            sLoc.getZ()
+                    );
+                }
+                else {
+                    new FractalTreeBuilder(FractalTypes.Tree.SCARLET_SMALL).build(tw,
+                            data,
+                            sLoc.getX(),
+                            sLoc.getY(),
+                            sLoc.getZ()
+                    );
+                }
+
+                TaigaHandler.replacePodzol(tw.getHashedRand(sLoc.getX(), sLoc.getY(), sLoc.getZ()).nextInt(9999),
+                        7f,
+                        new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ())
+                );
             }
         }
-        
+
         SimpleLocation[] smalltrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 7);
-        
+
         for (SimpleLocation sLoc : smalltrees) {
-        	
-    		int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+
+            int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
             sLoc.setY(treeY);
-            
-            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
-                    BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
+
+            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
+                    sLoc.getY(),
+                    sLoc.getZ())))
             {
-        		new FractalTreeBuilder(FractalTypes.Tree.SCARLET_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
-        	}
+                new FractalTreeBuilder(FractalTypes.Tree.SCARLET_SMALL).build(
+                        tw,
+                        data,
+                        sLoc.getX(),
+                        sLoc.getY(),
+                        sLoc.getZ()
+                );
+            }
         }
-	}
-	
-    public @NotNull BiomeBank getBeachType() {
-    	return BiomeBank.SCARLET_FOREST_BEACH;
     }
-    
+
+    public @NotNull BiomeBank getBeachType() {
+        return BiomeBank.SCARLET_FOREST_BEACH;
+    }
+
     public @NotNull BiomeBank getRiverType() {
-    	return BiomeBank.SCARLET_FOREST_RIVER;
+        return BiomeBank.SCARLET_FOREST_RIVER;
     }
 
 }

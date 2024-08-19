@@ -39,10 +39,10 @@ public class RibCageCommand extends TerraCommand {
 
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
-		int x = p.getLocation().getBlockX();
-		int y = p.getLocation().getBlockY();
-		int z = p.getLocation().getBlockZ();
-        new DesertHandler().spawnRibCage(new Random(), new SimpleBlock(data,x,y,z));
+        int x = p.getLocation().getBlockX();
+        int y = p.getLocation().getBlockY();
+        int z = p.getLocation().getBlockZ();
+        new DesertHandler().spawnRibCage(new Random(), new SimpleBlock(data, x, y, z));
     }
 
 }

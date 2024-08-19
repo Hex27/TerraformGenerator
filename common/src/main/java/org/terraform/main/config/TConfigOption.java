@@ -498,8 +498,8 @@ public enum TConfigOption {
 
     ;
     private final String path;
-    private Object value;
     private final Function<Object, Object> map;
+    private Object value;
 
     TConfigOption(String path, Object defaultValue) {
         this.path = path;
@@ -521,6 +521,41 @@ public enum TConfigOption {
         for (TConfigOption option : TConfigOption.values()) {
             option.value = option.map.apply(conf.get(option.path));
         }
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areCavesEnabled() {
+        return TConfigOption.FEATURE_CAVES_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areTreesEnabled() {
+        return TConfigOption.FEATURE_TREES_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areTallMushroomsEnabled() {
+        return TConfigOption.FEATURE_TALL_MUSHROOMS_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean arePlantsEnabled() {
+        return TConfigOption.FEATURE_PLANTS_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areStructuresEnabled() {
+        return TConfigOption.FEATURE_STRUCTURES_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areAnimalsEnabled() {
+        return TConfigOption.FEATURE_ANIMALS_ENABLED.getBoolean();
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean areDecorationsEnabled() {
+        return TConfigOption.FEATURE_DECORATIONS_ENABLED.getBoolean();
     }
 
     public @NotNull String getString() {
@@ -585,41 +620,6 @@ public enum TConfigOption {
 
     public <T> T get(@NotNull Class<T> clazz) {
         return clazz.cast(value);
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean areCavesEnabled() {
-        return TConfigOption.FEATURE_CAVES_ENABLED.getBoolean();
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean areTreesEnabled() {
-        return TConfigOption.FEATURE_TREES_ENABLED.getBoolean();
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean areTallMushroomsEnabled() {
-        return TConfigOption.FEATURE_TALL_MUSHROOMS_ENABLED.getBoolean();
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean arePlantsEnabled() {
-        return TConfigOption.FEATURE_PLANTS_ENABLED.getBoolean();
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean areStructuresEnabled() {
-        return TConfigOption.FEATURE_STRUCTURES_ENABLED.getBoolean();
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean areAnimalsEnabled() {
-        return TConfigOption.FEATURE_ANIMALS_ENABLED.getBoolean();
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean areDecorationsEnabled() {
-        return TConfigOption.FEATURE_DECORATIONS_ENABLED.getBoolean();
     }
 
 }

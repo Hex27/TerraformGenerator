@@ -17,7 +17,7 @@ public class TrialChamberPopulator extends VanillaStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-        return isEnabled() && rollSpawnRatio(tw,chunkX,chunkZ);
+        return isEnabled() && rollSpawnRatio(tw, chunkX, chunkZ);
     }
 
     @Override
@@ -36,9 +36,10 @@ public class TrialChamberPopulator extends VanillaStructurePopulator {
     }
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
-        return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 19650),
-                (int) (TConfigOption.STRUCTURES_TRIALCHAMBER_SPAWNRATIO
-                        .getDouble() * 10000),
-                10000);
+        return GenUtils.chance(
+                tw.getHashedRand(chunkX, chunkZ, 19650),
+                (int) (TConfigOption.STRUCTURES_TRIALCHAMBER_SPAWNRATIO.getDouble() * 10000),
+                10000
+        );
     }
 }

@@ -37,8 +37,7 @@ public class WarAntechamber extends Antechamber {
             Wall w = entry.getKey().getUp(2);
             for (int i = 0; i < entry.getValue(); i++) {
 
-                if (w.getRear().isSolid() && !w.isSolid()
-                        && GenUtils.chance(rand, 3, 10)) {
+                if (w.getRear().isSolid() && !w.isSolid() && GenUtils.chance(rand, 3, 10)) {
                     BannerUtils.generateBanner(rand, w.get(), w.getDirection(), true);
                 }
 
@@ -65,16 +64,18 @@ public class WarAntechamber extends Antechamber {
         }
 
         // Central Precious Block
-        w.getRelative(0, room.getHeight() / 2 - 1, 0).setType(GenUtils.randChoice(rand,
+        w.getRelative(0, room.getHeight() / 2 - 1, 0).setType(GenUtils.randChoice(
+                rand,
                 Material.GOLD_BLOCK,
                 Material.LAPIS_BLOCK,
                 Material.LAPIS_BLOCK,
                 Material.EMERALD_BLOCK,
-                Material.IRON_BLOCK));
+                Material.IRON_BLOCK
+        ));
 
     }
 
-    
+
     @Override
     public boolean canPopulate(@NotNull CubeRoom room) {
         return room.getWidthX() >= 6 && room.getWidthZ() >= 6;

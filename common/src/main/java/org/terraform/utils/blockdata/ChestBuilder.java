@@ -44,53 +44,57 @@ public class ChestBuilder {
 
     public @NotNull ChestBuilder apply(@NotNull SimpleBlock block) {
         block.setBlockData(blockData);
-        if (lootTable != null)
+        if (lootTable != null) {
             block.getPopData().lootTableChest(block.getX(), block.getY(), block.getZ(), lootTable);
+        }
         return this;
     }
-    
+
     public void extend(@NotNull SimpleBlock original, @NotNull SimpleBlock extended, boolean lootTableExtendedChest) {
-    	extended.setBlockData(blockData);
-    	Wall originalWall = new Wall(original, blockData.getFacing());
+        extended.setBlockData(blockData);
+        Wall originalWall = new Wall(original, blockData.getFacing());
         Chest originalChest, extendedChest;
-        try
-        {
+        try {
             originalChest = (Chest) original.getBlockData();
             extendedChest = (Chest) extended.getBlockData();
         }
-        catch(ClassCastException e)
-        {
+        catch (ClassCastException e) {
             original.setBlockData(blockData);
             extended.setBlockData(blockData);
             originalChest = (Chest) blockData.clone(); // original.getBlockData();
             extendedChest = (Chest) blockData.clone(); // original.getBlockData();
         }
 
-    	
-    	if(originalWall.getLeft().equals(extended)) {
-    		originalChest.setType(Type.LEFT);
-    		extendedChest.setType(Type.RIGHT);
-    	}else if(originalWall.getRight().equals(extended)) {
-    		originalChest.setType(Type.RIGHT);
-    		extendedChest.setType(Type.LEFT);
-    	}
-    	else {
-    		throw new IllegalArgumentException("A request to extend a doublechest was made, but an invalid location was specified.");
-    	}
-    	
-    	original.setBlockData(originalChest);
-    	extended.setBlockData(extendedChest);
-    	
-    	if (lootTable != null)
-    		original.getPopData().lootTableChest(original.getX(), original.getY(), original.getZ(), lootTable);
-        if (lootTableExtendedChest && lootTable != null)
-        	extended.getPopData().lootTableChest(extended.getX(), extended.getY(), extended.getZ(), lootTable);
+
+        if (originalWall.getLeft().equals(extended)) {
+            originalChest.setType(Type.LEFT);
+            extendedChest.setType(Type.RIGHT);
+        }
+        else if (originalWall.getRight().equals(extended)) {
+            originalChest.setType(Type.RIGHT);
+            extendedChest.setType(Type.LEFT);
+        }
+        else {
+            throw new IllegalArgumentException(
+                    "A request to extend a doublechest was made, but an invalid location was specified.");
+        }
+
+        original.setBlockData(originalChest);
+        extended.setBlockData(extendedChest);
+
+        if (lootTable != null) {
+            original.getPopData().lootTableChest(original.getX(), original.getY(), original.getZ(), lootTable);
+        }
+        if (lootTableExtendedChest && lootTable != null) {
+            extended.getPopData().lootTableChest(extended.getX(), extended.getY(), extended.getZ(), lootTable);
+        }
     }
 
     public @NotNull ChestBuilder apply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
         data.setBlockData(x, y, z, blockData);
-        if (lootTable != null)
+        if (lootTable != null) {
             data.lootTableChest(x, y, z, lootTable);
+        }
         return this;
     }
 

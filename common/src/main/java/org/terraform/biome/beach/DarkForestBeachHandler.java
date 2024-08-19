@@ -24,21 +24,34 @@ public class DarkForestBeachHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{
-        		Material.COARSE_DIRT,
+        return new Material[] {
                 Material.COARSE_DIRT,
-                GenUtils.randChoice(rand, Material.STONE, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT, Material.COARSE_DIRT),
+                Material.COARSE_DIRT,
+                GenUtils.randChoice(rand,
+                        Material.STONE,
+                        Material.COARSE_DIRT,
+                        Material.COARSE_DIRT,
+                        Material.COARSE_DIRT,
+                        Material.COARSE_DIRT,
+                        Material.COARSE_DIRT
+                ),
                 Material.STONE,
                 Material.STONE
-                };
+        };
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world,
+                                   Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   PopulatorDataAbstract data)
+    {
     }
 
-	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        
-	}
+    @Override
+    public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+
+    }
 }

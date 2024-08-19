@@ -20,7 +20,15 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
 
     final PlainsVillageHouseVariant variant;
     final PlainsVillagePopulator plainsVillagePopulator;
-    public PlainsVillageStandardPiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant variant, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+
+    public PlainsVillageStandardPiece(PlainsVillagePopulator plainsVillagePopulator,
+                                      PlainsVillageHouseVariant variant,
+                                      int widthX,
+                                      int height,
+                                      int widthZ,
+                                      JigsawType type,
+                                      BlockFace[] validDirs)
+    {
         super(widthX, height, widthZ, type, validDirs);
         this.variant = variant;
         this.plainsVillagePopulator = plainsVillagePopulator;
@@ -32,25 +40,25 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
         // Place flooring.
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-                data.setType(x, this.getRoom().getY(), z,
-                        GenUtils.randChoice(
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.MOSSY_STONE_BRICKS,
-                                Material.CRACKED_STONE_BRICKS
-                        ));
-                new Wall(new SimpleBlock(data, x, this.getRoom().getY() - 1, z))
-                        .downUntilSolid(rand,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.STONE_BRICKS,
-                                Material.MOSSY_STONE_BRICKS,
-                                Material.CRACKED_STONE_BRICKS
-                        );
+                data.setType(x, this.getRoom().getY(), z, GenUtils.randChoice(
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.MOSSY_STONE_BRICKS,
+                        Material.CRACKED_STONE_BRICKS
+                ));
+                new Wall(new SimpleBlock(data, x, this.getRoom().getY() - 1, z)).downUntilSolid(
+                        rand,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.STONE_BRICKS,
+                        Material.MOSSY_STONE_BRICKS,
+                        Material.CRACKED_STONE_BRICKS
+                );
             }
+        }
     }
 
     @Override
@@ -58,10 +66,11 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
         // Raise ceiling.
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
+        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY() + 4, z, Material.AIR);
             }
+        }
 
         // Fix weird walling for standard roofs.
         for (BlockFace face : this.getWalledFaces()) {
@@ -99,7 +108,8 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
                 Lantern lantern = (Lantern) Bukkit.createBlockData(Material.LANTERN);
                 lantern.setHanging(true);
                 w.setBlockData(lantern);
-            } else {
+            }
+            else {
                 w.setType(Material.CHAIN);
                 w = w.getDown();
             }

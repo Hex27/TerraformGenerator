@@ -16,8 +16,7 @@ import java.util.Random;
 
 public class LevelledRoomPopulator extends CageRoomPopulator {
 
-    public LevelledRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn,
-                                 boolean unique) {
+    public LevelledRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
     }
 
@@ -47,8 +46,7 @@ public class LevelledRoomPopulator extends CageRoomPopulator {
         // Some prismarine at the bottom
         Wall cent = new Wall(new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ()), BlockFace.NORTH);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
-            cent.getUp().getRelative(face).getRelative(face)
-                    .Pillar(2, rand, Material.DARK_PRISMARINE);
+            cent.getUp().getRelative(face).getRelative(face).Pillar(2, rand, Material.DARK_PRISMARINE);
             cent.getRelative(face).setType(Material.DARK_PRISMARINE);
         }
 
@@ -57,11 +55,13 @@ public class LevelledRoomPopulator extends CageRoomPopulator {
             for (int y = room.getY() + 5; y < room.getY() + room.getHeight(); y++) {
                 if (y == room.getY() + 5 || y == room.getY() + room.getHeight() - 1) {
                     data.setType(corner[0], y, corner[1], Material.DARK_PRISMARINE);
-                } else if (y % 2 == 0) {
+                }
+                else if (y % 2 == 0) {
                     Waterlogged wall = (Waterlogged) Bukkit.createBlockData(Material.PRISMARINE_WALL);
                     wall.setWaterlogged(y <= TerraformGenerator.seaLevel);
                     data.setBlockData(corner[0], y, corner[1], wall);
-                } else {
+                }
+                else {
                     data.setType(corner[0], y, corner[1], Material.SEA_LANTERN);
                 }
             }

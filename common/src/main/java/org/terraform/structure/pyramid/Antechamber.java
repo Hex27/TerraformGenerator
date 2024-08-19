@@ -36,72 +36,102 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
         for (int[] corner : corners) {
             Wall w = new Wall(new SimpleBlock(data, corner[0], room.getY() + room.getHeight() - 1, corner[1]));
             w.downLPillar(rand, 2, Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE);
-            for (BlockFace face : BlockUtils.directBlockFaces)
+            for (BlockFace face : BlockUtils.directBlockFaces) {
                 w.getRelative(face).setType(GenUtils.randChoice(Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE));
+            }
         }
 
         // Create randomised patterns
         int[] choices = {-2, -1, 0, 1, 2};
         int[] steps = new int[15];
-        for (int i = 0; i < 15; i++) steps[i] = choices[rand.nextInt(choices.length)];
+        for (int i = 0; i < 15; i++) {
+            steps[i] = choices[rand.nextInt(choices.length)];
+        }
 
         // For the floor
         SimpleBlock center = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
 
         for (BlockFace face : BlockUtils.directBlockFaces) {
             int length = room.getWidthX() / 2;
-            if (face == BlockFace.NORTH || face == BlockFace.SOUTH)
+            if (face == BlockFace.NORTH || face == BlockFace.SOUTH) {
                 length = room.getWidthZ() / 2;
+            }
             for (int i = 0; i < length; i++) {
-                if (face == BlockFace.NORTH || face == BlockFace.SOUTH)
-                    center.getRelative(face, i).getRelative(steps[i] * face.getModZ(), 0, 0)
-                            .setType(Material.ORANGE_TERRACOTTA);
-                else
-                    center.getRelative(face, i).getRelative(0, 0, steps[i] * face.getModX())
-                            .setType(Material.ORANGE_TERRACOTTA);
+                if (face == BlockFace.NORTH || face == BlockFace.SOUTH) {
+                    center.getRelative(face, i)
+                          .getRelative(steps[i] * face.getModZ(), 0, 0)
+                          .setType(Material.ORANGE_TERRACOTTA);
+                }
+                else {
+                    center.getRelative(face, i)
+                          .getRelative(0, 0, steps[i] * face.getModX())
+                          .setType(Material.ORANGE_TERRACOTTA);
+                }
             }
         }
         center.setType(Material.BLUE_TERRACOTTA);
 
         // If at 1.20, spawn suspicious sand in the floor
-        if(Version.isAtLeast(20))
-            for(int i = 0; i < TConfigOption.STRUCTURES_PYRAMID_SUSPICIOUS_SAND_COUNT_PER_ANTECHAMBER.getInt(); i++)
-            {
-                SimpleBlock target = center.getRelative(GenUtils.getSign(rand)*GenUtils.randInt(rand,1,room.getWidthX()/2 -1),
-                        0, GenUtils.getSign(rand)*GenUtils.randInt(rand,1,room.getWidthZ()/2 -1));
+        if (Version.isAtLeast(20)) {
+            for (int i = 0; i < TConfigOption.STRUCTURES_PYRAMID_SUSPICIOUS_SAND_COUNT_PER_ANTECHAMBER.getInt(); i++) {
+                SimpleBlock target = center.getRelative(GenUtils.getSign(rand) * GenUtils.randInt(rand,
+                                1,
+                                room.getWidthX() / 2 - 1
+                        ),
+                        0,
+                        GenUtils.getSign(rand) * GenUtils.randInt(rand, 1, room.getWidthZ() / 2 - 1)
+                );
                 target.setType(OneTwentyBlockHandler.SUSPICIOUS_SAND);
-                data.lootTableChest(target.getX(),target.getY(),target.getZ(), TerraLootTable.DESERT_PYRAMID_ARCHAEOLOGY);
+                data.lootTableChest(target.getX(),
+                        target.getY(),
+                        target.getZ(),
+                        TerraLootTable.DESERT_PYRAMID_ARCHAEOLOGY
+                );
             }
+        }
 
         // For the ceiling
         center = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ());
         for (BlockFace face : BlockUtils.directBlockFaces) {
             int length = room.getWidthX() / 2;
-            if (face == BlockFace.NORTH || face == BlockFace.SOUTH)
+            if (face == BlockFace.NORTH || face == BlockFace.SOUTH) {
                 length = room.getWidthZ() / 2;
+            }
             for (int i = 0; i < length; i++) {
-                if (face == BlockFace.NORTH || face == BlockFace.SOUTH)
-                    center.getRelative(face, i).getRelative(steps[i] * face.getModZ(), 0, 0)
-                            .setType(Material.ORANGE_TERRACOTTA);
-                else
-                    center.getRelative(face, i).getRelative(0, 0, steps[i] * face.getModX())
-                            .setType(Material.ORANGE_TERRACOTTA);
+                if (face == BlockFace.NORTH || face == BlockFace.SOUTH) {
+                    center.getRelative(face, i)
+                          .getRelative(steps[i] * face.getModZ(), 0, 0)
+                          .setType(Material.ORANGE_TERRACOTTA);
+                }
+                else {
+                    center.getRelative(face, i)
+                          .getRelative(0, 0, steps[i] * face.getModX())
+                          .setType(Material.ORANGE_TERRACOTTA);
+                }
             }
         }
         center.setType(Material.BLUE_TERRACOTTA);
     }
 
-    protected void randomRoomPlacement(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room, int lowerbound, int upperbound, Material... types) {
+    protected void randomRoomPlacement(@NotNull PopulatorDataAbstract data,
+                                       @NotNull CubeRoom room,
+                                       int lowerbound,
+                                       int upperbound,
+                                       Material... types)
+    {
 
         for (int i = 0; i < GenUtils.randInt(lowerbound, upperbound); i++) {
             int[] coords = room.randomCoords(rand, 1);
             BlockData bd = Bukkit.createBlockData(GenUtils.randChoice(types));
-            if (bd instanceof Waterlogged)
+            if (bd instanceof Waterlogged) {
                 ((Waterlogged) bd).setWaterlogged(false);
-            if (!data.getType(coords[0], room.getY() + 1, coords[2]).isSolid())
+            }
+            if (!data.getType(coords[0], room.getY() + 1, coords[2]).isSolid()) {
                 data.setBlockData(coords[0], room.getY() + 1, coords[2], bd);
-            else
+            }
+            else {
                 data.setBlockData(coords[0], room.getY() + 2, coords[2], bd);
+            }
         }
     }
 

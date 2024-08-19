@@ -39,24 +39,36 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
         int z = room.getZ();
 
         // Make some nether corruption
-        BlockUtils.replaceUpperSphere(rand.nextInt(123), rX, rY, rZ,
-                new SimpleBlock(data, x, y, z), true,
+        BlockUtils.replaceUpperSphere(rand.nextInt(123),
+                rX,
+                rY,
+                rZ,
+                new SimpleBlock(data, x, y, z),
+                true,
                 Material.NETHERRACK,
                 Material.NETHERRACK,
                 Material.SOUL_SAND,
                 Material.NETHERRACK,
                 Material.NETHERRACK,
-                Material.MAGMA_BLOCK);
+                Material.MAGMA_BLOCK
+        );
 
         while (data.getType(x, y, z).isSolid() && y < room.getY() + room.getHeight() - 5) {
             y++;
         }
         y--;
-        Wall wall = new Wall(new SimpleBlock(data, x, y, z),
-                BlockUtils.getXZPlaneBlockFace(rand));
+        Wall wall = new Wall(new SimpleBlock(data, x, y, z), BlockUtils.getXZPlaneBlockFace(rand));
 
-        Material[] blocks = {Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN,
-                Material.CAVE_AIR};
+        Material[] blocks = {
+                Material.OBSIDIAN,
+                Material.OBSIDIAN,
+                Material.OBSIDIAN,
+                Material.OBSIDIAN,
+                Material.OBSIDIAN,
+                Material.OBSIDIAN,
+                Material.OBSIDIAN,
+                Material.CAVE_AIR
+        };
 
         // Spawn a nether portal
         wall.getRight().getRight().Pillar(5, rand, blocks);

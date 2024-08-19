@@ -46,12 +46,15 @@ public class EnchantmentAntechamber extends Antechamber {
 
                 if (i % 2 == 0) {
                     int h = 1;
-                    if (i == 2) h = 2;
+                    if (i == 2) {
+                        h = 2;
+                    }
 
                     w.LPillar(h, rand, Material.BOOKSHELF);
                     w.getRelative(0, room.getHeight() - 2, 0).downLPillar(rand, h, Material.BOOKSHELF);
                     w.RPillar(room.getHeight(), rand, Material.SANDSTONE_WALL);
-                } else {
+                }
+                else {
                     Directional decor = (Directional) Bukkit.createBlockData(Material.LECTERN);
                     decor.setFacing(w.getDirection());
                     w.setBlockData(decor);

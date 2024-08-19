@@ -29,9 +29,9 @@ public class BannerUtils {
             PatternType.CURLY_BORDER,
             PatternType.DIAGONAL_LEFT,
             PatternType.DIAGONAL_RIGHT,
-//            PatternType.DIAGONAL_UP_LEFT,
-//            PatternType.DIAGONAL_UP_RIGHT,
-//            PatternType.FLOW,
+            //            PatternType.DIAGONAL_UP_LEFT,
+            //            PatternType.DIAGONAL_UP_RIGHT,
+            //            PatternType.FLOW,
             PatternType.FLOWER,
             PatternType.GLOBE,
             PatternType.GRADIENT,
@@ -78,7 +78,7 @@ public class BannerUtils {
             Material.BROWN_BANNER,
             Material.PINK_BANNER,
             Material.WHITE_BANNER,
-    };
+            };
     private static final Material[] WALL_BANNERS = {
             Material.RED_WALL_BANNER,
             Material.ORANGE_WALL_BANNER,
@@ -93,75 +93,103 @@ public class BannerUtils {
             Material.BROWN_WALL_BANNER,
             Material.PINK_WALL_BANNER,
             Material.WHITE_WALL_BANNER,
-    };
-    
-    public static void generateBanner(@NotNull SimpleBlock base, @NotNull BlockFace facing, @NotNull Material type, @Nullable ArrayList<Pattern> patterns) {
+            };
+
+    public static void generateBanner(@NotNull SimpleBlock base,
+                                      @NotNull BlockFace facing,
+                                      @NotNull Material type,
+                                      @Nullable ArrayList<Pattern> patterns)
+    {
 
         base.setType(type);
         Directional bd = ((Directional) base.getBlockData());
         bd.setFacing(facing);
         base.setBlockData(bd);
-    
-        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
-        if(patterns == null) {
+
+        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(
+                base.getX(),
+                base.getY(),
+                base.getZ()
+        );
+        if (patterns == null) {
             patterns = new ArrayList<>();
         }
-        
+
         banner.setPatterns(patterns);
         banner.update();
     }
-    
-    public static void generateBanner(@NotNull Random rand, @NotNull SimpleBlock base, @NotNull BlockFace facing, boolean wallBanner) {
+
+    public static void generateBanner(@NotNull Random rand,
+                                      @NotNull SimpleBlock base,
+                                      @NotNull BlockFace facing,
+                                      boolean wallBanner)
+    {
 
         Material type = null;
-        if (wallBanner)
+        if (wallBanner) {
             type = BannerUtils.randomWallBannerMaterial(rand);
-        else
+        }
+        else {
             BannerUtils.randomBannerMaterial(rand);
+        }
         base.setType(type);
         if (!wallBanner) {
             Rotatable bd = ((Rotatable) base.getBlockData());
             bd.setRotation(facing);
             base.setBlockData(bd);
-        } else {
+        }
+        else {
             Directional bd = ((Directional) base.getBlockData());
             bd.setFacing(facing);
             base.setBlockData(bd);
         }
 
-        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
+        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(
+                base.getX(),
+                base.getY(),
+                base.getZ()
+        );
         ArrayList<Pattern> patterns = new ArrayList<>();
 
         for (int i = 1 + rand.nextInt(3); i < 4 + rand.nextInt(3); i++) {
-            patterns.add(new Pattern(
-                    DyeColor.values()[rand.nextInt(DyeColor.values().length)],
+            patterns.add(new Pattern(DyeColor.values()[rand.nextInt(DyeColor.values().length)],
                     PATTERNS[rand.nextInt(PATTERNS.length)]
             ));
         }
         banner.setPatterns(patterns);
         banner.update();
     }
-    
-    public static void generatePillagerBanner(@NotNull SimpleBlock base, @NotNull BlockFace facing, boolean wallBanner) {
+
+    public static void generatePillagerBanner(@NotNull SimpleBlock base,
+                                              @NotNull BlockFace facing,
+                                              boolean wallBanner)
+    {
 
         Material type;
-        if (wallBanner)
+        if (wallBanner) {
             type = Material.WHITE_WALL_BANNER;
-        else
+        }
+        else {
             type = Material.WHITE_BANNER;
+        }
         base.setType(type);
         if (!wallBanner) {
             Rotatable bd = ((Rotatable) base.getBlockData());
             bd.setRotation(facing);
             base.setBlockData(bd);
-        } else {
+        }
+        else {
             Directional bd = ((Directional) base.getBlockData());
             bd.setFacing(facing);
             base.setBlockData(bd);
         }
 
-        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(base.getX(), base.getY(), base.getZ());
-        
+        Banner banner = (Banner) ((PopulatorDataPostGen) base.getPopData()).getBlockState(
+                base.getX(),
+                base.getY(),
+                base.getZ()
+        );
+
         banner.setPatterns(getOminousBannerPatterns());
         banner.update();
     }
@@ -175,28 +203,28 @@ public class BannerUtils {
         return WALL_BANNERS[rand.nextInt(WALL_BANNERS.length)];
     }
 
-	/**
+    /**
      * kms
      * <a href="https://minecraft.fandom.com/wiki/Banner/Patterns">...</a>
-     Pattern:"mr",Color:CYAN
-     Pattern:"bs",Color:LIGHT_GRAY
-     Pattern:"cs",Color:GRAY
-     Pattern:"bo",Color:LIGHT_GRAY
-     Pattern:"ms",Color:BLACK
-     Pattern:"hh",Color:LIGHT_GRAY
-     Pattern:"mc",Color:LIGHT_GRAY
-     Pattern:"bo",Color:BLACK
+     * Pattern:"mr",Color:CYAN
+     * Pattern:"bs",Color:LIGHT_GRAY
+     * Pattern:"cs",Color:GRAY
+     * Pattern:"bo",Color:LIGHT_GRAY
+     * Pattern:"ms",Color:BLACK
+     * Pattern:"hh",Color:LIGHT_GRAY
+     * Pattern:"mc",Color:LIGHT_GRAY
+     * Pattern:"bo",Color:BLACK
      */
-    public static @NotNull ArrayList<Pattern> getOminousBannerPatterns(){
-    	return new ArrayList<>() {{
-			add(new Pattern(DyeColor.CYAN, OneTwentyFiveBlockHandler.RHOMBUS));
-			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM));
-			add(new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER));
-			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER));
-			add(new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE));
-			add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL));
-			add(new Pattern(DyeColor.LIGHT_GRAY, OneTwentyFiveBlockHandler.CIRCLE)); //
-			add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
-		}};
+    public static @NotNull ArrayList<Pattern> getOminousBannerPatterns() {
+        return new ArrayList<>() {{
+            add(new Pattern(DyeColor.CYAN, OneTwentyFiveBlockHandler.RHOMBUS));
+            add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM));
+            add(new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER));
+            add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER));
+            add(new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE));
+            add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL));
+            add(new Pattern(DyeColor.LIGHT_GRAY, OneTwentyFiveBlockHandler.CIRCLE)); //
+            add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
+        }};
     }
 }

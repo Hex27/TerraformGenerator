@@ -16,8 +16,8 @@ public class BisectedBuilder {
     }
 
     public @NotNull BisectedBuilder placeBoth(@NotNull SimpleBlock block) {
-    	Bisected upper = (Bisected) blockData.clone();
-    	upper.setHalf(Half.TOP);
+        Bisected upper = (Bisected) blockData.clone();
+        upper.setHalf(Half.TOP);
         Bisected lower = (Bisected) blockData.clone();
         lower.setHalf(Half.BOTTOM);
         block.setBlockData(lower);

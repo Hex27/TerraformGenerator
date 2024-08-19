@@ -1,12 +1,5 @@
 package org.terraform.structure.room;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +13,8 @@ import org.terraform.structure.room.path.PathState;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
+import java.util.*;
+
 /**
  * This class is a fucking disgrace.
  * <br>
@@ -28,46 +23,42 @@ import org.terraform.utils.MazeSpawner;
  */
 public class RoomLayoutGenerator {
 
-    /**
-     * Needed for normal function or part of the recode
-     */
-    private PathState pathState;
     private final HashSet<CubeRoom> rooms = new HashSet<>();
     private final int @NotNull [] upperBound;
     private final int @NotNull [] lowerBound;
     private final RoomLayout layout;
-
-    boolean genPaths = true;
-    private int numRooms;
-    private int centX;
-    private int centY;
-    private int centZ;
-    private PathPopulatorAbstract pathPop;
-    public @Nullable RoomCarver roomCarver = null;
-    private int roomMaxHeight = 7;
-    private int roomMinHeight = 5;
-    private int roomMaxX = 15;
-    private int roomMinX = 10;
-    private int roomMaxZ = 15;
-    private int roomMinZ = 10;
-
-    // Range refers to the width of the room placement area.
-    // Note that only room central points follow range so it's possible
-    // for a room's area to exceed this range.
-    private int range;
-
-    /**
-     * For stupid transitory phase shit
-     */
-    public Material @NotNull [] wallMaterials = new Material[]{Material.CAVE_AIR};
-
     /**
      * LEGACY SHIT. Disorganised nonsense from a bygone era
      */
     private final HashSet<LegacyPathGenerator> pathGens = new HashSet<>();
     private final HashSet<PathPopulatorData> pathPopulators = new HashSet<>();
     private final ArrayList<RoomPopulatorAbstract> roomPops = new ArrayList<>();
+    public @Nullable RoomCarver roomCarver = null;
+    /**
+     * For stupid transitory phase shit
+     */
+    public Material @NotNull [] wallMaterials = new Material[] {Material.CAVE_AIR};
+    boolean genPaths = true;
     boolean allowOverlaps = false;
+    /**
+     * Needed for normal function or part of the recode
+     */
+    private PathState pathState;
+    private int numRooms;
+    private int centX;
+    private int centY;
+    private int centZ;
+    private PathPopulatorAbstract pathPop;
+    private int roomMaxHeight = 7;
+    private int roomMinHeight = 5;
+    private int roomMaxX = 15;
+    private int roomMinX = 10;
+    private int roomMaxZ = 15;
+    private int roomMinZ = 10;
+    // Range refers to the width of the room placement area.
+    // Note that only room central points follow range so it's possible
+    // for a room's area to exceed this range.
+    private int range;
     private Random rand;
     private boolean carveRooms = false;
     private float xCarveMul = 1.0f;
@@ -77,7 +68,14 @@ public class RoomLayoutGenerator {
     private MazeSpawner mazePathGenerator;
     private int tile = -1;
 
-    public RoomLayoutGenerator(Random random, RoomLayout layout, int numRooms, int centX, int centY, int centZ, int range) {
+    public RoomLayoutGenerator(Random random,
+                               RoomLayout layout,
+                               int numRooms,
+                               int centX,
+                               int centY,
+                               int centZ,
+                               int range)
+    {
         this.numRooms = numRooms;
         this.layout = layout;
         this.centX = centX;
@@ -89,9 +87,10 @@ public class RoomLayoutGenerator {
         this.lowerBound = new int[] {centX - range / 2, centZ - range / 2};
     }
 
-    public @NotNull PathState getOrCalculatePathState(@NotNull TerraformWorld tw){
-        if(pathState == null)
+    public @NotNull PathState getOrCalculatePathState(@NotNull TerraformWorld tw) {
+        if (pathState == null) {
             pathState = new PathState(this, tw);
+        }
 
         return pathState;
     }
@@ -132,30 +131,38 @@ public class RoomLayoutGenerator {
 
     public @Nullable CubeRoom forceAddRoom(int widthX, int widthZ, int heightY) {
         if (layout == RoomLayout.RANDOM_BRUTEFORCE) {
-            CubeRoom room = new CubeRoom(widthX, widthZ, heightY,
+            CubeRoom room = new CubeRoom(widthX,
+                    widthZ,
+                    heightY,
                     centX + GenUtils.randInt(rand, -range / 2, range / 2),
                     centY,
-                    centZ + GenUtils.randInt(rand, -range / 2, range / 2));
+                    centZ + GenUtils.randInt(rand, -range / 2, range / 2)
+            );
 
             boolean canAdd = false;
             while (!canAdd) {
                 canAdd = true;
-                if (!allowOverlaps)
+                if (!allowOverlaps) {
                     for (CubeRoom other : rooms) {
                         if (other.isOverlapping(room)) {
                             canAdd = false;
-                            room = new CubeRoom(widthX, widthZ, heightY,
+                            room = new CubeRoom(widthX,
+                                    widthZ,
+                                    heightY,
                                     centX + GenUtils.randInt(rand, -range / 2, range / 2),
                                     centY,
-                                    centZ + GenUtils.randInt(rand, -range / 2, range / 2));
+                                    centZ + GenUtils.randInt(rand, -range / 2, range / 2)
+                            );
                             break;
                         }
                     }
+                }
             }
 
             rooms.add(room);
             return room;
-        } else {
+        }
+        else {
             // Todo: make force spawn for corner budding
             return null;
         }
@@ -173,40 +180,48 @@ public class RoomLayoutGenerator {
 
             // Normalise room sizes to prevent strange shapes (Like narrow & tall etc)
             if (normalise) {
-                if (widthX < widthZ / 2) widthX = widthZ + GenUtils.randInt(rand, -2, 2);
-                if (widthZ < widthX / 2) widthZ = widthX + GenUtils.randInt(rand, -2, 2);
+                if (widthX < widthZ / 2) {
+                    widthX = widthZ + GenUtils.randInt(rand, -2, 2);
+                }
+                if (widthZ < widthX / 2) {
+                    widthZ = widthX + GenUtils.randInt(rand, -2, 2);
+                }
             }
             int heightY = GenUtils.randInt(rand, roomMinHeight, roomMaxHeight);
 
             if (pyramidish) {
                 double heightRange = 1 - ((Math.pow(nx, 2) + Math.pow(nz, 2)) / Math.pow(range / 2f, 2));
-                if (heightRange * roomMaxHeight < roomMinHeight) heightRange = roomMinHeight / (float) roomMaxHeight;
+                if (heightRange * roomMaxHeight < roomMinHeight) {
+                    heightRange = roomMinHeight / (float) roomMaxHeight;
+                }
                 // TerraformGeneratorPlugin.logger.info("Original h: " + heightY + "; heightRange: " + heightRange);
-                heightY = GenUtils.randInt(rand,
-                        roomMinHeight,
-                        (int) (roomMaxHeight * heightRange));
+                heightY = GenUtils.randInt(rand, roomMinHeight, (int) (roomMaxHeight * heightRange));
             }
 
             if (normalise) {
-                if (heightY > widthX) heightY = widthX + GenUtils.randInt(rand, -2, 2);
-                if (heightY < widthX / 3) heightY = widthX / 3 + GenUtils.randInt(rand, -2, 2);
+                if (heightY > widthX) {
+                    heightY = widthX + GenUtils.randInt(rand, -2, 2);
+                }
+                if (heightY < widthX / 3) {
+                    heightY = widthX / 3 + GenUtils.randInt(rand, -2, 2);
+                }
             }
-            CubeRoom room = new CubeRoom(widthX, widthZ, heightY,
-                    nx + centX,
-                    centY,
-                    nz + centZ);
+            CubeRoom room = new CubeRoom(widthX, widthZ, heightY, nx + centX, centY, nz + centZ);
             if (layout == RoomLayout.RANDOM_BRUTEFORCE) {
                 boolean canAdd = true;
-                if (!allowOverlaps)
+                if (!allowOverlaps) {
                     for (CubeRoom other : rooms) {
                         if (other.isOverlapping(room)) {
                             canAdd = false;
                             break;
                         }
                     }
-                if (canAdd)
+                }
+                if (canAdd) {
                     rooms.add(room);
-            } else if (layout == RoomLayout.OVERLAP_CONNECTED) {
+                }
+            }
+            else if (layout == RoomLayout.OVERLAP_CONNECTED) {
                 room.setX(centX + GenUtils.randInt(rand, -4, 4));
                 room.setZ(centZ + GenUtils.randInt(rand, -4, 4));
 
@@ -224,19 +239,25 @@ public class RoomLayoutGenerator {
                         break;
                     }
                 }
-                if (canAdd)
+                if (canAdd) {
                     rooms.add(room);
+                }
             }
         }
     }
 
     public boolean anyOverlaps() {
-        if (allowOverlaps) return false;
+        if (allowOverlaps) {
+            return false;
+        }
         for (CubeRoom room : rooms) {
             for (CubeRoom other : rooms) {
-                if (other.isClone(room)) continue;
-                if (room.isOverlapping(other))
+                if (other.isClone(room)) {
+                    continue;
+                }
+                if (room.isOverlapping(other)) {
                     return true;
+                }
             }
         }
         return false;
@@ -247,8 +268,9 @@ public class RoomLayoutGenerator {
      */
     public boolean isInRoom(int @NotNull [] coords) {
         for (CubeRoom room : rooms) {
-            if (room.isPointInside(coords))
+            if (room.isPointInside(coords)) {
                 return true;
+            }
         }
         return false;
     }
@@ -273,14 +295,18 @@ public class RoomLayoutGenerator {
                     if (room.pop == null && pops.canPopulate(room)) {
                         // TerraformGeneratorPlugin.logger.info("Set down forced populator of " + pops.getClass().getName());
                         room.setRoomPopulator(pops);
-                        if (pops.isUnique()) it.remove();
+                        if (pops.isUnique()) {
+                            it.remove();
+                        }
                         break;
                     }
                 }
             }
         }
 
-        if (roomPops.isEmpty()) return;
+        if (roomPops.isEmpty()) {
+            return;
+        }
 
         // Allocate randomly placed room populators
         for (CubeRoom room : rooms) {
@@ -300,9 +326,30 @@ public class RoomLayoutGenerator {
                 }
             }
             if (room.pop != null) {
-                TerraformGeneratorPlugin.logger.info("Registered: " + room.pop.getClass().getName() + " at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
-            } else {
-                TerraformGeneratorPlugin.logger.info("Registered: plain room at " + room.getX() + " " + room.getY() + " " + room.getZ() + " in a room of size " + room.getWidthX() + "x" + room.getWidthZ());
+                TerraformGeneratorPlugin.logger.info("Registered: "
+                                                     + room.pop.getClass().getName()
+                                                     + " at "
+                                                     + room.getX()
+                                                     + " "
+                                                     + room.getY()
+                                                     + " "
+                                                     + room.getZ()
+                                                     + " in a room of size "
+                                                     + room.getWidthX()
+                                                     + "x"
+                                                     + room.getWidthZ());
+            }
+            else {
+                TerraformGeneratorPlugin.logger.info("Registered: plain room at "
+                                                     + room.getX()
+                                                     + " "
+                                                     + room.getY()
+                                                     + " "
+                                                     + room.getZ()
+                                                     + " in a room of size "
+                                                     + room.getWidthX()
+                                                     + "x"
+                                                     + room.getWidthZ());
             }
         }
     }
@@ -311,17 +358,20 @@ public class RoomLayoutGenerator {
      * @Deprecated don't use this for new structures. Use the new jigsaw system
      */
     @Deprecated
-	public void runRoomPopulators(PopulatorDataAbstract data, @NotNull TerraformWorld tw) {
-    	// Allocate room populators
+    public void runRoomPopulators(PopulatorDataAbstract data, @NotNull TerraformWorld tw) {
+        // Allocate room populators
         calculateRoomPopulators(tw);
 
-        if (roomPops.isEmpty()) return;
+        if (roomPops.isEmpty()) {
+            return;
+        }
 
-        rooms.forEach((room)->room.populate(data));
+        rooms.forEach((room) -> room.populate(data));
     }
 
     /**
      * Links room populators to empty rooms and applies paths and room to the actual world.
+     *
      * @param mat Material to use for lining room walls.
      */
     public void fill(@NotNull PopulatorDataAbstract data, @NotNull TerraformWorld tw, Material... mat) {
@@ -340,88 +390,109 @@ public class RoomLayoutGenerator {
                 }
                 mazePathGenerator.prepareMaze();
                 mazePathGenerator.carveMaze(false, mat);
-            } else
+            }
+            else {
                 for (CubeRoom room : rooms) {
-                    SimpleBlock base = new SimpleBlock(
-                    		data,
-                    		room.getX() + room.getX() % (pathPop.getPathWidth()*2+1),
-                    		room.getY(),
-                    		room.getZ() + room.getZ() % (pathPop.getPathWidth()*2+1)
-            		);
-                    LegacyPathGenerator gen = new LegacyPathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
-                    if (pathPop != null) gen.setPopulator(pathPop);
+                    SimpleBlock base = new SimpleBlock(data,
+                            room.getX() + room.getX() % (pathPop.getPathWidth() * 2 + 1),
+                            room.getY(),
+                            room.getZ() + room.getZ() % (pathPop.getPathWidth() * 2 + 1)
+                    );
+                    LegacyPathGenerator gen = new LegacyPathGenerator(base,
+                            mat,
+                            rand,
+                            upperBound,
+                            lowerBound,
+                            pathPop.getPathMaxBend()
+                    );
+                    if (pathPop != null) {
+                        gen.setPopulator(pathPop);
+                    }
                     while (!gen.isDead()) {
                         gen.placeNext();
                     }
                     pathGens.add(gen);
                 }
+            }
         }
 
         // Create empty rooms
         for (CubeRoom room : rooms) {
             if (carveRooms) {
-            	room = new CarvedRoom(room);
-        		// TerraformGeneratorPlugin.logger.info("Vol: " + (room.getWidthX() * room.getWidthZ() * room.getHeight()));
-            	if(room.largerThanVolume(40000)) {
-            		// TerraformGeneratorPlugin.logger.info("Larger Room Invoked");
-                	((CarvedRoom) room).setFrequency(0.03f);
-            	}
-            	((CarvedRoom) room).setxMultiplier(this.xCarveMul);
-            	((CarvedRoom) room).setyMultiplier(this.yCarveMul);
-            	((CarvedRoom) room).setzMultiplier(this.zCarveMul);
+                room = new CarvedRoom(room);
+                // TerraformGeneratorPlugin.logger.info("Vol: " + (room.getWidthX() * room.getWidthZ() * room.getHeight()));
+                if (room.largerThanVolume(40000)) {
+                    // TerraformGeneratorPlugin.logger.info("Larger Room Invoked");
+                    ((CarvedRoom) room).setFrequency(0.03f);
+                }
+                ((CarvedRoom) room).setxMultiplier(this.xCarveMul);
+                ((CarvedRoom) room).setyMultiplier(this.yCarveMul);
+                ((CarvedRoom) room).setzMultiplier(this.zCarveMul);
             }
 
-            if (allowOverlaps)
+            if (allowOverlaps) {
                 room.fillRoom(data, tile, mat, Material.CAVE_AIR);
-            else
+            }
+            else {
                 room.fillRoom(data, tile, mat, Material.AIR);
+            }
         }
 
         // Populate pathways
         if (mazePathGenerator != null && this.pathPop != null) {
             for (PathPopulatorData pPData : mazePathGenerator.pathPopDatas) {
-                if (!this.isInRoom(new int[]{pPData.base.getX(), pPData.base.getZ()}))
+                if (!this.isInRoom(new int[] {pPData.base.getX(), pPData.base.getZ()})) {
                     this.pathPop.populate(pPData);
+                }
             }
-        } else {
+        }
+        else {
             for (LegacyPathGenerator pGen : pathGens) {
-            	// TerraformGeneratorPlugin.logger.info("pathgen");
+                // TerraformGeneratorPlugin.logger.info("pathgen");
                 pGen.populate();
             }
         }
 
-        if (roomPops.isEmpty()) return;
+        if (roomPops.isEmpty()) {
+            return;
+        }
 
         runRoomPopulators(data, tw);
 
     }
 
     public void carveRoomsOnly(@NotNull PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
-    	// Create empty rooms
+        // Create empty rooms
         for (CubeRoom room : rooms) {
             if (carveRooms) {
-            	room = new CarvedRoom(room);
-            	if(room.largerThanVolume(40000))
-                	((CarvedRoom) room).setFrequency(0.03f);
-            	((CarvedRoom) room).setxMultiplier(this.xCarveMul);
-            	((CarvedRoom) room).setyMultiplier(this.yCarveMul);
-            	((CarvedRoom) room).setzMultiplier(this.zCarveMul);
+                room = new CarvedRoom(room);
+                if (room.largerThanVolume(40000)) {
+                    ((CarvedRoom) room).setFrequency(0.03f);
+                }
+                ((CarvedRoom) room).setxMultiplier(this.xCarveMul);
+                ((CarvedRoom) room).setyMultiplier(this.yCarveMul);
+                ((CarvedRoom) room).setzMultiplier(this.zCarveMul);
             }
 
-            if (allowOverlaps)
+            if (allowOverlaps) {
                 room.fillRoom(data, tile, mat, Material.CAVE_AIR);
-            else
+            }
+            else {
                 room.fillRoom(data, tile, mat, Material.AIR);
+            }
         }
     }
 
     /**
+     *
      */
     public void fillRoomsOnly(@NotNull PopulatorDataAbstract data, @NotNull TerraformWorld tw, Material... mat) {
 
-    	carveRoomsOnly(data,tw,mat);
+        carveRoomsOnly(data, tw, mat);
 
-        if (roomPops.isEmpty()) return;
+        if (roomPops.isEmpty()) {
+            return;
+        }
 
         runRoomPopulators(data, tw);
 
@@ -429,16 +500,25 @@ public class RoomLayoutGenerator {
 
     public void carvePathsOnly(@NotNull PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
         // ArrayList<PathGenerator> pathGens = new ArrayList<>();
-        if (genPaths)
+        if (genPaths) {
             for (CubeRoom room : rooms) {
                 SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
-                LegacyPathGenerator gen = new LegacyPathGenerator(base, mat, rand, upperBound, lowerBound, pathPop.getPathMaxBend());
-                if (pathPop != null) gen.setPopulator(pathPop);
+                LegacyPathGenerator gen = new LegacyPathGenerator(base,
+                        mat,
+                        rand,
+                        upperBound,
+                        lowerBound,
+                        pathPop.getPathMaxBend()
+                );
+                if (pathPop != null) {
+                    gen.setPopulator(pathPop);
+                }
                 while (!gen.isDead()) {
                     gen.placeNext();
                 }
                 pathGens.add(gen);
             }
+        }
     }
 
 
@@ -454,7 +534,7 @@ public class RoomLayoutGenerator {
     }
 
     public void fillPathsOnly(@NotNull PopulatorDataAbstract data, TerraformWorld tw, Material... mat) {
-        carvePathsOnly(data,tw,mat);
+        carvePathsOnly(data, tw, mat);
 
         populatePathsOnly();
     }
@@ -649,30 +729,39 @@ public class RoomLayoutGenerator {
         this.mazePathGenerator = mazePathGenerator;
     }
 
-    public @NotNull HashSet<PathPopulatorData> getPathPopulators(){
-    	if(this.pathPopulators.isEmpty()) {
-    		for(LegacyPathGenerator pGen:this.pathGens) {
-    			this.pathPopulators.addAll(pGen.path);
-    		}
-    	}
-    	return this.pathPopulators;
+    public @NotNull HashSet<PathPopulatorData> getPathPopulators() {
+        if (this.pathPopulators.isEmpty()) {
+            for (LegacyPathGenerator pGen : this.pathGens) {
+                this.pathPopulators.addAll(pGen.path);
+            }
+        }
+        return this.pathPopulators;
     }
 
     public boolean isPointInPath(@NotNull Wall w, int rearOffset, int includeWidth) {
-    	if(getPathPopulators().contains(new PathPopulatorData(w.getRear(rearOffset).getAtY(centY), 3)))
-    		return true;
-    	if(includeWidth != 0)
-	    	for(int i = 1; i < includeWidth; i++) {
-	    		if(getPathPopulators().contains(new PathPopulatorData(
-	    				w.getRear(rearOffset).getLeft(i).getAtY(centY), 3)))
-	        		return true;
+        if (getPathPopulators().contains(new PathPopulatorData(w.getRear(rearOffset).getAtY(centY), 3))) {
+            return true;
+        }
+        if (includeWidth != 0) {
+            for (int i = 1; i < includeWidth; i++) {
+                if (getPathPopulators().contains(new PathPopulatorData(w.getRear(rearOffset).getLeft(i).getAtY(centY),
+                        3
+                )))
+                {
+                    return true;
+                }
 
-	    		if(getPathPopulators().contains(new PathPopulatorData(
-	    				w.getRear(rearOffset).getRight(i).getAtY(centY), 3)))
-	        		return true;
-	    	}
-    	return false;
+                if (getPathPopulators().contains(new PathPopulatorData(w.getRear(rearOffset).getRight(i).getAtY(centY),
+                        3
+                )))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
+
     public boolean genPaths() {
         return genPaths;
     }

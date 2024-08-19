@@ -13,9 +13,10 @@ import java.util.Random;
 /**
  * This class is used to control the order in which the bukkit populator is used
  * to perform various actions.
+ *
  * @author Hex_27
  */
-public class TerraformBukkitBlockPopulator extends BlockPopulator{
+public class TerraformBukkitBlockPopulator extends BlockPopulator {
 
     protected final TerraformWorld tw;
     private final @NotNull TerraformStructurePopulator structurePopulator;
@@ -37,7 +38,7 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
         // Run the fixers first
         this.nativePatcherPopulator.populate(world, random, chunk);
         this.physicsUpdaterPopulator.populate(world, random, chunk);
-        
+
         // Populate structures next
         this.structurePopulator.populate(world, random, chunk);
 
@@ -46,12 +47,17 @@ public class TerraformBukkitBlockPopulator extends BlockPopulator{
     }
 
     @Override
-    public void populate(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull LimitedRegion lr) {
+    public void populate(@NotNull WorldInfo worldInfo,
+                         @NotNull Random random,
+                         int chunkX,
+                         int chunkZ,
+                         @NotNull LimitedRegion lr)
+    {
         this.structurePopulator.populate(worldInfo, random, chunkX, chunkZ, lr);
     }
 
-        public @NotNull TerraformStructurePopulator getStructurePopulator() {
-		return structurePopulator;
-	}
-    
+    public @NotNull TerraformStructurePopulator getStructurePopulator() {
+        return structurePopulator;
+    }
+
 }

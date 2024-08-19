@@ -12,9 +12,11 @@ public enum BiomeType {
 
     private final boolean isDry;
 
-    BiomeType(boolean isDry) { this.isDry = isDry; }
-	
-	public boolean isDry() {
-		return isDry;
-	}
+    BiomeType(boolean isDry) {
+        this.isDry = isDry;
+    }
+
+    public boolean isDry() {
+        return isDry;
+    }
 }

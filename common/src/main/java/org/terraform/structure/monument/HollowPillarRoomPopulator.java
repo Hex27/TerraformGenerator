@@ -13,8 +13,7 @@ import java.util.Random;
 
 public class HollowPillarRoomPopulator extends CageRoomPopulator {
 
-    public HollowPillarRoomPopulator(Random rand, MonumentDesign design,
-                                     boolean forceSpawn, boolean unique) {
+    public HollowPillarRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
     }
 
@@ -27,7 +26,8 @@ public class HollowPillarRoomPopulator extends CageRoomPopulator {
                 room.getHeight() - 9,
                 room.getX(),
                 room.getY() + (room.getHeight() / 2) - ((room.getHeight() - 9) / 2),
-                room.getZ());
+                room.getZ()
+        );
 
         // Attach to the ceiling
         for (int[] corner : cage.getAllCorners()) {

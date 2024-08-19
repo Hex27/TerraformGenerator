@@ -6,60 +6,9 @@ import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 
 public class WoodUtils {
-	
-	public enum WoodSpecies{
-		OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK
-    }
-	
-	public enum WoodType{
-		PLANKS("%WOOD%_PLANKS"),
-		SAPLING("%WOOD%_SAPLING"),
-		POTTED_SAPLING("POTTED_%WOOD%_SAPLING"),
-		LOG("%WOOD%_LOG"),
-		STRIPPED_LOG("STRIPPED_%WOOD%_LOG"),
-		WOOD("%WOOD%_WOOD"),
-		STRIPPED_WOOD("STRIPPED_%WOOD%_WOOD"),
-		LEAVES("%WOOD%_LEAVES"),
-		SLAB("%WOOD%_SLAB"),
-		PRESSURE_PLATE("%WOOD%_PRESSURE_PLATE"),
-		FENCE("%WOOD%_FENCE"),
-		TRAPDOOR("%WOOD%_TRAPDOOR"),
-		FENCE_GATE("%WOOD%_FENCE_GATE"),
-		STAIRS("%WOOD%_STAIRS"),
-		BUTTON("%WOOD%_BUTTON"),
-		DOOR("%WOOD%_DOOR"),
-		SIGN("%WOOD%_SIGN"),
-		WALL_SIGN("%WOOD%_WALL_SIGN"),
-		BOAT("%WOOD%_BOAT"),
-		;
-		final String template;
-		WoodType(String template){
-			this.template = template;
-		}
-		
-		/**
-		 * Converts an oak material to a WoodType template.
-		 * Do not use for any other wood.
-		 * <br><br>
-		 * The dark oak check is there because schematics only check for the 
-		 * keyword "oak"
-		 * @param oak material to convert to an WoodType enum
-         */
-		public static @NotNull WoodType parse(@NotNull Material oak) {
-			return WoodType.valueOf(oak.toString()
-					.replace("DARK_OAK","OAK")
-					.replace("OAK_",""));
-		}
 
-		// I am the pinnacle of optimisation
-		// Fear my absolutely unbeatable timings
-		public @Nullable Material getWood(@NotNull WoodSpecies species) {
-			return Material.getMaterial(template.replace("%WOOD%", species.toString()));
-		}
-	}
-	
     public static @Nullable Material getWoodForBiome(@NotNull BiomeBank biome, @NotNull WoodType wood) {
-        return switch(biome) {
+        return switch (biome) {
             case BADLANDS, BADLANDS_RIVER, SAVANNA, DESERT_MOUNTAINS, DESERT, DESERT_RIVER, BADLANDS_BEACH,
                  BADLANDS_CANYON -> wood.getWood(WoodSpecies.ACACIA);
             case BIRCH_MOUNTAINS, SCARLET_FOREST -> wood.getWood(WoodSpecies.BIRCH);
@@ -74,6 +23,57 @@ public class WoodUtils {
                     wood.getWood(WoodSpecies.DARK_OAK);
             default -> wood.getWood(WoodSpecies.OAK);
         };
+    }
+
+    public enum WoodSpecies {
+        OAK, SPRUCE, BIRCH, JUNGLE, ACACIA, DARK_OAK
+    }
+
+    public enum WoodType {
+        PLANKS("%WOOD%_PLANKS"),
+        SAPLING("%WOOD%_SAPLING"),
+        POTTED_SAPLING("POTTED_%WOOD%_SAPLING"),
+        LOG("%WOOD%_LOG"),
+        STRIPPED_LOG("STRIPPED_%WOOD%_LOG"),
+        WOOD("%WOOD%_WOOD"),
+        STRIPPED_WOOD("STRIPPED_%WOOD%_WOOD"),
+        LEAVES("%WOOD%_LEAVES"),
+        SLAB("%WOOD%_SLAB"),
+        PRESSURE_PLATE("%WOOD%_PRESSURE_PLATE"),
+        FENCE("%WOOD%_FENCE"),
+        TRAPDOOR("%WOOD%_TRAPDOOR"),
+        FENCE_GATE("%WOOD%_FENCE_GATE"),
+        STAIRS("%WOOD%_STAIRS"),
+        BUTTON("%WOOD%_BUTTON"),
+        DOOR("%WOOD%_DOOR"),
+        SIGN("%WOOD%_SIGN"),
+        WALL_SIGN("%WOOD%_WALL_SIGN"),
+        BOAT("%WOOD%_BOAT"),
+        ;
+        final String template;
+
+        WoodType(String template) {
+            this.template = template;
+        }
+
+        /**
+         * Converts an oak material to a WoodType template.
+         * Do not use for any other wood.
+         * <br><br>
+         * The dark oak check is there because schematics only check for the
+         * keyword "oak"
+         *
+         * @param oak material to convert to an WoodType enum
+         */
+        public static @NotNull WoodType parse(@NotNull Material oak) {
+            return WoodType.valueOf(oak.toString().replace("DARK_OAK", "OAK").replace("OAK_", ""));
+        }
+
+        // I am the pinnacle of optimisation
+        // Fear my absolutely unbeatable timings
+        public @Nullable Material getWood(@NotNull WoodSpecies species) {
+            return Material.getMaterial(template.replace("%WOOD%", species.toString()));
+        }
     }
 
 }
