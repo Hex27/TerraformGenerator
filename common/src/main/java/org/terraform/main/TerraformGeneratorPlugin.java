@@ -30,6 +30,7 @@ import org.terraform.utils.bstats.TerraformGeneratorMetricsHandler;
 import org.terraform.utils.version.Version;
 import org.terraform.watchdog.TfgWatchdogSuppressant;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -70,17 +71,17 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         GenUtils.initGenUtils();
         BlockUtils.initBlockUtils();
         instance = this;
-        logger = new TLogger();
 
         try {
-            TConfig.init("config.yml");
+            TConfig.init(new File(getDataFolder(), "config.yml"));
         }
         catch (IOException e) {
-            logger.error("Failed to load config.yml");
+            getLogger().severe("Failed to load config.yml: " + e.getMessage());
             getPluginLoader().disablePlugin(this);
             return;
         }
 
+        logger = new TLogger();
         lang = new LanguageManager(this, TConfig.c);
 
         // Initiate the height map flat radius value

@@ -4,13 +4,15 @@ import org.avarion.yaml.YamlComment;
 import org.avarion.yaml.YamlFileInterface;
 import org.avarion.yaml.YamlKey;
 
+import java.io.File;
 import java.io.IOException;
 
 public class TConfig extends YamlFileInterface {
     public static TConfig c;
-    public static void init(String s) throws IOException {
+    public static void init(final File f) throws IOException {
         if (c == null) {
-            c = new TConfig().load(s);
+            c = new TConfig().load(f);
+            c.save(f); // updates the configuration file to the newest format
         }
     }
 
