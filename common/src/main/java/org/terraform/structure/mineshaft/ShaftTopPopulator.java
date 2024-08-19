@@ -56,20 +56,23 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
                 Wall target = w.getRelative(0, -GenUtils.randInt(rand, 8, 10), 0);
 
                 // Clear a space
-                BlockUtils.carveCaveAir(new Random().nextInt(777123),
+                BlockUtils.carveCaveAir(
+                        new Random().nextInt(777123),
                         3,
                         5,
                         3,
                         new SimpleBlock(data, target.getX(), room.getY(), target.getZ()),
                         false,
-                        EnumSet.of(Material.BARRIER));
+                        EnumSet.of(Material.BARRIER)
+                );
 
                 schema = TerraSchematic.load("ore-lift", target.get().getRelative(-1, 0, -1));
                 schema.parser = new OreLiftSchematicParser();
                 schema.setFace(BlockFace.NORTH);
                 schema.apply();
                 target.LPillar(w.getY() - target.getY(), rand, Material.OAK_FENCE);
-            } catch (FileNotFoundException e) {
+            }
+            catch (FileNotFoundException e) {
                 TerraformGeneratorPlugin.logger.stackTrace(e);
             }
         }

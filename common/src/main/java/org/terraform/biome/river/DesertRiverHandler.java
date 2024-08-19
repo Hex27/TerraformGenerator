@@ -9,7 +9,13 @@ import java.util.Random;
 
 public class DesertRiverHandler extends RiverHandler {
     @Override
-    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
         super.populateSmallItems(world, random, rawX, surfaceY, rawZ, data);
         OasisRiver.generateOasisRiver(world, random, data, rawX, rawZ, BiomeBank.DESERT);
     }

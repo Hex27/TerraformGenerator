@@ -14,7 +14,9 @@ import java.util.Random;
 public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if ( !isEnabled() ) return;
+        if (!isEnabled()) {
+            return;
+        }
 
         int totalHeight = 0;
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
@@ -24,34 +26,44 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
         }
 
         if (totalHeight / 256 <= TConfigOption.STRUCTURES_DROWNEDDUNGEON_MIN_DEPTH.getInt()
-                && GenUtils.chance(tw.getHashedRand(1223, data.getChunkX(), data.getChunkZ()), TConfigOption.STRUCTURES_DROWNEDDUNGEON_CHANCE.getInt(), 1000)) {
+            && GenUtils.chance(
+                tw.getHashedRand(1223, data.getChunkX(), data.getChunkZ()),
+                TConfigOption.STRUCTURES_DROWNEDDUNGEON_CHANCE.getInt(),
+                1000
+        ))
+        {
             // Only spawn these in full oceans
-            if (!TConfigOption.STRUCTURES_DROWNEDDUNGEON_ENABLED.getBoolean())
+            if (!TConfigOption.STRUCTURES_DROWNEDDUNGEON_ENABLED.getBoolean()) {
                 return;
+            }
             new DrownedDungeonPopulator().populate(tw, data);
-        } else {
-            if (!TConfigOption.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED.getBoolean())
+        }
+        else {
+            if (!TConfigOption.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED.getBoolean()) {
                 return;
+            }
             new UndergroundDungeonPopulator().populate(tw, data);
         }
     }
-    
+
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
-                (int) (TConfigOption.STRUCTURES_DUNGEONS_SPAWNRATIO
-                        .getDouble() * 10000),
-                10000);
+                (int) (TConfigOption.STRUCTURES_DUNGEONS_SPAWNRATIO.getDouble() * 10000),
+                10000
+        );
     }
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
-        if (!isEnabled()) return false;
+        if (!isEnabled()) {
+            return false;
+        }
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
             if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-                return rollSpawnRatio(tw,chunkX,chunkZ);
+                return rollSpawnRatio(tw, chunkX, chunkZ);
             }
         }
         return false;
@@ -60,10 +72,11 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     // Each mega chunk has config option dungeons
     @Override
     public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-    	int num = TConfigOption.STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK.getInt();
+        int num = TConfigOption.STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK.getInt();
         int[][] coords = new int[num][2];
-        for (int i = 0; i < num; i++)
-            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324*(1+i)));
+        for (int i = 0; i < num; i++) {
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324 * (1 + i)));
+        }
         return coords;
     }
 

@@ -7,8 +7,8 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.Random;
@@ -35,54 +35,54 @@ public class ValuesCommand extends TerraCommand {
 
         return sender.isOp();
     }
-    
-    @SuppressWarnings("unused")
-	private double warpSine(double tempUnwarpedSineX, int period, int seed) {
-		double warp = GenUtils.randInt(new Random(3L *seed),-3, 3);
-		if(warp == 0) warp = 1;
-		if(warp < 0) {
-			warp = (10-2*warp)/10.0;
-		}
-		
-		double warpedValue;
-		if(tempUnwarpedSineX == 0 && warp == 0) { // Prevent math error
-			warpedValue = 0;
-		}else {
-			warpedValue = Math.pow(Math.abs(tempUnwarpedSineX),warp);
-		}
-		if(tempUnwarpedSineX < 0) {
-			warpedValue = -warpedValue; // Preserve sign
-		}
-		return warpedValue;
-	}
 
     @SuppressWarnings("unused")
-	@Override
+    private double warpSine(double tempUnwarpedSineX, int period, int seed) {
+        double warp = GenUtils.randInt(new Random(3L * seed), -3, 3);
+        if (warp == 0) {
+            warp = 1;
+        }
+        if (warp < 0) {
+            warp = (10 - 2 * warp) / 10.0;
+        }
+
+        double warpedValue;
+        if (tempUnwarpedSineX == 0 && warp == 0) { // Prevent math error
+            warpedValue = 0;
+        }
+        else {
+            warpedValue = Math.pow(Math.abs(tempUnwarpedSineX), warp);
+        }
+        if (tempUnwarpedSineX < 0) {
+            warpedValue = -warpedValue; // Preserve sign
+        }
+        return warpedValue;
+    }
+
+    @SuppressWarnings("unused")
+    @Override
     public void execute(@NotNull CommandSender sender, Stack<String> args) {
-    	
+
         MathValues vals = new MathValues();
         MathValues unwarped = new MathValues();
         MathValues warped = new MathValues();
-        
+
         TerraformWorld tw = TerraformWorld.get("world-1232341234", new Random().nextInt(99999));
-        
-        FastNoise carverEntranceStandard = NoiseCacheHandler.getNoise(
-        		tw, 
-        		NoiseCacheEntry.CARVER_STANDARD, 
-        		world -> {
-        	        FastNoise n = new FastNoise((int) (world.getSeed() * 111));
-        	        n.SetNoiseType(NoiseType.SimplexFractal);
-        	        n.SetFractalOctaves(4);
-        	        n.SetFrequency(0.07f);
-        	        return n;
-        		});
-        
+
+        FastNoise carverEntranceStandard = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.CARVER_STANDARD, world -> {
+            FastNoise n = new FastNoise((int) (world.getSeed() * 111));
+            n.SetNoiseType(NoiseType.SimplexFractal);
+            n.SetFractalOctaves(4);
+            n.SetFrequency(0.07f);
+            return n;
+        });
+
         int period = 4;
         for (int x = 0; x < 9000000; x++) {
-            int y = GenUtils.randInt(0,100);
+            int y = GenUtils.randInt(0, 100);
             int z = GenUtils.randInt(-10000, 10000);
             vals.addValue(carverEntranceStandard.GetNoise(x, y, z));
-    		// vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
+            // vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
         }
         sender.sendMessage("Finished");
         sender.sendMessage("Highest: " + vals.getHighest());
@@ -104,8 +104,12 @@ public class ValuesCommand extends TerraCommand {
         public void addValue(double value) {
             total += value;
             count++;
-            if (value < lowest) lowest = value;
-            if (value > highest) highest = value;
+            if (value < lowest) {
+                lowest = value;
+            }
+            if (value > highest) {
+                highest = value;
+            }
         }
 
         public double avg() {

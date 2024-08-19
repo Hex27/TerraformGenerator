@@ -16,28 +16,33 @@ import java.util.Random;
 
 public class PlainsVillageTempleLootPiece extends PlainsVillageTempleStandardPiece {
 
-	public PlainsVillageTempleLootPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-		super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
-	}
-	
-	
-	@Override
+    public PlainsVillageTempleLootPiece(PlainsVillagePopulator plainsVillagePopulator,
+                                        int widthX,
+                                        int height,
+                                        int widthZ,
+                                        JigsawType type,
+                                        BlockFace[] validDirs)
+    {
+        super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
+    }
+
+
+    @Override
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
-		super.postBuildDecoration(random,data);
-		for(BlockFace face:this.getWalledFaces()) {
-			SimpleEntry<Wall,Integer> entry = this.getRoom().getWall(data, face, 0);
-			Wall w = entry.getKey();
-			for(int i = 0; i < entry.getValue(); i++) {
-				if(GenUtils.chance(random,1,5) && w.getRear().getType() != plainsVillagePopulator.woodDoor) {
-					new ChestBuilder(Material.CHEST)
-					.setFacing(w.getDirection())
-					.setLootTable(TerraLootTable.VILLAGE_TEMPLE)
-					.apply(w);
-				}
-				w = w.getLeft();
-			}
-		}
-			
-	}
+        super.postBuildDecoration(random, data);
+        for (BlockFace face : this.getWalledFaces()) {
+            SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, 0);
+            Wall w = entry.getKey();
+            for (int i = 0; i < entry.getValue(); i++) {
+                if (GenUtils.chance(random, 1, 5) && w.getRear().getType() != plainsVillagePopulator.woodDoor) {
+                    new ChestBuilder(Material.CHEST).setFacing(w.getDirection())
+                                                    .setLootTable(TerraLootTable.VILLAGE_TEMPLE)
+                                                    .apply(w);
+                }
+                w = w.getLeft();
+            }
+        }
+
+    }
 
 }

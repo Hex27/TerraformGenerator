@@ -9,26 +9,39 @@ import org.terraform.structure.village.plains.forge.PlainsVillageForgeWallPiece.
 
 public abstract class PlainsVillageForgePiece extends JigsawStructurePiece {
 
-	protected final PlainsVillagePopulator plainsVillagePopulator;
-	private @Nullable PlainsVillageForgeWallType wallType = null;
-	
-	public PlainsVillageForgePiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-		super(widthX, height, widthZ, type, validDirs);
-		this.plainsVillagePopulator = plainsVillagePopulator;
-	}
+    protected final PlainsVillagePopulator plainsVillagePopulator;
+    private @Nullable PlainsVillageForgeWallType wallType = null;
 
-	public PlainsVillageForgePiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace... validDirs) {
-	    	super(widthX, height, widthZ, type, unique, validDirs);
-	    	this.plainsVillagePopulator = plainsVillagePopulator;
-	}
+    public PlainsVillageForgePiece(PlainsVillagePopulator plainsVillagePopulator,
+                                   int widthX,
+                                   int height,
+                                   int widthZ,
+                                   JigsawType type,
+                                   BlockFace[] validDirs)
+    {
+        super(widthX, height, widthZ, type, validDirs);
+        this.plainsVillagePopulator = plainsVillagePopulator;
+    }
 
-	public @Nullable PlainsVillageForgeWallType getWallType() {
-		return wallType;
-	}
+    public PlainsVillageForgePiece(PlainsVillagePopulator plainsVillagePopulator,
+                                   int widthX,
+                                   int height,
+                                   int widthZ,
+                                   JigsawType type,
+                                   boolean unique,
+                                   BlockFace... validDirs)
+    {
+        super(widthX, height, widthZ, type, unique, validDirs);
+        this.plainsVillagePopulator = plainsVillagePopulator;
+    }
 
-	public void setWallType(@Nullable PlainsVillageForgeWallType wallType) {
-		this.wallType = wallType;
-	}
-	
+    public @Nullable PlainsVillageForgeWallType getWallType() {
+        return wallType;
+    }
+
+    public void setWallType(@Nullable PlainsVillageForgeWallType wallType) {
+        this.wallType = wallType;
+    }
+
 
 }

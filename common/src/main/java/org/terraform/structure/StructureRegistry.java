@@ -46,7 +46,8 @@ public class StructureRegistry {
      * getLargeStructureForMegaChunk contains the populator. Small structure populators
      * will always attempt to spawn.
      */
-    public static final Map<StructureType, SingleMegaChunkStructurePopulator[]> largeStructureRegistry = new EnumMap<>(StructureType.class);
+    public static final Map<StructureType, SingleMegaChunkStructurePopulator[]> largeStructureRegistry = new EnumMap<>(
+            StructureType.class);
     public static final Collection<MultiMegaChunkStructurePopulator> smallStructureRegistry = new ArrayList<>();
     private static final HashMap<MegaChunkKey, SingleMegaChunkStructurePopulator[]> queryCache = new HashMap<>();
 
@@ -61,8 +62,9 @@ public class StructureRegistry {
         registerStructure(StructureType.MEGA_DUNGEON, new StrongholdPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new MansionPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new AncientCityPopulator());
-        if(Version.isAtLeast(21))
+        if (Version.isAtLeast(21)) {
             registerStructure(StructureType.MEGA_DUNGEON, new TrialChamberPopulator());
+        }
 
         registerStructure(StructureType.LARGE_CAVE, new LargeCavePopulator());
 
@@ -87,8 +89,9 @@ public class StructureRegistry {
     public static @Nullable StructureType getStructureType(@NotNull Class<? extends SingleMegaChunkStructurePopulator> populatorType) {
         for (Entry<StructureType, SingleMegaChunkStructurePopulator[]> entry : largeStructureRegistry.entrySet()) {
             for (SingleMegaChunkStructurePopulator pops : entry.getValue()) {
-                if (populatorType.isInstance(pops))
+                if (populatorType.isInstance(pops)) {
                     return entry.getKey();
+                }
             }
         }
         return null; // Invalid populator Type.
@@ -98,14 +101,19 @@ public class StructureRegistry {
      * @return the structure types that can spawn in this mega chunk
      * Only one is meant to be picked.
      */
-    public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-    	// TerraformGeneratorPlugin.logger.info("getLargeStructureForMegaChunkQuery: " + mc.getX() + "," + mc.getZ());
+    public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(@NotNull TerraformWorld tw,
+                                                                                    @NotNull MegaChunk mc)
+    {
+        // TerraformGeneratorPlugin.logger.info("getLargeStructureForMegaChunkQuery: " + mc.getX() + "," + mc.getZ());
         // Clear the cache if it gets big.
-        if (queryCache.size() > 50) queryCache.clear();
-        MegaChunkKey key = new MegaChunkKey(tw,mc);
+        if (queryCache.size() > 50) {
+            queryCache.clear();
+        }
+        MegaChunkKey key = new MegaChunkKey(tw, mc);
         // Don't re-calculate
-        if (queryCache.containsKey(key))
+        if (queryCache.containsKey(key)) {
             return queryCache.get(key);
+        }
 
         Random structRand = tw.getHashedRand(9, mc.getX(), mc.getZ());
         int maxStructures = 3; // GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES.getInt());
@@ -114,14 +122,26 @@ public class StructureRegistry {
 
         // Check if there are any mega dungeons enabled
         if (largeStructureRegistry.containsKey(StructureType.MEGA_DUNGEON)
-                && largeStructureRegistry.get(StructureType.MEGA_DUNGEON).length > 0) {
+            && largeStructureRegistry.get(StructureType.MEGA_DUNGEON).length > 0)
+        {
             // First check if the megadungeons can spawn. Shuffle the array first.
-            SingleMegaChunkStructurePopulator[] available = (SingleMegaChunkStructurePopulator[]) shuffleArray(structRand, largeStructureRegistry.get(StructureType.MEGA_DUNGEON));
+            SingleMegaChunkStructurePopulator[] available = (SingleMegaChunkStructurePopulator[]) shuffleArray(
+                    structRand,
+                    largeStructureRegistry.get(StructureType.MEGA_DUNGEON)
+            );
             for (SingleMegaChunkStructurePopulator pop : available) {
                 int[] coords = mc.getCenterBiomeSectionBlockCoords(); // pop.getCoordsFromMegaChunk(tw, mc);
-                if (coords == null) continue;
+                if (coords == null) {
+                    continue;
+                }
 
-                if (TConfigOption.areStructuresEnabled() && pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
+                if (TConfigOption.areStructuresEnabled() && pop.canSpawn(
+                        tw,
+                        coords[0] >> 4,
+                        coords[1] >> 4,
+                        mc.getCenterBiomeSection(tw).getBiomeBank()
+                ))
+                {
                     pops[size] = pop;
                     size++;
                     break; // ONLY ONE MEGA DUNGEON.
@@ -134,18 +154,26 @@ public class StructureRegistry {
         StructureType[] types = {StructureType.LARGE_CAVE, StructureType.VILLAGE, StructureType.LARGE_MISC};
         types = (StructureType[]) shuffleArray(structRand, types);
         for (StructureType type : types) {
-            if (largeStructureRegistry.containsKey(type))
+            if (largeStructureRegistry.containsKey(type)) {
                 for (SingleMegaChunkStructurePopulator pop : largeStructureRegistry.get(type)) {
                     int[] coords = mc.getCenterBiomeSectionBlockCoords();
-                    if (TConfigOption.areStructuresEnabled() && pop.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, mc.getCenterBiomeSection(tw).getBiomeBank())) {
+                    if (TConfigOption.areStructuresEnabled() && pop.canSpawn(tw,
+                            coords[0] >> 4,
+                            coords[1] >> 4,
+                            mc.getCenterBiomeSection(tw).getBiomeBank()
+                    ))
+                    {
                         pops[size] = pop;
                         size++;
                         break; // ONLY ONE OF EACH TYPE. Do not try to spawn multiple.
                     }
                 }
+            }
 
             // Stop trying if max structures is hit
-            if (size >= maxStructures) break;
+            if (size >= maxStructures) {
+                break;
+            }
         }
         // }
 
@@ -161,7 +189,9 @@ public class StructureRegistry {
     // Implementing FisherYates shuffle
     private static Object @NotNull [] shuffleArray(@NotNull Random rand, Object[] ar) {
         ar = ar.clone();
-        if (ar.length == 0) return ar;
+        if (ar.length == 0) {
+            return ar;
+        }
         for (int i = ar.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
             // Simple swap
@@ -176,7 +206,9 @@ public class StructureRegistry {
      * Registers small or large structures. Must implement either SingleMegaChunkStructurePopulator or MultiMegaChunkStructurePopulator.
      */
     public static void registerStructure(StructureType type, @NotNull StructurePopulator pop) {
-        if (!pop.isEnabled()) return;// Don't register disabled features
+        if (!pop.isEnabled()) {
+            return;// Don't register disabled features
+        }
 
         if (pop instanceof SingleMegaChunkStructurePopulator) {
             SingleMegaChunkStructurePopulator[] pops = {(SingleMegaChunkStructurePopulator) pop};
@@ -187,10 +219,13 @@ public class StructureRegistry {
                 System.arraycopy(existing, 0, pops, 0, existing.length);
                 System.arraycopy(old, 0, pops, existing.length, 1);
             }
-            TerraformGeneratorPlugin.logger.info("[Structure Registry] Registered Large Structure: " + pop.getClass().getSimpleName());
+            TerraformGeneratorPlugin.logger.info("[Structure Registry] Registered Large Structure: " + pop.getClass()
+                                                                                                          .getSimpleName());
             largeStructureRegistry.put(type, pops);
-        } else if (pop instanceof MultiMegaChunkStructurePopulator) {
-            TerraformGeneratorPlugin.logger.info("[Structure Registry] Registered Small Structure: " + pop.getClass().getSimpleName());
+        }
+        else if (pop instanceof MultiMegaChunkStructurePopulator) {
+            TerraformGeneratorPlugin.logger.info("[Structure Registry] Registered Small Structure: " + pop.getClass()
+                                                                                                          .getSimpleName());
             smallStructureRegistry.add((MultiMegaChunkStructurePopulator) pop);
         }
 
@@ -219,25 +254,28 @@ public class StructureRegistry {
         }
         return pops;
     }
-    
+
     private static class MegaChunkKey {
-    	private final TerraformWorld tw;
-    	private final MegaChunk mc;
-		public MegaChunkKey(TerraformWorld tw, MegaChunk mc) {
-			super();
-			this.tw = tw;
-			this.mc = mc;
-		}
+        private final TerraformWorld tw;
+        private final MegaChunk mc;
 
-	    @Override
-	    public int hashCode() {
-	        return Objects.hash(tw.hashCode(),mc.getX(), mc.getZ());
-	    }
+        public MegaChunkKey(TerraformWorld tw, MegaChunk mc) {
+            super();
+            this.tw = tw;
+            this.mc = mc;
+        }
 
-	    @Override
-	    public boolean equals(Object obj) {
-	        if (!(obj instanceof MegaChunkKey other)) return false;
+        @Override
+        public int hashCode() {
+            return Objects.hash(tw.hashCode(), mc.getX(), mc.getZ());
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof MegaChunkKey other)) {
+                return false;
+            }
             return this.tw.equals(other.tw) && mc.getX() == other.mc.getX() && mc.getZ() == other.mc.getZ();
-	    }
+        }
     }
 }

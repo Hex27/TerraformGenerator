@@ -1,8 +1,5 @@
 package org.terraform.coregen.populatordata;
 
-import java.util.EnumSet;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
@@ -13,13 +10,17 @@ import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;
 
+import java.util.EnumSet;
+import java.util.Random;
+
 public abstract class PopulatorDataAbstract {
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
     public abstract @Nullable Material getType(int x, int y, int z);
-    public @Nullable Material getType(@NotNull Vector v){
-        return getType((int)Math.round(v.getX()),(int)Math.round(v.getY()),(int)Math.round(v.getZ()));
+
+    public @Nullable Material getType(@NotNull Vector v) {
+        return getType((int) Math.round(v.getX()), (int) Math.round(v.getY()), (int) Math.round(v.getZ()));
     }
 
     /**
@@ -31,33 +32,33 @@ public abstract class PopulatorDataAbstract {
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
     public abstract void setType(int x, int y, int z, Material type);
-    
+
     public void setType(int x, int y, int z, Material @NotNull ... type)
     {
-    	setType(x,y,z,type[new Random().nextInt(type.length)]);
+        setType(x, y, z, type[new Random().nextInt(type.length)]);
     }
 
     /**
      * This method will ROUND vector coordinates. Be very aware of that.
      */
     public void setType(@NotNull Vector add, Material... mat) {
-        setType((int)Math.round(add.getX()),
-                (int)Math.round(add.getY()),
-                (int)Math.round(add.getZ()), mat);
+        setType((int) Math.round(add.getX()), (int) Math.round(add.getY()), (int) Math.round(add.getZ()), mat);
     }
+
     public void setBlockData(@NotNull Vector add, BlockData data) {
-        setBlockData((int)Math.round(add.getX()),
-                (int)Math.round(add.getY()),
-                (int)Math.round(add.getZ()), data);
+        setBlockData((int) Math.round(add.getX()), (int) Math.round(add.getY()), (int) Math.round(add.getZ()), data);
     }
 
     public void lsetType(int x, int y, int z, Material... type) {
-        if(!getType(x,y,z).isSolid())
-            setType(x,y,z,type);
+        if (!getType(x, y, z).isSolid()) {
+            setType(x, y, z, type);
+        }
     }
+
     public void lsetType(@NotNull Vector v, Material... type) {
-        if(!getType(v).isSolid())
-            setType(v,type);
+        if (!getType(v).isSolid()) {
+            setType(v, type);
+        }
     }
 
     /**
@@ -66,19 +67,24 @@ public abstract class PopulatorDataAbstract {
      */
     public void rsetType(@NotNull Vector v, @NotNull EnumSet<Material> replaceable, Material... toSet)
     {
-        if(!replaceable.contains(getType(v))) return;
+        if (!replaceable.contains(getType(v))) {
+            return;
+        }
         setType(v, toSet);
     }
+
     /**
      * Set the material at the location if the current material is in
      * the enum set
      */
     public void rsetBlockData(@NotNull Vector v, @NotNull EnumSet<Material> replaceable, BlockData data)
     {
-        if(!replaceable.contains(getType(v))) return;
+        if (!replaceable.contains(getType(v))) {
+            return;
+        }
         setBlockData(v, data);
     }
-    
+
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
@@ -115,8 +121,12 @@ public abstract class PopulatorDataAbstract {
      */
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
         return obj instanceof PopulatorDataAbstract;
     }
 }

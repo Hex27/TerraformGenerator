@@ -14,28 +14,34 @@ import java.util.Random;
 
 public class MansionTowerWallPiece extends JigsawStructurePiece {
 
-	public boolean isTentRoofFace = false;
+    public boolean isTentRoofFace = false;
 
-    public MansionTowerWallPiece(MansionJigsawBuilder builder, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+    public MansionTowerWallPiece(MansionJigsawBuilder builder,
+                                 int widthX,
+                                 int height,
+                                 int widthZ,
+                                 JigsawType type,
+                                 BlockFace[] validDirs)
+    {
         super(widthX, height, widthZ, type, validDirs);
 
     }
-    
+
     @Override
     public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
         Wall w = entry.getKey().getDown();
-        
+
         for (int i = 0; i < entry.getValue(); i++) {
-            
-        	// Primary Wall and wooden stair decorations
-        	// w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+
+            // Primary Wall and wooden stair decorations
+            // w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getUp().Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
-            
+
             w = w.getLeft();
         }
     }
-    
+
 
 }

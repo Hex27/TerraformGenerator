@@ -35,12 +35,13 @@ public class CursedChamber extends RoomPopulatorAbstract {
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
-                for (int h = 0; h < room.getHeight() - 2; h++)
+                for (int h = 0; h < room.getHeight() - 2; h++) {
                     if (w.getRelative(0, h, 0).getRear().isSolid() && GenUtils.chance(rand, 1, 5)) {
                         Directional head = (Directional) Bukkit.createBlockData(Material.SKELETON_WALL_SKULL);
                         head.setFacing(w.getDirection());
                         w.getRelative(0, h, 0).setBlockData(head);
                     }
+                }
 
                 w = w.getLeft();
             }
@@ -52,7 +53,8 @@ public class CursedChamber extends RoomPopulatorAbstract {
         if (room.getWidthX() > 10) {
             availableX.add(lowerCorner[0]);
             availableX.add(upperCorner[0]);
-        } else { // Spawn only one.
+        }
+        else { // Spawn only one.
             availableX.add(room.getX());
         }
 
@@ -60,26 +62,31 @@ public class CursedChamber extends RoomPopulatorAbstract {
         if (room.getWidthZ() > 10) {
             availableZ.add(lowerCorner[1]);
             availableZ.add(upperCorner[1]);
-        } else { // Spawn only one.
+        }
+        else { // Spawn only one.
             availableZ.add(room.getZ());
         }
 
         // Build the pillars
-        for (int nx : availableX)
-            for (int nz : availableZ)
+        for (int nx : availableX) {
+            for (int nz : availableZ) {
                 spawnSkullPillar(new Wall(new SimpleBlock(data, nx, room.getY() + 1, nz)), room);
+            }
+        }
 
         // Ceiling erosions
         for (int i = 0; i < GenUtils.randInt(3, 10); i++) {
             int[] loc = room.randomCoords(rand, 1);
-            if (data.getType(loc[0], room.getY() + room.getHeight() + 1, loc[2]) == Material.SAND)
+            if (data.getType(loc[0], room.getY() + room.getHeight() + 1, loc[2]) == Material.SAND) {
                 data.setType(loc[0], room.getY() + room.getHeight() + 1, loc[2], Material.SANDSTONE);
+            }
             BlockUtils.dropDownBlock(new SimpleBlock(data, loc[0], room.getY() + room.getHeight(), loc[2]));
         }
 
         // Skeletons
-        for (int i = 0; i < GenUtils.randInt(rand, 1, 4); i++)
+        for (int i = 0; i < GenUtils.randInt(rand, 1, 4); i++) {
             data.addEntity(room.getX() - room.getWidthX() / 2 + 1, room.getY() + 1, room.getZ(), EntityType.SKELETON);
+        }
     }
 
     public void spawnSkullPillar(@NotNull Wall w, @NotNull CubeRoom room) {
@@ -88,12 +95,20 @@ public class CursedChamber extends RoomPopulatorAbstract {
 
         // Stair base and ceiling
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            Stairs stair = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(Material.SANDSTONE_STAIRS, Material.STONE_STAIRS, Material.COBBLESTONE_STAIRS));
+            Stairs stair = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(
+                    Material.SANDSTONE_STAIRS,
+                    Material.STONE_STAIRS,
+                    Material.COBBLESTONE_STAIRS
+            ));
             stair.setFacing(face.getOppositeFace());
             w.getRelative(face).setBlockData(stair);
 
 
-            stair = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(Material.SANDSTONE_STAIRS, Material.STONE_STAIRS, Material.COBBLESTONE_STAIRS));
+            stair = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(
+                    Material.SANDSTONE_STAIRS,
+                    Material.STONE_STAIRS,
+                    Material.COBBLESTONE_STAIRS
+            ));
             stair.setFacing(face.getOppositeFace());
             stair.setHalf(Half.TOP);
             w.getRelative(face).getRelative(0, room.getHeight() - 2, 0).setBlockData(stair);
@@ -103,7 +118,9 @@ public class CursedChamber extends RoomPopulatorAbstract {
         for (int h = 1; h < room.getHeight() - 3; h++) {
             Wall target = w.getRelative(0, h, 0);
             for (BlockFace face : BlockUtils.directBlockFaces) {
-                if (GenUtils.chance(4, 5)) continue;
+                if (GenUtils.chance(4, 5)) {
+                    continue;
+                }
                 Directional head = (Directional) Bukkit.createBlockData(Material.SKELETON_WALL_SKULL);
                 head.setFacing(face);
                 target.getRelative(face).setBlockData(head);
@@ -111,10 +128,12 @@ public class CursedChamber extends RoomPopulatorAbstract {
         }
 
         // Corrupt Ceiling
-        for (int nz = -2; nz <= 2; nz++)
+        for (int nz = -2; nz <= 2; nz++) {
             for (int nx = -2; nx <= 2; nx++) {
-                w.getRelative(nx, room.getHeight() - 1, nz).setType(GenUtils.randChoice(Material.ANDESITE, Material.COBBLESTONE, Material.SANDSTONE));
+                w.getRelative(nx, room.getHeight() - 1, nz)
+                 .setType(GenUtils.randChoice(Material.ANDESITE, Material.COBBLESTONE, Material.SANDSTONE));
             }
+        }
     }
 
     @Override

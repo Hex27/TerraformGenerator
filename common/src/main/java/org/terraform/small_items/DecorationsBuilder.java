@@ -33,18 +33,6 @@ public enum DecorationsBuilder {
         this.material = material;
     }
 
-    public void build(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        data.setType(x, y, z, material);
-    }
-
-    /*    public void build(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z, int minHeight, int maxHeight) {
-            BlockUtils.spawnPillar(rand, data, x, y, z, material, minHeight, maxHeight);
-        }
-    */
-    public void build(@NotNull SimpleBlock block) {
-        build(block.getPopData(), block.getX(), block.getY(), block.getZ());
-    }
-
     /*
         public void build(@NotNull SimpleBlock block, @NotNull Random rand, int minHeight, int maxHeight) {
             int height = GenUtils.randInt(rand, minHeight, maxHeight);
@@ -60,8 +48,25 @@ public enum DecorationsBuilder {
             randChoice(rand, options).build(data, x, y, z);
         }
     */
-    public static void build(@NotNull PopulatorDataAbstract data, int x, int y, int z, @NotNull DecorationsBuilder... options) {
+    public static void build(@NotNull PopulatorDataAbstract data,
+                             int x,
+                             int y,
+                             int z,
+                             @NotNull DecorationsBuilder... options)
+    {
         randChoice(options).build(data, x, y, z);
+    }
+
+    public void build(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        data.setType(x, y, z, material);
+    }
+
+    /*    public void build(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z, int minHeight, int maxHeight) {
+            BlockUtils.spawnPillar(rand, data, x, y, z, material, minHeight, maxHeight);
+        }
+    */
+    public void build(@NotNull SimpleBlock block) {
+        build(block.getPopData(), block.getX(), block.getY(), block.getZ());
     }
 
 }

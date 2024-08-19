@@ -25,13 +25,21 @@ public class OasisRiver {
         int height = HeightMap.getBlockHeight(tw, x, z);
         BiomeBank biome = BiomeBank.calculateHeightIndependentBiome(tw, x, z);
 
-        return lushRiverNoiseValue > OasisBeach.oasisThreshold &&
-                height < TerraformGenerator.seaLevel &&
-                targetBiome == biome;
+        return lushRiverNoiseValue > OasisBeach.oasisThreshold
+               && height < TerraformGenerator.seaLevel
+               && targetBiome == biome;
     }
 
-    public static void generateOasisRiver(TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int z, BiomeBank targetBiome) {
-        if (!isOasisRiver(tw, x, z, targetBiome)) return;
+    public static void generateOasisRiver(TerraformWorld tw,
+                                          @NotNull Random random,
+                                          @NotNull PopulatorDataAbstract data,
+                                          int x,
+                                          int z,
+                                          BiomeBank targetBiome)
+    {
+        if (!isOasisRiver(tw, x, z, targetBiome)) {
+            return;
+        }
 
         int riverBottom = GenUtils.getHighestGround(data, x, z);
 
@@ -41,13 +49,16 @@ public class OasisRiver {
         // Kelp and sea grass
         if (random.nextInt(4) == 0) {
             JungleRiverHandler.generateKelp(x, riverBottom + 1, z, data, random);
-        } else if (random.nextInt(5) == 0) {
+        }
+        else if (random.nextInt(5) == 0) {
             if (random.nextBoolean()) {
                 data.setType(x, riverBottom + 1, z, Material.SEAGRASS);
-            } else if (riverBottom + 1 < TerraformGenerator.seaLevel){
+            }
+            else if (riverBottom + 1 < TerraformGenerator.seaLevel) {
                 BlockUtils.setDoublePlant(data, x, riverBottom + 1, z, Material.TALL_SEAGRASS);
             }
-        } else if (random.nextInt(13) == 0) {
+        }
+        else if (random.nextInt(13) == 0) {
             data.setType(x, riverBottom + 1, z, Material.SEA_PICKLE);
         }
     }

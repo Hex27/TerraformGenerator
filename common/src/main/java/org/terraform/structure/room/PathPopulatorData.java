@@ -6,10 +6,10 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 
 public class PathPopulatorData {
-    public SimpleBlock base;
     public final BlockFace dir;
-    public boolean isOverlapped = false;
     public final int pathWidth;
+    public SimpleBlock base;
+    public boolean isOverlapped = false;
     public boolean isTurn;
     public boolean isEnd = false;
 
@@ -32,9 +32,11 @@ public class PathPopulatorData {
     public int calcRemainder(int multiplier) {
         if (dir.getModX() != 0) {
             return base.getX() % multiplier;
-        } else if (dir.getModZ() != 0) {
+        }
+        else if (dir.getModZ() != 0) {
             return base.getZ() % multiplier;
-        } else {
+        }
+        else {
             return 0; // BlockFace was not NSEW
         }
     }
@@ -51,10 +53,12 @@ public class PathPopulatorData {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof PathPopulatorData other)) return false;
-        return base.getX() == other.base.getX()
-        		&& base.getZ() == other.base.getZ() 
-        		&& base.getY() == other.base.getY();
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof PathPopulatorData other)) {
+            return false;
+        }
+        return base.getX() == other.base.getX() && base.getZ() == other.base.getZ() && base.getY() == other.base.getY();
     }
 }

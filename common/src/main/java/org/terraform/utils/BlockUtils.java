@@ -1,28 +1,12 @@
 package org.terraform.utils;
 
-import org.bukkit.Axis;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.Tag;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.*;
 import org.bukkit.block.data.Bisected.Half;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.MultipleFacing;
-import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rail.Shape;
-import org.bukkit.block.data.Rotatable;
-import org.bukkit.block.data.Waterlogged;
-import org.bukkit.block.data.type.Bed;
-import org.bukkit.block.data.type.Candle;
-import org.bukkit.block.data.type.CaveVinesPlant;
-import org.bukkit.block.data.type.Door;
-import org.bukkit.block.data.type.Leaves;
-import org.bukkit.block.data.type.PointedDripstone;
-import org.bukkit.block.data.type.Stairs;
+import org.bukkit.block.data.type.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -47,33 +31,10 @@ import java.util.Random;
 import java.util.Set;
 
 public class BlockUtils {
-	
-	public static void initBlockUtils() {
-		// init ores
-		for(Material mat:Material.values()) {
-    		if(mat.toString().endsWith("_ORE"))
-    		{
-                if(!mat.toString().contains("NETHER"))
-    			    ores.add(mat);
-    			stoneLike.add(mat);
-    		}
-    	}
-
-        badlandsStoneLike.addAll(stoneLike);
-        caveCarveReplace.addAll(badlandsStoneLike);
-        caveCarveReplace.addAll(caveDecoratorMaterials);
-		
-		// init glass panes
-    	for(Material mat:Material.values()) {
-    		if(mat.toString().endsWith("_GLASS_PANE"))
-    			glassPanes.add(mat);
-    	}
-	}
 
     // This is needed as REPLACABLE_BY_TREES is a 1.20 tag.
     // Also this has mushrooms and saplings, snow and coral fans
-    public static final EnumSet<Material> replacableByTrees = EnumSet.of(
-            Material.ACACIA_SAPLING,
+    public static final EnumSet<Material> replacableByTrees = EnumSet.of(Material.ACACIA_SAPLING,
             Material.DARK_OAK_SAPLING,
             Material.BIRCH_SAPLING,
             Material.SPRUCE_SAPLING,
@@ -134,59 +95,87 @@ public class BlockUtils {
             Material.DEAD_HORN_CORAL_WALL_FAN,
             Material.DEAD_TUBE_CORAL_WALL_FAN
     );
-
     // N
     // W E
     // S
     public static final BlockFace[] xzPlaneBlockFaces = new BlockFace[] {
-            BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
+            BlockFace.NORTH,
+            BlockFace.NORTH_EAST,
+            BlockFace.EAST,
+            BlockFace.SOUTH_EAST,
+            BlockFace.SOUTH,
+            BlockFace.SOUTH_WEST,
+            BlockFace.WEST,
+            BlockFace.NORTH_WEST
     };
-
     public static final EnumSet<Material> fluids = EnumSet.of(Material.WATER, Material.LAVA);
-    public static final EnumSet<Material> wetMaterials = EnumSet.of(
-    		Material.WATER,
-    		Material.KELP_PLANT,
-    		Material.SEAGRASS,
-    		Material.TALL_SEAGRASS
+    public static final EnumSet<Material> wetMaterials = EnumSet.of(Material.WATER,
+            Material.KELP_PLANT,
+            Material.SEAGRASS,
+            Material.TALL_SEAGRASS
     );
-
-    public static final EnumSet<Material> amethysts = EnumSet.of(
-            Material.AMETHYST_BLOCK,
+    public static final EnumSet<Material> amethysts = EnumSet.of(Material.AMETHYST_BLOCK,
             Material.AMETHYST_CLUSTER,
             Material.BUDDING_AMETHYST,
             Material.LARGE_AMETHYST_BUD,
             Material.MEDIUM_AMETHYST_BUD,
             Material.SMALL_AMETHYST_BUD
     );
-    
     public static final BlockFace[] flatBlockFaces3x3 = {
-            BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
+            BlockFace.SELF,
+            BlockFace.NORTH,
+            BlockFace.NORTH_EAST,
+            BlockFace.EAST,
+            BlockFace.SOUTH_EAST,
+            BlockFace.SOUTH,
+            BlockFace.SOUTH_WEST,
+            BlockFace.WEST,
+            BlockFace.NORTH_WEST
     };
-
     public static final BlockFace[] BLOCK_FACES = BlockFace.values();
-    public static final BlockFace[] xzDiagonalPlaneBlockFaces = {BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST};
-    public static final Material[] stoneBricks = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
+    public static final BlockFace[] xzDiagonalPlaneBlockFaces = {
+            BlockFace.NORTH_EAST,
+            BlockFace.SOUTH_EAST,
+            BlockFace.SOUTH_WEST,
+            BlockFace.NORTH_WEST
+    };
+    public static final Material[] stoneBricks = {
+            Material.STONE_BRICKS,
+            Material.MOSSY_STONE_BRICKS,
+            Material.CRACKED_STONE_BRICKS
+    };
     public static final Material[] stoneBrickSlabs = {Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB};
-    public static final BlockFace[] directBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
-
+    public static final BlockFace[] directBlockFaces = {
+            BlockFace.NORTH,
+            BlockFace.SOUTH,
+            BlockFace.EAST,
+            BlockFace.WEST
+    };
     public static final BlockFace[][] cornerBlockFaces = {
             {BlockFace.NORTH, BlockFace.EAST},
             {BlockFace.NORTH, BlockFace.WEST},
             {BlockFace.SOUTH, BlockFace.EAST},
             {BlockFace.SOUTH, BlockFace.WEST},
+            };
+    public static final BlockFace[] sixBlockFaces = {
+            BlockFace.NORTH,
+            BlockFace.SOUTH,
+            BlockFace.EAST,
+            BlockFace.WEST,
+            BlockFace.UP,
+            BlockFace.DOWN
     };
-
-    public static final BlockFace[] sixBlockFaces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
-    
     /**
      * Everything here <strong>must</strong> be solid blocks that tend to generate
      * in the ground.
      */
-    public static final EnumSet<Material> stoneLike = EnumSet.of(
-            Material.STONE, Material.COBBLESTONE,
+    public static final EnumSet<Material> stoneLike = EnumSet.of(Material.STONE,
+            Material.COBBLESTONE,
             Material.MOSSY_COBBLESTONE,
-            Material.GRANITE, Material.ANDESITE,
-            Material.DIORITE, Material.GRAVEL,
+            Material.GRANITE,
+            Material.ANDESITE,
+            Material.DIORITE,
+            Material.GRAVEL,
             Material.CLAY,
             Material.DEEPSLATE,
             Material.TUFF,
@@ -195,18 +184,25 @@ public class BlockUtils {
             Material.AMETHYST_BLOCK,
             Material.DRIPSTONE_BLOCK,
             Material.SMOOTH_BASALT,
-            Material.PACKED_ICE, Material.BLUE_ICE,
-            Material.DIRT, Material.PODZOL, Material.GRASS_BLOCK, Material.MYCELIUM,
-            Material.ROOTED_DIRT, Material.DIRT_PATH,
+            Material.PACKED_ICE,
+            Material.BLUE_ICE,
+            Material.DIRT,
+            Material.PODZOL,
+            Material.GRASS_BLOCK,
+            Material.MYCELIUM,
+            Material.ROOTED_DIRT,
+            Material.DIRT_PATH,
             OneOneNineBlockHandler.SCULK
     );
-    
-    public static final EnumSet<Material> caveDecoratorMaterials = EnumSet.of(
-    		Material.ANDESITE_WALL, Material.DIORITE_WALL, Material.GRANITE_WALL,
-    		Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL,
+    public static final EnumSet<Material> caveDecoratorMaterials = EnumSet.of(Material.ANDESITE_WALL,
+            Material.DIORITE_WALL,
+            Material.GRANITE_WALL,
+            Material.COBBLESTONE_WALL,
+            Material.MOSSY_COBBLESTONE_WALL,
             Material.MOSSY_COBBLESTONE_SLAB,
             Material.COBBLED_DEEPSLATE_WALL,
-    		Material.COBBLESTONE_SLAB, Material.STONE_SLAB,
+            Material.COBBLESTONE_SLAB,
+            Material.STONE_SLAB,
             Material.COBBLED_DEEPSLATE_SLAB,
             Material.MOSS_BLOCK,
             Material.MOSS_CARPET,
@@ -218,8 +214,10 @@ public class BlockUtils {
             Material.FLOWERING_AZALEA,
             Material.BIG_DRIPLEAF,
             Material.BIG_DRIPLEAF_STEM,
-    		Material.GRASS, Material.TALL_GRASS,
-    		Material.ICE, Material.PACKED_ICE,
+            Material.GRASS,
+            Material.TALL_GRASS,
+            Material.ICE,
+            Material.PACKED_ICE,
             Material.DRIPSTONE_BLOCK,
             Material.POINTED_DRIPSTONE,
             Material.AMETHYST_CLUSTER,
@@ -231,74 +229,21 @@ public class BlockUtils {
             Material.SPAWNER,
             Material.BROWN_MUSHROOM_BLOCK,
             Material.RED_MUSHROOM_BLOCK
-	);
-    
-    // This enumset gets populated more in initBlockUtils
-    public static final EnumSet<Material> badlandsStoneLike = EnumSet.of(
-            Material.TERRACOTTA, Material.ORANGE_TERRACOTTA,
-            Material.RED_TERRACOTTA, Material.BROWN_TERRACOTTA,
-            Material.YELLOW_TERRACOTTA, Material.RED_SAND
     );
-
+    // This enumset gets populated more in initBlockUtils
+    public static final EnumSet<Material> badlandsStoneLike = EnumSet.of(Material.TERRACOTTA,
+            Material.ORANGE_TERRACOTTA,
+            Material.RED_TERRACOTTA,
+            Material.BROWN_TERRACOTTA,
+            Material.YELLOW_TERRACOTTA,
+            Material.RED_SAND
+    );
     public static final EnumSet<Material> caveCarveReplace = EnumSet.of(Material.NOTE_BLOCK);
-
     // This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> ores = EnumSet.noneOf(Material.class);
-    
     public static final EnumSet<Material> airs = EnumSet.of(Material.AIR, Material.CAVE_AIR);
-
     // This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> glassPanes = EnumSet.noneOf(Material.class);
-    
-    private static final PlantBuilder[] TALL_FLOWER = {PlantBuilder.LILAC, PlantBuilder.ROSE_BUSH, PlantBuilder.PEONY, PlantBuilder.LARGE_FERN, PlantBuilder.SUNFLOWER};
-    private static final PlantBuilder[] FLOWER = {PlantBuilder.DANDELION,
-            PlantBuilder.POPPY,
-            PlantBuilder.WHITE_TULIP,
-            PlantBuilder.ORANGE_TULIP,
-            PlantBuilder.RED_TULIP,
-            PlantBuilder.PINK_TULIP,
-            PlantBuilder.BLUE_ORCHID,
-            PlantBuilder.ALLIUM,
-            PlantBuilder.AZURE_BLUET,
-            PlantBuilder.OXEYE_DAISY,
-            PlantBuilder.CORNFLOWER,
-            PlantBuilder.LILY_OF_THE_VALLEY,
-    };
-
-    private static final PlantBuilder[] POTTED = {
-            PlantBuilder.POTTED_DANDELION,
-            PlantBuilder.POTTED_POPPY,
-            PlantBuilder.POTTED_WHITE_TULIP,
-            PlantBuilder.POTTED_ORANGE_TULIP,
-            PlantBuilder.POTTED_RED_TULIP,
-            PlantBuilder.POTTED_PINK_TULIP,
-            PlantBuilder.POTTED_BLUE_ORCHID,
-            PlantBuilder.POTTED_ALLIUM,
-            PlantBuilder.POTTED_AZURE_BLUET,
-            PlantBuilder.POTTED_OXEYE_DAISY,
-            PlantBuilder.POTTED_CORNFLOWER,
-            PlantBuilder.POTTED_LILY_OF_THE_VALLEY,
-    };
-
-    private static final Material[] CARPETS = {
-            Material.WHITE_CARPET,
-            Material.BLACK_CARPET,
-            Material.BLUE_CARPET,
-            Material.BROWN_CARPET,
-            Material.CYAN_CARPET,
-            Material.GRAY_CARPET,
-            Material.GREEN_CARPET,
-            Material.LIGHT_BLUE_CARPET,
-            Material.LIGHT_GRAY_CARPET,
-            Material.LIME_CARPET,
-            Material.MAGENTA_CARPET,
-            Material.ORANGE_CARPET,
-            Material.PINK_CARPET,
-            Material.PURPLE_CARPET,
-            Material.RED_CARPET,
-            Material.YELLOW_CARPET
-    };
-    
     public static final Material[] WOOLS = {
             Material.WHITE_WOOL,
             Material.BLACK_WOOL,
@@ -317,26 +262,6 @@ public class BlockUtils {
             Material.RED_WOOL,
             Material.YELLOW_WOOL
     };
-    
-    private static final Material[] BED = {
-            Material.WHITE_BED,
-            Material.BLACK_BED,
-            Material.BLUE_BED,
-            Material.BROWN_BED,
-            Material.CYAN_BED,
-            Material.GRAY_BED,
-            Material.GREEN_BED,
-            Material.LIGHT_BLUE_BED,
-            Material.LIGHT_GRAY_BED,
-            Material.LIME_BED,
-            Material.MAGENTA_BED,
-            Material.ORANGE_BED,
-            Material.PINK_BED,
-            Material.PURPLE_BED,
-            Material.RED_BED,
-            Material.YELLOW_BED
-    };
-
     public static final Material[] GLAZED_TERRACOTTA = {
             Material.WHITE_GLAZED_TERRACOTTA,
             Material.BLACK_GLAZED_TERRACOTTA,
@@ -355,7 +280,6 @@ public class BlockUtils {
             Material.RED_GLAZED_TERRACOTTA,
             Material.YELLOW_GLAZED_TERRACOTTA
     };
-
     public static final Material[] TERRACOTTA = {
             Material.WHITE_TERRACOTTA,
             Material.BLACK_TERRACOTTA,
@@ -374,9 +298,104 @@ public class BlockUtils {
             Material.RED_TERRACOTTA,
             Material.YELLOW_TERRACOTTA
     };
+    private static final PlantBuilder[] TALL_FLOWER = {
+            PlantBuilder.LILAC,
+            PlantBuilder.ROSE_BUSH,
+            PlantBuilder.PEONY,
+            PlantBuilder.LARGE_FERN,
+            PlantBuilder.SUNFLOWER
+    };
+    private static final PlantBuilder[] FLOWER = {
+            PlantBuilder.DANDELION,
+            PlantBuilder.POPPY,
+            PlantBuilder.WHITE_TULIP,
+            PlantBuilder.ORANGE_TULIP,
+            PlantBuilder.RED_TULIP,
+            PlantBuilder.PINK_TULIP,
+            PlantBuilder.BLUE_ORCHID,
+            PlantBuilder.ALLIUM,
+            PlantBuilder.AZURE_BLUET,
+            PlantBuilder.OXEYE_DAISY,
+            PlantBuilder.CORNFLOWER,
+            PlantBuilder.LILY_OF_THE_VALLEY,
+            };
+    private static final PlantBuilder[] POTTED = {
+            PlantBuilder.POTTED_DANDELION,
+            PlantBuilder.POTTED_POPPY,
+            PlantBuilder.POTTED_WHITE_TULIP,
+            PlantBuilder.POTTED_ORANGE_TULIP,
+            PlantBuilder.POTTED_RED_TULIP,
+            PlantBuilder.POTTED_PINK_TULIP,
+            PlantBuilder.POTTED_BLUE_ORCHID,
+            PlantBuilder.POTTED_ALLIUM,
+            PlantBuilder.POTTED_AZURE_BLUET,
+            PlantBuilder.POTTED_OXEYE_DAISY,
+            PlantBuilder.POTTED_CORNFLOWER,
+            PlantBuilder.POTTED_LILY_OF_THE_VALLEY,
+            };
+    private static final Material[] CARPETS = {
+            Material.WHITE_CARPET,
+            Material.BLACK_CARPET,
+            Material.BLUE_CARPET,
+            Material.BROWN_CARPET,
+            Material.CYAN_CARPET,
+            Material.GRAY_CARPET,
+            Material.GREEN_CARPET,
+            Material.LIGHT_BLUE_CARPET,
+            Material.LIGHT_GRAY_CARPET,
+            Material.LIME_CARPET,
+            Material.MAGENTA_CARPET,
+            Material.ORANGE_CARPET,
+            Material.PINK_CARPET,
+            Material.PURPLE_CARPET,
+            Material.RED_CARPET,
+            Material.YELLOW_CARPET
+    };
+    private static final Material[] BED = {
+            Material.WHITE_BED,
+            Material.BLACK_BED,
+            Material.BLUE_BED,
+            Material.BROWN_BED,
+            Material.CYAN_BED,
+            Material.GRAY_BED,
+            Material.GREEN_BED,
+            Material.LIGHT_BLUE_BED,
+            Material.LIGHT_GRAY_BED,
+            Material.LIME_BED,
+            Material.MAGENTA_BED,
+            Material.ORANGE_BED,
+            Material.PINK_BED,
+            Material.PURPLE_BED,
+            Material.RED_BED,
+            Material.YELLOW_BED
+    };
+    private static final HashMap<String, Material> deepslateMap = new HashMap<>();
+
+    public static void initBlockUtils() {
+        // init ores
+        for (Material mat : Material.values()) {
+            if (mat.toString().endsWith("_ORE")) {
+                if (!mat.toString().contains("NETHER")) {
+                    ores.add(mat);
+                }
+                stoneLike.add(mat);
+            }
+        }
+
+        badlandsStoneLike.addAll(stoneLike);
+        caveCarveReplace.addAll(badlandsStoneLike);
+        caveCarveReplace.addAll(caveDecoratorMaterials);
+
+        // init glass panes
+        for (Material mat : Material.values()) {
+            if (mat.toString().endsWith("_GLASS_PANE")) {
+                glassPanes.add(mat);
+            }
+        }
+    }
 
     public static boolean isDirectBlockFace(@NotNull BlockFace facing) {
-        return switch(facing) {
+        return switch (facing) {
             case NORTH, SOUTH, EAST, WEST -> true;
             default -> false;
         };
@@ -405,16 +424,16 @@ public class BlockUtils {
         }
         return original;
     }
-    
+
     /**
      * @return rotates original block face (XZ plane only) clockwise the specified number of times
      */
     @SuppressWarnings("incomplete-switch")
     public static @NotNull BlockFace rotateXZPlaneBlockFace(@NotNull BlockFace original, int times) {
         //	N
-    	// W + E
-    	//	S
-    	for (int i = 0; i < times; i++) {
+        // W + E
+        //	S
+        for (int i = 0; i < times; i++) {
             switch (original) {
                 case NORTH:
                     original = BlockFace.NORTH_EAST;
@@ -444,16 +463,16 @@ public class BlockUtils {
         }
         return original;
     }
-    
+
     /**
      * @return rotates original block face (XZ plane only) clockwise the specified number of times
      */
     @SuppressWarnings("incomplete-switch")
     public static @NotNull BlockFace rotateXZPlaneBlockFaceOppositeAngle(@NotNull BlockFace original, int times) {
         //	N
-    	// W + E
-    	//	S
-    	for (int i = 0; i < times; i++) {
+        // W + E
+        //	S
+        for (int i = 0; i < times; i++) {
             switch (original) {
                 case NORTH:
                     original = BlockFace.NORTH_EAST;
@@ -483,12 +502,14 @@ public class BlockUtils {
         }
         return original;
     }
-    
+
     public static BlockFace @NotNull [] getRandomBlockfaceAxis(@NotNull Random rand) {
-    	if(rand.nextInt(2) == 0)
-    		return new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH};
-    	else
-    		return new BlockFace[] {BlockFace.WEST, BlockFace.EAST};
+        if (rand.nextInt(2) == 0) {
+            return new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH};
+        }
+        else {
+            return new BlockFace[] {BlockFace.WEST, BlockFace.EAST};
+        }
     }
 
     public static Material stoneBrick(@NotNull Random rand) {
@@ -502,9 +523,9 @@ public class BlockUtils {
     public static BlockFace getXZPlaneBlockFace(@NotNull Random rand) {
         return xzPlaneBlockFaces[rand.nextInt(8)];
     }
-    
+
     public static @Nullable BlockFace getBlockFaceFromAxis(@NotNull Axis ax) {
-        return switch(ax) {
+        return switch (ax) {
             case X -> BlockFace.EAST;
             case Z -> BlockFace.SOUTH;
             case Y -> BlockFace.UP;
@@ -512,16 +533,16 @@ public class BlockUtils {
     }
 
     public static @NotNull Axis getAxisFromBlockFace(@NotNull BlockFace face) {
-        return switch(face) {
+        return switch (face) {
             case NORTH, SOUTH -> Axis.Z;
             case EAST, WEST -> Axis.X;
             case UP, DOWN -> Axis.Y;
             default -> throw new IllegalArgumentException("Invalid block facing for axis: " + face);
         };
     }
-    
+
     public static @NotNull Axis getPerpendicularHorizontalPlaneAxis(@NotNull Axis x) {
-        return switch(x) {
+        return switch (x) {
             case X -> Axis.Z;
             case Z -> Axis.X;
             default -> x;
@@ -532,14 +553,15 @@ public class BlockUtils {
     public static BlockFace getDirectBlockFace(@NotNull Random rand) {
         return directBlockFaces[rand.nextInt(4)];
     }
-    
+
     public static BlockFace getSixBlockFace(@NotNull Random rand) {
-    	return sixBlockFaces[rand.nextInt(6)];
+        return sixBlockFaces[rand.nextInt(6)];
     }
 
     public static Material pickCarpet() {
         return GenUtils.randChoice(CARPETS);
     }
+
     public static Material pickWool() {
         return GenUtils.randChoice(WOOLS);
     }
@@ -563,6 +585,7 @@ public class BlockUtils {
     public static void dropDownBlock(@NotNull SimpleBlock block) {
         dropDownBlock(block, Material.CAVE_AIR);
     }
+
     public static void dropDownBlock(@NotNull SimpleBlock block, @NotNull Material fluid) {
         if (block.isSolid()) {
             Material type = block.getType();
@@ -571,13 +594,20 @@ public class BlockUtils {
             while (!block.isSolid()) {
                 block = block.getDown();
                 depth++;
-                if (depth > 50) return;
+                if (depth > 50) {
+                    return;
+                }
             }
             block.getUp().setType(type);
         }
     }
 
-    public static void horizontalGlazedTerracotta(@NotNull PopulatorDataAbstract data, int x, int y, int z, @NotNull Material glazedTerracotta) {
+    public static void horizontalGlazedTerracotta(@NotNull PopulatorDataAbstract data,
+                                                  int x,
+                                                  int y,
+                                                  int z,
+                                                  @NotNull Material glazedTerracotta)
+    {
         Directional terracotta = (Directional) Bukkit.createBlockData(glazedTerracotta);
         terracotta.setFacing(BlockFace.NORTH);
         data.setBlockData(x, y, z, terracotta);
@@ -596,14 +626,18 @@ public class BlockUtils {
     }
 
     public static void setVines(@NotNull PopulatorDataAbstract data, int x, int y, int z, int maxLength) {
-        if ( !TConfigOption.arePlantsEnabled()) return;
+        if (!TConfigOption.arePlantsEnabled()) {
+            return;
+        }
 
         SimpleBlock rel = new SimpleBlock(data, x, y, z);
         for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
             dir.setFace(face.getOppositeFace(), true);
             SimpleBlock vine = rel.getRelative(face);
-            if (vine.isSolid()) continue;
+            if (vine.isSolid()) {
+                continue;
+            }
 
             vine.setType(Material.VINE);
             vine.setBlockData(dir);
@@ -625,7 +659,13 @@ public class BlockUtils {
         }
     }
 
-    public static void downPillar(int x, int y, int z, int height, @NotNull PopulatorDataAbstract data, Material... type) {
+    public static void downPillar(int x,
+                                  int y,
+                                  int z,
+                                  int height,
+                                  @NotNull PopulatorDataAbstract data,
+                                  Material... type)
+    {
         while (!data.getType(x, y, z).isSolid() && height > TerraformGeneratorPlugin.injector.getMinY()) {
             data.setType(x, y, z, GenUtils.randChoice(type));
             height--;
@@ -638,21 +678,29 @@ public class BlockUtils {
     }
 
     public static boolean isDirtLike(@NotNull Material mat) {
-        return switch(mat) {
+        return switch (mat) {
             case DIRT, GRASS_BLOCK, PODZOL, COARSE_DIRT, MYCELIUM -> true;
-            default -> mat == Material.DIRT_PATH ||
-                    mat == Material.ROOTED_DIRT;
+            default -> mat == Material.DIRT_PATH || mat == Material.ROOTED_DIRT;
         };
     }
 
     public static void setPersistentLeaves(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if ( !TConfigOption.arePlantsEnabled()) return;
+        if (!TConfigOption.arePlantsEnabled()) {
+            return;
+        }
 
         setPersistentLeaves(data, x, y, z, Material.OAK_LEAVES);
     }
 
-    public static void setPersistentLeaves(@NotNull PopulatorDataAbstract data, int x, int y, int z, @NotNull Material type) {
-        if ( !TConfigOption.arePlantsEnabled()) return;
+    public static void setPersistentLeaves(@NotNull PopulatorDataAbstract data,
+                                           int x,
+                                           int y,
+                                           int z,
+                                           @NotNull Material type)
+    {
+        if (!TConfigOption.arePlantsEnabled()) {
+            return;
+        }
 
         data.setType(x, y, z, Material.OAK_LEAVES);
         Leaves bd = (Leaves) Bukkit.createBlockData(type);
@@ -660,8 +708,15 @@ public class BlockUtils {
         data.setBlockData(x, y, z, bd);
     }
 
-    public static void setDoublePlant(@NotNull PopulatorDataAbstract data, int x, int y, int z, @NotNull Material doublePlant) {
-        if ( !TConfigOption.arePlantsEnabled()) return;
+    public static void setDoublePlant(@NotNull PopulatorDataAbstract data,
+                                      int x,
+                                      int y,
+                                      int z,
+                                      @NotNull Material doublePlant)
+    {
+        if (!TConfigOption.arePlantsEnabled()) {
+            return;
+        }
 
         Bisected d = ((Bisected) Bukkit.createBlockData(doublePlant));
         d.setHalf(Half.BOTTOM);
@@ -681,7 +736,9 @@ public class BlockUtils {
             for (int nz = -1; nz <= 1; nz++) {
                 int x = middle.getX() + nx;
                 int z = middle.getZ() + nz;
-                if (!middle.getWorld().isChunkLoaded(x, z)) return false;
+                if (!middle.getWorld().isChunkLoaded(x, z)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -690,132 +747,192 @@ public class BlockUtils {
     public static @NotNull Material getTerracotta(int height) {
         int mapped = (height + 10) % 17;
 
-        if (mapped == 2 || mapped == 9 || mapped == 13 || mapped == 16) return Material.TERRACOTTA;
-        if (mapped == 4 || mapped == 5 || mapped == 12 || mapped == 15) return Material.RED_TERRACOTTA;
-        if (mapped == 6) return Material.YELLOW_TERRACOTTA;
-        if (mapped == 8) return Material.BROWN_TERRACOTTA;
+        if (mapped == 2 || mapped == 9 || mapped == 13 || mapped == 16) {
+            return Material.TERRACOTTA;
+        }
+        if (mapped == 4 || mapped == 5 || mapped == 12 || mapped == 15) {
+            return Material.RED_TERRACOTTA;
+        }
+        if (mapped == 6) {
+            return Material.YELLOW_TERRACOTTA;
+        }
+        if (mapped == 8) {
+            return Material.BROWN_TERRACOTTA;
+        }
 
         return Material.ORANGE_TERRACOTTA;
     }
 
-    public static int spawnPillar(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z, Material type, int minHeight, int maxHeight) {
+    public static int spawnPillar(@NotNull Random rand,
+                                  @NotNull PopulatorDataAbstract data,
+                                  int x,
+                                  int y,
+                                  int z,
+                                  Material type,
+                                  int minHeight,
+                                  int maxHeight)
+    {
         // TODO: PlantBuilder
         int height = GenUtils.randInt(rand, minHeight, maxHeight);
-        for (int i = 0; i < height; i++) data.setType(x, y + i, z, type);
+        for (int i = 0; i < height; i++) {
+            data.setType(x, y + i, z, type);
+        }
         return height;
     }
 
-    public static void generateClayDeposit(int x, int y, int z, @NotNull PopulatorDataAbstract data, @NotNull Random random) {
+    public static void generateClayDeposit(int x,
+                                           int y,
+                                           int z,
+                                           @NotNull PopulatorDataAbstract data,
+                                           @NotNull Random random)
+    {
         // CLAY DEPOSIT
-    	replaceCircularPatch(random.nextInt(9999), TConfigOption.BIOME_CLAY_DEPOSIT_SIZE.getFloat(), new SimpleBlock(data,x,y,z), Material.CLAY);
+        replaceCircularPatch(
+                random.nextInt(9999),
+                TConfigOption.BIOME_CLAY_DEPOSIT_SIZE.getFloat(),
+                new SimpleBlock(data, x, y, z),
+                Material.CLAY
+        );
 
     }
 
     public static void vineUp(@NotNull SimpleBlock base, int maxLength) {
-        if (!TConfigOption.arePlantsEnabled()) return;
+        if (!TConfigOption.arePlantsEnabled()) {
+            return;
+        }
 
         for (BlockFace face : directBlockFaces) {
             MultipleFacing dir = (MultipleFacing) Bukkit.createBlockData(Material.VINE);
             dir.setFace(face.getOppositeFace(), true);
             SimpleBlock vine = base.getRelative(face);
-            if (vine.isSolid()) continue;
+            if (vine.isSolid()) {
+                continue;
+            }
 
             vine.setType(Material.VINE);
             vine.setBlockData(dir);
             for (int i = 1; i < GenUtils.randInt(1, maxLength); i++) {
                 SimpleBlock relative = vine.getRelative(0, -i, 0);
-                if (relative.getType() != Material.AIR) break;
+                if (relative.getType() != Material.AIR) {
+                    break;
+                }
                 relative.setType(Material.VINE);
                 relative.setBlockData(dir);
             }
         }
     }
-    
+
     /**
      * Places a noise-fuzzed circle of the defined material
      */
     public static void replaceCircle(int seed, float radius, @NotNull SimpleBlock base, Material... type) {
-    	if (radius <= 0) return;
+        if (radius <= 0) {
+            return;
+        }
         if (radius <= 0.5) {
             // block.setReplaceType(ReplaceType.ALL);
             base.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
-        
+
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(0.09f);
-        
+
         for (float x = -radius; x <= radius; x++) {
             for (float z = -radius; z <= radius; z++) {
                 SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
-                
+
                 // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
-                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
-                        + Math.pow(z, 2) / Math.pow(radius, 2);
+                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2) + Math.pow(z, 2) / Math.pow(radius, 2);
                 if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
                     // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                     rel.lsetType(GenUtils.randChoice(type));
                 }
             }
         }
-        
+
     }
-    
+
     public static void replaceCircularPatch(int seed, float radius, @NotNull SimpleBlock base, Material... type) {
-    	replaceCircularPatch(seed,radius,base,false,type);
+        replaceCircularPatch(seed, radius, base, false, type);
     }
 
     /**
      * Replaces the highest ground with a noise-fuzzed circle of the defined material
      */
-    public static void replaceCircularPatch(int seed, float radius, @NotNull SimpleBlock base, boolean snowy, Material... type) {
-    	if (radius <= 0) return;
+    public static void replaceCircularPatch(int seed,
+                                            float radius,
+                                            @NotNull SimpleBlock base,
+                                            boolean snowy,
+                                            Material... type)
+    {
+        if (radius <= 0) {
+            return;
+        }
         if (radius <= 0.5) {
             // block.setReplaceType(ReplaceType.ALL);
             base.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
-        
+
         FastNoise noise = new FastNoise(seed);
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(0.09f);
-        
+
         for (float x = -radius; x <= radius; x++) {
             for (float z = -radius; z <= radius; z++) {
                 SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
                 rel = rel.getGround();
-                
+
                 // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
-                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
-                        + Math.pow(z, 2) / Math.pow(radius, 2);
+                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2) + Math.pow(z, 2) / Math.pow(radius, 2);
                 if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
                     // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                     rel.setType(GenUtils.randChoice(type));
-                    if(snowy && rel.getUp().isAir())
-                    	rel.getUp().setType(Material.SNOW);
+                    if (snowy && rel.getUp().isAir()) {
+                        rel.getUp().setType(Material.SNOW);
+                    }
                 }
             }
         }
-        
-    }
-    
-    public static void replaceSphere(int seed, float radius, @NotNull SimpleBlock base, boolean hardReplace, Material... type) {
-        if (radius > 0) replaceSphere(seed, radius, radius, radius, base, hardReplace, type);
+
     }
 
-    public static void replaceSphere(int seed, float rX, float rY, float rZ, @NotNull SimpleBlock block, boolean hardReplace, Material... type) {
+    public static void replaceSphere(int seed,
+                                     float radius,
+                                     @NotNull SimpleBlock base,
+                                     boolean hardReplace,
+                                     Material... type)
+    {
+        if (radius > 0) {
+            replaceSphere(seed, radius, radius, radius, base, hardReplace, type);
+        }
+    }
+
+    public static void replaceSphere(int seed,
+                                     float rX,
+                                     float rY,
+                                     float rZ,
+                                     @NotNull SimpleBlock block,
+                                     boolean hardReplace,
+                                     Material... type)
+    {
         replaceSphere(seed, rX, rY, rZ, block, hardReplace, false, type);
     }
 
     public static void replaceWaterSphere(int seed, float radius, @NotNull SimpleBlock base) {
-        if (radius <= 0) return;
+        if (radius <= 0) {
+            return;
+        }
         if (radius <= 0.5) {
             // block.setReplaceType(ReplaceType.ALL);
-        	if (base.getY() <= TerraformGenerator.seaLevel) 
-        		base.setType(Material.WATER);
-	        else
-	        	base.setType(Material.AIR);
+            if (base.getY() <= TerraformGenerator.seaLevel) {
+                base.setType(Material.WATER);
+            }
+            else {
+                base.setType(Material.AIR);
+            }
             return;
         }
 
@@ -830,38 +947,65 @@ public class BlockUtils {
                     SimpleBlock rel = base.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
-                            + Math.pow(y, 2) / Math.pow(radius, 2)
-                            + Math.pow(z, 2) / Math.pow(radius, 2);
+                                            + Math.pow(y, 2) / Math.pow(radius, 2)
+                                            + Math.pow(z, 2) / Math.pow(radius, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (rel.getY() <= TerraformGenerator.seaLevel) 
+                        if (rel.getY() <= TerraformGenerator.seaLevel) {
                             rel.setType(Material.WATER);
-                        else
+                        }
+                        else {
                             rel.setType(Material.AIR);
+                        }
                     }
                 }
             }
         }
     }
 
-    
-    public static void carveCaveAir(int seed, float rX, float rY, float rZ, @NotNull SimpleBlock block, boolean waterToAir, @NotNull EnumSet<Material> toReplace)
+    public static void carveCaveAir(int seed,
+                                    float rX,
+                                    float rY,
+                                    float rZ,
+                                    @NotNull SimpleBlock block,
+                                    boolean waterToAir,
+                                    @NotNull EnumSet<Material> toReplace)
     {
-    	carveCaveAir(seed,rX,rY,rZ,0.09f, block,waterToAir, toReplace);
+        carveCaveAir(seed, rX, rY, rZ, 0.09f, block, waterToAir, toReplace);
     }
-    
-    public static void carveCaveAir(int seed, float rX, float rY, float rZ, float frequency, @NotNull SimpleBlock block, boolean waterToAir, @NotNull EnumSet<Material> toReplace)
+
+    public static void carveCaveAir(int seed,
+                                    float rX,
+                                    float rY,
+                                    float rZ,
+                                    float frequency,
+                                    @NotNull SimpleBlock block,
+                                    boolean waterToAir,
+                                    @NotNull EnumSet<Material> toReplace)
     {
-    	carveCaveAir(seed, rX, rY, rZ, frequency, block, false, waterToAir, toReplace);
+        carveCaveAir(seed, rX, rY, rZ, frequency, block, false, waterToAir, toReplace);
     }
-    
+
     /**
      * Put barrier in toReplace to hard replace all solid blocks.
      */
-    public static void carveCaveAir(int seed, float rX, float rY, float rZ, float frequency, @NotNull SimpleBlock block, boolean blockWaterHoles, boolean waterToAir, @NotNull EnumSet<Material> toReplace) {
-        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+    public static void carveCaveAir(int seed,
+                                    float rX,
+                                    float rY,
+                                    float rZ,
+                                    float frequency,
+                                    @NotNull SimpleBlock block,
+                                    boolean blockWaterHoles,
+                                    boolean waterToAir,
+                                    @NotNull EnumSet<Material> toReplace)
+    {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) {
+            return;
+        }
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
-            if (waterToAir || block.getType() != Material.WATER) block.setType(Material.CAVE_AIR);
+            if (waterToAir || block.getType() != Material.WATER) {
+                block.setType(Material.CAVE_AIR);
+            }
             return;
         }
 
@@ -869,49 +1013,63 @@ public class BlockUtils {
         noise.SetNoiseType(NoiseType.Simplex);
         noise.SetFrequency(frequency);
 
-        for (float x = -rX*1.3f; x <= rX*1.3f; x++) {
+        for (float x = -rX * 1.3f; x <= rX * 1.3f; x++) {
             for (float y = -rY; y <= rY; y++) {
-                for (float z = -rZ*1.3f; z <= rZ*1.3f; z++) {
+                for (float z = -rZ * 1.3f; z <= rZ * 1.3f; z++) {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
-                            + Math.pow(y, 2) / Math.pow(rY, 2)
-                            + Math.pow(z, 2) / Math.pow(rZ, 2);
+                                            + Math.pow(y, 2) / Math.pow(rY, 2)
+                                            + Math.pow(z, 2) / Math.pow(rZ, 2);
                     double noiseVal = 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
                     if (equationResult <= noiseVal) {
                         if (toReplace.contains(Material.BARRIER)) { // Blacklist
-                            if (!toReplace.contains(rel.getType()))
-                                if (!isWet(rel) || waterToAir)
+                            if (!toReplace.contains(rel.getType())) {
+                                if (!isWet(rel) || waterToAir) {
                                     rel.physicsSetType(Material.CAVE_AIR, false);
+                                }
+                            }
 
-                        } else if (toReplace.contains(rel.getType())) { // Whitelist
-                            if (!isWet(rel) || waterToAir)
-                                rel.physicsSetType(Material.CAVE_AIR, false);
-
-                        } else if (!rel.isSolid()) {
-                            if (!isWet(rel) || waterToAir)
-                                rel.physicsSetType(Material.CAVE_AIR, false);
                         }
-                        
+                        else if (toReplace.contains(rel.getType())) { // Whitelist
+                            if (!isWet(rel) || waterToAir) {
+                                rel.physicsSetType(Material.CAVE_AIR, false);
+                            }
+
+                        }
+                        else if (!rel.isSolid()) {
+                            if (!isWet(rel) || waterToAir) {
+                                rel.physicsSetType(Material.CAVE_AIR, false);
+                            }
+                        }
+
                         // Patches found water holes
-                        if(blockWaterHoles)
-	                        for(BlockFace face:BlockUtils.sixBlockFaces)
-	                        {
-	                        	SimpleBlock relrel = rel.getRelative(face);
-	                        	if(isWet(relrel) ||
-	                        			relrel.getType() == Material.LAVA)
-	                        	{
-	                        		Material setMat = relrel.getY() < 0 ? Material.DEEPSLATE: Material.STONE;
-	                        		relrel.physicsSetType(setMat, false);
-	                        	}
-	                        }
+                        if (blockWaterHoles) {
+                            for (BlockFace face : BlockUtils.sixBlockFaces) {
+                                SimpleBlock relrel = rel.getRelative(face);
+                                if (isWet(relrel) || relrel.getType() == Material.LAVA) {
+                                    Material setMat = relrel.getY() < 0 ? Material.DEEPSLATE : Material.STONE;
+                                    relrel.physicsSetType(setMat, false);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    public static void replaceSphere(int seed, float rX, float rY, float rZ, @NotNull SimpleBlock block, boolean hardReplace, boolean snowy, Material... type) {
-        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+    public static void replaceSphere(int seed,
+                                     float rX,
+                                     float rY,
+                                     float rZ,
+                                     @NotNull SimpleBlock block,
+                                     boolean hardReplace,
+                                     boolean snowy,
+                                     Material... type)
+    {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) {
+            return;
+        }
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             // block.setReplaceType(ReplaceType.ALL);
             block.setType(GenUtils.randChoice(new Random(seed), type));
@@ -929,8 +1087,8 @@ public class BlockUtils {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
-                            + Math.pow(y, 2) / Math.pow(rY, 2)
-                            + Math.pow(z, 2) / Math.pow(rZ, 2);
+                                            + Math.pow(y, 2) / Math.pow(rY, 2)
+                                            + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                         if (hardReplace || !rel.isSolid()) {
@@ -945,8 +1103,17 @@ public class BlockUtils {
         }
     }
 
-    public static void replaceUpperSphere(int seed, float rX, float rY, float rZ, @NotNull SimpleBlock block, boolean hardReplace, Material... type) {
-        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+    public static void replaceUpperSphere(int seed,
+                                          float rX,
+                                          float rY,
+                                          float rZ,
+                                          @NotNull SimpleBlock block,
+                                          boolean hardReplace,
+                                          Material... type)
+    {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) {
+            return;
+        }
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             // block.setReplaceType(ReplaceType.ALL);
             block.setType(GenUtils.randChoice(new Random(seed), type));
@@ -964,20 +1131,31 @@ public class BlockUtils {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
-                            + Math.pow(y, 2) / Math.pow(rY, 2)
-                            + Math.pow(z, 2) / Math.pow(rZ, 2);
+                                            + Math.pow(y, 2) / Math.pow(rY, 2)
+                                            + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.isSolid()) rel.setType(GenUtils.randChoice(rand, type));
+                        if (hardReplace || !rel.isSolid()) {
+                            rel.setType(GenUtils.randChoice(rand, type));
+                        }
                         // rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
             }
         }
     }
-    
-    public static void replaceLowerSphere(int seed, float rX, float rY, float rZ, @NotNull SimpleBlock block, boolean hardReplace, Material... type) {
-        if (rX <= 0 && rY <= 0 && rZ <= 0) return;
+
+    public static void replaceLowerSphere(int seed,
+                                          float rX,
+                                          float rY,
+                                          float rZ,
+                                          @NotNull SimpleBlock block,
+                                          boolean hardReplace,
+                                          Material... type)
+    {
+        if (rX <= 0 && rY <= 0 && rZ <= 0) {
+            return;
+        }
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
             // block.setReplaceType(ReplaceType.ALL);
             block.setType(GenUtils.randChoice(new Random(seed), type));
@@ -995,11 +1173,13 @@ public class BlockUtils {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
-                            + Math.pow(y, 2) / Math.pow(rY, 2)
-                            + Math.pow(z, 2) / Math.pow(rZ, 2);
+                                            + Math.pow(y, 2) / Math.pow(rY, 2)
+                                            + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
                         // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if (hardReplace || !rel.isSolid()) rel.setType(GenUtils.randChoice(rand, type));
+                        if (hardReplace || !rel.isSolid()) {
+                            rel.setType(GenUtils.randChoice(rand, type));
+                        }
                         // rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
@@ -1011,7 +1191,7 @@ public class BlockUtils {
         //   N
         // W    E
         //   S
-        return switch(original) {
+        return switch (original) {
             case EAST -> new BlockFace[] {BlockFace.SOUTH, BlockFace.NORTH};
             case NORTH -> new BlockFace[] {BlockFace.EAST, BlockFace.WEST};
             case SOUTH -> new BlockFace[] {BlockFace.WEST, BlockFace.EAST};
@@ -1042,44 +1222,49 @@ public class BlockUtils {
         for (BlockFace face : data.getAllowedFaces()) {
             Material type = target.getRelative(face).getType();
             boolean facing = type.isSolid()
-                    && !Tag.PRESSURE_PLATES.isTagged(type)
-            		&& !Tag.BANNERS.isTagged(type)
-                    && !Tag.SLABS.isTagged(type)
-                    && !Tag.TRAPDOORS.isTagged(type);
-            if(glassPanes.contains(target.getType())
-            		&& (Tag.FENCE_GATES.isTagged(type)
-            				|| Tag.FENCES.isTagged(type)))
-            	facing = false;
+                             && !Tag.PRESSURE_PLATES.isTagged(type)
+                             && !Tag.BANNERS.isTagged(type)
+                             && !Tag.SLABS.isTagged(type)
+                             && !Tag.TRAPDOORS.isTagged(type);
+            if (glassPanes.contains(target.getType()) && (Tag.FENCE_GATES.isTagged(type)
+                                                          || Tag.FENCES.isTagged(type)))
+            {
+                facing = false;
+            }
             data.setFace(face, facing);
-            if(Tag.STAIRS.isTagged(type)) {
-            	Stairs stairs = (Stairs) target.getRelative(face).getBlockData();
+            if (Tag.STAIRS.isTagged(type)) {
+                Stairs stairs = (Stairs) target.getRelative(face).getBlockData();
                 data.setFace(face, stairs.getFacing() == face.getOppositeFace());
             }
         }
         target.setBlockData(data);
     }
-    
-    public static boolean isExposedToNonSolid(@NotNull SimpleBlock target) {
-    	for(BlockFace face:directBlockFaces) {
-    		if(!target.getRelative(face).isSolid())
-    			return true;
-    	}
-    	return false;
-    }
 
-    public static boolean isExposedToMaterial(@NotNull SimpleBlock target, @NotNull Set<Material> mats) {
-        for(BlockFace face:directBlockFaces) {
-            if(mats.contains(target.getRelative(face).getType()))
+    public static boolean isExposedToNonSolid(@NotNull SimpleBlock target) {
+        for (BlockFace face : directBlockFaces) {
+            if (!target.getRelative(face).isSolid()) {
                 return true;
+            }
         }
         return false;
     }
+
+    public static boolean isExposedToMaterial(@NotNull SimpleBlock target, @NotNull Set<Material> mats) {
+        for (BlockFace face : directBlockFaces) {
+            if (mats.contains(target.getRelative(face).getType())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isExposedToMaterial(@NotNull SimpleBlock target, Material mat) {
-    	for(BlockFace face:directBlockFaces) {
-    		if(target.getRelative(face).getType() == mat)
-    			return true;
-    	}
-    	return false;
+        for (BlockFace face : directBlockFaces) {
+            if (target.getRelative(face).getType() == mat) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1094,8 +1279,9 @@ public class BlockUtils {
         }
 
         correctMultifacingData(target);
-        if(!(target.getBlockData() instanceof MultipleFacing data))
-        	return;
+        if (!(target.getBlockData() instanceof MultipleFacing data)) {
+            return;
+        }
 
         for (BlockFace face : data.getAllowedFaces()) {
             if (target.getRelative(face).getBlockData() instanceof MultipleFacing) {
@@ -1113,8 +1299,9 @@ public class BlockUtils {
         BlockFace right = BlockUtils.getRight(data.getFacing());
 
         // Left is a stair and right isn't
-        if (Tag.STAIRS.isTagged(target.getRelative(left).getType())
-                && !Tag.STAIRS.isTagged(target.getRelative(right).getType())) {
+        if (Tag.STAIRS.isTagged(target.getRelative(left).getType()) && !Tag.STAIRS.isTagged(target.getRelative(right)
+                                                                                                  .getType()))
+        {
 
             // Only adjust if the left side has the same facing.
             if (((Stairs) target.getRelative(left).getBlockData()).getFacing() == data.getFacing()) {
@@ -1124,22 +1311,29 @@ public class BlockUtils {
 
                     // Only set if the back stair is facing a valid location
                     if (((Stairs) target.getRelative(data.getFacing()).getBlockData()).getFacing()
-                            == getLeft(data.getFacing()))
+                        == getLeft(data.getFacing()))
+                    {
                         data.setShape(Stairs.Shape.OUTER_RIGHT);
+                    }
 
                     // Front is a stair
-                } else if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
+                }
+                else if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
 
                     // Only set if the front stair is facing a valid location
                     if (((Stairs) target.getRelative(data.getFacing().getOppositeFace()).getBlockData()).getFacing()
-                            == getRight(data.getFacing()))
+                        == getRight(data.getFacing()))
+                    {
                         data.setShape(Stairs.Shape.INNER_RIGHT);
+                    }
                 }
             }
 
             // Right is a stair and left isn't.
-        } else if (!Tag.STAIRS.isTagged(target.getRelative(left).getType())
-                && Tag.STAIRS.isTagged(target.getRelative(right).getType())) {
+        }
+        else if (!Tag.STAIRS.isTagged(target.getRelative(left).getType()) && Tag.STAIRS.isTagged(target.getRelative(
+                right).getType()))
+        {
 
             // Only adjust if the right side has the same facing.
             if (((Stairs) target.getRelative(right).getBlockData()).getFacing() == data.getFacing()) {
@@ -1149,16 +1343,21 @@ public class BlockUtils {
 
                     // Only set if the back stair is facing a valid location
                     if (((Stairs) target.getRelative(data.getFacing()).getBlockData()).getFacing()
-                            == getRight(data.getFacing()))
+                        == getRight(data.getFacing()))
+                    {
                         data.setShape(Stairs.Shape.OUTER_LEFT);
+                    }
 
                     // Front is a stair
-                } else if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
+                }
+                else if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
 
                     // Only set if the front stair is facing a valid location
                     if (((Stairs) target.getRelative(data.getFacing().getOppositeFace()).getBlockData()).getFacing()
-                            == getLeft(data.getFacing()))
+                        == getLeft(data.getFacing()))
+                    {
                         data.setShape(Stairs.Shape.INNER_LEFT);
+                    }
                 }
             }
 
@@ -1187,7 +1386,9 @@ public class BlockUtils {
     }
 
     public static void correctMushroomData(@NotNull SimpleBlock target) {
-        if (!isMushroom(target)) return;
+        if (!isMushroom(target)) {
+            return;
+        }
         MultipleFacing data = (MultipleFacing) target.getBlockData();
         for (BlockFace face : data.getAllowedFaces()) {
             data.setFace(face, !isMushroom(target.getRelative(face)));
@@ -1198,14 +1399,22 @@ public class BlockUtils {
 
     public static void correctSurroundingMushroomData(@NotNull SimpleBlock target) {
         correctMushroomData(target);
-        for (BlockFace face : sixBlockFaces) correctMushroomData(target.getRelative(face));
+        for (BlockFace face : sixBlockFaces) {
+            correctMushroomData(target.getRelative(face));
+        }
     }
 
     public static void placeDoor(@NotNull PopulatorDataAbstract data, @NotNull Material mat, @NotNull Wall w) {
-    	placeDoor(data,mat,w.getX(),w.getY(),w.getZ(),w.getDirection());
+        placeDoor(data, mat, w.getX(), w.getY(), w.getZ(), w.getDirection());
     }
-    
-    public static void placeDoor(@NotNull PopulatorDataAbstract data, @NotNull Material mat, int x, int y, int z, @NotNull BlockFace dir) {
+
+    public static void placeDoor(@NotNull PopulatorDataAbstract data,
+                                 @NotNull Material mat,
+                                 int x,
+                                 int y,
+                                 int z,
+                                 @NotNull BlockFace dir)
+    {
         data.setType(x, y, z, mat);
         data.setType(x, y + 1, z, mat);
         Door door = (Door) Bukkit.createBlockData(mat);
@@ -1220,9 +1429,8 @@ public class BlockUtils {
     }
 
     public static void placeBed(@NotNull SimpleBlock block, @NotNull Material mat, @NotNull BlockFace dir) {
-        if(BlockUtils.isAir(block.getType()) && BlockUtils.isAir(block.getRelative(dir).getType())) 
-        {
-        	Bed bed = (Bed) Bukkit.createBlockData(mat);
+        if (BlockUtils.isAir(block.getType()) && BlockUtils.isAir(block.getRelative(dir).getType())) {
+            Bed bed = (Bed) Bukkit.createBlockData(mat);
             bed.setFacing(dir.getOppositeFace());
             bed.setPart(Bed.Part.HEAD);
             block.setBlockData(bed);
@@ -1233,15 +1441,15 @@ public class BlockUtils {
             block.getRelative(dir).setBlockData(bed);
         }
     }
-    
+
     public static BlockFace @NotNull [] getDirectFacesFromDiagonal(@NotNull BlockFace face) {
-        return switch(face) {
+        return switch (face) {
             case NORTH_EAST -> new BlockFace[] {BlockFace.NORTH, BlockFace.EAST};
             case NORTH_WEST -> new BlockFace[] {BlockFace.NORTH, BlockFace.WEST};
             case SOUTH_EAST -> new BlockFace[] {BlockFace.SOUTH, BlockFace.EAST};
             case SOUTH_WEST -> new BlockFace[] {BlockFace.SOUTH, BlockFace.EAST};
-            default ->
-                    throw new UnsupportedOperationException("getDirectFacesFromDiagonal can only be used for XZ-Plane diagonals");
+            default -> throw new UnsupportedOperationException(
+                    "getDirectFacesFromDiagonal can only be used for XZ-Plane diagonals");
         };
     }
 
@@ -1251,8 +1459,12 @@ public class BlockUtils {
         BlockFace upperFace = null;
         for (BlockFace face : BlockUtils.directBlockFaces) {
             SimpleBlock relative = block.getRelative(face);
-            if (Tag.RAILS.isTagged(relative.getType())) faces.add(face);
-            if (Tag.RAILS.isTagged(relative.getUp().getType())) upperFace = face;
+            if (Tag.RAILS.isTagged(relative.getType())) {
+                faces.add(face);
+            }
+            if (Tag.RAILS.isTagged(relative.getUp().getType())) {
+                upperFace = face;
+            }
         }
 
         if (upperFace != null) {
@@ -1272,16 +1484,21 @@ public class BlockUtils {
                 default:
                     break;
             }
-        } else if (!faces.isEmpty()) {
+        }
+        else if (!faces.isEmpty()) {
             if (faces.contains(BlockFace.NORTH) && faces.contains(BlockFace.EAST)) {
                 rail.setShape(Shape.NORTH_EAST);
-            } else if (faces.contains(BlockFace.NORTH) && faces.contains(BlockFace.WEST)) {
+            }
+            else if (faces.contains(BlockFace.NORTH) && faces.contains(BlockFace.WEST)) {
                 rail.setShape(Shape.NORTH_WEST);
-            } else if (faces.contains(BlockFace.SOUTH) && faces.contains(BlockFace.EAST)) {
+            }
+            else if (faces.contains(BlockFace.SOUTH) && faces.contains(BlockFace.EAST)) {
                 rail.setShape(Shape.SOUTH_EAST);
-            } else if (faces.contains(BlockFace.NORTH) || faces.contains(BlockFace.SOUTH)) {
+            }
+            else if (faces.contains(BlockFace.NORTH) || faces.contains(BlockFace.SOUTH)) {
                 rail.setShape(Shape.NORTH_SOUTH);
-            } else if (faces.contains(BlockFace.EAST) || faces.contains(BlockFace.WEST)) {
+            }
+            else if (faces.contains(BlockFace.EAST) || faces.contains(BlockFace.WEST)) {
                 rail.setShape(Shape.EAST_WEST);
             }
         }
@@ -1290,27 +1507,31 @@ public class BlockUtils {
     }
 
     public static void correctSurroundingRails(@NotNull SimpleBlock target) {
-        if (!(target.getBlockData() instanceof Rail)) return;
+        if (!(target.getBlockData() instanceof Rail)) {
+            return;
+        }
 
         placeRail(target, target.getType());
         for (BlockFace face : BlockUtils.directBlockFaces) {
             SimpleBlock relative = target.getRelative(face);
-            if (relative.getBlockData() instanceof Rail)
+            if (relative.getBlockData() instanceof Rail) {
                 placeRail(relative, relative.getType());
-            if (target.getRelative(face).getDown().getBlockData() instanceof Rail)
+            }
+            if (target.getRelative(face).getDown().getBlockData() instanceof Rail) {
                 placeRail(relative.getDown(), target.getDown().getRelative(face).getType());
+            }
         }
     }
 
     public static boolean emitsLight(@NotNull Material mat) {
-        return switch(mat) {
+        return switch (mat) {
             case TORCH, SEA_PICKLE, SEA_LANTERN, GLOWSTONE, LANTERN, LAVA, CAMPFIRE, REDSTONE_LAMP, FIRE -> true;
             default -> false;
         };
     }
 
     public static @NotNull BlockData infestStone(@NotNull BlockData mat) {
-        return switch(mat.getMaterial()) {
+        return switch (mat.getMaterial()) {
             case STONE_BRICKS -> Bukkit.createBlockData(Material.INFESTED_STONE_BRICKS);
             case MOSSY_STONE_BRICKS -> Bukkit.createBlockData(Material.INFESTED_MOSSY_STONE_BRICKS);
             case CRACKED_STONE_BRICKS -> Bukkit.createBlockData(Material.INFESTED_CRACKED_STONE_BRICKS);
@@ -1321,23 +1542,20 @@ public class BlockUtils {
         };
     }
 
-    public static void stairwayUntilSolid(@NotNull SimpleBlock start, @NotNull BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
+    public static void stairwayUntilSolid(@NotNull SimpleBlock start,
+                                          @NotNull BlockFace extensionDir,
+                                          Material[] downTypes,
+                                          Material... stairTypes)
+    {
         while (!start.isSolid()) {
-            new StairBuilder(stairTypes)
-                    .setFacing(extensionDir.getOppositeFace())
-                    .apply(start);
-            BlockUtils.setDownUntilSolid(
-                    start.getX(),
-                    start.getY() - 1,
-                    start.getZ(),
-                    start.getPopData(),
-                    downTypes);
+            new StairBuilder(stairTypes).setFacing(extensionDir.getOppositeFace()).apply(start);
+            BlockUtils.setDownUntilSolid(start.getX(), start.getY() - 1, start.getZ(), start.getPopData(), downTypes);
             start = start.getRelative(extensionDir).getDown();
         }
     }
-    
+
     public static boolean isAir(Material mat) {
-    	return airs.contains(mat);
+        return airs.contains(mat);
     }
 
     public static @NotNull BlockData getRandomBarrel() {
@@ -1345,40 +1563,37 @@ public class BlockUtils {
         barrel.setFacing(BlockUtils.sixBlockFaces[GenUtils.randInt(0, BlockUtils.sixBlockFaces.length - 1)]);
         return barrel;
     }
-    
-    public static void angledStairwayUntilSolid(@NotNull SimpleBlock start, BlockFace extensionDir, Material[] downTypes, Material... stairTypes) {
+
+    public static void angledStairwayUntilSolid(@NotNull SimpleBlock start,
+                                                BlockFace extensionDir,
+                                                Material[] downTypes,
+                                                Material... stairTypes)
+    {
         int threshold = 5;
-    	while (!start.isSolid()) {
-    		
-    		if(threshold == 0)
-    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
-            
-    		new StairBuilder(stairTypes)
-                    .setFacing(extensionDir.getOppositeFace())
-                    .apply(start);
-            BlockUtils.setDownUntilSolid(
-                    start.getX(),
-                    start.getY() - 1,
-                    start.getZ(),
-                    start.getPopData(),
-                    downTypes);
+        while (!start.isSolid()) {
+
+            if (threshold == 0) {
+                extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
+            }
+
+            new StairBuilder(stairTypes).setFacing(extensionDir.getOppositeFace()).apply(start);
+            BlockUtils.setDownUntilSolid(start.getX(), start.getY() - 1, start.getZ(), start.getPopData(), downTypes);
             threshold--;
             start = start.getRelative(extensionDir).getDown();
         }
     }
-    
+
     /**
      * Checks if the target is in a wet material, or if the material it is
      * in is waterlogged.
      */
     public static boolean isWet(@NotNull SimpleBlock target) {
-    	return BlockUtils.wetMaterials.contains(target.getType()) || 
-        		(target.getBlockData() instanceof Waterlogged
-            			&& ((Waterlogged) target.getBlockData()).isWaterlogged());
+        return BlockUtils.wetMaterials.contains(target.getType()) || (target.getBlockData() instanceof Waterlogged
+                                                                      && ((Waterlogged) target.getBlockData()).isWaterlogged());
     }
-    
+
     public static float yawFromBlockFace(@NotNull BlockFace face) {
-        return switch(face) {
+        return switch (face) {
             case EAST -> -90.0f;
             case NORTH -> 180.0f;
             case SOUTH -> 0.0f;
@@ -1388,22 +1603,32 @@ public class BlockUtils {
     }
 
     public static void randRotateBlockData(@NotNull Random rand, BlockData data) {
-    	if(data instanceof Directional) {
-    		Set<BlockFace> faces = ((Directional) data).getFaces();
-    		((Directional) data).setFacing(faces.stream().skip((int) (faces.size() * rand.nextDouble())).findAny().get());
-    	}else if(data instanceof Rotatable) {
-    		((Rotatable) data).setRotation(BlockUtils.getXZPlaneBlockFace(rand));
-    	}
+        if (data instanceof Directional) {
+            Set<BlockFace> faces = ((Directional) data).getFaces();
+            ((Directional) data).setFacing(faces.stream()
+                                                .skip((int) (faces.size() * rand.nextDouble()))
+                                                .findAny()
+                                                .get());
+        }
+        else if (data instanceof Rotatable) {
+            ((Rotatable) data).setRotation(BlockUtils.getXZPlaneBlockFace(rand));
+        }
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isOre(Material mat) {
-    	for(Material ore:ores)
-    		if(ore == mat) return true;
-    	return false;
+        for (Material ore : ores) {
+            if (ore == mat) {
+                return true;
+            }
+        }
+        return false;
     }
+
     public static void placeCandle(@NotNull SimpleBlock block, int numCandles, boolean lit) {
-        if ( !TConfigOption.areDecorationsEnabled()) return;
+        if (!TConfigOption.areDecorationsEnabled()) {
+            return;
+        }
 
         Candle candle = (Candle) Bukkit.createBlockData(Material.CANDLE);
         candle.setLit(lit);
@@ -1413,26 +1638,34 @@ public class BlockUtils {
     }
 
     public static void downLPointedDripstone(int height, @NotNull SimpleBlock base) {
-        if ( !TConfigOption.areDecorationsEnabled()) return;
+        if (!TConfigOption.areDecorationsEnabled()) {
+            return;
+        }
 
         int realHeight = 0;
-        while(!base.getRelative(0,-realHeight,0).isSolid() && height > 0) {
+        while (!base.getRelative(0, -realHeight, 0).isSolid() && height > 0) {
             realHeight++;
             height--;
         }
-        if(base.getRelative(0,-realHeight,0).isSolid())
+        if (base.getRelative(0, -realHeight, 0).isSolid()) {
             realHeight--;
+        }
 
-        if(realHeight <= 0) return;
+        if (realHeight <= 0) {
+            return;
+        }
 
-        for(int i = realHeight; i > 0; i--) {
+        for (int i = realHeight; i > 0; i--) {
             PointedDripstone.Thickness thickness = PointedDripstone.Thickness.MIDDLE;
-            if(i == 1)
+            if (i == 1) {
                 thickness = PointedDripstone.Thickness.TIP;
-            if(i == 2)
+            }
+            if (i == 2) {
                 thickness = PointedDripstone.Thickness.FRUSTUM;
-            if(i == realHeight && realHeight > 2)
+            }
+            if (i == realHeight && realHeight > 2) {
                 thickness = PointedDripstone.Thickness.BASE;
+            }
 
             PointedDripstone dripstone = (PointedDripstone) Bukkit.createBlockData(Material.POINTED_DRIPSTONE);
             dripstone.setVerticalDirection(BlockFace.DOWN);
@@ -1443,52 +1676,70 @@ public class BlockUtils {
 
     public static Material stoneOrSlate(int y)
     {
-        return y > 0 ? Material.STONE :
-                y < -3 ? Material.DEEPSLATE :
-                GenUtils.randChoice(Material.STONE, Material.DEEPSLATE);
+        return y > 0
+               ? Material.STONE
+               : y < -3 ? Material.DEEPSLATE : GenUtils.randChoice(Material.STONE, Material.DEEPSLATE);
     }
+
     public static Material stoneOrSlateWall(int y)
     {
-        return y > 0 ? Material.COBBLESTONE_WALL :
-                y < -3 ? Material.COBBLED_DEEPSLATE_WALL :
-                        GenUtils.randChoice(Material.COBBLESTONE_WALL, Material.COBBLED_DEEPSLATE_WALL);
+        return y > 0
+               ? Material.COBBLESTONE_WALL
+               : y < -3
+                 ? Material.COBBLED_DEEPSLATE_WALL
+                 : GenUtils.randChoice(Material.COBBLESTONE_WALL, Material.COBBLED_DEEPSLATE_WALL);
     }
 
     public static void upLPointedDripstone(int height, @NotNull SimpleBlock base) {
-        if ( !TConfigOption.areDecorationsEnabled()) return;
+        if (!TConfigOption.areDecorationsEnabled()) {
+            return;
+        }
 
         int realHeight = 0;
-        while(!base.getRelative(0,realHeight,0).isSolid() && height > 0) {
+        while (!base.getRelative(0, realHeight, 0).isSolid() && height > 0) {
             realHeight++;
             height--;
         }
-        if(base.getRelative(0,realHeight,0).isSolid())
+        if (base.getRelative(0, realHeight, 0).isSolid()) {
             realHeight--;
+        }
 
-        if(realHeight <= 0) return;
+        if (realHeight <= 0) {
+            return;
+        }
 
-        for(int i = 0; i < realHeight; i++) {
+        for (int i = 0; i < realHeight; i++) {
             PointedDripstone.Thickness thickness = PointedDripstone.Thickness.MIDDLE;
 
-            if(realHeight >= 4) {
-                if(i == realHeight-1)
+            if (realHeight >= 4) {
+                if (i == realHeight - 1) {
                     thickness = PointedDripstone.Thickness.TIP;
-                if(i == realHeight-2)
+                }
+                if (i == realHeight - 2) {
                     thickness = PointedDripstone.Thickness.FRUSTUM;
-                if(i == 0)
+                }
+                if (i == 0) {
                     thickness = PointedDripstone.Thickness.BASE;
-            }else if(realHeight >= 3) {
-                if(i == realHeight-1)
+                }
+            }
+            else if (realHeight >= 3) {
+                if (i == realHeight - 1) {
                     thickness = PointedDripstone.Thickness.TIP;
-                if(i == realHeight-2)
+                }
+                if (i == realHeight - 2) {
                     thickness = PointedDripstone.Thickness.FRUSTUM;
-                if(i == 0)
+                }
+                if (i == 0) {
                     thickness = PointedDripstone.Thickness.BASE;
-            }else if(realHeight >= 2) {
+                }
+            }
+            else if (realHeight >= 2) {
                 thickness = PointedDripstone.Thickness.TIP;
-                if(i == 0)
+                if (i == 0) {
                     thickness = PointedDripstone.Thickness.FRUSTUM;
-            }else {
+                }
+            }
+            else {
                 thickness = PointedDripstone.Thickness.TIP;
             }
 
@@ -1500,36 +1751,43 @@ public class BlockUtils {
     }
 
     public static void downLCaveVines(int height, @NotNull SimpleBlock base) {
-        if ( !TConfigOption.arePlantsEnabled()) return;
+        if (!TConfigOption.arePlantsEnabled()) {
+            return;
+        }
 
         int realHeight = 0;
-        while(!base.getRelative(0,-realHeight,0).isSolid() && height > 0) {
+        while (!base.getRelative(0, -realHeight, 0).isSolid() && height > 0) {
             realHeight++;
             height--;
         }
-        if(base.getRelative(0,-realHeight,0).isSolid())
+        if (base.getRelative(0, -realHeight, 0).isSolid()) {
             realHeight--;
+        }
 
-        if(realHeight <= 0) return;
+        if (realHeight <= 0) {
+            return;
+        }
 
-        for(int i = realHeight; i > 0; i--) {
-            CaveVinesPlant vines = (CaveVinesPlant) Bukkit.createBlockData(i == 1 ? Material.CAVE_VINES : Material.CAVE_VINES_PLANT);
+        for (int i = realHeight; i > 0; i--) {
+            CaveVinesPlant vines = (CaveVinesPlant) Bukkit.createBlockData(i == 1
+                                                                           ? Material.CAVE_VINES
+                                                                           : Material.CAVE_VINES_PLANT);
             vines.setBerries(new Random().nextInt(3) == 0);
             base.getRelative(0, -(realHeight - i), 0).lsetBlockData(vines);
         }
     }
 
-    private static final HashMap<String, Material> deepslateMap = new HashMap<>();
     public static @NotNull Material deepSlateVersion(@NotNull Material target) {
-        Material mat = deepslateMap.get("DEEPSLATE_"+ target);
+        Material mat = deepslateMap.get("DEEPSLATE_" + target);
 
-        if(mat == null) {
-            mat =  Material.getMaterial("DEEPSLATE_"+ target);
+        if (mat == null) {
+            mat = Material.getMaterial("DEEPSLATE_" + target);
         }
-        if(mat == null)
+        if (mat == null) {
             return target;
+        }
         else {
-            deepslateMap.put("DEEPSLATE_"+ target, mat);
+            deepslateMap.put("DEEPSLATE_" + target, mat);
             return mat;
         }
     }

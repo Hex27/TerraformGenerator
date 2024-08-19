@@ -16,9 +16,13 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class MapRenderWorldProviderBiome extends WorldChunkManager {
+    @SuppressWarnings("unused")
+    private static final boolean debug = false;
     private final TerraformWorld tw;
-
     private final Set<Holder<BiomeBase>> biomeList;
+    private final Holder<BiomeBase> river;
+    private final Holder<BiomeBase> plains;
+
     public MapRenderWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
         // super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = CustomBiomeHandler.biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
@@ -35,29 +39,24 @@ public class MapRenderWorldProviderBiome extends WorldChunkManager {
     }
 
     @Override // c is getPossibleBiomes
-    public Set<Holder<BiomeBase>>  c()
+    public Set<Holder<BiomeBase>> c()
     {
         return this.biomeList;
     }
 
     @Override
     protected MapCodec<? extends WorldChunkManager> a() {
-		throw new UnsupportedOperationException("Cannot serialize MapRenderWorldProviderBiome");
-	}
+        throw new UnsupportedOperationException("Cannot serialize MapRenderWorldProviderBiome");
+    }
 
-	private final Holder<BiomeBase> river;
-    private final Holder<BiomeBase> plains;
-	@SuppressWarnings("unused")
-	private static final boolean debug = false;
-	@Override
-	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
-		// Used to be attempted for cave gen. That didn't work, so now, this is
+    @Override
+    public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
+        // Used to be attempted for cave gen. That didn't work, so now, this is
         // for optimising cartographers and buried treasure.
         // This will return river or plains depending on whether
         // the area is submerged.
 
-        return HeightMap.getBlockHeight(tw, x,z) <= TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt() ?
-                river : plains;
-	}
+        return HeightMap.getBlockHeight(tw, x, z) <= TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt() ? river : plains;
+    }
 
 }

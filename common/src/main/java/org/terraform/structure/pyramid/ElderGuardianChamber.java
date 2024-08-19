@@ -47,12 +47,15 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
         center.setType(Material.BLUE_TERRACOTTA);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             center.getRelative(face).setType(Material.ORANGE_TERRACOTTA);
-            new Wall(center.getRelative(face).getRelative(face).getUp())
-                    .Pillar(room.getHeight(), rand, Material.CUT_SANDSTONE);
+            new Wall(center.getRelative(face).getRelative(face).getUp()).Pillar(
+                    room.getHeight(),
+                    rand,
+                    Material.CUT_SANDSTONE
+            );
         }
-        for (BlockFace face : BlockUtils.directBlockFaces)
-            center.getRelative(face).getRelative(face)
-                    .setType(Material.ORANGE_TERRACOTTA);
+        for (BlockFace face : BlockUtils.directBlockFaces) {
+            center.getRelative(face).getRelative(face).setType(Material.ORANGE_TERRACOTTA);
+        }
 
         // On the ceiling as well
         SimpleBlock ceiling = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ());
@@ -60,9 +63,9 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             ceiling.getRelative(face).setType(Material.ORANGE_TERRACOTTA);
         }
-        for (BlockFace face : BlockUtils.directBlockFaces)
-            ceiling.getRelative(face).getRelative(face)
-                    .setType(Material.ORANGE_TERRACOTTA);
+        for (BlockFace face : BlockUtils.directBlockFaces) {
+            ceiling.getRelative(face).getRelative(face).setType(Material.ORANGE_TERRACOTTA);
+        }
 
         // Elder Guardian cage
         if (TConfigOption.STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN.getBoolean()) {
@@ -124,7 +127,8 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
 
         }
 
-        cageCenter.getPopData().addEntity(cageCenter.getX(), cageCenter.getY(), cageCenter.getZ(), EntityType.ELDER_GUARDIAN);
+        cageCenter.getPopData()
+                  .addEntity(cageCenter.getX(), cageCenter.getY(), cageCenter.getZ(), EntityType.ELDER_GUARDIAN);
     }
 
     private void placePillar(@NotNull Wall base, int height) {
@@ -134,8 +138,16 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
         }
 
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            base.getRelative(face).Pillar(height, true, rand, Material.CUT_SANDSTONE, Material.CHISELED_SANDSTONE, Material.AIR, Material.AIR, Material.AIR,
-                    Material.CHISELED_SANDSTONE);
+            base.getRelative(face).Pillar(height,
+                    true,
+                    rand,
+                    Material.CUT_SANDSTONE,
+                    Material.CHISELED_SANDSTONE,
+                    Material.AIR,
+                    Material.AIR,
+                    Material.AIR,
+                    Material.CHISELED_SANDSTONE
+            );
         }
         base.Pillar(height, rand, Material.CHISELED_RED_SANDSTONE);
     }
@@ -146,7 +158,8 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
             schema.parser = new SchematicParser();
             schema.setFace(dir);
             schema.apply();
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }

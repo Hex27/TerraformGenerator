@@ -1,2 +1,4 @@
-package org.terraform.utils;public class Treetest {
+package org.terraform.utils;
+
+public class Treetest {
 }

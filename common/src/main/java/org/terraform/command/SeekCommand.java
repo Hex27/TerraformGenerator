@@ -15,11 +15,7 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.LangOpt;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.MultiMegaChunkStructurePopulator;
-import org.terraform.structure.SingleMegaChunkStructurePopulator;
-import org.terraform.structure.StructureLocator;
-import org.terraform.structure.StructurePopulator;
-import org.terraform.structure.StructureRegistry;
+import org.terraform.structure.*;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 
 import java.util.ArrayList;
@@ -51,18 +47,20 @@ public class SeekCommand extends TerraCommand implements Listener {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args) throws InvalidArgumentException {
         ArrayList<Object> params = this.parseArguments(sender, args);
         if (params.isEmpty()) {
             sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_HEADER.parse());
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
-                sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_ENTRY.parse("%entry%", spop.getClass().getSimpleName().replace("Populator", "")));
+                sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_ENTRY.parse(
+                        "%entry%",
+                        spop.getClass().getSimpleName().replace("Populator", "")
+                ));
             }
             sender.sendMessage(LangOpt.COMMAND_LOCATE_LIST_ENTRY.parse("%entry%", "Stronghold"));
             return;
         }
-        
+
         StructurePopulator spop = (StructurePopulator) params.get(0); // TODO: Get populator by name
 
         if (!spop.isEnabled() && !(spop instanceof StrongholdPopulator)) {
@@ -71,24 +69,28 @@ public class SeekCommand extends TerraCommand implements Listener {
         }
 
         World w = Objects.requireNonNull(Bukkit.getWorld("world"));
-        
+
         // Stronghold Special Case
         if (spop instanceof StrongholdPopulator) {
-            int[] coords = ((StrongholdPopulator)spop).getNearestFeature(TerraformWorld.get(Objects.requireNonNull(Bukkit.getWorld("world"))), 0,0);
+            int[] coords = ((StrongholdPopulator) spop).getNearestFeature(TerraformWorld.get(Objects.requireNonNull(
+                    Bukkit.getWorld("world"))), 0, 0);
             syncSendMessage(LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", coords[0] + "", "%z%", coords[1] + ""));
             return;
         }
 
         if (spop instanceof SingleMegaChunkStructurePopulator) {
             generateSingleMegaChunkStructure(w, (SingleMegaChunkStructurePopulator) spop);
-        } else {
+        }
+        else {
             generateMultiMegaChunkStructure(w, (MultiMegaChunkStructurePopulator) spop);
         }
     }
 
-    private void generateMultiMegaChunkStructure(@NotNull World w, @NotNull MultiMegaChunkStructurePopulator populator) {
+    private void generateMultiMegaChunkStructure(@NotNull World w,
+                                                 @NotNull MultiMegaChunkStructurePopulator populator)
+    {
 
-        MegaChunk center = new MegaChunk(0,0,0);
+        MegaChunk center = new MegaChunk(0, 0, 0);
         TerraformWorld tw = TerraformWorld.get(w);
         Bukkit.getConsoleSender().sendMessage(LangOpt.COMMAND_LOCATE_SEARCHING.parse());
 
@@ -96,26 +98,36 @@ public class SeekCommand extends TerraCommand implements Listener {
 
         BukkitRunnable runnable = new BukkitRunnable() {
             public void run() {
-            	int[] loc = StructureLocator.locateMultiMegaChunkStructure(tw, center, populator, -1);
-            	long timeTaken = System.currentTimeMillis() - startTime;
-            	
+                int[] loc = StructureLocator.locateMultiMegaChunkStructure(tw, center, populator, -1);
+                long timeTaken = System.currentTimeMillis() - startTime;
+
                 syncSendMessage(LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
                 if (loc != null) {
-                    syncSendMessage(ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", loc[0] + "",
-                            "%z%", loc[1] + ""));
+                    syncSendMessage(ChatColor.GREEN
+                                    + "["
+                                    + populator.getClass().getSimpleName()
+                                    + "] "
+                                    + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%",
+                            loc[0] + "",
+                            "%z%",
+                            loc[1] + ""
+                    ));
                     w.getChunkAt(new Location(w, loc[0], 0, loc[1]));
                 }
-                else
+                else {
                     syncSendMessage(ChatColor.RED + "Failed to find structure. Somehow.");
+                }
             }
         };
         runnable.runTaskAsynchronously(plugin);
     }
 
-    private void generateSingleMegaChunkStructure(@NotNull World w, @NotNull SingleMegaChunkStructurePopulator populator) {
+    private void generateSingleMegaChunkStructure(@NotNull World w,
+                                                  @NotNull SingleMegaChunkStructurePopulator populator)
+    {
 
-        MegaChunk center = new MegaChunk(0,0,0);
+        MegaChunk center = new MegaChunk(0, 0, 0);
         TerraformWorld tw = TerraformWorld.get(w);
         Bukkit.getConsoleSender().sendMessage(LangOpt.COMMAND_LOCATE_SEARCHING.parse());
 
@@ -123,18 +135,26 @@ public class SeekCommand extends TerraCommand implements Listener {
 
         BukkitRunnable runnable = new BukkitRunnable() {
             public void run() {
-            	int[] loc = StructureLocator.locateSingleMegaChunkStructure(tw, center, populator, -1);
-            	long timeTaken = System.currentTimeMillis() - startTime;
-            	
+                int[] loc = StructureLocator.locateSingleMegaChunkStructure(tw, center, populator, -1);
+                long timeTaken = System.currentTimeMillis() - startTime;
+
                 syncSendMessage(LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
 
                 if (loc != null) {
-                    syncSendMessage(ChatColor.GREEN + "[" + populator.getClass().getSimpleName() + "] " + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", loc[0] + "",
-                            "%z%", loc[1] + ""));
+                    syncSendMessage(ChatColor.GREEN
+                                    + "["
+                                    + populator.getClass().getSimpleName()
+                                    + "] "
+                                    + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%",
+                            loc[0] + "",
+                            "%z%",
+                            loc[1] + ""
+                    ));
                     w.getChunkAt(new Location(w, loc[0], 0, loc[1]));
                 }
-                else
+                else {
                     syncSendMessage(ChatColor.RED + "Failed to find structure. Somehow.");
+                }
             }
         };
         runnable.runTaskAsynchronously(plugin);
@@ -152,32 +172,45 @@ public class SeekCommand extends TerraCommand implements Listener {
 
         @Override
         public StructurePopulator parse(CommandSender arg0, @NotNull String arg1) {
-            if(arg1.equalsIgnoreCase("stronghold")||arg1.equalsIgnoreCase("strongholdpopulator"))
+            if (arg1.equalsIgnoreCase("stronghold") || arg1.equalsIgnoreCase("strongholdpopulator")) {
                 return new StrongholdPopulator();
+            }
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
-                if (spop.getClass().getSimpleName().equalsIgnoreCase(arg1) ||
-                        spop.getClass().getSimpleName().equalsIgnoreCase(arg1 + "populator"))
+                if (spop.getClass().getSimpleName().equalsIgnoreCase(arg1) || spop.getClass()
+                                                                                  .getSimpleName()
+                                                                                  .equalsIgnoreCase(arg1 + "populator"))
+                {
                     return spop;
+                }
             }
             return null;
         }
 
         @Override
         public @NotNull String validate(CommandSender arg0, @NotNull String arg1) {
-            if (this.parse(arg0, arg1) != null)
+            if (this.parse(arg0, arg1) != null) {
                 return "";
-            else
+            }
+            else {
                 return "Structure type does not exist";
+            }
         }
 
         @Override
         public @NotNull ArrayList<String> getTabOptions(String @NotNull [] args) {
-            if (args.length != 2) return new ArrayList<>();
+            if (args.length != 2) {
+                return new ArrayList<>();
+            }
             ArrayList<String> values = new ArrayList<>();
 
             for (StructurePopulator spop : StructureRegistry.getAllPopulators()) {
-            	if(spop.getClass().getSimpleName().toUpperCase(Locale.ENGLISH).startsWith(args[1].toUpperCase(Locale.ENGLISH)))
-            		values.add(spop.getClass().getSimpleName());
+                if (spop.getClass()
+                        .getSimpleName()
+                        .toUpperCase(Locale.ENGLISH)
+                        .startsWith(args[1].toUpperCase(Locale.ENGLISH)))
+                {
+                    values.add(spop.getClass().getSimpleName());
+                }
             }
 
             return values;

@@ -26,21 +26,26 @@ public class TrapChestChamberPopulator extends RoomPopulatorAbstract {
         // We don't want any mobs stepping on bombs here. The whole room explodes.
         int[] lowerCorner = room.getLowerCorner(1);
         int[] upperCorner = room.getUpperCorner(1);
-        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
-            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++)
+        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, room.getY() + 1, z, Material.AIR);
+            }
+        }
 
         // Classic Pyramid interior look
         SimpleBlock center = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
         center.setType(Material.BLUE_TERRACOTTA);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             center.getRelative(face).setType(Material.ORANGE_TERRACOTTA);
-            new Wall(center.getRelative(face).getRelative(face).getUp())
-                    .Pillar(room.getHeight(), rand, Material.CUT_SANDSTONE);
+            new Wall(center.getRelative(face).getRelative(face).getUp()).Pillar(
+                    room.getHeight(),
+                    rand,
+                    Material.CUT_SANDSTONE
+            );
         }
-        for (BlockFace face : BlockUtils.directBlockFaces)
-            center.getRelative(face).getRelative(face)
-                    .setType(Material.ORANGE_TERRACOTTA);
+        for (BlockFace face : BlockUtils.directBlockFaces) {
+            center.getRelative(face).getRelative(face).setType(Material.ORANGE_TERRACOTTA);
+        }
 
         center.getUp().setType(Material.TRAPPED_CHEST);
         data.lootTableChest(center.getX(), center.getY() + 1, center.getZ(), TerraLootTable.DESERT_PYRAMID);

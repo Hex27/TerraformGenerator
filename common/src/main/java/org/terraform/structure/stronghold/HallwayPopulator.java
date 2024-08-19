@@ -34,15 +34,17 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
             Wall w = entry.getKey();
             boolean wasAir = false;
             for (int i = 0; i < entry.getValue(); i++) {
-                new StairBuilder(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
-                        .setFacing(w.getDirection().getOppositeFace())
-                        .setHalf(Bisected.Half.TOP)
-                        .apply(w.getUp(4));
+                new StairBuilder(
+                        Material.STONE_BRICK_STAIRS,
+                        Material.MOSSY_STONE_BRICK_STAIRS
+                ).setFacing(w.getDirection().getOppositeFace()).setHalf(Bisected.Half.TOP).apply(w.getUp(4));
                 w.getUp(5).LPillar(room.getHeight(), rand, BlockUtils.stoneBricks);
                 if (!w.getRear().getUp().isSolid()) {
                     wasAir = true;
-                    w.getUp(5).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
-                } else {
+                    w.getUp(5)
+                     .setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
+                }
+                else {
                     // Right or left wall is part of an entrance
                     if (wasAir || !w.getLeft().getRear().getUp().isSolid()) {
                         w.getRear().Pillar(5, rand, Material.STONE, Material.SMOOTH_STONE);
@@ -57,10 +59,11 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
             Wall w = entry.getKey().getRelative(0, room.getHeight() - 1, 0);
             for (int i = 0; i < entry.getValue(); i++) {
-                new StairBuilder(Material.ANDESITE_STAIRS, Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
-                        .setFacing(w.getDirection().getOppositeFace())
-                        .setHalf(Bisected.Half.TOP)
-                        .apply(w);
+                new StairBuilder(
+                        Material.ANDESITE_STAIRS,
+                        Material.STONE_BRICK_STAIRS,
+                        Material.MOSSY_STONE_BRICK_STAIRS
+                ).setFacing(w.getDirection().getOppositeFace()).setHalf(Bisected.Half.TOP).apply(w);
 
                 w = w.getLeft();
             }
@@ -68,8 +71,11 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
 
         // Corner Walls
         for (int[] coords : room.getAllCorners(1)) {
-            new Wall(new SimpleBlock(data, coords[0], room.getY() + 1, coords[1]))
-                    .Pillar(room.getHeight() - 1, rand, BlockUtils.stoneBricks);
+            new Wall(new SimpleBlock(data, coords[0], room.getY() + 1, coords[1])).Pillar(
+                    room.getHeight() - 1,
+                    rand,
+                    BlockUtils.stoneBricks
+            );
         }
 
         for (int i = 0; i < GenUtils.randInt(rand, room.getWidthX(), room.getWidthX() * room.getWidthZ() / 10); i++) {
@@ -89,9 +95,12 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
 
                 for (int j = 0; j < GenUtils.randInt(rand, 0, 3); j++) {
                     BlockFace face = CoralGenerator.getRandomBlockFace();
-                    if (face == BlockFace.UP) face = BlockFace.SELF;
-                    if (!webBase.getRelative(face).isSolid())
+                    if (face == BlockFace.UP) {
+                        face = BlockFace.SELF;
+                    }
+                    if (!webBase.getRelative(face).isSolid()) {
                         webBase.getRelative(face).setType(Material.COBWEB);
+                    }
                 }
             }
         }
@@ -106,18 +115,22 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
             while (!block.isSolid()) {
                 block = block.getDown();
                 depth++;
-                if (depth > 50) return;
+                if (depth > 50) {
+                    return;
+                }
             }
 
             if (type instanceof Slab) {
                 ((Slab) type).setType(Slab.Type.BOTTOM);
-            } else if (type instanceof Stairs) {
+            }
+            else if (type instanceof Stairs) {
                 ((Stairs) type).setHalf(Half.BOTTOM);
             }
 
             if (GenUtils.chance(1, 3)) {
                 block.getUp().setBlockData(BlockUtils.infestStone(type));
-            } else {
+            }
+            else {
                 block.getUp().setBlockData(type);
             }
         }
@@ -126,9 +139,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
     @Override
     public boolean canPopulate(@NotNull CubeRoom room) {
         // Don't override prisons: Hallways are bloody dull.
-        return !new PrisonRoomPopulator(new Random(), false, false).canPopulate(room)
-                && room.isBig()
-                && !room.isHuge();
+        return !new PrisonRoomPopulator(new Random(), false, false).canPopulate(room) && room.isBig() && !room.isHuge();
     }
 
 

@@ -27,21 +27,35 @@ public class TerracottaRoom extends RoomPopulatorAbstract {
             for (int i = 0; i < entry.getValue(); i++) {
                 if (i != 0 && i != entry.getValue() - 1) {
                     if (w.getRear().isSolid()) {
-                        if(i != 1 && i != entry.getValue() - 2) { // Terracotta
-                            if (!w.getRear().getLeft().isSolid() ||
-                                    !w.getRear().getRight().isSolid()) {
+                        if (i != 1 && i != entry.getValue() - 2) { // Terracotta
+                            if (!w.getRear().getLeft().isSolid() || !w.getRear().getRight().isSolid()) {
                                 w.Pillar(room.getHeight(), rand, Material.CHISELED_SANDSTONE);
-                            } else {
+                            }
+                            else {
                                 if (i % 3 == 0) {
-                                    w.Pillar(room.getHeight(), true, rand, Material.BLUE_TERRACOTTA, Material.YELLOW_TERRACOTTA);
+                                    w.Pillar(
+                                            room.getHeight(),
+                                            true,
+                                            rand,
+                                            Material.BLUE_TERRACOTTA,
+                                            Material.YELLOW_TERRACOTTA
+                                    );
                                     // w.getRear().Pillar(room.getHeight(), true, rand, Material.BLUE_TERRACOTTA,Material.BARRIER,Material.BLUE_TERRACOTTA,Material.BARRIER);
-                                } else {
-                                    w.Pillar(room.getHeight(), true, rand, Material.YELLOW_TERRACOTTA, Material.BLUE_TERRACOTTA);
+                                }
+                                else {
+                                    w.Pillar(
+                                            room.getHeight(),
+                                            true,
+                                            rand,
+                                            Material.YELLOW_TERRACOTTA,
+                                            Material.BLUE_TERRACOTTA
+                                    );
                                     // w.getRear().Pillar(room.getHeight(), true, rand, Material.BARRIER,Material.BLUE_TERRACOTTA,Material.BARRIER,Material.BLUE_TERRACOTTA);
                                 }
                             }
                         }
-                    } else {
+                    }
+                    else {
                         entrances.add(w.clone());
                         w.getUp(3).Pillar(room.getHeight() - 3, rand, Material.CHISELED_SANDSTONE);
                     }

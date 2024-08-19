@@ -40,8 +40,7 @@ public class MushroomCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args) throws InvalidArgumentException {
 
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
@@ -52,16 +51,24 @@ public class MushroomCommand extends TerraCommand {
 
         if (!args.isEmpty()) {
             try {
-                new MushroomBuilder((FractalTypes.Mushroom) this.parseArguments(sender, args).get(0))
-                        .build(tw, data, x, y, z);
-            } catch (IllegalArgumentException e) {
+                new MushroomBuilder((FractalTypes.Mushroom) this.parseArguments(sender, args).get(0)).build(
+                        tw,
+                        data,
+                        x,
+                        y,
+                        z
+                );
+            }
+            catch (IllegalArgumentException e) {
                 sender.sendMessage(ChatColor.RED + "Invalid mushroom type.");
                 sender.sendMessage(ChatColor.RED + "Valid types:");
                 StringBuilder types = new StringBuilder();
                 boolean b = true;
                 for (FractalTypes.Mushroom type : FractalTypes.Mushroom.values()) {
                     ChatColor col = ChatColor.RED;
-                    if (b) col = ChatColor.DARK_RED;
+                    if (b) {
+                        col = ChatColor.DARK_RED;
+                    }
                     b = !b;
                     types.append(col).append(type).append(' ');
                 }
@@ -72,10 +79,22 @@ public class MushroomCommand extends TerraCommand {
             return;
         }
 
-        if (new Random().nextBoolean())
-            new MushroomBuilder(FractalTypes.Mushroom.GIANT_RED_MUSHROOM).build(TerraformWorld.get(p.getWorld()), data, x, y, z);
-        else
-            new MushroomBuilder(FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM).build(TerraformWorld.get(p.getWorld()), data, x, y, z);
+        if (new Random().nextBoolean()) {
+            new MushroomBuilder(FractalTypes.Mushroom.GIANT_RED_MUSHROOM).build(TerraformWorld.get(p.getWorld()),
+                    data,
+                    x,
+                    y,
+                    z
+            );
+        }
+        else {
+            new MushroomBuilder(FractalTypes.Mushroom.GIANT_BROWN_MUSHROOM).build(TerraformWorld.get(p.getWorld()),
+                    data,
+                    x,
+                    y,
+                    z
+            );
+        }
     }
 
 }

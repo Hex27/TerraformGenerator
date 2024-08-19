@@ -31,14 +31,14 @@ public class TreasureAntechamber extends Antechamber {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
 
-                if (i != 0 && i != entry.getValue() - 1)
-                    if (w.getRear().isSolid() && !w.isSolid()
-                            && GenUtils.chance(rand, 1, 4)) {
+                if (i != 0 && i != entry.getValue() - 1) {
+                    if (w.getRear().isSolid() && !w.isSolid() && GenUtils.chance(rand, 1, 4)) {
                         Chest chest = (Chest) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());
                         w.setBlockData(chest);
                         data.lootTableChest(w.getX(), w.getY(), w.getZ(), TerraLootTable.DESERT_PYRAMID);
                     }
+                }
 
                 w = w.getLeft();
             }

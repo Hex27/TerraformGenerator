@@ -25,6 +25,7 @@ public class CherryGroveRiverHandler extends BiomeHandler {
     public @NotNull Biome getBiome() {
         return Biome.RIVER;
     }
+
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
         return CustomBiomeType.CHERRY_GROVE;
@@ -32,21 +33,32 @@ public class CherryGroveRiverHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{
-        		Material.DIRT,
+        return new Material[] {
+                Material.DIRT,
                 Material.DIRT,
                 GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.DIRT),
                 GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
-                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)
+        };
     }
 
 
     @Override
-    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-        if(surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
+    public void populateSmallItems(@NotNull TerraformWorld world,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
+        if (surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
+        {
             return;
+        }
 
-        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
+        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) {
+            return;
+        }
 
         // SEA GRASS/KELP
         RiverHandler.riverVegetation(world, random, data, rawX, surfaceY, rawZ);
@@ -57,11 +69,11 @@ public class CherryGroveRiverHandler extends BiomeHandler {
         }
     }
 
-	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        // TODO Auto-generated method stub
+
+    }
 
 
 }

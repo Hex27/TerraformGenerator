@@ -42,10 +42,12 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             Wall wall = entry.getKey().getUp(3);
             for (int i = 1; i <= entry.getValue(); i++) {
                 wall.setType(Material.CHISELED_STONE_BRICKS);
-                if (i % 5 == 2 || i % 5 == 4)
+                if (i % 5 == 2 || i % 5 == 4) {
                     wall.getUp().Pillar(15 - 7, rand, Material.CHISELED_STONE_BRICKS);
-                if (i % 5 == 3)
+                }
+                if (i % 5 == 3) {
                     wall.getUp().Pillar(15 - 7, rand, Material.COBBLESTONE_WALL);
+                }
 
                 for (int h = 1; h < 15 - 7; h++) {
                     BlockUtils.correctSurroundingMultifacingData(wall.getRelative(0, h, 0).get());
@@ -160,7 +162,8 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             if (i == 0 || i == 3) {
                 w.getLeft().setType(Material.CHISELED_STONE_BRICKS);
                 w.getRight().setType(Material.CHISELED_STONE_BRICKS);
-            } else {
+            }
+            else {
                 Stairs stairs = (Stairs) Bukkit.createBlockData(Material.POLISHED_ANDESITE_STAIRS);
                 stairs.setFacing(BlockUtils.getAdjacentFaces(w.getDirection())[1]);
                 w.getLeft().setBlockData(stairs);
@@ -178,7 +181,8 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             if (i == 0 || i == 3) {
                 w.getLeft().setType(Material.CHISELED_STONE_BRICKS);
                 w.getRight().setType(Material.CHISELED_STONE_BRICKS);
-            } else {
+            }
+            else {
                 Stairs stairs = (Stairs) Bukkit.createBlockData(Material.POLISHED_ANDESITE_STAIRS);
                 stairs.setFacing(BlockUtils.getAdjacentFaces(w.getDirection())[1]);
                 w.getLeft().setBlockData(stairs);
@@ -210,13 +214,20 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
         for (int nx = -1; nx <= 1; nx++) {
             for (int nz = -1; nz <= 1; nz++) {
                 data.setType(x + nx, y + height, z + nz, Material.CHISELED_STONE_BRICKS);
-                if (nx == 0 && nz == 0)
+                if (nx == 0 && nz == 0) {
                     data.setType(x, y + height, z, Material.LAVA);
+                }
             }
         }
     }
 
-    public void decoratedPillar(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z, int height) {
+    public void decoratedPillar(@NotNull Random rand,
+                                @NotNull PopulatorDataAbstract data,
+                                int x,
+                                int y,
+                                int z,
+                                int height)
+    {
         BlockUtils.spawnPillar(rand, data, x, y, z, Material.CHISELED_STONE_BRICKS, height, height);
         BlockUtils.spawnPillar(rand, data, x + 1, y, z + 1, Material.COBBLESTONE_WALL, height, height);
         BlockUtils.spawnPillar(rand, data, x - 1, y, z + 1, Material.COBBLESTONE_WALL, height, height);
@@ -262,7 +273,7 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
         ceil.getRelative(0, 0, 2).setType(Material.MOSSY_STONE_BRICKS);
         ceil.getRelative(0, 0, 3).setType(Material.MOSSY_COBBLESTONE);
         ceil.getRelative(0, 0, 4).setBlockData(randTopSlab());
-        for (int i : new int[]{-1, 1}) {
+        for (int i : new int[] {-1, 1}) {
             ceil.getRelative(i, 0, -1).setType(Material.MOSSY_STONE_BRICKS);
             ceil.getRelative(i, 0, 0).setType(Material.MOSSY_STONE_BRICKS);
             ceil.getRelative(i, 0, 1).setType(Material.MOSSY_STONE_BRICKS);

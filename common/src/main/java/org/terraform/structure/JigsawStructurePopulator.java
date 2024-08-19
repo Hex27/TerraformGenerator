@@ -13,7 +13,7 @@ import org.terraform.data.TerraformWorld;
  * The large rooms that exceed 3x3 chunks MUST use the old block populator and
  * they WILL go last no matter what
  */
-public abstract class JigsawStructurePopulator extends SingleMegaChunkStructurePopulator{
+public abstract class JigsawStructurePopulator extends SingleMegaChunkStructurePopulator {
 
     /**
      * @return the JigsawState for the structure. This will be used in

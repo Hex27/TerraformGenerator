@@ -25,6 +25,7 @@ public class ScarletForestRiverHandler extends BiomeHandler {
     public @NotNull Biome getBiome() {
         return Biome.RIVER;
     }
+
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
         return CustomBiomeType.SCARLET_FOREST;
@@ -32,31 +33,44 @@ public class ScarletForestRiverHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{
-        		Material.DIRT,
+        return new Material[] {
+                Material.DIRT,
                 Material.DIRT,
                 GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.DIRT),
                 GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
-                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)
+        };
     }
 
 
     @Override
-    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
         boolean growsKelp = random.nextBoolean();
 
-        if(surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
+        if (surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
+        {
             return;
-
-        // Set ground near sea level to concrete
-        if(surfaceY >= TerraformGenerator.seaLevel - 2) {
-            data.setType(rawX, surfaceY, rawZ, Material.WHITE_CONCRETE);
-        }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
-            if(random.nextBoolean())
-                data.setType(rawX, surfaceY, rawZ, Material.WHITE_CONCRETE);
         }
 
-        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
+        // Set ground near sea level to concrete
+        if (surfaceY >= TerraformGenerator.seaLevel - 2) {
+            data.setType(rawX, surfaceY, rawZ, Material.WHITE_CONCRETE);
+        }
+        else if (surfaceY >= TerraformGenerator.seaLevel - 4) {
+            if (random.nextBoolean()) {
+                data.setType(rawX, surfaceY, rawZ, Material.WHITE_CONCRETE);
+            }
+        }
+
+        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) {
+            return;
+        }
 
         // SEA GRASS/KELP
         RiverHandler.riverVegetation(world, random, data, rawX, surfaceY, rawZ);
@@ -67,10 +81,10 @@ public class ScarletForestRiverHandler extends BiomeHandler {
         }
     }
 
-	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+    @Override
+    public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
 
-	}
+    }
 
 
 }

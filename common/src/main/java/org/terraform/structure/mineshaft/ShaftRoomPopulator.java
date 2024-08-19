@@ -23,13 +23,15 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         // Carve upward shaft. Replace stone-like objects and cave decorations.
         for (int i = 8; i < 20; i++) {
-            BlockUtils.carveCaveAir(new Random().nextInt(777123),
+            BlockUtils.carveCaveAir(
+                    new Random().nextInt(777123),
                     (room.getWidthX() - 4) / 2f,
                     5,
                     (room.getWidthZ() - 4) / 2f,
                     new SimpleBlock(data, room.getX(), room.getY() + i, room.getZ()),
                     false,
-                    EnumSet.of(Material.BARRIER));
+                    EnumSet.of(Material.BARRIER)
+            );
         }
 
         int[] lowerCorner = room.getLowerCorner(3);
@@ -41,16 +43,18 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 if (b.getType() == Material.CAVE_AIR
-                        || b.getType() == Material.OAK_PLANKS
-                        || b.getType() == Material.OAK_SLAB
-                        || b.getType() == Material.GRAVEL) {
+                    || b.getType() == Material.OAK_PLANKS
+                    || b.getType() == Material.OAK_SLAB
+                    || b.getType() == Material.GRAVEL)
+                {
                     b.setType(GenUtils.randChoice(
                             Material.STONE_BRICKS,
                             Material.CRACKED_STONE_BRICKS,
                             Material.MOSSY_STONE_BRICKS,
                             Material.MOSSY_COBBLESTONE,
                             Material.COBBLESTONE,
-                            Material.CAVE_AIR));
+                            Material.CAVE_AIR
+                    ));
                 }
             }
         }

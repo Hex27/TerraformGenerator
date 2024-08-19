@@ -24,18 +24,26 @@ public class AnimalFarmPathPopulator extends PathPopulatorAbstract {
     public void populate(@NotNull PathPopulatorData ppd) {
         Wall w = new Wall(ppd.base, ppd.dir);
         for (CubeRoom room : gen.getRooms()) {
-            if (room.isPointInside(new int[]{w.get().getX(), w.get().getZ()}))
+            if (room.isPointInside(new int[] {w.get().getX(), w.get().getZ()})) {
                 return;
+            }
         }
         if (GenUtils.chance(rand, 1, 50)) {
-            w.getLeft().getGround().getUp()
-                    .setType(Material.CAMPFIRE);
+            w.getLeft().getGround().getUp().setType(Material.CAMPFIRE);
         }
-        if (GenUtils.chance(rand, 2, 10))
-            w.getGround().setType(GenUtils.randChoice(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
-        if (GenUtils.chance(rand, 2, 10))
-            w.getLeft().getGround().setType(GenUtils.randChoice(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
-        if (GenUtils.chance(rand, 2, 10))
-            w.getRight().getGround().setType(GenUtils.randChoice(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
+        if (GenUtils.chance(rand, 2, 10)) {
+            w.getGround()
+             .setType(GenUtils.randChoice(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
+        }
+        if (GenUtils.chance(rand, 2, 10)) {
+            w.getLeft()
+             .getGround()
+             .setType(GenUtils.randChoice(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
+        }
+        if (GenUtils.chance(rand, 2, 10)) {
+            w.getRight()
+             .getGround()
+             .setType(GenUtils.randChoice(Material.COBBLESTONE, Material.COARSE_DIRT, Material.MOSSY_COBBLESTONE));
+        }
     }
 }

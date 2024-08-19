@@ -20,7 +20,8 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
 
         try {
             return TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
         return null;
@@ -31,7 +32,8 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
         try {
             // Path validation is done inside TerraSchematic.load
             TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
             return "Problem loading schematic. Check console for error";
         }

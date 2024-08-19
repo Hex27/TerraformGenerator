@@ -17,8 +17,9 @@ public abstract class BiomeHandler {
     public abstract boolean isOcean();
 
     public @NotNull CustomBiomeType getCustomBiome() {
-    	return CustomBiomeType.NONE;
+        return CustomBiomeType.NONE;
     }
+
     public abstract Biome getBiome();
 
     // public abstract int getHeight(int x, int z, Random rand);
@@ -42,16 +43,22 @@ public abstract class BiomeHandler {
      * <br>
      * Structure exclusion zones does not stop this method, so structures
      * will have to get rid of the stuff placed by this method
+     *
      * @param surfaceY cached height from TerraformGenerator
      */
-    public abstract void populateSmallItems(TerraformWorld tw, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data);
-    
+    public abstract void populateSmallItems(TerraformWorld tw,
+                                            Random random,
+                                            int rawX,
+                                            int surfaceY,
+                                            int rawZ,
+                                            PopulatorDataAbstract data);
+
     public abstract void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data);
 
     public int getMaxHeightForCaves(@NotNull TerraformWorld tw, int x, int z) {
-    	return tw.maxY;
+        return tw.maxY;
     }
-    
+
     /**
      * @return The used handler for transforming
      * the terrain. If handler uses another
@@ -72,30 +79,39 @@ public abstract class BiomeHandler {
      * <br>
      * Purify into just X,Z queries, as TerraformGenerator is ALREADY iterating
      * through x,z. There's no need for a nested one here.
+     *
      * @param x [0-15] internal chunk coords
      * @param z [0-15] internal chunk coords
      */
-    public void transformTerrain(ChunkCache cache, TerraformWorld tw, Random random, ChunkGenerator.ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
+    public void transformTerrain(ChunkCache cache,
+                                 TerraformWorld tw,
+                                 Random random,
+                                 ChunkGenerator.ChunkData chunk,
+                                 int x,
+                                 int z,
+                                 int chunkX,
+                                 int chunkZ)
+    {
         // Do nothing by default.
     }
 
     // Beach type. This will be used instead if the height is too close to sea level.
     public @NotNull BiomeBank getBeachType() {
-    	return BiomeBank.SANDY_BEACH;
+        return BiomeBank.SANDY_BEACH;
     }
-    
+
     // River type. This will be used instead if the heightmap got carved into a river.
     public @NotNull BiomeBank getRiverType() {
-    	return BiomeBank.RIVER;
+        return BiomeBank.RIVER;
     }
-    
+
     // By default, use the normal height map.
     // Omit mountain and sea calculations - they're not necessary.
     public double calculateHeight(TerraformWorld tw, int x, int z) {
         return HeightMap.CORE.getHeight(tw, x, z);
     }
-    
+
     public boolean forceDefaultToBeach() {
-    	return false;
+        return false;
     }
 }

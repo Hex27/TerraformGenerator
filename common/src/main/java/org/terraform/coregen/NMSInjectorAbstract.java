@@ -8,9 +8,10 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICAAbstract;
 
 public abstract class NMSInjectorAbstract {
-	
-	public void startupTasks() {}
-	
+
+    public void startupTasks() {
+    }
+
     public @Nullable BlockDataFixerAbstract getBlockDataFixer() {
         return null;
     }
@@ -39,19 +40,19 @@ public abstract class NMSInjectorAbstract {
      * for this.
      */
     public abstract void storeBee(Beehive hive);
-    
+
     /**
      * Force an NMS physics update at the location.
      */
     public void updatePhysics(World world, org.bukkit.block.Block block) {
-    	throw new UnsupportedOperationException("Tried to update physics without implementing.");
+        throw new UnsupportedOperationException("Tried to update physics without implementing.");
     }
 
     public int getMinY() {
-    	return 0;
+        return 0;
     }
-    
+
     public int getMaxY() {
-    	return 256;
+        return 256;
     }
 }

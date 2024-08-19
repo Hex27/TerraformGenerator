@@ -15,38 +15,48 @@ import java.util.Random;
 
 public class PlainsVillageTempleLoungePiece extends PlainsVillageTempleStandardPiece {
 
-	public PlainsVillageTempleLoungePiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
-		super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
-	}
-	
-	private static final Material[] stairTypes = {
-			Material.POLISHED_GRANITE_STAIRS,
-			Material.POLISHED_ANDESITE_STAIRS,
-			Material.POLISHED_DIORITE_STAIRS
-	};
-	
-	@Override
+    private static final Material[] stairTypes = {
+            Material.POLISHED_GRANITE_STAIRS, Material.POLISHED_ANDESITE_STAIRS, Material.POLISHED_DIORITE_STAIRS
+    };
+
+    public PlainsVillageTempleLoungePiece(PlainsVillagePopulator plainsVillagePopulator,
+                                          int widthX,
+                                          int height,
+                                          int widthZ,
+                                          JigsawType type,
+                                          BlockFace[] validDirs)
+    {
+        super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
+    }
+
+    @Override
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
 
         Material stairType = stairTypes[random.nextInt(stairTypes.length)];
 
-        SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
+        SimpleBlock core = new SimpleBlock(
+                data,
+                this.getRoom().getX(),
+                this.getRoom().getY() + 1,
+                this.getRoom().getZ()
+        );
 
-        for(BlockFace face : BlockUtils.getRandomBlockfaceAxis(random)) {
+        for (BlockFace face : BlockUtils.getRandomBlockfaceAxis(random)) {
 
-            new StairBuilder(stairType)
-                    .setFacing(face)
-                    .apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[0]))
-                    .apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[1]));
+            new StairBuilder(stairType).setFacing(face)
+                                       .apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[0]))
+                                       .apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[1]));
 
         }
-        if(TConfigOption.areDecorationsEnabled()) {
+        if (TConfigOption.areDecorationsEnabled()) {
             core.setType(plainsVillagePopulator.woodLog, Material.CRAFTING_TABLE, plainsVillagePopulator.woodPlank);
-            if(!TConfigOption.arePlantsEnabled() || random.nextBoolean())
+            if (!TConfigOption.arePlantsEnabled() || random.nextBoolean()) {
                 core.getUp().setType(Material.LANTERN);
-            else
+            }
+            else {
                 BlockUtils.pickPottedPlant().build(core.getUp());
+            }
         }
     }
 

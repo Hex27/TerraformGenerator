@@ -29,18 +29,21 @@ public class TrapChestRoomPopulator extends RoomPopulatorAbstract {
             int z = room.getZ() + GenUtils.randInt(rand, -room.getWidthZ() / 2, room.getWidthZ() / 2);
             data.setType(x, room.getY() + 1, z, Material.STONE_PRESSURE_PLATE);
 
-            if (GenUtils.chance(rand, 4, 5))
+            if (GenUtils.chance(rand, 4, 5)) {
                 data.setType(x, room.getY() - 1, z, Material.TNT);
+            }
         }
 
         int y = room.getY() + 1;
         int x = room.getX();
         int z = room.getZ();
 
-        if (GenUtils.chance(rand, 1, 2))
+        if (GenUtils.chance(rand, 1, 2)) {
             data.setType(x, y, z, Material.TNT);
-        else
+        }
+        else {
             data.setType(x, y, z, Material.SMOOTH_STONE);
+        }
 
         SimpleBlock core = new SimpleBlock(data, x, y, z);
         for (BlockFace face : BlockUtils.directBlockFaces) {

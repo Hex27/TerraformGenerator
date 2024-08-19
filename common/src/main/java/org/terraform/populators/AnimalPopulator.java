@@ -21,12 +21,21 @@ public class AnimalPopulator {
     private BiomeBank[] blacklistedBiomes;
     private boolean isAquatic = false;
 
-    public AnimalPopulator(EntityType animalType, int minNum, int maxNum, int chance, boolean useWhitelist, BiomeBank... biomes) {
+    public AnimalPopulator(EntityType animalType,
+                           int minNum,
+                           int maxNum,
+                           int chance,
+                           boolean useWhitelist,
+                           BiomeBank... biomes)
+    {
         this.animalType = animalType;
         this.chance = chance;
         if (useWhitelist) {
             this.whitelistedBiomes = biomes;
-        } else this.blacklistedBiomes = biomes;
+        }
+        else {
+            this.blacklistedBiomes = biomes;
+        }
 
         this.minNum = minNum;
         this.maxNum = maxNum;
@@ -39,19 +48,25 @@ public class AnimalPopulator {
     public boolean canSpawn(@NotNull Random rand) {
         return TConfigOption.areAnimalsEnabled() && !GenUtils.chance(rand, 100 - chance, 100);
     }
-    
-    private boolean canSpawnInBiome(BiomeBank b) {
-        if (!TConfigOption.areAnimalsEnabled()) return false;
 
-    	if (whitelistedBiomes != null) {
+    private boolean canSpawnInBiome(BiomeBank b) {
+        if (!TConfigOption.areAnimalsEnabled()) {
+            return false;
+        }
+
+        if (whitelistedBiomes != null) {
             for (BiomeBank entr : whitelistedBiomes) {
-                if (entr == b) return true;
+                if (entr == b) {
+                    return true;
+                }
             }
             return false;
         }
         if (blacklistedBiomes != null) {
             for (BiomeBank entr : blacklistedBiomes) {
-                if (entr == b) return false;
+                if (entr == b) {
+                    return false;
+                }
             }
             return true;
         }
@@ -59,28 +74,36 @@ public class AnimalPopulator {
     }
 
     public void populate(@NotNull TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-        if (!TConfigOption.areAnimalsEnabled()) return;
+        if (!TConfigOption.areAnimalsEnabled()) {
+            return;
+        }
 
         for (int i = 0; i < GenUtils.randInt(random, minNum, maxNum); i++) {
             int x = (data.getChunkX() << 4) + GenUtils.randInt(random, 5, 7);
             int z = (data.getChunkZ() << 4) + GenUtils.randInt(random, 5, 7);
-            
+
             // To account for solid ground that spawns above the noisemap (i.e. boulders/black spikes)
-            int height = GenUtils.getHighestGround(data,x,z)+1;// HeightMap.getBlockHeight(world, x, z) + 2;
-            
-            if(canSpawnInBiome(world.getBiomeBank(x, z)))
-            	if(!this.isAquatic && height > TerraformGenerator.seaLevel) {
-            		if(!data.getType(x, height, z).isSolid()) // Don't spawn in blocks
-            			data.addEntity(x, height, z, animalType);
-	            }else if(this.isAquatic && height <= TerraformGenerator.seaLevel) {
-	            	if(data.getType(x, height, z) == Material.WATER) // Don't spawn in anything but water
-	            		data.addEntity(x, height, z, animalType);
-	            }
+            int height = GenUtils.getHighestGround(data, x, z) + 1;// HeightMap.getBlockHeight(world, x, z) + 2;
+
+            if (canSpawnInBiome(world.getBiomeBank(x, z))) {
+                if (!this.isAquatic && height > TerraformGenerator.seaLevel) {
+                    if (!data.getType(x, height, z).isSolid()) // Don't spawn in blocks
+                    {
+                        data.addEntity(x, height, z, animalType);
+                    }
+                }
+                else if (this.isAquatic && height <= TerraformGenerator.seaLevel) {
+                    if (data.getType(x, height, z) == Material.WATER) // Don't spawn in anything but water
+                    {
+                        data.addEntity(x, height, z, animalType);
+                    }
+                }
+            }
         }
     }
 
-	public @NotNull AnimalPopulator setAquatic(boolean aquatic) {
-		this.isAquatic = aquatic;
-		return this;
-	}
+    public @NotNull AnimalPopulator setAquatic(boolean aquatic) {
+        this.isAquatic = aquatic;
+        return this;
+    }
 }

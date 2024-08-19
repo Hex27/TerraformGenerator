@@ -8,10 +8,10 @@ import org.terraform.data.TerraformWorld;
  * including things like small dungeons and shipwrecks.
  */
 public abstract class MultiMegaChunkStructurePopulator extends StructurePopulator {
-	
-	public abstract boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ);
-	
-	public abstract int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc);
+
+    public abstract boolean canSpawn(TerraformWorld tw, int chunkX, int chunkZ);
+
+    public abstract int[][] getCoordsFromMegaChunk(TerraformWorld tw, MegaChunk mc);
 
     public abstract int[] getNearestFeature(TerraformWorld world, int rawX, int rawZ);
 }

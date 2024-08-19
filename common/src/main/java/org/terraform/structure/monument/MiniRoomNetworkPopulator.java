@@ -13,8 +13,7 @@ import java.util.Random;
 
 public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
 
-    public MiniRoomNetworkPopulator(Random rand, MonumentDesign design, boolean forceSpawn,
-                                    boolean unique) {
+    public MiniRoomNetworkPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
     }
 
@@ -35,8 +34,9 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
                 w.RPillar(room.getHeight() - 1, rand, design.tileSet());
 
                 // Lighting
-                if (i % 2 == 0)
+                if (i % 2 == 0) {
                     w.setType(Material.SEA_LANTERN);
+                }
 
                 // Center hole
                 if (i == l / 2) {
@@ -60,7 +60,8 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
             if (width % 2 == 1) {
                 w.getLeft(width).RPillar(5, rand, design.tileSet());
                 w.getRight(width).RPillar(5, rand, design.tileSet());
-            } else {
+            }
+            else {
                 w.getLeft(width).getUp(2).setType(design.mat(rand));
                 w.getRight(width).getUp(2).setType(design.mat(rand));
             }

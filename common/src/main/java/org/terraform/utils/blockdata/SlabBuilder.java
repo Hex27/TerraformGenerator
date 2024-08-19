@@ -47,26 +47,29 @@ public class SlabBuilder {
     }
 
     public @NotNull SlabBuilder lapply(@NotNull SimpleBlock block) {
-    	if(block.isSolid())
-    		return this;
+        if (block.isSolid()) {
+            return this;
+        }
         block.setBlockData(blockData);
         return this;
     }
 
     public @NotNull SlabBuilder lapply(@NotNull Wall block) {
-    	if(block.isSolid())
-    		return this;
+        if (block.isSolid()) {
+            return this;
+        }
         block.setBlockData(blockData);
         return this;
     }
 
     public @NotNull SlabBuilder lapply(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-    	if(data.getType(x,y,z).isSolid())
-    		return this;
+        if (data.getType(x, y, z).isSolid()) {
+            return this;
+        }
         data.setBlockData(x, y, z, blockData);
         return this;
     }
-    
+
     public @NotNull Slab get() {
         return blockData;
     }

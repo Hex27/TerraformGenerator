@@ -25,7 +25,10 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
         this.design = design;
     }
 
-    protected static void setThickPillar(@NotNull Random rand, @NotNull MonumentDesign design, @NotNull SimpleBlock base) {
+    protected static void setThickPillar(@NotNull Random rand,
+                                         @NotNull MonumentDesign design,
+                                         @NotNull SimpleBlock base)
+    {
         Wall w = new Wall(base, BlockFace.NORTH);
         w.downUntilSolid(rand, Material.PRISMARINE);
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -67,7 +70,9 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
         }
 
         // Don't bother with tiny rooms
-        if (room.getHeight() < 7) return;
+        if (room.getHeight() < 7) {
+            return;
+        }
 
         // Corners are dark prismarine
         for (int[] corner : room.getAllCorners()) {
@@ -86,16 +91,17 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
                 if (!w.getUp().isSolid()) {
                     Stairs stair = (Stairs) Bukkit.createBlockData(design.stairs());
                     stair.setFacing(w.getDirection());
-                    if (w.get().getY() < TerraformGenerator.seaLevel)
+                    if (w.get().getY() < TerraformGenerator.seaLevel) {
                         stair.setWaterlogged(true);
+                    }
                     w.setBlockData(stair);
                 }
                 // Wall decor
                 if (j == length / 2) {
                     if (room.getHeight() >= 16 && room.getWidthX() >= 10 && room.getWidthZ() >= 10) {
 
-                        MonumentWallPattern.values()[rand.nextInt(MonumentWallPattern.values().length)]
-                                .apply(w.getDown(4));
+                        MonumentWallPattern.values()[rand.nextInt(MonumentWallPattern.values().length)].apply(w.getDown(
+                                4));
                     }
                 }
                 w = w.getLeft();
@@ -104,8 +110,9 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
 
         // Sea lanterns
         for (int[] corner : room.getAllCorners()) {
-            if (!data.getType(corner[0], room.getY() + room.getHeight() + 1, corner[1]).isSolid())
+            if (!data.getType(corner[0], room.getY() + room.getHeight() + 1, corner[1]).isSolid()) {
                 data.setType(corner[0], room.getY() + room.getHeight(), corner[1], Material.SEA_LANTERN);
+            }
         }
 
 
@@ -117,15 +124,23 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
                 for (int[] pos : room.getAllCorners(1)) {
                     int x = pos[0];
                     int z = pos[1];
-                    design.spire(new Wall(new SimpleBlock(data, x, room.getY() + room.getHeight() + 1, z), BlockFace.NORTH), rand);
+                    design.spire(new Wall(
+                            new SimpleBlock(data, x, room.getY() + room.getHeight() + 1, z),
+                            BlockFace.NORTH
+                    ), rand);
                 }
 
-                MonumentPopulator.arch(new Wall(new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ()), BlockFace.NORTH),
-                        design, rand, (room.getWidthX() - 4) / 2, 6);
-                MonumentPopulator.arch(new Wall(new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ()), BlockFace.EAST),
-                        design, rand, (room.getWidthX() - 4) / 2, 6);
+                MonumentPopulator.arch(new Wall(
+                        new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ()),
+                        BlockFace.NORTH
+                ), design, rand, (room.getWidthX() - 4) / 2, 6);
+                MonumentPopulator.arch(new Wall(
+                        new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ()),
+                        BlockFace.EAST
+                ), design, rand, (room.getWidthX() - 4) / 2, 6);
 
-            } else if (i == 2) {
+            }
+            else if (i == 2) {
                 // Some abraham lincoln architecture thingy
                 for (Entry<Wall, Integer> walls : room.getFourWalls(data, 1).entrySet()) {
                     Wall w = walls.getKey().getRelative(0, room.getHeight(), 0);
@@ -143,7 +158,8 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
                         data.setType(x, room.getY() + room.getHeight() + 5, z, design.mat(rand));
                     }
                 }
-            } else if (i == 3) {
+            }
+            else if (i == 3) {
                 // Large Lamp
                 for (Entry<Wall, Integer> walls : room.getFourWalls(data, 1).entrySet()) {
                     Wall w = walls.getKey().getRelative(0, room.getHeight(), 0);
@@ -153,7 +169,8 @@ public class MonumentRoomPopulator extends RoomPopulatorAbstract {
                             w.setType(design.mat(rand));
                             w.getUp().setType(Material.PRISMARINE_WALL);
                             w.getUp(2).setType(design.slab());
-                        } else {
+                        }
+                        else {
                             w.setType(design.slab());
                         }
                         w = w.getLeft();

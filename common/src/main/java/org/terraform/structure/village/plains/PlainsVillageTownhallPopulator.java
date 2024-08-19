@@ -35,9 +35,9 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
         this.tw = tw;
         this.elevation = GenUtils.randInt(this.rand, 2, 4);
     }
-    
+
     public void setElevation(int elevation) {
-    	this.elevation = elevation;
+        this.elevation = elevation;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
         try {
             BiomeBank biome = tw.getBiomeBank(x, z);
             y += elevation;
-            TerraSchematic farmHouse = TerraSchematic.load("farmhouse",  new SimpleBlock(data,x,y,z));
+            TerraSchematic farmHouse = TerraSchematic.load("farmhouse", new SimpleBlock(data, x, y, z));
             farmHouse.parser = new FarmhouseSchematicParser(biome, this.rand, data);
             BlockFace face = BlockUtils.getDirectBlockFace(this.rand);
             if (room instanceof DirectionalCubeRoom) {
@@ -58,7 +58,14 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
             farmHouse.setFace(face);
             farmHouse.apply();
 
-            TerraformGeneratorPlugin.logger.info("Spawning farmhouse at " + x + "," + y + "," + z + " with rotation of " + farmHouse.getFace());
+            TerraformGeneratorPlugin.logger.info("Spawning farmhouse at "
+                                                 + x
+                                                 + ","
+                                                 + y
+                                                 + ","
+                                                 + z
+                                                 + " with rotation of "
+                                                 + farmHouse.getFace());
 
             data.addEntity(x, y + 1, z, EntityType.VILLAGER); // Two villagers
             data.addEntity(x, y + 1, z, EntityType.VILLAGER);
@@ -67,35 +74,61 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
             // Spawn a base on the house to sit on
             for (int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
                 for (int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
-                    if (data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
-                            data.getType(x + nx, y - 1, z + nz).toString().contains("STONE_BRICKS"))
-                        BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
-                    else if (data.getType(x + nx, y - 1, z + nz).toString().contains("LOG"))
+                    if (data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") || data.getType(x + nx,
+                            y - 1,
+                            z + nz
+                    ).toString().contains("STONE_BRICKS"))
+                    {
+                        BlockUtils.setDownUntilSolid(
+                                x + nx,
+                                y - 2,
+                                z + nz,
+                                data,
+                                Material.COBBLESTONE,
+                                Material.COBBLESTONE,
+                                Material.COBBLESTONE,
+                                Material.MOSSY_COBBLESTONE
+                        );
+                    }
+                    else if (data.getType(x + nx, y - 1, z + nz).toString().contains("LOG")) {
                         BlockUtils.setDownUntilSolid(x + nx, y - 2, z + nz, data, data.getType(x + nx, y - 1, z + nz));
+                    }
                 }
             }
 
             // Spawn a stairway from the house.
             Wall w = new Wall(new SimpleBlock(data, x, y - 1, z), farmHouse.getFace()).getRight();
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 7; i++) {
                 w = w.getFront();
+            }
             // while(w.getType() != Material.DIRT){
-            while (!w.isSolid() ||
-                    w.getType().toString().contains("PLANKS")) {
-                Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(this.rand, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
-                        Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS));
+            while (!w.isSolid() || w.getType().toString().contains("PLANKS")) {
+                Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(this.rand,
+                        Material.COBBLESTONE_STAIRS,
+                        Material.COBBLESTONE_STAIRS,
+                        Material.COBBLESTONE_STAIRS,
+                        Material.MOSSY_COBBLESTONE_STAIRS
+                ));
                 stairs.setFacing(w.getDirection().getOppositeFace());
                 w.getRight().setBlockData(stairs);
                 w.setBlockData(stairs);
                 w.getLeft().setBlockData(stairs);
 
                 w.getLeft(2).getUp().downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
-                w.getLeft(2).getUp(2).setType(GenUtils.randChoice(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
-                        Material.MOSSY_COBBLESTONE_WALL));
+                w.getLeft(2).getUp(2).setType(GenUtils.randChoice(this.rand,
+                        Material.COBBLESTONE_WALL,
+                        Material.COBBLESTONE_WALL,
+                        Material.COBBLESTONE_WALL,
+                        Material.MOSSY_COBBLESTONE_WALL
+                ));
 
                 w.getRight(2).getUp().downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
-                w.getRight(2).getUp(2).setType(GenUtils.randChoice(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
-                        Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+                w.getRight(2).getUp(2).setType(GenUtils.randChoice(this.rand,
+                        Material.COBBLESTONE_WALL,
+                        Material.COBBLESTONE_WALL,
+                        Material.COBBLESTONE_WALL,
+                        Material.MOSSY_COBBLESTONE_WALL
+                ));
 
                 w = w.getFront().getDown();
             }
@@ -111,23 +144,33 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
 
             // Connect front to the nearest path.
             while (entrance.getType() != Material.DIRT_PATH && maxDepth > 0) {
-                if (BlockUtils.isDirtLike(entrance.getType()))
+                if (BlockUtils.isDirtLike(entrance.getType())) {
                     entrance.setType(Material.DIRT_PATH);
+                }
 
                 Wall leftPath = entrance.getLeft().getGround();
                 Wall rightPath = entrance.getRight().getGround();
-                if (BlockUtils.isDirtLike(leftPath.getType()))
+                if (BlockUtils.isDirtLike(leftPath.getType())) {
                     leftPath.setType(Material.DIRT_PATH);
-                if (BlockUtils.isDirtLike(rightPath.getType()))
+                }
+                if (BlockUtils.isDirtLike(rightPath.getType())) {
                     rightPath.setType(Material.DIRT_PATH);
+                }
 
 
                 entrance = entrance.getFront().getGround();
                 maxDepth--;
             }
 
-        } catch (Throwable e) {
-            TerraformGeneratorPlugin.logger.error("Something went wrong trying to place farmhouse at " + x + "," + y + "," + z + "!");
+        }
+        catch (Throwable e) {
+            TerraformGeneratorPlugin.logger.error("Something went wrong trying to place farmhouse at "
+                                                  + x
+                                                  + ","
+                                                  + y
+                                                  + ","
+                                                  + z
+                                                  + "!");
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 

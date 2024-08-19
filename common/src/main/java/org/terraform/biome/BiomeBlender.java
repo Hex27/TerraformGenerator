@@ -17,11 +17,11 @@ import java.util.Collection;
  * other biomes.
  */
 public class BiomeBlender {
+    final boolean blendBiomeGrid;
+    final boolean blendWater;
     private final TerraformWorld tw;
     double gridBlendingFactor = 1;
-    final boolean blendBiomeGrid;
     int riverThreshold = 5;
-    final boolean blendWater;
     boolean blendBeachesToo = true;
     int smoothBlendTowardsRivers = -1;
 
@@ -56,36 +56,46 @@ public class BiomeBlender {
 
         if (blendWater) {
             // Linear blending when closer to water
-        	double riverFactor;
-        	if(smoothBlendTowardsRivers == -1) {
-        		riverFactor = blendBeachesToo ? riverDepth / (-riverThreshold) :
-                    (HeightMap.getPreciseHeight(tw, x, z) - TerraformGenerator.seaLevel) / riverThreshold;
-        	}
-        	else
-        	{
-        		double height = HeightMap.getPreciseHeight(tw, x, z);
-        		if(height > TerraformGenerator.seaLevel + smoothBlendTowardsRivers) 
-        			riverFactor = 1;
-        		else if(height <= TerraformGenerator.seaLevel)
-        			riverFactor = 0;
-        		else
-        		{
-        			// if(height > TerraformGenerator.seaLevel)
-        			//	height = TerraformGenerator.seaLevel;
-        			// Linearly blend
-            		riverFactor = ((height - TerraformGenerator.seaLevel)/((double)smoothBlendTowardsRivers));
-            		// TerraformGeneratorPlugin.logger.info("RF" + riverFactor);
-        		}
-        	}
-            if (riverFactor < factor) factor = Math.max(0, riverFactor);
+            double riverFactor;
+            if (smoothBlendTowardsRivers == -1) {
+                riverFactor = blendBeachesToo
+                              ? riverDepth / (-riverThreshold)
+                              : (HeightMap.getPreciseHeight(tw, x, z) - TerraformGenerator.seaLevel) / riverThreshold;
+            }
+            else {
+                double height = HeightMap.getPreciseHeight(tw, x, z);
+                if (height > TerraformGenerator.seaLevel + smoothBlendTowardsRivers) {
+                    riverFactor = 1;
+                }
+                else if (height <= TerraformGenerator.seaLevel) {
+                    riverFactor = 0;
+                }
+                else {
+                    // if(height > TerraformGenerator.seaLevel)
+                    //	height = TerraformGenerator.seaLevel;
+                    // Linearly blend
+                    riverFactor = ((height - TerraformGenerator.seaLevel) / ((double) smoothBlendTowardsRivers));
+                    // TerraformGeneratorPlugin.logger.info("RF" + riverFactor);
+                }
+            }
+            if (riverFactor < factor) {
+                factor = Math.max(0, riverFactor);
+            }
         }
 
         if (blendBiomeGrid) {
             // Same here when closer to biome edge
-            double gridFactor = getGridEdgeFactor(currentBiome, tw,x,z);// getGridEdgeFactor(BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z),
-            		// currentBiome,
-                    // BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature(), BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
-            if (gridFactor < factor) factor = gridFactor;
+            double gridFactor = getGridEdgeFactor(
+                    currentBiome,
+                    tw,
+                    x,
+                    z
+            );// getGridEdgeFactor(BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z),
+            // currentBiome,
+            // BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature(), BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
+            if (gridFactor < factor) {
+                factor = gridFactor;
+            }
         }
 
         return factor;
@@ -96,34 +106,38 @@ public class BiomeBlender {
         Updated to reflect new changes to heightmap and biomes
      */
     public double getGridEdgeFactor(BiomeBank currentBiome, TerraformWorld tw, int x, int z) {
-        SimpleLocation target  = new SimpleLocation(x,0,z);
-    	Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, 3, x, z);
+        SimpleLocation target = new SimpleLocation(x, 0, z);
+        Collection<BiomeSection> sections = BiomeSection.getSurroundingSections(tw, 3, x, z);
 
-    	BiomeSection mostDominantTarget = null;
-    	double dominance = -100;
-    	for (BiomeSection section : sections) {
-    	    if (section.getBiomeBank() == currentBiome) {
-    	        double dom = section.getDominance(target);
-    	        if (dom > dominance) {
-    	            mostDominantTarget = section;
-    	            dominance = dom;
+        BiomeSection mostDominantTarget = null;
+        double dominance = -100;
+        for (BiomeSection section : sections) {
+            if (section.getBiomeBank() == currentBiome) {
+                double dom = section.getDominance(target);
+                if (dom > dominance) {
+                    mostDominantTarget = section;
+                    dominance = dom;
                 }
 
             }
         }
-    	if (mostDominantTarget == null) return 0;
-
-        double factor = 1;
-    	for (BiomeSection section : sections) {
-    	    if (section.getBiomeBank() == currentBiome) continue;
-
-    	    float dom = section.getDominance(target);
-    	    double diff = Math.max(0, dominance - dom);
-
-    	    factor = Math.min(factor, diff * gridBlendingFactor);
+        if (mostDominantTarget == null) {
+            return 0;
         }
 
-    	return Math.min(factor, 1);
+        double factor = 1;
+        for (BiomeSection section : sections) {
+            if (section.getBiomeBank() == currentBiome) {
+                continue;
+            }
+
+            float dom = section.getDominance(target);
+            double diff = Math.max(0, dominance - dom);
+
+            factor = Math.min(factor, diff * gridBlendingFactor);
+        }
+
+        return Math.min(factor, 1);
     }
 
     /**
@@ -145,7 +159,7 @@ public class BiomeBlender {
         this.riverThreshold = riverThreshold;
         return this;
     }
-    
+
     /**
      * Use a slower algorithm to smooth towards rivers based on heightmap's getPreciseHeight
      * <p>
@@ -153,8 +167,8 @@ public class BiomeBlender {
      */
     public @NotNull BiomeBlender setSmoothBlendTowardsRivers(int smoothBlendTowardsRivers)
     {
-    	this.smoothBlendTowardsRivers = smoothBlendTowardsRivers;
-    	return this;
+        this.smoothBlendTowardsRivers = smoothBlendTowardsRivers;
+        return this;
     }
 
     /**

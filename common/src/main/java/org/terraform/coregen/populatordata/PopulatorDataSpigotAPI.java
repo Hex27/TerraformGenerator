@@ -22,10 +22,12 @@ import org.terraform.main.config.TConfigOption;
 
 import java.util.Random;
 
-public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPopulatorDataBeehiveEditor,IPopulatorDataMinecartSpawner {
+public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
+        implements IPopulatorDataBeehiveEditor, IPopulatorDataMinecartSpawner
+{
     public final LimitedRegion lr;
     private final TerraformWorld tw;
-    private final int chunkX,chunkZ;
+    private final int chunkX, chunkZ;
 
     public PopulatorDataSpigotAPI(LimitedRegion lr, TerraformWorld tw, int chunkX, int chunkZ) {
         this.lr = lr;
@@ -36,43 +38,45 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
 
     @Override
     public Material getType(int x, int y, int z) {
-        if(!lr.isInRegion(x,y,z))
-        {
+        if (!lr.isInRegion(x, y, z)) {
             // yes i fucking know this is bad
             return y > TerraformGenerator.seaLevel ? Material.AIR : Material.WATER;
         }
-        return lr.getType(x,y,z);
+        return lr.getType(x, y, z);
     }
 
     @Override
     public BlockData getBlockData(int x, int y, int z) {
-        if(!lr.isInRegion(x,y,z))
-            return y > TerraformGenerator.seaLevel ? Bukkit.createBlockData(Material.AIR) : Bukkit.createBlockData(Material.WATER);
+        if (!lr.isInRegion(x, y, z)) {
+            return y > TerraformGenerator.seaLevel
+                   ? Bukkit.createBlockData(Material.AIR)
+                   : Bukkit.createBlockData(Material.WATER);
+        }
 
-        return lr.getBlockData(x,y,z);
+        return lr.getBlockData(x, y, z);
     }
 
     @Override
     public void setType(int x, int y, int z, @NotNull Material type) {
-        if(!lr.isInRegion(x,y,z)){
-            NativeGeneratorPatcherPopulator.pushChange(tw.getName(), x,y,z,Bukkit.createBlockData(type));
+        if (!lr.isInRegion(x, y, z)) {
+            NativeGeneratorPatcherPopulator.pushChange(tw.getName(), x, y, z, Bukkit.createBlockData(type));
             return;
         }
-        lr.setType(x,y,z,type);
+        lr.setType(x, y, z, type);
     }
 
     @Override
     public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
-        if(!lr.isInRegion(x,y,z)){
-            NativeGeneratorPatcherPopulator.pushChange(tw.getName(), x,y,z,data);
+        if (!lr.isInRegion(x, y, z)) {
+            NativeGeneratorPatcherPopulator.pushChange(tw.getName(), x, y, z, data);
             return;
         }
-        lr.setBlockData(x,y,z,data);
+        lr.setBlockData(x, y, z, data);
     }
 
     @Override
     public Biome getBiome(int rawX, int rawZ) {
-        return lr.getBiome(rawX,50,rawZ);
+        return lr.getBiome(rawX, 50, rawZ);
     }
 
     @Override
@@ -92,27 +96,30 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
-        if ( !TConfigOption.areAnimalsEnabled() ) return;
+        if (!TConfigOption.areAnimalsEnabled()) {
+            return;
+        }
 
-        setType(rawX,rawY,rawZ,Material.SPAWNER);
-        try{
+        setType(rawX, rawY, rawZ, Material.SPAWNER);
+        try {
             // This will give class cast exception sometimes. I'm not sure why.
             // Additionally, if rawX/rawZ is outside the region, this will correctly
             // throw an error
-            CreatureSpawner spawner = (CreatureSpawner) lr.getBlockState(rawX,rawY,rawZ);
+            CreatureSpawner spawner = (CreatureSpawner) lr.getBlockState(rawX, rawY, rawZ);
             spawner.setSpawnedType(type);
-            spawner.update(true,false);
-        }catch(ClassCastException e){
+            spawner.update(true, false);
+        }
+        catch (ClassCastException e) {
             TerraformGeneratorPlugin.logger.info("Failed to set spawner at " + rawX + "," + rawY + "," + rawZ);
         }
     }
 
     @Override
     public void lootTableChest(int x, int y, int z, @NotNull TerraLootTable table) {
-        BlockState s = lr.getBlockState(x,y,z);
-        if(s instanceof Lootable t){
+        BlockState s = lr.getBlockState(x, y, z);
+        if (s instanceof Lootable t) {
             t.setLootTable(table.bukkit());
-            s.update(true,false);
+            s.update(true, false);
         }
     }
 
@@ -123,18 +130,19 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
 
     @Override
     public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
-        if(!lr.isInRegion(rawX, rawY, rawZ)) return; // just forget it
+        if (!lr.isInRegion(rawX, rawY, rawZ)) {
+            return; // just forget it
+        }
 
         setType(rawX, rawY, rawZ, Material.BEE_NEST);
 
         // I guess the above can fail sometimes. I don't know why.
         // Catch and throw because that's fucking stupid
         try {
-            Beehive bukkitBeehive = (Beehive) lr.getBlockState(rawX,rawY,rawZ);
+            Beehive bukkitBeehive = (Beehive) lr.getBlockState(rawX, rawY, rawZ);
             TerraformGeneratorPlugin.injector.storeBee(bukkitBeehive);
         }
-        catch(ClassCastException e)
-        {
+        catch (ClassCastException e) {
             TerraformGeneratorPlugin.logger.info("Failed to set beehive at " + rawX + "," + rawY + "," + rawZ);
         }
 
@@ -143,7 +151,10 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     @Override
     public void spawnMinecartWithChest(int x, int y, int z, @NotNull TerraLootTable table, Random random) {
 
-         StorageMinecart e = (StorageMinecart) lr.spawnEntity(new Location(tw.getWorld(), x+0.5f, y+0.5f, z+0.5f), EntityType.MINECART_CHEST);
-         e.setLootTable(table.bukkit());
+        StorageMinecart e = (StorageMinecart) lr.spawnEntity(
+                new Location(tw.getWorld(), x + 0.5f, y + 0.5f, z + 0.5f),
+                EntityType.MINECART_CHEST
+        );
+        e.setLootTable(table.bukkit());
     }
 }

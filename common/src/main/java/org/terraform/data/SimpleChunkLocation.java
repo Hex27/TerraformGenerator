@@ -11,6 +11,7 @@ import java.util.Objects;
 
 /**
  * class represent chunk location in simple form
+ *
  * @author wysohn
  */
 public class SimpleChunkLocation implements Cloneable {
@@ -46,7 +47,9 @@ public class SimpleChunkLocation implements Cloneable {
 
     // world , x, z
     public static SimpleChunkLocation chunkStrToLoc(@Nullable String chunk) {
-        if (chunk == null) return null;
+        if (chunk == null) {
+            return null;
+        }
         String[] split = StringUtils.split(StringUtils.deleteWhitespace(chunk), ',');
 
         String world = split[0];
@@ -92,8 +95,12 @@ public class SimpleChunkLocation implements Cloneable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof SimpleChunkLocation other)) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof SimpleChunkLocation other)) {
+            return false;
+        }
         return this.x == other.x && this.z == other.z && Objects.equals(world, other.world);
     }
 
