@@ -61,10 +61,10 @@ public class SimpleLocation {
 
         // Handle absolute cases first
         if (o.x == x && o.z == z) {
-            return 0.0f;
+            return 0f;
         }
         else if (o.x == x && o.z > z) {
-            return 0.0f;
+            return 0f;
         }
         else if (o.x == x) {
             return (float) Math.PI;
@@ -100,7 +100,7 @@ public class SimpleLocation {
 
         // Handle absolute cases first
         if (o.x == x && o.z == z) {
-            return 0.0f;
+            return 0f;
         }
         else if (o.x == x && o.z > z) {
             return 0;

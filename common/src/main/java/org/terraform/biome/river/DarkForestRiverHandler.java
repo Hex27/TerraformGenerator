@@ -78,7 +78,7 @@ public class DarkForestRiverHandler extends BiomeHandler {
         if (GenUtils.chance(random, 1, 1000)) {
             BlockUtils.replaceCircularPatch(
                     random.nextInt(9999),
-                    2.0f,
+                    2f,
                     new SimpleBlock(data, rawX, surfaceY, rawZ),
                     Material.MAGMA_BLOCK
             );

@@ -34,47 +34,47 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("climate.humid-vegetation.minimum-temperature")
     public double CLIMATE_HUMIDVEGETATION_MINTEMP = -0.35d;
     @YamlKey("climate.humid-vegetation.maximum-temperature")
-    public double CLIMATE_HUMIDVEGETATION_MAXTEMP = 4.0d;
+    public double CLIMATE_HUMIDVEGETATION_MAXTEMP = 4d;
     @YamlKey("climate.humid-vegetation.minimum-moisture")
     public double CLIMATE_HUMIDVEGETATION_MINMOIST = 0d;
     @YamlKey("climate.humid-vegetation.maximum-moisture")
-    public double CLIMATE_HUMIDVEGETATION_MAXMOIST = 4.0d;
+    public double CLIMATE_HUMIDVEGETATION_MAXMOIST = 4d;
 
     @YamlKey("climate.dry-vegetation.minimum-temperature")
     public double CLIMATE_DRYVEGETATION_MINTEMP = -0.35d;
     @YamlKey("climate.dry-vegetation.maximum-temperature")
-    public double CLIMATE_DRYVEGETATION_MAXTEMP = 4.0d;
+    public double CLIMATE_DRYVEGETATION_MAXTEMP = 4d;
     @YamlKey("climate.dry-vegetation.minimum-moisture")
-    public double CLIMATE_DRYVEGETATION_MINMOIST = -4.0d;
+    public double CLIMATE_DRYVEGETATION_MINMOIST = -4d;
     @YamlKey("climate.dry-vegetation.maximum-moisture")
     public double CLIMATE_DRYVEGETATION_MAXMOIST = 0d;
 
     @YamlKey("climate.hot-barren.minimum-temperature")
     public double CLIMATE_HOTBARREN_MINTEMP = 1d;
     @YamlKey("climate.hot-barren.maximum-temperature")
-    public double CLIMATE_HOTBARREN_MAXTEMP = 4.0d;
+    public double CLIMATE_HOTBARREN_MAXTEMP = 4d;
     @YamlKey("climate.hot-barren.minimum-moisture")
-    public double CLIMATE_HOTBARREN_MINMOIST = -4.0d;
+    public double CLIMATE_HOTBARREN_MINMOIST = -4d;
     @YamlKey("climate.hot-barren.maximum-moisture")
-    public double CLIMATE_HOTBARREN_MAXMOIST = -1.0d;
+    public double CLIMATE_HOTBARREN_MAXMOIST = -1d;
 
     @YamlKey("climate.cold.minimum-temperature")
-    public double CLIMATE_COLD_MINTEMP = -4.0d;
+    public double CLIMATE_COLD_MINTEMP = -4d;
     @YamlKey("climate.cold.maximum-temperature")
     public double CLIMATE_COLD_MAXTEMP = -0.5d;
     @YamlKey("climate.cold.minimum-moisture")
-    public double CLIMATE_COLD_MINMOIST = -4.0d;
+    public double CLIMATE_COLD_MINMOIST = -4d;
     @YamlKey("climate.cold.maximum-moisture")
-    public double CLIMATE_COLD_MAXMOIST = 4.0d;
+    public double CLIMATE_COLD_MAXMOIST = 4d;
 
     @YamlKey("climate.snowy.minimum-temperature")
-    public double CLIMATE_SNOWY_MINTEMP = -4.0d;
+    public double CLIMATE_SNOWY_MINTEMP = -4d;
     @YamlKey("climate.snowy.maximum-temperature")
     public double CLIMATE_SNOWY_MAXTEMP = -2.7d;
     @YamlKey("climate.snowy.minimum-moisture")
-    public double CLIMATE_SNOWY_MINMOIST = -4.0d;
+    public double CLIMATE_SNOWY_MINMOIST = -4d;
     @YamlKey("climate.snowy.maximum-moisture")
-    public double CLIMATE_SNOWY_MAXMOIST = 4.0d;
+    public double CLIMATE_SNOWY_MAXMOIST = 4d;
 
     // -=[BIOMES]=-
     // Biome globals
@@ -87,7 +87,7 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("biome.highmountains-threshold")
     public float BIOME_HIGH_MOUNTAINOUS_THRESHOLD = 27.5f;
     @YamlKey("biome.mountainous-frequency")
-    public float BIOME_MOUNTAINOUS_FREQUENCY = 0.30f;
+    public float BIOME_MOUNTAINOUS_FREQUENCY = 0.3f;
     @YamlKey("biome.oceanic-frequency")
     public float BIOME_OCEANIC_FREQUENCY = 0.11f;
     @YamlKey("biome.oceanic-threshold")
@@ -269,7 +269,7 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("biome.mangrove.weight")
     public int BIOME_MANGROVE_WEIGHT = 5;
     @YamlKey("biome.oasis.commonness")
-    public double BIOME_OASIS_COMMONNESS = 1.0d;
+    public double BIOME_OASIS_COMMONNESS = 1d;
     @YamlKey("biome.oasis.frequency")
     public float BIOME_OASIS_FREQUENCY = 0.012f;
 
@@ -389,11 +389,11 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("structures.trialchamber.enabled")
     public boolean STRUCTURES_TRIALCHAMBER_ENABLED = true;
     @YamlKey("structures.warmoceanruins.spawnratio")
-    public double STRUCTURES_WARMOCEANRUINS_SPAWNRATIO = 1.0d;
+    public double STRUCTURES_WARMOCEANRUINS_SPAWNRATIO = 1d;
     @YamlKey("structures.warmoceanruins.enabled")
     public boolean STRUCTURES_WARMOCEANRUINS_ENABLED = true;
     @YamlKey("structures.village.spawnratio")
-    public double STRUCTURES_VILLAGE_SPAWNRATIO = 1.0d;
+    public double STRUCTURES_VILLAGE_SPAWNRATIO = 1d;
     @YamlKey("structures.plainsvillage.enabled")
     public boolean STRUCTURES_PLAINSVILLAGE_ENABLED = true;
     @YamlKey("structures.plainsvillage.height-tolerance")

@@ -67,8 +67,8 @@ public class NewFractalTreeBuilder implements Cloneable {
      * each recursion.
      */
     private BiFunction<Float, Float, Float> getBranchWidth = (initialBranchWidth, branchRatio) -> initialBranchWidth * (
-            1.0f
-            - branchRatio / 2.0f);
+            1f
+            - branchRatio / 2f);
     private Material branchMaterial = Material.OAK_LOG;
     private Material rootMaterial = Material.OAK_WOOD;
 
@@ -269,7 +269,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                                 oriY,
                                 displacementTheta,
                                 branchDecrement.apply(length, (float) (lastOperatedCentre.getY() - oriY)),
-                                1.0f,
+                                1f,
                                 depth + 1,
                                 currentWidth,
                                 0
@@ -293,7 +293,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                             oriY,
                             displacementTheta,
                             branchDecrement.apply(length, (float) (lastOperatedCentre.getY() - oriY)),
-                            1.0f,
+                            1f,
                             depth + 1,
                             currentWidth,
                             0

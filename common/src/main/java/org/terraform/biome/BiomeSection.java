@@ -169,8 +169,8 @@ public class BiomeSection {
     }
 
     private @Nullable BiomeBank parseBiomeBank() {
-        temperature = 3.0f * 2.5f * tw.getTemperatureOctave().GetNoise(this.x, this.z);
-        moisture = 3.0f * 2.5f * tw.getMoistureOctave().GetNoise(this.x, this.z);
+        temperature = 3f * 2.5f * tw.getTemperatureOctave().GetNoise(this.x, this.z);
+        moisture = 3f * 2.5f * tw.getMoistureOctave().GetNoise(this.x, this.z);
 
         return BiomeBank.selectBiome(
                 this,

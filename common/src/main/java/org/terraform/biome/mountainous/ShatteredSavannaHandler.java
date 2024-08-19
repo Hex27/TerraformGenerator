@@ -107,7 +107,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         int rawZ = chunkZ * 16 + z;
         double crevice = Math.abs(creviceNoise.GetNoise(rawX, rawZ));
         // peakHeight *= getBiomeBlender(tw).getEdgeFactor(BiomeBank.SHATTERED_SAVANNA, rawX, rawZ);
-        if (crevice < 0.40f) {
+        if (crevice < 0.4f) {
             return;
         }
 
@@ -120,7 +120,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
             // Make the pillars connect around baseHeight+0.5*(peakHeight-baseHeight)
             // by multiplying a factor that approaches lower values there
             double scale = (1f - 0.4 * Math.abs(yScaleNoise.GetNoise(y, 0)));
-            if (crevice * scale < 0.40f) {
+            if (crevice * scale < 0.4f) {
                 updateHeight = false;
                 continue;
             }

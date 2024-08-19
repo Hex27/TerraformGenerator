@@ -1594,11 +1594,11 @@ public class BlockUtils {
 
     public static float yawFromBlockFace(@NotNull BlockFace face) {
         return switch (face) {
-            case EAST -> -90.0f;
-            case NORTH -> 180.0f;
-            case SOUTH -> 0.0f;
-            case WEST -> 90.0f;
-            default -> 180.0f;
+            case EAST -> -90f;
+            case NORTH -> 180f;
+            case SOUTH -> 0f;
+            case WEST -> 90f;
+            default -> 180f;
         };
     }
 

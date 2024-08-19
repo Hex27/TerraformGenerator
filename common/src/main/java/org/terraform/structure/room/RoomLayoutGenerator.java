@@ -61,9 +61,9 @@ public class RoomLayoutGenerator {
     private int range;
     private Random rand;
     private boolean carveRooms = false;
-    private float xCarveMul = 1.0f;
-    private float yCarveMul = 1.0f;
-    private float zCarveMul = 1.0f;
+    private float xCarveMul = 1f;
+    private float yCarveMul = 1f;
+    private float zCarveMul = 1f;
     private boolean pyramidish = false;
     private MazeSpawner mazePathGenerator;
     private int tile = -1;

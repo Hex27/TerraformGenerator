@@ -63,7 +63,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
                                                                            .setRX(size * 1.5f)
                                                                            .setRY(0.5f)
                                                                            .setRZ(size * 1.5f)
-                                                                           .setMinRadius(1.0f)
+                                                                           .setMinRadius(1f)
                                                                            .setSingleBlockY(true)
                                                                            .build();
 

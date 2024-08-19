@@ -131,7 +131,7 @@ public class DesertHandler extends BiomeHandler {
             interval += 1;
         }
 
-        float ribSizeMultiplier = 1.0f;
+        float ribSizeMultiplier = 1f;
 
         for (int segmentIndex = 0; segmentIndex < spineLength; segmentIndex++) {
             Wall seg = new Wall(target.getRelative(direction, segmentIndex), direction);

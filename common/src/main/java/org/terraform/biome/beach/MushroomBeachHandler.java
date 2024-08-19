@@ -79,7 +79,7 @@ public class MushroomBeachHandler extends BiomeHandler {
                 data.getChunkX(),
                 data.getChunkZ(),
                 15,
-                0.30f
+                0.3f
         );
 
         // Giant mushrooms

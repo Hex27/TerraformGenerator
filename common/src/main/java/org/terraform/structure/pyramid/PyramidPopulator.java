@@ -351,8 +351,8 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                         // Depress downwards
 
                         int dist = Math.max(XdistanceFromCenter, ZdistanceFromCenter);
-                        // Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((50.0f-dist)/5.0f))));
-                        float comp = original + ((raiseDone) * ((((float) squareRadius - 5) - dist) / 5.0f)) + Math.abs(
+                        // Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((5f-dist)/5f))));
+                        float comp = original + ((raiseDone) * ((((float) squareRadius - 5) - dist) / 5f)) + Math.abs(
                                 vertNoise.GetNoise(nx, nz) * 30);
                         if (comp < original) {
                             comp = original;

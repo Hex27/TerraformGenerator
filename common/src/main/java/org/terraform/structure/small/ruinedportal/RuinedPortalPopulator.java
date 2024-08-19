@@ -219,7 +219,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
                 double fissureNoise = (3 - 100 * Math.abs(noise.GetNoise(relx + core.getX(), relz + core.getZ())));
                 if (fissureNoise > 0) {
                     SimpleBlock target = core.getRelative(relx, 0, relz).getGround();
-                    fissureNoise = (1.0 - Math.min(1.0f, target.distance(core) / (horRadius * 3))) * fissureNoise;
+                    fissureNoise = (1.0 - Math.min(1f, target.distance(core) / (horRadius * 3))) * fissureNoise;
                     lavaLocs.put(target, (int) Math.round(fissureNoise));
                     if (lowestY > target.getY()) {
                         lowestY = target.getY();

@@ -56,9 +56,9 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
         // Carve hole in ground
         int depth = GenUtils.randInt(3, 5);
         BlockUtils.replaceLowerSphere(rand.nextInt(12222),
-                (room.getWidthX() / 2.0f) - 1.5f,
+                (room.getWidthX() / 2f) - 1.5f,
                 (float) depth,
-                (room.getWidthZ() / 2.0f) - 1.5f,
+                (room.getWidthZ() / 2f) - 1.5f,
                 core,
                 true,
                 Material.AIR

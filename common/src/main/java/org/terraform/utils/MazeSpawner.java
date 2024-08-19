@@ -161,7 +161,7 @@ public class MazeSpawner {
 
                 // Carve Pathway
                 if (wallllllllless.contains(dir)) {
-                    for (int i = 0; i < Math.ceil(((float) this.mazePeriod) / 2.0f); i++) {
+                    for (int i = 0; i < Math.ceil(((float) this.mazePeriod) / 2f); i++) {
                         pathPopDatas.add(new PathPopulatorData(startPoint.getDown().get(), dir, mazePathWidth, false));
 
                         startPoint.Pillar(mazeHeight, rand, Material.CAVE_AIR);
