@@ -9,7 +9,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -47,7 +47,7 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-        int num = TConfigOption.STRUCTURES_BURIEDTREASURE_COUNT_PER_MEGACHUNK.getInt();
+        int num = TConfig.c.STRUCTURES_BURIEDTREASURE_COUNT_PER_MEGACHUNK;
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++) {
             coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 87464 * (1 + i)));
@@ -78,7 +78,7 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator {
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(
                 tw.getHashedRand(chunkX, chunkZ, 12422),
-                (int) (TConfigOption.STRUCTURES_BURIEDTREASURE_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_BURIEDTREASURE_SPAWNRATIO * 10000),
                 10000
         );
     }
@@ -113,7 +113,7 @@ public class BuriedTreasurePopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_BURIEDTREASURE_ENABLED.getBoolean();
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_BURIEDTREASURE_ENABLED;
     }
 
     @Override

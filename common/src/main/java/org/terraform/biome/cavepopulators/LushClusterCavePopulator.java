@@ -9,7 +9,7 @@ import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
@@ -128,7 +128,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
             }
         }
         else if (Version.isAtLeast(17) && GenUtils.chance(random, 1, 7)) { // Dripleaves
-            if (TConfigOption.arePlantsEnabled()) {
+            if (TConfig.arePlantsEnabled()) {
                 if (random.nextBoolean()) {
                     new DirectionalBuilder(Material.BIG_DRIPLEAF).setFacing(BlockUtils.getDirectBlockFace(random))
                                                                  .apply(floor.getUp());
@@ -178,7 +178,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
 
                     if (BlockUtils.isStoneLike(rel.getType())) {
                         rel.setType(Material.MOSS_BLOCK);
-                        if (TConfigOption.arePlantsEnabled() && BlockUtils.isAir(target.getType()) && GenUtils.chance(
+                        if (TConfig.arePlantsEnabled() && BlockUtils.isAir(target.getType()) && GenUtils.chance(
                                 random,
                                 1,
                                 5

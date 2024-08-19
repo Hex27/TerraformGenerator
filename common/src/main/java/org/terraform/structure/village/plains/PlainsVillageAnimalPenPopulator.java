@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
@@ -107,7 +107,7 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
                 //                else
                 //                	highest = roomY;
 
-                if (Math.abs(highest - roomY) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt()) {
+                if (Math.abs(highest - roomY) > TConfig.c.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE) {
                     continue;
                 }
 
@@ -147,7 +147,7 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
                         //    		            	core.getAtY(roomY+1);
 
                         if (Math.abs(core.getY() - roomY)
-                            > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
+                            > TConfig.c.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE)
                         {
                             continue;
                         }
@@ -210,7 +210,7 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
             highest++;
         }
         if (threshold < 6) {
-            if (Math.abs(highest - roomY) <= TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt()) {
+            if (Math.abs(highest - roomY) <= TConfig.c.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE) {
                 for (int i = 0; i < GenUtils.randInt(3, 7); i++) {
                     data.addEntity(coords[0], highest + 1, coords[2], animal);
                 }

@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.terraform.main.config.TConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +17,8 @@ public class LanguageManager {
     private final @NotNull HashMap<String, String> cache = new HashMap<>();
     private FileConfiguration langFile;
 
-    public LanguageManager(@NotNull TerraformGeneratorPlugin plugin) {
-        this.file = new File(plugin.getDataFolder(), plugin.getConfigLoader().getString("lang"));
+    public LanguageManager(@NotNull TerraformGeneratorPlugin plugin, @NotNull TConfig config) {
+        this.file = new File(plugin.getDataFolder(), config.LANGUAGE_FILE);
         reloadLangFile();
         loadDefaults();
     }
@@ -38,21 +39,17 @@ public class LanguageManager {
         if (cache.containsKey(langKey)) {
             return cache.get(langKey);
         }
-        if (langFile.isSet(langKey)) {
-            String value = ChatColor.translateAlternateColorCodes('&', langFile.getString(langKey));
-            cache.put(langKey, value);
-            return value;
-        }
-        else if (def != null) {
-            langFile.set(langKey, def);
+
+        String value = langFile.getString(langKey);
+        if (value == null) {
+            value = def == null ? langKey : def; // if no default is given, the default becomes the `langKey`
+            langFile.set(langKey, value);
             saveLangFile();
         }
-        cache.put(langKey, ChatColor.translateAlternateColorCodes('&', def));
-        return ChatColor.translateAlternateColorCodes('&', def);
-    }
 
-    public FileConfiguration getLangFile() {
-        return langFile;
+        value = ChatColor.translateAlternateColorCodes('&', value);
+        cache.put(langKey, value);
+        return value;
     }
 
     public void saveLangFile() {

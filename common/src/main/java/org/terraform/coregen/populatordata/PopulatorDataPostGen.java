@@ -17,7 +17,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 
 import java.util.Random;
 
@@ -133,7 +133,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
-        if (!TConfigOption.areAnimalsEnabled()) {
+        if (!TConfig.areAnimalsEnabled()) {
             return;
         }
 

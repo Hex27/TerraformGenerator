@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -16,11 +16,11 @@ import java.util.Random;
 
 public class GiantPumpkinPopulator {
     public void populate(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-        if (!TConfigOption.areStructuresEnabled()) {
+        if (!TConfig.areStructuresEnabled()) {
             return;
         }
 
-        if (!TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()) {
+        if (!TConfig.c.STRUCTURES_SWAMPHUT_ENABLED) {
             return;
         }
         int x = data.getChunkX() * 16 + random.nextInt(16);
@@ -59,7 +59,7 @@ public class GiantPumpkinPopulator {
         }
 
         // Spawn big bushes
-        if (TConfigOption.arePlantsEnabled()) {
+        if (TConfig.arePlantsEnabled()) {
             for (int i = 0; i < GenUtils.randInt(random, 4, 6); i++) {
                 int nx = x + GenUtils.getSign(random) * GenUtils.randInt(4, 6);
                 int nz = z + GenUtils.getSign(random) * GenUtils.randInt(4, 6);

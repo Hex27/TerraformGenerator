@@ -11,7 +11,7 @@ import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CylinderBuilder;
@@ -255,7 +255,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
                 rightCorner.getLeft(i).setType(getFluid(rightCorner.getLeft(i)));
                 BlockUtils.dropDownBlock(rightCorner.getLeft(i).getUp(), getFluid(rightCorner.getLeft(i).getUp()));
             }
-            if (overgrown && TConfigOption.arePlantsEnabled() && leftCorner.getRight().isSolid()) {
+            if (overgrown && TConfig.arePlantsEnabled() && leftCorner.getRight().isSolid()) {
                 leftCorner.getRight()
                           .getRear()
                           .downLPillar(random, GenUtils.randInt(vertHeight / 2, vertHeight - 1), Material.OAK_LEAVES);
@@ -274,7 +274,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
                 leftCorner.getRight(i).setType(getFluid(leftCorner.getRight(i)));
                 BlockUtils.dropDownBlock(leftCorner.getRight(i).getUp(), getFluid(leftCorner.getRight(i).getUp()));
             }
-            if (overgrown && TConfigOption.arePlantsEnabled() && rightCorner.getLeft().isSolid()) {
+            if (overgrown && TConfig.arePlantsEnabled() && rightCorner.getLeft().isSolid()) {
                 rightCorner.getLeft()
                            .getRear()
                            .downLPillar(random, GenUtils.randInt(vertHeight / 2, vertHeight - 1), Material.OAK_LEAVES);
@@ -331,7 +331,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-        int num = TConfigOption.STRUCTURES_RUINEDPORTAL_COUNT_PER_MEGACHUNK.getInt();
+        int num = TConfig.c.STRUCTURES_RUINEDPORTAL_COUNT_PER_MEGACHUNK;
         int[][] coords = new int[num][2];
         for (int i = 0; i < num; i++) {
             coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 4363463 * (1 + i)));
@@ -361,7 +361,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 976123),
-                (int) (TConfigOption.STRUCTURES_RUINEDPORTAL_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_RUINEDPORTAL_SPAWNRATIO * 10000),
                 10000
         );
     }
@@ -388,7 +388,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_RUINEDPORTAL_ENABLED.getBoolean();
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_RUINEDPORTAL_ENABLED;
     }
 
     @Override

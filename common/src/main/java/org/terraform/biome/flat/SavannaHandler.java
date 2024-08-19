@@ -8,7 +8,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -111,7 +111,7 @@ public class SavannaHandler extends BiomeHandler {
         // large trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 112, 0.6f);
 
-        if (TConfigOption.TREES_SAVANNA_BIG_ENABLED.getBoolean()) {
+        if (TConfig.c.TREES_SAVANNA_BIG_ENABLED) {
             for (SimpleLocation sLoc : trees) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
                 sLoc.setY(treeY);
@@ -150,7 +150,7 @@ public class SavannaHandler extends BiomeHandler {
         }
 
         // Grass Poffs
-        if (TConfigOption.arePlantsEnabled()) {
+        if (TConfig.arePlantsEnabled()) {
             SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 31);
             for (SimpleLocation sLoc : poffs) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());

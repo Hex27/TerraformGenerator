@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -108,7 +108,7 @@ public enum PlantBuilder {
     }
 
     public void build(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -128,7 +128,7 @@ public enum PlantBuilder {
                       int minHeight,
                       int maxHeight)
     {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -140,7 +140,7 @@ public enum PlantBuilder {
     }
 
     public void build(@NotNull SimpleBlock block, @NotNull Random rand, int minHeight, int maxHeight) {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 

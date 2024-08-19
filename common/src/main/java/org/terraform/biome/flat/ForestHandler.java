@@ -8,7 +8,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -130,7 +130,7 @@ public class ForestHandler extends BiomeHandler {
                                    @NotNull PopulatorDataAbstract data)
     {
         // Most forest chunks have a big tree
-        if (TConfigOption.TREES_FOREST_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 6, 10)) {
+        if (TConfig.c.TREES_FOREST_BIG_ENABLED && GenUtils.chance(random, 6, 10)) {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
             if (data.getBiome(treeX, treeZ) == getBiome()) {

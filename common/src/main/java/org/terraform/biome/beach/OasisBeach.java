@@ -7,7 +7,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.GenUtils;
@@ -20,8 +20,8 @@ import java.util.Random;
  * This class contains functions for oases, it's not a biome handler.
  */
 public class OasisBeach {
-    public static final double oasisThreshold = (2 - TConfigOption.BIOME_OASIS_COMMONNESS.getDouble()) * 0.31;
-    private static final float oasisFrequency = TConfigOption.BIOME_OASIS_FREQUENCY.getFloat();
+    public static final double oasisThreshold = (2 - TConfig.c.BIOME_OASIS_COMMONNESS) * 0.31;
+    private static final float oasisFrequency = TConfig.c.BIOME_OASIS_FREQUENCY;
 
     public static float getOasisNoise(TerraformWorld world, int x, int z) {
         FastNoise lushRiversNoise = NoiseCacheHandler.getNoise(world,
@@ -127,7 +127,7 @@ public class OasisBeach {
                                   Material stem,
                                   double density)
     {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 

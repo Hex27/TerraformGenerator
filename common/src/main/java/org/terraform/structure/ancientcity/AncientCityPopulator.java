@@ -13,7 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
@@ -54,7 +54,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 123122),
-                (int) (TConfigOption.STRUCTURES_ANCIENTCITY_SPAWNRATIO.getDouble() * 10000),
+                (int) (TConfig.c.STRUCTURES_ANCIENTCITY_SPAWNRATIO * 10000),
                 10000
         );
     }
@@ -70,9 +70,9 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         int x = coords[0];
         int z = coords[1];
         // int height = HeightMap.getBlockHeight(tw, x, z);
-        int minY = TConfigOption.STRUCTURES_ANCIENTCITY_MIN_Y.getInt();
+        int minY = TConfig.c.STRUCTURES_ANCIENTCITY_MIN_Y;
         // if(!Version.isAtLeast(18) && minY < 0) minY = 8;
-        int y = GenUtils.randInt(minY, TConfigOption.STRUCTURES_ANCIENTCITY_MAX_Y.getInt());
+        int y = GenUtils.randInt(minY, TConfig.c.STRUCTURES_ANCIENTCITY_MAX_Y);
 
 
         spawnAncientCity(tw, tw.getHashedRand(x, y, z, 23412222), data, x, y + 1, z);
@@ -211,7 +211,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_ANCIENTCITY_ENABLED.getBoolean();
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_ANCIENTCITY_ENABLED;
     }
 
     // Underground structures don't need a decorative buffer

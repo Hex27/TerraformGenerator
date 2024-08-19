@@ -13,7 +13,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalLeaves;
 import org.terraform.tree.FractalTreeBuilder;
@@ -74,7 +74,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
                                    @NotNull PopulatorDataAbstract data)
     {
         boolean gradient = HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3)
-                           <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble();
+                           <= TConfig.c.MISC_TREES_GRADIENT_LIMIT;
         if (gradient) {
             data.setType(rawX, surfaceY, rawZ, Material.GRASS_BLOCK);
             if (random.nextBoolean()) {

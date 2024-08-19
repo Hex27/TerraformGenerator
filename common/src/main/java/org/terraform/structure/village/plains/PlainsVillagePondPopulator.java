@@ -6,7 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
@@ -131,7 +131,7 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
                                 PlantBuilder.TALL_GRASS
                         );
                     }
-                    else if (!placedJobBlock && TConfigOption.areDecorationsEnabled() && GenUtils.chance(2, 5)) {
+                    else if (!placedJobBlock && TConfig.areDecorationsEnabled() && GenUtils.chance(2, 5)) {
                         target.setType(Material.BARREL);
                         placedJobBlock = true;
                     }
@@ -152,7 +152,7 @@ public class PlainsVillagePondPopulator extends RoomPopulatorAbstract {
                         CoralGenerator.generateSeaPickles(data, x, target.getY(), z);
                     }
 
-                    if (TConfigOption.areAnimalsEnabled() && GenUtils.chance(1, 20)) { // spawn fish
+                    if (TConfig.areAnimalsEnabled() && GenUtils.chance(1, 20)) { // spawn fish
                         core.getPopData()
                             .addEntity(target.getX(), target.getY(), target.getZ(), EntityType.TROPICAL_FISH);
                     }

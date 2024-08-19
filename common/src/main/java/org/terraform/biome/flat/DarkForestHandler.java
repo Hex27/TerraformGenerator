@@ -11,7 +11,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
@@ -93,7 +93,7 @@ public class DarkForestHandler extends BiomeHandler {
                                    int rawZ,
                                    @NotNull PopulatorDataAbstract data)
     {
-        boolean spawnHeads = TConfigOption.BIOME_DARK_FOREST_SPAWN_HEADS.getBoolean() && GenUtils.chance(
+        boolean spawnHeads = TConfig.c.BIOME_DARK_FOREST_SPAWN_HEADS && GenUtils.chance(
                 random,
                 1,
                 100
@@ -120,7 +120,7 @@ public class DarkForestHandler extends BiomeHandler {
             }
         }
 
-        if (spawnHeads && TConfigOption.areDecorationsEnabled() && GenUtils.chance(random, 1, 50)) {
+        if (spawnHeads && TConfig.areDecorationsEnabled() && GenUtils.chance(random, 1, 50)) {
             if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
                 Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
                 skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
@@ -157,7 +157,7 @@ public class DarkForestHandler extends BiomeHandler {
                     };
                     new MushroomBuilder(type).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
                 }
-                else if (TConfigOption.TREES_DARK_FOREST_BIG_ENABLED.getBoolean()) {
+                else if (TConfig.c.TREES_DARK_FOREST_BIG_ENABLED) {
                     FractalTypes.Tree.DARK_OAK_BIG_TOP.build(tw, new SimpleBlock(data, sLoc));
                 }
             }

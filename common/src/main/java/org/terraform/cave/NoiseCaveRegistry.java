@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.noise.FastNoise;
 
 public class NoiseCaveRegistry {
@@ -23,7 +23,7 @@ public class NoiseCaveRegistry {
     }
 
     public boolean canNoiseCarve(int x, int y, int z, double height) {
-        if (!TConfigOption.areCavesEnabled()) {
+        if (!TConfig.areCavesEnabled()) {
             return false;
         }
 
@@ -39,7 +39,7 @@ public class NoiseCaveRegistry {
     }
 
     public boolean canGenerateCarve(int x, int y, int z, double height) {
-        if (!TConfigOption.areCavesEnabled()) {
+        if (!TConfig.areCavesEnabled()) {
             return false;
         }
 

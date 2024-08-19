@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class BiomeSection {
     // A BiomeSection is 128 blocks wide (Default of bitshift 7).
-    public static final int bitshifts = TConfigOption.BIOME_SECTION_BITSHIFTS.getInt();
+    public static final int bitshifts = TConfig.c.BIOME_SECTION_BITSHIFTS;
     public static final int sectionWidth = (int) (1 << bitshifts);
     public static final int minSize = sectionWidth;
     public static final int dominanceThreshold = (int) (0.35 * sectionWidth);
@@ -119,7 +119,7 @@ public class BiomeSection {
 
     public static @NotNull BiomeSection getMostDominantSection(@NotNull TerraformWorld tw, int x, int z) {
 
-        double dither = TConfigOption.BIOME_DITHER.getDouble();
+        double dither = TConfig.c.BIOME_DITHER;
         Random locationBasedRandom = new Random(Objects.hash(tw.getSeed(), x, z));
         SimpleLocation target = new SimpleLocation(x, 0, z);
         BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);

@@ -17,7 +17,7 @@ import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class TerraformGenerator extends ChunkGenerator {
     public static int seaLevel = 62;
 
     public static void updateSeaLevelFromConfig() {
-        seaLevel = TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt();
+        seaLevel = TConfig.c.HEIGHT_MAP_SEA_LEVEL;
     }
 
     /**
@@ -202,8 +202,8 @@ public class TerraformGenerator extends ChunkGenerator {
                 chunkData.setBlock(x, TerraformGeneratorPlugin.injector.getMinY(), z, Material.BEDROCK);
 
                 // Up till y = minY+HEIGHT_MAP_BEDROCK_HEIGHT
-                for (int i = 1; i < TConfigOption.HEIGHT_MAP_BEDROCK_HEIGHT.getInt(); i++) {
-                    if (GenUtils.chance(dontCareRandom, TConfigOption.HEIGHT_MAP_BEDROCK_DENSITY.getInt(), 100)) {
+                for (int i = 1; i < TConfig.c.HEIGHT_MAP_BEDROCK_HEIGHT; i++) {
+                    if (GenUtils.chance(dontCareRandom, TConfig.c.HEIGHT_MAP_BEDROCK_DENSITY, 100)) {
                         chunkData.setBlock(x, TerraformGeneratorPlugin.injector.getMinY() + i, z, Material.BEDROCK);
                     }
                     else {

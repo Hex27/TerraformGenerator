@@ -13,7 +13,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
@@ -68,7 +68,7 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
         }
 
         // Elder Guardian cage
-        if (TConfigOption.STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN.getBoolean()) {
+        if (TConfig.c.STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN) {
             SimpleBlock cageCenter = center.getUp(11);
             placeElderGuardianCage(cageCenter);
         }

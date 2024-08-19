@@ -16,7 +16,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.GenUtils;
@@ -84,7 +84,7 @@ public class FractalTreeBuilder {
     public FractalTreeBuilder(FractalTypes.@NotNull Tree type) {
         switch (type) {
             case FOREST:
-                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                this.setBeeChance(TConfig.c.ANIMALS_BEE_HIVEFREQUENCY)
                     .setBaseHeight(9)
                     .setBaseThickness(3.0f)
                     .setThicknessDecrement(0.3f)
@@ -99,7 +99,7 @@ public class FractalTreeBuilder {
                                                          .setLeafNoiseMultiplier(1.0f));
                 break;
             case NORMAL_SMALL:
-                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                this.setBeeChance(TConfig.c.ANIMALS_BEE_HIVEFREQUENCY)
                     .setBaseHeight(5)
                     .setBaseThickness(1)
                     .setThicknessDecrement(1f)
@@ -110,7 +110,7 @@ public class FractalTreeBuilder {
                     .setHeightVariation(1);
                 break;
             case AZALEA_TOP:
-                this.setBeeChance(TConfigOption.ANIMALS_BEE_HIVEFREQUENCY.getDouble())
+                this.setBeeChance(TConfig.c.ANIMALS_BEE_HIVEFREQUENCY)
                     .setBaseHeight(3)
                     .setBaseThickness(1)
                     .setThicknessDecrement(0.3f)
@@ -587,7 +587,7 @@ public class FractalTreeBuilder {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean checkGradient(PopulatorDataAbstract data, int x, int z) {
         heightGradientChecked = true;
-        return (HeightMap.getTrueHeightGradient(data, x, z, 3) <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
+        return (HeightMap.getTrueHeightGradient(data, x, z, 3) <= TConfig.c.MISC_TREES_GRADIENT_LIMIT);
     }
 
     public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock block) {
@@ -595,7 +595,7 @@ public class FractalTreeBuilder {
     }
 
     public boolean build(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return false;
         }
 
@@ -608,7 +608,7 @@ public class FractalTreeBuilder {
             }
         }
 
-        if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
+        if (TConfig.c.MISC_TREES_FORCE_LOGS) {
             this.trunkType = Material.getMaterial(StringUtils.replace(this.trunkType.toString(), "WOOD", "LOG"));
         }
         this.oriX = x;

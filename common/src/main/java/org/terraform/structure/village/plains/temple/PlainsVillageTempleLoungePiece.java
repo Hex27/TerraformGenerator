@@ -5,7 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
@@ -49,9 +49,9 @@ public class PlainsVillageTempleLoungePiece extends PlainsVillageTempleStandardP
                                        .apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[1]));
 
         }
-        if (TConfigOption.areDecorationsEnabled()) {
+        if (TConfig.areDecorationsEnabled()) {
             core.setType(plainsVillagePopulator.woodLog, Material.CRAFTING_TABLE, plainsVillagePopulator.woodPlank);
-            if (!TConfigOption.arePlantsEnabled() || random.nextBoolean()) {
+            if (!TConfig.arePlantsEnabled() || random.nextBoolean()) {
                 core.getUp().setType(Material.LANTERN);
             }
             else {

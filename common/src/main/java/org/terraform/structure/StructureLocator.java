@@ -11,7 +11,7 @@ import org.terraform.data.TerraformWorld;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 
 public class StructureLocator {
 
@@ -62,7 +62,7 @@ public class StructureLocator {
                         continue;
                     }
 
-                    if (TConfigOption.areStructuresEnabled() && populator.canSpawn(
+                    if (TConfig.areStructuresEnabled() && populator.canSpawn(
                             tw,
                             coords[0] >> 4,
                             coords[1] >> 4
@@ -156,7 +156,7 @@ public class StructureLocator {
                 BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
                 // Right bitshift of 4 is conversion from block coords to chunk coords.
 
-                if (TConfigOption.areStructuresEnabled() && populator.canSpawn(
+                if (TConfig.areStructuresEnabled() && populator.canSpawn(
                         tw,
                         coords[0] >> 4,
                         coords[1] >> 4,
@@ -170,7 +170,7 @@ public class StructureLocator {
                         if (availablePops == null) {
                             continue;
                         }
-                        if (TConfigOption.areStructuresEnabled() && availablePops.canSpawn(
+                        if (TConfig.areStructuresEnabled() && availablePops.canSpawn(
                                 tw,
                                 coords[0] >> 4,
                                 coords[1] >> 4,

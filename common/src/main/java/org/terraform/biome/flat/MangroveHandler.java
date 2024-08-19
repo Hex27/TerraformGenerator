@@ -12,7 +12,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
@@ -134,7 +134,7 @@ public class MangroveHandler extends BiomeHandler {
             CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
 
         }
-        if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
+        if (GenUtils.chance(random, TConfig.c.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND, 1000)) {
             BlockUtils.generateClayDeposit(rawX, surfaceY, rawZ, data, random);
         }
         if (GenUtils.chance(random, 5, 1000)) {

@@ -5,6 +5,7 @@ api-version: 1.18
 description: World Generator
 main: org.terraform.main.TerraformGeneratorPlugin
 load: STARTUP
+folia-supported: true
 commands:
   terraform:
     description: Main command

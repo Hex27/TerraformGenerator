@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
@@ -26,7 +26,7 @@ public class AmethystGeodePopulator {
 
     public AmethystGeodePopulator(int geodeRadius, double frequency, int minDepth, int minDepthBelowSurface) {
         this.geodeRadius = geodeRadius;
-        this.frequency = TConfigOption.FEATURE_ORES_ENABLED.getBoolean() ? frequency : 0;
+        this.frequency = TConfig.c.FEATURE_ORES_ENABLED ? frequency : 0;
         this.minDepth = minDepth;
         this.minDepthBelowSurface = minDepthBelowSurface;
     }

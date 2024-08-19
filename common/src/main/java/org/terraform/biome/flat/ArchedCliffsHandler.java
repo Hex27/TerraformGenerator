@@ -16,7 +16,7 @@ import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -119,7 +119,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
                     // If an underside was valid, you can check the upper area for
                     // decorating overhangs
                     for (BlockFace face : BlockUtils.directBlockFaces) {
-                        if (TConfigOption.arePlantsEnabled() && target.getRelative(face).getType() == Material.AIR) {
+                        if (TConfig.arePlantsEnabled() && target.getRelative(face).getType() == Material.AIR) {
                             if (GenUtils.chance(random, 1, 5))
                             // TODO:PlantBuilder
                             {

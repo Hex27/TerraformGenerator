@@ -17,7 +17,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.utils.BlockUtils;
@@ -33,7 +33,7 @@ import java.util.Random;
 public class FarmhousePopulator extends VillageHousePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if (!TConfigOption.areStructuresEnabled()) {
+        if (!TConfig.areStructuresEnabled()) {
             return;
         }
 
@@ -52,7 +52,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                                int y,
                                int z)
     {
-        if (!TConfigOption.areStructuresEnabled()) {
+        if (!TConfig.areStructuresEnabled()) {
             return;
         }
 
@@ -159,7 +159,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                            int y,
                            int z)
     {
-        if (!TConfigOption.areDecorationsEnabled()) {
+        if (!TConfig.areDecorationsEnabled()) {
             return;
         }
 

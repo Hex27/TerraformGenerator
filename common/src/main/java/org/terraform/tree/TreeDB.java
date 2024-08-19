@@ -8,7 +8,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -33,7 +33,7 @@ public class TreeDB {
                                    int y,
                                    int z)
     {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return;
         }
 
@@ -66,7 +66,7 @@ public class TreeDB {
                                         int y,
                                         int z)
     {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return;
         }
 
@@ -80,7 +80,7 @@ public class TreeDB {
 
         // Spawn the base
         Material log = Material.JUNGLE_WOOD;
-        if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) {
+        if (TConfig.c.MISC_TREES_FORCE_LOGS) {
             log = Material.JUNGLE_LOG;
         }
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -96,7 +96,7 @@ public class TreeDB {
                                             int y,
                                             int z)
     {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return;
         }
 
@@ -137,7 +137,7 @@ public class TreeDB {
      * Roots will extend at least a little above sea level
      */
     public static void spawnBreathingRoots(@NotNull TerraformWorld tw, @NotNull SimpleBlock centre, Material type) {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return;
         }
 

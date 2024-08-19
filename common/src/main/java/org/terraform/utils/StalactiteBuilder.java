@@ -5,7 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ public class StalactiteBuilder {
     }
 
     public void build(@NotNull Random rand, @NotNull Wall w) {
-        if (TConfigOption.areDecorationsEnabled()) {
+        if (TConfig.areDecorationsEnabled()) {
             return;
         }
 

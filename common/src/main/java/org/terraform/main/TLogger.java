@@ -3,7 +3,7 @@ package org.terraform.main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class TLogger {
     private static boolean suppressConsoleLogs = false;
 
     public TLogger() {
-        suppressConsoleLogs = TConfigOption.DEVSTUFF_SUPPRESS_CONSOLE_LOGS.getBoolean();
+        suppressConsoleLogs = TConfig.c.DEVSTUFF_SUPPRESS_CONSOLE_LOGS;
         if (suppressConsoleLogs) {
             Handler consoleHandler;
             Handler fileHandler;
@@ -103,7 +103,7 @@ public class TLogger {
     }
 
     public void debug(@NotNull String message) {
-        if (TConfigOption.DEVSTUFF_DEBUG_MODE.getBoolean()) {
+        if (TConfig.c.DEVSTUFF_DEBUG_MODE) {
             if (suppressConsoleLogs) {
                 LOGGER.log(Level.INFO, "[v] " + message);
             }

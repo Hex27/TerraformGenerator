@@ -14,7 +14,7 @@ import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -195,10 +195,10 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         for (SimpleLocation sLoc : poffs) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
             sLoc.setY(treeY);
-            if (TConfigOption.arePlantsEnabled()
-                && data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
-                && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()))
-                && !data.getType(sLoc.getX(), sLoc.getY() + 1, sLoc.getZ()).isSolid())
+            if (TConfig.arePlantsEnabled()
+				&& data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
+				&& BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()))
+				&& !data.getType(sLoc.getX(), sLoc.getY() + 1, sLoc.getZ()).isSolid())
             {
                 SimpleBlock base = new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());
                 int rX = GenUtils.randInt(random, 2, 4);

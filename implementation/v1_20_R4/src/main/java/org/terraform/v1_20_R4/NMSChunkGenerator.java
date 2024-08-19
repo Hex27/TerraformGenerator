@@ -33,7 +33,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.StructureLocator;
 import org.terraform.structure.monument.MonumentPopulator;
 import org.terraform.structure.pillager.mansion.MansionPopulator;
@@ -111,7 +111,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
                 return new Pair<>(new BlockPosition(coords[0], 20, coords[1]), holder);
             }
-            else if (!TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean()) {
+            else if (!TConfig.c.DEVSTUFF_VANILLA_LOCATE_DISABLE) {
                 if (holder.a().getClass() == OceanMonumentStructure.class) { // Monument
 
                     int[] coords = StructureLocator.locateSingleMegaChunkStructure(
@@ -119,7 +119,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                             pX,
                             pZ,
                             new MonumentPopulator(),
-                            TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt()
+                            TConfig.c.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS
                     );
 
                     return new Pair<>(new BlockPosition(coords[0], 50, coords[1]), holder);
@@ -131,7 +131,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                             pX,
                             pZ,
                             new MansionPopulator(),
-                            TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt()
+                            TConfig.c.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS
                     );
 
                     return new Pair<>(new BlockPosition(coords[0], 50, coords[1]), holder);
@@ -142,7 +142,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                             tw,
                             new MegaChunk(pX, 0, pZ),
                             new BuriedTreasurePopulator(),
-                            TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt()
+                            TConfig.c.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS
                     );
                     if (coords == null) {
                         return null;

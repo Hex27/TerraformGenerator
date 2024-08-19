@@ -15,7 +15,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
@@ -626,7 +626,7 @@ public class BlockUtils {
     }
 
     public static void setVines(@NotNull PopulatorDataAbstract data, int x, int y, int z, int maxLength) {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -685,7 +685,7 @@ public class BlockUtils {
     }
 
     public static void setPersistentLeaves(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -698,7 +698,7 @@ public class BlockUtils {
                                            int z,
                                            @NotNull Material type)
     {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -714,7 +714,7 @@ public class BlockUtils {
                                       int z,
                                       @NotNull Material doublePlant)
     {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -789,7 +789,7 @@ public class BlockUtils {
         // CLAY DEPOSIT
         replaceCircularPatch(
                 random.nextInt(9999),
-                TConfigOption.BIOME_CLAY_DEPOSIT_SIZE.getFloat(),
+                TConfig.c.BIOME_CLAY_DEPOSIT_SIZE,
                 new SimpleBlock(data, x, y, z),
                 Material.CLAY
         );
@@ -797,7 +797,7 @@ public class BlockUtils {
     }
 
     public static void vineUp(@NotNull SimpleBlock base, int maxLength) {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 
@@ -1626,7 +1626,7 @@ public class BlockUtils {
     }
 
     public static void placeCandle(@NotNull SimpleBlock block, int numCandles, boolean lit) {
-        if (!TConfigOption.areDecorationsEnabled()) {
+        if (!TConfig.areDecorationsEnabled()) {
             return;
         }
 
@@ -1638,7 +1638,7 @@ public class BlockUtils {
     }
 
     public static void downLPointedDripstone(int height, @NotNull SimpleBlock base) {
-        if (!TConfigOption.areDecorationsEnabled()) {
+        if (!TConfig.areDecorationsEnabled()) {
             return;
         }
 
@@ -1691,7 +1691,7 @@ public class BlockUtils {
     }
 
     public static void upLPointedDripstone(int height, @NotNull SimpleBlock base) {
-        if (!TConfigOption.areDecorationsEnabled()) {
+        if (!TConfig.areDecorationsEnabled()) {
             return;
         }
 
@@ -1751,7 +1751,7 @@ public class BlockUtils {
     }
 
     public static void downLCaveVines(int height, @NotNull SimpleBlock base) {
-        if (!TConfigOption.arePlantsEnabled()) {
+        if (!TConfig.arePlantsEnabled()) {
             return;
         }
 

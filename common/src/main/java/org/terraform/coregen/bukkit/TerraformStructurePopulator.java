@@ -21,7 +21,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.event.TerraformStructureSpawnEvent;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.JigsawState;
 import org.terraform.structure.JigsawStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
@@ -139,7 +139,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 
         // Use IChunkAccess to place blocks instead. Known to cause lighting problems.
         // Since people keep turning this on for fun, then reporting bugs, I'm removing it.
-        //        if (TConfigOption.DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT.getBoolean())
+        //        if (TConfigOption.DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT)
         //            data = new PopulatorDataRecursiveICA(chunk);
 
         // Spawn large structures
@@ -147,7 +147,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
 
         // Special Case
-        if (!TConfigOption.areStructuresEnabled() && new StrongholdPopulator().canSpawn(
+        if (!TConfig.areStructuresEnabled() && new StrongholdPopulator().canSpawn(
                 tw,
                 data.getChunkX(),
                 data.getChunkZ(),
@@ -178,7 +178,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
                 if (spop instanceof StrongholdPopulator) {
                     continue;
                 }
-                if (TConfigOption.areStructuresEnabled() && spop.canSpawn(
+                if (TConfig.areStructuresEnabled() && spop.canSpawn(
                         tw,
                         data.getChunkX(),
                         data.getChunkZ(),
@@ -219,7 +219,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
                 continue;
             }
             // TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
-            if (TConfigOption.areStructuresEnabled() && spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
+            if (TConfig.areStructuresEnabled() && spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
                 return spop;
             }
         }

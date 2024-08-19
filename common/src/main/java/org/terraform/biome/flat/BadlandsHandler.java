@@ -15,7 +15,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -27,11 +27,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BadlandsHandler extends BiomeHandler {
-    static final int sandRadius = TConfigOption.BIOME_BADLANDS_PLATEAU_SAND_RADIUS.getInt();
-    static final int plateauHeight = TConfigOption.BIOME_BADLANDS_PLATEAU_HEIGHT.getInt();
-    static final float plateauFrequency = TConfigOption.BIOME_BADLANDS_PLATEAU_FREQUENCY.getFloat();
-    static final double plateauThreshold = TConfigOption.BIOME_BADLANDS_PLATEAU_THRESHOLD.getDouble();
-    static final double plateauCommonness = TConfigOption.BIOME_BADLANDS_PLATEAU_COMMONNESS.getDouble();
+    static final int sandRadius = TConfig.c.BIOME_BADLANDS_PLATEAU_SAND_RADIUS;
+    static final int plateauHeight = TConfig.c.BIOME_BADLANDS_PLATEAU_HEIGHT;
+    static final float plateauFrequency = TConfig.c.BIOME_BADLANDS_PLATEAU_FREQUENCY;
+    static final double plateauThreshold = TConfig.c.BIOME_BADLANDS_PLATEAU_THRESHOLD;
+    static final double plateauCommonness = TConfig.c.BIOME_BADLANDS_PLATEAU_COMMONNESS;
     static private BiomeBlender riversBlender;
     static private BiomeBlender plateauBlender;
 
@@ -324,7 +324,7 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     void spawnDeadTree(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.areTreesEnabled()) {
+        if (!TConfig.areTreesEnabled()) {
             return;
         }
 

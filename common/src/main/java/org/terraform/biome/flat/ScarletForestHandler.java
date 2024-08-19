@@ -10,7 +10,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -89,7 +89,7 @@ public class ScarletForestHandler extends BiomeHandler {
             if (tw.getBiomeBank(sLoc.getX(), sLoc.getZ()) == BiomeBank.SCARLET_FOREST
                 && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))
             {
-                if (TConfigOption.TREES_SCARLET_BIG_ENABLED.getBoolean()) {
+                if (TConfig.c.TREES_SCARLET_BIG_ENABLED) {
                     new FractalTreeBuilder(FractalTypes.Tree.SCARLET_BIG).build(tw,
                             data,
                             sLoc.getX(),
