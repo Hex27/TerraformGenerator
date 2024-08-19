@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class OneOneNineBlockHandler {
 
-	//public static final EntityType FROG = getEntityType("FROG", "FISH");
+	// public static final EntityType FROG = getEntityType("FROG", "FISH");
 
 	public static final EntityType ALLAY = getEntityType();
 	
@@ -40,7 +40,7 @@ public class OneOneNineBlockHandler {
 	public static final @Nullable Material MANGROVE_FENCE = !Version.isAtLeast(19) ?
 			Material.getMaterial("OAK_FENCE") : Material.getMaterial("MANGROVE_FENCE");
 	
-	//Pre-1.19 versions WILL NOT have any sculk related spawns.
+	// Pre-1.19 versions WILL NOT have any sculk related spawns.
 	public static final @Nullable Material SCULK_VEIN = Material.getMaterial("SCULK_VEIN");
 	public static final @Nullable Material SCULK = !Version.isAtLeast(19) ?
 			Material.getMaterial("STONE") : Material.getMaterial("SCULK");

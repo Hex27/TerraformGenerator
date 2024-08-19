@@ -14,6 +14,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalLeaves;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
@@ -52,17 +53,17 @@ public class ElevatedPlainsHandler extends BiomeHandler {
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK &&
                 !BlockUtils.isWet(new SimpleBlock(data,rawX,surfaceY,rawZ))) {
 
-            if (GenUtils.chance(random, 1, 10)) { //Grass
+            if (GenUtils.chance(random, 1, 10)) { // Grass
                 if (GenUtils.chance(random, 6, 10)) {
-                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     if (random.nextBoolean()) {
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                        PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     }
                 } else {
                     if (GenUtils.chance(random, 7, 10))
-                        data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                        BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
                     else
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, BlockUtils.pickTallFlower());
+                        BlockUtils.pickTallFlower().build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -84,7 +85,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
         int height = (int) preciseHeight;
 
         int noiseValue = (int) Math.round(heightFactor * getBiomeBlender(tw).getEdgeFactor(BiomeBank.ELEVATED_PLAINS, rawX, rawZ));
-        if(noiseValue < 1) return; //If no changes are made, DO NOT TOUCH CACHE
+        if(noiseValue < 1) return; // If no changes are made, DO NOT TOUCH CACHE
 
         for (int y = 1; y <= noiseValue; y++) {
             chunk.setBlock(x, height + y, z, getRockAt(random, x,y,z));

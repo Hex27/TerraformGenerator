@@ -17,6 +17,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.utils.BlockUtils;
@@ -32,15 +33,19 @@ import java.util.Random;
 public class FarmhousePopulator extends VillageHousePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if ( !TConfigOption.areStructuresEnabled()) return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
         spawnFarmHouse(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, height + 1, z);
     }
 
     public void spawnFarmHouse(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if ( !TConfigOption.areStructuresEnabled()) return;
+
         try {
             BiomeBank biome = tw.getBiomeBank(x, z);
             y += GenUtils.randInt(random, 1, 3);
@@ -51,11 +56,11 @@ public class FarmhousePopulator extends VillageHousePopulator {
 
             TerraformGeneratorPlugin.logger.info("Spawning farmhouse at " + x + "," + y + "," + z + " with rotation of " + farmHouse.getFace());
 
-            data.addEntity(x, y + 1, z, EntityType.VILLAGER); //Two villagers
+            data.addEntity(x, y + 1, z, EntityType.VILLAGER); // Two villagers
             data.addEntity(x, y + 1, z, EntityType.VILLAGER);
-            data.addEntity(x, y + 1, z, EntityType.CAT); //And a cat.
+            data.addEntity(x, y + 1, z, EntityType.CAT); // And a cat.
 
-            //Spawn a base on the house to sit on
+            // Spawn a base on the house to sit on
             for (int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
                 for (int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
                     if (data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
@@ -66,26 +71,26 @@ public class FarmhousePopulator extends VillageHousePopulator {
                 }
             }
 
-            //Spawn a stairway from the house.
+            // Spawn a stairway from the house.
             Wall w = new Wall(new SimpleBlock(data, x, y - 1, z), farmHouse.getFace()).getRight();
             for (int i = 0; i < 7; i++)
                 w = w.getFront();
-            //while(w.getType() != Material.DIRT){
-            while (!w.getType().isSolid() ||
+            // while(w.getType() != Material.DIRT){
+            while (!w.isSolid() ||
                     w.getType().toString().contains("PLANKS")) {
-                Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(random, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
+                Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(random, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
                         Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS));
                 stairs.setFacing(w.getDirection().getOppositeFace());
                 w.getRight().setBlockData(stairs);
                 w.setBlockData(stairs);
                 w.getLeft().setBlockData(stairs);
-                w.getLeft().getLeft().getRelative(0, 1, 0).downUntilSolid(random, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
-                w.getLeft().getLeft().getRelative(0, 2, 0).setType(GenUtils.randMaterial(random, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
+                w.getLeft().getLeft().getUp().downUntilSolid(random, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
+                w.getLeft().getLeft().getUp(2).setType(GenUtils.randChoice(random, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.MOSSY_COBBLESTONE_WALL));
-                w.getRight().getRight().getRelative(0, 1, 0).downUntilSolid(random, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
-                w.getRight().getRight().getRelative(0, 2, 0).setType(GenUtils.randMaterial(random, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
+                w.getRight().getRight().getUp().downUntilSolid(random, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
+                w.getRight().getRight().getUp(2).setType(GenUtils.randChoice(random, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-                w = w.getFront().getRelative(0, -1, 0);
+                w = w.getFront().getDown();
             }
 
             createFields(tw, biome, random, data, x, y, z);
@@ -96,24 +101,26 @@ public class FarmhousePopulator extends VillageHousePopulator {
         }
     }
 
-    public void placeLamp(TerraformWorld tw, BiomeBank biome, @NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+    private void placeLamp(TerraformWorld tw, BiomeBank biome, @NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if (!TConfigOption.areDecorationsEnabled()) return;
+
         SimpleBlock b = new SimpleBlock(data, x, y, z);
-        b.setType(GenUtils.randMaterial(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
-        b.getRelative(0, 1, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-        b.getRelative(0, 2, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-        b.getRelative(0, 3, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
-        b.getRelative(0, 4, 0).setType(Material.CAMPFIRE);
-        b.getRelative(0, 5, 0).setType(GenUtils.randMaterial(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
+        b.setType(GenUtils.randChoice(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
+        b.getUp().setType(GenUtils.randChoice(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+        b.getUp(2).setType(GenUtils.randChoice(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+        b.getUp(3).setType(GenUtils.randChoice(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
+        b.getUp(4).setType(Material.CAMPFIRE);
+        b.getUp(5).setType(GenUtils.randChoice(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            Slab tSlab = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
+            Slab tSlab = (Slab) Bukkit.createBlockData(GenUtils.randChoice(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
             tSlab.setType(Type.TOP);
-            b.getRelative(face).getRelative(0, 3, 0).setBlockData(tSlab);
-            b.getRelative(face).getRelative(0, 4, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-            b.getRelative(face).getRelative(0, 5, 0).setType(GenUtils.randMaterial(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
+            b.getRelative(face).getUp(3).setBlockData(tSlab);
+            b.getRelative(face).getUp(4).setType(GenUtils.randChoice(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+            b.getRelative(face).getUp(5).setType(GenUtils.randChoice(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
         }
     }
 
-    public void createFields(@NotNull TerraformWorld tw, @NotNull BiomeBank biome, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+    private void createFields(@NotNull TerraformWorld tw, @NotNull BiomeBank biome, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         FastNoise fieldNoise = new FastNoise(tw.getHashedRand(x, y, z, 23).nextInt(225));
         fieldNoise.SetNoiseType(NoiseType.Simplex);
         fieldNoise.SetFrequency(0.05f);
@@ -150,7 +157,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         continue;
                     }
 
-                if (noise < -0.2) { //Crop one
+                if (noise < -0.2) { // Crop one
                     if (GenUtils.chance(random, 1, 15)) {
                         data.setType(nx + x, height, nz + z, Material.WATER);
                         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -167,7 +174,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         if (!data.getType(nx + x, height + 1, nz + z).isSolid())
                             data.setBlockData(nx + x, height + 1, nz + z, crop);
                     }
-                } else if (noise > 0.2) { //Crop two
+                } else if (noise > 0.2) { // Crop two
                     if (GenUtils.chance(random, 1, 15)) {
                         data.setType(nx + x, height, nz + z, Material.WATER);
                         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -183,16 +190,15 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         crop.setAge(GenUtils.randInt(random, 0, crop.getMaximumAge()));
                         data.setBlockData(nx + x, height + 1, nz + z, crop);
                     }
-                } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { //Grass hedges
+                } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { // Grass hedges
                     BlockUtils.setPersistentLeaves(data, nx + x, height + 1, nz + z, WoodUtils.getWoodForBiome(biome, WoodType.LEAVES));
 
                     if (GenUtils.chance(random, 1, 100)) {
                         placeLamp(tw, biome, random, data, nx + x, height + 1, z + nz);
                     }
-                    //data.setType(nx+x, height+1, nz+z, Material.OAK_LEAVES);
                 } else {
                     if (GenUtils.chance(random, (int) (100 * Math.pow(multiplier, 3)), 100)) {
-                        data.setType(nx + x, height, nz + z, GenUtils.randMaterial(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
+                        data.setType(nx + x, height, nz + z, GenUtils.randChoice(random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
                     }
                 }
 

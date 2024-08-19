@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
-import org.terraform.utils.BlockUtils;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.OneOneNineBlockHandler;
 
@@ -27,10 +27,10 @@ public class MudflatsHandler extends BiomeHandler {
 	@Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, OneOneNineBlockHandler.MUD, 35, Material.GRASS_BLOCK, 10),
-                GenUtils.randMaterial(rand, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -39,14 +39,14 @@ public class MudflatsHandler extends BiomeHandler {
         if (data.getType(rawX, surfaceY, rawZ) != Material.AIR) return;
         if (GenUtils.chance(5, 100)) {
             if (random.nextBoolean())
-                BlockUtils.setDoublePlant(data, rawX, surfaceY, rawZ, Material.TALL_GRASS);
+                PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY, rawZ);
             else
-                data.setType(rawX, surfaceY, rawZ, Material.GRASS);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY, rawZ);
         }
     }
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        //does nothing
+        // does nothing
 	}
 }

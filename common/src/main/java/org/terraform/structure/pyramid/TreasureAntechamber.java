@@ -26,13 +26,13 @@ public class TreasureAntechamber extends Antechamber {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
-        //Place chests against the walls
+        // Place chests against the walls
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
 
                 if (i != 0 && i != entry.getValue() - 1)
-                    if (w.getRear().getType().isSolid() && !w.getType().isSolid()
+                    if (w.getRear().isSolid() && !w.isSolid()
                             && GenUtils.chance(rand, 1, 4)) {
                         Chest chest = (Chest) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());

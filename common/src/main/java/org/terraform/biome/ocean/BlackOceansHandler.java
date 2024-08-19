@@ -26,7 +26,7 @@ public class BlackOceansHandler extends AbstractOceanHandler {
 
 	public static void genSpike(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
         y -= height / 5;
-        //Vector one to two;
+        // Vector one to two;
         Vector base = new Vector(x, y, z);
         Vector base2 = new Vector(x + GenUtils.randInt(random, -2 * baseRadius, 2 * baseRadius), y + height, z + GenUtils.randInt(random, -2 * baseRadius, 2 * baseRadius));
         Vector v = base2.subtract(base);
@@ -65,7 +65,7 @@ public class BlackOceansHandler extends AbstractOceanHandler {
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
-        //Set ground near sea level to gravel
+        // Set ground near sea level to gravel
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
@@ -73,10 +73,10 @@ public class BlackOceansHandler extends AbstractOceanHandler {
                 data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
         }
 
-        //No kelp above sea level.
+        // No kelp above sea level.
         if(surfaceY > TerraformGenerator.seaLevel) return;
         if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
-        if (GenUtils.chance(random, 1, 80)) { //SEA GRASS/KELP
+        if (GenUtils.chance(random, 1, 80)) { // SEA GRASS/KELP
             CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
         }
 
@@ -88,11 +88,11 @@ public class BlackOceansHandler extends AbstractOceanHandler {
             for (int z = data.getChunkZ() * 16 + 3; z < data.getChunkZ() * 16 + 16 - 3; z++) {
                 
                 if (data.getBiome(x, z) != getBiome()) continue;
-                //black spike
+                // black spike
                 if (GenUtils.chance(random, 1, 200)) {
                 	int y = HeightMap.getBlockHeight(tw, x, z);
                     genSpike(tw, random, data, x, y, z,
-                            GenUtils.randInt(5, 15), //radius
+                            GenUtils.randInt(5, 15), // radius
                             GenUtils.randInt(50, 100));
                 }
             }

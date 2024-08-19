@@ -37,15 +37,15 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
         int[] lowerBounds = room.getLowerCorner();
         int[] upperBounds = room.getUpperCorner();
 
-        //Bookshelves and entrance decor
+        // Bookshelves and entrance decor
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
-            Wall wall = entry.getKey().getRelative(0, 3, 0);
+            Wall wall = entry.getKey().getUp(3);
             for (int i = 1; i <= entry.getValue(); i++) {
                 wall.setType(Material.CHISELED_STONE_BRICKS);
                 if (i % 5 == 2 || i % 5 == 4)
-                    wall.getRelative(0, 1, 0).Pillar(15 - 7, rand, Material.CHISELED_STONE_BRICKS);
+                    wall.getUp().Pillar(15 - 7, rand, Material.CHISELED_STONE_BRICKS);
                 if (i % 5 == 3)
-                    wall.getRelative(0, 1, 0).Pillar(15 - 7, rand, Material.COBBLESTONE_WALL);
+                    wall.getUp().Pillar(15 - 7, rand, Material.COBBLESTONE_WALL);
 
                 for (int h = 1; h < 15 - 7; h++) {
                     BlockUtils.correctSurroundingMultifacingData(wall.getRelative(0, h, 0).get());
@@ -55,7 +55,7 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Obisidian line around the room
+        // Obisidian line around the room
         for (int x = lowerBounds[0] + 1; x < upperBounds[0]; x++) {
             for (int z = lowerBounds[1] + 1; z < upperBounds[1]; z++) {
                 data.setType(x, room.getY(), z, Material.OBSIDIAN);
@@ -67,7 +67,7 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Texture the sides of the ceiling
+        // Texture the sides of the ceiling
         for (int x = lowerBounds[0] + 1; x < upperBounds[0]; x++) {
             for (int z = lowerBounds[1] + 1; z < upperBounds[1]; z++) {
                 data.setType(x, room.getY() + room.getHeight() - 1, z, Material.COBBLESTONE);
@@ -85,11 +85,11 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Add ceiling decor
+        // Add ceiling decor
         SimpleBlock ceil = new SimpleBlock(data, room.getX(), room.getHeight() - 1 + room.getY(), room.getZ());
         ceilDecor(ceil);
 
-        //Create the portal
+        // Create the portal
         SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY() + 2, room.getZ());
         for (BlockFace face : BlockUtils.directBlockFaces) {
             Wall w = new Wall(base.getRelative(face).getRelative(face), face);
@@ -104,7 +104,7 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             w.getLeft().getLeft().setType(Material.CHISELED_STONE_BRICKS);
             w.getRight().getRight().setType(Material.CHISELED_STONE_BRICKS);
 
-            w = w.getRelative(0, -1, 0);
+            w = w.getDown();
             w.setType(BlockUtils.stoneBrick(rand));
             w.getLeft().setType(BlockUtils.stoneBrick(rand));
             w.getRight().setType(BlockUtils.stoneBrick(rand));
@@ -112,14 +112,14 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
 
         base = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
 
-        //Lava
+        // Lava
         for (int nx = -1; nx <= 1; nx++) {
             for (int nz = -1; nz <= 1; nz++) {
                 base.getRelative(nx, 0, nz).setType(Material.LAVA);
             }
         }
 
-        //Create the portal base
+        // Create the portal base
         for (BlockFace face : BlockUtils.directBlockFaces) {
             Wall w = new Wall(base.getRelative(face).getRelative(face).getRelative(face), face);
             w.setType(BlockUtils.stoneBrick(rand));
@@ -128,9 +128,9 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
             w.getLeft().getLeft().setType(BlockUtils.stoneBrick(rand));
             w.getRight().getRight().setType(BlockUtils.stoneBrick(rand));
 
-            w.getRelative(0, 1, 0).setType(BlockUtils.stoneBrickSlab(rand));
-            w.getRelative(0, 1, 0).getLeft().setType(BlockUtils.stoneBrickSlab(rand));
-            w.getRelative(0, 1, 0).getRight().setType(BlockUtils.stoneBrickSlab(rand));
+            w.getUp().setType(BlockUtils.stoneBrickSlab(rand));
+            w.getUp().getLeft().setType(BlockUtils.stoneBrickSlab(rand));
+            w.getUp().getRight().setType(BlockUtils.stoneBrickSlab(rand));
 
             w.getLeft().getLeft().getLeft().setType(BlockUtils.stoneBrickSlab(rand));
             w.getRight().getRight().getRight().setType(BlockUtils.stoneBrickSlab(rand));
@@ -149,11 +149,11 @@ public class PortalRoomPopulator extends RoomPopulatorAbstract {
         decoratedPillar(rand, data, room.getX() + 6, room.getY() + 1, room.getZ() - 6, room.getHeight() - 2);
         decoratedPillar(rand, data, room.getX() - 6, room.getY() + 1, room.getZ() - 6, room.getHeight() - 2);
 
-        //Lava pools.
+        // Lava pools.
         lavaPool(data, room.getX() + 8, room.getY() + 1, room.getZ(), room.getHeight() - 2);
         lavaPool(data, room.getX() - 8, room.getY() + 1, room.getZ(), room.getHeight() - 2);
 
-        //Connect the pools to the center
+        // Connect the pools to the center
         Wall w = new Wall(new SimpleBlock(data, room.getX() + 6, room.getY() + 1, room.getZ()), BlockFace.WEST);
         for (int i = 0; i < 4; i++) {
             w.setType(Material.LAVA);

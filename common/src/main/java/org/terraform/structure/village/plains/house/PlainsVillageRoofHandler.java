@@ -43,7 +43,7 @@ public class PlainsVillageRoofHandler {
                 highestCoords[1] = piece.getRoom().getZ();
         }
 
-        //Check and see if every piece is accounted for when looping through the coords.
+        // Check and see if every piece is accounted for when looping through the coords.
         int count = 0;
         for (int x = lowestCoords[0]; x <= highestCoords[0]; x += builder.getPieceWidth()) {
             for (int z = lowestCoords[1]; z <= highestCoords[1]; z += builder.getPieceWidth()) {
@@ -54,7 +54,7 @@ public class PlainsVillageRoofHandler {
             }
         }
 
-        //If all pieces accounted for by looping the coords, this is a rectangle.
+        // If all pieces accounted for by looping the coords, this is a rectangle.
         return count == builder.getPieces().size();
     }
 
@@ -84,12 +84,12 @@ public class PlainsVillageRoofHandler {
                 highestCoords[1] = piece.getRoom().getZ();
         }
 
-        //Longer axis is the superior one
+        // Longer axis is the superior one
         if (highestCoords[0] - lowestCoords[0] > highestCoords[1] - lowestCoords[1])
             superiorAxis = Axis.X;
         else if (highestCoords[0] - lowestCoords[0] < highestCoords[1] - lowestCoords[1])
             superiorAxis = Axis.Z;
-        else //Square house
+        else // Square house
             superiorAxis = new Axis[]{Axis.X, Axis.Z}[rand.nextInt(1)];
 
 
@@ -116,32 +116,32 @@ public class PlainsVillageRoofHandler {
             Wall target = w;
             for (int right = 0; right < breadth; right++) {
 
-                //Cover the holes
+                // Cover the holes
                 if (i == 2 || i == length - 3) {
                     Material bottom = getLowestMaterial(target);
                     target.downUntilSolid(new Random(), bottom);
-                    //target.CorrectMultipleFacing(1);
+                    // target.CorrectMultipleFacing(1);
                 }
 
-                //Place logs at the sides
+                // Place logs at the sides
                 if (right != 0 && right != breadth - 1) {
-                    //Sandwiched by trapdoors
+                    // Sandwiched by trapdoors
                     if (i == 0) {
                         new TrapdoorBuilder(plainsVillagePopulator.woodTrapdoor)
                                 .setHalf(Half.TOP)
                                 .setOpen(true)
                                 .setFacing(target.getDirection().getOppositeFace())
-                                .apply(target.getRelative(0, -1, 0));
+                                .apply(target.getDown());
                     } else if (i == length - 1) {
                         new TrapdoorBuilder(plainsVillagePopulator.woodTrapdoor)
                                 .setHalf(Half.TOP)
                                 .setOpen(true)
                                 .setFacing(target.getDirection())
-                                .apply(target.getRelative(0, -1, 0));
+                                .apply(target.getDown());
                     } else {
                         new OrientableBuilder(plainsVillagePopulator.woodLog)
                                 .setAxis(superiorAxis)
-                                .apply(target.getRelative(0, -1, 0).get());
+                                .apply(target.getDown().get());
                     }
                 }
 
@@ -152,42 +152,42 @@ public class PlainsVillageRoofHandler {
                     stairType = new Material[]{Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS};
                 }
 
-                if (breadth % 2 == 1) { //For odd breadth.
+                if (breadth % 2 == 1) { // For odd breadth.
                     if (right > breadth / 2) {
-                        //Slope down
+                        // Slope down
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getLeft(target.getDirection()))
                                 .apply(target);
-                        target = target.getRight().getRelative(0, -1, 0);
+                        target = target.getRight().getDown();
                     } else if (right < breadth / 2) {
-                        //Slope up
+                        // Slope up
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getRight(target.getDirection()))
                                 .apply(target);
-                        target = target.getRight().getRelative(0, 1, 0);
+                        target = target.getRight().getUp();
                     } else {
-                        //Top (Only exists when the breadth is odd.
+                        // Top (Only exists when the breadth is odd.
                         target.setType(slabType);
-                        target = target.getRight().getRelative(0, -1, 0);
+                        target = target.getRight().getDown();
                     }
-                } else { //For even breadth
+                } else { // For even breadth
                     if (right == breadth / 2 - 1) {
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getRight(target.getDirection()))
                                 .apply(target);
                         target = target.getRight();
                     } else if (right >= breadth / 2) {
-                        //Slope down
+                        // Slope down
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getLeft(target.getDirection()))
                                 .apply(target);
-                        target = target.getRight().getRelative(0, -1, 0);
+                        target = target.getRight().getDown();
                     } else if (right < breadth / 2) {
-                        //Slope up
+                        // Slope up
                         new StairBuilder(stairType)
                                 .setFacing(BlockUtils.getRight(target.getDirection()))
                                 .apply(target);
-                        target = target.getRight().getRelative(0, 1, 0);
+                        target = target.getRight().getUp();
                     }
                 }
             }
@@ -219,7 +219,7 @@ public class PlainsVillageRoofHandler {
             stairMat = new Material[]{Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS};
         }
 
-        //Pass One, handle the general shape of the roof
+        // Pass One, handle the general shape of the roof
         for (JigsawStructurePiece piece : builder.getPieces().values()) {
 
             for (int depth = -2; depth <= 0; depth++) {
@@ -228,12 +228,12 @@ public class PlainsVillageRoofHandler {
                 for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
                     for (int z = lowerCorner[1]; z <= upperCorner[1]; z++)
                         data.setType(x, piece.getRoom().getY() + piece.getRoom().getHeight() + 3 + depth, z,
-                                GenUtils.randMaterial(solidMat));
+                                GenUtils.randChoice(solidMat));
             }
 
         }
 
-        //Pass Two, replace the exposed sides with stairs
+        // Pass Two, replace the exposed sides with stairs
         for (JigsawStructurePiece piece : builder.getPieces().values()) {
             for (int depth = -2; depth <= 0; depth++) {
                 int[] lowerCorner = piece.getRoom().getLowerCorner(depth);
@@ -244,19 +244,19 @@ public class PlainsVillageRoofHandler {
                         if (target.getType() != Material.COBBLESTONE
                                 && target.getType() != plainsVillagePopulator.woodPlank
                                 && target.getType() != Material.MOSSY_COBBLESTONE) {
-                            //BlockUtils.correctSurroundingStairData(target);
+                            // BlockUtils.correctSurroundingStairData(target);
                             continue;
                         }
-                        //ArrayList<BlockFace> exposedFaces = new ArrayList<BlockFace>();
+                        // ArrayList<BlockFace> exposedFaces = new ArrayList<BlockFace>();
 
                         for (BlockFace face : BlockUtils.directBlockFaces) {
-                            if (!target.getRelative(face).getType().isSolid()) {
+                            if (!target.getRelative(face).isSolid()) {
                                 new StairBuilder(stairMat)
                                         .setFacing(face.getOppositeFace())
                                         .apply(target);
                                 BlockUtils.correctSurroundingStairData(target);
                                 break;
-                                //exposedFaces.add(face);
+                                // exposedFaces.add(face);
                             }
                         }
                     }

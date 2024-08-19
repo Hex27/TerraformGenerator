@@ -21,17 +21,17 @@ public class StairwayTopPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Open up the floor
+        // Open up the floor
         for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
             data.setType(room.getX() + face.getModX(), room.getY(), room.getZ() + face.getModZ(), Material.CAVE_AIR);
         }
 
-        //Have a pillar from the center to the ceiling
+        // Have a pillar from the center to the ceiling
         for (int i = 0; i < room.getHeight(); i++) {
             data.setType(room.getX(), room.getY() + i, room.getZ(), BlockUtils.stoneBrick(rand));
         }
 
-        //Connect to the bottom stairs.
+        // Connect to the bottom stairs.
         int bfIndex = 2;
         BlockFace face = BlockUtils.xzPlaneBlockFaces[bfIndex];
         Slab bottom = (Slab) Bukkit.createBlockData(BlockUtils.stoneBrickSlab(rand));

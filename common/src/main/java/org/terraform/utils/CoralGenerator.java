@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.main.config.TConfigOption;
 
 import java.util.Random;
 
@@ -81,7 +82,7 @@ public class CoralGenerator {
         BlockFace face = getRandomBlockFace();
         coralType = StringUtils.remove(coralType, "_BLOCK");
         if (face == BlockFace.DOWN) face = BlockFace.UP;
-        Material coral = Material.getMaterial(coralType + "_FAN");//coralFans().get(GenUtils.randInt(0, coralFans().size() - 1));
+        Material coral = Material.getMaterial(coralType + "_FAN");// coralFans().get(GenUtils.randInt(0, coralFans().size() - 1));
         if(new Random().nextBoolean())
         	coral = Material.getMaterial(coralType);
 
@@ -105,6 +106,8 @@ public class CoralGenerator {
      * @param data refers to the block to replace with sea pickles
      */
     public static void generateSeaPickles(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if (!TConfigOption.arePlantsEnabled()) return;
+
         int fullSize = GenUtils.randInt(1, 4);
         if (attemptReplace(data, x, y, z, Material.SEA_PICKLE)) {
             if (data.getBlockData(x, y, z) instanceof SeaPickle state) {
@@ -119,6 +122,8 @@ public class CoralGenerator {
      * @param data refers to the block ABOVE the floor (lowest block of the kelp plant)
      */
     public static void generateKelpGrowth(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if ( !TConfigOption.arePlantsEnabled()) return;
+
         int fullSize = GenUtils.randInt(1, 2);
         if (new Random().nextBoolean()) fullSize += GenUtils.randInt(1, 20);
         if (fullSize == 1) {

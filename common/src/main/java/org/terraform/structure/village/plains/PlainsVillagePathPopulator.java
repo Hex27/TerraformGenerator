@@ -11,6 +11,8 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
@@ -32,18 +34,18 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
     }
 
     public static void placeLamp(@NotNull Random rand, @NotNull SimpleBlock b) {
-        b.setType(GenUtils.randMaterial(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
-        b.getRelative(0, 1, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-        b.getRelative(0, 2, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-        b.getRelative(0, 3, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
-        b.getRelative(0, 4, 0).setType(Material.CAMPFIRE);
-        b.getRelative(0, 5, 0).setType(GenUtils.randMaterial(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
+        b.setType(GenUtils.randChoice(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
+        b.getUp().setType(GenUtils.randChoice(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+        b.getUp(2).setType(GenUtils.randChoice(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+        b.getUp(3).setType(GenUtils.randChoice(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE));
+        b.getUp(4).setType(Material.CAMPFIRE);
+        b.getUp(5).setType(GenUtils.randChoice(rand, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS));
         for (BlockFace face : BlockUtils.directBlockFaces) {
-            Slab tSlab = (Slab) Bukkit.createBlockData(GenUtils.randMaterial(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
+            Slab tSlab = (Slab) Bukkit.createBlockData(GenUtils.randChoice(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
             tSlab.setType(Type.TOP);
-            b.getRelative(face).getRelative(0, 3, 0).setBlockData(tSlab);
-            b.getRelative(face).getRelative(0, 4, 0).setType(GenUtils.randMaterial(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
-            b.getRelative(face).getRelative(0, 5, 0).setType(GenUtils.randMaterial(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
+            b.getRelative(face).getUp(3).setBlockData(tSlab);
+            b.getRelative(face).getUp(4).setType(GenUtils.randChoice(rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
+            b.getRelative(face).getUp(5).setType(GenUtils.randChoice(rand, Material.STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_SLAB));
         }
     }
     
@@ -60,7 +62,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
     		return false;
         for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
             for (int i = 0; i < 6; i++)
-                if (target.getRelative(face).getRelative(0, i, 0).getType().isSolid())
+                if (target.getRelative(face).getRelative(0, i, 0).isSolid())
                     return false;
         }
 
@@ -70,42 +72,43 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
     @Override
     public void populate(@NotNull PathPopulatorData ppd) {
 
-        //Find the ground level to place pathways
+        // Find the ground level to place pathways
         ppd.base = new SimpleBlock(
                 ppd.base.getPopData(),
                 ppd.base.getX(),
                 GenUtils.getHighestGround(ppd.base.getPopData(), ppd.base.getX(), ppd.base.getZ()),
                 ppd.base.getZ());
 
-        //Path is on water. Place a solid wooden foundation, and then return.
-        if (BlockUtils.isWet(ppd.base.getRelative(0,1,0))) {
+        // Path is on water. Place a solid wooden foundation, and then return.
+        if (BlockUtils.isWet(ppd.base.getUp())) {
             
         	Wall pathCore = new Wall(ppd.base, ppd.dir).getAtY(TerraformGenerator.seaLevel);
            
         	if((BlockUtils.getAxisFromBlockFace(ppd.dir) == Axis.X && ppd.base.getX() % 2 == 0) 
         		|| (BlockUtils.getAxisFromBlockFace(ppd.dir) == Axis.Z && ppd.base.getZ() % 2 == 0)) {
-        		pathCore.getRelative(0, -1, 0).downLPillar(random, 50, Material.OAK_LOG);
+        		pathCore.getDown().downLPillar(random, 50, Material.OAK_LOG);
         		pathCore.setType(Material.CHISELED_STONE_BRICKS);
         	}
             return;
         }
         
-        //Decorate the sides of the paths
+        // Decorate the sides of the paths
         Wall pathCore = new Wall(ppd.base, ppd.dir);
     	for(BlockFace face:BlockUtils.getAdjacentFaces(ppd.dir)) {
             for(int i = 0; i < 4; i++) {
         		Wall target = pathCore.getRelative(face,i).getGround();
-            	if(!target.getRelative(0,1,0).getType().isSolid()
-            			&& target.getRelative(0,1,0).getType() != Material.WATER
+            	if(!target.getUp().isSolid()
+            			&& target.getUp().getType() != Material.WATER
             			&& BlockUtils.isDirtLike(target.getType()) 
             			&& target.getType() != Material.DIRT_PATH) {
-            		if(GenUtils.chance(2,5)) { //Leaves
-            			target.getRelative(0,1,0).setType(Material.OAK_LEAVES);
-            		}else if(GenUtils.chance(1, 5)) { //Flowers
-            			BlockUtils.setDoublePlant(target.get().getPopData(), target.getX(), target.getY()+1, target.getZ(), BlockUtils.pickTallFlower());
-            		}else if(GenUtils.chance(1, 10)) { //Small cobble walls with lanterns
-            			target.getRelative(0,1,0).setType(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
-            			target.getRelative(0,2,0).setType(Material.LANTERN);
+            		if(GenUtils.chance(2,5)) { // Leaves
+                        PlantBuilder.OAK_LEAVES.build(target.getUp());
+            		}else if(GenUtils.chance(1, 5)) { // Flowers
+                        BlockUtils.pickTallFlower().build(target);
+            		}else if(GenUtils.chance(1, 10)) { // Small cobble walls with lanterns
+            			target.getUp().setType(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
+                        if (TConfigOption.areDecorationsEnabled())
+            			    target.getUp(2).setType(Material.LANTERN);
             		}
             		
             		break;
@@ -126,7 +129,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                     ppd.base.getZ() + side.getModZ() * 3);
             if (target.getType() == Material.DIRT_PATH) return;
             for (BlockFace face : BlockUtils.xzPlaneBlockFaces) {
-                if (target.getRelative(face).getGround().getRelative(0, 1, 0).getType().isSolid())
+                if (target.getRelative(face).getGround().getUp().isSolid())
                     return;
             }
 
@@ -135,7 +138,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
                     return;
             }
 
-            placeLamp(random, target.getRelative(0, 1, 0));
+            placeLamp(random, target.getUp());
         }
     }
 

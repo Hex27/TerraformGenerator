@@ -154,7 +154,7 @@ public class SphereBuilder {
             for (float y = effectiveRYLower; y <= effectiveRYUpper; y++) {
                 for (float z = -rZ-padding; z <= rZ+padding; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
@@ -189,23 +189,23 @@ public class SphereBuilder {
     
     private void unitReplace(@NotNull SimpleBlock rel, int effectiveRYUpper) {
     	if(replaceWhitelist.isEmpty()) {
-    		if (hardReplace || !rel.getType().isSolid()) {
-                rel.setType(GenUtils.randMaterial(random, types));
+    		if (hardReplace || !rel.isSolid()) {
+                rel.setType(GenUtils.randChoice(random, types));
                 if(this.doLiquidContainment)
                 	rel.replaceAdjacentNonLiquids(new BlockFace[]{BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}, types[0], containmentMaterial);
             }
         } else if(replaceWhitelist.contains(rel.getType())) {
-            rel.setType(GenUtils.randMaterial(random, types));
+            rel.setType(GenUtils.randChoice(random, types));
             if(this.doLiquidContainment)
             	rel.replaceAdjacentNonLiquids(new BlockFace[]{BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST}, types[0], containmentMaterial);
     	}
 
-        if(rel.getType().isSolid()) {
+        if(rel.isSolid()) {
 	    	if(upperType != null && rel.getY() == effectiveRYUpper) {
-	    		rel.getRelative(0,1,0).lsetType(upperType);
+	    		rel.getUp().lsetType(upperType);
 	    	}
 	    	if(lowerType != null)
-	    		rel.getRelative(0,-1,0).setType(lowerType);
+	    		rel.getDown().setType(lowerType);
     	}
 
 

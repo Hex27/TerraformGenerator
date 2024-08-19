@@ -11,6 +11,7 @@ import org.terraform.data.TerraformWorld;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.terraform.main.config.TConfigOption;
 
 public class StructureLocator {
 	
@@ -24,12 +25,12 @@ public class StructureLocator {
 		if(!populator.isEnabled()) return null;
 		StructureLocatorKey cacheKey = new StructureLocatorKey(center,tw,populator);
 		
-		//Do not use the cache if timeout is -1. 
+		// Do not use the cache if timeout is -1. 
 		// /terra locate should keep re-running this code for debug purposes.
 		if(timeoutMillis != -1) {
 			int[] coords = STRUCTURELOCATION_CACHE.getIfPresent(cacheKey);
 			if(coords != null) {
-				//Query timed out before. Don't try again.
+				// Query timed out before. Don't try again.
 				if(coords[0] == TIMEDOUT[0] && coords[1] == TIMEDOUT[1])
 					return null;
 				return coords;
@@ -44,7 +45,7 @@ public class StructureLocator {
 
         while (!found) {
             for (MegaChunk mc : getSurroundingChunks(center, radius)) {
-            	//Timeout catcher
+            	// Timeout catcher
             	if(timeoutMillis != -1 && System.currentTimeMillis() - currentTimeMillis > timeoutMillis) {
                 	STRUCTURELOCATION_CACHE.put(cacheKey, TIMEDOUT);
             		break;
@@ -52,7 +53,7 @@ public class StructureLocator {
                 for (int[] coords : populator.getCoordsFromMegaChunk(tw, mc)) {
                     if (coords == null) continue;
 
-                    if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4)) {
+                    if (TConfigOption.areStructuresEnabled() && populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4)) {
                         found = true;
                         blockX = coords[0];
                         blockZ = coords[1];
@@ -79,15 +80,15 @@ public class StructureLocator {
 		
 		StructureLocatorKey cacheKey = new StructureLocatorKey(center,tw,populator);
 		
-		//Do not use the cache if timeout is -1. 
+		// Do not use the cache if timeout is -1. 
 		// /terra locate should keep re-running this code for debug purposes.
 		// Also to prevent potential bugs where bad coordinates are cached.
-		//Caching must be done anyway for vanilla, as it will cause locks when
-		//players level up villagers.
+		// Caching must be done anyway for vanilla, as it will cause locks when
+		// players level up villagers.
 		if(timeoutMillis != -1) {
 			int[] coords = STRUCTURELOCATION_CACHE.getIfPresent(cacheKey);
 			if(coords != null) {
-				//Query timed out before. Don't try again.
+				// Query timed out before. Don't try again.
 				if(coords[0] == TIMEDOUT[0] && coords[1] == TIMEDOUT[1])
 					return null;
 				return coords;
@@ -103,7 +104,7 @@ public class StructureLocator {
         
         while (!found) {
             for (MegaChunk mc : getSurroundingChunks(center, radius)) {
-            	//Timeout catcher
+            	// Timeout catcher
             	if(timeoutMillis != -1 && System.currentTimeMillis() - currentTimeMillis > timeoutMillis) {
                 	STRUCTURELOCATION_CACHE.put(cacheKey, TIMEDOUT);
             		break;
@@ -114,25 +115,25 @@ public class StructureLocator {
                     lowerBound = mc;
                 if (mc.getX() > upperBound.getX() || mc.getZ() > upperBound.getZ())
                     upperBound = mc;
-                int[] coords = mc.getCenterBiomeSectionBlockCoords(); //populator.getCoordsFromMegaChunk(tw, mc);
+                int[] coords = mc.getCenterBiomeSectionBlockCoords(); // populator.getCoordsFromMegaChunk(tw, mc);
                 if (coords == null) continue;
                 BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
-                //Right bitshift of 4 is conversion from block coords to chunk coords.
+                // Right bitshift of 4 is conversion from block coords to chunk coords.
                 
-                if (populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
+                if (TConfigOption.areStructuresEnabled() && populator.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
                     for (SingleMegaChunkStructurePopulator availablePops : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
                         if (availablePops == null) continue;
-                        if(availablePops.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
+                        if(TConfigOption.areStructuresEnabled() && availablePops.canSpawn(tw, coords[0] >> 4, coords[1] >> 4, biome)) {
                             if (availablePops.getClass().equals(populator.getClass())) {
-                                //Can spawn
+                                // Can spawn
                                 found = true;
                                 blockX = coords[0];
                                 blockZ = coords[1];
                             }
 
-                            //Break either way, as the first structure that can spawn will spawn.
-                            //If the populator could spawn, but it isn't the target populator
-                            //we're looking for, then this megachunk didn't spawn our structure.
+                            // Break either way, as the first structure that can spawn will spawn.
+                            // If the populator could spawn, but it isn't the target populator
+                            // we're looking for, then this megachunk didn't spawn our structure.
                             break;
                         }
                     }
@@ -151,19 +152,19 @@ public class StructureLocator {
             add(center);
         }};
         //     xxxxx
-        //xxx  x   x
-        //xox  x o x
-        //xxx  x   x
+        // xxx  x   x
+        // xox  x o x
+        // xxx  x   x
         //     xxxxx
         ArrayList<MegaChunk> candidates = new ArrayList<>();
-      //Lock rX, iterate rZ
+      // Lock rX, iterate rZ
         for(int rx:new int[] {-radius,radius}) {
         	 for (int rz = -radius; rz <= radius; rz++) {
         		 candidates.add(center.getRelative(rx, rz));
              }
         }
         
-        //Lock rZ, iterate rX
+        // Lock rZ, iterate rX
         for(int rz:new int[] {-radius,radius}) {
        	 for (int rx = 1-radius; rx <= radius-1; rx++) {
        		 candidates.add(center.getRelative(rx, rz));

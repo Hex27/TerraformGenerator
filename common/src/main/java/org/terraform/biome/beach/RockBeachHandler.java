@@ -26,8 +26,8 @@ public class RockBeachHandler extends BiomeHandler {
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.STONE, 5, Material.GRAVEL, 35, Material.COBBLESTONE, 10),
                 GenUtils.weightedRandomMaterial(rand, Material.STONE, 5, Material.GRAVEL, 35, Material.COBBLESTONE, 10),
-                GenUtils.randMaterial(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL),
-                GenUtils.randMaterial(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)};
+                GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL),
+                GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)};
     }
 
     @Override

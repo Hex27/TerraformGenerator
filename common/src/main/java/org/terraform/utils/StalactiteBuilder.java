@@ -5,6 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -23,21 +24,23 @@ public class StalactiteBuilder {
 		this.wallType = wallType;
 	}
 	
-	public @NotNull StalactiteBuilder build(@NotNull Random rand, @NotNull Wall w) {
-		if(verticalSpace < 6) return this;
+	public void build(@NotNull Random rand, @NotNull Wall w) {
+        if (TConfigOption.areDecorationsEnabled()) return;
+
+		if(verticalSpace < 6) return;
 		
 		int stalactiteHeight;
-		if(verticalSpace > 60) //massive cave
+		if(verticalSpace > 60) // massive cave
 			stalactiteHeight = GenUtils.randInt(rand, 6, 25);
-		else if(verticalSpace > 30) //large cave
+		else if(verticalSpace > 30) // large cave
 			stalactiteHeight = GenUtils.randInt(rand, 5, 17);
-		else if(verticalSpace > 15) //medium cave
+		else if(verticalSpace > 15) // medium cave
 			stalactiteHeight = GenUtils.randInt(rand, 3, 10);
-		else //likely noodle cave
+		else // likely noodle cave
 			stalactiteHeight = GenUtils.randInt(rand, 1, 2);
 		
 		if(stalactiteHeight < 4) {
-			//tiny stalactite (1-3 blocks)
+			// tiny stalactite (1-3 blocks)
 			if(isFacingUp)
 				w.LPillar(stalactiteHeight, rand, wallType);
 			else 
@@ -45,7 +48,7 @@ public class StalactiteBuilder {
 		}
 		else if(stalactiteHeight < 7) 
 		{
-			//Bigger stalactite. (4-7 blocks)
+			// Bigger stalactite. (4-7 blocks)
 			if(isFacingUp) {
 				w.LPillar(stalactiteHeight, rand, wallType);
 				w.Pillar(GenUtils.randInt(rand, 2, 3), rand, solidBlockType);
@@ -56,22 +59,20 @@ public class StalactiteBuilder {
 		}
 		else
 		{
-			//Large stalactite (8+ blocks)
+			// Large stalactite (8+ blocks)
 			if(isFacingUp)
 			{
-				makeSpike(rand, w.getDown(),
+				makeSpike(w.getDown(),
                         GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),
                         stalactiteHeight, true);
 			}
 			else
 			{
-                makeSpike(rand, w.getUp(),
+                makeSpike(w.getUp(),
                         GenUtils.randDouble(rand, stalactiteHeight/6.0, stalactiteHeight/4.0),
                         stalactiteHeight, false);
 			}
 		}
-		
-		return this;
 	}
 
 	public @NotNull StalactiteBuilder setSolidBlockType(Material... solidBlockType) {
@@ -103,18 +104,18 @@ public class StalactiteBuilder {
      * Responsible for generating a stalactite or stalagmite.
      * @param facingUp generates stalagmites if true. If not, makes stalactites.
      */
-	public void makeSpike(Random random, @NotNull SimpleBlock root, double baseRadius, int height, boolean facingUp) {
+	public void makeSpike(@NotNull SimpleBlock root, double baseRadius, int height, boolean facingUp) {
 
-        //HEIGHT CANNOT BE LESS THAN 1. (1.0/0.0) DOES NOT THROW ARITHMETIC ERRORS
+        // HEIGHT CANNOT BE LESS THAN 1. (1.0/0.0) DOES NOT THROW ARITHMETIC ERRORS
         if(height < 8) return;
 
         float maxRadius = 3f;
         baseRadius = Math.min(maxRadius, Math.max(baseRadius, minRadius));
 
-        //Perform a BFS against the cone 3d equation to prevent spheres from overwriting
-        //each other. Should reduce chunk r/w ops
+        // Perform a BFS against the cone 3d equation to prevent spheres from overwriting
+        // each other. Should reduce chunk r/w ops
 
-        //Assume that it will use slightly more than coneVolume blocks
+        // Assume that it will use slightly more than coneVolume blocks
         Queue<SimpleBlock> queue = new ArrayDeque<>((int) (Math.PI*Math.pow(baseRadius,2)*(height/2.5)));
         queue.add(root);
         HashSet<SimpleBlock> seen = new HashSet<>();
@@ -124,7 +125,7 @@ public class StalactiteBuilder {
             SimpleBlock v = queue.remove();
             v.setType(solidBlockType);
 
-            //Place blocks for v
+            // Place blocks for v
             for(BlockFace rel:BlockUtils.sixBlockFaces)
             {
                 SimpleBlock neighbour = v.getRelative(rel);
@@ -139,18 +140,18 @@ public class StalactiteBuilder {
                  * x^2 + z^2 - ((y-h)/baseRadius)^2 = 0
                  */
                 double coneEqn = facingUp ?
-                        //Stalagmites. Minus as it grows up
+                        // Stalagmites. Minus as it grows up
                         Math.pow(neighbour.getX()-root.getX(),2)
                         + Math.pow(neighbour.getZ()-root.getZ(),2)
                         - Math.pow((yOffset-height)/(height/baseRadius), 2)
                         :
-                        //Stalactites. Plus as it grows down
+                        // Stalactites. Plus as it grows down
                         Math.pow(neighbour.getX()-root.getX(),2)
                         + Math.pow(neighbour.getZ()-root.getZ(),2)
                         - Math.pow((yOffset+height)/(height/baseRadius), 2);
-                //Only make cones larger, not smaller. This prevents blobs.
-                //coneEqn -= Math.abs(noise.GetNoise(neighbour.getX(), neighbour.getZ()));
-                if(coneEqn > 0) continue; //<=0 is within the spike
+                // Only make cones larger, not smaller. This prevents blobs.
+                // coneEqn -= Math.abs(noise.GetNoise(neighbour.getX(), neighbour.getZ()));
+                if(coneEqn > 0) continue; // <=0 is within the spike
 
                 queue.add(neighbour);
                 seen.add(neighbour);

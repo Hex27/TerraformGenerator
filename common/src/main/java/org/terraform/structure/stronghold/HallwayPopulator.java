@@ -37,14 +37,14 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
                 new StairBuilder(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS)
                         .setFacing(w.getDirection().getOppositeFace())
                         .setHalf(Bisected.Half.TOP)
-                        .apply(w.getRelative(0, 4, 0));
-                w.getRelative(0, 5, 0).LPillar(room.getHeight(), rand, BlockUtils.stoneBricks);
-                if (!w.getRear().getRelative(0, 1, 0).getType().isSolid()) {
+                        .apply(w.getUp(4));
+                w.getUp(5).LPillar(room.getHeight(), rand, BlockUtils.stoneBricks);
+                if (!w.getRear().getUp().isSolid()) {
                     wasAir = true;
-                    w.getRelative(0, 5, 0).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
+                    w.getUp(5).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
                 } else {
-                    //Right or left wall is part of an entrance
-                    if (wasAir || !w.getLeft().getRear().getRelative(0, 1, 0).getType().isSolid()) {
+                    // Right or left wall is part of an entrance
+                    if (wasAir || !w.getLeft().getRear().getUp().isSolid()) {
                         w.getRear().Pillar(5, rand, Material.STONE, Material.SMOOTH_STONE);
                     }
                     wasAir = false;
@@ -66,7 +66,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Corner Walls
+        // Corner Walls
         for (int[] coords : room.getAllCorners(1)) {
             new Wall(new SimpleBlock(data, coords[0], room.getY() + 1, coords[1]))
                     .Pillar(room.getHeight() - 1, rand, BlockUtils.stoneBricks);
@@ -75,22 +75,22 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
         for (int i = 0; i < GenUtils.randInt(rand, room.getWidthX(), room.getWidthX() * room.getWidthZ() / 10); i++) {
             int[] randomCoords = room.randomCoords(rand, 1);
             SimpleBlock ceil = new SimpleBlock(data, randomCoords[0], room.getY() + room.getHeight(), randomCoords[2]);
-            //Sometimes parts of the ceiling falls down
+            // Sometimes parts of the ceiling falls down
             if (GenUtils.chance(rand, 4, 25)) {
                 for (int j = 0; j < GenUtils.randInt(rand, 1, 5); j++) {
                     dropDownBlock(ceil.getRelative(GenUtils.randInt(rand, -1, 1), 0, GenUtils.randInt(rand, -1, 1)));
                 }
             }
 
-            //Cobwebs
+            // Cobwebs
             if (GenUtils.chance(rand, 1, 5)) {
-                SimpleBlock webBase = ceil.getRelative(0, -1, 0);
+                SimpleBlock webBase = ceil.getDown();
                 webBase.setType(Material.COBWEB);
 
                 for (int j = 0; j < GenUtils.randInt(rand, 0, 3); j++) {
                     BlockFace face = CoralGenerator.getRandomBlockFace();
                     if (face == BlockFace.UP) face = BlockFace.SELF;
-                    if (!webBase.getRelative(face).getType().isSolid())
+                    if (!webBase.getRelative(face).isSolid())
                         webBase.getRelative(face).setType(Material.COBWEB);
                 }
             }
@@ -99,12 +99,12 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
     }
 
     private void dropDownBlock(@NotNull SimpleBlock block) {
-        if (block.getType().isSolid()) {
+        if (block.isSolid()) {
             BlockData type = block.getBlockData();
             block.setType(Material.CAVE_AIR);
             int depth = 0;
-            while (!block.getType().isSolid()) {
-                block = block.getRelative(0, -1, 0);
+            while (!block.isSolid()) {
+                block = block.getDown();
                 depth++;
                 if (depth > 50) return;
             }
@@ -116,16 +116,16 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
             }
 
             if (GenUtils.chance(1, 3)) {
-                block.getRelative(0, 1, 0).setBlockData(BlockUtils.infestStone(type));
+                block.getUp().setBlockData(BlockUtils.infestStone(type));
             } else {
-                block.getRelative(0, 1, 0).setBlockData(type);
+                block.getUp().setBlockData(type);
             }
         }
     }
 
     @Override
     public boolean canPopulate(@NotNull CubeRoom room) {
-        //Don't override prisons: Hallways are bloody dull.
+        // Don't override prisons: Hallways are bloody dull.
         return !new PrisonRoomPopulator(new Random(), false, false).canPopulate(room)
                 && room.isBig()
                 && !room.isHuge();

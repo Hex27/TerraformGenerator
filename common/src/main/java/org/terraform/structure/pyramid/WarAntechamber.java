@@ -32,12 +32,12 @@ public class WarAntechamber extends Antechamber {
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
-        //Decorate the walls with various banners
+        // Decorate the walls with various banners
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
-            Wall w = entry.getKey().getRelative(0, 2, 0);
+            Wall w = entry.getKey().getUp(2);
             for (int i = 0; i < entry.getValue(); i++) {
 
-                if (w.getRear().getType().isSolid() && !w.getType().isSolid()
+                if (w.getRear().isSolid() && !w.isSolid()
                         && GenUtils.chance(rand, 3, 10)) {
                     BannerUtils.generateBanner(rand, w.get(), w.getDirection(), true);
                 }
@@ -47,11 +47,11 @@ public class WarAntechamber extends Antechamber {
 
         }
 
-        //Pillar in the center.
+        // Pillar in the center.
         Wall w = new Wall(new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ()));
         w.LPillar(room.getHeight(), rand, Material.CHISELED_SANDSTONE);
 
-        //Stair base and ceiling
+        // Stair base and ceiling
         for (BlockFace face : BlockUtils.directBlockFaces) {
             Stairs stair = (Stairs) Bukkit.createBlockData(Material.SANDSTONE_STAIRS);
             stair.setFacing(face.getOppositeFace());
@@ -64,8 +64,8 @@ public class WarAntechamber extends Antechamber {
             w.getRelative(face).getRelative(0, room.getHeight() - 2, 0).setBlockData(stair);
         }
 
-        //Central Precious Block
-        w.getRelative(0, room.getHeight() / 2 - 1, 0).setType(GenUtils.randMaterial(rand,
+        // Central Precious Block
+        w.getRelative(0, room.getHeight() / 2 - 1, 0).setType(GenUtils.randChoice(rand,
                 Material.GOLD_BLOCK,
                 Material.LAPIS_BLOCK,
                 Material.LAPIS_BLOCK,

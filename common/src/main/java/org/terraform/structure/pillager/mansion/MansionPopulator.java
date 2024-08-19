@@ -28,11 +28,13 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-    	//Enforce minimum distance
+        if (!isEnabled()) return false;
+
+    	// Enforce minimum distance
         if(Math.pow(chunkX*16,2) + Math.pow(chunkZ*16,2) < Math.pow(TConfigOption.STRUCTURES_MANSION_MINDISTANCE.getInt(),2))
             return false;
 
-        //Mansions must spawn. Dark forests are rare enough. Ignore ground height.
+        // Mansions must spawn. Dark forests are rare enough. Ignore ground height.
     	if(biome == (BiomeBank.DARK_FOREST)) {
             return rollSpawnRatio(tw,chunkX,chunkZ);
         }
@@ -41,11 +43,13 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
 
-        //If it is below sea level, DON'T SPAWN IT.
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        // If it is below sea level, DON'T SPAWN IT.
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
         int y = GenUtils.getHighestGround(data, coords[0], coords[1]);
     	if(y < TerraformGenerator.seaLevel) y = TerraformGenerator.seaLevel;
     	
@@ -67,7 +71,8 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return BiomeBank.isBiomeEnabled(BiomeBank.DARK_FOREST) 
-        		&& TConfigOption.STRUCTURES_MANSION_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled()
+               && BiomeBank.isBiomeEnabled(BiomeBank.DARK_FOREST)
+               && TConfigOption.STRUCTURES_MANSION_ENABLED.getBoolean();
     }
 }

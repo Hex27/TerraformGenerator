@@ -45,7 +45,7 @@ public class NewTreeCommand extends TerraCommand {
 
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
-        //TreeDB.spawnFractalTree(new Random(), new SimpleBlock(data,p.getLocation().getBlock()));
+        // TreeDB.spawnFractalTree(new Random(), new SimpleBlock(data,p.getLocation().getBlock()));
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
         int x = p.getLocation().getBlockX();
         int y = p.getLocation().getBlockY();

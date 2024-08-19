@@ -63,7 +63,7 @@ public class SeekCommand extends TerraCommand implements Listener {
             return;
         }
         
-        StructurePopulator spop = (StructurePopulator) params.get(0); //TODO: Get populator by name
+        StructurePopulator spop = (StructurePopulator) params.get(0); // TODO: Get populator by name
 
         if (!spop.isEnabled() && !(spop instanceof StrongholdPopulator)) {
             sender.sendMessage(LangOpt.COMMAND_LOCATE_STRUCTURE_NOT_ENABLED.parse());
@@ -72,7 +72,7 @@ public class SeekCommand extends TerraCommand implements Listener {
 
         World w = Objects.requireNonNull(Bukkit.getWorld("world"));
         
-        //Stronghold Special Case
+        // Stronghold Special Case
         if (spop instanceof StrongholdPopulator) {
             int[] coords = ((StrongholdPopulator)spop).getNearestFeature(TerraformWorld.get(Objects.requireNonNull(Bukkit.getWorld("world"))), 0,0);
             syncSendMessage(LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", coords[0] + "", "%z%", coords[1] + ""));

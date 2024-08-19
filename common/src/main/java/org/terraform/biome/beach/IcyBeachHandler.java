@@ -46,8 +46,8 @@ public class IcyBeachHandler extends BiomeHandler {
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
                 GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
-                GenUtils.randMaterial(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL),
-                GenUtils.randMaterial(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)};
+                GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL),
+                GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)};
     }
 
     @Override

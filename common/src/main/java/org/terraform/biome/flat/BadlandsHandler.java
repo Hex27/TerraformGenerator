@@ -16,6 +16,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
@@ -80,18 +81,18 @@ public class BadlandsHandler extends BiomeHandler {
         return new Material[]{
                 Material.RED_SAND,
                 Material.RED_SAND,
-                GenUtils.randMaterial(rand, Material.RED_SAND, Material.RED_SANDSTONE),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.RED_SAND, Material.RED_SANDSTONE),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         
-    	//While not a small item, generatePlateaus is left in, as it
-    	//transforms the terrain itself. Structures placed must account for
-    	//these terrain changes.
-        //TODO: Past me wrote this to kick the bucket to future me. I am future me. Fuck you.
+    	// While not a small item, generatePlateaus is left in, as it
+    	// transforms the terrain itself. Structures placed must account for
+    	// these terrain changes.
+        // TODO: Past me wrote this to kick the bucket to future me. I am future me. Fuck you.
 
     	generatePlateaus(world, rawX, surfaceY, rawZ,data);
 
@@ -117,9 +118,9 @@ public class BadlandsHandler extends BiomeHandler {
                 if (canSpawn && GenUtils.chance(1, 50))
                     spawnDeadTree(data, rawX, surfaceY, rawZ);
                 else if (canSpawn)
-                    BlockUtils.spawnPillar(random, data, rawX, surfaceY + 1, rawZ, Material.CACTUS, 2, 5);
+                    PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 2, 5);
             } else if (GenUtils.chance(random, 1, 80) && surfaceY > TerraformGenerator.seaLevel) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
             }
         }
     }
@@ -131,10 +132,10 @@ public class BadlandsHandler extends BiomeHandler {
 
 	@Override
     public void transformTerrain(ChunkCache cache, @NotNull TerraformWorld tw, Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
-        //Badlands doesn't actually mutate height in here (WHY??).
-        //Because of that, don't edit heightChanges
-        //This is perpetuating the cycle of abuse and falsehood
-        //Let's leave it till it explodes for some reason
+        // Badlands doesn't actually mutate height in here (WHY??).
+        // Because of that, don't edit heightChanges
+        // This is perpetuating the cycle of abuse and falsehood
+        // Let's leave it till it explodes for some reason
 
         BiomeBlender blender = getRiversBlender(tw);
 
@@ -182,7 +183,7 @@ public class BadlandsHandler extends BiomeHandler {
                 // Curved top edges
                 if (riverFactor > threshold) {
                     int upperBuildHeight = (int) Math.round(
-                            1 *//topEdgeFactor *
+                            1 *// topEdgeFactor *
                                     (Math.min(1, 50 * Math.pow(riverFactor - threshold, 2.5)) * maxDiff + wallNoise.GetNoise(rawX, rawZ) * 1.5));
 
                     if (topEdgeFactor == 0) return;
@@ -231,9 +232,9 @@ public class BadlandsHandler extends BiomeHandler {
                     if ((int) graduated * plateauHeight == y)
                         material = Material.RED_SAND;
                     else if ((int) graduated * plateauHeight == y + 1)
-                        material = GenUtils.randMaterial(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y));
+                        material = GenUtils.randChoice(Material.RED_SAND, Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y));
                     else if ((int) graduated * plateauHeight == y + 2)
-                        material = GenUtils.randMaterial(Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y),
+                        material = GenUtils.randChoice(Material.RED_SAND, BlockUtils.getTerracotta(surfaceY + y),
                                 BlockUtils.getTerracotta(surfaceY + y));
                     else
                         material = BlockUtils.getTerracotta(surfaceY + y);
@@ -276,6 +277,8 @@ public class BadlandsHandler extends BiomeHandler {
     }
 
     void spawnDeadTree(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if ( !TConfigOption.areTreesEnabled()) return;
+
         int height = GenUtils.randInt(5, 7);
         int branches = GenUtils.randInt(1, height == 5 ? 2 : 3);
 
@@ -309,8 +312,8 @@ public class BadlandsHandler extends BiomeHandler {
         }
     }
 
-    //TODO: Seems like a mass of excessive calculation just to spawn dead trees
-    //Look into optimisation here in future.
+    // TODO: Seems like a mass of excessive calculation just to spawn dead trees
+    // Look into optimisation here in future.
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 

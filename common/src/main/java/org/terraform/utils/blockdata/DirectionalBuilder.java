@@ -19,7 +19,7 @@ public class DirectionalBuilder {
     }
 
     public DirectionalBuilder(Material... mat) {
-        this.blockData = (Directional) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Directional) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 

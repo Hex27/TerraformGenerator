@@ -44,7 +44,7 @@ public enum CustomBiomeType {
         this.grassColor = grassColor;
         this.rainFall = 0.8f;
         this.isCold = false;
-        //In 1.20, cherry trees no longer need the pink.
+        // In 1.20, cherry trees no longer need the pink.
         if(Version.isAtLeast(20) && this.foliageColor.equals("ffa1fc"))
             this.foliageColor = "acff96";
 

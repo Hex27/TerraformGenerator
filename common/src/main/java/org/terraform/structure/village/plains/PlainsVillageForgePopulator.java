@@ -24,9 +24,9 @@ public class PlainsVillageForgePopulator extends PlainsVillageAbstractRoomPopula
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
         int height = super.calculateRoomY(data, room);
-        //GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
+        // GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
         
-        //1 is added to height because temples need a small bit of elevation to look better
+        // 1 is added to height because temples need a small bit of elevation to look better
         PlainsVillageForgeJigsawBuilder builder = new PlainsVillageForgeJigsawBuilder(
         		plainsVillagePopulator,
                 room.getWidthX() - 3, room.getWidthZ() - 3, data, room.getX(), height+1, room.getZ()
@@ -41,7 +41,7 @@ public class PlainsVillageForgePopulator extends PlainsVillageAbstractRoomPopula
         int maxDepth = 12;
 
         boolean placedLamp = false;
-        //Connect front to the nearest path.
+        // Connect front to the nearest path.
         while (entrance.getType() != Material.DIRT_PATH && maxDepth > 0) {
             if (BlockUtils.isDirtLike(entrance.getType()))
                 entrance.setType(Material.DIRT_PATH);
@@ -49,9 +49,9 @@ public class PlainsVillageForgePopulator extends PlainsVillageAbstractRoomPopula
             if (!placedLamp && GenUtils.chance(this.rand, 3, 5)) {
                 SimpleBlock target;
                 if (this.rand.nextBoolean())
-                    target = entrance.getLeft(2).getGround().getRelative(0, 1, 0).get();
+                    target = entrance.getLeft(2).getGround().getUp().get();
                 else
-                    target = entrance.getRight(2).getGround().getRelative(0, 1, 0).get();
+                    target = entrance.getRight(2).getGround().getUp().get();
                 if (PlainsVillagePathPopulator.canPlaceLamp(target)) {
                     placedLamp = true;
                     PlainsVillagePathPopulator.placeLamp(rand, target);

@@ -20,11 +20,11 @@ public class OreLiftSchematicParser extends SchematicParser {
     @Override
     public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
         if (BlockUtils.ores.contains(data.getMaterial())) {
-            data = Bukkit.createBlockData(GenUtils.randMaterial(BlockUtils.ores));
+            data = Bukkit.createBlockData(GenUtils.randChoice(BlockUtils.ores));
         }
-        //super.applyData(block, data);
-        //Override the normal way as it updates physics.
-        //Don't update physics because rails are cancer.
+        // super.applyData(block, data);
+        // Override the normal way as it updates physics.
+        // Don't update physics because rails are cancer.
         
         if(this.isBadlands) {
         	 if (data.getMaterial().toString().contains("OAK")) {

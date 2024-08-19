@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.utils.BlockUtils;
@@ -34,24 +35,24 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     public void populate(@NotNull PathPopulatorData ppd) {
         Wall core = new Wall(ppd.base, ppd.dir);
         
-        //Was populated before.
+        // Was populated before.
         if (core.getType() != Material.CAVE_AIR)
             return;
 
         Wall ceiling = core.findCeiling(10);
         if (ceiling != null) {
-            ceiling.getRelative(0, -1, 0);
+            ceiling = ceiling.getDown();
         }
         Wall floor = core.getDown();
-        if(!floor.isSolid()) return; //Don't populate a path if there's no floor
+        if(!floor.isSolid()) return; // Don't populate a path if there's no floor
         
-        //Set the base path material to a brownish-dirt texture
+        // Set the base path material to a brownish-dirt texture
         core.setType(pathMaterial);
         for(BlockFace face:BlockUtils.xzPlaneBlockFaces)
         	if(rand.nextBoolean())
         		core.getRelative(face).setType(pathMaterial);
         
-        //Spawn supports
+        // Spawn supports
         boolean spawnSupports = true;
     	for(BlockFace dir:BlockUtils.getAdjacentFaces(core.getDirection())) {
     		Wall relPillar = core.getUp().findDir(dir, 2);
@@ -65,18 +66,18 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     	            if (core.getZ() % 5 != 0) spawnSupports = false;
     	        }
             
-            if(spawnSupports) { //All supports can be a same-ish width
+            if(spawnSupports) { // All supports can be a same-ish width
             	relPillar.Pillar(3, BlockUtils.stoneBricks);       
             	
             	relPillar.getUp().setType(Material.CHISELED_STONE_BRICKS);
             	
-            	//Tiny arch
+            	// Tiny arch
             	new StairBuilder(Material.STONE_BRICK_STAIRS)
             	.setFacing(dir)
             	.setHalf(Half.TOP)
             	.apply(relPillar.getUp(2).getRelative(dir.getOppositeFace()));
             	
-            	//Small bases at the sides
+            	// Small bases at the sides
             	new StairBuilder(Material.STONE_BRICK_STAIRS)
             	.setFacing(core.getDirection().getOppositeFace())
             	.apply(relPillar.getFront())
@@ -86,18 +87,18 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     	}
         
         
-        //Apply wall decorations (skulls, andesite and chests)
+        // Apply wall decorations (skulls, andesite and chests)
         for(int i = 1; i <= 3; i++) {
         	for(BlockFace dir:BlockUtils.getAdjacentFaces(core.getDirection())) {
         		Wall rel = core.getUp(i).findDir(dir, 3);
 
     	        if(rel != null) {
-    	        	//wall texturing
+    	        	// wall texturing
     	        	if(rand.nextBoolean() && rel.getType() == Material.STONE) {
     	    	        rel.setType(Material.ANDESITE,Material.COBBLESTONE);
     	        	}
     	        	
-    	        	//Skulls
+    	        	// Skulls
     	        	if(rel.getAtY(core.getY()).distance(core) > 1 
     	        			&& BlockUtils.isStoneLike(rel.getType())
     	        			&& rand.nextBoolean()) {
@@ -106,17 +107,18 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     	        		.apply(rel.getRelative(dir.getOppositeFace()));
     	        	}
     	        	
-    	        	//Ground side decorations
+    	        	// Ground side decorations
     	        	if(i == 1) {
     	        		if(GenUtils.chance(rand, 1, 60)) {
-            	        	//Chests
-	    	        		new ChestBuilder(Material.CHEST)
-	    	        		.setFacing(dir.getOppositeFace())
-	    	        		.setLootTable(TerraLootTable.SIMPLE_DUNGEON)
-	    	        		.apply(rel.getRelative(dir.getOppositeFace()));
+            	        	// Chests
+                            if ( TConfigOption.areDecorationsEnabled() ) {
+                                new ChestBuilder(Material.CHEST).setFacing(dir.getOppositeFace())
+                                                                .setLootTable(TerraLootTable.SIMPLE_DUNGEON)
+                                                                .apply(rel.getRelative(dir.getOppositeFace()));
+                            }
     	        		}
     	        		else if(GenUtils.chance(rand, 1, 20)) {
-    	        			//Candles
+    	        			// Candles
     	        			new StairBuilder(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS, Material.COBBLESTONE_STAIRS)
     	        			.setHalf(Half.TOP)
     	        			.setFacing(dir)
@@ -126,8 +128,10 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     	        		}
     	        	}else if(rel.getRelative(dir.getOppositeFace()).getUp().isSolid()
     	        			&& GenUtils.chance(rand, 1, 10)) {
-    	        		//Cobwebs
-    	        		rel.getRelative(dir.getOppositeFace()).setType(Material.COBWEB);
+    	        		// Cobwebs
+                        if ( TConfigOption.areDecorationsEnabled() ) {
+                            rel.getRelative(dir.getOppositeFace()).setType(Material.COBWEB);
+                        }
     	        	}
     	        }
         	}
@@ -136,7 +140,7 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     
     @Override
     public boolean customCarve(@NotNull SimpleBlock base, BlockFace dir, int pathWidth) {
-        Wall core = new Wall(base.getRelative(0, 2, 0), dir);
+        Wall core = new Wall(base.getUp(2), dir);
         int seed = 2293 + 5471*core.getX() + 9817*core.getY() ^ 2 + 1049*core.getZ() ^ 3;
         BlockUtils.carveCaveAir(seed,
                 pathWidth, pathWidth, pathWidth, core.get(), false, 

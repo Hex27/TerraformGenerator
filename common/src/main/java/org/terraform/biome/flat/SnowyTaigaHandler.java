@@ -11,6 +11,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -36,17 +37,17 @@ public class SnowyTaigaHandler extends BiomeHandler {
         return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.DIRT, 3, Material.PODZOL, 2),
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         if (data.getType(rawX, surfaceY, rawZ) == Material.DIRT) {
             if (GenUtils.chance(random, 1, 20)) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
                 if (random.nextBoolean()) {
-                    data.setType(rawX, surfaceY + 1, rawZ, Material.ALLIUM);
+                    PlantBuilder.ALLIUM.build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -92,8 +93,8 @@ public class SnowyTaigaHandler extends BiomeHandler {
     public static void defrostAndReplacePodzol(int seed, float radius, @NotNull SimpleBlock base) {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
-            base.setType(GenUtils.randMaterial(new Random(seed), Material.PODZOL));
+            // block.setReplaceType(ReplaceType.ALL);
+            base.setType(GenUtils.randChoice(new Random(seed), Material.PODZOL));
             return;
         }
         
@@ -111,15 +112,15 @@ public class SnowyTaigaHandler extends BiomeHandler {
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getZ()));
                 if (equationResult <= 1.0+noiseVal) {
-                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                     if(equationResult * 4 > 0.7+noiseVal) {
                     	if(rand.nextBoolean()) {
                     		rel.setType(Material.PODZOL);
-                    		rel.getRelative(0,1,0).lsetType(Material.AIR);
+                    		rel.getUp().lsetType(Material.AIR);
                     	}
                     }else {
                     	rel.setType(Material.PODZOL);
-                		rel.getRelative(0,1,0).lsetType(Material.AIR);
+                		rel.getUp().lsetType(Material.AIR);
                     }
                 }
             }

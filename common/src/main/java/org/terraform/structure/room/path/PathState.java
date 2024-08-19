@@ -23,7 +23,7 @@ public class PathState {
     /* Generation state
     */
 
-    //This will contain some path nodes
+    // This will contain some path nodes
     public final @NotNull HashSet<PathNode> nodes = new HashSet<>();
 
     /*
@@ -33,8 +33,8 @@ public class PathState {
     private int pathWidth = 3;
     private int pathHeight = 3;
     private int maxBend = -1;
-    //If the path generator is not to run while inside room areas,
-    //then set this to true.
+    // If the path generator is not to run while inside room areas,
+    // then set this to true.
     private final boolean ignoreWithinRooms = true;
     private final @NotNull RoomLayoutGenerator generator;
 
@@ -46,14 +46,14 @@ public class PathState {
         PathNode[] baseNodes = new PathNode[generator.getRooms().size()];
         ArrayList<CubeRoom> rooms = new ArrayList<>(generator.getRooms());
 
-        //One starting node for each room
+        // One starting node for each room
         for(int i = 0; i < generator.getRooms().size(); i++) {
             CubeRoom room = rooms.get(i);
             baseNodes[i] = new PathNode(new SimpleLocation(room.getX(), room.getY(), room.getZ()), pathWidth, generator.getPathPop());
         }
 
-        //For every node, connect it to the next node
-        //With a poor correlation between array order and
+        // For every node, connect it to the next node
+        // With a poor correlation between array order and
         // actual XZ position, this would look random.
         assert(baseNodes.length >= 2);
         for(int i = 0; i < baseNodes.length-1; i++)
@@ -62,11 +62,11 @@ public class PathState {
         nodes.addAll(Arrays.asList(baseNodes));
     }
 
-    //Connects the two nodes with new nodes added to toAdd
+    // Connects the two nodes with new nodes added to toAdd
     private void connectNodes(@NotNull PathNode one, @NotNull PathNode two, @NotNull TerraformWorld tw, @NotNull HashSet<PathNode> toAdd)
     {
         BlockFace oneConn;
-        //Set connected state
+        // Set connected state
         if(one.center.getX() - two.center.getX() == 0)
         {
             oneConn = one.center.getZ() > two.center.getZ() ? BlockFace.NORTH : BlockFace.SOUTH;
@@ -79,9 +79,9 @@ public class PathState {
             one.connected.add(oneConn);
             two.connected.add(oneConn.getOppositeFace());
         }
-        else //Add a new node perpendicularly to both
+        else // Add a new node perpendicularly to both
         {
-            //Either add a node varying the X of one or the Z of two
+            // Either add a node varying the X of one or the Z of two
             PathNode newNode = new PathNode(
                     tw.getHashedRand(one.center.getX(), two.center.getZ(), 1890341).nextBoolean() ?
                             new SimpleLocation(one.center.getX(),one.center.getY(),two.center.getZ())
@@ -89,10 +89,10 @@ public class PathState {
             toAdd.add(newNode);
             connectNodes(newNode, one, tw, toAdd);
             connectNodes(newNode, two, tw, toAdd);
-            return; //do NOT run the code below
+            return; // do NOT run the code below
         }
 
-        //Add path nodes that lead from one to two
+        // Add path nodes that lead from one to two
         for(int i = pathWidth; i < one.center.distance(two.center); i++)
         {
             toAdd.add(new PathNode(one.center.getRelative(oneConn, i), pathWidth, generator.getPathPop(), oneConn));
@@ -128,19 +128,19 @@ public class PathState {
         public final @NotNull SimpleLocation center;
         public final PathPopulatorAbstract populator;
         public final HashSet<BlockFace> connected = new HashSet<>();
-        //Assumes input is new
+        // Assumes input is new
         public PathNode(@NotNull SimpleLocation center, int pathWidth, PathPopulatorAbstract populator, BlockFace... connections) {
             this.pathWidth = pathWidth;
             this.center = center;
-            //Lock path nodes to a grid-like structure which will allow
-            //path nodes to be spaced properly
+            // Lock path nodes to a grid-like structure which will allow
+            // path nodes to be spaced properly
             this.center.setX((center.getX() / pathWidth)*pathWidth);
             this.center.setZ((center.getZ() / pathWidth)*pathWidth);
             Collections.addAll(connected, connections);
             this.populator = populator;
         }
 
-        //Equality is based on the simple location
+        // Equality is based on the simple location
         public boolean equals(Object o){
             if(o instanceof PathNode pn)
                 return pn.center.equals(center);

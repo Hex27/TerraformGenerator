@@ -11,6 +11,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -37,8 +38,8 @@ public class TaigaHandler extends BiomeHandler {
         		Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -58,9 +59,9 @@ public class TaigaHandler extends BiomeHandler {
         if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
 
             // Generate sweet berry bushes
-            if (sweetBerriesNoise.GetNoise(rawX, rawZ) > 0.3 &&
+            if (TConfigOption.arePlantsEnabled() && sweetBerriesNoise.GetNoise(rawX, rawZ) > 0.3 &&
                     sweetBerriesNoise.GetNoise(rawX, rawZ) * random.nextFloat() > 0.35) {
-                Ageable bush = (Ageable) Material.SWEET_BERRY_BUSH.createBlockData();
+                Ageable bush = (Ageable) Material.SWEET_BERRY_BUSH.createBlockData(); // TODO: SmallItemsBuilder
                 bush.setAge(GenUtils.randInt(random,  1, 3));
                 data.setBlockData(rawX, surfaceY + 1, rawZ, bush);
                 return;
@@ -71,12 +72,17 @@ public class TaigaHandler extends BiomeHandler {
                 int i = random.nextInt(4);
 
                 if (i >= 2) {
-                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ,
-                            random.nextBoolean() ? Material.TALL_GRASS : Material.LARGE_FERN);
+                    if (random.nextBoolean())
+                        PlantBuilder.TALL_GRASS.build(data,rawX, surfaceY + 1, rawZ);
+                    else
+                        PlantBuilder.LARGE_FERN.build(data,rawX, surfaceY + 1, rawZ);
                 } else if (i == 1) {
-                    data.setType(rawX, surfaceY + 1, rawZ, random.nextBoolean() ? Material.GRASS : Material.FERN);
+                    if (random.nextBoolean())
+                        PlantBuilder.GRASS.build(data,rawX, surfaceY + 1, rawZ);
+                    else
+                        PlantBuilder.FERN.build(data,rawX, surfaceY + 1, rawZ);
                 } else {
-                    data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                    BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -122,8 +128,8 @@ public class TaigaHandler extends BiomeHandler {
     public static void replacePodzol(int seed, float radius, @NotNull SimpleBlock base) {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
-            base.setType(GenUtils.randMaterial(new Random(seed), Material.PODZOL));
+            // block.setReplaceType(ReplaceType.ALL);
+            base.setType(GenUtils.randChoice(new Random(seed), Material.PODZOL));
             return;
         }
         
@@ -137,12 +143,12 @@ public class TaigaHandler extends BiomeHandler {
                 rel = rel.getGround();
                 if(!BlockUtils.isDirtLike(rel.getType()))
                 	continue;
-                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                 double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getZ()));
                 if (equationResult <= 1.0+noiseVal) {
-                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
                     if(equationResult * 4 > 0.7+noiseVal) {
                     	if(rand.nextBoolean())
                     		rel.setType(Material.PODZOL);

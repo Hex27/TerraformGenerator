@@ -35,7 +35,7 @@ public class FarmhouseSchematicParser extends SchematicParser {
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "cobblestone",
-                            GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
+                            GenUtils.randChoice(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE)
                                     .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
@@ -51,7 +51,7 @@ public class FarmhouseSchematicParser extends SchematicParser {
         } else if (data.getMaterial() == Material.CHEST) {
             if (GenUtils.chance(rand, 1, 5)) {
                 block.setType(Material.AIR);
-                return; //A fifth of chests are not placed.
+                return; // A fifth of chests are not placed.
             }
             super.applyData(block, data);
             pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.VILLAGE_PLAINS_HOUSE);

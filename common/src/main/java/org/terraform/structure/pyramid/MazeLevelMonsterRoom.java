@@ -16,13 +16,13 @@ public class MazeLevelMonsterRoom extends RoomPopulatorAbstract {
         super(rand, forceSpawn, unique);
     }
 
-    //Basically just spawns monsters tbh. A boring room otherwise.
+    // Basically just spawns monsters tbh. A boring room otherwise.
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Feeble attempt to decorate the room
+        // Feeble attempt to decorate the room
         data.setType(room.getX(), room.getY(), room.getZ(), Material.RED_TERRACOTTA);
 
-        int choice = rand.nextInt(3); //0,1,2
+        int choice = rand.nextInt(3); // 0,1,2
         EntityType monster = new EntityType[]{
                 EntityType.HUSK,
                 EntityType.CAVE_SPIDER,

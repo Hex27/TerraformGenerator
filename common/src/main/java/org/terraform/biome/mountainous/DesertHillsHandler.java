@@ -22,7 +22,7 @@ public class DesertHillsHandler extends AbstractMountainHandler {
         return false;
     }
 
-	//Make these resemble dunes more, not massive mountains.
+	// Make these resemble dunes more, not massive mountains.
 	@Override
 	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
@@ -37,17 +37,17 @@ public class DesertHillsHandler extends AbstractMountainHandler {
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.SAND,
                 Material.SAND,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.STONE),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND, Material.STONE),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)};
     }
 
     @Override

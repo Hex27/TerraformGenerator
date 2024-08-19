@@ -15,7 +15,7 @@ public class ConfigLoader {
 	
 	private final @NotNull HashMap<String, Object> configOptions = new HashMap<>();
 	private final TerraformGeneratorPlugin plugin;
-	private static final int configVersion = 3;
+	private static final int configVersion = 4;
 	public ConfigLoader(@NotNull TerraformGeneratorPlugin plugin){
 		this.plugin = plugin;
 		plugin.getConfig().options().copyDefaults(false);
@@ -26,14 +26,14 @@ public class ConfigLoader {
 	
 	public void load(){
 		
-		//If config version is older, overwrite the whole config.
+		// If config version is older, overwrite the whole config.
 		boolean overwrite = false;
 		if(!plugin.getConfig().isSet("config-version"))
 			overwrite = true;
 		else if(plugin.getConfig().getInt("config-version") < configVersion)
 			overwrite = true;
 		
-		//Make backup of old config before overwriting
+		// Make backup of old config before overwriting
 		if(overwrite) {
 			try {
 				if(new File("./plugins/TerraformGenerator/config.yml").exists()) {

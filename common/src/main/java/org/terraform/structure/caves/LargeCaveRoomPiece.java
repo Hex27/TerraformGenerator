@@ -9,7 +9,7 @@ public class LargeCaveRoomPiece extends CubeRoom {
 
     protected int waterLevel = -64;
 
-    //Boolean is true if the location is a boundary.
+    // Boolean is true if the location is a boundary.
     protected final HashMap<SimpleLocation, Boolean> toCarve = new HashMap<>();
     protected final HashMap<SimpleLocation, SimpleLocation[]> ceilFloorPairs = new HashMap<>();
 

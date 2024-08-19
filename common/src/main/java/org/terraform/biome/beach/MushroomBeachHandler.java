@@ -11,6 +11,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
 import org.terraform.utils.BlockUtils;
@@ -34,8 +35,8 @@ public class MushroomBeachHandler extends BiomeHandler {
         return new Material[]{
         		Material.MYCELIUM,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.STONE, Material.DIRT, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.STONE, Material.DIRT)
+                GenUtils.randChoice(rand, Material.STONE, Material.DIRT, Material.DIRT),
+                GenUtils.randChoice(rand, Material.STONE, Material.DIRT)
             	};
     }
 
@@ -47,7 +48,7 @@ public class MushroomBeachHandler extends BiomeHandler {
         if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
             if (BlockUtils.isAir(data.getType(rawX, surfaceY + 1, rawZ))
                     && GenUtils.chance(1, 60)) {
-                data.setType(rawX, surfaceY + 1, rawZ, GenUtils.randMaterial(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM));
+                PlantBuilder.build(data, rawX, surfaceY + 1, rawZ, PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
             }
         }
     }
@@ -100,7 +101,7 @@ public class MushroomBeachHandler extends BiomeHandler {
             }
         }
         
-        //Bracket fungus
+        // Bracket fungus
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x+=2) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z+=2) {
             	int y = GenUtils.getHighestGround(data, x, z);
@@ -110,7 +111,7 @@ public class MushroomBeachHandler extends BiomeHandler {
                 		&& GenUtils.chance(random, 1, 20)) {
                 	BlockUtils.replaceCircle(random.nextInt(919292), 
                 			3, new SimpleBlock(data,x,y-2,z),
-                			GenUtils.randMaterial(random, Material.BROWN_MUSHROOM_BLOCK, Material.RED_MUSHROOM_BLOCK));
+                			GenUtils.randChoice(random, Material.BROWN_MUSHROOM_BLOCK, Material.RED_MUSHROOM_BLOCK));
                 }
             }
         }

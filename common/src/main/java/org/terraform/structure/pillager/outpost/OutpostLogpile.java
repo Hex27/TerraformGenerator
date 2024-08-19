@@ -45,7 +45,7 @@ public class OutpostLogpile extends RoomPopulatorAbstract {
     				ob.apply(core.getRelative(0,i+1,0).getRight(width).getFront(len));
     				ob.apply(core.getRelative(0,i+1,0).getRight(width).getRear(len));
     				
-    				//Place rails
+    				// Place rails
     				if(len == 1) {
 						core.getRelative(0,i+2,0).getLeft(width).getFront(len).setType(Material.RAIL);
     					core.getRelative(0,i+2,0).getRight(width).getFront(len).setType(Material.RAIL);
@@ -70,8 +70,8 @@ public class OutpostLogpile extends RoomPopulatorAbstract {
     		}
     	}
     	
-    	//Replace the top rails with stone slabs, because they're buggy.
-    	//Fuck rails
+    	// Replace the top rails with stone slabs, because they're buggy.
+    	// Fuck rails
     	core.getRelative(0,stackHeight+1,0).getRelative(facing).setType(Material.COBBLESTONE_SLAB);
     	core.getRelative(0,stackHeight+1,0).getRelative(facing.getOppositeFace()).setType(Material.COBBLESTONE_SLAB);
     	

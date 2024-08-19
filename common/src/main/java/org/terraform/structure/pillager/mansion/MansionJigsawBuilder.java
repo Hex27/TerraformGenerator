@@ -67,7 +67,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         }
         super.build(random);
 
-        //Make sure awkward corners are fixed
+        // Make sure awkward corners are fixed
         for (JigsawStructurePiece piece : this.pieces.values()) {
             SimpleBlock core = new SimpleBlock(
                     this.core.getPopData(),
@@ -77,28 +77,28 @@ public class MansionJigsawBuilder extends JigsawBuilder {
             Wall target;
             
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //nw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // nw
                 target = new Wall(core.getRelative(-5, 1, -5));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.WEST, 
                 		areOtherWallsOverlapping(piece, BlockFace.NORTH)
                 		|| areOtherWallsOverlapping(piece, BlockFace.WEST));
             }
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //ne
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // ne
                 target = new Wall(core.getRelative(5, 1, -5));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.EAST, 
                 		areOtherWallsOverlapping(piece, BlockFace.NORTH)
                 		|| areOtherWallsOverlapping(piece, BlockFace.EAST));
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //sw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // sw
                 target = new Wall(core.getRelative(-5, 1, 5));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.WEST, 
                 		areOtherWallsOverlapping(piece, BlockFace.SOUTH)
                 		|| areOtherWallsOverlapping(piece, BlockFace.WEST));
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //se
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // se
                 target = new Wall(core.getRelative(5, 1, 5));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST, 
                 		areOtherWallsOverlapping(piece, BlockFace.SOUTH)
@@ -106,7 +106,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
             }
         }
         
-        //Decorate rooms and walls
+        // Decorate rooms and walls
         for (JigsawStructurePiece piece : this.overlapperPieces) {
             piece.postBuildDecoration(random, this.core.getPopData());
         }
@@ -120,20 +120,20 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	mansionPiece.thirdStageDecoration(random, this.core.getPopData());
         }
         
-        //Begin populating second story (place room walls)
+        // Begin populating second story (place room walls)
         secondFloorHandler.setRandom(random);
         secondFloorHandler.populateSecondFloorRoomLayout();
         secondFloorHandler.buildSecondFloor(random);
         secondFloorHandler.decorateAwkwardCorners();
         
-        //Build the roof
+        // Build the roof
         int[][] bounds = MansionRoofHandler.getLargestRectangle(this);
         
-        //Shrink to change behaviour of rectangles at the roof.
+        // Shrink to change behaviour of rectangles at the roof.
         int[] lowerBounds = new int[] {bounds[0][0],bounds[0][1]};
         int[] upperBounds = new int[] {bounds[1][0],bounds[1][1]};
         
-        //Extend the bounds in the shorter axis.
+        // Extend the bounds in the shorter axis.
         if(MansionRoofHandler.getDominantAxis(lowerBounds, upperBounds) == Axis.X) {
         	lowerBounds[0] -= 7;
         	upperBounds[0] += 7;
@@ -146,7 +146,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	upperBounds[0] += 4;
         }
         
-        //Debug code for showing roof bounds.
+        // Debug code for showing roof bounds.
 
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorOverlapperPieces) {
             if(piece instanceof MansionSecondFloorWallPiece) {
@@ -166,7 +166,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         
         for(JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()) {
         	if(!getRoofedLocations().contains(piece.getRoom().getSimpleLocation())) {
-        		SimpleLocation loc = piece.getRoom().getSimpleLocation().getRelative(0,13,0);
+        		SimpleLocation loc = piece.getRoom().getSimpleLocation().getUp(13);
         		if(this.core.getPopData().getType(loc.getX(),loc.getY(),loc.getZ()) 
         				!= Material.COBBLESTONE_SLAB) {
         			int towerHeight = towerPieceHandler.registerTowerPiece(random, piece);
@@ -189,15 +189,15 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         
         towerPieceHandler.buildRoofs(MansionRoofHandler.getDominantBlockFace(lowerBounds, upperBounds), random);
         
-        //Begin decorating internal rooms
+        // Begin decorating internal rooms
         
-        //GROUND FLOOR
+        // GROUND FLOOR
         for (JigsawStructurePiece piece : pieces.values()){
         	((MansionStandardRoomPiece) piece).setupInternalAttributes(core.getPopData(), this.getPieces());
         }
         
-        //Carves out pathways with a maze algorithm 
-        //and open random walls to make the maze less strict. 
+        // Carves out pathways with a maze algorithm 
+        // and open random walls to make the maze less strict. 
         MansionMazeAlgoUtil.setupPathways(this.pieces.values(), random);
         MansionMazeAlgoUtil.knockdownRandomWalls(this.pieces.values(), random);
         MansionCompoundRoomDistributor.distributeRooms(this.pieces.values(), random, true);
@@ -206,7 +206,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	((MansionStandardRoomPiece) piece).buildWalls(random, this.core.getPopData());
         }
         
-        //Second floor walling
+        // Second floor walling
         for (JigsawStructurePiece piece : secondFloorHandler.secondFloorPieces.values()){
         	((MansionStandardRoomPiece) piece).setupInternalAttributes(core.getPopData(),secondFloorHandler.secondFloorPieces);
         }
@@ -216,7 +216,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         
         
         MansionStandardRoomPiece secondFloorStairwayCenter;
-        //Find the Stairway piece and (it extends to the second floor.)
+        // Find the Stairway piece and (it extends to the second floor.)
         for (JigsawStructurePiece piece : pieces.values()){
         	if(((MansionStandardRoomPiece) piece).getRoomPopulator() instanceof MansionGrandStairwayPopulator && ((MansionStandardRoomPiece) piece).isPopulating()) {
         		secondFloorStairwayCenter = (MansionStandardRoomPiece) secondFloorHandler.secondFloorPieces.get(piece.getRoom().getSimpleLocation().getRelative(0,MansionJigsawBuilder.roomHeight+1,0));
@@ -229,7 +229,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	}
         }
         
-        //SECOND FLOOR WALLING
+        // SECOND FLOOR WALLING
 
         MansionCompoundRoomDistributor.distributeRooms(secondFloorHandler.secondFloorPieces.values(), random, false);
 
@@ -237,8 +237,8 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	((MansionStandardRoomPiece) piece).buildWalls(random, this.core.getPopData());
         }
         
-        //Decorate both floors after all allocations are done.
-        //Always re-loop for each one to prevent weird race condition overlaps.
+        // Decorate both floors after all allocations are done.
+        // Always re-loop for each one to prevent weird race condition overlaps.
         for (JigsawStructurePiece piece : pieces.values()){
         	((MansionStandardRoomPiece) piece).decorateInternalRoom(random, this.core.getPopData());
         }
@@ -253,7 +253,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
         	((MansionStandardRoomPiece) piece).decorateWalls(random, core.getPopData());
         }
         
-        //Spawn guards
+        // Spawn guards
         MansionStandardRoomPiece.spawnedGuards = 0;
         for (JigsawStructurePiece piece : pieces.values()){
         	((MansionStandardRoomPiece) piece).spawnGuards(random, core.getPopData());
@@ -284,25 +284,25 @@ public class MansionJigsawBuilder extends JigsawBuilder {
 
     public void decorateAwkwardCorner(@NotNull Wall target, @NotNull Random random, @NotNull BlockFace one, @NotNull BlockFace two, boolean isSinkIn) {
         
-    	//Build a large pillar (supports second floor and provides more depth
+    	// Build a large pillar (supports second floor and provides more depth
     	if(!isSinkIn) {
     		Wall largePillar = target.getRelative(one, 4).getRelative(two, 4);
     		largePillar.Pillar(roomHeight, Material.STONE_BRICKS);
-    		largePillar.getRelative(0,-1,0).downUntilSolid(new Random(),Material.COBBLESTONE);
+    		largePillar.getDown().downUntilSolid(new Random(),Material.COBBLESTONE);
     		largePillar.getRelative(one).downUntilSolid(new Random(),Material.COBBLESTONE);
     		largePillar.getRelative(two).downUntilSolid(new Random(),Material.COBBLESTONE);
     		
-    		//Side stone walls
-    		largePillar.getRelative(one).getRelative(0,1,0).Pillar(roomHeight-2, Material.COBBLESTONE_WALL);
-    		largePillar.getRelative(one).getRelative(0,1,0).CorrectMultipleFacing(roomHeight-2);
-    		largePillar.getRelative(two).getRelative(0,1,0).Pillar(roomHeight-2, Material.COBBLESTONE_WALL);
-    		largePillar.getRelative(two).getRelative(0,1,0).CorrectMultipleFacing(roomHeight-2);
+    		// Side stone walls
+    		largePillar.getRelative(one).getUp().Pillar(roomHeight-2, Material.COBBLESTONE_WALL);
+    		largePillar.getRelative(one).getUp().CorrectMultipleFacing(roomHeight-2);
+    		largePillar.getRelative(two).getUp().Pillar(roomHeight-2, Material.COBBLESTONE_WALL);
+    		largePillar.getRelative(two).getUp().CorrectMultipleFacing(roomHeight-2);
     		
-    		//Cobblestone at the top
+    		// Cobblestone at the top
     		largePillar.getRelative(one).getRelative(0,roomHeight-1,0).Pillar(3, Material.COBBLESTONE);
     		largePillar.getRelative(two).getRelative(0,roomHeight-1,0).Pillar(3, Material.COBBLESTONE);
     		
-    		//Decorative upsidedown stairs
+    		// Decorative upsidedown stairs
     		new StairBuilder(Material.STONE_BRICK_STAIRS)
     		.setFacing(one)
     		.setHalf(Half.TOP)
@@ -318,17 +318,17 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     		.apply(largePillar.getRelative(0,roomHeight-1,0).getRelative(two.getOppositeFace(),2));
     	}
     	
-    	//Fill in gap in the corner
+    	// Fill in gap in the corner
     	target.Pillar(roomHeight, Material.POLISHED_ANDESITE);
 
-    	target.getRelative(0,2,0).setType(Material.STONE_BRICK_WALL);
-    	target.getRelative(0,3,0).setType(Material.POLISHED_DIORITE);
-    	target.getRelative(0,4,0).setType(Material.STONE_BRICK_WALL);
-    	target.getRelative(0,2,0).CorrectMultipleFacing(3);
+    	target.getUp(2).setType(Material.STONE_BRICK_WALL);
+    	target.getUp(3).setType(Material.POLISHED_DIORITE);
+    	target.getUp(4).setType(Material.STONE_BRICK_WALL);
+    	target.getUp(2).CorrectMultipleFacing(3);
     	
-    	target.getRelative(0, -1, 0).downUntilSolid(random, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+    	target.getDown().downUntilSolid(random, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
         
-    	//Small stair base
+    	// Small stair base
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(one.getOppositeFace())
     	.apply(target.getRelative(one));
@@ -342,7 +342,7 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     	.apply(target.getRelative(two).getRelative(one))
     	.correct();
     	
-    	//Two more slabs at the corner
+    	// Two more slabs at the corner
     	new SlabBuilder(Material.COBBLESTONE_SLAB)
     	.lapply(target.getRelative(one).getRelative(BlockUtils.getRight(one)))
     	.lapply(target.getRelative(one).getRelative(BlockUtils.getLeft(one)));
@@ -352,39 +352,39 @@ public class MansionJigsawBuilder extends JigsawBuilder {
     	.lapply(target.getRelative(two).getRelative(BlockUtils.getLeft(two)));
     	
 
-    	//Small stair base
+    	// Small stair base
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(one.getOppositeFace())
     	.setHalf(Half.TOP)
-    	.apply(target.getRelative(0,6,0).getRelative(one));
+    	.apply(target.getUp(6).getRelative(one));
     	
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(two.getOppositeFace())
     	.setHalf(Half.TOP)
-    	.apply(target.getRelative(0,6,0).getRelative(two));
+    	.apply(target.getUp(6).getRelative(two));
     	
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(two.getOppositeFace())
     	.setHalf(Half.TOP)
-    	.apply(target.getRelative(0,6,0).getRelative(two).getRelative(one))
+    	.apply(target.getUp(6).getRelative(two).getRelative(one))
     	.correct();
     	
-    	//Two more slabs at the corner
+    	// Two more slabs at the corner
     	new SlabBuilder(Material.COBBLESTONE_SLAB)
     	.setType(Type.TOP)
-    	.lapply(target.getRelative(0,6,0).getRelative(one).getRelative(BlockUtils.getRight(one)))
-    	.lapply(target.getRelative(0,6,0).getRelative(one).getRelative(BlockUtils.getLeft(one)));
+    	.lapply(target.getUp(6).getRelative(one).getRelative(BlockUtils.getRight(one)))
+    	.lapply(target.getUp(6).getRelative(one).getRelative(BlockUtils.getLeft(one)));
     	
     	new SlabBuilder(Material.COBBLESTONE_SLAB)
     	.setType(Type.TOP)
-    	.lapply(target.getRelative(0,6,0).getRelative(two).getRelative(BlockUtils.getRight(two)))
-    	.lapply(target.getRelative(0,6,0).getRelative(two).getRelative(BlockUtils.getLeft(two)));
+    	.lapply(target.getUp(6).getRelative(two).getRelative(BlockUtils.getRight(two)))
+    	.lapply(target.getUp(6).getRelative(two).getRelative(BlockUtils.getLeft(two)));
     }
     
     @Override
     public boolean canPlaceEntrance(SimpleLocation pieceLoc) {
-    	//Also disallow 2, as it implies a corner doorway, which is diagonal.
-    	//I don't want to deal with a diagonal staircase, so fuck that.
+    	// Also disallow 2, as it implies a corner doorway, which is diagonal.
+    	// I don't want to deal with a diagonal staircase, so fuck that.
 		return this.countOverlappingPiecesAtLocation(pieceLoc) != 4
 				&& this.countOverlappingPiecesAtLocation(pieceLoc) != 2;
 	}

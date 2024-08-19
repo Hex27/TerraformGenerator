@@ -24,21 +24,21 @@ import java.util.function.BiFunction;
  */
 public class NewFractalTreeBuilder implements Cloneable {
 
-    //Supposedly final fields not meant for mutation during build
-    private int maxDepth = 3; //Last branch is depth 1
-    private int originalTrunkLength = 20; //Starting length of the tree trunk
+    // Supposedly final fields not meant for mutation during build
+    private int maxDepth = 3; // Last branch is depth 1
+    private int originalTrunkLength = 20; // Starting length of the tree trunk
     private float lengthVariance = 4;
-    private float firstEnd = 0.8f; //First branch will end before it hits full length
-    private int crownBranches = 4; //Number of branches to spawn from the top of the first branch
+    private float firstEnd = 0.8f; // First branch will end before it hits full length
+    private int crownBranches = 4; // Number of branches to spawn from the top of the first branch
     private float initialBranchRadius = 3f;
-    private double branchSpawnChance = 0.08f; //Chance for a new branch to spawn while stepping a branch
-    private float minBranchSpawnLength = 0.4f; //New branches only spawn at this branch ratio.
-    private int randomBranchSegmentCount = 3; //Controls how randomised branches are placed. Attempts to rotate branches evenly to prevent weird looks.
-    private float randomBranchSpawnCooldown = 0; //Controls the cooldown after every branch spawn before the next
-    private int randomBranchClusterCount = 1; //Number of random branches to spawn per successful roll
+    private double branchSpawnChance = 0.08f; // Chance for a new branch to spawn while stepping a branch
+    private float minBranchSpawnLength = 0.4f; // New branches only spawn at this branch ratio.
+    private int randomBranchSegmentCount = 3; // Controls how randomised branches are placed. Attempts to rotate branches evenly to prevent weird looks.
+    private float randomBranchSpawnCooldown = 0; // Controls the cooldown after every branch spawn before the next
+    private int randomBranchClusterCount = 1; // Number of random branches to spawn per successful roll
 
-    //Pitch rotates up or down, yaw rotates left/right
-    private final Vector initialNormal = new Vector(0,1,0);//.normalize();
+    // Pitch rotates up or down, yaw rotates left/right
+    private final Vector initialNormal = new Vector(0,1,0);// .normalize();
     private double maxInitialNormalDelta = 0.3;
     private double minInitialNormalDelta = -0.3;
     private double minBranchHorizontalComponent = 0.5;
@@ -71,11 +71,13 @@ public class NewFractalTreeBuilder implements Cloneable {
     private boolean spawnBees = false;
     private boolean checkGradient = true;
 
-    //[No more mutable fields. They caused concurrency problems]===================
+    // [No more mutable fields. They caused concurrency problems]===================
 
     public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock base)
     {
-        //Clear and set mutable structures
+        if ( !TConfigOption.areTreesEnabled()) return false;
+
+        // Clear and set mutable structures
         if(!checkGradient(base.getPopData(),base.getX(),base.getZ())) return false;
         int oriY = base.getY();
         Random random = tw.getHashedRand(base.getX(), base.getY(), base.getZ());
@@ -85,7 +87,7 @@ public class NewFractalTreeBuilder implements Cloneable {
 
         fractalLeaves.purgeOccupiedLeavesCache();
 
-        //Spawn the actual tree
+        // Spawn the actual tree
         branch(tw, random, base, initialNormal.clone()
                         .add(
                         new Vector(
@@ -102,24 +104,24 @@ public class NewFractalTreeBuilder implements Cloneable {
                 0, this.initialBranchRadius,
                 0);
 
-        //Process prospectiveHives
+        // Process prospectiveHives
         if(spawnBees)
             for(SimpleBlock b:prospectiveHives)
             {
-                //TerraformGeneratorPlugin.logger.info("Testing " + b);
-                if(b.isSolid()) continue; //occupied block
-                //TerraformGeneratorPlugin.logger.info("Success: " + b);
+                // TerraformGeneratorPlugin.logger.info("Testing " + b);
+                if(b.isSolid()) continue; // occupied block
+                // TerraformGeneratorPlugin.logger.info("Success: " + b);
                 BeeHiveSpawner.spawnFullBeeNest(b);
-                break; //just one.
+                break; // just one.
             }
 
-        //Undo mutated changes
+        // Undo mutated changes
         this.fractalLeaves.setSnowy(false);
 
         return true;
     }
 
-    public boolean checkGradient(PopulatorDataAbstract data, int x, int z) {
+    boolean checkGradient(PopulatorDataAbstract data, int x, int z) {
         return !checkGradient || (HeightMap.getTrueHeightGradient(data, x, z, 3)
                 <= TConfigOption.MISC_TREES_GRADIENT_LIMIT.getDouble());
     }
@@ -143,15 +145,15 @@ public class NewFractalTreeBuilder implements Cloneable {
      * @param depth of the current recursion. Starts from 0 and stops at maxDepth
      * @param currentWidth width of the current recursion
      */
-    public void branch(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock base, @NotNull Vector normal, @NotNull HashSet<SimpleBlock> prospectiveHives, double currentBranchTheta, int oriY, double displacementTheta, float length, float end, int depth, float currentWidth, float startingBranchIndex)
+    void branch(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock base, @NotNull Vector normal, @NotNull HashSet<SimpleBlock> prospectiveHives, double currentBranchTheta, int oriY, double displacementTheta, float length, float end, int depth, float currentWidth, float startingBranchIndex)
     {
         boolean spawnedNewBranch = false;
         SimpleBlock lastOperatedCentre = base;
-        //Terminate on maxDepth.
+        // Terminate on maxDepth.
         if(length > 0 && depth < maxDepth)
         {
             float initialWidth = currentWidth;
-            //Number of rotated cylindrical disks is length
+            // Number of rotated cylindrical disks is length
 
             FastNoise noiseGen = NoiseCacheHandler.getNoise(
                     tw,
@@ -164,16 +166,16 @@ public class NewFractalTreeBuilder implements Cloneable {
                         return n;
                     });
 
-            //A vector representing the centre of the branch, including its length.
+            // A vector representing the centre of the branch, including its length.
             Vector branchVect = normal.clone().multiply(length);
 
-            //Represents the cooldown before a random branch can spawn during this process
+            // Represents the cooldown before a random branch can spawn during this process
             float randomBranchSpawnCooldownCurrent = 0;
 
-            //This for loop places the branch.
-            //I am the branchIndex, and steps is the maximum steps the branch will
-            //take. Preferably, the radius of the branch will shrink as steps
-            //increase.
+            // This for loop places the branch.
+            // I am the branchIndex, and steps is the maximum steps the branch will
+            // take. Preferably, the radius of the branch will shrink as steps
+            // increase.
             for(float i = 0; i < length-startingBranchIndex; i+=0.5f) {
                 if((i / length) > end) break;
 
@@ -181,7 +183,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                 float appliedWidth = currentWidth;
                 float appliedNoisePriority = this.noisePriority;
                 Vector appliedNormal = normal;
-                //Base branches are thicker at the bottom for roots.
+                // Base branches are thicker at the bottom for roots.
                 Material temp = this.branchMaterial;
                 if(depth == 0 && i < treeRootThreshold) {
                     appliedWidth *= (float) (treeRootMultiplier + ((1.0-treeRootMultiplier)/treeRootThreshold)*i);
@@ -190,7 +192,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                     this.branchMaterial = this.rootMaterial;
                 }
 
-                //this.setBranchMaterial(BlockUtils.WOOLS[(int) length]);
+                // this.setBranchMaterial(BlockUtils.WOOLS[(int) length]);
 
                 lastOperatedCentre = generateRotatedCircle(
                         random, oriY,
@@ -201,23 +203,23 @@ public class NewFractalTreeBuilder implements Cloneable {
                 this.branchMaterial = temp;
 
                 currentWidth = getBranchWidth.apply(initialWidth, (i/length));
-                //TerraformGeneratorPlugin.logger.info("CWidth: " + currentWidth);
+                // TerraformGeneratorPlugin.logger.info("CWidth: " + currentWidth);
 
-                //Tick cooldown down by the loop step
+                // Tick cooldown down by the loop step
                 randomBranchSpawnCooldownCurrent -= 0.5F;
-                //Spawn more branches. These branches are random in nature.
+                // Spawn more branches. These branches are random in nature.
                 if((i/length) > minBranchSpawnLength
                         && GenUtils.chance(random, (int) (100*branchSpawnChance), 100)
                         && randomBranchSpawnCooldownCurrent <= 0)
                 {
                     randomBranchSpawnCooldownCurrent = randomBranchSpawnCooldown;
                     spawnedNewBranch = true;
-                    //If the cluster count is more than 0, you must reshuffle displacement theta
+                    // If the cluster count is more than 0, you must reshuffle displacement theta
                     double effectiveDisplacementTheta = displacementTheta;
                     if(randomBranchClusterCount > 0)
                         displacementTheta = GenUtils.randDouble(random, 0,displacementThetaDelta);
 
-                    //Place the randomised branches.
+                    // Place the randomised branches.
                     for(int y = 0; y < randomBranchClusterCount; y++) {
                         currentBranchTheta++;
                         branch(tw, random, lastOperatedCentre,
@@ -234,11 +236,11 @@ public class NewFractalTreeBuilder implements Cloneable {
                 }
             }
 
-            //This is the base branch. Check if you want to spawn crowning branches
+            // This is the base branch. Check if you want to spawn crowning branches
             if(depth == 0 && crownBranches > 0) {
                 double thetaDelta = (2*Math.PI)/crownBranches;
                 for(int i = 0; i < crownBranches; i++) {
-                    //branchMaterial = BlockUtils.pickWool();
+                    // branchMaterial = BlockUtils.pickWool();
                     spawnedNewBranch = true;
                     branch(tw, random, lastOperatedCentre,
                             calculateNextProjection(random, normal, thetaDelta*i),
@@ -265,7 +267,7 @@ public class NewFractalTreeBuilder implements Cloneable {
      *                    same branch
      * @return a theta with the next segment
      */
-    private double getNextTheta(double currentBranchTheta, int numSegments, double displacementTheta)
+    double getNextTheta(double currentBranchTheta, int numSegments, double displacementTheta)
     {
         double thetaDelta = (2*Math.PI)/((double)numSegments);
         return (displacementTheta + currentBranchTheta * thetaDelta);
@@ -287,13 +289,13 @@ public class NewFractalTreeBuilder implements Cloneable {
      * @param theta refers to the yaw (represented by 0 to 2pi)
      * @return the new normal vector
      */
-    private @NotNull Vector calculateNextProjection(@NotNull Random random, @NotNull Vector normal, double theta) {
-        //One perpendicular vector will be rotated about the normal to
-        //generate a rotating projection.
+    @NotNull Vector calculateNextProjection(@NotNull Random random, @NotNull Vector normal, double theta) {
+        // One perpendicular vector will be rotated about the normal to
+        // generate a rotating projection.
         //
         Vector A = normal.clone();
 
-        //Rotate A to be perpendicular to the normal
+        // Rotate A to be perpendicular to the normal
         A.setX(rotationMatrixX[0][0] * normal.getX() + rotationMatrixX[0][1] * normal.getY() + rotationMatrixX[0][2] * normal.getZ());
         A.setY(rotationMatrixX[1][0] * normal.getX() + rotationMatrixX[1][1] * normal.getY() + rotationMatrixX[1][2] * normal.getZ());
         A.setZ(rotationMatrixX[2][0] * normal.getX() + rotationMatrixX[2][1] * normal.getY() + rotationMatrixX[2][2] * normal.getZ());
@@ -314,8 +316,8 @@ public class NewFractalTreeBuilder implements Cloneable {
                 + (-v*x + u*y)*Math.sin(theta);
         A = new Vector(xPrime, yPrime, zPrime);
 
-        //Randomly rotate the normal by adding a minimum magnitude scalar to both A and B
-        //with a random direction (+ or -)
+        // Randomly rotate the normal by adding a minimum magnitude scalar to both A and B
+        // with a random direction (+ or -)
         return normal.clone()
                 .add(A.multiply(
                             GenUtils.randDouble(
@@ -356,7 +358,7 @@ public class NewFractalTreeBuilder implements Cloneable {
      *                    its length.
      * @return the centre of the evaluated circle.
      */
-    private @NotNull SimpleBlock generateRotatedCircle(@NotNull Random random, int oriY, @NotNull PopulatorDataAbstract data, @NotNull Vector centre, @NotNull Vector normal, @NotNull HashSet<SimpleBlock> prospectiveHives, float noisePriority, float radius, @NotNull FastNoise noiseGen, float heightIndex)
+    @NotNull SimpleBlock generateRotatedCircle(@NotNull Random random, int oriY, @NotNull PopulatorDataAbstract data, @NotNull Vector centre, @NotNull Vector normal, @NotNull HashSet<SimpleBlock> prospectiveHives, float noisePriority, float radius, @NotNull FastNoise noiseGen, float heightIndex)
     {
         if(radius <= 0.5f)
         {
@@ -364,10 +366,10 @@ public class NewFractalTreeBuilder implements Cloneable {
             return new SimpleBlock(data, centre);
         }
 
-        //Material mat = BlockUtils.WOOLS[Math.round(heightIndex) % BlockUtils.WOOLS.length];
+        // Material mat = BlockUtils.WOOLS[Math.round(heightIndex) % BlockUtils.WOOLS.length];
 
-        //An orthogonal basis will be used as an alternative
-        //coordinate system, (A, B) in terms of x,y,z.
+        // An orthogonal basis will be used as an alternative
+        // coordinate system, (A, B) in terms of x,y,z.
         //
         Vector A = normal.clone();
         Vector B = normal.clone();
@@ -381,18 +383,18 @@ public class NewFractalTreeBuilder implements Cloneable {
         B.setZ(rotationMatrixZ[2][0]*normal.getX()+rotationMatrixZ[2][1]*normal.getY()+rotationMatrixZ[2][2]*normal.getZ());
 
         boolean didNotGenerate = true;
-        //Now that you have an orthogonal basis, you can now
-        //iterate in a 2D square based on multiples of A and B
-        //Iterate from (-rA,-rB) to (rA, rB)
+        // Now that you have an orthogonal basis, you can now
+        // iterate in a 2D square based on multiples of A and B
+        // Iterate from (-rA,-rB) to (rA, rB)
         double maxPossibleRadius = (1+noisePriority*2)*radius;
         for(double rA = -maxPossibleRadius; rA <= maxPossibleRadius; rA++)
             for(double rB = -maxPossibleRadius; rB <= maxPossibleRadius; rB++)
             {
                 double distFromCentre = Math.sqrt(Math.pow(rA,2)+Math.pow(rB,2));
-                //Theta will be used to calculate variations in radius
-                //for fuzzing.
+                // Theta will be used to calculate variations in radius
+                // for fuzzing.
                 double theta = Math.atan2(rB,rA);
-                //atan2 returns -pi to pi. Convert this to 0 to 2pi.
+                // atan2 returns -pi to pi. Convert this to 0 to 2pi.
                 if(theta < 0) theta = 2*Math.PI - theta;
 
                 double newRadius;
@@ -405,8 +407,8 @@ public class NewFractalTreeBuilder implements Cloneable {
 
                 if(distFromCentre <= newRadius)
                 {
-                    //Re-convert coordinates from (A,B) to (x,y,z)
-                    //As a recap, (1,1,A), (B,1,1)
+                    // Re-convert coordinates from (A,B) to (x,y,z)
+                    // As a recap, (1,1,A), (B,1,1)
                     data.rsetType(centre.clone()
                                     .add(A.clone().multiply(rA))
                                     .add(B.clone().multiply(rB)),
@@ -414,7 +416,7 @@ public class NewFractalTreeBuilder implements Cloneable {
                             branchMaterial);
                     didNotGenerate = false;
 
-                    //Add possible beehives
+                    // Add possible beehives
                     if(spawnBees
                             && centre.getY() > oriY + originalTrunkLength/2f
                             && GenUtils.chance(random,1,200))
@@ -432,107 +434,107 @@ public class NewFractalTreeBuilder implements Cloneable {
         return new SimpleBlock(data, centre);
     }
 
-    public @NotNull NewFractalTreeBuilder setMaxDepth(int maxDepth) {
+    @NotNull NewFractalTreeBuilder setMaxDepth(int maxDepth) {
         this.maxDepth = maxDepth;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setOriginalTrunkLength(int originalTrunkLength) {
+    @NotNull NewFractalTreeBuilder setOriginalTrunkLength(int originalTrunkLength) {
         this.originalTrunkLength = originalTrunkLength;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setFirstEnd(float firstEnd) {
+    @NotNull NewFractalTreeBuilder setFirstEnd(float firstEnd) {
         this.firstEnd = firstEnd;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setCrownBranches(int crownBranches) {
+    @NotNull NewFractalTreeBuilder setCrownBranches(int crownBranches) {
         this.crownBranches = crownBranches;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setInitialBranchRadius(float initialBranchRadius) {
+    @NotNull NewFractalTreeBuilder setInitialBranchRadius(float initialBranchRadius) {
         this.initialBranchRadius = initialBranchRadius;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setBranchSpawnChance(double branchSpawnChance) {
+    @NotNull NewFractalTreeBuilder setBranchSpawnChance(double branchSpawnChance) {
         this.branchSpawnChance = branchSpawnChance;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setMinBranchSpawnLength(float minBranchSpawnLength) {
+    @NotNull NewFractalTreeBuilder setMinBranchSpawnLength(float minBranchSpawnLength) {
         this.minBranchSpawnLength = minBranchSpawnLength;
         return this;
     }
-    public @NotNull NewFractalTreeBuilder setTreeRootThreshold(int treeRootThreshold) {
+    @NotNull NewFractalTreeBuilder setTreeRootThreshold(int treeRootThreshold) {
         this.treeRootThreshold = treeRootThreshold;
         return this;
     }
-    public @NotNull NewFractalTreeBuilder setRandomBranchClusterCount(int randomBranchClusterCount)
+    @NotNull NewFractalTreeBuilder setRandomBranchClusterCount(int randomBranchClusterCount)
     {
         this.randomBranchClusterCount = randomBranchClusterCount;
         return this;
     }
-    public @NotNull NewFractalTreeBuilder setRandomBranchSegmentCount(int randomBranchSegmentCount) {
+    @NotNull NewFractalTreeBuilder setRandomBranchSegmentCount(int randomBranchSegmentCount) {
         this.randomBranchSegmentCount = randomBranchSegmentCount;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setMaxInitialNormalDelta(double maxInitialNormalDelta) {
+    @NotNull NewFractalTreeBuilder setMaxInitialNormalDelta(double maxInitialNormalDelta) {
         this.maxInitialNormalDelta = maxInitialNormalDelta;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setRandomBranchSpawnCooldown(float randomBranchSpawnCooldown)
+    @NotNull NewFractalTreeBuilder setRandomBranchSpawnCooldown(float randomBranchSpawnCooldown)
     {
         this.randomBranchSpawnCooldown = randomBranchSpawnCooldown;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setTreeRootMultiplier(float treeRootMultiplier)
+    @NotNull NewFractalTreeBuilder setTreeRootMultiplier(float treeRootMultiplier)
     {
         this.treeRootMultiplier = treeRootMultiplier;
         return this;
     }
-    public @NotNull NewFractalTreeBuilder setLeafSpawnDepth(int leafSpawnDepth)
+    @NotNull NewFractalTreeBuilder setLeafSpawnDepth(int leafSpawnDepth)
     {
         this.leafSpawnDepth = leafSpawnDepth;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setMinBranchHorizontalComponent(double minBranchHorizontalComponent) {
+    @NotNull NewFractalTreeBuilder setMinBranchHorizontalComponent(double minBranchHorizontalComponent) {
         this.minBranchHorizontalComponent = minBranchHorizontalComponent;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setMaxBranchHorizontalComponent(double maxBranchHorizontalComponent) {
+    @NotNull NewFractalTreeBuilder setMaxBranchHorizontalComponent(double maxBranchHorizontalComponent) {
         this.maxBranchHorizontalComponent = maxBranchHorizontalComponent;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setFractalLeaves(FractalLeaves fractalLeaves) {
+    @NotNull NewFractalTreeBuilder setFractalLeaves(FractalLeaves fractalLeaves) {
         this.fractalLeaves = fractalLeaves;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setBranchDecrement(BiFunction<Float, Float, Float> branchDecrement) {
+    @NotNull NewFractalTreeBuilder setBranchDecrement(BiFunction<Float, Float, Float> branchDecrement) {
         this.branchDecrement = branchDecrement;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setGetBranchWidth(BiFunction<Float, Float, Float> getBranchWidth) {
+    @NotNull NewFractalTreeBuilder setGetBranchWidth(BiFunction<Float, Float, Float> getBranchWidth) {
         this.getBranchWidth = getBranchWidth;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setSpawnBees(boolean spawnBees) {
+    @NotNull NewFractalTreeBuilder setSpawnBees(boolean spawnBees) {
         this.spawnBees = spawnBees;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setLengthVariance(float lengthVariance)
+    @NotNull NewFractalTreeBuilder setLengthVariance(float lengthVariance)
     {
         this.lengthVariance = lengthVariance;
         return this;
@@ -547,13 +549,13 @@ public class NewFractalTreeBuilder implements Cloneable {
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setNoisePriority(float noisePriority)
+    @NotNull NewFractalTreeBuilder setNoisePriority(float noisePriority)
     {
         this.noisePriority = noisePriority;
         return this;
     }
 
-    public @NotNull NewFractalTreeBuilder setMinInitialNormalDelta(double minInitialNormalDelta) {
+    @NotNull NewFractalTreeBuilder setMinInitialNormalDelta(double minInitialNormalDelta) {
         this.minInitialNormalDelta = minInitialNormalDelta;
         return this;
     }

@@ -20,7 +20,7 @@ public class TrapdoorBuilder {
     }
 
     public TrapdoorBuilder(Material... mat) {
-        this.blockData = (TrapDoor) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (TrapDoor) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 
@@ -60,7 +60,7 @@ public class TrapdoorBuilder {
     }
 
     public @NotNull TrapdoorBuilder lapply(@NotNull Wall block) {
-    	if(!block.getType().isSolid())
+    	if(!block.isSolid())
     		block.setBlockData(blockData);
         return this;
     }

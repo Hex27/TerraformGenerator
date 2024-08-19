@@ -14,6 +14,8 @@ import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -52,8 +54,8 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         return new Material[]{
         		Material.GRASS_BLOCK,
         		Material.DIRT,
-        		GenUtils.randMaterial(Material.DIRT, Material.STONE),
-        		GenUtils.randMaterial(Material.DIRT, Material.STONE),
+        		GenUtils.randChoice(Material.DIRT, Material.STONE),
+        		GenUtils.randChoice(Material.DIRT, Material.STONE),
         		Material.STONE
         		};
     }
@@ -91,7 +93,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         int rawX = chunkX*16+x;
         int rawZ = chunkZ*16+z;
         double crevice = Math.abs(creviceNoise.GetNoise(rawX,rawZ));
-        //peakHeight *= getBiomeBlender(tw).getEdgeFactor(BiomeBank.SHATTERED_SAVANNA, rawX, rawZ);
+        // peakHeight *= getBiomeBlender(tw).getEdgeFactor(BiomeBank.SHATTERED_SAVANNA, rawX, rawZ);
         if(crevice < 0.40f) return;
 
         short baseHeight = cache.getTransformedHeight(x,z);
@@ -99,10 +101,10 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         boolean updateHeight = true;
         for(int y = baseHeight; y > low; y--)
         {
-            //Noise meant to scale with y while making terraces every 10 blocks
-            //Additionally, add a small curve to make the land bend a bit
-            //Make the pillars connect around baseHeight+0.5*(peakHeight-baseHeight)
-            //by multiplying a factor that approaches lower values there
+            // Noise meant to scale with y while making terraces every 10 blocks
+            // Additionally, add a small curve to make the land bend a bit
+            // Make the pillars connect around baseHeight+0.5*(peakHeight-baseHeight)
+            // by multiplying a factor that approaches lower values there
             double scale = (1f - 0.4*Math.abs(yScaleNoise.GetNoise(y,0)));
             if(crevice*scale < 0.40f){
                 updateHeight = false;
@@ -112,7 +114,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
             if(updateHeight) cache.writeTransformedHeight(x,z, (short) (y-1));
         }
 
-        //Make write changes
+        // Make write changes
         if(chunk instanceof DudChunkData) return;
 
         Material[] crust = getSurfaceCrust(new Random());
@@ -138,16 +140,16 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
 
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
                 && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
-            //Dense grass
+            // Dense grass
             if (GenUtils.chance(random, 2, 10)) {
-                data.setType(rawX, surfaceY+1, rawZ, Material.GRASS);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY+1, rawZ);
             }
         }
     }
 
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-        //Small trees
+        // Small trees
 	    SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 34);
         for (SimpleLocation sLoc : trees) {
      	    int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
@@ -158,12 +160,12 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
 		    }
         }
 
-        //Grass Poffs
+        // Grass Poffs
         SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 35);
         for (SimpleLocation sLoc : poffs) {
      	   int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
 		   sLoc.setY(treeY);
-		   if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
+		   if(TConfigOption.arePlantsEnabled() && data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
 		           BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())) &&
 		           !data.getType(sLoc.getX(),sLoc.getY()+1,sLoc.getZ()).isSolid()) {
                SimpleBlock base = new SimpleBlock(data, sLoc.getX(), sLoc.getY() + 1, sLoc.getZ());

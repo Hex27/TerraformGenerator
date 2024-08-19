@@ -23,7 +23,7 @@ public class StairBuilder {
     }
 
     public StairBuilder(Material... mat) {
-        this.blockData = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 
@@ -54,7 +54,7 @@ public class StairBuilder {
     }
 
     public @NotNull StairBuilder lapply(@NotNull SimpleBlock block) {
-    	if(block.getType().isSolid())
+    	if(block.isSolid())
     		return this;
     	
         block.setBlockData(blockData);

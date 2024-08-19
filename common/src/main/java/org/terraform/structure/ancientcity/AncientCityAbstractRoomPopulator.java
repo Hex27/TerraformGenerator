@@ -40,10 +40,10 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
     	
     	shrunkenWidth = GenUtils.randInt(this.rand, 2,4);
     	
-    	//This variable is named depression, but can also represent elevation.
+    	// This variable is named depression, but can also represent elevation.
     	int depression = shrunkenWidth;
     	
-    	//Sometimes the room will be higher than the path's Y.
+    	// Sometimes the room will be higher than the path's Y.
     	if(rand.nextBoolean()) {
     		depression = depression*-1;
     	}
@@ -54,10 +54,10 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
     			room.getHeight(),
     			room.getX(), room.getY() + depression, room.getZ()));
     	
-        //Clear out space for the room
+        // Clear out space for the room
     	effectiveRoom.fillRoom(data, Material.CAVE_AIR);
     	
-    	//Room flooring
+    	// Room flooring
         int[] lowerCorner = effectiveRoom.getLowerCorner(0);
         int[] upperCorner = effectiveRoom.getUpperCorner(0);
         int y = effectiveRoom.getY();
@@ -65,7 +65,7 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 
-                //Fuzz the sides to give a sense of ruin
+                // Fuzz the sides to give a sense of ruin
                 if(x == lowerCorner[0] || x == upperCorner[0] || z == lowerCorner[1] || z == upperCorner[1])
                 {
                 	if(rand.nextBoolean())
@@ -74,7 +74,7 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
                 else
                 	b.lsetType(AncientCityUtils.deepslateBricks);
                 
-                //every few intervals, place a pillar
+                // every few intervals, place a pillar
             	int relX = effectiveRoom.getX() - x;
                 int relZ = effectiveRoom.getZ() - z;
                 if(relX % 5 == 0 && relZ % 5 == 0 && 
@@ -87,13 +87,13 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
             }
         }
         
-        //Connect the paths to the rooms
+        // Connect the paths to the rooms
         for(Entry<Wall, Integer> entry:room.getFourWalls(data, 0).entrySet()) {
         	Wall w = entry.getKey().getDown();
         	for(int i = shrunkenWidth; i < entry.getValue()-shrunkenWidth; i++) {
     			
         		if(this.gen.getPathPopulators().contains(new PathPopulatorData(w.getRear().getAtY(room.getY()), 3))) {
-        			//w.getUp(3).setType(Material.RED_WOOL);
+        			// w.getUp(3).setType(Material.RED_WOOL);
         			w.setType(AncientCityUtils.deepslateBricks);
         			w.getLeft().setType(AncientCityUtils.deepslateBricks);
         			w.getRight().setType(AncientCityUtils.deepslateBricks);
@@ -138,8 +138,8 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
                 });
 		for(int i = 0; i <= ((room.getWidthX()*room.getWidthZ())/150); i++)
 		{
-			//Generates 3d coords, but we will discard the y coords.
-			//We will separately generate y coords later.
+			// Generates 3d coords, but we will discard the y coords.
+			// We will separately generate y coords later.
 			int[] coords = room.randomCoords(rand);
 			int y = rand.nextInt(5);
 			SimpleBlock target = new SimpleBlock(data, coords[0], room.getY()+y,coords[2]);

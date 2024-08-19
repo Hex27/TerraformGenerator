@@ -8,6 +8,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
@@ -33,19 +34,19 @@ public class JungleRiverHandler extends BiomeHandler {
         return new Material[]{
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
 
     @Override
     public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         boolean growsKelp = random.nextBoolean();
-        if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
+        if(surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
             return;
 
-        //Set ground near sea level to sand
+        // Set ground near sea level to sand
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.SAND);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
@@ -71,13 +72,13 @@ public class JungleRiverHandler extends BiomeHandler {
      */
     public static void generateLilyPad(TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int z, int highestGround) {
         if (GenUtils.chance(random, 1, (int) (getLilyPadNoise(tw, x, z) * 7 + Math.pow(TerraformGenerator.seaLevel - highestGround, 3) + 18))) {
-            data.setType(x, TerraformGenerator.seaLevel + 1, z, Material.LILY_PAD);
+            PlantBuilder.LILY_PAD.build(data, x, TerraformGenerator.seaLevel + 1, z);
         }
     }
 
     public static void generateKelp(int x, int y, int z, @NotNull PopulatorDataAbstract data, @NotNull Random random) {
         for (int ny = y; ny < TerraformGenerator.seaLevel - GenUtils.randInt(random, 0, 2); ny++) {
-            data.setType(x, ny, z, Material.KELP_PLANT);
+            PlantBuilder.KELP_PLANT.build(data, x, ny, z);
         }
     }
 

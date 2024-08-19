@@ -21,19 +21,19 @@ public class MansionBaseTowerPiece extends MansionStandardTowerPiece {
 	
 	@Override
 	public void decorateAwkwardCorner(@NotNull Wall target, Random random, @NotNull BlockFace one, @NotNull BlockFace two) {
-    	//Fill in gap in the corner
+    	// Fill in gap in the corner
     	target.Pillar(MansionJigsawBuilder.roomHeight, Material.STONE_BRICKS);
     	target.getRelative(one).getRelative(two).setType(Material.COBBLESTONE_SLAB);
     	
     	new SlabBuilder(Material.COBBLESTONE_SLAB)
     	.setType(Type.TOP)
-    	.apply(target.getRelative(one).getRelative(two).getRelative(0,3,0));
+    	.apply(target.getRelative(one).getRelative(two).getUp(3));
     	
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(one.getOppositeFace())
-    	.apply(target.getRelative(two).getRelative(0,4,0))
+    	.apply(target.getRelative(two).getUp(4))
     	.setFacing(two.getOppositeFace())
-    	.apply(target.getRelative(one).getRelative(0,4,0));
+    	.apply(target.getRelative(one).getUp(4));
     	
     	target.getRelative(one).Pillar(4, Material.COBBLESTONE_WALL);
     	target.getRelative(one).CorrectMultipleFacing(4);
@@ -42,10 +42,10 @@ public class MansionBaseTowerPiece extends MansionStandardTowerPiece {
     	
     	target.getRelative(one).setType(Material.COBBLESTONE);
     	target.getRelative(two).setType(Material.COBBLESTONE);
-    	if(target.getRelative(two).getRelative(0,-2,0).getType().isSolid())
-    		target.getRelative(two).getRelative(0,-1,0).setType(Material.COBBLESTONE);
-    	if(target.getRelative(one).getRelative(0,-2,0).getType().isSolid())
-    		target.getRelative(one).getRelative(0,-1,0).setType(Material.COBBLESTONE);
+    	if(target.getRelative(two).getDown(2).isSolid())
+    		target.getRelative(two).getDown().setType(Material.COBBLESTONE);
+    	if(target.getRelative(one).getDown(2).isSolid())
+    		target.getRelative(one).getDown().setType(Material.COBBLESTONE);
     	
     }
 

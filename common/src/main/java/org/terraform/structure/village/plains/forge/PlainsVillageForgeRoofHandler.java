@@ -27,7 +27,7 @@ public class PlainsVillageForgeRoofHandler {
 		SimpleLocation lowerBound = null;
 		SimpleLocation upperBound = null;
 		
-		Material roofCornerMaterial = GenUtils.randMaterial(Material.STONE_BRICKS, Material.COBBLESTONE);
+		Material roofCornerMaterial = GenUtils.randChoice(Material.STONE_BRICKS, Material.COBBLESTONE);
 		Material roofSlabCornerMaterial = Material.STONE_BRICK_SLAB;
 		if(roofCornerMaterial == Material.COBBLESTONE)
 			roofSlabCornerMaterial = Material.COBBLESTONE_SLAB;
@@ -51,20 +51,20 @@ public class PlainsVillageForgeRoofHandler {
 		
 		for(int x = lowerBound.getX(); x <= upperBound.getX(); x++) {
 			for(int z = lowerBound.getZ(); z <= upperBound.getZ(); z++) {
-				//core.getPopData().setType(x, core.getY()+4, z, Material.RED_WOOL);
+				// core.getPopData().setType(x, core.getY()+4, z, Material.RED_WOOL);
 				int height;
 				double percent;
 				if(roofAxis == Axis.X) {
-					//0 to 1.0
+					// 0 to 1.0
 					percent = ((double)x-(double)lowerBound.getX())/((double)upperBound.getX()-(double)lowerBound.getX());
-					//-12(x-0.5)^2+3
+					// -12(x-0.5)^2+3
 				}else {
 					percent = ((double)z-(double)lowerBound.getZ())/((double)upperBound.getZ()-(double)lowerBound.getZ());
-					//-12(x-0.5)^2+3
+					// -12(x-0.5)^2+3
 				}
 				height = (int) ((-12*Math.pow(percent-0.5,2)+3));
 				SimpleBlock target = new SimpleBlock(core.getPopData(),x,core.getY()+4+((int)(((double)height)/2)),z);
-				if(height % 2 == 1) { //Use solid blocks for odd heights
+				if(height % 2 == 1) { // Use solid blocks for odd heights
 					if(x == lowerBound.getX() || x == upperBound.getX() || z == lowerBound.getZ() || z == upperBound.getZ()) {
 						target.setType(roofCornerMaterial);
 						
@@ -77,7 +77,7 @@ public class PlainsVillageForgeRoofHandler {
 						target.setType(plainsVillagePopulator.woodPlank);
 					}
 					
-					//Log center
+					// Log center
 					if(height == 3) {
 						new OrientableBuilder(plainsVillagePopulator.woodLog)
 						.setAxis(BlockUtils.getPerpendicularHorizontalPlaneAxis(roofAxis))
@@ -86,13 +86,13 @@ public class PlainsVillageForgeRoofHandler {
 						if((roofAxis == Axis.X && (z == lowerBound.getZ()+1||z == upperBound.getZ()-1))
 								||(roofAxis == Axis.Z && (x == lowerBound.getX()+1||x == upperBound.getX()-1))) {
 							
-							//Fill the holes between the walls and the roof
-							if(BlockUtils.isStoneLike(target.getRelative(0,-2,0).getType()) || target.getRelative(0,-2,0).getType() == plainsVillagePopulator.woodDoor)
-								new Wall(target.getRelative(0,-1,0)).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
+							// Fill the holes between the walls and the roof
+							if(BlockUtils.isStoneLike(target.getDown(2).getType()) || target.getDown(2).getType() == plainsVillagePopulator.woodDoor)
+								new Wall(target.getDown()).downUntilSolid(new Random(), Material.STONE, Material.COBBLESTONE, Material.ANDESITE);
 						}
 					}
 				
-				} else { //Use slabs for even heights
+				} else { // Use slabs for even heights
 					if(x == lowerBound.getX() || x == upperBound.getX() || z == lowerBound.getZ() || z == upperBound.getZ()) {
 						new SlabBuilder(roofSlabCornerMaterial)
 						.apply(target);
@@ -107,7 +107,7 @@ public class PlainsVillageForgeRoofHandler {
 	}
 	
 	/**
-	 * 
+	 *
 	 * @return a list of structure piece simplelocations that are contained within a rectangle.
 	 * This rectangle may not be the largest in the provided hashmap.
 	 */
@@ -119,7 +119,7 @@ public class PlainsVillageForgeRoofHandler {
 			break;
 		}
 		
-		//Find a corner of the pieces
+		// Find a corner of the pieces
 		BlockFace sideToMove = BlockUtils.getDirectBlockFace(new Random());
 		JigsawStructurePiece target = getAdjacentPiece(pieces, cornerLoc, sideToMove);
 		while(target != null) {
@@ -128,14 +128,14 @@ public class PlainsVillageForgeRoofHandler {
 		}
 		target = pieces.get(cornerLoc);
 		
-		//Begin moving towards the opposite side. Add all relevant entries to the list.
+		// Begin moving towards the opposite side. Add all relevant entries to the list.
 		while(target != null) {
 			cornerLoc = target.getRoom().getSimpleLocation();
 			rectangleList.add(target.getRoom().getSimpleLocation());
 			target = getAdjacentPiece(pieces, cornerLoc, sideToMove.getOppositeFace());
 		}
 		
-		//For all entries in the list, find the maximum expansion towards one side.
+		// For all entries in the list, find the maximum expansion towards one side.
 		sideToMove = BlockUtils.getTurnBlockFace(new Random(), sideToMove);
 		int shortestLength = 99;
 		for(SimpleLocation pLoc:rectangleList) {
@@ -147,10 +147,10 @@ public class PlainsVillageForgeRoofHandler {
 				piece = getAdjacentPiece(pieces, piece.getRoom().getSimpleLocation(), sideToMove);
 			}
 			if(expansionLength < shortestLength) shortestLength = expansionLength;
-			if(expansionLength == 0) break; //Shortest side is 0. Break out.
+			if(expansionLength == 0) break; // Shortest side is 0. Break out.
 		}
 		
-		//Add all associated pieces to the list.
+		// Add all associated pieces to the list.
 		Collection<SimpleLocation> toAdd = new ArrayList<>();
 		for(SimpleLocation pLoc:rectangleList) {
 			JigsawStructurePiece piece = pieces.get(pLoc);

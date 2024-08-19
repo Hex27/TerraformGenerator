@@ -20,7 +20,7 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Wall up all entrances with wooden planks
+        // Wall up all entrances with wooden planks
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall wall = entry.getKey().clone();
             int length = entry.getValue();
@@ -38,7 +38,7 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
         int x = room.getX();
         int z = room.getZ();
 
-        //Make some nether corruption
+        // Make some nether corruption
         BlockUtils.replaceUpperSphere(rand.nextInt(123), rX, rY, rZ,
                 new SimpleBlock(data, x, y, z), true,
                 Material.NETHERRACK,
@@ -58,18 +58,18 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
         Material[] blocks = {Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN,
                 Material.CAVE_AIR};
 
-        //Spawn a nether portal
+        // Spawn a nether portal
         wall.getRight().getRight().Pillar(5, rand, blocks);
         wall.Pillar(5, rand, blocks);
         wall.getRight().Pillar(5, rand, blocks);
         wall.getLeft().Pillar(5, rand, blocks);
 
-        wall.getRelative(0, 4, 0).getRight().getRight().setType(Material.CHISELED_STONE_BRICKS);
-        wall.getRelative(0, 4, 0).getLeft().setType(Material.CHISELED_STONE_BRICKS);
+        wall.getUp(4).getRight().getRight().setType(Material.CHISELED_STONE_BRICKS);
+        wall.getUp(4).getLeft().setType(Material.CHISELED_STONE_BRICKS);
         wall.getRight().getRight().setType(Material.CHISELED_STONE_BRICKS);
         wall.getLeft().setType(Material.CHISELED_STONE_BRICKS);
 
-        wall = wall.getRelative(0, 1, 0);
+        wall = wall.getUp();
 
         wall.Pillar(3, rand, Material.CAVE_AIR);
         wall.getRight().Pillar(3, rand, Material.CAVE_AIR);

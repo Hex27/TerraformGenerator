@@ -22,7 +22,7 @@ public class MansionSecondFloorBunkPopulator extends MansionRoomPopulator {
 		super(room, internalWalls);
 	}
 
-	//Refers to the kitchen room width, not the width of one room cell.
+	// Refers to the kitchen room width, not the width of one room cell.
 	private static final int roomWidthX = 15;
 	private static final int roomWidthZ = 6;
 	@Override
@@ -30,7 +30,7 @@ public class MansionSecondFloorBunkPopulator extends MansionRoomPopulator {
 
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
-		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
+		// TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
 		try {
 			if(randomFace == BlockFace.NORTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);

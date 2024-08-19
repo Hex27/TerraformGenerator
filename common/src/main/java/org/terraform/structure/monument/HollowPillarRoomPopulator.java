@@ -29,24 +29,24 @@ public class HollowPillarRoomPopulator extends CageRoomPopulator {
                 room.getY() + (room.getHeight() / 2) - ((room.getHeight() - 9) / 2),
                 room.getZ());
 
-        //Attach to the ceiling
+        // Attach to the ceiling
         for (int[] corner : cage.getAllCorners()) {
             Wall w = new Wall(new SimpleBlock(data, corner[0], room.getY() + 1, corner[1]), BlockFace.NORTH);
             w.LPillar(room.getHeight() - 1, rand, design.tileSet());
         }
 
-        //Lines
+        // Lines
         for (Entry<Wall, Integer> entry : cage.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
             int length = entry.getValue();
             for (int i = 0; i < length; i++) {
-                w.getRelative(0, -1, 0).setType(design.mat(rand));
+                w.getDown().setType(design.mat(rand));
                 w.getRelative(0, cage.getHeight() - 1, 0).setType(design.mat(rand));
                 w = w.getLeft();
             }
         }
 
-        //Lanterns
+        // Lanterns
         for (int[] corner : cage.getAllCorners()) {
             int x = corner[0];
             int z = corner[1];

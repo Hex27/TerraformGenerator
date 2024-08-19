@@ -20,7 +20,7 @@ public class MansionStandardSecondFloorPiece extends MansionStandardRoomPiece {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
-        //Place attic ceiling
+        // Place attic ceiling
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY()+this.getRoom().getHeight(), z, Material.DARK_OAK_PLANKS);

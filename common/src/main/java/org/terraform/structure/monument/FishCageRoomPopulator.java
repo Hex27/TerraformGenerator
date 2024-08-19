@@ -25,7 +25,7 @@ public class FishCageRoomPopulator extends LevelledRoomPopulator {
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
-        //Fish Cage
+        // Fish Cage
         CubeRoom cage = new CubeRoom(room.getWidthX() - 6, room.getWidthZ() - 6, room.getHeight() - 11, room.getX(), room.getY() + 7, room.getZ());
         for (Entry<Wall, Integer> entry : cage.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
@@ -54,13 +54,13 @@ public class FishCageRoomPopulator extends LevelledRoomPopulator {
             }
         }
 
-        //Attach to the ceiling
+        // Attach to the ceiling
         for (int[] corner : cage.getAllCorners()) {
             new Wall(new SimpleBlock(data, corner[0], cage.getY() + cage.getHeight() + 1, corner[1]), BlockFace.NORTH)
                     .Pillar(room.getHeight() - 8 - cage.getHeight(), rand, Material.PRISMARINE_WALL);
         }
 
-        //Dolphins
+        // Dolphins
         for (int i = 0; i < GenUtils.randInt(3, 6); i++)
             data.addEntity(cage.getX(), cage.getY() + 1, cage.getZ(), EntityType.DOLPHIN);
     }

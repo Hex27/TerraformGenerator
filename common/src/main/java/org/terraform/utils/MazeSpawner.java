@@ -28,9 +28,9 @@ public class MazeSpawner {
      */
     private final Map<SimpleLocation, MazeCell> cellGrid = new HashMap<>();
     public final @NotNull List<PathPopulatorData> pathPopDatas = new ArrayList<>();
-    private SimpleBlock core; //Maze center
-    private int widthX = -1; //Maze x width
-    private int widthZ = -1; //Maze z width
+    private SimpleBlock core; // Maze center
+    private int widthX = -1; // Maze x width
+    private int widthZ = -1; // Maze z width
     private Random rand;
     private int mazeHeight = 3;
     private MazeCell center;
@@ -59,7 +59,7 @@ public class MazeSpawner {
     private @NotNull Map<BlockFace, MazeCell> getValidNeighbours(@NotNull MazeCell target) {
         Map<BlockFace, MazeCell> neighbours = new EnumMap<>(BlockFace.class);
 
-        //Loop NSEW
+        // Loop NSEW
         for (BlockFace face : BlockUtils.directBlockFaces) {
             MazeCell neighbour = getAdjacentCell(target, face);
             if (neighbour != null && neighbour.hasAllWalls()) {
@@ -77,44 +77,44 @@ public class MazeSpawner {
     public void prepareMaze() {
 
 
-        //Initialise the cellGrid
+        // Initialise the cellGrid
         int mazeCellsWidthX = widthX / (mazePathWidth + mazePeriod);
         int mazeCellsWidthZ = widthZ / (mazePathWidth + mazePeriod);
         for (int x = -mazeCellsWidthX / 2; x <= mazeCellsWidthX / 2; x++)
             for (int z = -mazeCellsWidthZ / 2; z <= mazeCellsWidthZ / 2; z++) {
                 MazeCell cell = new MazeCell(x, z);
                 cellGrid.put(new SimpleLocation(x, core.getY(), z), cell);
-                //Bukkit.getLogger().info("CELL " + x + "," + z);
+                // Bukkit.getLogger().info("CELL " + x + "," + z);
                 if (x == 0 && z == 0) {
                     center = cell;
                 }
             }
 
-        //Bukkit.getLogger().info("CENTER: " + center.x + "," + center.z);
+        // Bukkit.getLogger().info("CENTER: " + center.x + "," + center.z);
 
-        //Total number of cells
+        // Total number of cells
         int n = mazeCellsWidthX * mazeCellsWidthZ;
 
         Stack<MazeCell> cellStack = new Stack<>();
         MazeCell currentCell = center;
-        //Total number of visited cells during maze construction
+        // Total number of visited cells during maze construction
         int nv = 1;
 
-        //Knock down walls until all cells have been visited before
+        // Knock down walls until all cells have been visited before
         while (nv < n) {
-            //Bukkit.getLogger().info("CurrentCell: " + currentCell.x + "," + currentCell.z);
+            // Bukkit.getLogger().info("CurrentCell: " + currentCell.x + "," + currentCell.z);
             Map<BlockFace, MazeCell> neighbours = this.getValidNeighbours(currentCell);
 
             if (neighbours.isEmpty()) {
-                //Dead end. Go backwards.
+                // Dead end. Go backwards.
 
-                //No items in stack, break out.
+                // No items in stack, break out.
                 if (cellStack.isEmpty()) break;
                 currentCell = cellStack.pop();
                 continue;
             }
 
-            //choose a random neighbouring cell and move into it.
+            // choose a random neighbouring cell and move into it.
             @SuppressWarnings("unchecked")
             Entry<BlockFace, MazeCell> entry = (Entry<BlockFace, MazeCell>)
                     neighbours.entrySet().toArray()[
@@ -126,7 +126,7 @@ public class MazeSpawner {
             currentCell = entry.getValue();
             nv++;
         }
-        //Bukkit.getLogger().info(nv+"/"+n);
+        // Bukkit.getLogger().info(nv+"/"+n);
     }
 
 
@@ -142,15 +142,15 @@ public class MazeSpawner {
             int realWorldX = cell.x * (mazePathWidth + mazePeriod);
             int realWorldZ = cell.z * (mazePathWidth + mazePeriod);
             Wall cellCore = new Wall(core.getRelative(realWorldX, 0, realWorldZ));
-            pathPopDatas.add(new PathPopulatorData(cellCore.getRelative(0, -1, 0).get(), BlockFace.UP, mazePathWidth, false));
+            pathPopDatas.add(new PathPopulatorData(cellCore.getDown().get(), BlockFace.UP, mazePathWidth, false));
 
-            //Carve 1 cell
+            // Carve 1 cell
             for (int nx = -cellRadius; nx <= cellRadius; nx++) {
                 for (int nz = -cellRadius; nz <= cellRadius; nz++) {
                     cellCore.getRelative(nx, 0, nz).Pillar(mazeHeight, rand, Material.CAVE_AIR);
                     if (covered) {
-                        cellCore.getRelative(nx, mazeHeight, nz).setType(GenUtils.randMaterial(materials));
-                        cellCore.getRelative(nx, -1, nz).setType(GenUtils.randMaterial(materials));
+                        cellCore.getRelative(nx, mazeHeight, nz).setType(GenUtils.randChoice(materials));
+                        cellCore.getRelative(nx, -1, nz).setType(GenUtils.randChoice(materials));
                     }
                 }
             }
@@ -158,36 +158,36 @@ public class MazeSpawner {
 
             Set<BlockFace> wallllllllless = cell.getWalllessFaces();
 
-            //Connect
+            // Connect
             for (BlockFace dir : BlockUtils.directBlockFaces) {
                 Wall startPoint = new Wall(core.getRelative(realWorldX, 0, realWorldZ), dir)
                         .getRelative(dir, cellRadius + 1);
 
-                //Carve Pathway
+                // Carve Pathway
                 if (wallllllllless.contains(dir)) {
                     for (int i = 0; i < Math.ceil(((float) this.mazePeriod) / 2.0f); i++) {
-                        pathPopDatas.add(new PathPopulatorData(startPoint.getRelative(0, -1, 0).get(), dir, mazePathWidth, false));
+                        pathPopDatas.add(new PathPopulatorData(startPoint.getDown().get(), dir, mazePathWidth, false));
 
                         startPoint.Pillar(mazeHeight, rand, Material.CAVE_AIR);
                         if (covered) {
-                            startPoint.getRelative(0, mazeHeight, 0).setType(GenUtils.randMaterial(materials));
-                            startPoint.getRelative(0, -1, 0).setType(GenUtils.randMaterial(materials));
+                            startPoint.getRelative(0, mazeHeight, 0).setType(GenUtils.randChoice(materials));
+                            startPoint.getDown().setType(GenUtils.randChoice(materials));
                         }
                         for (int w = 1; w <= cellRadius; w++) {
                             startPoint.getLeft(w).Pillar(mazeHeight, rand, Material.CAVE_AIR);
                             startPoint.getRight(w).Pillar(mazeHeight, rand, Material.CAVE_AIR);
                             if (covered) {
-                                startPoint.getLeft(w).getRelative(0, -1, 0).setType(GenUtils.randMaterial(materials));
-                                startPoint.getRight(w).getRelative(0, -1, 0).setType(GenUtils.randMaterial(materials));
-                                startPoint.getLeft(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randMaterial(materials));
-                                startPoint.getRight(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randMaterial(materials));
+                                startPoint.getLeft(w).getDown().setType(GenUtils.randChoice(materials));
+                                startPoint.getRight(w).getDown().setType(GenUtils.randChoice(materials));
+                                startPoint.getLeft(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randChoice(materials));
+                                startPoint.getRight(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randChoice(materials));
                             }
                         }
                         startPoint.getLeft(cellRadius + 1).Pillar(mazeHeight, rand, materials);
                         startPoint.getRight(cellRadius + 1).Pillar(mazeHeight, rand, materials);
                         startPoint = startPoint.getRelative(dir);
                     }
-                } else { //Set Wall
+                } else { // Set Wall
                     startPoint.Pillar(mazeHeight, rand, materials);
                     for (int w = 1; w <= cellRadius; w++) {
                         startPoint.getLeft(w).Pillar(mazeHeight, rand, materials);
@@ -205,7 +205,7 @@ public class MazeSpawner {
     private MazeCell getAdjacentCell(@NotNull MazeCell target, @NotNull BlockFace face) {
         int neighbourX = target.x + face.getModX();
         int neighbourZ = target.z + face.getModZ();
-        //Bukkit.getLogger().info("Face: " + face.toString() + " - REL(" + face.getModX() + "," + face.getModZ() + ") === (" + neighbourX + "," + neighbourZ + ")" );
+        // Bukkit.getLogger().info("Face: " + face.toString() + " - REL(" + face.getModX() + "," + face.getModZ() + ") === (" + neighbourX + "," + neighbourZ + ")" );
         return cellGrid.get(new SimpleLocation(neighbourX, core.getY(), neighbourZ));
     }
 

@@ -24,12 +24,12 @@ public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStanda
 		super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
 	}
 	
-	//Use postBuildDecoration.
+	// Use postBuildDecoration.
     @Override
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
-    	//SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ());
+    	// SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ());
     	if(this.getWalledFaces().isEmpty()) {
-    		//Leave the room empty if you can't spawn anything.
+    		// Leave the room empty if you can't spawn anything.
     		return;
     	}
     	
@@ -41,8 +41,8 @@ public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStanda
     		Wall w = entry.getKey();
     		for(int i = 0; i < entry.getValue(); i++) {
     			
-    			//Ensure that you don't place anything against the entrance
-    			if(w.getRear().getRelative(0,-1,0).getType() != Material.CHISELED_STONE_BRICKS)
+    			// Ensure that you don't place anything against the entrance
+    			if(w.getRear().getDown().getType() != Material.CHISELED_STONE_BRICKS)
     			{
     				int choice = random.nextInt(4);
     				switch(choice) {
@@ -52,19 +52,19 @@ public class PlainsVillageForgeWeaponSmithPiece extends PlainsVillageForgeStanda
     						w.setType(Material.SMITHING_TABLE, Material.FLETCHING_TABLE);
     					}
     					break;
-    				case 1: //Workbench & lantern
+    				case 1: // Workbench & lantern
     					if(GenUtils.chance(random, 3, 4))
     						break;
     					w.setType(Material.CRAFTING_TABLE);
-    					w.getRelative(0,1,0).setType(Material.LANTERN);
-    					if(w.getRelative(0,1,0).getRear().getType().isSolid() && !placedJobBlock) {
+    					w.getUp().setType(Material.LANTERN);
+    					if(w.getUp().getRear().isSolid() && !placedJobBlock) {
     						placedJobBlock = true;
     						new DirectionalBuilder(Material.GRINDSTONE)
         					.setFacing(w.getDirection())
-        					.apply(w.getRelative(0,1,0));
+        					.apply(w.getUp());
     					}
     					break;
-    				case 2: //Anvil
+    				case 2: // Anvil
     					if(GenUtils.chance(random, 3, 4))
     						break;
     					new DirectionalBuilder(Material.ANVIL, Material.CHIPPED_ANVIL, Material.DAMAGED_ANVIL)

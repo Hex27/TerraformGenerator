@@ -13,6 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -22,7 +23,7 @@ import java.util.Random;
 
 public class BirchMountainsHandler extends AbstractMountainHandler {
 	
-	//Birch Mountains must be shorter to allow trees to populate.
+	// Birch Mountains must be shorter to allow trees to populate.
 	@Override
 	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.1, 1.3);
@@ -44,23 +45,22 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
         		Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-
         setRock(new SimpleBlock(data,rawX,0,rawZ).getGround());
 
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
 
             if (GenUtils.chance(random, 1, 10)) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 if (random.nextBoolean()) {
-                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                    PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 } else {
-                    data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                    BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -78,7 +78,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
     			rock = Material.DIORITE;
     		while(BlockUtils.isExposedToNonSolid(target)) {
     			target.setType(rock);
-    			target = target.getRelative(0,-1,0);
+    			target = target.getDown();
     		}
     	}
     }
@@ -113,11 +113,11 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
 	@Override
     public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
     	double coreRawHeight;
-        double height = HeightMap.CORE.getHeight(tw, x, z);//HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
+        double height = HeightMap.CORE.getHeight(tw, x, z);// HeightMap.MOUNTAINOUS.getHeight(tw, x, z); // Added here
         
-        //Let mountains cut into adjacent sections.
+        // Let mountains cut into adjacent sections.
         double maxMountainRadius = ((double) BiomeSection.sectionWidth);
-        //Double attrition height
+        // Double attrition height
         height += HeightMap.ATTRITION.getHeight(tw, x, z);
         coreRawHeight = height;
         
@@ -129,7 +129,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
         Random sectionRand = sect.getSectionRandom();
         double maxPeak = getPeakMultiplier(sect, sectionRand);
         
-        //Let's just not offset the peak. This seems to give a better result.
+        // Let's just not offset the peak. This seems to give a better result.
         SimpleLocation mountainPeak = sect.getCenter();
         
         double distFromPeak = (1.42*maxMountainRadius)-Math.sqrt(
@@ -142,18 +142,18 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
         
         height = height*heightMultiplier;
         
-        //If the height is too high, just force it to smooth out
+        // If the height is too high, just force it to smooth out
         if (height > 200) height = 200 + (height - 200) * 0.5;
         if (height > 230) height = 230 + (height - 230) * 0.3;
         if (height > 240) height = 240 + (height - 240) * 0.1;
         if (height > 250) height = 250 + (height - 250) * 0.05;
         
-        //Let rivers forcefully carve through birch mountains if they're deep enough.
-        double riverDepth = HeightMap.getRawRiverDepth(tw, x, z); //HeightMap.RIVER.getHeight(tw, x, z);
+        // Let rivers forcefully carve through birch mountains if they're deep enough.
+        double riverDepth = HeightMap.getRawRiverDepth(tw, x, z); // HeightMap.RIVER.getHeight(tw, x, z);
         
         if(coreRawHeight - riverDepth <= TerraformGenerator.seaLevel - 4) {
         	double makeup = 0;
-        	//Ensure depth
+        	// Ensure depth
         	if(coreRawHeight - riverDepth > TerraformGenerator.seaLevel - 10) {
         		makeup = (coreRawHeight - riverDepth) - (TerraformGenerator.seaLevel - 10);
         	}

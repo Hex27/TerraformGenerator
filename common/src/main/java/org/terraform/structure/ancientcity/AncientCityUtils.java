@@ -30,14 +30,14 @@ public class AncientCityUtils {
 
     public static void placeSupportPillar(@NotNull SimpleBlock w) {
         Random dud = new Random();
-        //w.getUp().lsetType(Material.GRAY_WOOL);
+        // w.getUp().lsetType(Material.GRAY_WOOL);
         w.downUntilSolid(dud, Material.DEEPSLATE_BRICKS);
         for(BlockFace face : BlockUtils.directBlockFaces)
             w.getRelative(face).downUntilSolid(dud, Material.DEEPSLATE_BRICKS);
 
         for(BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             int height = w.getRelative(face).downUntilSolid(dud, Material.COBBLED_DEEPSLATE_WALL);
-            //w.getRelative(face).getUp().lsetType(Material.GRAY_WOOL);
+            // w.getRelative(face).getUp().lsetType(Material.GRAY_WOOL);
             w.getRelative(face).getDown(height - 1).CorrectMultipleFacing(height);
         }
     }
@@ -64,17 +64,17 @@ public class AncientCityUtils {
                     if(!rel.isSolid()
                             || rel.getType() == OneOneNineBlockHandler.SCULK_VEIN)
                         continue;
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(nx, 2) / Math.pow(radius, 2)
                             + Math.pow(nz, 2) / Math.pow(radius, 2) + Math.pow(ny, 2) / Math.pow(radius, 2);
                     float noiseVal = circleNoise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
                     if(equationResult <= 1 + 0.7 * noiseVal) {
                         if(BlockUtils.isExposedToNonSolid(rel) || !rel.getDown().isSolid() || !rel.getUp().isSolid()) {
-                            //Inner area of the circle is sculk
+                            // Inner area of the circle is sculk
                             if(t.isTagged(rel.getType()) && equationResult <= 0.7 * (1 + 0.7 * noiseVal)) {
                                 rel.setType(OneOneNineBlockHandler.SCULK);
 
-                                //If the above is not solid, place some decorations
+                                // If the above is not solid, place some decorations
                                 if(!rel.getUp().isSolid())
                                     if(!placedCatalyst && GenUtils.chance(random, 1, 40)) {
                                         placedCatalyst = true;
@@ -89,7 +89,7 @@ public class AncientCityUtils {
                             } else if(rel.getType() != OneOneNineBlockHandler.SCULK_SHRIEKER
                                     && rel.getType() != OneOneNineBlockHandler.SCULK_SENSOR
                                     && !Tag.STAIRS.isTagged(rel.getType())
-                                    && !Tag.SLABS.isTagged(rel.getType()))//Outer area are sculk veins
+                                    && !Tag.SLABS.isTagged(rel.getType()))// Outer area are sculk veins
                             {
                                 for(BlockFace face : BlockUtils.sixBlockFaces) {
                                     SimpleBlock adj = rel.getRelative(face);

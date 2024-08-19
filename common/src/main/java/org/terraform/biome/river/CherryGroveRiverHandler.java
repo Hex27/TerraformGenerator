@@ -35,15 +35,15 @@ public class CherryGroveRiverHandler extends BiomeHandler {
         return new Material[]{
         		Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
 
     @Override
     public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-        if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
+        if(surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
             return;
 
         if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;

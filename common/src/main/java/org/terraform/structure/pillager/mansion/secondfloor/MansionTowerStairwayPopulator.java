@@ -35,7 +35,7 @@ public class MansionTowerStairwayPopulator extends MansionRoomPopulator {
         int height = 8;
         if(towerHeight == 2)
         	height = 15;
-        //Slabs curving upwards
+        // Slabs curving upwards
         for (int i = 1; i < height; i++) {
             b.getRelative(0,i,0).setType(Material.STONE_BRICKS);
 
@@ -54,8 +54,8 @@ public class MansionTowerStairwayPopulator extends MansionRoomPopulator {
             bfIndex = getNextIndex(bfIndex);
         }
         
-        //7 blocks above, place some chests and decorations at the stairs
-        b = b.getRelative(0,8,0);
+        // 7 blocks above, place some chests and decorations at the stairs
+        b = b.getUp(8);
         
         for(Entry<Wall, Integer> entry:this.getRoom().getFourWalls(data, 2).entrySet()) {
         	Wall w = entry.getKey().getAtY(b.getY());

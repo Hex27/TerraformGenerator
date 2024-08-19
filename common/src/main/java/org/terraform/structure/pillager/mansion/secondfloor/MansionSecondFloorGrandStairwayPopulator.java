@@ -34,37 +34,37 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
 
 	@Override
 	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
-		//Arch
+		// Arch
 		
 		w.getLeft(3).Pillar(6, Material.DARK_OAK_LOG);
-		w.getRelative(0,5,0).setType(Material.DARK_OAK_PLANKS);
+		w.getUp(5).setType(Material.DARK_OAK_PLANKS);
 		w.getRight(3).Pillar(6, Material.DARK_OAK_LOG);
 		new StairBuilder(Material.DARK_OAK_STAIRS)
 		.setHalf(Half.TOP)
 		.setFacing(BlockUtils.getLeft(w.getDirection()))
-		.apply(w.getRelative(0,4,0).getLeft(2))
-		.apply(w.getRelative(0,5,0).getLeft(2))
-		.apply(w.getRelative(0,5,0).getLeft())
+		.apply(w.getUp(4).getLeft(2))
+		.apply(w.getUp(5).getLeft(2))
+		.apply(w.getUp(5).getLeft())
 		.setFacing(BlockUtils.getRight(w.getDirection()))
-		.apply(w.getRelative(0,4,0).getRight(2))
-		.apply(w.getRelative(0,5,0).getRight(2))
-		.apply(w.getRelative(0,5,0).getRight());
+		.apply(w.getUp(4).getRight(2))
+		.apply(w.getUp(5).getRight(2))
+		.apply(w.getUp(5).getRight());
 		int choice = rand.nextInt(2);
-        //Armor stands
-        if(choice == 0) { //Wall carving
+        // Armor stands
+        if(choice == 0) { // Wall carving
             w.getRear().Pillar(5, Material.DARK_OAK_LOG);
             new OrientableBuilder(Material.DARK_OAK_LOG)
                     .setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
-                    .apply(w.getRear().getRelative(0, 2, 0))
-                    .apply(w.getRear().getRelative(0, 1, 0).getLeft())
-                    .apply(w.getRear().getRelative(0, 1, 0).getRight())
-                    .apply(w.getRear().getRelative(0, 3, 0).getLeft())
-                    .apply(w.getRear().getRelative(0, 3, 0).getRight())
+                    .apply(w.getRear().getUp(2))
+                    .apply(w.getRear().getUp().getLeft())
+                    .apply(w.getRear().getUp().getRight())
+                    .apply(w.getRear().getUp(3).getLeft())
+                    .apply(w.getRear().getUp(3).getRight())
                     .setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())))
-                    .apply(w.getRear().getRelative(0, 2, 0).getLeft())
-                    .apply(w.getRear().getRelative(0, 2, 0).getLeft(2))
-                    .apply(w.getRear().getRelative(0, 2, 0).getRight())
-                    .apply(w.getRear().getRelative(0, 2, 0).getRight(2));
+                    .apply(w.getRear().getUp(2).getLeft())
+                    .apply(w.getRear().getUp(2).getLeft(2))
+                    .apply(w.getRear().getUp(2).getRight())
+                    .apply(w.getRear().getUp(2).getRight(2));
 
             for(BlockFace face : BlockUtils.directBlockFaces)
                 new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
@@ -76,7 +76,7 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
                         .setFacing(face.getOppositeFace())
                         .lapply(w.getRight(3).getRelative(face));
         } else {
-            BannerUtils.generatePillagerBanner(w.getRelative(0, 4, 0).get(), w.getDirection(), true);
+            BannerUtils.generatePillagerBanner(w.getUp(4).get(), w.getDirection(), true);
 
             new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
                     .setType(Type.TOP)
@@ -86,9 +86,9 @@ public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulat
                     .apply(w.getRight())
                     .apply(w.getRight(2));
 
-            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).get(), w.getDirection(), rand);
-            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).getLeft(2).get(), w.getDirection(), rand);
-            ArmorStandUtils.placeArmorStand(w.getRelative(0, 2, 0).getRight(2).get(), w.getDirection(), rand);
+            ArmorStandUtils.placeArmorStand(w.getUp(2).get(), w.getDirection(), rand);
+            ArmorStandUtils.placeArmorStand(w.getUp(2).getLeft(2).get(), w.getDirection(), rand);
+            ArmorStandUtils.placeArmorStand(w.getUp(2).getRight(2).get(), w.getDirection(), rand);
         }
 	}
 	

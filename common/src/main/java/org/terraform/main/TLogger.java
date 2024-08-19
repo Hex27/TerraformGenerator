@@ -28,11 +28,11 @@ public class TLogger {
             Handler consoleHandler;
             Handler fileHandler;
             try{
-                //Creating consoleHandler and fileHandler
+                // Creating consoleHandler and fileHandler
                 consoleHandler = new ConsoleHandler();
                 fileHandler  = new FileHandler("plugins" + File.separator + "TerraformGenerator" + File.separator + "terraform.log", true);
                 
-                //Follow bukkit format
+                // Follow bukkit format
                 fileHandler.setFormatter(new SimpleFormatter() {
                     private static final String format = "[%1$tF %1$tT] [%2$-7s] %3$s %n";
 
@@ -47,19 +47,19 @@ public class TLogger {
                 
                 LOGGER.setUseParentHandlers(false);
                 
-                //Assigning handlers to LOGGER object
+                // Assigning handlers to LOGGER object
                 LOGGER.addHandler(consoleHandler);
                 LOGGER.addHandler(fileHandler);
                 
-                //No stdout
-                //LOGGER.setLevel(Level.OFF);
+                // No stdout
+                // LOGGER.setLevel(Level.OFF);
                 consoleHandler.setLevel(Level.OFF);
                 fileHandler.setLevel(Level.ALL);
                  
                 LOGGER.config("Configuration done.");
                  
-                //Console handler removed
-                //LOGGER.removeHandler(consoleHandler);
+                // Console handler removed
+                // LOGGER.removeHandler(consoleHandler);
                  
                 this.stdout("Custom Logger Initialized");
             }catch(IOException exception){

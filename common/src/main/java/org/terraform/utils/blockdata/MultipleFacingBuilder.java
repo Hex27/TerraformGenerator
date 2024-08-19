@@ -19,7 +19,7 @@ public class MultipleFacingBuilder {
     }
 
     public MultipleFacingBuilder(Material... mat) {
-        this.blockData = (MultipleFacing) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (MultipleFacing) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 

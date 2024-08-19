@@ -34,12 +34,12 @@ public class CustomBiomeHandler {
 		CraftServer craftserver = (CraftServer)Bukkit.getServer();
 		DedicatedServer dedicatedserver = craftserver.getServer();
 
-		//aP is BIOME_REGISTRY
-		//aU is registryAccess
-		//b is ownedRegistryOrThrow
+		// aP is BIOME_REGISTRY
+		// aU is registryAccess
+		// b is ownedRegistryOrThrow
 		IRegistryWritable<BiomeBase> registrywritable = (IRegistryWritable<BiomeBase>) dedicatedserver.aU().b(IRegistry.aP);
 		
-		//This thing isn't actually writable, so we have to forcefully UNFREEZE IT
+		// This thing isn't actually writable, so we have to forcefully UNFREEZE IT
 		try {
 			Field frozen = RegistryMaterials.class.getDeclaredField("bL");
 			frozen.setAccessible(true);
@@ -49,7 +49,7 @@ public class CustomBiomeHandler {
 			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 		
-		BiomeBase forestbiome = registrywritable.a(Biomes.h); //forest
+		BiomeBase forestbiome = registrywritable.a(Biomes.h); // forest
 	
 		for(CustomBiomeType type:CustomBiomeType.values()) {
 			if(type == CustomBiomeType.NONE)
@@ -84,14 +84,14 @@ public class CustomBiomeHandler {
 
 		ResourceKey<BiomeBase> newKey = ResourceKey.a(IRegistry.aP, new MinecraftKey("terraformgenerator", biomeType.toString().toLowerCase(Locale.ENGLISH)));
 
-		//BiomeBase.a is BiomeBuilder
+		// BiomeBase.a is BiomeBuilder
 		BiomeBase.a newBiomeBuilder = new BiomeBase.a();
 		
-		//l is biomeCategory
+		// l is biomeCategory
 		Field f = BiomeBase.class.getDeclaredField("l");
 		f.setAccessible(true);
 		newBiomeBuilder.a((BiomeBase.Geography) f.get(forestbiome));
-		newBiomeBuilder.a(forestbiome.c()); //c is getPrecipitation
+		newBiomeBuilder.a(forestbiome.c()); // c is getPrecipitation
 
 		Field biomeSettingMobsField = BiomeBase.class.getDeclaredField("k");
 		biomeSettingMobsField.setAccessible(true);
@@ -103,57 +103,57 @@ public class CustomBiomeHandler {
 		BiomeSettingsGeneration biomeSettingGen = (BiomeSettingsGeneration) biomeSettingGenField.get(forestbiome);
 		newBiomeBuilder.a(biomeSettingGen);
 
-        newBiomeBuilder.a(0.7F); //Temperature of biome
-		newBiomeBuilder.b(biomeType.getRainFall()); //Downfall of biome
+        newBiomeBuilder.a(0.7F); // Temperature of biome
+		newBiomeBuilder.b(biomeType.getRainFall()); // Downfall of biome
 
-		//BiomeBase.TemperatureModifier.a will make your biome normal
-		//BiomeBase.TemperatureModifier.b will make your biome frozen
+		// BiomeBase.TemperatureModifier.a will make your biome normal
+		// BiomeBase.TemperatureModifier.b will make your biome frozen
 		if(biomeType.isCold())
 			newBiomeBuilder.a(BiomeBase.TemperatureModifier.b); 
 		else
 			newBiomeBuilder.a(BiomeBase.TemperatureModifier.a); 
 		
 		BiomeFog.a newFog = new BiomeFog.a();
-		newFog.a(GrassColor.a); //This doesn't affect the actual final grass color, just leave this line as it is or you will get errors
+		newFog.a(GrassColor.a); // This doesn't affect the actual final grass color, just leave this line as it is or you will get errors
 		
-		//Set biome colours. If field is empty, default to forest color
+		// Set biome colours. If field is empty, default to forest color
 		
-		//fogcolor
+		// fogcolor
 		newFog.a(biomeType.getFogColor().isEmpty() ? forestbiome.f():Integer.parseInt(biomeType.getFogColor(),16));
 		
-		//water color
+		// water color
 		newFog.b(biomeType.getWaterColor().isEmpty() ? forestbiome.k():Integer.parseInt(biomeType.getWaterColor(),16));
 		
-		//water fog color
+		// water fog color
 		newFog.c(biomeType.getWaterFogColor().isEmpty() ? forestbiome.l():Integer.parseInt(biomeType.getWaterFogColor(),16));
 		
-		//sky color
+		// sky color
 		newFog.d(biomeType.getSkyColor().isEmpty() ? forestbiome.a():Integer.parseInt(biomeType.getSkyColor(),16));
 
-		//Unnecessary values; can be removed safely if you don't want to change them
+		// Unnecessary values; can be removed safely if you don't want to change them
 		
-		//foliage color (leaves, fines and more)
+		// foliage color (leaves, fines and more)
 
 		newFog.e(biomeType.getFoliageColor().isEmpty() ? forestbiome.g():Integer.parseInt(biomeType.getFoliageColor(),16));
 		
-		//grass blocks color
+		// grass blocks color
 		newFog.f(biomeType.getGrassColor().isEmpty() ? Integer.parseInt("79C05A",16):Integer.parseInt(biomeType.getGrassColor(),16));
 
 		
 		newBiomeBuilder.a(newFog.a());
 		
-		BiomeBase biome = newBiomeBuilder.a(); //biomebuilder.build();
+		BiomeBase biome = newBiomeBuilder.a(); // biomebuilder.build();
 
-		//Inject into the data registry for biomes
+		// Inject into the data registry for biomes
 		RegistryGeneration.a(RegistryGeneration.i, newKey, biome);
 		
-		//Inject into the biome registry
-		//aP is BIOME_REGISTRY
-		//aU is registryAccess
-		//b is ownedRegistryOrThrow
+		// Inject into the biome registry
+		// aP is BIOME_REGISTRY
+		// aU is registryAccess
+		// b is ownedRegistryOrThrow
 		RegistryMaterials<BiomeBase> registry = ((RegistryMaterials<BiomeBase>)dedicatedserver.aU().b(IRegistry.aP));
 		
-		//a is ownedRegistryOrThrow
+		// a is ownedRegistryOrThrow
 		registry.a(newKey, biome, Lifecycle.stable());
 		
 		terraformGenBiomeRegistry.put(biomeType, newKey);

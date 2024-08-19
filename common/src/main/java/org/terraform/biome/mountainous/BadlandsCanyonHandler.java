@@ -54,7 +54,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         return Biome.ERODED_BADLANDS;
     }
 
-    //Extra red sandstone padding required: Prevents exposed vertical surfaces.
+    // Extra red sandstone padding required: Prevents exposed vertical surfaces.
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{
@@ -64,8 +64,8 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         		Material.RED_SAND,
         		Material.RED_SAND,
         		Material.RED_SAND,
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.RED_SAND),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.RED_SAND),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.RED_SAND),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.RED_SAND),
                 Material.RED_SANDSTONE,
                 Material.RED_SANDSTONE,
                 Material.RED_SANDSTONE,
@@ -77,8 +77,8 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
                 Material.RED_SANDSTONE,
                 Material.RED_SANDSTONE,
                 Material.RED_SANDSTONE,
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.RED_SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE),
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE)};
     }
 
     @Override
@@ -125,11 +125,11 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
 		if(noise < 0) noise = 0;
 
     	
-        double height = HeightMap.CORE.getHeight(tw, x, z);//HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
+        double height = HeightMap.CORE.getHeight(tw, x, z);// HeightMap.MOUNTAINOUS.getHeight(tw, x, z); // Added here
         
-        //Let mountains cut into adjacent sections.
+        // Let mountains cut into adjacent sections.
         double maxMountainRadius = ((double) BiomeSection.sectionWidth);
-        //Add dune height
+        // Add dune height
         height += noise*20;
         
         BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
@@ -141,11 +141,11 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         Random sectionRand = sect.getSectionRandom();
         double maxPeak = getPeakMultiplier(sect, sectionRand);
         
-        //Let's just not offset the peak. This seems to give a better result.
+        // Let's just not offset the peak. This seems to give a better result.
         SimpleLocation mountainPeak = sect.getCenter();
         
         double angleFromPeak = new SimpleLocation(x, 0, z).twoDAngleTo(mountainPeak);
-        double circleFuzz = 1.32 + Math.abs(duneNoise.GetValue((float) (10*angleFromPeak), 40519*mountainPeak.getX() + 75721*mountainPeak.getZ()));//Math.min(0.5, 0.5*duneNoise.GetValue((float) angleFromPeak, 40519*mountainPeak.getX() + 75721*mountainPeak.getZ()));
+        double circleFuzz = 1.32 + Math.abs(duneNoise.GetValue((float) (10*angleFromPeak), 40519*mountainPeak.getX() + 75721*mountainPeak.getZ()));// Math.min(0.5, 0.5*duneNoise.GetValue((float) angleFromPeak, 40519*mountainPeak.getX() + 75721*mountainPeak.getZ()));
         
         
         double distFromPeak = (circleFuzz*maxMountainRadius)-Math.sqrt(
@@ -160,7 +160,7 @@ public class BadlandsCanyonHandler extends AbstractMountainHandler {
         
         height = height*heightMultiplier;
         
-		//Thresholds to make separate plateau-looking bits
+		// Thresholds to make separate plateau-looking bits
 		if(height > 75) {
 			if(height < 80)
 				height = 80;

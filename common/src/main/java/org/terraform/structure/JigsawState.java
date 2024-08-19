@@ -11,8 +11,8 @@ import java.util.ArrayList;
  */
 public class JigsawState {
 
-    //This will hold the room coordinates.
-    //Lowest index generates first.
+    // This will hold the room coordinates.
+    // Lowest index generates first.
     public final ArrayList<RoomLayoutGenerator> roomPopulatorStates = new ArrayList<>();
     boolean calculatedRange = false;
     int minChunkX = Integer.MAX_VALUE;

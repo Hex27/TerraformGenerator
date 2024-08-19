@@ -13,6 +13,8 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
@@ -41,18 +43,18 @@ public class DesertHandler extends BiomeHandler {
         return BiomeBank.DESERT_RIVER;
     }
 
-    //Pad more sandstone so that mountains don't get stone exposed vertically
+    // Pad more sandstone so that mountains don't get stone exposed vertically
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[]{Material.SAND,
                 Material.SAND,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 Material.SANDSTONE,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)};
     }
 
     @Override
@@ -76,9 +78,9 @@ public class DesertHandler extends BiomeHandler {
                         canSpawn = false;
                 }
                 if (canSpawn)
-                    BlockUtils.spawnPillar(random, data, rawX, surfaceY + 1, rawZ, Material.CACTUS, 3, 5);
+                    PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 3, 5);
             } else if (GenUtils.chance(random, 1, 80)) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
             }
         }
     }
@@ -86,7 +88,7 @@ public class DesertHandler extends BiomeHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
-		//Rib cages
+		// Rib cages
         SimpleLocation[] ribCages = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 
         		256, 0.6f);
 
@@ -101,11 +103,13 @@ public class DesertHandler extends BiomeHandler {
 	}
 
 	public void spawnRibCage(@NotNull Random random, @NotNull SimpleBlock target) {
+        if (!TConfigOption.areStructuresEnabled()) return;
+
 		BlockFace direction = BlockUtils.getDirectBlockFace(random);
 		int spineLength = GenUtils.randInt(random, 10, 14);
 		float ribWidthRadius = GenUtils.randInt(random, 1, 2) + (float) spineLength /2;
-		float ribHeightRadius = 0.7f*ribWidthRadius; //GenUtils.randInt(random, 6, 8);
-		//eqn -> ((y-ribHeight)/(ribHeight))^2 + ((x)/(ribWidth))^2 = 1
+		float ribHeightRadius = 0.7f*ribWidthRadius; // GenUtils.randInt(random, 6, 8);
+		// eqn -> ((y-ribHeight)/(ribHeight))^2 + ((x)/(ribWidth))^2 = 1
 		int interval = 2;
 		if(random.nextBoolean()) 
 			interval += 1;

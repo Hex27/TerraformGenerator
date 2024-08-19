@@ -37,10 +37,12 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 	private Material[] stakeGravel;
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
         int height = new SimpleBlock(data, x, 0, z).getGroundOrSeaLevel().getY();
         spawnOutpost(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, height + 1, z);
     }
@@ -79,8 +81,8 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             propGenerator.setRoomMinZ(12);
             propGenerator.setRoomMaxX(12);
             propGenerator.setRoomMaxZ(12);
-            //Placeholder room to ensure primary outpost structure does not
-            //get overlapped.
+            // Placeholder room to ensure primary outpost structure does not
+            // get overlapped.
             CubeRoom placeholder = new CubeRoom(20, 20, 15, x, y, z);
             propGenerator.getRooms().add(placeholder);
             
@@ -89,14 +91,14 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             propGenerator.registerRoomPopulator(new OutpostLogpile(random, false, true, biome));
             propGenerator.registerRoomPopulator(new OutpostStakeCage(random, false, true, biome, stakeGravel));
             
-            //No paths
+            // No paths
             propGenerator.setGenPaths(false);
             propGenerator.calculateRoomPlacement();
             
-            //Remove the placeholder room
+            // Remove the placeholder room
             propGenerator.getRooms().remove(placeholder);
             
-            //Only run room populators. We don't want any room space carving.
+            // Only run room populators. We don't want any room space carving.
             propGenerator.runRoomPopulators(data,tw);
             setupPillagerSpawns(data, x, y, z);
         } catch (Throwable e) {
@@ -121,20 +123,20 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             for (float z = -radius; z <= radius; z++) {
                 SimpleBlock rel = center.getRelative(Math.round(x), 0, Math.round(z)).getGroundOrSeaLevel();
                 
-                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                 double mainRadiusResult = Math.pow(x, 2) / Math.pow(radius, 2)
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 double secondaryRadiusResult = mainRadiusResult*1.3;
                 double noiseVal = noise.GetNoise(rel.getX(), rel.getZ());
                 if (mainRadiusResult <= 1 + 0.7 * noiseVal) {
                 	
-                	//Raise water ground
+                	// Raise water ground
                 	rel.lsetType(planksMat);
                 	if(secondaryRadiusResult > 1 + 0.7 * noiseVal) {
-                		//Rocky ground
+                		// Rocky ground
                     	BlockUtils.replaceCircularPatch(rand.nextInt(4211), 1.5f, rel, stakeGravel);
                     	
-                    	spawnOneStake(rand,rel.getRelative(0,1,0),bank,stakeGravel);
+                    	spawnOneStake(rand,rel.getUp(),bank,stakeGravel);
                 	}
                 	
                 }
@@ -145,7 +147,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     public void spawnOneStake(@NotNull Random rand, @NotNull SimpleBlock base, @NotNull BiomeBank bank, Material... stakeGravel) {
     	WoodType type = new WoodType[] {WoodType.LOG, WoodType.STRIPPED_LOG}[rand.nextInt(2)];
     	Wall w = new Wall(base);
-    	//Don't spawn stake next to another one
+    	// Don't spawn stake next to another one
     	for(BlockFace face:BlockUtils.xzPlaneBlockFaces) {
     		if(Tag.LOGS.isTagged(base.getRelative(face).getType()))
 				return;
@@ -158,12 +160,12 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     	}
         w.Pillar(h, rand, WoodUtils.getWoodForBiome(bank, type));
         w.getRelative(0,h,0).Pillar(GenUtils.randInt(1,2), rand, WoodUtils.getWoodForBiome(bank, WoodType.FENCE));
-        w.getRelative(0,-1,0).downUntilSolid(rand, stakeGravel);
-        w.getRelative(0,-2,0).downUntilSolid(rand, stakeGravel);
+        w.getDown().downUntilSolid(rand, stakeGravel);
+        w.getDown(2).downUntilSolid(rand, stakeGravel);
     }
     
     public void spawnStairway(Random rand, @NotNull BiomeBank biome, @NotNull SimpleBlock core, int height) {
-    	Material pillarMat = GenUtils.randMaterial(
+    	Material pillarMat = GenUtils.randChoice(
     			WoodUtils.getWoodForBiome(biome, WoodType.LOG),
     			Material.COBBLESTONE);
     	Material stair = WoodUtils.getWoodForBiome(biome, WoodType.STAIRS);
@@ -186,7 +188,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     			.setType(Type.TOP)
     			.apply(core.getRelative(BlockUtils.rotateXZPlaneBlockFace(face, 1)));
     		
-    		core = core.getRelative(0,1,0);
+    		core = core.getUp();
     		face = BlockUtils.rotateFace(face, 1);
     	}
     }
@@ -214,7 +216,9 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
-        if (!biome.getType().isDry())
+        if (!isEnabled()) return false;
+
+        if (!biome.isDry())
             return false;
         if(biome == BiomeBank.DESERT ||
         		biome == BiomeBank.SNOWY_WASTELAND ||
@@ -234,7 +238,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
 
 	@Override
 	public boolean isEnabled() {
-		return TConfigOption.STRUCTURES_OUTPOST_ENABLED.getBoolean();
+		return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_OUTPOST_ENABLED.getBoolean();
 	}
 
 	@Override

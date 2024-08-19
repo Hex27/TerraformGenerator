@@ -16,7 +16,7 @@ public class CheeseCave extends NoiseCaveAbstract{
             return n;
         });
 
-        //Stretch caves horizontally so that they're not excessively spherical
+        // Stretch caves horizontally so that they're not excessively spherical
         float cheese = cheeseNoise.GetNoise(rawX*0.5f,y,rawZ*0.5f);
 
         return surfaceFilter *cheese <= -0.3f;

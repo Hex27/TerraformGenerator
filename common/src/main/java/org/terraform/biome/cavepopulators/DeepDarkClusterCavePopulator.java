@@ -19,10 +19,10 @@ import java.util.Random;
 
 public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
 
-	//private boolean isForLargeCave;
+	// private boolean isForLargeCave;
 	public DeepDarkClusterCavePopulator(float radius) {
 		super(radius);
-		//this.isForLargeCave = isForLargeCave;
+		// this.isForLargeCave = isForLargeCave;
 	}
 	
 	public static void oneUnit(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock origin) {
@@ -35,22 +35,22 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
 	public void oneUnit(TerraformWorld tw, @NotNull Random random, @Nullable SimpleBlock ceil, @Nullable SimpleBlock floor, boolean boundary) {
     	if(ceil == null || floor == null) return;
     	
-    	//Already processed
+    	// Already processed
     	if(ceil.getType() == OneOneNineBlockHandler.SCULK
     			|| floor.getType() == OneOneNineBlockHandler.SCULK) return;
-    	//=========================
-        //Upper decorations
-        //=========================
-        //int caveHeight = ceil.getY() - floor.getY();
+    	// =========================
+        // Upper decorations
+        // =========================
+        // int caveHeight = ceil.getY() - floor.getY();
 
-        //Don't decorate wet areas
-        if(!BlockUtils.isWet(ceil.getRelative(0,-1,0))) {
-        	//Don't touch slabbed floors or stalagmites
+        // Don't decorate wet areas
+        if(!BlockUtils.isWet(ceil.getDown())) {
+        	// Don't touch slabbed floors or stalagmites
             if (Tag.SLABS.isTagged(floor.getType()) ||
             		Tag.WALLS.isTagged(floor.getType()))
                 return;
             
-            //Ceiling is ALWAYS sculk/veins
+            // Ceiling is ALWAYS sculk/veins
             if(BlockUtils.isStoneLike(ceil.getType())) {
         		ceil.setType(OneOneNineBlockHandler.SCULK);
             }
@@ -62,17 +62,17 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
             }
         }
 
-        //=========================
-        //Lower decorations 
-        //=========================
+        // =========================
+        // Lower decorations
+        // =========================
         
-        //If floor is submerged, then don't touch it.
+        // If floor is submerged, then don't touch it.
         if(BlockUtils.isWet(floor.getUp())) {
         	return;
         }
         
-        //Ground is sculk
-        //Ceiling is ALWAYS sculk/veins
+        // Ground is sculk
+        // Ceiling is ALWAYS sculk/veins
         if(BlockUtils.isStoneLike(ceil.getType())) {
     		floor.setType(OneOneNineBlockHandler.SCULK);
         }
@@ -85,22 +85,22 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         
        
         if (GenUtils.chance(random, 1, 20)) 
-        { //Sculk Catalysts
+        { // Sculk Catalysts
         	floor.getUp().setType(OneOneNineBlockHandler.SCULK_CATALYST);
         }
         else if (GenUtils.chance(random, 1, 17)) 
-        { //Sculk Sensors
+        { // Sculk Sensors
         	floor.getUp().setType(OneOneNineBlockHandler.SCULK_SENSOR);
         }
         else if(GenUtils.chance(random, 1, 25))
-        	//Sculk Shrieker
+        	// Sculk Shrieker
         	floor.getUp().setType(OneOneNineBlockHandler.SCULK_SHRIEKER);
         
 
 
-        //=========================
-        //Attempt to replace close-by walls with sculk.
-        //=========================
+        // =========================
+        // Attempt to replace close-by walls with sculk.
+        // =========================
         
         SimpleBlock target = floor;
         while(target.getY() != ceil.getY()) {
@@ -116,16 +116,16 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         			}
         		}
         	}
-        	target = target.getRelative(0,1,0);
+        	target = target.getUp();
         }
         
-        //=========================
-        //Biome Setter 
-        //=========================
+        // =========================
+        // Biome Setter
+        // =========================
         if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract data) {
             while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), OneOneNineBlockHandler.DEEP_DARK);
-        		floor = floor.getRelative(0,1,0);
+        		floor = floor.getUp();
         	}
         }
     }

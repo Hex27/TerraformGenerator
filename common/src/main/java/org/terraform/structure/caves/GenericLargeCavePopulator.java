@@ -24,27 +24,27 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
     protected void populateFloor(SimpleBlock floor, int waterLevel){}
 
     protected void populateCeilFloorPair(@NotNull SimpleBlock ceil, @NotNull SimpleBlock floor, int height){
-        //Stalactites
+        // Stalactites
         if(GenUtils.chance(rand, 1, 200))
         {
             int r = 2;
             int h = GenUtils.randInt(rand, height/4, (int) ((3f / 2f) * (height/2f)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(ceil.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
-                    .makeSpike(rand, ceil, r, h, false);
+                    .makeSpike(ceil, r, h, false);
         }
 
-        //Stalagmites
+        // Stalagmites
         if(GenUtils.chance(rand, 1, 200))
         {
             int r = 2;
             int h = GenUtils.randInt(rand, height/4, (int) ((3f / 2f) * (height/2f)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(floor.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(floor.getY()))
-                    .makeSpike(rand, floor, r, h, true);
+                    .makeSpike(floor, r, h, true);
         }
 
-        //Sea pickles
+        // Sea pickles
         if(BlockUtils.isWet(floor.getUp())
                 && GenUtils.chance(rand, 4, 100))
         {

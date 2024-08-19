@@ -12,6 +12,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
 import org.terraform.utils.BlockUtils;
@@ -38,33 +39,34 @@ public class DarkForestHandler extends BiomeHandler {
         		Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-      
-        boolean spawnHeads = TConfigOption.BIOME_DARK_FOREST_SPAWN_HEADS.getBoolean() 
+        boolean spawnHeads = TConfigOption.BIOME_DARK_FOREST_SPAWN_HEADS.getBoolean()
         		&& GenUtils.chance(random, 1, 100);
 
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
             if (GenUtils.chance(random, 1, 10)) {
                 if (data.getType(rawX, surfaceY + 1, rawZ) != Material.AIR) return;
-                //Only grass and mushrooms
-                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                // Only grass and mushrooms
+                PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 if (random.nextInt(3) != 0) {
-                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                    PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 } else {
-                    Material mushroom = Material.RED_MUSHROOM;
-                    if (random.nextBoolean())
-                        mushroom = Material.BROWN_MUSHROOM;
-                    data.setType(rawX, surfaceY + 1, rawZ, mushroom);
+                    if (random.nextBoolean()) {
+                        PlantBuilder.BROWN_MUSHROOM.build(data, rawX, surfaceY + 1, rawZ);
+                    }
+                    else {
+                        PlantBuilder.RED_MUSHROOM.build(data, rawX, surfaceY + 1, rawZ);
+                    }
                 }
             }
         }
 
-        if (spawnHeads && GenUtils.chance(random, 1, 50)) {
+        if (spawnHeads && TConfigOption.areDecorationsEnabled() && GenUtils.chance(random, 1, 50)) {
             if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
                 Rotatable skull = (Rotatable) Bukkit.createBlockData(Material.PLAYER_HEAD);
                 skull.setRotation(BlockUtils.getXZPlaneBlockFace(random));
@@ -107,7 +109,7 @@ public class DarkForestHandler extends BiomeHandler {
             sLoc.setY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
-            	//new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
+            	// new FractalTreeBuilder(FractalTypes.Tree.DARK_OAK_SMALL)
                 FractalTypes.Tree.DARK_OAK_SMALL.build(tw, new SimpleBlock(data,sLoc));
             }
         }
@@ -181,7 +183,7 @@ public class DarkForestHandler extends BiomeHandler {
     	return BiomeBank.DARK_FOREST_BEACH;
     }
     
-    //River type. This will be used instead if the heightmap got carved into a river.
+    // River type. This will be used instead if the heightmap got carved into a river.
     public @NotNull BiomeBank getRiverType() {
     	return BiomeBank.DARK_FOREST_RIVER;
     }

@@ -28,7 +28,7 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
-                if (w.getType().isSolid()) { //Don't block off pathways
+                if (w.isSolid()) { // Don't block off pathways
                     if (w.getType().toString().contains("SAND"))
                         w.Pillar(room.getHeight() - 1, rand,
                                 Material.SANDSTONE,
@@ -45,7 +45,7 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
                                 Material.STONE_BRICK_SLAB,
                                 Material.CRACKED_STONE_BRICKS,
                                 Material.STONE_BRICKS);
-                    //Spawn chests
+                    // Spawn chests
                     if (GenUtils.chance(this.rand, 1, 50) && i != 0 && i != entry.getValue() - 1) {
                         Directional chest = (Directional) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());
@@ -62,10 +62,10 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Place the spawner
+        // Place the spawner
         data.setSpawner(room.getX(), room.getY() + 1, room.getZ(), EntityType.HUSK);
 
-        //Ceiling erosions
+        // Ceiling erosions
         for (int i = 0; i < GenUtils.randInt(3, 10); i++) {
             int[] loc = room.randomCoords(rand, 1);
             if (data.getType(loc[0], room.getY() + room.getHeight() + 1, loc[2]) == Material.SAND)
@@ -77,7 +77,7 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(@NotNull CubeRoom room) {
-        //Don't compete with Crypt rooms for space
+        // Don't compete with Crypt rooms for space
         return room.getWidthX() >= 5 && room.getWidthZ() >= 5
                 && room.getWidthX() < 13 && room.getWidthZ() < 13;
     }

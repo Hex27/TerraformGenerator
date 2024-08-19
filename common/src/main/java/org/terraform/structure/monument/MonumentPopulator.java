@@ -44,7 +44,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         rs.setWaterlogged(true);
         rs.setFacing(right);
 
-        //Top straight line
+        // Top straight line
         for (int i = 0; i < archHalfLength - 1; i++) {
             if (i <= 1) {
                 Slab slab = (Slab) Bukkit.createBlockData(design.slab());
@@ -55,29 +55,29 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             arch.getRight(i).setType(design.mat(random));
         }
 
-        //Top decor
-        arch.getRelative(0, 1, 0).setType(Material.SEA_LANTERN);
-        arch.getRelative(0, 2, 0).setType(design.slab());
-        arch.getRelative(0, 1, 0).getLeft(1).setType(design.mat(random));
-        arch.getRelative(0, 1, 0).getRight(1).setType(design.mat(random));
-        arch.getRelative(0, 1, 0).getLeft(2).setBlockData(ls);
-        arch.getRelative(0, 1, 0).getRight(2).setBlockData(rs);
+        // Top decor
+        arch.getUp().setType(Material.SEA_LANTERN);
+        arch.getUp(2).setType(design.slab());
+        arch.getUp().getLeft(1).setType(design.mat(random));
+        arch.getUp().getRight(1).setType(design.mat(random));
+        arch.getUp().getLeft(2).setBlockData(ls);
+        arch.getUp().getRight(2).setBlockData(rs);
 
-        //Bending sides
+        // Bending sides
         arch.getLeft(archHalfLength - 2).setBlockData(ls);
-        arch.getRelative(0, -1, 0).getLeft(archHalfLength).setBlockData(ls);
+        arch.getDown().getLeft(archHalfLength).setBlockData(ls);
 
         arch.getRight(archHalfLength - 2).setBlockData(rs);
-        arch.getRelative(0, -1, 0).getRight(archHalfLength).setBlockData(rs);
+        arch.getDown().getRight(archHalfLength).setBlockData(rs);
 
         arch.getLeft(archHalfLength - 1).setType(design.slab());
         arch.getRight(archHalfLength - 1).setType(design.slab());
-        arch.getLeft(archHalfLength - 1).getRelative(0, -1, 0).setType(Material.SEA_LANTERN);
-        arch.getRight(archHalfLength - 1).getRelative(0, -1, 0).setType(Material.SEA_LANTERN);
+        arch.getLeft(archHalfLength - 1).getDown().setType(Material.SEA_LANTERN);
+        arch.getRight(archHalfLength - 1).getDown().setType(Material.SEA_LANTERN);
 
-        //Vertical area
-        arch.getLeft(archHalfLength).getRelative(0, -2, 0).downUntilSolid(random, design.tileSet);
-        arch.getRight(archHalfLength).getRelative(0, -2, 0).downUntilSolid(random, design.tileSet);
+        // Vertical area
+        arch.getLeft(archHalfLength).getDown(2).downUntilSolid(random, design.tileSet);
+        arch.getRight(archHalfLength).getDown(2).downUntilSolid(random, design.tileSet);
     }
 
     /**
@@ -97,7 +97,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
                 if (GenUtils.chance(rand, 2, 5)) {
                     int y = GenUtils.getTrueHighestBlock(data, nx, nz);
-                    //Don't place on weird blocks
+                    // Don't place on weird blocks
                     if (data.getType(nx, y, nz).toString().contains("SLAB") ||
                             data.getType(nx, y, nz).toString().contains("STAIR") ||
                             data.getType(nx, y, nz).toString().contains("WALL"))
@@ -136,7 +136,9 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
-        if (biome.getType() != BiomeType.DEEP_OCEANIC || 
+        if (!isEnabled()) return false;
+
+        if (biome.getType() != BiomeType.DEEP_OCEANIC ||
         		biome == BiomeBank.MUSHROOM_ISLANDS)
             return false;
         return rollSpawnRatio(tw, chunkX, chunkZ);
@@ -151,6 +153,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
 
         int[] coords = new MegaChunk(data.getChunkX(),data.getChunkZ()).getCenterBiomeSectionBlockCoords();
         int x = coords[0];
@@ -195,7 +198,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     private void entranceSegment(@NotNull Wall w, @NotNull Random random, MonumentDesign design) {
-        //Entrance hole
+        // Entrance hole
         for (int i = 0; i < 12; i++) {
             w.getRear(i).Pillar(6, random, Material.WATER);
         }
@@ -203,7 +206,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         stair.setWaterlogged(true);
         stair.setHalf(Half.TOP);
         stair.setFacing(w.getDirection().getOppositeFace());
-        w.getRear(11).getRelative(0, 5, 0).setBlockData(stair);
+        w.getRear(11).getUp(5).setBlockData(stair);
         w.getFront().Pillar(6, random, Material.WATER);
     }
 
@@ -228,7 +231,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             leftClone = leftClone.getLeft();
         }
 
-        //Build entrance archs.
+        // Build entrance archs.
         for (int i = 0; i < 12; i += 3) {
             arch(w.getRear(i), design, random, halfLength + 2, 10);
         }
@@ -244,7 +247,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
                 for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
 
-                    //Spires on the corners
+                    // Spires on the corners
                     if (i % 2 == 0)
                         if (nx == x - range / 2 - i || nx == x + range / 2 + i) {
                             if (nz == z - range / 2 - i || nz == z + range / 2 + i) {
@@ -252,12 +255,12 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
                             }
                         }
 
-                    data.setType(nx, y + (6 - i), nz, GenUtils.randMaterial(random, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE));
+                    data.setType(nx, y + (6 - i), nz, GenUtils.randChoice(random, Material.PRISMARINE_BRICKS, Material.PRISMARINE_BRICKS, Material.PRISMARINE));
                 }
             }
         }
 
-        //Spawn large lamps
+        // Spawn large lamps
         int pad = 5;
         lightPlatform(data, x - range / 2 + pad, y + 7, z - range / 2 + pad);
         design.spawnLargeLight(data, x - range / 2 + pad, y + 8, z - range / 2 + pad);
@@ -281,7 +284,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             for (int nx = x - range / 2; nx <= x + range / 2; nx++) {
                 for (int nz = z - range / 2; nz <= z + range / 2; nz++) {
 
-                    //Don't touch the middle
+                    // Don't touch the middle
                     if (nx > x + 5 - range / 2
                             && nx < x - 5 + range / 2
                             && nz > z + 5 - range / 2
@@ -292,7 +295,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             }
         }
 
-        //Light the floor in the hallway
+        // Light the floor in the hallway
         for (int nx = x - range / 2 + 3; nx <= x + range / 2 - 3; nx += 2) {
             data.setType(nx, y, z - range / 2 + 3, Material.SEA_LANTERN);
             data.setType(nx, y, z + range / 2 - 3, Material.SEA_LANTERN);
@@ -316,6 +319,6 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_MONUMENT_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_MONUMENT_ENABLED.getBoolean();
     }
 }

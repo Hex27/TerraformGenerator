@@ -8,8 +8,8 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.TreeDB;
-import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
@@ -70,7 +70,7 @@ public class OasisBeach {
 
 
         if (y == TerraformGenerator.seaLevel && random.nextInt(3) == 0) {
-            BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.SUGAR_CANE, 1, 4);
+            PlantBuilder.SUGAR_CANE.build(random, data, x, y + 1, z, 1, 4);
         } else if (y >= TerraformGenerator.seaLevel) {
             if (random.nextInt(8) == 0) {
                 TreeDB.spawnCoconutTree(tw, data, x, y, z);
@@ -82,14 +82,15 @@ public class OasisBeach {
                         Material.JUNGLE_LEAVES,
                         Material.JUNGLE_LOG, 0.7);
             } else if (isGrass) {
-                data.setType(x, y + 1, z, GenUtils.randMaterial(random,
-                        Material.GRASS, Material.GRASS, Material.GRASS, Material.FERN));
+                PlantBuilder.build(random, data, x, y + 1, z, PlantBuilder.GRASS, PlantBuilder.GRASS, PlantBuilder.GRASS, PlantBuilder.FERN);
             }
         }
     }
 
     // TODO: I feel like this is the 10th time I implement this in some form, should all game "objects" like rocks etc. be stored in one class as static functions?
     public static void createBush(@NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, double xRadius, double yRadius, double zRadius, Material leaves, Material stem, double density) {
+        if (!TConfigOption.arePlantsEnabled()) return;
+
         for (int ny = y; ny < y + yRadius / 2; ny++)
             data.setType(x, ny, z, stem);
         for (int xr = (int) -Math.ceil(xRadius); xr < Math.ceil(xRadius); xr++) {

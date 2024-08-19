@@ -7,6 +7,7 @@ import org.terraform.biome.BiomeHandler;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -30,9 +31,9 @@ public class SandyBeachHandler extends BiomeHandler {
         return new Material[]{
         		Material.SAND,
                 Material.SAND,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND, Material.SAND, Material.SAND, Material.SAND, Material.SAND),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE),
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)};
     }
 
     @Override
@@ -45,7 +46,7 @@ public class SandyBeachHandler extends BiomeHandler {
 
         surfaceY++;
 
-        //Spawn sugarcane
+        // Spawn sugarcane
         if (hasSugarcane) {
             boolean hasWater = data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER;
             if (data.getType(rawX - 1, surfaceY - 1, rawZ) == Material.WATER)
@@ -55,7 +56,7 @@ public class SandyBeachHandler extends BiomeHandler {
             if (data.getType(rawX, surfaceY - 1, rawZ - 1) == Material.WATER)
                 hasWater = true;
 
-            if (hasWater) BlockUtils.spawnPillar(random, data, rawX, surfaceY, rawZ, Material.SUGAR_CANE, 3, 7);
+            if (hasWater) PlantBuilder.SUGAR_CANE.build(random, data, rawX, surfaceY, rawZ, 3, 7);
         }
 
     }

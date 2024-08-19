@@ -20,30 +20,30 @@ public class TerracottaRoom extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Decorate the walls with Terracotta
+        // Decorate the walls with Terracotta
         ArrayList<Wall> entrances = new ArrayList<>();
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
                 if (i != 0 && i != entry.getValue() - 1) {
-                    if (w.getRear().getType().isSolid()) {
-                        if(i != 1 && i != entry.getValue() - 2) { //Terracotta
-                            if (!w.getRear().getLeft().getType().isSolid() ||
-                                    !w.getRear().getRight().getType().isSolid()) {
+                    if (w.getRear().isSolid()) {
+                        if(i != 1 && i != entry.getValue() - 2) { // Terracotta
+                            if (!w.getRear().getLeft().isSolid() ||
+                                    !w.getRear().getRight().isSolid()) {
                                 w.Pillar(room.getHeight(), rand, Material.CHISELED_SANDSTONE);
                             } else {
                                 if (i % 3 == 0) {
                                     w.Pillar(room.getHeight(), true, rand, Material.BLUE_TERRACOTTA, Material.YELLOW_TERRACOTTA);
-                                    //w.getRear().Pillar(room.getHeight(), true, rand, Material.BLUE_TERRACOTTA,Material.BARRIER,Material.BLUE_TERRACOTTA,Material.BARRIER);
+                                    // w.getRear().Pillar(room.getHeight(), true, rand, Material.BLUE_TERRACOTTA,Material.BARRIER,Material.BLUE_TERRACOTTA,Material.BARRIER);
                                 } else {
                                     w.Pillar(room.getHeight(), true, rand, Material.YELLOW_TERRACOTTA, Material.BLUE_TERRACOTTA);
-                                    //w.getRear().Pillar(room.getHeight(), true, rand, Material.BARRIER,Material.BLUE_TERRACOTTA,Material.BARRIER,Material.BLUE_TERRACOTTA);
+                                    // w.getRear().Pillar(room.getHeight(), true, rand, Material.BARRIER,Material.BLUE_TERRACOTTA,Material.BARRIER,Material.BLUE_TERRACOTTA);
                                 }
                             }
                         }
                     } else {
                         entrances.add(w.clone());
-                        w.getRelative(0, 3, 0).Pillar(room.getHeight() - 3, rand, Material.CHISELED_SANDSTONE);
+                        w.getUp(3).Pillar(room.getHeight() - 3, rand, Material.CHISELED_SANDSTONE);
                     }
                 }
 
@@ -51,12 +51,12 @@ public class TerracottaRoom extends RoomPopulatorAbstract {
             }
         }
 
-        //Make sure entrances are not blocked
+        // Make sure entrances are not blocked
         for (Wall w : entrances) {
             w.Pillar(room.getHeight() - 1, rand, Material.AIR);
         }
 
-        //Decorate the floor with glazed terracotta
+        // Decorate the floor with glazed terracotta
         int[] lowerCorner = room.getLowerCorner(2);
         int[] upperCorner = room.getUpperCorner(2);
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x += 2) {

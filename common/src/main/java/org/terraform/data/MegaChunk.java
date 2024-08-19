@@ -21,8 +21,8 @@ public class MegaChunk {
         this.z = blockCoordsToMega(z);
     }
     
-    //A megachunk consists of a bunch of biome sections.
-    //The big structures spawn right in the middle of them.
+    // A megachunk consists of a bunch of biome sections.
+    // The big structures spawn right in the middle of them.
     public MegaChunk(int chunkX, int chunkZ) {
         this(chunkX*16,0,chunkZ*16);
 
@@ -45,7 +45,7 @@ public class MegaChunk {
         int highX = lowX + megaChunkBlockWidth-1;
         int highZ = lowZ + megaChunkBlockWidth-1;
 
-        //Pad the sides. Never generate on the side of a mega chunk.
+        // Pad the sides. Never generate on the side of a mega chunk.
         int x = GenUtils.randInt(rand, lowX + megaChunkBlockWidth/10, highX - megaChunkBlockWidth/10);
         int z = GenUtils.randInt(rand, lowZ + megaChunkBlockWidth/10, highZ - megaChunkBlockWidth/10);
         return new int[]{x, z};
@@ -61,7 +61,7 @@ public class MegaChunk {
         int highX = this.getUpperCornerChunkCoords()[0];
         int highZ = this.getUpperCornerChunkCoords()[1];
 
-        //Pad the sides. Never generate on the side of a mega chunk.
+        // Pad the sides. Never generate on the side of a mega chunk.
         int x = GenUtils.randInt(rand, lowX, highX);
         int z = GenUtils.randInt(rand, lowZ, highZ);
         return new int[]{x*16+7, z*16+7};
@@ -71,7 +71,7 @@ public class MegaChunk {
         
         int lowX = megaToBlockCoords(this.x);
         int lowZ = megaToBlockCoords(this.z);
-        //TerraformGeneratorPlugin.logger.info("MC(" + this.x + "," + this.z + "):(" + (lowX + megaChunkBlockWidth/2) + "," + (lowZ + megaChunkBlockWidth/2) + ")");
+        // TerraformGeneratorPlugin.logger.info("MC(" + this.x + "," + this.z + "):(" + (lowX + megaChunkBlockWidth/2) + "," + (lowZ + megaChunkBlockWidth/2) + ")");
         return new int[]{lowX + megaChunkBlockWidth/2, lowZ + megaChunkBlockWidth/2};
     }
     
@@ -89,7 +89,7 @@ public class MegaChunk {
         int centerOfSectionX = (sectionX << BiomeSection.bitshifts) + BiomeSection.sectionWidth/2;
         int centerOfSectionZ = (sectionZ << BiomeSection.bitshifts) + BiomeSection.sectionWidth/2;
         
-        //TerraformGeneratorPlugin.logger.info("MC(" + this.x + "," + this.z + "):(" + (lowX + megaChunkBlockWidth/2) + "," + (lowZ + megaChunkBlockWidth/2) + ")");
+        // TerraformGeneratorPlugin.logger.info("MC(" + this.x + "," + this.z + "):(" + (lowX + megaChunkBlockWidth/2) + "," + (lowZ + megaChunkBlockWidth/2) + ")");
         return new int[]{centerOfSectionX, centerOfSectionZ};
     }
     

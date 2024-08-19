@@ -13,6 +13,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
@@ -42,11 +43,11 @@ public class MangroveHandler extends BiomeHandler {
     }
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
-                GenUtils.randMaterial(rand, Material.DIRT),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+        return new Material[]{GenUtils.randChoice(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
+                GenUtils.randChoice(rand, Material.DIRT),
+                GenUtils.randChoice(rand, Material.DIRT, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
@@ -84,7 +85,7 @@ public class MangroveHandler extends BiomeHandler {
                 else
                     chunk.setBlock(x, surfaceY + i, z, getSurfaceCrust(random)[0]);
             }
-            //No guard needed, att < 1 will write surfaceY
+            // No guard needed, att < 1 will write surfaceY
             cache.writeTransformedHeight(x,z, (short) (surfaceY + att));
         }
     }
@@ -97,12 +98,12 @@ public class MangroveHandler extends BiomeHandler {
 
             if (data.getType(rawX,TerraformGenerator.seaLevel,rawZ) == Material.WATER) {
                 if (GenUtils.chance(random, 1, 30))
-                    data.setType(rawX, TerraformGenerator.seaLevel + 1, rawZ, Material.LILY_PAD);
+                    PlantBuilder.LILY_PAD.build(data, rawX, TerraformGenerator.seaLevel + 1, rawZ);
             }
         }
 
         if (BlockUtils.isWet(new SimpleBlock(data,rawX,surfaceY+1,rawZ))
-                && GenUtils.chance(random, 10, 100) && surfaceY < TerraformGenerator.seaLevel - 3) { //SEA GRASS/KELP
+                && GenUtils.chance(random, 10, 100) && surfaceY < TerraformGenerator.seaLevel - 3) { // SEA GRASS/KELP
             CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
 
         }
@@ -129,8 +130,8 @@ public class MangroveHandler extends BiomeHandler {
                 treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 
                 if(treeY > TerraformGenerator.seaLevel-6) {
-                	 //Don't do gradient checks for swamp trees, the mud is uneven.
-                	//just make sure it's submerged
+                	 // Don't do gradient checks for swamp trees, the mud is uneven.
+                	// just make sure it's submerged
                     TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data,treeX,treeY,treeZ), OneOneNineBlockHandler.MANGROVE_ROOTS);
                     FractalTypes.Tree.SWAMP_TOP.build(tw, new SimpleBlock(data,treeX,treeY,treeZ), (t)->t.setCheckGradient(false));
                 }
@@ -148,8 +149,8 @@ public class MangroveHandler extends BiomeHandler {
     	
         double height = HeightMap.CORE.getHeight(tw, x, z) - 10;
 
-        //If the height is too low, force it back to 3.
-        //30/11/2023: what the fuck is this guard clause for
+        // If the height is too low, force it back to 3.
+        // 30/11/2023: what the fuck is this guard clause for
         if (height <= 0) height = 3;
         
         return height;

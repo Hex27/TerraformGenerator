@@ -20,7 +20,7 @@ public class BrokenShaftPopulator extends RoomPopulatorAbstract {
         int[] lowerCorner = room.getLowerCorner(3);
         int[] upperCorner = room.getUpperCorner(3);
 
-        //Spawn a solid stone platform
+        // Spawn a solid stone platform
         int y = room.getY();
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
@@ -29,7 +29,7 @@ public class BrokenShaftPopulator extends RoomPopulatorAbstract {
                         || b.getType() == Material.OAK_PLANKS
                         || b.getType() == Material.OAK_SLAB
                         || b.getType() == Material.GRAVEL) {
-                    b.setType(GenUtils.randMaterial(
+                    b.setType(GenUtils.randChoice(
                             Material.STONE_BRICKS,
                             Material.CRACKED_STONE_BRICKS,
                             Material.MOSSY_STONE_BRICKS,

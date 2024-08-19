@@ -24,9 +24,9 @@ public class PlainsVillageStandardHousePopulator extends PlainsVillageAbstractRo
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
         int height = super.calculateRoomY(data, room);
-        //GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
+        // GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
         
-        //Debug squares
+        // Debug squares
 
         PlainsVillageHouseJigsawBuilder builder = new PlainsVillageHouseJigsawBuilder(
         		plainsVillagePopulator,
@@ -42,7 +42,7 @@ public class PlainsVillageStandardHousePopulator extends PlainsVillageAbstractRo
         int maxDepth = 6;
 
         boolean placedLamp = false;
-        //Connect front to the nearest path.
+        // Connect front to the nearest path.
         while (entrance.getType() != Material.DIRT_PATH && maxDepth > 0) {
             if (BlockUtils.isDirtLike(entrance.getType()))
                 entrance.setType(Material.DIRT_PATH);
@@ -50,9 +50,9 @@ public class PlainsVillageStandardHousePopulator extends PlainsVillageAbstractRo
             if (!placedLamp && GenUtils.chance(this.rand, 3, 5)) {
                 SimpleBlock target;
                 if (this.rand.nextBoolean())
-                    target = entrance.getLeft(2).getGround().getRelative(0, 1, 0).get();
+                    target = entrance.getLeft(2).getGround().getUp().get();
                 else
-                    target = entrance.getRight(2).getGround().getRelative(0, 1, 0).get();
+                    target = entrance.getRight(2).getGround().getUp().get();
                 if (PlainsVillagePathPopulator.canPlaceLamp(target)) {
                     placedLamp = true;
                     PlainsVillagePathPopulator.placeLamp(rand, target);

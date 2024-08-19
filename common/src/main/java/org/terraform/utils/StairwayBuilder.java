@@ -30,7 +30,7 @@ public class StairwayBuilder {
 	public StairwayBuilder(Material @NotNull ... stairTypes) {
 		this.stairTypes = stairTypes;
 
-		//Infer downTypes
+		// Infer downTypes
 		ArrayList<Material> downTypes = new ArrayList<>();
 		for(Material mat:stairTypes) {
 			Material toAdd = Material.matchMaterial(
@@ -70,14 +70,14 @@ public class StairwayBuilder {
 	}
 	
 	public @NotNull StairwayBuilder build(@NotNull Wall start) {
-		if(stairDirection == BlockFace.DOWN) { //Stairway extends downwards
+		if(stairDirection == BlockFace.DOWN) { // Stairway extends downwards
 			int threshold = 5;
 	        BlockFace extensionDir = start.getDirection();
 	    	while (continueCondition(start)) {
 	    		
 	    		if(threshold == 0) {
 	    			start.setType(downTypes);
-		    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
+		    		start.getDown().downUntilSolid(new Random(), downTypes);
 	    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
 	    			start = start.getRelative(extensionDir);
 	    		}
@@ -90,41 +90,41 @@ public class StairwayBuilder {
 	    		else
 	    			start.setType(stairType);
 	            
-	    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
+	    		start.getDown().downUntilSolid(new Random(), downTypes);
 
 	    		if(angled) 
 	        		threshold--;
-	    		start = start.getRelative(extensionDir).getRelative(0,-1,0);
+	    		start = start.getRelative(extensionDir).getDown();
 	        }
 
-	    	//If it is on water, build a pathway forward. 
-	    	//Hope that there's something there.
-	    	//Stop on oak slabs specifically too, because that's the path type
+	    	// If it is on water, build a pathway forward.
+	    	// Hope that there's something there.
+	    	// Stop on oak slabs specifically too, because that's the path type
 	    	if(stopAtWater 
 	    			&& start.get().getType() != Material.OAK_SLAB 
 	    			&& BlockUtils.isWet(start.get())) {
 	    		for(int i = 0; i < maxExtensionForward; i++) {
-	    			if(start.getType().isSolid())
+	    			if(start.isSolid())
 	    				break;
 	    			
 	    			start.downUntilSolid(new Random(), downTypes);
 	    			start = start.getFront();
 	    		}
 	    	}
-		}else if(stairDirection == BlockFace.UP){ //Stairway extends upwards
+		}else if(stairDirection == BlockFace.UP){ // Stairway extends upwards
 			
 			int threshold = 5;
 	        BlockFace extensionDir = start.getDirection();
 	    	while (continueCondition(start)) {
 	    		
 	    		if(threshold == 0) {
-	    			start = start.getRelative(0,-1,0);
+	    			start = start.getDown();
 	    			if(carveAirSpace)
-	    				start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
+	    				start.getUp().Pillar(3, new Random(), Material.AIR);
 	    			start.setType(downTypes);
-		    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
+		    		start.getDown().downUntilSolid(new Random(), downTypes);
 	    			extensionDir = BlockUtils.getTurnBlockFace(new Random(), extensionDir);
-	    			start = start.getRelative(extensionDir).getRelative(0,1,0);
+	    			start = start.getRelative(extensionDir).getUp();
 	    		}
 	    		
 	    		Material stairType = stairTypes[new Random().nextInt(stairTypes.length)];
@@ -135,18 +135,18 @@ public class StairwayBuilder {
 	    		else
 	    			start.setType(stairType);
 	            
-	    		start.getRelative(0,-1,0).downUntilSolid(new Random(), downTypes);
+	    		start.getDown().downUntilSolid(new Random(), downTypes);
 	    		
-	    		//This space is required for movement
+	    		// This space is required for movement
 	    		if(carveAirSpace)
 	    		{
-	    			start.getRelative(0,1,0).Pillar(3, new Random(), Material.AIR);
-		    		start.getRelative(0,2,0).getRelative(extensionDir).setType(Material.AIR);
+	    			start.getUp().Pillar(3, new Random(), Material.AIR);
+		    		start.getUp(2).getRelative(extensionDir).setType(Material.AIR);
 		    	}
 	    		
 	    		if(angled) 
 	        		threshold--;
-	    		start = start.getRelative(extensionDir).getRelative(0, 1, 0);
+	    		start = start.getRelative(extensionDir).getUp();
 	        }
 			
 		}else {
@@ -166,19 +166,19 @@ public class StairwayBuilder {
 			if(stopAtWater && BlockUtils.isWet(target.get()))
 				return false;
 			
-			return !target.getType().isSolid();
+			return !target.isSolid();
 		}else { 
 			if(stopAtY != Short.MIN_VALUE)
 				if(target.getY() == stopAtY+1) 
 					return false;
 
-			//Continue carving upwards until the area isn't solid anymore.
+			// Continue carving upwards until the area isn't solid anymore.
 			if (upwardsCarveUntilNotSolid)
-				return target.getType().isSolid();
+				return target.isSolid();
 
-			//Continue carving upwards until the area is solid anymore.
+			// Continue carving upwards until the area is solid anymore.
 			if(upwardsCarveUntilSolid) 
-				return !target.getType().isSolid();
+				return !target.isSolid();
 			
 			return true;
 		}

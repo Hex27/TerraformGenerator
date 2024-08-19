@@ -39,8 +39,8 @@ public enum MonumentDesign {
         return switch(this) {
             case DARK_LIGHTLESS -> Material.DARK_PRISMARINE_SLAB;
             case DARK_PRISMARINE_CORNERS ->
-                    GenUtils.randMaterial(Material.DARK_PRISMARINE_SLAB, Material.PRISMARINE_BRICK_SLAB);
-            case PRISMARINE_LANTERNS -> GenUtils.randMaterial(Material.PRISMARINE_SLAB, Material.PRISMARINE_BRICK_SLAB);
+                    GenUtils.randChoice(Material.DARK_PRISMARINE_SLAB, Material.PRISMARINE_BRICK_SLAB);
+            case PRISMARINE_LANTERNS -> GenUtils.randChoice(Material.PRISMARINE_SLAB, Material.PRISMARINE_BRICK_SLAB);
         };
     }
 
@@ -49,7 +49,7 @@ public enum MonumentDesign {
     }
 
     public Material mat(@NotNull Random rand) {
-        return GenUtils.randMaterial(rand, tileSet);
+        return GenUtils.randChoice(rand, tileSet);
     }
 
     public void spawnLargeLight(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
@@ -57,7 +57,7 @@ public enum MonumentDesign {
             x++;
             z++;
             y++;
-            //World w = ((PopulatorDataPostGen) data).getWorld();
+            // World w = ((PopulatorDataPostGen) data).getWorld();
             TerraSchematic schema = TerraSchematic.load(this.toString().toLowerCase(Locale.ENGLISH) + "-largelight", new SimpleBlock(data,x,y,z));
             schema.parser = new MonumentSchematicParser();
             schema.setFace(BlockFace.NORTH);
@@ -68,8 +68,8 @@ public enum MonumentDesign {
     }
 
     public void upSpire(@NotNull SimpleBlock base, @NotNull Random rand) {
-        while (base.getType().isSolid() || base.getRelative(0, 1, 0).getType().isSolid()) {
-            base = base.getRelative(0, 1, 0);
+        while (base.isSolid() || base.getUp().isSolid()) {
+            base = base.getUp();
             if (base.getY() > TerraformGenerator.seaLevel)
                 return;
         }
@@ -87,7 +87,7 @@ public enum MonumentDesign {
                     if (i == 0) w.setType(Material.DARK_PRISMARINE);
                     else if (i > height - 3) w.setType(Material.PRISMARINE_WALL);
                     else {
-                        w.setType(GenUtils.randMaterial(Material.DARK_PRISMARINE, Material.PRISMARINE_WALL));
+                        w.setType(GenUtils.randChoice(Material.DARK_PRISMARINE, Material.PRISMARINE_WALL));
                         if (rand.nextBoolean()) {
                             Stairs stairs = (Stairs) Bukkit.createBlockData(Material.DARK_PRISMARINE_STAIRS);
                             stairs.setFacing(BlockUtils.getDirectBlockFace(rand));
@@ -96,7 +96,7 @@ public enum MonumentDesign {
                         }
 
                     }
-                    w = w.getRelative(0, 1, 0);
+                    w = w.getUp();
                 }
                 break;
             case DARK_PRISMARINE_CORNERS:
@@ -104,7 +104,7 @@ public enum MonumentDesign {
                     if (i == 0) w.setType(Material.DARK_PRISMARINE);
                     else if (i == 3) w.setType(Material.SEA_LANTERN);
                     else {
-                        w.setType(GenUtils.randMaterial(Material.DARK_PRISMARINE, Material.PRISMARINE_WALL));
+                        w.setType(GenUtils.randChoice(Material.DARK_PRISMARINE, Material.PRISMARINE_WALL));
                         if (rand.nextBoolean()) {
                             Stairs stairs = (Stairs) Bukkit.createBlockData(Material.DARK_PRISMARINE_STAIRS);
                             stairs.setFacing(BlockUtils.getDirectBlockFace(rand));
@@ -112,7 +112,7 @@ public enum MonumentDesign {
                         }
 
                     }
-                    w = w.getRelative(0, 1, 0);
+                    w = w.getUp();
                 }
                 break;
             case PRISMARINE_LANTERNS:
@@ -126,7 +126,7 @@ public enum MonumentDesign {
                             w.setType(Material.SEA_LANTERN);
                         }
                     }
-                    w = w.getRelative(0, 1, 0);
+                    w = w.getUp();
                 }
                 break;
         }

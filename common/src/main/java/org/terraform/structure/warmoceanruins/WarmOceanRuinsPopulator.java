@@ -30,6 +30,7 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
+        if (!isEnabled()) return false;
 
     	if(biome == (BiomeBank.DEEP_WARM_OCEAN)
         		|| biome == (BiomeBank.WARM_OCEAN)
@@ -47,12 +48,13 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
-        //Height set to 50 as plains village will settle its own height.
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
+        // Height set to 50 as plains village will settle its own height.
         int y = GenUtils.getHighestGround(data, x, z);
 
         spawnWarmOceanRuins(tw,this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()),
@@ -63,19 +65,19 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
         int numRooms = 10;
         int range = 80;
 
-        //Level One
+        // Level One
         Random hashedRand = tw.getHashedRand(x, y, z);
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range);
-        //gen.setPathPopulator(new WarmOceansPathPopulator());
+        // gen.setPathPopulator(new WarmOceansPathPopulator());
         gen.setRoomMaxX(15);
         gen.setRoomMaxZ(15);
         gen.setRoomMinX(10);
         gen.setRoomMinZ(10);
         gen.setRoomMaxHeight(15);
         gen.setCarveRooms(true);
-        gen.setCarveRoomsMultiplier(0,0,0); //No carving
+        gen.setCarveRoomsMultiplier(0,0,0); // No carving
 
-        gen.forceAddRoom(25, 25, 25); //At least one room that is the center room.
+        gen.forceAddRoom(25, 25, 25); // At least one room that is the center room.
 
         gen.registerRoomPopulator(new WarmOceanDomeHutRoom(random, false, false));
         gen.registerRoomPopulator(new WarmOceanAltarRoom(random, false, false));
@@ -91,18 +93,18 @@ public class WarmOceanRuinsPopulator extends SingleMegaChunkStructurePopulator {
         return 0;
     }
 
-    //Since the cold ocean ruins weren't added, the warm ocean ruins
-    //spawn everywhere.
+    // Since the cold ocean ruins weren't added, the warm ocean ruins
+    // spawn everywhere.
     @Override
     public boolean isEnabled() {
-        return (BiomeBank.isBiomeEnabled(BiomeBank.DEEP_WARM_OCEAN)
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.WARM_OCEAN)
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.DEEP_LUKEWARM_OCEAN)
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.CORAL_REEF_OCEAN)
-                || BiomeBank.isBiomeEnabled(BiomeBank.COLD_OCEAN)
-                || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_COLD_OCEAN)
-                || BiomeBank.isBiomeEnabled(BiomeBank.FROZEN_OCEAN)
-                || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_FROZEN_OCEAN))
-        		&& TConfigOption.STRUCTURES_WARMOCEANRUINS_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled() && (BiomeBank.isBiomeEnabled(BiomeBank.DEEP_WARM_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.WARM_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_LUKEWARM_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.CORAL_REEF_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.COLD_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_COLD_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.FROZEN_OCEAN)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.DEEP_FROZEN_OCEAN))
+               && TConfigOption.STRUCTURES_WARMOCEANRUINS_ENABLED.getBoolean();
     }
 }

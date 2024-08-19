@@ -45,7 +45,7 @@ public class EntityTypeMapper {
         put(EntityType.EVOKER_FANGS, "H");
         put(EntityType.THROWN_EXP_BOTTLE, "I");
         put(EntityType.EXPERIENCE_ORB, "J");
-        //put(EntityType.EYE_OF_ENDER, "K");
+        // put(EntityType.EYE_OF_ENDER, "K");
         put(EntityType.FALLING_BLOCK, "L");
         put(EntityType.FIREWORK, "M");
         put(EntityType.FOX, "N");

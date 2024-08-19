@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.DirectionalBuilder;
@@ -25,7 +26,7 @@ public class AmethystGeodePopulator {
 	
     public AmethystGeodePopulator(int geodeRadius, double frequency, int minDepth, int minDepthBelowSurface) {
 		this.geodeRadius = geodeRadius;
-		this.frequency = frequency;
+		this.frequency = TConfigOption.FEATURE_ORES_ENABLED.getBoolean() ? frequency : 0;
     	this.minDepth = minDepth;
     	this.minDepthBelowSurface = minDepthBelowSurface;
     }
@@ -44,7 +45,7 @@ public class AmethystGeodePopulator {
         	
         	if(upperHeightRange < 14) return;
         	
-        	//Elevate 14 units up.
+        	// Elevate 14 units up.
         	int y = GenUtils.randInt(random, 14, upperHeightRange);
         	placeGeode(random.nextInt(9999), geodeRadius, new SimpleBlock(data,x,y,z));
     	}
@@ -89,8 +90,8 @@ public class AmethystGeodePopulator {
                     		rel.setType(Material.WATER);
                     	else
                     		rel.setType(Material.CAVE_AIR);
-                        //Only do the other stuff if this isn't air.
-                    }else if(rel.getType().isSolid())
+                        // Only do the other stuff if this isn't air.
+                    }else if(rel.isSolid())
 	                    if (amethystCrust <= noiseVal) {
 	                        rel.setType(Material.AMETHYST_BLOCK,Material.BUDDING_AMETHYST);
 	                        amethystBlocks.add(rel);
@@ -103,7 +104,7 @@ public class AmethystGeodePopulator {
             }
         }
         
-        //Place crystals
+        // Place crystals
         for(SimpleBlock rel:amethystBlocks) {
         	for(BlockFace face:BlockUtils.sixBlockFaces) {
         		if(GenUtils.chance(1,6)) continue;

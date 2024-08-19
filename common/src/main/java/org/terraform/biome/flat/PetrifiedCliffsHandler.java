@@ -14,6 +14,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes.Tree;
 import org.terraform.utils.BlockUtils;
@@ -42,8 +43,8 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
         return new Material[]{Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     public static final HashSet<Material> endWithStones = new HashSet<>(){{
@@ -54,7 +55,6 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-
         for(int i = 0; i < 30; i++)
             if(data.getType(rawX, surfaceY, rawZ) == Material.DIORITE
             || data.getType(rawX, surfaceY, rawZ) == Material.ANDESITE
@@ -82,17 +82,17 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
             }
             if(continueOut) return;
 
-            if (GenUtils.chance(random, 1, 10)) { //Grass
+            if (GenUtils.chance(random, 1, 10)) { // Grass
                 if (GenUtils.chance(random, 6, 10)) {
-                    data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                    PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     if (random.nextBoolean()) {
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                        PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     }
                 } else {
                     if (GenUtils.chance(random, 7, 10))
-                        data.setType(rawX, surfaceY + 1, rawZ, BlockUtils.pickFlower());
+                        BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
                     else
-                        BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, BlockUtils.pickTallFlower());
+                        BlockUtils.pickTallFlower().build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -133,7 +133,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
         	        n.SetFrequency(0.05f);
         	        return n;
         		});
-        //Generates -0.8 to 0.8
+        // Generates -0.8 to 0.8
         int rawX = chunkX * 16 + x;
         int rawZ = chunkZ * 16 + z;
 
@@ -153,7 +153,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
 
             if(0.85+detailsNoise > detailsNoiseMultiplier) {
                 chunk.setBlock(x, height + y, z,
-                        GenUtils.randMaterial(
+                        GenUtils.randChoice(
                                 Material.STONE,
                                 Material.STONE,
                                 Material.STONE,
@@ -173,7 +173,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-		//Rock trees
+		// Rock trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 13, 0.2f);
         
         for (SimpleLocation sLoc : trees) {

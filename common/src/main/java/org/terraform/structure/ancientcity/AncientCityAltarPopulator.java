@@ -25,7 +25,7 @@ public class AncientCityAltarPopulator extends AncientCityAbstractRoomPopulator 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
-    	//Generates outer walls
+    	// Generates outer walls
     	for(Entry<Wall,Integer> entry:this.effectiveRoom.getFourWalls(data, 0).entrySet()) {
     		Wall w = entry.getKey();
     		Wall center = null;
@@ -63,7 +63,7 @@ public class AncientCityAltarPopulator extends AncientCityAbstractRoomPopulator 
 					TerraformGeneratorPlugin.logger.stackTrace(e);
 				}
 				
-				//Misc pillars leading up to the altar
+				// Misc pillars leading up to the altar
 				int pillarSpacing = entry.getValue() / 3;
 				for(int i = pillarSpacing; i < Math.min(effectiveRoom.getWidthX(), effectiveRoom.getWidthZ()); i += 3)
 				{

@@ -46,7 +46,7 @@ public class AncientCitySchematicPlatform extends AncientCityAbstractRoomPopulat
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	
-    	int platformSize = 0; //0 - small, 1 - medium, 2 - large
+    	int platformSize = 0; // 0 - small, 1 - medium, 2 - large
     	if(this.effectiveRoom.getWidthX() >= 10 
     			&& this.effectiveRoom.getWidthZ() >= 10)
     		platformSize = 1;
@@ -77,7 +77,7 @@ public class AncientCitySchematicPlatform extends AncientCityAbstractRoomPopulat
             schema.setFace(BlockUtils.getDirectBlockFace(rand));
             schema.apply();
             
-            //12 blocks up, possibly spawn an air sphere to make the thing broken.
+            // 12 blocks up, possibly spawn an air sphere to make the thing broken.
             if(GenUtils.chance(rand, 1, 2)){
             	new SphereBuilder(new Random(), 
             			center.getRelative(BlockUtils.getXZPlaneBlockFace(rand), 4).getUp(11), 

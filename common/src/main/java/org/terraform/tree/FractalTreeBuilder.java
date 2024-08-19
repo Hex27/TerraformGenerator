@@ -41,7 +41,7 @@ public class FractalTreeBuilder {
     float minThickness = 0f;
     int maxDepth = 4;
 
-    //maxHeight is used for corals to force sea-level cutoff.
+    // maxHeight is used for corals to force sea-level cutoff.
     int maxHeight = 999;
     float lengthDecrement = 1;
     float lengthDecrementMultiplier = 1;
@@ -575,9 +575,11 @@ public class FractalTreeBuilder {
     }
     
     public boolean build(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if (!TConfigOption.areTreesEnabled()) return false;
+
         fractalLeaves.purgeOccupiedLeavesCache();
-    	//Terrain too steep, don't attempt tree generation, 
-    	//lest it gets stuck in a wall.
+    	// Terrain too steep, don't attempt tree generation,
+    	// lest it gets stuck in a wall.
     	if(!heightGradientChecked) {
     		if(!checkGradient(data,x,z)) return false;
     	}
@@ -592,7 +594,7 @@ public class FractalTreeBuilder {
         this.fractalLeaves.setOriY(oriY);
         this.fractalLeaves.setTw(tw);
         this.fractalLeaves.setMaxHeight(maxHeight);
-        //this.noiseGen = new FastNoise((int) tw.getSeed());
+        // this.noiseGen = new FastNoise((int) tw.getSeed());
 
         FastNoise noiseGen = NoiseCacheHandler.getNoise(
         		tw, 
@@ -624,7 +626,7 @@ public class FractalTreeBuilder {
         
         
         if (alwaysOneStraight > 0) {
-            //Starting Trunk
+            // Starting Trunk
             fractalBranch(rand, base,
                     initialAngle,
                     initialPitch,
@@ -642,25 +644,25 @@ public class FractalTreeBuilder {
         
         if(beeHive != null)
 	        for (int i = 0; i < 8; i++) {
-	            if (!beeHive.getType().isSolid()) {
+	            if (!beeHive.isSolid()) {
 	                BeeHiveSpawner.spawnFullBeeNest(beeHive);
-	            	//TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+	            	// TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
 	                break;
 	            }else
-	            	beeHive = beeHive.getRelative(0,-1,0);
+	            	beeHive = beeHive.getDown();
 	        }
         
         return true;
         
     }
 
-    public void fractalBranch(@NotNull Random rand, @NotNull SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size) {
+    private void fractalBranch(@NotNull Random rand, @NotNull SimpleBlock base, double pitch, double yaw, int depth, double thickness, double size) {
 
     	if(thickness < minThickness)
     		thickness = minThickness;
     	
         if (pitch > maxPitch) {
-            //reset pitch
+            // reset pitch
             pitch = maxPitch - rta();
         } else if (pitch < minPitch) {
             pitch = minPitch + rta();
@@ -683,14 +685,14 @@ public class FractalTreeBuilder {
             size = 0;
         }
 
-        int y = (int) (Math.round(size * Math.sin(pitch))); //Pitch is vertical tilt
+        int y = (int) (Math.round(size * Math.sin(pitch))); // Pitch is vertical tilt
         int x = (int) (Math.round(size * Math.cos(pitch) * Math.sin(yaw)));
         int z = (int) (Math.round(size * Math.cos(pitch) * Math.cos(yaw)));
 
         SimpleBlock two = base.getRelative(x, y, z);
         if (two.getY() > top.getY()) top = two;
 
-        //Set height
+        // Set height
         if (two.getY() - oriY > height) height = two.getY() - oriY;
 
         if (restore) {
@@ -705,10 +707,10 @@ public class FractalTreeBuilder {
                 && Version.isAtLeast(15.1)
                 && GenUtils.chance(rand, (int) (beeChance * 1000.0), 1000)) {
             for (int i = 0; i < 3; i++) {
-                if (!two.getRelative(0, -i, 0).getType().isSolid()) {
+                if (!two.getRelative(0, -i, 0).isSolid()) {
                     beeHive = two.getRelative(0,-i,0);
                     break;
-                    //TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+                    // TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
                 }
             }
 
@@ -719,7 +721,7 @@ public class FractalTreeBuilder {
         if (fractalsDone % fractalThreshold != 0
                 && thickness >= 1
                 && size >= 1) {
-            //Make 1 branch
+            // Make 1 branch
             fractalBranch(rand, two, pitch - randomAngle(depth),
                     yaw + GenUtils.randInt(rand, 1, 5)
                             * GenUtils.getSign(rand) * rta(),
@@ -729,9 +731,9 @@ public class FractalTreeBuilder {
             return;
         }
 
-        //This indicates a branch as the initial is no longer the same.
-        //For always straight trees, the branches don't have additional fractals.
-        //Set depth to 99 and force leaf generation.
+        // This indicates a branch as the initial is no longer the same.
+        // For always straight trees, the branches don't have additional fractals.
+        // Set depth to 99 and force leaf generation.
         if (alwaysOneStraight > 0 && pitch != initialAngle) {
             fractalBranch(rand, two, pitch - randomAngle(depth), yaw - rta(), 99, thickness - thicknessDecrement, size - lengthDecrement);
             return;
@@ -740,9 +742,9 @@ public class FractalTreeBuilder {
         if (alwaysOneStraight > 0) {
             alwaysOneStraightBranchLength -= (int) this.lengthDecrement;
             this.lengthDecrement *= this.lengthDecrementMultiplier;
-            //Extend a central trunk and make more branches.
+            // Extend a central trunk and make more branches.
             
-            //Only spawn branches if depth is sufficient.
+            // Only spawn branches if depth is sufficient.
             if(depth >= alwaysOneStraightBranchSpawningDepth) {
             	fractalBranch(rand, two, pitch + randomAngle(depth), -ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
                 fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
@@ -750,7 +752,7 @@ public class FractalTreeBuilder {
                 fractalBranch(rand, two, pitch + randomAngle(depth), -5 * ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
 
 
-                //4 more static angle fractals.
+                // 4 more static angle fractals.
                 if (alwaysOneStraightExtendedBranches) {
                     fractalBranch(rand, two, pitch + randomAngle(depth), ra(0, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
                     fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 2, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
@@ -759,10 +761,10 @@ public class FractalTreeBuilder {
                 }
             }
             
-            //this.logType = Material.SPRUCE_WOOD;
+            // this.logType = Material.SPRUCE_WOOD;
             fractalBranch(rand, two, pitch, yaw, depth + 1, thickness - thicknessDecrement, alwaysOneStraight);
         } else {
-            //Make 4 branches
+            // Make 4 branches
             fractalBranch(rand, two, pitch - randomAngle(depth), yaw - rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
             fractalBranch(rand, two, pitch + randomAngle(depth), yaw + rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
             fractalBranch(rand, two, pitch + randomAngle(depth), yaw + 5 * rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
@@ -770,9 +772,9 @@ public class FractalTreeBuilder {
         }
     }
 
-    public void drawLine(@NotNull SimpleBlock one, @NotNull SimpleBlock two, int segments, double thickness) {
+    private void drawLine(@NotNull SimpleBlock one, @NotNull SimpleBlock two, int segments, double thickness) {
         if (one.equals(two)) return;
-        //Vector one to two;
+        // Vector one to two;
         Vector v = two.toVector().subtract(one.toVector());
         for (int i = 0; i <= segments; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) segments));
@@ -788,7 +790,7 @@ public class FractalTreeBuilder {
         replaceSphere(radius, radius, radius, base, type);
     }
 
-    //private boolean debug = true;
+    // private boolean debug = true;
     private void replaceSphere(float rX, float rY, float rZ, @NotNull SimpleBlock block, @NotNull Material type) {
 
         // Don't place anything if radius is nothing
@@ -834,7 +836,7 @@ public class FractalTreeBuilder {
                         return;
                     }
                     if (rel.getY() - this.oriY == this.maxHeight) {
-                        if (rand.nextBoolean()) //Fade off if too high
+                        if (rand.nextBoolean()) // Fade off if too high
                             return;
                     }
 
@@ -854,14 +856,14 @@ public class FractalTreeBuilder {
                         if (cocoaBeans > 0
                                 && Math.abs(x) >= rX - 2
                                 && Math.abs(z) >= rZ - 2) {
-                            //Coca beans
+                            // Coca beans
                             if (GenUtils.chance(cocoaBeans, 100)) {
                                 for (BlockFace face : BlockUtils.directBlockFaces) {
                                     Directional dir = (Directional) Bukkit.createBlockData(Material.COCOA);
                                     dir.setFacing(face.getOppositeFace());
                                     ((Ageable) dir).setAge(GenUtils.randInt(rand, 0, ((Ageable) dir).getMaximumAge()));
                                     SimpleBlock beans = rel.getRelative(face);
-                                    if (beans.getType().isSolid() ||
+                                    if (beans.isSolid() ||
                                             beans.getType() == Material.WATER) continue;
 
                                     beans.setBlockData(dir);
@@ -881,20 +883,20 @@ public class FractalTreeBuilder {
             }
         }
         
-        //Ensures that corals don't die
+        // Ensures that corals don't die
         while (!changed.isEmpty()) {
             SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));
             if (!CoralGenerator.isSaturatedCoral(sb)) {
-                //No floating coral fans
+                // No floating coral fans
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType()))
                         sb.getRelative(face).setType(Material.WATER);
                 }
 
-                //No levitating sea pickles & fans
-                if (sb.getRelative(0, 1, 0).getType() == Material.SEA_PICKLE ||
-                        Tag.CORAL_PLANTS.isTagged(sb.getRelative(0, 1, 0).getType())) {
-                    sb.getRelative(0, 1, 0).setType(Material.WATER);
+                // No levitating sea pickles & fans
+                if (sb.getUp().getType() == Material.SEA_PICKLE ||
+                        Tag.CORAL_PLANTS.isTagged(sb.getUp().getType())) {
+                    sb.getUp().setType(Material.WATER);
                 }
                 sb.setType(Material.WATER);
 
@@ -924,13 +926,13 @@ public class FractalTreeBuilder {
             leaf.setDistance(1);
         }
         for (int i = 1; i <= GenUtils.randInt(min, max); i++) {
-            if (!block.getRelative(0, -i, 0).getType().isSolid())
+            if (!block.getRelative(0, -i, 0).isSolid())
                 block.getRelative(0, -i, 0).rsetBlockData(BlockUtils.replacableByTrees,type);
             else
                 break;
         }
 
-        //Log for good measure, as well as some surrounding leaves.
+        // Log for good measure, as well as some surrounding leaves.
         if (Tag.LEAVES.isTagged(material))
             block.rsetType(BlockUtils.replacableByTrees,this.trunkType);
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -943,7 +945,7 @@ public class FractalTreeBuilder {
             
             block.getRelative(face).rsetBlockData(BlockUtils.replacableByTrees,type);
         }
-        block.getRelative(0, 1, 0).rsetBlockData(BlockUtils.replacableByTrees, type);
+        block.getUp().rsetBlockData(BlockUtils.replacableByTrees, type);
     }
 
     public @NotNull FractalTreeBuilder setSnowyLeaves(boolean snowy) {
@@ -951,36 +953,36 @@ public class FractalTreeBuilder {
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setVines(int vines) {
+    private @NotNull FractalTreeBuilder setVines(int vines) {
         this.vines = vines;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setHeightVariation(int heightVariation) {
+    private @NotNull FractalTreeBuilder setHeightVariation(int heightVariation) {
         this.heightVariation = heightVariation;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setMinBend(double bend) {
+    private @NotNull FractalTreeBuilder setMinBend(double bend) {
         this.minBend = bend;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setMaxBend(double bend) {
+    private @NotNull FractalTreeBuilder setMaxBend(double bend) {
         this.maxBend = bend;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setInitialTilt(double initialTilt) {
+    private @NotNull FractalTreeBuilder setInitialTilt(double initialTilt) {
         this.initialTilt = initialTilt;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setMinInitialTilt(double minInitialTilt) {
+    private @NotNull FractalTreeBuilder setMinInitialTilt(double minInitialTilt) {
         this.minInitialTilt = minInitialTilt;
         return this;
     }
-    
+
     public @NotNull FractalTreeBuilder setFractalLeaves(FractalLeaves fractalLeaves) {
         this.fractalLeaves = fractalLeaves;
         return this;
@@ -991,27 +993,27 @@ public class FractalTreeBuilder {
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setLengthDecrement(float d) {
+    private @NotNull FractalTreeBuilder setLengthDecrement(float d) {
         this.lengthDecrement = d;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setMaxDepth(int d) {
+    private @NotNull FractalTreeBuilder setMaxDepth(int d) {
         this.maxDepth = d;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setAlwaysOneStraight(int val) {
+    private @NotNull FractalTreeBuilder setAlwaysOneStraight(int val) {
         this.alwaysOneStraight = val;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setAlwaysOneStraightExtendedBranches(boolean bool) {
+    private @NotNull FractalTreeBuilder setAlwaysOneStraightExtendedBranches(boolean bool) {
         this.alwaysOneStraightExtendedBranches = bool;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setNoMainStem(boolean bool) {
+    private @NotNull FractalTreeBuilder setNoMainStem(boolean bool) {
         this.noMainStem = bool;
         return this;
     }
@@ -1019,7 +1021,7 @@ public class FractalTreeBuilder {
     /**
      * @param beeChance the beeChance to set
      */
-    public @NotNull FractalTreeBuilder setBeeChance(double beeChance) {
+    private @NotNull FractalTreeBuilder setBeeChance(double beeChance) {
         this.beeChance = beeChance;
         return this;
     }
@@ -1027,59 +1029,59 @@ public class FractalTreeBuilder {
     /**
      * @return the cocabeans
      */
-    public int getCocoaBeans() {
+    private int getCocoaBeans() {
         return cocoaBeans;
     }
 
     /**
      * @param cocoaBeans the cocabeans to set
      */
-    public @NotNull FractalTreeBuilder setCocoaBeans(int cocoaBeans) {
+    private @NotNull FractalTreeBuilder setCocoaBeans(int cocoaBeans) {
         this.cocoaBeans = cocoaBeans;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setThicknessDecrement(float d) {
+    private @NotNull FractalTreeBuilder setThicknessDecrement(float d) {
         this.thicknessDecrement = d;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setBaseThickness(float baseThickness) {
+    private @NotNull FractalTreeBuilder setBaseThickness(float baseThickness) {
         this.baseThickness = baseThickness;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setMinThickness(float minThickness) {
+    private @NotNull FractalTreeBuilder setMinThickness(float minThickness) {
         this.minThickness = minThickness;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setBaseHeight(int h) {
+    private @NotNull FractalTreeBuilder setBaseHeight(int h) {
         this.baseHeight = h;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setFractalThreshold(int i) {
+    private @NotNull FractalTreeBuilder setFractalThreshold(int i) {
         this.fractalThreshold = i;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setMaxPitch(double max) {
+    private @NotNull FractalTreeBuilder setMaxPitch(double max) {
         this.maxPitch = max;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setBranchNoiseMultiplier(float multiplier) {
+    private @NotNull FractalTreeBuilder setBranchNoiseMultiplier(float multiplier) {
         this.branchNoiseMultiplier = multiplier;
         return this;
     }
 
-    public @NotNull FractalTreeBuilder setDepthPitchMultiplier(float depthPitchMultiplier) {
+    private @NotNull FractalTreeBuilder setDepthPitchMultiplier(float depthPitchMultiplier) {
         this.depthPitchMultiplier = depthPitchMultiplier;
         return this;
     }
     
-    public @NotNull FractalTreeBuilder setLeafBranchFrequency(float freq) {
+    private @NotNull FractalTreeBuilder setLeafBranchFrequency(float freq) {
         this.branchNoiseFrequency = freq;
         return this;
     }
@@ -1088,7 +1090,7 @@ public class FractalTreeBuilder {
         this.maxHeight = max;
         return this;
     }
-    
+
     public @NotNull FractalTreeBuilder skipGradientCheck() {
     	this.heightGradientChecked = true;
     	return this;
@@ -1097,11 +1099,11 @@ public class FractalTreeBuilder {
     /**
      * @return the height
      */
-    public int getHeight() {
+    private int getHeight() {
         return height;
     }
 
-    public @NotNull FractalTreeBuilder setMinPitch(double min) {
+    private @NotNull FractalTreeBuilder setMinPitch(double min) {
         this.minPitch = min;
         return this;
     }
@@ -1109,7 +1111,7 @@ public class FractalTreeBuilder {
     /**
      * Random angle defined by the min and max bend angles
      */
-    public double randomAngle(int depth) {
+    private double randomAngle(int depth) {
         return (Math.pow(depthPitchMultiplier,depth))*GenUtils.randDouble(rand, minBend, maxBend);
     }
 
@@ -1117,7 +1119,7 @@ public class FractalTreeBuilder {
      * Random-thirty-ish-angle
      * @return An angle between 0.8*30 to 1.2*30 degrees in radians
      */
-    public double rta() {
+    private double rta() {
         return GenUtils.randDouble(new Random(), 0.8 * Math.PI / 6, 1.2 * Math.PI / 6);
     }
 
@@ -1125,37 +1127,37 @@ public class FractalTreeBuilder {
      * Random-angle
      * @return An angle between lowerBound*base to upperBound*base degrees in radians
      */
-    public double ra(double base, double lowerBound, double upperBound) {
+    private double ra(double base, double lowerBound, double upperBound) {
         return GenUtils.randDouble(new Random(), lowerBound * base, upperBound * base);
     }
 
-    public @NotNull FractalTreeBuilder setCoralDecoration(boolean d) {
+    private @NotNull FractalTreeBuilder setCoralDecoration(boolean d) {
         this.coralDecoration = d;
         this.fractalLeaves.coralDecoration = d;
         return this;
     }
     
-    public @NotNull FractalTreeBuilder setAlwaysOneStraightBranchLength(int alwaysOneStraightBranchLength) {
+    private @NotNull FractalTreeBuilder setAlwaysOneStraightBranchLength(int alwaysOneStraightBranchLength) {
     	this.alwaysOneStraightBranchLength = alwaysOneStraightBranchLength;
     	return this;
     }
 
-	public @NotNull FractalTreeBuilder setLengthDecrementMultiplier(float lengthDecrementMultiplier) {
+	private @NotNull FractalTreeBuilder setLengthDecrementMultiplier(float lengthDecrementMultiplier) {
 		this.lengthDecrementMultiplier = lengthDecrementMultiplier;
 		return this;
 	}
 
-	public @NotNull FractalTreeBuilder setAlwaysOneStraightBranchYawLowerMultiplier(double alwaysOneStraightBranchYawLowerMultiplier) {
+	private @NotNull FractalTreeBuilder setAlwaysOneStraightBranchYawLowerMultiplier(double alwaysOneStraightBranchYawLowerMultiplier) {
 		this.alwaysOneStraightBranchYawLowerMultiplier = alwaysOneStraightBranchYawLowerMultiplier;
 		return this;
 	}
 
-	public @NotNull FractalTreeBuilder setAlwaysOneStraightBranchYawUpperMultiplier(double alwaysOneStraightBranchYawUpperMultiplier) {
+	private @NotNull FractalTreeBuilder setAlwaysOneStraightBranchYawUpperMultiplier(double alwaysOneStraightBranchYawUpperMultiplier) {
 		this.alwaysOneStraightBranchYawUpperMultiplier = alwaysOneStraightBranchYawUpperMultiplier;
 		return this;
 	}
 	
-	public @NotNull FractalTreeBuilder setAlwaysOneStraightBranchSpawningDepth(int alwaysOneStraightBranchSpawningDepth) {
+	private @NotNull FractalTreeBuilder setAlwaysOneStraightBranchSpawningDepth(int alwaysOneStraightBranchSpawningDepth) {
 		this.alwaysOneStraightBranchSpawningDepth = alwaysOneStraightBranchSpawningDepth;
 		return this;
 	}

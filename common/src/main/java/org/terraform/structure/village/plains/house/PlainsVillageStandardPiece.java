@@ -31,11 +31,11 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
-        //Place flooring.
+        // Place flooring.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY(), z,
-                        GenUtils.randMaterial(
+                        GenUtils.randChoice(
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,
@@ -57,26 +57,26 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
     public void postBuildDecoration(Random random, @NotNull PopulatorDataAbstract data) {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
-        //Raise ceiling.
+        // Raise ceiling.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY() + 4, z, Material.AIR);
             }
 
-        //Fix weird walling for standard roofs.
+        // Fix weird walling for standard roofs.
         for (BlockFace face : this.getWalledFaces()) {
             SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, -1);
-            Wall w = entry.getKey().getRelative(0, 2, 0);
+            Wall w = entry.getKey().getUp(2);
             for (int i = 0; i < entry.getValue(); i++) {
                 Material type = w.getType();
-                w.getRelative(0, 1, 0).getType();
-                w.getRelative(0, 1, 0).setType(type);
+                w.getUp().getType();
+                w.getUp().setType(type);
 
                 w = w.getLeft();
             }
         }
 
-        //Place lanterns (At least one per room)
+        // Place lanterns (At least one per room)
         genLanterns(data, this.getRoom().getX(), this.getRoom().getZ());
     }
 
@@ -84,14 +84,14 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
         Wall w = new Wall(new SimpleBlock(data, x, this.getRoom().getY() + 1, z));
         w = w.findCeiling(25);
         if (w == null) {
-            //Bruh wtf
+            // Bruh wtf
             return;
         }
 
-        w = w.getRelative(0, -1, 0);
+        w = w.getDown();
         int space = w.getY() - room.getY() - 3;
         if (space <= 0) {
-            return; //Ceiling too low.
+            return; // Ceiling too low.
         }
         int units = GenUtils.randInt(1, space);
         for (int i = 0; i < units; i++) {
@@ -101,7 +101,7 @@ public class PlainsVillageStandardPiece extends JigsawStructurePiece {
                 w.setBlockData(lantern);
             } else {
                 w.setType(Material.CHAIN);
-                w = w.getRelative(0, -1, 0);
+                w = w.getDown();
             }
         }
     }

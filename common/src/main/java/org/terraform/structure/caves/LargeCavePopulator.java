@@ -61,17 +61,17 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
                     return n;
                 });
 
-        //Max Y: TransformedHeight
-        //Min Y: -32
+        // Max Y: TransformedHeight
+        // Min Y: -32
         int minY = GenUtils.randInt(rand, -5, -32);
         int highest = GenUtils.getTransformedHeight(tw, x, z) - minY;
         int rX = GenUtils.randInt(rand, 30, 50);
-        int rY = (highest - 20) / 2; //5 block padding bottom, 15 padding top.
+        int rY = (highest - 20) / 2; // 5 block padding bottom, 15 padding top.
         int rZ = GenUtils.randInt(rand, 30, 50);
-        int y = rY + minY + 6; //6 is derived from the padding rule above
+        int y = rY + minY + 6; // 6 is derived from the padding rule above
 
-        //Random will be unused
-        //All the arguments in gen are going to be unused too, as it won't be generating rooms
+        // Random will be unused
+        // All the arguments in gen are going to be unused too, as it won't be generating rooms
         GenericLargeCavePopulator cavePopulator = Objects.requireNonNull(GenUtils.choice(rand,
             new GenericLargeCavePopulator[] {
                     new MushroomCavePopulator(tw.getHashedRand(x, 13729804, z), false, false),
@@ -81,12 +81,12 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
         RoomLayoutGenerator gen = new RoomLayoutGenerator(new Random(), RoomLayout.RANDOM_BRUTEFORCE, 10, x, y, z, 150);
         gen.setGenPaths(false);
-        gen.roomCarver = new LargeCaveRoomCarver(GenUtils.randMaterial(rand, Material.LAVA, Material.WATER));
+        gen.roomCarver = new LargeCaveRoomCarver(GenUtils.randChoice(rand, Material.LAVA, Material.WATER));
         SimpleLocation center = new SimpleLocation(x, y, z);
         TerraformGeneratorPlugin.logger.info("Large Cave at " + center + " has water level > " + minY + " with populator " +cavePopulator.getClass().getSimpleName());
         HashMap<SimpleChunkLocation, LargeCaveRoomPiece> chunkToRoom = new HashMap<>();
 
-        //BFS against center with "edges" as the noise equation
+        // BFS against center with "edges" as the noise equation
         ArrayDeque<SimpleLocation> queue = new ArrayDeque<>();
         HashSet<SimpleLocation> seen = new HashSet<>();
         int actualMinY = y;
@@ -97,14 +97,14 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
         {
             SimpleLocation v = queue.remove();
 
-            //Process v
+            // Process v
             LargeCaveRoomPiece caveRoom = chunkToRoom.computeIfAbsent(
                 new SimpleChunkLocation(tw.getName(),
                         GenUtils.getTripleChunk(v.getX()>>4),
                         GenUtils.getTripleChunk(v.getZ()>>4)),
                 (loc)->{
-                    //Each room is 48x48 blocks wide to ensure that rooms do not carve over
-                    //one another when writing outside their bounds.
+                    // Each room is 48x48 blocks wide to ensure that rooms do not carve over
+                    // one another when writing outside their bounds.
                     LargeCaveRoomPiece newRoom = new LargeCaveRoomPiece(
                             41, 41, 15,
                             GenUtils.getTripleChunk(v.getX()>>4)*16+7,
@@ -124,7 +124,7 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
                 if(seen.contains(neighbour)) continue;
 
-                //"Edges" are whether the neighbour satisfies the equation
+                // "Edges" are whether the neighbour satisfies the equation
                 double equationResult = Math.pow(neighbour.getX()-center.getX(), 2) / Math.pow(rX, 2)
                         + Math.pow(neighbour.getY()-center.getY(), 2) / Math.pow(rY, 2)
                         + Math.pow(neighbour.getZ()-center.getZ(), 2) / Math.pow(rZ, 2);
@@ -138,11 +138,11 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
                 queue.add(neighbour);
             }
 
-            //Continue v processing. This is done here to detect boundaries.
+            // Continue v processing. This is done here to detect boundaries.
             caveRoom.toCarve.put(v, nextToBoundary);
         }
 
-        //Set water levels
+        // Set water levels
         ((LargeCaveRoomCarver) gen.roomCarver).waterLevel = actualMinY + GenUtils.randInt(rand, 4,7);
         gen.getRooms().forEach((room)->((LargeCaveRoomPiece)room).waterLevel = ((LargeCaveRoomCarver) gen.roomCarver).waterLevel);
         state.roomPopulatorStates.add(gen);
@@ -159,6 +159,8 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
+        if ( !isEnabled()) return false;
+
 		if(biome.getType() == BiomeType.DEEP_OCEANIC)
 			return false;
         return rollSpawnRatio(tw,chunkX,chunkZ);
@@ -171,7 +173,7 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean();
+        return TConfigOption.areCavesEnabled() && TConfigOption.STRUCTURES_LARGECAVE_ENABLED.getBoolean();
     }
 
     @Override

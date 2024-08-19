@@ -33,6 +33,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         if (!isEnabled()) return;
+
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
@@ -41,7 +42,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
             if(x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ())
                 continue;
             int height = GenUtils.getHighestGround(data, x, z);
-            if (height < TerraformGenerator.seaLevel) { //Assume. it's on water
+            if (height < TerraformGenerator.seaLevel) { // Assume. it's on water
                 height = TerraformGenerator.seaLevel + GenUtils.randInt(random, 2, 3);
             } else
                 height += GenUtils.randInt(random, 2, 3);
@@ -52,7 +53,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     public void spawnSwampHut(TerraformWorld tw, @NotNull Random random,
                               @NotNull PopulatorDataAbstract data, int x, int y, int z) {
 
-        //Refers to center of hut, above the water.
+        // Refers to center of hut, above the water.
         SimpleBlock core = new SimpleBlock(data, x, y, z);
         TerraformGeneratorPlugin.logger.info("Spawning Swamp Hut at " + core.getCoords());
         try {
@@ -61,9 +62,9 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
             swamphut.parser = new WitchHutSchematicParser(random, data);
             swamphut.setFace(face);
             swamphut.apply();
-            Wall w = new Wall(core.getRelative(0, -2, 0), face).getRear();
+            Wall w = new Wall(core.getDown(2), face).getRear();
 
-            //Pillars down
+            // Pillars down
             w.getFront().getRight().downUntilSolid(random, Material.OAK_LOG);
             w.getFront().getLeft(2).downUntilSolid(random, Material.OAK_LOG);
             w.getRear(2).getRight().downUntilSolid(random, Material.OAK_LOG);
@@ -87,6 +88,8 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     }
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
+        if (!isEnabled()) return false;
+
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
@@ -133,7 +136,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()
+        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()
                 && (TConfigOption.BIOME_SWAMP_WEIGHT.getInt() > 0||
                 TConfigOption.BIOME_MANGROVE_WEIGHT.getInt() > 0);
     }
@@ -157,7 +160,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
         public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             if (data.getMaterial().toString().contains("COBBLESTONE")) {
                 data = Bukkit.createBlockData(
-                        StringUtils.replace(data.getAsString(), "cobblestone", GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE,
+                        StringUtils.replace(data.getAsString(), "cobblestone", GenUtils.randChoice(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE,
                                 Material.MOSSY_COBBLESTONE).name().toLowerCase(Locale.ENGLISH))
                 );
                 super.applyData(block, data);

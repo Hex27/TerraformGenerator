@@ -20,8 +20,8 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     private final TerraformWorld tw;
 
     private static final AnimalPopulator[] ANIMAL_POPULATORS = {
-    		null, //Slot for goat
-            null, //Slot for armadillo
+    		null, // Slot for goat
+            null, // Slot for armadillo
     		
             new AnimalPopulator(EntityType.PIG, TConfigOption.ANIMALS_PIG_MINHERDSIZE.getInt(), TConfigOption.ANIMALS_PIG_MAXHERDSIZE.getInt(),
                     TConfigOption.ANIMALS_PIG_CHANCE.getInt(), false, BiomeBank.BLACK_OCEAN, BiomeBank.MUSHROOM_ISLANDS, BiomeBank.MUSHROOM_BEACH,BiomeBank.RIVER, BiomeBank.FROZEN_RIVER, BiomeBank.OCEAN, BiomeBank.COLD_OCEAN, BiomeBank.FROZEN_OCEAN,

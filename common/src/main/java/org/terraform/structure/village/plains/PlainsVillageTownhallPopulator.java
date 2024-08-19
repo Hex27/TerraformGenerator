@@ -60,11 +60,11 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
 
             TerraformGeneratorPlugin.logger.info("Spawning farmhouse at " + x + "," + y + "," + z + " with rotation of " + farmHouse.getFace());
 
-            data.addEntity(x, y + 1, z, EntityType.VILLAGER); //Two villagers
+            data.addEntity(x, y + 1, z, EntityType.VILLAGER); // Two villagers
             data.addEntity(x, y + 1, z, EntityType.VILLAGER);
-            data.addEntity(x, y + 1, z, EntityType.CAT); //And a cat.
+            data.addEntity(x, y + 1, z, EntityType.CAT); // And a cat.
 
-            //Spawn a base on the house to sit on
+            // Spawn a base on the house to sit on
             for (int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
                 for (int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
                     if (data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
@@ -75,41 +75,41 @@ public class PlainsVillageTownhallPopulator extends RoomPopulatorAbstract {
                 }
             }
 
-            //Spawn a stairway from the house.
+            // Spawn a stairway from the house.
             Wall w = new Wall(new SimpleBlock(data, x, y - 1, z), farmHouse.getFace()).getRight();
             for (int i = 0; i < 7; i++)
                 w = w.getFront();
-            //while(w.getType() != Material.DIRT){
-            while (!w.getType().isSolid() ||
+            // while(w.getType() != Material.DIRT){
+            while (!w.isSolid() ||
                     w.getType().toString().contains("PLANKS")) {
-                Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
+                Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(this.rand, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
                         Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS));
                 stairs.setFacing(w.getDirection().getOppositeFace());
                 w.getRight().setBlockData(stairs);
                 w.setBlockData(stairs);
                 w.getLeft().setBlockData(stairs);
 
-                w.getLeft(2).getRelative(0, 1, 0).downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
-                w.getLeft(2).getRelative(0, 2, 0).setType(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
+                w.getLeft(2).getUp().downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
+                w.getLeft(2).getUp(2).setType(GenUtils.randChoice(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.MOSSY_COBBLESTONE_WALL));
 
-                w.getRight(2).getRelative(0, 1, 0).downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
-                w.getRight(2).getRelative(0, 2, 0).setType(GenUtils.randMaterial(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
+                w.getRight(2).getUp().downUntilSolid(this.rand, WoodUtils.getWoodForBiome(biome, WoodType.LOG));
+                w.getRight(2).getUp(2).setType(GenUtils.randChoice(this.rand, Material.COBBLESTONE_WALL, Material.COBBLESTONE_WALL,
                         Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
 
-                w = w.getFront().getRelative(0, -1, 0);
+                w = w.getFront().getDown();
             }
 
-            //Place a bell. The townhall acts as the village center.
+            // Place a bell. The townhall acts as the village center.
             Bell bell = (Bell) Bukkit.createBlockData(Material.BELL);
             bell.setAttachment(Attachment.SINGLE_WALL);
             bell.setFacing(w.getDirection().getOppositeFace());
-            w.getLeft(2).getRelative(0, 2, 0).setBlockData(bell);
+            w.getLeft(2).getUp(2).setBlockData(bell);
 
             Wall entrance = w.getGround();
             int maxDepth = 5;
 
-            //Connect front to the nearest path.
+            // Connect front to the nearest path.
             while (entrance.getType() != Material.DIRT_PATH && maxDepth > 0) {
                 if (BlockUtils.isDirtLike(entrance.getType()))
                     entrance.setType(Material.DIRT_PATH);

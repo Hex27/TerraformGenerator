@@ -16,6 +16,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
+import org.terraform.small_items.DecorationsBuilder;
 import org.terraform.structure.pillager.mansion.MansionInternalWallState;
 import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
 import org.terraform.structure.pillager.mansion.MansionRoomSchematicParser;
@@ -33,7 +34,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		super(room, internalWalls);
 	}
 
-	//Refers to the kitchen room width, not the width of one room cell.
+	// Refers to the kitchen room width, not the width of one room cell.
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
@@ -83,14 +84,14 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 
 	@Override
 	public void decorateExit(Random rand, @NotNull Wall w) {
-		w.getRelative(0,6,0).setType(Material.DARK_OAK_PLANKS);
+		w.getUp(6).setType(Material.DARK_OAK_PLANKS);
 	}
 	@Override
 	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
-		w.getRelative(0,6,0).setType(Material.DARK_OAK_PLANKS);
+		w.getUp(6).setType(Material.DARK_OAK_PLANKS);
 		int choice = rand.nextInt(3);
 		switch(choice) {
-		case 0: //Smokers & pressure plates
+		case 0: // Smokers & pressure plates
 			new DirectionalBuilder(Material.SMOKER)
 			.setFacing(w.getDirection())
 			.apply(w)
@@ -99,13 +100,13 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 			.apply(w.getLeft(2))
 			.apply(w.getRight(2));
 			
-			w.getRelative(0,1,0).setType(Material.DARK_OAK_PRESSURE_PLATE);
-			w.getRelative(0,1,0).getLeft().setType(Material.DARK_OAK_PRESSURE_PLATE);
-			w.getRelative(0,1,0).getLeft(2).setType(Material.DARK_OAK_PRESSURE_PLATE);
-			w.getRelative(0,1,0).getRight().setType(Material.DARK_OAK_PRESSURE_PLATE);
-			w.getRelative(0,1,0).getRight(2).setType(Material.DARK_OAK_PRESSURE_PLATE);
+			w.getUp().setType(Material.DARK_OAK_PRESSURE_PLATE);
+			w.getUp().getLeft().setType(Material.DARK_OAK_PRESSURE_PLATE);
+			w.getUp().getLeft(2).setType(Material.DARK_OAK_PRESSURE_PLATE);
+			w.getUp().getRight().setType(Material.DARK_OAK_PRESSURE_PLATE);
+			w.getUp().getRight(2).setType(Material.DARK_OAK_PRESSURE_PLATE);
 			break;
-		case 1: //Barrels
+		case 1: // Barrels
 			Wall target = w.getRight(2);
 			for(int i = 0; i < 5; i++) {
 				if(GenUtils.chance(rand, 1,3)) {
@@ -117,7 +118,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 				target = target.getLeft();
 			}
 			break;
-		default: //Table
+		default: // Table
 			new SlabBuilder(Material.DARK_OAK_SLAB)
 			.setType(Type.TOP)
 			.apply(w).apply(w.getLeft()).apply(w.getRight());
@@ -129,38 +130,37 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 			.apply(w.getRight(2));
 			
 			if(rand.nextBoolean())
-				w.getLeft().setType(Material.CRAFTING_TABLE);
+                DecorationsBuilder.CRAFTING_TABLE.build(w.getLeft());
 
 			if(rand.nextBoolean())
-				w.getRight().getRelative(0,1,0).setType(
-						Material.MELON, Material.PUMPKIN, Material.CAKE
-						);
+                DecorationsBuilder.build(w.getRight(), DecorationsBuilder.MELON, DecorationsBuilder.PUMPKIN, DecorationsBuilder.CAKE);
+
 			if(rand.nextBoolean())
-				w.getRelative(0,1,0).setType(Material.OAK_PRESSURE_PLATE);
+                DecorationsBuilder.OAK_PRESSURE_PLATE.build(w.getUp());
 			break;
 		}
 		
 	}
 	
-	//Decorate with paintings and wall texturing
+	// Decorate with paintings and wall texturing
 	@Override
 	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
-        //Shelves
+        // Shelves
         w.getRear().getLeft().Pillar(7, Material.DARK_OAK_LOG);
         if(rand.nextBoolean()) {
             new DirectionalBuilder(Material.FURNACE)
                     .setFacing(w.getDirection())
                     .apply(w.getLeft());
-            w.getLeft().getRelative(0, 1, 0).Pillar(6, Material.COBBLESTONE_WALL);
-            w.getLeft().getRelative(0, 1, 0).CorrectMultipleFacing(6);
+            w.getLeft().getUp().Pillar(6, Material.COBBLESTONE_WALL);
+            w.getLeft().getUp().CorrectMultipleFacing(6);
         }
         w.getRear().getRight().Pillar(7, Material.DARK_OAK_LOG);
         if(rand.nextBoolean()) {
             new DirectionalBuilder(Material.FURNACE)
                     .setFacing(w.getDirection())
                     .apply(w.getRight());
-            w.getRight().getRelative(0, 1, 0).Pillar(6, Material.COBBLESTONE_WALL);
-            w.getRight().getRelative(0, 1, 0).CorrectMultipleFacing(6);
+            w.getRight().getUp().Pillar(6, Material.COBBLESTONE_WALL);
+            w.getRight().getUp().CorrectMultipleFacing(6);
         }
         shelfify(rand, w.getRear());
         shelfify(rand, w.getLeft(2).getRear());
@@ -170,28 +170,28 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 	private void shelfify(@NotNull Random rand, @NotNull Wall w) {
 		new SlabBuilder(Material.POLISHED_ANDESITE_SLAB)
 		.setType(Type.TOP)
-		.apply(w.getRelative(0,1,0))
-		.apply(w.getRelative(0,3,0));
+		.apply(w.getUp())
+		.apply(w.getUp(3));
 		w.setType(Material.AIR, Material.AIR, Material.CRAFTING_TABLE, Material.MELON, Material.PUMPKIN);
 		
-		w.getRelative(0,2,0)
+		w.getUp(2)
 		.setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM
 				, Material.CAKE, Material.TURTLE_EGG, Material.AIR, Material.AIR);
 
-		w.getRelative(0,4,0)
+		w.getUp(4)
 		.setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM
 				, Material.CAKE, Material.TURTLE_EGG, Material.AIR, Material.AIR);
 		
-		//Barrel loot
+		// Barrel loot
 		if(GenUtils.chance(rand, 1, 5)) {
-			Wall target = w.getRelative(0,2,0);
+			Wall target = w.getUp(2);
 			target.setBlockData(BlockUtils.getRandomBarrel());
 			target.get().getPopData().lootTableChest(
 					target.getX(), target.getY(), target.getZ(), 
 					TerraLootTable.VILLAGE_BUTCHER);
 		}
 		if(GenUtils.chance(rand, 1, 5)) {
-			Wall target = w.getRelative(0,4,0);
+			Wall target = w.getUp(4);
 			target.setBlockData(BlockUtils.getRandomBarrel());
 			target.get().getPopData().lootTableChest(
 					target.getX(), target.getY(), target.getZ(), 

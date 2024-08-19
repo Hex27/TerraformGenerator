@@ -27,7 +27,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     private final RoomLayoutGenerator gen;
     private final HashSet<SimpleLocation> occupied;
     public AncientCityPathPopulator(Random rand, RoomLayoutGenerator gen, HashSet<SimpleLocation> occupied) {
-        //private int state = 0;
+        // private int state = 0;
         this.gen = gen;
         this.occupied = occupied;
     }
@@ -37,11 +37,11 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         
         Wall core = new Wall(ppd.base, ppd.dir);
         
-        //Do not populate in rooms.
+        // Do not populate in rooms.
         if(gen.isInRoom(new int[] {ppd.base.getX(), ppd.base.getZ()}))
         	return;
         
-        if(ppd.isTurn) { //Turn area
+        if(ppd.isTurn) { // Turn area
         	for(int nx = -1; nx <= 1; nx++)
         		for(int nz = -1; nz <= 1; nz++) {
         			core.getRelative(nx,0,nz).setType(Material.GRAY_WOOL);
@@ -55,8 +55,8 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         			core.getRelative(rel).getRelative(face,2).lsetType(AncientCityUtils.deepslateBricks);
         	}
         }
-        else if (!ppd.isEnd){ //Straight path
-        	//main path
+        else if (!ppd.isEnd){ // Straight path
+        	// main path
         	core.setType(Material.GRAY_WOOL);
         	core.getLeft().setType(Material.GRAY_WOOL);
         	core.getRight().setType(Material.GRAY_WOOL);
@@ -76,7 +76,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         		state = core.getZ() % 9;
         	else if(ppd.dir == BlockFace.EAST)
         		state = core.getX() % 9;
-        	else //if(ppd.dir == BlockFace.WEST)
+        	else // if(ppd.dir == BlockFace.WEST)
         		state = (-1*core.getX()) % 9;
         	
         	if(state < 0) state += 9;
@@ -84,9 +84,9 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
             if(!ppd.isOverlapped) {
             	placeWallArc(core,state);
             }
-            //state++;
+            // state++;
         }
-        else { //End
+        else { // End
         	AncientCityPathMiniRoomPlacer.placeAltar(core);
         }
     }
@@ -104,28 +104,28 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 		BlockFace pathFacing = core.getDirection();
 		if(state > 4) pathFacing = core.getDirection().getOppositeFace();
 		
-		//0 is center
-		//1, 8 is the segment closest to center
-		//2, 7 is next closest
-		//3, 6 is the next
-		//4, 5 is the sides (highest point in the arc)
+		// 0 is center
+		// 1, 8 is the segment closest to center
+		// 2, 7 is next closest
+		// 3, 6 is the next
+		// 4, 5 is the sides (highest point in the arc)
     	switch(state) {
     	case 0:
-    		//Debug arrow
+    		// Debug arrow
 //    		core.getUp().setType(Material.RED_WOOL);
 //    		core.getUp().getRear().getLeft().setType(Material.RED_WOOL);
 //    		core.getUp().getRear().getRight().setType(Material.RED_WOOL);
-        	//Middle of the arc.
+        	// Middle of the arc.
     		core.getUp(6).lsetType(Material.DEEPSLATE_BRICK_WALL);
     		core.getUp(5).lsetType(Material.DEEPSLATE_BRICKS);
 			Lantern lantern = (Lantern) Bukkit.createBlockData(Material.SOUL_LANTERN);
 			lantern.setHanging(true);
     		core.getUp(4).lsetBlockData(lantern);
 			
-    		//Support pillar
+    		// Support pillar
     		AncientCityUtils.placeSupportPillar(core.getDown());
     		
-    		//Mirror the sides to create the arc in the middle
+    		// Mirror the sides to create the arc in the middle
     		for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
     			
     			new StairBuilder(Material.POLISHED_DEEPSLATE_STAIRS)
@@ -152,14 +152,14 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         	break;
     	case 1, 8:
 			
-			//Upper stair
+			// Upper stair
 			new StairBuilder(Material.DEEPSLATE_TILE_STAIRS)
 			.setHalf(Half.TOP)
 			.setFacing(pathFacing.getOppositeFace())
 			.lapply(core.getUp(5));
     	
     		for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
-        		//Slab
+        		// Slab
     			new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
     			.setType(Type.TOP)
     			.lapply(core.getRelative(leftRight,2).getDown());
@@ -169,7 +169,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 //    			else
 //    				core.getUp().setType(Material.GREEN_WOOL);
     			
-    			//Stairs that complete the arc
+    			// Stairs that complete the arc
     			new StairBuilder(Material.POLISHED_DEEPSLATE_STAIRS)
     			.setFacing(pathFacing.getOppositeFace())
     			.lapply(core.getRelative(leftRight,2).getUp());
@@ -186,7 +186,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     		break;
     	case 2, 7:
     		for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
-        		//Slab
+        		// Slab
     			new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
     			.setType(Type.TOP)
     			.lapply(core.getRelative(leftRight,2).getDown())
@@ -198,13 +198,13 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     		}
     		break;
     	case 3, 6:
-    		//Center slab
+    		// Center slab
     		new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
 			.setType(Type.TOP)
 			.lapply(core.getUp(5));
     	
 	    	for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
-	    		//Slab
+	    		// Slab
 				new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
 				.setType(Type.TOP)
 				.lapply(core.getRelative(leftRight, 2).getUp(5));
@@ -215,13 +215,13 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 			}
     		break;
     	case 4, 5:
-    		//Center slab
+    		// Center slab
     		new SlabBuilder(Material.DEEPSLATE_BRICK_SLAB)
 			.setType(Type.TOP)
 			.lapply(core.getUp(5));
     	
 	    	for(BlockFace leftRight:BlockUtils.getAdjacentFaces(core.getDirection())) {
-	    		//Slab
+	    		// Slab
 	    		new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 				.setFacing(leftRight)
 				.setHalf(Half.TOP)
@@ -240,7 +240,7 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 
     @Override
     public boolean customCarve(@NotNull SimpleBlock base, BlockFace dir, int pathWidth) {
-        Wall core = new Wall(base.getRelative(0, 1, 0), dir);
+        Wall core = new Wall(base.getUp(), dir);
         int seed = 55 + core.getX() + core.getY() ^ 2 + core.getZ() ^ 3;
         EnumSet<Material> carveMaterials = BlockUtils.stoneLike.clone();
         carveMaterials.addAll(BlockUtils.caveDecoratorMaterials);

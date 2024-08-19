@@ -30,13 +30,13 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 		super(room, internalWalls);
 	}
 
-	//Refers to the library room width, not the width of one room cell.
+	// Refers to the library room width, not the width of one room cell.
 	private static final int roomWidth = 15;
 	@Override
 	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = BlockUtils.getDirectBlockFace(random);
-		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
+		// TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
 		try {
 			if(randomFace == BlockFace.NORTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);
@@ -78,27 +78,27 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 		
 		new OrientableBuilder(Material.DARK_OAK_LOG)
 		.setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
-		.apply(w.getRear().getRelative(0,5,0));
+		.apply(w.getRear().getUp(5));
 		
-		w.getRelative(0,6,0).downPillar(rand, 2, Material.CHAIN);
+		w.getUp(6).downPillar(rand, 2, Material.CHAIN);
 		Lantern lantern = (Lantern) Bukkit.createBlockData(Material.LANTERN);
 		lantern.setHanging(true);
-		w.getRelative(0,4,0).setBlockData(lantern);
+		w.getUp(4).setBlockData(lantern);
 		
 		new StairBuilder(Material.DARK_OAK_STAIRS)
 		.setFacing(BlockUtils.getLeft(w.getDirection()))
-		.apply(w.getRear().getRelative(0,3,0).getRight())
-		.apply(w.getRear().getRelative(0,3,0).getRight(3))
-		.apply(w.getRear().getRelative(0,4,0).getRight(2))
+		.apply(w.getRear().getUp(3).getRight())
+		.apply(w.getRear().getUp(3).getRight(3))
+		.apply(w.getRear().getUp(4).getRight(2))
 		.setFacing(BlockUtils.getRight(w.getDirection()))
-		.apply(w.getRear().getRelative(0,3,0).getLeft())
-		.apply(w.getRear().getRelative(0,3,0).getLeft(3))
-		.apply(w.getRear().getRelative(0,4,0).getLeft(2));
+		.apply(w.getRear().getUp(3).getLeft())
+		.apply(w.getRear().getUp(3).getLeft(3))
+		.apply(w.getRear().getUp(4).getLeft(2));
 
 		new StairBuilder(Material.DARK_OAK_STAIRS)
 		.setFacing(w.getDirection().getOppositeFace())
-		.apply(w.getRear().getRelative(0,4,0).getLeft())
-		.apply(w.getRear().getRelative(0,4,0).getRight());
+		.apply(w.getRear().getUp(4).getLeft())
+		.apply(w.getRear().getUp(4).getRight());
 	}
 	
 	@Override
@@ -114,10 +114,10 @@ public class MansionGroundLevelLibraryPopulator extends MansionRoomPopulator {
 		.apply(w.getRight());
 		if(rand.nextBoolean()) {
 			w.getLeft().setType(Material.BOOKSHELF);
-			w.getLeft().getRelative(0,1,0).setType(Material.LANTERN);
+			w.getLeft().getUp().setType(Material.LANTERN);
 		}else if(rand.nextBoolean()) {
 			w.getRight().setType(Material.BOOKSHELF);
-			w.getRight().getRelative(0,1,0).setType(Material.LANTERN);
+			w.getRight().getUp().setType(Material.LANTERN);
 		}
 	}
 

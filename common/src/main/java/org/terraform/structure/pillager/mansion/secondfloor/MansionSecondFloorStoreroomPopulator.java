@@ -28,7 +28,7 @@ public class MansionSecondFloorStoreroomPopulator extends MansionRoomPopulator {
 		super(room, internalWalls);
 	}
 
-	//Refers to the kitchen room width, not the width of one room cell.
+	// Refers to the kitchen room width, not the width of one room cell.
 	private static final int roomWidthX = 15;
 	private static final int roomWidthZ = 6;
 	@Override
@@ -36,7 +36,7 @@ public class MansionSecondFloorStoreroomPopulator extends MansionRoomPopulator {
 
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
-		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
+		// TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
 		try {
 			if(randomFace == BlockFace.NORTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);
@@ -59,8 +59,8 @@ public class MansionSecondFloorStoreroomPopulator extends MansionRoomPopulator {
 	}
 	
 
-	//Do not extend MansionRoomSchematicParser, as we want the looting to
-	//be done differently for this room specifically.
+	// Do not extend MansionRoomSchematicParser, as we want the looting to
+	// be done differently for this room specifically.
 	private static class MansionStoreroomSchematicParser extends SchematicParser
 	{
 		private final Random rand;
@@ -71,7 +71,7 @@ public class MansionSecondFloorStoreroomPopulator extends MansionRoomPopulator {
 	    @Override
 	    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 	    	if (data.getMaterial() == Material.CHEST) {
-	    		Material replacement = GenUtils.randMaterial(rand, 
+	    		Material replacement = GenUtils.randChoice(rand,
 	    				Material.CHEST, 
 	    				Material.CHEST, 
 	    				Material.CHEST, 

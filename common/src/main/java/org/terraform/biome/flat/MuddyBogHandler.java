@@ -12,6 +12,8 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.MushroomBuilder;
 import org.terraform.utils.BlockUtils;
@@ -39,12 +41,12 @@ public class MuddyBogHandler extends BiomeHandler {
         return CustomBiomeType.MUDDY_BOG;
     }
     
-    //Beach type. This will be used instead if the height is too close to sea level.
+    // Beach type. This will be used instead if the height is too close to sea level.
     public @NotNull BiomeBank getBeachType() {
     	return BiomeBank.BOG_BEACH;
     }
     
-    //River type. This will be used instead if the heightmap got carved into a river.
+    // River type. This will be used instead if the heightmap got carved into a river.
     public @NotNull BiomeBank getRiverType() {
     	return BiomeBank.BOG_RIVER;
     }
@@ -54,32 +56,31 @@ public class MuddyBogHandler extends BiomeHandler {
         return new Material[]{Material.GRASS_BLOCK,
                 Material.DIRT,
                 Material.DIRT,
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE),
-                GenUtils.randMaterial(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-
         SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
-        if(block.getRelative(0,1,0).getType() == Material.AIR &&
+        if(block.getUp().getType() == Material.AIR &&
                 block.getType() == Material.GRASS_BLOCK) {
             if(GenUtils.chance(random, 1, 85))
-                block.getRelative(0,1,0).setType(Material.DEAD_BUSH);
+                PlantBuilder.DEAD_BUSH.build(block.getUp());
             else if(GenUtils.chance(random, 1, 85))
-                block.getRelative(0,1,0).setType(Material.BROWN_MUSHROOM);
+                PlantBuilder.BROWN_MUSHROOM.build(block.getUp());
             else if(GenUtils.chance(random, 1, 85))
-                block.getRelative(0,1,0).setType(Material.GRASS);
+                PlantBuilder.GRASS.build(block.getUp());
             else if(GenUtils.chance(random, 1, 85))
-                BlockUtils.setDoublePlant(data, rawX, surfaceY+1, rawZ, Material.TALL_GRASS);
-            else if(GenUtils.chance(random, 1, 300))
-            {//Dripstone Cluster
+                PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY+1, rawZ);
+            else if(TConfigOption.areDecorationsEnabled() && GenUtils.chance(random, 1, 300))
+            {// Dripstone Cluster
                 BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.5f, block, Material.DRIPSTONE_BLOCK);
                 if(GenUtils.chance(random, 1, 7))
-                    BlockUtils.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(0,1,0));
+                    BlockUtils.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getUp());
                 for(BlockFace face:BlockUtils.xzPlaneBlockFaces)
                     if(GenUtils.chance(random, 1, 7))
-                        BlockUtils.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(face).getGround().getRelative(0,1,0));
+                        BlockUtils.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getRelative(face).getGround().getUp());
             }
 
         }
@@ -87,7 +88,7 @@ public class MuddyBogHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-		 //Small brown mushrooms on dry areas
+		 // Small brown mushrooms on dry areas
         SimpleLocation[] shrooms = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
 
         for (SimpleLocation sLoc : shrooms) {

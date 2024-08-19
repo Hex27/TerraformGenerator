@@ -29,26 +29,26 @@ public class LevelledElderRoomPopulator extends LevelledRoomPopulator {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
-        //Decorated walls
+        // Decorated walls
         for (Entry<Wall, Integer> walls : room.getFourWalls(data, 1).entrySet()) {
-            Wall w = walls.getKey().getRelative(0, 4, 0);
+            Wall w = walls.getKey().getUp(4);
             int length = walls.getValue();
             for (int j = 0; j < length; j++) {
                 if (j % 2 == 0)
                     w.LPillar(room.getHeight() - 1, rand, Material.PRISMARINE_BRICKS);
                 else {
                     w.LPillar(room.getHeight() - 1, rand, Material.PRISMARINE);
-                    w.getRelative(0, 3, 0).Pillar(4, rand, Material.SEA_LANTERN);
+                    w.getUp(3).Pillar(4, rand, Material.SEA_LANTERN);
                 }
                 w.setType(Material.DARK_PRISMARINE);
-                //w.getRelative(0,room.getHeight()-2-4,0).setType(Material.DARK_PRISMARINE);
+                // w.getRelative(0,room.getHeight()-2-4,0).setType(Material.DARK_PRISMARINE);
 
                 w = w.getLeft();
             }
         }
 
 
-        //Stairs at the top
+        // Stairs at the top
         for (Entry<Wall, Integer> walls : room.getFourWalls(data, 2).entrySet()) {
             Wall w = walls.getKey().getRelative(0, room.getHeight() - 2, 0);
             int length = walls.getValue();
@@ -63,7 +63,7 @@ public class LevelledElderRoomPopulator extends LevelledRoomPopulator {
             }
         }
 
-        //Elder
+        // Elder
         data.addEntity(room.getX() + 3,
                 room.getY() + 8,
                 room.getZ() - 3,

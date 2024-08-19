@@ -32,11 +32,11 @@ import net.minecraft.world.level.chunk.IChunkAccess;
 
 public class NMSInjector extends NMSInjectorAbstract {
 	
-	//private boolean heightInjectSuccess = true;
+	// private boolean heightInjectSuccess = true;
 	
 	@Override
 	public void startupTasks() {
-        //Inject new biomes
+        // Inject new biomes
         CustomBiomeHandler.init();
 	}
 	
@@ -50,24 +50,24 @@ public class NMSInjector extends NMSInjectorAbstract {
         CraftWorld cw = (CraftWorld) world;
         WorldServer ws = cw.getHandle();
         
-        //Force world to correct height
+        // Force world to correct height
         TerraformWorld.get(world).minY = -64;
         TerraformWorld.get(world).maxY = 320;
         
-        //String worldname,
-        //int seed,
-        //WorldChunkManager worldchunkmanager,
-        //WorldChunkManager worldchunkmanager1,
-        //StructureSettings structuresettings,
-        //long i
+        // String worldname,
+        // int seed,
+        // WorldChunkManager worldchunkmanager,
+        // WorldChunkManager worldchunkmanager1,
+        // StructureSettings structuresettings,
+        // long i
         NMSChunkGenerator bpg = new NMSChunkGenerator(
                 world.getName(),
                 (int) world.getSeed(),
-                ws.k().g());//, //k is getChunkProvider, g is getChunkGenerator()
-                //old,
-                //old,
-                //ws.k().g().d(),
-                //world.getSeed());
+                ws.k().g());// , // k is getChunkProvider, g is getChunkGenerator()
+                // old,
+                // old,
+                // ws.k().g().d(),
+                // world.getSeed());
         TerraformGeneratorPlugin.logger.info("NMSChunkGenerator Delegate is of type " + ws.k().g().getClass().getSimpleName());
         
         if(ws.k().g() instanceof CustomChunkGenerator) {
@@ -82,18 +82,18 @@ public class NMSInjector extends NMSInjectorAbstract {
             	TerraformGeneratorPlugin.logger.stackTrace(e);
             }
         }
-        //For Changing DimensionManager height
+        // For Changing DimensionManager height
     	TerraformGeneratorPlugin.logger.info("- minY " + ws.q_().k() + "   " + world.getMinHeight());
 		TerraformGeneratorPlugin.logger.info("- Height " + ws.q_().l() + "   " + world.getMaxHeight());
 		TerraformGeneratorPlugin.logger.info("- LogicalHeight " + ws.q_().m() + "   " + world.getLogicalHeight()); 
         
-		//Inject TerraformGenerator NMS chunk generator
+		// Inject TerraformGenerator NMS chunk generator
 		
-        PlayerChunkMap pcm = ws.k().a; //getChunkProvider().PlayerChunkMap
+        PlayerChunkMap pcm = ws.k().a; // getChunkProvider().PlayerChunkMap
 
         try {
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
-                    pcm, "u", bpg); //chunkGenerator
+                    pcm, "u", bpg); // chunkGenerator
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
             return false;
@@ -109,17 +109,17 @@ public class NMSInjector extends NMSInjectorAbstract {
         WorldServer ws = cw.getHandle();
         
         TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
-        //return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
+        // return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
         return new PopulatorDataICA(new PopulatorDataPostGen(chunk), tw, ws, ica, chunk.getX(), chunk.getZ());
     }
 
     @Override
     public @Nullable PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
-        //This is for the damn bees
+        // This is for the damn bees
         if (data instanceof PopulatorDataSpigotAPI pdata) {
             GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
             WorldServer ws = gas.getMinecraftWorld();
-            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.D()); //C is getSeed()
+            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.D()); // C is getSeed()
             return new PopulatorDataICA(data, tw, ws, gas.a(data.getChunkX(),data.getChunkZ()), data.getChunkX(), data.getChunkZ());
         }
         if(data instanceof PopulatorDataPostGen gdata)
@@ -141,7 +141,7 @@ public class NMSInjector extends NMSInjectorAbstract {
 
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             nbttagcompound.a("id", "minecraft:bee");
-            //TileEntityBeehive.storeBee
+            // TileEntityBeehive.storeBee
             teb.a(nbttagcompound, 0, false);
 
         } catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

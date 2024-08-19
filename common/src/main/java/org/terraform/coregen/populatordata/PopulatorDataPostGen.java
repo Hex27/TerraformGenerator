@@ -24,6 +24,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 
 public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract implements IPopulatorDataPhysicsCapable {
     private final @NotNull World w;
@@ -127,8 +128,8 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
 
     @Override
     public void addEntity(int x, int y, int z, @NotNull EntityType type) {
-    	//Always offset by 0.5 to prevent them spawning in corners.
-    	//Y is offset by a small bit to prevent falling through weird spawning areas
+    	// Always offset by 0.5 to prevent them spawning in corners.
+    	// Y is offset by a small bit to prevent falling through weird spawning areas
         Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),x+0.5,y+0.3,z+0.5), type);
         e.setPersistent(true);
         if(e instanceof LivingEntity)
@@ -138,6 +139,8 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     private static int spawnerRetries = 0;
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
+        if ( !TConfigOption.areAnimalsEnabled() ) return;
+
         Block b = w.getBlockAt(rawX, rawY, rawZ);
         b.setType(Material.SPAWNER, false);
         try {

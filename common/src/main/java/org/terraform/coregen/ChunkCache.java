@@ -25,7 +25,7 @@ public class ChunkCache {
      * blurredHeightCache will hold intermediate height blurring values
      * (calculated after dominantBiomeHeightCache)
      */
-    float[] arrayCache; //These 6 arrays are now one big array. No more nested pointers
+    float[] arrayCache; // These 6 arrays are now one big array. No more nested pointers
     BiomeBank[] biomeCache;
 
     public ChunkCache(TerraformWorld tw, int chunkX, int chunkZ) {
@@ -42,10 +42,10 @@ public class ChunkCache {
         this.tw = tw;
         this.chunkX = getChunkCoordinate(rawX);
         this.chunkZ = getChunkCoordinate(rawZ);
-        //initInternalCache(); THIS IS COMMENTED ON PURPOSE.
-        //THIS CONSTRUCTOR IS ONLY USED FOR CACHE HITS, SO DOES NOT INITIALIZE.
-        //Good practice mandates that we mark this constructor with protected,
-        //but the class calling this is in another package, so too bad!
+        // initInternalCache(); THIS IS COMMENTED ON PURPOSE.
+        // THIS CONSTRUCTOR IS ONLY USED FOR CACHE HITS, SO DOES NOT INITIALIZE.
+        // Good practice mandates that we mark this constructor with protected,
+        // but the class calling this is in another package, so too bad!
     }
 
     public static int getChunkCoordinate(int coordinate) {
@@ -61,7 +61,7 @@ public class ChunkCache {
         disgusting monster array with hardcoded numbers because of
         how speed sensitive this is.
         */
-        arrayCache = new float[1536]; //6*256 for 6 separate caches
+        arrayCache = new float[1536]; // 6*256 for 6 separate caches
 
         /*
         If arrays.fill gives further speed problems, just use

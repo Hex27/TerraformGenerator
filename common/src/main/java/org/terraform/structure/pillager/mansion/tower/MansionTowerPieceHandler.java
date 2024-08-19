@@ -17,10 +17,10 @@ import org.terraform.utils.GenUtils;
 
 public class MansionTowerPieceHandler {
 
-	//Contains rooms in 3d.
+	// Contains rooms in 3d.
 	public final @NotNull HashMap<SimpleLocation, JigsawStructurePiece> pieces = new HashMap<>();
     public final @NotNull ArrayList<JigsawStructurePiece> overlapperPieces = new ArrayList<>();
-    public static final int towerPieceWidth = 7; //2 less than groundFloorPiece
+    public static final int towerPieceWidth = 7; // 2 less than groundFloorPiece
     
 	private final MansionJigsawBuilder builder;
 	private final PopulatorDataAbstract data;
@@ -62,8 +62,8 @@ public class MansionTowerPieceHandler {
 		for(JigsawStructurePiece piece:this.pieces.values()) {
 			ArrayList<BlockFace> faces = new ArrayList<>();
 			for(BlockFace face:BlockUtils.directBlockFaces) {
-				//Only wall off this area if there are no adjacent rooms there.
-				//Place the wall regardless.
+				// Only wall off this area if there are no adjacent rooms there.
+				// Place the wall regardless.
 				if(!this.pieces.containsKey(piece.getRoom().getSimpleLocation()
 						.getRelative(face, towerPieceWidth))) {
 					JigsawStructurePiece  newWall;
@@ -96,7 +96,7 @@ public class MansionTowerPieceHandler {
 	public void buildPieces(Random rand) {
         for (JigsawStructurePiece piece : this.pieces.values()) {
 
-        	//Force room to be air first
+        	// Force room to be air first
         	int[] lowerCorner = piece.getRoom().getLowerCorner(0);
         	int[] upperCorner = piece.getRoom().getUpperCorner(0);
         	int lowestY = piece.getRoom().getY() + 1;
@@ -107,7 +107,7 @@ public class MansionTowerPieceHandler {
         			for(int y = lowestY; y < upperY; y++)
         				builder.getCore().getPopData().setType(x, y, z, Material.AIR);
             
-            //Build room
+            // Build room
         	if(piece instanceof MansionStandardTowerPiece)
         		((MansionStandardTowerPiece) piece).decorateAwkwardCorners(rand);
             piece.build(builder.getCore().getPopData(), rand);
@@ -116,7 +116,7 @@ public class MansionTowerPieceHandler {
 	
 	public void buildRoofs(BlockFace roofFacing, Random rand) {
         for (JigsawStructurePiece piece : this.pieces.values()) {
-        	//Build roof.
+        	// Build roof.
         	if(((MansionStandardTowerPiece) piece).isHighestPieceInTower())
         		((MansionStandardTowerPiece) piece).placeTentRoof(data, roofFacing, rand);
         }
@@ -124,7 +124,7 @@ public class MansionTowerPieceHandler {
 	
 	public void buildOverlapperPieces(Random rand) {
         for (JigsawStructurePiece piece : this.overlapperPieces) {
-            //Build room
+            // Build room
             piece.build(builder.getCore().getPopData(), rand);
         }
 	}

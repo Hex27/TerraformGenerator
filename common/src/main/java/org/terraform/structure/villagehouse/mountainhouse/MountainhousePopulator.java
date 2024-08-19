@@ -23,12 +23,12 @@ public class MountainhousePopulator extends VillageHousePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
         
-        //Forcefully sink the house downwards to try and make it more tolerant to wackiness
+        // Forcefully sink the house downwards to try and make it more tolerant to wackiness
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         int sinkDown = GenUtils.randInt(random, 7, 10);
         spawnMountainhouse(tw, random, 
@@ -50,7 +50,7 @@ public class MountainhousePopulator extends VillageHousePopulator {
     		.setHardReplace(true)
     		.build();
     		
-        	//Place platform to prevent mountain weirdness
+        	// Place platform to prevent mountain weirdness
     		new SphereBuilder(random, core.getDown(2).getRight(7).getFront(3), 
     				Material.DIRT)
     		.setRX(12)
@@ -64,7 +64,7 @@ public class MountainhousePopulator extends VillageHousePopulator {
     		.setSphereType(SphereType.LOWER_SEMISPHERE)
     		.build(); 
     		
-    		//Place schematic
+    		// Place schematic
             y += GenUtils.randInt(random, 1, 3);
             core = core.getAtY(y);
             TerraSchematic mountainHouse = TerraSchematic.load("mountainhouse",  core);
@@ -74,11 +74,11 @@ public class MountainhousePopulator extends VillageHousePopulator {
 
             TerraformGeneratorPlugin.logger.info("Spawning mountainhouse at " + x + "," + y + "," + z + " with rotation of " + mountainHouse.getFace());
 
-            data.addEntity(x, y + 1, z, EntityType.VILLAGER); //Two villagers
+            data.addEntity(x, y + 1, z, EntityType.VILLAGER); // Two villagers
             data.addEntity(x, y + 1, z, EntityType.VILLAGER);
-            data.addEntity(x, y + 1, z, EntityType.CAT); //And a cat.
+            data.addEntity(x, y + 1, z, EntityType.CAT); // And a cat.
 
-            //Spawn a base on the house to sit on
+            // Spawn a base on the house to sit on
             for (int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
                 for (int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
                     if (data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
@@ -90,7 +90,7 @@ public class MountainhousePopulator extends VillageHousePopulator {
                 }
             }
 
-            //Spawn a stairway from the house.
+            // Spawn a stairway from the house.
             new StairwayBuilder(Material.COBBLESTONE, Material.STONE_BRICKS)
             .setAngled(false)
             .setMaxExtensionForward(10)

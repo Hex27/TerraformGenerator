@@ -32,15 +32,16 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
+        if (!isEnabled()) return false;
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
             
-        		if(!biome.getType().isDry())
+        		if(!biome.isDry())
         			return false;
         	
-            //If it is below sea level, DON'T SPAWN IT.
+            // If it is below sea level, DON'T SPAWN IT.
             if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
                 if (biome == (BiomeBank.DESERT)
                         || biome == (BiomeBank.BADLANDS)
@@ -62,12 +63,14 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
+        if (!isEnabled()) return;
+
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
-        //On ground, spawn dry village houses
-        //int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        // On ground, spawn dry village houses
+        // int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
-        //if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+        // if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
         if (biome == (BiomeBank.DESERT)
                 || biome == (BiomeBank.BADLANDS)
                 || biome == (BiomeBank.ICE_SPIKES)) {
@@ -90,20 +93,20 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
             new MountainhousePopulator().populate(tw, data);
         }
-        //}
+        // }
     }
 
     @Override
     public boolean isEnabled() {
-        return  (BiomeBank.isBiomeEnabled(BiomeBank.DESERT) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.BADLANDS) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.ICE_SPIKES) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_TAIGA) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_WASTELAND) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.ROCKY_MOUNTAINS) )
-        		&& (TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean() 
-        				|| TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean()
-        				|| TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean());
+        return TConfigOption.areStructuresEnabled() && (BiomeBank.isBiomeEnabled(BiomeBank.DESERT)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.BADLANDS)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.ICE_SPIKES)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_TAIGA)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_WASTELAND)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE)
+                                                        || BiomeBank.isBiomeEnabled(BiomeBank.ROCKY_MOUNTAINS)) && (
+                       TConfigOption.STRUCTURES_ANIMALFARM_ENABLED.getBoolean()
+                       || TConfigOption.STRUCTURES_FARMHOUSE_ENABLED.getBoolean()
+                       || TConfigOption.STRUCTURES_MOUNTAINHOUSE_ENABLED.getBoolean());
     }
 }

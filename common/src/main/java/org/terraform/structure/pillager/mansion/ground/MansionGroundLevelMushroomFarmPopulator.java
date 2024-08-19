@@ -26,14 +26,14 @@ public class MansionGroundLevelMushroomFarmPopulator extends MansionRoomPopulato
 		super(room, internalWalls);
 	}
 
-	//Refers to the kitchen room width, not the width of one room cell.
+	// Refers to the kitchen room width, not the width of one room cell.
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
 	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
-		//TerraformGeneratorPlugin.logger.info("Mushroom Farm at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
+		// TerraformGeneratorPlugin.logger.info("Mushroom Farm at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
 		try {
 			if(randomFace == BlockFace.NORTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);

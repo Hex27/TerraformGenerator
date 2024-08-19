@@ -28,20 +28,20 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
     @Override
     public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
-        Wall w = entry.getKey().getRelative(0, -1, 0);
+        Wall w = entry.getKey().getDown();
 
-        //Wall
+        // Wall
         for (int i = 0; i < entry.getValue(); i++) {
-            w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+            w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w = w.getLeft();
         }
 
         Wall core = new Wall(new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ()), this.getRotation());
         core = core.getRear(2);
         
-        //Stairway down
+        // Stairway down
 
-        if(core.getFront().getType().isSolid()) {
+        if(core.getFront().isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
 	        .setAngled(true)
 	        .setStopAtWater(true)
@@ -53,63 +53,63 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
 	        .setAngled(true)
 	        .setStopAtWater(true)
-	        .build(core.getFront().getRelative(0, -1, 0));
+	        .build(core.getFront().getDown());
         
     }
     
     @Override
     public void postBuildDecoration(@NotNull Random rand, @NotNull PopulatorDataAbstract data) {
-    	if(getWallType() == PlainsVillageForgeWallType.SOLID) { //Door entrance
+    	if(getWallType() == PlainsVillageForgeWallType.SOLID) { // Door entrance
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
-    		Wall w = entry.getKey().getRelative(0, -1, 0);
+    		Wall w = entry.getKey().getDown();
     		for (int i = 0; i < entry.getValue(); i++) {
-    			w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+    			w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     			w.RPillar(5, rand, Material.COBBLESTONE, Material.ANDESITE, Material.STONE);
     			w = w.getLeft();
     		}
     		 Wall core = new Wall(new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ()), this.getRotation());
 	         core = core.getRear(2);
-	         core.getRelative(0,-1,0).setType(Material.CHISELED_STONE_BRICKS);
+	         core.getDown().setType(Material.CHISELED_STONE_BRICKS);
     	     BlockUtils.placeDoor(data, plainsVillagePopulator.woodDoor, core.getX(), core.getY(), core.getZ(), core.getDirection().getOppositeFace());
     	     
-    	     //Door decor
-    	     core.getRelative(0,2,0).getFront().setType(Material.STONE_BRICK_SLAB);
+    	     // Door decor
+    	     core.getUp(2).getFront().setType(Material.STONE_BRICK_SLAB);
     	     
-    	     core.getRelative(0,2,0).setType(Material.CHISELED_STONE_BRICKS);
+    	     core.getUp(2).setType(Material.CHISELED_STONE_BRICKS);
     	     core.getLeft().Pillar(2, rand, Material.CHISELED_STONE_BRICKS);
     	     core.getRight().Pillar(2, rand, Material.CHISELED_STONE_BRICKS);
     	     
     	     core.getLeft().getFront().setType(Material.STONE_BRICK_WALL);
     	     core.getRight().getFront().setType(Material.STONE_BRICK_WALL);
 
-    	     core.getLeft().getFront().getRelative(0,-1,0).setType(Material.STONE_BRICKS);
-    	     core.getRight().getFront().getRelative(0,-1,0).setType(Material.STONE_BRICKS);
+    	     core.getLeft().getFront().getDown().setType(Material.STONE_BRICKS);
+    	     core.getRight().getFront().getDown().setType(Material.STONE_BRICKS);
     	     
     	     new StairBuilder(Material.STONE_BRICK_STAIRS)
     	     .setFacing(BlockUtils.getLeft(core.getDirection()))
-    	     .apply(core.getRight().getFront().getRelative(0,1,0))
+    	     .apply(core.getRight().getFront().getUp())
     	     .setFacing(BlockUtils.getRight(core.getDirection()))
-    	     .apply(core.getLeft().getFront().getRelative(0,1,0))
+    	     .apply(core.getLeft().getFront().getUp())
     	     .setHalf(Half.TOP)
-    	     .apply(core.getRight().getRelative(0,2,0))
+    	     .apply(core.getRight().getUp(2))
     	     .setFacing(BlockUtils.getLeft(core.getDirection()))
-    	     .apply(core.getLeft().getRelative(0,2,0));
+    	     .apply(core.getLeft().getUp(2));
     	}
-    	else //Just a hole in a fence
+    	else // Just a hole in a fence
     	{
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
     		Wall w = entry.getKey();
     		for (int i = 0; i < entry.getValue(); i++) {
-    			w.getRelative(0,-2,0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+    			w.getDown(2).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     			
     			if(i == 2) {
-    				//Opening
-    				w.getRelative(0,-1,0).setType(Material.CHISELED_STONE_BRICKS);
+    				// Opening
+    				w.getDown().setType(Material.CHISELED_STONE_BRICKS);
     			}
     			else if(i == 1 || i == 3) 
     			{
-    				w.getRelative(0,-1,0).Pillar(2, rand, plainsVillagePopulator.woodLog);
-    				w.getRelative(0,1,0).setType(Material.STONE_SLAB,Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB);
+    				w.getDown().Pillar(2, rand, plainsVillagePopulator.woodLog);
+    				w.getUp().setType(Material.STONE_SLAB,Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB);
     			}
     			else
     			{
@@ -117,7 +117,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
         			w.CorrectMultipleFacing(1);
         			new OrientableBuilder(plainsVillagePopulator.woodLog)
         			.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(w.getDirection())))
-        			.apply(w.getRelative(0,-1,0));
+        			.apply(w.getDown());
     			}
     			
     			w = w.getLeft();

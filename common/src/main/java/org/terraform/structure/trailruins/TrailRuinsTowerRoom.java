@@ -67,16 +67,16 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
                     GenUtils.getSign(rand)*rand.nextInt(3)
             );
 
-            //Shuffle terracotta types
-            this.newMapping.put(Material.YELLOW_GLAZED_TERRACOTTA, GenUtils.randMaterial(BlockUtils.GLAZED_TERRACOTTA));
-            this.newMapping.put(Material.LIGHT_BLUE_TERRACOTTA, GenUtils.randMaterial(BlockUtils.TERRACOTTA));
-            this.newMapping.put(Material.CYAN_GLAZED_TERRACOTTA, GenUtils.randMaterial(BlockUtils.GLAZED_TERRACOTTA));
-            this.newMapping.put(Material.CYAN_TERRACOTTA, GenUtils.randMaterial(BlockUtils.TERRACOTTA));
+            // Shuffle terracotta types
+            this.newMapping.put(Material.YELLOW_GLAZED_TERRACOTTA, GenUtils.randChoice(BlockUtils.GLAZED_TERRACOTTA));
+            this.newMapping.put(Material.LIGHT_BLUE_TERRACOTTA, GenUtils.randChoice(BlockUtils.TERRACOTTA));
+            this.newMapping.put(Material.CYAN_GLAZED_TERRACOTTA, GenUtils.randChoice(BlockUtils.GLAZED_TERRACOTTA));
+            this.newMapping.put(Material.CYAN_TERRACOTTA, GenUtils.randChoice(BlockUtils.TERRACOTTA));
         }
 
         @Override
         public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
-            //If within destruction zone, don't place
+            // If within destruction zone, don't place
             if(block.distance(destruction) < 3) return;
 
             if(newMapping.containsKey(data.getMaterial())) {
@@ -102,7 +102,7 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
                     }
                     else
                         block.getUp(i).setType(Material.SAND, Material.GRAVEL);
-                }else break; //Stack up, but break if its no longer stone
+                }else break; // Stack up, but break if its no longer stone
             }
         }
     }

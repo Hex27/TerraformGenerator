@@ -18,7 +18,7 @@ public class BadlandsMineEntranceParser extends SchematicParser {
     static @Nullable FastNoise noise = null;
     private boolean didPlaceLantern = false;
     
-    //Don't cache, as it does not change based on terraformworld.
+    // Don't cache, as it does not change based on terraformworld.
     static double getNoise(int x, int y, int z) {
         if (noise == null) {
             noise = new FastNoise();
@@ -63,7 +63,7 @@ public class BadlandsMineEntranceParser extends SchematicParser {
             case DARK_OAK_FENCE: {
                 if (willPlaceFence(block)) {
                     block.lsetBlockData(data);
-                } else if (willPlaceFence(block.getRelative(0, 1, 0))
+                } else if (willPlaceFence(block.getUp())
                         && !didPlaceLantern) {
                     Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
                     l.setHanging(true);
@@ -77,7 +77,7 @@ public class BadlandsMineEntranceParser extends SchematicParser {
                 if (noiseValue < 0) {
                     SimpleBlock b = block;
                     while (b.getType() == Material.RED_SAND) {
-                        b = b.getRelative(0, 1, 0);
+                        b = b.getUp();
                     }
                     b.lsetType(Material.RED_SAND);
                 }

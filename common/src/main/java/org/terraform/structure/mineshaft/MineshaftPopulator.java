@@ -25,19 +25,21 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
-        //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        //int[] coords = mc.getCenterBiomeSectionBlockCoords();
-        	
-		//Do not spawn mineshafts under deep oceans, there's no space.
+        if (!isEnabled()) return false;
+
+        // MegaChunk mc = new MegaChunk(chunkX, chunkZ);
+        // int[] coords = mc.getCenterBiomeSectionBlockCoords();
+
+		// Do not spawn mineshafts under deep oceans, there's no space.
 		if(biome.getType() == BiomeType.DEEP_OCEANIC)
 			return false;
 
-		//Don't compete with badlandsmine for space
+		// Don't compete with badlandsmine for space
 		if(biome == BiomeBank.BADLANDS_CANYON)
 			return false;
-		
-		//Do height and space checks
-		//In the interest of optimisation, this check will not be performed.
+
+		// Do height and space checks
+		// In the interest of optimisation, this check will not be performed.
 
         return rollSpawnRatio(tw,chunkX,chunkZ);
     }
@@ -68,12 +70,12 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
         }
         else
         {
-            //Badlands mines want to spawn an entrance shaft. Because of this,
-            //they will spawn closer to the surface.
+            // Badlands mines want to spawn an entrance shaft. Because of this,
+            // they will spawn closer to the surface.
             y = (int) (HeightMap.CORE.getHeight(tw,x,z) - BadlandsMinePopulator.shaftDepth);
         }
 
-        //Level One
+        // Level One
         Random hashedRand = tw.getHashedRand(mc.getX(), mc.getZ(), 179821643);
         boolean doubleLevel = hashedRand.nextBoolean();
 
@@ -91,7 +93,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
         if (doubleLevel)
             gen.registerRoomPopulator(new ShaftRoomPopulator(tw.getHashedRand(mc.getX(), mc.getZ(),213098), true, false));
 
-        //To connect the mineshaft to the surface entrance
+        // To connect the mineshaft to the surface entrance
         if (badlandsMineshaft) {
             CubeRoom brokenShaft = new CubeRoom(
                     15,
@@ -109,10 +111,10 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
         ps.writer = new CavePathWriter(0f, 1f, 0f, 0,1,0);
         gen.calculateRoomPopulators(tw);
         state.roomPopulatorStates.add(gen);
-        //gen.fill(data, tw, Material.CAVE_AIR);
+        // gen.fill(data, tw, Material.CAVE_AIR);
 
         if (doubleLevel) {
-            //Level Two
+            // Level Two
             RoomLayoutGenerator secondGen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 10, x, y + 15, z, 150);
             pathRand = tw.getHashedRand(x, y + 15, z, 2);
             secondGen.setPathPopulator(badlandsMineshaft ? new BadlandsMineshaftPathPopulator(pathRand) : new MineshaftPathPopulator(pathRand));
@@ -144,7 +146,7 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
             ps.writer = new CavePathWriter(0f, 1f, 0f, 0,1,0);
             secondGen.calculateRoomPopulators(tw);
             state.roomPopulatorStates.add(secondGen);
-            //secondGen.fill(data, tw, Material.CAVE_AIR);
+            // secondGen.fill(data, tw, Material.CAVE_AIR);
         }
 
         return state;
@@ -157,9 +159,9 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_MINESHAFT_ENABLED.getBoolean();
     }
-    
+
     @Override
     public int getChunkBufferDistance() {
     	return 0;

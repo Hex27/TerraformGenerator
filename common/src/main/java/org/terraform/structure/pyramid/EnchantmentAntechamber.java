@@ -28,11 +28,11 @@ public class EnchantmentAntechamber extends Antechamber {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
-        //Enchantment Table
+        // Enchantment Table
         data.setType(room.getX(), room.getY() + 1, room.getZ(), Material.ENCHANTING_TABLE);
 
         SimpleBlock core = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
-        //Place shelves and Lecterns
+        // Place shelves and Lecterns
         HashMap<Wall, Integer> tableWalls = new HashMap<>() {{
             put(new Wall(core.getRelative(2, 0, -2), BlockFace.SOUTH), 5);
             put(new Wall(core.getRelative(-2, 0, 2), BlockFace.NORTH), 5);

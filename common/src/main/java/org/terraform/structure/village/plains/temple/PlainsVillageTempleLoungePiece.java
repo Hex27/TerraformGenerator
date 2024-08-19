@@ -5,6 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.BlockUtils;
@@ -27,21 +28,26 @@ public class PlainsVillageTempleLoungePiece extends PlainsVillageTempleStandardP
 	@Override
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
-		
-        Material stairType = stairTypes[random.nextInt(stairTypes.length)];
-        
-        SimpleBlock core = new SimpleBlock(data,this.getRoom().getX(),this.getRoom().getY()+1,this.getRoom().getZ());
-        
-        for(BlockFace face:BlockUtils.getRandomBlockfaceAxis(random)) {
 
-        	new StairBuilder(stairType)
-        	.setFacing(face)
-        	.apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[0]))
-        	.apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[1]));
-        
+        Material stairType = stairTypes[random.nextInt(stairTypes.length)];
+
+        SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
+
+        for(BlockFace face : BlockUtils.getRandomBlockfaceAxis(random)) {
+
+            new StairBuilder(stairType)
+                    .setFacing(face)
+                    .apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[0]))
+                    .apply(core.getRelative(face).getRelative(BlockUtils.getAdjacentFaces(face)[1]));
+
         }
-        core.setType(plainsVillagePopulator.woodLog,Material.CRAFTING_TABLE,plainsVillagePopulator.woodPlank);
-        core.getRelative(0,1,0).setType(Material.LANTERN,BlockUtils.pickPottedPlant());
+        if(TConfigOption.areDecorationsEnabled()) {
+            core.setType(plainsVillagePopulator.woodLog, Material.CRAFTING_TABLE, plainsVillagePopulator.woodPlank);
+            if(!TConfigOption.arePlantsEnabled() || random.nextBoolean())
+                core.getUp().setType(Material.LANTERN);
+            else
+                BlockUtils.pickPottedPlant().build(core.getUp());
+        }
     }
 
 }

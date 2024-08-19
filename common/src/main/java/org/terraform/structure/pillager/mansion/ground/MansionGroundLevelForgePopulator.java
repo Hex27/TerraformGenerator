@@ -32,14 +32,14 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 		super(room, internalWalls);
 	}
 
-	//Refers to the kitchen room width, not the width of one room cell.
+	// Refers to the kitchen room width, not the width of one room cell.
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
 	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
-		//TerraformGeneratorPlugin.logger.info("Mushroom Farm at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
+		// TerraformGeneratorPlugin.logger.info("Mushroom Farm at " + this.getRoom().getSimpleLocation() + " picking face: " + randomFace);
 		try {
 			if(randomFace == BlockFace.NORTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);
@@ -93,9 +93,9 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 		.apply(w.getRight())
 		.apply(w.getRight(2));
 		
-		ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).get(), w.getDirection(), rand);
-		ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).getLeft(2).get(), w.getDirection(), rand);
-		ArmorStandUtils.placeArmorStand(w.getRelative(0,2,0).getRight(2).get(), w.getDirection(), rand);
+		ArmorStandUtils.placeArmorStand(w.getUp(2).get(), w.getDirection(), rand);
+		ArmorStandUtils.placeArmorStand(w.getUp(2).getLeft(2).get(), w.getDirection(), rand);
+		ArmorStandUtils.placeArmorStand(w.getUp(2).getRight(2).get(), w.getDirection(), rand);
 		
 	}
 	
@@ -109,7 +109,7 @@ public class MansionGroundLevelForgePopulator extends MansionRoomPopulator {
 	    public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             super.applyData(block, data);
 	        if (data.getMaterial() == Material.POLISHED_DIORITE) {
-	            ArmorStandUtils.placeArmorStand(block.getRelative(0,1,0), BlockUtils.getDirectBlockFace(rand), rand);
+	            ArmorStandUtils.placeArmorStand(block.getUp(), BlockUtils.getDirectBlockFace(rand), rand);
 	        }
 	    }
 	}

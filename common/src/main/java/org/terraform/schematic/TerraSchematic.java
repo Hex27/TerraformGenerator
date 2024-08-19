@@ -46,7 +46,7 @@ public class TerraSchematic {
     BlockFace face = BlockFace.NORTH;
     private double VERSION_VALUE;
 
-    //North is always the default blockface.
+    // North is always the default blockface.
     //
     public TerraSchematic(SimpleBlock vector) {
         this.schematicFolder = new File(TerraformGeneratorPlugin.get().getDataFolder(), SCHEMATIC_FOLDER);
@@ -67,9 +67,9 @@ public class TerraSchematic {
     }
 
     public static @NotNull TerraSchematic load(String internalPath, SimpleBlock refPoint) throws FileNotFoundException {
-    	//A new object gets created from here. If the path is in the cache,
-    	//this object is NOT the one that gets returned. Instead, a clone is
-    	//returned, with a new hashmap copy and a (broken) version number.
+    	// A new object gets created from here. If the path is in the cache,
+    	// this object is NOT the one that gets returned. Instead, a clone is
+    	// returned, with a new hashmap copy and a (broken) version number.
     	TerraSchematic schem = new TerraSchematic(refPoint);
         if(cache.containsKey(internalPath)) { 
         	schem.data = cache.get(internalPath);
@@ -79,7 +79,7 @@ public class TerraSchematic {
         boolean wasInDataFolder = false;
         InputStream is = TerraformGeneratorPlugin.get().getClass().getResourceAsStream("/" + internalPath + ".terra");
         if(is == null) {
-            //Try to lookup in the schematics folder
+            // Try to lookup in the schematics folder
             final File schematicFolder = new File(TerraformGeneratorPlugin.get().getDataFolder(), SCHEMATIC_FOLDER);
             final File schematicFile = new File(schematicFolder, internalPath + ".terra");
             try{
@@ -93,9 +93,9 @@ public class TerraSchematic {
             wasInDataFolder = true;
         }
 
-        Scanner sc = new Scanner(is);    //file to be scanned
+        Scanner sc = new Scanner(is);    // file to be scanned
 
-        String line = sc.nextLine(); //First line is the schematic's version.
+        String line = sc.nextLine(); // First line is the schematic's version.
         schem.VERSION_VALUE = Double.parseDouble(line);
         
         while (sc.hasNextLine()) {
@@ -107,14 +107,14 @@ public class TerraSchematic {
             BlockData value;
             try {
                 value = Bukkit.createBlockData(cont[1]);
-                //TerraformGeneratorPlugin.logger.info("loaded: " + value.getAsString());
+                // TerraformGeneratorPlugin.logger.info("loaded: " + value.getAsString());
             } catch (IllegalArgumentException e) {
                 BlockDataFixerAbstract fixer = TerraformGeneratorPlugin.injector.getBlockDataFixer();
                 if (fixer != null) {
                     value = Bukkit.createBlockData(fixer.updateSchematic(schem.getVersionValue(),cont[1]));
                     
                 } else {
-                    //GG
+                    // GG
                     throw e;
                 }
             }
@@ -122,7 +122,7 @@ public class TerraSchematic {
         }
         sc.close();
         
-        //Cache all small schematics that are not in the data folder
+        // Cache all small schematics that are not in the data folder
         if(schem.data.size() < 100 && !wasInDataFolder)
         	cache.put(internalPath, schem.data);
         return schem;
@@ -130,7 +130,7 @@ public class TerraSchematic {
 
     public void registerBlock(@NotNull Block b) {
         Vector rel = b.getLocation().toVector().subtract(refPoint.toVector());
-        //String coords = rel.getBlockX() + "," + rel.getBlockY() + "," + rel.getBlockZ();
+        // String coords = rel.getBlockX() + "," + rel.getBlockY() + "," + rel.getBlockZ();
         data.put(rel, b.getBlockData());
     }
 
@@ -175,16 +175,16 @@ public class TerraSchematic {
                 else if (bd instanceof Directional r) {
                     if (BlockUtils.isDirectBlockFace(r.getFacing()))
                         if (face == BlockFace.SOUTH) {
-                        	//South means flip it to opposite face
-                        	//TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + r.getFacing().getOppositeFace());
+                        	// South means flip it to opposite face
+                        	// TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + r.getFacing().getOppositeFace());
                             r.setFacing(r.getFacing().getOppositeFace());
                         } else if (face == BlockFace.WEST) {
-                        	//Turn left
-                        	//TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + BlockUtils.getAdjacentFaces(r.getFacing())[1]);
+                        	// Turn left
+                        	// TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + BlockUtils.getAdjacentFaces(r.getFacing())[1]);
                             r.setFacing(BlockUtils.getAdjacentFaces(r.getFacing())[1]);
                         } else if (face == BlockFace.EAST) {
-                        	//Turn right
-                        	//TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + BlockUtils.getAdjacentFaces(r.getFacing())[0]);
+                        	// Turn right
+                        	// TerraformGeneratorPlugin.logger.info(r.getMaterial() + ":" + r.getFacing() + " ->" + BlockUtils.getAdjacentFaces(r.getFacing())[0]);
                             r.setFacing(BlockUtils.getAdjacentFaces(r.getFacing())[0]);
                         }
                 } 
@@ -199,13 +199,13 @@ public class TerraSchematic {
                 		if(w.getFace(wireFace) == Connection.NONE) continue;
                 		
                 		if (this.face == BlockFace.SOUTH) {
-                        	//South means flip it to opposite face
+                        	// South means flip it to opposite face
                 			newData.setFace(wireFace.getOppositeFace(), w.getFace(wireFace));
                         } else if (this.face == BlockFace.WEST) {
-                        	//Turn left
+                        	// Turn left
                         	newData.setFace(BlockUtils.getAdjacentFaces(wireFace)[1], w.getFace(wireFace));
                         } else if (this.face == BlockFace.EAST) {
-                        	//Turn right
+                        	// Turn right
                         	newData.setFace(BlockUtils.getAdjacentFaces(wireFace)[0], w.getFace(wireFace));
                         }
                         else
@@ -214,7 +214,7 @@ public class TerraSchematic {
                 	bd = newData;
                 }
 
-                //Apply version-specific updates
+                // Apply version-specific updates
                 if (bdfa != null)
                     bdfa.correctFacing(pos, null, bd, face);
             }
@@ -223,7 +223,7 @@ public class TerraSchematic {
         }
         
         parser.applyDelayedData();
-        //Multiple-facing blocks are just gonna be painful.
+        // Multiple-facing blocks are just gonna be painful.
         for (Vector pos : multiFace) {
             SimpleBlock b = refPoint.getRelative(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ());
             if(b.getBlockData() instanceof MultipleFacing)
@@ -238,7 +238,7 @@ public class TerraSchematic {
     }
 
     public void export(@NotNull String path) throws IOException {
-        //Validate it again.
+        // Validate it again.
         String validation = new FilenameArgument("schem-name", false).validate(null,path);
         if(!validation.isEmpty())
             throw new IOException(validation);
@@ -256,7 +256,7 @@ public class TerraSchematic {
         FileOutputStream outputStream = new FileOutputStream(outputFile);
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
         
-        //Append version header
+        // Append version header
         bufferedWriter.write(Version.DOUBLE+"");
         bufferedWriter.newLine();
         

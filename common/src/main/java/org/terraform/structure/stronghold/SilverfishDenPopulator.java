@@ -22,15 +22,15 @@ public class SilverfishDenPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Spawn a random sphere of silverfish eggs
+        // Spawn a random sphere of silverfish eggs
         SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight() / 2 - 2, room.getZ());
         BlockUtils.replaceUpperSphere(rand.nextInt(9999), (room.getWidthX() - 2) / 2f, (room.getHeight() - 3), (room.getWidthZ() - 2) / 2f, base, false, Material.INFESTED_STONE,
                 Material.INFESTED_STONE, Material.CAVE_AIR, Material.STONE);
 
-        //Silverfish spawner in the middle
+        // Silverfish spawner in the middle
         data.setSpawner(room.getX(), room.getY() + 1, room.getZ(), EntityType.SILVERFISH);
 
-        //Spawn loot chests
+        // Spawn loot chests
         int[] upperBounds = room.getUpperCorner();
         int[] lowerBounds = room.getLowerCorner();
 

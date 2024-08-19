@@ -108,7 +108,7 @@ public class BoxBuilder {
         	for (float x = -rX*(1f+ fuzzMultiplier)*yMultiplier; x <= rX*(1f+ fuzzMultiplier)*yMultiplier; x++) {
                 for (float z = -rZ*(1f+ fuzzMultiplier)*yMultiplier; z <= rZ*(1f+ fuzzMultiplier)*yMultiplier; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getY(), rel.getZ()));
                     
                     if (Math.abs(x) <= rX * (1+(noiseVal* fuzzMultiplier))
@@ -134,22 +134,22 @@ public class BoxBuilder {
     
     private void unitReplace(@NotNull SimpleBlock rel) {
     	if(replaceWhitelist.isEmpty()) {
-    		if (hardReplace || !rel.getType().isSolid()) {
-                rel.setType(GenUtils.randMaterial(random, types));
+    		if (hardReplace || !rel.isSolid()) {
+                rel.setType(GenUtils.randChoice(random, types));
             }
     		else
     			return;
     	} else if(replaceWhitelist.contains(rel.getType())) {
-            rel.setType(GenUtils.randMaterial(random, types));
+            rel.setType(GenUtils.randChoice(random, types));
     	}
     	else
     		return;
     	
-    	if(rel.getRelative(0,-1,0).getType().isSolid()) {
+    	if(rel.getDown().isSolid()) {
 	    	if(upperType != null)
-	    		rel.getRelative(0,1,0).lsetType(upperType);
+	    		rel.getUp().lsetType(upperType);
 	    	if(lowerType != null)
-	    		rel.getRelative(0,-1,0).setType(lowerType);
+	    		rel.getDown().setType(lowerType);
     	}
     }
 

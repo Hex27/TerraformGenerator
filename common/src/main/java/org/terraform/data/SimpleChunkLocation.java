@@ -44,7 +44,7 @@ public class SimpleChunkLocation implements Cloneable {
         return Bukkit.getWorld(loc.world).getChunkAt(loc.x, loc.z);
     }
 
-    //world , x, z
+    // world , x, z
     public static SimpleChunkLocation chunkStrToLoc(@Nullable String chunk) {
         if (chunk == null) return null;
         String[] split = StringUtils.split(StringUtils.deleteWhitespace(chunk), ',');

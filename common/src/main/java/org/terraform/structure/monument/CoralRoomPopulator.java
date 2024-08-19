@@ -21,7 +21,7 @@ public class CoralRoomPopulator extends LevelledRoomPopulator {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 1).entrySet()) {
-            Wall w = entry.getKey().getRelative(0, 5, 0);
+            Wall w = entry.getKey().getUp(5);
             int length = entry.getValue();
             for (int i = 0; i < length; i++) {
                 int x = w.get().getX();

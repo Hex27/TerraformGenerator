@@ -23,7 +23,7 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
 		super(plainsVillagePopulator, widthX, height, widthZ, type, validDirs);
 	}
 	
-	//Use postBuildDecoration, as the walls are built after build()
+	// Use postBuildDecoration, as the walls are built after build()
     @Override
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
     	SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ());
@@ -41,7 +41,7 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     	Collections.shuffle(walledFaces);
     	for(BlockFace face:walledFaces) {
 
-    		//Don't spawn walled chimney against entrance
+    		// Don't spawn walled chimney against entrance
     		if(core.getRelative(face,3).getType() == Material.CHISELED_STONE_BRICKS)
     			continue;
     		
@@ -56,10 +56,10 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
      * @param core must contain the direction the chimney is to face.
      */
     private void spawnWallChimney(@NotNull Random random, Wall core) {
-    	core = core.getRelative(0,1,0);
+    	core = core.getUp();
     	
-    	//Refers to the height of the segment of the 
-    	//chimney where there's a repeating pattern
+    	// Refers to the height of the segment of the
+    	// chimney where there's a repeating pattern
     	int chimneyCoreHeight = random.nextInt(3)+5; 
 
     	for(BlockFace face:BlockUtils.xzDiagonalPlaneBlockFaces) {
@@ -82,7 +82,7 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     				core.getRelative(0,2+i,0).getRelative(face).setType(Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
     		}
     		
-    		if(face == core.getDirection()) { //Front
+    		if(face == core.getDirection()) { // Front
     			new StairBuilder(Material.COBBLESTONE_STAIRS)
     			.setFacing(face.getOppositeFace())
     			.apply(core.getFront(2).getLeft())
@@ -90,50 +90,50 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     			core.getFront().getLeft().setType(Material.COBBLESTONE);
     			core.getFront().getRight().setType(Material.COBBLESTONE);
     			
-    		}else if(face != core.getDirection().getOppositeFace()) //Sides
+    		}else if(face != core.getDirection().getOppositeFace()) // Sides
     			new StairBuilder(Material.COBBLESTONE_STAIRS)
     			.setFacing(face.getOppositeFace())
     			.apply(core.getRelative(face,2));
     		
-    		else { //Walled face
+    		else { // Walled face
     			new StairBuilder(Material.COBBLESTONE_STAIRS)
     			.setFacing(face.getOppositeFace())
     			.apply(core.getRelative(face,2))
     			.setHalf(Half.TOP)
-    			.apply(core.getRelative(0,2,0).getRelative(face,2));
+    			.apply(core.getUp(2).getRelative(face,2));
     			
 
-    			//Modify the exterior. 
-    			core.getRelative(face,2).getRelative(0,3,0).Pillar(2, random, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
+    			// Modify the exterior.
+    			core.getRelative(face,2).getUp(3).Pillar(2, random, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
     			
-    			core.getRelative(face,2).getLeft().getRelative(0,-1,0)
+    			core.getRelative(face,2).getLeft().getDown()
     			.Pillar(6, random, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
     			
-    			core.getRelative(face,2).getRight().getRelative(0,-1,0)
+    			core.getRelative(face,2).getRight().getDown()
     			.Pillar(6, random, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
     			
     			new StairBuilder(Material.COBBLESTONE_STAIRS)
     			.setFacing(BlockUtils.getLeft(face))
-    			.apply(core.getRelative(face, 2).getRelative(0,4,0).getLeft())
+    			.apply(core.getRelative(face, 2).getUp(4).getLeft())
     			.setFacing(BlockUtils.getRight(face))
-    			.apply(core.getRelative(face, 2).getRelative(0,4,0).getRight());
+    			.apply(core.getRelative(face, 2).getUp(4).getRight());
     			
-    			core.getRelative(face, 2).getRelative(0, 5, 0).setType(Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB);
+    			core.getRelative(face, 2).getUp(5).setType(Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB);
     			
-    			//This will be the base
-    			core.getRelative(face,2).getRelative(0,-2,0).getLeft().downUntilSolid(random,Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
-    			core.getRelative(face,2).getRelative(0,-1,0).downUntilSolid(random, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
-    			core.getRelative(face,2).getRelative(0,-2,0).getRight().downUntilSolid(random,Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
+    			// This will be the base
+    			core.getRelative(face,2).getDown(2).getLeft().downUntilSolid(random,Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
+    			core.getRelative(face,2).getDown().downUntilSolid(random, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
+    			core.getRelative(face,2).getDown(2).getRight().downUntilSolid(random,Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
     			
-    			//Solidify the wall behind
+    			// Solidify the wall behind
     			core.getRelative(face).Pillar(6, random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     			core.getRelative(face).getLeft().Pillar(6, random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     			core.getRelative(face).getRight().Pillar(6, random, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     		}
     		
-    		//Iron bars placed last.
-    		core.getRelative(0,1,0).getRelative(face).setType(Material.IRON_BARS);
-    		core.getRelative(0,1,0).getRelative(face).CorrectMultipleFacing(1); 
+    		// Iron bars placed last.
+    		core.getUp().getRelative(face).setType(Material.IRON_BARS);
+    		core.getUp().getRelative(face).CorrectMultipleFacing(1); 
     	}
     	
     	new DirectionalBuilder(Material.BLAST_FURNACE)
@@ -141,8 +141,8 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     	.apply(core.getFront());
 
     	core.Pillar(chimneyCoreHeight+2, random, Material.AIR);
-    	core.getRelative(0,-1,0).setType(Material.CAMPFIRE);
-    	core.getRelative(0,-2,0).setType(Material.HAY_BLOCK);
+    	core.getDown().setType(Material.CAMPFIRE);
+    	core.getDown(2).setType(Material.HAY_BLOCK);
     	core.setType(Material.LAVA);
     }
     
@@ -150,15 +150,15 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
      * 3x3 chimney spawned right in the middle of the room.
      */
     private void spawnStraightChimney(@NotNull Random random, Wall core) {
-    	core = core.getRelative(0,1,0);
+    	core = core.getUp();
     	
-    	//Refers to the height of the segment of the 
-    	//chimney where there's a repeating pattern
+    	// Refers to the height of the segment of the
+    	// chimney where there's a repeating pattern
     	int chimneyCoreHeight = random.nextInt(3)+6; 
     	for(BlockFace face:BlockUtils.directBlockFaces) {
 
     		core.getRelative(face).setType(Material.COBBLESTONE);
-    		core.getRelative(0,1,0).getRelative(face).setType(Material.IRON_BARS);
+    		core.getUp().getRelative(face).setType(Material.IRON_BARS);
 
     		for(int i = 0; i < chimneyCoreHeight; i++) {
     			if(i % 2 == 0)
@@ -181,10 +181,10 @@ public class PlainsVillageForgeChimneyPiece extends PlainsVillageForgeStandardPi
     	.setFacing(blastFurnaceDir)
     	.apply(core.getRelative(blastFurnaceDir));
 
-    	//Empty out space in the chimney
+    	// Empty out space in the chimney
     	core.Pillar(chimneyCoreHeight+2, random, Material.AIR);
-    	core.getRelative(0,-1,0).setType(Material.CAMPFIRE);
-    	core.getRelative(0,-2,0).setType(Material.HAY_BLOCK);
+    	core.getDown().setType(Material.CAMPFIRE);
+    	core.getDown(2).setType(Material.HAY_BLOCK);
     	core.setType(Material.LAVA);
 
     }

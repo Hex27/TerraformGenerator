@@ -19,7 +19,7 @@ import org.terraform.utils.blockdata.MultipleFacingBuilder;
 import java.util.Random;
 
 public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulator {
-    //private static boolean genned = false;
+    // private static boolean genned = false;
     
     public CrystallineClusterCavePopulator(float radius) {
 		super(radius);
@@ -27,57 +27,57 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
 
 	@Override
     protected void oneUnit(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor, boolean boundary) {
-		//if (!genned) {
+		// if (!genned) {
         //    genned = true;
-        //}
+        // }
     	
-    	//=========================
-        //Upper decorations
-        //=========================
+    	// =========================
+        // Upper decorations
+        // =========================
 
         int caveHeight = ceil.getY() - floor.getY();
 
-        //Don't touch slabbed floors or stalagmites
+        // Don't touch slabbed floors or stalagmites
         if (Tag.SLABS.isTagged(floor.getType()) ||
         		Tag.WALLS.isTagged(floor.getType()))
             return;
         
-        //Amethyst crust. Don't cover ores. Don't mess with moss.
+        // Amethyst crust. Don't cover ores. Don't mess with moss.
         if(Material.MOSS_BLOCK != ceil.getType()
         		&& !BlockUtils.isOre(ceil.getType())) {
         	ceil.setType(Material.AMETHYST_BLOCK);
         	
-            //Amethysts
+            // Amethysts
             if (GenUtils.chance(random, 1, 5)) {
                 new DirectionalBuilder(Material.AMETHYST_CLUSTER)
                 .setFacing(BlockFace.DOWN)
-                .apply(ceil.getRelative(0,-1,0));
+                .apply(ceil.getDown());
             }
         }
 
-        //=========================
-        //Lower decorations 
-        //=========================        
+        // =========================
+        // Lower decorations
+        // =========================
 
-        //Amethyst crust. Don't cover ores. Don't mess with moss.
+        // Amethyst crust. Don't cover ores. Don't mess with moss.
         if(Material.MOSS_BLOCK != floor.getType()
         		&& !BlockUtils.isOre(floor.getType())) {
         	floor.setType(Material.AMETHYST_BLOCK);
         	
-            //Amethysts
+            // Amethysts
             if (GenUtils.chance(random, 1, 5)) {
                 new DirectionalBuilder(Material.AMETHYST_CLUSTER)
                 .setFacing(BlockFace.UP)
-                .apply(floor.getRelative(0,1,0));
-            }else if(GenUtils.chance(random, 1, 20)) { //Calcite Pillars
+                .apply(floor.getUp());
+            }else if(GenUtils.chance(random, 1, 20)) { // Calcite Pillars
             	floor.setType(Material.CALCITE);
-            	floor.getRelative(0,1,0).LPillar(2*caveHeight, new Random(), Material.CALCITE);
+            	floor.getUp().LPillar(2*caveHeight, new Random(), Material.CALCITE);
             }
         }
         
-        //=========================
-        //Attempt to replace close-by walls with Amethyst. Also apply lichen.
-        //=========================
+        // =========================
+        // Attempt to replace close-by walls with Amethyst. Also apply lichen.
+        // =========================
         
         SimpleBlock target = floor;
         while(target.getY() != ceil.getY()) {
@@ -94,17 +94,17 @@ public class CrystallineClusterCavePopulator extends AbstractCaveClusterPopulato
         			}
         		}
         	}
-        	target = target.getRelative(0,1,0);
+        	target = target.getUp();
         }
 
-        //=========================
-        //Biome Setter 
-        //=========================
+        // =========================
+        // Biome Setter
+        // =========================
         PopulatorDataAbstract d = TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
         if(d instanceof PopulatorDataICABiomeWriterAbstract data) {
             while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), CustomBiomeType.CRYSTALLINE_CLUSTER, Biome.DRIPSTONE_CAVES);
-        		floor = floor.getRelative(0,1,0);
+        		floor = floor.getUp();
         	}
         }
     }

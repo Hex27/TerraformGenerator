@@ -38,11 +38,11 @@ public class BiomeVisualiserCommand extends TerraCommand {
     public void execute(CommandSender sender, Stack<String> args) {
     	Player p = (Player) sender;
     	World world = Bukkit.getWorld("world");
-    	//idk wtf im doing tbh this doesn't work
+    	// idk wtf im doing tbh this doesn't work
     	
     	for(int nx = -10; nx <= 10; nx++)
     		for(int nz = -10; nz <= 10; nz++) {
-    			//Biome comp = TerraformWorld.get(world).getBiomeBank(p.getLocation().getBlockX() + nx, (p.getLocation().getBlockZ() + nz)).getHandler().getBiome();
+    			// Biome comp = TerraformWorld.get(world).getBiomeBank(p.getLocation().getBlockX() + nx, (p.getLocation().getBlockZ() + nz)).getHandler().getBiome();
     			for(int y = 0; y < 130; y++) {
     				Location loc = new Location(world,p.getLocation().getX() + nx, y, p.getLocation().getZ() + nz);
     				Biome b = world.getBiome(loc);

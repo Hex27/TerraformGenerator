@@ -12,10 +12,10 @@ subprojects {
     group = "org.terraform"
 
     repositories {
-        //mavenLocal()
+        // mavenLocal()
         mavenCentral()
         maven("https://repo.codemc.io/repository/nms/")
-		//maven("https://libraries.minecraft.net/minecraft-server")
+		// maven("https://libraries.minecraft.net/minecraft-server")
 		maven("https://papermc.io/repo/repository/maven-public/")
     }
 //    Handle this inside each implementation as different minecraft versions support a different max jvm version

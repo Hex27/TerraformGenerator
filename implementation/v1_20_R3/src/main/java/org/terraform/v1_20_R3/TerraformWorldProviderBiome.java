@@ -25,7 +25,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 
     private final Set<Holder<BiomeBase>> biomeList;
     public TerraformWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
-        //super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
+        // super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = CustomBiomeHandler.biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
         this.tw = tw;
         this.registry = CustomBiomeHandler.getBiomeRegistry();
@@ -37,7 +37,7 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
         return this.biomeList.stream();
     }
 
-    @Override //c is getPossibleBiomes
+    @Override // c is getPossibleBiomes
     public Set<Holder<BiomeBase>>  c()
     {
         return this.biomeList;
@@ -51,15 +51,15 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
 	private static final boolean debug = false;
 	@Override
 	public @Nullable Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
-        //Used for biome generation in NMSChunkGenerator.
-        //Left shift x and z
+        // Used for biome generation in NMSChunkGenerator.
+        // Left shift x and z
         BiomeBank bank = tw.getBiomeBank(x << 2, z << 2);
 
         if(bank.getHandler().getCustomBiome() == CustomBiomeType.NONE) {
 
             return CraftBiome.bukkitToMinecraftHolder(bank.getHandler().getBiome());
         } else {
-            ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(bank.getHandler().getCustomBiome()); //ResourceKey.a(IRegistry.aP, new MinecraftKey(bank.getHandler().getCustomBiome().getKey()));
+            ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(bank.getHandler().getCustomBiome()); // ResourceKey.a(IRegistry.aP, new MinecraftKey(bank.getHandler().getCustomBiome().getKey()));
             Optional<Holder.c<BiomeBase>> holder = registry.b(rkey);
             if(holder.isEmpty())
                 TerraformGeneratorPlugin.logger.error("Custom biome was not found in the vanilla registry!");

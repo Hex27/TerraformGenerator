@@ -13,6 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
@@ -26,7 +27,7 @@ import java.util.Random;
 
 public class PaintedHillsHandler extends AbstractMountainHandler {
 	
-	//Birch Mountains must be shorter to allow trees to populate.
+	// Birch Mountains must be shorter to allow trees to populate.
 	@Override
 	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.05, 1.1);
@@ -54,13 +55,12 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
         		Material.ORANGE_TERRACOTTA,
         		Material.ORANGE_TERRACOTTA,
         		Material.ORANGE_TERRACOTTA,
-                GenUtils.randMaterial(rand, Material.ORANGE_TERRACOTTA, Material.STONE),
-                GenUtils.randMaterial(rand, Material.ORANGE_TERRACOTTA, Material.STONE)};
+                GenUtils.randChoice(rand, Material.ORANGE_TERRACOTTA, Material.STONE),
+                GenUtils.randChoice(rand, Material.ORANGE_TERRACOTTA, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-
         correctDirt(new SimpleBlock(data,rawX,surfaceY,rawZ));
 
         FastNoise paintNoise = NoiseCacheHandler.getNoise(
@@ -83,11 +83,11 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
                 data.setType(rawX, surfaceY-1, rawZ, Material.DIRT);
 
             if (GenUtils.chance(random, 1, 30)) {
-                data.setType(rawX, surfaceY + 1, rawZ, Material.GRASS);
+                PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 if (random.nextBoolean()) {
-                    BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_GRASS);
+                    PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 } else {
-                    data.setType(rawX, surfaceY + 1, rawZ, Material.DEAD_BUSH);
+                    PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -137,7 +137,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     				break;
     			}
     		}
-    		start = start.getRelative(0,-1,0);
+    		start = start.getDown();
     	}
     }
 
@@ -146,11 +146,11 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
 	 */
 	@Override
     public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
-        double height = HeightMap.CORE.getHeight(tw, x, z);//HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
+        double height = HeightMap.CORE.getHeight(tw, x, z);// HeightMap.MOUNTAINOUS.getHeight(tw, x, z); // Added here
         
-        //Let mountains cut into adjacent sections.
+        // Let mountains cut into adjacent sections.
         double maxMountainRadius = ((double) BiomeSection.sectionWidth);
-        //Double attrition height
+        // Double attrition height
         height += HeightMap.ATTRITION.getHeight(tw, x, z);
         
         BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
@@ -173,7 +173,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
         
         height = height*heightMultiplier;
         
-        //Add randomised peaks
+        // Add randomised peaks
         FastNoise jaggedPeaksNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_PAINTEDHILLS_ROCKS_NOISE, 
@@ -191,7 +191,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     	}
     	
         
-        //If the height is too high, just force it to smooth out
+        // If the height is too high, just force it to smooth out
         if (height > 200) height = 200 + (height - 200) * 0.5;
         if (height > 230) height = 230 + (height - 230) * 0.3;
         if (height > 240) height = 240 + (height - 240) * 0.1;

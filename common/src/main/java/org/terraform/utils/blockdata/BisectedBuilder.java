@@ -21,7 +21,7 @@ public class BisectedBuilder {
         Bisected lower = (Bisected) blockData.clone();
         lower.setHalf(Half.BOTTOM);
         block.setBlockData(lower);
-        block.getRelative(0,1,0).setBlockData(upper);
+        block.getUp().setBlockData(upper);
         return this;
     }
 

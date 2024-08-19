@@ -11,6 +11,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
@@ -31,7 +32,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
         data.setType(x, y, z, Material.GRASS_BLOCK);
 
         if (GenUtils.chance(rand, 1, 10))
-            data.setType(x, y + 1, z, Material.GRASS);
+            PlantBuilder.GRASS.build(data, x, y + 1, z);
         
         int depth = GenUtils.randInt(rand, 3, 7);
         for (int i = 1; i < depth; i++) {
@@ -56,17 +57,17 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.randMaterial(rand, Material.STONE, Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),};
+        return new Material[]{GenUtils.randChoice(rand, Material.STONE, Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE),
+                              GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+                              GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+                              GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),
+                              GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.STONE),};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
-        //Carve under-mountain river holes
+        // Carve under-mountain river holes
         if(rawX % 3 == 0 && rawZ % 3 == 0)
             if(HeightMap.CORE.getHeight(tw, rawX, rawZ)
                     - HeightMap.getRawRiverDepth(tw, rawX, rawZ)
@@ -87,11 +88,11 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
                 }
             }
 
-        //Don't touch submerged blocks for the other decorations
+        // Don't touch submerged blocks for the other decorations
         if(surfaceY < TerraformGenerator.seaLevel)
             return;
 
-        //Make patches of dirt that extend on the mountain sides
+        // Make patches of dirt that extend on the mountain sides
         if (GenUtils.chance(random, 1, 25)) {
             dirtStack(data, random, rawX, surfaceY, rawZ);
             for (int nx = -2; nx <= 2; nx++)
@@ -99,7 +100,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
                     if (GenUtils.chance(random, 1, 5)) continue;
                     surfaceY = GenUtils.getHighestGround(data, rawX + nx, rawZ + nz);
 
-                    //Another check, make sure relative position isn't underwater.
+                    // Another check, make sure relative position isn't underwater.
                     if(surfaceY < TerraformGenerator.seaLevel)
                         continue;
                     dirtStack(data, random, rawX + nx, surfaceY, rawZ + nz);
@@ -146,7 +147,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
 	        }
 
         
-        //Small jungle trees
+        // Small jungle trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
 
         for (SimpleLocation sLoc : trees) {
@@ -181,7 +182,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
                     if (leavesNoiseValue > -0.12
                             && Math.random() > 0.85)
                         JungleHandler.createBush(data, leavesNoiseValue, x, y, z);
-                    //Also generate it very commonly on steep areas.
+                    // Also generate it very commonly on steep areas.
                     else if (GenUtils.chance(random, 1, 10) && HeightMap.getTrueHeightGradient(data, x, z, 2) > 2) // Some random ones where there is no noise.
                     	JungleHandler.createBush(data, 0, x, y, z);
 
@@ -196,7 +197,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
                     if (data.getType(x, y + 1, z) == Material.JUNGLE_WOOD
                             && BlockUtils.isAir(data.getType(x, y + 2, z))
                             && GenUtils.chance(2, 9)) {
-                        data.setType(x, y + 2, z, GenUtils.randMaterial(Material.RED_MUSHROOM, Material.BROWN_MUSHROOM));
+                        PlantBuilder.build(data, x, y + 2, z, PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
                     }
                 }
             }

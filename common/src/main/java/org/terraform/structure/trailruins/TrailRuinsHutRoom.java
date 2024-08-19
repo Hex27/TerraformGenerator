@@ -25,7 +25,7 @@ public class TrailRuinsHutRoom extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        Material terracottaType = GenUtils.randMaterial(BlockUtils.TERRACOTTA);
+        Material terracottaType = GenUtils.randChoice(BlockUtils.TERRACOTTA);
         for(Map.Entry<Wall,Integer> entry:room.getFourWalls(data,1).entrySet())
         {
             Wall w = entry.getKey();
@@ -37,10 +37,10 @@ public class TrailRuinsHutRoom extends RoomPopulatorAbstract {
                     w.Pillar(Math.min(2,h), OneOneNineBlockHandler.MUD_BRICKS);
                     w.getUp(2).Pillar(Math.min(0,h-2), terracottaType);
 
-                    //If this is inside a jungle, allow jungle chests.
+                    // If this is inside a jungle, allow jungle chests.
                     if(data.getBiome(w.getX(),w.getZ()) == Biome.JUNGLE
                             || data.getBiome(w.getX(),w.getZ()) == Biome.BAMBOO_JUNGLE
-                            //|| data.getBiome(w.getX(),w.getZ()) == Biome.SPARSE_JUNGLE
+                            // || data.getBiome(w.getX(),w.getZ()) == Biome.SPARSE_JUNGLE
                             // this biome doesn't exist in 1.16. It's not used anyway, might as well remove the check
                         )
                         if(i > 1 && i < entry.getValue() - 2
@@ -54,7 +54,7 @@ public class TrailRuinsHutRoom extends RoomPopulatorAbstract {
             }
         }
 
-        //Suspicious gravel
+        // Suspicious gravel
         if(Version.isAtLeast(20))
             for(int i = 0; i < rand.nextInt(4); i++)
             {

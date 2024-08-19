@@ -35,7 +35,7 @@ public class PathPopulatorData {
         } else if (dir.getModZ() != 0) {
             return base.getZ() % multiplier;
         } else {
-            return 0; //BlockFace was not NSEW
+            return 0; // BlockFace was not NSEW
         }
     }
 

@@ -10,6 +10,8 @@ import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StalactiteBuilder;
@@ -46,7 +48,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
                     return n;
                 });
 
-        //Raise some ground up
+        // Raise some ground up
         double noise = raisedGroundNoise.GetNoise(floor.getX(), floor.getZ());
         if (noise > 0){
             int h = (int) Math.round(4.3f*waterDepth*noise);
@@ -55,61 +57,61 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator{
             floor = floor.getUp(h-1);
         }
 
-        //Place pickles
+        // Place pickles
         if(floor.getY() > waterLevel) return;
 
-        //sea pickle
-        if (BlockUtils.isWet(floor.getUp()) && GenUtils.chance(rand, 7, 100)) {
+        // sea pickle
+        if (TConfigOption.arePlantsEnabled() && BlockUtils.isWet(floor.getUp()) && GenUtils.chance(rand, 7, 100)) {
             SeaPickle sp = (SeaPickle) Bukkit.createBlockData(Material.SEA_PICKLE);
             sp.setPickles(GenUtils.randInt(3, 4));
             floor.getUp().setBlockData(sp);
         }
 
-        //Lilypads
+        // Lilypads
         if(GenUtils.chance(rand, 1, 200)
             && BlockUtils.isWet(floor.getAtY(waterLevel))
             && floor.getAtY(waterLevel+1).isAir())
         {
-            floor.getAtY(waterLevel+1).setType(Material.LILY_PAD);
+            PlantBuilder.LILY_PAD.build(floor.getAtY(waterLevel+1));
         }
 
-        //Stalagmites
+        // Stalagmites
         if(GenUtils.chance(rand, 1, 130))
         {
             int r = 2;
             int h = GenUtils.randInt(rand, 6*waterDepth, (int) ((3f / 2f) * (6*waterDepth)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(floor.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(floor.getY()))
-                    .makeSpike(rand, floor, r, h, true);
+                    .makeSpike(floor, r, h, true);
         }
     }
     @Override
     protected void populateCeilFloorPair(@NotNull SimpleBlock ceil, @NotNull SimpleBlock floor, int height) {
         TerraformWorld tw = ceil.getPopData().getTerraformWorld();
 
-        //Correct for clay ground raise
+        // Correct for clay ground raise
         int cutoff = height;
         while(cutoff > 0 && floor.getUp().isSolid()){
             floor = floor.getUp();
             cutoff--;
         }
-        if(cutoff <= 0) return; //give up.
+        if(cutoff <= 0) return; // give up.
 
-        //Invoke OneUnit from the lush cave populator
+        // Invoke OneUnit from the lush cave populator
         new LushClusterCavePopulator(10, true)
                 .oneUnit(tw, new Random(), ceil, floor, false);
 
-        //Spawn potential stalactites and stalagmites
+        // Spawn potential stalactites and stalagmites
         if(GenUtils.chance(rand, 1, 150))
         {
             int r = 2;
             int h = GenUtils.randInt(rand, (int) (height/2.5f), (int) ((3f / 2f) * (height/2.5f)));
             new StalactiteBuilder(BlockUtils.stoneOrSlateWall(ceil.getY()))
                     .setSolidBlockType(BlockUtils.stoneOrSlate(ceil.getY()))
-                    .makeSpike(rand, ceil, r, h, false);
+                    .makeSpike(ceil, r, h, false);
         }
 
-        //set biome
+        // set biome
         PopulatorDataICABiomeWriterAbstract biomeWriter = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData());
         for(int ny = floor.getY(); ny <= ceil.getY(); ny++)
             biomeWriter.setBiome(floor.getX(), ny, floor.getZ(), Biome.LUSH_CAVES);

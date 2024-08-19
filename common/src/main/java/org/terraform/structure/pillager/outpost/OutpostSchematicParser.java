@@ -42,15 +42,15 @@ public class OutpostSchematicParser extends SchematicParser {
 
     @Override
     public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
-    	//No moss on desert areas. 
+    	// No moss on desert areas.
         if (data.getMaterial().toString().contains("COBBLESTONE")) {
         	
-        	//Desert variants replace cobblestone with andesite instead of mossy cobble.
+        	// Desert variants replace cobblestone with andesite instead of mossy cobble.
         	
             data = Bukkit.createBlockData(
                     data.getAsString().replaceAll(
                             "cobblestone",
-                            GenUtils.randMaterial(rand, toReplace)
+                            GenUtils.randChoice(rand, toReplace)
                                     .toString().toLowerCase(Locale.ENGLISH)
                     )
             );
@@ -67,7 +67,7 @@ public class OutpostSchematicParser extends SchematicParser {
         } else if (data.getMaterial() == Material.CHEST) {
             if (GenUtils.chance(rand, 1, 5)) {
                 block.setType(Material.AIR);
-                //A fifth of chests are not placed.
+                // A fifth of chests are not placed.
             } else {
             	super.applyData(block, data);
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.PILLAGER_OUTPOST);
@@ -75,16 +75,16 @@ public class OutpostSchematicParser extends SchematicParser {
         } else if (data.getMaterial() == Material.BARREL) {
             if (GenUtils.chance(rand, 3, 5)) {
                 block.setType(Material.HAY_BLOCK);
-                //3 fifths of barrels are not placed.
+                // 3 fifths of barrels are not placed.
             } else {
             	super.applyData(block, data);
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.PILLAGER_OUTPOST);
             }
         } else if (data.getMaterial() == Material.WHITE_WALL_BANNER||data.getMaterial() == Material.WHITE_BANNER) {
-        	//Set it first to make the target block a banner
+        	// Set it first to make the target block a banner
         	super.applyData(block, data);
         	if(block.getPopData() instanceof PopulatorDataPostGen) {
-        		//org.bukkit.block.Banner;
+        		// org.bukkit.block.Banner;
         		Banner banner = (Banner) ((PopulatorDataPostGen) block.getPopData()).getBlockState(block.getX(),block.getY(),block.getZ());
         		banner.setPatterns(BannerUtils.getOminousBannerPatterns());
                 banner.update();
@@ -94,7 +94,7 @@ public class OutpostSchematicParser extends SchematicParser {
         }
         
         if(block.getY() == baseY) {
-        	new Wall(block.getRelative(0,-1,0)).downUntilSolid(new Random(), toReplace);
+        	new Wall(block.getDown()).downUntilSolid(new Random(), toReplace);
         }
     }
 

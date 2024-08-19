@@ -39,14 +39,14 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
         return new Material[]{
         		Material.SAND,
         		Material.SAND,
-                GenUtils.randMaterial(rand, Material.SANDSTONE, Material.SAND, Material.SAND),
-                GenUtils.randMaterial(rand, Material.STONE),
-                GenUtils.randMaterial(rand, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND, Material.SAND),
+                GenUtils.randChoice(rand, Material.STONE),
+                GenUtils.randChoice(rand, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-        //Set ground near sea level to sand
+        // Set ground near sea level to sand
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.SAND);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
@@ -55,14 +55,14 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
         }
 
         if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
-        if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
+        if (GenUtils.chance(random, 10, 100)) { // SEA GRASS/KELP
             CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
         }
     }
 
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-		//Large Corals
+		// Large Corals
 		SimpleLocation[] largeCorals = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.4f);
         
         for (SimpleLocation sLoc : largeCorals) {
@@ -90,7 +90,7 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
             }
         }
 		
-		//Spawn rocks
+		// Spawn rocks
 		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 30, 0.4f);
         
         for (SimpleLocation sLoc : rocks) {
@@ -107,7 +107,7 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
                 		(float) GenUtils.randDouble(random, 3, 7), 
                 		new SimpleBlock(data,sLoc), 
                 		true, 
-                		GenUtils.randMaterial(
+                		GenUtils.randChoice(
                 				Material.STONE,
                 				Material.GRANITE,
                 				Material.ANDESITE,

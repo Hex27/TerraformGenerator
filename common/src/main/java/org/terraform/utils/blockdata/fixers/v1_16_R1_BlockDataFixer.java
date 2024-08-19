@@ -15,7 +15,7 @@ import org.terraform.utils.BlockUtils;
 
 public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
 
-    //TODO: Investigate what this class is for. Seems quite random to have this around.
+    // TODO: Investigate what this class is for. Seems quite random to have this around.
     public static void correctWallData(@NotNull SimpleBlock target) {
         if (!(target.getBlockData() instanceof Wall data)) return;
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -26,11 +26,11 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
                     && !Tag.TRAPDOORS.isTagged(relType)
                     && !Tag.SLABS.isTagged(relType)) {
                 data.setHeight(face, Height.LOW);
-                if (target.getRelative(BlockFace.UP).getType().isSolid()) {
+                if (target.getRelative(BlockFace.UP).isSolid()) {
                     data.setHeight(face, Height.TALL);
                 }
 
-                //Ensure that target panes do not join with relType fences and vice versa
+                // Ensure that target panes do not join with relType fences and vice versa
                 if(BlockUtils.glassPanes.contains(target.getType())
                 		&& (Tag.FENCE_GATES.isTagged(relType)||Tag.FENCES.isTagged(relType))) {
                 	data.setHeight(face, Height.NONE);
@@ -71,7 +71,7 @@ public class v1_16_R1_BlockDataFixer extends BlockDataFixerAbstract {
         }
 
         if (data instanceof Wall && b != null) {
-            //TerraformGeneratorPlugin.logger.info("corrected");
+            // TerraformGeneratorPlugin.logger.info("corrected");
             correctSurroundingWallData(b);
         }
     }

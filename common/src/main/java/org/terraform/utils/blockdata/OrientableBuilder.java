@@ -18,7 +18,7 @@ public class OrientableBuilder {
     }
 
     public OrientableBuilder(Material... mat) {
-        this.blockData = (Orientable) Bukkit.createBlockData(GenUtils.randMaterial(mat));
+        this.blockData = (Orientable) Bukkit.createBlockData(GenUtils.randChoice(mat));
     }
 
 
@@ -44,13 +44,13 @@ public class OrientableBuilder {
     }
 
     public @NotNull OrientableBuilder lapply(@NotNull SimpleBlock block) {
-    	if(!block.getType().isSolid())
+    	if(!block.isSolid())
     		block.setBlockData(blockData);
         return this;
     }
 
     public @NotNull OrientableBuilder lapply(@NotNull Wall block) {
-    	if(!block.getType().isSolid())
+    	if(!block.isSolid())
     		block.setBlockData(blockData);
         return this;
     }

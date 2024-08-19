@@ -27,15 +27,15 @@ public class TerraformPopulator extends BlockPopulator {
             new OrePopulator(Material.DEEPSLATE, TConfigOption.ORE_DEEPSLATE_CHANCE.getInt(), TConfigOption.ORE_DEEPSLATE_VEINSIZE.getInt(),
                     TConfigOption.ORE_DEEPSLATE_MAXVEINNUMBER.getInt(), TConfigOption.ORE_DEEPSLATE_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_DEEPSLATE_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_DEEPSLATE_MAXSPAWNHEIGHT.getInt(),
-                    true),//deepslate
+                    true),// deepslate
             new OrePopulator(Material.TUFF, TConfigOption.ORE_TUFF_CHANCE.getInt(), TConfigOption.ORE_TUFF_VEINSIZE.getInt(),
                     TConfigOption.ORE_TUFF_MAXVEINNUMBER.getInt(), TConfigOption.ORE_TUFF_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_TUFF_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_TUFF_MAXSPAWNHEIGHT.getInt(),
-                    true),//tuff
+                    true),// tuff
             new OrePopulator(Material.COPPER_ORE, TConfigOption.ORE_COPPER_CHANCE.getInt(), TConfigOption.ORE_COPPER_VEINSIZE.getInt(),
                     TConfigOption.ORE_COPPER_MAXVEINNUMBER.getInt(), TConfigOption.ORE_COPPER_MINSPAWNHEIGHT.getInt(), TConfigOption.ORE_COPPER_COMMONSPAWNHEIGHT.getInt(),
                     TConfigOption.ORE_COPPER_MAXSPAWNHEIGHT.getInt(),
-                    false),//Space for copper
+                    false),// Space for copper
             new OrePopulator(Material.COAL_ORE,
              TConfigOption.ORE_COAL_CHANCE.getInt(),
              TConfigOption.ORE_COAL_VEINSIZE.getInt(),
@@ -63,7 +63,7 @@ public class TerraformPopulator extends BlockPopulator {
              TConfigOption.ORE_GOLD_MAXSPAWNHEIGHT.getInt(),
              false),
 
-            //BADLANDS SPAWNRATE
+            // BADLANDS SPAWNRATE
             new OrePopulator(Material.GOLD_ORE,
                     TConfigOption.ORE_BADLANDSGOLD_CHANCE.getInt(),
                     TConfigOption.ORE_BADLANDSGOLD_VEINSIZE.getInt(),
@@ -88,7 +88,7 @@ public class TerraformPopulator extends BlockPopulator {
              false),
             
             
-            //Emeralds only spawn in mountainous biomes (except deserts)
+            // Emeralds only spawn in mountainous biomes (except deserts)
             new OrePopulator(Material.EMERALD_ORE,
              TConfigOption.ORE_EMERALD_CHANCE.getInt(),
              TConfigOption.ORE_EMERALD_VEINSIZE.getInt(),
@@ -125,7 +125,7 @@ public class TerraformPopulator extends BlockPopulator {
              false),
             
             
-            //Non-ores
+            // Non-ores
             new OrePopulator(Material.GRAVEL,
              TConfigOption.ORE_GRAVEL_CHANCE.getInt(),
              TConfigOption.ORE_GRAVEL_VEINSIZE.getInt(),
@@ -185,12 +185,12 @@ public class TerraformPopulator extends BlockPopulator {
 
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         Random random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
-        //ores
+        // ores
         for (OrePopulator ore : ORE_POPS) {
             ore.populate(tw, random, data);
         }
         
-        //Amethysts
+        // Amethysts
         amethystGeodePopulator.populate(tw, random, data);
 
         // Get all biomes in a chunk
@@ -198,7 +198,7 @@ public class TerraformPopulator extends BlockPopulator {
 
         boolean canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
 
-        //Small Populators run per block.
+        // Small Populators run per block.
         for(int rawX = data.getChunkX()*16; rawX <= data.getChunkX()*16+16; rawX++)
             for(int rawZ = data.getChunkZ()*16; rawZ <= data.getChunkZ()*16+16; rawZ++)
             {
@@ -206,29 +206,29 @@ public class TerraformPopulator extends BlockPopulator {
                 BiomeBank bank = tw.getBiomeBank(rawX,surfaceY,rawZ);
                 banks.add(bank);
 
-                //Don't populate wet stuff in places that aren't wet
-                if(!bank.getType().isDry() && data.getType(rawX,surfaceY+1,rawZ) != Material.WATER)
+                // Don't populate wet stuff in places that aren't wet
+                if(!bank.isDry() && data.getType(rawX,surfaceY+1,rawZ) != Material.WATER)
                     continue;
                 bank.getHandler().populateSmallItems(tw, random, rawX, surfaceY, rawZ, data);
             }
 
-        //Only decorate disruptive features if the structures allow for them
+        // Only decorate disruptive features if the structures allow for them
         if(canDecorate)
             for (BiomeBank bank : banks)
                 bank.getHandler().populateLargeItems(tw, random, data);
 
         
 		// Cave populators
-        //They will recalculate biomes per block.
+        // They will recalculate biomes per block.
 		caveDistributor.populate(tw, random, data);
 
-		//Multi-megachunk structures
+		// Multi-megachunk structures
         for (MultiMegaChunkStructurePopulator spop : StructureRegistry.smallStructureRegistry) {
-            if (spop.canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
+            if (TConfigOption.areStructuresEnabled() && spop.canSpawn(tw, data.getChunkX(), data.getChunkZ())) {
                 TerraformGeneratorPlugin.logger.info("Generating " + spop.getClass().getName() + " at chunk: " + data.getChunkX() + "," + data.getChunkZ());
                 
-                //No async events
-                //Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(data.getChunkX()*16+8, data.getChunkZ()*16+8, spop.getClass().getName()));
+                // No async events
+                // Bukkit.getPluginManager().callEvent(new TerraformStructureSpawnEvent(data.getChunkX()*16+8, data.getChunkZ()*16+8, spop.getClass().getName()));
                 
                 spop.populate(tw, data);
             }

@@ -36,15 +36,15 @@ public class WarmOceansHandler extends AbstractOceanHandler {
         return new Material[]{
         		Material.GRAVEL,
         		Material.GRAVEL,
-                GenUtils.randMaterial(rand, Material.STONE, Material.GRAVEL, Material.STONE),
-                GenUtils.randMaterial(rand, Material.STONE),
-                GenUtils.randMaterial(rand, Material.STONE)};
+                GenUtils.randChoice(rand, Material.STONE, Material.GRAVEL, Material.STONE),
+                GenUtils.randChoice(rand, Material.STONE),
+                GenUtils.randChoice(rand, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
-        //Set ground near sea level to sand
+        // Set ground near sea level to sand
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.SAND);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
@@ -53,7 +53,7 @@ public class WarmOceansHandler extends AbstractOceanHandler {
         }
 
         if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
-        if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
+        if (GenUtils.chance(random, 10, 100)) { // SEA GRASS/KELP
             data.setType(rawX, surfaceY + 1, rawZ, Material.SEAGRASS);
             if (random.nextBoolean() && surfaceY < TerraformGenerator.seaLevel - 3)
                 BlockUtils.setDoublePlant(data, rawX, surfaceY + 1, rawZ, Material.TALL_SEAGRASS);
@@ -63,7 +63,7 @@ public class WarmOceansHandler extends AbstractOceanHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
-		//Spawn rocks
+		// Spawn rocks
 		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.4f);
         
         for (SimpleLocation sLoc : rocks) {
@@ -80,7 +80,7 @@ public class WarmOceansHandler extends AbstractOceanHandler {
                 		(float) GenUtils.randDouble(random, 3, 7), 
                 		new SimpleBlock(data,sLoc), 
                 		true, 
-                		GenUtils.randMaterial(
+                		GenUtils.randChoice(
                 				Material.STONE,
                 				Material.GRANITE,
                 				Material.ANDESITE,

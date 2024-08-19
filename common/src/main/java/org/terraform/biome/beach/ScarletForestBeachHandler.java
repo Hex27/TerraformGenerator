@@ -34,14 +34,14 @@ public class ScarletForestBeachHandler extends BiomeHandler {
         		Material.WHITE_CONCRETE,
                 Material.WHITE_CONCRETE,
                 Material.WHITE_CONCRETE,
-                GenUtils.randMaterial(rand, Material.WHITE_CONCRETE, Material.STONE),
-                GenUtils.randMaterial(rand, Material.WHITE_CONCRETE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.WHITE_CONCRETE, Material.STONE),
+                GenUtils.randChoice(rand, Material.WHITE_CONCRETE, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        //WHAT THE FUCK DO YOU MEAN REMOVE SUBMERGED GRASS??? WHY WAS IT BEING SET???
+        // WHAT THE FUCK DO YOU MEAN REMOVE SUBMERGED GRASS??? WHY WAS IT BEING SET???
 	}
 
 	@Override

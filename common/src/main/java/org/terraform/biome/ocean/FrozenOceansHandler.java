@@ -39,15 +39,15 @@ public class FrozenOceansHandler extends AbstractOceanHandler {
         return new Material[]{
         		Material.GRAVEL,
         		Material.GRAVEL,
-                GenUtils.randMaterial(rand, Material.STONE, Material.GRAVEL, Material.STONE),
-                GenUtils.randMaterial(rand, Material.STONE),
-                GenUtils.randMaterial(rand, Material.STONE)};
+                GenUtils.randChoice(rand, Material.STONE, Material.GRAVEL, Material.STONE),
+                GenUtils.randChoice(rand, Material.STONE),
+                GenUtils.randChoice(rand, Material.STONE)};
     }
 
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
-        //Set ground near sea level to gravel
+        // Set ground near sea level to gravel
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
@@ -55,7 +55,7 @@ public class FrozenOceansHandler extends AbstractOceanHandler {
                 data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
         }
 
-        //Full ice-sheets
+        // Full ice-sheets
         if (!data.getType(rawX, TerraformGenerator.seaLevel, rawZ).isSolid())
             data.setType(rawX, TerraformGenerator.seaLevel, rawZ, Material.ICE);
 
@@ -64,7 +64,7 @@ public class FrozenOceansHandler extends AbstractOceanHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
-		//Spawn rocks
+		// Spawn rocks
 		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.4f);
         
         for (SimpleLocation sLoc : rocks) {
@@ -81,7 +81,7 @@ public class FrozenOceansHandler extends AbstractOceanHandler {
                 		(float) GenUtils.randDouble(random, 3, 7), 
                 		new SimpleBlock(data,sLoc), 
                 		true, 
-                		GenUtils.randMaterial(
+                		GenUtils.randChoice(
                 				Material.STONE,
                 				Material.GRANITE,
                 				Material.ANDESITE,

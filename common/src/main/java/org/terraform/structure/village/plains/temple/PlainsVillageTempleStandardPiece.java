@@ -34,11 +34,11 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
-        //Place flooring.
+        // Place flooring.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY(), z,
-                        GenUtils.randMaterial(
+                        GenUtils.randChoice(
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICKS,
@@ -69,7 +69,7 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
 //        int[] steps = new int[3];
 //        for (int i = 0; i < 3; i++) steps[i] = choices[random.nextInt(choices.length)];
 //        Material other = BRIGHT_CARPETS.get(random.nextInt(BRIGHT_CARPETS.size()));
-        //Place carpets.
+        // Place carpets.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
             	if(x % 2 == 0 && z % 2 == 0)
@@ -78,8 +78,8 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
             	if(!data.getType(x, getRoom().getY()+1, z).isSolid()) {
             		boolean canPlace = true;
             		
-            		//VILLAGERS CAN'T WALK THROUGH CARPETS FOR SOME FUCK REASON
-            		//Don't place carpet if there's a door next to it.
+            		// VILLAGERS CAN'T WALK THROUGH CARPETS FOR SOME FUCK REASON
+            		// Don't place carpet if there's a door next to it.
             		for(BlockFace face:BlockUtils.directBlockFaces) {
             			if(data.getType(x+face.getModX(),getRoom().getY()+1,z+face.getModZ()) == plainsVillagePopulator.woodDoor) {
             				canPlace = false;
@@ -91,8 +91,8 @@ public class PlainsVillageTempleStandardPiece extends JigsawStructurePiece {
             	}
             }
         
-        //Commented out because it's ugly af
-        //Random pattern on floor
+        // Commented out because it's ugly af
+        // Random pattern on floor
     }
 
 	public boolean isTower() {

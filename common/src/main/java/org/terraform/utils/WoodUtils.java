@@ -51,8 +51,8 @@ public class WoodUtils {
 					.replace("OAK_",""));
 		}
 
-		//I am the pinnacle of optimisation
-		//Fear my absolutely unbeatable timings
+		// I am the pinnacle of optimisation
+		// Fear my absolutely unbeatable timings
 		public @Nullable Material getWood(@NotNull WoodSpecies species) {
 			return Material.getMaterial(template.replace("%WOOD%", species.toString()));
 		}

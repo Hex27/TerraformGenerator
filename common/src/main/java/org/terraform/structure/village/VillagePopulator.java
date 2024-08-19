@@ -27,13 +27,13 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-
-        //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        //int[] coords = mc.getCenterBiomeSectionBlockCoords();//getCoordsFromMegaChunk(tw, mc);
-        //If it is below sea level, DON'T SPAWN IT.
-        //if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+        if ( !isEnabled()) return false;
+        // MegaChunk mc = new MegaChunk(chunkX, chunkZ);
+        // int[] coords = mc.getCenterBiomeSectionBlockCoords();// getCoordsFromMegaChunk(tw, mc);
+        // If it is below sea level, DON'T SPAWN IT.
+        // if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
         
-    	//Height no longer checked in the interest of speed.
+    	// Height no longer checked in the interest of speed.
     	
     	if(biome == (BiomeBank.PLAINS)
         		|| biome == (BiomeBank.FOREST)
@@ -44,22 +44,24 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 
             return rollSpawnRatio(tw,chunkX,chunkZ);
         }
-        //}
+        // }
         return false;
     }
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-    	//For now, don't check biomes. There is only plains village.
+        if ( !isEnabled()) return;
+
+    	// For now, don't check biomes. There is only plains village.
 //    	EnumSet<BiomeBank> banks = GenUtils.getBiomesInChunk(tw, data.getChunkX(), data.getChunkZ());
 
-        //MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
+        // MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
 
-        //int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        // int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
         
-        //NO HIGHEST GROUND CHECKS IN POPULATE. If canSpawn is true, the structure MUST spawn.
-        //if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+        // NO HIGHEST GROUND CHECKS IN POPULATE. If canSpawn is true, the structure MUST spawn.
+        // if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
 //        if (banks.contains(BiomeBank.PLAINS)
 //       		|| banks.contains(BiomeBank.FOREST)
 //       		|| banks.contains(BiomeBank.SAVANNA)
@@ -67,12 +69,9 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 //       		|| banks.contains(BiomeBank.SCARLET_FOREST)
 //       		|| banks.contains(BiomeBank.CHERRY_GROVE)) {
 
-            if (!TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean())
-            	return;
-
-            new PlainsVillagePopulator().populate(tw, data);
+        new PlainsVillagePopulator().populate(tw, data);
 //        }
-        //}
+        // }
         
     }
 
@@ -83,12 +82,13 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return (BiomeBank.isBiomeEnabled(BiomeBank.PLAINS) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.FOREST) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.SAVANNA) 
-        		|| BiomeBank.isBiomeEnabled(BiomeBank.TAIGA) 
-           		|| BiomeBank.isBiomeEnabled(BiomeBank.SCARLET_FOREST)
-           		|| BiomeBank.isBiomeEnabled(BiomeBank.CHERRY_GROVE))
-        		&& TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean();
+        return TConfigOption.areStructuresEnabled()
+               && (BiomeBank.isBiomeEnabled(BiomeBank.PLAINS)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.FOREST)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.SAVANNA)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.TAIGA)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.SCARLET_FOREST)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.CHERRY_GROVE))
+               && TConfigOption.STRUCTURES_PLAINSVILLAGE_ENABLED.getBoolean();
     }
 }

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
+import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CoralGenerator;
 import org.terraform.utils.CylinderBuilder;
@@ -23,10 +24,10 @@ public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
     @Override
     public void populate(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor) {
 
-        //Likely to be a river cave
+        // Likely to be a river cave
         if(ceil.getY() > TerraformGenerator.seaLevel && floor.getY() < TerraformGenerator.seaLevel)
         {
-        	//Definitely a river cave
+        	// Definitely a river cave
         	if(ceil.getAtY(TerraformGenerator.seaLevel).getType() == Material.WATER) {
 
                 int caveHeight = ceil.getY() - TerraformGenerator.seaLevel - 1;
@@ -34,7 +35,7 @@ public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
                 if(caveHeight <= 2) return;
 
                 
-                //Pillars
+                // Pillars
                 if(GenUtils.chance(random, 1, 100)) {
                 	new CylinderBuilder(random, floor.getRelative(
                 			0,(ceil.getY() - floor.getY())/2,0), 
@@ -46,9 +47,9 @@ public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
                 	return;
                 }
                 	
-                //CEILING DECORATIONS
+                // CEILING DECORATIONS
                 
-        		//Glow berries
+        		// Glow berries
                 int glowBerryChance = 15;
                 if (GenUtils.chance(random, 1, glowBerryChance)) {
                     int h = caveHeight / 2;
@@ -56,24 +57,27 @@ public class ForestedMountainsCavePopulator extends AbstractCavePopulator {
                     BlockUtils.downLCaveVines(h, ceil);
                 }
                 
-                //Spore blossom
+                // Spore blossom
             	if(GenUtils.chance(random, 1, 30))
-            		ceil.setType(Material.SPORE_BLOSSOM);
-                
-                //WATER DECORATIONS
-                //Lily pads
+                    PlantBuilder.SPORE_BLOSSOM.build(ceil);
+
+                // WATER DECORATIONS
+                // Lily pads
                 if(GenUtils.chance(random, 1, 50)) {
-                	ceil.getAtY(TerraformGenerator.seaLevel + 1).lsetType(Material.LILY_PAD);
+                    var at = ceil.getAtY(TerraformGenerator.seaLevel + 1);
+                    if (!at.isSolid()) {
+                        PlantBuilder.LILY_PAD.build(at);
+                    }
                 }
 
-                //Don't touch slabbed floors or stalagmites
+                // Don't touch slabbed floors or stalagmites
                 if (Tag.SLABS.isTagged(floor.getType()) ||
                 		Tag.WALLS.isTagged(floor.getType()))
                     return;
                 
-                //BOTTOM DECORATIONS (underwater)
+                // BOTTOM DECORATIONS (underwater)
                 
-                //sea pickles
+                // sea pickles
                 if(GenUtils.chance(random, 1, 20))
 	                CoralGenerator.generateSeaPickles(
 	                		floor.getPopData(), 

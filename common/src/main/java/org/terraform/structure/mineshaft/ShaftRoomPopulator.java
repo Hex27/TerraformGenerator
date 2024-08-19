@@ -21,7 +21,7 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Carve upward shaft. Replace stone-like objects and cave decorations.
+        // Carve upward shaft. Replace stone-like objects and cave decorations.
         for (int i = 8; i < 20; i++) {
             BlockUtils.carveCaveAir(new Random().nextInt(777123),
                     (room.getWidthX() - 4) / 2f,
@@ -35,7 +35,7 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
         int[] lowerCorner = room.getLowerCorner(3);
         int[] upperCorner = room.getUpperCorner(3);
 
-        //Spawn a solid stone platform
+        // Spawn a solid stone platform
         int y = room.getY();
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
@@ -44,7 +44,7 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
                         || b.getType() == Material.OAK_PLANKS
                         || b.getType() == Material.OAK_SLAB
                         || b.getType() == Material.GRAVEL) {
-                    b.setType(GenUtils.randMaterial(
+                    b.setType(GenUtils.randChoice(
                             Material.STONE_BRICKS,
                             Material.CRACKED_STONE_BRICKS,
                             Material.MOSSY_STONE_BRICKS,
@@ -55,12 +55,12 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Support pillars
+        // Support pillars
         for (int[] corner : room.getAllCorners(3)) {
             int x = corner[0];
             int z = corner[1];
             Wall w = new Wall(new SimpleBlock(data, x, room.getY() + 1, z));
-            w.getRelative(0, -1, 0).downUntilSolid(rand, Material.OAK_LOG);
+            w.getDown().downUntilSolid(rand, Material.OAK_LOG);
         }
     }
 

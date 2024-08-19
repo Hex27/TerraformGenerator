@@ -31,88 +31,88 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
     public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
 
     	SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
-        Wall w = entry.getKey().getRelative(0, -1, 0);
+        Wall w = entry.getKey().getDown();
         for (int i = 0; i < entry.getValue(); i++) {
-            w.getRelative(0, -1, 0).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+            w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(1, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
-            w.getRelative(0, 1, 0).Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
+            w.getUp().Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
             
             w = w.getLeft();
         }
 
-        //Place doorway
-        w = w.getRight(5).getRelative(0, 1, 0);
+        // Place doorway
+        w = w.getRight(5).getUp();
         
-        //Carve empty frame
+        // Carve empty frame
         w.getRight().Pillar(2, new Random(), Material.AIR);
         w.Pillar(3, new Random(), Material.AIR);        
         w.getLeft().Pillar(2, new Random(), Material.AIR);
         
-        //Wall first layer decorations
+        // Wall first layer decorations
         w.getFront().getRight(3).Pillar(3, new Random(), Material.DARK_OAK_LOG);
         w.getFront().getLeft(3).Pillar(3, new Random(), Material.DARK_OAK_LOG);
 
         new StairBuilder(Material.DARK_OAK_STAIRS)
         .setHalf(Half.TOP).setFacing(BlockUtils.getRight(w.getDirection()))
-        .apply(w.getFront().getRight(2).getRelative(0,2,0))
-        .apply(w.getFront().getRight(1).getRelative(0,3,0));
+        .apply(w.getFront().getRight(2).getUp(2))
+        .apply(w.getFront().getRight(1).getUp(3));
 
         new StairBuilder(Material.DARK_OAK_STAIRS)
         .setHalf(Half.TOP).setFacing(BlockUtils.getLeft(w.getDirection()))
-        .apply(w.getFront().getLeft(2).getRelative(0,2,0))
-        .apply(w.getFront().getLeft(1).getRelative(0,3,0));
+        .apply(w.getFront().getLeft(2).getUp(2))
+        .apply(w.getFront().getLeft(1).getUp(3));
 
         new OrientableBuilder(Material.DARK_OAK_LOG)
         .setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))
-        .apply(w.getRelative(0,4,0).getFront())
-        .apply(w.getRelative(0,3,0).getFront().getLeft(2))
-        .apply(w.getRelative(0,3,0).getFront().getRight(2));
+        .apply(w.getUp(4).getFront())
+        .apply(w.getUp(3).getFront().getLeft(2))
+        .apply(w.getUp(3).getFront().getRight(2));
         
         new DirectionalBuilder(Material.STONE_BUTTON)
         .setFacing(w.getDirection())
-        .apply(w.getRelative(0,4,0).getFront(2))
-        .apply(w.getRelative(0,3,0).getFront(2).getLeft(2))
-        .apply(w.getRelative(0,3,0).getFront(2).getRight(2));
+        .apply(w.getUp(4).getFront(2))
+        .apply(w.getUp(3).getFront(2).getLeft(2))
+        .apply(w.getUp(3).getFront(2).getRight(2));
         
         new OrientableBuilder(Material.DARK_OAK_LOG)
         .setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getRight(w.getDirection())))
-        .apply(w.getRelative(0,4,0).getFront().getLeft())
-        .apply(w.getRelative(0,4,0).getFront().getRight());
+        .apply(w.getUp(4).getFront().getLeft())
+        .apply(w.getUp(4).getFront().getRight());
         
         new StairBuilder(Material.DARK_OAK_STAIRS)
         .setHalf(Half.BOTTOM).setFacing(BlockUtils.getLeft(w.getDirection()))
-        .apply(w.getFront().getRight(3).getRelative(0,3,0))
-        .apply(w.getFront().getRight(2).getRelative(0,4,0));
+        .apply(w.getFront().getRight(3).getUp(3))
+        .apply(w.getFront().getRight(2).getUp(4));
 
         new StairBuilder(Material.DARK_OAK_STAIRS)
         .setHalf(Half.BOTTOM).setFacing(BlockUtils.getRight(w.getDirection()))
-        .apply(w.getFront().getLeft(3).getRelative(0,3,0))
-        .apply(w.getFront().getLeft(2).getRelative(0,4,0));
+        .apply(w.getFront().getLeft(3).getUp(3))
+        .apply(w.getFront().getLeft(2).getUp(4));
         
-        //Wall second layer decorations
+        // Wall second layer decorations
         new StairBuilder(Material.DARK_OAK_STAIRS)
         .setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
-        .apply(w.getRelative(0,3,0));
+        .apply(w.getUp(3));
 
         new StairBuilder(Material.DARK_OAK_STAIRS)
         .setHalf(Half.TOP).setFacing(BlockUtils.getRight(w.getDirection()))
-        .apply(w.getRight().getRelative(0,2,0));
+        .apply(w.getRight().getUp(2));
 
         new StairBuilder(Material.DARK_OAK_STAIRS)
         .setHalf(Half.TOP)
         .setFacing(BlockUtils.getLeft(w.getDirection()))
-        .apply(w.getLeft().getRelative(0,2,0));
+        .apply(w.getLeft().getUp(2));
         
-        //Stone decorations on the outside
+        // Stone decorations on the outside
         w.getFront(2).getRight(3).setType(Material.COBBLESTONE);
         w.getFront(2).getLeft(3).setType(Material.COBBLESTONE);
-        w.getFront(2).getRight(3).getRelative(0,1,0).setType(Material.COBBLESTONE_WALL);
-        w.getFront(2).getLeft(3).getRelative(0,1,0).setType(Material.COBBLESTONE_WALL);
-        w.getFront(2).getRight(3).getRelative(0,2,0).setType(Material.LANTERN);
-        w.getFront(2).getLeft(3).getRelative(0,2,0).setType(Material.LANTERN);
+        w.getFront(2).getRight(3).getUp().setType(Material.COBBLESTONE_WALL);
+        w.getFront(2).getLeft(3).getUp().setType(Material.COBBLESTONE_WALL);
+        w.getFront(2).getRight(3).getUp(2).setType(Material.LANTERN);
+        w.getFront(2).getLeft(3).getUp(2).setType(Material.LANTERN);
         
-        //At the entrance, place a circle to give the entrance a slightly special look
+        // At the entrance, place a circle to give the entrance a slightly special look
         w = new Wall(new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ()),w.getDirection());
         
         ArrayList<BlockFace> directions = new ArrayList<>();
@@ -121,22 +121,22 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         		directions.add(p.getRotation());
         }
         
-        //Door is in an awkward sink-in.
-        //Redetermine entrance direction and move the circle outwards
+        // Door is in an awkward sink-in.
+        // Redetermine entrance direction and move the circle outwards
         if(directions.size() == 3) {
         	for(BlockFace face:directions) {
-        		//Identify the outward direction, then remake w with it.
+        		// Identify the outward direction, then remake w with it.
         		if(directions.contains(face.getOppositeFace()))
         			continue;
         		
         		w = new Wall(w.get(), face);
-        		//after remaking the wall, move it outwards to allow the circle
-        		//to protrude out better
+        		// after remaking the wall, move it outwards to allow the circle
+        		// to protrude out better
         		w = w.getFront(4);
         	}
         }
         else
-        	w = w.getRear(3); //Push backwards if this is a direct entrance
+        	w = w.getRear(3); // Push backwards if this is a direct entrance
         
         int radius = 10;
         int radiusSquared = radius*radius;
@@ -147,13 +147,13 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
             	{
             		if(rel.getType() != Material.STONE_BRICKS)
             			rel.setType(Material.COBBLESTONE);
-            		rel.getRelative(0,-1,0).downUntilSolid(new Random(), Material.COBBLESTONE);
+            		rel.getDown().downUntilSolid(new Random(), Material.COBBLESTONE);
             		rel.getRelative(0,this.getRoom().getHeight()+1,0).setType(Material.STONE_BRICKS);
             	}
             }
         }
         
-        //Stairway from the front door
+        // Stairway from the front door
         Wall stairway = w.getFront(10);
         BlockUtils.stairwayUntilSolid(stairway.get(), stairway.getDirection(),
         		new Material[] {Material.COBBLESTONE}, 
@@ -171,7 +171,7 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         		new Material[] {Material.COBBLESTONE}, 
         		Material.COBBLESTONE_STAIRS);
         
-        //Primary upper portion decorations
+        // Primary upper portion decorations
         Wall ceilingCenter =  stairway.getRear().getRelative(0,1+MansionJigsawBuilder.roomHeight,0);
         ceilingCenter.setType(Material.POLISHED_DIORITE);
         
@@ -182,18 +182,18 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         .setFacing(BlockUtils.getRight(ceilingCenter.getDirection()))
         .apply(ceilingCenter.getRight())
         .setFacing(ceilingCenter.getDirection().getOppositeFace())
-        .apply(ceilingCenter.getRelative(0,-1,0));
+        .apply(ceilingCenter.getDown());
         
-        ceilingCenter.getRelative(0,1,0).setType(Material.COBBLESTONE_SLAB);
+        ceilingCenter.getUp().setType(Material.COBBLESTONE_SLAB);
         for(int i = 1; i <= 3; i++) {
-        	ceilingCenter.getRelative(0,1,0).getLeft(i).setType(Material.STONE_BRICK_WALL);
-        	ceilingCenter.getRelative(0,1,0).getLeft(i).CorrectMultipleFacing(1);
-        	ceilingCenter.getRelative(0,1,0).getRight(i).setType(Material.STONE_BRICK_WALL);
-        	ceilingCenter.getRelative(0,1,0).getRight(i).CorrectMultipleFacing(1);
+        	ceilingCenter.getUp().getLeft(i).setType(Material.STONE_BRICK_WALL);
+        	ceilingCenter.getUp().getLeft(i).CorrectMultipleFacing(1);
+        	ceilingCenter.getUp().getRight(i).setType(Material.STONE_BRICK_WALL);
+        	ceilingCenter.getUp().getRight(i).CorrectMultipleFacing(1);
         }
 
-        //Replace corners with stone bricks instead of cobblestone
-        //Place decorative pillars
+        // Replace corners with stone bricks instead of cobblestone
+        // Place decorative pillars
         for(BlockFace face:BlockUtils.getAdjacentFaces(stairway.getDirection())) {
         	Wall target = stairway.getRear().getRelative(face,3);
         	for(int i = 0; i < 6; i++) {
@@ -202,15 +202,15 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         			target = target.getRear();
         			maxRecursion--;
         		}
-        		if(maxRecursion <= 0) break; //Wtf
+        		if(maxRecursion <= 0) break; // Wtf
         		
-        		//Ceiling decor
+        		// Ceiling decor
         		if(i > 1) {
     				target.getRelative(0,2+MansionJigsawBuilder.roomHeight,0).setType(Material.COBBLESTONE_WALL);
     				target.getRelative(0,2+MansionJigsawBuilder.roomHeight,0).CorrectMultipleFacing(1);
         		}
         		
-        		if(i % 2 == 0 || i > 4) { //Just a short stone brick stub
+        		if(i % 2 == 0 || i > 4) { // Just a short stone brick stub
         			if(i == 0 || i > 4)
         				target.Pillar(2, Material.STONE_BRICKS);
         			else
@@ -218,13 +218,13 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         		}
         		else
         		{
-        			//Pillar
+        			// Pillar
         			target.getRear().Pillar(1+MansionJigsawBuilder.roomHeight, Material.DARK_OAK_LOG);
         			
-        			target.getRelative(0,1,0).Pillar(MansionJigsawBuilder.roomHeight, Material.COBBLESTONE_WALL);
-        			target.getRelative(0,1,0).CorrectMultipleFacing(MansionJigsawBuilder.roomHeight);
+        			target.getUp().Pillar(MansionJigsawBuilder.roomHeight, Material.COBBLESTONE_WALL);
+        			target.getUp().CorrectMultipleFacing(MansionJigsawBuilder.roomHeight);
         			
-        			target.getRelative(0,5,0).Pillar(5, Material.COBBLESTONE);
+        			target.getUp(5).Pillar(5, Material.COBBLESTONE);
         			
         			new StairBuilder(Material.STONE_BRICK_STAIRS)
             		.setFacing(face)

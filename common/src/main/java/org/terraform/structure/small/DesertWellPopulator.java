@@ -33,6 +33,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         if (!isEnabled()) return;
+
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
@@ -53,13 +54,13 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
         try {
             TerraSchematic desertWell = TerraSchematic.load("desert_well", core);
             desertWell.parser = new DesertWellSchematicParser(random, badlandsWell, y);
-            //swamphut.setFace(face);
+            // swamphut.setFace(face);
             desertWell.apply();
 
-            //Reposition center (Because shit's fucky)
+            // Reposition center (Because shit's fucky)
             core = core.getRelative(1, 0, 1);
 
-            //Make sure the well is standing on a stable base
+            // Make sure the well is standing on a stable base
             for (int nx = -3; nx <= 3; nx++) {
                 for (int nz = -3; nz <= 3; nz++) {
                     if (!badlandsWell)
@@ -71,7 +72,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                 }
             }
 
-            //Drill hole down
+            // Drill hole down
             int depth = GenUtils.randInt(random, 5, 10);
             if(core.getUp().getType() != Material.WATER)
                 for (int i = 0; i < depth; i++) {
@@ -95,6 +96,8 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
     }
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
+        if (!isEnabled()) return false;
+
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
@@ -141,9 +144,9 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()
-                && (TConfigOption.BIOME_DESERT_WEIGHT.getInt() > 0||
-                TConfigOption.BIOME_BADLANDS_WEIGHT.getInt() > 0);
+        return TConfigOption.areStructuresEnabled()
+               && TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()
+               && (TConfigOption.BIOME_DESERT_WEIGHT.getInt() > 0 || TConfigOption.BIOME_BADLANDS_WEIGHT.getInt() > 0);
     }
 
     @Override
@@ -153,7 +156,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     private static class DesertWellSchematicParser extends SchematicParser {
         private final Random rand;
-        //private final PopulatorDataAbstract pop;
+        // private final PopulatorDataAbstract pop;
         private final boolean badlandsWell;
         private final int baseY;
 
@@ -187,7 +190,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                             StringUtils.replace(
                                     data.getAsString(),
                                     "red_sandstone",
-                                    GenUtils.randMaterial(
+                                    GenUtils.randChoice(
                                             rand,
                                             Material.RED_SANDSTONE,
                                             Material.SMOOTH_RED_SANDSTONE,
@@ -225,7 +228,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                             StringUtils.replace(
                                     data.getAsString(),
                                     "sandstone",
-                                    GenUtils.randMaterial(
+                                    GenUtils.randChoice(
                                             rand,
                                             Material.SANDSTONE,
                                             Material.SMOOTH_SANDSTONE,

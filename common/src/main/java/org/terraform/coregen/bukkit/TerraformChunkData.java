@@ -18,7 +18,7 @@ public class TerraformChunkData implements ChunkData {
 		this.popData = popData;
 	}
 	
-	//private static boolean debug = true;
+	// private static boolean debug = true;
 	public int getBaseHeight(int x, int z) {
 		int height = -64;
 		if(popData instanceof IPopulatorDataBaseHeightAccess) {
@@ -64,7 +64,7 @@ public class TerraformChunkData implements ChunkData {
 
 	@Override
 	public void setBlock(int x, int y, int z, @NotNull Material arg3) {
-		//TerraformGeneratorPlugin.logger.info("Called setBlock at " + x + "," + y + "," + z);
+		// TerraformGeneratorPlugin.logger.info("Called setBlock at " + x + "," + y + "," + z);
 		popData.setType(x + (popData.getChunkX()*16), y, z + (popData.getChunkZ()*16), arg3);
 	}
 

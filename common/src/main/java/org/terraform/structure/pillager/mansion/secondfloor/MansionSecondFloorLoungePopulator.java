@@ -28,7 +28,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 		super(room, internalWalls);
 	}
 
-	//Refers to the kitchen room width, not the width of one room cell.
+	// Refers to the kitchen room width, not the width of one room cell.
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
@@ -60,7 +60,7 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 		private final Material terracottaType;
 		public MansionLoungeSchematicParser(@NotNull Random rand, PopulatorDataAbstract pop) {
 			super(rand, pop);
-			terracottaType = GenUtils.randMaterial(rand,
+			terracottaType = GenUtils.randChoice(rand,
             		Material.WHITE_GLAZED_TERRACOTTA,
             		Material.ORANGE_GLAZED_TERRACOTTA,
             		Material.MAGENTA_GLAZED_TERRACOTTA,
@@ -99,29 +99,29 @@ public class MansionSecondFloorLoungePopulator extends MansionRoomPopulator {
 
 	@Override
 	public void decorateExit(Random rand, @NotNull Wall w) {
-		w.getRelative(0,6,0).setType(Material.DARK_OAK_PLANKS);
+		w.getUp(6).setType(Material.DARK_OAK_PLANKS);
 	}
 	
 	@Override
 	public void decorateWindow(Random rand, @NotNull Wall w) {
 		for(int i = 0; i <= 3; i++) {
 			w.getLeft(i).setType(Material.POLISHED_DIORITE);
-			if(!w.getLeft(i).getFront().getType().isSolid()
+			if(!w.getLeft(i).getFront().isSolid()
 					|| w.getLeft(i).getFront().getType() == Material.POLISHED_ANDESITE_STAIRS)
 				w.getLeft(i).getFront().setType(Material.POLISHED_ANDESITE);
 			
 			w.getRight(i).setType(Material.POLISHED_DIORITE);
-			if(!w.getRight(i).getFront().getType().isSolid()
+			if(!w.getRight(i).getFront().isSolid()
 					|| w.getRight(i).getFront().getType() == Material.POLISHED_ANDESITE_STAIRS)
 				w.getRight(i).getFront().setType(Material.POLISHED_ANDESITE);
 		}
 		
-		if(!w.getRight(4).getFront().getType().isSolid()
+		if(!w.getRight(4).getFront().isSolid()
 					|| w.getRight(4).getFront().getType() == Material.POLISHED_ANDESITE_STAIRS)
 		{
 			w.getRight(4).Pillar(6, Material.DARK_OAK_LOG);
 		}
-		if(!w.getLeft(4).getFront().getType().isSolid()
+		if(!w.getLeft(4).getFront().isSolid()
 				|| w.getLeft(4).getFront().getType() == Material.POLISHED_ANDESITE_STAIRS)
 	{
 		w.getLeft(4).Pillar(6, Material.DARK_OAK_LOG);

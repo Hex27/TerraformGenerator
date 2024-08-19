@@ -29,7 +29,7 @@ import org.terraform.utils.GenUtils;
  */
 public class MansionCompoundRoomDistributor {
 	
-	//A map of populators and their respective room areas
+	// A map of populators and their respective room areas
 	public static final @NotNull HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators =
 			new HashMap<>() {{
 				put(new MansionRoomSize(3,3), MansionRoomPopulatorRegistry.GROUND_3_3.getPopulators());
@@ -57,11 +57,11 @@ public class MansionCompoundRoomDistributor {
 		int occupiedCells = 13;
 		if(isGround) {
 			activeRoomPool = groundFloorPopulators;
-			potentialRoomSizes.add(new MansionRoomSize(3,3)); //Stairway Room
+			potentialRoomSizes.add(new MansionRoomSize(3,3)); // Stairway Room
 		}else {
 			activeRoomPool = secondFloorPopulators;
 		}
-		potentialRoomSizes.add(new MansionRoomSize(2,2)); //At least one 2x2 room
+		potentialRoomSizes.add(new MansionRoomSize(2,2)); // At least one 2x2 room
 		
 		while((double) occupiedCells /pieces.size() < 0.7 ||
 				GenUtils.chance(random, pieces.size()-occupiedCells/4, pieces.size())) {
@@ -77,11 +77,11 @@ public class MansionCompoundRoomDistributor {
 			}
 		}
 		
-		//Iterate this way because index 0 is the 3x3 room which we want.
+		// Iterate this way because index 0 is the 3x3 room which we want.
         for(MansionRoomSize roomSize : potentialRoomSizes) {
             Collections.shuffle(shuffledList);
             for(JigsawStructurePiece piece : shuffledList) {
-                //Force every room to generate at least once before generating duplicate types
+                // Force every room to generate at least once before generating duplicate types
                 Collections.shuffle(activeRoomPool.get(roomSize), random);
                 ArrayList<MansionRoomPopulator> populators = activeRoomPool.get(roomSize);
                 if(populators.size() <= 0) {
@@ -90,25 +90,25 @@ public class MansionCompoundRoomDistributor {
                 }
                 MansionRoomPopulator populator = populators.get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
                 if(canRoomSizeFitWithCenter((MansionStandardRoomPiece) piece, pieces, roomSize, populator, false)) {
-                    //Shuffle and distribute populator
+                    // Shuffle and distribute populator
                     TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
-                    ((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
+                    ((MansionStandardRoomPiece) piece).setRoomPopulator(populator); // set the populator;
 
-                    //If successful, remove the populator from the active pool.
+                    // If successful, remove the populator from the active pool.
                     populators.remove(0);
                     break;
                 }
             }
         }
 		
-		//Fill the rest of the rooms with 1x1 rooms
+		// Fill the rest of the rooms with 1x1 rooms
 		for(JigsawStructurePiece piece:pieces) {
 			MansionRoomSize roomSize = new MansionRoomSize(1,1);
 			if(((MansionStandardRoomPiece) piece).getRoomPopulator() == null) {
 				Collections.shuffle(activeRoomPool.get(roomSize), random);
 				MansionRoomPopulator populator = activeRoomPool.get(roomSize).get(0).getInstance(piece.getRoom(), ((MansionStandardRoomPiece) piece).internalWalls);
 				TerraformGeneratorPlugin.logger.info(populator.getClass().getSimpleName() + " generating at " + piece.getRoom().getSimpleLocation());
-				((MansionStandardRoomPiece) piece).setRoomPopulator(populator); //set the populator;
+				((MansionStandardRoomPiece) piece).setRoomPopulator(populator); // set the populator;
 			}
 				
 		}
@@ -126,22 +126,22 @@ public class MansionCompoundRoomDistributor {
 		
 		ArrayList<SimpleLocation> relevantLocations = new ArrayList<>();
 		relevantLocations.add(center);
-		//Positive X
+		// Positive X
 		if(roomSize.getWidthX() == 2) {
 			relevantLocations.add(center.getRelative(BlockFace.EAST, MansionJigsawBuilder.groundFloorRoomWidth));
 		}
 		
-		//Positive Z
+		// Positive Z
 		if(roomSize.getWidthZ() == 2) {
 			relevantLocations.add(center.getRelative(BlockFace.SOUTH, MansionJigsawBuilder.groundFloorRoomWidth));
 		}
 		
-		//Corner for 2x2 rooms
+		// Corner for 2x2 rooms
 		if(roomSize.getWidthZ() == 2 && roomSize.getWidthX() == 2) {
 			relevantLocations.add(center.getRelative(BlockFace.SOUTH_EAST, MansionJigsawBuilder.groundFloorRoomWidth));
 		}
 		
-		//3x3 room
+		// 3x3 room
 		if(roomSize.getWidthX() == 3 && roomSize.getWidthZ() == 3) {
 			for(BlockFace face:BlockUtils.xzPlaneBlockFaces) {
 				relevantLocations.add(center.getRelative(face, MansionJigsawBuilder.groundFloorRoomWidth));
@@ -149,23 +149,23 @@ public class MansionCompoundRoomDistributor {
 		}
 		
 		int hits = 0;
-		//First pass, if any rooms are occupied, return false.
+		// First pass, if any rooms are occupied, return false.
 		for(JigsawStructurePiece p:pieces) {
 			if(relevantLocations.contains(p.getRoom().getSimpleLocation())) {
-				//If force is on, only care if the piece exists in pieces, not if the
-				//piece is occupied.
+				// If force is on, only care if the piece exists in pieces, not if the
+				// piece is occupied.
 				if(!force && ((MansionStandardRoomPiece) p).getRoomPopulator() != null)
 					return false;
 				hits++;
 			}
 		}
 		
-		//Should not return false when force is true
-		//Caller should ensure that.
+		// Should not return false when force is true
+		// Caller should ensure that.
 		if(hits < relevantLocations.size()) return false;
 		
-		//Second pass, knock down walls and set all rooms to occupied. 
-		//Center room will be set by calling code.
+		// Second pass, knock down walls and set all rooms to occupied.
+		// Center room will be set by calling code.
 		for(JigsawStructurePiece p:pieces) {
 			if(relevantLocations.contains(p.getRoom().getSimpleLocation())) {
 				MansionStandardRoomPiece spiece = ((MansionStandardRoomPiece) p);
@@ -173,7 +173,7 @@ public class MansionCompoundRoomDistributor {
 				for(BlockFace face:spiece.adjacentPieces.keySet()) {
 					if(relevantLocations.contains(spiece.adjacentPieces.get(face).getRoom().getSimpleLocation()))
 					{
-						spiece.internalWalls.remove(face); //Knock down walls to join rooms
+						spiece.internalWalls.remove(face); // Knock down walls to join rooms
 						spiece.adjacentPieces.get(face).internalWalls.remove(face.getOppositeFace());
 					}
 				}
