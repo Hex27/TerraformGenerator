@@ -96,7 +96,7 @@ public class TerraformWorld {
         return NoiseCacheHandler.getNoise(this, NoiseCacheEntry.TW_MOUNTAINOUS, tw -> {
             FastNoise n = new FastNoise((int) tw.getSeed() * 73);
             n.SetNoiseType(NoiseType.Simplex);
-            n.SetFrequency(TConfig.c.BIOME_MOUNTAINOUS_FREQUENCY);
+            n.SetFrequency((float)TConfig.c.BIOME_MOUNTAINOUS_FREQUENCY);
             return n;
         });
     }

@@ -87,7 +87,7 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("biome.highmountains-threshold")
     public float BIOME_HIGH_MOUNTAINOUS_THRESHOLD = 27.5f;
     @YamlKey("biome.mountainous-frequency")
-    public float BIOME_MOUNTAINOUS_FREQUENCY = 0.3f;
+    public double BIOME_MOUNTAINOUS_FREQUENCY = 0.3d;
     @YamlKey("biome.oceanic-frequency")
     public float BIOME_OCEANIC_FREQUENCY = 0.11f;
     @YamlKey("biome.oceanic-threshold")
@@ -95,7 +95,7 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("biome.cave.crystalline-cluster.separation")
     public int BIOME_CAVE_CRYSTALLINECLUSTER_SEPARATION = 86;
     @YamlKey("biome.cave.crystalline-cluster.separation-maxpertub")
-    public float BIOME_CAVE_CRYSTALLINECLUSTER_MAXPERTUB = 0.37f;
+    public double BIOME_CAVE_CRYSTALLINECLUSTER_MAXPERTUB = 0.37f;
     @YamlKey("biome.cave.crystalline-cluster.minsize")
     public int BIOME_CAVE_CRYSTALLINECLUSTER_MINSIZE = 7;
     @YamlKey("biome.cave.crystalline-cluster.maxsize")
@@ -103,7 +103,7 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("biome.cave.dripstone-cluster.separation")
     public int BIOME_CAVE_DRIPSTONECLUSTER_SEPARATION = 64;
     @YamlKey("biome.cave.dripstone-cluster.separation-maxpertub")
-    public float BIOME_CAVE_DRIPSTONECLUSTER_MAXPERTUB = 0.35f;
+    public double BIOME_CAVE_DRIPSTONECLUSTER_MAXPERTUB = 0.35d;
     @YamlKey("biome.cave.dripstone-cluster.minsize")
     public int BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE = 5;
     @YamlKey("biome.cave.dripstone-cluster.maxsize")
@@ -111,7 +111,7 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("biome.cave.lush-cluster.separation")
     public int BIOME_CAVE_LUSHCLUSTER_SEPARATION = 64;
     @YamlKey("biome.cave.lush-cluster.separation-maxpertub")
-    public float BIOME_CAVE_LUSHCLUSTER_MAXPERTUB = 0.35f;
+    public double BIOME_CAVE_LUSHCLUSTER_MAXPERTUB = 0.35d;
     @YamlKey("biome.cave.lush-cluster.minsize")
     public int BIOME_CAVE_LUSHCLUSTER_MINSIZE = 10;
     @YamlKey("biome.cave.lush-cluster.maxsize")
