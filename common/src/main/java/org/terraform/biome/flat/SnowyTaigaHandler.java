@@ -93,7 +93,7 @@ public class SnowyTaigaHandler extends BiomeHandler {
     public static void defrostAndReplacePodzol(int seed, float radius, @NotNull SimpleBlock base) {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
+            // block.setReplaceType(ReplaceType.ALL);
             base.setType(GenUtils.randChoice(new Random(seed), Material.PODZOL));
             return;
         }
@@ -112,7 +112,7 @@ public class SnowyTaigaHandler extends BiomeHandler {
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getZ()));
                 if (equationResult <= 1.0+noiseVal) {
-                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                     if(equationResult * 4 > 0.7+noiseVal) {
                     	if(rand.nextBoolean()) {
                     		rel.setType(Material.PODZOL);

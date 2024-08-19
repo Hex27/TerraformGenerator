@@ -86,13 +86,13 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     	
     	core.getUp(size+1).setType(Material.SPRUCE_SLAB);
     	
-    	//Side Decorations
+    	// Side Decorations
     	spawnTrapdoorDecors(new Wall(core.getUp(size), BlockFace.NORTH), size);
     	spawnTrapdoorDecors(new Wall(core.getUp(size), BlockFace.SOUTH), size);
     	spawnTrapdoorDecors(new Wall(core.getUp(size), BlockFace.EAST), size);
     	spawnTrapdoorDecors(new Wall(core.getUp(size), BlockFace.WEST), size);
     	
-    	//Entrance
+    	// Entrance
     	core.getFront(size+1).getUp().setType(Material.AIR);
     	core.getFront(size+1).setType(Material.AIR);
     	core.getFront(size).setType(Material.AIR);
@@ -131,7 +131,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     	.apply(entranceCore.getRight(2))
     	.apply(entranceCore.getRight(2).getUp());
     	
-    	//Stairway out the entrance.
+    	// Stairway out the entrance.
 
         if(entranceCore.getFront(2).isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
@@ -147,10 +147,10 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
 	        .setStopAtWater(true)
 	        .build(entranceCore.getFront(2).getDown());
     	
-    	//By this point, the entire exterior of the igloo has been placed.
-    	//The below area handles interior placement
+    	// By this point, the entire exterior of the igloo has been placed.
+    	// The below area handles interior placement
     	
-    	//Pick a random corner to place a chimney
+    	// Pick a random corner to place a chimney
     	int offset = size/2;
     	BlockFace offsetDir = BlockUtils.xzDiagonalPlaneBlockFaces[random.nextInt(BlockUtils.xzDiagonalPlaneBlockFaces.length)];
     	SimpleBlock chimneyCore = core
@@ -166,10 +166,10 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
                 }
     	}
     	
-    	//dril chimney
+    	// dril chimney
     	chimneyCore.getUp().Pillar(size+10, Material.AIR);
     	
-    	//Create the actual chimney (drill air and make the chimney out of trapdoor)
+    	// Create the actual chimney (drill air and make the chimney out of trapdoor)
 		for(BlockFace face:BlockUtils.directBlockFaces) {
 			for(int ry = size+1; ry > 0; ry--) {
 				SimpleBlock target = chimneyCore.getUp(ry).getRelative(face);
@@ -187,11 +187,11 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     		}
     	}
     	
-    	//On all four corners except the entrance, place some stuff
+    	// On all four corners except the entrance, place some stuff
     	for(BlockFace face:BlockUtils.directBlockFaces) {
     		if(face == core.getDirection()) continue;
     		
-    		//find the igloo wall. It will be spruce log, so get the one in front of it.
+    		// find the igloo wall. It will be spruce log, so get the one in front of it.
     		Wall wall = new Wall(core, face.getOppositeFace());
     		
     		int threshold = size+1;
@@ -204,39 +204,39 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     			wall = wall.getRear();
     			threshold--;
     		}
-    		//Only operate on the wall if a wall is found.
+    		// Only operate on the wall if a wall is found.
     		if(found) {
     			wall = wall.getFront(2);
     			for(BlockFace side:BlockUtils.getAdjacentFaces(wall.getDirection())) {
 	    			Wall decoCore = wall.getRelative(side);
-    				//That's the chimney
+    				// That's the chimney
     				if(BlockUtils.isStoneLike(decoCore.getType()) ||
     						BlockUtils.isStoneLike(decoCore.getRelative(side).getType())) 
     					continue;
     	    		
     				switch(random.nextInt(6)) {
-        			case 0: //Bed
+        			case 0: // Bed
         			case 1: 
         				BlockUtils.placeBed(decoCore, BlockUtils.pickBed(), decoCore.getDirection());
         				decoCore.getRelative(side).lsetType(Material.SPRUCE_LOG);
         				decoCore.getRelative(side).getUp().lsetType(Material.POTTED_SPRUCE_SAPLING);
         				break;
         			case 2: 
-        			case 3: //Solid interactable blocks and tables
+        			case 3: // Solid interactable blocks and tables
         				for(int i = 0; i < 5; i++) {
         					if(decoCore.getRelative(side,i).isSolid())
         						break;
         					
         					switch(random.nextInt(3)) {
-        					case 0: //Directional deco
+        					case 0: // Directional deco
 	        					new DirectionalBuilder(Material.FURNACE, Material.BLAST_FURNACE, Material.SMOKER, Material.ANVIL)
 	        					.setFacing(decoCore.getDirection())
 	        					.apply(decoCore.getRelative(side,i));
 	        					break;
-        					case 1: //Static deco
+        					case 1: // Static deco
         						decoCore.getRelative(side,i).setType(Material.CRAFTING_TABLE, Material.FLETCHING_TABLE);
 	        					break;
-    						default: //Table
+    						default: // Table
     							new SlabBuilder(Material.SPRUCE_SLAB, Material.DIORITE_SLAB, Material.ANDESITE_SLAB, Material.COBBLESTONE_SLAB)
     							.setType(Slab.Type.TOP)
     							.apply(decoCore.getRelative(side,i));
@@ -244,7 +244,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
         							
         					}
         					
-        					//Place stuff on top of whatever was placed.
+        					// Place stuff on top of whatever was placed.
         					decoCore.getRelative(side,i).getUp().setType(Material.TURTLE_EGG, 
             						Material.AIR, Material.AIR,
             						Material.AIR, Material.AIR,
@@ -255,7 +255,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
             						Material.POTTED_FERN);
         				}
         				break;
-        			default: //Barrels of stuff
+        			default: // Barrels of stuff
         				for(int i = 0; i < 5; i++) {
         					if(decoCore.getRelative(side,i).isSolid()) break;
         					if(random.nextBoolean()) continue;
@@ -270,10 +270,10 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     		}
     	}
     	
-    	//Place carpet on the ground in the middle.
+    	// Place carpet on the ground in the middle.
     	core.setType(Material.RED_CARPET);
     	
-    	//Pick a color and set the larger radius.
+    	// Pick a color and set the larger radius.
     	Material carpet = BlockUtils.pickCarpet();
     	for(BlockFace face:BlockUtils.xzPlaneBlockFaces) {
     		core.getRelative(face).lsetType(carpet);
@@ -283,7 +283,7 @@ public class IglooPopulator extends MultiMegaChunkStructurePopulator {
     			core.getRelative(face,2).setType(carpet);
     		}
     	
-    	//Spawn a villager.
+    	// Spawn a villager.
     	core.getUp().addEntity(EntityType.VILLAGER);
     }
     

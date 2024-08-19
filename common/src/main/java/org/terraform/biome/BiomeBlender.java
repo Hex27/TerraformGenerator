@@ -70,11 +70,11 @@ public class BiomeBlender {
         			riverFactor = 0;
         		else
         		{
-        			//if(height > TerraformGenerator.seaLevel) 
+        			// if(height > TerraformGenerator.seaLevel)
         			//	height = TerraformGenerator.seaLevel;
-        			//Linearly blend
+        			// Linearly blend
             		riverFactor = ((height - TerraformGenerator.seaLevel)/((double)smoothBlendTowardsRivers));
-            		//TerraformGeneratorPlugin.logger.info("RF" + riverFactor);
+            		// TerraformGeneratorPlugin.logger.info("RF" + riverFactor);
         		}
         	}
             if (riverFactor < factor) factor = Math.max(0, riverFactor);
@@ -82,9 +82,9 @@ public class BiomeBlender {
 
         if (blendBiomeGrid) {
             // Same here when closer to biome edge
-            double gridFactor = getGridEdgeFactor(currentBiome, tw,x,z);//getGridEdgeFactor(BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z),
-            		//currentBiome,
-                    //BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature(), BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
+            double gridFactor = getGridEdgeFactor(currentBiome, tw,x,z);// getGridEdgeFactor(BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z),
+            		// currentBiome,
+                    // BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature(), BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
             if (gridFactor < factor) factor = gridFactor;
         }
 

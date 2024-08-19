@@ -154,7 +154,7 @@ public class SphereBuilder {
             for (float y = effectiveRYLower; y <= effectiveRYUpper; y++) {
                 for (float z = -rZ-padding; z <= rZ+padding; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);

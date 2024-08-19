@@ -65,10 +65,10 @@ public class OutpostStakeCage extends RoomPopulatorAbstract {
     	}
     	
     	if(Version.isAtLeast(19)) {
-    		//Spawn the mob.
+    		// Spawn the mob.
         	switch(rand.nextInt(3)) {
         	case 0:
-        		//Iron Golem
+        		// Iron Golem
         		data.addEntity(
         				room.getX(), 
         				new SimpleBlock(data, room.getX(),room.getY(),room.getZ())
@@ -77,7 +77,7 @@ public class OutpostStakeCage extends RoomPopulatorAbstract {
         				EntityType.IRON_GOLEM);
         		break;
         	case 1:
-        		//Allay (1 to 3)
+        		// Allay (1 to 3)
         		for(int i = 0; i < 1 + rand.nextInt(3); i++)
             		data.addEntity(
             				room.getX(), 
@@ -86,7 +86,7 @@ public class OutpostStakeCage extends RoomPopulatorAbstract {
             				room.getZ(), 
             				OneOneNineBlockHandler.ALLAY);
         		
-        		//If spawning allays, a roof must be added to the cage.
+        		// If spawning allays, a roof must be added to the cage.
         		for(int nx = lowerCorner[0]; nx <= upperCorner[0]; nx++)
             		for(int nz = lowerCorner[1]; nz <= upperCorner[1]; nz++) {
             			int baseHeight = 6 + highestHeight;
@@ -96,7 +96,7 @@ public class OutpostStakeCage extends RoomPopulatorAbstract {
             		}
         		break;
         	case 2:
-        		//Nothing
+        		// Nothing
         		break;
         	}
     	}

@@ -36,9 +36,9 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
         if ( !isEnabled()) return false;
 
-        //MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        //int[] coords = mc.getCenterBiomeSectionBlockCoords();      	
-		//Do not spawn ancient cities in non-mountains, like vanilla
+        // MegaChunk mc = new MegaChunk(chunkX, chunkZ);
+        // int[] coords = mc.getCenterBiomeSectionBlockCoords();      	
+		// Do not spawn ancient cities in non-mountains, like vanilla
 		if(biome.getType() != BiomeType.MOUNTAINOUS
 				&& biome.getType() != BiomeType.HIGH_MOUNTAINOUS)
 			return false;
@@ -62,9 +62,9 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
         int x = coords[0];
         int z = coords[1];
-        //int height = HeightMap.getBlockHeight(tw, x, z);
+        // int height = HeightMap.getBlockHeight(tw, x, z);
         int minY = TConfigOption.STRUCTURES_ANCIENTCITY_MIN_Y.getInt();
-        //if(!Version.isAtLeast(18) && minY < 0) minY = 8;
+        // if(!Version.isAtLeast(18) && minY < 0) minY = 8;
         int y = GenUtils.randInt(minY, TConfigOption.STRUCTURES_ANCIENTCITY_MAX_Y.getInt());
 
         
@@ -76,7 +76,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
     public void spawnAncientCity(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
     	TerraformGeneratorPlugin.logger.info("Spawning ancient city at: " + x + "," + y + "," + z);
     	
-        //Level One
+        // Level One
     	HashSet<SimpleLocation> occupied = new HashSet<>();
         Random hashedRand = tw.getHashedRand(x, y, z);
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, 40, x, y, z, 120);
@@ -93,7 +93,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new AncientCityAltarPopulator(tw, occupied, gen, random, false, false));
         gen.registerRoomPopulator(new AncientCityLargePillarRoomPopulator(tw, occupied, gen, random, false, false));
         
-        //Forcefully place the center platform in the middle
+        // Forcefully place the center platform in the middle
         CubeRoom room = new CubeRoom(50, 50, 40, x,y,z);
         room.setRoomPopulator(new AncientCityCenterPlatformPopulator(tw, occupied, gen, random, true, true));
         gen.getRooms().add(room);
@@ -101,11 +101,11 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         gen.setCarveRooms(true);
         gen.setCarveRoomsMultiplier(1.5f, 2f, 1.5f);
         gen.calculateRoomPlacement();
-        //gen.fill(data, tw, Material.CAVE_AIR);
+        // gen.fill(data, tw, Material.CAVE_AIR);
         gen.carvePathsOnly(data, tw, Material.CAVE_AIR);
         gen.carveRoomsOnly(data, tw, Material.CAVE_AIR);
         
-        //Creep up the whole place.
+        // Creep up the whole place.
         float radius = 80;
 
         FastNoise circleNoise = NoiseCacheHandler.getNoise(
@@ -137,19 +137,19 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 	        		
 	                
 	                if(!BlockUtils.isStoneLike(rel.getType())) continue;
-	                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+	                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
 	                double equationResult = Math.pow(nx, 2) / Math.pow(radius, 2)
 	                        + Math.pow(nz, 2) / Math.pow(radius, 2) + Math.pow(ny, 2) / Math.pow(50, 2);
 	                float noiseVal = circleNoise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
 	                if (equationResult <= 1 + 0.7 * noiseVal) {
 	                	if(BlockUtils.isExposedToNonSolid(rel) || !rel.getDown().isSolid() || !rel.getUp().isSolid())
 	                	{
-	                		//Inner area of the circle is sculk
+	                		// Inner area of the circle is sculk
 	                		if(equationResult <= 0.7*(1 + 0.7 * noiseVal)) 
 	                		{
 	                			rel.setType(OneOneNineBlockHandler.SCULK);
 		                		
-		                		//If the above is not solid, place some decorations
+		                		// If the above is not solid, place some decorations
 		                		if(!rel.getUp().isSolid())
 			                		if(GenUtils.chance(random, 1, 230))
 			                			rel.getUp().setType(OneOneNineBlockHandler.SCULK_CATALYST);
@@ -158,7 +158,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
 			                		else if(GenUtils.chance(random, 1, 600))
 			                			rel.getUp().setBlockData(OneOneNineBlockHandler.getActiveSculkShrieker());
 	                		}
-	                		else //Outer area are sculk veins
+	                		else // Outer area are sculk veins
 	                		{
 	                			for(BlockFace face:BlockUtils.sixBlockFaces) {
 	                				SimpleBlock adj = rel.getRelative(face);
@@ -198,7 +198,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_ANCIENTCITY_ENABLED.getBoolean();
     }
     
-    //Underground structures don't need a decorative buffer
+    // Underground structures don't need a decorative buffer
     @Override
     public int getChunkBufferDistance() {
     	return 0;

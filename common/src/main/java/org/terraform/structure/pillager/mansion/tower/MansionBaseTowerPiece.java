@@ -21,7 +21,7 @@ public class MansionBaseTowerPiece extends MansionStandardTowerPiece {
 	
 	@Override
 	public void decorateAwkwardCorner(@NotNull Wall target, Random random, @NotNull BlockFace one, @NotNull BlockFace two) {
-    	//Fill in gap in the corner
+    	// Fill in gap in the corner
     	target.Pillar(MansionJigsawBuilder.roomHeight, Material.STONE_BRICKS);
     	target.getRelative(one).getRelative(two).setType(Material.COBBLESTONE_SLAB);
     	

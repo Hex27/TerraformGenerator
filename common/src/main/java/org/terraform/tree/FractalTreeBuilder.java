@@ -41,7 +41,7 @@ public class FractalTreeBuilder {
     float minThickness = 0f;
     int maxDepth = 4;
 
-    //maxHeight is used for corals to force sea-level cutoff.
+    // maxHeight is used for corals to force sea-level cutoff.
     int maxHeight = 999;
     float lengthDecrement = 1;
     float lengthDecrementMultiplier = 1;
@@ -578,8 +578,8 @@ public class FractalTreeBuilder {
         if (!TConfigOption.areTreesEnabled()) return false;
 
         fractalLeaves.purgeOccupiedLeavesCache();
-    	//Terrain too steep, don't attempt tree generation, 
-    	//lest it gets stuck in a wall.
+    	// Terrain too steep, don't attempt tree generation,
+    	// lest it gets stuck in a wall.
     	if(!heightGradientChecked) {
     		if(!checkGradient(data,x,z)) return false;
     	}
@@ -594,7 +594,7 @@ public class FractalTreeBuilder {
         this.fractalLeaves.setOriY(oriY);
         this.fractalLeaves.setTw(tw);
         this.fractalLeaves.setMaxHeight(maxHeight);
-        //this.noiseGen = new FastNoise((int) tw.getSeed());
+        // this.noiseGen = new FastNoise((int) tw.getSeed());
 
         FastNoise noiseGen = NoiseCacheHandler.getNoise(
         		tw, 
@@ -626,7 +626,7 @@ public class FractalTreeBuilder {
         
         
         if (alwaysOneStraight > 0) {
-            //Starting Trunk
+            // Starting Trunk
             fractalBranch(rand, base,
                     initialAngle,
                     initialPitch,
@@ -646,7 +646,7 @@ public class FractalTreeBuilder {
 	        for (int i = 0; i < 8; i++) {
 	            if (!beeHive.isSolid()) {
 	                BeeHiveSpawner.spawnFullBeeNest(beeHive);
-	            	//TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+	            	// TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
 	                break;
 	            }else
 	            	beeHive = beeHive.getDown();
@@ -662,7 +662,7 @@ public class FractalTreeBuilder {
     		thickness = minThickness;
     	
         if (pitch > maxPitch) {
-            //reset pitch
+            // reset pitch
             pitch = maxPitch - rta();
         } else if (pitch < minPitch) {
             pitch = minPitch + rta();
@@ -685,14 +685,14 @@ public class FractalTreeBuilder {
             size = 0;
         }
 
-        int y = (int) (Math.round(size * Math.sin(pitch))); //Pitch is vertical tilt
+        int y = (int) (Math.round(size * Math.sin(pitch))); // Pitch is vertical tilt
         int x = (int) (Math.round(size * Math.cos(pitch) * Math.sin(yaw)));
         int z = (int) (Math.round(size * Math.cos(pitch) * Math.cos(yaw)));
 
         SimpleBlock two = base.getRelative(x, y, z);
         if (two.getY() > top.getY()) top = two;
 
-        //Set height
+        // Set height
         if (two.getY() - oriY > height) height = two.getY() - oriY;
 
         if (restore) {
@@ -710,7 +710,7 @@ public class FractalTreeBuilder {
                 if (!two.getRelative(0, -i, 0).isSolid()) {
                     beeHive = two.getRelative(0,-i,0);
                     break;
-                    //TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
+                    // TerraformGeneratorPlugin.logger.debug("Bee nest spawned at " + two.getRelative(0,-i,0).getCoords());
                 }
             }
 
@@ -721,7 +721,7 @@ public class FractalTreeBuilder {
         if (fractalsDone % fractalThreshold != 0
                 && thickness >= 1
                 && size >= 1) {
-            //Make 1 branch
+            // Make 1 branch
             fractalBranch(rand, two, pitch - randomAngle(depth),
                     yaw + GenUtils.randInt(rand, 1, 5)
                             * GenUtils.getSign(rand) * rta(),
@@ -731,9 +731,9 @@ public class FractalTreeBuilder {
             return;
         }
 
-        //This indicates a branch as the initial is no longer the same.
-        //For always straight trees, the branches don't have additional fractals.
-        //Set depth to 99 and force leaf generation.
+        // This indicates a branch as the initial is no longer the same.
+        // For always straight trees, the branches don't have additional fractals.
+        // Set depth to 99 and force leaf generation.
         if (alwaysOneStraight > 0 && pitch != initialAngle) {
             fractalBranch(rand, two, pitch - randomAngle(depth), yaw - rta(), 99, thickness - thicknessDecrement, size - lengthDecrement);
             return;
@@ -742,9 +742,9 @@ public class FractalTreeBuilder {
         if (alwaysOneStraight > 0) {
             alwaysOneStraightBranchLength -= (int) this.lengthDecrement;
             this.lengthDecrement *= this.lengthDecrementMultiplier;
-            //Extend a central trunk and make more branches.
+            // Extend a central trunk and make more branches.
             
-            //Only spawn branches if depth is sufficient.
+            // Only spawn branches if depth is sufficient.
             if(depth >= alwaysOneStraightBranchSpawningDepth) {
             	fractalBranch(rand, two, pitch + randomAngle(depth), -ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
                 fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
@@ -752,7 +752,7 @@ public class FractalTreeBuilder {
                 fractalBranch(rand, two, pitch + randomAngle(depth), -5 * ra(Math.PI / 4, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
 
 
-                //4 more static angle fractals.
+                // 4 more static angle fractals.
                 if (alwaysOneStraightExtendedBranches) {
                     fractalBranch(rand, two, pitch + randomAngle(depth), ra(0, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
                     fractalBranch(rand, two, pitch + randomAngle(depth), ra(Math.PI / 2, alwaysOneStraightBranchYawLowerMultiplier, alwaysOneStraightBranchYawUpperMultiplier), depth + 1, thickness - thicknessDecrement, alwaysOneStraightBranchLength);
@@ -761,10 +761,10 @@ public class FractalTreeBuilder {
                 }
             }
             
-            //this.logType = Material.SPRUCE_WOOD;
+            // this.logType = Material.SPRUCE_WOOD;
             fractalBranch(rand, two, pitch, yaw, depth + 1, thickness - thicknessDecrement, alwaysOneStraight);
         } else {
-            //Make 4 branches
+            // Make 4 branches
             fractalBranch(rand, two, pitch - randomAngle(depth), yaw - rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
             fractalBranch(rand, two, pitch + randomAngle(depth), yaw + rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
             fractalBranch(rand, two, pitch + randomAngle(depth), yaw + 5 * rta(), depth + 1, thickness - thicknessDecrement, size - lengthDecrement);
@@ -774,7 +774,7 @@ public class FractalTreeBuilder {
 
     private void drawLine(@NotNull SimpleBlock one, @NotNull SimpleBlock two, int segments, double thickness) {
         if (one.equals(two)) return;
-        //Vector one to two;
+        // Vector one to two;
         Vector v = two.toVector().subtract(one.toVector());
         for (int i = 0; i <= segments; i++) {
             Vector seg = v.clone().multiply((float) i / ((float) segments));
@@ -790,7 +790,7 @@ public class FractalTreeBuilder {
         replaceSphere(radius, radius, radius, base, type);
     }
 
-    //private boolean debug = true;
+    // private boolean debug = true;
     private void replaceSphere(float rX, float rY, float rZ, @NotNull SimpleBlock block, @NotNull Material type) {
 
         // Don't place anything if radius is nothing
@@ -836,7 +836,7 @@ public class FractalTreeBuilder {
                         return;
                     }
                     if (rel.getY() - this.oriY == this.maxHeight) {
-                        if (rand.nextBoolean()) //Fade off if too high
+                        if (rand.nextBoolean()) // Fade off if too high
                             return;
                     }
 
@@ -856,7 +856,7 @@ public class FractalTreeBuilder {
                         if (cocoaBeans > 0
                                 && Math.abs(x) >= rX - 2
                                 && Math.abs(z) >= rZ - 2) {
-                            //Coca beans
+                            // Coca beans
                             if (GenUtils.chance(cocoaBeans, 100)) {
                                 for (BlockFace face : BlockUtils.directBlockFaces) {
                                     Directional dir = (Directional) Bukkit.createBlockData(Material.COCOA);
@@ -883,17 +883,17 @@ public class FractalTreeBuilder {
             }
         }
         
-        //Ensures that corals don't die
+        // Ensures that corals don't die
         while (!changed.isEmpty()) {
             SimpleBlock sb = changed.remove(new Random().nextInt(changed.size()));
             if (!CoralGenerator.isSaturatedCoral(sb)) {
-                //No floating coral fans
+                // No floating coral fans
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType()))
                         sb.getRelative(face).setType(Material.WATER);
                 }
 
-                //No levitating sea pickles & fans
+                // No levitating sea pickles & fans
                 if (sb.getUp().getType() == Material.SEA_PICKLE ||
                         Tag.CORAL_PLANTS.isTagged(sb.getUp().getType())) {
                     sb.getUp().setType(Material.WATER);
@@ -932,7 +932,7 @@ public class FractalTreeBuilder {
                 break;
         }
 
-        //Log for good measure, as well as some surrounding leaves.
+        // Log for good measure, as well as some surrounding leaves.
         if (Tag.LEAVES.isTagged(material))
             block.rsetType(BlockUtils.replacableByTrees,this.trunkType);
         for (BlockFace face : BlockUtils.directBlockFaces) {

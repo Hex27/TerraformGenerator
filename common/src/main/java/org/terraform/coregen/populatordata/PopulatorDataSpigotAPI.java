@@ -18,6 +18,7 @@ import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 
 import java.util.Random;
 
@@ -37,7 +38,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     public Material getType(int x, int y, int z) {
         if(!lr.isInRegion(x,y,z))
         {
-            //yes i fucking know this is bad
+            // yes i fucking know this is bad
             return y > TerraformGenerator.seaLevel ? Material.AIR : Material.WATER;
         }
         return lr.getType(x,y,z);
@@ -90,11 +91,14 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
     }
 
     @Override
-    public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {        setType(rawX,rawY,rawZ,Material.SPAWNER);
+    public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
+        if ( !TConfigOption.areAnimalsEnabled() ) return;
+
+        setType(rawX,rawY,rawZ,Material.SPAWNER);
         try{
-            //This will give class cast exception sometimes. I'm not sure why.
-            //Additionally, if rawX/rawZ is outside the region, this will correctly
-            //throw an error
+            // This will give class cast exception sometimes. I'm not sure why.
+            // Additionally, if rawX/rawZ is outside the region, this will correctly
+            // throw an error
             CreatureSpawner spawner = (CreatureSpawner) lr.getBlockState(rawX,rawY,rawZ);
             spawner.setSpawnedType(type);
             spawner.update(true,false);
@@ -119,12 +123,12 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract implements IPo
 
     @Override
     public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
-        if(!lr.isInRegion(rawX, rawY, rawZ)) return; //just forget it
+        if(!lr.isInRegion(rawX, rawY, rawZ)) return; // just forget it
 
         setType(rawX, rawY, rawZ, Material.BEE_NEST);
 
-        //I guess the above can fail sometimes. I don't know why.
-        //Catch and throw because that's fucking stupid
+        // I guess the above can fail sometimes. I don't know why.
+        // Catch and throw because that's fucking stupid
         try {
             Beehive bukkitBeehive = (Beehive) lr.getBlockState(rawX,rawY,rawZ);
             TerraformGeneratorPlugin.injector.storeBee(bukkitBeehive);

@@ -32,12 +32,12 @@ public class WarmOceanDomeHutRoom extends WarmOceanBaseRoom{
                 Material.POLISHED_ANDESITE
         }[rand.nextInt(3)];
 
-        //This is just a cylinder with an ellipse on it
+        // This is just a cylinder with an ellipse on it
         SimpleBlock centre = room.getCenterSimpleBlock(data);
         float radius = Math.min(room.getWidthX(),room.getWidthZ())/3.0f;
         int cylSize = GenUtils.randInt(rand, 3, 5);
 
-        //Carves the actual dome, with sandstone flooring
+        // Carves the actual dome, with sandstone flooring
         new CylinderBuilder(rand, centre.getDown(), Material.SMOOTH_SANDSTONE, Material.SANDSTONE)
                 .setStartFromZero(true)
                 .setRadius(radius)
@@ -64,18 +64,18 @@ public class WarmOceanDomeHutRoom extends WarmOceanBaseRoom{
                 .setHardReplace(true)
                 .build();
 
-        //Place chest
+        // Place chest
         BlockFace entrance = BlockUtils.getDirectBlockFace(rand);
         new ChestBuilder(Material.CHEST)
                 .setFacing(entrance)
                 .setLootTable(TerraLootTable.UNDERWATER_RUIN_SMALL)
                 .apply(centre.getRelative(entrance.getOppositeFace(), ((int)radius)-2));
 
-        //Carve door
+        // Carve door
         centre.getRelative(entrance, (int) radius).physicsSetType(Material.WATER, true);
         centre.getUp().getRelative(entrance, (int) radius).physicsSetType(Material.WATER, true);
 
-        //Holes
+        // Holes
         for(int i = 0; i < GenUtils.randInt(rand,2,4); i++)
         {
             BlockUtils.replaceWaterSphere(i*room.getX()*room.getZ(),
@@ -85,7 +85,7 @@ public class WarmOceanDomeHutRoom extends WarmOceanBaseRoom{
                             GenUtils.getSign(rand)*rand.nextInt((int)radius)));
         }
 
-        //Decorate stuff
+        // Decorate stuff
         centre.getUp((int) (cylSize+radius-1)).setType(decorator);
         for(BlockFace face:BlockUtils.directBlockFaces)
         {
@@ -94,7 +94,7 @@ public class WarmOceanDomeHutRoom extends WarmOceanBaseRoom{
             centre.getUp(cylSize/2).getRelative(face, (int) radius).setType(decorator);
         }
 
-        //Drowned
+        // Drowned
         centre.addEntity(EntityType.DROWNED);
     }
 

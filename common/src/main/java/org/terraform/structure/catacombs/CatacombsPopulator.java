@@ -28,16 +28,16 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
         	
-		//Do not spawn catacombs under deep oceans, there's no space.
+		// Do not spawn catacombs under deep oceans, there's no space.
 		if(biome.getType() == BiomeType.DEEP_OCEANIC)
 			return false;
 
-		//Don't compete with badlandsmine for space
+		// Don't compete with badlandsmine for space
 		if(biome == BiomeBank.BADLANDS_CANYON)
 			return false;
 		
-		//Don't compete with villages for space. In future, this may be changed
-		//to allow multiple structures per megachunk
+		// Don't compete with villages for space. In future, this may be changed
+		// to allow multiple structures per megachunk
 		if(biome == (BiomeBank.PLAINS)
             		|| biome == (BiomeBank.FOREST)
             		|| biome == (BiomeBank.SAVANNA)
@@ -46,10 +46,10 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
                		|| biome == (BiomeBank.CHERRY_GROVE))
 			return false;
 		
-		//Do height and space checks
+		// Do height and space checks
         int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
         if (height < TConfigOption.STRUCTURES_CATACOMBS_MAX_Y.getInt() + 15) {
-            //Way too little space. Abort generation.
+            // Way too little space. Abort generation.
             return false;
         }
 
@@ -103,7 +103,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
     	TerraformGeneratorPlugin.logger.info("Spawning catacombs at: " + x + "," + z);
 
         
-        //Level One
+        // Level One
         Random hashedRand = tw.getHashedRand(x, y, z);
         boolean canGoDeeper = canGoDeeper(tw,y,hashedRand);
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range);
@@ -133,7 +133,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
         	if(catacombLevels >= TConfigOption.STRUCTURES_CATACOMBS_MAX_LEVELS.getInt())
         		break;
         	y -= 15;
-            //Level Two
+            // Level Two
         	hashedRand = tw.getHashedRand(x, y, z);
         	canGoDeeper = canGoDeeper(tw,y,hashedRand);
         	previousGen = gen;
@@ -179,7 +179,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
                gen.registerRoomPopulator(new CatacombsStairwayPopulator(random, true, false));
                gen.registerRoomPopulator(new CatacombsDripstoneCavern(random, true, false));
            }
-           if(stairways <= 0) break; //no more stairways. Don't generate.
+           if(stairways <= 0) break; // no more stairways. Don't generate.
            
            TerraformGeneratorPlugin.logger.info("Additional Catacombs Level at: " + x + "," + z);
        	
@@ -198,7 +198,7 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
         return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_CATACOMBS_ENABLED.getBoolean();
     }
     
-    //Underground structures don't need a decorative buffer
+    // Underground structures don't need a decorative buffer
     @Override
     public int getChunkBufferDistance() {
     	return 0;

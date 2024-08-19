@@ -54,11 +54,11 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             }
         }
 
-        int x = spawnCoords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int x = spawnCoords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = spawnCoords[1];// data.getChunkZ()*16 + random.nextInt(16);
         Random rand = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 
-        int y = HeightMap.getBlockHeight(tw, x, z) - GenUtils.randInt(rand, 15, 50);//GenUtils.getHighestGround(data, x, z)
+        int y = HeightMap.getBlockHeight(tw, x, z) - GenUtils.randInt(rand, 15, 50);// GenUtils.getHighestGround(data, x, z)
 
         if (y < 10) y = 10;
 
@@ -87,13 +87,13 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         	isWet = true;
         }
 
-        //Fill with water if the room is wet. If not, use cave air.
+        // Fill with water if the room is wet. If not, use cave air.
         room.fillRoom(data, -1, new Material[]{
                         Material.COBBLESTONE,
                         Material.MOSSY_COBBLESTONE},
         		fluid);
 
-        //Make some fence pattern.
+        // Make some fence pattern.
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey().getUp();
             int length = entry.getValue();
@@ -113,7 +113,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             }
         }
 
-        //Holes
+        // Holes
         for (int i = 0; i < GenUtils.randInt(rand, 0, 3); i++) {
             int[] coords = room.randomCoords(rand);
             int nX = coords[0];
@@ -122,7 +122,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             BlockUtils.replaceSphere(rand.nextInt(992), GenUtils.randInt(rand, 1, 3), new SimpleBlock(data, nX, nY, nZ), true, fluid);
         }
 
-        //Dropdown blocks
+        // Dropdown blocks
         for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
             for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
                 int ny = room.getHeight();
@@ -131,7 +131,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             }
         }
 
-        //Make spikes from the ceiling
+        // Make spikes from the ceiling
         for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
             for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
                 int ny = room.getHeight() - 1;
@@ -144,7 +144,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             }
         }
 
-        //Make spikes on the floor
+        // Make spikes on the floor
         for (int nx = -room.getWidthX() / 2; nx < room.getWidthX() / 2; nx++) {
             for (int nz = -room.getWidthZ() / 2; nz < room.getWidthZ() / 2; nz++) {
                 if (GenUtils.chance(9, 10)) continue;
@@ -156,7 +156,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             }
         }
 
-        //Place Spawner
+        // Place Spawner
         EntityType type = switch(rand.nextInt(3)) {
             case (0) -> EntityType.ZOMBIE;
             case (1) -> EntityType.SKELETON;
@@ -167,7 +167,7 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
         
         data.setSpawner(x, y + 1, z, type);
 
-        //Spawn chests
+        // Spawn chests
         ArrayList<Entry<Wall, Integer>> entries = new ArrayList<>();
         HashMap<Wall, Integer> walls = room.getFourWalls(data, 1);
         for (Entry<Wall, Integer> entry : walls.entrySet()) {

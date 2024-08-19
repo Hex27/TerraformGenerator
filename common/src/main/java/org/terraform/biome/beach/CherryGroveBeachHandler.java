@@ -46,7 +46,7 @@ public class CherryGroveBeachHandler extends BiomeHandler {
 
         Material base = data.getType(rawX,surfaceY,rawZ);
 
-        //Remove submerged grass
+        // Remove submerged grass
         if(base == Material.GRASS_BLOCK && data.getType(rawX, surfaceY+1, rawZ) == Material.WATER)
             data.setType(rawX, surfaceY, rawZ,Material.DIRT);
 
@@ -54,7 +54,7 @@ public class CherryGroveBeachHandler extends BiomeHandler {
 
         surfaceY++;
 
-        //Spawn sugarcane
+        // Spawn sugarcane
         if (hasSugarcane) {
             boolean hasWater = data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER;
             if (data.getType(rawX - 1, surfaceY - 1, rawZ) == Material.WATER)

@@ -56,9 +56,9 @@ public class MansionRoofHandler {
         int previousNotInRect = getNumberOfPiecesNotInRectangle(builder, lowestCoords,highestCoords);
         int i = 0;
         int stall = 0;
-        //Shrink the rectangle one side at a time until it is a rectangle
-        //If the shrink operation did not change the number of pieces not in the rectangle,
-        //then undo the shrink.
+        // Shrink the rectangle one side at a time until it is a rectangle
+        // If the shrink operation did not change the number of pieces not in the rectangle,
+        // then undo the shrink.
         while(previousNotInRect != 0) {
         	int piecesInRect = 0;
         	switch(i%4) {
@@ -131,18 +131,18 @@ public class MansionRoofHandler {
             }
         }
 
-        //If all pieces accounted for by looping the coords, this is a rectangle.
+        // If all pieces accounted for by looping the coords, this is a rectangle.
         return notInRect;
     }
     
     public static @NotNull Axis getDominantAxis(int @NotNull [] lowestCoords, int @NotNull [] highestCoords) {
     	Axis superiorAxis;
-        //Longer axis is the superior one
+        // Longer axis is the superior one
         if (highestCoords[0] - lowestCoords[0] > highestCoords[1] - lowestCoords[1])
             superiorAxis = Axis.X;
         else if (highestCoords[0] - lowestCoords[0] < highestCoords[1] - lowestCoords[1])
             superiorAxis = Axis.Z;
-        else //Square house
+        else // Square house
             superiorAxis = Axis.X;
 
         return superiorAxis;
@@ -150,12 +150,12 @@ public class MansionRoofHandler {
     
     public static @NotNull BlockFace getDominantBlockFace(int @NotNull [] lowestCoords, int @NotNull [] highestCoords) {
     	BlockFace superiorAxis;
-        //Longer axis is the superior one
+        // Longer axis is the superior one
         if (highestCoords[0] - lowestCoords[0] > highestCoords[1] - lowestCoords[1])
             superiorAxis = BlockFace.WEST;
         else if (highestCoords[0] - lowestCoords[0] < highestCoords[1] - lowestCoords[1])
             superiorAxis = BlockFace.NORTH;
-        else //Square house
+        else // Square house
             superiorAxis = BlockFace.WEST;
 
         return superiorAxis;
@@ -173,8 +173,8 @@ public class MansionRoofHandler {
         int[] lowestCoords = bounds[0];
         int[] highestCoords = bounds[1];
         
-        //RoofY
-        //Lol idk why 4
+        // RoofY
+        // Lol idk why 4
         int y = builder.getCore().getY() + 2*MansionJigsawBuilder.roomHeight + 4;
         
         superiorAxis = getDominantAxis(lowestCoords, highestCoords);
@@ -202,10 +202,10 @@ public class MansionRoofHandler {
             boolean ascendBlock = false;
             for (int right = 0; right < breadth-1; right++) {
 
-                //Place logs at the sides
+                // Place logs at the sides
                 if (right != 0 && right != breadth - 1) {
                     if (i == 0 || i == length - 1) {
-                        //Sandwiched by trapdoors
+                        // Sandwiched by trapdoors
                         new TrapdoorBuilder(Material.DARK_OAK_TRAPDOOR)
                                 .setHalf(Half.TOP)
                                 .setOpen(true)
@@ -217,16 +217,16 @@ public class MansionRoofHandler {
                                 .setAxis(superiorAxis)
                                 .apply(target.getDown().get());
                         
-                        //Connect the roof to the walls below
+                        // Connect the roof to the walls below
                         if(i == 2 || i == length - 3) {
-                        	//Lower Walls
+                        	// Lower Walls
                         	Wall bottom = target.getAtY(builder.getCore().getY() + 2*MansionJigsawBuilder.roomHeight+2);
                             if(BlockUtils.isAir(bottom.getType()) || Tag.STAIRS.isTagged(bottom.getType()) || Tag.SLABS.isTagged(bottom.getType())) {
                                 bottom.setType(Material.DARK_OAK_PLANKS);
                             }
                             target.getDown(2).downPillar(new Random(), target.getY()-bottom.getY()-2, bottom.getType());
                         }
-                        else if(i != 1 && i != length-2)//Force set air for things below the roof within the walls
+                        else if(i != 1 && i != length-2)// Force set air for things below the roof within the walls
                         {
                         	target.getDown(2).downPillar(new Random(), target.getY()-y+1, Material.AIR);
                         }
@@ -239,9 +239,9 @@ public class MansionRoofHandler {
                     slabType = Material.COBBLESTONE_SLAB;
                 }
 
-                if (breadth % 2 == 1) { //For odd breadth.
+                if (breadth % 2 == 1) { // For odd breadth.
                     if (right > breadth / 2) {
-                        //Slope down
+                        // Slope down
                     	attemptReplaceSlab(slabType,target,ascendBlock? Type.BOTTOM : Type.DOUBLE);
                     	if(ascendBlock) {
                     		target = target.getRight().getDown();
@@ -251,7 +251,7 @@ public class MansionRoofHandler {
                     		ascendBlock = true;
                     	}
                     } else if (right < breadth / 2) {
-                        //Slope up
+                        // Slope up
                     	attemptReplaceSlab(slabType,target,ascendBlock? Type.DOUBLE : Type.BOTTOM);
                     	if(ascendBlock) {
                     		target = target.getRight().getUp();
@@ -261,7 +261,7 @@ public class MansionRoofHandler {
                     		ascendBlock = true;
                     	}
                     } else {
-                        //Top (Only exists when the breadth is odd.
+                        // Top (Only exists when the breadth is odd.
                     	highestY = target.getY();
                         target.setType(slabType);
                     	if(ascendBlock) {
@@ -272,7 +272,7 @@ public class MansionRoofHandler {
                     		ascendBlock = true;
                     	}
                     }
-                } else { //For even breadth
+                } else { // For even breadth
                     if (right == breadth / 2 - 1) {
                     	highestY = target.getY();
                         target.setType(Material.DARK_OAK_PLANKS);
@@ -280,7 +280,7 @@ public class MansionRoofHandler {
                         	target.setType(Material.COBBLESTONE);
                         target = target.getRight();
                     } else if (right >= breadth / 2) {
-                        //Slope down
+                        // Slope down
                     	attemptReplaceSlab(slabType,target,ascendBlock? Type.BOTTOM : Type.DOUBLE);
                     	if(ascendBlock) {
                     		target = target.getRight().getDown();
@@ -290,7 +290,7 @@ public class MansionRoofHandler {
                     		ascendBlock = true;
                     	}
                     } else if (right < breadth / 2) {
-                        //Slope up
+                        // Slope up
                     	attemptReplaceSlab(slabType,target,ascendBlock? Type.DOUBLE : Type.BOTTOM);
                     	if(ascendBlock) {
                     		target = target.getRight().getUp();
@@ -332,13 +332,13 @@ public class MansionRoofHandler {
     			lantern.setHanging(true);
     			ceiling.getDown(chainLength).setBlockData(lantern);
     			if(ceiling.getY() - core.getY() > 5) {
-    				//If height is high enough, spawn a couple of cave spiders and spiders
+    				// If height is high enough, spawn a couple of cave spiders and spiders
     				if(GenUtils.chance(rand, 1,2))
     					data.addEntity(core.getX(), core.getY(), core.getZ(), EntityType.SPIDER);
     				if(GenUtils.chance(rand, 1,2))
     					data.addEntity(core.getX(), core.getY(), core.getZ(), EntityType.CAVE_SPIDER);
 
-    				//If lucky, spawn allays
+    				// If lucky, spawn allays
     				if(Version.isAtLeast(19) && rand.nextBoolean())
     	        		for(int i = 0; i < 1 + rand.nextInt(3); i++)
     	        			data.addEntity(core.getX(), core.getY(), core.getZ(), OneOneNineBlockHandler.ALLAY);
@@ -352,16 +352,16 @@ public class MansionRoofHandler {
     	{
     		SimpleBlock target = new SimpleBlock(data, loc[0], core.getY(), loc[1]);
     		Wall ceiling = new Wall(target).findCeiling(15);
-    		//Height more than 1
+    		// Height more than 1
     		if(ceiling != null && ceiling.getY() > target.getY()+1) {
     			ceiling.getDown().downUntilSolid(new Random(), Material.DARK_OAK_LOG);
     			for(BlockFace face:BlockUtils.directBlockFaces) {
-    				//Webs
+    				// Webs
     				if(GenUtils.chance(rand, 1, 8))
     					ceiling.getDown().getRelative(face).get().lsetType(Material.COBWEB);
     			}
     			
-    			//Small chance for chests against pillars
+    			// Small chance for chests against pillars
     			if(GenUtils.chance(rand, 1, 20))
     			{
     				BlockFace f = BlockUtils.getDirectBlockFace(rand);

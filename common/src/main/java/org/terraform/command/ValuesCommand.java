@@ -45,13 +45,13 @@ public class ValuesCommand extends TerraCommand {
 		}
 		
 		double warpedValue;
-		if(tempUnwarpedSineX == 0 && warp == 0) { //Prevent math error
+		if(tempUnwarpedSineX == 0 && warp == 0) { // Prevent math error
 			warpedValue = 0;
 		}else {
 			warpedValue = Math.pow(Math.abs(tempUnwarpedSineX),warp);
 		}
 		if(tempUnwarpedSineX < 0) {
-			warpedValue = -warpedValue; //Preserve sign
+			warpedValue = -warpedValue; // Preserve sign
 		}
 		return warpedValue;
 	}
@@ -82,7 +82,7 @@ public class ValuesCommand extends TerraCommand {
             int y = GenUtils.randInt(0,100);
             int z = GenUtils.randInt(-10000, 10000);
             vals.addValue(carverEntranceStandard.GetNoise(x, y, z));
-    		//vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
+    		// vals.addValue(50.0*tw.getOceanicNoise().GetNoise(x,z));
         }
         sender.sendMessage("Finished");
         sender.sendMessage("Highest: " + vals.getHighest());

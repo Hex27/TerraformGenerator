@@ -25,13 +25,13 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
         int[] lowerCorner = room.getLowerCorner(3);
         int[] upperCorner = room.getUpperCorner(3);
 
-        //If the room has any sunlight or water, don't build this.
+        // If the room has any sunlight or water, don't build this.
         SimpleBlock center = room.getCenterSimpleBlock(data).getUp();
         if(BlockUtils.isWet(center) 
     		|| GenUtils.getHighestGround(data, center.getX(), center.getZ()) <= center.getY())
         	return;
         	
-        //Flooring - Have a stone brick platform.
+        // Flooring - Have a stone brick platform.
         int y = room.getY();
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
@@ -49,7 +49,7 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Cave-spider spawner & Webs
+        // Cave-spider spawner & Webs
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
@@ -58,7 +58,7 @@ public class CaveSpiderDenPopulator extends RoomPopulatorAbstract {
                     b = b.getUp();
                     limit--;
                 }
-                if (limit < 0) continue; //No space above.
+                if (limit < 0) continue; // No space above.
                 if (x == room.getX() && z == room.getZ()) {
                     data.setSpawner(x, b.getY(), z, EntityType.CAVE_SPIDER);
                 } else {

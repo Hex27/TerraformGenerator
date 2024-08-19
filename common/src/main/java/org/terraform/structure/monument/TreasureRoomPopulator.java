@@ -87,10 +87,10 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
         int z = room.getZ();
         TerraSchematic schema;
 
-        //Spawn gold core
+        // Spawn gold core
         try {
-            //World w = ((PopulatorDataPostGen) data).getWorld();
-            //Add one to all to correct some weird aligning shit.
+            // World w = ((PopulatorDataPostGen) data).getWorld();
+            // Add one to all to correct some weird aligning shit.
             schema = TerraSchematic.load("monument-gold", new SimpleBlock(data,x+1,y-5,z+1));
             schema.parser = new MonumentSchematicParser();
             schema.setFace(BlockFace.NORTH);
@@ -99,10 +99,10 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 
-        //Spawn elder guardian
-        //data.addEntity(x+5, y, z+5, EntityType.ELDER_GUARDIAN);
+        // Spawn elder guardian
+        // data.addEntity(x+5, y, z+5, EntityType.ELDER_GUARDIAN);
 
-        //spawn claws
+        // spawn claws
         spawnLowerClaw(data, x, room.getY(), z);
         spawnUpperClaw(data, x, room.getY() + room.getHeight(), z);
     }

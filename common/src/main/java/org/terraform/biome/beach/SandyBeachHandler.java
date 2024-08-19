@@ -46,7 +46,7 @@ public class SandyBeachHandler extends BiomeHandler {
 
         surfaceY++;
 
-        //Spawn sugarcane
+        // Spawn sugarcane
         if (hasSugarcane) {
             boolean hasWater = data.getType(rawX + 1, surfaceY - 1, rawZ) == Material.WATER;
             if (data.getType(rawX - 1, surfaceY - 1, rawZ) == Material.WATER)

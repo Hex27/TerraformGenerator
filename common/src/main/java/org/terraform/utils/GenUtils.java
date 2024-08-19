@@ -29,7 +29,7 @@ public class GenUtils {
     private static final EnumSet<Material> BLACKLIST_HIGHEST_GROUND = EnumSet.noneOf(Material.class);
     public static void initGenUtils() {
 
-    	//Initialize highest ground blacklist
+    	// Initialize highest ground blacklist
     	for(Material mat:Material.values()) {
     		if(mat.toString().contains("LEAVES")
     				|| mat.toString().contains("LOG")
@@ -51,9 +51,9 @@ public class GenUtils {
     				|| mat == Material.BAMBOO_SAPLING
     				|| mat == Material.IRON_BARS
     				|| mat == Material.LANTERN
-    				//|| mat == Material.SNOW_BLOCK
-    				//|| mat == Material.PACKED_ICE
-    				//|| mat == Material.BLUE_ICE
+    				// || mat == Material.SNOW_BLOCK
+    				// || mat == Material.PACKED_ICE
+    				// || mat == Material.BLUE_ICE
     				) {
 //    	    	{
 //              "LEAVES", "LOG",
@@ -81,7 +81,7 @@ public class GenUtils {
         int y = data instanceof PopulatorDataSpigotAPI ? getTransformedHeight(data.getTerraformWorld(),x,z) : getHighestGround(data, x, z);
         int[] pair = {TerraformGeneratorPlugin.injector.getMinY() - 1, TerraformGeneratorPlugin.injector.getMinY() - 1};
         List<int[]> list = new ArrayList<>();
-        //Subtract one as the first cave floor cannot be the surface
+        // Subtract one as the first cave floor cannot be the surface
         for(int ny = y-1; ny > TerraformGeneratorPlugin.injector.getMinY(); ny--) {
             Material type = data.getType(x, ny, z);
             if(BlockUtils.isStoneLike(type)) {
@@ -196,7 +196,7 @@ public class GenUtils {
 
     @SafeVarargs
     public static <T> T randChoice(@NotNull Random rand, T @NotNull ... candidates) {
-        if(candidates.length == 1) return candidates[0]; //avoid invocation to randInt
+        if(candidates.length == 1) return candidates[0]; // avoid invocation to randInt
         return candidates[randInt(rand, 0, candidates.length - 1)];
     }
 
@@ -308,7 +308,7 @@ public class GenUtils {
     }
 
 	public static boolean isGroundLike(@NotNull Material mat) {
-    	//Ice is considered stone-like, but not in a million years is it ground.
+    	// Ice is considered stone-like, but not in a million years is it ground.
         if(BlockUtils.isStoneLike(mat) 
         		&& mat != Material.PACKED_ICE 
         		&& mat != Material.BLUE_ICE) 
@@ -361,7 +361,7 @@ public class GenUtils {
      * But you know what? I'm going to cache it anyway.
      */
     public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
-        //If you're too lazy to bother then just do this
+        // If you're too lazy to bother then just do this
         if(data instanceof PopulatorDataSpigotAPI)
             return getTransformedHeight(data.getTerraformWorld(),x,z);
 
@@ -369,9 +369,9 @@ public class GenUtils {
     	ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x, z);
     	int cachedY = cache.getHighestGround(x, z);
     	if(cachedY != TerraformGeneratorPlugin.injector.getMinY()-1) {
-    		//Basic check to ensure block above is not ground
-    		//and current block is ground.
-    		//Will fail if the new ground is an overhang of some kind.
+    		// Basic check to ensure block above is not ground
+    		// and current block is ground.
+    		// Will fail if the new ground is an overhang of some kind.
     		if(isGroundLike(data.getType(x, cachedY, z))
     				&& !isGroundLike(data.getType(x, cachedY+1, z))) {
                 return cache.getHighestGround(x, z);
@@ -394,7 +394,7 @@ public class GenUtils {
             }
         }
         
-        //Y can be stored as a short, as there's no way world height will be 32k.
+        // Y can be stored as a short, as there's no way world height will be 32k.
         cache.cacheHighestGround(x, z, Integer.valueOf(y).shortValue());
         return y;
     }

@@ -47,6 +47,6 @@ public class MudflatsHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-        //does nothing
+        // does nothing
 	}
 }

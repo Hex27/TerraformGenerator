@@ -29,7 +29,7 @@ public class MansionSecondFloorHandler {
 	
 	public void decorateAwkwardCorners()
 	{
-        //Make sure awkward corners are fixed
+        // Make sure awkward corners are fixed
         for (JigsawStructurePiece piece : secondFloorPieces.values()) {
             SimpleBlock core = new SimpleBlock(
                     builder.getCore().getPopData(),
@@ -39,22 +39,22 @@ public class MansionSecondFloorHandler {
             Wall target;
             
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //nw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // nw
                 target = new Wall(core.getRelative(-5, 1, -5));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.WEST);
             }
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //ne
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // ne
                 target = new Wall(core.getRelative(5, 1, -5));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.EAST);
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //sw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // sw
                 target = new Wall(core.getRelative(-5, 1, 5));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.WEST);
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //se
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // se
                 target = new Wall(core.getRelative(5, 1, 5));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST);
             }
@@ -63,7 +63,7 @@ public class MansionSecondFloorHandler {
 	
 	public void decorateAwkwardCorner(@NotNull Wall target, Random random, BlockFace one, BlockFace two) {
         
-    	//Fill in gap in the corner
+    	// Fill in gap in the corner
     	target.Pillar(MansionJigsawBuilder.roomHeight, Material.DARK_OAK_LOG);
     	
     }
@@ -100,7 +100,7 @@ public class MansionSecondFloorHandler {
     public void buildSecondFloor(Random random) {
         for (JigsawStructurePiece piece : this.secondFloorPieces.values()) {
 
-        	//Force room to be air first
+        	// Force room to be air first
         	int[] lowerCorner = piece.getRoom().getLowerCorner(0);
         	int[] upperCorner = piece.getRoom().getUpperCorner(0);
         	int lowestY = piece.getRoom().getY() + 1;
@@ -111,15 +111,15 @@ public class MansionSecondFloorHandler {
         			for(int y = lowestY; y <= upperY; y++)
         				builder.getCore().getPopData().setType(x, y, z, Material.AIR);
             
-            //Build room
+            // Build room
             piece.build(builder.getCore().getPopData(), random);
         }
 
         ArrayList<JigsawStructurePiece> toRemove = new ArrayList<>();
-        //Overlapper pieces are stuff like walls and entrances.
+        // Overlapper pieces are stuff like walls and entrances.
         Collections.shuffle(this.secondFloorOverlapperPieces);
         for (JigsawStructurePiece piece : this.secondFloorOverlapperPieces) {
-            //Don't place overlapper objects where rooms have been placed.
+            // Don't place overlapper objects where rooms have been placed.
             SimpleLocation pieceLoc = new SimpleLocation(piece.getRoom().getX(), piece.getRoom().getY(), piece.getRoom().getZ());
             if (secondFloorPieces.containsKey(pieceLoc)) {
                 toRemove.add(piece);
@@ -128,11 +128,11 @@ public class MansionSecondFloorHandler {
             JigsawStructurePiece host = builder.getAdjacentPiece(pieceLoc, piece.getRotation().getOppositeFace());
             if (host != null)
                 host.getWalledFaces().add(piece.getRotation());
-            //TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
+            // TerraformGeneratorPlugin.logger.info("Populating at " + piece.getClass().getSimpleName() + "::" + piece.getRoom().getX() + "," + piece.getRoom().getZ() + "," + piece.getRotation());
             piece.build(builder.getCore().getPopData(), random);
         }
 
-        //Remove pieces that weren't placed and replace the unused wall with the entrance.        
+        // Remove pieces that weren't placed and replace the unused wall with the entrance.        
         secondFloorOverlapperPieces.removeIf(toRemove::contains);
     }
     

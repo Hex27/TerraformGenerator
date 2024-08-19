@@ -29,12 +29,12 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
         }
 
         if (data instanceof Wall && b != null) {
-            //1.16 stuff.
+            // 1.16 stuff.
             correctSurroundingWallData(b);
         }
     }
     
-    //--------[1.16 stuff]
+    // --------[1.16 stuff]
     public static void correctWallData(@NotNull SimpleBlock target) {
         if (!(target.getBlockData() instanceof Wall data)) return;
         for (BlockFace face : BlockUtils.directBlockFaces) {

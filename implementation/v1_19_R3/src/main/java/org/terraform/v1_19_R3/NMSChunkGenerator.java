@@ -52,15 +52,15 @@ public class NMSChunkGenerator extends ChunkGenerator {
 	public NMSChunkGenerator(String worldname, long seed,
                              @NotNull ChunkGenerator delegate) {
     	super(
-                delegate.c(), //WorldChunkManager c() is getBiomeSource()
-    			delegate.d); //Idk what generationSettingsGetter is
+                delegate.c(), // WorldChunkManager c() is getBiomeSource()
+    			delegate.d); // Idk what generationSettingsGetter is
         tw = TerraformWorld.get(worldname, seed);
         this.delegate = delegate;
         twpb = new TerraformWorldProviderBiome(tw, delegate.c());
     }
     
 
-    @Override //getBiomeSource
+    @Override // getBiomeSource
     public @NotNull WorldChunkManager c() {
     	return twpb;
     }
@@ -69,47 +69,47 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return tw;
     }
 
-    @Override //createBiomes
+    @Override // createBiomes
     public @NotNull CompletableFuture<IChunkAccess> a(Executor executor, RandomState randomstate, Blender blender, StructureManager structuremanager, @NotNull IChunkAccess ichunkaccess)
     {
     	return CompletableFuture.supplyAsync(SystemUtils.a("init_biomes", () -> {
-             return ichunkaccess; //Don't do any calculations here, biomes are set in applyCarvers
+             return ichunkaccess; // Don't do any calculations here, biomes are set in applyCarvers
          }), SystemUtils.f());
      }
     
-	@Override //findNearestMapFeature
+	@Override // findNearestMapFeature
 	public Pair<BlockPosition, Holder<Structure>> a(WorldServer worldserver, @NotNull HolderSet<Structure> holderset,
                                                     @NotNull BlockPosition blockposition, int i, boolean flag) {
     	
-    	int pX = blockposition.u(); //getX
-        int pZ = blockposition.w(); //getZ
+    	int pX = blockposition.u(); // getX
+        int pZ = blockposition.w(); // getZ
         
         for(Holder<Structure> holder:holderset) {
         	Structure feature = holder.a();
-        	//StructureGenerator<?> structuregenerator = feature.;
+        	// StructureGenerator<?> structuregenerator = feature.;
         	TerraformGeneratorPlugin.logger.info("Vanilla locate for " + feature.getClass().getName() + " invoked.");
 
-            if (holder.a().getClass() == StrongholdStructure.class) { //stronghold
+            if (holder.a().getClass() == StrongholdStructure.class) { // stronghold
                 int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
                 return new Pair<>
                         (new BlockPosition(coords[0], 20, coords[1]), holder);
             } 
             else if(!TConfigOption.DEVSTUFF_VANILLA_LOCATE_DISABLE.getBoolean())
             {
-            	if (holder.a().getClass() == OceanMonumentStructure.class) { //Monument
+            	if (holder.a().getClass() == OceanMonumentStructure.class) { // Monument
                     
             		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
                     return new Pair<>
                             (new BlockPosition(coords[0], 50, coords[1]), holder);
-                } else if (holder.a().getClass() == WoodlandMansionStructure.class) { //Mansion
+                } else if (holder.a().getClass() == WoodlandMansionStructure.class) { // Mansion
                         
             		int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
 
                     return new Pair<>
                             (new BlockPosition(coords[0], 50, coords[1]), holder);
                 } else if (holder.a().getClass() == BuriedTreasureStructure.class) { 
-                	//Buried Treasure
+                	// Buried Treasure
                 	int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfigOption.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS.getInt());
                     if(coords == null) return null;
                     return new Pair<>
@@ -120,41 +120,41 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return null;
     }
 
-    @Override //applyBiomeDecoration
+    @Override // applyBiomeDecoration
     public void a(GeneratorAccessSeed generatoraccessseed, IChunkAccess ichunkaccess, StructureManager structuremanager) {
     	delegate.a(generatoraccessseed, ichunkaccess, structuremanager);
     }
 
-    @Override //applyCarvers
+    @Override // applyCarvers
     public void a(RegionLimitedWorldAccess regionlimitedworldaccess, long seed,
                   RandomState randomstate, BiomeManager biomemanager,
                   StructureManager structuremanager, @NotNull IChunkAccess ichunkaccess,
                   WorldGenStage.Features worldgenstage_features)
     {
-    	//POPULATES BIOMES. IMPORTANT
-    	//(net.minecraft.world.level.biome.BiomeResolver,net.minecraft.world.level.biome.Climate$Sampler)
-        ichunkaccess.a(twpb, null); //This can be null as its passed into twpd
+    	// POPULATES BIOMES. IMPORTANT
+    	// (net.minecraft.world.level.biome.BiomeResolver,net.minecraft.world.level.biome.Climate$Sampler)
+        ichunkaccess.a(twpb, null); // This can be null as its passed into twpd
 
         delegate.a(regionlimitedworldaccess, seed, randomstate, biomemanager,structuremanager,ichunkaccess,worldgenstage_features);
     }
 
 
-    @Override //getSeaLevel
+    @Override // getSeaLevel
     public int e() {
         return delegate.e();
     }
 
-    @Override //createStructures should be empty
+    @Override // createStructures should be empty
     public void a(IRegistryCustom iregistrycustom, ChunkGeneratorStructureState chunkgeneratorstructurestate, StructureManager structuremanager, IChunkAccess ichunkaccess, StructureTemplateManager structuretemplatemanager) {
     	
     }
 
-    @Override //getSpawnHeight
+    @Override // getSpawnHeight
     public int a(LevelHeightAccessor levelheightaccessor) {
         return 64;
      }
 
-    @Override //fillFromNoise
+    @Override // fillFromNoise
     public CompletableFuture<IChunkAccess> a(Executor executor, Blender blender, 
     		RandomState randomstate, StructureManager structuremanager, 
     		IChunkAccess ichunkaccess) {
@@ -165,12 +165,12 @@ public class NMSChunkGenerator extends ChunkGenerator {
     
 
 //  	@SuppressWarnings("unchecked")
-    @Override //buildSurface. Used to be buildBase
+    @Override // buildSurface. Used to be buildBase
     public void a(RegionLimitedWorldAccess regionlimitedworldaccess, StructureManager structuremanager, RandomState randomstate, IChunkAccess ichunkaccess) {
         delegate.a(regionlimitedworldaccess, structuremanager, randomstate, ichunkaccess);
     }
   	
-  	@Override //createReferences. Idk what this is
+  	@Override // createReferences. Idk what this is
   	public void a(GeneratorAccessSeed gas,StructureManager manager,IChunkAccess ica)
   	{
   		delegate.a(gas, manager, ica);
@@ -181,51 +181,51 @@ public class NMSChunkGenerator extends ChunkGenerator {
         return Codec.unit(null);
     }
 
-	@Override //getBaseColumn
+	@Override // getBaseColumn
 	public BlockColumn a(int i, int j, LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
 		return this.delegate.a(i,j,levelheightaccessor,randomstate);
 	}
 
-    //spawnOriginalMobs
+    // spawnOriginalMobs
 	public void a(RegionLimitedWorldAccess regionlimitedworldaccess) {
 		this.delegate.a(regionlimitedworldaccess);
 	}
-	//getGenDepth
+	// getGenDepth
 	public int d() {
 		return this.delegate.d();
 	}
 
 	
-	//getMinY
+	// getMinY
 	@Override
 	public int f() {
 		return this.delegate.f();
 	}
 	
-	@Override //getFirstFreeHeight
+	@Override // getFirstFreeHeight
 	public int b(int i, int j, HeightMap.Type heightmap_type, 
 			LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
 		return this.a(i, j, heightmap_type, levelheightaccessor, randomstate);
 	}
 	
 	
-	@Override //getFirstOccupiedHeight
+	@Override // getFirstOccupiedHeight
 	public int c(int i, int j, HeightMap.Type heightmap_type, 
 			LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
 		return this.a(i, j, heightmap_type, levelheightaccessor, randomstate) - 1;
 	}
 
-    @Override //getBaseHeight
+    @Override // getBaseHeight
     public int a(int i, int j, HeightMap.Type heightmap_type, LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
-        //return delegate.a(x, z, var2, var3);
+        // return delegate.a(x, z, var2, var3);
     	return 100;
-    	//return org.terraform.coregen.HeightMap.getBlockHeight(tw, x, z);
+    	// return org.terraform.coregen.HeightMap.getBlockHeight(tw, x, z);
     }
    
-    //private static boolean biomeDebug = false;
+    // private static boolean biomeDebug = false;
     
 
-	@Override //addDebugScreenInfo
+	@Override // addDebugScreenInfo
 	public void a(List<String> list, RandomState randomstate, BlockPosition blockposition) {
 		
 	}

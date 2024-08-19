@@ -76,14 +76,14 @@ public class LocateCommand extends TerraCommand implements Listener {
             sender.sendMessage(LangOpt.fetchLang("permissions.console-cannot-exec"));
             return;
         }
-        StructurePopulator spop = (StructurePopulator) params.get(0); //TODO: Get populator by name
+        StructurePopulator spop = (StructurePopulator) params.get(0); // TODO: Get populator by name
 
         if (!spop.isEnabled() && !(spop instanceof StrongholdPopulator)) {
             p.sendMessage(LangOpt.COMMAND_LOCATE_STRUCTURE_NOT_ENABLED.parse());
             return;
         }
 
-        //Stronghold Special Case
+        // Stronghold Special Case
         if (spop instanceof StrongholdPopulator) {
             final TerraformWorld tw = TerraformWorld.get(p.getWorld());
             int[] coords = ((StrongholdPopulator) spop).getNearestFeature(tw,

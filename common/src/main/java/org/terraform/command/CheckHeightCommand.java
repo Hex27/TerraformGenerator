@@ -58,7 +58,7 @@ public class CheckHeightCommand extends TerraCommand {
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
         p.sendMessage("[CH]===============================");
         p.sendMessage("Core Height: " + HeightMap.CORE.getHeight(tw, x, z));
-        //p.sendMessage("Mountainous Height: " + HeightMap.MOUNTAIN.getHeight(tw, x, z));
+        // p.sendMessage("Mountainous Height: " + HeightMap.MOUNTAIN.getHeight(tw, x, z));
         p.sendMessage("Attrition Height: " + HeightMap.ATTRITION.getHeight(tw, x, z));
         p.sendMessage("Gradient (2,3,4): " + HeightMap.getNoiseGradient(tw, x, z, 2) + "," + HeightMap.getNoiseGradient(tw, x, z, 3) + "," + HeightMap.getNoiseGradient(tw, x, z,4)); 
         p.sendMessage("True Gradient (2,3,4): " + HeightMap.getTrueHeightGradient(data, x, z, 2) + "," + HeightMap.getTrueHeightGradient(data, x, z, 3) + "," + HeightMap.getTrueHeightGradient(data, x, z,4));
@@ -77,7 +77,7 @@ public class CheckHeightCommand extends TerraCommand {
         }
         for(SingleMegaChunkStructurePopulator spop:StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
         	if (spop == null) continue;
-        	int[] coords = mc.getCenterBlockCoords(); //spop.getCoordsFromMegaChunk(tw, mc);
+        	int[] coords = mc.getCenterBlockCoords(); // spop.getCoordsFromMegaChunk(tw, mc);
         	int dist = (int) Math.sqrt(Math.pow(x-coords[0], 2) + Math.pow(z-coords[1], 2));
         	p.sendMessage(" - Structure Registered: " + spop.getClass().getSimpleName() + "(" + coords[0] + "," + coords[1] + ") " + dist + " blocks away");
         }

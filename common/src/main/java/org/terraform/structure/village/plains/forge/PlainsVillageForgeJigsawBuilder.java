@@ -35,7 +35,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
     @Override
     public @NotNull JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return new PlainsVillageForgeChimneyPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, BlockUtils.directBlockFaces);
-    	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
+    	// return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
         
         ArrayList<JigsawStructurePiece> builtWalls = new ArrayList<>();
         
-        //Decorate walls and entrance based on the rectangle identified.
+        // Decorate walls and entrance based on the rectangle identified.
         for(JigsawStructurePiece piece:pieces.values()) {
         	PlainsVillageForgeWallType wallType = PlainsVillageForgeWallType.FENCE;
         	if(rectanglePieces.contains(piece.getRoom().getSimpleLocation())) {
@@ -61,7 +61,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
         	}
         }
         
-        //Make sure awkward corners are fixed
+        // Make sure awkward corners are fixed
         for (JigsawStructurePiece piece : this.pieces.values()) {
             SimpleBlock core = new SimpleBlock(
                     this.core.getPopData(),
@@ -73,22 +73,22 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
             if(rectanglePieces.contains(piece.getRoom().getSimpleLocation()))
             	type = PlainsVillageForgeWallType.SOLID;
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //nw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // nw
                 target = new Wall(core.getRelative(-3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.WEST, type);
             }
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //ne
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // ne
                 target = new Wall(core.getRelative(3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.EAST, type);
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //sw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // sw
                 target = new Wall(core.getRelative(-3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.WEST, type);
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //se
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // se
                 target = new Wall(core.getRelative(3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST, type);
             }
@@ -96,7 +96,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
         
         PlainsVillageForgeRoofHandler.placeRoof(this.plainsVillagePopulator, core, rectanglePieces);
         
-        //Decorate rooms and walls
+        // Decorate rooms and walls
         for (JigsawStructurePiece piece : this.overlapperPieces) {
             piece.postBuildDecoration(random, this.core.getPopData());
         }
@@ -110,7 +110,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
     
     public void decorateAwkwardCorner(@NotNull Wall target, @NotNull Random random, BlockFace one, BlockFace two, PlainsVillageForgeWallType wallType) {
         if(wallType == PlainsVillageForgeWallType.SOLID) {
-        	//Corner logs
+        	// Corner logs
             target.Pillar(4, random, plainsVillagePopulator.woodLog);
             
             target.getDown().downUntilSolid(random, plainsVillagePopulator.woodLog);
@@ -119,7 +119,7 @@ public class PlainsVillageForgeJigsawBuilder extends JigsawBuilder {
         }
         else
         {
-        	//Fence stubs
+        	// Fence stubs
             target.Pillar(2, random, plainsVillagePopulator.woodLog);
             target.getUp(2).setType(Material.STONE_SLAB,Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB);
             target.getDown().downUntilSolid(random,plainsVillagePopulator.woodLog);

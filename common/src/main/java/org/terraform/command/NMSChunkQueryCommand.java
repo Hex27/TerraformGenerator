@@ -31,7 +31,7 @@ public class NMSChunkQueryCommand extends TerraCommand {
     @Override
     public void execute(CommandSender sender, Stack<String> args)
 	{
-    	//Commented out to prevent runtime errors for older versions
+    	// Commented out to prevent runtime errors for older versions
     }
 
 }

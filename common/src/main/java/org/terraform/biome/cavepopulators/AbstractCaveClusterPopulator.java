@@ -20,7 +20,7 @@ import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator {
 
 	private final float radius;
-    //Starts null, but will be populated by the time oneUnit is called.
+    // Starts null, but will be populated by the time oneUnit is called.
     protected SimpleBlock center;
     protected SimpleBlock lowestYCenter;
 	public AbstractCaveClusterPopulator(float radius) {
@@ -48,19 +48,19 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
         center = new SimpleBlock(ceil.getPopData(), ceil.getX(), (ceil.getY() + floor.getY())/2, ceil.getZ());
         int lowest = center.getY();
 
-        //Perform a breadth-first search from the center.
+        // Perform a breadth-first search from the center.
 
         HashMap<SimpleBlock, Wall[]> seen = new HashMap<>();
         Queue<SimpleBlock> queue = new LinkedList<>();
-        queue.add(center); //Add the root element
+        queue.add(center); // Add the root element
         seen.put(center, new Wall[]{new Wall(ceil), new Wall(floor)});
 
-        //TerraformGeneratorPlugin.logger.info("Entering BFS for " + center);
+        // TerraformGeneratorPlugin.logger.info("Entering BFS for " + center);
         while(!queue.isEmpty())
         {
             SimpleBlock v = queue.remove();
 
-            //Process the node
+            // Process the node
             Wall vCeil = seen.get(v)[0];
             Wall vFloor = seen.get(v)[1];
             lowest = Math.min(vFloor.getY(), lowest);
@@ -68,34 +68,34 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
                     vCeil.get(),
                     vFloor.get()
             });
-            //TerraformGeneratorPlugin.logger.info("NLOOP: " + v);
+            // TerraformGeneratorPlugin.logger.info("NLOOP: " + v);
 
             boolean sawFailCondition = false;
             for(BlockFace face:BlockUtils.directBlockFaces)
             {
-                //Simulate the criteria as edge connections.
-                //Continue if the neighbour doesn't meet the criteria
+                // Simulate the criteria as edge connections.
+                // Continue if the neighbour doesn't meet the criteria
                 SimpleBlock neighbour = v.getRelative(face);
 
                 if(seen.containsKey(neighbour)){
-                    //TerraformGeneratorPlugin.logger.info("Seen " + neighbour);
+                    // TerraformGeneratorPlugin.logger.info("Seen " + neighbour);
                     continue;
                 }
 
-                //Check if neighbour is within radius
+                // Check if neighbour is within radius
                 double equationResult = Math.pow(neighbour.getX()-center.getX(), 2) / Math.pow(radius, 2)
                         + Math.pow(neighbour.getZ()-center.getZ(), 2) / Math.pow(radius, 2);
                 if(equationResult > 1 + 0.7*circleNoise.GetNoise(neighbour.getX(), neighbour.getZ()))
                 {
                     sawFailCondition = true;
-                    //TerraformGeneratorPlugin.logger.info("OOB " + neighbour + ": " + equationResult);
+                    // TerraformGeneratorPlugin.logger.info("OOB " + neighbour + ": " + equationResult);
                     continue;
                 }
 
                 Wall candidateFloorWall = new Wall(neighbour).findStonelikeFloor(60);
                 Wall candidateCeilWall = new Wall(neighbour).findStonelikeCeiling(60);
 
-                //Misc checks that don't affect boundary condition
+                // Misc checks that don't affect boundary condition
                 if(candidateFloorWall == null
                         || candidateCeilWall == null
                         ||BlockUtils.amethysts.contains(floor.getType())
@@ -105,28 +105,28 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
                         || candidateFloorWall.getType() == Material.DRIPSTONE_BLOCK
                         || candidateFloorWall.getUp().isSolid()
                         || candidateCeilWall.getDown().isSolid()) {
-                    //TerraformGeneratorPlugin.logger.info("Misc Skip " + neighbour);
+                    // TerraformGeneratorPlugin.logger.info("Misc Skip " + neighbour);
                     continue;
                 }
 
-                //Process under BFS
+                // Process under BFS
                 seen.put(neighbour, new Wall[]{candidateCeilWall,candidateFloorWall});
                 queue.add(neighbour);
-                //TerraformGeneratorPlugin.logger.info("Enqueued " + neighbour);
+                // TerraformGeneratorPlugin.logger.info("Enqueued " + neighbour);
             }
 
-            //If you saw a node that fails the radius equation,
+            // If you saw a node that fails the radius equation,
             // then you're a boundary block.
             boundaries.add(sawFailCondition);
-            //TerraformGeneratorPlugin.logger.info("Processed " + v + ", SZ Q: " + queue.size());
+            // TerraformGeneratorPlugin.logger.info("Processed " + v + ", SZ Q: " + queue.size());
         }
-        //TerraformGeneratorPlugin.logger.info("Finished for " + center);
+        // TerraformGeneratorPlugin.logger.info("Finished for " + center);
 
         lowestYCenter = center.getAtY(lowest);
         for(int i = 0; i < ceilFloorPairs.size(); i++) {
             SimpleBlock[] candidates = ceilFloorPairs.get(i);
 
-            //Late fluid checks
+            // Late fluid checks
             if(BlockUtils.fluids.contains(candidates[1].getAtY(lowest+1).getType()))
                 continue;
         	oneUnit(tw, random, candidates[0], candidates[1], boundaries.get(i));

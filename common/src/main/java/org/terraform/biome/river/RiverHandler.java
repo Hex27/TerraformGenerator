@@ -39,10 +39,10 @@ public class RiverHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-        if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
+        if(surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
             return;
 
-        //Set ground near sea level to sand
+        // Set ground near sea level to sand
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.SAND);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {

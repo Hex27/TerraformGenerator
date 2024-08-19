@@ -29,7 +29,7 @@ public class SchematicArgument extends TerraCommandArgument<TerraSchematic> {
     @Override
     public @NotNull String validate(@NotNull CommandSender sender, String value) {
         try {
-            //Path validation is done inside TerraSchematic.load
+            // Path validation is done inside TerraSchematic.load
             TerraSchematic.load(value, new SimpleBlock(((Player) sender).getLocation()));
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);

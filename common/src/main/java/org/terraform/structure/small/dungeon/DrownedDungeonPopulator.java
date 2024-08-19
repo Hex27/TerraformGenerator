@@ -41,11 +41,11 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
             }
         }
 
-        int x = spawnCoords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = spawnCoords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int x = spawnCoords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = spawnCoords[1];// data.getChunkZ()*16 + random.nextInt(16);
         Random rand = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 
-        //int y = GenUtils.getHighestGround(data, x, z);
+        // int y = GenUtils.getHighestGround(data, x, z);
 
 
         spawnDungeonRoom(x, z, tw, rand, data);
@@ -58,21 +58,21 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
         Material[] set = sets[setIndex];
         int radius = GenUtils.randInt(rand, 5, 10);
 
-        //First Round
+        // First Round
         for (int nx = -radius; nx <= radius; nx++) {
             for (int nz = -radius; nz <= radius; nz++) {
                 if (nx * nx + nz * nz > radius * radius + GenUtils.randInt(rand, -10, 10))
                     continue;
 
-                int y = HeightMap.getBlockHeight(tw, x, z);//GenUtils.getHighestGround(data, nx + x, nz + z);
+                int y = HeightMap.getBlockHeight(tw, x, z);// GenUtils.getHighestGround(data, nx + x, nz + z);
 
-                //Spawner
+                // Spawner
                 if (nx == 0 && nz == 0) {
                     data.setSpawner(x, y + 1, z, EntityType.DROWNED);
                     continue;
                 }
 
-                //Spawn a dungeon Pillar
+                // Spawn a dungeon Pillar
                 if (GenUtils.chance(rand, 1, 10)) {
                     Wall w = new Wall(new SimpleBlock(data, nx + x, y + 1, nz + z), BlockFace.NORTH);
                     w.LPillar(GenUtils.randInt(1, 7), rand, set);
@@ -92,7 +92,7 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
             }
         }
 
-        //Second decorative round
+        // Second decorative round
         for (int nx = -radius; nx <= radius; nx++) {
             for (int nz = -radius; nz <= radius; nz++) {
                 int y = GenUtils.getHighestGround(data, nx + x, nz + z);

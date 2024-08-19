@@ -18,7 +18,7 @@ public class BadlandsMineEntranceParser extends SchematicParser {
     static @Nullable FastNoise noise = null;
     private boolean didPlaceLantern = false;
     
-    //Don't cache, as it does not change based on terraformworld.
+    // Don't cache, as it does not change based on terraformworld.
     static double getNoise(int x, int y, int z) {
         if (noise == null) {
             noise = new FastNoise();

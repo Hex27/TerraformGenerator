@@ -41,15 +41,15 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
             w = w.getLeft();
         }
 
-        //Place doorway
+        // Place doorway
         w = w.getRight(5).getUp();
         
-        //Carve empty frame
+        // Carve empty frame
         w.getRight().Pillar(2, new Random(), Material.AIR);
         w.Pillar(3, new Random(), Material.AIR);        
         w.getLeft().Pillar(2, new Random(), Material.AIR);
         
-        //Wall first layer decorations
+        // Wall first layer decorations
         w.getFront().getRight(3).Pillar(3, new Random(), Material.DARK_OAK_LOG);
         w.getFront().getLeft(3).Pillar(3, new Random(), Material.DARK_OAK_LOG);
 
@@ -90,7 +90,7 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         .apply(w.getFront().getLeft(3).getUp(3))
         .apply(w.getFront().getLeft(2).getUp(4));
         
-        //Wall second layer decorations
+        // Wall second layer decorations
         new StairBuilder(Material.DARK_OAK_STAIRS)
         .setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
         .apply(w.getUp(3));
@@ -104,7 +104,7 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         .setFacing(BlockUtils.getLeft(w.getDirection()))
         .apply(w.getLeft().getUp(2));
         
-        //Stone decorations on the outside
+        // Stone decorations on the outside
         w.getFront(2).getRight(3).setType(Material.COBBLESTONE);
         w.getFront(2).getLeft(3).setType(Material.COBBLESTONE);
         w.getFront(2).getRight(3).getUp().setType(Material.COBBLESTONE_WALL);
@@ -112,7 +112,7 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         w.getFront(2).getRight(3).getUp(2).setType(Material.LANTERN);
         w.getFront(2).getLeft(3).getUp(2).setType(Material.LANTERN);
         
-        //At the entrance, place a circle to give the entrance a slightly special look
+        // At the entrance, place a circle to give the entrance a slightly special look
         w = new Wall(new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ()),w.getDirection());
         
         ArrayList<BlockFace> directions = new ArrayList<>();
@@ -121,22 +121,22 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         		directions.add(p.getRotation());
         }
         
-        //Door is in an awkward sink-in.
-        //Redetermine entrance direction and move the circle outwards
+        // Door is in an awkward sink-in.
+        // Redetermine entrance direction and move the circle outwards
         if(directions.size() == 3) {
         	for(BlockFace face:directions) {
-        		//Identify the outward direction, then remake w with it.
+        		// Identify the outward direction, then remake w with it.
         		if(directions.contains(face.getOppositeFace()))
         			continue;
         		
         		w = new Wall(w.get(), face);
-        		//after remaking the wall, move it outwards to allow the circle
-        		//to protrude out better
+        		// after remaking the wall, move it outwards to allow the circle
+        		// to protrude out better
         		w = w.getFront(4);
         	}
         }
         else
-        	w = w.getRear(3); //Push backwards if this is a direct entrance
+        	w = w.getRear(3); // Push backwards if this is a direct entrance
         
         int radius = 10;
         int radiusSquared = radius*radius;
@@ -153,7 +153,7 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
             }
         }
         
-        //Stairway from the front door
+        // Stairway from the front door
         Wall stairway = w.getFront(10);
         BlockUtils.stairwayUntilSolid(stairway.get(), stairway.getDirection(),
         		new Material[] {Material.COBBLESTONE}, 
@@ -171,7 +171,7 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         		new Material[] {Material.COBBLESTONE}, 
         		Material.COBBLESTONE_STAIRS);
         
-        //Primary upper portion decorations
+        // Primary upper portion decorations
         Wall ceilingCenter =  stairway.getRear().getRelative(0,1+MansionJigsawBuilder.roomHeight,0);
         ceilingCenter.setType(Material.POLISHED_DIORITE);
         
@@ -192,8 +192,8 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         	ceilingCenter.getUp().getRight(i).CorrectMultipleFacing(1);
         }
 
-        //Replace corners with stone bricks instead of cobblestone
-        //Place decorative pillars
+        // Replace corners with stone bricks instead of cobblestone
+        // Place decorative pillars
         for(BlockFace face:BlockUtils.getAdjacentFaces(stairway.getDirection())) {
         	Wall target = stairway.getRear().getRelative(face,3);
         	for(int i = 0; i < 6; i++) {
@@ -202,15 +202,15 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         			target = target.getRear();
         			maxRecursion--;
         		}
-        		if(maxRecursion <= 0) break; //Wtf
+        		if(maxRecursion <= 0) break; // Wtf
         		
-        		//Ceiling decor
+        		// Ceiling decor
         		if(i > 1) {
     				target.getRelative(0,2+MansionJigsawBuilder.roomHeight,0).setType(Material.COBBLESTONE_WALL);
     				target.getRelative(0,2+MansionJigsawBuilder.roomHeight,0).CorrectMultipleFacing(1);
         		}
         		
-        		if(i % 2 == 0 || i > 4) { //Just a short stone brick stub
+        		if(i % 2 == 0 || i > 4) { // Just a short stone brick stub
         			if(i == 0 || i > 4)
         				target.Pillar(2, Material.STONE_BRICKS);
         			else
@@ -218,7 +218,7 @@ public class MansionEntrancePiece extends JigsawStructurePiece {
         		}
         		else
         		{
-        			//Pillar
+        			// Pillar
         			target.getRear().Pillar(1+MansionJigsawBuilder.roomHeight, Material.DARK_OAK_LOG);
         			
         			target.getUp().Pillar(MansionJigsawBuilder.roomHeight, Material.COBBLESTONE_WALL);

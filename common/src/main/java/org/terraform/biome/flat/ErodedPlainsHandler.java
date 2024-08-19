@@ -90,7 +90,7 @@ public class ErodedPlainsHandler extends BiomeHandler {
                 + detailsValue * heightFactor * 0.5;
 
         short newHeight = (short) (height + (int) Math.round(platformHeight));
-        if(newHeight < height) return; //Does not make changes if the platform is lower.
+        if(newHeight < height) return; // Does not make changes if the platform is lower.
 
         cache.writeTransformedHeight (x,z,(short) ((int)Math.round(platformHeight)+height));
         for (int y = height+1; y <= newHeight; y++) {

@@ -40,9 +40,9 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
         if (!isEnabled()) return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
         int height = new SimpleBlock(data, x, 0, z).getGroundOrSeaLevel().getY();
         spawnOutpost(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, height + 1, z);
     }
@@ -81,8 +81,8 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             propGenerator.setRoomMinZ(12);
             propGenerator.setRoomMaxX(12);
             propGenerator.setRoomMaxZ(12);
-            //Placeholder room to ensure primary outpost structure does not
-            //get overlapped.
+            // Placeholder room to ensure primary outpost structure does not
+            // get overlapped.
             CubeRoom placeholder = new CubeRoom(20, 20, 15, x, y, z);
             propGenerator.getRooms().add(placeholder);
             
@@ -91,14 +91,14 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             propGenerator.registerRoomPopulator(new OutpostLogpile(random, false, true, biome));
             propGenerator.registerRoomPopulator(new OutpostStakeCage(random, false, true, biome, stakeGravel));
             
-            //No paths
+            // No paths
             propGenerator.setGenPaths(false);
             propGenerator.calculateRoomPlacement();
             
-            //Remove the placeholder room
+            // Remove the placeholder room
             propGenerator.getRooms().remove(placeholder);
             
-            //Only run room populators. We don't want any room space carving.
+            // Only run room populators. We don't want any room space carving.
             propGenerator.runRoomPopulators(data,tw);
             setupPillagerSpawns(data, x, y, z);
         } catch (Throwable e) {
@@ -123,17 +123,17 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
             for (float z = -radius; z <= radius; z++) {
                 SimpleBlock rel = center.getRelative(Math.round(x), 0, Math.round(z)).getGroundOrSeaLevel();
                 
-                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                 double mainRadiusResult = Math.pow(x, 2) / Math.pow(radius, 2)
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 double secondaryRadiusResult = mainRadiusResult*1.3;
                 double noiseVal = noise.GetNoise(rel.getX(), rel.getZ());
                 if (mainRadiusResult <= 1 + 0.7 * noiseVal) {
                 	
-                	//Raise water ground
+                	// Raise water ground
                 	rel.lsetType(planksMat);
                 	if(secondaryRadiusResult > 1 + 0.7 * noiseVal) {
-                		//Rocky ground
+                		// Rocky ground
                     	BlockUtils.replaceCircularPatch(rand.nextInt(4211), 1.5f, rel, stakeGravel);
                     	
                     	spawnOneStake(rand,rel.getUp(),bank,stakeGravel);
@@ -147,7 +147,7 @@ public class OutpostPopulator extends SingleMegaChunkStructurePopulator {
     public void spawnOneStake(@NotNull Random rand, @NotNull SimpleBlock base, @NotNull BiomeBank bank, Material... stakeGravel) {
     	WoodType type = new WoodType[] {WoodType.LOG, WoodType.STRIPPED_LOG}[rand.nextInt(2)];
     	Wall w = new Wall(base);
-    	//Don't spawn stake next to another one
+    	// Don't spawn stake next to another one
     	for(BlockFace face:BlockUtils.xzPlaneBlockFaces) {
     		if(Tag.LOGS.isTagged(base.getRelative(face).getType()))
 				return;

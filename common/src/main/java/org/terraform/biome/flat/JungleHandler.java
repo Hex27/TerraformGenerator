@@ -58,9 +58,9 @@ public class JungleHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-    	//Almost everything about jungle population is highly disruptive.
-    	//Only grass spawning remains here. Mushrooms and everything else go to
-    	//populateLargeItems
+    	// Almost everything about jungle population is highly disruptive.
+    	// Only grass spawning remains here. Mushrooms and everything else go to
+    	// populateLargeItems
          // Generate grass
          if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
              if (BlockUtils.isAir(data.getType(rawX, surfaceY + 1, rawZ)) && GenUtils.chance(2, 3)) {
@@ -147,7 +147,7 @@ public class JungleHandler extends BiomeHandler {
 	        }
 
         
-        //Small jungle trees, OR jungle statues
+        // Small jungle trees, OR jungle statues
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
 
         for (SimpleLocation sLoc : trees) {

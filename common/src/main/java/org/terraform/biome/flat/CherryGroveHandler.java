@@ -54,9 +54,9 @@ public class CherryGroveHandler extends BiomeHandler {
 
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
 
-            if (GenUtils.chance(random, 2, 10)) { //Grass
+            if (GenUtils.chance(random, 2, 10)) { // Grass
                 if (GenUtils.chance(random, 8, 10)) {
-                    //Pink petals. No longer generate tall grass.
+                    // Pink petals. No longer generate tall grass.
                     if (Version.isAtLeast(20) && TConfigOption.arePlantsEnabled() && GenUtils.chance(random, 6, 10)) {
                         data.setBlockData(rawX,surfaceY+1,rawZ, OneTwentyBlockHandler.getPinkPetalData(GenUtils.randInt(1,4)));
                     }else
@@ -74,7 +74,7 @@ public class CherryGroveHandler extends BiomeHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
-		//Small trees or grass poffs
+		// Small trees or grass poffs
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 20);
         
         for (SimpleLocation sLoc : trees) {
@@ -84,19 +84,19 @@ public class CherryGroveHandler extends BiomeHandler {
             
             if(tw.getBiomeBank(sLoc.getX(),sLoc.getZ()) == BiomeBank.CHERRY_GROVE &&
                     BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ())))
-                switch(random.nextInt(20)) //0 to 19 inclusive
+                switch(random.nextInt(20)) // 0 to 19 inclusive
                 {
-                    case 19, 18, 17, 16, 15 -> //Rock (5/20)
+                    case 19, 18, 17, 16, 15 -> // Rock (5/20)
                             new SphereBuilder(random, new SimpleBlock(data, sLoc), Material.COBBLESTONE, Material.STONE, Material.STONE, Material.STONE, Material.MOSSY_COBBLESTONE)
                                     .setRadius(GenUtils.randInt(random, 3, 5))
                                     .setRY(GenUtils.randInt(random, 6, 10))
                                     .build();
-                    default -> { //Tree (15/20)
-                        if(random.nextBoolean())  //small trees
+                    default -> { // Tree (15/20)
+                        if(random.nextBoolean())  // small trees
                             new FractalTreeBuilder(FractalTypes.Tree.CHERRY_SMALL).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
                         else
                             new FractalTreeBuilder(FractalTypes.Tree.CHERRY_THICK).build(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
-                        //No spore blossoms on 1.20 as the new cherry trees already drop petals
+                        // No spore blossoms on 1.20 as the new cherry trees already drop petals
                         if(!Version.isAtLeast(20)) {
                             for(int rX = sLoc.getX() - 6; rX <= sLoc.getX() + 6; rX++) {
                                 for(int rZ = sLoc.getZ() - 6; rZ <= sLoc.getZ() + 6; rZ++) {

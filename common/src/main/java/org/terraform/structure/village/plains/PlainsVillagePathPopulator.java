@@ -72,14 +72,14 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
     @Override
     public void populate(@NotNull PathPopulatorData ppd) {
 
-        //Find the ground level to place pathways
+        // Find the ground level to place pathways
         ppd.base = new SimpleBlock(
                 ppd.base.getPopData(),
                 ppd.base.getX(),
                 GenUtils.getHighestGround(ppd.base.getPopData(), ppd.base.getX(), ppd.base.getZ()),
                 ppd.base.getZ());
 
-        //Path is on water. Place a solid wooden foundation, and then return.
+        // Path is on water. Place a solid wooden foundation, and then return.
         if (BlockUtils.isWet(ppd.base.getUp())) {
             
         	Wall pathCore = new Wall(ppd.base, ppd.dir).getAtY(TerraformGenerator.seaLevel);
@@ -92,7 +92,7 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
             return;
         }
         
-        //Decorate the sides of the paths
+        // Decorate the sides of the paths
         Wall pathCore = new Wall(ppd.base, ppd.dir);
     	for(BlockFace face:BlockUtils.getAdjacentFaces(ppd.dir)) {
             for(int i = 0; i < 4; i++) {
@@ -101,11 +101,11 @@ public class PlainsVillagePathPopulator extends PathPopulatorAbstract {
             			&& target.getUp().getType() != Material.WATER
             			&& BlockUtils.isDirtLike(target.getType()) 
             			&& target.getType() != Material.DIRT_PATH) {
-            		if(GenUtils.chance(2,5)) { //Leaves
+            		if(GenUtils.chance(2,5)) { // Leaves
                         PlantBuilder.OAK_LEAVES.build(target.getUp());
-            		}else if(GenUtils.chance(1, 5)) { //Flowers
+            		}else if(GenUtils.chance(1, 5)) { // Flowers
                         BlockUtils.pickTallFlower().build(target);
-            		}else if(GenUtils.chance(1, 10)) { //Small cobble walls with lanterns
+            		}else if(GenUtils.chance(1, 10)) { // Small cobble walls with lanterns
             			target.getUp().setType(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
                         if (TConfigOption.areDecorationsEnabled())
             			    target.getUp(2).setType(Material.LANTERN);

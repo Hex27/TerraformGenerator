@@ -45,12 +45,12 @@ public class ShipwreckSchematicParser extends SchematicParser {
     @Override
     public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 
-        //Water logging
+        // Water logging
         if (data instanceof Waterlogged logged) {
             logged.setWaterlogged(BlockUtils.isWet(block));
         }
 
-        //Mossy cobble
+        // Mossy cobble
         if (data.getMaterial().toString().contains("COBBLESTONE")) {
             data = Bukkit.createBlockData(
                     StringUtils.replace(data.getAsString(), "cobblestone",
@@ -60,7 +60,7 @@ public class ShipwreckSchematicParser extends SchematicParser {
             );
         }
 
-        //Holes
+        // Holes
         if (GenUtils.chance(rand, 1, 30)) {
             if (block.getY() <= TerraformGenerator.seaLevel)
                 data = Bukkit.createBlockData(Material.WATER);
@@ -108,13 +108,13 @@ public class ShipwreckSchematicParser extends SchematicParser {
 
         if (data.getMaterial().isBlock() && data.getMaterial().isSolid()) {
             if (GenUtils.chance(rand, 1, 60)
-                    && !biome.toString().contains("COLD") //Dont spawn these in cold places.
-                    && !biome.toString().contains("FROZEN")) { //Corals
+                    && !biome.toString().contains("COLD") // Dont spawn these in cold places.
+                    && !biome.toString().contains("FROZEN")) { // Corals
                 CoralGenerator.generateCoral(block.getPopData(),
                         block.getX(),
                         block.getY(),
                         block.getZ());
-            } else if (GenUtils.chance(rand, 1, 40)) { //kelp n stuff
+            } else if (GenUtils.chance(rand, 1, 40)) { // kelp n stuff
                 CoralGenerator.generateKelpGrowth(block.getPopData(),
                         block.getX(),
                         block.getY() + 1,

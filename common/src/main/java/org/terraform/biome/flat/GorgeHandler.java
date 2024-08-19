@@ -39,7 +39,7 @@ public class GorgeHandler extends BiomeHandler {
         return plainsHandler.getBiome();
     }
     
-    //Remove rivers from gorges.
+    // Remove rivers from gorges.
     @Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
     	double height = super.calculateHeight(tw, x, z);
@@ -57,10 +57,10 @@ public class GorgeHandler extends BiomeHandler {
 
         SimpleBlock target = new SimpleBlock(data,rawX,surfaceY+1,rawZ);
         boolean wasBelowSea = false;
-        //the repair work is here because it needs the 3x3 boundary
-        //for cave air that is BESIDE the water
-        //DOES NOT change height truth because another block MUST be above the
-        //one being changed due to the way this works
+        // the repair work is here because it needs the 3x3 boundary
+        // for cave air that is BESIDE the water
+        // DOES NOT change height truth because another block MUST be above the
+        // one being changed due to the way this works
         while(target.getY() <= TerraformGenerator.seaLevel-20) {
             wasBelowSea = true;
             if(target.getType() == Material.WATER)
@@ -71,13 +71,13 @@ public class GorgeHandler extends BiomeHandler {
             target = target.getUp();
         }
 
-        //Do not do dry decorations if this was water
+        // Do not do dry decorations if this was water
         if(wasBelowSea) return;
 
         target = target.getGround();
 
         if(!BlockUtils.isWet(target.getUp()) && target.getType() == Material.STONE) {
-            //Make the ground more dynamic
+            // Make the ground more dynamic
             target.setType(Material.GRASS_BLOCK);
             target.getDown().setType(Material.DIRT);
             if(random.nextBoolean()) {
@@ -133,7 +133,7 @@ public class GorgeHandler extends BiomeHandler {
         double noiseValue = rawCliffNoiseVal * getBiomeBlender(tw).getEdgeFactor(BiomeBank.GORGE, rawX, rawZ);
         double detailsValue = detailsNoise.GetNoise(rawX, rawZ);
 
-        //Raise up a tall area
+        // Raise up a tall area
         if(noiseValue >= 0) {
             double d = (noiseValue / threshold) - (int) (noiseValue / threshold) - 0.5;
             double platformHeight = (int) (noiseValue / threshold) * heightFactor
@@ -158,19 +158,19 @@ public class GorgeHandler extends BiomeHandler {
 
             }
         }
-        else //Burrow a gorge deep down like a ravine
+        else // Burrow a gorge deep down like a ravine
         {
             int depth = (int) Math.sqrt(Math.abs(rawCliffNoiseVal * getBiomeBlender(tw).getEdgeFactor(BiomeBank.GORGE, rawX, rawZ)) * 200 * 50);
 
-            //Smooth out anything that crosses the water threshold
+            // Smooth out anything that crosses the water threshold
             if(height - depth < TerraformGenerator.seaLevel - 20) {
                 int depthToPreserve = height - (TerraformGenerator.seaLevel - 20);
                 depth = (int) (depthToPreserve + Math.round(Math.sqrt(depth - depthToPreserve)));
             }
 
-            //Prevent going beneath y = 10
+            // Prevent going beneath y = 10
             if(depth > height - 10) depth = height-10;
-            //No guard here, depth is an integer, so if its 0, this cache write is safe
+            // No guard here, depth is an integer, so if its 0, this cache write is safe
             cache.writeTransformedHeight (x,z, (short) (height - depth));
             for (int y = 0; y < depth; y++) {
                 if(TerraformGenerator.seaLevel - 20 >= height-y)
@@ -181,8 +181,8 @@ public class GorgeHandler extends BiomeHandler {
                 }
             }
 
-            //Stop water from escaping. Also makes the highest-ground assertion true
-            //MYSTERIO IS THE TRUTH
+            // Stop water from escaping. Also makes the highest-ground assertion true
+            // MYSTERIO IS THE TRUTH
             if(height-depth <= TerraformGenerator.seaLevel - 20)
                 chunk.setBlock(x, height-depth, z, Material.STONE);
         }
@@ -199,7 +199,7 @@ public class GorgeHandler extends BiomeHandler {
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		plainsHandler.populateLargeItems(tw, random, data);
 		
-		//Spawn rocks
+		// Spawn rocks
 		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 17, 0.4f);
         
         for (SimpleLocation sLoc : rocks) {

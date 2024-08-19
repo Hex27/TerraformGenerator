@@ -10,6 +10,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
@@ -59,24 +60,28 @@ public class CatacombsCasketRoomPopulator extends CatacombsStandardPopulator {
     	
     	switch(rand.nextInt(3)) {
     	case 0:
-        	//Chest inside the casket.
-    		new ChestBuilder(Material.CHEST)
-    		.setFacing(BlockUtils.getLeft(target.getDirection()))
-    		.setLootTable(TerraLootTable.SIMPLE_DUNGEON)
-    		.apply(target)
-    		.extend(target, target.getFront(), false);
+        	// Chest inside the casket.
+            if ( TConfigOption.areDecorationsEnabled() ) {
+                new ChestBuilder(Material.CHEST).setFacing(BlockUtils.getLeft(target.getDirection()))
+                                                .setLootTable(TerraLootTable.SIMPLE_DUNGEON)
+                                                .apply(target)
+                                                .extend(target, target.getFront(), false);
+            }
     		break;
     	case 1:
-    		//Skull and redstone
-    		new RotatableBuilder(Material.SKELETON_SKULL)
-    		.setRotation(BlockUtils.getXZPlaneBlockFace(rand))
-    		.apply(target);
-    		target.getFront().setType(Material.REDSTONE_WIRE);
+    		// Skull and redstone
+            if ( TConfigOption.areDecorationsEnabled() ) {
+                new RotatableBuilder(Material.SKELETON_SKULL).setRotation(BlockUtils.getXZPlaneBlockFace(rand))
+                                                             .apply(target);
+                target.getFront().setType(Material.REDSTONE_WIRE);
+            }
     		break;
 		default:
-			//spiders
-			target.addEntity(EntityType.CAVE_SPIDER);
-			target.getFront().addEntity(EntityType.CAVE_SPIDER);
+			// spiders
+            if ( TConfigOption.areAnimalsEnabled() ) {
+                target.addEntity(EntityType.CAVE_SPIDER);
+                target.getFront().addEntity(EntityType.CAVE_SPIDER);
+            }
     		break;
     	}
     }

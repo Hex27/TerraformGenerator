@@ -47,7 +47,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
     		SimpleBlock corner = core.getRelative(face,size-1);
     		corner.getRelative(facing.getOppositeFace()).setType(cloth);
     		corner.getRelative(facing.getOppositeFace()).getUp().setType(fenceMat);
-    		//Place corner. Cache the builder to prevent recalculation from woodutils
+    		// Place corner. Cache the builder to prevent recalculation from woodutils
     		StairBuilder builder = new StairBuilder(WoodUtils.getWoodForBiome(biome, WoodType.STAIRS));
     		
     		builder.setFacing(face.getOppositeFace())
@@ -59,10 +59,10 @@ public class OutpostTent extends RoomPopulatorAbstract {
     		
     		builder.setHalf(Half.BOTTOM).setFacing(face.getOppositeFace());
     		
-    		//Place slopes
+    		// Place slopes
     		for(int i = 0; i < size-2; i++) {
     			builder.apply(corner);
-        		//Hollow out bottom so tent entrance is clear
+        		// Hollow out bottom so tent entrance is clear
     			for(int j = corner.getY()-1; j > core.getY()-1; j--) {
     				if(!Tag.BEDS.isTagged(corner.getAtY(j).getType())
     						&& !Tag.STAIRS.isTagged(corner.getAtY(j).getType()))
@@ -72,7 +72,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
     			SimpleBlock target = corner.getRelative(facing.getOppositeFace());
     			target.setType(cloth);
         		
-        		//Hollow out bottom so tent entrance is clear
+        		// Hollow out bottom so tent entrance is clear
     			for(int j = target.getY()-1; j > core.getY()-1; j--) {
     				if(!Tag.BEDS.isTagged(target.getAtY(j).getType()))
     					target.getAtY(j).setType(Material.AIR);
@@ -96,26 +96,26 @@ public class OutpostTent extends RoomPopulatorAbstract {
     	SimpleBlock firstProp = new SimpleBlock(data, room.getX(), room.getY(), room.getZ())
     			.getRelative(facing,length/2).getGroundOrSeaLevel();
     	
-    	//Tent props
+    	// Tent props
     	placeProp(height, firstProp.getUp(), facing, cloth);
     	placeProp(height, firstProp.getUp().getRelative(facing.getOppositeFace(),length), facing.getOppositeFace(), cloth);
     	
-    	//Tent ground to account for water or potential uneven ground.
+    	// Tent ground to account for water or potential uneven ground.
     	Wall wallProp = new Wall(firstProp, facing);
     	for(int relWidth = 0; relWidth < height; relWidth++){
     		for(int relLen = 0; relLen <= length; relLen++) {
         		Wall target = wallProp.getLeft(relWidth).getRelative(facing.getOppositeFace(),relLen);
         		target.get().lsetType(planks);
         		target.getDown().downUntilSolid(getRand(), fence);
-        		//target.getUp().get().lsetType(Material.WHITE_CARPET);
+        		// target.getUp().get().lsetType(Material.WHITE_CARPET);
         		target = wallProp.getRight(relWidth).getRelative(facing.getOppositeFace(),relLen);
         		target.get().lsetType(planks);
         		target.getDown().downUntilSolid(getRand(), fence);
-        		//target.getUp().get().lsetType(Material.WHITE_CARPET);
+        		// target.getUp().get().lsetType(Material.WHITE_CARPET);
     		}
     	}
     	
-    	//Connect the 2 props with one long log
+    	// Connect the 2 props with one long log
     	OrientableBuilder ob = new OrientableBuilder(WoodUtils.getWoodForBiome(biome, WoodType.LOG))
     			.setAxis(BlockUtils.getAxisFromBlockFace(facing));
     	wallProp = wallProp.getRelative(0,height,0);
@@ -130,14 +130,14 @@ public class OutpostTent extends RoomPopulatorAbstract {
     		wallProp = wallProp.getRelative(facing.getOppositeFace());
     	}
     	
-    	//Place wool walls
+    	// Place wool walls
     	for(BlockFace face:BlockUtils.getAdjacentFaces(facing)) {
     				
     		for(int relLen = 2; relLen <= length-2; relLen++) {
     			SimpleBlock corner = firstProp
     					.getRelative(face,height-1)
     					.getRelative(facing.getOppositeFace(),relLen)
-    					.getUp(); //Off the ground
+    					.getUp(); // Off the ground
     		    for(int relWidth = height-2; relWidth >= 0; relWidth--) {
 
     				for(int i = corner.getY(); i > firstProp.getY(); i--) {
@@ -147,7 +147,7 @@ public class OutpostTent extends RoomPopulatorAbstract {
     				
         			if(relWidth == height-2) {
         				corner.setType(cloth);
-        				//Empty out tent area
+        				// Empty out tent area
     					SimpleBlock target = corner.getRelative(face.getOppositeFace());
         				if(!target.isSolid() && GenUtils.chance(rand, 1,2)) {
     						switch(rand.nextInt(4)) {

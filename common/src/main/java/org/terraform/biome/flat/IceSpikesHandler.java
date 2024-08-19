@@ -21,7 +21,7 @@ public class IceSpikesHandler extends BiomeHandler {
     
 	public static void genSpike(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z, int baseRadius, int height) {
         y -= height / 5;
-        //Vector one to two;
+        // Vector one to two;
         Vector base = new Vector(x, y, z);
         Vector base2 = new Vector(
         		x + GenUtils.randInt(random, (int) (-1.5 * baseRadius), (int) (1.5 * baseRadius)), 
@@ -77,7 +77,7 @@ public class IceSpikesHandler extends BiomeHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 
-		//Ice Spikes
+		// Ice Spikes
         SimpleLocation[] spikes = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16, 0.5f);
         
         for (SimpleLocation sLoc : spikes) {
@@ -86,14 +86,14 @@ public class IceSpikesHandler extends BiomeHandler {
             if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                     data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()) == Material.SNOW_BLOCK) {
             	
-            	if (GenUtils.chance(random, 1, 10)) { //big spike
+            	if (GenUtils.chance(random, 1, 10)) { // big spike
                     genSpike(tw, random, data, sLoc.getX(), sLoc.getY(), sLoc.getZ(),
-                            GenUtils.randInt(3, 7), //radius
-                            GenUtils.randInt(40, 55)); //height
-                } else //Small spike
+                            GenUtils.randInt(3, 7), // radius
+                            GenUtils.randInt(40, 55)); // height
+                } else // Small spike
                     genSpike(tw, random, data, sLoc.getX(), sLoc.getY(), sLoc.getZ(),
-                            GenUtils.randInt(3, 5), //radius
-                            GenUtils.randInt(13, 24)); //height
+                            GenUtils.randInt(3, 5), // radius
+                            GenUtils.randInt(13, 24)); // height
             	
             }
         }

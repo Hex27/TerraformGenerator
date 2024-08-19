@@ -34,12 +34,12 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
 
-        //No walls :V
+        // No walls :V
         if (this.getWalledFaces().isEmpty()) {
             return;
         }
 
-        //Pick a random walled face to be the primary wall, where all the stuff goes.
+        // Pick a random walled face to be the primary wall, where all the stuff goes.
         BlockFace primaryWall = this.getWalledFaces().get(random.nextInt(this.getWalledFaces().size()));
         SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
         int numUtilities = 5;
@@ -71,7 +71,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                             w.getUp().setBlockData(lever);
                         }
                         break;
-                    case FURNACE: //Furnace and smoker handled the same way
+                    case FURNACE: // Furnace and smoker handled the same way
                     case SMOKER:
                         new DirectionalBuilder(mat)
                                 .setFacing(w.getDirection()).apply(w);
@@ -108,8 +108,8 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
             w = w.getLeft();
         }
 
-        //Other walls can be decorated with random and loot
-        //Populate for walled areas
+        // Other walls can be decorated with random and loot
+        // Populate for walled areas
         for (BlockFace face : this.getWalledFaces()) {
             if (face == primaryWall) continue;
             entry = this.getRoom().getWall(data, face, 0);
@@ -120,13 +120,13 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                         && !w.isSolid()) {
                     int decor = random.nextInt(5);
                     switch (decor) {
-                        case 0: //Counter
+                        case 0: // Counter
                             new StairBuilder(Material.STONE_BRICK_STAIRS, Material.POLISHED_ANDESITE_STAIRS, plainsVillagePopulator.woodStairs)
                                     .setFacing(w.getDirection().getOppositeFace())
                                     .setHalf(Half.TOP)
                                     .apply(w);
                             break;
-                        case 1: //Solid counter or other random solid blocks
+                        case 1: // Solid counter or other random solid blocks
                             w.setType(
                                     Material.SMOOTH_STONE,
                                     Material.POLISHED_ANDESITE,
@@ -134,11 +134,11 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                                     Material.DRIED_KELP_BLOCK,
                                     Material.MELON);
                             break;
-                        case 2: //Random loot
+                        case 2: // Random loot
                             new ChestBuilder(Material.CHEST)
                                     .setFacing(w.getDirection())
                                     .setLootTable(TerraLootTable.VILLAGE_BUTCHER, TerraLootTable.VILLAGE_PLAINS_HOUSE);
-                        default: //Do nothing
+                        default: // Do nothing
                             break;
                     }
                 }
@@ -150,7 +150,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 
     @Override
     public void build(@NotNull PopulatorDataAbstract data, @NotNull Random rand) {
-        //this.getRoom().fillRoom(data, new Material[] {Material.BLUE_STAINED_GLASS});
+        // this.getRoom().fillRoom(data, new Material[] {Material.BLUE_STAINED_GLASS});
         super.build(data, rand);
     }
 

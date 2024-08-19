@@ -27,16 +27,16 @@ public class LevelledRoomPopulator extends CageRoomPopulator {
         int[] lowerBounds = room.getLowerCorner();
         int[] upperBounds = room.getUpperCorner();
 
-        //Create a floor to the above area
+        // Create a floor to the above area
         for (int x = lowerBounds[0] + 1; x <= upperBounds[0] - 1; x++) {
             for (int z = lowerBounds[1] + 1; z <= upperBounds[1] - 1; z++) {
                 data.setType(x, room.getY() + 4, z, Material.PRISMARINE_BRICKS);
 
-                //Surrounding decor
+                // Surrounding decor
                 if (Math.abs(x - room.getX()) <= 2 && Math.abs(z - room.getZ()) <= 2) {
                     data.setType(x, room.getY() + 4, z, Material.DARK_PRISMARINE);
 
-                    //Central area
+                    // Central area
                     if (Math.abs(x - room.getX()) <= 1 && Math.abs(z - room.getZ()) <= 1) {
                         data.setType(x, room.getY() + 4, z, Material.WATER);
                     }
@@ -44,7 +44,7 @@ public class LevelledRoomPopulator extends CageRoomPopulator {
             }
         }
 
-        //Some prismarine at the bottom
+        // Some prismarine at the bottom
         Wall cent = new Wall(new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ()), BlockFace.NORTH);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             cent.getUp().getRelative(face).getRelative(face)
@@ -52,7 +52,7 @@ public class LevelledRoomPopulator extends CageRoomPopulator {
             cent.getRelative(face).setType(Material.DARK_PRISMARINE);
         }
 
-        //Lighting and pillars on lvl 2
+        // Lighting and pillars on lvl 2
         for (int[] corner : room.getAllCorners(1)) {
             for (int y = room.getY() + 5; y < room.getY() + room.getHeight(); y++) {
                 if (y == room.getY() + 5 || y == room.getY() + room.getHeight() - 1) {
@@ -67,7 +67,7 @@ public class LevelledRoomPopulator extends CageRoomPopulator {
             }
         }
 
-        //Decorative pillars on level 1.
+        // Decorative pillars on level 1.
         for (int[] corner : room.getAllCorners(2)) {
             data.setType(corner[0], room.getY() + 3, corner[1], Material.SEA_LANTERN);
             data.setType(corner[0], room.getY() + 2, corner[1], Material.PRISMARINE_BRICKS);

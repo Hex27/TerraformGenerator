@@ -21,15 +21,15 @@ public abstract class WarmOceanBaseRoom extends RoomPopulatorAbstract {
         super(rand, forceSpawn, unique);
     }
 
-    //Partially sink the structure into the ground.
+    // Partially sink the structure into the ground.
     // Set some suspicious sand around too
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         room.setY(GenUtils.getHighestGround(data, room.getX(), room.getZ()) + 1
-                //- rand.nextInt(2)
+                // - rand.nextInt(2)
         );
-        //Spawn suspicious sand relative to room size
-        //Sprinkle some magma blocks too
+        // Spawn suspicious sand relative to room size
+        // Sprinkle some magma blocks too
         for(int i = 0; i < (room.getWidthX()*room.getWidthZ())/70; i++)
         {
             int[] coords = room.randomCoords(rand);

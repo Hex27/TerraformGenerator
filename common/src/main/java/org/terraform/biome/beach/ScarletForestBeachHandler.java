@@ -41,7 +41,7 @@ public class ScarletForestBeachHandler extends BiomeHandler {
     @Override
     public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
 
-        //WHAT THE FUCK DO YOU MEAN REMOVE SUBMERGED GRASS??? WHY WAS IT BEING SET???
+        // WHAT THE FUCK DO YOU MEAN REMOVE SUBMERGED GRASS??? WHY WAS IT BEING SET???
 	}
 
 	@Override

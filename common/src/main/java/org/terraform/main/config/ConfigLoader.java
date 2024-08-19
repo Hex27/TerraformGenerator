@@ -26,14 +26,14 @@ public class ConfigLoader {
 	
 	public void load(){
 		
-		//If config version is older, overwrite the whole config.
+		// If config version is older, overwrite the whole config.
 		boolean overwrite = false;
 		if(!plugin.getConfig().isSet("config-version"))
 			overwrite = true;
 		else if(plugin.getConfig().getInt("config-version") < configVersion)
 			overwrite = true;
 		
-		//Make backup of old config before overwriting
+		// Make backup of old config before overwriting
 		if(overwrite) {
 			try {
 				if(new File("./plugins/TerraformGenerator/config.yml").exists()) {

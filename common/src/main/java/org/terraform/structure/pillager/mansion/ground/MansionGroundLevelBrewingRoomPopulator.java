@@ -33,7 +33,7 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 		super(room, internalWalls);
 	}
 
-	//Refers to the kitchen room width, not the width of one room cell.
+	// Refers to the kitchen room width, not the width of one room cell.
 	private static final int roomWidthX = 15;
 	private static final int roomWidthZ = 6;
 	@Override
@@ -41,7 +41,7 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
-		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
+		// TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
 		try {
 			if(randomFace == BlockFace.NORTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);
@@ -65,7 +65,7 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
 
     @Override
 	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
-        //table with potted mushrooms
+        // table with potted mushrooms
         new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
                 .setHalf(Half.TOP).setFacing(w.getDirection().getOppositeFace())
                 .apply(w)
@@ -81,7 +81,7 @@ public class MansionGroundLevelBrewingRoomPopulator extends MansionRoomPopulator
             w.getLeft().getUp().setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM);
     }
 	
-	//Brewing stand and mini library
+	// Brewing stand and mini library
 	@Override
 	public void decorateWall(Random rand, @NotNull Wall w) {
 		w.setType(Material.CAULDRON);

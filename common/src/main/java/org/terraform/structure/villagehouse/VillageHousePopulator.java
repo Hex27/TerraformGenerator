@@ -35,13 +35,13 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
         if (!isEnabled()) return false;
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
         if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
             
         		if(!biome.isDry())
         			return false;
         	
-            //If it is below sea level, DON'T SPAWN IT.
+            // If it is below sea level, DON'T SPAWN IT.
             if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
                 if (biome == (BiomeBank.DESERT)
                         || biome == (BiomeBank.BADLANDS)
@@ -67,10 +67,10 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
 
-        //On ground, spawn dry village houses
-        //int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
+        // On ground, spawn dry village houses
+        // int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
-        //if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+        // if (GenUtils.getHighestGround(data, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
         if (biome == (BiomeBank.DESERT)
                 || biome == (BiomeBank.BADLANDS)
                 || biome == (BiomeBank.ICE_SPIKES)) {
@@ -93,7 +93,7 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
 
             new MountainhousePopulator().populate(tw, data);
         }
-        //}
+        // }
     }
 
     @Override

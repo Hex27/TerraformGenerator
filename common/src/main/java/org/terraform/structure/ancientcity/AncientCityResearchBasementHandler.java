@@ -25,7 +25,7 @@ public class AncientCityResearchBasementHandler {
 
 	public static void populate(@NotNull Random random, @NotNull PopulatorDataAbstract data, @NotNull CubeRoom room, @NotNull BlockFace headFacing) {
 		
-		//Clear out the room and place floor
+		// Clear out the room and place floor
 		int[] lowerCorner = room.getLowerCorner();
 		int[] upperCorner = room.getUpperCorner();
 		for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
@@ -47,7 +47,7 @@ public class AncientCityResearchBasementHandler {
 					
 				}
 		
-		//Place walls
+		// Place walls
 		for(Entry<Wall, Integer> entry:room.getFourWalls(data, 0).entrySet())
 		{
 			Wall w = entry.getKey().getLeft(3);
@@ -65,14 +65,14 @@ public class AncientCityResearchBasementHandler {
 				.apply(w.getUp(2))
 				.apply(w.getUp(2).getFront());
 				
-				//Back of wall
+				// Back of wall
 				w.getUp().getFront().setType(Material.CHISELED_DEEPSLATE);
 				w.getUp(3).getFront().setType(Material.CHISELED_DEEPSLATE);
 				w.getFront().setType(Material.DEEPSLATE_TILES);
 				w.getUp(4).getFront().setType(Material.DEEPSLATE_TILES);
 				
 				
-				//Left and right sides
+				// Left and right sides
 				for(BlockFace face:BlockUtils.getAdjacentFaces(w.getDirection()))
 				{
 					Wall temp = w.getRelative(face);
@@ -91,7 +91,7 @@ public class AncientCityResearchBasementHandler {
 					.setHalf(Half.TOP)
 					.apply(temp.getUp());
 					
-					//rear
+					// rear
 					w.getFront().getRelative(face).Pillar(2, Material.POLISHED_BASALT);
 					w.getFront().getRelative(face).getUp(2).setType(Material.DEEPSLATE_TILES);
 					w.getFront().getRelative(face).getUp(3).Pillar(2, Material.POLISHED_BASALT);
@@ -101,14 +101,14 @@ public class AncientCityResearchBasementHandler {
 			}
 		}
 		
-		//Place 4 solid cubes of deepslate at the corners
-		//Decorate the sides
+		// Place 4 solid cubes of deepslate at the corners
+		// Decorate the sides
 		for(int[] corner:room.getAllCorners(2))
 		{
 			
 			SimpleBlock core = new SimpleBlock(data,corner[0],room.getY(),corner[1]);
 			
-	    	//Solid rectangle
+	    	// Solid rectangle
 	    	for(int relX = -2; relX <= 2; relX++)
 	        	for(int relZ = -2; relZ <= 2; relZ++)
 	        	{
@@ -123,12 +123,12 @@ public class AncientCityResearchBasementHandler {
 	    					Material.DEEPSLATE_BRICK_SLAB);
 	        	}
 	    	
-	    	//Stairs at the top and bottom
+	    	// Stairs at the top and bottom
 	    	for(BlockFace side:BlockUtils.directBlockFaces)
 	    	{
 	    		Wall w = new Wall(core,side).getFront(3).getUp();
     			if(!w.getDown().isSolid() || w.isSolid()) continue;
-    			//w.setType(Material.RED_WOOL);
+    			// w.setType(Material.RED_WOOL);
 	    		for(BlockFace adj:BlockUtils.getAdjacentFaces(side))
 	    		{
 	    			if(w.getRelative(adj).isSolid()) continue;
@@ -144,7 +144,7 @@ public class AncientCityResearchBasementHandler {
 	    			.apply(w.getRelative(adj,2).getUp(3))
 	    			.apply(w.getRelative(adj,3).getUp(3));
 	    			
-	    			//Make these corners
+	    			// Make these corners
 	    			BlockUtils.correctStairData(w.getRelative(adj,3));
 	    			BlockUtils.correctStairData(w.getRelative(adj,3).getUp(3));
 	    			w.getRelative(adj,2).getRear().Pillar(4, Material.POLISHED_BASALT);
@@ -152,7 +152,7 @@ public class AncientCityResearchBasementHandler {
 	    	}
 		}
     	
-    	//Build stairs leading out of the room
+    	// Build stairs leading out of the room
 		int roomBreadth = BlockUtils.getAxisFromBlockFace(headFacing) == Axis.X ? room.getWidthX() : room.getWidthZ();
 		SimpleBlock base = room.getCenterSimpleBlock(data).getRelative(headFacing, roomBreadth / 3);
 
@@ -181,7 +181,7 @@ public class AncientCityResearchBasementHandler {
 			if(breakOut) break;
 		}
 		
-		//Place a center light pillar and partition the room with 8 walls
+		// Place a center light pillar and partition the room with 8 walls
 		SimpleBlock pillarCent = room.getCenterSimpleBlock(data).getUp();
 		for(int nx = -1; nx <= 1; nx++)
 			for(int nz = -1; nz <= 1; nz++)
@@ -206,7 +206,7 @@ public class AncientCityResearchBasementHandler {
 			.getUp().CorrectMultipleFacing(2);
 		}
 		
-		//Glass wall up
+		// Glass wall up
 		for(BlockFace[] faces:BlockUtils.cornerBlockFaces)
 		{
 			SimpleBlock rel = pillarCent.getRelative(faces[0], 3).getRelative(faces[1], 3);
@@ -228,7 +228,7 @@ public class AncientCityResearchBasementHandler {
 			}
 		}
 		
-		//Place piston doors at the entrance
+		// Place piston doors at the entrance
 		try {
 			TerraSchematic schema = TerraSchematic.load("ancient-city/ancient-city-pistondoor", 
 					base.getUp().getRelative(headFacing.getOppositeFace(),2));
@@ -239,9 +239,9 @@ public class AncientCityResearchBasementHandler {
 			TerraformGeneratorPlugin.logger.stackTrace(e);
 		}
 		
-		//Decorate the 4 redstone research rooms
+		// Decorate the 4 redstone research rooms
 		for(BlockFace face:BlockUtils.directBlockFaces) {
-			//room.getCenterSimpleBlock(data).getUp().setType(Material.RED_WOOL);
+			// room.getCenterSimpleBlock(data).getUp().setType(Material.RED_WOOL);
 			SimpleBlock pasteCent = room.getCenterSimpleBlock(data).getUp()
 					.getRelative(face, 2)
 					.getRelative(BlockUtils.getLeft(face), 2);
@@ -249,8 +249,8 @@ public class AncientCityResearchBasementHandler {
 			try {
 				String schematic;
 				
-				//This aligns the rooms with the head's piston entrance, as the 
-				//rooms are of an unequal size.
+				// This aligns the rooms with the head's piston entrance, as the 
+				// rooms are of an unequal size.
 				if(BlockUtils.getAxisFromBlockFace(face) == BlockUtils.getAxisFromBlockFace(headFacing))
 					schematic = northSouthResearchSchematics[random.nextInt(northSouthResearchSchematics.length)];
 				else

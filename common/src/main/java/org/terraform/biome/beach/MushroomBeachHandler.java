@@ -101,7 +101,7 @@ public class MushroomBeachHandler extends BiomeHandler {
             }
         }
         
-        //Bracket fungus
+        // Bracket fungus
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x+=2) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z+=2) {
             	int y = GenUtils.getHighestGround(data, x, z);

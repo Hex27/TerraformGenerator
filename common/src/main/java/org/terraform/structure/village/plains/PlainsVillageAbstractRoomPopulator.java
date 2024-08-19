@@ -25,7 +25,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 	
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-    	//Test the center and 4 corners to ensure that the ground is fairly stable
+    	// Test the center and 4 corners to ensure that the ground is fairly stable
     	int roomY = this.calculateRoomY(data, room);
     	
     	int worldHeight = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY() + 1;
@@ -35,7 +35,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
     		int lowSb = sb.findFloor(worldHeight).getY();
     		if(Math.abs(lowSb - roomY) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
     		{
-    			//place platform as uneven ground was detected.
+    			// place platform as uneven ground was detected.
     			this.placeFixerPlatform(roomY, data, room);
     			break;
     		}
@@ -44,10 +44,10 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 
 	public void placeFixerPlatform(int roomY, @NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 		
-    	//Semisphere air and semisphere ground
+    	// Semisphere air and semisphere ground
 		SimpleBlock core = room.getCenterSimpleBlock(data);
 		core = core.getAtY(roomY);
-		//Air
+		// Air
 		new SphereBuilder(this.rand, core.getUp(), Material.AIR)
 		.setRX((float) room.getWidthX() /2 - 1.5f)
 		.setRZ((float) room.getWidthZ() /2 - 1.5f)
@@ -56,7 +56,7 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 		.setSphereType(SphereType.UPPER_SEMISPHERE)
 		.build();
 
-		//Platform
+		// Platform
 		new SphereBuilder(this.rand, core.getDown(), Material.DIRT)
 		.setRX(room.getWidthX()/2f)
 		.setRZ(room.getWidthZ()/2f)
@@ -101,12 +101,12 @@ public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAb
 	}
 	
 	protected int getPathHeight(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-		int pathHeight; //This is the entry height for the house/object
+		int pathHeight; // This is the entry height for the house/object
     	
         BlockFace dir = ((DirectionalCubeRoom) room).getDirection();
         int pad = GenUtils.randInt(1, 3);
     	
-    	//calculate center height
+    	// calculate center height
     	Entry<Wall, Integer> openingWallSet = room.getWall(data, dir, pad);
     	pathHeight = openingWallSet.getKey().getLeft(openingWallSet.getValue()/2).getGroundOrSeaLevel().getY();
     	return pathHeight;

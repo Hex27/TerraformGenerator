@@ -39,7 +39,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
     	
-    	//Generates outer walls
+    	// Generates outer walls
     	for(Entry<Wall,Integer> entry:this.effectiveRoom.getFourWalls(data, 0).entrySet()) {
     		Wall w = entry.getKey();
     		for(int i = 0; i < entry.getValue(); i++) {
@@ -85,7 +85,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     		}
     	}
     	
-    	//Spawn corner decorations
+    	// Spawn corner decorations
         int y = effectiveRoom.getY();
         for (int[] corner:effectiveRoom.getAllCorners(2)) {
         	int x = corner[0];
@@ -93,7 +93,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         	spawnLargePillar(new SimpleBlock(data,x,y,z),room);
         }
 
-        //Direction the head faces
+        // Direction the head faces
     	BlockFace facing = BlockUtils.getDirectBlockFace(this.getRand());
 
     	int modX; int modZ; CubeRoom fireBox;
@@ -108,7 +108,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     		fireBox = effectiveRoom.getCloneSubsetRoom(2, 8);
     	}
 
-        //Make box around head area
+        // Make box around head area
     	int[] lowerCorner = fireBox.getLowerCorner(6); 
     	int[] upperCorner = fireBox.getUpperCorner(6); 
     	for(int nx = lowerCorner[0]; nx <= upperCorner[0]; nx++)
@@ -152,16 +152,16 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     	}
 
     	
-        //Spawn a rectangular slab of deepslate bricks
+        // Spawn a rectangular slab of deepslate bricks
         new CylinderBuilder(new Random(), room.getCenterSimpleBlock(data).getUp(13), AncientCityUtils.deepslateBricks)
         .setRX(modX).setRZ(modZ).setRY(20)
         .build();
         
-        //Spawn center head
+        // Spawn center head
         spawnCentralHead(room.getCenterSimpleBlock(data).getUp(13), facing);
         
         
-        //Stairs at the front and back
+        // Stairs at the front and back
         for(BlockFace dir:new BlockFace[] {facing,facing.getOppositeFace()})
         {
         	Wall targetStair = new Wall(room.getCenterSimpleBlock(data)
@@ -186,7 +186,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         }
         
 
-    	//Debree and breakage
+    	// Debree and breakage
     	lowerCorner = effectiveRoom.getLowerCorner(6); 
     	upperCorner = effectiveRoom.getUpperCorner(6); 
     	for(int nx = lowerCorner[0]; nx <= upperCorner[0]; nx++)
@@ -233,7 +233,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
 	        			core.getUp(headHeight).getRelative(rel,radius).setType(Material.POLISHED_DIORITE,Material.DIORITE);
 	    			}
 
-    			//Air the warden's teeth
+    			// Air the warden's teeth
     			if(radius != headWidth)
     				core.getRelative(rel,radius).getUp()
     					.Pillar(headHeight-1, Material.AIR);
@@ -244,7 +244,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     			airWardenBlocks(core.getUp(1).getRelative(rel,radius), headHeight-1, facing);
     			
     			
-    			//Fuzz up and down
+    			// Fuzz up and down
     			core.getRelative(rel,radius).getDown().downPillar(GenUtils.randInt(rand, generalFuzzSize, generalFuzzSize+1), AncientCityUtils.deepslateTiles);
     			airWardenBlocks(core.getRelative(rel,radius).getDown(), facing);
     			core.getRelative(rel,radius).getUp(headHeight+1).Pillar(GenUtils.randInt(rand, generalFuzzSize, generalFuzzSize+1), AncientCityUtils.deepslateTiles);
@@ -255,7 +255,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     				else
     					core.getRelative(rel,radius).Pillar(headHeight, true, new Random(), Material.DEEPSLATE_TILES, Material.DIORITE);
 
-    				//Fuzz left and right
+    				// Fuzz left and right
     				for(int i = -2; i <= headHeight + 2; i++) {
     					SimpleBlock start = core.getRelative(rel, radius+1).getUp(i);
     					int maxFuzzSize = GenUtils.randInt(rand, generalFuzzSize, generalFuzzSize+1);
@@ -282,7 +282,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
      */
     private void airWardenBlocks(@NotNull SimpleBlock b, int height, @NotNull BlockFace dir) {
     	for(int i = 0; i < height; i++) {
-    		//b.getUp(i).setType(Material.AIR);
+    		// b.getUp(i).setType(Material.AIR);
 	    	for(int depth = 1; depth <= 3; depth++)
 	    	{
 	    		b.getUp(i).getRelative(dir,depth).setType(Material.AIR);
@@ -291,10 +291,10 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     	}
     }
     
-    //Spawns in the corners of the center large platform
+    // Spawns in the corners of the center large platform
     private void spawnLargePillar(@NotNull SimpleBlock core, @NotNull CubeRoom room) {
     		
-    	//Hollow square with a pillar in the middle
+    	// Hollow square with a pillar in the middle
     	for(int relX = -2; relX <= 2; relX++)
         	for(int relZ = -2; relZ <= 2; relZ++)
         	{
@@ -313,7 +313,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     				target.Pillar(10, Material.AIR);
         	}
     	
-    	//Spiral Stairway upwards
+    	// Spiral Stairway upwards
         int bfIndex = 0;
 
     	if(core.getX() < room.getX() && core.getZ() < room.getZ())
@@ -326,7 +326,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
     		bfIndex = 7;
     	
         for (int i = 1; i <= 10; i++) {
-            //If index is 1, carve an entrance
+            // If index is 1, carve an entrance
         	if(i == 1) {
 	        	SimpleBlock target = core.getRelative(BlockUtils.xzPlaneBlockFaces[bfIndex],2);
 	        	
@@ -334,7 +334,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
 	        		for(int relZ = -1; relZ <= 1; relZ++)
 	        			target.getRelative(relX,1,relZ).Pillar(3,Material.AIR);
         	}
-            //Two slab stairs
+            // Two slab stairs
             BlockFace face = BlockUtils.xzPlaneBlockFaces[bfIndex];
             Slab bottom = (Slab) Bukkit.createBlockData(Material.DEEPSLATE_BRICK_SLAB);
             bottom.setType(Type.BOTTOM);

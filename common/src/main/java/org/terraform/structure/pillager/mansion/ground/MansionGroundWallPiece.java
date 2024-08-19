@@ -37,7 +37,7 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
         
         for (int i = 0; i < entry.getValue(); i++) {
             
-        	//Primary Wall and ground beneath wall
+        	// Primary Wall and ground beneath wall
         	w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(1, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getUp().Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
@@ -71,11 +71,11 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
             
         	switch(type) {
 			case LARGE_WINDOW:
-				if(i == 1 || i == entry.getValue()-2) //Side decoration
+				if(i == 1 || i == entry.getValue()-2) // Side decoration
 					w.getUp().Pillar(this.getRoom().getHeight(),new Random(),Material.DARK_OAK_LOG);
 				
 				if(i == 3 || i == 4 || i == 5)
-				{ //Window Panes and decorations at the base
+				{ // Window Panes and decorations at the base
 					w.getUp(2).Pillar(4, new Random(), Material.LIGHT_GRAY_STAINED_GLASS_PANE);
 					w.getUp(2).CorrectMultipleFacing(4);
 					
@@ -92,7 +92,7 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
 				}
 				
 				if(i == 2 || i == entry.getValue()-3)
-				{//Supporting Pillars
+				{// Supporting Pillars
 					w.getFront().getUp().setType(Material.COBBLESTONE);
 					w.getFront().getUp(2).Pillar(3, new Random(), Material.STONE_BRICK_WALL);
 					w.getFront().getUp(2).CorrectMultipleFacing(3);
@@ -102,7 +102,7 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
 				}
 				
 				if(i == 4) {
-					//Place Main window decoration
+					// Place Main window decoration
 					spawnWindowOverhang(w.getFront().getUp(6));
 				}
 					
@@ -110,7 +110,7 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
 			case PLAIN:
 				break;
 			case THIN_WINDOWS:
-				if(i == 2 || i == entry.getValue()-3) //Side decoration
+				if(i == 2 || i == entry.getValue()-3) // Side decoration
 				{
 					w.getUp().Pillar(this.getRoom().getHeight(),new Random(),Material.DARK_OAK_LOG);
 					
@@ -136,15 +136,15 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
         	}
         	
         	if(type != MansionWallType.PLAIN && i == 4) {
-            	//Frontal Decorations - Pillars
-            	//Only spawn if the wall is not a sink-in
+            	// Frontal Decorations - Pillars
+            	// Only spawn if the wall is not a sink-in
             	int overlaps = 0;
             	for(JigsawStructurePiece p:this.builder.getOverlapperPieces()) {
             		if(p.getRoom().getSimpleLocation().equals(this.getRoom().getSimpleLocation()))
             			overlaps++;
             	}
             	if(overlaps == 1) {
-            		//Front-facing pillar with some shrubbery and grass
+            		// Front-facing pillar with some shrubbery and grass
             		Wall target = w.getFront(4).getUp();
             		target.Pillar(MansionJigsawBuilder.roomHeight, Material.STONE_BRICKS);
             		target.getFront().Pillar(MansionJigsawBuilder.roomHeight, Material.COBBLESTONE_WALL);
@@ -196,9 +196,9 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
             		.setFacing(BlockUtils.getRight(target.getDirection()))
             		.apply(target.getLeft(2).getUp());
             		
-            		//underhanging stair decorations
+            		// underhanging stair decorations
 
-                	//Two more slabs at the corner
+                	// Two more slabs at the corner
             		new StairBuilder(Material.STONE_BRICK_STAIRS)
             		.setFacing(BlockUtils.getRight(target.getDirection()))
             		.setHalf(Half.TOP)
@@ -215,7 +215,7 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
 
             	}
             	else if(overlaps == 2) 
-            	{ //Corner pillar
+            	{ // Corner pillar
             		Wall target = w.getFront(4).getUp();
             		target.Pillar(MansionJigsawBuilder.roomHeight, Material.STONE_BRICKS);
 
@@ -272,12 +272,12 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
     }
     
     private void spawnWindowOverhang(@NotNull Wall w) {
-    	//log row
+    	// log row
     	new OrientableBuilder(Material.DARK_OAK_LOG)
     	.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getRight(w.getDirection())))
     	.apply(w).apply(w.getLeft()).apply(w.getRight());
     	
-    	//Upsidedown overhang in front of log row.
+    	// Upsidedown overhang in front of log row.
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setHalf(Half.TOP)
     	.setFacing(w.getDirection().getOppositeFace())
@@ -288,7 +288,7 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
     	.apply(w.getFront().getRight());
     	
     	
-    	//Inner upside down stairs
+    	// Inner upside down stairs
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setHalf(Half.TOP)
     	.setFacing(BlockUtils.getLeft(w.getDirection()))
@@ -296,7 +296,7 @@ public class MansionGroundWallPiece extends JigsawStructurePiece {
     	.setFacing(BlockUtils.getRight(w.getDirection()))
     	.apply(w.getDown().getRight());
     	
-    	//Stairs at the top
+    	// Stairs at the top
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(BlockUtils.getLeft(w.getDirection()))
     	.apply(w.getRight(2))

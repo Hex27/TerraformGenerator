@@ -42,8 +42,8 @@ public class ArchedCliffsHandler extends BiomeHandler {
         return Biome.PLAINS;
     }
     
-    //Remove rivers from arched cliffs.
-    //Arched cliffs are slightly higher than other biomes to lower beach sizes
+    // Remove rivers from arched cliffs.
+    // Arched cliffs are slightly higher than other biomes to lower beach sizes
     @Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
     	double height = super.calculateHeight(tw, x, z);
@@ -66,8 +66,8 @@ public class ArchedCliffsHandler extends BiomeHandler {
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         SimpleBlock target = new SimpleBlock(data,rawX,surfaceY,rawZ);
 
-        //Highest Ground decorations: grass and flowers
-        if (GenUtils.chance(random, 1, 10)) { //Grass
+        // Highest Ground decorations: grass and flowers
+        if (GenUtils.chance(random, 1, 10)) { // Grass
             if (GenUtils.chance(random, 6, 10)) {
                 PlantBuilder.GRASS.build(target.getUp());
                 if (random.nextBoolean()) {
@@ -81,25 +81,25 @@ public class ArchedCliffsHandler extends BiomeHandler {
             }
         }
 
-        //Underside decorations: Mushrooms
+        // Underside decorations: Mushrooms
         SimpleBlock underside = target.findAirPocket(30);
         if(underside != null && underside.getY() > TerraformGenerator.seaLevel) {
-            //TODO: Consider optimization: calculateHeight() instead of this shit
+            // TODO: Consider optimization: calculateHeight() instead of this shit
             SimpleBlock grassBottom = underside.findStonelikeFloor(50);
             if(grassBottom != null && grassBottom.getY() > TerraformGenerator.seaLevel) {
                 if(grassBottom.getType() == Material.GRASS_BLOCK) {
-                    //Indicates that this area is valid for population
+                    // Indicates that this area is valid for population
 
                     if (GenUtils.chance(random, 1, 10)) {
                         PlantBuilder.build(grassBottom.getUp(), PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
                     }
 
-                    //If an underside was valid, you can check the upper area for
-                    //decorating overhangs
+                    // If an underside was valid, you can check the upper area for
+                    // decorating overhangs
                     for(BlockFace face:BlockUtils.directBlockFaces) {
                         if(TConfigOption.arePlantsEnabled() && target.getRelative(face).getType() == Material.AIR) {
                             if(GenUtils.chance(random, 1, 5))
-                                //TODO:PlantBuilder
+                                // TODO:PlantBuilder
                                 target.getRelative(face).downLPillar(random, random.nextInt(8), Material.OAK_LEAVES);
                         }
                     }
@@ -111,8 +111,8 @@ public class ArchedCliffsHandler extends BiomeHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 
-        //Highest Ground decorations
-        //Small trees generate in the presence of light
+        // Highest Ground decorations
+        // Small trees generate in the presence of light
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 6);
         
         for (SimpleLocation sLoc : trees) {
@@ -128,7 +128,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
             
         }
         
-        //Mushrooms generate underneath the overhangs
+        // Mushrooms generate underneath the overhangs
         SimpleLocation[] shrooms = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 10);
         
         for (SimpleLocation sLoc : shrooms) {
@@ -138,7 +138,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
     			SimpleBlock grassBottom = underside.findStonelikeFloor(50);
     			if(grassBottom != null && grassBottom.getY() > TerraformGenerator.seaLevel) {
     				if(grassBottom.getType() == Material.GRASS_BLOCK) {
-    					//Indicates that this area is valid for population
+    					// Indicates that this area is valid for population
     					sLoc.setY(grassBottom.getY());
 
                     	FractalTypes.Mushroom type = switch(random.nextInt(6)) {
@@ -193,7 +193,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
         double preciseHeight = HeightMap.getPreciseHeight(tw, rawX, rawZ);
         int height = (int) preciseHeight;
 
-        //Round to force a 0 if the value is too low. Makes blending better.
+        // Round to force a 0 if the value is too low. Makes blending better.
         double platformNoiseVal =
                 Math.round(
                     Math.max(
@@ -209,7 +209,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
                     - HeightMap.ATTRITION.getHeight(tw, rawX, rawZ)
                     + 55);
 
-            //for higher platform noise vals, make a thicker platform
+            // for higher platform noise vals, make a thicker platform
             cache.writeTransformedHeight (x,z,(short) platformHeight);
             chunk.setBlock(x, platformHeight, z, Material.GRASS_BLOCK);
             Material[] crust = getSurfaceCrust(random);
@@ -220,17 +220,17 @@ public class ArchedCliffsHandler extends BiomeHandler {
                     chunk.setBlock(x, platformHeight-i, z, Material.STONE);
             }
 
-            //This is for the bottom platform
-            //DOES NOT change height, so can be ignored in pure height calculation
-            //This is bad practice
+            // This is for the bottom platform
+            // DOES NOT change height, so can be ignored in pure height calculation
+            // This is bad practice
             if(!(chunk instanceof DudChunkData)
                     && platformNoiseVal > 6) {
                 int pillarNoiseVal = (int) ((platformNoiseVal/10.0)*((0.1+Math.abs(pillarNoise.GetNoise(rawX, rawZ)))*20.0));
                 if(pillarNoiseVal + height > platformHeight)
                     pillarNoiseVal = platformHeight - height;
 
-                //Crust cannot be under solids.
-                //Guarded from DudChunkData, so safe to read
+                // Crust cannot be under solids.
+                // Guarded from DudChunkData, so safe to read
                 boolean applyCrust = !chunk.getType(x, height+pillarNoiseVal+1, z).isSolid();
 
                 for(int i = pillarNoiseVal; i >= 1; i--) {

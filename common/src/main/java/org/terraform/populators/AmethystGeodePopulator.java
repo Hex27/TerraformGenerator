@@ -45,7 +45,7 @@ public class AmethystGeodePopulator {
         	
         	if(upperHeightRange < 14) return;
         	
-        	//Elevate 14 units up.
+        	// Elevate 14 units up.
         	int y = GenUtils.randInt(random, 14, upperHeightRange);
         	placeGeode(random.nextInt(9999), geodeRadius, new SimpleBlock(data,x,y,z));
     	}
@@ -90,7 +90,7 @@ public class AmethystGeodePopulator {
                     		rel.setType(Material.WATER);
                     	else
                     		rel.setType(Material.CAVE_AIR);
-                        //Only do the other stuff if this isn't air.
+                        // Only do the other stuff if this isn't air.
                     }else if(rel.isSolid())
 	                    if (amethystCrust <= noiseVal) {
 	                        rel.setType(Material.AMETHYST_BLOCK,Material.BUDDING_AMETHYST);
@@ -104,7 +104,7 @@ public class AmethystGeodePopulator {
             }
         }
         
-        //Place crystals
+        // Place crystals
         for(SimpleBlock rel:amethystBlocks) {
         	for(BlockFace face:BlockUtils.sixBlockFaces) {
         		if(GenUtils.chance(1,6)) continue;

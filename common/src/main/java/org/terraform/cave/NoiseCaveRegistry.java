@@ -37,7 +37,7 @@ public class NoiseCaveRegistry {
     public boolean canGenerateCarve(int x, int y, int z, double height){
         if(!TConfigOption.areCavesEnabled()) return false;
 
-        //The sea filter is special, pass in HEIGHT as it's about scaling towards the sea
+        // The sea filter is special, pass in HEIGHT as it's about scaling towards the sea
         float filterSea = yBarrier(tw, x,(int)height,z, TerraformGenerator.seaLevel, 5, 1);
         for(NoiseCaveAbstract carver:generateCaveCarvers) {
             if(carver.canCarve(tw, x, y, z, height, filterSea)) return true;
@@ -57,7 +57,7 @@ public class NoiseCaveRegistry {
         FastNoise boundaryNoise = new FastNoise((int) tw.getSeed()*5);
         boundaryNoise.SetNoiseType(FastNoise.NoiseType.Simplex);
         boundaryNoise.SetFrequency(0.01f);
-        barrier += 3*boundaryNoise.GetNoise(x,z); //fuzz the boundary
+        barrier += 3*boundaryNoise.GetNoise(x,z); // fuzz the boundary
 
         if(Math.abs(y-v) <= limit)
             return 0;

@@ -36,16 +36,16 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
         if(surfaceY < TerraformGenerator.seaLevel) return;
-        //Dirt Fixer
-        //Snowy wastelands and the like will spawn snow blocks, then dirt blocks.
-        //Analyze 5 blocks down. Replace the block if anything next to it is stone.
+        // Dirt Fixer
+        // Snowy wastelands and the like will spawn snow blocks, then dirt blocks.
+        // Analyze 5 blocks down. Replace the block if anything next to it is stone.
         correctDirt(new SimpleBlock(data,rawX,surfaceY,rawZ));
 
-        //Snow on top if the biome is the same
+        // Snow on top if the biome is the same
         data.setType(rawX, surfaceY+1, rawZ, Material.SNOW);
 
 
-        //Make patches of decorative rock on the mountain sides.
+        // Make patches of decorative rock on the mountain sides.
         if (GenUtils.chance(random, 1, 25)) {
             Material stoneType = GenUtils.randChoice(Material.ANDESITE, Material.DIORITE);
             stoneStack(stoneType, data, random, rawX, surfaceY, rawZ);
@@ -54,15 +54,15 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
                     if (GenUtils.chance(random, 1, 5)) continue;
                     int stoneY = GenUtils.getHighestGround(data, rawX + nx, rawZ + nz);
 
-                    //Another check, make sure relative position isn't underwater.
+                    // Another check, make sure relative position isn't underwater.
                     if(stoneY < TerraformGenerator.seaLevel)
                         continue;
                     stoneStack(stoneType, data, random, rawX + nx, stoneY, rawZ + nz);
                 }
         }
 
-        //Thick Snow on shallow areas
-        //Snowy Snow on near flat areas
+        // Thick Snow on shallow areas
+        // Snowy Snow on near flat areas
         double gradient = HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3);
         if(gradient < 1.4) {
 
@@ -70,7 +70,7 @@ public class SnowyMountainsHandler extends AbstractMountainHandler {
                 return;
             if(gradient < 1.2) {
                 data.setType(rawX, surfaceY, rawZ, Material.POWDER_SNOW);
-                data.setType(rawX, surfaceY+1, rawZ, Material.AIR); //remove snow
+                data.setType(rawX, surfaceY+1, rawZ, Material.AIR); // remove snow
             }else
                 data.setType(rawX, surfaceY, rawZ, Material.SNOW_BLOCK);
         }

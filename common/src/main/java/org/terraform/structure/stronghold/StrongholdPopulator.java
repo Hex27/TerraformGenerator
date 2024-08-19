@@ -51,27 +51,27 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
                 POSITIONS[pos++] = coords;
             }
             radius += 3072;
-            //TerraformGeneratorPlugin.logger.debug("sp-1");
+            // TerraformGeneratorPlugin.logger.debug("sp-1");
             for (int i = 0; i < 6; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
             radius += 3072;
-            //TerraformGeneratorPlugin.logger.debug("sp-2");
+            // TerraformGeneratorPlugin.logger.debug("sp-2");
             for (int i = 0; i < 10; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
             radius += 3072;
-            //TerraformGeneratorPlugin.logger.debug("sp-3");
+            // TerraformGeneratorPlugin.logger.debug("sp-3");
             for (int i = 0; i < 15; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
             radius += 3072;
-            //TerraformGeneratorPlugin.logger.debug("s-pop-4");
+            // TerraformGeneratorPlugin.logger.debug("s-pop-4");
             for (int i = 0; i < 21; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
             radius += 3072;
-            //TerraformGeneratorPlugin.logger.debug("s-pop-5");
+            // TerraformGeneratorPlugin.logger.debug("s-pop-5");
             for (int i = 0; i < 28; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
             radius += 3072;
-            //TerraformGeneratorPlugin.logger.debug("s-pop-6");
+            // TerraformGeneratorPlugin.logger.debug("s-pop-6");
             for (int i = 0; i < 36; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
             radius += 3072;
-            //TerraformGeneratorPlugin.logger.debug("s-pop-7");
+            // TerraformGeneratorPlugin.logger.debug("s-pop-7");
             for (int i = 0; i < 9; i++) POSITIONS[pos++] = randomCircleCoords(rand, radius);
-            //TerraformGeneratorPlugin.logger.debug("s-pop-8");
+            // TerraformGeneratorPlugin.logger.debug("s-pop-8");
 
         }
         return POSITIONS;
@@ -103,12 +103,12 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
                 for (int[] pos : positions) {
                     if (areCoordsEqual(pos, x, z)) {
                         
-                    	//Strongholds no longer calculate from the surface.
-                    	//Just pick a directly underground location.
+                    	// Strongholds no longer calculate from the surface.
+                    	// Just pick a directly underground location.
                         int y = GenUtils.randInt(TConfigOption.STRUCTURES_STRONGHOLD_MIN_Y.getInt(), TConfigOption.STRUCTURES_STRONGHOLD_MAX_Y.getInt());
                         
-                        //Attempt to force strongholds further underground if
-                        //they're above the surface.
+                        // Attempt to force strongholds further underground if
+                        // they're above the surface.
                         if(y + 18 > GenUtils.getHighestGround(data, x, z)) {
                         	if(y > TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt()) y = TConfigOption.STRUCTURES_STRONGHOLD_FAILSAFE_Y.getInt();
                         }
@@ -124,12 +124,12 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     public void spawnStronghold(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        //TerraformGeneratorPlugin.logger.info("Spawning stronghold at: " + x + "," + z);
+        // TerraformGeneratorPlugin.logger.info("Spawning stronghold at: " + x + "," + z);
 
         int numRooms = 70;
         int range = 100;
 
-        //Level One
+        // Level One
         Random hashedRand = tw.getHashedRand(x, y, z);
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range);
 
@@ -144,7 +144,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         gen.setRoomMaxX(30);
         gen.setRoomMaxZ(30);
         gen.setRoomMaxHeight(15);
-        gen.forceAddRoom(25, 25, 15); //At least one room that can be the Portal room.
+        gen.forceAddRoom(25, 25, 15); // At least one room that can be the Portal room.
 
         CubeRoom stairwayOne = gen.forceAddRoom(5, 5, 18);
         stairwayOne.setRoomPopulator(new StairwayRoomPopulator(random, false, false));
@@ -168,7 +168,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         mazeSpawner.setWidth(range + 20);
         gen.setMazePathGenerator(mazeSpawner);
 
-        //Level Two
+        // Level Two
         y += 18;
         gen.setCentY(y);
         gen.setRand(tw.getHashedRand(x, y, z));
@@ -183,7 +183,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
     }
 
-    //This has to be kept. It is used to locate strongholds
+    // This has to be kept. It is used to locate strongholds
     public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
         double minDistanceSquared = Double.MAX_VALUE;
         int[] min = null;

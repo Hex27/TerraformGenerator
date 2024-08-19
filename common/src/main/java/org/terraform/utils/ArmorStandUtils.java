@@ -49,13 +49,13 @@ public class ArmorStandUtils {
 		
 		public static @NotNull ArmorStandQuality rollQuality(@NotNull Random rand) {
 			int weight = rand.nextInt(100);
-			if(weight > 95) //15%
+			if(weight > 95) // 15%
 				return ArmorStandQuality.DIAMOND;
-			else if(weight > 60) //35%
+			else if(weight > 60) // 35%
 				return ArmorStandQuality.IRON;
-			else if(weight > 30) //30%
+			else if(weight > 30) // 30%
 				return ArmorStandQuality.GOLD;
-			else //30%
+			else // 30%
 				return ArmorStandQuality.LEATHER;
 		}
 	}

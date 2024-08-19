@@ -25,7 +25,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
     protected int depth = 0;
     protected BlockFace rotation = BlockFace.NORTH;
     protected boolean unique = false;
-    protected int elevation = 0; //elevation of 0 is ground level.
+    protected int elevation = 0; // elevation of 0 is ground level.
 
     public JigsawStructurePiece(int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace @NotNull ... validDirs) {
         this.room = new CubeRoom(widthX, widthZ, height, 0, 0, 0);
@@ -54,7 +54,7 @@ public abstract class JigsawStructurePiece implements Cloneable {
             for (BlockFace face : validDirections.keySet()) {
                 clone.validDirections.put(face, false);
             }
-            //TerraformGeneratorPlugin.logger.info("CREATOR-validDirsSize: " + validDirections.size());
+            // TerraformGeneratorPlugin.logger.info("CREATOR-validDirsSize: " + validDirections.size());
             clone.walledFaces = new ArrayList<>();
             clone.setRotation(BlockUtils.getDirectBlockFace(rand));
             clone.elevation = 0;

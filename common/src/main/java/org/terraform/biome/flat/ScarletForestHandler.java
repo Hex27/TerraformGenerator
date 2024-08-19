@@ -48,7 +48,7 @@ public class ScarletForestHandler extends BiomeHandler {
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
 
-            if (GenUtils.chance(random, 1, 10)) { //Grass
+            if (GenUtils.chance(random, 1, 10)) { // Grass
                 if (GenUtils.chance(random, 6, 10)) {
                     PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     if (random.nextBoolean()) {

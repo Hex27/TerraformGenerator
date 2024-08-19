@@ -49,7 +49,7 @@ import java.util.Set;
 public class BlockUtils {
 	
 	public static void initBlockUtils() {
-		//init ores
+		// init ores
 		for(Material mat:Material.values()) {
     		if(mat.toString().endsWith("_ORE"))
     		{
@@ -63,15 +63,15 @@ public class BlockUtils {
         caveCarveReplace.addAll(badlandsStoneLike);
         caveCarveReplace.addAll(caveDecoratorMaterials);
 		
-		//init glass panes
+		// init glass panes
     	for(Material mat:Material.values()) {
     		if(mat.toString().endsWith("_GLASS_PANE"))
     			glassPanes.add(mat);
     	}
 	}
 
-    //This is needed as REPLACABLE_BY_TREES is a 1.20 tag.
-    //Also this has mushrooms and saplings, snow and coral fans
+    // This is needed as REPLACABLE_BY_TREES is a 1.20 tag.
+    // Also this has mushrooms and saplings, snow and coral fans
     public static final EnumSet<Material> replacableByTrees = EnumSet.of(
             Material.ACACIA_SAPLING,
             Material.DARK_OAK_SAPLING,
@@ -136,7 +136,7 @@ public class BlockUtils {
     );
 
     // N
-    //W E
+    // W E
     // S
     public static final BlockFace[] xzPlaneBlockFaces = new BlockFace[] {
             BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST
@@ -226,14 +226,14 @@ public class BlockUtils {
             Material.BUDDING_AMETHYST,
             Material.GLOW_LICHEN,
 
-            //ItemsAdder Blocks
+            // ItemsAdder Blocks
             Material.NOTE_BLOCK,
             Material.SPAWNER,
             Material.BROWN_MUSHROOM_BLOCK,
             Material.RED_MUSHROOM_BLOCK
 	);
     
-    //This enumset gets populated more in initBlockUtils
+    // This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> badlandsStoneLike = EnumSet.of(
             Material.TERRACOTTA, Material.ORANGE_TERRACOTTA,
             Material.RED_TERRACOTTA, Material.BROWN_TERRACOTTA,
@@ -242,12 +242,12 @@ public class BlockUtils {
 
     public static final EnumSet<Material> caveCarveReplace = EnumSet.of(Material.NOTE_BLOCK);
 
-    //This enumset gets populated more in initBlockUtils
+    // This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> ores = EnumSet.noneOf(Material.class);
     
     public static final EnumSet<Material> airs = EnumSet.of(Material.AIR, Material.CAVE_AIR);
 
-    //This enumset gets populated more in initBlockUtils
+    // This enumset gets populated more in initBlockUtils
     public static final EnumSet<Material> glassPanes = EnumSet.noneOf(Material.class);
     
     private static final PlantBuilder[] TALL_FLOWER = {PlantBuilder.LILAC, PlantBuilder.ROSE_BUSH, PlantBuilder.PEONY, PlantBuilder.LARGE_FERN, PlantBuilder.SUNFLOWER};
@@ -412,7 +412,7 @@ public class BlockUtils {
     @SuppressWarnings("incomplete-switch")
     public static @NotNull BlockFace rotateXZPlaneBlockFace(@NotNull BlockFace original, int times) {
         //	N
-    	//W + E
+    	// W + E
     	//	S
     	for (int i = 0; i < times; i++) {
             switch (original) {
@@ -451,7 +451,7 @@ public class BlockUtils {
     @SuppressWarnings("incomplete-switch")
     public static @NotNull BlockFace rotateXZPlaneBlockFaceOppositeAngle(@NotNull BlockFace original, int times) {
         //	N
-    	//W + E
+    	// W + E
     	//	S
     	for (int i = 0; i < times; i++) {
             switch (original) {
@@ -706,7 +706,7 @@ public class BlockUtils {
     }
 
     public static void generateClayDeposit(int x, int y, int z, @NotNull PopulatorDataAbstract data, @NotNull Random random) {
-        //CLAY DEPOSIT
+        // CLAY DEPOSIT
     	replaceCircularPatch(random.nextInt(9999), TConfigOption.BIOME_CLAY_DEPOSIT_SIZE.getFloat(), new SimpleBlock(data,x,y,z), Material.CLAY);
 
     }
@@ -737,7 +737,7 @@ public class BlockUtils {
     public static void replaceCircle(int seed, float radius, @NotNull SimpleBlock base, Material... type) {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
+            // block.setReplaceType(ReplaceType.ALL);
             base.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
@@ -750,11 +750,11 @@ public class BlockUtils {
             for (float z = -radius; z <= radius; z++) {
                 SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
                 
-                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                 double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
-                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                     rel.lsetType(GenUtils.randChoice(type));
                 }
             }
@@ -772,7 +772,7 @@ public class BlockUtils {
     public static void replaceCircularPatch(int seed, float radius, @NotNull SimpleBlock base, boolean snowy, Material... type) {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
+            // block.setReplaceType(ReplaceType.ALL);
             base.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
@@ -786,11 +786,11 @@ public class BlockUtils {
                 SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
                 rel = rel.getGround();
                 
-                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                 double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
-                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                     rel.setType(GenUtils.randChoice(type));
                     if(snowy && rel.getUp().isAir())
                     	rel.getUp().setType(Material.SNOW);
@@ -811,7 +811,7 @@ public class BlockUtils {
     public static void replaceWaterSphere(int seed, float radius, @NotNull SimpleBlock base) {
         if (radius <= 0) return;
         if (radius <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
+            // block.setReplaceType(ReplaceType.ALL);
         	if (base.getY() <= TerraformGenerator.seaLevel) 
         		base.setType(Material.WATER);
 	        else
@@ -828,12 +828,12 @@ public class BlockUtils {
                 for (float z = -radius; z <= radius; z++) {
 
                     SimpleBlock rel = base.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
                             + Math.pow(y, 2) / Math.pow(radius, 2)
                             + Math.pow(z, 2) / Math.pow(radius, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
+                        // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                         if (rel.getY() <= TerraformGenerator.seaLevel) 
                             rel.setType(Material.WATER);
                         else
@@ -878,12 +878,12 @@ public class BlockUtils {
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     double noiseVal = 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
                     if (equationResult <= noiseVal) {
-                        if (toReplace.contains(Material.BARRIER)) { //Blacklist
+                        if (toReplace.contains(Material.BARRIER)) { // Blacklist
                             if (!toReplace.contains(rel.getType()))
                                 if (!isWet(rel) || waterToAir)
                                     rel.physicsSetType(Material.CAVE_AIR, false);
 
-                        } else if (toReplace.contains(rel.getType())) { //Whitelist
+                        } else if (toReplace.contains(rel.getType())) { // Whitelist
                             if (!isWet(rel) || waterToAir)
                                 rel.physicsSetType(Material.CAVE_AIR, false);
 
@@ -892,7 +892,7 @@ public class BlockUtils {
                                 rel.physicsSetType(Material.CAVE_AIR, false);
                         }
                         
-                        //Patches found water holes
+                        // Patches found water holes
                         if(blockWaterHoles)
 	                        for(BlockFace face:BlockUtils.sixBlockFaces)
 	                        {
@@ -913,7 +913,7 @@ public class BlockUtils {
     public static void replaceSphere(int seed, float rX, float rY, float rZ, @NotNull SimpleBlock block, boolean hardReplace, boolean snowy, Material... type) {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
+            // block.setReplaceType(ReplaceType.ALL);
             block.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
@@ -927,12 +927,12 @@ public class BlockUtils {
             for (float y = -rY; y <= rY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
+                        // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                         if (hardReplace || !rel.isSolid()) {
                             rel.setType(GenUtils.randChoice(rand, type));
                             if (snowy) {
@@ -948,7 +948,7 @@ public class BlockUtils {
     public static void replaceUpperSphere(int seed, float rX, float rY, float rZ, @NotNull SimpleBlock block, boolean hardReplace, Material... type) {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
+            // block.setReplaceType(ReplaceType.ALL);
             block.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
@@ -962,14 +962,14 @@ public class BlockUtils {
             for (float y = 0; y <= rY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
+                        // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                         if (hardReplace || !rel.isSolid()) rel.setType(GenUtils.randChoice(rand, type));
-                        //rel.setReplaceType(ReplaceType.ALL);
+                        // rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
             }
@@ -979,7 +979,7 @@ public class BlockUtils {
     public static void replaceLowerSphere(int seed, float rX, float rY, float rZ, @NotNull SimpleBlock block, boolean hardReplace, Material... type) {
         if (rX <= 0 && rY <= 0 && rZ <= 0) return;
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
+            // block.setReplaceType(ReplaceType.ALL);
             block.setType(GenUtils.randChoice(new Random(seed), type));
             return;
         }
@@ -993,14 +993,14 @@ public class BlockUtils {
             for (float y = -rY; y <= 0; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(rX, 2)
                             + Math.pow(y, 2) / Math.pow(rY, 2)
                             + Math.pow(z, 2) / Math.pow(rZ, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
+                        // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
                         if (hardReplace || !rel.isSolid()) rel.setType(GenUtils.randChoice(rand, type));
-                        //rel.setReplaceType(ReplaceType.ALL);
+                        // rel.setReplaceType(ReplaceType.ALL);
                     }
                 }
             }
@@ -1009,7 +1009,7 @@ public class BlockUtils {
 
     public static BlockFace @NotNull [] getAdjacentFaces(@NotNull BlockFace original) {
         //   N
-        //W    E
+        // W    E
         //   S
         return switch(original) {
             case EAST -> new BlockFace[] {BlockFace.SOUTH, BlockFace.NORTH};
@@ -1112,57 +1112,57 @@ public class BlockUtils {
         BlockFace left = BlockUtils.getLeft(data.getFacing());
         BlockFace right = BlockUtils.getRight(data.getFacing());
 
-        //Left is a stair and right isn't
+        // Left is a stair and right isn't
         if (Tag.STAIRS.isTagged(target.getRelative(left).getType())
                 && !Tag.STAIRS.isTagged(target.getRelative(right).getType())) {
 
-            //Only adjust if the left side has the same facing.
+            // Only adjust if the left side has the same facing.
             if (((Stairs) target.getRelative(left).getBlockData()).getFacing() == data.getFacing()) {
 
-                //Back is a stair
+                // Back is a stair
                 if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing()).getType())) {
 
-                    //Only set if the back stair is facing a valid location
+                    // Only set if the back stair is facing a valid location
                     if (((Stairs) target.getRelative(data.getFacing()).getBlockData()).getFacing()
                             == getLeft(data.getFacing()))
                         data.setShape(Stairs.Shape.OUTER_RIGHT);
 
-                    //Front is a stair
+                    // Front is a stair
                 } else if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
 
-                    //Only set if the front stair is facing a valid location
+                    // Only set if the front stair is facing a valid location
                     if (((Stairs) target.getRelative(data.getFacing().getOppositeFace()).getBlockData()).getFacing()
                             == getRight(data.getFacing()))
                         data.setShape(Stairs.Shape.INNER_RIGHT);
                 }
             }
 
-            //Right is a stair and left isn't.
+            // Right is a stair and left isn't.
         } else if (!Tag.STAIRS.isTagged(target.getRelative(left).getType())
                 && Tag.STAIRS.isTagged(target.getRelative(right).getType())) {
 
-            //Only adjust if the right side has the same facing.
+            // Only adjust if the right side has the same facing.
             if (((Stairs) target.getRelative(right).getBlockData()).getFacing() == data.getFacing()) {
 
-                //Back is a stair
+                // Back is a stair
                 if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing()).getType())) {
 
-                    //Only set if the back stair is facing a valid location
+                    // Only set if the back stair is facing a valid location
                     if (((Stairs) target.getRelative(data.getFacing()).getBlockData()).getFacing()
                             == getRight(data.getFacing()))
                         data.setShape(Stairs.Shape.OUTER_LEFT);
 
-                    //Front is a stair
+                    // Front is a stair
                 } else if (Tag.STAIRS.isTagged(target.getRelative(data.getFacing().getOppositeFace()).getType())) {
 
-                    //Only set if the front stair is facing a valid location
+                    // Only set if the front stair is facing a valid location
                     if (((Stairs) target.getRelative(data.getFacing().getOppositeFace()).getBlockData()).getFacing()
                             == getLeft(data.getFacing()))
                         data.setShape(Stairs.Shape.INNER_LEFT);
                 }
             }
 
-            //Right is a stair and left isn't.
+            // Right is a stair and left isn't.
         }
         target.setBlockData(data);
     }

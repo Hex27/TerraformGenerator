@@ -33,8 +33,8 @@ public class MansionBaseTowerWallPiece extends MansionTowerWallPiece {
         
         for (int i = 0; i < entry.getValue(); i++) {
             
-        	//Primary Wall and wooden stair decorations
-        	//w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        	// Primary Wall and wooden stair decorations
+        	// w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getUp().Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
             new StairBuilder(Material.COBBLESTONE_STAIRS)
             .setFacing(w.getDirection().getOppositeFace())
@@ -53,13 +53,13 @@ public class MansionBaseTowerWallPiece extends MansionTowerWallPiece {
 
     	
     	OrientableBuilder logBuilder = new OrientableBuilder(Material.DARK_OAK_LOG).setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getRight(w.getDirection())));
-    	//Carving
+    	// Carving
         for (int i = 0; i < entry.getValue(); i++) {
             
         	w.getRear().getUp().Pillar(6,Material.STONE);
         	logBuilder.apply(w.getUp(7));
         	
-        	//Decorative Roofing & carving
+        	// Decorative Roofing & carving
         	if(i == 0 || i == entry.getValue()-1) {
         		new SlabBuilder(Material.COBBLESTONE_SLAB)
         		.setType(Type.TOP)
@@ -86,7 +86,7 @@ public class MansionBaseTowerWallPiece extends MansionTowerWallPiece {
         		.setType(Type.TOP)
         		.apply(w.getUp(5));
         	}
-        	else{ //center
+        	else{ // center
         		new SlabBuilder(Material.COBBLESTONE_SLAB)
         		.setType(Type.BOTTOM)
         		.apply(w.getUp(7).getFront());

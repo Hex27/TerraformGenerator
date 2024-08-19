@@ -128,7 +128,7 @@ public class TaigaHandler extends BiomeHandler {
     public static void replacePodzol(int seed, float radius, @NotNull SimpleBlock base) {
     	if (radius <= 0) return;
         if (radius <= 0.5) {
-            //block.setReplaceType(ReplaceType.ALL);
+            // block.setReplaceType(ReplaceType.ALL);
             base.setType(GenUtils.randChoice(new Random(seed), Material.PODZOL));
             return;
         }
@@ -143,12 +143,12 @@ public class TaigaHandler extends BiomeHandler {
                 rel = rel.getGround();
                 if(!BlockUtils.isDirtLike(rel.getType()))
                 	continue;
-                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                 double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
                         + Math.pow(z, 2) / Math.pow(radius, 2);
                 double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getZ()));
                 if (equationResult <= 1.0+noiseVal) {
-                    //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
+                    // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){          
                     if(equationResult * 4 > 0.7+noiseVal) {
                     	if(rand.nextBoolean())
                     		rel.setType(Material.PODZOL);

@@ -23,14 +23,14 @@ public class MonumentPathPopulator extends PathPopulatorAbstract {
     public void populate(@NotNull PathPopulatorData ppd) {
         Wall w = new Wall(ppd.base, ppd.dir);
 
-        //Fill with water :<
-        //w.getLeft().getLeft().RPillar(5, rand, Material.WATER);
+        // Fill with water :<
+        // w.getLeft().getLeft().RPillar(5, rand, Material.WATER);
         w.getLeft().RPillar(5, rand, Material.WATER);
         w.RPillar(5, rand, Material.WATER);
         w.getRight().RPillar(5, rand, Material.WATER);
-        //w.getRight().getRight().RPillar(5, rand, Material.WATER);
+        // w.getRight().getRight().RPillar(5, rand, Material.WATER);
 
-        //Floor is Prismarine >:V
+        // Floor is Prismarine >:V
         for (int i = 0; i <= 1; i++) {
             if (w.getLeft(i).getType() != Material.SEA_LANTERN)
                 w.getLeft(i).setType(Material.PRISMARINE);
@@ -38,13 +38,13 @@ public class MonumentPathPopulator extends PathPopulatorAbstract {
                 w.getRight(i).setType(Material.PRISMARINE);
         }
 
-        //Lantern corridor lights
+        // Lantern corridor lights
         if (light) {
             w.setType(Material.SEA_LANTERN);
         }
         light = !light;
 
-        //Pillars
+        // Pillars
         if (GenUtils.chance(rand, 1, 20)) {
             w.RPillar(5, rand, GenUtils.mergeArr(design.tileSet, new Material[]{Material.SEA_LANTERN}));
         }
@@ -52,12 +52,12 @@ public class MonumentPathPopulator extends PathPopulatorAbstract {
 //			MonumentRoomPopulator.setThickPillar(rand, design, w.get().getUp(3));
 //		}
 
-        //Thick pillars
+        // Thick pillars
         if (GenUtils.chance(rand, 1, 50)) {
             MonumentRoomPopulator.setThickPillar(rand, design, w.get().getDown());
         }
 
-        //Small spires on the top
+        // Small spires on the top
         if (GenUtils.chance(rand, 1, 50)) {
             if (w.getUp(6).isSolid()
                     && !w.getUp(7).isSolid())

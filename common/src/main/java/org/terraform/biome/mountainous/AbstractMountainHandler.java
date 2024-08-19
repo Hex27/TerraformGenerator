@@ -19,22 +19,22 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
 
 	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom)
 	{
-		//this is positive as this is a mountain.
-		//double elevation = section.getElevation();
+		// this is positive as this is a mountain.
+		// double elevation = section.getElevation();
 		double lowerBound = 1.4;
 		double upperBound = 1.7;
 		
-		//boolean surroundedByMountains = true;
+		// boolean surroundedByMountains = true;
 		
 		float mt =  TConfigOption.BIOME_MOUNTAINOUS_THRESHOLD.getFloat();
-		//float hmt =  TConfigOption.BIOME_HIGH_MOUNTAINOUS_THRESHOLD.getFloat();
+		// float hmt =  TConfigOption.BIOME_HIGH_MOUNTAINOUS_THRESHOLD.getFloat();
 		
-		//Check direct faces, not diagonals
+		// Check direct faces, not diagonals
 		for(int[] rel:new int[][] {{1,0},{-1,0},{0,1},{0,-1}}) {
 			int nx = rel[0];
 			int nz = rel[1];
 			if(section.getRelative(nx, nz).getOceanLevel() >= mt) {
-				//surroundedByMountains = false;
+				// surroundedByMountains = false;
 				lowerBound = 1.2;
 				upperBound = 1.4;
 				break;
@@ -51,11 +51,11 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
 	@Override
     public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
     	
-        double height = HeightMap.CORE.getHeight(tw, x, z);//HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
+        double height = HeightMap.CORE.getHeight(tw, x, z);// HeightMap.MOUNTAINOUS.getHeight(tw, x, z); // Added here
         
-        //Let mountains cut into adjacent sections.
+        // Let mountains cut into adjacent sections.
         double maxMountainRadius = ((double) BiomeSection.sectionWidth);
-        //Double attrition height
+        // Double attrition height
         height += HeightMap.ATTRITION.getHeight(tw, x, z);
         
         BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
@@ -66,7 +66,7 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
         Random sectionRand = sect.getSectionRandom();
         double maxPeak = getPeakMultiplier(sect, sectionRand);
         
-        //Let's just not offset the peak. This seems to give a better result.
+        // Let's just not offset the peak. This seems to give a better result.
         SimpleLocation mountainPeak = sect.getCenter();
         
         double distFromPeak = (1.42*maxMountainRadius)-Math.sqrt(
@@ -105,7 +105,7 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
         
         height = height*heightMultiplier;
         
-        //If the height is too high, just force it to smooth out
+        // If the height is too high, just force it to smooth out
         if (height > (TerraformGeneratorPlugin.injector.getMaxY() - 56)) height = (TerraformGeneratorPlugin.injector.getMaxY() - 56) + (height - (TerraformGeneratorPlugin.injector.getMaxY() - 56)) * 0.5;
         if (height > (TerraformGeneratorPlugin.injector.getMaxY() - 25)) height = (TerraformGeneratorPlugin.injector.getMaxY() - 25) + (height - (TerraformGeneratorPlugin.injector.getMaxY() - 25)) * 0.3;
         if (height > (TerraformGeneratorPlugin.injector.getMaxY() - 15)) height = (TerraformGeneratorPlugin.injector.getMaxY() - 15) + (height - (TerraformGeneratorPlugin.injector.getMaxY() - 15)) * 0.1;

@@ -50,9 +50,9 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
     public void populate(@NotNull TerraformWorld tw,
                          @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
         spawnAnimalFarm(tw, data, x, height + 1, z);
     }
@@ -69,11 +69,11 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
 
             TerraformGeneratorPlugin.logger.info("Spawning animal farm at " + x + "," + y + "," + z + " with rotation of " + animalFarm.getFace());
 
-            data.addEntity(x, y + 1, z, EntityType.VILLAGER); //Two villagers
+            data.addEntity(x, y + 1, z, EntityType.VILLAGER); // Two villagers
             data.addEntity(x, y + 1, z, EntityType.VILLAGER);
-            data.addEntity(x, y + 1, z, EntityType.CAT); //And a cat.
+            data.addEntity(x, y + 1, z, EntityType.CAT); // And a cat.
 
-            //Spawn a base on the house to sit on
+            // Spawn a base on the house to sit on
             if (dir == BlockFace.EAST || dir == BlockFace.WEST) {
                 for (int nx = -5; nx <= 5; nx++) {
                     for (int nz = -10; nz <= 10; nz++) {
@@ -115,7 +115,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
         radiusNoise.SetNoiseType(NoiseType.Cubic);
         radiusNoise.SetFrequency(0.09f);
 
-        //Make paths
+        // Make paths
         for (int nx = -50; nx <= 50; nx++) {
             for (int nz = -50; nz <= 50; nz++) {
                 int height = GenUtils.getHighestGround(data, x + nx, z + nz);
@@ -131,7 +131,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                 noise = Math.abs(noise * multiplier);
 
                 if (GenUtils.chance(random, (2500 - dist) > 0 ? (int) (2500 - dist) : 0, 2500)) {
-                    if(0.1 < noise && noise < 0.2) { //Grass hedges
+                    if(0.1 < noise && noise < 0.2) { // Grass hedges
                         data.setType(nx + x, height, nz + z, GenUtils.randChoice(
                                 random,
                                 Material.CHISELED_STONE_BRICKS,
@@ -150,16 +150,16 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
             }
         }
 
-        //Create each pen
+        // Create each pen
         int pens = 0;
         for (CubeRoom room : gen.getRooms()) {
-            //Don't touch the center room
+            // Don't touch the center room
             if (room.getWidthX() == 20 && room.getWidthZ() == 20) continue;
 
-            //Don't generate pens inside water
+            // Don't generate pens inside water
             if (GenUtils.getHighestGround(data, room.getX(), room.getZ()) < TerraformGenerator.seaLevel) continue;
 
-            //Create fences
+            // Create fences
             for (int t = 0; t <= 360; t += 5) {
                 int ePX = room.getX() + (int) (((double) room.getWidthX() / 2) * Math.cos(Math.toRadians(t)));
                 int ePZ = room.getZ() + (int) (((double) room.getWidthZ() / 2) * Math.sin(Math.toRadians(t)));
@@ -167,7 +167,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
 
                 data.setType(ePX, highest + 1, ePZ, Material.SPRUCE_FENCE);
 
-                //General lighting
+                // General lighting
                 if (GenUtils.chance(random, 1, 30)) {
                     data.setType(ePX, highest + 1, ePZ, Material.CHISELED_STONE_BRICKS);
                     data.setType(ePX, highest + 2, ePZ, GenUtils.randChoice(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL));
@@ -180,7 +180,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
 
             HashMap<Wall, Integer> walls = room.getFourWalls(data, 0);
 
-            //Spawn job blocks
+            // Spawn job blocks
             for (Entry<Wall, Integer> entry : walls.entrySet()) {
                 Wall w = entry.getKey();
                 int length = entry.getValue();
@@ -206,14 +206,14 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
                 animal = OneTwentyBlockHandler.CAMEL;
                 animalCount = 2;
             }
-            //Spawn animals
+            // Spawn animals
             for (int i = 0; i < animalCount; i++) {
                 int[] coords = room.randomCoords(random, 2);
                 int highest = GenUtils.getHighestGround(data, coords[0], coords[2]);
                 data.addEntity(coords[0], highest + 1, coords[2], animal);
             }
 
-            //Decorate it
+            // Decorate it
             for (int nx = room.getLowerCorner()[0] + 2; nx <= room.getUpperCorner()[0] - 2; nx++) {
                 for (int nz = room.getLowerCorner()[1] + 2; nz <= room.getUpperCorner()[1] - 2; nz++) {
                     int highest = GenUtils.getHighestGround(data, nx, nz);

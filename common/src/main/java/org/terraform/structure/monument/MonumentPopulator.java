@@ -44,7 +44,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         rs.setWaterlogged(true);
         rs.setFacing(right);
 
-        //Top straight line
+        // Top straight line
         for (int i = 0; i < archHalfLength - 1; i++) {
             if (i <= 1) {
                 Slab slab = (Slab) Bukkit.createBlockData(design.slab());
@@ -55,7 +55,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             arch.getRight(i).setType(design.mat(random));
         }
 
-        //Top decor
+        // Top decor
         arch.getUp().setType(Material.SEA_LANTERN);
         arch.getUp(2).setType(design.slab());
         arch.getUp().getLeft(1).setType(design.mat(random));
@@ -63,7 +63,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         arch.getUp().getLeft(2).setBlockData(ls);
         arch.getUp().getRight(2).setBlockData(rs);
 
-        //Bending sides
+        // Bending sides
         arch.getLeft(archHalfLength - 2).setBlockData(ls);
         arch.getDown().getLeft(archHalfLength).setBlockData(ls);
 
@@ -75,7 +75,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
         arch.getLeft(archHalfLength - 1).getDown().setType(Material.SEA_LANTERN);
         arch.getRight(archHalfLength - 1).getDown().setType(Material.SEA_LANTERN);
 
-        //Vertical area
+        // Vertical area
         arch.getLeft(archHalfLength).getDown(2).downUntilSolid(random, design.tileSet);
         arch.getRight(archHalfLength).getDown(2).downUntilSolid(random, design.tileSet);
     }
@@ -97,7 +97,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
                 if (GenUtils.chance(rand, 2, 5)) {
                     int y = GenUtils.getTrueHighestBlock(data, nx, nz);
-                    //Don't place on weird blocks
+                    // Don't place on weird blocks
                     if (data.getType(nx, y, nz).toString().contains("SLAB") ||
                             data.getType(nx, y, nz).toString().contains("STAIR") ||
                             data.getType(nx, y, nz).toString().contains("WALL"))
@@ -198,7 +198,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     private void entranceSegment(@NotNull Wall w, @NotNull Random random, MonumentDesign design) {
-        //Entrance hole
+        // Entrance hole
         for (int i = 0; i < 12; i++) {
             w.getRear(i).Pillar(6, random, Material.WATER);
         }
@@ -231,7 +231,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             leftClone = leftClone.getLeft();
         }
 
-        //Build entrance archs.
+        // Build entrance archs.
         for (int i = 0; i < 12; i += 3) {
             arch(w.getRear(i), design, random, halfLength + 2, 10);
         }
@@ -247,7 +247,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             for (int nx = x - range / 2 - i; nx <= x + range / 2 + i; nx++) {
                 for (int nz = z - range / 2 - i; nz <= z + range / 2 + i; nz++) {
 
-                    //Spires on the corners
+                    // Spires on the corners
                     if (i % 2 == 0)
                         if (nx == x - range / 2 - i || nx == x + range / 2 + i) {
                             if (nz == z - range / 2 - i || nz == z + range / 2 + i) {
@@ -260,7 +260,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             }
         }
 
-        //Spawn large lamps
+        // Spawn large lamps
         int pad = 5;
         lightPlatform(data, x - range / 2 + pad, y + 7, z - range / 2 + pad);
         design.spawnLargeLight(data, x - range / 2 + pad, y + 8, z - range / 2 + pad);
@@ -284,7 +284,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             for (int nx = x - range / 2; nx <= x + range / 2; nx++) {
                 for (int nz = z - range / 2; nz <= z + range / 2; nz++) {
 
-                    //Don't touch the middle
+                    // Don't touch the middle
                     if (nx > x + 5 - range / 2
                             && nx < x - 5 + range / 2
                             && nz > z + 5 - range / 2
@@ -295,7 +295,7 @@ public class MonumentPopulator extends SingleMegaChunkStructurePopulator {
             }
         }
 
-        //Light the floor in the hallway
+        // Light the floor in the hallway
         for (int nx = x - range / 2 + 3; nx <= x + range / 2 - 3; nx += 2) {
             data.setType(nx, y, z - range / 2 + 3, Material.SEA_LANTERN);
             data.setType(nx, y, z + range / 2 - 3, Material.SEA_LANTERN);

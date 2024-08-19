@@ -27,7 +27,7 @@ public class PlainsVillageForgeStandardPiece extends PlainsVillageForgePiece {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
-        //Place flooring.
+        // Place flooring.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY(), z,

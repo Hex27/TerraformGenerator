@@ -45,12 +45,12 @@ public class AncientCityPillarSchematicParser extends SchematicParser {
     	}
     	
     	if(data.getMaterial() == Material.DEEPSLATE_TILES)
-    	{ //Crack deepslate tiles
+    	{ // Crack deepslate tiles
     		if(rand.nextBoolean())
     			data = Bukkit.createBlockData(Material.CRACKED_DEEPSLATE_TILES);
     	}
 		else if(data.getMaterial() == Material.DEEPSLATE_BRICKS)
-		{ //Crack deepslate bricks
+		{ // Crack deepslate bricks
     		if(rand.nextBoolean())
     			data = Bukkit.createBlockData(Material.CRACKED_DEEPSLATE_BRICKS);
 		}

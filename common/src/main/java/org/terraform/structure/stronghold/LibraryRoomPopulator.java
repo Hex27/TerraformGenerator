@@ -35,12 +35,12 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
         int[] lowerBounds = room.getLowerCorner();
 
         HashMap<Wall, Integer> walls = room.getFourWalls(data, 1);
-        //Bookshelves and entrance decor
+        // Bookshelves and entrance decor
         for (Entry<Wall, Integer> entry : walls.entrySet()) {
             Wall wall = entry.getKey().clone();
             int other = 0;
             for (int i = 0; i < entry.getValue(); i++) {
-                //Tis' an entrance. Don't cover. Decorate it a bit.
+                // Tis' an entrance. Don't cover. Decorate it a bit.
                 if (!wall.getRear().get().getType().toString().endsWith("STONE_BRICKS")) {
                     Wall temp = wall.getUp();
                     for (int t = 0; t < room.getHeight(); t++) {
@@ -52,7 +52,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
                     temp.getUp().LPillar(room.getHeight(), rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
 
-                } else { //If it isn't an entrance, make bookshelves
+                } else { // If it isn't an entrance, make bookshelves
                     if (other <= 2) {
                         wall.LPillar(room.getHeight(), rand, Material.BOOKSHELF);
                         other++;
@@ -66,15 +66,15 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        int pHeight = room.getHeight() / 2; //Platform height
+        int pHeight = room.getHeight() / 2; // Platform height
 
-        //Platforms for second level
+        // Platforms for second level
         for (Entry<Wall, Integer> entry : walls.entrySet()) {
             Wall wall = entry.getKey().clone();
             for (int l = 0; l < entry.getValue(); l++) {
                 Wall pWall = wall.getFront().getRelative(0, pHeight - 1, 0);
                 if (pWall.get().getType().toString().contains("COBBLE")) {
-                    //Make a cobble prop
+                    // Make a cobble prop
                     for (int i = 0; i < 3; i++) {
                         pWall = pWall.getFront();
                         SimpleBlock front = pWall.get();
@@ -86,7 +86,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
                     }
                 } else {
 
-                    //Spawn loot chest
+                    // Spawn loot chest
                     if (GenUtils.chance(rand, 5, 100)) {
                         SimpleBlock cBlock = pWall.getUp().get();
                         cBlock.setType(Material.CHEST);
@@ -96,7 +96,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
                         cBlock.setBlockData(chest);
                         data.lootTableChest(cBlock.getX(), cBlock.getY(), cBlock.getZ(), TerraLootTable.STRONGHOLD_LIBRARY);
                     }
-                    //Place slabs
+                    // Place slabs
                     for (int i = 0; i < 3; i++) {
                         SimpleBlock front = pWall.get();
                         if (!front.lsetType(Material.OAK_SLAB)) {
@@ -114,7 +114,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Fences
+        // Fences
         walls.clear();
         walls = room.getFourWalls(data, 4);
 
@@ -129,8 +129,8 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Stairway generation
-        //Wall object, to the length of the wall
+        // Stairway generation
+        // Wall object, to the length of the wall
         ArrayList<Wall> stairWalls = new ArrayList<>();
         Wall stairWallOne = new Wall(
                 new SimpleBlock(data, lowerBounds[0] + 5, room.getY() + pHeight, upperBounds[1] - 5)
@@ -154,11 +154,11 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
         int i = GenUtils.randInt(rand, 1, 4);
         for (int s = 0; s < i; s++) {
             Wall stairWall = stairWalls.get(s);
-            //Remove the fences there
+            // Remove the fences there
             stairWall.getRight().getUp().setType(Material.AIR);
             stairWall.getFront().getRight().getUp().setType(Material.AIR);
 
-            //Place stairs
+            // Place stairs
             while (stairWall.get().getY() > room.getY()) {
                 stairWall.setType(Material.OAK_STAIRS);
                 Stairs d = (Stairs) Bukkit.createBlockData(Material.OAK_STAIRS);
@@ -174,7 +174,7 @@ public class LibraryRoomPopulator extends RoomPopulatorAbstract {
 
         SimpleBlock core = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
 
-        //Generate central bookpillar
+        // Generate central bookpillar
         for (int nx = -1; nx <= 1; nx++)
             for (int nz = -1; nz <= 1; nz++)
                 for (int ny = 0; ny < room.getHeight() - 1; ny++) {

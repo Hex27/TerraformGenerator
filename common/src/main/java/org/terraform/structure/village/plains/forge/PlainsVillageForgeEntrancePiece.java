@@ -30,7 +30,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
         Wall w = entry.getKey().getDown();
 
-        //Wall
+        // Wall
         for (int i = 0; i < entry.getValue(); i++) {
             w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w = w.getLeft();
@@ -39,7 +39,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
         Wall core = new Wall(new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ()), this.getRotation());
         core = core.getRear(2);
         
-        //Stairway down
+        // Stairway down
 
         if(core.getFront().isSolid()) {
 	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
@@ -59,7 +59,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
     
     @Override
     public void postBuildDecoration(@NotNull Random rand, @NotNull PopulatorDataAbstract data) {
-    	if(getWallType() == PlainsVillageForgeWallType.SOLID) { //Door entrance
+    	if(getWallType() == PlainsVillageForgeWallType.SOLID) { // Door entrance
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
     		Wall w = entry.getKey().getDown();
     		for (int i = 0; i < entry.getValue(); i++) {
@@ -72,7 +72,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
 	         core.getDown().setType(Material.CHISELED_STONE_BRICKS);
     	     BlockUtils.placeDoor(data, plainsVillagePopulator.woodDoor, core.getX(), core.getY(), core.getZ(), core.getDirection().getOppositeFace());
     	     
-    	     //Door decor
+    	     // Door decor
     	     core.getUp(2).getFront().setType(Material.STONE_BRICK_SLAB);
     	     
     	     core.getUp(2).setType(Material.CHISELED_STONE_BRICKS);
@@ -95,7 +95,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
     	     .setFacing(BlockUtils.getLeft(core.getDirection()))
     	     .apply(core.getLeft().getUp(2));
     	}
-    	else //Just a hole in a fence
+    	else // Just a hole in a fence
     	{
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
     		Wall w = entry.getKey();
@@ -103,7 +103,7 @@ public class PlainsVillageForgeEntrancePiece extends PlainsVillageForgePiece {
     			w.getDown(2).downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     			
     			if(i == 2) {
-    				//Opening
+    				// Opening
     				w.getDown().setType(Material.CHISELED_STONE_BRICKS);
     			}
     			else if(i == 1 || i == 3) 

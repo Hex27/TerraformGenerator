@@ -30,7 +30,7 @@ import org.terraform.utils.GenUtils;
 import javax.annotation.Nullable;
 
 public class SimpleBlock {
-    @SerializedName("w") //wtf is this for
+    @SerializedName("w") // wtf is this for
     private final int x, y, z;
 
     @NotNull
@@ -51,7 +51,7 @@ public class SimpleBlock {
     }
 
     public SimpleBlock(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        //this.world = world;
+        // this.world = world;
         this.popData = data;
         this.x = x;
         this.y = y;
@@ -62,16 +62,16 @@ public class SimpleBlock {
     	BlockFace dir = BlockFace.NORTH;
     	int max = -1;
     	if(target.getX() - this.getX() > max) {
-            //east
+            // east
             dir = BlockFace.EAST;
     	}else if(this.getX() - target.getX() > max) {
-            //west
+            // west
             dir = BlockFace.WEST;
     	}else if(this.getZ() - target.getZ() > max) {
-            //north
+            // north
             dir = BlockFace.NORTH;
     	}else if(target.getZ() - this.getZ() > max) {
-            //south
+            // south
             dir = BlockFace.SOUTH;
     	}
     	
@@ -90,7 +90,7 @@ public class SimpleBlock {
     
 
     public SimpleBlock(@NotNull PopulatorDataAbstract data, @NotNull SimpleLocation sLoc) {
-        //this.world = world;
+        // this.world = world;
         this.popData = data;
         this.x = sLoc.getX();
         this.y = sLoc.getY();
@@ -99,7 +99,7 @@ public class SimpleBlock {
     }
 
     public SimpleBlock(@NotNull PopulatorDataAbstract data, @NotNull Location loc) {
-        //this.world = loc.getWorld().getName();
+        // this.world = loc.getWorld().getName();
         this.popData = data;
         this.x = (int) loc.getX();
         this.y = (int) loc.getY();
@@ -108,12 +108,12 @@ public class SimpleBlock {
     }
 
     public SimpleBlock(@NotNull PopulatorDataAbstract data, @NotNull Block b) {
-        //this.world = b.getWorld().getName();
+        // this.world = b.getWorld().getName();
         this.popData = data;
         this.x = b.getX();
         this.y = b.getY();
         this.z = b.getZ();
-        //this.data = b.getBlockData().getAsString();
+        // this.data = b.getBlockData().getAsString();
     }
     
     public @NotNull SimpleLocation getLoc() {
@@ -184,7 +184,7 @@ public class SimpleBlock {
     }
 
     public @Nullable BlockData getBlockData() {
-        return popData.getBlockData(x, y, z);//Bukkit.createBlockData(getType());
+        return popData.getBlockData(x, y, z);// Bukkit.createBlockData(getType());
     }
 
     public void setBlockData(BlockData dat) {
@@ -312,9 +312,9 @@ public class SimpleBlock {
             } else
             	((IPopulatorDataPhysicsCapable) popData).setType(x, y, z, type, updatePhysics);
 
-            //Setting leaves with setType will be persistent
+            // Setting leaves with setType will be persistent
             if (Tag.LEAVES.isTagged(type)) {
-                //if (type.toString().contains("LEAVES")) {
+                // if (type.toString().contains("LEAVES")) {
                 BlockData l = Bukkit.createBlockData(type);
                 if(l instanceof Leaves)
                     ((Leaves) l).setPersistent(true);
@@ -352,9 +352,9 @@ public class SimpleBlock {
         } else
             popData.setType(x, y, z, type);
 
-        //Setting leaves with setType will be persistent
+        // Setting leaves with setType will be persistent
         if (Tag.LEAVES.isTagged(type)) {
-            //if (type.toString().contains("LEAVES")) {
+            // if (type.toString().contains("LEAVES")) {
             BlockData l = Bukkit.createBlockData(type);
             if(l instanceof Leaves)
                 ((Leaves) l).setPersistent(true);
@@ -522,7 +522,7 @@ public class SimpleBlock {
     public @Nullable SimpleBlock findStonelikeFloor(int cutoff) {
     	SimpleBlock floor = this.getDown();
         while (cutoff > 0 && floor.getY() >= TerraformGeneratorPlugin.injector.getMinY()) {
-        	//floor.getUp().setType(Material.CYAN_STAINED_GLASS);
+        	// floor.getUp().setType(Material.CYAN_STAINED_GLASS);
             if (BlockUtils.isStoneLike(floor.getType())) {
                 return floor;
             }

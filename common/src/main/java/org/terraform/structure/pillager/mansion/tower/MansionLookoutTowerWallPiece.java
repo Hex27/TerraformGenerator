@@ -38,10 +38,10 @@ public class MansionLookoutTowerWallPiece extends MansionTowerWallPiece {
     	Wall w = entry.getKey().getDown();
 
     	
-    	//Carving
+    	// Carving
         for (int i = 0; i < entry.getValue(); i++) {
             
-        	//sides
+        	// sides
         	if(i == 0 || i == entry.getValue()-1) {
         		w.getUp().Pillar(8, Material.DARK_OAK_LOG);
         		new SlabBuilder(Material.STONE_BRICK_SLAB)
@@ -83,7 +83,7 @@ public class MansionLookoutTowerWallPiece extends MansionTowerWallPiece {
         		new StairBuilder(Material.DARK_OAK_STAIRS)
         		.setFacing(w.getDirection())
         		.apply(w.getUp());
-        	}else { //center
+        	}else { // center
         		w.getUp().Pillar(5, Material.AIR);
 
         		new StairBuilder(Material.STONE_BRICK_STAIRS)
@@ -96,7 +96,7 @@ public class MansionLookoutTowerWallPiece extends MansionTowerWallPiece {
         		.setFacing(w.getDirection())
         		.apply(w.getUp());
         		
-        		//Edit stairs on the left and right
+        		// Edit stairs on the left and right
 
         		new StairBuilder(Material.DARK_OAK_STAIRS)
         		.setHalf(Half.TOP)

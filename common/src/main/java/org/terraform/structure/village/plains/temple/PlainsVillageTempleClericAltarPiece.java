@@ -70,7 +70,7 @@ public class PlainsVillageTempleClericAltarPiece extends PlainsVillageTempleStan
             		w.getFront().setType(Material.WATER);
             		w.getFront().getDown().setType(Material.CHISELED_STONE_BRICKS);
             		
-            		//Sometimes the pond will have corals.
+            		// Sometimes the pond will have corals.
             		if(random.nextBoolean())
             			w.getFront().setType(CoralGenerator.CORAL_FANS);
         		}

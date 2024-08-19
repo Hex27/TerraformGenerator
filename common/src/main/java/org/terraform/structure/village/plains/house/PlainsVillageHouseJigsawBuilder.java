@@ -40,7 +40,7 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
     public void build(@NotNull Random random) {
         super.build(random);
 
-        //Make sure awkward corners are fixed
+        // Make sure awkward corners are fixed
         for (JigsawStructurePiece piece : this.pieces.values()) {
             SimpleBlock core = new SimpleBlock(
                     this.core.getPopData(),
@@ -57,34 +57,34 @@ public class PlainsVillageHouseJigsawBuilder extends JigsawBuilder {
                 cornerType = plainsVillagePopulator.woodStrippedLog;
             }
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //nw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // nw
                 target = new Wall(core.getRelative(-3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.WEST, cornerType, fenceType);
             }
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //ne
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // ne
                 target = new Wall(core.getRelative(3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.EAST, cornerType, fenceType);
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //sw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // sw
                 target = new Wall(core.getRelative(-3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.WEST, cornerType, fenceType);
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //se
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // se
                 target = new Wall(core.getRelative(3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST, cornerType, fenceType);
             }
         }
 
-        //Place the roof
+        // Place the roof
         if (!PlainsVillageRoofHandler.isRectangle(this))
             PlainsVillageRoofHandler.placeStandardRoof(plainsVillagePopulator, this);
         else
             PlainsVillageRoofHandler.placeTentRoof(plainsVillagePopulator, random, this);
 
-        //Decorate rooms and walls
+        // Decorate rooms and walls
         for (JigsawStructurePiece piece : this.pieces.values()) {
             piece.postBuildDecoration(random, this.core.getPopData());
         }

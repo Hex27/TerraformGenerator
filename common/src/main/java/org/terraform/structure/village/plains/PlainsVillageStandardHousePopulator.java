@@ -24,9 +24,9 @@ public class PlainsVillageStandardHousePopulator extends PlainsVillageAbstractRo
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	super.populate(data, room);
         int height = super.calculateRoomY(data, room);
-        //GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
+        // GenUtils.getHighestGroundOrSeaLevel(data, room.getX(), room.getZ());
         
-        //Debug squares
+        // Debug squares
 
         PlainsVillageHouseJigsawBuilder builder = new PlainsVillageHouseJigsawBuilder(
         		plainsVillagePopulator,
@@ -42,7 +42,7 @@ public class PlainsVillageStandardHousePopulator extends PlainsVillageAbstractRo
         int maxDepth = 6;
 
         boolean placedLamp = false;
-        //Connect front to the nearest path.
+        // Connect front to the nearest path.
         while (entrance.getType() != Material.DIRT_PATH && maxDepth > 0) {
             if (BlockUtils.isDirtLike(entrance.getType()))
                 entrance.setType(Material.DIRT_PATH);

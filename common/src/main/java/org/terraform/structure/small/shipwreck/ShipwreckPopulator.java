@@ -57,7 +57,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
 
     public void spawnShipwreck(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         try {
-        	//If the ground is dry, force the whole ship down into the ground to bury it.
+        	// If the ground is dry, force the whole ship down into the ground to bury it.
         	if(!BlockUtils.isWet(new SimpleBlock(data,x,0,z).getGround().getUp())) {
         		y -= GenUtils.randInt(random, 4, 7);
         	}
@@ -69,7 +69,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
 
             TerraformGeneratorPlugin.logger.info("Spawning shipwreck at " + x + ", " + y + ", " + z + " with rotation of " + shipwreck.getFace());
 
-            //Generate holes and damage
+            // Generate holes and damage
             for (int i = 0; i < GenUtils.randInt(random, 0, 3); i++) {
                 int nx = x + GenUtils.randInt(random, -8, 8);
                 int nz = z + GenUtils.randInt(random, -8, 8);
@@ -77,7 +77,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
                 BlockUtils.replaceWaterSphere(nx * 7 * ny * 23 * nz, GenUtils.randInt(1, 3), new SimpleBlock(data, nx, ny, nz));
             }
 
-            //Dropdown blocks
+            // Dropdown blocks
             for (int i = 0; i < GenUtils.randInt(random, 5, 15); i++) {
                 int nx = x + GenUtils.randInt(random, -8, 8);
                 int nz = z + GenUtils.randInt(random, -8, 8);
@@ -85,7 +85,7 @@ public class ShipwreckPopulator extends MultiMegaChunkStructurePopulator {
                 dropDownBlock(new SimpleBlock(data, nx, ny, nz));
             }
 
-            data.addEntity(x, y + 12, z, EntityType.DROWNED); //Two Drowneds
+            data.addEntity(x, y + 12, z, EntityType.DROWNED); // Two Drowneds
             data.addEntity(x, y + 15, z, EntityType.DROWNED);
 
 

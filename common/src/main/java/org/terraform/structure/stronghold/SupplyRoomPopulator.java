@@ -30,7 +30,7 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
         int[] lowerBounds = room.getLowerCorner();
         int y = room.getY();
 
-        //Spawn torches
+        // Spawn torches
         for (int i = 0; i < GenUtils.randInt(rand, 1, 4); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);
@@ -40,7 +40,7 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
             data.setType(x, ny, z, Material.TORCH);
         }
 
-        //Spawn piles of supply blocks.
+        // Spawn piles of supply blocks.
         for (int i = 0; i < GenUtils.randInt(rand, 1, 3); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);
@@ -58,7 +58,7 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
             );
         }
 
-        //Spawn utilities
+        // Spawn utilities
         for (int i = 0; i < GenUtils.randInt(rand, 5, 20); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);
@@ -88,7 +88,7 @@ public class SupplyRoomPopulator extends RoomPopulatorAbstract {
             data.setBlockData(x, ny, z, typeData);
         }
 
-        //Spawn loot chests
+        // Spawn loot chests
         for (int i = 0; i < GenUtils.randInt(rand, 5, 20); i++) {
             int x = GenUtils.randInt(rand, lowerBounds[0] + 1, upperBounds[0] - 1);
             int z = GenUtils.randInt(rand, lowerBounds[1] + 1, upperBounds[1] - 1);

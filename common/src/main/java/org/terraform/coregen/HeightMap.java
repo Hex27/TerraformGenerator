@@ -36,20 +36,20 @@ public enum HeightMap {
             FastNoise noise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.HEIGHTMAP_CORE, world -> {
                 FastNoise n = new FastNoise((int) world.getSeed());
                 n.SetNoiseType(NoiseType.SimplexFractal);
-                n.SetFractalOctaves(2); //Poor detail after blurs. Rely on Attrition for detail
+                n.SetFractalOctaves(2); // Poor detail after blurs. Rely on Attrition for detail
                 n.SetFrequency(TConfigOption.HEIGHT_MAP_CORE_FREQUENCY.getFloat());
                 return n;
             });
 
-            //7 blocks elevated from the sea level
+            // 7 blocks elevated from the sea level
             double height = 10*noise.GetNoise(x, z) + 7 + TerraformGenerator.seaLevel;
 
-            //Plateau-out height to make it flat-ish
+            // Plateau-out height to make it flat-ish
             if (height > TerraformGenerator.seaLevel + 10) {
                 height = (height - TerraformGenerator.seaLevel - 10) * 0.1 + TerraformGenerator.seaLevel + 10;
             }
 
-            //This is fucking nonsense
+            // This is fucking nonsense
 
             return height;
         }
@@ -85,7 +85,7 @@ public enum HeightMap {
         for (int nx = -radius; nx <= radius; nx++)
             for (int nz = -radius; nz <= radius; nz++) {
                 if (nx == 0 && nz == 0) continue;
-                //Bukkit.getLogger().info(nx + "," + nz + ":"+(getHeight(tw,x+nx,z+nz)-centerNoise));
+                // Bukkit.getLogger().info(nx + "," + nz + ":"+(getHeight(tw,x+nx,z+nz)-centerNoise));
                 totalChangeInGradient += Math.abs(getBlockHeight(tw, x + nx, z + nz) - centerNoise);
                 count++;
             }
@@ -104,11 +104,11 @@ public enum HeightMap {
     public static double getTrueHeightGradient(PopulatorDataAbstract data, int x, int z, int radius) {
         double totalChangeInGradient = 0;
         int count = 0;
-        double centerNoise = GenUtils.getHighestGround(data, x, z); //getBlockHeight(tw, x, z);
+        double centerNoise = GenUtils.getHighestGround(data, x, z); // getBlockHeight(tw, x, z);
         for (int nx = -radius; nx <= radius; nx++)
             for (int nz = -radius; nz <= radius; nz++) {
                 if (nx == 0 && nz == 0) continue;
-                //Bukkit.getLogger().info(nx + "," + nz + ":"+(getHeight(tw,x+nx,z+nz)-centerNoise));
+                // Bukkit.getLogger().info(nx + "," + nz + ":"+(getHeight(tw,x+nx,z+nz)-centerNoise));
                 totalChangeInGradient += Math.abs(GenUtils.getHighestGround(data, x+nx, z+nz) - centerNoise);
                 count++;
             }
@@ -133,14 +133,14 @@ public enum HeightMap {
 
         double height = getRiverlessHeight(tw,x,z);
 
-        //River Depth
+        // River Depth
         double depth = getRawRiverDepth(tw,x,z);
 
-        //Normal scenario: Shallow area
+        // Normal scenario: Shallow area
         if (height - depth >= TerraformGenerator.seaLevel - 15) {
             height -= depth;
 
-            //Fix for underwater river carving: Don't carve deeply
+            // Fix for underwater river carving: Don't carve deeply
         } else if (height > TerraformGenerator.seaLevel - 15
                 && height - depth < TerraformGenerator.seaLevel - 15) {
             height = TerraformGenerator.seaLevel - 15;
@@ -158,7 +158,7 @@ public enum HeightMap {
         ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
         float h = cache.getDominantBiomeHeight(x, z);
         if(h == TerraformGeneratorPlugin.injector.getMinY()-1) {
-            //Upscale the biome
+            // Upscale the biome
             if(x % upscaleSize != 0 && z % upscaleSize != 0)
                 h = getDominantBiomeHeight(tw, x-(x%upscaleSize),z-(z%upscaleSize));
             else
@@ -183,19 +183,19 @@ public enum HeightMap {
 
         int maskRadius = 5;
         int maskDiameter = (maskRadius*2) + 1;
-        //int maskDiameterSquared = maskDiameter*maskDiameter;
+        // int maskDiameterSquared = maskDiameter*maskDiameter;
         double coreHeight;
 
         ChunkCache mainCache = TerraformGenerator.getCache(tw, x, z);
 
-        //If this chunk cache hasn't cached a blurred value,
+        // If this chunk cache hasn't cached a blurred value,
         if(mainCache.getBlurredHeight(x, z) == TerraformGeneratorPlugin.injector.getMinY()-1) {
 
-            //Box blur across the biome section
-            //MegaChunk mc = new MegaChunk(x, 0, z);
+            // Box blur across the biome section
+            // MegaChunk mc = new MegaChunk(x, 0, z);
             BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
 
-            //For every point in the biome section, blur across the X axis.
+            // For every point in the biome section, blur across the X axis.
             for(int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
                 for(int relZ = sect.getLowerBounds().getZ() - maskRadius; relZ <= sect.getUpperBounds().getZ() + maskRadius; relZ++) {
 
@@ -205,8 +205,8 @@ public enum HeightMap {
                         lineTotalHeight += getDominantBiomeHeight(tw, relX + offsetX, relZ);
                     }
 
-                    //Temporarily cache these X-Blurred values into chunkcache.
-                    //Do not purge values that are legitimate.
+                    // Temporarily cache these X-Blurred values into chunkcache.
+                    // Do not purge values that are legitimate.
                     if(targetCache.getIntermediateBlurHeight(relX, relZ) == TerraformGeneratorPlugin.injector.getMinY()-1)
                     {
                         targetCache.cacheIntermediateBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
@@ -214,7 +214,7 @@ public enum HeightMap {
                 }
             }
 
-            //For every point in the biome section, blur across the Z axis.
+            // For every point in the biome section, blur across the Z axis.
             for(int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
                 for(int relZ = sect.getLowerBounds().getZ(); relZ <= sect.getUpperBounds().getZ(); relZ++) {
 
@@ -223,11 +223,11 @@ public enum HeightMap {
                     for(int offsetZ = -maskRadius; offsetZ <= maskRadius; offsetZ++) {
                         ChunkCache queryCache = TerraformGenerator.getCache(tw, relX, relZ + offsetZ);
 
-                        //Note, this may accidentally blur twice for some Z values if
-                        //chunks generate in a specific weird order. That's (probably) fine.
+                        // Note, this may accidentally blur twice for some Z values if
+                        // chunks generate in a specific weird order. That's (probably) fine.
                         lineTotalHeight += (float) queryCache.getIntermediateBlurHeight(relX, relZ + offsetZ);
                     }
-                    //final blurred value
+                    // final blurred value
                     targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight/maskDiameter);
                 }
             }

@@ -39,7 +39,7 @@ public class CatacombsDripstoneBasinPopulator extends CatacombsStandardPopulator
     	.setHardReplace(true)
     	.build();
 
-    	//Sea pickles
+    	// Sea pickles
     	for(int i = 2; i <= GenUtils.randInt(2, 5); i++)
     	{
     		int[] coords = room.randomCoords(rand, 2);

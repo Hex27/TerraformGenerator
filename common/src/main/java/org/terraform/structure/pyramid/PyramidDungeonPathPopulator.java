@@ -29,22 +29,22 @@ public class PyramidDungeonPathPopulator extends PathPopulatorAbstract {
     @Override
     public void populate(@NotNull PathPopulatorData ppd) {
 
-        //Gravel tnt trap
+        // Gravel tnt trap
         if (GenUtils.chance(this.rand, 1, 300)) {
-            //TerraformGeneratorPlugin.logger.info("Pyramid trap at " + ppd.base.getX()+","+ppd.base.getY()+","+ppd.base.getZ());
-            //To make the
+            // TerraformGeneratorPlugin.logger.info("Pyramid trap at " + ppd.base.getX()+","+ppd.base.getY()+","+ppd.base.getZ());
+            // To make the
             ppd.base.setType(Material.GRAVEL);
             ppd.base.getDown().setType(Material.TNT);
             ppd.base.getUp().setType(Material.STONE_PRESSURE_PLATE);
 
-            //Generate cross-shaped hole.
+            // Generate cross-shaped hole.
             for (int i = -2; i > -8; i--) {
                 ppd.base.getRelative(0, i, 0).setType(Material.AIR);
                 for (BlockFace face : BlockUtils.directBlockFaces)
                     ppd.base.getRelative(face).getRelative(0, i, 0).setType(Material.AIR);
             }
 
-            //Place torches against the tnt. This leads to a larger pit when the trap is triggered.
+            // Place torches against the tnt. This leads to a larger pit when the trap is triggered.
             for (BlockFace face : BlockUtils.directBlockFaces) {
                 Directional torch = (Directional) Bukkit.createBlockData(Material.WALL_TORCH);
                 torch.setFacing(face);
@@ -53,7 +53,7 @@ public class PyramidDungeonPathPopulator extends PathPopulatorAbstract {
             }
         }
 
-        //Cobwebs
+        // Cobwebs
         if (GenUtils.chance(this.rand, 1, 100)) {
             if (ppd.base.getRelative(0, height + 1, 0).isSolid()) {
                 ppd.base.getRelative(0, height, 0).setType(Material.COBWEB);

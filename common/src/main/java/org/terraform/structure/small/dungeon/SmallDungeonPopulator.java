@@ -25,7 +25,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
 
         if (totalHeight / 256 <= TConfigOption.STRUCTURES_DROWNEDDUNGEON_MIN_DEPTH.getInt()
                 && GenUtils.chance(tw.getHashedRand(1223, data.getChunkX(), data.getChunkZ()), TConfigOption.STRUCTURES_DROWNEDDUNGEON_CHANCE.getInt(), 1000)) {
-            //Only spawn these in full oceans
+            // Only spawn these in full oceans
             if (!TConfigOption.STRUCTURES_DROWNEDDUNGEON_ENABLED.getBoolean())
                 return;
             new DrownedDungeonPopulator().populate(tw, data);
@@ -57,7 +57,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
         return false;
     }
 
-    //Each mega chunk has config option dungeons
+    // Each mega chunk has config option dungeons
     @Override
     public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
     	int num = TConfigOption.STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK.getInt();

@@ -54,7 +54,7 @@ public class BogBeachHandler extends BiomeHandler {
                 PlantBuilder.GRASS.build(block.getUp());
             else if(GenUtils.chance(random, 1, 85))
                 PlantBuilder.TALL_GRASS.build(block.getUp());
-            else { //Possible Sugarcane
+            else { // Possible Sugarcane
                 for(BlockFace face:BlockUtils.directBlockFaces) {
                     if(GenUtils.chance(random, 1, 75) && BlockUtils.isWet(block.getRelative(face))) {
                         PlantBuilder.SUGAR_CANE.build(block.getUp(), random, 2, 5);

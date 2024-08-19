@@ -52,13 +52,13 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
 
         w = w.getRight(3).getFront().getUp();
 
-        //Variant Wooden
+        // Variant Wooden
         Material[] slabType = {plainsVillagePopulator.woodSlab};
         Material[] fenceType = {plainsVillagePopulator.woodFence};
         Material[] baseType = {Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
         Material[] stairType = {Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS};
 
-        //Variant Cobblestone
+        // Variant Cobblestone
         if (var == PlainsVillageHouseVariant.COBBLESTONE) {
             slabType = new Material[]{Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB};
             fenceType = new Material[]{Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL};
@@ -88,14 +88,14 @@ public class PlainsVillageWallPiece extends JigsawStructurePiece {
         w.getLeft().setType(baseType);
         w.getRight().setType(baseType);
 
-        if (new Random().nextBoolean()) { //Plants
+        if (new Random().nextBoolean()) { // Plants
             w.setType(Material.GRASS_BLOCK);
             TrapDoor trapdoor = (TrapDoor) Bukkit.createBlockData(plainsVillagePopulator.woodTrapdoor);
             trapdoor.setFacing(w.getDirection());
             trapdoor.setOpen(true);
             w.getFront().setBlockData(trapdoor);
             BlockUtils.pickFlower().build(w.getUp());
-        } else { //Stairs
+        } else { // Stairs
             new StairBuilder(stairType).setFacing(w.getDirection().getOppositeFace())
                     .apply(w);
         }

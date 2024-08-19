@@ -33,7 +33,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
     @Override
     public void populate(@NotNull PathPopulatorData ppd) {
 
-        //Find the ceiling for easier management later
+        // Find the ceiling for easier management later
         SimpleBlock ceil = ppd.base.getUp();
         int depth = 0;
         while (!ceil.isSolid()) {
@@ -43,13 +43,13 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         }
 
 
-        //This is a mazecell. Represents a crossroad or turn etc.
+        // This is a mazecell. Represents a crossroad or turn etc.
         if (ppd.dir == BlockFace.UP) {
             decorateCrossroads(ppd.base, Half.BOTTOM);
 
             boolean isCrossroad = true;
 
-            //Check for any walls.
+            // Check for any walls.
             ArrayList<Wall> walls = new ArrayList<>();
             for (BlockFace face : BlockUtils.directBlockFaces) {
                 if (ppd.base.getRelative(face.getModX() * 2, 2, face.getModZ() * 2)
@@ -63,14 +63,14 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
 
             decorateCrossroads(ceil, Half.TOP);
 
-            if (isCrossroad) { //This is a crossroad (Has 4 pathways)
+            if (isCrossroad) { // This is a crossroad (Has 4 pathways)
                 for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
                     new Wall(ppd.base.getUp().getRelative(face))
                             .LPillar(10, rand, Material.COBBLESTONE_WALL, Material.ANDESITE_WALL, Material.STONE_BRICK_WALL);
                 }
-            } else //this is a turn
+            } else // this is a turn
             {
-                //Decorate the walls
+                // Decorate the walls
                 for (Wall wall : walls) {
                     wall.setType(Material.STONE, Material.SMOOTH_STONE, Material.ANDESITE);
                     wall.getUp().setType(Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
@@ -99,13 +99,13 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
                             .apply(wall.getLeft().getUp(2));
                 }
             }
-        } else //This is a pathway
+        } else // This is a pathway
         {
-            //Check if the walls present really make it a pathway
-            //3x4 empty air area. (widthxheight)
+            // Check if the walls present really make it a pathway
+            // 3x4 empty air area. (widthxheight)
             if (!verifyPathway(new Wall(ppd.base, ppd.dir))) return;
 
-            if (ppd.calcRemainder(2) == 0) { //arch
+            if (ppd.calcRemainder(2) == 0) { // arch
                 decoratePathways(ppd.base, ppd.dir);
                 Wall base = new Wall(ppd.base, ppd.dir);
                 base.getUp().getLeft(2).setType(Material.SMOOTH_STONE, Material.POLISHED_ANDESITE);
@@ -126,7 +126,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
                         .apply(base.getUp(4).getRight());
 
                 ceil.setType(Material.CHISELED_STONE_BRICKS);
-            } else //not-arch
+            } else // not-arch
             {
                 Wall base = new Wall(ppd.base, ppd.dir);
 
@@ -138,9 +138,9 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
                         .setType(Slab.Type.TOP)
                         .apply(base.getUp(4).getRight());
 
-                //Loot chests
+                // Loot chests
                 if (GenUtils.chance(rand, 1, 50)) {
-                    //Left or right
+                    // Left or right
                     int i = GenUtils.randInt(rand, 0, 1);
                     Wall w = base.getUp();
                     depth = 0;
@@ -160,23 +160,23 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
                     if (i == 1) chest.setFacing(BlockUtils.getAdjacentFaces(ppd.dir)[0]);
                     cBlock.setBlockData(chest);
                     cBlock.getPopData().lootTableChest(cBlock.getX(), cBlock.getY(), cBlock.getZ(), TerraLootTable.STRONGHOLD_CORRIDOR);
-                } else if (GenUtils.chance(rand, 4, 25)) { //If a chest spawns, don't overlap it with iron bars
+                } else if (GenUtils.chance(rand, 4, 25)) { // If a chest spawns, don't overlap it with iron bars
                     setIronBars(ppd);
                 }
             }
         }
 
-        //Refind ceiling. It could have been changed above.
+        // Refind ceiling. It could have been changed above.
         ceil = new Wall(ppd.base.getUp(), ppd.dir).findCeiling(10).get();
 
-        //Sometimes parts of the ceiling falls down
+        // Sometimes parts of the ceiling falls down
         if (GenUtils.chance(rand, 3, 25)) {
             for (int i = 0; i < GenUtils.randInt(rand, 1, 5); i++) {
                 dropDownBlock(ceil.getRelative(GenUtils.randInt(rand, -1, 1), 0, GenUtils.randInt(rand, -1, 1)));
             }
         }
 
-        //Cobwebs
+        // Cobwebs
         if (GenUtils.chance(rand, 1, 25)) {
             SimpleBlock webBase = ceil.getDown();
             webBase.setType(Material.COBWEB);
@@ -213,7 +213,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
     }
 
     private void decorateCrossroads(@NotNull SimpleBlock core, Bisected.@NotNull Half isCeil) {
-        //Decorate the floor and ceiling
+        // Decorate the floor and ceiling
         core.RSolSetType(Material.CHISELED_STONE_BRICKS);
         for (BlockFace face : BlockUtils.directBlockFaces) {
 
@@ -229,7 +229,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
     }
 
     private void decoratePathways(@NotNull SimpleBlock core, @NotNull BlockFace dir) {
-        //Decorate the floor and ceiling
+        // Decorate the floor and ceiling
         core.RSolSetType(Material.CHISELED_STONE_BRICKS);
         for (BlockFace face : BlockUtils.getAdjacentFaces(dir)) {
 
@@ -251,7 +251,7 @@ public class StrongholdPathPopulator extends PathPopulatorAbstract {
         wall.getLeft().downRPillar(new Random(), 4, Material.IRON_BARS);
         wall.getRight().downRPillar(new Random(), 4, Material.IRON_BARS);
 
-        //Fix iron bar placement.
+        // Fix iron bar placement.
         for (int h = 3; h >= 0; h--) {
             Wall temp = wall.getRelative(0, -h, 0);
             BlockUtils.correctSurroundingMultifacingData(temp.get());

@@ -29,8 +29,8 @@ public class MansionTowerWallPiece extends JigsawStructurePiece {
         
         for (int i = 0; i < entry.getValue(); i++) {
             
-        	//Primary Wall and wooden stair decorations
-        	//w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        	// Primary Wall and wooden stair decorations
+        	// w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getUp().Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
             
             w = w.getLeft();

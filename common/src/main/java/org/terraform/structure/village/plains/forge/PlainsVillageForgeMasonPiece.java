@@ -21,7 +21,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
 		super(plainsVillagePopulator,widthX, height, widthZ, type, validDirs);
 	}
 	
-	//Use postBuildDecoration.
+	// Use postBuildDecoration.
     @Override
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
     	SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY(), this.getRoom().getZ());
@@ -39,7 +39,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	Collections.shuffle(walledFaces);
     	for(BlockFace face:walledFaces) {
 
-    		//Don't spawn stone pile against entrance
+    		// Don't spawn stone pile against entrance
     		if(core.getRelative(face,3).getType() == Material.CHISELED_STONE_BRICKS)
     			continue;
     		
@@ -78,7 +78,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     		core.getRelative(face).Pillar(random.nextInt(3), random, ores);
     	}
     	
-    	//Place stone cutter
+    	// Place stone cutter
     	Wall target = core.getRelative(BlockUtils.getXZPlaneBlockFace(random));
     	while(target.isSolid()) {
     		target = target.getUp();
@@ -87,7 +87,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	.setFacing(BlockUtils.getDirectBlockFace(new Random()))
     	.apply(target);
     	
-    	//Place one or two lamps next to the cutter
+    	// Place one or two lamps next to the cutter
     	for(int i = 0; i < random.nextInt(2)+1; i++) {
     		target = target.getAtY(core.getY()+1).getRelative(BlockUtils.getDirectBlockFace(random));
     		while(target.isSolid()) {
@@ -122,16 +122,16 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     			Material.STONE
     	};
 
-    	//Place stone cutter
+    	// Place stone cutter
     	new DirectionalBuilder(Material.STONECUTTER)
     	.setFacing(BlockUtils.getDirectBlockFace(new Random()))
     	.apply(core);
-    	//core.setType(Material.STONECUTTER);
+    	// core.setType(Material.STONECUTTER);
     	
-    	//Move against the wall
+    	// Move against the wall
     	core = core.getRelative(core.getDirection(),2);
     	
-    	//Highest ores are against the wall
+    	// Highest ores are against the wall
     	core.Pillar(random.nextInt(3)+1, random, ores);
     	core.getLeft().Pillar(random.nextInt(3)+1, random, ores);
     	core.getRight().Pillar(random.nextInt(3)+1, random, ores);
@@ -144,7 +144,7 @@ public class PlainsVillageForgeMasonPiece extends PlainsVillageForgeStandardPiec
     	core.getRear().getRight().Pillar(random.nextInt(3), random, ores);
     	
 
-    	//Place one or two lamps next to the cutter
+    	// Place one or two lamps next to the cutter
     	for(int i = 0; i < random.nextInt(2)+1; i++) {
     		Wall target = core.getRelative(core.getDirection().getOppositeFace(), 2).getRelative(BlockUtils.getDirectBlockFace(random));
     		while(target.isSolid()) {

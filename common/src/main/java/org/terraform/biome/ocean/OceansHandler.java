@@ -47,7 +47,7 @@ public class OceansHandler extends AbstractOceanHandler {
     @Override
     public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         boolean growsKelp = world.getHashedRand(rawX>>4,rawZ>>4,371412).nextBoolean();
-        //Set ground near sea level to sand
+        // Set ground near sea level to sand
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.SAND);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
@@ -56,7 +56,7 @@ public class OceansHandler extends AbstractOceanHandler {
         }
 
         if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
-        if (GenUtils.chance(random, 10, 100)) { //SEA GRASS/KELP
+        if (GenUtils.chance(random, 10, 100)) { // SEA GRASS/KELP
             CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
         } else if (GenUtils.chance(random, 3, 50)
                 && growsKelp
@@ -74,7 +74,7 @@ public class OceansHandler extends AbstractOceanHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
-		//Spawn rocks
+		// Spawn rocks
 		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.4f);
         
         for (SimpleLocation sLoc : rocks) {

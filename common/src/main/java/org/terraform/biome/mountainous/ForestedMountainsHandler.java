@@ -67,7 +67,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
-        //Carve under-mountain river holes
+        // Carve under-mountain river holes
         if(rawX % 3 == 0 && rawZ % 3 == 0)
             if(HeightMap.CORE.getHeight(tw, rawX, rawZ)
                     - HeightMap.getRawRiverDepth(tw, rawX, rawZ)
@@ -88,11 +88,11 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
                 }
             }
 
-        //Don't touch submerged blocks for the other decorations
+        // Don't touch submerged blocks for the other decorations
         if(surfaceY < TerraformGenerator.seaLevel)
             return;
 
-        //Make patches of dirt that extend on the mountain sides
+        // Make patches of dirt that extend on the mountain sides
         if (GenUtils.chance(random, 1, 25)) {
             dirtStack(data, random, rawX, surfaceY, rawZ);
             for (int nx = -2; nx <= 2; nx++)
@@ -100,7 +100,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
                     if (GenUtils.chance(random, 1, 5)) continue;
                     surfaceY = GenUtils.getHighestGround(data, rawX + nx, rawZ + nz);
 
-                    //Another check, make sure relative position isn't underwater.
+                    // Another check, make sure relative position isn't underwater.
                     if(surfaceY < TerraformGenerator.seaLevel)
                         continue;
                     dirtStack(data, random, rawX + nx, surfaceY, rawZ + nz);
@@ -147,7 +147,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
 	        }
 
         
-        //Small jungle trees
+        // Small jungle trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 9);
 
         for (SimpleLocation sLoc : trees) {
@@ -182,7 +182,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
                     if (leavesNoiseValue > -0.12
                             && Math.random() > 0.85)
                         JungleHandler.createBush(data, leavesNoiseValue, x, y, z);
-                    //Also generate it very commonly on steep areas.
+                    // Also generate it very commonly on steep areas.
                     else if (GenUtils.chance(random, 1, 10) && HeightMap.getTrueHeightGradient(data, x, z, 2) > 2) // Some random ones where there is no noise.
                     	JungleHandler.createBush(data, 0, x, y, z);
 

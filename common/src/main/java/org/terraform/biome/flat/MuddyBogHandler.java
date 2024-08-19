@@ -41,12 +41,12 @@ public class MuddyBogHandler extends BiomeHandler {
         return CustomBiomeType.MUDDY_BOG;
     }
     
-    //Beach type. This will be used instead if the height is too close to sea level.
+    // Beach type. This will be used instead if the height is too close to sea level.
     public @NotNull BiomeBank getBeachType() {
     	return BiomeBank.BOG_BEACH;
     }
     
-    //River type. This will be used instead if the heightmap got carved into a river.
+    // River type. This will be used instead if the heightmap got carved into a river.
     public @NotNull BiomeBank getRiverType() {
     	return BiomeBank.BOG_RIVER;
     }
@@ -74,7 +74,7 @@ public class MuddyBogHandler extends BiomeHandler {
             else if(GenUtils.chance(random, 1, 85))
                 PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY+1, rawZ);
             else if(TConfigOption.areDecorationsEnabled() && GenUtils.chance(random, 1, 300))
-            {//Dripstone Cluster
+            {// Dripstone Cluster
                 BlockUtils.replaceCircularPatch(random.nextInt(9999), 2.5f, block, Material.DRIPSTONE_BLOCK);
                 if(GenUtils.chance(random, 1, 7))
                     BlockUtils.upLPointedDripstone(GenUtils.randInt(random, 2, 4), block.getUp());
@@ -88,7 +88,7 @@ public class MuddyBogHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-		 //Small brown mushrooms on dry areas
+		 // Small brown mushrooms on dry areas
         SimpleLocation[] shrooms = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
 
         for (SimpleLocation sLoc : shrooms) {

@@ -25,7 +25,7 @@ public class PyramidStairwayRoomPopulator extends RoomPopulatorAbstract {
         for (int i = 1; i < room.getHeight(); i++) {
             data.setType(room.getX(), room.getY() + i, room.getZ(), Material.CHISELED_SANDSTONE);
 
-            //Two slab stairs
+            // Two slab stairs
 
             BlockFace face = BlockUtils.xzPlaneBlockFaces[bfIndex];
             Slab bottom = (Slab) Bukkit.createBlockData(Material.SANDSTONE_SLAB);

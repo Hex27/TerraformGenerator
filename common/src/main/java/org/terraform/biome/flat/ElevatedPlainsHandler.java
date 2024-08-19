@@ -53,7 +53,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK &&
                 !BlockUtils.isWet(new SimpleBlock(data,rawX,surfaceY,rawZ))) {
 
-            if (GenUtils.chance(random, 1, 10)) { //Grass
+            if (GenUtils.chance(random, 1, 10)) { // Grass
                 if (GenUtils.chance(random, 6, 10)) {
                     PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     if (random.nextBoolean()) {
@@ -85,7 +85,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
         int height = (int) preciseHeight;
 
         int noiseValue = (int) Math.round(heightFactor * getBiomeBlender(tw).getEdgeFactor(BiomeBank.ELEVATED_PLAINS, rawX, rawZ));
-        if(noiseValue < 1) return; //If no changes are made, DO NOT TOUCH CACHE
+        if(noiseValue < 1) return; // If no changes are made, DO NOT TOUCH CACHE
 
         for (int y = 1; y <= noiseValue; y++) {
             chunk.setBlock(x, height + y, z, getRockAt(random, x,y,z));

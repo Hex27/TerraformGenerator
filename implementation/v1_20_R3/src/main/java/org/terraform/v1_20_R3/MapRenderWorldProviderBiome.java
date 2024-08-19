@@ -20,7 +20,7 @@ public class MapRenderWorldProviderBiome extends WorldChunkManager {
 
     private final Set<Holder<BiomeBase>> biomeList;
     public MapRenderWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
-        //super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
+        // super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = CustomBiomeHandler.biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
         this.tw = tw;
         IRegistry<BiomeBase> registry = CustomBiomeHandler.getBiomeRegistry();
@@ -34,7 +34,7 @@ public class MapRenderWorldProviderBiome extends WorldChunkManager {
         return this.biomeList.stream();
     }
 
-    @Override //c is getPossibleBiomes
+    @Override // c is getPossibleBiomes
     public Set<Holder<BiomeBase>>  c()
     {
         return this.biomeList;
@@ -51,10 +51,10 @@ public class MapRenderWorldProviderBiome extends WorldChunkManager {
 	private static final boolean debug = false;
 	@Override
 	public Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
-		//Used to be attempted for cave gen. That didn't work, so now, this is
-        //for optimising cartographers and buried treasure.
-        //This will return river or plains depending on whether
-        //the area is submerged.
+		// Used to be attempted for cave gen. That didn't work, so now, this is
+        // for optimising cartographers and buried treasure.
+        // This will return river or plains depending on whether
+        // the area is submerged.
 
         return HeightMap.getBlockHeight(tw, x,z) <= TConfigOption.HEIGHT_MAP_SEA_LEVEL.getInt() ?
                 river : plains;

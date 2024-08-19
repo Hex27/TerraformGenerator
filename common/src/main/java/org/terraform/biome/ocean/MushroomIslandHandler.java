@@ -44,10 +44,10 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
         	currentSection = BiomeSection.getMostDominantSection(tw, x, z);
         }
         
-        //CHECK 4 SURROUNDING BIOMES.
-        //If ANY of them are dry, the mushroom island radius will be 
-        //aggressively shrunk to avoid land connections.
-        //If they're still connected uh. Lol I guess.
+        // CHECK 4 SURROUNDING BIOMES.
+        // If ANY of them are dry, the mushroom island radius will be
+        // aggressively shrunk to avoid land connections.
+        // If they're still connected uh. Lol I guess.
         float islandRadius = BiomeSection.sectionWidth/2.5f;
         for(BlockFace face:BlockUtils.directBlockFaces) {
         	if(currentSection.getRelative(face.getModX(), face.getModZ())
@@ -58,9 +58,9 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
         	}
         }
         
-        //The island itself is a distorted circle.
-        //Everything within the circle's radius is aggressively raised above
-        //sea level.
+        // The island itself is a distorted circle.
+        // Everything within the circle's radius is aggressively raised above
+        // sea level.
         
         FastNoise circleNoise = NoiseCacheHandler.getNoise(
         		tw, 
@@ -76,7 +76,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
         int relX = x - center.getX();
         int relZ = z - center.getZ();
         
-        //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+        // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
         double equationResult = Math.pow(relX, 2) / Math.pow(islandRadius, 2)
                 + Math.pow(relZ, 2) / Math.pow(islandRadius, 2);
         double noise = 1 + 0.7 * circleNoise.GetNoise(relX, relZ);
@@ -125,7 +125,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
         if(rawX >= TerraformGenerator.seaLevel) return;
 
         if (!BlockUtils.isStoneLike(data.getType(rawX, rawX, rawZ))) return;
-        if (GenUtils.chance(random, 1, 150)) { //SEA GRASS/KELP
+        if (GenUtils.chance(random, 1, 150)) { // SEA GRASS/KELP
             CoralGenerator.generateKelpGrowth(data, rawX, rawX + 1, rawZ);
         }
 
@@ -134,7 +134,7 @@ public class MushroomIslandHandler extends AbstractOceanHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
 		
-		//Spawn rocks
+		// Spawn rocks
 		SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 25, 0.4f);
         
         for (SimpleLocation sLoc : rocks) {

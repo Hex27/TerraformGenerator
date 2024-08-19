@@ -24,10 +24,10 @@ public class PlainsVillagePopulator extends VillagePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
-        //Height set to 50 as plains village will settle its own height.
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
+        // Height set to 50 as plains village will settle its own height.
         spawnPlainsVillage(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, 50, z);
     }
     
@@ -44,27 +44,27 @@ public class PlainsVillagePopulator extends VillagePopulator {
     	int max = 30;
     	while(max > 0 && !isFrontSpaceClear(w,frontSpaceGuarantee)) {
     		switch(rand.nextInt(2+1)) {
-    		case 0: //Move the house forward
+    		case 0: // Move the house forward
         		w = w.getFront().getGround().getRelative(0,elevation,0);
         		break;
-    		case 1: //Turn the house
+    		case 1: // Turn the house
         		w = new Wall(w.get(),BlockUtils.getTurnBlockFace(rand, w.getDirection()));
         		break;
     		case 2: 
-    			elevation+=2; //elevate more
+    			elevation+=2; // elevate more
     			break;
     		}
     		max--;
     	}
 
-    	//If the block above is wet, find another area.
+    	// If the block above is wet, find another area.
     	Wall temp = w.getGround().getUp(elevation);
     	while(BlockUtils.isWet(temp) || BlockUtils.isWet(temp.getDown())) {
     		temp = temp.getUp();
     		elevation++;
     	}
     	
-    	if(max == 0) { //Maybe it's a mountain or stuck in the middle of eroded plains
+    	if(max == 0) { // Maybe it's a mountain or stuck in the middle of eroded plains
     		TerraformGeneratorPlugin.logger.info("Village at " + w.get().toVector() + " may have a weird spawn.");
     	}
     	
@@ -122,8 +122,8 @@ public class PlainsVillagePopulator extends VillagePopulator {
         woodLeaves = WoodUtils.getWoodForBiome(biome, WoodType.LEAVES);
         wood = woodLeaves.toString().toLowerCase(Locale.ENGLISH).replace("leaves","");
         
-        //Re-get x and z because they change after ensureFarmHouseEntrance.
-        //13 because that's the width of the townhall.
+        // Re-get x and z because they change after ensureFarmHouseEntrance.
+        // 13 because that's the width of the townhall.
         PlainsPathRecursiveSpawner spawner = new PlainsPathRecursiveSpawner(
                 new SimpleBlock(data, townHall.getX() + pathStart.getModX() * 13, y, townHall.getZ() + pathStart.getModZ() * 13),
                 100, BlockUtils.getAdjacentFaces(pathStart));

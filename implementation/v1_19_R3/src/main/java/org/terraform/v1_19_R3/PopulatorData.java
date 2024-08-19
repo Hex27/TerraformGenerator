@@ -31,6 +31,7 @@ import org.terraform.coregen.populatordata.IPopulatorDataBeehiveEditor;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfigOption;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -59,7 +60,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         		if(type == EntityType.ENDER_SIGNAL) continue;
         		if(type == EntityType.UNKNOWN) continue;
 				try {
-                    //EntityTypes.byString
+                    // EntityTypes.byString
 					Optional<EntityTypes<?>> et = EntityTypes.a("minecraft:"+type.toString().toLowerCase(Locale.ENGLISH));
                     et.ifPresent(entityTypes -> entityTypesDict.put(type, entityTypes));
 				} catch (IllegalArgumentException e) {
@@ -75,7 +76,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 
     public Material getType(int x, int y, int z) {
     	try {
-        	//return rlwa.getType(x, y, z);
+        	// return rlwa.getType(x, y, z);
         	return CraftMagicNumbers.getMaterial(rlwa.a_(new BlockPosition(x, y, z)).b());
     	}catch(Exception e) {
         	Bukkit.getLogger().info("Error chunk: " + chunkX + "," + chunkZ + "--- Block Coords: " + 16*chunkX + "," + 16*chunkZ + " for coords " + x + "," + y + "," + z);
@@ -85,7 +86,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     public BlockData getBlockData(int x, int y, int z) {
-        //return rlwa.getBlockData(x,y,z);
+        // return rlwa.getBlockData(x,y,z);
     	return CraftBlockData.fromData(rlwa.a_(new BlockPosition(x, y, z)));
     }
 
@@ -113,7 +114,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         }
     }
 
-    //wtf
+    // wtf
     public Biome getBiome(int rawX, int rawZ) {
         TerraformWorld tw = gen.getTerraformWorld();
         return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();
@@ -136,16 +137,18 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     		return;
     	}
     	
-    	//Use this method for thread safety.
+    	// Use this method for thread safety.
     	CraftLimitedRegion clr = new CraftLimitedRegion(rlwa, ica.f());
     	net.minecraft.world.entity.Entity e = clr.createEntity(new Location(gen.getTerraformWorld().getWorld(),rawX,rawY,rawZ),
     			type.getEntityClass());
     	rlwa.b(e);
-    	//TerraformGeneratorPlugin.logger.info("Spawned " + e.getType() + " at " + rawX + " " + rawY + " " + rawZ);
+    	// TerraformGeneratorPlugin.logger.info("Spawned " + e.getType() + " at " + rawX + " " + rawY + " " + rawZ);
     }
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
+        if ( !TConfigOption.areAnimalsEnabled() ) return;
+
         BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
         
         setType(rawX, rawY, rawZ, Material.SPAWNER);
@@ -153,13 +156,13 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 
         if (tileentity instanceof TileEntityMobSpawner) {
             try {
-                //Refer to WorldGenDungeons
+                // Refer to WorldGenDungeons
 //                TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) tileentity;
 //
 //                tileentitymobspawner.setEntityId(this.randomEntityId(randomsource), randomsource);
 
-                //Fetch from ENTITY_TYPE (Q)'s map
-            	//q is ENTITY_TYPE
+                // Fetch from ENTITY_TYPE (Q)'s map
+            	// q is ENTITY_TYPE
             	EntityTypes<?> nmsEntity = entityTypesDict.get(type);
                 if(nmsEntity == null) TerraformGeneratorPlugin.logger.error(type + " was not present in the entityTypesDict.");
                 ((TileEntityMobSpawner) tileentity).a(nmsEntity, new RandomSourceWrapper(new Random()));
@@ -308,31 +311,31 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 
 	@Override
 	public int getBaseHeight(int rawX, int rawZ) {
-		//(int i, int j, HeightMap.Type heightmap_type, LevelHeightAccessor levelheightaccessor, RandomState randomstate)
+		// (int i, int j, HeightMap.Type heightmap_type, LevelHeightAccessor levelheightaccessor, RandomState randomstate)
 		return 100;
-		//return gen.a(rawX, rawZ, HeightMap.Type.a, this.rlwa);
+		// return gen.a(rawX, rawZ, HeightMap.Type.a, this.rlwa);
 	}
 
 	@Override
 	public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
 		BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
-        //TerraformGeneratorPlugin.logger.info(IRegistry.X.b(EntityTypes.h).toString());
+        // TerraformGeneratorPlugin.logger.info(IRegistry.X.b(EntityTypes.h).toString());
         setType(rawX, rawY, rawZ, Material.BEE_NEST);
 
         try {
-            //TerraformGeneratorPlugin.logger.error("Failed to set beehive at (" + rawX + "," + rawY + "," + rawZ + ") " + BuiltInRegistries.h.b(entityTypesDict.get(EntityType.BEE)));
+            // TerraformGeneratorPlugin.logger.error("Failed to set beehive at (" + rawX + "," + rawY + "," + rawZ + ") " + BuiltInRegistries.h.b(entityTypesDict.get(EntityType.BEE)));
             TileEntityBeehive tileentity = (TileEntityBeehive) rlwa.c_(pos);
             if(tileentity == null)
-            { //retry?
+            { // retry?
             	 setType(rawX, rawY, rawZ, Material.BEE_NEST);
             	 tileentity = (TileEntityBeehive) rlwa.c_(pos);
             }
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            //BuiltInRegistries.ENTITY_TYPE -> h
-            //b is getKey
+            // BuiltInRegistries.ENTITY_TYPE -> h
+            // b is getKey
             nbttagcompound.a("id", "minecraft:bee");
-            //TileEntityBeehive.storeBee
+            // TileEntityBeehive.storeBee
             tileentity.a(nbttagcompound, 0, false);
         } catch (NullPointerException | IllegalArgumentException | SecurityException e) {
              TerraformGeneratorPlugin.logger.stackTrace(e);

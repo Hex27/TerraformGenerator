@@ -57,11 +57,11 @@ public class TreeDB {
         SimpleBlock base = new SimpleBlock(data, x, y, z);
         FractalTreeBuilder builder = new FractalTreeBuilder(FractalTypes.Tree.COCONUT_TOP);
         
-        //If gradient too steep, don't try spawning
+        // If gradient too steep, don't try spawning
         if(!builder.checkGradient(data, x, z))
         	return;
         
-        //Spawn the base
+        // Spawn the base
         Material log = Material.JUNGLE_WOOD;
         if (TConfigOption.MISC_TREES_FORCE_LOGS.getBoolean()) log = Material.JUNGLE_LOG;
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -90,7 +90,7 @@ public class TreeDB {
     public static void spawnRandomGiantCoral(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         FractalTypes.Tree type = FRACTAL_CORAL_TYPES[tw.getHashedRand(x, y, z).nextInt(5)];
         FractalTreeBuilder ftb = new FractalTreeBuilder(type);
-        ftb.setMaxHeight(TerraformGenerator.seaLevel - y - 1); //Max height is one below sea level
+        ftb.setMaxHeight(TerraformGenerator.seaLevel - y - 1); // Max height is one below sea level
         ftb.build(tw, data, x, y - 2, z);
     }
 

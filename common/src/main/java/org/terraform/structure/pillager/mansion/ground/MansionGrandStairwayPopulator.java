@@ -37,7 +37,7 @@ public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 		SimpleBlock target = this.getRoom().getCenterSimpleBlock(data);
 		try {
 			TerraSchematic schema = TerraSchematic.load("mansion/mansion-stairway", target);
-	        //schema.parser = new MansionRoomSchematicParser();
+	        // schema.parser = new MansionRoomSchematicParser();
 	        schema.setFace(BlockUtils.getDirectBlockFace(random));
 	        schema.apply();
 		} catch (FileNotFoundException e) {
@@ -47,7 +47,7 @@ public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 
 	@Override
 	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
-		//Arch
+		// Arch
 		
 		w.getLeft(3).Pillar(7, Material.DARK_OAK_LOG);
 		w.getUp(6).setType(Material.DARK_OAK_PLANKS);
@@ -63,8 +63,8 @@ public class MansionGrandStairwayPopulator extends MansionRoomPopulator {
 		.apply(w.getUp(6).getRight(2))
 		.apply(w.getUp(6).getRight());
 		int choice = rand.nextInt(2);
-        //Armor stands
-        if(choice == 0) { //Wall carving
+        // Armor stands
+        if(choice == 0) { // Wall carving
             w.getRear().getUp().Pillar(5, Material.DARK_OAK_LOG);
             new OrientableBuilder(Material.DARK_OAK_LOG)
                     .setAxis(BlockUtils.getAxisFromBlockFace(w.getDirection()))

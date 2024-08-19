@@ -41,7 +41,7 @@ public class SnowyWastelandHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-        //Snowier Snow
+        // Snowier Snow
         if(GenUtils.chance(random, 1, 500)) {
             BlockUtils.replaceCircularPatch(random.nextInt(9999), 3, new SimpleBlock(data,rawX,0,rawZ), Material.POWDER_SNOW);
         }

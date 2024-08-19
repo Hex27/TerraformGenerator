@@ -32,7 +32,7 @@ public class BlackOceanBeachHandler extends BiomeHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-        //Set ground near sea level to gravel
+        // Set ground near sea level to gravel
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.GRAVEL);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
@@ -40,10 +40,10 @@ public class BlackOceanBeachHandler extends BiomeHandler {
                 data.setType(rawX,surfaceY,rawZ, Material.GRAVEL);
         }
 
-        //No kelp above sea level.
+        // No kelp above sea level.
         if(surfaceY > TerraformGenerator.seaLevel) return;
         if (!BlockUtils.isStoneLike(data.getType(rawX,surfaceY,rawZ))) return;
-        if (GenUtils.chance(random, 1, 80)) { //SEA GRASS/KELP
+        if (GenUtils.chance(random, 1, 80)) { // SEA GRASS/KELP
             CoralGenerator.generateKelpGrowth(data, rawX,surfaceY+1,rawZ);
         }
     }

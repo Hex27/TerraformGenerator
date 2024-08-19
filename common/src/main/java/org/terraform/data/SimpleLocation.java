@@ -54,7 +54,7 @@ public class SimpleLocation {
      */
     public float twoDAngleTo(@NotNull SimpleLocation o) {
     	
-    	//Handle absolute cases first
+    	// Handle absolute cases first
     	if(o.x == x && o.z == z) {
     		return 0.0f;
     	}else if(o.x == x && o.z > z){
@@ -66,14 +66,14 @@ public class SimpleLocation {
     	}else if(o.x < x && o.z == z){
     		return (float) (3*Math.PI/2);
     	}
-    	//Handle CAST trigo calculations
-    	else if(o.x > x && o.z > z) { //A segment
+    	// Handle CAST trigo calculations
+    	else if(o.x > x && o.z > z) { // A segment
     		return (float) Math.atan((double) (o.x - x) /(o.z-z));
-    	}else if(o.x > x) { //C segment
+    	}else if(o.x > x) { // C segment
     		return (float) (Math.atan((double) (z - o.z) /(o.x-x)) + Math.PI/2);
-    	}else if(o.z < z) { //T segment
+    	}else if(o.z < z) { // T segment
     		return (float) (Math.atan((double) (x - o.x) /(z-o.z)) + Math.PI);
-    	}else { //S segment
+    	}else { // S segment
     		return (float) (Math.atan((double) (o.z - z) /(x-o.x))+3*Math.PI/2);
     	}
     }
@@ -86,7 +86,7 @@ public class SimpleLocation {
      */
     public float twoDAngleWrapTo(@NotNull SimpleLocation o) {
     	
-    	//Handle absolute cases first
+    	// Handle absolute cases first
     	if(o.x == x && o.z == z) {
     		return 0.0f;
     	}else if(o.x == x && o.z > z){
@@ -98,14 +98,14 @@ public class SimpleLocation {
     	}else if(o.x < x && o.z == z){
     		return (float) (Math.PI/2);
     	}
-    	//Handle CAST trigo calculations
-    	else if(o.x > x && o.z > z) { //A segment
+    	// Handle CAST trigo calculations
+    	else if(o.x > x && o.z > z) { // A segment
     		return (float) Math.atan((double) (o.x - x) /(o.z-z));
-    	}else if(o.x > x) { //C segment
+    	}else if(o.x > x) { // C segment
     		return (float) (Math.atan((double) (z - o.z) /(o.x-x)) + Math.PI/2);
-    	}else if(o.z < z) { //T segment
+    	}else if(o.z < z) { // T segment
     		return (float) (Math.atan((double) (z - o.z) /(x-o.x)) + Math.PI/2);
-    	}else { //S segment
+    	}else { // S segment
     		return (float) Math.atan((double) (x - o.x) /(o.z-z));
     	}
     }

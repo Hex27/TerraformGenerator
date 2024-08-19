@@ -27,23 +27,23 @@ public class MiniRoomNetworkPopulator extends MonumentRoomPopulator {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
-        //Make the hashtag room structure
+        // Make the hashtag room structure
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 4).entrySet()) {
             Wall w = entry.getKey();
             int l = entry.getValue();
             for (int i = 0; i < l + 4; i++) {
                 w.RPillar(room.getHeight() - 1, rand, design.tileSet());
 
-                //Lighting
+                // Lighting
                 if (i % 2 == 0)
                     w.setType(Material.SEA_LANTERN);
 
-                //Center hole
+                // Center hole
                 if (i == l / 2) {
                     w.getUp(2).setType(Material.WATER);
                 }
 
-                //Side holes
+                // Side holes
                 if (i == l + 2) {
                     w.getUp(2).setType(Material.WATER);
                 }

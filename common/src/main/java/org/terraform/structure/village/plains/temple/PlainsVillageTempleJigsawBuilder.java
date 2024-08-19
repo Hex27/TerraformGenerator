@@ -36,7 +36,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
     @Override
     public @NotNull JigsawStructurePiece getFirstPiece(@NotNull Random random) {
         return new PlainsVillageTempleClericAltarPiece(plainsVillagePopulator, 5, 3, 5, JigsawType.STANDARD, true, this, BlockUtils.directBlockFaces);
-    	//return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
+    	// return getPiece(pieceRegistry, JigsawType.STANDARD, random).getInstance(random, 0);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
 
         super.build(random);
 
-        //Make sure awkward corners are fixed
+        // Make sure awkward corners are fixed
         for (JigsawStructurePiece piece : this.pieces.values()) {
             SimpleBlock core = new SimpleBlock(
                     this.core.getPopData(),
@@ -55,43 +55,43 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
             Wall target;
 
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //nw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // nw
                 target = new Wall(core.getRelative(-3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.WEST);
             }
             if (piece.getWalledFaces().contains(BlockFace.NORTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //ne
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // ne
                 target = new Wall(core.getRelative(3, 0, -3));
                 decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.EAST);
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.WEST)) { //sw
+                    && piece.getWalledFaces().contains(BlockFace.WEST)) { // sw
                 target = new Wall(core.getRelative(-3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.WEST);
             }
             if (piece.getWalledFaces().contains(BlockFace.SOUTH)
-                    && piece.getWalledFaces().contains(BlockFace.EAST)) { //se
+                    && piece.getWalledFaces().contains(BlockFace.EAST)) { // se
                 target = new Wall(core.getRelative(3, 0, 3));
                 decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST);
             }
         }
         
-        //Declare one of the pieces a tower
+        // Declare one of the pieces a tower
         int randIndex = random.nextInt(this.pieces.size());
         int i = 0;
         for(JigsawStructurePiece p:this.pieces.values()) {
         	if(i == randIndex) {
         		((PlainsVillageTempleStandardPiece) p).setTower(true);
-        		//break;
+        		// break;
         	}
         }
         
-        //Place roofing
+        // Place roofing
         for(JigsawStructurePiece piece:overlapperPieces) {
         	PlainsVillageTempleRoofHandler.handleTempleRoof(plainsVillagePopulator, this.core.getPopData(), piece, overlapperPieces);
         }
         
-        //Try to place large windows between pairs of walls
+        // Try to place large windows between pairs of walls
         for(JigsawStructurePiece wallPiece:overlapperPieces) {
     		for(BlockFace face:BlockUtils.getAdjacentFaces(wallPiece.getRotation())) {
     			if(hasAdjacentWall(wallPiece, face, overlapperPieces)) {
@@ -103,7 +103,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
         
         PlainsVillageTempleRoofHandler.placeCeilingTerracotta(this.core.getPopData(), this.pieces.values());
         
-        //Decorate rooms and walls
+        // Decorate rooms and walls
         for (JigsawStructurePiece piece : this.pieces.values()) {
             piece.postBuildDecoration(random, this.core.getPopData());
         }
@@ -145,14 +145,14 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
         Material[] cobblestone = {Material.COBBLESTONE, Material.MOSSY_COBBLESTONE};
         Material[] stoneBricks = {Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
 
-        //Corner and corner spires
+        // Corner and corner spires
         target.Pillar(5, random, BlockUtils.stoneBricks);
         
         target.getDown().downUntilSolid(random, cobblestone);
 
         target = target.getUp();
 
-        //Areas next to the corner. Decorative.
+        // Areas next to the corner. Decorative.
         target.getRelative(one).Pillar(3, random, stoneBricks);
         new StairBuilder(Material.STONE_BRICK_STAIRS)
                 .setFacing(one.getOppositeFace())
@@ -163,7 +163,7 @@ public class PlainsVillageTempleJigsawBuilder extends JigsawBuilder {
                 .setFacing(two.getOppositeFace())
                 .apply(target.getRelative(two).getUp(3));
 
-        //Solid platform underneath in case of uneven ground.
+        // Solid platform underneath in case of uneven ground.
         target = target.getDown();
         target.getRelative(one).downUntilSolid(random, cobblestone);
         target.getRelative(two).downUntilSolid(random, cobblestone);

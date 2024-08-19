@@ -16,13 +16,13 @@ import java.util.Random;
 
 public class MountainhouseSchematicParser extends SchematicParser {
 
-    //private final BiomeBank biome;
+    // private final BiomeBank biome;
     private final Random rand;
     private final PopulatorDataAbstract pop;
 
     public MountainhouseSchematicParser(BiomeBank biome, Random rand,
                                     PopulatorDataAbstract pop) {
-        //this.biome = biome;
+        // this.biome = biome;
         this.rand = rand;
         this.pop = pop;
     }
@@ -59,7 +59,7 @@ public class MountainhouseSchematicParser extends SchematicParser {
             );
             super.applyData(block, data);
         } 
-        //Don't do wood replacements. This schematic uses different wood types.
+        // Don't do wood replacements. This schematic uses different wood types.
 //        else if (data.getMaterial().toString().contains("SPRUCE")) {
 //            data = Bukkit.createBlockData(
 //                    data.getAsString().replaceAll(
@@ -72,7 +72,7 @@ public class MountainhouseSchematicParser extends SchematicParser {
         else if (data.getMaterial() == Material.CHEST) {
             if (GenUtils.chance(rand, 1, 5)) {
                 block.setType(Material.AIR);
-                return; //A fifth of chests are not placed.
+                return; // A fifth of chests are not placed.
             }
             super.applyData(block, data);
             pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.VILLAGE_TAIGA_HOUSE);

@@ -44,7 +44,7 @@ public class SQLiteDB {
             String url = "jdbc:sqlite:" + dir;
             // create a connection to the database & create the table
 
-            //Create Chunks Table
+            // Create Chunks Table
             conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS CHUNKS " +
@@ -53,7 +53,7 @@ public class SQLiteDB {
             stmt.executeUpdate(sql);
             stmt.close();
 
-            //Create BlockData table
+            // Create BlockData table
             stmt = conn.createStatement();
             sql = "CREATE TABLE IF NOT EXISTS BLOCKDATA " +
                     "(CHUNK STRING NOT NULL,"
@@ -147,7 +147,7 @@ public class SQLiteDB {
             c.close();
         } catch (Exception e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
-            //Bukkit.getLogger().severe(e.getClass().getName() + "[" + e.getCause() +"]" + ":" + e.getMessage() );
+            // Bukkit.getLogger().severe(e.getClass().getName() + "[" + e.getCause() +"]" + ":" + e.getMessage() );
         }
 
         return queryReply;

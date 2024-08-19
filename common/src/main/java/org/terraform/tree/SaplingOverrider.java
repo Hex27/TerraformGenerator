@@ -40,14 +40,14 @@ public class SaplingOverrider implements Listener {
                 .filter((b) -> Tag.LEAVES.isTagged(b.getType()))
                 .toList();
         if(baseBlocks.isEmpty())
-        {   //Leafless trees are not trees
+        {   // Leafless trees are not trees
             event.setCancelled(false);
             return;
         }
         BlockState baseBlock = baseBlocks.get(0);
 
-        //This used to use event.getSpecies(), but some weird bug
-        //made event.getSpecies() give incorrect values.
+        // This used to use event.getSpecies(), but some weird bug
+        // made event.getSpecies() give incorrect values.
         switch (baseBlock.getType()) {
             case ACACIA_LEAVES:
                 new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL)
@@ -83,7 +83,7 @@ public class SaplingOverrider implements Listener {
                 {
                     FractalTypes.Tree.TAIGA_BIG
                             .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
-                    //Set the original podzol radius
+                    // Set the original podzol radius
                     event.getBlocks().stream()
                             .filter((b) -> b.getType() == Material.PODZOL)
                             .forEach((b)->data.setType(b.getX(),b.getY(),b.getZ(),b.getType()));
@@ -100,7 +100,7 @@ public class SaplingOverrider implements Listener {
                             .build(tw, data, x, y, z);
                     return;
                 }
-                //Not handled by TG
+                // Not handled by TG
                 event.setCancelled(wasCancelled);
                 break;
         }

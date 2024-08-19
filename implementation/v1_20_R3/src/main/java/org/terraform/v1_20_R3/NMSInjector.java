@@ -31,11 +31,11 @@ import java.lang.reflect.Method;
 
 public class NMSInjector extends NMSInjectorAbstract {
 
-	//private boolean heightInjectSuccess = true;
+	// private boolean heightInjectSuccess = true;
 
 	@Override
 	public void startupTasks() {
-        //Inject new biomes
+        // Inject new biomes
         CustomBiomeHandler.init();
 	}
 
@@ -49,32 +49,32 @@ public class NMSInjector extends NMSInjectorAbstract {
         CraftWorld cw = (CraftWorld) world;
         WorldServer ws = cw.getHandle();
 
-        //Force world to correct height
+        // Force world to correct height
         TerraformWorld.get(world).minY = -64;
         TerraformWorld.get(world).maxY = 320;
 
-        //k is getChunkSource, g is getChunkGenerator()
+        // k is getChunkSource, g is getChunkGenerator()
         ChunkGenerator delegate = ws.l().g();
 
         TerraformGeneratorPlugin.logger.info("NMSChunkGenerator Delegate is of type " + delegate.getClass().getSimpleName());
 
-        //String worldname,
-        //int seed,
-        //WorldChunkManager worldchunkmanager,
-        //WorldChunkManager worldchunkmanager1,
-        //StructureSettings structuresettings,
-        //long i
+        // String worldname,
+        // int seed,
+        // WorldChunkManager worldchunkmanager,
+        // WorldChunkManager worldchunkmanager1,
+        // StructureSettings structuresettings,
+        // long i
         NMSChunkGenerator bpg = new NMSChunkGenerator(
                 world.getName(),
                 (int) world.getSeed(),
                 delegate);
 
-		//Inject TerraformGenerator NMS chunk generator
-        PlayerChunkMap pcm = ws.l().a; //getChunkProvider().PlayerChunkMap
+		// Inject TerraformGenerator NMS chunk generator
+        PlayerChunkMap pcm = ws.l().a; // getChunkProvider().PlayerChunkMap
 
         try {
             TerraformGeneratorPlugin.privateFieldHandler.injectField(
-                    pcm, "t", bpg); //chunkGenerator
+                    pcm, "t", bpg); // chunkGenerator
         } catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
             return false;
@@ -85,23 +85,23 @@ public class NMSInjector extends NMSInjectorAbstract {
 
     @Override
     public @NotNull PopulatorDataICAAbstract getICAData(@NotNull Chunk chunk) {
-        //ChunKStatus.FULL
+        // ChunKStatus.FULL
         IChunkAccess ica = ((CraftChunk) chunk).getHandle(ChunkStatus.n);
         CraftWorld cw = (CraftWorld) chunk.getWorld();
         WorldServer ws = cw.getHandle();
 
         TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
-        //return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
+        // return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
         return new PopulatorDataICA(new PopulatorDataPostGen(chunk), tw, ws, ica, chunk.getX(), chunk.getZ());
     }
 
     @Override
     public @Nullable PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
-        //This is for the damn bees
+        // This is for the damn bees
         if (data instanceof PopulatorDataSpigotAPI pdata) {
             GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
             WorldServer ws = gas.getMinecraftWorld();
-            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.C()); //C is getSeed()
+            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.C()); // C is getSeed()
             return new PopulatorDataICA(data, tw, ws, gas.a(data.getChunkX(),data.getChunkZ()), data.getChunkX(), data.getChunkZ());
         }
         if(data instanceof PopulatorDataPostGen gdata)
@@ -123,7 +123,7 @@ public class NMSInjector extends NMSInjectorAbstract {
 
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             nbttagcompound.a("id", "minecraft:bee");
-            //TileEntityBeehive.storeBee
+            // TileEntityBeehive.storeBee
             teb.a(nbttagcompound, 0, false);
 
         } catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

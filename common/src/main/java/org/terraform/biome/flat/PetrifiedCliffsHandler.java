@@ -82,7 +82,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
             }
             if(continueOut) return;
 
-            if (GenUtils.chance(random, 1, 10)) { //Grass
+            if (GenUtils.chance(random, 1, 10)) { // Grass
                 if (GenUtils.chance(random, 6, 10)) {
                     PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     if (random.nextBoolean()) {
@@ -133,7 +133,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
         	        n.SetFrequency(0.05f);
         	        return n;
         		});
-        //Generates -0.8 to 0.8
+        // Generates -0.8 to 0.8
         int rawX = chunkX * 16 + x;
         int rawZ = chunkZ * 16 + z;
 
@@ -173,7 +173,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-		//Rock trees
+		// Rock trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 13, 0.2f);
         
         for (SimpleLocation sLoc : trees) {

@@ -30,7 +30,7 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
         
-        //Place ground
+        // Place ground
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 data.setType(x, this.getRoom().getY(), z, Material.DARK_OAK_PLANKS);
@@ -40,7 +40,7 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
 
     public void decorateAwkwardCorners(Random random)
 	{
-        //Make sure awkward corners are fixed
+        // Make sure awkward corners are fixed
         SimpleBlock core = new SimpleBlock(
                 builder.getCore().getPopData(),
                 getRoom().getX(),
@@ -49,29 +49,29 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
         Wall target;
         
         if (getWalledFaces().contains(BlockFace.NORTH)
-                && getWalledFaces().contains(BlockFace.WEST)) { //nw
+                && getWalledFaces().contains(BlockFace.WEST)) { // nw
             target = new Wall(core.getRelative(-4, 1, -4));
             decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.WEST);
         }
         if (getWalledFaces().contains(BlockFace.NORTH)
-                && getWalledFaces().contains(BlockFace.EAST)) { //ne
+                && getWalledFaces().contains(BlockFace.EAST)) { // ne
             target = new Wall(core.getRelative(4, 1, -4));
             decorateAwkwardCorner(target, random, BlockFace.NORTH, BlockFace.EAST);
         }
         if (getWalledFaces().contains(BlockFace.SOUTH)
-                && getWalledFaces().contains(BlockFace.WEST)) { //sw
+                && getWalledFaces().contains(BlockFace.WEST)) { // sw
             target = new Wall(core.getRelative(-4, 1, 4));
             decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.WEST);
         }
         if (getWalledFaces().contains(BlockFace.SOUTH)
-                && getWalledFaces().contains(BlockFace.EAST)) { //se
+                && getWalledFaces().contains(BlockFace.EAST)) { // se
             target = new Wall(core.getRelative(4, 1, 4));
             decorateAwkwardCorner(target, random, BlockFace.SOUTH, BlockFace.EAST);
         }
 	}
 
 	public void decorateAwkwardCorner(@NotNull Wall target, Random random, BlockFace one, BlockFace two) {
-    	//Fill in gap in the corner
+    	// Fill in gap in the corner
     	target.Pillar(MansionJigsawBuilder.roomHeight, Material.STONE_BRICKS);
     }
 	
@@ -83,12 +83,12 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
 				.getFront(1+(MansionJigsawBuilder.groundFloorRoomWidth/2));
 		
 		for(BlockFace dir:BlockUtils.getAdjacentFaces(core.getDirection())) {
-			//Index from the side
+			// Index from the side
 			for(int i = 0; i <= 2+(MansionJigsawBuilder.groundFloorRoomWidth/2); i++) {
 				for(int depth = 0; depth < 2 + MansionJigsawBuilder.groundFloorRoomWidth; depth++) {
 					Wall w = core.getRear(depth).getRelative(dir,i);
 					
-					if(i == 0) { //Center
+					if(i == 0) { // Center
 						w.getUp(5).Pillar(2, Material.COBBLESTONE);
 						w.getUp(7).setType(Material.COBBLESTONE_WALL);
 						w.getUp(7).CorrectMultipleFacing(1);
@@ -128,12 +128,12 @@ public class MansionStandardTowerPiece extends JigsawStructurePiece {
 						.setType(Type.TOP)
 						.apply(w);
 					}
-					else //Final
+					else // Final
 						new SlabBuilder(getSlab(i,depth))
 						.setType(Type.TOP)
 						.apply(w);
 						
-					//Join the walls to the roof
+					// Join the walls to the roof
 					if(i <= 3)
 						if(depth == 1 || depth == MansionJigsawBuilder.groundFloorRoomWidth)
 						{

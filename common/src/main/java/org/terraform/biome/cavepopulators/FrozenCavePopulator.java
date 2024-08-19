@@ -19,22 +19,22 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
 
         int caveHeight = ceil.getY() - floor.getY();
 
-        //Don't touch slabbed floors or stalagmites
+        // Don't touch slabbed floors or stalagmites
         if (Tag.SLABS.isTagged(floor.getType()) ||
         		Tag.WALLS.isTagged(floor.getType()))
             return;
 
-        //=========================
-        //Upper decorations
-        //=========================
+        // =========================
+        // Upper decorations
+        // =========================
 
-        //Upper Ice
+        // Upper Ice
         ceil.setType(Material.ICE);
 
-        //Stalactites
+        // Stalactites
         if (GenUtils.chance(random, 1, 24)) {
             Wall w = new Wall(ceil.getDown(), BlockFace.NORTH);
-            //w.downLPillar(random, h, Material.ICE);
+            // w.downLPillar(random, h, Material.ICE);
 
             new StalactiteBuilder(Material.ICE)
             .setSolidBlockType(Material.ICE)
@@ -43,18 +43,18 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
             .build(random, w);
         }
 
-        //=========================
-        //Lower decorations 
-        //=========================
+        // =========================
+        // Lower decorations
+        // =========================
 
-        //Lower Ice
+        // Lower Ice
         floor.getUp().setType(Material.ICE);
 
-        //Stalagmites
+        // Stalagmites
         if (GenUtils.chance(random, 1, 25)) {
             Wall w = new Wall(floor.getUp(2));
             if (w.getType() == Material.CAVE_AIR)
-                //w.LPillar(h, random, Material.ICE);
+                // w.LPillar(h, random, Material.ICE);
                 new StalactiteBuilder(Material.ICE)
                 .setSolidBlockType(Material.ICE)
                 .setFacingUp(true)

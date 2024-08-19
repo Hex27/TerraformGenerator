@@ -42,7 +42,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 		for(BlockFace face:BlockUtils.directBlockFaces) {
 			if(getInternalWalls().get(face) != MansionInternalWallState.WINDOW) {
 				Wall w = new Wall(center, face);
-				//This is a solid wall. Bring it forward and decorate it.
+				// This is a solid wall. Bring it forward and decorate it.
 				if(getInternalWalls().get(face) == MansionInternalWallState.SOLID) {
 					Wall target = w.getFront(3);
 					applyHallwaySmoothing(target);
@@ -53,8 +53,8 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 					applyHallwaySmoothing(target.getRight(2));
 					applyHallwaySmoothing(target.getRight(3));
 					
-					//Room is connected to a window.
-					//Spawn the arch and block out the window.
+					// Room is connected to a window.
+					// Spawn the arch and block out the window.
 					if(!target.getRight(4).getUp().isSolid()) {
 						applyHallwaySmoothing(target.getRight(4));
 						target.getRight(5).Pillar(6, Material.DARK_OAK_PLANKS);
@@ -66,7 +66,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 					decorateHallwayWall(random, new Wall(target.getRear().getUp().get(), w.getDirection().getOppositeFace()), false);
 				}
 				else if(getInternalWalls().get(face) == MansionInternalWallState.ROOM_ENTRANCE) 
-					//This wall opens to another room somewhere. Connect a red carpet to it
+					// This wall opens to another room somewhere. Connect a red carpet to it
 				{
 					for(int length = 2; length < 6; length++) {
 						Wall target = w.getFront(length).getUp();
@@ -78,7 +78,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 					}
 				}
 			}
-			else //This face connects to a window
+			else // This face connects to a window
 			{
 				center.getUp().getRelative(face,2).setType(Material.RED_CARPET);
 				decorateHallwayWall(random, new Wall(center.getRelative(face, 3).getUp(), face.getOppositeFace()), true);
@@ -90,9 +90,9 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 	
 	private void decorateHallwayWall(@NotNull Random random, @NotNull Wall center, boolean isWindow) {
 		int decorationType = random.nextInt(3);
-		if(!isWindow) { //Solid wall decorations
+		if(!isWindow) { // Solid wall decorations
 			switch(decorationType) {
-			case 0: //3 1x2 paintings
+			case 0: // 3 1x2 paintings
 				PaintingUtils.placePainting(center.getUp().get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
 				PaintingUtils.placePainting(center.getRight(2).getUp().get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
 				PaintingUtils.placePainting(center.getLeft(2).getUp().get(), center.getDirection(), PaintingUtils.getArtFromDimensions(random, 1, 2));
@@ -110,7 +110,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 				center.getRight().getUp(4).setType(Material.DARK_OAK_PLANKS);
 				center.getLeft().getUp(4).setType(Material.DARK_OAK_PLANKS);
 				break;
-			case 1: //3 banners
+			case 1: // 3 banners
 				BannerUtils.generateBanner(random, center.getUp(2).get(), center.getDirection(), true);
 				BannerUtils.generateBanner(random, center.getRight(2).getUp(2).get(), center.getDirection(), true);
 				BannerUtils.generateBanner(random, center.getLeft(2).getUp(2).get(), center.getDirection(), true);
@@ -122,7 +122,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 				.apply(center.getLeft().getUp(2))
 				.apply(center.getRight().getUp(2));
 				break;
-			case 2: //chair
+			case 2: // chair
 				new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
 				.setFacing(center.getDirection().getOppositeFace())
 				.apply(center)
@@ -143,9 +143,9 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 			default:
 				break;
 			}
-		} else { //Window decorations
+		} else { // Window decorations
 			switch(decorationType) {
-			case 0: //Chair
+			case 0: // Chair
 				new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
 				.setFacing(center.getDirection().getOppositeFace())
 				.apply(center)
@@ -156,7 +156,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 				.setShape(Shape.INNER_LEFT)
 				.apply(center.getRight());
 				break;
-			case 1: //Big potted plants
+			case 1: // Big potted plants
 				center.setType(Material.DARK_OAK_PLANKS);
 				center.getLeft().setType(Material.GRASS_BLOCK);
 				center.getRight().setType(Material.GRASS_BLOCK);
@@ -165,7 +165,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
                 PlantBuilder.OAK_LEAVES.build(center.getLeft().getUp(2));
                 PlantBuilder.OAK_LEAVES.build(center.getRight().getUp(2));
 
-				//Pot
+				// Pot
 				new TrapdoorBuilder(Material.DARK_OAK_TRAPDOOR)
 				.setFacing(center.getDirection())
 				.setOpen(true)
@@ -186,7 +186,7 @@ public class MansionSecondFloorHallwayPopulator extends MansionRoomPopulator {
 				.apply(center.getRight(2));
 				break;
 			default:
-				//Sometimes windows don't get decorated.
+				// Sometimes windows don't get decorated.
 				break;
 			}
 		}

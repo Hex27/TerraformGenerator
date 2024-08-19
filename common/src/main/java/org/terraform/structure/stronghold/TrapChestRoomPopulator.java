@@ -23,7 +23,7 @@ public class TrapChestRoomPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Mines
+        // Mines
         for (int i = 0; i < GenUtils.randInt(rand, 0, 5); i++) {
             int x = room.getX() + GenUtils.randInt(rand, -room.getWidthX() / 2, room.getWidthX() / 2);
             int z = room.getZ() + GenUtils.randInt(rand, -room.getWidthZ() / 2, room.getWidthZ() / 2);

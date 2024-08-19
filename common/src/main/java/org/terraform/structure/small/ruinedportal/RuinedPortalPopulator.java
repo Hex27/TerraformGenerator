@@ -71,20 +71,20 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     public void spawnRuinedPortal(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock core,
                                   int mossiness, boolean overgrown, boolean snowy) {
     	int horRadius = GenUtils.randInt(random, 2, 4); // ALWAYS EVEN
-    	int vertHeight = 1+horRadius*2; //Can be odd
+    	int vertHeight = 1+horRadius*2; // Can be odd
     	BlockFace facing = BlockUtils.getDirectBlockFace(random);
     	Wall w = new Wall(core, facing);
-    	//Material fluid = Material.AIR;
+    	// Material fluid = Material.AIR;
     	Material lavaFluid = Material.LAVA;
     	
-    	//Replace lava when overgrown to prevent forest fires
+    	// Replace lava when overgrown to prevent forest fires
     	if(BlockUtils.isWet(core) || snowy || overgrown) lavaFluid = Material.MAGMA_BLOCK;
     	
-    	//Nether-rize the land around the portal
+    	// Nether-rize the land around the portal
     	BlockUtils.replaceCircularPatch(random.nextInt(99999), horRadius*2.5f, core.getDown(), 
     			snowy, Material.NETHERRACK);
     	
-    	//Flatten land below the portal
+    	// Flatten land below the portal
     	Material[] stoneBricks = BlockUtils.stoneBricks;
     	if(mossiness == 0) stoneBricks = new Material[] {Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS};
     	if(mossiness > 1) stoneBricks = new Material[] {Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.MOSSY_STONE_BRICKS, Material.MOSSY_STONE_BRICKS};
@@ -94,7 +94,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     	.setHardReplace(false)
     	.build();
     	
-    	//[Side decorations]============================
+    	// [Side decorations]============================
     	Wall effectiveGround = w.getRight(horRadius).findFloor(10);
     	int heightCorrection = vertHeight;
     	if(effectiveGround != null) {
@@ -126,15 +126,15 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
 	    	.build(random, effectiveGround);
     	}
     	
-    	//[End side decorations]========================
+    	// [End side decorations]========================
     	
-    	//Build the core portal
+    	// Build the core portal
     	for(int left = 0; left < horRadius; left++) {
     		w.getLeft(left).setType(portalBlocks);
     		
-    		//Empty center of portal
-    		for(int depth = -3; depth <= 3; depth++) //depth is the horizontal depth
-    			for(int height = 0; height < vertHeight - 2; height++) //Height is vertical height
+    		// Empty center of portal
+    		for(int depth = -3; depth <= 3; depth++) // depth is the horizontal depth
+    			for(int height = 0; height < vertHeight - 2; height++) // Height is vertical height
     			{
     				Wall target = w.getFront(depth).getLeft(left).getUp(1 + height);
     				target.setType(getFluid(target));
@@ -146,8 +146,8 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     	}
     	for(int right = 1; right < horRadius-1; right++) {
     		w.getRight(right).setType(portalBlocks);
-    		for(int depth = -3; depth <= 3; depth++) //depth is the horizontal depth
-    			for(int height = 0; height < vertHeight - 2; height++) //Height is vertical height
+    		for(int depth = -3; depth <= 3; depth++) // depth is the horizontal depth
+    			for(int height = 0; height < vertHeight - 2; height++) // Height is vertical height
     			{
     				Wall target = w.getFront(depth).getRight(right).getUp(1+height);
     				target.setType(getFluid(target));
@@ -164,7 +164,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     	Wall rightCorner = w.getUp(vertHeight).getRight(horRadius - 1);
     	Wall leftCorner = w.getUp(vertHeight).getLeft(horRadius);
     	
-    	//[Carve out a lava fissure]=================
+    	// [Carve out a lava fissure]=================
     	 FastNoise noise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.STRUCTURE_RUINEDPORTAL_FISSURES, world -> {
              FastNoise n = new FastNoise((int) world.getSeed());
              n.SetNoiseType(NoiseType.PerlinFractal);
@@ -199,11 +199,11 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     			 target.getDown(i).setType(lavaFluid);
     		 }
     	 }
-    	//[End carve lava fissure]======================
+    	// [End carve lava fissure]======================
     	 
-    	//[Break one of the corners]==================
+    	// [Break one of the corners]==================
     	
-		//Break right corner
+		// Break right corner
 		if(random.nextBoolean()) {
 			for(int i = 0; i < GenUtils.randInt(1,3); i++) {
 				rightCorner.getDown(i).setType(getFluid(rightCorner.getDown(i)));
@@ -218,7 +218,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
 				leftCorner.getRight().getRear().downLPillar(random, GenUtils.randInt(vertHeight/2,vertHeight-1), Material.OAK_LEAVES);
 				leftCorner.getRight().getFront().downLPillar(random, GenUtils.randInt(vertHeight/2,vertHeight-1), Material.OAK_LEAVES);
 			}
-		//Break left corner
+		// Break left corner
 		}else{
 			for(int i = 0; i < GenUtils.randInt(1,3); i++) {
 				leftCorner.getDown(i).setType(getFluid(leftCorner.getDown(i)));
@@ -234,7 +234,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
 			}
 		}
 		
-    	//Upper decorations
+    	// Upper decorations
     	if(rightCorner.isSolid())
 	    	new StairBuilder(Material.STONE_BRICK_STAIRS)
 	    	.setFacing(BlockUtils.getLeft(w.getDirection()))
@@ -244,7 +244,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
         	.setFacing(BlockUtils.getRight(w.getDirection()))
         	.apply(leftCorner.getUp());
     	
-    	//Gold blocks
+    	// Gold blocks
     	if(w.getUp(vertHeight).isSolid()) {
 	    	new StairBuilder(Material.STONE_BRICK_STAIRS)
 	    	.setFacing(BlockUtils.getLeft(w.getDirection()))
@@ -260,7 +260,7 @@ public class RuinedPortalPopulator extends MultiMegaChunkStructurePopulator {
     	}
     	
     	
-    	//Random chest
+    	// Random chest
     	new ChestBuilder(Material.CHEST)
     	.setFacing(w.getDirection())
     	.setLootTable(TerraLootTable.RUINED_PORTAL)

@@ -21,16 +21,16 @@ public class DeepCavePopulator extends AbstractCavePopulator {
         
         int caveHeight = ceil.getY() - floor.getY();
         
-        //Don't touch slabbed floors or stalagmites
+        // Don't touch slabbed floors or stalagmites
         if (Tag.SLABS.isTagged(floor.getType()) ||
         		Tag.WALLS.isTagged(floor.getType()))
             return;
 
-        //=========================
-        //Upper decorations
-        //=========================
+        // =========================
+        // Upper decorations
+        // =========================
 
-        //Stalactites
+        // Stalactites
         if (GenUtils.chance(random, 1, 10*Math.max(3, caveHeight/4))) {
             Wall w = new Wall(ceil, BlockFace.NORTH);
             if(w.getUp().getType() == Material.DEEPSLATE) {
@@ -39,7 +39,7 @@ public class DeepCavePopulator extends AbstractCavePopulator {
                 .setFacingUp(false)
                 .setVerticalSpace(caveHeight)
                 .build(random, w);
-            	//w.downLPillar(random, h, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
+            	// w.downLPillar(random, h, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
             }
             else {
                 new StalactiteBuilder(Material.COBBLESTONE_WALL)
@@ -47,23 +47,23 @@ public class DeepCavePopulator extends AbstractCavePopulator {
                 .setFacingUp(false)
                 .setVerticalSpace(caveHeight)
                 .build(random, w);
-                //w.downLPillar(random, h, Material.COBBLESTONE_WALL);
+                // w.downLPillar(random, h, Material.COBBLESTONE_WALL);
             }
 
         }
 
-        //=========================
-        //Lower decorations 
-        //=========================
+        // =========================
+        // Lower decorations
+        // =========================
 
-        //Stalagmites
+        // Stalagmites
         if (GenUtils.chance(random, 1, 10*Math.max(3, caveHeight/4))) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
             Wall w = new Wall(floor.getUp());
             if (BlockUtils.isAir(w.getType()))
             	if(w.getDown().getType() == Material.DEEPSLATE)
-            		//w.LPillar(h, random, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
+            		// w.LPillar(h, random, OneOneSevenBlockHandler.COBBLED_DEEPSLATE_WALL);
 
                     new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL)
                     .setSolidBlockType(Material.DEEPSLATE)
@@ -79,9 +79,9 @@ public class DeepCavePopulator extends AbstractCavePopulator {
                     .setVerticalSpace(caveHeight)
                     .build(random, w);
 
-        } else if (GenUtils.chance(random, 1, 25)) { //Slabbing
+        } else if (GenUtils.chance(random, 1, 25)) { // Slabbing
             SimpleBlock base = floor.getUp();
-            //Only next to spots where there's some kind of solid block.
+            // Only next to spots where there's some kind of solid block.
             if (BlockUtils.isAir(base.getType()))
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (base.getRelative(face).isSolid()) {
@@ -92,7 +92,7 @@ public class DeepCavePopulator extends AbstractCavePopulator {
                         break;
                     }
                 }
-        } else if (GenUtils.chance(random, 1, 35)) { //Shrooms :3
+        } else if (GenUtils.chance(random, 1, 35)) { // Shrooms :3
             if (BlockUtils.isAir(floor.getUp().getType()))
                 PlantBuilder.build(floor.getUp(), PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
         }

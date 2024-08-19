@@ -64,7 +64,7 @@ public class TerraformCommandManager implements TabExecutor {
             this.registerCommand(new InjectorDebugTestCommand(plugin, "idt", "injectordebugtest"));
             this.registerCommand(new DrownedDungeonCommand(plugin, "dd", "drowneddungeon"));
             this.registerCommand(new CheckHeightCommand(plugin, "checkheight", "ch"));
-            //this.registerCommand(new GuardianSpawnCheckCommand(plugin, "gsc","guardianspawncheck"));
+            // this.registerCommand(new GuardianSpawnCheckCommand(plugin, "gsc","guardianspawncheck"));
             this.registerCommand(new WandCommand(plugin, "wand"));
             this.registerCommand(new MushroomCommand(plugin, "mushroom"));
             this.registerCommand(new RuinedPortalCommand(plugin, "ruinedportal"));
@@ -123,7 +123,7 @@ public class TerraformCommandManager implements TabExecutor {
 		for(TerraCommand command:commands){
 			if(command.matchCommand(args[0].toLowerCase(Locale.ENGLISH))){
 				Stack<String> stack = new Stack<>();
-				//Push arguments from back to front, except the 1st arg
+				// Push arguments from back to front, except the 1st arg
 				for(int i = args.length -1; i>=1; i--){
 					stack.push(args[i]);
 				}

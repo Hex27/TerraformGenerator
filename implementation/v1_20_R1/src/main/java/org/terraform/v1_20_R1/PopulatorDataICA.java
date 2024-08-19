@@ -65,14 +65,14 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     }
     
     public Material getType(int x, int y, int z) {
-    	//return parent.getType(x, y, z);
-    	IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); //getState
+    	// return parent.getType(x, y, z);
+    	IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); // getState
         return CraftBlockData.fromData(ibd).getMaterial();
     }
 
     public BlockData getBlockData(int x, int y, int z) {
-       //return parent.getBlockData(x, y, z);
-    	IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); //getState
+       // return parent.getBlockData(x, y, z);
+    	IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); // getState
         return CraftBlockData.fromData(ibd);
     }
     
@@ -84,8 +84,8 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 			
 			targetBiome = CraftBlock.biomeToBiomeBase(ica.biomeRegistry, fallback);
 		} else {
-			ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);//ResourceKey.a(IRegistry.aP, new MinecraftKey(cbt.getKey()));
-			Optional<Holder.c<BiomeBase>> optHolder = biomeRegistry.b(rkey); //getHolder
+			ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);// ResourceKey.a(IRegistry.aP, new MinecraftKey(cbt.getKey()));
+			Optional<Holder.c<BiomeBase>> optHolder = biomeRegistry.b(rkey); // getHolder
 	        if(optHolder.isEmpty()) {
 	        	TerraformGeneratorPlugin.logger.error("Custom biome was not found in the vanilla registry!");
 	        	targetBiome =  CraftBlock.biomeToBiomeBase(ica.biomeRegistry, fallback);
@@ -99,28 +99,28 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
 	@Override
 	public void setBiome(int rawX, int rawY, int rawZ, Biome biome) {
-		//TerraformGeneratorPlugin.logger.info("Set " + rawX + "," + rawY + "," + rawZ + " to " + biome);
+		// TerraformGeneratorPlugin.logger.info("Set " + rawX + "," + rawY + "," + rawZ + " to " + biome);
 		ica.setBiome(rawX >> 2, rawY >> 2, rawZ >> 2, CraftBlock.biomeToBiomeBase(ica.biomeRegistry, biome));
 	}
 
     @Override
     public void setType(int x, int y, int z, @NotNull Material type) {
-    	//parent.setType(x, y, z, type);
+    	// parent.setType(x, y, z, type);
     	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
 
-    	//ica.setType(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
+    	// ica.setType(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
     }
 
     @Override
     public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
-    	//parent.setBlockData(x, y, z, data);
+    	// parent.setBlockData(x, y, z, data);
     	ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), false);
 
     }
 
     public Biome getBiome(int rawX, int rawZ) {
     	return parent.getBiome(rawX, rawZ);
-        //return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();//BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();//Biome.valueOf(ica
+        // return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();// BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();// Biome.valueOf(ica
         // .getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase(Locale.ENGLISH));
     }
 
@@ -148,12 +148,12 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     public void lootTableChest(int x, int y, int z, TerraLootTable table) {
         BlockPosition pos = new BlockPosition(x, y, z);
 
-        //getBlockEntity
+        // getBlockEntity
         TileEntity te = ica.c_(pos);
         if(te instanceof TileEntityLootable)
             TileEntityLootable.a(ica, RandomSource.a(tw.getHashedRand(x, y, z).nextLong()), pos, LootTableTranslator.translationMap.get(table));
         else if(te instanceof BrushableBlockEntity)
-            //BrushableBlockEntity.setLootTable
+            // BrushableBlockEntity.setLootTable
             ((BrushableBlockEntity) te).a(
                     LootTableTranslator.translationMap.get(table),
                     tw.getHashedRand(x, y, z).nextLong());
@@ -163,11 +163,11 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 	@Override
     public void registerNaturalSpawns(@NotNull NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
     	ResourceKey<Structure> structureKey = switch(type) {
-            case GUARDIAN -> BuiltinStructures.l; //Ocean Monument
-            case PILLAGER -> BuiltinStructures.a; //Pillager Outpost
+            case GUARDIAN -> BuiltinStructures.l; // Ocean Monument
+            case PILLAGER -> BuiltinStructures.a; // Pillager Outpost
         };
 
-        //ax is STRUCTURE
+        // ax is STRUCTURE
     	IRegistry<Structure> featureRegistry = MinecraftServer.getServer().aV().d(Registries.az);
 		
     	Structure structureFeature = featureRegistry.a(structureKey);
@@ -186,7 +186,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 				0, container);
 
     	try {
-        	Field i = StructureStart.class.getDeclaredField("h"); //boundingBox
+        	Field i = StructureStart.class.getDeclaredField("h"); // boundingBox
         	i.setAccessible(true);
         	i.set(start, new StructureBoundingBox(x0, y0, z0, x1, y1, z1));
         }
@@ -196,7 +196,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     	}
 
     	ica.a(structureFeature, start);
-    	ica.a(structureFeature, new ChunkCoordIntPair(chunkX, chunkZ).a()); //a is toLong
+    	ica.a(structureFeature, new ChunkCoordIntPair(chunkX, chunkZ).a()); // a is toLong
     }
 
     @SuppressWarnings("deprecation")

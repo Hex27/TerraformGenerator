@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public enum TConfigOption {
-    //-=[HEIGHTMAP]=-
+    // -=[HEIGHTMAP]=-
     HEIGHT_MAP_CORE_FREQUENCY("heightmap.core-frequency", 0.003f),
     HEIGHT_MAP_RIVER_FREQUENCY("heightmap.river-frequency", 0.005f),
     HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER("heightmap.land-height-amplifier", 1f),
@@ -16,7 +16,7 @@ public enum TConfigOption {
     HEIGHT_MAP_BEDROCK_DENSITY("heightmap.bedrock-density", 70),
     HEIGHT_MAP_SPAWN_FLAT_RADIUS("heightmap.spawn-flat-radius", -1),
 
-    //-=[CLIMATES]=-
+    // -=[CLIMATES]=-
     CLIMATE_HUMIDVEGETATION_MINTEMP("climate.humid-vegetation.minimum-temperature", -0.35d),
     CLIMATE_HUMIDVEGETATION_MAXTEMP("climate.humid-vegetation.maximum-temperature", 4.0d),
     CLIMATE_HUMIDVEGETATION_MINMOIST("climate.humid-vegetation.minimum-moisture", 0d),
@@ -42,8 +42,8 @@ public enum TConfigOption {
     CLIMATE_SNOWY_MINMOIST("climate.snowy.minimum-moisture", -4.0d),
     CLIMATE_SNOWY_MAXMOIST("climate.snowy.maximum-moisture", 4.0d),
 
-    //-=[BIOMES]=-
-    //Biome globals
+    // -=[BIOMES]=-
+    // Biome globals
     BIOME_TEMPERATURE_FREQUENCY("biome.temperature-frequency", 0.03f),
     BIOME_MOISTURE_FREQUENCY("biome.moisture-frequency", 0.03f),
     BIOME_MOUNTAINOUS_THRESHOLD("biome.mountainous-threshold", 18.5f),
@@ -73,8 +73,8 @@ public enum TConfigOption {
     BIOME_SINGLE_DEEPOCEAN_TYPE("biome.single.deepocean", "disabled"),
     BIOME_SINGLE_MOUNTAIN_TYPE("biome.single.mountain", "disabled"),
     BIOME_SINGLE_HIGHMOUNTAIN_TYPE("biome.single.highmountain", "disabled"),
-    //BIOME_SINGLE_RIVER_TYPE("biome.single.river", "disabled"),
-    //BIOME_SINGLE_BEACH_TYPE("biome.single.beach", "disabled"),
+    // BIOME_SINGLE_RIVER_TYPE("biome.single.river", "disabled"),
+    // BIOME_SINGLE_BEACH_TYPE("biome.single.beach", "disabled"),
     BIOME_DEFAULT_FLAT("biome.defaults.flat", "PLAINS"),
     BIOME_DEFAULT_OCEANIC("biome.defaults.oceanic", "OCEAN"),
     BIOME_DEFAULT_DEEPOCEANIC("biome.defaults.deepoceanic", "DEEP_OCEAN"),
@@ -83,7 +83,7 @@ public enum TConfigOption {
     BIOME_DEFAULT_RIVER("biome.defaults.river", "RIVER"),
     BIOME_DEFAULT_BEACH("biome.defaults.beach", "SANDY_BEACH"),
 
-    //Biome specific
+    // Biome specific
     BIOME_ROCKY_MOUNTAINS_WEIGHT("biome.rockymountains.weight", 1),
     BIOME_FORESTED_MOUNTAINS_WEIGHT("biome.forestedmountains.weight", 1),
     BIOME_BADLANDS_MOUNTAINS_WEIGHT("biome.badlandsmountains.weight", 1),
@@ -145,7 +145,7 @@ public enum TConfigOption {
     BIOME_OASIS_FREQUENCY("biome.oasis.frequency", 0.012f),
 
 
-    //-=[TREES]=-
+    // -=[TREES]=-
     TREES_JUNGLE_BIG_ENABLED("trees.big-jungle-trees.enabled", true),
     TREES_TAIGA_BIG_ENABLED("trees.big-taiga-trees.enabled", true),
     TREES_FOREST_BIG_ENABLED("trees.big-forest-trees.enabled", true),
@@ -155,19 +155,19 @@ public enum TConfigOption {
     TREES_SNOWY_TAIGA_BIG_ENABLED("trees.big-snowy-taiga-trees.enabled", true),
     TREES_DARK_FOREST_BIG_ENABLED("trees.big-dark-forest-trees.enabled", true),
 
-    //-=[MISC]=-
-    //MISC_SMOOTH_DESIGN("misc.smooth-design",false),
+    // -=[MISC]=-
+    // MISC_SMOOTH_DESIGN("misc.smooth-design",false),
     MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", true),
     MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree", true),
     MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood", false),
     MISC_TREES_GRADIENT_LIMIT("misc.trees.ground-gradient-limit", 1.3d),
     MISC_USE_SLABS_TO_SMOOTH("misc.use-slabs-to-smooth-terrain", true),
 
-    //-=[DEVSTUFF]=-
+    // -=[DEVSTUFF]=-
     DEVSTUFF_SUPPRESS_WATCHDOG("dev-stuff.suppress-watchdog", true),
     DEVSTUFF_CHUNKCACHE_SIZE("dev-stuff.chunk-cache-size", 6000),
     DEVSTUFF_CHUNKBIOMES_SIZE("dev-stuff.biomecache-size", 3000),
-    //DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
+    // DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT("dev-stuff.experimental-structure-placement", false),
     DEVSTUFF_DEBUG_MODE("dev-stuff.debug-mode", false),
     DEVSTUFF_VANILLA_MUSHROOMS("dev-stuff.force-only-vanilla-mushrooms", false),
     DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY("dev-stuff.patcher-cache-max-size", 100),
@@ -177,11 +177,11 @@ public enum TConfigOption {
     DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS("dev-stuff.vanilla-structure-locate-timeoutmillis", 5000),
     DEVSTUFF_VANILLA_LOCATE_DISABLE("dev-stuff.vanilla-disable-locate", false),
 
-    //-=[CAVES]=-
+    // -=[CAVES]=-
     CAVES_ALLOW_FLOODED_CAVES("caves.allow-flooded-caves", false),
-    //CAVES_ALLOW_FLOODED_RAVINES("caves.allow-flooded-ravines",true),
+    // CAVES_ALLOW_FLOODED_RAVINES("caves.allow-flooded-ravines",true),
 
-    //-=[STRUCTURES]=-
+    // -=[STRUCTURES]=-
     STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS("structures.technical.megachunk.numbiomesections", 4),
     STRUCTURES_MEGACHUNK_MAXSTRUCTURES("structures.technical.megachunk.max-structures-per-megachunk", 3),
     STRUCTURES_MANSION_ENABLED("structures.mansion.enabled", true),
@@ -260,114 +260,114 @@ public enum TConfigOption {
     STRUCTURES_OUTPOST_ENABLED("structures.outpost.enabled", true),
     STRUCTURES_OUTPOST_SPAWNRATIO("structures.outpost.spawnratio", 0.8),
 
-    //-=[ANIMALS]=-
-    //BEES
+    // -=[ANIMALS]=-
+    // BEES
     ANIMALS_BEE_HIVEFREQUENCY("animals.bee.hive-frequency", 0.02),
-    //PIG
+    // PIG
     ANIMALS_PIG_MINHERDSIZE("animals.pig.min-herd-size", 3),
     ANIMALS_PIG_MAXHERDSIZE("animals.pig.max-herd-size", 4),
     ANIMALS_PIG_CHANCE("animals.pig.chance", 2),
-    //COW
+    // COW
     ANIMALS_COW_MINHERDSIZE("animals.cow.min-herd-size", 4),
     ANIMALS_COW_MAXHERDSIZE("animals.cow.max-herd-size", 12),
     ANIMALS_COW_CHANCE("animals.cow.chance", 2),
-    //MOOSHROOM
+    // MOOSHROOM
     ANIMALS_MOOSHROOM_MINHERDSIZE("animals.mooshroom.min-herd-size", 2),
     ANIMALS_MOOSHROOM_MAXHERDSIZE("animals.mooshroom.max-herd-size", 6),
     ANIMALS_MOOSHROOM_CHANCE("animals.mooshroom.chance", 10),
-    //SHEEP
+    // SHEEP
     ANIMALS_SHEEP_MINHERDSIZE("animals.sheep.min-herd-size", 2),
     ANIMALS_SHEEP_MAXHERDSIZE("animals.sheep.max-herd-size", 8),
     ANIMALS_SHEEP_CHANCE("animals.sheep.chance", 2),
-    //CHICKEN
+    // CHICKEN
     ANIMALS_CHICKEN_MINHERDSIZE("animals.chicken.min-herd-size", 1),
     ANIMALS_CHICKEN_MAXHERDSIZE("animals.chicken.max-herd-size", 3),
     ANIMALS_CHICKEN_CHANCE("animals.chicken.chance", 2),
-    //ARMADILLO
+    // ARMADILLO
     ANIMALS_ARMADILLO_MINHERDSIZE("animals.armadillo.min-herd-size", 1),
     ANIMALS_ARMADILLO_MAXHERDSIZE("animals.armadillo.max-herd-size", 3),
     ANIMALS_ARMADILLO_CHANCE("animals.armadillo.chance", 2),
-    //HORSE
+    // HORSE
     ANIMALS_HORSE_MINHERDSIZE("animals.horse.min-herd-size", 2),
     ANIMALS_HORSE_MAXHERDSIZE("animals.horse.max-herd-size", 6),
     ANIMALS_HORSE_CHANCE("animals.horse.chance", 1),
-    //DONKEY
+    // DONKEY
     ANIMALS_DONKEY_MINHERDSIZE("animals.donkey.min-herd-size", 2),
     ANIMALS_DONKEY_MAXHERDSIZE("animals.donkey.max-herd-size", 6),
     ANIMALS_DONKEY_CHANCE("animals.donkey.chance", 1),
-    //GOAT
+    // GOAT
     ANIMALS_GOAT_MINHERDSIZE("animals.goat.min-herd-size", 3),
     ANIMALS_GOAT_MAXHERDSIZE("animals.goat.max-herd-size", 4),
     ANIMALS_GOAT_CHANCE("animals.goat.chance", 1),
-    //RABBIT
+    // RABBIT
     ANIMALS_RABBIT_MINHERDSIZE("animals.rabbit.min-herd-size", 2),
     ANIMALS_RABBIT_MAXHERDSIZE("animals.rabbit.max-herd-size", 3),
     ANIMALS_RABBIT_CHANCE("animals.rabbit.chance", 1),
-    //POLAR_BEAR
+    // POLAR_BEAR
     ANIMALS_POLAR_BEAR_MINHERDSIZE("animals.polarbear.min-herd-size", 2),
     ANIMALS_POLAR_BEAR_MAXHERDSIZE("animals.polarbear.max-herd-size", 3),
     ANIMALS_POLAR_BEAR_CHANCE("animals.polarbear.chance", 1),
-    //PANDA
+    // PANDA
     ANIMALS_PANDA_MINHERDSIZE("animals.panda.min-herd-size", 2),
     ANIMALS_PANDA_MAXHERDSIZE("animals.panda.max-herd-size", 3),
     ANIMALS_PANDA_CHANCE("animals.panda.chance", 1),
-    //FOX
+    // FOX
     ANIMALS_FOX_MINHERDSIZE("animals.fox.min-herd-size", 1),
     ANIMALS_FOX_MAXHERDSIZE("animals.fox.max-herd-size", 2),
     ANIMALS_FOX_CHANCE("animals.fox.chance", 1),
-    //LLAMMA
+    // LLAMMA
     ANIMALS_LLAMA_MINHERDSIZE("animals.llama.min-herd-size", 4),
     ANIMALS_LLAMA_MAXHERDSIZE("animals.llama.max-herd-size", 6),
     ANIMALS_LLAMA_CHANCE("animals.llama.chance", 2),
-    //PARROT
+    // PARROT
     ANIMALS_PARROT_MINHERDSIZE("animals.parrot.min-herd-size", 1),
     ANIMALS_PARROT_MAXHERDSIZE("animals.parrot.max-herd-size", 2),
     ANIMALS_PARROT_CHANCE("animals.parrot.chance", 2),
-    //OCELOT
+    // OCELOT
     ANIMALS_OCELOT_MINHERDSIZE("animals.ocelot.min-herd-size", 1),
     ANIMALS_OCELOT_MAXHERDSIZE("animals.ocelot.max-herd-size", 3),
     ANIMALS_OCELOT_CHANCE("animals.ocelot.chance", 1),
-    //WOLF
+    // WOLF
     ANIMALS_WOLF_MINHERDSIZE("animals.wolf.min-herd-size", 1),
     ANIMALS_WOLF_MAXHERDSIZE("animals.wolf.max-herd-size", 4),
     ANIMALS_WOLF_CHANCE("animals.wolf.chance", 2),
-    //TURTLE
+    // TURTLE
     ANIMALS_TURTLE_MINHERDSIZE("animals.turtle.min-herd-size", 2),
     ANIMALS_TURTLE_MAXHERDSIZE("animals.turtle.max-herd-size", 5),
     ANIMALS_TURTLE_CHANCE("animals.turtle.chance", 1),
-    //DOLPHIN
+    // DOLPHIN
     ANIMALS_DOLPHIN_MINHERDSIZE("animals.dolphin.min-herd-size", 1),
     ANIMALS_DOLPHIN_MAXHERDSIZE("animals.dolphin.max-herd-size", 3),
     ANIMALS_DOLPHIN_CHANCE("animals.dolphin.chance", 1),
-    //COD
+    // COD
     ANIMALS_COD_MINHERDSIZE("animals.cod.min-herd-size", 3),
     ANIMALS_COD_MAXHERDSIZE("animals.cod.max-herd-size", 6),
     ANIMALS_COD_CHANCE("animals.cod.chance", 2),
-    //SQUID
+    // SQUID
     ANIMALS_SQUID_MINHERDSIZE("animals.squid.min-herd-size", 1),
     ANIMALS_SQUID_MAXHERDSIZE("animals.squid.max-herd-size", 4),
     ANIMALS_SQUID_CHANCE("animals.squid.chance", 2),
-    //SALMON
+    // SALMON
     ANIMALS_SALMON_MINHERDSIZE("animals.salmon.min-herd-size", 4),
     ANIMALS_SALMON_MAXHERDSIZE("animals.salmon.max-herd-size", 4),
     ANIMALS_SALMON_CHANCE("animals.salmon.chance", 2),
-    //PUFFERFISH
+    // PUFFERFISH
     ANIMALS_PUFFERFISH_MINHERDSIZE("animals.pufferfish.min-herd-size", 1),
     ANIMALS_PUFFERFISH_MAXHERDSIZE("animals.pufferfish.max-herd-size", 3),
     ANIMALS_PUFFERFISH_CHANCE("animals.pufferfish.chance", 1),
-    //TROPICALFISH
+    // TROPICALFISH
     ANIMALS_TROPICALFISH_MINHERDSIZE("animals.tropical-fish.min-herd-size", 4),
     ANIMALS_TROPICALFISH_MAXHERDSIZE("animals.tropical-fish.max-herd-size", 8),
     ANIMALS_TROPICALFISH_CHANCE("animals.tropical-fish.chance", 2),
 
-    //-=[ORES]=-
-    //AMETHYST
+    // -=[ORES]=-
+    // AMETHYST
     ORE_AMETHYST_CHANCE("ore.amethyst.chance-per-chunk", 0.05),
     ORE_AMETHYST_GEODE_SIZE("ore.amethyst.geode-size", 7),
     ORE_AMETHYST_MIN_DEPTH("ore.amethyst.min-depth", 70),
     ORE_AMETHYST_MIN_DEPTH_BELOW_SURFACE("ore.amethyst.min-depth-below-surface", 15),
 
-    //COAL
+    // COAL
     ORE_COAL_CHANCE("ore.coal.chance-per-chunk", 50),
     ORE_COAL_VEINSIZE("ore.coal.max-vein-size", 25),
     ORE_COAL_MAXVEINNUMBER("ore.coal.max-vein-count", 115),
@@ -375,7 +375,7 @@ public enum TConfigOption {
     ORE_COAL_MAXSPAWNHEIGHT("ore.coal.max-spawn-height", 256),
     ORE_COAL_MINSPAWNHEIGHT("ore.coal.min-spawn-height", 5),
 
-    //IRON
+    // IRON
     ORE_IRON_CHANCE("ore.iron.chance-per-chunk", 50),
     ORE_IRON_VEINSIZE("ore.iron.max-vein-size", 10),
     ORE_IRON_MAXVEINNUMBER("ore.iron.max-vein-count", 73),
@@ -383,7 +383,7 @@ public enum TConfigOption {
     ORE_IRON_MAXSPAWNHEIGHT("ore.iron.max-spawn-height", 256),
     ORE_IRON_MINSPAWNHEIGHT("ore.iron.min-spawn-height", -64),
 
-    //GOLD
+    // GOLD
     ORE_GOLD_CHANCE("ore.gold.chance-per-chunk", 40),
     ORE_GOLD_VEINSIZE("ore.gold.max-vein-size", 10),
     ORE_GOLD_MAXVEINNUMBER("ore.gold.max-vein-count", 15),
@@ -391,7 +391,7 @@ public enum TConfigOption {
     ORE_GOLD_MAXSPAWNHEIGHT("ore.gold.max-spawn-height", 32),
     ORE_GOLD_MINSPAWNHEIGHT("ore.gold.min-spawn-height", -64),
 
-    //GOLD
+    // GOLD
     ORE_BADLANDSGOLD_CHANCE("ore.badlandsgold.chance-per-chunk", 40),
     ORE_BADLANDSGOLD_VEINSIZE("ore.badlandsgold.max-vein-size", 10),
     ORE_BADLANDSGOLD_MAXVEINNUMBER("ore.badlandsgold.max-vein-count", 15),
@@ -399,7 +399,7 @@ public enum TConfigOption {
     ORE_BADLANDSGOLD_MAXSPAWNHEIGHT("ore.badlandsgold.max-spawn-height", 256),
     ORE_BADLANDSGOLD_MINSPAWNHEIGHT("ore.badlandsgold.min-spawn-height", -64),
 
-    //DIAMOND
+    // DIAMOND
     ORE_DIAMOND_CHANCE("ore.diamond.chance-per-chunk", 30),
     ORE_DIAMOND_VEINSIZE("ore.diamond.max-vein-size", 7),
     ORE_DIAMOND_MAXVEINNUMBER("ore.diamond.max-vein-count", 16),
@@ -407,7 +407,7 @@ public enum TConfigOption {
     ORE_DIAMOND_MAXSPAWNHEIGHT("ore.diamond.max-spawn-height", 16),
     ORE_DIAMOND_MINSPAWNHEIGHT("ore.diamond.min-spawn-height", -64),
 
-    //EMERALD
+    // EMERALD
     ORE_EMERALD_CHANCE("ore.emerald.chance-per-chunk", 30),
     ORE_EMERALD_VEINSIZE("ore.emerald.max-vein-size", 7),
     ORE_EMERALD_MAXVEINNUMBER("ore.emerald.max-vein-count", 3),
@@ -415,7 +415,7 @@ public enum TConfigOption {
     ORE_EMERALD_MAXSPAWNHEIGHT("ore.emerald.max-spawn-height", 256),
     ORE_EMERALD_MINSPAWNHEIGHT("ore.emerald.min-spawn-height", -16),
 
-    //LAPIS
+    // LAPIS
     ORE_LAPIS_CHANCE("ore.lapis.chance-per-chunk", 30),
     ORE_LAPIS_VEINSIZE("ore.lapis.max-vein-size", 6),
     ORE_LAPIS_MAXVEINNUMBER("ore.lapis.max-vein-count", 40),
@@ -423,7 +423,7 @@ public enum TConfigOption {
     ORE_LAPIS_MAXSPAWNHEIGHT("ore.lapis.max-spawn-height", 64),
     ORE_LAPIS_MINSPAWNHEIGHT("ore.lapis.min-spawn-height", -64),
 
-    //REDSTONE
+    // REDSTONE
     ORE_REDSTONE_CHANCE("ore.redstone.chance-per-chunk", 40),
     ORE_REDSTONE_VEINSIZE("ore.redstone.max-vein-size", 10),
     ORE_REDSTONE_MAXVEINNUMBER("ore.redstone.max-vein-count", 15),
@@ -431,7 +431,7 @@ public enum TConfigOption {
     ORE_REDSTONE_MAXSPAWNHEIGHT("ore.redstone.max-spawn-height", 16),
     ORE_REDSTONE_MINSPAWNHEIGHT("ore.redstone.min-spawn-height", -64),
 
-    //COPPER
+    // COPPER
     ORE_COPPER_CHANCE("ore.copper.chance-per-chunk", 40),
     ORE_COPPER_VEINSIZE("ore.copper.max-vein-size", 10),
     ORE_COPPER_MAXVEINNUMBER("ore.copper.max-vein-count", 45),
@@ -439,7 +439,7 @@ public enum TConfigOption {
     ORE_COPPER_MAXSPAWNHEIGHT("ore.copper.max-spawn-height", 104),
     ORE_COPPER_MINSPAWNHEIGHT("ore.copper.min-spawn-height", -16),
 
-    //GRAVEL
+    // GRAVEL
     ORE_GRAVEL_CHANCE("ore.gravel.chance-per-chunk", 75),
     ORE_GRAVEL_VEINSIZE("ore.gravel.max-vein-size", 45),
     ORE_GRAVEL_MAXVEINNUMBER("ore.gravel.max-vein-count", 100),
@@ -447,7 +447,7 @@ public enum TConfigOption {
     ORE_GRAVEL_MAXSPAWNHEIGHT("ore.gravel.max-spawn-height", 300),
     ORE_GRAVEL_MINSPAWNHEIGHT("ore.gravel.min-spawn-height", -64),
 
-    //ANDESITE
+    // ANDESITE
     ORE_ANDESITE_CHANCE("ore.andesite.chance-per-chunk", 80),
     ORE_ANDESITE_VEINSIZE("ore.andesite.max-vein-size", 45),
     ORE_ANDESITE_MAXVEINNUMBER("ore.andesite.max-vein-count", 110),
@@ -455,7 +455,7 @@ public enum TConfigOption {
     ORE_ANDESITE_MAXSPAWNHEIGHT("ore.andesite.max-spawn-height", 300),
     ORE_ANDESITE_MINSPAWNHEIGHT("ore.andesite.min-spawn-height", -64),
 
-    //DIORITE
+    // DIORITE
     ORE_DIORITE_CHANCE("ore.diorite.chance-per-chunk", 80),
     ORE_DIORITE_VEINSIZE("ore.diorite.max-vein-size", 45),
     ORE_DIORITE_MAXVEINNUMBER("ore.diorite.max-vein-count", 110),
@@ -463,7 +463,7 @@ public enum TConfigOption {
     ORE_DIORITE_MAXSPAWNHEIGHT("ore.diorite.max-spawn-height", 300),
     ORE_DIORITE_MINSPAWNHEIGHT("ore.diorite.min-spawn-height", -64),
 
-    //GRANITE
+    // GRANITE
     ORE_GRANITE_CHANCE("ore.granite.chance-per-chunk", 80),
     ORE_GRANITE_VEINSIZE("ore.granite.max-vein-size", 45),
     ORE_GRANITE_MAXVEINNUMBER("ore.granite.max-vein-count", 110),
@@ -471,7 +471,7 @@ public enum TConfigOption {
     ORE_GRANITE_MAXSPAWNHEIGHT("ore.granite.max-spawn-height", 300),
     ORE_GRANITE_MINSPAWNHEIGHT("ore.granite.min-spawn-height", -64),
 
-    //TUFF
+    // TUFF
     ORE_TUFF_CHANCE("ore.tuff.chance-per-chunk", 40),
     ORE_TUFF_VEINSIZE("ore.tuff.max-vein-size", 30),
     ORE_TUFF_MAXVEINNUMBER("ore.tuff.max-vein-count", 50),
@@ -479,7 +479,7 @@ public enum TConfigOption {
     ORE_TUFF_MAXSPAWNHEIGHT("ore.tuff.max-spawn-height", 10),
     ORE_TUFF_MINSPAWNHEIGHT("ore.tuff.min-spawn-height", -63),
 
-    //DEEPSLATE
+    // DEEPSLATE
     ORE_DEEPSLATE_CHANCE("ore.deepslate.chance-per-chunk", 80),
     ORE_DEEPSLATE_VEINSIZE("ore.deepslate.max-vein-size", 45),
     ORE_DEEPSLATE_MAXVEINNUMBER("ore.deepslate.max-vein-count", 50),

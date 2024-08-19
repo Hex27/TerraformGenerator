@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.entity.TileEntityMobSpawner;
 import net.minecraft.world.level.chunk.IChunkAccess;
 import net.minecraft.world.level.levelgen.HeightMap;
 import net.minecraft.world.level.storage.loot.LootTables;
+import org.terraform.main.config.TConfigOption;
 
 public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDataBaseHeightAccess {
     private final int chunkX;
@@ -73,7 +74,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 
     public Material getType(int x, int y, int z) {
     	try {
-        	//return rlwa.getType(x, y, z);
+        	// return rlwa.getType(x, y, z);
         	return CraftMagicNumbers.getMaterial(rlwa.a_(new BlockPosition(x, y, z)).b());
     	}catch(Exception e) {
         	Bukkit.getLogger().info("Error chunk: " + chunkX + "," + chunkZ + "--- Block Coords: " + 16*chunkX + "," + 16*chunkZ + " for coords " + x + "," + y + "," + z);
@@ -83,7 +84,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     public BlockData getBlockData(int x, int y, int z) {
-        //return rlwa.getBlockData(x,y,z);
+        // return rlwa.getBlockData(x,y,z);
     	return CraftBlockData.fromData(rlwa.a_(new BlockPosition(x, y, z)));
     }
 
@@ -111,7 +112,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
         }
     }
 
-    //wtf
+    // wtf
     public Biome getBiome(int rawX, int rawZ) {
         TerraformWorld tw = gen.getTerraformWorld();
         return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();
@@ -136,23 +137,25 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 		try {
 	    	EntityTypes<?> et = entityTypesDict.get(type);
 			Entity e = et.a(rlwa.getMinecraftWorld());
-	    	//o is setPosRaw
+	    	// o is setPosRaw
 	    	e.o((double) rawX + 0.5D, rawY, (double) rawZ + 0.5D);
 	    	if (e instanceof EntityInsentient) {
 
 	    		((EntityInsentient)e).a(rlwa, rlwa.d_(new BlockPosition(rawX + 0.5D, rawY, rawZ + 0.5D)), EnumMobSpawn.n, (GroupDataEntity)null, (NBTTagCompound)null);
 	    	}
-	    	//b is addFreshEntity
+	    	// b is addFreshEntity
 	    	rlwa.b(e);
 		} catch (IllegalArgumentException | SecurityException e1) {
 			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
          
-    	//rlwa.spawnEntity(new Location(gen.getTerraformWorld().getWorld(), rawX, rawY, rawZ), type);
+    	// rlwa.spawnEntity(new Location(gen.getTerraformWorld().getWorld(), rawX, rawY, rawZ), type);
     }
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
+        if ( !TConfigOption.areAnimalsEnabled() ) return;
+
         BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
         
         setType(rawX, rawY, rawZ, Material.SPAWNER);
@@ -160,9 +163,9 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
 
         if (tileentity instanceof TileEntityMobSpawner) {
             try {
-            	//Fetch from ENTITY_TYPE_REGISTRY (m)'s map
+            	// Fetch from ENTITY_TYPE_REGISTRY (m)'s map
             	@SuppressWarnings("deprecation")
-            	//W is ENTITY_TYPE
+            	// W is ENTITY_TYPE
             	EntityTypes<?> nmsEntity = IRegistry.W.a(new MinecraftKey(type.getName()));
                 ((TileEntityMobSpawner) tileentity).d().a(nmsEntity);
             } catch (IllegalArgumentException | SecurityException e) {

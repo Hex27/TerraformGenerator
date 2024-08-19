@@ -82,7 +82,7 @@ public class CoralGenerator {
         BlockFace face = getRandomBlockFace();
         coralType = StringUtils.remove(coralType, "_BLOCK");
         if (face == BlockFace.DOWN) face = BlockFace.UP;
-        Material coral = Material.getMaterial(coralType + "_FAN");//coralFans().get(GenUtils.randInt(0, coralFans().size() - 1));
+        Material coral = Material.getMaterial(coralType + "_FAN");// coralFans().get(GenUtils.randInt(0, coralFans().size() - 1));
         if(new Random().nextBoolean())
         	coral = Material.getMaterial(coralType);
 

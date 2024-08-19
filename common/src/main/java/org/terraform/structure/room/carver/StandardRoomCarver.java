@@ -20,10 +20,10 @@ public class StandardRoomCarver extends RoomCarver{
 
     @Override
     public void carveRoom(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room, Material @NotNull ... mat) {
-        //30/1/2024 God you really were a shit programmer what the fuck is this
+        // 30/1/2024 God you really were a shit programmer what the fuck is this
         int tileIndex = 0;
         if (mat[0] != Material.BARRIER)
-            //Create a solid block with the specified width
+            // Create a solid block with the specified width
             for (int nx = room.getX() - room.getWidthX() / 2; nx <= room.getX() + room.getWidthX() / 2; nx++) {
                 for (int ny = room.getY(); ny <= room.getY() + room.getHeight(); ny++) {
                     for (int nz = room.getZ() - room.getWidthZ() / 2; nz <= room.getZ() + room.getWidthZ() / 2; nz++) {
@@ -39,7 +39,7 @@ public class StandardRoomCarver extends RoomCarver{
                 }
             }
 
-        //Hollow out the room
+        // Hollow out the room
         for (int nx = room.getX() - room.getWidthX() / 2 + 1; nx <= room.getX() + room.getWidthX() / 2 - 1; nx++) {
             for (int ny = room.getY() + 1; ny <= room.getY() + room.getHeight() - 1; ny++) {
                 for (int nz = room.getZ() - room.getWidthZ() / 2 + 1; nz <= room.getZ() + room.getWidthZ() / 2 - 1; nz++) {

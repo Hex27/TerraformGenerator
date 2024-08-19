@@ -89,28 +89,28 @@ public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
     			room.getZ()),rotation);
     	w = w.getRelative(rotation.getOppositeFace(),2).getRelative(face,2);
     	
-    	//Remove roof ledge for windows
+    	// Remove roof ledge for windows
     	w.getRear().getUp(3).Pillar(3,new Random(),Material.AIR);
     	w.getRear(2).getUp(3).Pillar(4,new Random(),Material.AIR);
     	
-    	//Interior stair decor
+    	// Interior stair decor
     	new StairBuilder(Material.POLISHED_DIORITE_STAIRS)
     	.setHalf(Half.TOP)
     	.setFacing(w.getDirection())
     	.apply(w.getRear().getUp(5))
     	.apply(w.getRear(2).getUp(6));
     	
-    	//Place the window
+    	// Place the window
     	if(BRIGHT_STAINED_GLASS_PANES.contains(w.getRelative(face).getType())) {
     		pane = w.getRelative(face).getType();
     	}else
     		pane = BRIGHT_STAINED_GLASS_PANES.get(new Random().nextInt(BRIGHT_STAINED_GLASS_PANES.size()));
     	
     	w.Pillar(5, new Random(), pane);
-    	w.getDown().getRelative(face.getOppositeFace()).Pillar(6, new Random(), Material.POLISHED_DIORITE);//Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
+    	w.getDown().getRelative(face.getOppositeFace()).Pillar(6, new Random(), Material.POLISHED_DIORITE);// Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.CRACKED_STONE_BRICKS);
     	w.CorrectMultipleFacing(5);
     	
-    	//Decorate the sides
+    	// Decorate the sides
     	w = w.getRelative(face.getOppositeFace()).getFront().getUp();
     	new SlabBuilder(Material.STONE_BRICK_SLAB).setType(Slab.Type.TOP).apply(w);
     	w = w.getUp();

@@ -20,7 +20,7 @@ public class BrokenShaftPopulator extends RoomPopulatorAbstract {
         int[] lowerCorner = room.getLowerCorner(3);
         int[] upperCorner = room.getUpperCorner(3);
 
-        //Spawn a solid stone platform
+        // Spawn a solid stone platform
         int y = room.getY();
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {

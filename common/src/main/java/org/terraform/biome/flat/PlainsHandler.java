@@ -43,7 +43,7 @@ public class PlainsHandler extends BiomeHandler {
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK &&
                 !BlockUtils.isWet(new SimpleBlock(data,rawX,surfaceY,rawZ))) {
 
-            if (GenUtils.chance(random, 1, 10)) { //Grass
+            if (GenUtils.chance(random, 1, 10)) { // Grass
                 if (GenUtils.chance(random, 6, 10)) {
                     PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                     if (random.nextBoolean()) {
@@ -61,7 +61,7 @@ public class PlainsHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-        //Pumpkin Patch
+        // Pumpkin Patch
         if (GenUtils.chance(1, 1000)) {
             for (int i = 0; i < GenUtils.randInt(5, 10); i++) {
                 int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
@@ -72,7 +72,7 @@ public class PlainsHandler extends BiomeHandler {
             }
         }
 
-        //Melon Patch
+        // Melon Patch
         if (GenUtils.chance(1, 1000)) {
             for (int i = 0; i < GenUtils.randInt(5, 10); i++) {
                 int[] loc = GenUtils.randomSurfaceCoordinates(random, data);
@@ -83,7 +83,7 @@ public class PlainsHandler extends BiomeHandler {
             }
         }
 
-		//Small trees or grass poffs
+		// Small trees or grass poffs
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
         
         for (SimpleLocation sLoc : trees) {
@@ -91,13 +91,13 @@ public class PlainsHandler extends BiomeHandler {
     		if(BlockUtils.isWet(new SimpleBlock(data, sLoc.getX(), highestY+1, sLoc.getZ())))
     			continue;
     		
-        	if(random.nextBoolean()) { //trees
+        	if(random.nextBoolean()) { // trees
                 sLoc.setY(highestY);
                 if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                         BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {
                     new FractalTreeBuilder(FractalTypes.Tree.NORMAL_SMALL).build(tw, data, sLoc.getX(),sLoc.getY(),sLoc.getZ());
                 }
-        	}else { //Poffs
+        	}else { // Poffs
                 sLoc.setY(highestY);
                 if(TConfigOption.arePlantsEnabled() && data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
                         BlockUtils.isDirtLike(data.getType(sLoc.getX(),sLoc.getY(),sLoc.getZ()))) {

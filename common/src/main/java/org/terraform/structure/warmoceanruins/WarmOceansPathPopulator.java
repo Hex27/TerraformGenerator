@@ -11,7 +11,7 @@ public class WarmOceansPathPopulator extends PathPopulatorAbstract {
 
     }
 
-    //This path populator doesn't carve anything.
+    // This path populator doesn't carve anything.
     @Override
     public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
         return true;

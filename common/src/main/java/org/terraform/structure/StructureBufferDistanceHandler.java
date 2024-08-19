@@ -16,7 +16,7 @@ public class StructureBufferDistanceHandler {
 	 */
 	public static boolean canDecorateChunk(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
 
-        //Within radius
+        // Within radius
         if(Math.pow(chunkX*16,2) + Math.pow(chunkZ*16,2) < HeightMap.spawnFlatRadiusSquared)
             return false;
 
@@ -29,13 +29,13 @@ public class StructureBufferDistanceHandler {
             int chunkBufferRadius = spop.getChunkBufferDistance();
             if(chunkBufferRadius <= 0)
             	continue;
-            //No need to account for strongholds, which have a different way of
-            //checking spawn locations.
+            // No need to account for strongholds, which have a different way of
+            // checking spawn locations.
             
-            //Grab the center chunk, where the structure will spawn
+            // Grab the center chunk, where the structure will spawn
         	int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
             if (TConfigOption.areStructuresEnabled() && spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
-            	//If the structure will spawn, calculate distance to it.
+            	// If the structure will spawn, calculate distance to it.
             	int dist = (int) (Math.pow(chunkCoords[0] - chunkX,2) + Math.pow(chunkCoords[1] - chunkZ,2));
             	if(Math.sqrt(dist) <= chunkBufferRadius) {
             		return false;

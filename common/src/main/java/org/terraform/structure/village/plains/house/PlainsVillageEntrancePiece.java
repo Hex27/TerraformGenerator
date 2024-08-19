@@ -47,7 +47,7 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w = w.getLeft();
         }
 
-        //The door
+        // The door
         w = w.getRight(3).getUp();
         BlockUtils.placeDoor(data, plainsVillagePopulator.woodDoor,
                 w.getX(), w.getY(), w.getZ(), w.getDirection().getOppositeFace());
@@ -68,11 +68,11 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
 	        .setStopAtWater(true)
 	        .build(w.getFront().getDown());
 
-        //Decorations depending on variant
+        // Decorations depending on variant
         if (this.var == PlainsVillageHouseVariant.COBBLESTONE) {
             w = w.getFront();
 
-            //Logs at the front
+            // Logs at the front
             w.getLeft().Pillar(2, rand, plainsVillagePopulator.woodLog);
             w.getRight().Pillar(2, rand, plainsVillagePopulator.woodLog);
             w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
@@ -149,7 +149,7 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             else
                 log.setAxis(Axis.X);
 
-            //w.getUp(2).setBlockData(log);
+            // w.getUp(2).setBlockData(log);
 
             w = w.getFront();
             w.getLeft().getDown().downUntilSolid(rand, plainsVillagePopulator.woodLog);

@@ -187,7 +187,7 @@ public class MushroomBuilder {
 
     private void spawnSphericalCap(int seed, float r, float ry, @NotNull SimpleBlock base, boolean hardReplace, Material... type) {
         Random rand = new Random(seed);
-        //FastNoise noise = new FastNoise(seed);
+        // FastNoise noise = new FastNoise(seed);
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
         noiseGen.SetFrequency(1.4f);
 
@@ -313,7 +313,7 @@ public class MushroomBuilder {
 
     private void spawnFunnelCap(int seed, float r, float height, float thickness, @NotNull SimpleBlock base, Material... type) {
         Random rand = new Random(seed);
-        //FastNoise noise = new FastNoise(seed);
+        // FastNoise noise = new FastNoise(seed);
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
         noiseGen.SetFrequency(1.4f);
 

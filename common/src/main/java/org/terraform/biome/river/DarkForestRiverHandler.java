@@ -42,10 +42,10 @@ public class DarkForestRiverHandler extends BiomeHandler {
     @Override
     public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
-        if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
+        if(surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
             return;
 
-        //Set ground near sea level to coarse dirt
+        // Set ground near sea level to coarse dirt
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.COARSE_DIRT);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {
@@ -53,7 +53,7 @@ public class DarkForestRiverHandler extends BiomeHandler {
                 data.setType(rawX, surfaceY, rawZ, Material.COARSE_DIRT);
         }
 
-        //Don't generate kelp on non-stonelike.
+        // Don't generate kelp on non-stonelike.
         if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
 
         // SEA GRASS/KELP
@@ -81,8 +81,8 @@ public class DarkForestRiverHandler extends BiomeHandler {
 	                treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
 	                
 	                if(treeY < TerraformGenerator.seaLevel) {
-	                	 //Don't do gradient checks for swamp trees, the mud is uneven.
-	                	//just make sure it's submerged
+	                	 // Don't do gradient checks for swamp trees, the mud is uneven.
+	                	// just make sure it's submerged
                         TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data,sLoc), OneOneNineBlockHandler.MANGROVE_ROOTS);
                         FractalTypes.Tree.SWAMP_TOP.build(tw, new SimpleBlock(data,sLoc), (t)->t.setCheckGradient(false));
 	                }

@@ -34,7 +34,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		super(room, internalWalls);
 	}
 
-	//Refers to the kitchen room width, not the width of one room cell.
+	// Refers to the kitchen room width, not the width of one room cell.
 	private static final int roomWidthX = 6;
 	private static final int roomWidthZ = 15;
 	@Override
@@ -91,7 +91,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		w.getUp(6).setType(Material.DARK_OAK_PLANKS);
 		int choice = rand.nextInt(3);
 		switch(choice) {
-		case 0: //Smokers & pressure plates
+		case 0: // Smokers & pressure plates
 			new DirectionalBuilder(Material.SMOKER)
 			.setFacing(w.getDirection())
 			.apply(w)
@@ -106,7 +106,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 			w.getUp().getRight().setType(Material.DARK_OAK_PRESSURE_PLATE);
 			w.getUp().getRight(2).setType(Material.DARK_OAK_PRESSURE_PLATE);
 			break;
-		case 1: //Barrels
+		case 1: // Barrels
 			Wall target = w.getRight(2);
 			for(int i = 0; i < 5; i++) {
 				if(GenUtils.chance(rand, 1,3)) {
@@ -118,7 +118,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 				target = target.getLeft();
 			}
 			break;
-		default: //Table
+		default: // Table
 			new SlabBuilder(Material.DARK_OAK_SLAB)
 			.setType(Type.TOP)
 			.apply(w).apply(w.getLeft()).apply(w.getRight());
@@ -142,10 +142,10 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		
 	}
 	
-	//Decorate with paintings and wall texturing
+	// Decorate with paintings and wall texturing
 	@Override
 	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
-        //Shelves
+        // Shelves
         w.getRear().getLeft().Pillar(7, Material.DARK_OAK_LOG);
         if(rand.nextBoolean()) {
             new DirectionalBuilder(Material.FURNACE)
@@ -182,7 +182,7 @@ public class MansionGroundLevelKitchenPopulator extends MansionRoomPopulator {
 		.setType(Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM
 				, Material.CAKE, Material.TURTLE_EGG, Material.AIR, Material.AIR);
 		
-		//Barrel loot
+		// Barrel loot
 		if(GenUtils.chance(rand, 1, 5)) {
 			Wall target = w.getUp(2);
 			target.setBlockData(BlockUtils.getRandomBarrel());

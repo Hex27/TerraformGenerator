@@ -32,10 +32,10 @@ public class GenericAntechamber extends Antechamber {
                     Material.BONE_BLOCK));
         }
 
-        //Flower pots
+        // Flower pots
         randomRoomPlacement(data, room, 0, 5, Material.FLOWER_POT);
 
-        //Dead corals
+        // Dead corals
         Material[] deadCorals = {
                 Material.DEAD_BRAIN_CORAL,
                 Material.DEAD_BUBBLE_CORAL,
@@ -52,11 +52,11 @@ public class GenericAntechamber extends Antechamber {
         if (GenUtils.chance(rand, 1, 2))
             randomRoomPlacement(data, room, 1, 5, deadCorals);
 
-        //Animal items
+        // Animal items
         if (GenUtils.chance(rand, 1, 3))
             randomRoomPlacement(data, room, 1, 1, Material.TURTLE_EGG);
 
-        //Logs
+        // Logs
         if (GenUtils.chance(rand, 1, 2))
             randomRoomPlacement(data, room, 1, 5, Material.ACACIA_LOG,
                     Material.BIRCH_LOG,
@@ -65,7 +65,7 @@ public class GenericAntechamber extends Antechamber {
                     Material.SPRUCE_LOG,
                     Material.OAK_LOG);
 
-        //Rare, monster head
+        // Rare, monster head
         if (GenUtils.chance(1, 3)) {
             randomRoomPlacement(data, room, 1, 1, Material.CREEPER_HEAD,
                     Material.BIRCH_LOG,
@@ -75,7 +75,7 @@ public class GenericAntechamber extends Antechamber {
                     Material.OAK_LOG);
         }
 
-        //Oceanic Treasure Chest
+        // Oceanic Treasure Chest
         if (GenUtils.chance(1, 10)) {
             int[] coords = room.randomCoords(rand, 2);
             if (!data.getType(coords[0], room.getY() + 1, coords[2]).isSolid()) {

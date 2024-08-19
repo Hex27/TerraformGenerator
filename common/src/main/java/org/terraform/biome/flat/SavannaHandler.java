@@ -66,7 +66,7 @@ public class SavannaHandler extends BiomeHandler {
 
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
                 && !data.getType(rawX, surfaceY + 1, rawZ).isSolid()) {
-            //Dense grass
+            // Dense grass
             if (GenUtils.chance(random, 5, 10)) {
                 PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
             }
@@ -78,7 +78,7 @@ public class SavannaHandler extends BiomeHandler {
 		
         boolean spawnedLargeSavannaTree = false;
         
-		//large trees
+		// large trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 112, 0.6f);
         
         if(TConfigOption.TREES_SAVANNA_BIG_ENABLED.getBoolean())
@@ -92,7 +92,7 @@ public class SavannaHandler extends BiomeHandler {
 	            }
 	        }
 		
-        //Small trees
+        // Small trees
         if (!spawnedLargeSavannaTree) {
     	    trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 32);
             for (SimpleLocation sLoc : trees) {
@@ -105,7 +105,7 @@ public class SavannaHandler extends BiomeHandler {
             }
         }
        
-        //Grass Poffs
+        // Grass Poffs
         if ( TConfigOption.arePlantsEnabled()) {
             SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 31);
             for(SimpleLocation sLoc : poffs) {

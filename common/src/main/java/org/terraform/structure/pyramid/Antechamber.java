@@ -31,7 +31,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
      * along with some basic wall decorations
      */
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Ceiling Corner Decorations
+        // Ceiling Corner Decorations
         int[][] corners = room.getAllCorners(1);
         for (int[] corner : corners) {
             Wall w = new Wall(new SimpleBlock(data, corner[0], room.getY() + room.getHeight() - 1, corner[1]));
@@ -40,12 +40,12 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
                 w.getRelative(face).setType(GenUtils.randChoice(Material.CUT_SANDSTONE, Material.SMOOTH_SANDSTONE));
         }
 
-        //Create randomised patterns
+        // Create randomised patterns
         int[] choices = {-2, -1, 0, 1, 2};
         int[] steps = new int[15];
         for (int i = 0; i < 15; i++) steps[i] = choices[rand.nextInt(choices.length)];
 
-        //For the floor
+        // For the floor
         SimpleBlock center = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
 
         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -63,7 +63,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
         }
         center.setType(Material.BLUE_TERRACOTTA);
 
-        //If at 1.20, spawn suspicious sand in the floor
+        // If at 1.20, spawn suspicious sand in the floor
         if(Version.isAtLeast(20))
             for(int i = 0; i < TConfigOption.STRUCTURES_PYRAMID_SUSPICIOUS_SAND_COUNT_PER_ANTECHAMBER.getInt(); i++)
             {
@@ -73,7 +73,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
                 data.lootTableChest(target.getX(),target.getY(),target.getZ(), TerraLootTable.DESERT_PYRAMID_ARCHAEOLOGY);
             }
 
-        //For the ceiling
+        // For the ceiling
         center = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ());
         for (BlockFace face : BlockUtils.directBlockFaces) {
             int length = room.getWidthX() / 2;

@@ -78,18 +78,18 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 		lang = new LanguageManager(this);
         TConfigOption.loadValues(config);
 
-        //Initiate the height map flat radius value
+        // Initiate the height map flat radius value
         HeightMap.spawnFlatRadiusSquared = TConfigOption.HEIGHT_MAP_SPAWN_FLAT_RADIUS.getInt();
         if(HeightMap.spawnFlatRadiusSquared > 0) HeightMap.spawnFlatRadiusSquared *= HeightMap.spawnFlatRadiusSquared;
 
-        BiomeBank.initSinglesConfig(); //Initiates single biome modes.
+        BiomeBank.initSinglesConfig(); // Initiates single biome modes.
         
-        //Initialize chunk cache based on config size
+        // Initialize chunk cache based on config size
         TerraformGenerator.CHUNK_CACHE = 
         		CacheBuilder.newBuilder()
         		.maximumSize(TConfigOption.DEVSTUFF_CHUNKCACHE_SIZE.getInt()).build(new ChunkCacheLoader());
         
-        //Initialize biome query cache based on config size
+        // Initialize biome query cache based on config size
         GenUtils.biomeQueryCache = CacheBuilder.newBuilder()
                 .maximumSize(TConfigOption.DEVSTUFF_CHUNKBIOMES_SIZE.getInt())
                 .build(new CacheLoader<>() {
@@ -111,7 +111,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         LangOpt.init(this);
         logger = new TLogger();
         watchdogSuppressant = new TfgWatchdogSuppressant();
-        new TerraformGeneratorMetricsHandler(this); //bStats
+        new TerraformGeneratorMetricsHandler(this); // bStats
         
         TerraformGenerator.updateSeaLevelFromConfig();
         new TerraformCommandManager(this, "terraform", "terra");
@@ -144,8 +144,8 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     
     @Override
     public void onDisable() {
-    	//This is already done in NativeGeneratorPatcherPopulator World Unload Event.
-    	//NativeGeneratorPatcherPopulator.flushChanges();
+    	// This is already done in NativeGeneratorPatcherPopulator World Unload Event.
+    	// NativeGeneratorPatcherPopulator.flushChanges();
     }
     
     /**

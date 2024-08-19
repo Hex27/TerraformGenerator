@@ -36,9 +36,9 @@ public class FarmhousePopulator extends VillageHousePopulator {
         if ( !TConfigOption.areStructuresEnabled()) return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
         spawnFarmHouse(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, height + 1, z);
     }
@@ -56,11 +56,11 @@ public class FarmhousePopulator extends VillageHousePopulator {
 
             TerraformGeneratorPlugin.logger.info("Spawning farmhouse at " + x + "," + y + "," + z + " with rotation of " + farmHouse.getFace());
 
-            data.addEntity(x, y + 1, z, EntityType.VILLAGER); //Two villagers
+            data.addEntity(x, y + 1, z, EntityType.VILLAGER); // Two villagers
             data.addEntity(x, y + 1, z, EntityType.VILLAGER);
-            data.addEntity(x, y + 1, z, EntityType.CAT); //And a cat.
+            data.addEntity(x, y + 1, z, EntityType.CAT); // And a cat.
 
-            //Spawn a base on the house to sit on
+            // Spawn a base on the house to sit on
             for (int nx = -17 / 2 - 1; nx <= 17 / 2 + 1; nx++) {
                 for (int nz = -17 / 2 - 1; nz <= 17 / 2 + 1; nz++) {
                     if (data.getType(x + nx, y - 1, z + nz).toString().contains("PLANKS") ||
@@ -71,11 +71,11 @@ public class FarmhousePopulator extends VillageHousePopulator {
                 }
             }
 
-            //Spawn a stairway from the house.
+            // Spawn a stairway from the house.
             Wall w = new Wall(new SimpleBlock(data, x, y - 1, z), farmHouse.getFace()).getRight();
             for (int i = 0; i < 7; i++)
                 w = w.getFront();
-            //while(w.getType() != Material.DIRT){
+            // while(w.getType() != Material.DIRT){
             while (!w.isSolid() ||
                     w.getType().toString().contains("PLANKS")) {
                 Stairs stairs = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(random, Material.COBBLESTONE_STAIRS, Material.COBBLESTONE_STAIRS,
@@ -157,7 +157,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         continue;
                     }
 
-                if (noise < -0.2) { //Crop one
+                if (noise < -0.2) { // Crop one
                     if (GenUtils.chance(random, 1, 15)) {
                         data.setType(nx + x, height, nz + z, Material.WATER);
                         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -174,7 +174,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         if (!data.getType(nx + x, height + 1, nz + z).isSolid())
                             data.setBlockData(nx + x, height + 1, nz + z, crop);
                     }
-                } else if (noise > 0.2) { //Crop two
+                } else if (noise > 0.2) { // Crop two
                     if (GenUtils.chance(random, 1, 15)) {
                         data.setType(nx + x, height, nz + z, Material.WATER);
                         for (BlockFace face : BlockUtils.directBlockFaces) {
@@ -190,7 +190,7 @@ public class FarmhousePopulator extends VillageHousePopulator {
                         crop.setAge(GenUtils.randInt(random, 0, crop.getMaximumAge()));
                         data.setBlockData(nx + x, height + 1, nz + z, crop);
                     }
-                } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { //Grass hedges
+                } else if (Math.abs(noise) < 0.2 && Math.abs(noise) > 0.1) { // Grass hedges
                     BlockUtils.setPersistentLeaves(data, nx + x, height + 1, nz + z, WoodUtils.getWoodForBiome(biome, WoodType.LEAVES));
 
                     if (GenUtils.chance(random, 1, 100)) {

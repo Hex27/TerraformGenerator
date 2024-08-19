@@ -32,13 +32,13 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
-                //Use scaffolding instead of fences for top area
+                // Use scaffolding instead of fences for top area
                 if (b.getDown().getType() == Material.OAK_FENCE) {
-                    //Find lowest block
+                    // Find lowest block
                     while (b.getDown().getType() == Material.OAK_FENCE) {
                         b = b.getDown();
                     }
-                    //Start replacing upwards
+                    // Start replacing upwards
                     while (b.getY() <= y) {
                         b.setType(Material.SCAFFOLDING);
                         b = b.getUp();
@@ -47,7 +47,7 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Generate Ore Lift
+        // Generate Ore Lift
         Wall w = new Wall(new SimpleBlock(data, room.getX(), room.getY() + 3, room.getZ()));
         w = w.findCeiling(10);
         if (w != null) {
@@ -55,7 +55,7 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
             try {
                 Wall target = w.getRelative(0, -GenUtils.randInt(rand, 8, 10), 0);
 
-                //Clear a space
+                // Clear a space
                 BlockUtils.carveCaveAir(new Random().nextInt(777123),
                         3,
                         5,

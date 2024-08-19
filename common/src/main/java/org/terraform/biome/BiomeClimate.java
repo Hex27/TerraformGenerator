@@ -6,7 +6,7 @@ import org.terraform.main.config.TConfigOption;
 
 public enum BiomeClimate {
 
-	//Tree-Dense areas
+	// Tree-Dense areas
 	HUMID_VEGETATION(Range.between(
 			TConfigOption.CLIMATE_HUMIDVEGETATION_MINTEMP.getDouble(),
 			TConfigOption.CLIMATE_HUMIDVEGETATION_MAXTEMP.getDouble()),
@@ -14,7 +14,7 @@ public enum BiomeClimate {
 					TConfigOption.CLIMATE_HUMIDVEGETATION_MINMOIST.getDouble(),
 					TConfigOption.CLIMATE_HUMIDVEGETATION_MAXMOIST.getDouble()),2), 
 	
-	//Savannas
+	// Savannas
 	DRY_VEGETATION(Range.between(
 			TConfigOption.CLIMATE_DRYVEGETATION_MINTEMP.getDouble(),
 			TConfigOption.CLIMATE_DRYVEGETATION_MAXTEMP.getDouble()),
@@ -22,7 +22,7 @@ public enum BiomeClimate {
 					TConfigOption.CLIMATE_DRYVEGETATION_MINMOIST.getDouble(),
 					TConfigOption.CLIMATE_DRYVEGETATION_MAXMOIST.getDouble()),1),
 	
-	//Deserts
+	// Deserts
 	HOT_BARREN(Range.between(
 			TConfigOption.CLIMATE_HOTBARREN_MINTEMP.getDouble(),
 			TConfigOption.CLIMATE_HOTBARREN_MAXTEMP.getDouble()),
@@ -30,7 +30,7 @@ public enum BiomeClimate {
 					TConfigOption.CLIMATE_HOTBARREN_MINMOIST.getDouble(),
 					TConfigOption.CLIMATE_HOTBARREN_MAXMOIST.getDouble()),2), 
 	
-	//Cold biomes - taigas, maybe eroded plains
+	// Cold biomes - taigas, maybe eroded plains
 	COLD(Range.between(
 			TConfigOption.CLIMATE_COLD_MINTEMP.getDouble(),
 			TConfigOption.CLIMATE_COLD_MAXTEMP.getDouble()),
@@ -38,7 +38,7 @@ public enum BiomeClimate {
 					TConfigOption.CLIMATE_COLD_MINMOIST.getDouble(),
 					TConfigOption.CLIMATE_COLD_MAXMOIST.getDouble()),1), 
 	
-	//Any snowy biomes. 
+	// Any snowy biomes.
 	SNOWY(Range.between(
 			TConfigOption.CLIMATE_SNOWY_MINTEMP.getDouble(),
 			TConfigOption.CLIMATE_SNOWY_MAXTEMP.getDouble()),
@@ -46,13 +46,13 @@ public enum BiomeClimate {
 					TConfigOption.CLIMATE_SNOWY_MINMOIST.getDouble(),
 					TConfigOption.CLIMATE_SNOWY_MAXMOIST.getDouble()),2), 	
 	
-	//Default climate.
+	// Default climate.
 	TRANSITION(Range.between(-4.0,4.0),Range.between(-4.0,4.0),0), 
 	; 
 	
 	final Range<Double> temperatureRange;
 	final Range<Double> moistureRange;
-	final int priority; //Higher priority means override.
+	final int priority; // Higher priority means override.
 	BiomeClimate(Range<Double> temperatureRange, Range<Double> moistureRange, int priority){
 		this.temperatureRange = temperatureRange;
 		this.moistureRange = moistureRange;
@@ -79,8 +79,8 @@ public enum BiomeClimate {
 			if(isInRange(temp,climate.getTemperatureRange())
 					&& isInRange(moist,climate.getMoistureRange())) {
 				
-				//If there are multiple climate ranges that apply to this, then
-				//the climate with the highest priority will win.
+				// If there are multiple climate ranges that apply to this, then
+				// the climate with the highest priority will win.
                 if(candidate.priority < climate.priority)
                     candidate = climate;
 			}

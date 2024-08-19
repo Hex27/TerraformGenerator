@@ -95,10 +95,10 @@ public class BogRiverHandler extends BiomeHandler {
     @Override
     public void populateSmallItems(@NotNull TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
 
-        //Dry decorations
+        // Dry decorations
         new MuddyBogHandler().populateSmallItems(tw, random, rawX, surfaceY, rawZ, data);
     	
-    	//Water decorations
+    	// Water decorations
                 
         SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
         if(BlockUtils.isWet(block.getUp()))

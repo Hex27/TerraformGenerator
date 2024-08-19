@@ -101,7 +101,7 @@ public class ForestHandler extends BiomeHandler {
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
             if (GenUtils.chance(random, 1, 10)) {
                 if (data.getType(rawX, surfaceY + 1, rawZ) != Material.AIR) return;
-                //Grass & Flowers
+                // Grass & Flowers
                 PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
                 if (random.nextBoolean()) {
                     PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
@@ -114,7 +114,7 @@ public class ForestHandler extends BiomeHandler {
 
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-        //Most forest chunks have a big tree
+        // Most forest chunks have a big tree
         if (TConfigOption.TREES_FOREST_BIG_ENABLED.getBoolean() && GenUtils.chance(random, 6, 10)) {
             int treeX = GenUtils.randInt(random, 2, 12) + data.getChunkX() * 16;
             int treeZ = GenUtils.randInt(random, 2, 12) + data.getChunkZ() * 16;
@@ -126,7 +126,7 @@ public class ForestHandler extends BiomeHandler {
             }
         }
 
-        //Small trees
+        // Small trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
 
         for (SimpleLocation sLoc : trees) {
@@ -138,7 +138,7 @@ public class ForestHandler extends BiomeHandler {
             }
         }
 
-        //Small rocks
+        // Small rocks
         SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 10);
 
         for (SimpleLocation sLoc : rocks) {

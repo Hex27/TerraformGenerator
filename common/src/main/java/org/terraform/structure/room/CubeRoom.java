@@ -282,10 +282,10 @@ public class CubeRoom {
     public int[][] getAllCorners(int padding) {
         int[][] corners = new int[4][2];
 
-        corners[0] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; //++
-        corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; //-+
-        corners[2] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; //+-
-        corners[3] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; //--
+        corners[0] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; // ++
+        corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
+        corners[2] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; // +-
+        corners[3] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
 
         return corners;
     }
@@ -298,28 +298,28 @@ public class CubeRoom {
         int[][] corners = new int[2][2];
 
         if (face == BlockFace.NORTH) {
-            corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; //--
-            corners[1] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; //+-
+            corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
+            corners[1] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; // +-
         } else if (face == BlockFace.SOUTH) {
-            corners[0] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; //-+
-            corners[1] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; //++
+            corners[0] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
+            corners[1] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; // ++
         } else if (face == BlockFace.WEST) {
-            corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; //--
-            corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; //-+
+            corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
+            corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
         } else if (face == BlockFace.EAST) {
-            corners[0] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; //--
-            corners[1] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; //-+
+            corners[0] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; // --
+            corners[1] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; // -+
         }
 
         return corners;
     }
 
-    //Positive x,z corner
+    // Positive x,z corner
     public int[] getUpperCorner() {
         return new int[]{x + widthX / 2, z + widthZ / 2};
     }
 
-    //Negative x,z corner
+    // Negative x,z corner
     public int[] getLowerCorner() {
         return new int[]{x - widthX / 2, z - widthZ / 2};
     }
@@ -330,7 +330,7 @@ public class CubeRoom {
                 && region.isInRegion(x+widthX / 2, y, z+widthZ / 2);
     }
 
-    //Positive x,z corner
+    // Positive x,z corner
     public int[] getUpperCorner(int pad) {
         int Z = z - pad + widthZ / 2;
         int X = x - pad + widthX / 2;
@@ -339,7 +339,7 @@ public class CubeRoom {
         return new int[]{X, Z};
     }
 
-    //Negative x,z corner
+    // Negative x,z corner
     public int[] getLowerCorner(int pad) {
         int Z = z + pad - widthZ / 2;
         int X = x + pad - widthX / 2;

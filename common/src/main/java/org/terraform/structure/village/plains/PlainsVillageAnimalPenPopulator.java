@@ -38,22 +38,22 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
     	
-    	//If terrain is adverse, 
-    	//just forget it, animal pens don't fare well in hilly terrain.
+    	// If terrain is adverse,
+    	// just forget it, animal pens don't fare well in hilly terrain.
     	if(super.doesAreaFailTolerance(data, room))
     		return;
     	
     	int roomY = super.calculateRoomY(data, room);
     	
     	
-    	//For animal farms, they look increasingly stupid when tilted.
-    	//Just give up and place a platform underneath.
-		//super.placeFixerPlatform(roomY, data, room);
-    	//Maybe this isn't needed as it no longer places when terrain is adverse
+    	// For animal farms, they look increasingly stupid when tilted.
+    	// Just give up and place a platform underneath.
+		// super.placeFixerPlatform(roomY, data, room);
+    	// Maybe this isn't needed as it no longer places when terrain is adverse
     	
     	SimpleBlock jobBlock = null;
     	boolean spawnedWater = false;
-    	//Place fence
+    	// Place fence
     	for(Entry<Wall,Integer> entry:room.getFourWalls(data, 2).entrySet()) {
     		Wall w = entry.getKey();
     		for(int i = 0; i < entry.getValue(); i++) {
@@ -87,11 +87,11 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     		
     	}
     	
-    	//Decorations
+    	// Decorations
     	int[] lowerCorner = room.getLowerCorner(3);
     	int[] upperCorner = room.getUpperCorner(3);
     	
-    	//Change the floor
+    	// Change the floor
     	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
     		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
     			
@@ -118,12 +118,12 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
 
     	lowerCorner = room.getLowerCorner(5);
     	upperCorner = room.getUpperCorner(5);
-    	//Place objects
+    	// Place objects
     	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++)
     		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
     			
     			if(GenUtils.chance(rand, 1, 70)) {
-    				if(!spawnedWater && rand.nextBoolean()) { //Water 
+    				if(!spawnedWater && rand.nextBoolean()) { // Water
     					spawnedWater = true;
     					Wall core = new Wall(new SimpleBlock(data, x,0,z),BlockUtils.getDirectBlockFace(rand));
 
@@ -156,7 +156,7 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     					core.getDown().downUntilSolid(new Random(),Material.DIRT);
     					core.getFront().getDown().downUntilSolid(new Random(),Material.DIRT);
     					break;
-    				} else { //Haybales
+    				} else { // Haybales
     					SimpleBlock core = new SimpleBlock(data, x, roomY, z).findAirPocket(15);
     		            if(core == null)
     		            	continue;
@@ -169,9 +169,9 @@ public class PlainsVillageAnimalPenPopulator extends PlainsVillageAbstractRoomPo
     			}
     		}
     	
-    	//Spawn animals
+    	// Spawn animals
     	EntityType animal = farmAnimals[rand.nextInt(farmAnimals.length)];
-        //Spawn animals
+        // Spawn animals
     	int[] coords = new int[] {room.getX(),0,room.getZ()};
 
 		int highest;

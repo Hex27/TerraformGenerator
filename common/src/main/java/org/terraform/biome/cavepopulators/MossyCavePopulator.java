@@ -21,16 +21,16 @@ public class MossyCavePopulator extends AbstractCavePopulator {
 
         int caveHeight = ceil.getY() - floor.getY();
 
-        //Don't touch slabbed floors or stalagmites
+        // Don't touch slabbed floors or stalagmites
         if (Tag.SLABS.isTagged(floor.getType()) ||
         		Tag.WALLS.isTagged(floor.getType()))
         	return;
 
-        //=========================
-        //Upper decorations
-        //=========================
+        // =========================
+        // Upper decorations
+        // =========================
 
-        //Stalactites
+        // Stalactites
         if (GenUtils.chance(random, 1, 35)) {
             Wall w = new Wall(ceil);
             if (w.getUp().getType() == Material.SAND || w.getUp().getType() == Material.SANDSTONE)
@@ -39,7 +39,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                 .setFacingUp(false)
                 .setVerticalSpace(caveHeight)
                 .build(random, w);
-            	//w.downLPillar(random, h, Material.SANDSTONE_WALL);
+            	// w.downLPillar(random, h, Material.SANDSTONE_WALL);
             else 
                 if(w.getUp().getType() == Material.DEEPSLATE) {
                     new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL)
@@ -47,7 +47,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                     .setFacingUp(false)
                     .setVerticalSpace(caveHeight)
                     .build(random, w);
-                	//w.downLPillar(random, h, Material.COBBLED_DEEPSLATE_WALL);
+                	// w.downLPillar(random, h, Material.COBBLED_DEEPSLATE_WALL);
                 }
                 else if(BlockUtils.isStoneLike(w.getUp().getType())){
                     new StalactiteBuilder(Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL)
@@ -55,15 +55,15 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                     .setFacingUp(false)
                     .setVerticalSpace(caveHeight)
                     .build(random, w);
-                    //w.downLPillar(random, h, Material.COBBLESTONE_WALL);
+                    // w.downLPillar(random, h, Material.COBBLESTONE_WALL);
                 }
         }
 
-        //=========================
-        //Lower decorations 
-        //=========================
+        // =========================
+        // Lower decorations 
+        // =========================
 
-        //Stalagmites
+        // Stalagmites
         if (GenUtils.chance(random, 1, 35)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
@@ -75,7 +75,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                     .setFacingUp(true)
                     .setVerticalSpace(caveHeight)
                     .build(random, w);
-                	//w.downLPillar(random, h, Material.SANDSTONE_WALL);
+                	// w.downLPillar(random, h, Material.SANDSTONE_WALL);
                 else 
                     if(w.getDown().getType() == Material.DEEPSLATE) {
                         new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL)
@@ -83,7 +83,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                         .setFacingUp(true)
                         .setVerticalSpace(caveHeight)
                         .build(random, w);
-                    	//w.downLPillar(random, h, Material.COBBLED_DEEPSLATE_WALL);
+                    	// w.downLPillar(random, h, Material.COBBLED_DEEPSLATE_WALL);
                     }
                     else if(BlockUtils.isStoneLike(w.getDown().getType())){
                         new StalactiteBuilder(Material.COBBLESTONE_WALL,Material.MOSSY_COBBLESTONE_WALL)
@@ -91,16 +91,16 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                         .setFacingUp(true)
                         .setVerticalSpace(caveHeight)
                         .build(random, w);
-                        //w.downLPillar(random, h, Material.COBBLESTONE_WALL);
+                        // w.downLPillar(random, h, Material.COBBLESTONE_WALL);
                     }
             }
 
         } 
         else if (GenUtils.chance(random, 1, 25) 
         		&& BlockUtils.isStoneLike(floor.getUp().getType()))
-        { //Slabbing
+        { // Slabbing
             SimpleBlock base = floor.getUp();
-            //Only next to spots where there's some kind of solid block.
+            // Only next to spots where there's some kind of solid block.
             if (BlockUtils.isAir(base.getType()))
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (base.getRelative(face).isSolid()) {
@@ -113,7 +113,7 @@ public class MossyCavePopulator extends AbstractCavePopulator {
                 }
         } 
         else if (GenUtils.chance(random, 1, 35) && BlockUtils.isStoneLike(floor.getUp().getType()))
-        { //Shrooms
+        { // Shrooms
             if (BlockUtils.isAir(floor.getUp().getType()))
                 PlantBuilder.build(floor.getUp(), PlantBuilder.RED_MUSHROOM, PlantBuilder.BROWN_MUSHROOM);
         }

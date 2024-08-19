@@ -43,7 +43,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
                     wasAir = true;
                     w.getUp(5).setType(Material.CHISELED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.COBBLESTONE);
                 } else {
-                    //Right or left wall is part of an entrance
+                    // Right or left wall is part of an entrance
                     if (wasAir || !w.getLeft().getRear().getUp().isSolid()) {
                         w.getRear().Pillar(5, rand, Material.STONE, Material.SMOOTH_STONE);
                     }
@@ -66,7 +66,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
             }
         }
 
-        //Corner Walls
+        // Corner Walls
         for (int[] coords : room.getAllCorners(1)) {
             new Wall(new SimpleBlock(data, coords[0], room.getY() + 1, coords[1]))
                     .Pillar(room.getHeight() - 1, rand, BlockUtils.stoneBricks);
@@ -75,14 +75,14 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
         for (int i = 0; i < GenUtils.randInt(rand, room.getWidthX(), room.getWidthX() * room.getWidthZ() / 10); i++) {
             int[] randomCoords = room.randomCoords(rand, 1);
             SimpleBlock ceil = new SimpleBlock(data, randomCoords[0], room.getY() + room.getHeight(), randomCoords[2]);
-            //Sometimes parts of the ceiling falls down
+            // Sometimes parts of the ceiling falls down
             if (GenUtils.chance(rand, 4, 25)) {
                 for (int j = 0; j < GenUtils.randInt(rand, 1, 5); j++) {
                     dropDownBlock(ceil.getRelative(GenUtils.randInt(rand, -1, 1), 0, GenUtils.randInt(rand, -1, 1)));
                 }
             }
 
-            //Cobwebs
+            // Cobwebs
             if (GenUtils.chance(rand, 1, 5)) {
                 SimpleBlock webBase = ceil.getDown();
                 webBase.setType(Material.COBWEB);
@@ -125,7 +125,7 @@ public class HallwayPopulator extends RoomPopulatorAbstract {
 
     @Override
     public boolean canPopulate(@NotNull CubeRoom room) {
-        //Don't override prisons: Hallways are bloody dull.
+        // Don't override prisons: Hallways are bloody dull.
         return !new PrisonRoomPopulator(new Random(), false, false).canPopulate(room)
                 && room.isBig()
                 && !room.isHuge();

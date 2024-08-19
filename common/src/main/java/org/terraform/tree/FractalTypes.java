@@ -16,7 +16,7 @@ public class FractalTypes {
     public enum Tree {
         FOREST
                 (
-                //Medium Forest Tree
+                // Medium Forest Tree
             new NewFractalTreeBuilder()
                 .setLengthVariance(2)
                 .setOriginalTrunkLength(12)
@@ -31,7 +31,7 @@ public class FractalTypes {
                         .setRadius(4f)
                         .setRadiusY(2f))
                 .setSpawnBees(true),
-                //Large Forest Tree
+                // Large Forest Tree
             new NewFractalTreeBuilder()
                 .setOriginalTrunkLength(18)
                 .setInitialBranchRadius(2f)
@@ -49,7 +49,7 @@ public class FractalTypes {
                         .setRadius(4f)
                         .setRadiusY(2.5f))
                 .setSpawnBees(true),
-//            //Original Style Tree
+//            // Original Style Tree
             new NewFractalTreeBuilder()
                 .setOriginalTrunkLength(18)
                 .setInitialBranchRadius(2f)
@@ -136,7 +136,7 @@ public class FractalTypes {
                         .setOriginalTrunkLength(30)
                         .setLengthVariance(2)
                         .setInitialBranchRadius(1.8f)
-                        //.setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth/2)
+                        // .setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth/2)
                         .setBranchDecrement((currentBranchLength, totalTreeHeight) -> {
                             if(currentBranchLength < 10) return 0f;
                             return 0.3f*Math.max(0,30 - totalTreeHeight);
@@ -353,8 +353,8 @@ public class FractalTypes {
             return build(tw,base,null);
         }
 
-        //Use of treeMutator is currently not optimal as it makes a copy before every use
-        //No idea how bad that is.
+        // Use of treeMutator is currently not optimal as it makes a copy before every use
+        // No idea how bad that is.
         public boolean build(@NotNull TerraformWorld tw, @NotNull SimpleBlock base, @Nullable Function<NewFractalTreeBuilder, Object> treeMutator){
             if(builders.length > 0) {
                 NewFractalTreeBuilder b = Objects.requireNonNull(
@@ -367,7 +367,7 @@ public class FractalTypes {
                         b = (NewFractalTreeBuilder) b.clone();
                         treeMutator.apply(b);
                     }catch(CloneNotSupportedException e){
-                        //good luck m8
+                        // good luck m8
                         TerraformGeneratorPlugin.logger.stackTrace(e);
                         return b.build(tw,base);
                     }

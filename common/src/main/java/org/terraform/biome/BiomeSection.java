@@ -139,7 +139,7 @@ public class BiomeSection {
 		temperature = 3.0f*2.5f*tw.getTemperatureOctave().GetNoise(this.x, this.z);
     	moisture = 3.0f*2.5f*tw.getMoistureOctave().GetNoise(this.x, this.z);
 
-        return BiomeBank.selectBiome(this, temperature, moisture);//BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
+        return BiomeBank.selectBiome(this, temperature, moisture);// BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class BiomeSection {
     	SimpleLocation target  = new SimpleLocation(x,0,z);
     	BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x,z);
     	
-    	//Don't calculate if distance is very close to center
+    	// Don't calculate if distance is very close to center
     	if(target.distance(homeSection.getCenter()) <= dominanceThreshold) {
     		return homeSection;
     	}
@@ -230,20 +230,20 @@ public class BiomeSection {
             }};
         }
         //     xxxxx
-        //xxx  x   x
-        //xox  x o x
-        //xxx  x   x
+        // xxx  x   x
+        // xox  x o x
+        // xxx  x   x
         //     xxxxx
         ArrayList<BiomeSection> candidates = new ArrayList<>();
         
-        //Lock rX, iterate rZ
+        // Lock rX, iterate rZ
         for(int rx:new int[] {-radius,radius}) {
         	 for (int rz = -radius; rz <= radius; rz++) {
         		 candidates.add(this.getRelative(rx, rz));
              }
         }
         
-        //Lock rZ, iterate rX
+        // Lock rZ, iterate rX
         for(int rz:new int[] {-radius,radius}) {
        	 for (int rx = 1-radius; rx <= radius-1; rx++) {
        		 candidates.add(this.getRelative(rx, rz));
@@ -259,7 +259,7 @@ public class BiomeSection {
      * Works even if the coords are outside the biome section.
      */
     public @NotNull BiomeSubSection getSubSection(int rawX, int rawZ) {
-    	//if(new BiomeSection(tw, rawX, rawZ).equals(this)) {
+    	// if(new BiomeSection(tw, rawX, rawZ).equals(this)) {
     		SimpleLocation sectionCenter = this.getCenter();
     		int relXFromCenter = rawX - sectionCenter.getX();
     		int relZFromCenter = rawZ - sectionCenter.getZ();
@@ -286,7 +286,7 @@ public class BiomeSection {
     		
     		return BiomeSubSection.NONE;
     		
-    	//}
+    	// }
 
     }
 

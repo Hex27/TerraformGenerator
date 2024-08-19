@@ -31,7 +31,7 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         super.populate(data, room);
 
-        //Not always a cage room
+        // Not always a cage room
         if (GenUtils.chance(rand, 3, 5)) return;
 
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
@@ -44,7 +44,7 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
                     for (int j = 0; j < room.getHeight() - 9; j++) {
                         w.getRelative(0, j, 0).setBlockData(wall);
                     }
-                    //w.Pillar(room.getHeight()-9, rand, Material.PRISMARINE_WALL);
+                    // w.Pillar(room.getHeight()-9, rand, Material.PRISMARINE_WALL);
                 } else {
                     w.Pillar(room.getHeight() - 9, rand, Material.DARK_PRISMARINE_SLAB, Material.PRISMARINE_SLAB, Material.PRISMARINE_BRICK_SLAB);
                     Stairs s = (Stairs) Bukkit.createBlockData(design.stairs());
@@ -60,7 +60,7 @@ public class CageRoomPopulator extends MonumentRoomPopulator {
             }
         }
 
-        //Corners are dark prismarine
+        // Corners are dark prismarine
         for (int[] corner : room.getAllCorners()) {
             for (int i = 0; i < room.getHeight(); i++) {
                 if (data.getType(corner[0], i + room.getY(), corner[1]).isSolid()) {

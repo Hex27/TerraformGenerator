@@ -28,10 +28,10 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
     
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-    	//super.populate(data, room);
+    	// super.populate(data, room);
     	this.effectiveRoom = room;
     	
-    	//Room flooring
+    	// Room flooring
         int[] lowerCorner = effectiveRoom.getLowerCorner(0);
         int[] upperCorner = effectiveRoom.getUpperCorner(0);
         int y = effectiveRoom.getY();
@@ -39,7 +39,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 
-                //Fuzz the sides to give a sense of ruin
+                // Fuzz the sides to give a sense of ruin
                 if(x == lowerCorner[0] || x == upperCorner[0] || z == lowerCorner[1] || z == upperCorner[1])
                 {
                 	if(rand.nextBoolean())
@@ -62,7 +62,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
              });
     
     	try {
-       	 	//Place upwards
+       	 	// Place upwards
        	 	SimpleBlock center = room.getCenterSimpleBlock(data).getUp();
     		int maxHeight = 70;
     		
@@ -77,9 +77,9 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
 
 	            center = center.getUp(3);
 	            
-	            //If around 30% of the pillar fails to place, break out of the loop and 
-	            //place ruined versions of the upper pillar
-	            //TerraformGeneratorPlugin.logger.info("FR = " + lastParser.calculateFailRate());
+	            // If around 30% of the pillar fails to place, break out of the loop and 
+	            // place ruined versions of the upper pillar
+	            // TerraformGeneratorPlugin.logger.info("FR = " + lastParser.calculateFailRate());
 	            if(lastParser.calculateFailRate() > 0.3f)
 	            {
 	            	break;
@@ -87,7 +87,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
 	            maxHeight--;
     		}
     		
-    		//Make the top of the pillar a bit fuzzed.
+    		// Make the top of the pillar a bit fuzzed.
         	for(SimpleBlock b:lastParser.getTouchedOffsets())
         	{
         		b.getUp().LPillar(
@@ -95,7 +95,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
         				AncientCityUtils.deepslateBricks);
         	}
         	
-        	//Place downwards
+        	// Place downwards
        	 	center = room.getCenterSimpleBlock(data).getDown(3);
     		maxHeight = 70;
     		
@@ -110,9 +110,9 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
 
 	            center = center.getDown(3);
 	            
-	            //If around 30% of the pillar fails to place, break out of the loop and 
-	            //place ruined versions of the upper pillar
-	            //TerraformGeneratorPlugin.logger.info("FR = " + lastParser.calculateFailRate());
+	            // If around 30% of the pillar fails to place, break out of the loop and 
+	            // place ruined versions of the upper pillar
+	            // TerraformGeneratorPlugin.logger.info("FR = " + lastParser.calculateFailRate());
 	            if(lastParser.calculateFailRate() > 0.3f || center.getY() <= TerraformGeneratorPlugin.injector.getMinY())
 	            {
 	            	break;
@@ -120,7 +120,7 @@ public class AncientCityLargePillarRoomPopulator extends AncientCityAbstractRoom
 	            maxHeight--;
     		}
     		
-    		//Make the bottom of the pillar a bit fuzzed.
+    		// Make the bottom of the pillar a bit fuzzed.
         	for(SimpleBlock b:lastParser.getTouchedOffsets())
         	{
         		b.getDown(3).downLPillar(

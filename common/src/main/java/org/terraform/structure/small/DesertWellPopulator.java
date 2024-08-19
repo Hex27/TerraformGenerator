@@ -54,13 +54,13 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
         try {
             TerraSchematic desertWell = TerraSchematic.load("desert_well", core);
             desertWell.parser = new DesertWellSchematicParser(random, badlandsWell, y);
-            //swamphut.setFace(face);
+            // swamphut.setFace(face);
             desertWell.apply();
 
-            //Reposition center (Because shit's fucky)
+            // Reposition center (Because shit's fucky)
             core = core.getRelative(1, 0, 1);
 
-            //Make sure the well is standing on a stable base
+            // Make sure the well is standing on a stable base
             for (int nx = -3; nx <= 3; nx++) {
                 for (int nz = -3; nz <= 3; nz++) {
                     if (!badlandsWell)
@@ -72,7 +72,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                 }
             }
 
-            //Drill hole down
+            // Drill hole down
             int depth = GenUtils.randInt(random, 5, 10);
             if(core.getUp().getType() != Material.WATER)
                 for (int i = 0; i < depth; i++) {
@@ -156,7 +156,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     private static class DesertWellSchematicParser extends SchematicParser {
         private final Random rand;
-        //private final PopulatorDataAbstract pop;
+        // private final PopulatorDataAbstract pop;
         private final boolean badlandsWell;
         private final int baseY;
 

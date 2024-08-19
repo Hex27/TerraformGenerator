@@ -33,7 +33,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     
     public void buildIndividualRoofs(Random random, @NotNull PopulatorDataAbstract data, int[] lowerBound, int[] upperBound) {
     	
-    	//Don't build roofs for pieces that are in sink-ins
+    	// Don't build roofs for pieces that are in sink-ins
     	if(this.builder.countOverlappingPiecesAtLocation(
     			this.getRoom().getSimpleLocation().getRelative(
     					0,-MansionJigsawBuilder.roomHeight-1,0
@@ -50,19 +50,19 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     	
     	int maxDepth = -1;
     	BlockFace roofOuterFace = null;
-    	//Figure out where the roof's position is, so as to determine which direction
-    	//the individual roof should face.
+    	// Figure out where the roof's position is, so as to determine which direction
+    	// the individual roof should face.
     	if(lowerBound[0] <= w.getX() 
     			&& lowerBound[1] <= w.getZ()
     			&& upperBound[0] >= w.getX() 
     			&& upperBound[1] >= w.getZ()) {
-    		//Piece is inside the roof. Don't do anything.
+    		// Piece is inside the roof. Don't do anything.
     		builder.getRoofedLocations().add(this.getRoom().getSimpleLocation().getRelative(this.getRotation().getOppositeFace(), MansionJigsawBuilder.groundFloorRoomWidth));
         	return;
     	}
     	else if(w.getX() >= lowerBound[0] && w.getX() <= upperBound[0]) 
     	{
-    		//Z Axis aligned.
+    		// Z Axis aligned.
     		if(w.getZ() > upperBound[1]) {
     			roofOuterFace = BlockFace.SOUTH;
     			maxDepth = w.getZ() - upperBound[1];
@@ -73,7 +73,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     	}
     	else if(w.getZ() >= lowerBound[1] && w.getZ() <= upperBound[1]) 
     	{
-    		//X Axis aligned.
+    		// X Axis aligned.
     		if(w.getX() > upperBound[0]) {
     			roofOuterFace = BlockFace.EAST;
     			maxDepth = w.getX() - upperBound[0];
@@ -83,17 +83,17 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     		}
     	}
     	
-    	//Increase it to force it to properly sink into the main roof
+    	// Increase it to force it to properly sink into the main roof
     	maxDepth = (maxDepth*2);
     	if(maxDepth < 6) maxDepth*=2;
-    	//Only place the roof if the walled face is correct. If not, ignore it.
+    	// Only place the roof if the walled face is correct. If not, ignore it.
     	if(roofOuterFace == null || walledFace != roofOuterFace)
     	{
     		return;
     	}
     	isTentRoofFace = true;
     	builder.getRoofedLocations().add(this.getRoom().getSimpleLocation().getRelative(this.getRotation().getOppositeFace(), MansionJigsawBuilder.groundFloorRoomWidth));
-    	//Place the actual roof
+    	// Place the actual roof
 		for(BlockFace side:BlockUtils.getAdjacentFaces(walledFace)) {
 			
 			for(int i = 0; i < 6; i++) {
@@ -151,8 +151,8 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
         
         for (int i = 0; i < entry.getValue(); i++) {
             
-        	//Primary Wall and ground beneath wall
-        	//w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
+        	// Primary Wall and ground beneath wall
+        	// w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.getUp().Pillar(this.getRoom().getHeight(), rand, Material.DARK_OAK_PLANKS);
             
             w = w.getLeft();
@@ -173,12 +173,12 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
             default -> null;
         };
 
-        //Don't allow balconies in sink in areas
+        // Don't allow balconies in sink in areas
     	if(type == MansionSecondFloorWallType.BALCONY) {
         	int overlappers = 0;
 	    	for(JigsawStructurePiece otherPiece:builder.getOverlapperPieces()) {
 	    		int[] center = otherPiece.getRoom().getCenter();
-	    		//Only check X and Z, as they're identical to bottom floor
+	    		// Only check X and Z, as they're identical to bottom floor
 	    		if(center[0] == this.getRoom().getCenter()[0]
 						&& center[2] == this.getRoom().getCenter()[2])
 	    			overlappers++;
@@ -193,11 +193,11 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
             
         	switch(type) {
 			case LARGE_WINDOW:
-				if(i == 1 || i == entry.getValue()-2) //Side decoration
+				if(i == 1 || i == entry.getValue()-2) // Side decoration
 					w.getUp().Pillar(this.getRoom().getHeight(),new Random(),Material.DARK_OAK_LOG);
 				
 				if(i == 3 || i == 4 || i == 5)
-				{ //Window Panes and decorations at the base
+				{ // Window Panes and decorations at the base
 					w.getUp(2).Pillar(4, new Random(), Material.LIGHT_GRAY_STAINED_GLASS_PANE);
 					w.getUp(2).CorrectMultipleFacing(4);
 					
@@ -214,7 +214,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
 				}
 				
 				if(i == 2 || i == entry.getValue()-3)
-				{//Supporting Pillars
+				{// Supporting Pillars
 					w.getFront().getUp().setType(Material.COBBLESTONE);
 					w.getFront().getUp(2).Pillar(3, new Random(), Material.STONE_BRICK_WALL);
 					w.getFront().getUp(2).CorrectMultipleFacing(3);
@@ -224,13 +224,13 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
 				}
 				
 				if(i == 4) {
-					//Place Main window decoration
+					// Place Main window decoration
 					spawnWindowOverhang(w.getFront().getUp(6));
 				}
 					
 				break;
 			case BALCONY:
-				if(i == 4) { //center
+				if(i == 4) { // center
 					w.getUp().getLeft().Pillar(3, Material.AIR);
 					w.getUp().getRight().Pillar(3, Material.AIR);
 					w.getUp().Pillar(4, Material.AIR);
@@ -278,7 +278,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
 					;
 				}
 				else if (i == 1 || i == entry.getValue() - 2) 
-				{ //Side lamps and oak log
+				{ // Side lamps and oak log
 					w.getUp().Pillar(this.getRoom().getHeight(), Material.DARK_OAK_LOG);
 					new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
 					.setHalf(Half.TOP)
@@ -288,7 +288,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
 				}
 				break;
 			case THIN_WINDOWS:
-				if(i == 2 || i == entry.getValue()-3) //Side decoration
+				if(i == 2 || i == entry.getValue()-3) // Side decoration
 				{
 					w.getUp().Pillar(this.getRoom().getHeight(),new Random(),Material.DARK_OAK_LOG);
 					
@@ -316,7 +316,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
             w = w.getLeft();
         }
         
-    	//Raise walls to meet roof.
+    	// Raise walls to meet roof.
         entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
         w = entry.getKey().getDown();
         
@@ -327,13 +327,13 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
         	if(target.getUp().getType() == Material.DARK_OAK_LOG)
         		target.getUp().setType(Material.AIR);
 
-        	//Link the wall to the roof above
+        	// Link the wall to the roof above
         	if(target.findCeiling(10) != null)
         	{
         		int spawnedHeight = target.getUp().LPillar(10, new Random(), target.getType());
             	
             	if(!isTentRoofFace)
-            	//Spawn slightly overhanging roof
+            	// Spawn slightly overhanging roof
     	        	if(spawnedHeight == 0 && target.getUp().getFront().isAir() &&  Tag.STAIRS.isTagged(target.getUp().getType())) {
     	        		StairBuilder builder = new StairBuilder(Material.COBBLESTONE_STAIRS)
     	        		.setFacing(target.getDirection().getOppositeFace())
@@ -383,12 +383,12 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     }
     
     private void spawnWindowOverhang(@NotNull Wall w) {
-    	//log row
+    	// log row
     	new OrientableBuilder(Material.DARK_OAK_LOG)
     	.setAxis(BlockUtils.getAxisFromBlockFace(BlockUtils.getRight(w.getDirection())))
     	.apply(w).apply(w.getLeft()).apply(w.getRight());
     	
-    	//Upsidedown overhang in front of log row.
+    	// Upsidedown overhang in front of log row.
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setHalf(Half.TOP)
     	.setFacing(w.getDirection().getOppositeFace())
@@ -399,7 +399,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     	.apply(w.getFront().getRight());
     	
     	
-    	//Inner upside down stairs
+    	// Inner upside down stairs
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setHalf(Half.TOP)
     	.setFacing(BlockUtils.getLeft(w.getDirection()))
@@ -407,7 +407,7 @@ public class MansionSecondFloorWallPiece extends JigsawStructurePiece {
     	.setFacing(BlockUtils.getRight(w.getDirection()))
     	.apply(w.getDown().getRight());
     	
-    	//Stairs at the top
+    	// Stairs at the top
     	new StairBuilder(Material.COBBLESTONE_STAIRS)
     	.setFacing(BlockUtils.getLeft(w.getDirection()))
     	.apply(w.getRight(2))

@@ -50,19 +50,19 @@ public class PreviewCommand extends TerraCommand {
     
     @Override
     public void execute(CommandSender sender, Stack<String> args) {
-        //int seed = GenUtils.randInt(1, 1000000);
+        // int seed = GenUtils.randInt(1, 1000000);
         int maxX = 16*10;
         int maxY = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY();
 
-        TerraformWorld tw = TerraformWorld.get("test-world-"+new Random().nextInt(99999), new Random().nextInt(99999));//TerraformWorld.get("test-world", 11111);
+        TerraformWorld tw = TerraformWorld.get("test-world-"+new Random().nextInt(99999), new Random().nextInt(99999));// TerraformWorld.get("test-world", 11111);
 
         ImageWorldInfo iwi = new ImageWorldInfo(tw.getName(), tw.getSeed());
 
         BufferedImage img = new BufferedImage(maxX, maxY+maxX, BufferedImage.TYPE_INT_RGB);
-        //Delete existing
+        // Delete existing
         File f = new File("terra-preview.png"); if (f.exists()) f.delete();
         TerraformGenerator generator = new TerraformGenerator();
-        //Generate both side and top-down
+        // Generate both side and top-down
         for (int x = (-maxX/2)>>4; x < (maxX/2)>>4; x++) {
             for(int z = (-maxX/2)>>4; z < (maxX/2)>>4; z++)
             {
@@ -94,8 +94,8 @@ public class PreviewCommand extends TerraCommand {
             this.maxX = maxX;
         }
 
-        //We only care about this one.
-        //x,z in [0,15]
+        // We only care about this one.
+        // x,z in [0,15]
         @Override
         public void setBlock(int x, int y, int z, @NotNull Material material) {
             Color col;
@@ -107,13 +107,13 @@ public class PreviewCommand extends TerraCommand {
                 default -> col = Color.GREEN.darker();
             }
 
-            //Vertical slice at z=0
+            // Vertical slice at z=0
             if(z==0 && chunkZ == 0)
                 img.setRGB(
                         (maxX/2) + x+chunkX*16,
                         maxY-(y-TerraformGeneratorPlugin.injector.getMinY())-1,
                         col.getRGB());
-            //Top-Down slice
+            // Top-Down slice
             if(y>=maxHeights[x][z])
             {
                 maxHeights[x][z] = y;
@@ -133,12 +133,12 @@ public class PreviewCommand extends TerraCommand {
 
         @Override
         public int getMinHeight() {
-            return 0; //idc
+            return 0; // idc
         }
 
         @Override
         public int getMaxHeight() {
-            return 0; //idc
+            return 0; // idc
         }
 
         @NotNull
@@ -153,7 +153,7 @@ public class PreviewCommand extends TerraCommand {
             return null;
         }
 
-        //Ignore these.
+        // Ignore these.
         @NotNull
         @Override
         public Biome getBiome(int i, int i1, int i2) {
@@ -287,14 +287,14 @@ public class PreviewCommand extends TerraCommand {
     
     @SuppressWarnings("unused")
 	private @NotNull Color getHeightColorFromNoise(int noise) {
-        if (noise <= 62) { //Sea level
-            return new Color(50, 50, 100 + (noise * 2));//Blue
-        } else if (noise < 62 + 4) { //Beaches?
-            return new Color(240, 238, 108);//Yellow
+        if (noise <= 62) { // Sea level
+            return new Color(50, 50, 100 + (noise * 2));// Blue
+        } else if (noise < 62 + 4) { // Beaches?
+            return new Color(240, 238, 108);// Yellow
         } else if (noise < 92) {
-            return new Color(37, (70 + (noise * 2)), 2);//Green
-        } else { //Mountainous
-            return new Color(255, 255, 255);//White
+            return new Color(37, (70 + (noise * 2)), 2);// Green
+        } else { // Mountainous
+            return new Color(255, 255, 255);// White
         }
     }
 }

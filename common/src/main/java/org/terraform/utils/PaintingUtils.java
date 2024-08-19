@@ -27,7 +27,7 @@ public class PaintingUtils {
 			catch(IllegalArgumentException e) 
 			{
 				// TerraformGeneratorPlugin.TerraformGeneratorPlugin.logger.stackTrace(e);
-				//Area is occupied by another entity. Fail silently.
+				// Area is occupied by another entity. Fail silently.
 			}
 		}
 	}

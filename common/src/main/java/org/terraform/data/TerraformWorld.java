@@ -72,7 +72,7 @@ public class TerraformWorld {
         		tw -> {
                     FastNoise n = new FastNoise((int) (tw.getSeed() * 2));
                     n.SetNoiseType(NoiseType.Simplex);
-                    n.SetFrequency(TConfigOption.BIOME_TEMPERATURE_FREQUENCY.getFloat()); //Default 0.03f
+                    n.SetFrequency(TConfigOption.BIOME_TEMPERATURE_FREQUENCY.getFloat()); // Default 0.03f
         	        return n;
         		});
     }
@@ -84,7 +84,7 @@ public class TerraformWorld {
         		tw -> {
                     FastNoise n = new FastNoise((int) (tw.getSeed()/4));
                     n.SetNoiseType(NoiseType.Simplex);
-                    n.SetFrequency(TConfigOption.BIOME_MOISTURE_FREQUENCY.getFloat()); //Default 0.03f
+                    n.SetFrequency(TConfigOption.BIOME_MOISTURE_FREQUENCY.getFloat()); // Default 0.03f
         	        return n;
         		});
     }

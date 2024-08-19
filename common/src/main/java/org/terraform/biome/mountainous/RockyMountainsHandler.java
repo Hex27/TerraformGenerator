@@ -61,10 +61,10 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 
     @Override
     public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
-        //Don't touch submerged blocks
+        // Don't touch submerged blocks
         if(surfaceY < TerraformGenerator.seaLevel)
             return;
-        //Make patches of dirt that extend on the mountain sides
+        // Make patches of dirt that extend on the mountain sides
         if (GenUtils.chance(random, 1, 25)) {
             dirtStack(data, random, rawX, surfaceY, rawZ);
             for (int nx = -2; nx <= 2; nx++)
@@ -72,7 +72,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                     if (GenUtils.chance(random, 1, 5)) continue;
                     surfaceY = GenUtils.getHighestGround(data, rawX + nx, rawZ + nz);
 
-                    //Another check, make sure relative position isn't underwater.
+                    // Another check, make sure relative position isn't underwater.
                     if(surfaceY < TerraformGenerator.seaLevel)
                         continue;
                     dirtStack(data, random, rawX + nx, surfaceY, rawZ + nz);
@@ -93,16 +93,16 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                 for (float z = -radius; z <= radius; z++) {
 
                     SimpleBlock rel = base.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
                             + Math.pow(y, 2) / Math.pow(radius, 2)
                             + Math.pow(z, 2) / Math.pow(radius, 2);
                     if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())) {
-                        //if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                        if(y > 0) { //Upper half of sphere is air
+                        // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
+                        if(y > 0) { // Upper half of sphere is air
                         	rel.setType(Material.AIR);
                         }else if(rel.isSolid()) {
-                        	//Lower half is water, if replaced block was solid.
+                        	// Lower half is water, if replaced block was solid.
                         	rel.setType(Material.WATER);
                         	PhysicsUpdaterPopulator.pushChange(tw.getName(), new SimpleLocation(rel.getX(),rel.getY(),rel.getZ()));
                         }
@@ -113,7 +113,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
     }
     
     public boolean checkWaterfallSpace(@NotNull SimpleBlock b) {
-    	//Only bother if the waterfall is at least 15 blocks up
+    	// Only bother if the waterfall is at least 15 blocks up
     	if(b.getY() < TerraformGenerator.seaLevel + 15)
     		return false;
     	for(int i = 0; i < 5; i++) {
@@ -126,14 +126,14 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
 	@Override
 	public void populateLargeItems(@NotNull TerraformWorld tw, Random random, @NotNull PopulatorDataAbstract data) {
 
-        //Waterfalls only spawn 1 in 30 times (rolled after checking position.).
+        // Waterfalls only spawn 1 in 30 times (rolled after checking position.).
         for(int rawX = data.getChunkX()*16; rawX < data.getChunkX()*16+16; rawX++)
             for(int rawZ = data.getChunkZ()*16; rawZ < data.getChunkZ()*16+16; rawZ++)
             {
                 int surfaceY = GenUtils.getTransformedHeight(data.getTerraformWorld(), rawX, rawZ);
                 if(HeightMap.getTrueHeightGradient(data, rawX, rawZ, 3) > 1.5)
                     if(HeightMap.CORE.getHeight(tw, rawX, rawZ) - HeightMap.getRawRiverDepth(tw, rawX, rawZ) < TerraformGenerator.seaLevel) {
-                        //If this face is at least 4 blocks wide, carve a waterfall opening
+                        // If this face is at least 4 blocks wide, carve a waterfall opening
                         SimpleBlock block = new SimpleBlock(data,rawX,surfaceY,rawZ);
                         if(checkWaterfallSpace(block)
                                 && GenUtils.chance(tw.getHashedRand(rawX, surfaceY, rawZ), 1, 30)) {
@@ -144,12 +144,12 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
                     }
             }
 
-        //Small trees
+        // Small trees
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 14);
         
-        //Trees on shallow areas
+        // Trees on shallow areas
         for (SimpleLocation sLoc : trees) {
-        	if(HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3) < 1.4) { //trees
+        	if(HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3) < 1.4) { // trees
         		int treeY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
                 sLoc.setY(treeY);
                 if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&

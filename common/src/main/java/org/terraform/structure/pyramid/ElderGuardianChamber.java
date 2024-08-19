@@ -31,18 +31,18 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //4 statues
+        // 4 statues
         SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
         for (BlockFace face : BlockUtils.directBlockFaces) {
             placeStatue(base.getRelative(face, 4), face.getOppositeFace());
         }
 
-        //4 pillars
+        // 4 pillars
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
             placePillar(new Wall(base.getRelative(face, 6)), room.getHeight() - 1);
         }
 
-        //Classic Pyramid interior floor decoration. On the ceiling as well.
+        // Classic Pyramid interior floor decoration. On the ceiling as well.
         SimpleBlock center = new SimpleBlock(data, room.getX(), room.getY(), room.getZ());
         center.setType(Material.BLUE_TERRACOTTA);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
@@ -54,7 +54,7 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
             center.getRelative(face).getRelative(face)
                     .setType(Material.ORANGE_TERRACOTTA);
 
-        //On the ceiling as well
+        // On the ceiling as well
         SimpleBlock ceiling = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight(), room.getZ());
         ceiling.setType(Material.BLUE_TERRACOTTA);
         for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
@@ -64,16 +64,16 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
             ceiling.getRelative(face).getRelative(face)
                     .setType(Material.ORANGE_TERRACOTTA);
 
-        //Elder Guardian cage
+        // Elder Guardian cage
         if (TConfigOption.STRUCTURES_PYRAMID_SPAWN_ELDER_GUARDIAN.getBoolean()) {
             SimpleBlock cageCenter = center.getUp(11);
             placeElderGuardianCage(cageCenter);
         }
 
-        //Decorate the 4 walls to not be so plain
+        // Decorate the 4 walls to not be so plain
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
-            //entry.getValue() == 20
+            // entry.getValue() == 20
             for (int i = 0; i < entry.getValue(); i++) {
                 if (i % 2 == 0 && i != 0 && i != entry.getValue() - 1) {
                     w.getUp(4).Pillar(10, rand, Material.CHISELED_RED_SANDSTONE);
@@ -82,7 +82,7 @@ public class ElderGuardianChamber extends RoomPopulatorAbstract {
             }
         }
 
-        //Stairs at the top
+        // Stairs at the top
         for (Entry<Wall, Integer> walls : room.getFourWalls(data, 1).entrySet()) {
             Wall w = walls.getKey().getRelative(0, room.getHeight() - 2, 0);
             int length = walls.getValue();

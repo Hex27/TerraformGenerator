@@ -47,11 +47,11 @@ public class TerraformStructurePopulator extends BlockPopulator {
         this.tw = tw;
     }
 
-    //NEW BLOCK POPULATOR API
-    //Used to generate small paths and small rooms
+    // NEW BLOCK POPULATOR API
+    // Used to generate small paths and small rooms
     @Override
     public void populate(@NotNull WorldInfo worldInfo, @NotNull Random random, int chunkX, int chunkZ, @NotNull LimitedRegion lr) {
-        //Check if the nearest structure in this megachunk is close enough
+        // Check if the nearest structure in this megachunk is close enough
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
 
@@ -66,17 +66,17 @@ public class TerraformStructurePopulator extends BlockPopulator {
             jigsawCache.put(mc, state);
         }
 
-        //Check if the room will be in range
+        // Check if the room will be in range
         if(!state.isInRange(chunkX, chunkZ)) return;
 
         PopulatorDataAbstract data = new PopulatorDataSpigotAPI(lr, tw, chunkX, chunkZ);
 
-        //Carve each path
+        // Carve each path
         HashSet<PathState.PathNode> seenNodes = new HashSet<>();
         state.roomPopulatorStates.forEach(roomLayoutGenerator -> {
             final PathState pathState = roomLayoutGenerator.getOrCalculatePathState(tw);
             pathState.nodes.stream()
-                    //Filter to only those inside this chunk
+                    // Filter to only those inside this chunk
                     .filter(node->node.center.getX() >> 4 == chunkX && node.center.getZ() >> 4 == chunkZ)
                     .forEach(node->{
                         pathState.writer.apply(data, tw, node);
@@ -84,11 +84,11 @@ public class TerraformStructurePopulator extends BlockPopulator {
                     });
         });
 
-        //Carve each room
+        // Carve each room
         ArrayList<CubeRoom> seenRooms = new ArrayList<>();
         state.roomPopulatorStates.forEach(roomLayoutGenerator ->
                 roomLayoutGenerator.getRooms().stream()
-                //No rooms that have bounds beyond LR
+                // No rooms that have bounds beyond LR
                 .filter(room->room.isInRegion(lr))
                 .forEach(room->
                 {
@@ -96,9 +96,9 @@ public class TerraformStructurePopulator extends BlockPopulator {
                     roomLayoutGenerator.roomCarver.carveRoom(data, room, roomLayoutGenerator.wallMaterials);
                 }));
 
-        //Populate the paths
+        // Populate the paths
         seenNodes.forEach((node)->{
-            //If the path has a direction of up, it is a crossway.
+            // If the path has a direction of up, it is a crossway.
             if(node.populator != null)
                 node.populator.populate(new PathPopulatorData(
                         new Wall(new SimpleBlock(data, node.center),
@@ -107,44 +107,44 @@ public class TerraformStructurePopulator extends BlockPopulator {
                         node.pathWidth));
         });
 
-        //Populate the rooms
+        // Populate the rooms
         seenRooms.forEach(room-> room.getPop().populate(data, room));
     }
 
-    //OLDER BLOCK POPULATOR API
-    //Used for large structures as they are too big and rely on a guaranteed write.
-    //The older api allows guaranteed writes via cascasion. Slow, but guaranteed to work
+    // OLDER BLOCK POPULATOR API
+    // Used for large structures as they are too big and rely on a guaranteed write.
+    // The older api allows guaranteed writes via cascasion. Slow, but guaranteed to work
     @Override
     public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
-        //Structuregen will freeze for long periods
+        // Structuregen will freeze for long periods
         TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
-        //Don't attempt generation pre-injection.
+        // Don't attempt generation pre-injection.
         if(!TerraformGeneratorPlugin.INJECTED_WORLDS.contains(world.getName())) return;
         PopulatorDataPostGen data = new PopulatorDataPostGen(chunk);
 
-        //Use IChunkAccess to place blocks instead. Known to cause lighting problems.
-        //Since people keep turning this on for fun, then reporting bugs, I'm removing it. 
+        // Use IChunkAccess to place blocks instead. Known to cause lighting problems.
+        // Since people keep turning this on for fun, then reporting bugs, I'm removing it.
 //        if (TConfigOption.DEVSTUFF_EXPERIMENTAL_STRUCTURE_PLACEMENT.getBoolean())
 //            data = new PopulatorDataRecursiveICA(chunk);
 
-        //Spawn large structures
+        // Spawn large structures
         MegaChunk mc = new MegaChunk(chunk.getX(), chunk.getZ());
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
 
-        //Special Case
+        // Special Case
         if(!TConfigOption.areStructuresEnabled() && new StrongholdPopulator().canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
             TerraformGeneratorPlugin.logger.info("Generating Stronghold at chunk: " + data.getChunkX() + "," + data.getChunkZ());
             new StrongholdPopulator().populate(tw, data);
         }
 
-        //Only check singlemegachunkstructures if this chunk is a central chunk.
+        // Only check singlemegachunkstructures if this chunk is a central chunk.
         int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
-        //TerraformGeneratorPlugin.logger.info("[v] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
+        // TerraformGeneratorPlugin.logger.info("[v] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
         if(chunkCoords[0] == data.getChunkX()
                 && chunkCoords[1] == data.getChunkZ()) {
             int[] blockCoords = mc.getCenterBiomeSectionBlockCoords();
 
-            //TerraformGeneratorPlugin.logger.info("[!] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
+            // TerraformGeneratorPlugin.logger.info("[!] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
             for(SingleMegaChunkStructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
                 if(spop == null) continue;
                 if(!spop.isEnabled()) continue;
@@ -165,7 +165,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
             if(spop == null) continue;
             if(!spop.isEnabled()) continue;
             if(spop instanceof StrongholdPopulator) continue;
-            //TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
+            // TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
             if(TConfigOption.areStructuresEnabled() && spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
                 return spop;
             }

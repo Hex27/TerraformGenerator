@@ -85,7 +85,7 @@ public class MangroveHandler extends BiomeHandler {
                 else
                     chunk.setBlock(x, surfaceY + i, z, getSurfaceCrust(random)[0]);
             }
-            //No guard needed, att < 1 will write surfaceY
+            // No guard needed, att < 1 will write surfaceY
             cache.writeTransformedHeight(x,z, (short) (surfaceY + att));
         }
     }
@@ -103,7 +103,7 @@ public class MangroveHandler extends BiomeHandler {
         }
 
         if (BlockUtils.isWet(new SimpleBlock(data,rawX,surfaceY+1,rawZ))
-                && GenUtils.chance(random, 10, 100) && surfaceY < TerraformGenerator.seaLevel - 3) { //SEA GRASS/KELP
+                && GenUtils.chance(random, 10, 100) && surfaceY < TerraformGenerator.seaLevel - 3) { // SEA GRASS/KELP
             CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
 
         }
@@ -130,8 +130,8 @@ public class MangroveHandler extends BiomeHandler {
                 treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 
                 if(treeY > TerraformGenerator.seaLevel-6) {
-                	 //Don't do gradient checks for swamp trees, the mud is uneven.
-                	//just make sure it's submerged
+                	 // Don't do gradient checks for swamp trees, the mud is uneven.
+                	// just make sure it's submerged
                     TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data,treeX,treeY,treeZ), OneOneNineBlockHandler.MANGROVE_ROOTS);
                     FractalTypes.Tree.SWAMP_TOP.build(tw, new SimpleBlock(data,treeX,treeY,treeZ), (t)->t.setCheckGradient(false));
                 }
@@ -149,8 +149,8 @@ public class MangroveHandler extends BiomeHandler {
     	
         double height = HeightMap.CORE.getHeight(tw, x, z) - 10;
 
-        //If the height is too low, force it back to 3.
-        //30/11/2023: what the fuck is this guard clause for
+        // If the height is too low, force it back to 3.
+        // 30/11/2023: what the fuck is this guard clause for
         if (height <= 0) height = 3;
         
         return height;

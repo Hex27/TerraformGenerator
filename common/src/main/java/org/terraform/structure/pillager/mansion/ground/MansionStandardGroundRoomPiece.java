@@ -28,13 +28,13 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
         int[] lowerCorner = this.getRoom().getLowerCorner(0);
         int[] upperCorner = this.getRoom().getUpperCorner(0);
 
-        //Place flooring.
+        // Place flooring.
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++)
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
             	
                 data.setType(x, this.getRoom().getY(), z, Material.STONE_BRICKS);
                 
-                //Supporting ground
+                // Supporting ground
                 new Wall(new SimpleBlock(data, x, this.getRoom().getY() - 1, z))
                         .downUntilSolid(rand,Material.STONE_BRICKS);
             }
@@ -48,8 +48,8 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     	int[] lowerCorner = this.getRoom().getLowerCorner(-5);
         int[] upperCorner = this.getRoom().getUpperCorner(-5);
         
-        //Places extended ground and roofing over the piece.
-        //If this piece is identified as a corner, place a pillar.
+        // Places extended ground and roofing over the piece.
+        // If this piece is identified as a corner, place a pillar.
         for(int nx = lowerCorner[0]; nx <= upperCorner[0]; nx++)
         	for(int nz = lowerCorner[1]; nz <= upperCorner[1]; nz++) {
         		SimpleBlock b = new SimpleBlock(data, nx, this.getRoom().getY(), nz);
@@ -66,13 +66,13 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     	int[] lowerCorner = targetRoom.getLowerCorner(0);
         int[] upperCorner = targetRoom.getUpperCorner(0);
         
-        //Places extended ground and roofing over the piece.
-        //If this piece is identified as a corner, place a pillar.
+        // Places extended ground and roofing over the piece.
+        // If this piece is identified as a corner, place a pillar.
         for(int nx = lowerCorner[0]; nx <= upperCorner[0]; nx++)
         	for(int nz = lowerCorner[1]; nz <= upperCorner[1]; nz++) {
         		SimpleBlock b = new SimpleBlock(data, nx, targetRoom.getY(), nz);
         		
-        		//Edge Piece of extended room. Place cobblestone on ceiling edges
+        		// Edge Piece of extended room. Place cobblestone on ceiling edges
         		if(upperCorner[0] - lowerCorner[0] > this.getRoom().getWidthX()
         				&& (nx == lowerCorner[0] || nx == upperCorner[0] || nz == lowerCorner[1] || nz == upperCorner[1])) {
         			if(b.getRelative(0,targetRoom.getHeight()+1,0).getType() != Material.STONE_BRICKS)
@@ -100,14 +100,14 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
     	CubeRoom targetRoom;
         if(!this.getWalledFaces().isEmpty()) {
         	targetRoom = this.getExtendedRoom(6);
-        	//Decorate the top and bottom areas
+        	// Decorate the top and bottom areas
             for(Entry<Wall, Integer> entry:this.getRoom().getFourWalls(data, -5).entrySet()) {
             	if(this.getWalledFaces().contains(entry.getKey().getDirection().getOppositeFace())) {
             		Wall w = entry.getKey();
             		for(int i = 0; i < entry.getValue(); i++) {
             			if(w.getRear().getRelative(0,targetRoom.getHeight(),0).getType() == Material.COBBLESTONE)
             			{
-            				//Lower decorations
+            				// Lower decorations
             				if(!w.isSolid() || w.getType() == Material.POLISHED_ANDESITE) {
             					
             					new StairBuilder(Material.STONE_BRICK_STAIRS)
@@ -124,7 +124,7 @@ public abstract class MansionStandardGroundRoomPiece extends MansionStandardRoom
             					w.getRight().getUp().get().lsetType(Material.POLISHED_ANDESITE);
             					w.getRight().get().lsetType(Material.POLISHED_ANDESITE);
             				}
-            				//Upper decorations
+            				// Upper decorations
             				if(i % 2 == 0) {
                 				w.getRear().getRelative(0,targetRoom.getHeight()+1,0).setType(Material.COBBLESTONE);
                 			}

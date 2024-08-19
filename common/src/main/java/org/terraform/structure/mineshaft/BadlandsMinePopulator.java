@@ -39,7 +39,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
 
         if (biome != BiomeBank.BADLANDS_CANYON) return false;
 
-        //what the fuck is this
+        // what the fuck is this
 		/*
 		 * // randomObjectPositions returns chunk positions here for (Vector2f pos :
 		 * GenUtils.vectorRandomObjectPositions(tw, chunkX >> 4, chunkZ >> 4,
@@ -82,24 +82,24 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         BlockFace outDir, inDir;
         SimpleBlock entrance, shaft;
 
-        //Find a suitable spawn direction
+        // Find a suitable spawn direction
         MegaChunk mc = new MegaChunk(data.getChunkX(),data.getChunkZ());
     	int[] spawnCoords = mc.getCenterBiomeSectionBlockCoords();
         
-    	//This is in the middle of a plateau.
-    	//This must extend out until the entrance is found.
+    	// This is in the middle of a plateau.
+    	// This must extend out until the entrance is found.
         SimpleBlock spawnSpot = new SimpleBlock(data, spawnCoords[0],0,spawnCoords[1]).getGround();
 
-        //The plateau (by right,) should generate as a distorted circle.
-        //As such, the direction can be random.
+        // The plateau (by right,) should generate as a distorted circle.
+        // As such, the direction can be random.
         inDir = BlockUtils.getDirectBlockFace(getHashedRandom(tw,data.getChunkX(),data.getChunkZ()));
         outDir = inDir.getOppositeFace();
         
         entrance = getSpawnEntrance(tw, spawnSpot, outDir);
         
-        //The shaft will spawn directly at the center of the plateau, deep within
-        //the terracotta.
-        shaft = spawnSpot.getAtY(entrance.getY()); //entrance.getRelative(inDir, hallwayLen + sandRadius - 1);
+        // The shaft will spawn directly at the center of the plateau, deep within
+        // the terracotta.
+        shaft = spawnSpot.getAtY(entrance.getY()); // entrance.getRelative(inDir, hallwayLen + sandRadius - 1);
         
         
         int hallwayLength;
@@ -108,7 +108,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
         }else {
         	hallwayLength = Math.abs(shaft.getZ() - entrance.getZ());
         }
-        hallwayLength -= 6; //Don't cover the shaft entrance
+        hallwayLength -= 6; // Don't cover the shaft entrance
         
         TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Entrance: " + entrance);
         TerraformGeneratorPlugin.logger.info("Badlands Mineshaft Shaft: " + shaft);
@@ -118,27 +118,27 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
 
         // Spawning stuff
         
-        //Standard mineshaft below the badlands entrance
-        //Comment this out, the new populator will handle this
-        //new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
+        // Standard mineshaft below the badlands entrance
+        // Comment this out, the new populator will handle this
+        // new MineshaftPopulator().spawnMineshaft(tw, random, data, shaft.getX(), shaft.getY() - shaftDepth - 5, shaft.getZ(), false, 3, 60, true);
 
-        //Carve downwards hole into the mineshaft below
+        // Carve downwards hole into the mineshaft below
         spawnShaft(random, shaft, inDir);
         
-        //Carve entrance out
+        // Carve entrance out
         LegacyPathGenerator g = new LegacyPathGenerator(entrance.getRelative(inDir.getModX() * 3, -1, inDir.getModZ() * 3),
                 new Material[] {Material.CAVE_AIR}, new Random(), new int[]{0,0}, new int[]{0,0}, -1);
         g.setPopulator(new BadlandsMineshaftPathPopulator(random));
         g.generateStraightPath(null, inDir, hallwayLength);
         
-        //Create the entrance
+        // Create the entrance
         spawnEntrance(entrance.getRelative(inDir,5), outDir);
         patchEntrance(entrance, inDir);
 
-        //Spawn an ore lift
+        // Spawn an ore lift
         if (GenUtils.chance(random, 4, 5)) {
             try {
-            	//Ore lift schematic. Constructor has true to replace oak with dark oak
+            	// Ore lift schematic. Constructor has true to replace oak with dark oak
                 TerraSchematic schema = TerraSchematic.load("ore-lift", new SimpleBlock(data, shaft.getX() - 1, shaft.getY() - shaftDepth, shaft.getZ() - 1));
                 schema.parser = new OreLiftSchematicParser(true);
                 schema.setFace(BlockFace.NORTH);
@@ -162,7 +162,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     	
 		double riverHeight = HeightMap.getRawRiverDepth(tw, query.getX(), query.getZ());
         double baseHeight = HeightMap.CORE.getHeight(tw, query.getX(), query.getZ()) + riverHeight;
-        while(query.getGround().getY() > baseHeight + 3) { //3 block leeway to account for random blurring
+        while(query.getGround().getY() > baseHeight + 3) { // 3 block leeway to account for random blurring
     		query = query.getRelative(dir);
     		riverHeight = HeightMap.getRawRiverDepth(tw, query.getX(), query.getZ());
             baseHeight = HeightMap.CORE.getHeight(tw, query.getX(), query.getZ()) + riverHeight;

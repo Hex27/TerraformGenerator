@@ -29,12 +29,12 @@ public class LargeCaveRoomCarver extends RoomCarver {
             }
             else
             {
-                //Ensure no fluid flows out
+                // Ensure no fluid flows out
                 if(loc.getY() <= waterLevel)
                     data.setType(loc.getX(),loc.getY(),loc.getZ(), BlockUtils.stoneOrSlate(loc.getY()));
 
-                //find the floors and ceilings for the populator.
-                //Only add them to the list if the thing is solid
+                // find the floors and ceilings for the populator.
+                // Only add them to the list if the thing is solid
                 if(data.getType(loc.getX(),loc.getY(),loc.getZ()).isSolid())
                 {
                     if(!caveRoom.toCarve.containsKey(loc.getDown()))

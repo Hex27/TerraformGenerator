@@ -45,10 +45,10 @@ public class ScarletForestRiverHandler extends BiomeHandler {
     public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
         boolean growsKelp = random.nextBoolean();
 
-        if(surfaceY >= TerraformGenerator.seaLevel) //Don't apply to dry land
+        if(surfaceY >= TerraformGenerator.seaLevel) // Don't apply to dry land
             return;
 
-        //Set ground near sea level to concrete
+        // Set ground near sea level to concrete
         if(surfaceY >= TerraformGenerator.seaLevel - 2) {
             data.setType(rawX, surfaceY, rawZ, Material.WHITE_CONCRETE);
         }else if(surfaceY >= TerraformGenerator.seaLevel - 4) {

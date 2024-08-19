@@ -55,7 +55,7 @@ public class BambooForestHandler extends BiomeHandler {
                 return n;
         });
 
-        //Podzol Paths
+        // Podzol Paths
         if (pathNoise.GetNoise(rawX, rawZ) > 0.27) {
             if (GenUtils.chance(random, 99, 100) &&
                     data.getBiome(rawX, rawZ) == getBiome() &&
@@ -66,7 +66,7 @@ public class BambooForestHandler extends BiomeHandler {
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK ||
                 data.getType(rawX, surfaceY, rawZ) == Material.PODZOL) {
 
-            //Grass and shrubbery
+            // Grass and shrubbery
             if (GenUtils.chance(random, 1, 3)) {
                 if (GenUtils.chance(random, 6, 10)) {
                     PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
@@ -93,7 +93,7 @@ public class BambooForestHandler extends BiomeHandler {
                 if (data.getType(x, y, z) == Material.GRASS_BLOCK ||
                         data.getType(x, y, z) == Material.PODZOL) {
                 	
-                    //Small grass poffs
+                    // Small grass poffs
                     if (TConfigOption.arePlantsEnabled() && GenUtils.chance(random, 1, 50)) {
                         BlockUtils.replaceSphere(
                                 random.nextInt(424444),
@@ -101,7 +101,7 @@ public class BambooForestHandler extends BiomeHandler {
                                 new SimpleBlock(data, x, y + 1, z), false, Material.JUNGLE_LEAVES);
                     }
 
-                    //Bamboo
+                    // Bamboo
                     if (TConfigOption.arePlantsEnabled() && GenUtils.chance(random, 1, 3) && BlockUtils.isDirtLike(data.getType(x, y, z))) {
                         int h = BlockUtils.spawnPillar(random, data, x, y + 1, z, Material.BAMBOO, 12, 16);
                         Bamboo bambooHead = (Bamboo) Bukkit.createBlockData(Material.BAMBOO);

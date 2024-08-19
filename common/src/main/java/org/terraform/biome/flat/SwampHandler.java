@@ -60,8 +60,8 @@ public class SwampHandler extends BiomeHandler {
                 treeY = GenUtils.getHighestGround(data, treeX, treeZ);
                 
                 if(treeY > TerraformGenerator.seaLevel-6) {
-                	 //Don't do gradient checks for swamp trees, the mud is uneven.
-                	//just make sure it's submerged
+                	 // Don't do gradient checks for swamp trees, the mud is uneven.
+                	// just make sure it's submerged
                     TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data,treeX,treeY,treeZ), Material.OAK_LOG);
                     FractalTypes.Tree.SWAMP_TOP.build(tw, new SimpleBlock(data,treeX,treeY,treeZ), (t)->{
                         t.setCheckGradient(false);
@@ -86,7 +86,7 @@ public class SwampHandler extends BiomeHandler {
     	
         double height = HeightMap.CORE.getHeight(tw, x, z) - 10;
 
-        //If the height is too low, force it back to 3.
+        // If the height is too low, force it back to 3.
         if (height <= 0) height = 3;
         
         return height;

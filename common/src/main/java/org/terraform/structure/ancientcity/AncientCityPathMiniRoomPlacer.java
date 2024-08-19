@@ -16,12 +16,12 @@ public class AncientCityPathMiniRoomPlacer {
 
 	public static void placeAltar(@NotNull Wall origin) {
 		Material[] deepSlateBricks = new Material[] {Material.DEEPSLATE_BRICKS, Material.CRACKED_DEEPSLATE_BRICKS};
-		//Place cylinder below
+		// Place cylinder below
 		cylinderDown(origin, 4, deepSlateBricks);
 		
 		cylinderDown(origin.getUp(), 3, deepSlateBricks);
 		
-		//Place stairs leading to altar
+		// Place stairs leading to altar
 		new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
 		.setFacing(origin.getDirection())
 		.apply(origin.getRear(2).getUp())
@@ -32,7 +32,7 @@ public class AncientCityPathMiniRoomPlacer {
 		origin.getRear(2).getUp().getLeft().fluidize();
 		origin.getRear(2).getUp().getRight().fluidize();
 		
-		//Place the actual altar
+		// Place the actual altar
 		Wall altarCore = origin.getFront(2).getUp(2);
 		altarCore.setType(deepSlateBricks);
 		altarCore.getLeft().setType(deepSlateBricks);
@@ -72,7 +72,7 @@ public class AncientCityPathMiniRoomPlacer {
         for (float x = -radius; x <= radius; x++) {
             for (float z = -radius; z <= radius; z++) {
                 SimpleBlock rel = core.getRelative(Math.round(x), 0, Math.round(z));
-                //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                
                 double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
                         + Math.pow(z, 2) / Math.pow(radius, 2);

@@ -55,7 +55,7 @@ public class SphereCommand extends TerraCommand {
                     double radiusSquared = Math.pow(trueRadius + noise.GetNoise(x, y, z) * 2, 2);
                     SimpleBlock rel = block.getRelative(Math.round(x), Math.round(y), Math.round(z));
                     if (rel.distanceSquared(block) <= radiusSquared) {
-                        //replaced = true;
+                        // replaced = true;
                         rel.setType(Material.STONE);
                     }
                 }

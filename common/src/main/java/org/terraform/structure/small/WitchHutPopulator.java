@@ -42,7 +42,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
             if(x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ())
                 continue;
             int height = GenUtils.getHighestGround(data, x, z);
-            if (height < TerraformGenerator.seaLevel) { //Assume. it's on water
+            if (height < TerraformGenerator.seaLevel) { // Assume. it's on water
                 height = TerraformGenerator.seaLevel + GenUtils.randInt(random, 2, 3);
             } else
                 height += GenUtils.randInt(random, 2, 3);
@@ -53,7 +53,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
     public void spawnSwampHut(TerraformWorld tw, @NotNull Random random,
                               @NotNull PopulatorDataAbstract data, int x, int y, int z) {
 
-        //Refers to center of hut, above the water.
+        // Refers to center of hut, above the water.
         SimpleBlock core = new SimpleBlock(data, x, y, z);
         TerraformGeneratorPlugin.logger.info("Spawning Swamp Hut at " + core.getCoords());
         try {
@@ -64,7 +64,7 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
             swamphut.apply();
             Wall w = new Wall(core.getDown(2), face).getRear();
 
-            //Pillars down
+            // Pillars down
             w.getFront().getRight().downUntilSolid(random, Material.OAK_LOG);
             w.getFront().getLeft(2).downUntilSolid(random, Material.OAK_LOG);
             w.getRear(2).getRight().downUntilSolid(random, Material.OAK_LOG);

@@ -11,6 +11,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
+import org.terraform.main.config.TConfigOption;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
@@ -33,10 +34,10 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
         int[] lowerCorner = room.getLowerCorner(0);
         int[] upperCorner = room.getUpperCorner(0);
         float maxTotalDiff = room.getWidthX()/2f + room.getWidthZ()/2f;
-        //Flooring and ceiling decor
+        // Flooring and ceiling decor
         int y = room.getY();
         
-        //Flooring
+        // Flooring
 
         new SphereBuilder(this.rand, room.getCenterSimpleBlock(data), CatacombsPathPopulator.pathMaterial)
 		.setRX(room.getWidthX()/2f)
@@ -48,14 +49,14 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
         
         for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-//            	//Flooring
+//            	// Flooring
             	if(rand.nextInt(5) < 4)
             		data.setType(x,y,z,GenUtils.randChoice(CatacombsPathPopulator.pathMaterial));
             	else if(!data.getType(x, y, z).isSolid()) {
             		data.setType(x,y,z,GenUtils.randChoice(Material.STONE, Material.ANDESITE, Material.CRACKED_STONE_BRICKS));
             	}
             	
-            	//Ceiling is a fuzzed dome.
+            	// Ceiling is a fuzzed dome.
             	SimpleBlock ceiling = new SimpleBlock(data, x,y+1,z).findCeiling(room.getHeight()+1);
             	if(ceiling != null) {
             		float maxDownExtend = room.getHeight()-4;
@@ -65,20 +66,20 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
             				*maxDownExtend);
             		ceiling.getDown().downLPillar(new Random(), extend, Material.STONE, Material.ANDESITE, Material.CRACKED_STONE_BRICKS);
             		
-            		//Cobwebs
-            		if(rand.nextInt(10) == 0)
+            		// Cobwebs
+            		if(TConfigOption.areDecorationsEnabled() && rand.nextInt(10) == 0)
             			ceiling.getDown(extend+1).getRelative(BlockUtils.getDirectBlockFace(rand))
             			.lsetType(Material.COBWEB);
             	}
             }
         }
         
-        //Walling
+        // Walling
         for(Entry<Wall, Integer> entry:room.getFourWalls(data, 0).entrySet()) {
         	Wall w = entry.getKey();
         	for(int i = 0; i < entry.getValue(); i++) {
         		
-        		//Texture walls
+        		// Texture walls
         		w.getRear().ReplacePillar(room.getHeight(), Material.STONE, Material.ANDESITE);
     			if(rand.nextInt(8) == 4) {
     				Wall target = w.getUp(rand.nextInt(room.getHeight())+1).getRear();
@@ -88,7 +89,7 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
     				}
     			}
         		
-        		//Candles on room entrances
+        		// Candles on room entrances
         		if((w.getUp(2).getLeft().getRear().isAir()||w.getUp(2).getRight().getRear().isAir()) 
         				&& w.getUp(2).getRear().isSolid()){
         			new StairBuilder(Material.STONE_BRICK_STAIRS, Material.MOSSY_STONE_BRICK_STAIRS, Material.COBBLESTONE_STAIRS)
@@ -103,7 +104,7 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
         	}
         }
         
-        //Skeleton Warriors
+        // Skeleton Warriors
     	for(int i = 0; i < 1+rand.nextInt(3); i++)
     	{
     		int[] coords = room.randomCoords(rand, 1);
@@ -120,11 +121,13 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
     	}
     }
     
-    //This has to be isolated into another method because
-    //the chains interfere with lPillar by being solid.
-    //Child classes are responsible for calling this.
+    // This has to be isolated into another method because
+    // the chains interfere with lPillar by being solid.
+    // Child classes are responsible for calling this.
     protected void spawnHangingChains(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-    	for(int i = 3; i <= 10; i++)
+        if ( !TConfigOption.areDecorationsEnabled() ) return;
+
+        for(int i = 3; i <= 10; i++)
     	{
     		int[] coords = room.randomCoords(rand, 1);
     		SimpleBlock target = new SimpleBlock(data, coords[0], room.getY()+1, coords[2]);

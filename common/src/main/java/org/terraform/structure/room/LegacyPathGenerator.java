@@ -62,7 +62,7 @@ public class LegacyPathGenerator {
         
         PathPopulatorData candidate = new PathPopulatorData(base, dir, pathWidth, false);
         candidate.isEnd = true;
-        //Prevent overlapping - path populators don't need to rerun against the same locations
+        // Prevent overlapping - path populators don't need to rerun against the same locations
         if(!path.add(candidate))
         {
         	path.remove(candidate);
@@ -91,14 +91,14 @@ public class LegacyPathGenerator {
         }
 
         BlockFace oldDir = dir;
-        //Only turn if the path is turning at a nice degree
-        //This should prevent weird intersections.
+        // Only turn if the path is turning at a nice degree
+        // This should prevent weird intersections.
         if(length % (1+2*this.pathWidth) == 0) {
             // Make a turn if out of bounds
             while (isOutOfBounds(base.getRelative(dir))) {
                 straightInARow = 0;
 
-                //For ensuring that corners are covered.
+                // For ensuring that corners are covered.
                 int cover = this.pathWidth - 1;
                 if (cover == 0) cover = 1;
                 for (int i = 0; i < cover; i++) {
@@ -107,7 +107,7 @@ public class LegacyPathGenerator {
                 }
                 for (int i = 0; i < cover; i++)
                     base = base.getRelative(dir.getOppositeFace());
-                //turn
+                // turn
                 dir = BlockUtils.getTurnBlockFace(rand, dir);
             }
 
@@ -116,7 +116,7 @@ public class LegacyPathGenerator {
             if (straightInARow > maxNoBend || GenUtils.chance(rand, 1, 500)) {
                 straightInARow = 0;
 
-                //For ensuring that corners are covered
+                // For ensuring that corners are covered
                 int cover = this.pathWidth - 1;
                 if (cover == 0) cover = 1;
                 for (int i = 0; i < cover; i++) {
@@ -125,7 +125,7 @@ public class LegacyPathGenerator {
                 }
                 for (int i = 0; i < cover; i++)
                     base = base.getRelative(dir.getOppositeFace());
-                //turn
+                // turn
                 dir = BlockUtils.getTurnBlockFace(rand, dir);
             }
         }
@@ -135,10 +135,10 @@ public class LegacyPathGenerator {
             setHall();
         }
 
-        /// Handle populating the paths
+        // / Handle populating the paths
         PathPopulatorData candidate = new PathPopulatorData(base, dir, pathWidth, oldDir != dir);
         
-        //Prevent overlapping - path populators don't need to rerun against the same locations
+        // Prevent overlapping - path populators don't need to rerun against the same locations
         if(!path.contains(candidate))
 	        path.add(candidate);
         else
@@ -184,12 +184,12 @@ public class LegacyPathGenerator {
             SimpleBlock rel = base;
             for (int i = 0; i <= pathWidth / 2; i++) {
                 rel = rel.getRelative(f);
-                //Bukkit.getLogger().info(i + ":" + pathWidth/2);
-                if (i == pathWidth / 2) { //Walls
+                // Bukkit.getLogger().info(i + ":" + pathWidth/2);
+                if (i == pathWidth / 2) { // Walls
                     for (int h = 1; h <= pathHeight; h++)
                         if (rel.getRelative(0, h, 0).getType() != Material.CAVE_AIR)
                             rel.getRelative(0, h, 0).setType(GenUtils.randChoice(mat));
-                } else { //Air in hallway (And floor and ceiling)
+                } else { // Air in hallway (And floor and ceiling)
                     if (rel.getType() != Material.CAVE_AIR)
                         rel.setType(GenUtils.randChoice(mat));
                     

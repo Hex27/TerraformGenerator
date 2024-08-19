@@ -30,7 +30,7 @@ public class StairwayBuilder {
 	public StairwayBuilder(Material @NotNull ... stairTypes) {
 		this.stairTypes = stairTypes;
 
-		//Infer downTypes
+		// Infer downTypes
 		ArrayList<Material> downTypes = new ArrayList<>();
 		for(Material mat:stairTypes) {
 			Material toAdd = Material.matchMaterial(
@@ -70,7 +70,7 @@ public class StairwayBuilder {
 	}
 	
 	public @NotNull StairwayBuilder build(@NotNull Wall start) {
-		if(stairDirection == BlockFace.DOWN) { //Stairway extends downwards
+		if(stairDirection == BlockFace.DOWN) { // Stairway extends downwards
 			int threshold = 5;
 	        BlockFace extensionDir = start.getDirection();
 	    	while (continueCondition(start)) {
@@ -97,9 +97,9 @@ public class StairwayBuilder {
 	    		start = start.getRelative(extensionDir).getDown();
 	        }
 
-	    	//If it is on water, build a pathway forward. 
-	    	//Hope that there's something there.
-	    	//Stop on oak slabs specifically too, because that's the path type
+	    	// If it is on water, build a pathway forward.
+	    	// Hope that there's something there.
+	    	// Stop on oak slabs specifically too, because that's the path type
 	    	if(stopAtWater 
 	    			&& start.get().getType() != Material.OAK_SLAB 
 	    			&& BlockUtils.isWet(start.get())) {
@@ -111,7 +111,7 @@ public class StairwayBuilder {
 	    			start = start.getFront();
 	    		}
 	    	}
-		}else if(stairDirection == BlockFace.UP){ //Stairway extends upwards
+		}else if(stairDirection == BlockFace.UP){ // Stairway extends upwards
 			
 			int threshold = 5;
 	        BlockFace extensionDir = start.getDirection();
@@ -137,7 +137,7 @@ public class StairwayBuilder {
 	            
 	    		start.getDown().downUntilSolid(new Random(), downTypes);
 	    		
-	    		//This space is required for movement
+	    		// This space is required for movement
 	    		if(carveAirSpace)
 	    		{
 	    			start.getUp().Pillar(3, new Random(), Material.AIR);
@@ -172,11 +172,11 @@ public class StairwayBuilder {
 				if(target.getY() == stopAtY+1) 
 					return false;
 
-			//Continue carving upwards until the area isn't solid anymore.
+			// Continue carving upwards until the area isn't solid anymore.
 			if (upwardsCarveUntilNotSolid)
 				return target.isSolid();
 
-			//Continue carving upwards until the area is solid anymore.
+			// Continue carving upwards until the area is solid anymore.
 			if(upwardsCarveUntilSolid) 
 				return !target.isSolid();
 			

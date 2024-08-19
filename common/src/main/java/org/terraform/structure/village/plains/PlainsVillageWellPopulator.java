@@ -38,7 +38,7 @@ public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulat
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
 
-    	//This code is repeated from super, as it must be changed a little
+    	// This code is repeated from super, as it must be changed a little
         int y = super.calculateRoomY(data, room);
     	
     	int worldHeight = TerraformGeneratorPlugin.injector.getMaxY()-TerraformGeneratorPlugin.injector.getMinY() + 1;
@@ -48,7 +48,7 @@ public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulat
     		int lowSb = sb.findFloor(worldHeight).getY();
     		if(Math.abs(lowSb - y) > TConfigOption.STRUCTURES_PLAINSVILLAGE_HEIGHT_TOLERANCE.getInt())
     		{
-    			//place platform as uneven ground was detected.
+    			// place platform as uneven ground was detected.
     			this.placeFixerPlatform(y, data, room);
     			break;
     		}
@@ -58,7 +58,7 @@ public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulat
         int z = room.getZ();
         SimpleBlock tester = new SimpleBlock(data,x,y+1,z);
         if(BlockUtils.isWet(tester)) 
-        	y = tester.getGroundOrDry().getY(); //Force wells to not be submerged.
+        	y = tester.getGroundOrDry().getY(); // Force wells to not be submerged.
         
         BlockFace roomDir = ((DirectionalCubeRoom) room).getDirection();
         
@@ -74,7 +74,7 @@ public class PlainsVillageWellPopulator extends PlainsVillageAbstractRoomPopulat
 				boolean breakOut = false;
 				if(i > 0)
 					for(BlockFace face:BlockUtils.flatBlockFaces3x3) {
-						//no solid ground beneath. Do not place water.
+						// no solid ground beneath. Do not place water.
 						if(!core.getRelative(face).getDown(depth+1).isSolid()) {
 							breakOut = true;
 							break;

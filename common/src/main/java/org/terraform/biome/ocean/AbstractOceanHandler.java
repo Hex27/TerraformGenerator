@@ -20,7 +20,7 @@ public abstract class AbstractOceanHandler extends BiomeHandler {
         if(oceanType == BiomeType.DEEP_OCEANIC)
         	height -= 20;
         
-        //If the height is too low, force it back to 3.
+        // If the height is too low, force it back to 3.
         if (height <= 0) height = 3;
         
         return height;

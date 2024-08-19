@@ -104,7 +104,7 @@ public class CylinderBuilder {
             for (float y = startFromZero ? 0 : -effectiveRY; y <= effectiveRY; y++) {
                 for (float z = -rZ; z <= rZ; z++) {
                     SimpleBlock rel = core.getRelative(Math.round(x), Math.round(y), Math.round(z));
-                    //double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
+                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
                     float effectiveY = y;
                     
                     if(Math.abs(y)/rY <= 0.7)

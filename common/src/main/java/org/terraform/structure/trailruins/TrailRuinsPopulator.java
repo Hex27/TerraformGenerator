@@ -32,7 +32,7 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
         int numRooms = 10;
         int range = 40;
 
-        //Level One
+        // Level One
         Random hashedRand = tw.getHashedRand(x, y, z);
         RoomLayoutGenerator gen = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range);
         gen.setPathPopulator(new TrailRuinsPathPopulator(hashedRand));
@@ -42,7 +42,7 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
         gen.setRoomMinZ(6);
         gen.setRoomMaxHeight(15);
         gen.setCarveRooms(true);
-        gen.setCarveRoomsMultiplier(0,0,0); //No carving
+        gen.setCarveRoomsMultiplier(0,0,0); // No carving
 
         CubeRoom towerRoom = new CubeRoom(7,7,7, x,y,z);
         towerRoom.setRoomPopulator(new TrailRuinsTowerRoom(random, false, false));
@@ -63,9 +63,9 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
         if (!isEnabled()) return;
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); //getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];//data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];//data.getChunkZ()*16 + random.nextInt(16);
+        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
 
         int y = GenUtils.getHighestGround(data, x, z) - GenUtils.randInt(
                 this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()),

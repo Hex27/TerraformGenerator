@@ -48,13 +48,13 @@ public class CustomBiomeHandler {
 		CraftServer craftserver = (CraftServer)Bukkit.getServer();
 		DedicatedServer dedicatedserver = craftserver.getServer();
 		MinecraftServer minecraftServer = MinecraftServer.getServer();
-		//ap is BIOME
-		//aV is registryAccess
-		//d is registryOrThrow
+		// ap is BIOME
+		// aV is registryAccess
+		// d is registryOrThrow
 		IRegistryWritable<BiomeBase> registrywritable = (IRegistryWritable<BiomeBase>) getBiomeRegistry();
 		
-		//This thing isn't actually writable, so we have to forcefully UNFREEZE IT
-		//l is frozen
+		// This thing isn't actually writable, so we have to forcefully UNFREEZE IT
+		// l is frozen
 		try {
 			Field frozen = RegistryMaterials.class.getDeclaredField("l");
 			frozen.setAccessible(true);
@@ -64,7 +64,7 @@ public class CustomBiomeHandler {
 			TerraformGeneratorPlugin.logger.stackTrace(e1);
 		}
 		
-		BiomeBase forestbiome = registrywritable.a(Biomes.i); //forest
+		BiomeBase forestbiome = registrywritable.a(Biomes.i); // forest
 	
 		for(CustomBiomeType type:CustomBiomeType.values()) {
 			if(type == CustomBiomeType.NONE)
@@ -101,113 +101,113 @@ public class CustomBiomeHandler {
 
 		ResourceKey<BiomeBase> newKey = ResourceKey.a(Registries.ap, new MinecraftKey("terraformgenerator", biomeType.toString().toLowerCase(Locale.ENGLISH)));
 
-		//BiomeBase.a is BiomeBuilder
+		// BiomeBase.a is BiomeBuilder
 		BiomeBase.a newBiomeBuilder = new BiomeBase.a();
 		
-		//BiomeBase.b is ClimateSettings
-		//d is temperatureModifier
-		//This temperature modifier stuff is more cleanly handled below.
+		// BiomeBase.b is ClimateSettings
+		// d is temperatureModifier
+		// This temperature modifier stuff is more cleanly handled below.
 //		Class<?> climateSettingsClass = Class.forName("net.minecraft.world.level.biome.BiomeBase.b");
 //		Field temperatureModififierField = climateSettingsClass.getDeclaredField("d");
 //		temperatureModififierField.setAccessible(true);
 
-		//i is climateSettings
-        newBiomeBuilder.a(forestbiome.c()); //c is getPrecipitation
+		// i is climateSettings
+        newBiomeBuilder.a(forestbiome.c()); // c is getPrecipitation
 
-		//k is mobSettings
+		// k is mobSettings
 		Field biomeSettingMobsField = BiomeBase.class.getDeclaredField("k");
 		biomeSettingMobsField.setAccessible(true);
 		BiomeSettingsMobs biomeSettingMobs = (BiomeSettingsMobs) biomeSettingMobsField.get(forestbiome);
 		newBiomeBuilder.a(biomeSettingMobs);
 
-		//j is generationSettings
+		// j is generationSettings
 		Field biomeSettingGenField = BiomeBase.class.getDeclaredField("j");
 		biomeSettingGenField.setAccessible(true);
 		BiomeSettingsGeneration biomeSettingGen = (BiomeSettingsGeneration) biomeSettingGenField.get(forestbiome);
 		newBiomeBuilder.a(biomeSettingGen);
 
-        newBiomeBuilder.a(0.7F); //Temperature of biome
-		newBiomeBuilder.b(biomeType.getRainFall()); //Downfall of biome
+        newBiomeBuilder.a(0.7F); // Temperature of biome
+		newBiomeBuilder.b(biomeType.getRainFall()); // Downfall of biome
 
-		//BiomeBase.TemperatureModifier.a will make your biome normal
-		//BiomeBase.TemperatureModifier.b will make your biome frozen
+		// BiomeBase.TemperatureModifier.a will make your biome normal
+		// BiomeBase.TemperatureModifier.b will make your biome frozen
 		if(biomeType.isCold())
 			newBiomeBuilder.a(BiomeBase.TemperatureModifier.b); 
 		else
 			newBiomeBuilder.a(BiomeBase.TemperatureModifier.a); 
 		
 		BiomeFog.a newFog = new BiomeFog.a();
-		newFog.a(GrassColor.a); //This doesn't affect the actual final grass color, just leave this line as it is or you will get errors
+		newFog.a(GrassColor.a); // This doesn't affect the actual final grass color, just leave this line as it is or you will get errors
 		
-		//Set biome colours. If field is empty, default to forest color
+		// Set biome colours. If field is empty, default to forest color
 		
-		//fogcolor
+		// fogcolor
 		newFog.a(biomeType.getFogColor().isEmpty() ? forestbiome.e():Integer.parseInt(biomeType.getFogColor(),16));
 		
-		//water color i is getWaterColor
+		// water color i is getWaterColor
 		newFog.b(biomeType.getWaterColor().isEmpty() ? forestbiome.i():Integer.parseInt(biomeType.getWaterColor(),16));
 		
-		//water fog color j is getWaterFogColor
+		// water fog color j is getWaterFogColor
 		newFog.c(biomeType.getWaterFogColor().isEmpty() ? forestbiome.j():Integer.parseInt(biomeType.getWaterFogColor(),16));
 		
-		//sky color
+		// sky color
 		newFog.d(biomeType.getSkyColor().isEmpty() ? forestbiome.a():Integer.parseInt(biomeType.getSkyColor(),16));
 
 
-		//Unnecessary values; can be removed safely if you don't want to change them
+		// Unnecessary values; can be removed safely if you don't want to change them
 		
-		//foliage color (leaves, fines and more) f is getFoliageColor
+		// foliage color (leaves, fines and more) f is getFoliageColor
 		newFog.e(biomeType.getFoliageColor().isEmpty() ? forestbiome.f():Integer.parseInt(biomeType.getFoliageColor(),16));
 		
-		//grass blocks color
+		// grass blocks color
 		newFog.f(biomeType.getGrassColor().isEmpty() ? Integer.parseInt("79C05A",16):Integer.parseInt(biomeType.getGrassColor(),16));
 
 		
 		newBiomeBuilder.a(newFog.a());
 		
-		BiomeBase biome = newBiomeBuilder.a(); //biomebuilder.build();
+		BiomeBase biome = newBiomeBuilder.a(); // biomebuilder.build();
 
-		//Inject into the data registry for biomes
-		//RegistryGeneration.a(RegistryGeneration.i, newKey, biome);
+		// Inject into the data registry for biomes
+		// RegistryGeneration.a(RegistryGeneration.i, newKey, biome);
 
-        //c is containsKey
+        // c is containsKey
         if(registrywritable.c(newKey))
         {
             TerraformGeneratorPlugin.logger.info(newKey + " was already registered. Was there a plugin/server reload?");
             return;
         }
 
-        //Inject into the biome registry
-        //al is BIOMES
-        //aW is registryAccess
-        //d is registryOrThrow
-        //RegistryMaterials<BiomeBase> registry = (RegistryMaterials<BiomeBase>) getBiomeRegistry();
+        // Inject into the biome registry
+        // al is BIOMES
+        // aW is registryAccess
+        // d is registryOrThrow
+        // RegistryMaterials<BiomeBase> registry = (RegistryMaterials<BiomeBase>) getBiomeRegistry();
 
-        //Inject unregisteredIntrusiveHolders with a new map to allow intrusive holders
-        //m is unregisteredIntrusiveHolders
-        //Field unregisteredIntrusiveHolders = RegistryMaterials.class.getDeclaredField("m");
-        //unregisteredIntrusiveHolders.setAccessible(true);
-        //unregisteredIntrusiveHolders.set(registrywritable, new IdentityHashMap<>());
+        // Inject unregisteredIntrusiveHolders with a new map to allow intrusive holders
+        // m is unregisteredIntrusiveHolders
+        // Field unregisteredIntrusiveHolders = RegistryMaterials.class.getDeclaredField("m");
+        // unregisteredIntrusiveHolders.setAccessible(true);
+        // unregisteredIntrusiveHolders.set(registrywritable, new IdentityHashMap<>());
 
-        //f is createIntrusiveHolder
-        //registrywritable.f(biome);
+        // f is createIntrusiveHolder
+        // registrywritable.f(biome);
 
-		//a is RegistryMaterials.register
-        //Holder.c is Holder.Reference
+		// a is RegistryMaterials.register
+        // Holder.c is Holder.Reference
 		Holder.c<BiomeBase> holder = registrywritable.a(newKey, biome, Lifecycle.stable());
 
-        //Holder.Reference.bindValue
+        // Holder.Reference.bindValue
         Method bindValue = Holder.c.class.getDeclaredMethod("b", Object.class);
         bindValue.setAccessible(true);
         bindValue.invoke(holder, biome);
 
-        //Make unregisteredIntrusiveHolders null again to remove potential for undefined behaviour
-        //unregisteredIntrusiveHolders.set(registrywritable, null);
+        // Make unregisteredIntrusiveHolders null again to remove potential for undefined behaviour
+        // unregisteredIntrusiveHolders.set(registrywritable, null);
 
-        //There is a slightly cleaner way this can be done (void bindValue(T value)
+        // There is a slightly cleaner way this can be done (void bindValue(T value)
         // instead of the whole unregistered intrusive holders stuff),
-        //but it also involves reflection so I don't want to
-        //change this out just yet. Consider for the next version.
+        // but it also involves reflection so I don't want to
+        // change this out just yet. Consider for the next version.
 		terraformGenBiomeRegistry.put(biomeType, newKey);
 	
 	}
@@ -220,7 +220,7 @@ public class CustomBiomeHandler {
         for (Biome biome : Biome.values()) {
             if(biome == null || biome == Biome.CUSTOM) continue;
             try {
-                //Preconditions.checkArgument(biome != Biome.CUSTOM, "Cannot use the biome %s", biome);
+                // Preconditions.checkArgument(biome != Biome.CUSTOM, "Cannot use the biome %s", biome);
                 biomeBases.add(CraftBlock.biomeToBiomeBase(registry, biome));
             } catch(IllegalStateException e) {
                 TerraformGeneratorPlugin.logger.info("Ignoring biome " + biome);
@@ -230,8 +230,8 @@ public class CustomBiomeHandler {
         for(CustomBiomeType cbt:CustomBiomeType.values()) {
             if(cbt == CustomBiomeType.NONE) continue;
             ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);
-            //TerraformGeneratorPlugin.logger.info(cbt + " --- " + rkey);
-            //Holder.c is Holder.Reference. It implements Holder. No idk why.
+            // TerraformGeneratorPlugin.logger.info(cbt + " --- " + rkey);
+            // Holder.c is Holder.Reference. It implements Holder. No idk why.
             Optional<Holder.c<BiomeBase>> holder = registry.b(rkey);
             holder.ifPresent(biomeBases::add);
         }

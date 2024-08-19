@@ -22,21 +22,21 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
 	@Override
     protected void oneUnit(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor, boolean boundary) {
     	
-    	//=========================
-        //Upper decorations
-        //=========================
+    	// =========================
+        // Upper decorations
+        // =========================
 
         int caveHeight = ceil.getY() - floor.getY();
 
-        //Don't touch slabbed floors or stalagmites
+        // Don't touch slabbed floors or stalagmites
         if (Tag.SLABS.isTagged(floor.getType()) ||
         		Tag.WALLS.isTagged(floor.getType()))
             return;
         
-        //All ceiling is dripstone
+        // All ceiling is dripstone
         ceil.setType(Material.DRIPSTONE_BLOCK);
         
-        //Stalactites
+        // Stalactites
         if (GenUtils.chance(random, 1, 4)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
@@ -44,14 +44,14 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
             BlockUtils.downLPointedDripstone(GenUtils.randInt(1, h), ceil.getDown());
         }
 
-        //=========================
-        //Lower decorations 
-        //=========================
+        // =========================
+        // Lower decorations
+        // =========================
 
-        //Floor is dripstone
+        // Floor is dripstone
         floor.setType(Material.DRIPSTONE_BLOCK);
         
-        //Stalagmites
+        // Stalagmites
         if (GenUtils.chance(random, 1, 4)) {
             int h = caveHeight / 4;
             if (h < 1) h = 1;
@@ -59,9 +59,9 @@ public class DripstoneClusterCavePopulator extends AbstractCaveClusterPopulator 
             BlockUtils.upLPointedDripstone(GenUtils.randInt(1,h), floor.getUp());
         }
 
-        //=========================
-        //Biome Setter 
-        //=========================
+        // =========================
+        // Biome Setter
+        // =========================
         if(TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract data) {
             while(floor.getY() < ceil.getY()) {
         		data.setBiome(floor.getX(), floor.getY(), floor.getZ(), Biome.DRIPSTONE_CAVES);

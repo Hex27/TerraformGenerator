@@ -26,20 +26,20 @@ public class PlainsVillageForgeWallPiece extends PlainsVillageForgePiece {
 
     @Override
     public void build(PopulatorDataAbstract data, Random rand) {
-    	//All handled in postBuildDecoration, as the type to build is only identified then.
+    	// All handled in postBuildDecoration, as the type to build is only identified then.
     } 
     
     @Override
     public void postBuildDecoration(@NotNull Random rand, @NotNull PopulatorDataAbstract data) {
-    	if(getWallType() == PlainsVillageForgeWallType.SOLID) { //Wall
+    	if(getWallType() == PlainsVillageForgeWallType.SOLID) { // Wall
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
     		Wall w = entry.getKey().getDown();
     		for (int i = 0; i < entry.getValue(); i++) {
     			w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
     			w.RPillar(5, rand, Material.COBBLESTONE, Material.ANDESITE, Material.STONE);
     			
-    			//Handle window hole placement
-    			if(i == 2) { //Center
+    			// Handle window hole placement
+    			if(i == 2) { // Center
     				w.getUp(2).setType(Material.AIR);
     				new SlabBuilder(Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB,Material.STONE_SLAB,Material.STONE_BRICK_SLAB)
     				.setType(Type.TOP)
@@ -51,11 +51,11 @@ public class PlainsVillageForgeWallPiece extends PlainsVillageForgePiece {
     				
     				w.getFront().downUntilSolid(rand, Material.COBBLESTONE,Material.MOSSY_COBBLESTONE);
     			}
-    			else if(i == 1 || i == 3) { //Beside the opening
+    			else if(i == 1 || i == 3) { // Beside the opening
     				w.getUp(3).getFront().setType(Material.COBBLESTONE_SLAB,Material.ANDESITE_SLAB,Material.STONE_SLAB,Material.STONE_BRICK_SLAB);
     				w.getUp(2).getFront().setType(Material.COBBLESTONE_WALL,Material.STONE_BRICK_WALL,Material.ANDESITE_WALL);
     				
-    				//Stair decor
+    				// Stair decor
     				if(i == 1)
     					new StairBuilder(Material.COBBLESTONE_STAIRS,Material.ANDESITE_STAIRS,Material.STONE_STAIRS,Material.STONE_BRICK_STAIRS)
     					.setFacing(BlockUtils.getRight(w.getDirection()))
@@ -76,7 +76,7 @@ public class PlainsVillageForgeWallPiece extends PlainsVillageForgePiece {
     			w = w.getLeft();
     		}
     	}
-    	else //Fences
+    	else // Fences
     	{
     		SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, getRotation().getOppositeFace(), 0);
     		Wall w = entry.getKey();

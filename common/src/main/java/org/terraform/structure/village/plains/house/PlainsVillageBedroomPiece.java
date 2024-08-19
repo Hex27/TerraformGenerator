@@ -39,9 +39,9 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
 
-        //No walls :V
+        // No walls :V
         if (this.getWalledFaces().isEmpty()) {
-            //Place a dining table or smt, idk
+            // Place a dining table or smt, idk
 
             SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
             core.setType(Material.SMOOTH_STONE);
@@ -62,12 +62,12 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
         }
 
         int placedBeds = 0;
-        //Populate for walled areas
+        // Populate for walled areas
         for (BlockFace face : this.getWalledFaces()) {
             SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, 0);
             Wall w = entry.getKey();
 
-            //First pass, place beds
+            // First pass, place beds
             for (int i = 0; i < entry.getValue(); i++) {
                 if (!w.getFront().isSolid()
                         && placedBeds < 2
@@ -76,46 +76,46 @@ public class PlainsVillageBedroomPiece extends PlainsVillageStandardPiece {
                             || (GenUtils.chance(random, 1, 10) && placedBeds == 1)) {
                         BlockUtils.placeBed(w.get(), BlockUtils.pickBed(), w.getDirection());
                         placedBeds++;
-                        //Spawn a villager on the bed.
+                        // Spawn a villager on the bed.
                         data.addEntity(w.getX(), w.getY() + 1, w.getZ(), EntityType.VILLAGER);
                     }
                 }
                 w = w.getLeft();
             }
 
-            //Second pass, decorate with misc things
+            // Second pass, decorate with misc things
             w = entry.getKey();
 
             for (int i = 0; i < entry.getValue(); i++) {
-                //Don't place stuff in front of doors
+                // Don't place stuff in front of doors
                 if (w.getRear().getType() != plainsVillagePopulator.woodDoor) {
-                    if (!Tag.BEDS.isTagged(w.getType())) { //don't replace beds
+                    if (!Tag.BEDS.isTagged(w.getType())) { // don't replace beds
                         if (Tag.BEDS.isTagged(w.getRight().getType())
                                 || Tag.BEDS.isTagged(w.getLeft().getType())) {
-                            //If next to bed,
+                            // If next to bed,
 
                             if (random.nextBoolean()) {
-                                //Place Night stand
+                                // Place Night stand
                                 new StairBuilder(Material.STONE_BRICK_STAIRS, Material.POLISHED_ANDESITE_STAIRS)
                                         .setFacing(w.getDirection().getOppositeFace())
                                         .setHalf(Half.TOP)
                                         .apply(w);
                                 BlockUtils.pickPottedPlant().build(w.getUp());
                             } else {
-                                //Place Crafting Table
+                                // Place Crafting Table
                                 DecorationsBuilder.CRAFTING_TABLE.build(w);
                             }
 
-                        } else { //Not next to a bed
+                        } else { // Not next to a bed
 
                             if (GenUtils.chance(random, 1, 10)) {
-                                //Chest
+                                // Chest
                                 new ChestBuilder(Material.CHEST)
                                         .setFacing(w.getDirection())
                                         .setLootTable(TerraLootTable.VILLAGE_PLAINS_HOUSE)
                                         .apply(w);
                             } else if (GenUtils.chance(random, 1, 5)) {
-                                //Study table, if there's enough space
+                                // Study table, if there's enough space
                                 if (!w.getFront().isSolid()) {
                                     new SlabBuilder(Material.SMOOTH_STONE_SLAB, Material.POLISHED_ANDESITE_SLAB)
                                             .setType(Slab.Type.TOP)

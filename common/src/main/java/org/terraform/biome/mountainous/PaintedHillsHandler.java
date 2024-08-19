@@ -27,7 +27,7 @@ import java.util.Random;
 
 public class PaintedHillsHandler extends AbstractMountainHandler {
 	
-	//Birch Mountains must be shorter to allow trees to populate.
+	// Birch Mountains must be shorter to allow trees to populate.
 	@Override
 	protected double getPeakMultiplier(@NotNull BiomeSection section, @NotNull Random sectionRandom) {
 		return GenUtils.randDouble(sectionRandom, 1.05, 1.1);
@@ -146,11 +146,11 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
 	 */
 	@Override
     public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
-        double height = HeightMap.CORE.getHeight(tw, x, z);//HeightMap.MOUNTAINOUS.getHeight(tw, x, z); //Added here
+        double height = HeightMap.CORE.getHeight(tw, x, z);// HeightMap.MOUNTAINOUS.getHeight(tw, x, z); // Added here
         
-        //Let mountains cut into adjacent sections.
+        // Let mountains cut into adjacent sections.
         double maxMountainRadius = ((double) BiomeSection.sectionWidth);
-        //Double attrition height
+        // Double attrition height
         height += HeightMap.ATTRITION.getHeight(tw, x, z);
         
         BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
@@ -173,7 +173,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
         
         height = height*heightMultiplier;
         
-        //Add randomised peaks
+        // Add randomised peaks
         FastNoise jaggedPeaksNoise = NoiseCacheHandler.getNoise(
         		tw, 
         		NoiseCacheEntry.BIOME_PAINTEDHILLS_ROCKS_NOISE, 
@@ -191,7 +191,7 @@ public class PaintedHillsHandler extends AbstractMountainHandler {
     	}
     	
         
-        //If the height is too high, just force it to smooth out
+        // If the height is too high, just force it to smooth out
         if (height > 200) height = 200 + (height - 200) * 0.5;
         if (height > 230) height = 230 + (height - 230) * 0.3;
         if (height > 240) height = 240 + (height - 240) * 0.1;

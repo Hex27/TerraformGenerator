@@ -51,7 +51,7 @@ public class FarmhouseSchematicParser extends SchematicParser {
         } else if (data.getMaterial() == Material.CHEST) {
             if (GenUtils.chance(rand, 1, 5)) {
                 block.setType(Material.AIR);
-                return; //A fifth of chests are not placed.
+                return; // A fifth of chests are not placed.
             }
             super.applyData(block, data);
             pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.VILLAGE_PLAINS_HOUSE);

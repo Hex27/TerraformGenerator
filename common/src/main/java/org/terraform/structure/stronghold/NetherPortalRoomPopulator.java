@@ -20,7 +20,7 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-        //Wall up all entrances with wooden planks
+        // Wall up all entrances with wooden planks
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall wall = entry.getKey().clone();
             int length = entry.getValue();
@@ -38,7 +38,7 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
         int x = room.getX();
         int z = room.getZ();
 
-        //Make some nether corruption
+        // Make some nether corruption
         BlockUtils.replaceUpperSphere(rand.nextInt(123), rX, rY, rZ,
                 new SimpleBlock(data, x, y, z), true,
                 Material.NETHERRACK,
@@ -58,7 +58,7 @@ public class NetherPortalRoomPopulator extends RoomPopulatorAbstract {
         Material[] blocks = {Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN, Material.OBSIDIAN,
                 Material.CAVE_AIR};
 
-        //Spawn a nether portal
+        // Spawn a nether portal
         wall.getRight().getRight().Pillar(5, rand, blocks);
         wall.Pillar(5, rand, blocks);
         wall.getRight().Pillar(5, rand, blocks);

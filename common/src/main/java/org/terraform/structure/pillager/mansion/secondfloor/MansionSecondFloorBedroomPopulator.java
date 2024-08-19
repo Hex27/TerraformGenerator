@@ -33,13 +33,13 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 		super(room, internalWalls);
 	}
 
-	//Refers to the bedroom room width, not the width of one room cell.
+	// Refers to the bedroom room width, not the width of one room cell.
 	private static final int roomWidth = 15;
 	@Override
 	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 		int[] lowerBounds = this.getRoom().getLowerCorner(1);
 		BlockFace randomFace = BlockUtils.getDirectBlockFace(random);
-		//TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
+		// TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
 		try {
 			if(randomFace == BlockFace.NORTH) {
 				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);
@@ -95,8 +95,8 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	@Override
 	public void decorateWall(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(2);
-        //Table
-        if(choice == 0) { //Andesite table with banner and lectern
+        // Table
+        if(choice == 0) { // Andesite table with banner and lectern
             w.getLeft(3).Pillar(6, Material.DARK_OAK_LOG);
             w.getRight(3).Pillar(6, Material.DARK_OAK_LOG);
             new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
@@ -131,8 +131,8 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
 	@Override
 	public void decorateWindow(@NotNull Random rand, @NotNull Wall w) {
 		int choice = rand.nextInt(2);
-        //Utility Block
-        if(choice == 0) { //Table with flowers
+        // Utility Block
+        if(choice == 0) { // Table with flowers
 			new StairBuilder(Material.POLISHED_ANDESITE_STAIRS)
 			.setHalf(Half.TOP)
 			.setFacing(BlockUtils.getLeft(w.getDirection()))

@@ -31,13 +31,13 @@ public class PlainsVillageLibraryPiece extends PlainsVillageStandardPiece {
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
 
-        //In the center, place a single lectern
+        // In the center, place a single lectern
         SimpleBlock core = new SimpleBlock(data, this.getRoom().getX(), this.getRoom().getY() + 1, this.getRoom().getZ());
         new DirectionalBuilder(Material.LECTERN)
                 .setFacing(BlockUtils.getDirectBlockFace(random))
                 .apply(core);
 
-        //Populate for walled areas
+        // Populate for walled areas
         for (BlockFace face : this.getWalledFaces()) {
             SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, face, 0);
             Wall w = entry.getKey();

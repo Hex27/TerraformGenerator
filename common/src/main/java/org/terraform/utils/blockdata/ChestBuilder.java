@@ -62,8 +62,8 @@ public class ChestBuilder {
         {
             original.setBlockData(blockData);
             extended.setBlockData(blockData);
-            originalChest = (Chest) blockData.clone(); //original.getBlockData();
-            extendedChest = (Chest) blockData.clone(); //original.getBlockData();
+            originalChest = (Chest) blockData.clone(); // original.getBlockData();
+            extendedChest = (Chest) blockData.clone(); // original.getBlockData();
         }
 
     	
