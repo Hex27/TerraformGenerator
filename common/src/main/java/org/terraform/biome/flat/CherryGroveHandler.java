@@ -37,7 +37,7 @@ public class CherryGroveHandler extends BiomeHandler {
 
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
-        return CustomBiomeType.CHERRY_GROVE;
+        return CustomBiomeType.GLACIERBORN_LAND;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class CherryGroveHandler extends BiomeHandler {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
             sLoc.setY(treeY);
 
-            if (tw.getBiomeBank(sLoc.getX(), sLoc.getZ()) == BiomeBank.CHERRY_GROVE
+            if (tw.getBiomeBank(sLoc.getX(), sLoc.getZ()) == BiomeBank.GLACIERBORN_LAND
                 && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))
             {
                 switch (random.nextInt(20)) // 0 to 19 inclusive

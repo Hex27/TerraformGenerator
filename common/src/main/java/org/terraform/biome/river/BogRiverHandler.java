@@ -37,7 +37,7 @@ public class BogRiverHandler extends BiomeHandler {
 
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
-        return CustomBiomeType.MUDDY_BOG;
+        return CustomBiomeType.SUNFORGED_LAND;
     }
 
 
@@ -89,7 +89,7 @@ public class BogRiverHandler extends BiomeHandler {
                 int height = (int) Math.round((maxHeight * noise));
 
                 if (tw.getBiomeBank(rawX, rawZ) != BiomeBank.BOG_RIVER
-                    && tw.getBiomeBank(rawX, rawZ) != BiomeBank.MUDDY_BOG
+                    && tw.getBiomeBank(rawX, rawZ) != BiomeBank.SUNFORGED_LAND
                     && tw.getBiomeBank(rawX, rawZ) != BiomeBank.BOG_BEACH)
                 {
                     height = 0;

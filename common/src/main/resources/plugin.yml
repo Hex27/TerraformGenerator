@@ -1,8 +1,8 @@
-name: TerraformGenerator
-author: Hex_27
+name: MysticBiomes
+author: BadgersMC
 version: 16.2.0
 api-version: 1.18
-description: World Generator
+description: World Generator for play.mysticdominions.com
 main: org.terraform.main.TerraformGeneratorPlugin
 load: STARTUP
 folia-supported: true

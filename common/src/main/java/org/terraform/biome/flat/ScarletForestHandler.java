@@ -33,7 +33,7 @@ public class ScarletForestHandler extends BiomeHandler {
 
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
-        return CustomBiomeType.SCARLET_FOREST;
+        return CustomBiomeType.LEAFSTRIDER_LAND;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ScarletForestHandler extends BiomeHandler {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
             sLoc.setY(treeY);
 
-            if (tw.getBiomeBank(sLoc.getX(), sLoc.getZ()) == BiomeBank.SCARLET_FOREST
+            if (tw.getBiomeBank(sLoc.getX(), sLoc.getZ()) == BiomeBank.LEAFSTRIDER_LAND
                 && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))
             {
                 if (TConfig.c.TREES_SCARLET_BIG_ENABLED) {

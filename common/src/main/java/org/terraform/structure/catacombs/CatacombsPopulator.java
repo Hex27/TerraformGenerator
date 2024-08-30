@@ -42,15 +42,15 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
 
         // Don't compete with villages for space. In future, this may be changed
         // to allow multiple structures per megachunk
-        if (biome == (BiomeBank.PLAINS)
-            || biome == (BiomeBank.FOREST)
-            || biome == (BiomeBank.SAVANNA)
-            || biome == (BiomeBank.TAIGA)
-            || biome == (BiomeBank.SCARLET_FOREST)
-            || biome == (BiomeBank.CHERRY_GROVE))
-        {
-            return false;
-        }
+        //if (biome == (BiomeBank.PLAINS)
+        //    || biome == (BiomeBank.FOREST)
+        //    || biome == (BiomeBank.SAVANNA)
+        //    || biome == (BiomeBank.TAIGA)
+        //    || biome == (BiomeBank.LEAFSTRIDER_LAND)
+        //    || biome == (BiomeBank.GLACIERBORN_LAND))
+        //{
+        //    return false;
+        //}
 
         // Do height and space checks
         int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);

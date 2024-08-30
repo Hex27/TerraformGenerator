@@ -105,6 +105,9 @@ public class TrailRuinsPopulator extends SingleMegaChunkStructurePopulator {
                && (BiomeBank.isBiomeEnabled(BiomeBank.TAIGA)
                    || BiomeBank.isBiomeEnabled(BiomeBank.SNOWY_TAIGA)
                    || BiomeBank.isBiomeEnabled(BiomeBank.JUNGLE))
+                   || BiomeBank.isBiomeEnabled(BiomeBank.LEAFSTRIDER_LAND)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.SUNFORGED_LAND)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.GLACIERBORN_LAND)
                && TConfig.c.STRUCTURES_TRAILRUINS_ENABLED;
     }
 

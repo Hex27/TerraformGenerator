@@ -28,7 +28,7 @@ public class ScarletForestRiverHandler extends BiomeHandler {
 
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
-        return CustomBiomeType.SCARLET_FOREST;
+        return CustomBiomeType.LEAFSTRIDER_LAND;
     }
 
     @Override

@@ -39,7 +39,7 @@ public class MuddyBogHandler extends BiomeHandler {
 
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
-        return CustomBiomeType.MUDDY_BOG;
+        return CustomBiomeType.SUNFORGED_LAND;
     }
 
     // Beach type. This will be used instead if the height is too close to sea level.
@@ -141,7 +141,7 @@ public class MuddyBogHandler extends BiomeHandler {
     }
 
     private boolean isRightBiome(BiomeBank bank) {
-        return bank == BiomeBank.MUDDY_BOG || bank == BiomeBank.BOG_BEACH;
+        return bank == BiomeBank.SUNFORGED_LAND || bank == BiomeBank.BOG_BEACH;
     }
 
     @Override

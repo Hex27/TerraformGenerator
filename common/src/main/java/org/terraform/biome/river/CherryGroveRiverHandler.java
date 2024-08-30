@@ -28,7 +28,7 @@ public class CherryGroveRiverHandler extends BiomeHandler {
 
     @Override
     public @NotNull CustomBiomeType getCustomBiome() {
-        return CustomBiomeType.CHERRY_GROVE;
+        return CustomBiomeType.GLACIERBORN_LAND;
     }
 
     @Override

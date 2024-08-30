@@ -7,9 +7,9 @@ import java.util.Locale;
 
 public enum CustomBiomeType {
     NONE,
-    MUDDY_BOG("b8ad49", "9c8046", "b8ad49", "d9cd62", "ad8445", "ad8445"),
-    CHERRY_GROVE("", "69faff", "", "87fffb", "ffa1fc", "acff96"),
-    SCARLET_FOREST("", "", "", "", "fc3103", "ff7700"),
+    SUNFORGED_LAND("b8ad49", "9c8046", "b8ad49", "d9cd62", "ad8445", "ad8445"),
+    GLACIERBORN_LAND("", "69faff", "", "87fffb", "ffa1fc", "acff96"),
+    LEAFSTRIDER_LAND("", "", "", "", "fc3103", "ff7700"),
     CRYSTALLINE_CLUSTER("e54fff", "c599ff", "e54fff", "", "", ""),
     ;
 
@@ -24,7 +24,7 @@ public enum CustomBiomeType {
     private boolean isCold = false;
 
     CustomBiomeType() {
-        this.key = "terraformgenerator:" + this.toString().toLowerCase(Locale.ENGLISH);
+        this.key = "MysticBiomes:" + this.toString().toLowerCase(Locale.ENGLISH);
         this.fogColor = "";
         this.waterColor = "";
         this.waterFogColor = "";
@@ -40,7 +40,7 @@ public enum CustomBiomeType {
                     String foliageColor,
                     String grassColor)
     {
-        this.key = "terraformgenerator:" + this.toString().toLowerCase(Locale.ENGLISH);
+        this.key = "MysticBiomes:" + this.toString().toLowerCase(Locale.ENGLISH);
         this.fogColor = fogColor;
         this.waterColor = waterColor;
         this.waterFogColor = waterFogColor;

@@ -42,8 +42,9 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
             || biome == (BiomeBank.FOREST)
             || biome == (BiomeBank.SAVANNA)
             || biome == (BiomeBank.TAIGA)
-            || biome == (BiomeBank.SCARLET_FOREST)
-            || biome == (BiomeBank.CHERRY_GROVE))
+            || biome == (BiomeBank.SUNFORGED_LAND)
+            || biome == (BiomeBank.GLACIERBORN_LAND)
+            || biome == (BiomeBank.LEAFSTRIDER_LAND))
         {
 
             return rollSpawnRatio(tw, chunkX, chunkZ);
@@ -72,8 +73,8 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
         //       		|| banks.contains(BiomeBank.FOREST)
         //       		|| banks.contains(BiomeBank.SAVANNA)
         //       		|| banks.contains(BiomeBank.TAIGA)
-        //       		|| banks.contains(BiomeBank.SCARLET_FOREST)
-        //       		|| banks.contains(BiomeBank.CHERRY_GROVE)) {
+        //       		|| banks.contains(BiomeBank.LEAFSTRIDER_LAND)
+        //       		|| banks.contains(BiomeBank.GLACIERBORN_LAND)) {
 
         new PlainsVillagePopulator().populate(tw, data);
         //        }
@@ -93,8 +94,9 @@ public class VillagePopulator extends SingleMegaChunkStructurePopulator {
                    || BiomeBank.isBiomeEnabled(BiomeBank.FOREST)
                    || BiomeBank.isBiomeEnabled(BiomeBank.SAVANNA)
                    || BiomeBank.isBiomeEnabled(BiomeBank.TAIGA)
-                   || BiomeBank.isBiomeEnabled(BiomeBank.SCARLET_FOREST)
-                   || BiomeBank.isBiomeEnabled(BiomeBank.CHERRY_GROVE))
+                   || BiomeBank.isBiomeEnabled(BiomeBank.LEAFSTRIDER_LAND)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.SUNFORGED_LAND)
+                   || BiomeBank.isBiomeEnabled(BiomeBank.GLACIERBORN_LAND))
                && TConfig.c.STRUCTURES_PLAINSVILLAGE_ENABLED;
     }
 }

@@ -251,7 +251,7 @@ public enum BiomeBank {
             BiomeClimate.DRY_VEGETATION,
             TConfig.c.BIOME_SAVANNA_WEIGHT
     ),
-    MUDDY_BOG(new MuddyBogHandler(),
+    SUNFORGED_LAND(new MuddyBogHandler(),
             BiomeType.FLAT,
             BiomeClimate.DRY_VEGETATION,
             TConfig.c.BIOME_MUDDYBOG_WEIGHT
@@ -282,12 +282,12 @@ public enum BiomeBank {
             BiomeClimate.COLD,
             TConfig.c.BIOME_ERODED_PLAINS_WEIGHT
     ),
-    SCARLET_FOREST(new ScarletForestHandler(),
+    LEAFSTRIDER_LAND(new ScarletForestHandler(),
             BiomeType.FLAT,
             BiomeClimate.COLD,
             TConfig.c.BIOME_SCARLETFOREST_WEIGHT
     ),
-    CHERRY_GROVE(new CherryGroveHandler(),
+    GLACIERBORN_LAND(new CherryGroveHandler(),
             BiomeType.FLAT,
             BiomeClimate.COLD,
             TConfig.c.BIOME_CHERRYGROVE_WEIGHT
