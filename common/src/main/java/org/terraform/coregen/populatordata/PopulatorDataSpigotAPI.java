@@ -130,6 +130,8 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
 
     @Override
     public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
+        if (!TConfig.areAnimalsEnabled()) return;
+
         if (!lr.isInRegion(rawX, rawY, rawZ)) {
             return; // just forget it
         }
