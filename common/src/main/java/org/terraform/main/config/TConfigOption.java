@@ -158,7 +158,8 @@ public enum TConfigOption {
     // -=[MISC]=-
     // MISC_SMOOTH_DESIGN("misc.smooth-design",false),
     MISC_SAPLING_CUSTOM_TREES_ENABLED("misc.custom-small-trees-from-saplings.enabled", true),
-    MISC_SAPLING_CUSTOM_TREES_BIGTREES("misc.custom-small-trees-from-saplings.big-jungle-tree", true),
+    MISC_SAPLING_CUSTOM_TREES_BIGTREES_JUNGLE("misc.custom-small-trees-from-saplings.big-jungle-tree", true),
+    MISC_SAPLING_CUSTOM_TREES_BIGTREES_SPRUCE("misc.custom-small-trees-from-saplings.big-spruce-tree", true),
     MISC_TREES_FORCE_LOGS("misc.trees.only-use-logs-no-wood", false),
     MISC_TREES_GRADIENT_LIMIT("misc.trees.ground-gradient-limit", 1.3d),
     MISC_USE_SLABS_TO_SMOOTH("misc.use-slabs-to-smooth-terrain", true),

@@ -31,22 +31,6 @@ public class OrePopulator {
     private final boolean ignorePeakSpawnChance;
 
     public OrePopulator(Material type, int baseChance, int maxOreSize,
-                        int maxNumberOfVeins, int peakSpawnChanceHeight, int maxSpawnHeight, 
-                        boolean ignorePeakSpawnChance, BiomeBank... requiredBiomes) {
-        this.type = type;
-        this.baseChance = baseChance;
-        this.maxOreSize = maxOreSize;
-        this.minOreSize = maxOreSize/2;
-        this.maxNumberOfVeins = maxNumberOfVeins;
-        this.peakSpawnChanceHeight = peakSpawnChanceHeight;
-        this.maxSpawnHeight = maxSpawnHeight;
-        this.requiredBiomes = requiredBiomes;
-        this.ignorePeakSpawnChance = ignorePeakSpawnChance;
-        this.minRange = TerraformGeneratorPlugin.injector.getMinY()+1;
-        this.maxDistance = Math.max(Math.abs(minRange - peakSpawnChanceHeight), Math.abs(maxSpawnHeight - peakSpawnChanceHeight));
-    }
-
-    public OrePopulator(Material type, int baseChance, int maxOreSize,
                         int maxNumberOfVeins, int minRange, int peakSpawnChanceHeight, 
                         int maxSpawnHeight, boolean ignorePeakSpawnChance, 
                         BiomeBank... requiredBiomes) {
@@ -62,6 +46,7 @@ public class OrePopulator {
         this.ignorePeakSpawnChance = ignorePeakSpawnChance;
         // this.minRange = TerraformGeneratorPlugin.injector.getMinY()+1;
         this.maxDistance = Math.max(Math.abs(minRange - peakSpawnChanceHeight), Math.abs(maxSpawnHeight - peakSpawnChanceHeight));
+        TerraformGeneratorPlugin.logger.debug("Initialising ore type: " + type + " maxNumberOfVeins: " + this.maxNumberOfVeins);
     }
     
     public void populate(@NotNull TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
@@ -76,8 +61,7 @@ public class OrePopulator {
     		
     		if(!canPopulate) return;
     	}
-    	
-    	// Attempt maxNumberOfVeins number of times
+        // Attempt maxNumberOfVeins number of times
     	for (int i = 0; i < this.maxNumberOfVeins; i++) {
     		
     		// Roll chance to spawn one ore

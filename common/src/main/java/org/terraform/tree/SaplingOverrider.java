@@ -65,7 +65,7 @@ public class SaplingOverrider implements Listener {
                 break;
             case JUNGLE_LEAVES:
 
-                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean()
+                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES_JUNGLE.getBoolean()
                         && isLarge)
                     new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG)
                             .skipGradientCheck()
@@ -78,7 +78,7 @@ public class SaplingOverrider implements Listener {
                         .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
                 break;
             case SPRUCE_LEAVES:
-                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES.getBoolean()
+                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES_SPRUCE.getBoolean()
                         && isLarge)
                 {
                     FractalTypes.Tree.TAIGA_BIG

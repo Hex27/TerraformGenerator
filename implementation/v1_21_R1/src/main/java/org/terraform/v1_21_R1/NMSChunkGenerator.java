@@ -2,12 +2,10 @@ package org.terraform.v1_21_R1;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.SystemUtils;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.IRegistryCustom;
-import net.minecraft.core.SectionPosition;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import net.minecraft.*;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.server.MinecraftServer;
@@ -18,17 +16,14 @@ import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.GeneratorAccessSeed;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.StructureManager;
-import net.minecraft.world.level.biome.BiomeManager;
-import net.minecraft.world.level.biome.WorldChunkManager;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
-import net.minecraft.world.level.chunk.IChunkAccess;
-import net.minecraft.world.level.levelgen.HeightMap;
-import net.minecraft.world.level.levelgen.RandomState;
-import net.minecraft.world.level.levelgen.WorldGenStage;
+import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.chunk.*;
+import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.structures.BuriedTreasureStructure;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
@@ -53,10 +48,13 @@ import org.terraform.structure.small.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.trialchamber.TrialChamberPopulator;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class NMSChunkGenerator extends ChunkGenerator {
     private final @NotNull ChunkGenerator delegate;
@@ -65,7 +63,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
     private final @NotNull TerraformWorldProviderBiome twBS;
     private final @NotNull Method tryGenerateStructure;
     private final ArrayList<MinecraftKey> possibleStructureSets = new ArrayList<>();
-    public NMSChunkGenerator(String worldName, long seed, @NotNull ChunkGenerator delegate) throws NoSuchMethodException, SecurityException{
+
+    private final @NotNull Method getWriteableArea;
+    private final @NotNull Supplier featuresPerStep;
+
+    public NMSChunkGenerator(String worldName, long seed, @NotNull ChunkGenerator delegate)
+            throws NoSuchMethodException, SecurityException, NoSuchFieldException, IllegalAccessException
+    {
         super(
                 delegate.d(), // WorldChunkManager d() is getBiomeSource()
                 delegate.d); // Idk what generationSettingsGetter is
@@ -76,6 +80,14 @@ public class NMSChunkGenerator extends ChunkGenerator {
         // is initiated inside the cave carver
         mapRendererBS = new MapRenderWorldProviderBiome(tw, delegate.d());
         twBS = new TerraformWorldProviderBiome(TerraformWorld.get(worldName, seed), delegate.d());
+
+        //This is needed for addVanillaFeatures
+        Field f = ChunkGenerator.class.getDeclaredField("c");
+        f.setAccessible(true);
+        featuresPerStep = (Supplier) f.get(delegate);
+
+        getWriteableArea = ChunkGenerator.class.getDeclaredMethod("a", IChunkAccess.class);
+        getWriteableArea.setAccessible(true);
 
         // This is tryGenerateStructure
         // Register VanillaStructurePopulators to allow Minecraft to properly
@@ -180,6 +192,174 @@ public class NMSChunkGenerator extends ChunkGenerator {
         // This triggers structure gen. Needed for VanillaStructurePopulator
         addVanillaDecorations(generatoraccessseed,ichunkaccess, structuremanager);
     }
+
+    //This has to be overridden because calling the normal one will make vanilla
+    // generate ores. The giant commented swath of stuff did it
+    @Override
+    public void addVanillaDecorations(GeneratorAccessSeed generatoraccessseed, IChunkAccess ichunkaccess, StructureManager structuremanager) { // CraftBukkit
+        ChunkCoordIntPair chunkcoordintpair = ichunkaccess.f(); //getPos
+
+        //debugVoidTerrain
+        if (!SharedConstants.a(chunkcoordintpair)) {
+            //SectionPosition.of(...,generatoraccessseed.getMinSection())
+            SectionPosition sectionposition = SectionPosition.a(chunkcoordintpair, generatoraccessseed.ao());
+            BlockPosition blockposition = sectionposition.j(); //origin()
+
+            //generatorAccessSeed.registryAccess().registryOrThrow(Registries.STRUCTURE)
+            IRegistry<Structure> iregistry = generatoraccessseed.H_().d(Registries.aR);
+
+            //iregistry.stream()
+            Map<Integer, List<Structure>> map = (Map) iregistry.t().collect(Collectors.groupingBy((structure) -> {
+                //structure.step()
+                return structure.c().ordinal();
+            }));
+            List<FeatureSorter.b> list = (List) featuresPerStep.get(); //this.featuresPerStep
+            SeededRandom seededrandom = new SeededRandom(new XoroshiroRandomSource(RandomSupport.a())); //generateUniqueSeed
+            //seededrandom.setDecorationSeed(generatoraccessseed.getSeed(), blockposition.getX(), blockposition.getZ())
+            long i = seededrandom.a(generatoraccessseed.C(), blockposition.u(), blockposition.w());
+            Set<Holder<BiomeBase>> set = new ObjectArraySet();
+//            ChunkCoordIntPair.rangeClosed(sectionposition.chunk(),...
+            ChunkCoordIntPair.a(sectionposition.r(), 1).forEach((chunkcoordintpair1) -> {
+//              IChunkAccess ichunkaccess1 = generatoraccessseed.getChunk(chunkcoordintpair1.x, chunkcoordintpair1.z);
+                IChunkAccess ichunkaccess1 = generatoraccessseed.a(chunkcoordintpair1.e, chunkcoordintpair1.f);
+                ChunkSection[] achunksection = ichunkaccess1.d(); //getSections
+                int j = achunksection.length;
+
+                for (int k = 0; k < j; ++k) {
+                    ChunkSection chunksection = achunksection[k];
+                    //getBiomes
+                    PalettedContainerRO<Holder<BiomeBase>> palettedcontainerro = chunksection.i(); // CraftBukkit - decompile error
+
+                    Objects.requireNonNull(set);
+                    palettedcontainerro.a(set::add); //getAll
+                }
+
+            });
+            //set.retainAll(this.biomeSource.possibleBiomes());
+            set.retainAll(this.b.c());
+            int j = list.size();
+
+            try {
+                //generatoraccessseed.registryAccess().registryOrThrow(Registries.PLACED_FEATURE);
+                IRegistry<PlacedFeature> iregistry1 = generatoraccessseed.H_().d(Registries.aQ);
+                int k = Math.max(WorldGenStage.Decoration.values().length, j);
+
+                for (int l = 0; l < k; ++l) {
+                    int i1 = 0;
+                    Iterator iterator;
+                    CrashReportSystemDetails crashreportsystemdetails;
+
+                    if (structuremanager.a()) { //shouldGenerateStructures
+                        List<Structure> list1 = (List) map.getOrDefault(l, Collections.emptyList());
+
+                        for (iterator = list1.iterator(); iterator.hasNext(); ++i1) {
+                            Structure structure = (Structure) iterator.next();
+
+                            seededrandom.b(i, i1, l); //setFeatureSeed
+                            Supplier<String> supplier = () -> {
+                                //getResourceKey
+                                Optional optional = iregistry.d(structure).map(Object::toString);
+
+                                Objects.requireNonNull(structure);
+                                return (String) optional.orElseGet(structure::toString);
+                            };
+
+                            try {
+                                //setCurrentlyGenerating
+                                generatoraccessseed.a(supplier);
+                                //startsForStructure
+                                structuremanager.a(sectionposition, structure).forEach((structurestart) -> {
+                                    //placeInChunk(...getWritableArea...)
+                                    try{
+                                        structurestart.a(generatoraccessseed, structuremanager, this,
+                                                seededrandom, (StructureBoundingBox) getWriteableArea.invoke(null,ichunkaccess),
+                                                chunkcoordintpair);
+                                    }catch(IllegalAccessException | InvocationTargetException e){
+                                        CrashReport crashreport = CrashReport.a(e, "TerraformGenerator");
+                                        throw new ReportedException(crashreport);
+                                    }
+                                });
+                            } catch (Exception exception) {
+                                //forThrowable
+                                CrashReport crashreport = CrashReport.a(exception, "Feature placement");
+
+                                crashreportsystemdetails = crashreport.a("Feature"); //addCategory
+                                Objects.requireNonNull(supplier);
+                                crashreportsystemdetails.a("Description", supplier::get); //setDetail
+                                throw new ReportedException(crashreport);
+                            }
+                        }
+                    }
+
+                    /*
+                    if (l < j) {
+                        IntArraySet intarrayset = new IntArraySet();
+
+                        iterator = set.iterator();
+
+                        while (iterator.hasNext()) {
+                            Holder<BiomeBase> holder = (Holder) iterator.next();
+                            List<HolderSet<PlacedFeature>> list2 = ((BiomeSettingsGeneration) this.generationSettingsGetter.apply(holder)).features();
+
+                            if (l < list2.size()) {
+                                HolderSet<PlacedFeature> holderset = (HolderSet) list2.get(l);
+                                FeatureSorter.b featuresorter_b = (FeatureSorter.b) list.get(l);
+
+                                holderset.stream().map(Holder::value).forEach((placedfeature) -> {
+                                    intarrayset.add(featuresorter_b.indexMapping().applyAsInt(placedfeature));
+                                });
+                            }
+                        }
+
+                        int j1 = intarrayset.size();
+                        int[] aint = intarrayset.toIntArray();
+
+                        Arrays.sort(aint);
+                        FeatureSorter.b featuresorter_b1 = (FeatureSorter.b) list.get(l);
+
+                        for (int k1 = 0; k1 < j1; ++k1) {
+                            int l1 = aint[k1];
+                            PlacedFeature placedfeature = (PlacedFeature) featuresorter_b1.features().get(l1);
+                            Supplier<String> supplier1 = () -> {
+                                Optional optional = iregistry1.getResourceKey(placedfeature).map(Object::toString);
+
+                                Objects.requireNonNull(placedfeature);
+                                return (String) optional.orElseGet(placedfeature::toString);
+                            };
+
+                            seededrandom.setFeatureSeed(i, l1, l);
+
+                            try {
+                                generatoraccessseed.setCurrentlyGenerating(supplier1);
+                                placedfeature.placeWithBiomeCheck(generatoraccessseed, this, seededrandom, blockposition);
+                            } catch (Exception exception1) {
+                                //forThrowable
+                                CrashReport crashreport1 = CrashReport.a(exception1, "Feature placement");
+
+                                crashreportsystemdetails = crashreport1.a("Feature"); //addCategory
+                                Objects.requireNonNull(supplier1);
+                                crashreportsystemdetails.a("Description", supplier1::get); //setDetail
+                                throw new ReportedException(crashreport1);
+                            }
+                        }
+                    }
+                    */
+                }
+
+                generatoraccessseed.a((Supplier) null); //setCurrentlyGenerating
+            } catch (Exception exception2) {
+                //forThrowable
+                CrashReport crashreport2 = CrashReport.a(exception2, "Biome decoration");
+
+                crashreport2.a("Generation") //addCategory
+                            .a("CenterX", (Object) chunkcoordintpair.e) //setDetail
+                            .a("CenterZ", (Object) chunkcoordintpair.f) //setDetail
+                            .a("Decoration Seed", (Object) i); //setDetail
+                throw new ReportedException(crashreport2);
+            }
+        }
+    }
+
 
     @Override // applyCarvers
     public void a(RegionLimitedWorldAccess regionlimitedworldaccess, long seed,
