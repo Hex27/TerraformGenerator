@@ -132,7 +132,8 @@ public class TerraformStructurePopulator extends BlockPopulator {
         BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
 
         // Special Case
-        if(!TConfigOption.areStructuresEnabled() && new StrongholdPopulator().canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
+        if(TConfigOption.areStructuresEnabled()
+           && new StrongholdPopulator().canSpawn(tw, data.getChunkX(), data.getChunkZ(), biome)) {
             TerraformGeneratorPlugin.logger.info("Generating Stronghold at chunk: " + data.getChunkX() + "," + data.getChunkZ());
             new StrongholdPopulator().populate(tw, data);
         }
