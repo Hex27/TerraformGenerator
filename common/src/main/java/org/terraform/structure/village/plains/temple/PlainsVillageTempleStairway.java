@@ -18,7 +18,7 @@ public class PlainsVillageTempleStairway extends JigsawStructurePiece {
 
     @Override
     public void build(@NotNull PopulatorDataAbstract data, Random rand) {
-        this.getRoom().fillRoom(data, new Material[]{Material.YELLOW_STAINED_GLASS});
+        this.getRoom().fillRoom(data, new Material[] {Material.YELLOW_STAINED_GLASS});
     }
 
 }

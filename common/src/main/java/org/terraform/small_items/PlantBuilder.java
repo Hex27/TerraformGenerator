@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -84,18 +84,53 @@ public enum PlantBuilder {
         this(material, false);
     }
 
-    public void build(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if ( !TConfigOption.arePlantsEnabled() ) return;
+    public static void build(@NotNull SimpleBlock block, @NotNull PlantBuilder... options) {
+        randChoice(options).build(block.getPopData(), block.getX(), block.getY(), block.getZ());
+    }
 
-        if(isDoublePlant) {
+    public static void build(@NotNull Random rand,
+                             @NotNull PopulatorDataAbstract data,
+                             int x,
+                             int y,
+                             int z,
+                             @NotNull PlantBuilder... options)
+    {
+        randChoice(rand, options).build(data, x, y, z);
+    }
+
+    public static void build(@NotNull PopulatorDataAbstract data,
+                             int x,
+                             int y,
+                             int z,
+                             @NotNull PlantBuilder... options)
+    {
+        randChoice(options).build(data, x, y, z);
+    }
+
+    public void build(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
+        if (!TConfig.arePlantsEnabled()) {
+            return;
+        }
+
+        if (isDoublePlant) {
             BlockUtils.setDoublePlant(data, x, y, z, material);
-        } else {
+        }
+        else {
             data.setType(x, y, z, material);
         }
     }
 
-    public void build(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z, int minHeight, int maxHeight) {
-        if ( !TConfigOption.arePlantsEnabled() ) return;
+    public void build(@NotNull Random rand,
+                      @NotNull PopulatorDataAbstract data,
+                      int x,
+                      int y,
+                      int z,
+                      int minHeight,
+                      int maxHeight)
+    {
+        if (!TConfig.arePlantsEnabled()) {
+            return;
+        }
 
         BlockUtils.spawnPillar(rand, data, x, y, z, material, minHeight, maxHeight);
     }
@@ -105,21 +140,13 @@ public enum PlantBuilder {
     }
 
     public void build(@NotNull SimpleBlock block, @NotNull Random rand, int minHeight, int maxHeight) {
-        if ( !TConfigOption.arePlantsEnabled() ) return;
+        if (!TConfig.arePlantsEnabled()) {
+            return;
+        }
 
         int height = GenUtils.randInt(rand, minHeight, maxHeight);
-        for(int i = 0; i < height; i++) block.getRelative(0, i, 0).setType(material);
-    }
-
-    public static void build(@NotNull SimpleBlock block, @NotNull PlantBuilder... options) {
-        randChoice(options).build(block.getPopData(), block.getX(), block.getY(), block.getZ());
-    }
-
-    public static void build(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z, @NotNull PlantBuilder... options) {
-        randChoice(rand, options).build(data, x, y, z);
-    }
-
-    public static void build(@NotNull PopulatorDataAbstract data, int x, int y, int z, @NotNull PlantBuilder... options) {
-        randChoice(options).build(data, x, y, z);
+        for (int i = 0; i < height; i++) {
+            block.getRelative(0, i, 0).setType(material);
+        }
     }
 }

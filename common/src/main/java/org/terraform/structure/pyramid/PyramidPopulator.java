@@ -14,7 +14,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
@@ -22,8 +22,8 @@ import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.ArrayList;
@@ -33,25 +33,30 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
-        if (!isEnabled()) return false;
+        if (!isEnabled()) {
+            return false;
+        }
 
         // Check biome
-        if (biome != BiomeBank.DESERT)
+        if (biome != BiomeBank.DESERT) {
             return false;
+        }
 
         return rollSpawnRatio(tw, chunkX, chunkZ);
     }
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 163456),
-                (int) (TConfigOption.STRUCTURES_PYRAMID_SPAWNRATIO
-                        .getDouble() * 10000),
-                10000);
+                (int) (TConfig.c.STRUCTURES_PYRAMID_SPAWNRATIO * 10000),
+                10000
+        );
     }
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if (!isEnabled()) return;
+        if (!isEnabled()) {
+            return;
+        }
 
         int[] coords = new MegaChunk(data.getChunkX(), data.getChunkZ()).getCenterBiomeSectionBlockCoords();
         int x = coords[0];
@@ -60,37 +65,53 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         int y = HeightMap.getBlockHeight(tw, x, z);// GenUtils.getHighestGround(data, x, z);
         try {
             spawnPyramid(tw, tw.getHashedRand(x, y, z, 1211222), data, x, y, z);
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
 
-    public void spawnPyramid(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnPyramid(@NotNull TerraformWorld tw,
+                             @NotNull Random random,
+                             @NotNull PopulatorDataAbstract data,
+                             int x,
+                             int y,
+                             int z)
+    {
         y -= 10;
-    	TerraformGeneratorPlugin.logger.info("Spawning Pyramid at: " + x + "," + z);
+        TerraformGeneratorPlugin.logger.info("Spawning Pyramid at: " + x + "," + z);
         int numRooms = 1000;
         int range = 70;
-        if(y >= TerraformGenerator.seaLevel+3) {
+        if (y >= TerraformGenerator.seaLevel + 3) {
             spawnSandBase(tw, data, x, y, z);
-        } else {
-            spawnSandBase(tw, data, x, TerraformGenerator.seaLevel+3, z);
-            y = TerraformGenerator.seaLevel-7;
         }
-        
+        else {
+            spawnSandBase(tw, data, x, TerraformGenerator.seaLevel + 3, z);
+            y = TerraformGenerator.seaLevel - 7;
+        }
+
         spawnPyramidBase(data, x, y, z);
 
         Random hashedRand = tw.getHashedRand(x, y, z);
 
         // Level 0 - Labyrinth Layer (Dark, full of traps). Also the entry level.
-        RoomLayoutGenerator level0 = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y - 8, z, range);
-//		private int roomMaxHeight = 7;
-//		private int roomMinHeight = 5;
-//		private int roomMaxX = 15;
-//		private int roomMinX = 10;
-//		private int roomMaxZ = 15;
-//		private int roomMinZ = 10;
+        RoomLayoutGenerator level0 = new RoomLayoutGenerator(
+                hashedRand,
+                RoomLayout.RANDOM_BRUTEFORCE,
+                numRooms,
+                x,
+                y - 8,
+                z,
+                range
+        );
+        //		private int roomMaxHeight = 7;
+        //		private int roomMinHeight = 5;
+        //		private int roomMaxX = 15;
+        //		private int roomMinX = 10;
+        //		private int roomMaxZ = 15;
+        //		private int roomMinZ = 10;
         // Add pyramid entrance at the pyramid corner
-        int entranceRoomHeight = 4 + GenUtils.getHighestGround(data, x, z + 5 + range / 2) - (y-8);
+        int entranceRoomHeight = 4 + GenUtils.getHighestGround(data, x, z + 5 + range / 2) - (y - 8);
         CubeRoom entranceRoom = new CubeRoom(9, 9, entranceRoomHeight, x, y - 8, z + 5 + range / 2);
         MainEntrancePopulator entrancePopulator = new MainEntrancePopulator(hashedRand, false, false, BlockFace.NORTH);
         entranceRoom.setRoomPopulator(entrancePopulator);
@@ -107,7 +128,15 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
         // Level 1 - Maze level (?)
 
-        RoomLayoutGenerator level1 = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y, z, range + 10);
+        RoomLayoutGenerator level1 = new RoomLayoutGenerator(
+                hashedRand,
+                RoomLayout.RANDOM_BRUTEFORCE,
+                numRooms,
+                x,
+                y,
+                z,
+                range + 10
+        );
         level1.setMazePathGenerator(new MazeSpawner());
         level1.setRoomMinX(5);
         level1.setRoomMaxX(6);
@@ -118,9 +147,9 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         level1.registerRoomPopulator(new MazeLevelMonsterRoom(random, false, false));
 
         // Manually add a room for HuskTomb to work.
-        CubeRoom room = level1.forceAddRoom(
+        CubeRoom room = level1.forceAddRoom(GenUtils.randInt(6, 12),
                 GenUtils.randInt(6, 12),
-                GenUtils.randInt(6, 12), // 6 and 12 because these are the bounds for husk tombs.
+                // 6 and 12 because these are the bounds for husk tombs.
                 GenUtils.randInt(level1.getRoomMinHeight(), level1.getRoomMaxHeight())
         );
         room.setRoomPopulator(new HuskTombPopulator(random, true, true));
@@ -146,7 +175,15 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         range -= 10;
 
         // Level 2
-        RoomLayoutGenerator level2 = new RoomLayoutGenerator(hashedRand, RoomLayout.RANDOM_BRUTEFORCE, numRooms, x, y + 8, z, range);
+        RoomLayoutGenerator level2 = new RoomLayoutGenerator(
+                hashedRand,
+                RoomLayout.RANDOM_BRUTEFORCE,
+                numRooms,
+                x,
+                y + 8,
+                z,
+                range
+        );
         level2.setRoomMaxX(10);
         level2.setRoomMinX(7);
         level2.setRoomMaxZ(10);
@@ -195,18 +232,47 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         }};
         for (int nx = -50; nx <= 50; nx++) {
             for (int nz = -50; nz <= 50; nz++) {
-                if (toReplace.contains(data.getType(x + nx, y - 8, z + nz)))
-                    data.setType(x + nx, y - 8, z + nz, GenUtils.randChoice(Material.STONE, Material.STONE, Material.STONE, Material.COBBLESTONE, Material.ANDESITE));
+                if (toReplace.contains(data.getType(x + nx, y - 8, z + nz))) {
+                    data.setType(
+                            x + nx,
+                            y - 8,
+                            z + nz,
+                            GenUtils.randChoice(Material.STONE,
+                                    Material.STONE,
+                                    Material.STONE,
+                                    Material.COBBLESTONE,
+                                    Material.ANDESITE
+                            )
+                    );
+                }
 
                 // Dither. Include infested stone here.
                 if (random.nextBoolean()) {
-                    if (toReplace.contains(data.getType(x + nx, y - 7, z + nz)))
-                        data.setType(x + nx, y - 7, z + nz, GenUtils.weightedRandomMaterial(random, Material.STONE, 9, Material.INFESTED_STONE, 5, Material.COBBLESTONE, 3,
-                                Material.ANDESITE, 3));
+                    if (toReplace.contains(data.getType(x + nx, y - 7, z + nz))) {
+                        data.setType(x + nx, y - 7, z + nz, GenUtils.weightedRandomMaterial(random,
+                                Material.STONE,
+                                9,
+                                Material.INFESTED_STONE,
+                                5,
+                                Material.COBBLESTONE,
+                                3,
+                                Material.ANDESITE,
+                                3
+                        ));
+                    }
                     if (random.nextBoolean()) {
-                        if (toReplace.contains(data.getType(x + nx, y - 6, z + nz)))
-                            data.setType(x + nx, y - 6, z + nz, GenUtils.weightedRandomMaterial(random, Material.STONE, 9, Material.INFESTED_STONE, 5, Material.COBBLESTONE, 3,
-                                    Material.ANDESITE, 3));
+                        if (toReplace.contains(data.getType(x + nx, y - 6, z + nz))) {
+                            data.setType(x + nx, y - 6, z + nz, GenUtils.weightedRandomMaterial(random,
+                                    Material.STONE,
+                                    9,
+                                    Material.INFESTED_STONE,
+                                    5,
+                                    Material.COBBLESTONE,
+                                    3,
+                                    Material.ANDESITE,
+                                    3
+                            ));
+                        }
 
                     }
                 }
@@ -229,29 +295,26 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     public void spawnSandBase(TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
         int squareRadius = 45;
 
-        FastNoise noiseGenerator = NoiseCacheHandler.getNoise(
-        		tw, 
-        		NoiseCacheEntry.STRUCTURE_PYRAMID_BASEELEVATOR, 
-        		world -> {
-                    FastNoise n = new FastNoise((int)world.getSeed());
+        FastNoise noiseGenerator = NoiseCacheHandler.getNoise(tw,
+                NoiseCacheEntry.STRUCTURE_PYRAMID_BASEELEVATOR,
+                world -> {
+                    FastNoise n = new FastNoise((int) world.getSeed());
                     n.SetNoiseType(NoiseType.PerlinFractal);
                     n.SetFrequency(0.007f);
                     n.SetFractalOctaves(6);
-                
-        	        return n;
-        		});
 
-        FastNoise vertNoise = NoiseCacheHandler.getNoise(
-        		tw, 
-        		NoiseCacheEntry.STRUCTURE_PYRAMID_BASEFUZZER, 
-        		world -> {
-                    FastNoise n = new FastNoise((int)world.getSeed());
-                    n.SetNoiseType(NoiseType.PerlinFractal);
-                    n.SetFrequency(0.01f);
-                    n.SetFractalOctaves(8);
-                
-        	        return n;
-        		});
+                    return n;
+                }
+        );
+
+        FastNoise vertNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.STRUCTURE_PYRAMID_BASEFUZZER, world -> {
+            FastNoise n = new FastNoise((int) world.getSeed());
+            n.SetNoiseType(NoiseType.PerlinFractal);
+            n.SetFrequency(0.01f);
+            n.SetFractalOctaves(8);
+
+            return n;
+        });
 
         for (int nx = x - squareRadius; nx <= x + squareRadius; nx++) {
             for (int nz = z - squareRadius; nz <= z + squareRadius; nz++) {
@@ -263,34 +326,46 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                 int raiseDone = 0;
                 int noise = Math.round(noiseGenerator.GetNoise(nx, nz) * 5);
                 int newHeight = y + noise - 1;
-                if (newHeight < y - 1) newHeight = y - 1;
+                if (newHeight < y - 1) {
+                    newHeight = y - 1;
+                }
 
                 while (height < newHeight) {
                     raiseDone++;
                     if (!data.getType(nx, height + 1, nz).isSolid()
-                            || data.getType(nx, height + 1, nz) == Material.CACTUS)
+                        || data.getType(nx, height + 1, nz) == Material.CACTUS)
+                    {
                         data.setType(nx, height + 1, nz, mat);
+                    }
                     height++;
                 }
 
                 if (raiseDone > 0) {
                     // Make the sides sink down naturally (lol. Or try to, anyway)
-                    int XdistanceFromCenter = (int) (Math.abs(nx - x) + Math.abs(vertNoise.GetNoise(nx - 80, nz - 80) * 25));
-                    int ZdistanceFromCenter = (int) (Math.abs(nz - z) + Math.abs(vertNoise.GetNoise(nx - 80, nz - 80) * 25));
-//        			
-                    if (XdistanceFromCenter > squareRadius-10 || ZdistanceFromCenter > squareRadius-10) {
+                    int XdistanceFromCenter = (int) (Math.abs(nx - x) + Math.abs(vertNoise.GetNoise(nx - 80, nz - 80)
+                                                                                 * 25));
+                    int ZdistanceFromCenter = (int) (Math.abs(nz - z) + Math.abs(vertNoise.GetNoise(nx - 80, nz - 80)
+                                                                                 * 25));
+                    //
+                    if (XdistanceFromCenter > squareRadius - 10 || ZdistanceFromCenter > squareRadius - 10) {
                         // Depress downwards
 
                         int dist = Math.max(XdistanceFromCenter, ZdistanceFromCenter);
-                        // Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((50.0f-dist)/5.0f))));
-                        float comp = original + ((raiseDone) * ((((float) squareRadius-5) - dist) / 5.0f)) + Math.abs(vertNoise.GetNoise(nx, nz) * 30);
-                        if (comp < original) comp = original;
+                        // Bukkit.getLogger().info(height + ":" + (height-raiseDone+((raiseDone)*((5f-dist)/5f))));
+                        float comp = original + ((raiseDone) * ((((float) squareRadius - 5) - dist) / 5f)) + Math.abs(
+                                vertNoise.GetNoise(nx, nz) * 30);
+                        if (comp < original) {
+                            comp = original;
+                        }
                         while (height > comp) {
-                            if (data.getType(nx, height, nz) == mat)
-                                if (height > TerraformGenerator.seaLevel)
+                            if (data.getType(nx, height, nz) == mat) {
+                                if (height > TerraformGenerator.seaLevel) {
                                     data.setType(nx, height, nz, Material.AIR);
-                                else
+                                }
+                                else {
                                     data.setType(nx, height, nz, Material.WATER);
+                                }
+                            }
                             height--;
                         }
                     }
@@ -304,31 +379,45 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
             int radius = 40 - height;
             for (int nx = -radius; nx <= radius; nx++) {
                 for (int nz = -radius; nz <= radius; nz++) {
-                    data.setType(x + nx, y + height, z + nz, GenUtils.randChoice(Material.SANDSTONE, Material.SMOOTH_SANDSTONE));
+                    data.setType(
+                            x + nx,
+                            y + height,
+                            z + nz,
+                            GenUtils.randChoice(Material.SANDSTONE, Material.SMOOTH_SANDSTONE)
+                    );
                     // data.setType(x + nx, y + height, z + nz, Material.GLASS); // dEBUG.
 
                     // Corners have special decorations
                     if (Math.abs(nx) == radius && Math.abs(nz) == radius) {
-                        if (!data.getType(x + nx, y + height + 1, z + nz).isSolid())
+                        if (!data.getType(x + nx, y + height + 1, z + nz).isSolid()) {
                             data.setType(x + nx, y + height + 1, z + nz, Material.SANDSTONE_WALL);
+                        }
 
-                        if (height == 38)
+                        if (height == 38) {
                             data.setType(x + nx, y + 38 + 2, z + nz, Material.CAMPFIRE);
-                    } else if (GenUtils.chance(1, 20)) {
+                        }
+                    }
+                    else if (GenUtils.chance(1, 20)) {
                         // Side Decorations (Stairs)
                         BlockFace dir = null;
 
                         if (nx == -radius) {
                             dir = BlockFace.EAST;
-                        } else if (nx == radius) {
+                        }
+                        else if (nx == radius) {
                             dir = BlockFace.WEST;
-                        } else if (nz == -radius) {
+                        }
+                        else if (nz == -radius) {
                             dir = BlockFace.SOUTH;
-                        } else if (nz == radius) {
+                        }
+                        else if (nz == radius) {
                             dir = BlockFace.NORTH;
                         }
                         if (dir != null) {
-                            Stairs s = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(Material.SANDSTONE_STAIRS, Material.SMOOTH_SANDSTONE_STAIRS));
+                            Stairs s = (Stairs) Bukkit.createBlockData(GenUtils.randChoice(
+                                    Material.SANDSTONE_STAIRS,
+                                    Material.SMOOTH_SANDSTONE_STAIRS
+                            ));
                             s.setFacing(dir);
                             data.setBlockData(x + nx, y + height, z + nz, s);
                         }
@@ -345,29 +434,36 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
         int elevation = 14;
         for (int height = elevation; height <= elevation + 16; height++) {
             int radius = 40 - height;
-            for (int nx : new int[]{-radius, 0, radius}) {
-                for (int nz : new int[]{-radius, 0, radius}) {
+            for (int nx : new int[] {-radius, 0, radius}) {
+                for (int nz : new int[] {-radius, 0, radius}) {
                     // Pyramid Surface Decal
                     int carveLength = (height - elevation);
-                    if (carveLength > 8)
+                    if (carveLength > 8) {
                         carveLength = 16 - carveLength;
-                    if (nx != 0 && nz != 0) continue;
+                    }
+                    if (nx != 0 && nz != 0) {
+                        continue;
+                    }
                     Wall w = null;
                     if (nx == -radius) {
                         w = new Wall(new SimpleBlock(data, x + nx, y + height, z + nz), BlockFace.WEST);
-                    } else if (nx == radius) {
+                    }
+                    else if (nx == radius) {
                         w = new Wall(new SimpleBlock(data, x + nx, y + height, z + nz), BlockFace.EAST);
-                    } else if (nz == -radius) {
+                    }
+                    else if (nz == -radius) {
                         w = new Wall(new SimpleBlock(data, x + nx, y + height, z + nz), BlockFace.NORTH);
-                    } else if (nz == radius) {
+                    }
+                    else if (nz == radius) {
                         w = new Wall(new SimpleBlock(data, x + nx, y + height, z + nz), BlockFace.SOUTH);
                     }
-                    if (w != null)
+                    if (w != null) {
                         for (int i = 0; i <= carveLength; i++) {
                             if (carveLength == 0) {
                                 if (height == elevation) {
                                     w.getFront().setType(Material.SANDSTONE_WALL);
-                                } else if (height == elevation + 16) {
+                                }
+                                else if (height == elevation + 16) {
                                     w.getRear().getUp(2).setType(Material.SANDSTONE_WALL);
                                 }
                             }
@@ -382,6 +478,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
                                 w.getLeft(i + 1).getUp().setType(Material.SANDSTONE_WALL);
                             }
                         }
+                    }
                 }
             }
         }
@@ -395,9 +492,9 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
     @Override
     public boolean isEnabled() {
         // TODO Auto-generated method stub
-        return TConfigOption.areStructuresEnabled()
+        return TConfig.areStructuresEnabled()
                && BiomeBank.isBiomeEnabled(BiomeBank.DESERT)
-               && TConfigOption.STRUCTURES_PYRAMID_ENABLED.getBoolean();
+               && TConfig.c.STRUCTURES_PYRAMID_ENABLED;
     }
 
 

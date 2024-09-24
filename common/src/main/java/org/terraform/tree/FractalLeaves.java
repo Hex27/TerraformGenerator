@@ -22,24 +22,26 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
-public class FractalLeaves implements Cloneable{
+public class FractalLeaves implements Cloneable {
 
-    int oriY;
-    int maxHeight;
-    TerraformWorld tw;
+    @NotNull
+    final Random rand = new Random();
+    /**
+     * Used for caching leaves that are already processed.
+     * Meant to be cleared when a new tree begins using the class.
+     */
+    private final HashSet<SimpleBlock> occupiedLeaves = new HashSet<>();
     public float radiusX = 4;
     public float radiusY = 2;
     public int numYSegments = 5;
     public float radiusZ = 4;
     public int offsetY = 0;
-
     public Material[] material = new Material[] {Material.OAK_LEAVES};
+    int oriY;
     // public FractalTreeBuilder builder;
-
+    int maxHeight;
+    TerraformWorld tw;
     boolean semiSphereLeaves = false;
-    @NotNull
-    final
-    Random rand = new Random();
     float leafNoiseMultiplier = 0.7f;
     float leafNoiseFrequency = 0.09f;
     double hollowLeaves = 0.0;
@@ -52,51 +54,43 @@ public class FractalLeaves implements Cloneable{
     int unitLeafSize = 0;
     float unitLeafChance = 0;
 
-    /**
-     * Used for caching leaves that are already processed.
-     * Meant to be cleared when a new tree begins using the class.
-     */
-    private final HashSet<SimpleBlock> occupiedLeaves = new HashSet<>();
-    public void purgeOccupiedLeavesCache(){ occupiedLeaves.clear(); }
+    public void purgeOccupiedLeavesCache() {
+        occupiedLeaves.clear();
+    }
 
     public void placeLeaves(@NotNull SimpleBlock centre)
     {
         placeLeaves(centre.getPopData().getTerraformWorld(), -999, 999, centre);
     }
+
     /**
      * This is a sphere algorithm
+     *
      * @param centre the centre of the sphere.
      */
     public void placeLeaves(TerraformWorld tw, int oriY, int maxHeight, @NotNull SimpleBlock centre) {
-    	// Setup noise to be used in randomising the sphere
+        // Setup noise to be used in randomising the sphere
 
         this.tw = tw;
         this.oriY = oriY;
         this.maxHeight = maxHeight;
 
-        FastNoise noiseGen = NoiseCacheHandler.getNoise(
-        		tw,
-        		NoiseCacheEntry.FRACTALTREES_LEAVES_NOISE, 
-        		world -> {
-                    FastNoise n = new FastNoise((int) world.getSeed());
-                	n.SetFractalOctaves(5);
-                	n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-                
-        	        return n;
-        		});
+        FastNoise noiseGen = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.FRACTALTREES_LEAVES_NOISE, world -> {
+            FastNoise n = new FastNoise((int) world.getSeed());
+            n.SetFractalOctaves(5);
+            n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
+
+            return n;
+        });
         noiseGen.SetFrequency(leafNoiseFrequency);
-        
+
         // Don't place anything if radius is nothing
-        if (radiusX <= 0 &&
-                radiusY <= 0 &&
-                radiusZ <= 0) {
+        if (radiusX <= 0 && radiusY <= 0 && radiusZ <= 0) {
             return;
         }
 
         // Radius 0.5 is 1 block
-        if (radiusX <= 0.5 &&
-                radiusY <= 0.5 &&
-                radiusZ <= 0.5) {
+        if (radiusX <= 0.5 && radiusY <= 0.5 && radiusZ <= 0.5) {
             centre.setType(material);
             return;
         }
@@ -104,13 +98,15 @@ public class FractalLeaves implements Cloneable{
         // Initialise noise to be used in randomising the sphere
         float noiseMultiplier = leafNoiseMultiplier;
         int minRadiusY = -Math.round(radiusY);
-        if(semiSphereLeaves) minRadiusY = 0;
+        if (semiSphereLeaves) {
+            minRadiusY = 0;
+        }
         ArrayList<SimpleBlock> changed = new ArrayList<>();
 
         for (int y = minRadiusY; y <= radiusY; y++) {
             for (int x = -Math.round(radiusX); x <= radiusX; x++) {
                 for (int z = -Math.round(radiusZ); z <= radiusZ; z++) {
-                	Material material = this.material[rand.nextInt(this.material.length)];
+                    Material material = this.material[rand.nextInt(this.material.length)];
                     SimpleBlock relativeBlock = centre.getRelative(x, y + offsetY, z);
 
                     if (relativeBlock.getY() - oriY > maxHeight) {
@@ -119,7 +115,9 @@ public class FractalLeaves implements Cloneable{
 
                     if (relativeBlock.getY() - oriY == maxHeight) {
                         if (rand.nextBoolean()) // Fade off if too high
+                        {
                             return;
+                        }
                     }
 
                     float effectiveY = y;
@@ -127,45 +125,68 @@ public class FractalLeaves implements Cloneable{
                     if (coneLeaves) {
                         effectiveY += radiusY / 2; // Shift center area downwards
                         // Compress negative y
-                        if (effectiveY < 0) effectiveY = effectiveY * 2.0f;
+                        if (effectiveY < 0) {
+                            effectiveY = effectiveY * 2f;
+                        }
 
                         // Extend positive y and multiply it by a power to make it sharp
                         if (effectiveY > 0) {
-                            effectiveY = effectiveY * (2.0f / 3.0f);
+                            effectiveY = effectiveY * (2f / 3f);
                             effectiveY = (float) Math.pow(effectiveY, 1.3);
-                            if (effectiveY > radiusY) effectiveY = radiusY;
+                            if (effectiveY > radiusY) {
+                                effectiveY = radiusY;
+                            }
                         }
                         relativeBlock = relativeBlock.getRelative(0, (int) (radiusY / 2), 0);
                     }
                     // Continue as early as possible.
-                    if(occupiedLeaves.contains(relativeBlock))
+                    if (occupiedLeaves.contains(relativeBlock)) {
                         continue;
+                    }
 
-                    double equationResult = Math.pow(x, 2) / Math.pow(radiusX, 2)
-                            + Math.pow(effectiveY, 2) / Math.pow(radiusY, 2)
-                            + Math.pow(z, 2) / Math.pow(radiusZ, 2);
+                    double equationResult = Math.pow(x, 2) / Math.pow(radiusX, 2) + Math.pow(effectiveY, 2) / Math.pow(
+                            radiusY,
+                            2
+                    ) + Math.pow(z, 2) / Math.pow(radiusZ, 2);
 
-                    if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ())) {
-                        if (equationResult < hollowLeaves)
+                    if (equationResult <= 1 + noiseMultiplier * noiseGen.GetNoise(
+                            relativeBlock.getX(),
+                            relativeBlock.getY(),
+                            relativeBlock.getZ()
+                    ))
+                    {
+                        if (equationResult < hollowLeaves) {
                             continue;
+                        }
                         // cache this block so that getType and setType aren't called for already processed blocks
                         occupiedLeaves.add(relativeBlock);
 
-                        if(mangrovePropagules && Version.isAtLeast(19) && !BlockUtils.isWet(relativeBlock.getDown())) {
-                        	 if (GenUtils.chance(1, 50)) {
-                                 relativeBlock.getDown().rsetBlockData(BlockUtils.replacableByTrees, OneOneNineBlockHandler.getHangingMangrovePropagule());
-                             }
+                        if (mangrovePropagules && Version.isAtLeast(19) && !BlockUtils.isWet(relativeBlock.getDown())) {
+                            if (GenUtils.chance(1, 50)) {
+                                relativeBlock.getDown()
+                                             .rsetBlockData(
+                                                     BlockUtils.replacableByTrees,
+                                                     OneOneNineBlockHandler.getHangingMangrovePropagule()
+                                             );
+                            }
                         }
 
                         // For fixing up corals later
                         if (Tag.CORALS.isTagged(material)) {
-                            if (!changed.contains(relativeBlock))
+                            if (!changed.contains(relativeBlock)) {
                                 changed.add(relativeBlock);
+                            }
                         }
 
                         // Decorate with fans
                         if (coralDecoration) {
-                        	CoralGenerator.generateSingleCoral(relativeBlock.getPopData(), relativeBlock.getX(), relativeBlock.getY(), relativeBlock.getZ(), this.material[0].toString());
+                            CoralGenerator.generateSingleCoral(
+                                    relativeBlock.getPopData(),
+                                    relativeBlock.getX(),
+                                    relativeBlock.getY(),
+                                    relativeBlock.getZ(),
+                                    this.material[0].toString()
+                            );
                         }
 
                         // Leaves do not replace solid blocks.
@@ -173,14 +194,15 @@ public class FractalLeaves implements Cloneable{
                             unitSet(relativeBlock, material);
 
                             // Handle placing random cubes in the leaves
-                            if(this.unitLeafSize > 0 && this.unitLeafChance > 0)
-                            {
-                                if(GenUtils.chance(this.rand, (int) (this.unitLeafChance*100),100))
-                                {
-                                    for(int scaleX = -unitLeafSize; scaleX < unitLeafSize; scaleX++)
-                                        for(int scaleZ = -unitLeafSize; scaleZ < unitLeafSize; scaleZ++)
-                                            for(int scaleY = -unitLeafSize; scaleY < unitLeafSize; scaleY++)
+                            if (this.unitLeafSize > 0 && this.unitLeafChance > 0) {
+                                if (GenUtils.chance(this.rand, (int) (this.unitLeafChance * 100), 100)) {
+                                    for (int scaleX = -unitLeafSize; scaleX < unitLeafSize; scaleX++) {
+                                        for (int scaleZ = -unitLeafSize; scaleZ < unitLeafSize; scaleZ++) {
+                                            for (int scaleY = -unitLeafSize; scaleY < unitLeafSize; scaleY++) {
                                                 unitSet(relativeBlock.getRelative(scaleX, scaleY, scaleZ), material);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -193,7 +215,11 @@ public class FractalLeaves implements Cloneable{
                         }
 
                         if (weepingLeavesChance > 0 && Math.random() < weepingLeavesChance) {
-                            weepingLeaves(relativeBlock, Math.round(weepingLeavesChance * weepingLeavesLength), weepingLeavesLength);
+                            weepingLeaves(
+                                    relativeBlock,
+                                    Math.round(weepingLeavesChance * weepingLeavesLength),
+                                    weepingLeavesLength
+                            );
                         }
                     }
                 }
@@ -206,18 +232,19 @@ public class FractalLeaves implements Cloneable{
             if (!CoralGenerator.isSaturatedCoral(sb)) {
                 // No floating coral fans
                 for (BlockFace face : BlockUtils.directBlockFaces) {
-                    if (Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType()))
+                    if (Tag.WALL_CORALS.isTagged(sb.getRelative(face).getType())) {
                         sb.getRelative(face).setType(Material.WATER);
+                    }
                 }
 
                 // No levitating sea pickles & fans
-                if (sb.getUp().getType() == Material.SEA_PICKLE ||
-                        Tag.CORAL_PLANTS.isTagged(sb.getUp().getType())) {
+                if (sb.getUp().getType() == Material.SEA_PICKLE || Tag.CORAL_PLANTS.isTagged(sb.getUp().getType())) {
                     sb.getUp().setType(Material.WATER);
                 }
                 sb.setType(Material.WATER);
 
-            } else {
+            }
+            else {
                 sb.setType(material);
             }
         }
@@ -228,13 +255,14 @@ public class FractalLeaves implements Cloneable{
             Leaves leaf = (Leaves) Bukkit.createBlockData(material);
             leaf.setDistance(1);
             relativeBlock.rsetBlockData(BlockUtils.replacableByTrees, leaf);
-        } else {
-            relativeBlock.rsetType(BlockUtils.replacableByTrees,material);
+        }
+        else {
+            relativeBlock.rsetType(BlockUtils.replacableByTrees, material);
         }
     }
 
     private void weepingLeaves(@NotNull SimpleBlock base, int minDist, int maxDist) {
-    	Material material = this.material[rand.nextInt(this.material.length)];
+        Material material = this.material[rand.nextInt(this.material.length)];
         BlockData type = Bukkit.createBlockData(material);
         if (Tag.LEAVES.isTagged(material)) {
             Leaves leaf = (Leaves) type;
@@ -242,10 +270,12 @@ public class FractalLeaves implements Cloneable{
         }
 
         for (int i = 1; i <= GenUtils.randInt(minDist, maxDist); i++) {
-            if (BlockUtils.isAir(base.getRelative(0, -i, 0).getType()))
+            if (BlockUtils.isAir(base.getRelative(0, -i, 0).getType())) {
                 base.getRelative(0, -i, 0).rsetBlockData(BlockUtils.replacableByTrees, type);
-            else
+            }
+            else {
                 break;
+            }
         }
     }
 
@@ -266,7 +296,7 @@ public class FractalLeaves implements Cloneable{
 
     public @NotNull FractalLeaves setRadiusY(float radiusY) {
         this.radiusY = radiusY;
-        this.numYSegments = (int) Math.ceil(radiusY*2+1);
+        this.numYSegments = (int) Math.ceil(radiusY * 2 + 1);
         return this;
     }
 
@@ -318,9 +348,11 @@ public class FractalLeaves implements Cloneable{
         this.mangrovePropagules = mangrovePropagules;
         return this;
     }
+
     /**
      * Creates dangling leaves without vines. Useful for
      * creating types of weeping trees.
+     *
      * @param chance    chance of creating dangling leaves per block (0 - 1)
      * @param maxLength maximum length of dangling leaves
      */
@@ -335,11 +367,13 @@ public class FractalLeaves implements Cloneable{
         this.unitLeafChance = unitLeafChance;
         return this;
     }
+
     public @NotNull FractalLeaves setUnitLeafSize(int unitSize)
     {
         this.unitLeafSize = unitSize;
         return this;
     }
+
     public @NotNull FractalLeaves setSemiSphereLeaves(boolean semiSphereLeaves)
     {
         this.semiSphereLeaves = semiSphereLeaves;
@@ -372,7 +406,7 @@ public class FractalLeaves implements Cloneable{
 
 
     @Override
-    public FractalLeaves clone() throws CloneNotSupportedException{
+    public FractalLeaves clone() throws CloneNotSupportedException {
         return (FractalLeaves) super.clone();
     }
 }

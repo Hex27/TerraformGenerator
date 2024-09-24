@@ -26,16 +26,18 @@ public class BrokenShaftPopulator extends RoomPopulatorAbstract {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 if (b.getType() == Material.CAVE_AIR
-                        || b.getType() == Material.OAK_PLANKS
-                        || b.getType() == Material.OAK_SLAB
-                        || b.getType() == Material.GRAVEL) {
+                    || b.getType() == Material.OAK_PLANKS
+                    || b.getType() == Material.OAK_SLAB
+                    || b.getType() == Material.GRAVEL)
+                {
                     b.setType(GenUtils.randChoice(
                             Material.STONE_BRICKS,
                             Material.CRACKED_STONE_BRICKS,
                             Material.MOSSY_STONE_BRICKS,
                             Material.MOSSY_COBBLESTONE,
                             Material.COBBLESTONE,
-                            Material.CAVE_AIR));
+                            Material.CAVE_AIR
+                    ));
                 }
             }
         }

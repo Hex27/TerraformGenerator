@@ -19,30 +19,33 @@ public class LargeCaveRoomCarver extends RoomCarver {
 
     @Override
     public void carveRoom(@NotNull PopulatorDataAbstract data, CubeRoom room, Material... wallMaterial) {
-        if(!(room instanceof LargeCaveRoomPiece caveRoom))
+        if (!(room instanceof LargeCaveRoomPiece caveRoom)) {
             throw new NotImplementedException("room for LargeCaveRoomCarver was not a LargeCaveRoomPiece");
+        }
 
-        caveRoom.toCarve.forEach((loc, boundary)->{
-            if(!boundary) {
-                data.setType(loc.getX(), loc.getY(), loc.getZ(),
-                        loc.getY() > waterLevel ? Material.CAVE_AIR : fluid);
+        caveRoom.toCarve.forEach((loc, boundary) -> {
+            if (!boundary) {
+                data.setType(loc.getX(), loc.getY(), loc.getZ(), loc.getY() > waterLevel ? Material.CAVE_AIR : fluid);
             }
-            else
-            {
+            else {
                 // Ensure no fluid flows out
-                if(loc.getY() <= waterLevel)
-                    data.setType(loc.getX(),loc.getY(),loc.getZ(), BlockUtils.stoneOrSlate(loc.getY()));
+                if (loc.getY() <= waterLevel) {
+                    data.setType(loc.getX(), loc.getY(), loc.getZ(), BlockUtils.stoneOrSlate(loc.getY()));
+                }
 
                 // find the floors and ceilings for the populator.
                 // Only add them to the list if the thing is solid
-                if(data.getType(loc.getX(),loc.getY(),loc.getZ()).isSolid())
-                {
-                    if(!caveRoom.toCarve.containsKey(loc.getDown()))
+                if (data.getType(loc.getX(), loc.getY(), loc.getZ()).isSolid()) {
+                    if (!caveRoom.toCarve.containsKey(loc.getDown())) {
                         caveRoom.ceilFloorPairs.computeIfAbsent(loc.getAtY(0),
-                                newLoc->new SimpleLocation[2])[1] = loc;
-                    else if(!caveRoom.toCarve.containsKey(loc.getUp()))
+                                newLoc -> new SimpleLocation[2]
+                        )[1] = loc;
+                    }
+                    else if (!caveRoom.toCarve.containsKey(loc.getUp())) {
                         caveRoom.ceilFloorPairs.computeIfAbsent(loc.getAtY(0),
-                                newLoc->new SimpleLocation[2])[0] = loc;
+                                newLoc -> new SimpleLocation[2]
+                        )[0] = loc;
+                    }
                 }
             }
         });

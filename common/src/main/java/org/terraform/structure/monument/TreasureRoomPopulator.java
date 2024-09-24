@@ -19,8 +19,7 @@ import java.util.Random;
 
 public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
 
-    public TreasureRoomPopulator(Random rand, MonumentDesign design,
-                                 boolean forceSpawn, boolean unique) {
+    public TreasureRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
         // TODO Auto-generated constructor stub
     }
@@ -35,13 +34,11 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
 
             stair.setFacing(face);
             block.getUp().getRelative(face).setBlockData(stair);
-            block.getUp(2).getRelative(face).getRelative(face)
-                    .setBlockData(stair);
+            block.getUp(2).getRelative(face).getRelative(face).setBlockData(stair);
 
             stair.setFacing(face.getOppositeFace());
             stair.setHalf(Half.TOP);
-            block.getUp().getRelative(face).getRelative(face)
-                    .setBlockData(stair);
+            block.getUp().getRelative(face).getRelative(face).setBlockData(stair);
         }
 
         block.getRelative(-1, 1, -1).setType(Material.PRISMARINE_BRICK_SLAB);
@@ -61,13 +58,11 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
 
             stair.setFacing(face);
             block.getDown().getRelative(face).setBlockData(stair);
-            block.getDown(2).getRelative(face).getRelative(face)
-                    .setBlockData(stair);
+            block.getDown(2).getRelative(face).getRelative(face).setBlockData(stair);
 
             stair.setFacing(face.getOppositeFace());
             stair.setHalf(Half.BOTTOM);
-            block.getDown().getRelative(face).getRelative(face)
-                    .setBlockData(stair);
+            block.getDown().getRelative(face).getRelative(face).setBlockData(stair);
         }
 
         Waterlogged slab = (Waterlogged) Bukkit.createBlockData(Material.PRISMARINE_BRICK_SLAB);
@@ -91,11 +86,12 @@ public class TreasureRoomPopulator extends DecoratedSidesElderRoomPopulator {
         try {
             // World w = ((PopulatorDataPostGen) data).getWorld();
             // Add one to all to correct some weird aligning shit.
-            schema = TerraSchematic.load("monument-gold", new SimpleBlock(data,x+1,y-5,z+1));
+            schema = TerraSchematic.load("monument-gold", new SimpleBlock(data, x + 1, y - 5, z + 1));
             schema.parser = new MonumentSchematicParser();
             schema.setFace(BlockFace.NORTH);
             schema.apply();
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 

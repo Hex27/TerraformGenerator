@@ -9,7 +9,7 @@ import java.util.HashMap;
 @SuppressWarnings("UnstableApiUsage")
 public class EntityTypeMapper {
 
-    private static final HashMap<EntityType, String> obsNames = new HashMap<>(){{
+    private static final HashMap<EntityType, String> obsNames = new HashMap<>() {{
         put(EntityType.ALLAY, "b");
         put(EntityType.AREA_EFFECT_CLOUD, "c");
         put(EntityType.ARMOR_STAND, "d");
@@ -135,12 +135,13 @@ public class EntityTypeMapper {
         put(EntityType.PLAYER, "bt");
         put(EntityType.FISHING_HOOK, "bu");
     }};
-	public static @NotNull String getObfsNameFromBukkitEntityType(@NotNull EntityType e){
+
+    public static @NotNull String getObfsNameFromBukkitEntityType(@NotNull EntityType e) {
         String name = obsNames.get(e);
-        if(name == null) {
+        if (name == null) {
             TerraformGeneratorPlugin.logger.error("INVALID ENTITY REQUESTED: " + e);
             return "";
         }
         return name;
-	}
+    }
 }

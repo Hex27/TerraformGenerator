@@ -23,30 +23,26 @@ public class JigsawState {
     /**
      * Called to check if chunkX,chunkZ will contain a piece
      */
-    public boolean isInRange(int chunkX, int chunkZ){
-        if(!calculatedRange)
-        {
+    public boolean isInRange(int chunkX, int chunkZ) {
+        if (!calculatedRange) {
             calculatedRange = true;
-            roomPopulatorStates.forEach((gen)->{
-                gen.getRooms().forEach((room)->{
+            roomPopulatorStates.forEach((gen) -> {
+                gen.getRooms().forEach((room) -> {
                     int[] lowerCorner = room.getLowerCorner();
                     int[] upperCorner = room.getUpperCorner();
-                    minChunkX = Math.min(minChunkX, lowerCorner[0]>>4);
-                    maxChunkX = Math.max(maxChunkX, upperCorner[0]>>4);
-                    minChunkZ = Math.min(minChunkZ, lowerCorner[1]>>4);
-                    maxChunkZ = Math.max(maxChunkZ, upperCorner[1]>>4);
+                    minChunkX = Math.min(minChunkX, lowerCorner[0] >> 4);
+                    maxChunkX = Math.max(maxChunkX, upperCorner[0] >> 4);
+                    minChunkZ = Math.min(minChunkZ, lowerCorner[1] >> 4);
+                    maxChunkZ = Math.max(maxChunkZ, upperCorner[1] >> 4);
                 });
 
-                minChunkX = Math.min(minChunkX, (gen.getCentX()-gen.getRange())>>4);
-                maxChunkX = Math.max(maxChunkX, (gen.getCentX()+gen.getRange())>>4);
-                minChunkZ = Math.min(minChunkZ, (gen.getCentZ()-gen.getRange())>>4);
-                maxChunkZ = Math.max(maxChunkZ, (gen.getCentZ()+gen.getRange())>>4);
+                minChunkX = Math.min(minChunkX, (gen.getCentX() - gen.getRange()) >> 4);
+                maxChunkX = Math.max(maxChunkX, (gen.getCentX() + gen.getRange()) >> 4);
+                minChunkZ = Math.min(minChunkZ, (gen.getCentZ() - gen.getRange()) >> 4);
+                maxChunkZ = Math.max(maxChunkZ, (gen.getCentZ() + gen.getRange()) >> 4);
             });
         }
 
-        return chunkX >= minChunkX
-                && chunkX <= maxChunkX
-                && chunkZ >= minChunkZ
-                && chunkZ <= maxChunkZ;
+        return chunkX >= minChunkX && chunkX <= maxChunkX && chunkZ >= minChunkZ && chunkZ <= maxChunkZ;
     }
 }

@@ -18,57 +18,55 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.noise.FastNoise;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GenUtils {
     public static final Random RANDOMIZER = new Random();
     private static final EnumSet<Material> BLACKLIST_HIGHEST_GROUND = EnumSet.noneOf(Material.class);
+    public static LoadingCache<ChunkCache, EnumSet<BiomeBank>> biomeQueryCache;
+
     public static void initGenUtils() {
 
-    	// Initialize highest ground blacklist
-    	for(Material mat:Material.values()) {
-    		if(mat.toString().contains("LEAVES")
-    				|| mat.toString().contains("LOG")
-    				|| mat.toString().contains("WOOD")
-    				|| mat.toString().contains("MUSHROOM")
-    				|| mat.toString().contains("FENCE")
-    				|| mat.toString().contains("WALL")
-    				|| mat.toString().contains("POTTED")
-    				|| mat.toString().contains("BRICK")
-    				|| mat.toString().contains("CHAIN")
-    				|| mat.toString().contains("CORAL")
-    				|| mat.toString().contains("POINTED_DRIPSTONE")
-    				|| mat.toString().contains("NETHERRACK")
-    				|| mat.toString().contains("MANGROVE")
-    				|| mat == Material.HAY_BLOCK
-    				|| mat == Material.ICE
-    				|| mat == Material.CACTUS
-    				|| mat == Material.BAMBOO
-    				|| mat == Material.BAMBOO_SAPLING
-    				|| mat == Material.IRON_BARS
-    				|| mat == Material.LANTERN
-    				// || mat == Material.SNOW_BLOCK
-    				// || mat == Material.PACKED_ICE
-    				// || mat == Material.BLUE_ICE
-    				) {
-//    	    	{
-//              "LEAVES", "LOG",
-//              "WOOD", "MUSHROOM",
-//              "FENCE", "WALL",
-//              "POTTED", "BRICK",
-//              "CHAIN", "CORAL",
-//              "POINTED_DRIPSTONE",
-//              "NETHERRACK"
-//      };
-    			BLACKLIST_HIGHEST_GROUND.add(mat);
-    		}
-    	}
+        // Initialize highest ground blacklist
+        for (Material mat : Material.values()) {
+            if (mat.toString().contains("LEAVES")
+                || mat.toString().contains("LOG")
+                || mat.toString().contains("WOOD")
+                || mat.toString().contains("MUSHROOM")
+                || mat.toString().contains("FENCE")
+                || mat.toString().contains("WALL")
+                || mat.toString().contains("POTTED")
+                || mat.toString().contains("BRICK")
+                || mat.toString().contains("CHAIN")
+                || mat.toString().contains("CORAL")
+                || mat.toString().contains("POINTED_DRIPSTONE")
+                || mat.toString().contains("NETHERRACK")
+                || mat.toString().contains("MANGROVE")
+                || mat == Material.HAY_BLOCK
+                || mat == Material.ICE
+                || mat == Material.CACTUS
+                || mat == Material.BAMBOO
+                || mat == Material.BAMBOO_SAPLING
+                || mat == Material.IRON_BARS
+                || mat == Material.LANTERN
+                // || mat == Material.SNOW_BLOCK
+                // || mat == Material.PACKED_ICE
+                // || mat == Material.BLUE_ICE
+            )
+            {
+                //    	    	{
+                //              "LEAVES", "LOG",
+                //              "WOOD", "MUSHROOM",
+                //              "FENCE", "WALL",
+                //              "POTTED", "BRICK",
+                //              "CHAIN", "CORAL",
+                //              "POINTED_DRIPSTONE",
+                //              "NETHERRACK"
+                //      };
+                BLACKLIST_HIGHEST_GROUND.add(mat);
+            }
+        }
     }
-    public static LoadingCache<ChunkCache, EnumSet<BiomeBank>> biomeQueryCache;
 
     public static int getSign(@NotNull Random rand) {
         return rand.nextBoolean() ? 1 : -1;
@@ -77,28 +75,43 @@ public class GenUtils {
     /**
      * This will now use StoneLike, and not just any solid block.
      */
-    public static @NotNull Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data, int x, int z, int minimumHeight) {
-        int y = data instanceof PopulatorDataSpigotAPI ? getTransformedHeight(data.getTerraformWorld(),x,z) : getHighestGround(data, x, z);
+    public static @NotNull Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data,
+                                                               int x,
+                                                               int z,
+                                                               int minimumHeight)
+    {
+        int y = data instanceof PopulatorDataSpigotAPI
+                ? getTransformedHeight(data.getTerraformWorld(), x, z)
+                : getHighestGround(data, x, z);
         int[] pair = {TerraformGeneratorPlugin.injector.getMinY() - 1, TerraformGeneratorPlugin.injector.getMinY() - 1};
         List<int[]> list = new ArrayList<>();
         // Subtract one as the first cave floor cannot be the surface
-        for(int ny = y-1; ny > TerraformGeneratorPlugin.injector.getMinY(); ny--) {
+        for (int ny = y - 1; ny > TerraformGeneratorPlugin.injector.getMinY(); ny--) {
             Material type = data.getType(x, ny, z);
-            if(BlockUtils.isStoneLike(type)) {
+            if (BlockUtils.isStoneLike(type)) {
                 pair[1] = ny;
-                if(pair[0] - pair[1] >= minimumHeight) list.add(pair);
-                pair = new int[] {TerraformGeneratorPlugin.injector.getMinY() - 1,TerraformGeneratorPlugin.injector.getMinY() - 1};
-            } else if(pair[0] == TerraformGeneratorPlugin.injector.getMinY() - 1)
+                if (pair[0] - pair[1] >= minimumHeight) {
+                    list.add(pair);
+                }
+                pair = new int[] {
+                        TerraformGeneratorPlugin.injector.getMinY() - 1,
+                        TerraformGeneratorPlugin.injector.getMinY() - 1
+                };
+            }
+            else if (pair[0] == TerraformGeneratorPlugin.injector.getMinY() - 1) {
                 pair[0] = ny;
+            }
         }
 
         return list;
     }
 
     public static int[] randomCoords(@NotNull Random rand, int @NotNull [] lowBound, int @NotNull [] highBound) {
-        return new int[] {randInt(rand, lowBound[0], highBound[0]),
+        return new int[] {
+                randInt(rand, lowBound[0], highBound[0]),
                 randInt(rand, lowBound[1], highBound[1]),
-                randInt(rand, lowBound[2], highBound[2])};
+                randInt(rand, lowBound[2], highBound[2])
+        };
     }
 
     public static boolean chance(@NotNull Random rand, int chance, int outOf) {
@@ -125,19 +138,26 @@ public class GenUtils {
      *
      * @return Position for the biome or null if no biomes found.
      */
-    public static @Nullable Vector2f locateHeightDependentBiome(@NotNull TerraformWorld tw, @NotNull BiomeBank biome, @NotNull Vector2f center, int radius, int blockSkip) {
-        if(!BiomeBank.isBiomeEnabled(biome)) return null;
-    	if(tw.getBiomeBank(Math.round(center.x), Math.round(center.y)) == biome)
+    public static @Nullable Vector2f locateHeightDependentBiome(@NotNull TerraformWorld tw,
+                                                                @NotNull BiomeBank biome,
+                                                                @NotNull Vector2f center,
+                                                                int radius,
+                                                                int blockSkip)
+    {
+        if (!BiomeBank.isBiomeEnabled(biome)) {
+            return null;
+        }
+        if (tw.getBiomeBank(Math.round(center.x), Math.round(center.y)) == biome) {
             return new Vector2f(center.x, center.y);
+        }
         int iter = 2;
 
         int x = (int) center.x;
         int z = (int) center.y;
 
-        while(Math.abs(center.x - x) < radius
-                || Math.abs(center.y - z) < radius) {
-            for(int i = 0; i < iter / 2; i++) {
-                switch(iter % 4) {
+        while (Math.abs(center.x - x) < radius || Math.abs(center.y - z) < radius) {
+            for (int i = 0; i < iter / 2; i++) {
+                switch (iter % 4) {
                     case 0 -> x += blockSkip;
                     case 1 -> z -= blockSkip;
                     case 2 -> x -= blockSkip;
@@ -145,42 +165,57 @@ public class GenUtils {
                 }
             }
 
-            if(tw.getBiomeBank(x, z) == biome) return new Vector2f(x, z);
+            if (tw.getBiomeBank(x, z) == biome) {
+                return new Vector2f(x, z);
+            }
             iter++;
         }
 
         return null;
     }
-    
+
     /**
      * Locates a biome with BiomeSection.
      * WILL NOT FIND RIVERS AND BEACHES.
      * Does not stop until biome is found, much like structure locate, because it should work.
      */
-    public static @Nullable Vector2f locateHeightIndependentBiome(TerraformWorld tw, @NotNull BiomeBank biome, @NotNull Vector2f centerBlockLocation) {
-        if(!BiomeBank.isBiomeEnabled(biome)) return null;
-        
-    	BiomeSection center = BiomeBank.getBiomeSectionFromBlockCoords(tw, (int) centerBlockLocation.x, (int) centerBlockLocation.y);
-    	int radius = 0;
-    	
-    	while(true) {
-    		for(BiomeSection sect:center.getRelativeSurroundingSections(radius)) {
-    			if(sect.getBiomeBank() == biome) {
-    				SimpleLocation sectionCenter = sect.getCenter();
-    				return new Vector2f(sectionCenter.getX(),sectionCenter.getZ());
-    			}
-    			radius++;
-    		}
-    	}
+    public static @Nullable Vector2f locateHeightIndependentBiome(TerraformWorld tw,
+                                                                  @NotNull BiomeBank biome,
+                                                                  @NotNull Vector2f centerBlockLocation)
+    {
+        if (!BiomeBank.isBiomeEnabled(biome)) {
+            return null;
+        }
+
+        BiomeSection center = BiomeBank.getBiomeSectionFromBlockCoords(
+                tw,
+                (int) centerBlockLocation.x,
+                (int) centerBlockLocation.y
+        );
+        int radius = 0;
+
+        while (true) {
+            for (BiomeSection sect : center.getRelativeSurroundingSections(radius)) {
+                if (sect.getBiomeBank() == biome) {
+                    SimpleLocation sectionCenter = sect.getCenter();
+                    return new Vector2f(sectionCenter.getX(), sectionCenter.getZ());
+                }
+                radius++;
+            }
+        }
     }
 
     public static Object weightedChoice(@NotNull Random rand, Object @NotNull ... candidates) {
-        if(candidates.length % 2 != 0) throw new IllegalArgumentException();
+        if (candidates.length % 2 != 0) {
+            throw new IllegalArgumentException();
+        }
         ArrayList<Object> types = new ArrayList<>(50);
-        for(int i = 0; i < candidates.length; i+=2) {
+        for (int i = 0; i < candidates.length; i += 2) {
             Object type = candidates[i];
-            int freq = (int) candidates[i+1];
-            for(int z = 0; z < freq; z++) types.add(type);
+            int freq = (int) candidates[i + 1];
+            for (int z = 0; z < freq; z++) {
+                types.add(type);
+            }
         }
 
         return types.get(randInt(rand, 0, types.size() - 1));
@@ -196,7 +231,9 @@ public class GenUtils {
 
     @SafeVarargs
     public static <T> T randChoice(@NotNull Random rand, T @NotNull ... candidates) {
-        if(candidates.length == 1) return candidates[0]; // avoid invocation to randInt
+        if (candidates.length == 1) {
+            return candidates[0]; // avoid invocation to randInt
+        }
         return candidates[randInt(rand, 0, candidates.length - 1)];
     }
 
@@ -230,20 +267,24 @@ public class GenUtils {
     }
 
     public static int randInt(int min, int max) {
-        if(min == max) return min;
+        if (min == max) {
+            return min;
+        }
         return randInt(RANDOMIZER, min, max);
     }
 
     public static int randInt(@NotNull Random rand, int d, int max) {
-        if(d == max) return d;
+        if (d == max) {
+            return d;
+        }
         boolean negative = false;
-        if(d < 0 && max < 0) {
+        if (d < 0 && max < 0) {
             negative = true;
             d = -d;
             max = -max;
         }
 
-        if(max < d) {
+        if (max < d) {
             int temp = d;
             d = max;
             max = temp;
@@ -258,8 +299,10 @@ public class GenUtils {
      */
     public static int randOddInt(@NotNull Random rand, int min, int max) {
         int randomNum = rand.nextInt((max - min) + 1) + min;
-        if(randomNum % 2 == 0) {
-            if(randomNum++ > max) randomNum -= 2;
+        if (randomNum % 2 == 0) {
+            if (randomNum++ > max) {
+                randomNum -= 2;
+            }
         }
         return randomNum;
     }
@@ -267,9 +310,12 @@ public class GenUtils {
     public static double randDouble(@NotNull Random rand, double min, double max) {
         return rand.nextDouble() * (max - min) + min;
     }
+
     public static int getHighestX(@NotNull PopulatorDataAbstract data, int x, int z, Material X) {
         int y = TerraformGeneratorPlugin.injector.getMaxY() - 1;
-        while(y > TerraformGeneratorPlugin.injector.getMinY() && data.getType(x, y, z) != X) y--;
+        while (y > TerraformGeneratorPlugin.injector.getMinY() && data.getType(x, y, z) != X) {
+            y--;
+        }
         return y;
     }
 
@@ -278,55 +324,61 @@ public class GenUtils {
      * @return the highest solid block
      */
     public static int getTrueHighestBlock(@NotNull PopulatorDataAbstract data, int x, int z) {
-        int y = TerraformGeneratorPlugin.injector.getMaxY()-1;
-        while(y > TerraformGeneratorPlugin.injector.getMinY() && !data.getType(x, y, z).isSolid()) y--;
+        int y = TerraformGeneratorPlugin.injector.getMaxY() - 1;
+        while (y > TerraformGeneratorPlugin.injector.getMinY() && !data.getType(x, y, z).isSolid()) {
+            y--;
+        }
         return y;
     }
 
-    
+
     /**
-     *
      * @return the highest dry ground, or the sea level
      */
     public static int getHighestGroundOrSeaLevel(PopulatorDataAbstract data, int x, int z) {
-    	int y = getHighestGround(data,x,z);
+        int y = getHighestGround(data, x, z);
         return Math.max(y, TerraformGenerator.seaLevel);
     }
-    
+
     /**
      * @return the highest solid block below y
      */
     public static int getTrueHighestBlockBelow(@NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        while(y > TerraformGeneratorPlugin.injector.getMinY() && !data.getType(x, y, z).isSolid()) y--;
+        while (y > TerraformGeneratorPlugin.injector.getMinY() && !data.getType(x, y, z).isSolid()) {
+            y--;
+        }
         return y;
     }
 
     public static @NotNull SimpleBlock getTrueHighestBlockBelow(@NotNull SimpleBlock block) {
         int y = block.getY();
-        while(y > TerraformGeneratorPlugin.injector.getMinY() && !block.getPopData().getType(block.getX(), y, block.getZ()).isSolid()) y--;
+        while (y > TerraformGeneratorPlugin.injector.getMinY() && !block.getPopData()
+                                                                        .getType(block.getX(), y, block.getZ())
+                                                                        .isSolid()) {
+            y--;
+        }
         return new SimpleBlock(block.getPopData(), block.getX(), y, block.getZ());
     }
 
-	public static boolean isGroundLike(@NotNull Material mat) {
-    	// Ice is considered stone-like, but not in a million years is it ground.
-        if(BlockUtils.isStoneLike(mat) 
-        		&& mat != Material.PACKED_ICE 
-        		&& mat != Material.BLUE_ICE) 
-        	return true;
-        if(mat == Material.SAND 
-        	|| mat == Material.RED_SAND
-        	|| mat == Material.GRAVEL)
-        	return true;
+    public static boolean isGroundLike(@NotNull Material mat) {
+        // Ice is considered stone-like, but not in a million years is it ground.
+        if (BlockUtils.isStoneLike(mat) && mat != Material.PACKED_ICE && mat != Material.BLUE_ICE) {
+            return true;
+        }
+        if (mat == Material.SAND || mat == Material.RED_SAND || mat == Material.GRAVEL) {
+            return true;
+        }
 
-        if(mat.isSolid()) {
-            if(mat.isInteractable()) {
+        if (mat.isSolid()) {
+            if (mat.isInteractable()) {
                 return false;
             }
-            if(Tag.SLABS.isTagged(mat)) {
-            	return false;
+            if (Tag.SLABS.isTagged(mat)) {
+                return false;
             }
             return !BLACKLIST_HIGHEST_GROUND.contains(mat);
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -340,10 +392,10 @@ public class GenUtils {
     public static int getTransformedHeight(@NotNull TerraformWorld tw, int rawX, int rawZ)
     {
         ChunkCache cache = TerraformGenerator.getCache(tw, rawX, rawZ);
-        int cachedY = cache.getTransformedHeight(rawX&0xF, rawZ&0xF);
-        if(cachedY == TerraformGeneratorPlugin.injector.getMinY()-1){
-            TerraformGenerator.buildFilledCache(tw, rawX>>4,rawZ>>4, cache);
-            cachedY = cache.getTransformedHeight(rawX&0xF, rawZ&0xF);
+        int cachedY = cache.getTransformedHeight(rawX & 0xF, rawZ & 0xF);
+        if (cachedY == TerraformGeneratorPlugin.injector.getMinY() - 1) {
+            TerraformGenerator.buildFilledCache(tw, rawX >> 4, rawZ >> 4, cache);
+            cachedY = cache.getTransformedHeight(rawX & 0xF, rawZ & 0xF);
         }
         return cachedY;
     }
@@ -362,50 +414,62 @@ public class GenUtils {
      */
     public static int getHighestGround(PopulatorDataAbstract data, int x, int z) {
         // If you're too lazy to bother then just do this
-        if(data instanceof PopulatorDataSpigotAPI)
-            return getTransformedHeight(data.getTerraformWorld(),x,z);
+        if (data instanceof PopulatorDataSpigotAPI) {
+            return getTransformedHeight(data.getTerraformWorld(), x, z);
+        }
 
-    	int y = TerraformGeneratorPlugin.injector.getMaxY()-1;
-    	ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x, z);
-    	int cachedY = cache.getHighestGround(x, z);
-    	if(cachedY != TerraformGeneratorPlugin.injector.getMinY()-1) {
-    		// Basic check to ensure block above is not ground
-    		// and current block is ground.
-    		// Will fail if the new ground is an overhang of some kind.
-    		if(isGroundLike(data.getType(x, cachedY, z))
-    				&& !isGroundLike(data.getType(x, cachedY+1, z))) {
+        int y = TerraformGeneratorPlugin.injector.getMaxY() - 1;
+        ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x, z);
+        int cachedY = cache.getHighestGround(x, z);
+        if (cachedY != TerraformGeneratorPlugin.injector.getMinY() - 1) {
+            // Basic check to ensure block above is not ground
+            // and current block is ground.
+            // Will fail if the new ground is an overhang of some kind.
+            if (isGroundLike(data.getType(x, cachedY, z)) && !isGroundLike(data.getType(x, cachedY + 1, z))) {
                 return cache.getHighestGround(x, z);
             }
-    	}
+        }
 
-        while(y > TerraformGeneratorPlugin.injector.getMinY()) {
+        while (y > TerraformGeneratorPlugin.injector.getMinY()) {
             Material block = data.getType(x, y, z);
-            if(!isGroundLike(block)) {
-            	y--;
-            	continue;
+            if (!isGroundLike(block)) {
+                y--;
+                continue;
             }
             break;
         }
-        if(y <= TerraformGeneratorPlugin.injector.getMinY()) {
-            TerraformGeneratorPlugin.logger.error("GetHighestGround returned less than " + TerraformGeneratorPlugin.injector.getMinY() + "! (" + y + ")");
-            try { throw new Exception("GetHighestGround returned less than " + TerraformGeneratorPlugin.injector.getMinY() + "! (" + y + ")"); }
+        if (y <= TerraformGeneratorPlugin.injector.getMinY()) {
+            TerraformGeneratorPlugin.logger.error("GetHighestGround returned less than "
+                                                  + TerraformGeneratorPlugin.injector.getMinY()
+                                                  + "! ("
+                                                  + y
+                                                  + ")");
+            try {
+                throw new Exception("GetHighestGround returned less than "
+                                    + TerraformGeneratorPlugin.injector.getMinY()
+                                    + "! ("
+                                    + y
+                                    + ")");
+            }
             catch (Exception e) {
                 TerraformGeneratorPlugin.logger.stackTrace(e);
             }
         }
-        
+
         // Y can be stored as a short, as there's no way world height will be 32k.
         cache.cacheHighestGround(x, z, Integer.valueOf(y).shortValue());
         return y;
     }
 
-    public static Material @NotNull [] mergeArr(@NotNull Material[] ... arrs) {
+    public static Material @NotNull [] mergeArr(@NotNull Material[]... arrs) {
         int totalLength = 0, index = 0;
-        for(Material[] arr : arrs) totalLength += arr.length;
+        for (Material[] arr : arrs) {
+            totalLength += arr.length;
+        }
         Material[] res = new Material[totalLength];
 
-        for(Material[] arr : arrs) {
-            for(Material mat : arr) {
+        for (Material[] arr : arrs) {
+            for (Material mat : arr) {
                 res[index++] = mat;
             }
         }
@@ -424,7 +488,12 @@ public class GenUtils {
      * @param maxPerturbation Max amount a point can move in each axis
      * @return Array of points
      */
-    public static Vector2f @NotNull [] vectorRandomObjectPositions(int seed, int chunkX, int chunkZ, int distanceBetween, float maxPerturbation) {
+    public static Vector2f @NotNull [] vectorRandomObjectPositions(int seed,
+                                                                   int chunkX,
+                                                                   int chunkZ,
+                                                                   int distanceBetween,
+                                                                   float maxPerturbation)
+    {
 
         FastNoise noise = new FastNoise(seed);
         noise.SetFrequency(1);
@@ -444,66 +513,101 @@ public class GenUtils {
 
         // Also checks if points from chunks close by are perturbed to this chunk
         for (int x = startX - distanceBetween; x < startX + 16 + distanceBetween; x += distanceBetween) {
-            for(int z = startZ - distanceBetween; z < startZ + 16 + distanceBetween; z += distanceBetween) {
+            for (int z = startZ - distanceBetween; z < startZ + 16 + distanceBetween; z += distanceBetween) {
                 Vector2f v = new Vector2f(x, z);
                 noise.GradientPerturb(v);
                 v.x = Math.round(v.x);
                 v.y = Math.round(v.y);
 
                 // If perturbed vector is inside chunk
-                if (v.x >= (chunkX << 4) && v.x < (chunkX << 4) + 16 &&
-                        v.y >= (chunkZ << 4) && v.y < (chunkZ << 4) + 16 )
+                if (v.x >= (chunkX << 4)
+                    && v.x < (chunkX << 4) + 16
+                    && v.y >= (chunkZ << 4)
+                    && v.y < (chunkZ << 4) + 16)
+                {
                     positions.add(v);
+                }
             }
         }
 
         return positions.toArray(new Vector2f[0]);
     }
 
-    public static SimpleLocation @NotNull [] randomObjectPositions(@NotNull TerraformWorld world, int chunkX, int chunkZ, int distanceBetween) {
-    	Vector2f[] vecs = vectorRandomObjectPositions((int)world.getSeed(), chunkX, chunkZ, distanceBetween, 0.35f * distanceBetween);
+    public static SimpleLocation @NotNull [] randomObjectPositions(@NotNull TerraformWorld world,
+                                                                   int chunkX,
+                                                                   int chunkZ,
+                                                                   int distanceBetween)
+    {
+        Vector2f[] vecs = vectorRandomObjectPositions(
+                (int) world.getSeed(),
+                chunkX,
+                chunkZ,
+                distanceBetween,
+                0.35f * distanceBetween
+        );
         SimpleLocation[] locs = new SimpleLocation[vecs.length];
-    	
-    	for(int i = 0; i < vecs.length; i++) {
-    		locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
-    	}
-        
+
+        for (int i = 0; i < vecs.length; i++) {
+            locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
+        }
+
         return locs;
     }
 
     /**
-     *
      * @param pertubMultiplier is normally 0.35.
      */
-    public static SimpleLocation @NotNull [] randomObjectPositions(@NotNull TerraformWorld world, int chunkX, int chunkZ, int distanceBetween, float pertubMultiplier) {
-    	Vector2f[] vecs = vectorRandomObjectPositions((int)world.getSeed(), chunkX, chunkZ, distanceBetween, pertubMultiplier * distanceBetween);
+    public static SimpleLocation @NotNull [] randomObjectPositions(@NotNull TerraformWorld world,
+                                                                   int chunkX,
+                                                                   int chunkZ,
+                                                                   int distanceBetween,
+                                                                   float pertubMultiplier)
+    {
+        Vector2f[] vecs = vectorRandomObjectPositions(
+                (int) world.getSeed(),
+                chunkX,
+                chunkZ,
+                distanceBetween,
+                pertubMultiplier * distanceBetween
+        );
         SimpleLocation[] locs = new SimpleLocation[vecs.length];
-    	
-    	for(int i = 0; i < vecs.length; i++) {
-    		locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
-    	}
-        
+
+        for (int i = 0; i < vecs.length; i++) {
+            locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
+        }
+
         return locs;
     }
-    
+
     /**
-     * 
-     * @param seed for tighter control between points
+     * @param seed             for tighter control between points
      * @param pertubMultiplier is normally 0.35.
      */
-    public static SimpleLocation @NotNull [] randomObjectPositions(int seed, int chunkX, int chunkZ, int distanceBetween, float pertubMultiplier) {
-    	Vector2f[] vecs = vectorRandomObjectPositions(seed, chunkX, chunkZ, distanceBetween, pertubMultiplier * distanceBetween);
+    public static SimpleLocation @NotNull [] randomObjectPositions(int seed,
+                                                                   int chunkX,
+                                                                   int chunkZ,
+                                                                   int distanceBetween,
+                                                                   float pertubMultiplier)
+    {
+        Vector2f[] vecs = vectorRandomObjectPositions(
+                seed,
+                chunkX,
+                chunkZ,
+                distanceBetween,
+                pertubMultiplier * distanceBetween
+        );
         SimpleLocation[] locs = new SimpleLocation[vecs.length];
-    	
-    	for(int i = 0; i < vecs.length; i++) {
-    		locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
-    	}
-        
+
+        for (int i = 0; i < vecs.length; i++) {
+            locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
+        }
+
         return locs;
     }
 
     /**
      * Random-angle
+     *
      * @return An angle between lowerBound*base to upperBound*base degrees in radians
      */
     public static double randAngle(double base, double lowerBound, double upperBound) {
@@ -512,18 +616,25 @@ public class GenUtils {
 
     public static <T> @Nullable T choice(@NotNull Random rand, T @NotNull [] array)
     {
-        if(array.length == 0) return null;
-        if(array.length == 1) return array[0];
+        if (array.length == 0) {
+            return null;
+        }
+        if (array.length == 1) {
+            return array[0];
+        }
         return array[rand.nextInt(array.length)];
     }
 
     /**
      * Gets the center chunk of a hypothetically split limited region of 3x3 chunks
+     *
      * @return a chunk coordinate
      */
-    public static int getTripleChunk(int chunkCoord){
-        if(chunkCoord >= 0) return 1+3*(chunkCoord/3);
+    public static int getTripleChunk(int chunkCoord) {
+        if (chunkCoord >= 0) {
+            return 1 + 3 * (chunkCoord / 3);
+        }
 
-        return 1+3*(-1+(chunkCoord+1)/3);
+        return 1 + 3 * (-1 + (chunkCoord + 1) / 3);
     }
 }

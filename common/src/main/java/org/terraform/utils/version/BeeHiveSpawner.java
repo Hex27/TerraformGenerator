@@ -6,24 +6,23 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.IPopulatorDataBeehiveEditor;
 import org.terraform.data.SimpleBlock;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfig;
 
 public class BeeHiveSpawner {
 
     public static void spawnFullBeeNest(@NotNull SimpleBlock block) {
-        try
-        {
-            if(block.getPopData() instanceof IPopulatorDataBeehiveEditor ipopdata)
-            {
+        if (!TConfig.areAnimalsEnabled()) return;
+
+        try {
+            if (block.getPopData() instanceof IPopulatorDataBeehiveEditor ipopdata) {
                 ipopdata.setBeehiveWithBee(block.getX(), block.getY(), block.getZ());
             }
-            else
-            {
+            else {
                 block.setType(Material.BEE_NEST);
                 block.getPopData().addEntity(block.getX(), block.getY(), block.getZ(), EntityType.BEE);
             }
         }
-        catch(NullPointerException e)
-        {
+        catch (NullPointerException e) {
             TerraformGeneratorPlugin.logger.info("Beehive null silently ignored");
         }
     }

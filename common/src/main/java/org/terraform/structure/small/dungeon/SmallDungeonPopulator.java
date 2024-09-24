@@ -5,7 +5,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.GenUtils;
 
@@ -14,7 +14,9 @@ import java.util.Random;
 public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if ( !isEnabled() ) return;
+        if (!isEnabled()) {
+            return;
+        }
 
         int totalHeight = 0;
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
@@ -23,35 +25,45 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
             }
         }
 
-        if (totalHeight / 256 <= TConfigOption.STRUCTURES_DROWNEDDUNGEON_MIN_DEPTH.getInt()
-                && GenUtils.chance(tw.getHashedRand(1223, data.getChunkX(), data.getChunkZ()), TConfigOption.STRUCTURES_DROWNEDDUNGEON_CHANCE.getInt(), 1000)) {
+        if (totalHeight / 256 <= TConfig.c.STRUCTURES_DROWNEDDUNGEON_MIN_DEPTH
+            && GenUtils.chance(
+                tw.getHashedRand(1223, data.getChunkX(), data.getChunkZ()),
+                TConfig.c.STRUCTURES_DROWNEDDUNGEON_CHANCE,
+                1000
+        ))
+        {
             // Only spawn these in full oceans
-            if (!TConfigOption.STRUCTURES_DROWNEDDUNGEON_ENABLED.getBoolean())
+            if (!TConfig.c.STRUCTURES_DROWNEDDUNGEON_ENABLED) {
                 return;
+            }
             new DrownedDungeonPopulator().populate(tw, data);
-        } else {
-            if (!TConfigOption.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED.getBoolean())
+        }
+        else {
+            if (!TConfig.c.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED) {
                 return;
+            }
             new UndergroundDungeonPopulator().populate(tw, data);
         }
     }
-    
+
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 12222),
-                (int) (TConfigOption.STRUCTURES_DUNGEONS_SPAWNRATIO
-                        .getDouble() * 10000),
-                10000);
+                (int) (TConfig.c.STRUCTURES_DUNGEONS_SPAWNRATIO * 10000),
+                10000
+        );
     }
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
-        if (!isEnabled()) return false;
+        if (!isEnabled()) {
+            return false;
+        }
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
             if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
-                return rollSpawnRatio(tw,chunkX,chunkZ);
+                return rollSpawnRatio(tw, chunkX, chunkZ);
             }
         }
         return false;
@@ -60,10 +72,11 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
     // Each mega chunk has config option dungeons
     @Override
     public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-    	int num = TConfigOption.STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK.getInt();
+        int num = TConfig.c.STRUCTURES_DUNGEONS_COUNT_PER_MEGACHUNK;
         int[][] coords = new int[num][2];
-        for (int i = 0; i < num; i++)
-            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324*(1+i)));
+        for (int i = 0; i < num; i++) {
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 1317324 * (1 + i)));
+        }
         return coords;
     }
 
@@ -94,7 +107,7 @@ public class SmallDungeonPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && (TConfigOption.STRUCTURES_DROWNEDDUNGEON_ENABLED.getBoolean()
-                                                        || TConfigOption.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED.getBoolean());
+        return TConfig.areStructuresEnabled() && (TConfig.c.STRUCTURES_DROWNEDDUNGEON_ENABLED
+                                                  || TConfig.c.STRUCTURES_UNDERGROUNDDUNGEON_ENABLED);
     }
 }

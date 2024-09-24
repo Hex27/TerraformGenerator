@@ -1,12 +1,12 @@
 package org.terraform.command.contants;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.FractalTypes.Mushroom;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class MushroomTypeArgument extends TerraCommandArgument<FractalTypes.Mushroom> {
 
@@ -25,23 +25,27 @@ public class MushroomTypeArgument extends TerraCommandArgument<FractalTypes.Mush
     public @NotNull String validate(CommandSender sender, @NotNull String value) {
         try {
             parse(sender, value);
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e) {
             return "Mushroom type does not exist!";
         }
         return "";
     }
-    
+
 
     @Override
     public @NotNull ArrayList<String> getTabOptions(String @NotNull [] args) {
-        if (args.length != 2) return new ArrayList<>();
+        if (args.length != 2) {
+            return new ArrayList<>();
+        }
         ArrayList<String> values = new ArrayList<>();
 
-        for(Mushroom type: FractalTypes.Mushroom.values()) {
-        	if(type.toString().startsWith(args[1].toUpperCase(Locale.ENGLISH)))
-        		values.add(type.toString());
+        for (Mushroom type : FractalTypes.Mushroom.values()) {
+            if (type.toString().startsWith(args[1].toUpperCase(Locale.ENGLISH))) {
+                values.add(type.toString());
+            }
         }
-        
+
         return values;
     }
 

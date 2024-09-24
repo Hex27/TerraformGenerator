@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
+
 import java.util.Stack;
 
 public class InjectorDebugTestCommand extends TerraCommand {
@@ -36,11 +37,11 @@ public class InjectorDebugTestCommand extends TerraCommand {
         Player p = (Player) sender;
 
         World w = p.getWorld();
-        
-        for(int y = -64; y < 320; y++) {
-        	w.setBiome(p.getLocation().getBlockX(), y, p.getLocation().getBlockZ(), Biome.BADLANDS);	
+
+        for (int y = -64; y < 320; y++) {
+            w.setBiome(p.getLocation().getBlockX(), y, p.getLocation().getBlockZ(), Biome.BADLANDS);
         }
         p.sendMessage("Finished setting biome.");
-        
+
     }
 }

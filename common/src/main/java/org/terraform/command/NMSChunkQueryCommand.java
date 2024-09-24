@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
+
 import java.util.Stack;
 
 public class NMSChunkQueryCommand extends TerraCommand {
@@ -30,8 +31,8 @@ public class NMSChunkQueryCommand extends TerraCommand {
 
     @Override
     public void execute(CommandSender sender, Stack<String> args)
-	{
-    	// Commented out to prevent runtime errors for older versions
+    {
+        // Commented out to prevent runtime errors for older versions
     }
 
 }

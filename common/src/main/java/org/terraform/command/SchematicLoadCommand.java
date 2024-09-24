@@ -38,9 +38,8 @@ public class SchematicLoadCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
-            throws InvalidArgumentException {
-        try{
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args) throws InvalidArgumentException {
+        try {
             ArrayList<Object> parsed = this.parseArguments(sender, args);
             TerraSchematic schem = (TerraSchematic) parsed.get(0);
             sender.sendMessage("Schematic Version: " + schem.getVersionValue());
@@ -48,8 +47,7 @@ public class SchematicLoadCommand extends TerraCommand {
             sender.sendMessage("Facing: " + schem.getFace());
             schem.apply();
         }
-        catch(IllegalArgumentException e)
-        {
+        catch (IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + e.getMessage());
         }
     }

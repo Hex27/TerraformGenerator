@@ -30,15 +30,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class NMSInjector extends NMSInjectorAbstract {
-	
-	// private boolean heightInjectSuccess = true;
-	
-	@Override
-	public void startupTasks() {
+
+    // private boolean heightInjectSuccess = true;
+
+    private static @Nullable Method getTileEntity = null;
+
+    @Override
+    public void startupTasks() {
         // Inject new biomes
         CustomBiomeHandler.init();
-	}
-	
+    }
+
     @Override
     public BlockDataFixerAbstract getBlockDataFixer() {
         return new BlockDataFixer();
@@ -48,7 +50,7 @@ public class NMSInjector extends NMSInjectorAbstract {
     public boolean attemptInject(@NotNull World world) {
         CraftWorld cw = (CraftWorld) world;
         WorldServer ws = cw.getHandle();
-        
+
         // Force world to correct height
         TerraformWorld.get(world).minY = -64;
         TerraformWorld.get(world).maxY = 320;
@@ -56,30 +58,28 @@ public class NMSInjector extends NMSInjectorAbstract {
         // k is getChunkProvider, g is getChunkGenerator()
         ChunkGenerator delegate = ws.k().g();
 
-        TerraformGeneratorPlugin.logger.info("NMSChunkGenerator Delegate is of type " + delegate.getClass().getSimpleName());
-        
+        TerraformGeneratorPlugin.logger.info("NMSChunkGenerator Delegate is of type " + delegate.getClass()
+                                                                                                .getSimpleName());
+
         // String worldname,
         // int seed,
         // WorldChunkManager worldchunkmanager,
         // WorldChunkManager worldchunkmanager1,
         // StructureSettings structuresettings,
         // long i
-        NMSChunkGenerator bpg = new NMSChunkGenerator(
-                world.getName(),
-                (int) world.getSeed(),
-                delegate);
+        NMSChunkGenerator bpg = new NMSChunkGenerator(world.getName(), (int) world.getSeed(), delegate);
 
-		// Inject TerraformGenerator NMS chunk generator
+        // Inject TerraformGenerator NMS chunk generator
         PlayerChunkMap pcm = ws.k().a; // getChunkProvider().PlayerChunkMap
 
         try {
-            TerraformGeneratorPlugin.privateFieldHandler.injectField(
-                    pcm, "t", bpg); // chunkGenerator
-        } catch (Throwable e) {
+            TerraformGeneratorPlugin.privateFieldHandler.injectField(pcm, "t", bpg); // chunkGenerator
+        }
+        catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
             return false;
         }
-        
+
         return true;
     }
 
@@ -89,7 +89,7 @@ public class NMSInjector extends NMSInjectorAbstract {
         IChunkAccess ica = ((CraftChunk) chunk).getHandle(ChunkStatus.n);
         CraftWorld cw = (CraftWorld) chunk.getWorld();
         WorldServer ws = cw.getHandle();
-        
+
         TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
         return new PopulatorDataICA(new PopulatorDataPostGen(chunk), tw, ws, ica, chunk.getX(), chunk.getZ());
     }
@@ -101,22 +101,28 @@ public class NMSInjector extends NMSInjectorAbstract {
             GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
             WorldServer ws = gas.getMinecraftWorld();
             TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.A()); // B is getSeed()
-            return new PopulatorDataICA(data, tw, ws, gas.a(data.getChunkX(),data.getChunkZ()), data.getChunkX(), data.getChunkZ());
+            return new PopulatorDataICA(
+                    data,
+                    tw,
+                    ws,
+                    gas.a(data.getChunkX(), data.getChunkZ()),
+                    data.getChunkX(),
+                    data.getChunkZ()
+            );
         }
-        if(data instanceof PopulatorDataPostGen gdata)
+        if (data instanceof PopulatorDataPostGen gdata) {
             return getICAData(gdata.getChunk());
+        }
 
         return null;
     }
 
-    private static @Nullable Method getTileEntity = null;
     @Override
     public void storeBee(Beehive hive) {
         try {
-            if(getTileEntity == null)
-            {
-                    getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
-                    getTileEntity.setAccessible(true);
+            if (getTileEntity == null) {
+                getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
+                getTileEntity.setAccessible(true);
             }
             TileEntityBeehive teb = (TileEntityBeehive) getTileEntity.invoke(hive);
 
@@ -125,19 +131,20 @@ public class NMSInjector extends NMSInjectorAbstract {
             // TileEntityBeehive.storeBee
             teb.a(nbttagcompound, 0, false);
 
-        } catch(NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
-	@Override
-	public int getMinY() {
-		return -64;
-	}
+    @Override
+    public int getMinY() {
+        return -64;
+    }
 
-	@Override
-	public int getMaxY() {
-		return 320;
-	}
+    @Override
+    public int getMaxY() {
+        return 320;
+    }
 
 }

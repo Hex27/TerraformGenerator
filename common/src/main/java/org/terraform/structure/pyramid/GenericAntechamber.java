@@ -28,8 +28,11 @@ public class GenericAntechamber extends Antechamber {
         super.populate(data, room);
         for (int i = 0; i < GenUtils.randInt(2, 5); i++) {
             int[] coords = room.randomCoords(rand, 2);
-            data.setType(coords[0], room.getY() + 1, coords[2], GenUtils.randChoice(Material.CHISELED_SANDSTONE, Material.CHISELED_SANDSTONE, Material.CHISELED_SANDSTONE,
-                    Material.BONE_BLOCK));
+            data.setType(coords[0], room.getY() + 1, coords[2], GenUtils.randChoice(Material.CHISELED_SANDSTONE,
+                    Material.CHISELED_SANDSTONE,
+                    Material.CHISELED_SANDSTONE,
+                    Material.BONE_BLOCK
+            ));
         }
 
         // Flower pots
@@ -49,30 +52,44 @@ public class GenericAntechamber extends Antechamber {
                 Material.DEAD_TUBE_CORAL_FAN
         };
 
-        if (GenUtils.chance(rand, 1, 2))
+        if (GenUtils.chance(rand, 1, 2)) {
             randomRoomPlacement(data, room, 1, 5, deadCorals);
+        }
 
         // Animal items
-        if (GenUtils.chance(rand, 1, 3))
+        if (GenUtils.chance(rand, 1, 3)) {
             randomRoomPlacement(data, room, 1, 1, Material.TURTLE_EGG);
+        }
 
         // Logs
-        if (GenUtils.chance(rand, 1, 2))
-            randomRoomPlacement(data, room, 1, 5, Material.ACACIA_LOG,
+        if (GenUtils.chance(rand, 1, 2)) {
+            randomRoomPlacement(
+                    data,
+                    room,
+                    1,
+                    5,
+                    Material.ACACIA_LOG,
                     Material.BIRCH_LOG,
                     Material.DARK_OAK_LOG,
                     Material.JUNGLE_LOG,
                     Material.SPRUCE_LOG,
-                    Material.OAK_LOG);
+                    Material.OAK_LOG
+            );
+        }
 
         // Rare, monster head
         if (GenUtils.chance(1, 3)) {
-            randomRoomPlacement(data, room, 1, 1, Material.CREEPER_HEAD,
+            randomRoomPlacement(data,
+                    room,
+                    1,
+                    1,
+                    Material.CREEPER_HEAD,
                     Material.BIRCH_LOG,
                     Material.DARK_OAK_LOG,
                     Material.JUNGLE_LOG,
                     Material.SPRUCE_LOG,
-                    Material.OAK_LOG);
+                    Material.OAK_LOG
+            );
         }
 
         // Oceanic Treasure Chest

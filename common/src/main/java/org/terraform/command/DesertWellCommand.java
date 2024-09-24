@@ -40,11 +40,14 @@ public class DesertWellCommand extends TerraCommand {
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
 
-        new DesertWellPopulator().spawnDesertWell(TerraformWorld.get(p.getWorld()), new Random(), data,
+        new DesertWellPopulator().spawnDesertWell(TerraformWorld.get(p.getWorld()),
+                new Random(),
+                data,
                 p.getLocation().getBlockX(),
                 p.getLocation().getBlockY(),
                 p.getLocation().getBlockZ(),
-                new Random().nextBoolean());
+                new Random().nextBoolean()
+        );
 
     }
 

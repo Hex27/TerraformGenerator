@@ -14,25 +14,17 @@ import java.util.Random;
 
 public class PlainsVillageTempleRelicPiece extends PlainsVillageTempleStandardPiece {
 
-	public PlainsVillageTempleRelicPiece(PlainsVillagePopulator plainsVillagePopulator, int widthX, int height, int widthZ, JigsawType type, boolean unique, BlockFace[] validDirs) {
-		super(plainsVillagePopulator, widthX, height, widthZ, type, unique, validDirs);
-	}
-	
-	private static final Material[] stairTypes = {
-			Material.POLISHED_GRANITE_STAIRS,
-			Material.POLISHED_ANDESITE_STAIRS,
-			Material.POLISHED_DIORITE_STAIRS
-	};
-
-	private static final Material[] slabTypes = {
-			Material.POLISHED_GRANITE_SLAB,
-			Material.POLISHED_ANDESITE_SLAB,
-			Material.POLISHED_DIORITE_SLAB,
-			Material.SMOOTH_STONE_SLAB
-	};
-
-	private static final Material[] relics = {
-			Material.EMERALD_BLOCK,
+    private static final Material[] stairTypes = {
+            Material.POLISHED_GRANITE_STAIRS, Material.POLISHED_ANDESITE_STAIRS, Material.POLISHED_DIORITE_STAIRS
+    };
+    private static final Material[] slabTypes = {
+            Material.POLISHED_GRANITE_SLAB,
+            Material.POLISHED_ANDESITE_SLAB,
+            Material.POLISHED_DIORITE_SLAB,
+            Material.SMOOTH_STONE_SLAB
+    };
+    private static final Material[] relics = {
+            Material.EMERALD_BLOCK,
             Material.WHITE_GLAZED_TERRACOTTA,
             Material.BLACK_GLAZED_TERRACOTTA,
             Material.BLUE_GLAZED_TERRACOTTA,
@@ -50,23 +42,35 @@ public class PlainsVillageTempleRelicPiece extends PlainsVillageTempleStandardPi
             Material.RED_GLAZED_TERRACOTTA,
             Material.YELLOW_GLAZED_TERRACOTTA,
             Material.GOLD_BLOCK
-	};
-	
-	@Override
+    };
+
+    public PlainsVillageTempleRelicPiece(PlainsVillagePopulator plainsVillagePopulator,
+                                         int widthX,
+                                         int height,
+                                         int widthZ,
+                                         JigsawType type,
+                                         boolean unique,
+                                         BlockFace[] validDirs)
+    {
+        super(plainsVillagePopulator, widthX, height, widthZ, type, unique, validDirs);
+    }
+
+    @Override
     public void postBuildDecoration(@NotNull Random random, @NotNull PopulatorDataAbstract data) {
         super.postBuildDecoration(random, data);
-		
+
         Material stairType = stairTypes[random.nextInt(stairTypes.length)];
         Material slab = slabTypes[random.nextInt(slabTypes.length)];
-        
-        SimpleBlock core = new SimpleBlock(data,this.getRoom().getX(),this.getRoom().getY()+1,this.getRoom().getZ());
-        for(BlockFace face:BlockUtils.directBlockFaces) {
-        	new StairBuilder(stairType)
-        	.setFacing(face.getOppositeFace())
-        	.apply(core.getRelative(face));
+
+        SimpleBlock core = new SimpleBlock(data,
+                this.getRoom().getX(),
+                this.getRoom().getY() + 1,
+                this.getRoom().getZ());
+        for (BlockFace face : BlockUtils.directBlockFaces) {
+            new StairBuilder(stairType).setFacing(face.getOppositeFace()).apply(core.getRelative(face));
         }
-        for(BlockFace face:BlockUtils.xzDiagonalPlaneBlockFaces) {
-        	core.getRelative(face).setType(slab);
+        for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
+            core.getRelative(face).setType(slab);
         }
         core.getUp().setType(relics[random.nextInt(relics.length)]);
     }

@@ -24,8 +24,17 @@ public class SilverfishDenPopulator extends RoomPopulatorAbstract {
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
         // Spawn a random sphere of silverfish eggs
         SimpleBlock base = new SimpleBlock(data, room.getX(), room.getY() + room.getHeight() / 2 - 2, room.getZ());
-        BlockUtils.replaceUpperSphere(rand.nextInt(9999), (room.getWidthX() - 2) / 2f, (room.getHeight() - 3), (room.getWidthZ() - 2) / 2f, base, false, Material.INFESTED_STONE,
-                Material.INFESTED_STONE, Material.CAVE_AIR, Material.STONE);
+        BlockUtils.replaceUpperSphere(rand.nextInt(9999),
+                (room.getWidthX() - 2) / 2f,
+                (room.getHeight() - 3),
+                (room.getWidthZ() - 2) / 2f,
+                base,
+                false,
+                Material.INFESTED_STONE,
+                Material.INFESTED_STONE,
+                Material.CAVE_AIR,
+                Material.STONE
+        );
 
         // Silverfish spawner in the middle
         data.setSpawner(room.getX(), room.getY() + 1, room.getZ(), EntityType.SILVERFISH);
@@ -41,7 +50,9 @@ public class SilverfishDenPopulator extends RoomPopulatorAbstract {
             while (data.getType(x, ny, z).isSolid() && ny < room.getHeight() + room.getY()) {
                 ny++;
             }
-            if (ny == room.getHeight() + room.getY()) continue;
+            if (ny == room.getHeight() + room.getY()) {
+                continue;
+            }
 
             data.setType(x, ny, z, Material.CHEST);
             org.bukkit.block.data.type.Chest chest = (org.bukkit.block.data.type.Chest) Bukkit.createBlockData(Material.CHEST);

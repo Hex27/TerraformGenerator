@@ -33,39 +33,38 @@ public class CubeRoom {
     }
 
     /**
-     * @param face Direction of the wall relative to the center
+     * @param face    Direction of the wall relative to the center
      * @param padding padding of 0 refers to the room's wall.
      *                1 refers to one layer inside the room and so on.
      * @return The walls of one side of the room
      */
-    public @NotNull SimpleEntry<Wall, Integer> getWall(@NotNull PopulatorDataAbstract data, @NotNull BlockFace face, int padding) {
+    public @NotNull SimpleEntry<Wall, Integer> getWall(@NotNull PopulatorDataAbstract data,
+                                                       @NotNull BlockFace face,
+                                                       int padding)
+    {
         int[] lowerBounds = getLowerCorner();
         int[] upperBounds = getUpperCorner();
         Wall wall;
         int length = 0;
-        switch(face) {
+        switch (face) {
             case SOUTH -> {
-                wall = new Wall(
-                        new SimpleBlock(data, lowerBounds[0] + padding, y + 1, upperBounds[1] - padding)
-                        , BlockFace.NORTH);
+                wall = new Wall(new SimpleBlock(data, lowerBounds[0] + padding, y + 1, upperBounds[1] - padding),
+                        BlockFace.NORTH);
                 length = widthX - 2 * padding;
             }
             case NORTH -> {
-                wall = new Wall(
-                        new SimpleBlock(data, upperBounds[0] - padding, y + 1, lowerBounds[1] + padding)
-                        , BlockFace.SOUTH);
+                wall = new Wall(new SimpleBlock(data, upperBounds[0] - padding, y + 1, lowerBounds[1] + padding),
+                        BlockFace.SOUTH);
                 length = widthX - 2 * padding;
             }
             case WEST -> {
-                wall = new Wall(
-                        new SimpleBlock(data, lowerBounds[0] + padding, y + 1, lowerBounds[1] + padding)
-                        , BlockFace.EAST);
+                wall = new Wall(new SimpleBlock(data, lowerBounds[0] + padding, y + 1, lowerBounds[1] + padding),
+                        BlockFace.EAST);
                 length = widthZ - 2 * padding;
             }
             case EAST -> {
-                wall = new Wall(
-                        new SimpleBlock(data, upperBounds[0] - padding, y + 1, upperBounds[1] - padding)
-                        , BlockFace.WEST);
+                wall = new Wall(new SimpleBlock(data, upperBounds[0] - padding, y + 1, upperBounds[1] - padding),
+                        BlockFace.WEST);
                 length = widthZ - 2 * padding;
             }
             default -> {
@@ -81,18 +80,14 @@ public class CubeRoom {
         int[] lowerBounds = getLowerCorner();
         int[] upperBounds = getUpperCorner();
         HashMap<Wall, Integer> walls = new HashMap<>();
-        Wall north = new Wall(
-                new SimpleBlock(data, lowerBounds[0] + padding, y + 1, upperBounds[1] - padding)
-                , BlockFace.NORTH);
-        Wall south = new Wall(
-                new SimpleBlock(data, upperBounds[0] - padding, y + 1, lowerBounds[1] + padding)
-                , BlockFace.SOUTH);
-        Wall east = new Wall(
-                new SimpleBlock(data, lowerBounds[0] + padding, y + 1, lowerBounds[1] + padding)
-                , BlockFace.EAST);
-        Wall west = new Wall(
-                new SimpleBlock(data, upperBounds[0] - padding, y + 1, upperBounds[1] - padding)
-                , BlockFace.WEST);
+        Wall north = new Wall(new SimpleBlock(data, lowerBounds[0] + padding, y + 1, upperBounds[1] - padding),
+                BlockFace.NORTH);
+        Wall south = new Wall(new SimpleBlock(data, upperBounds[0] - padding, y + 1, lowerBounds[1] + padding),
+                BlockFace.SOUTH);
+        Wall east = new Wall(new SimpleBlock(data, lowerBounds[0] + padding, y + 1, lowerBounds[1] + padding),
+                BlockFace.EAST);
+        Wall west = new Wall(new SimpleBlock(data, upperBounds[0] - padding, y + 1, upperBounds[1] - padding),
+                BlockFace.WEST);
 
         walls.put(north, widthX - 2 * padding);
         walls.put(south, widthX - 2 * padding);
@@ -106,7 +101,9 @@ public class CubeRoom {
     }
 
     public void populate(PopulatorDataAbstract data) {
-        if (pop != null) pop.populate(data, this);
+        if (pop != null) {
+            pop.populate(data, this);
+        }
     }
 
     public void fillRoom(@NotNull PopulatorDataAbstract data, Material... mat) {
@@ -115,10 +112,11 @@ public class CubeRoom {
 
     /**
      * Carves a hollow cube room.
-     * @param data populator data to use for writing
-     * @param tile whether to treat mat as a pattern to tile with. If this is -1,
-     *             no repetition will occur and instead mat will be sampled randomly
-     * @param mat the array of materials for the walls, floor and ceiling of the room
+     *
+     * @param data    populator data to use for writing
+     * @param tile    whether to treat mat as a pattern to tile with. If this is -1,
+     *                no repetition will occur and instead mat will be sampled randomly
+     * @param mat     the array of materials for the walls, floor and ceiling of the room
      * @param fillMat material to use for the hollow area. Typically a fluid like air or water
      */
     public void fillRoom(@NotNull PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
@@ -127,7 +125,7 @@ public class CubeRoom {
     }
 
     public int[] getCenter() {
-        return new int[]{x, y, z};
+        return new int[] {x, y, z};
     }
 
     public @NotNull SimpleBlock getCenterSimpleBlock(@NotNull PopulatorDataAbstract data) {
@@ -140,21 +138,29 @@ public class CubeRoom {
 
     public @NotNull CubeRoom getCloneSubsetRoom(int paddingX, int paddingZ)
     {
-    	return new CubeRoom(this.widthX - paddingX*2, this.widthZ - paddingZ*2, this.height, this.x, this.y, this.z);
+        return new CubeRoom(
+                this.widthX - paddingX * 2,
+                this.widthZ - paddingZ * 2,
+                this.height,
+                this.x,
+                this.y,
+                this.z
+        );
     }
-    
+
     public boolean isClone(@NotNull CubeRoom other) {
         return this.x == other.x
-                && this.y == other.y
-                && this.z == other.z
-                && this.widthX == other.widthX
-                && this.height == other.height
-                && this.widthZ == other.widthZ;
+               && this.y == other.y
+               && this.z == other.z
+               && this.widthX == other.widthX
+               && this.height == other.height
+               && this.widthZ == other.widthZ;
     }
 
     public boolean isOverlapping(@NotNull CubeRoom room) {
-        return Math.abs(room.x - this.x) < (Math.abs(room.widthX + this.widthX) / 2)
-                && (Math.abs(room.z - this.z) < (Math.abs(room.widthZ + this.widthZ) / 2));
+        return Math.abs(room.x - this.x) < (Math.abs(room.widthX + this.widthX) / 2) && (Math.abs(room.z - this.z) < (
+                Math.abs(room.widthZ + this.widthZ)
+                / 2));
     }
 
     /**
@@ -169,8 +175,9 @@ public class CubeRoom {
      */
     public int[] randomCoords(@NotNull Random rand, int pad) {
         return GenUtils.randomCoords(rand,
-                new int[]{x - widthX / 2 + pad, y + pad, z - widthZ / 2 + pad},
-                new int[]{x + widthX / 2 - pad, y + height - 1 - pad, z + widthZ / 2 - pad});
+                new int[] {x - widthX / 2 + pad, y + pad, z - widthZ / 2 + pad},
+                new int[] {x + widthX / 2 - pad, y + height - 1 - pad, z + widthZ / 2 - pad}
+        );
     }
 
 
@@ -181,10 +188,8 @@ public class CubeRoom {
         int[] boundOne = getUpperCorner(pad);
         int[] boundTwo = getLowerCorner(pad);
 
-        if (boundOne[0] >= point[0]
-                && boundOne[1] >= point[1]) {
-            return boundTwo[0] <= point[0]
-                    && boundTwo[1] <= point[1];
+        if (boundOne[0] >= point[0] && boundOne[1] >= point[1]) {
+            return boundTwo[0] <= point[0] && boundTwo[1] <= point[1];
         }
 
         return false;
@@ -197,10 +202,8 @@ public class CubeRoom {
         int[] boundOne = getUpperCorner();
         int[] boundTwo = getLowerCorner();
 
-        if (boundOne[0] >= point[0]
-                && boundOne[1] >= point[1]) {
-            return boundTwo[0] <= point[0]
-                    && boundTwo[1] <= point[1];
+        if (boundOne[0] >= point[0] && boundOne[1] >= point[1]) {
+            return boundTwo[0] <= point[0] && boundTwo[1] <= point[1];
         }
 
         return false;
@@ -213,31 +216,28 @@ public class CubeRoom {
         int[] boundOne = getUpperCorner();
         int[] boundTwo = getLowerCorner();
 
-        if (boundOne[0] >= loc.getX()
-                && boundOne[1] >= loc.getZ()) {
-            return boundTwo[0] <= loc.getX()
-                    && boundTwo[1] <= loc.getZ();
+        if (boundOne[0] >= loc.getX() && boundOne[1] >= loc.getZ()) {
+            return boundTwo[0] <= loc.getX() && boundTwo[1] <= loc.getZ();
         }
 
         return false;
     }
-    
+
     public @NotNull SimpleLocation getSimpleLocation() {
-    	return new SimpleLocation(getX(),getY(),getZ());
+        return new SimpleLocation(getX(), getY(), getZ());
     }
 
     /**
      * IGNORES Y AXIS.
+     *
      * @param point 2d point (size 2 int array)
      */
     public boolean isPointInside(@NotNull SimpleBlock point) {
         int[] boundOne = getUpperCorner();
         int[] boundTwo = getLowerCorner();
 
-        if (boundOne[0] >= point.getX()
-                && boundOne[1] >= point.getZ()) {
-            return boundTwo[0] <= point.getX()
-                    && boundTwo[1] <= point.getZ();
+        if (boundOne[0] >= point.getX() && boundOne[1] >= point.getZ()) {
+            return boundTwo[0] <= point.getX() && boundTwo[1] <= point.getZ();
         }
 
         return false;
@@ -245,8 +245,9 @@ public class CubeRoom {
 
     public boolean isInside(@NotNull CubeRoom other) {
         for (int[] corner : getAllCorners()) {
-            if (!other.isPointInside(corner))
+            if (!other.isPointInside(corner)) {
                 return false;
+            }
         }
         return true;
     }
@@ -282,10 +283,10 @@ public class CubeRoom {
     public int[][] getAllCorners(int padding) {
         int[][] corners = new int[4][2];
 
-        corners[0] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; // ++
-        corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
-        corners[2] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; // +-
-        corners[3] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
+        corners[0] = new int[] {x + widthX / 2 - padding, z + widthZ / 2 - padding}; // ++
+        corners[1] = new int[] {x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
+        corners[2] = new int[] {x + widthX / 2 - padding, z - widthZ / 2 + padding}; // +-
+        corners[3] = new int[] {x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
 
         return corners;
     }
@@ -298,17 +299,20 @@ public class CubeRoom {
         int[][] corners = new int[2][2];
 
         if (face == BlockFace.NORTH) {
-            corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
-            corners[1] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; // +-
-        } else if (face == BlockFace.SOUTH) {
-            corners[0] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
-            corners[1] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; // ++
-        } else if (face == BlockFace.WEST) {
-            corners[0] = new int[]{x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
-            corners[1] = new int[]{x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
-        } else if (face == BlockFace.EAST) {
-            corners[0] = new int[]{x + widthX / 2 - padding, z - widthZ / 2 + padding}; // --
-            corners[1] = new int[]{x + widthX / 2 - padding, z + widthZ / 2 - padding}; // -+
+            corners[0] = new int[] {x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
+            corners[1] = new int[] {x + widthX / 2 - padding, z - widthZ / 2 + padding}; // +-
+        }
+        else if (face == BlockFace.SOUTH) {
+            corners[0] = new int[] {x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
+            corners[1] = new int[] {x + widthX / 2 - padding, z + widthZ / 2 - padding}; // ++
+        }
+        else if (face == BlockFace.WEST) {
+            corners[0] = new int[] {x - widthX / 2 + padding, z - widthZ / 2 + padding}; // --
+            corners[1] = new int[] {x - widthX / 2 + padding, z + widthZ / 2 - padding}; // -+
+        }
+        else if (face == BlockFace.EAST) {
+            corners[0] = new int[] {x + widthX / 2 - padding, z - widthZ / 2 + padding}; // --
+            corners[1] = new int[] {x + widthX / 2 - padding, z + widthZ / 2 - padding}; // -+
         }
 
         return corners;
@@ -316,53 +320,67 @@ public class CubeRoom {
 
     // Positive x,z corner
     public int[] getUpperCorner() {
-        return new int[]{x + widthX / 2, z + widthZ / 2};
+        return new int[] {x + widthX / 2, z + widthZ / 2};
     }
 
     // Negative x,z corner
     public int[] getLowerCorner() {
-        return new int[]{x - widthX / 2, z - widthZ / 2};
+        return new int[] {x - widthX / 2, z - widthZ / 2};
     }
 
     public boolean isInRegion(@NotNull LimitedRegion region)
     {
-        return region.isInRegion(x-widthX / 2, y,z-widthZ / 2)
-                && region.isInRegion(x+widthX / 2, y, z+widthZ / 2);
+        return region.isInRegion(x - widthX / 2, y, z - widthZ / 2) && region.isInRegion(
+                x + widthX / 2,
+                y,
+                z + widthZ / 2
+        );
     }
 
     // Positive x,z corner
     public int[] getUpperCorner(int pad) {
         int Z = z - pad + widthZ / 2;
         int X = x - pad + widthX / 2;
-        if (pad > widthZ / 2) Z = z;
-        if (pad > widthX / 2) X = x;
-        return new int[]{X, Z};
+        if (pad > widthZ / 2) {
+            Z = z;
+        }
+        if (pad > widthX / 2) {
+            X = x;
+        }
+        return new int[] {X, Z};
     }
 
     // Negative x,z corner
     public int[] getLowerCorner(int pad) {
         int Z = z + pad - widthZ / 2;
         int X = x + pad - widthX / 2;
-        if (pad > widthZ / 2) Z = z;
-        if (pad > widthX / 2) X = x;
-        return new int[]{X, Z};
+        if (pad > widthZ / 2) {
+            Z = z;
+        }
+        if (pad > widthX / 2) {
+            X = x;
+        }
+        return new int[] {X, Z};
     }
 
     /**
      * Forces all 3D coords in the room with the specified padding to be air.
      */
     public void purgeRoomContents(@NotNull PopulatorDataAbstract data, int padding) {
-    	int[] lowerCorner = getLowerCorner(padding);
-    	int[] upperCorner = getUpperCorner(padding);
-    	int lowestY = y + padding;
-    	int upperY = y + height - padding;
-    	
-    	for(int x = lowerCorner[0]; x<= upperCorner[0]; x++)
-    		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++)
-    			for(int y = lowestY; y <= upperY; y++)
-    				data.setType(x, y, z, Material.AIR);
+        int[] lowerCorner = getLowerCorner(padding);
+        int[] upperCorner = getUpperCorner(padding);
+        int lowestY = y + padding;
+        int upperY = y + height - padding;
+
+        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+                for (int y = lowestY; y <= upperY; y++) {
+                    data.setType(x, y, z, Material.AIR);
+                }
+            }
+        }
     }
-    
+
     public boolean isBig() {
         return widthX * widthZ * height >= 2000;
     }
@@ -370,7 +388,7 @@ public class CubeRoom {
     public boolean isHuge() {
         return widthX * widthZ * height >= 7000;
     }
-    
+
     public boolean largerThanVolume(int vol) {
         return widthX * widthZ * height >= vol;
     }
@@ -462,14 +480,14 @@ public class CubeRoom {
     public void setZ(int z) {
         this.z = z;
     }
-    
+
     public void debugRedGround(@NotNull PopulatorDataAbstract data) {
-    	int[] lowerCorner = getLowerCorner();
-    	int[] upperCorner = getUpperCorner();
-    	for(int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
-    		for(int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
-    			data.setType(x, GenUtils.getHighestGround(data, x, z), z, Material.RED_WOOL);
-    		}
-    	}
+        int[] lowerCorner = getLowerCorner();
+        int[] upperCorner = getUpperCorner();
+        for (int x = lowerCorner[0]; x <= upperCorner[0]; x++) {
+            for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
+                data.setType(x, GenUtils.getHighestGround(data, x, z), z, Material.RED_WOOL);
+            }
+        }
     }
 }

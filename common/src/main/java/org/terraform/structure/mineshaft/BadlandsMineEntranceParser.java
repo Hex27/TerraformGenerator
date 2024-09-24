@@ -17,7 +17,7 @@ import org.terraform.utils.noise.FastNoise;
 public class BadlandsMineEntranceParser extends SchematicParser {
     static @Nullable FastNoise noise = null;
     private boolean didPlaceLantern = false;
-    
+
     // Don't cache, as it does not change based on terraformworld.
     static double getNoise(int x, int y, int z) {
         if (noise == null) {
@@ -34,11 +34,12 @@ public class BadlandsMineEntranceParser extends SchematicParser {
     public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
         double noiseValue = getNoise(block.getX(), block.getY(), block.getZ());
 
-        switch(data.getMaterial()) {
+        switch (data.getMaterial()) {
             case RED_CONCRETE: {
                 if (noiseValue > 0) {
                     super.applyData(block, Bukkit.createBlockData(Material.DARK_OAK_FENCE));
-                } else {
+                }
+                else {
                     Slab s = (Slab) Bukkit.createBlockData(Material.DARK_OAK_SLAB);
                     s.setType(Slab.Type.TOP);
                     super.applyData(block, s);
@@ -63,8 +64,8 @@ public class BadlandsMineEntranceParser extends SchematicParser {
             case DARK_OAK_FENCE: {
                 if (willPlaceFence(block)) {
                     block.lsetBlockData(data);
-                } else if (willPlaceFence(block.getUp())
-                        && !didPlaceLantern) {
+                }
+                else if (willPlaceFence(block.getUp()) && !didPlaceLantern) {
                     Lantern l = (Lantern) Bukkit.createBlockData(Material.LANTERN);
                     l.setHanging(true);
                     super.applyData(block, l);
@@ -85,16 +86,20 @@ public class BadlandsMineEntranceParser extends SchematicParser {
             }
             case DARK_OAK_SLAB: {
                 Slab s = (Slab) data;
-                if (s.getType() == Slab.Type.BOTTOM)
+                if (s.getType() == Slab.Type.BOTTOM) {
                     block.lsetBlockData(data);
-                else super.applyData(block, data);
+                }
+                else {
+                    super.applyData(block, data);
+                }
                 break;
             }
             case OAK_STAIRS: {
                 block.lsetBlockData(data);
                 break;
             }
-            default: super.applyData(block, data);
+            default:
+                super.applyData(block, data);
         }
     }
 

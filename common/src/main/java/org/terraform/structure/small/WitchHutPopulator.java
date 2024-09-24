@@ -16,7 +16,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
@@ -32,26 +32,36 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if (!isEnabled()) return;
+        if (!isEnabled()) {
+            return;
+        }
 
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
             int x = coords[0];
             int z = coords[1];
-            if(x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ())
+            if (x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ()) {
                 continue;
+            }
             int height = GenUtils.getHighestGround(data, x, z);
             if (height < TerraformGenerator.seaLevel) { // Assume. it's on water
                 height = TerraformGenerator.seaLevel + GenUtils.randInt(random, 2, 3);
-            } else
+            }
+            else {
                 height += GenUtils.randInt(random, 2, 3);
+            }
             spawnSwampHut(tw, random, data, x, height, z);
         }
     }
 
-    public void spawnSwampHut(TerraformWorld tw, @NotNull Random random,
-                              @NotNull PopulatorDataAbstract data, int x, int y, int z) {
+    public void spawnSwampHut(TerraformWorld tw,
+                              @NotNull Random random,
+                              @NotNull PopulatorDataAbstract data,
+                              int x,
+                              int y,
+                              int z)
+    {
 
         // Refers to center of hut, above the water.
         SimpleBlock core = new SimpleBlock(data, x, y, z);
@@ -74,7 +84,8 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
             z = w.getRear(2).get().getZ();
             data.addEntity(x, y + 1, z, EntityType.WITCH);
             data.addEntity(x, y + 1, z, EntityType.CAT);
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 
@@ -82,24 +93,28 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 8242112),
-                (int) (TConfigOption.STRUCTURES_SWAMPHUT_SPAWNRATIO
-                        .getDouble() * 10000),
-                10000);
+                (int) (TConfig.c.STRUCTURES_SWAMPHUT_SPAWNRATIO * 10000),
+                10000
+        );
     }
+
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
-        if (!isEnabled()) return false;
+        if (!isEnabled()) {
+            return false;
+        }
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
             if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
                 EnumSet<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
-                for(BiomeBank b:biomes) {
-                    if(b != BiomeBank.SWAMP && b != BiomeBank.MANGROVE)
+                for (BiomeBank b : biomes) {
+                    if (b != BiomeBank.SWAMP && b != BiomeBank.MANGROVE) {
                         return false;
+                    }
                 }
-                return rollSpawnRatio(tw,chunkX,chunkZ);
+                return rollSpawnRatio(tw, chunkX, chunkZ);
             }
         }
         return false;
@@ -107,10 +122,11 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-        int num = TConfigOption.STRUCTURES_SWAMPHUT_COUNT_PER_MEGACHUNK.getInt();
+        int num = TConfig.c.STRUCTURES_SWAMPHUT_COUNT_PER_MEGACHUNK;
         int[][] coords = new int[num][2];
-        for (int i = 0; i < num; i++)
-            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 819227*(1+i)));
+        for (int i = 0; i < num; i++) {
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 819227 * (1 + i)));
+        }
         return coords;
     }
 
@@ -136,9 +152,9 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled() && TConfigOption.STRUCTURES_SWAMPHUT_ENABLED.getBoolean()
-                && (TConfigOption.BIOME_SWAMP_WEIGHT.getInt() > 0||
-                TConfigOption.BIOME_MANGROVE_WEIGHT.getInt() > 0);
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_SWAMPHUT_ENABLED && (
+                TConfig.c.BIOME_SWAMP_WEIGHT > 0
+                || TConfig.c.BIOME_MANGROVE_WEIGHT > 0);
     }
 
     @Override
@@ -146,12 +162,16 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
         return world.getHashedRand(1211221, chunkX, chunkZ);
     }
 
+    @Override
+    public int getChunkBufferDistance() {
+        return 1;
+    }
+
     private static class WitchHutSchematicParser extends SchematicParser {
         private final Random rand;
         private final PopulatorDataAbstract pop;
 
-        public WitchHutSchematicParser(Random rand,
-                                       PopulatorDataAbstract pop) {
+        public WitchHutSchematicParser(Random rand, PopulatorDataAbstract pop) {
             this.rand = rand;
             this.pop = pop;
         }
@@ -159,29 +179,38 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
         @Override
         public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             if (data.getMaterial().toString().contains("COBBLESTONE")) {
-                data = Bukkit.createBlockData(
-                        StringUtils.replace(data.getAsString(), "cobblestone", GenUtils.randChoice(rand, Material.COBBLESTONE, Material.COBBLESTONE, Material.COBBLESTONE,
-                                Material.MOSSY_COBBLESTONE).name().toLowerCase(Locale.ENGLISH))
-                );
+                data = Bukkit.createBlockData(StringUtils.replace(
+                        data.getAsString(),
+                        "cobblestone",
+                        GenUtils.randChoice(rand,
+                                Material.COBBLESTONE,
+                                Material.COBBLESTONE,
+                                Material.COBBLESTONE,
+                                Material.MOSSY_COBBLESTONE
+                        ).name().toLowerCase(Locale.ENGLISH)
+                ));
                 super.applyData(block, data);
 
-                if (GenUtils.chance(1, 5)) BlockUtils.vineUp(block, 2);
-            } else if (data.getMaterial().toString().startsWith("OAK")) {
+                if (GenUtils.chance(1, 5)) {
+                    BlockUtils.vineUp(block, 2);
+                }
+            }
+            else if (data.getMaterial().toString().startsWith("OAK")) {
                 super.applyData(block, data);
                 if (data.getMaterial().toString().endsWith("LOG")) {
-                    if (GenUtils.chance(1, 5)) BlockUtils.vineUp(block, 2);
+                    if (GenUtils.chance(1, 5)) {
+                        BlockUtils.vineUp(block, 2);
+                    }
                 }
                 super.applyData(block, data);
-            } else if (data.getMaterial() == Material.CHEST) {
+            }
+            else if (data.getMaterial() == Material.CHEST) {
                 super.applyData(block, data);
                 pop.lootTableChest(block.getX(), block.getY(), block.getZ(), TerraLootTable.VILLAGE_TEMPLE);
-            } else {
+            }
+            else {
                 super.applyData(block, data);
             }
         }
-    }
-    @Override
-    public int getChunkBufferDistance() {
-        return 1;
     }
 }

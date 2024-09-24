@@ -12,7 +12,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.version.OneTwentyBlockHandler;
 
 import java.util.List;
@@ -21,12 +21,16 @@ public class SaplingOverrider implements Listener {
 
     /**
      * Use priority highest to allow other plugins to modify event.getBlocks
-    */
-    @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
+     */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTreeGrow(@NotNull StructureGrowEvent event) {
-        if (!TConfigOption.areTreesEnabled()) return;
+        if (!TConfig.areTreesEnabled()) {
+            return;
+        }
 
-        if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) return;
+        if (!(event.getWorld().getGenerator() instanceof TerraformGenerator)) {
+            return;
+        }
         TerraformWorld tw = TerraformWorld.get(event.getWorld());
         PopulatorDataPostGen data = new PopulatorDataPostGen(event.getLocation().getChunk());
         int x = event.getLocation().getBlockX();
@@ -36,11 +40,11 @@ public class SaplingOverrider implements Listener {
         event.setCancelled(true);
 
         boolean isLarge = event.getBlocks().size() > 150;
-        List<BlockState> baseBlocks = event.getBlocks().stream()
-                .filter((b) -> Tag.LEAVES.isTagged(b.getType()))
-                .toList();
-        if(baseBlocks.isEmpty())
-        {   // Leafless trees are not trees
+        List<BlockState> baseBlocks = event.getBlocks()
+                                           .stream()
+                                           .filter((b) -> Tag.LEAVES.isTagged(b.getType()))
+                                           .toList();
+        if (baseBlocks.isEmpty()) {   // Leafless trees are not trees
             event.setCancelled(false);
             return;
         }
@@ -50,54 +54,56 @@ public class SaplingOverrider implements Listener {
         // made event.getSpecies() give incorrect values.
         switch (baseBlock.getType()) {
             case ACACIA_LEAVES:
-                new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL)
-                        .skipGradientCheck()
-                        .build(tw, data, x, y, z);
+                new FractalTreeBuilder(FractalTypes.Tree.SAVANNA_SMALL).skipGradientCheck().build(tw, data, x, y, z);
                 break;
             case OAK_LEAVES:
-                FractalTypes.Tree.NORMAL_SMALL
-                        .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
+                FractalTypes.Tree.NORMAL_SMALL.build(
+                        tw,
+                        new SimpleBlock(data, x, y, z),
+                        (nt -> nt.setCheckGradient(false))
+                );
                 break;
             case BIRCH_LEAVES:
-                new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL)
-                        .skipGradientCheck()
-                        .build(tw, data, x, y, z);
+                new FractalTreeBuilder(FractalTypes.Tree.BIRCH_SMALL).skipGradientCheck().build(tw, data, x, y, z);
                 break;
             case JUNGLE_LEAVES:
 
-                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES_JUNGLE.getBoolean()
-                        && isLarge)
-                    new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG)
-                            .skipGradientCheck()
-                            .build(tw, data, x, y, z);
-                else
+                if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES_JUNGLE && isLarge) {
+                    new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).skipGradientCheck().build(tw, data, x, y, z);
+                }
+                else {
                     TreeDB.spawnSmallJungleTree(true, tw, data, x, y, z);
+                }
                 break;
             case DARK_OAK_LEAVES:
-                FractalTypes.Tree.DARK_OAK_SMALL
-                        .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
+                FractalTypes.Tree.DARK_OAK_SMALL.build(
+                        tw,
+                        new SimpleBlock(data, x, y, z),
+                        (nt -> nt.setCheckGradient(false))
+                );
                 break;
             case SPRUCE_LEAVES:
-                if (TConfigOption.MISC_SAPLING_CUSTOM_TREES_BIGTREES_SPRUCE.getBoolean()
-                        && isLarge)
-                {
-                    FractalTypes.Tree.TAIGA_BIG
-                            .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
+                if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES_SPRUCE && isLarge) {
+                    FractalTypes.Tree.TAIGA_BIG.build(tw,
+                            new SimpleBlock(data, x, y, z),
+                            (nt -> nt.setCheckGradient(false))
+                    );
                     // Set the original podzol radius
-                    event.getBlocks().stream()
-                            .filter((b) -> b.getType() == Material.PODZOL)
-                            .forEach((b)->data.setType(b.getX(),b.getY(),b.getZ(),b.getType()));
+                    event.getBlocks()
+                         .stream()
+                         .filter((b) -> b.getType() == Material.PODZOL)
+                         .forEach((b) -> data.setType(b.getX(), b.getY(), b.getZ(), b.getType()));
                 }
-                else
-                    FractalTypes.Tree.TAIGA_SMALL
-                        .build(tw, new SimpleBlock(data,x,y,z), (nt->nt.setCheckGradient(false)));
+                else {
+                    FractalTypes.Tree.TAIGA_SMALL.build(tw,
+                            new SimpleBlock(data, x, y, z),
+                            (nt -> nt.setCheckGradient(false))
+                    );
+                }
                 break;
             default:
-                if(baseBlock.getType() == OneTwentyBlockHandler.CHERRY_LEAVES)
-                {
-                    new FractalTreeBuilder(FractalTypes.Tree.CHERRY_SMALL)
-                            .skipGradientCheck()
-                            .build(tw, data, x, y, z);
+                if (baseBlock.getType() == OneTwentyBlockHandler.CHERRY_LEAVES) {
+                    new FractalTreeBuilder(FractalTypes.Tree.CHERRY_SMALL).skipGradientCheck().build(tw, data, x, y, z);
                     return;
                 }
                 // Not handled by TG

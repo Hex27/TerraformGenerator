@@ -12,7 +12,7 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
@@ -30,7 +30,9 @@ import java.util.Random;
 public class MangroveHandler extends BiomeHandler {
 
     @Override
-    public @NotNull BiomeBank getRiverType(){ return BiomeBank.MANGROVE; }
+    public @NotNull BiomeBank getRiverType() {
+        return BiomeBank.MANGROVE;
+    }
 
     @Override
     public boolean isOcean() {
@@ -41,85 +43,114 @@ public class MangroveHandler extends BiomeHandler {
     public @NotNull Biome getBiome() {
         return OneOneNineBlockHandler.MANGROVE_SWAMP;
     }
+
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.randChoice(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
+        return new Material[] {
+                GenUtils.randChoice(rand, Material.GRASS_BLOCK, Material.PODZOL, Material.PODZOL),
                 GenUtils.randChoice(rand, Material.DIRT),
                 GenUtils.randChoice(rand, Material.DIRT, Material.DIRT, Material.STONE),
                 GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
-                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)};
+                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)
+        };
     }
 
     @Override
-    public @NotNull BiomeHandler getTransformHandler(){
+    public @NotNull BiomeHandler getTransformHandler() {
         return this;
     }
+
     @Override
-    public void transformTerrain(@NotNull ChunkCache cache, TerraformWorld tw, @NotNull Random random, ChunkGenerator.@NotNull ChunkData chunk, int x, int z, int chunkX, int chunkZ) {
-        int surfaceY = cache.getTransformedHeight(x,z);
-        if(surfaceY < TerraformGenerator.seaLevel)
-        {
-            int rawX = chunkX*16+x;
-            int rawZ = chunkZ*16+z;
-            FastNoise mudNoise = NoiseCacheHandler.getNoise(
-                    tw,
-                    NoiseCacheEntry.BIOME_SWAMP_MUDNOISE,
-                    world -> {
-                        FastNoise n = new FastNoise((int) (world.getSeed() * 4));
-                        n.SetNoiseType(NoiseType.SimplexFractal);
-                        n.SetFrequency(0.05f);
-                        n.SetFractalOctaves(4);
+    public void transformTerrain(@NotNull ChunkCache cache,
+                                 TerraformWorld tw,
+                                 @NotNull Random random,
+                                 ChunkGenerator.@NotNull ChunkData chunk,
+                                 int x,
+                                 int z,
+                                 int chunkX,
+                                 int chunkZ)
+    {
+        int surfaceY = cache.getTransformedHeight(x, z);
+        if (surfaceY < TerraformGenerator.seaLevel) {
+            int rawX = chunkX * 16 + x;
+            int rawZ = chunkZ * 16 + z;
+            FastNoise mudNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_SWAMP_MUDNOISE, world -> {
+                FastNoise n = new FastNoise((int) (world.getSeed() * 4));
+                n.SetNoiseType(NoiseType.SimplexFractal);
+                n.SetFrequency(0.05f);
+                n.SetFractalOctaves(4);
 
-                        return n;
-                    });
+                return n;
+            });
 
-            double noise = mudNoise.GetNoise(rawX,rawZ);
+            double noise = mudNoise.GetNoise(rawX, rawZ);
 
-            if (noise < 0) noise = 0;
+            if (noise < 0) {
+                noise = 0;
+            }
             int att = (int) Math.round(noise * 10);
-            if (att + surfaceY > TerraformGenerator.seaLevel)
+            if (att + surfaceY > TerraformGenerator.seaLevel) {
                 att = TerraformGenerator.seaLevel - surfaceY;
+            }
             for (int i = 1; i <= att; i++) {
-                if (i < att)
+                if (i < att) {
                     chunk.setBlock(x, surfaceY + i, z, getSurfaceCrust(random)[1]);
-                else
+                }
+                else {
                     chunk.setBlock(x, surfaceY + i, z, getSurfaceCrust(random)[0]);
+                }
             }
             // No guard needed, att < 1 will write surfaceY
-            cache.writeTransformedHeight(x,z, (short) (surfaceY + att));
+            cache.writeTransformedHeight(x, z, (short) (surfaceY + att));
         }
     }
+
     @Override
-    public void populateSmallItems(TerraformWorld tw, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld tw,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
         int seaLevel = TerraformGenerator.seaLevel;
 
-        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) return;
+        if (!BlockUtils.isStoneLike(data.getType(rawX, surfaceY, rawZ))) {
+            return;
+        }
         if (surfaceY < seaLevel) {
 
-            if (data.getType(rawX,TerraformGenerator.seaLevel,rawZ) == Material.WATER) {
-                if (GenUtils.chance(random, 1, 30))
+            if (data.getType(rawX, TerraformGenerator.seaLevel, rawZ) == Material.WATER) {
+                if (GenUtils.chance(random, 1, 30)) {
                     PlantBuilder.LILY_PAD.build(data, rawX, TerraformGenerator.seaLevel + 1, rawZ);
+                }
             }
         }
 
-        if (BlockUtils.isWet(new SimpleBlock(data,rawX,surfaceY+1,rawZ))
-                && GenUtils.chance(random, 10, 100) && surfaceY < TerraformGenerator.seaLevel - 3) { // SEA GRASS/KELP
+        if (BlockUtils.isWet(new SimpleBlock(data, rawX, surfaceY + 1, rawZ))
+            && GenUtils.chance(random, 10, 100)
+            && surfaceY < TerraformGenerator.seaLevel - 3)
+        { // SEA GRASS/KELP
             CoralGenerator.generateKelpGrowth(data, rawX, surfaceY + 1, rawZ);
 
         }
-        if (GenUtils.chance(random, TConfigOption.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND.getInt(), 1000)) {
+        if (GenUtils.chance(random, TConfig.c.BIOME_CLAY_DEPOSIT_CHANCE_OUT_OF_THOUSAND, 1000)) {
             BlockUtils.generateClayDeposit(rawX, surfaceY, rawZ, data, random);
         }
-        if(GenUtils.chance(random, 5, 1000)) {
-            BlockUtils.replaceCircularPatch(
-                    random.nextInt(9999),
+        if (GenUtils.chance(random, 5, 1000)) {
+            BlockUtils.replaceCircularPatch(random.nextInt(9999),
                     3.5f,
-                    new SimpleBlock(data,rawX,surfaceY,rawZ), OneOneNineBlockHandler.MUD);
+                    new SimpleBlock(data, rawX, surfaceY, rawZ),
+                    OneOneNineBlockHandler.MUD
+            );
         }
     }
 
-	@Override
-	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
+    @Override
+    public void populateLargeItems(@NotNull TerraformWorld tw,
+                                   @NotNull Random random,
+                                   @NotNull PopulatorDataAbstract data)
+    {
 
         int treeX, treeY, treeZ;
         if (GenUtils.chance(random, 8, 10)) {
@@ -128,31 +159,41 @@ public class MangroveHandler extends BiomeHandler {
 
             if (data.getBiome(treeX, treeZ) == getBiome()) {
                 treeY = GenUtils.getHighestGround(data, treeX, treeZ);
-                
-                if(treeY > TerraformGenerator.seaLevel-6) {
-                	 // Don't do gradient checks for swamp trees, the mud is uneven.
-                	// just make sure it's submerged
-                    TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data,treeX,treeY,treeZ), OneOneNineBlockHandler.MANGROVE_ROOTS);
-                    FractalTypes.Tree.SWAMP_TOP.build(tw, new SimpleBlock(data,treeX,treeY,treeZ), (t)->t.setCheckGradient(false));
+
+                if (treeY > TerraformGenerator.seaLevel - 6) {
+                    // Don't do gradient checks for swamp trees, the mud is uneven.
+                    // just make sure it's submerged
+                    TreeDB.spawnBreathingRoots(
+                            tw,
+                            new SimpleBlock(data, treeX, treeY, treeZ),
+                            OneOneNineBlockHandler.MANGROVE_ROOTS
+                    );
+                    FractalTypes.Tree.SWAMP_TOP.build(
+                            tw,
+                            new SimpleBlock(data, treeX, treeY, treeZ),
+                            (t) -> t.setCheckGradient(false)
+                    );
                 }
             }
         }
-	}
+    }
 
-	@Override
-	public @NotNull BiomeBank getBeachType() {
-		return BiomeBank.MUDFLATS;
-	}
-	
-	@Override
+    @Override
+    public @NotNull BiomeBank getBeachType() {
+        return BiomeBank.MUDFLATS;
+    }
+
+    @Override
     public double calculateHeight(TerraformWorld tw, int x, int z) {
-    	
+
         double height = HeightMap.CORE.getHeight(tw, x, z) - 10;
 
         // If the height is too low, force it back to 3.
         // 30/11/2023: what the fuck is this guard clause for
-        if (height <= 0) height = 3;
-        
+        if (height <= 0) {
+            height = 3;
+        }
+
         return height;
     }
 

@@ -30,12 +30,17 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
      */
     private @NotNull PopulatorDataICAAbstract getData(int x, int z) {
         SimpleChunkLocation scl = new SimpleChunkLocation(w.getName(), x, z);
-        synchronized(loadedChunks) {
+        synchronized (loadedChunks) {
             return loadedChunks.computeIfAbsent(scl, k -> {
                 int chunkX = x >> 4;
                 int chunkZ = z >> 4;
-                if(!w.isChunkLoaded(chunkX, chunkZ)) w.loadChunk(chunkX, chunkZ);
-                PopulatorDataICAAbstract data = TerraformGeneratorPlugin.injector.getICAData(w.getChunkAt(chunkX, chunkZ));
+                if (!w.isChunkLoaded(chunkX, chunkZ)) {
+                    w.loadChunk(chunkX, chunkZ);
+                }
+                PopulatorDataICAAbstract data = TerraformGeneratorPlugin.injector.getICAData(w.getChunkAt(
+                        chunkX,
+                        chunkZ
+                ));
                 loadedChunks.put(scl, data);
                 return data;
             });

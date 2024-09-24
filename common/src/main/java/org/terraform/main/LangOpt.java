@@ -60,7 +60,8 @@ public enum LangOpt {
         for (int i = 0; i < placeholders.length; i++) {
             if (i % 2 == 0) {
                 placeholder = placeholders[i];
-            } else {
+            }
+            else {
                 parsed = parsed.replaceAll(placeholder, placeholders[i]);
             }
         }

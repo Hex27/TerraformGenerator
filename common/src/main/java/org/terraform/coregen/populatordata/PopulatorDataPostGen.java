@@ -1,13 +1,6 @@
 package org.terraform.coregen.populatordata;
 
-import java.util.Random;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Tag;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -24,9 +17,12 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
+
+import java.util.Random;
 
 public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract implements IPopulatorDataPhysicsCapable {
+    private static int spawnerRetries = 0;
     private final @NotNull World w;
     private final @NotNull Chunk c;
 
@@ -42,14 +38,12 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
         return w;
     }
 
-
     /**
      * @return the c
      */
     public @NotNull Chunk getChunk() {
         return c;
     }
-
 
     @Override
     public @Nullable Material getType(int x, int y, int z) {
@@ -63,24 +57,24 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
 
     @Override
     public void setType(int x, int y, int z, @NotNull Material type) {
-        boolean isFragile = Tag.DOORS.isTagged(type) ||
-        		Tag.CARPETS.isTagged(type) ||
-                type == Material.FARMLAND ||
-                type == Material.WATER;
+        boolean isFragile = Tag.DOORS.isTagged(type)
+                            || Tag.CARPETS.isTagged(type)
+                            || type == Material.FARMLAND
+                            || type == Material.WATER;
         Block b = w.getBlockAt(x, y, z);
         b.setType(type, !isFragile);
     }
 
     @Override
     public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
-        boolean isFragile = Tag.DOORS.isTagged(data.getMaterial()) ||
-        		Tag.CARPETS.isTagged(data.getMaterial()) ||
-                data.getMaterial() == Material.FARMLAND ||
-                data.getMaterial() == Material.WATER;
+        boolean isFragile = Tag.DOORS.isTagged(data.getMaterial())
+                            || Tag.CARPETS.isTagged(data.getMaterial())
+                            || data.getMaterial() == Material.FARMLAND
+                            || data.getMaterial() == Material.WATER;
         Block b = w.getBlockAt(x, y, z);
         b.setBlockData(data.clone(), !isFragile);
     }
-    
+
     @Override
     public void setType(int x, int y, int z, @NotNull Material type, boolean updatePhysics) {
         Block b = w.getBlockAt(x, y, z);
@@ -128,18 +122,20 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
 
     @Override
     public void addEntity(int x, int y, int z, @NotNull EntityType type) {
-    	// Always offset by 0.5 to prevent them spawning in corners.
-    	// Y is offset by a small bit to prevent falling through weird spawning areas
-        Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(),x+0.5,y+0.3,z+0.5), type);
+        // Always offset by 0.5 to prevent them spawning in corners.
+        // Y is offset by a small bit to prevent falling through weird spawning areas
+        Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(), x + 0.5, y + 0.3, z + 0.5), type);
         e.setPersistent(true);
-        if(e instanceof LivingEntity)
+        if (e instanceof LivingEntity) {
             ((LivingEntity) e).setRemoveWhenFarAway(false);
+        }
     }
-    
-    private static int spawnerRetries = 0;
+
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
-        if ( !TConfigOption.areAnimalsEnabled() ) return;
+        if (!TConfig.areAnimalsEnabled()) {
+            return;
+        }
 
         Block b = w.getBlockAt(rawX, rawY, rawZ);
         b.setType(Material.SPAWNER, false);
@@ -148,16 +144,23 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
             spawner.setSpawnedType(type);
             spawner.update();
         }
-        catch(IllegalStateException | ClassCastException e)
-        {
-        	spawnerRetries++;
-        	if(spawnerRetries > 10){ 
-            	Bukkit.getLogger().info("Giving up on spawner at " + rawX + "," + rawY + "," + rawZ);
-            	spawnerRetries = 0;
-        		return;
-        	}
-        	Bukkit.getLogger().info("Failed to get state for spawner at " + rawX + "," + rawY + "," + rawZ + ", try " + spawnerRetries);
-        	setSpawner(rawX, rawY, rawZ, type);
+        catch (IllegalStateException | ClassCastException e) {
+            spawnerRetries++;
+            if (spawnerRetries > 10) {
+                Bukkit.getLogger().info("Giving up on spawner at " + rawX + "," + rawY + "," + rawZ);
+                spawnerRetries = 0;
+                return;
+            }
+            Bukkit.getLogger()
+                  .info("Failed to get state for spawner at "
+                        + rawX
+                        + ","
+                        + rawY
+                        + ","
+                        + rawZ
+                        + ", try "
+                        + spawnerRetries);
+            setSpawner(rawX, rawY, rawZ, type);
         }
     }
 
@@ -166,29 +169,34 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
         TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x, y, z).getChunk()).lootTableChest(x, y, z, table);
     }
 
-	@Override
-	public TerraformWorld getTerraformWorld() {
-		return TerraformWorld.get(w);
-	}
+    @Override
+    public TerraformWorld getTerraformWorld() {
+        return TerraformWorld.get(w);
+    }
 
-	@Override
-	public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
-		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(rawX, rawY, rawZ).getChunk());
-		if(icad instanceof PopulatorDataICABiomeWriterAbstract biomeWriter)
+    @Override
+    public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
+        PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(rawX, rawY, rawZ)
+                                                                                      .getChunk());
+        if (icad instanceof PopulatorDataICABiomeWriterAbstract biomeWriter) {
             biomeWriter.setBiome(rawX, rawY, rawZ, cbt, fallback);
-	}
+        }
+    }
 
-	@Override
-	public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
-		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x0,y0,z0).getChunk());
-		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
-		    icad.registerNaturalSpawns(type, x0, y0, z0, x1, y1, z1);
-	}
+    @Override
+    public void registerNaturalSpawns(NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
+        PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x0, y0, z0)
+                                                                                      .getChunk());
+        if (icad instanceof PopulatorDataICABiomeWriterAbstract) {
+            icad.registerNaturalSpawns(type, x0, y0, z0, x1, y1, z1);
+        }
+    }
 
-	@Override
-	public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, Random random) {
-		PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x,y,z).getChunk());
-		if(icad instanceof PopulatorDataICABiomeWriterAbstract)
-		    icad.spawnMinecartWithChest(x,y,z,table,random);
-	}
+    @Override
+    public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, Random random) {
+        PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(x, y, z).getChunk());
+        if (icad instanceof PopulatorDataICABiomeWriterAbstract) {
+            icad.spawnMinecartWithChest(x, y, z, table, random);
+        }
+    }
 }

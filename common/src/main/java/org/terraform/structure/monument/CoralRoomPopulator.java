@@ -12,8 +12,7 @@ import java.util.Random;
 
 public class CoralRoomPopulator extends LevelledRoomPopulator {
 
-    public CoralRoomPopulator(Random rand, MonumentDesign design,
-                              boolean forceSpawn, boolean unique) {
+    public CoralRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
     }
 
@@ -28,11 +27,13 @@ public class CoralRoomPopulator extends LevelledRoomPopulator {
                 int y = w.get().getY() + GenUtils.randInt(rand, 0, room.getHeight() - 6);
                 int z = w.get().getZ();
 
-                if (GenUtils.chance(rand, 1, 15))
+                if (GenUtils.chance(rand, 1, 15)) {
                     CoralGenerator.generateCoral(data, x, y, z);
+                }
 
-                if (GenUtils.chance(rand, 1, 5))
+                if (GenUtils.chance(rand, 1, 5)) {
                     CoralGenerator.generateSponge(data, x, y, z);
+                }
 
                 w = w.getLeft();
             }

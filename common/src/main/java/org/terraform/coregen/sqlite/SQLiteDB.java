@@ -6,11 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +20,9 @@ public class SQLiteDB {
     private static SQLiteDB i;
 
     public static @NotNull SQLiteDB get() {
-        if (i == null) i = new SQLiteDB();
+        if (i == null) {
+            i = new SQLiteDB();
+        }
         return i;
     }
 
@@ -32,13 +30,11 @@ public class SQLiteDB {
      * Ensures that the database and all relevant tables exist.
      */
     public static void createTableIfNotExists(String world) {
-        if (PREPARED_WORLDS.contains(world)) return;
+        if (PREPARED_WORLDS.contains(world)) {
+            return;
+        }
         Connection conn = null;
-        String dir = "plugins"
-                + File.separator
-                + "TerraformGenerator"
-                + File.separator
-                + world + ".db";
+        String dir = "plugins" + File.separator + "TerraformGenerator" + File.separator + world + ".db";
         try {
             // db parameters  
             String url = "jdbc:sqlite:" + dir;
@@ -47,25 +43,27 @@ public class SQLiteDB {
             // Create Chunks Table
             conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();
-            String sql = "CREATE TABLE IF NOT EXISTS CHUNKS " +
-                    "(CHUNK STRING PRIMARY KEY     NOT NULL," +
-                    " POPULATED           BOOLEAN     NOT NULL); ";
+            String sql = "CREATE TABLE IF NOT EXISTS CHUNKS "
+                         + "(CHUNK STRING PRIMARY KEY     NOT NULL,"
+                         + " POPULATED           BOOLEAN     NOT NULL); ";
             stmt.executeUpdate(sql);
             stmt.close();
 
             // Create BlockData table
             stmt = conn.createStatement();
-            sql = "CREATE TABLE IF NOT EXISTS BLOCKDATA " +
-                    "(CHUNK STRING NOT NULL,"
-                    + "COORDS STRING NOT NULL," +
-                    " DATA STRING NOT NULL,"
-                    + "PRIMARY KEY (CHUNK,COORDS)); ";
+            sql = "CREATE TABLE IF NOT EXISTS BLOCKDATA "
+                  + "(CHUNK STRING NOT NULL,"
+                  + "COORDS STRING NOT NULL,"
+                  + " DATA STRING NOT NULL,"
+                  + "PRIMARY KEY (CHUNK,COORDS)); ";
             stmt.executeUpdate(sql);
             stmt.close();
             PREPARED_WORLDS.add(world);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
-        } finally {
+        }
+        finally {
             closeConn(conn);
         }
     }
@@ -75,7 +73,8 @@ public class SQLiteDB {
             if (conn != null) {
                 conn.close();
             }
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             TerraformGeneratorPlugin.logger.stackTrace(ex);
         }
     }
@@ -85,11 +84,7 @@ public class SQLiteDB {
      */
     public void updateBlockData(String world, int chunkX, int chunkZ, int x, int y, int z, @NotNull BlockData data) {
         createTableIfNotExists(world);
-        String dir = "plugins"
-                + File.separator
-                + "TerraformGenerator"
-                + File.separator
-                + world + ".db";
+        String dir = "plugins" + File.separator + "TerraformGenerator" + File.separator + world + ".db";
         String CHUNK = chunkX + "," + chunkZ;
         String COORDS = x + "," + y + "," + z;
         String DATA = data.toString();
@@ -98,21 +93,25 @@ public class SQLiteDB {
             Connection c = DriverManager.getConnection("jdbc:sqlite:" + dir);
             c.setAutoCommit(false);
 
-			Statement stmt = c.createStatement();
-            String sql = "DELETE from BLOCKDATA where CHUNK='" + CHUNK + "' and"
-                    + " COORDS='" + COORDS + "';";
+            Statement stmt = c.createStatement();
+            String sql = "DELETE from BLOCKDATA where CHUNK='" + CHUNK + "' and" + " COORDS='" + COORDS + "';";
             stmt.executeUpdate(sql);
 
-            sql = "INSERT INTO BLOCKDATA (CHUNK,COORDS,DATA) " +
-                    "VALUES ('" + CHUNK + "', '"
-                    + COORDS + "', '"
-                    + DATA + "');";
+            sql = "INSERT INTO BLOCKDATA (CHUNK,COORDS,DATA) "
+                  + "VALUES ('"
+                  + CHUNK
+                  + "', '"
+                  + COORDS
+                  + "', '"
+                  + DATA
+                  + "');";
             stmt.executeUpdate(sql);
 
             stmt.close();
             c.commit();
             c.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }
@@ -123,11 +122,7 @@ public class SQLiteDB {
      */
     public boolean[] fetchFromChunks(String world, int chunkX, int chunkZ) {
         createTableIfNotExists(world);
-        String dir = "plugins"
-                + File.separator
-                + "TerraformGenerator"
-                + File.separator
-                + world + ".db";
+        String dir = "plugins" + File.separator + "TerraformGenerator" + File.separator + world + ".db";
         String key = chunkX + "," + chunkZ;
         boolean[] queryReply = {false, false};
         try {
@@ -138,14 +133,16 @@ public class SQLiteDB {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM CHUNKS WHERE CHUNK='" + key + "';");
             if (rs.next()) {
-                queryReply = new boolean[]{true, rs.getBoolean("POPULATED")};
-            } else {
-                queryReply = new boolean[]{false, false};
+                queryReply = new boolean[] {true, rs.getBoolean("POPULATED")};
+            }
+            else {
+                queryReply = new boolean[] {false, false};
             }
             rs.close();
             stmt.close();
             c.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
             // Bukkit.getLogger().severe(e.getClass().getName() + "[" + e.getCause() +"]" + ":" + e.getMessage() );
         }
@@ -158,11 +155,7 @@ public class SQLiteDB {
      */
     public void putChunk(String world, int chunkX, int chunkZ, boolean populated) {
         createTableIfNotExists(world);
-        String dir = "plugins"
-                + File.separator
-                + "TerraformGenerator"
-                + File.separator
-                + world + ".db";
+        String dir = "plugins" + File.separator + "TerraformGenerator" + File.separator + world + ".db";
         try {
             Class.forName("org.sqlite.JDBC");
             Connection c = DriverManager.getConnection("jdbc:sqlite:" + dir);
@@ -173,15 +166,14 @@ public class SQLiteDB {
             String sql = "DELETE from CHUNKS where CHUNK='" + key + "';";
             stmt.executeUpdate(sql);
 
-            sql = "INSERT INTO CHUNKS (CHUNK,POPULATED) " +
-                    "VALUES ('" + key + "', '"
-                    + populated + "');";
+            sql = "INSERT INTO CHUNKS (CHUNK,POPULATED) " + "VALUES ('" + key + "', '" + populated + "');";
             stmt.executeUpdate(sql);
 
             stmt.close();
             c.commit();
             c.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
     }

@@ -23,7 +23,15 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
 
     final PlainsVillageHouseVariant var;
     final PlainsVillagePopulator plainsVillagePopulator;
-    public PlainsVillageEntrancePiece(PlainsVillagePopulator plainsVillagePopulator, PlainsVillageHouseVariant var, int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
+
+    public PlainsVillageEntrancePiece(PlainsVillagePopulator plainsVillagePopulator,
+                                      PlainsVillageHouseVariant var,
+                                      int widthX,
+                                      int height,
+                                      int widthZ,
+                                      JigsawType type,
+                                      BlockFace[] validDirs)
+    {
         super(widthX, height, widthZ, type, validDirs);
         this.var = var;
         this.plainsVillagePopulator = plainsVillagePopulator;
@@ -39,34 +47,43 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
             w.Pillar(2, rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
-            if (this.var == PlainsVillageHouseVariant.CLAY)
+            if (this.var == PlainsVillageHouseVariant.CLAY) {
                 w.getUp(2).Pillar(2, rand, Material.WHITE_TERRACOTTA);
-            else
+            }
+            else {
                 w.getUp(2).Pillar(2, rand, plainsVillagePopulator.woodPlank);
+            }
 
             w = w.getLeft();
         }
 
         // The door
         w = w.getRight(3).getUp();
-        BlockUtils.placeDoor(data, plainsVillagePopulator.woodDoor,
-                w.getX(), w.getY(), w.getZ(), w.getDirection().getOppositeFace());
+        BlockUtils.placeDoor(data,
+                plainsVillagePopulator.woodDoor,
+                w.getX(),
+                w.getY(),
+                w.getZ(),
+                w.getDirection().getOppositeFace()
+        );
 
 
-        if(w.getFront().isSolid()) {
-	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
-	        .setAngled(true)
-	        .setStopAtWater(true)
-	        .setStairwayDirection(BlockFace.UP)
-	        .build(w.getFront(4));
-	        w.getFront().Pillar(2, new Random(), Material.AIR);
-	        w.getFront(2).Pillar(2, new Random(), Material.AIR);
-	        w.getFront(3).Pillar(3, new Random(), Material.AIR);
-        }else
-	        new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS)
-	        .setAngled(true)
-	        .setStopAtWater(true)
-	        .build(w.getFront().getDown());
+        if (w.getFront().isSolid()) {
+            new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS).setAngled(true)
+                                                                                               .setStopAtWater(true)
+                                                                                               .setStairwayDirection(
+                                                                                                       BlockFace.UP)
+                                                                                               .build(w.getFront(4));
+            w.getFront().Pillar(2, new Random(), Material.AIR);
+            w.getFront(2).Pillar(2, new Random(), Material.AIR);
+            w.getFront(3).Pillar(3, new Random(), Material.AIR);
+        }
+        else {
+            new StairwayBuilder(Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE_STAIRS).setAngled(true)
+                                                                                               .setStopAtWater(true)
+                                                                                               .build(w.getFront()
+                                                                                                       .getDown());
+        }
 
         // Decorations depending on variant
         if (this.var == PlainsVillageHouseVariant.COBBLESTONE) {
@@ -80,10 +97,12 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getRight().getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
             Orientable log = (Orientable) Bukkit.createBlockData(plainsVillagePopulator.woodLog);
-            if (w.getDirection().getModZ() != 0)
+            if (w.getDirection().getModZ() != 0) {
                 log.setAxis(Axis.X);
-            else
+            }
+            else {
                 log.setAxis(Axis.Z);
+            }
 
             w.getUp(2).setBlockData(log);
             w.getRight().getUp(2).setBlockData(log);
@@ -94,21 +113,20 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getRight().getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
 
-            new SlabBuilder(Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB)
-                    .setType(Slab.Type.TOP)
-                    .apply(w.getUp(2));
+            new SlabBuilder(Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB).setType(Slab.Type.TOP)
+                                                                                       .apply(w.getUp(2));
 
-            new SlabBuilder(Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB)
-                    .setType(Slab.Type.BOTTOM)
-                    .apply(w.getUp(2).getLeft())
-                    .apply(w.getUp(2).getRight());
+            new SlabBuilder(Material.COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_SLAB).setType(Slab.Type.BOTTOM)
+                                                                                       .apply(w.getUp(2).getLeft())
+                                                                                       .apply(w.getUp(2).getRight());
 
             w.getLeft().Pillar(2, rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
             w.getRight().Pillar(2, rand, Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL);
             w.getLeft().CorrectMultipleFacing(2);
             w.getRight().CorrectMultipleFacing(2);
 
-        } else if (this.var == PlainsVillageHouseVariant.CLAY) {
+        }
+        else if (this.var == PlainsVillageHouseVariant.CLAY) {
             w.getLeft().getUp().setType(plainsVillagePopulator.woodLog);
             w.getRight().getUp().setType(plainsVillagePopulator.woodLog);
             w = w.getFront();
@@ -116,10 +134,12 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getRight().getDown().downUntilSolid(rand, Material.COBBLESTONE, Material.MOSSY_COBBLESTONE);
 
             Orientable log = (Orientable) Bukkit.createBlockData(plainsVillagePopulator.woodLog);
-            if (w.getDirection().getModZ() != 0)
+            if (w.getDirection().getModZ() != 0) {
                 log.setAxis(Axis.Z);
-            else
+            }
+            else {
                 log.setAxis(Axis.X);
+            }
 
             w.getLeft().setType(plainsVillagePopulator.woodLog);
             w.getLeft().getUp().setType(Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL);
@@ -142,12 +162,15 @@ public class PlainsVillageEntrancePiece extends JigsawStructurePiece {
             w.getLeft().CorrectMultipleFacing(1);
             w.getRight().setType(Material.STONE_BRICK_WALL, Material.MOSSY_STONE_BRICK_WALL);
             w.getRight().CorrectMultipleFacing(1);
-        } else if (this.var == PlainsVillageHouseVariant.WOODEN) {
+        }
+        else if (this.var == PlainsVillageHouseVariant.WOODEN) {
             Orientable log = (Orientable) Bukkit.createBlockData(plainsVillagePopulator.woodLog);
-            if (w.getDirection().getModZ() != 0)
+            if (w.getDirection().getModZ() != 0) {
                 log.setAxis(Axis.Z);
-            else
+            }
+            else {
                 log.setAxis(Axis.X);
+            }
 
             // w.getUp(2).setBlockData(log);
 

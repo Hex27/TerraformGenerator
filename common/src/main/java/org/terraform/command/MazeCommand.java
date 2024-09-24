@@ -43,7 +43,7 @@ public class MazeCommand extends TerraCommand {
         int x = p.getLocation().getBlockX();
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
-//		TreeDB.spawnCoconutTree(new Random(), data, x,y,z);
+        //		TreeDB.spawnCoconutTree(new Random(), data, x,y,z);
         MazeSpawner spawner = new MazeSpawner(new Random(), new SimpleBlock(data, x, y, z), 30, 30);
         spawner.setMazePeriod(5);
         spawner.prepareMaze();

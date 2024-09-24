@@ -13,7 +13,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
@@ -46,7 +46,8 @@ public class DesertHandler extends BiomeHandler {
     // Pad more sandstone so that mountains don't get stone exposed vertically
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{Material.SAND,
+        return new Material[] {
+                Material.SAND,
                 Material.SAND,
                 GenUtils.randChoice(rand, Material.SANDSTONE, Material.SAND),
                 Material.SANDSTONE,
@@ -54,109 +55,129 @@ public class DesertHandler extends BiomeHandler {
                 Material.SANDSTONE,
                 Material.SANDSTONE,
                 GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE),
-                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.SANDSTONE, Material.STONE)
+        };
     }
 
     @Override
-    public void populateSmallItems(@NotNull TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
+    public void populateSmallItems(@NotNull TerraformWorld world,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
         boolean cactusGathering = GenUtils.chance(random, 1, 100);
         OasisBeach.generateOasisBeach(world, random, data, rawX, rawZ, BiomeBank.DESERT);
 
         Material base = data.getType(rawX, surfaceY, rawZ);
 
         if (cactusGathering) {
-            if (GenUtils.chance(random, 5, 100))
+            if (GenUtils.chance(random, 5, 100)) {
                 data.setType(rawX, surfaceY, rawZ, Material.DIRT_PATH);
+            }
         }
 
         if (base == Material.SAND) {
-            if (GenUtils.chance(random, 1, 100) ||
-                    (GenUtils.chance(random, 1, 20) && cactusGathering)) {
+            if (GenUtils.chance(random, 1, 100) || (GenUtils.chance(random, 1, 20) && cactusGathering)) {
                 boolean canSpawn = true;
                 for (BlockFace face : BlockUtils.directBlockFaces) {
-                    if (data.getType(rawX + face.getModX(), surfaceY + 1, rawZ + face.getModZ()) != Material.AIR)
+                    if (data.getType(rawX + face.getModX(), surfaceY + 1, rawZ + face.getModZ()) != Material.AIR) {
                         canSpawn = false;
+                    }
                 }
-                if (canSpawn)
+                if (canSpawn) {
                     PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 3, 5);
-            } else if (GenUtils.chance(random, 1, 80)) {
+                }
+            }
+            else if (GenUtils.chance(random, 1, 80)) {
                 PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
             }
         }
     }
 
-	@Override
-	public void populateLargeItems(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-		
-		// Rib cages
-        SimpleLocation[] ribCages = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 
-        		256, 0.6f);
+    @Override
+    public void populateLargeItems(@NotNull TerraformWorld tw,
+                                   @NotNull Random random,
+                                   @NotNull PopulatorDataAbstract data)
+    {
+
+        // Rib cages
+        SimpleLocation[] ribCages = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 256, 0.6f);
 
         for (SimpleLocation sLoc : ribCages) {
-            int ribY = GenUtils.getHighestGround(data, sLoc.getX(),sLoc.getZ());
+            int ribY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
             sLoc.setY(ribY - GenUtils.randInt(random, 0, 6));
-            if(data.getBiome(sLoc.getX(),sLoc.getZ()) == getBiome() &&
-            		data.getType(sLoc.getX(),ribY,sLoc.getZ()) == Material.SAND) {
-            	spawnRibCage(random, new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ()));
+            if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
+                && data.getType(sLoc.getX(), ribY, sLoc.getZ()) == Material.SAND)
+            {
+                spawnRibCage(random, new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ()));
             }
         }
-	}
+    }
 
-	public void spawnRibCage(@NotNull Random random, @NotNull SimpleBlock target) {
-        if (!TConfigOption.areStructuresEnabled()) return;
+    public void spawnRibCage(@NotNull Random random, @NotNull SimpleBlock target) {
+        if (!TConfig.areStructuresEnabled()) {
+            return;
+        }
 
-		BlockFace direction = BlockUtils.getDirectBlockFace(random);
-		int spineLength = GenUtils.randInt(random, 10, 14);
-		float ribWidthRadius = GenUtils.randInt(random, 1, 2) + (float) spineLength /2;
-		float ribHeightRadius = 0.7f*ribWidthRadius; // GenUtils.randInt(random, 6, 8);
-		// eqn -> ((y-ribHeight)/(ribHeight))^2 + ((x)/(ribWidth))^2 = 1
-		int interval = 2;
-		if(random.nextBoolean()) 
-			interval += 1;
+        BlockFace direction = BlockUtils.getDirectBlockFace(random);
+        int spineLength = GenUtils.randInt(random, 10, 14);
+        float ribWidthRadius = GenUtils.randInt(random, 1, 2) + (float) spineLength / 2;
+        float ribHeightRadius = 0.7f * ribWidthRadius; // GenUtils.randInt(random, 6, 8);
+        // eqn -> ((y-ribHeight)/(ribHeight))^2 + ((x)/(ribWidth))^2 = 1
+        int interval = 2;
+        if (random.nextBoolean()) {
+            interval += 1;
+        }
 
-		float ribSizeMultiplier = 1.0f;
-		
-		for(int segmentIndex = 0; segmentIndex < spineLength; segmentIndex++) {
-			Wall seg = new Wall(target.getRelative(direction, segmentIndex),direction);
-			new OrientableBuilder(Material.BONE_BLOCK)
-			.setAxis(BlockUtils.getAxisFromBlockFace(direction))
-			.apply(seg);
-			
-			if(segmentIndex < (int) (spineLength/2f)) {
-				ribSizeMultiplier += 0.05f;
-			}else if(segmentIndex > (int) (spineLength/2f))
-				ribSizeMultiplier -= 0.05f;
-			
-			if(segmentIndex % interval == 0 && segmentIndex > spineLength/6) {
-				for(float nHor = 1; nHor <= ribWidthRadius*ribSizeMultiplier; nHor+= 0.01F) {
-					
-					int[] multipliers = {-1};
-					if(nHor > ribWidthRadius*ribSizeMultiplier/3)
-						multipliers = new int[]{-1,1};
-					
-					for(int multiplier:multipliers) {
-						int ny = (int) Math.round(ribHeightRadius*ribSizeMultiplier + (multiplier*ribHeightRadius*ribSizeMultiplier
-								*Math.sqrt(1-Math.pow(
-										(nHor)
-										/(ribWidthRadius*ribSizeMultiplier),
-										2)
-								)));
-						
-						int horRel = Math.round(nHor);
-						Axis axis = BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(direction));
-						if(ny > ribSizeMultiplier*ribHeightRadius/3 && ny < 5*ribSizeMultiplier*ribHeightRadius/3) {
-							axis = Axis.Y;
-						}
-						
-						new OrientableBuilder(Material.BONE_BLOCK)
-						.setAxis(axis)
-						.apply(seg.getRelative(0,ny,0).getRight(horRel))
-						.apply(seg.getRelative(0,ny,0).getLeft(horRel));
-					}
-				}
-				
-			}
-		}
-		
-	}
+        float ribSizeMultiplier = 1f;
+
+        for (int segmentIndex = 0; segmentIndex < spineLength; segmentIndex++) {
+            Wall seg = new Wall(target.getRelative(direction, segmentIndex), direction);
+            new OrientableBuilder(Material.BONE_BLOCK).setAxis(BlockUtils.getAxisFromBlockFace(direction)).apply(seg);
+
+            if (segmentIndex < (int) (spineLength / 2f)) {
+                ribSizeMultiplier += 0.05f;
+            }
+            else if (segmentIndex > (int) (spineLength / 2f)) {
+                ribSizeMultiplier -= 0.05f;
+            }
+
+            if (segmentIndex % interval == 0 && segmentIndex > spineLength / 6) {
+                for (float nHor = 1; nHor <= ribWidthRadius * ribSizeMultiplier; nHor += 0.01F) {
+
+                    int[] multipliers = {-1};
+                    if (nHor > ribWidthRadius * ribSizeMultiplier / 3) {
+                        multipliers = new int[] {-1, 1};
+                    }
+
+                    for (int multiplier : multipliers) {
+                        int ny = (int) Math.round(ribHeightRadius * ribSizeMultiplier + (multiplier
+                                                                                         * ribHeightRadius
+                                                                                         * ribSizeMultiplier
+                                                                                         * Math.sqrt(1 - Math.pow((nHor)
+                                                                                                                  / (ribWidthRadius
+                                                                                                                     * ribSizeMultiplier),
+                                2
+                        ))));
+
+                        int horRel = Math.round(nHor);
+                        Axis axis = BlockUtils.getAxisFromBlockFace(BlockUtils.getLeft(direction));
+                        if (ny > ribSizeMultiplier * ribHeightRadius / 3
+                            && ny < 5 * ribSizeMultiplier * ribHeightRadius / 3)
+                        {
+                            axis = Axis.Y;
+                        }
+
+                        new OrientableBuilder(Material.BONE_BLOCK).setAxis(axis)
+                                                                  .apply(seg.getRelative(0, ny, 0).getRight(horRel))
+                                                                  .apply(seg.getRelative(0, ny, 0).getLeft(horRel));
+                    }
+                }
+
+            }
+        }
+
+    }
 }

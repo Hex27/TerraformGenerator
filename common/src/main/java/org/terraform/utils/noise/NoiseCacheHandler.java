@@ -1,162 +1,165 @@
 package org.terraform.utils.noise;
 
-import java.util.function.Function;
-
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.data.TerraformWorld;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import java.util.function.Function;
 
 /**
  * To help handle noise object caching throughout the entire plugin.
  * No more stupid hashmap caches all over the place.
- *
  */
-public class NoiseCacheHandler{
-	
-	public enum NoiseCacheEntry{
-		TW_TEMPERATURE,
-		TW_MOISTURE,
-		TW_OCEANIC,
-		TW_MOUNTAINOUS,
-		
-		CARVER_STANDARD,
-		
-		HEIGHTMAP_CORE,
-		HEIGHTMAP_RIVER,
-		// HEIGHTMAP_MOUNTAINOUS,
-		HEIGHTMAP_ATTRITION,
-		
-		BIOME_BEACH_HEIGHT,
-		
-		BIOME_MUDDYBOG_HEIGHTMAP,
-		
-		BIOME_BADLANDS_PLATEAU_DISTORTEDCIRCLE,
-		BIOME_BADLANDS_PLATEAUNOISE,
-		BIOME_BADLANDS_WALLNOISE,
-		BIOME_BADLANDS_PLATEAUDETAILS,
+public class NoiseCacheHandler {
 
-		BIOME_PAINTEDHILLS_NOISE,
-		BIOME_PAINTEDHILLS_ROCKS_NOISE,
-		
+    private static final LoadingCache<NoiseCacheHandler.NoiseCacheKey, FastNoise> NOISE_CACHE = CacheBuilder.newBuilder()
+                                                                                                            .maximumSize(
+                                                                                                                    300)
+                                                                                                            .build(new NoiseCacheLoader());
+
+    public static @NotNull FastNoise getNoise(TerraformWorld world,
+                                              NoiseCacheEntry entry,
+                                              @NotNull Function<TerraformWorld, FastNoise> noiseFunction)
+    {
+        NoiseCacheKey key = new NoiseCacheKey(world, entry);
+        FastNoise noise = NOISE_CACHE.getIfPresent(key);
+        if (noise == null) {
+            noise = noiseFunction.apply(world);
+            NOISE_CACHE.put(key, noise);
+        }
+        return noise;
+
+    }
+
+    public enum NoiseCacheEntry {
+        TW_TEMPERATURE,
+        TW_MOISTURE,
+        TW_OCEANIC,
+        TW_MOUNTAINOUS,
+
+        CARVER_STANDARD,
+
+        HEIGHTMAP_CORE,
+        HEIGHTMAP_RIVER,
+        // HEIGHTMAP_MOUNTAINOUS,
+        HEIGHTMAP_ATTRITION,
+
+        BIOME_BEACH_HEIGHT,
+
+        BIOME_MUDDYBOG_HEIGHTMAP,
+
+        BIOME_BADLANDS_PLATEAU_DISTORTEDCIRCLE,
+        BIOME_BADLANDS_PLATEAUNOISE,
+        BIOME_BADLANDS_WALLNOISE,
+        BIOME_BADLANDS_PLATEAUDETAILS,
+
+        BIOME_PAINTEDHILLS_NOISE,
+        BIOME_PAINTEDHILLS_ROCKS_NOISE,
+
         BIOME_DESERT_LUSH_RIVER,
 
-		BIOME_BAMBOOFOREST_PATHNOISE,
+        BIOME_BAMBOOFOREST_PATHNOISE,
 
-		BIOME_GORGE_CLIFFNOISE,
-		BIOME_GORGE_DETAILS,
-		
-		BIOME_ARCHEDCLIFFS_PLATFORMNOISE,
-		BIOME_ARCHEDCLIFFS_PILLARNOISE,
+        BIOME_GORGE_CLIFFNOISE,
+        BIOME_GORGE_DETAILS,
 
-		BIOME_ERODEDPLAINS_CLIFFNOISE,
-		BIOME_ERODEDPLAINS_DETAILS,
+        BIOME_ARCHEDCLIFFS_PLATFORMNOISE,
+        BIOME_ARCHEDCLIFFS_PILLARNOISE,
 
-		BIOME_PETRIFIEDCLIFFS_CLIFFNOISE,
-		BIOME_PETRIFIEDCLIFFS_INNERNOISE,
-		
-		BIOME_MUSHROOMISLAND_CIRCLE,
-		BIOME_LAKE_CIRCLE,
-		
-		BIOME_FOREST_PATHNOISE,
+        BIOME_ERODEDPLAINS_CLIFFNOISE,
+        BIOME_ERODEDPLAINS_DETAILS,
+
+        BIOME_PETRIFIEDCLIFFS_CLIFFNOISE,
+        BIOME_PETRIFIEDCLIFFS_INNERNOISE,
+
+        BIOME_MUSHROOMISLAND_CIRCLE,
+        BIOME_LAKE_CIRCLE,
+
+        BIOME_FOREST_PATHNOISE,
 
         BIOME_TAIGA_BERRY_BUSHNOISE,
 
-		BIOME_JUNGLE_GROUNDWOOD,
-		BIOME_JUNGLE_GROUNDLEAVES,
-		BIOME_JUNGLE_LILYPADS,
+        BIOME_JUNGLE_GROUNDWOOD,
+        BIOME_JUNGLE_GROUNDLEAVES,
+        BIOME_JUNGLE_LILYPADS,
 
-		BIOME_DESERT_DUNENOISE,
-		
-		BIOME_BADLANDS_CANYON_NOISE,
-		
-		BIOME_SWAMP_MUDNOISE,
-		
-		BIOME_CAVECLUSTER_CIRCLENOISE,
-		
-		BIOME_JAGGED_PEAKSNOISE,
-		
-		BIOME_SHATTERED_SAVANNANOISE,
+        BIOME_DESERT_DUNENOISE,
+
+        BIOME_BADLANDS_CANYON_NOISE,
+
+        BIOME_SWAMP_MUDNOISE,
+
+        BIOME_CAVECLUSTER_CIRCLENOISE,
+
+        BIOME_JAGGED_PEAKSNOISE,
+
+        BIOME_SHATTERED_SAVANNANOISE,
         BIOME_SHATTERED_Y_SAVANNANOISE,
 
         CAVE_FLUID_NOISE,
         CAVE_CHEESE_NOISE,
         CAVE_XRAVINE_NOISE,
         CAVE_XRAVINE_DETAILS,
-		
-		STRUCTURE_LARGECAVE_CARVER,
-		
-		STRUCTURE_LARGECAVE_RAISEDGROUNDNOISE,
-		
-		STRUCTURE_PYRAMID_BASEELEVATOR,
-		STRUCTURE_PYRAMID_BASEFUZZER,
-		
-		STRUCTURE_ANCIENTCITY_RUINS,
-		
-		STRUCTURE_ANIMALFARM_FIELDNOISE,
-		STRUCTURE_ANIMALFARM_RADIUSNOISE,
-		
-		STRUCTURE_RUINEDPORTAL_FISSURES,
-		
-		GENUTILS_RANDOMOBJ_NOISE,
-		
-		FRACTALTREES_LEAVES_NOISE,
-		FRACTALTREES_BASE_NOISE,
-    }
-	
-    private static final LoadingCache<NoiseCacheHandler.NoiseCacheKey, FastNoise> NOISE_CACHE = 
-    		CacheBuilder.newBuilder()
-    		.maximumSize(300).build(new NoiseCacheLoader());
-	
-    public static @NotNull FastNoise getNoise(TerraformWorld world, NoiseCacheEntry entry, @NotNull Function<TerraformWorld, FastNoise> noiseFunction) {
-        NoiseCacheKey key = new NoiseCacheKey(world,entry);
-        FastNoise noise = NOISE_CACHE.getIfPresent(key);
-        if(noise == null) {
-        	noise = noiseFunction.apply(world);
-        	NOISE_CACHE.put(key, noise);
-        }
-        return noise;
-        
-    }
-    
-	public static class NoiseCacheLoader extends CacheLoader<NoiseCacheHandler.NoiseCacheKey, FastNoise> {
-		/**
-		 * Does not do loading. 
-		 * If this is null, the caller is responsible for inserting it.
-		 */
-		@Override
-		public @Nullable FastNoise load(@NotNull NoiseCacheKey key) {
-			return null;
-		}
-	}
-	
-	public static class NoiseCacheKey {
-		private final TerraformWorld tw;
-		private final NoiseCacheEntry entry;
-		
-		public NoiseCacheKey(TerraformWorld world, NoiseCacheEntry entry) {
-			this.tw = world;
-			this.entry = entry;
-		}
 
-		@Override
-		public int hashCode() {
-	        return tw.hashCode() ^ (entry.hashCode() * 31);
-	    }
-		
-		@Override
-		public boolean equals(Object other) {
-			if(other instanceof NoiseCacheKey o) {
-                if(!o.tw.getName().equals(tw.getName()))
-					return false;
-				return entry == o.entry;
-			}
-			return false;
-		}
-	}
-	
+        STRUCTURE_LARGECAVE_CARVER,
+
+        STRUCTURE_LARGECAVE_RAISEDGROUNDNOISE,
+
+        STRUCTURE_PYRAMID_BASEELEVATOR,
+        STRUCTURE_PYRAMID_BASEFUZZER,
+
+        STRUCTURE_ANCIENTCITY_RUINS,
+
+        STRUCTURE_ANIMALFARM_FIELDNOISE,
+        STRUCTURE_ANIMALFARM_RADIUSNOISE,
+
+        STRUCTURE_RUINEDPORTAL_FISSURES,
+
+        GENUTILS_RANDOMOBJ_NOISE,
+
+        FRACTALTREES_LEAVES_NOISE,
+        FRACTALTREES_BASE_NOISE,
+    }
+
+    public static class NoiseCacheLoader extends CacheLoader<NoiseCacheHandler.NoiseCacheKey, FastNoise> {
+        /**
+         * Does not do loading.
+         * If this is null, the caller is responsible for inserting it.
+         */
+        @Override
+        public @Nullable FastNoise load(@NotNull NoiseCacheKey key) {
+            return null;
+        }
+    }
+
+    public static class NoiseCacheKey {
+        private final TerraformWorld tw;
+        private final NoiseCacheEntry entry;
+
+        public NoiseCacheKey(TerraformWorld world, NoiseCacheEntry entry) {
+            this.tw = world;
+            this.entry = entry;
+        }
+
+        @Override
+        public int hashCode() {
+            return tw.hashCode() ^ (entry.hashCode() * 31);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof NoiseCacheKey o) {
+                if (!o.tw.getName().equals(tw.getName())) {
+                    return false;
+                }
+                return entry == o.entry;
+            }
+            return false;
+        }
+    }
+
 
 }

@@ -5,8 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.data.Wall;
 
 public enum MonumentWallPattern {
-    EYE,
-    CROSS;
+    EYE, CROSS;
 
     public void apply(@NotNull Wall w) {
         if (this == EYE) {
@@ -40,7 +39,8 @@ public enum MonumentWallPattern {
             // Pupil
             w.setType(Material.DARK_PRISMARINE);
             w.getUp().setType(Material.DARK_PRISMARINE);
-        } else if (this == CROSS) {
+        }
+        else if (this == CROSS) {
             // Sea lanterns
             w.setType(Material.SEA_LANTERN);
             w.getUp(2).setType(Material.SEA_LANTERN);

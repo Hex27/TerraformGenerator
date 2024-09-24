@@ -50,7 +50,8 @@ public class LocateBiomeCommand extends TerraCommand {
 
         if (!args.isEmpty()) {
             try {
-                new Task(p.getUniqueId(),
+                new Task(
+                        p.getUniqueId(),
                         TerraformWorld.get(p.getWorld()),
                         p.getLocation().getBlockX(),
                         p.getLocation().getBlockZ(),

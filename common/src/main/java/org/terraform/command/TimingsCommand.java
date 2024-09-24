@@ -34,7 +34,14 @@ public class TimingsCommand extends TerraCommand {
     public void execute(@NotNull CommandSender sender, Stack<String> args) {
         sender.sendMessage("=====Avg Timings=====");
         for (Map.Entry<String, Long> entry : TickTimer.TIMINGS.entrySet()) {
-            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + entry.getKey() + ChatColor.DARK_GRAY + ": " + ChatColor.GOLD + entry.getValue());
+            sender.sendMessage(ChatColor.GRAY
+                               + "- "
+                               + ChatColor.GREEN
+                               + entry.getKey()
+                               + ChatColor.DARK_GRAY
+                               + ": "
+                               + ChatColor.GOLD
+                               + entry.getValue());
         }
     }
 }

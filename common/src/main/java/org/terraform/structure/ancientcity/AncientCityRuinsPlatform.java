@@ -17,39 +17,44 @@ import java.util.Random;
 
 public class AncientCityRuinsPlatform extends AncientCityAbstractRoomPopulator {
 
-    public AncientCityRuinsPlatform(TerraformWorld tw, HashSet<SimpleLocation> occupied, RoomLayoutGenerator gen, Random rand, boolean forceSpawn, boolean unique) {
+    public AncientCityRuinsPlatform(TerraformWorld tw,
+                                    HashSet<SimpleLocation> occupied,
+                                    RoomLayoutGenerator gen,
+                                    Random rand,
+                                    boolean forceSpawn,
+                                    boolean unique)
+    {
         super(tw, gen, rand, forceSpawn, unique);
     }
 
     @Override
     public void populate(@NotNull PopulatorDataAbstract data, @NotNull CubeRoom room) {
-    	super.populate(data, room);
-    	
-    	 FastNoise ruinsNoise = NoiseCacheHandler.getNoise(
-                 tw,
-                 NoiseCacheEntry.STRUCTURE_ANCIENTCITY_RUINS,
-                 world -> {
-                     FastNoise n = new FastNoise((int) (world.getSeed() * 11));
-                     n.SetNoiseType(FastNoise.NoiseType.Simplex);
-                     n.SetFrequency(0.09f);
+        super.populate(data, room);
 
-                     return n;
-                 });
+        FastNoise ruinsNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.STRUCTURE_ANCIENTCITY_RUINS, world -> {
+            FastNoise n = new FastNoise((int) (world.getSeed() * 11));
+            n.SetNoiseType(FastNoise.NoiseType.Simplex);
+            n.SetFrequency(0.09f);
 
- 		int totalPillars = 0;
-    	for(Entry<Wall, Integer> entry:this.effectiveRoom.getFourWalls(data, 2).entrySet())
-    	{
-    		Wall w = entry.getKey();
-    		for(int i = 0; i < entry.getValue(); i++) {
-    			
-    			w.LPillar(Math.round(Math.abs(5*ruinsNoise.GetNoise(totalPillars,0))), AncientCityUtils.deepslateBricks);
-    			
-    			w = w.getLeft();
-    			totalPillars++;
-    		}
-    	}
-    	
-    	super.sculkUp(tw, data, this.effectiveRoom);
+            return n;
+        });
+
+        int totalPillars = 0;
+        for (Entry<Wall, Integer> entry : this.effectiveRoom.getFourWalls(data, 2).entrySet()) {
+            Wall w = entry.getKey();
+            for (int i = 0; i < entry.getValue(); i++) {
+
+                w.LPillar(
+                        Math.round(Math.abs(5 * ruinsNoise.GetNoise(totalPillars, 0))),
+                        AncientCityUtils.deepslateBricks
+                );
+
+                w = w.getLeft();
+                totalPillars++;
+            }
+        }
+
+        super.sculkUp(tw, data, this.effectiveRoom);
     }
 
     @Override

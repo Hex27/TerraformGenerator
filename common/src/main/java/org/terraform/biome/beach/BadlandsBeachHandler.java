@@ -24,16 +24,23 @@ public class BadlandsBeachHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{
+        return new Material[] {
                 Material.RED_SAND,
                 Material.RED_SAND,
                 GenUtils.randChoice(rand, Material.RED_SAND, Material.RED_SANDSTONE),
                 GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE),
-                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE)};
+                GenUtils.randChoice(rand, Material.RED_SANDSTONE, Material.STONE)
+        };
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, Random random, int rawX, int surfaceY, int rawZ, PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world,
+                                   Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   PopulatorDataAbstract data)
+    {
 
     }
 
@@ -42,9 +49,9 @@ public class BadlandsBeachHandler extends BiomeHandler {
         return BiomeBank.BADLANDS.getHandler();
     }
 
-	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        // TODO Auto-generated method stub
+
+    }
 }

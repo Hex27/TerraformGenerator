@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.main.TerraformGeneratorPlugin;
+
 import java.util.Stack;
 
 public class BiomeVisualiserCommand extends TerraCommand {
@@ -36,20 +37,22 @@ public class BiomeVisualiserCommand extends TerraCommand {
 
     @Override
     public void execute(CommandSender sender, Stack<String> args) {
-    	Player p = (Player) sender;
-    	World world = Bukkit.getWorld("world");
-    	// idk wtf im doing tbh this doesn't work
-    	
-    	for(int nx = -10; nx <= 10; nx++)
-    		for(int nz = -10; nz <= 10; nz++) {
-    			// Biome comp = TerraformWorld.get(world).getBiomeBank(p.getLocation().getBlockX() + nx, (p.getLocation().getBlockZ() + nz)).getHandler().getBiome();
-    			for(int y = 0; y < 130; y++) {
-    				Location loc = new Location(world,p.getLocation().getX() + nx, y, p.getLocation().getZ() + nz);
-    				Biome b = world.getBiome(loc);
-    				if(b.toString().equals("PLAINS") && !world.getType(loc).isSolid())
-    					world.setType(loc, Material.RED_STAINED_GLASS);
-    			}
-    		}
+        Player p = (Player) sender;
+        World world = Bukkit.getWorld("world");
+        // idk wtf im doing tbh this doesn't work
+
+        for (int nx = -10; nx <= 10; nx++) {
+            for (int nz = -10; nz <= 10; nz++) {
+                // Biome comp = TerraformWorld.get(world).getBiomeBank(p.getLocation().getBlockX() + nx, (p.getLocation().getBlockZ() + nz)).getHandler().getBiome();
+                for (int y = 0; y < 130; y++) {
+                    Location loc = new Location(world, p.getLocation().getX() + nx, y, p.getLocation().getZ() + nz);
+                    Biome b = world.getBiome(loc);
+                    if (b.toString().equals("PLAINS") && !world.getType(loc).isSolid()) {
+                        world.setType(loc, Material.RED_STAINED_GLASS);
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -19,13 +19,19 @@ public class FilenameArgument extends TerraCommandArgument<String> {
 
     @Override
     public @NotNull String validate(CommandSender sender, @NotNull String value) {
-        File schematicFolder = new File(TerraformGeneratorPlugin.get().getDataFolder(), TerraSchematic.SCHEMATIC_FOLDER);
+        File schematicFolder = new File(
+                TerraformGeneratorPlugin.get().getDataFolder(),
+                TerraSchematic.SCHEMATIC_FOLDER
+        );
         File file = new File(schematicFolder, value);
         try {
-            if(file.getName().endsWith(File.pathSeparator)
-                    || !file.getCanonicalPath().startsWith(schematicFolder.getCanonicalPath()))
+            if (file.getName().endsWith(File.pathSeparator) || !file.getCanonicalPath()
+                                                                    .startsWith(schematicFolder.getCanonicalPath()))
+            {
                 return "Schematic name contained illegal characters (i.e. periods)";
-        } catch(Exception e) {
+            }
+        }
+        catch (Exception e) {
             return "Schematic name contained illegal characters (i.e. periods)";
         }
         return "";

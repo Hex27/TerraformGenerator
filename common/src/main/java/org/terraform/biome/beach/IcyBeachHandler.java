@@ -18,11 +18,11 @@ public class IcyBeachHandler extends BiomeHandler {
         int nz = z;
         while (length > 0) {
             length--;
-            if (data.getType(nx, y, nz).isSolid() &&
-                    data.getType(nx, y + 1, nz) == Material.AIR)
+            if (data.getType(nx, y, nz).isSolid() && data.getType(nx, y + 1, nz) == Material.AIR) {
                 data.setType(nx, y, nz, Material.ICE);
+            }
 
-            switch(random.nextInt(5)) {  // The direction chooser
+            switch (random.nextInt(5)) {  // The direction chooser
                 case 0 -> nx++;
                 case 2 -> nz++;
                 case 3 -> nx--;
@@ -44,14 +44,22 @@ public class IcyBeachHandler extends BiomeHandler {
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[]{GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
+        return new Material[] {
+                GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
                 GenUtils.weightedRandomMaterial(rand, Material.STONE, 35, Material.GRAVEL, 5, Material.COBBLESTONE, 10),
                 GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL),
-                GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)};
+                GenUtils.randChoice(rand, Material.STONE, Material.COBBLESTONE, Material.GRAVEL)
+        };
     }
 
     @Override
-    public void populateSmallItems(TerraformWorld world, @NotNull Random random, int rawX, int surfaceY, int rawZ, @NotNull PopulatorDataAbstract data) {
+    public void populateSmallItems(TerraformWorld world,
+                                   @NotNull Random random,
+                                   int rawX,
+                                   int surfaceY,
+                                   int rawZ,
+                                   @NotNull PopulatorDataAbstract data)
+    {
 
         if (GenUtils.chance(random, 7, 100)) {
             makeIceSheet(rawX, surfaceY, rawZ, data, random);
@@ -59,9 +67,9 @@ public class IcyBeachHandler extends BiomeHandler {
         }
     }
 
-	@Override
-	public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void populateLargeItems(TerraformWorld tw, Random random, PopulatorDataAbstract data) {
+        // TODO Auto-generated method stub
+
+    }
 }

@@ -20,7 +20,8 @@ public class Pre14PrivateFieldHandler extends PrivateFieldHandler {
             Field modifiersField = Field.class.getDeclaredField("modifiers");
             modifiersField.setAccessible(true);
             fieldModifiers = lookup.unreflectSetter(modifiersField);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        }
+        catch (NoSuchFieldException | IllegalAccessException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 

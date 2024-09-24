@@ -1,13 +1,13 @@
 package org.terraform.structure.room;
 
-import java.util.Random;
-
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 
+import java.util.Random;
+
 public abstract class RoomPopulatorAbstract {
+    public final Random rand;
     private final boolean forceSpawn;
     private final boolean unique;
-    public final Random rand;
 
     public RoomPopulatorAbstract(Random rand, boolean forceSpawn, boolean unique) {
         this.rand = rand;
@@ -17,7 +17,9 @@ public abstract class RoomPopulatorAbstract {
 
     protected static int getNextIndex(int bfIndex) {
         bfIndex++;
-        if (bfIndex >= 8) bfIndex = 0;
+        if (bfIndex >= 8) {
+            bfIndex = 0;
+        }
         return bfIndex;
     }
 

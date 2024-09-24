@@ -36,20 +36,20 @@ public class BiomeConsoleCheckCommand extends TerraCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, Stack<String> args)
-	{
-    	World world = Bukkit.getWorld("world");
-		for(int i = 0; i < 10; i++) {
-    	   int x = new Random().nextInt(1000);
-    	   int z = new Random().nextInt(1000);
-    	   
-    	   BiomeBank bank = TerraformWorld.get(world).getBiomeBank(x, z);
-    	   
-    	   sender.sendMessage("[Iteration] " + i + " (" + x + "," + z + ")");
-    	   sender.sendMessage("    BiomeBank: " + bank + " (" + bank.getHandler().getBiome() + ")");
-    	   sender.sendMessage("    Minecraft Biome [0]" + world.getBiome(x, 0, z));
-    	   sender.sendMessage("    Minecraft Biome [60]" + world.getBiome(x, 60, z));
-    	   sender.sendMessage("    Minecraft Biome [300]" + world.getBiome(x, 300, z));
-       }
+    {
+        World world = Bukkit.getWorld("world");
+        for (int i = 0; i < 10; i++) {
+            int x = new Random().nextInt(1000);
+            int z = new Random().nextInt(1000);
+
+            BiomeBank bank = TerraformWorld.get(world).getBiomeBank(x, z);
+
+            sender.sendMessage("[Iteration] " + i + " (" + x + "," + z + ")");
+            sender.sendMessage("    BiomeBank: " + bank + " (" + bank.getHandler().getBiome() + ")");
+            sender.sendMessage("    Minecraft Biome [0]" + world.getBiome(x, 0, z));
+            sender.sendMessage("    Minecraft Biome [60]" + world.getBiome(x, 60, z));
+            sender.sendMessage("    Minecraft Biome [300]" + world.getBiome(x, 300, z));
+        }
     }
 
 }

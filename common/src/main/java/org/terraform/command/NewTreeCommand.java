@@ -40,8 +40,7 @@ public class NewTreeCommand extends TerraCommand {
     }
 
     @Override
-    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args)
-            throws InvalidArgumentException {
+    public void execute(@NotNull CommandSender sender, @NotNull Stack<String> args) throws InvalidArgumentException {
 
         Player p = (Player) sender;
         PopulatorDataPostGen data = new PopulatorDataPostGen(p.getLocation().getChunk());
@@ -51,16 +50,18 @@ public class NewTreeCommand extends TerraCommand {
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
         try {
-            ((FractalTypes.Tree) this.parseArguments(sender, args).get(0))
-                    .build(tw, new SimpleBlock(data, x, y, z));
-        } catch (IllegalArgumentException e) {
+            ((FractalTypes.Tree) this.parseArguments(sender, args).get(0)).build(tw, new SimpleBlock(data, x, y, z));
+        }
+        catch (IllegalArgumentException e) {
             sender.sendMessage(ChatColor.RED + "Invalid tree type.");
             sender.sendMessage(ChatColor.RED + "Valid types:");
             StringBuilder types = new StringBuilder();
             boolean b = true;
             for (FractalTypes.Tree type : FractalTypes.Tree.values()) {
                 ChatColor col = ChatColor.RED;
-                if (b) col = ChatColor.DARK_RED;
+                if (b) {
+                    col = ChatColor.DARK_RED;
+                }
                 b = !b;
                 types.append(col).append(type).append(' ');
             }

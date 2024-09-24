@@ -40,8 +40,9 @@ public class PyramidDungeonPathPopulator extends PathPopulatorAbstract {
             // Generate cross-shaped hole.
             for (int i = -2; i > -8; i--) {
                 ppd.base.getRelative(0, i, 0).setType(Material.AIR);
-                for (BlockFace face : BlockUtils.directBlockFaces)
+                for (BlockFace face : BlockUtils.directBlockFaces) {
                     ppd.base.getRelative(face).getRelative(0, i, 0).setType(Material.AIR);
+                }
             }
 
             // Place torches against the tnt. This leads to a larger pit when the trap is triggered.

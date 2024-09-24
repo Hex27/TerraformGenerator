@@ -19,11 +19,12 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class TerraformWorldProviderBiome extends WorldChunkManager {
+    @SuppressWarnings("unused")
+    private static final boolean debug = false;
     private final TerraformWorld tw;
     private final IRegistry<BiomeBase> registry;
-
-
     private final Set<Holder<BiomeBase>> biomeList;
+
     public TerraformWorldProviderBiome(TerraformWorld tw, WorldChunkManager delegate) {
         // super(biomeListToBiomeBaseList(CustomBiomeHandler.getBiomeRegistry()));
         this.biomeList = CustomBiomeHandler.biomeListToBiomeBaseSet(CustomBiomeHandler.getBiomeRegistry());
@@ -38,36 +39,40 @@ public class TerraformWorldProviderBiome extends WorldChunkManager {
     }
 
     @Override // c is getPossibleBiomes
-    public Set<Holder<BiomeBase>>  c()
+    public Set<Holder<BiomeBase>> c()
     {
         return this.biomeList;
     }
 
-	@Override
-	protected Codec<? extends WorldChunkManager> a() {
-		throw new UnsupportedOperationException("Cannot serialize TerraformWorldProviderBiome");
-	}
-	@SuppressWarnings("unused")
-	private static final boolean debug = false;
-	@Override
-	public @Nullable Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
+    @Override
+    protected Codec<? extends WorldChunkManager> a() {
+        throw new UnsupportedOperationException("Cannot serialize TerraformWorldProviderBiome");
+    }
+
+    @Override
+    public @Nullable Holder<BiomeBase> getNoiseBiome(int x, int y, int z, Sampler arg3) {
         // Used for biome generation in NMSChunkGenerator.
         // Left shift x and z
         BiomeBank bank = tw.getBiomeBank(x << 2, z << 2);
 
-        if(bank.getHandler().getCustomBiome() == CustomBiomeType.NONE) {
+        if (bank.getHandler().getCustomBiome() == CustomBiomeType.NONE) {
 
             return CraftBiome.bukkitToMinecraftHolder(bank.getHandler().getBiome());
-        } else {
-            ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(bank.getHandler().getCustomBiome()); // ResourceKey.a(IRegistry.aP, new MinecraftKey(bank.getHandler().getCustomBiome().getKey()));
+        }
+        else {
+            ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(bank.getHandler()
+                                                                                               .getCustomBiome()); // ResourceKey.a(IRegistry.aP, new MinecraftKey(bank.getHandler().getCustomBiome().getKey()));
             Optional<Holder.c<BiomeBase>> holder = registry.b(rkey);
-            if(holder.isEmpty())
+            if (holder.isEmpty()) {
                 TerraformGeneratorPlugin.logger.error("Custom biome was not found in the vanilla registry!");
+            }
 
-            if(holder.isPresent()) {
+            if (holder.isPresent()) {
                 return holder.get();
-            } else
+            }
+            else {
                 return CraftBiome.bukkitToMinecraftHolder(bank.getHandler().getBiome());
+            }
         }
     }
 

@@ -15,14 +15,18 @@ import java.util.Random;
 public class FrozenCavePopulator extends AbstractCavePopulator {
 
     @Override
-    public void populate(TerraformWorld tw, @NotNull Random random, @NotNull SimpleBlock ceil, @NotNull SimpleBlock floor) {
+    public void populate(TerraformWorld tw,
+                         @NotNull Random random,
+                         @NotNull SimpleBlock ceil,
+                         @NotNull SimpleBlock floor)
+    {
 
         int caveHeight = ceil.getY() - floor.getY();
 
         // Don't touch slabbed floors or stalagmites
-        if (Tag.SLABS.isTagged(floor.getType()) ||
-        		Tag.WALLS.isTagged(floor.getType()))
+        if (Tag.SLABS.isTagged(floor.getType()) || Tag.WALLS.isTagged(floor.getType())) {
             return;
+        }
 
         // =========================
         // Upper decorations
@@ -36,11 +40,10 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
             Wall w = new Wall(ceil.getDown(), BlockFace.NORTH);
             // w.downLPillar(random, h, Material.ICE);
 
-            new StalactiteBuilder(Material.ICE)
-            .setSolidBlockType(Material.ICE)
-            .setFacingUp(false)
-            .setVerticalSpace(caveHeight)
-            .build(random, w);
+            new StalactiteBuilder(Material.ICE).setSolidBlockType(Material.ICE)
+                                               .setFacingUp(false)
+                                               .setVerticalSpace(caveHeight)
+                                               .build(random, w);
         }
 
         // =========================
@@ -54,12 +57,13 @@ public class FrozenCavePopulator extends AbstractCavePopulator {
         if (GenUtils.chance(random, 1, 25)) {
             Wall w = new Wall(floor.getUp(2));
             if (w.getType() == Material.CAVE_AIR)
-                // w.LPillar(h, random, Material.ICE);
-                new StalactiteBuilder(Material.ICE)
-                .setSolidBlockType(Material.ICE)
-                .setFacingUp(true)
-                .setVerticalSpace(caveHeight)
-                .build(random, w);
+            // w.LPillar(h, random, Material.ICE);
+            {
+                new StalactiteBuilder(Material.ICE).setSolidBlockType(Material.ICE)
+                                                   .setFacingUp(true)
+                                                   .setVerticalSpace(caveHeight)
+                                                   .build(random, w);
+            }
         }
     }
 }

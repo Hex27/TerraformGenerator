@@ -18,43 +18,50 @@ import org.terraform.structure.room.CubeRoom;
 
 public class MansionSecondFloorBunkPopulator extends MansionRoomPopulator {
 
-	public MansionSecondFloorBunkPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
-		super(room, internalWalls);
-	}
+    // Refers to the kitchen room width, not the width of one room cell.
+    private static final int roomWidthX = 15;
+    private static final int roomWidthZ = 6;
+    public MansionSecondFloorBunkPopulator(CubeRoom room, HashMap<BlockFace, MansionInternalWallState> internalWalls) {
+        super(room, internalWalls);
+    }
 
-	// Refers to the kitchen room width, not the width of one room cell.
-	private static final int roomWidthX = 15;
-	private static final int roomWidthZ = 6;
-	@Override
-	public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
+    @Override
+    public void decorateRoom(@NotNull PopulatorDataAbstract data, @NotNull Random random) {
 
-		int[] lowerBounds = this.getRoom().getLowerCorner(1);
-		BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
-		// TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
-		try {
-			if(randomFace == BlockFace.NORTH) {
-				SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);
-				TerraSchematic schema = TerraSchematic.load("mansion/mansion-bunk", target);
-		        schema.parser = new MansionRoomSchematicParser(random, data);
-				schema.setFace(randomFace);
-		        schema.apply();
-			}else if(randomFace == BlockFace.SOUTH) {
-				SimpleBlock target = new SimpleBlock(data, lowerBounds[0]+roomWidthX, this.getRoom().getY(), lowerBounds[1]+roomWidthZ);
-				TerraSchematic schema = TerraSchematic.load("mansion/mansion-bunk", target);
-		        schema.parser = new MansionRoomSchematicParser(random, data);
-		        schema.setFace(randomFace);
-		        schema.apply();
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			TerraformGeneratorPlugin.logger.stackTrace(e);
-		}
-	
-	}
+        int[] lowerBounds = this.getRoom().getLowerCorner(1);
+        BlockFace randomFace = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH}[random.nextInt(2)];
+        // TerraformGeneratorPlugin.logger.info("Library picking face: " + randomFace);
+        try {
+            if (randomFace == BlockFace.NORTH) {
+                SimpleBlock target = new SimpleBlock(data, lowerBounds[0], this.getRoom().getY(), lowerBounds[1]);
+                TerraSchematic schema = TerraSchematic.load("mansion/mansion-bunk", target);
+                schema.parser = new MansionRoomSchematicParser(random, data);
+                schema.setFace(randomFace);
+                schema.apply();
+            }
+            else if (randomFace == BlockFace.SOUTH) {
+                SimpleBlock target = new SimpleBlock(
+                        data,
+                        lowerBounds[0] + roomWidthX,
+                        this.getRoom().getY(),
+                        lowerBounds[1] + roomWidthZ
+                );
+                TerraSchematic schema = TerraSchematic.load("mansion/mansion-bunk", target);
+                schema.parser = new MansionRoomSchematicParser(random, data);
+                schema.setFace(randomFace);
+                schema.apply();
+            }
+        }
+        catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            TerraformGeneratorPlugin.logger.stackTrace(e);
+        }
+
+    }
 
 
-	@Override
-	public @NotNull MansionRoomSize getSize() {
-		return new MansionRoomSize(2,1);
-	}
+    @Override
+    public @NotNull MansionRoomSize getSize() {
+        return new MansionRoomSize(2, 1);
+    }
 }

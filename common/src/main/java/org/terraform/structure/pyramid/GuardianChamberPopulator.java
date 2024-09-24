@@ -38,19 +38,24 @@ public class GuardianChamberPopulator extends RoomPopulatorAbstract {
 
                 // Sides have more platforms.
                 if (x == lowerCorner[0] || x == upperCorner[0] || z == lowerCorner[1] || z == upperCorner[1]) {
-                    if (rand.nextBoolean()) continue;
+                    if (rand.nextBoolean()) {
+                        continue;
+                    }
                 }
 
                 // The closer to the center, the deeper the pool.
-                double heightMultiplierX = ((double) (2 * Math.abs(room.getX() - x))) / ((double) Math.abs(room.getWidthX()));
-                double heightMultiplierZ = ((double) (2 * Math.abs(room.getZ() - z))) / ((double) Math.abs(room.getWidthZ()));
+                double heightMultiplierX = ((double) (2 * Math.abs(room.getX() - x)))
+                                           / ((double) Math.abs(room.getWidthX()));
+                double heightMultiplierZ = ((double) (2 * Math.abs(room.getZ() - z)))
+                                           / ((double) Math.abs(room.getWidthZ()));
                 double heightMultiplier = 1 - ((heightMultiplierX + heightMultiplierZ) / 2);
                 int poolDepth = (int) (1 + heightMultiplier * 4);
                 // Set water and delete pressure plate deathpit traps
                 for (int y = room.getY(); y > room.getY() - poolDepth; y--) {
                     data.setType(x, y, z, Material.WATER);
-                    if (data.getType(x, y + 1, z) == Material.STONE_PRESSURE_PLATE)
+                    if (data.getType(x, y + 1, z) == Material.STONE_PRESSURE_PLATE) {
                         data.setType(x, y + 1, z, Material.AIR);
+                    }
                 }
             }
         }
@@ -63,8 +68,7 @@ public class GuardianChamberPopulator extends RoomPopulatorAbstract {
     @Override
     public boolean canPopulate(@NotNull CubeRoom room) {
         // Don't compete with crypt rooms for space
-        return room.getWidthX() >= 5 && room.getWidthZ() >= 5
-                && room.getWidthX() < 13 && room.getWidthZ() < 13;
+        return room.getWidthX() >= 5 && room.getWidthZ() >= 5 && room.getWidthX() < 13 && room.getWidthZ() < 13;
     }
 
 

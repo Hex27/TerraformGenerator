@@ -28,17 +28,25 @@ public class SchematicListener implements Listener {
             add(ChatColor.RED + "-=[Developer's Tool]=-");
         }});
         wand.setItemMeta(meta);
-        
+
         return wand;
     }
 
     @EventHandler
     public void onBlockClick(@NotNull PlayerInteractEvent event) {
-        if (event.getHand() == EquipmentSlot.OFF_HAND) return;
-        if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getHand() == EquipmentSlot.OFF_HAND) {
+            return;
+        }
+        if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
         ItemStack item = event.getPlayer().getEquipment().getItemInMainHand();
-        if (!item.hasItemMeta()) return;
-        if (!item.getItemMeta().getDisplayName().equals(WAND_NAME)) return;
+        if (!item.hasItemMeta()) {
+            return;
+        }
+        if (!item.getItemMeta().getDisplayName().equals(WAND_NAME)) {
+            return;
+        }
 
         event.setCancelled(true);
         Player player = event.getPlayer();
@@ -47,7 +55,8 @@ public class SchematicListener implements Listener {
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
             terraRg.setOne(event.getClickedBlock());
             player.sendMessage(ChatColor.GREEN + "Position one set.");
-        } else {
+        }
+        else {
             terraRg.setTwo(event.getClickedBlock());
             player.sendMessage(ChatColor.GREEN + "Position two set.");
         }

@@ -9,25 +9,17 @@ import org.terraform.data.Wall;
 import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
-import java.util.Stack;
 
 public class MazeSpawner {
+    public final @NotNull List<PathPopulatorData> pathPopDatas = new ArrayList<>();
     /**
      * A hashmap of raw location 2d x,z arrays to maze cells.
      * SIMPLE LOCATION HERE REFERS TO MAZECELL RELATIVE COORDINATES,
      * NOT REAL IN-WORLD COORDS.
      */
     private final Map<SimpleLocation, MazeCell> cellGrid = new HashMap<>();
-    public final @NotNull List<PathPopulatorData> pathPopDatas = new ArrayList<>();
     private SimpleBlock core; // Maze center
     private int widthX = -1; // Maze x width
     private int widthZ = -1; // Maze z width
@@ -80,7 +72,7 @@ public class MazeSpawner {
         // Initialise the cellGrid
         int mazeCellsWidthX = widthX / (mazePathWidth + mazePeriod);
         int mazeCellsWidthZ = widthZ / (mazePathWidth + mazePeriod);
-        for (int x = -mazeCellsWidthX / 2; x <= mazeCellsWidthX / 2; x++)
+        for (int x = -mazeCellsWidthX / 2; x <= mazeCellsWidthX / 2; x++) {
             for (int z = -mazeCellsWidthZ / 2; z <= mazeCellsWidthZ / 2; z++) {
                 MazeCell cell = new MazeCell(x, z);
                 cellGrid.put(new SimpleLocation(x, core.getY(), z), cell);
@@ -89,6 +81,7 @@ public class MazeSpawner {
                     center = cell;
                 }
             }
+        }
 
         // Bukkit.getLogger().info("CENTER: " + center.x + "," + center.z);
 
@@ -109,17 +102,17 @@ public class MazeSpawner {
                 // Dead end. Go backwards.
 
                 // No items in stack, break out.
-                if (cellStack.isEmpty()) break;
+                if (cellStack.isEmpty()) {
+                    break;
+                }
                 currentCell = cellStack.pop();
                 continue;
             }
 
             // choose a random neighbouring cell and move into it.
-            @SuppressWarnings("unchecked")
-            Entry<BlockFace, MazeCell> entry = (Entry<BlockFace, MazeCell>)
-                    neighbours.entrySet().toArray()[
-                            rand.nextInt(neighbours.size())
-                            ];
+            @SuppressWarnings("unchecked") Entry<BlockFace, MazeCell> entry = (Entry<BlockFace, MazeCell>) neighbours.entrySet()
+                                                                                                                     .toArray()[rand.nextInt(
+                    neighbours.size())];
 
             currentCell.knockDownWall(entry.getValue(), entry.getKey());
             cellStack.push(currentCell);
@@ -132,6 +125,7 @@ public class MazeSpawner {
 
     /**
      * Carve a maze according to the provided parameters
+     *
      * @param carveInSolid whether or not the maze is to be carved into a solid, or if walls must be created.
      * @materials if carveInSolid is false, supply a list of materials to use for walls.
      */
@@ -160,12 +154,14 @@ public class MazeSpawner {
 
             // Connect
             for (BlockFace dir : BlockUtils.directBlockFaces) {
-                Wall startPoint = new Wall(core.getRelative(realWorldX, 0, realWorldZ), dir)
-                        .getRelative(dir, cellRadius + 1);
+                Wall startPoint = new Wall(core.getRelative(realWorldX, 0, realWorldZ), dir).getRelative(
+                        dir,
+                        cellRadius + 1
+                );
 
                 // Carve Pathway
                 if (wallllllllless.contains(dir)) {
-                    for (int i = 0; i < Math.ceil(((float) this.mazePeriod) / 2.0f); i++) {
+                    for (int i = 0; i < Math.ceil(((float) this.mazePeriod) / 2f); i++) {
                         pathPopDatas.add(new PathPopulatorData(startPoint.getDown().get(), dir, mazePathWidth, false));
 
                         startPoint.Pillar(mazeHeight, rand, Material.CAVE_AIR);
@@ -179,15 +175,20 @@ public class MazeSpawner {
                             if (covered) {
                                 startPoint.getLeft(w).getDown().setType(GenUtils.randChoice(materials));
                                 startPoint.getRight(w).getDown().setType(GenUtils.randChoice(materials));
-                                startPoint.getLeft(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randChoice(materials));
-                                startPoint.getRight(w).getRelative(0, mazeHeight, 0).setType(GenUtils.randChoice(materials));
+                                startPoint.getLeft(w)
+                                          .getRelative(0, mazeHeight, 0)
+                                          .setType(GenUtils.randChoice(materials));
+                                startPoint.getRight(w)
+                                          .getRelative(0, mazeHeight, 0)
+                                          .setType(GenUtils.randChoice(materials));
                             }
                         }
                         startPoint.getLeft(cellRadius + 1).Pillar(mazeHeight, rand, materials);
                         startPoint.getRight(cellRadius + 1).Pillar(mazeHeight, rand, materials);
                         startPoint = startPoint.getRelative(dir);
                     }
-                } else { // Set Wall
+                }
+                else { // Set Wall
                     startPoint.Pillar(mazeHeight, rand, materials);
                     for (int w = 1; w <= cellRadius; w++) {
                         startPoint.getLeft(w).Pillar(mazeHeight, rand, materials);
@@ -259,7 +260,9 @@ public class MazeSpawner {
     }
 
     public void setMazePathWidth(int mazePathWidth) {
-        if (mazePathWidth % 2 == 0) throw new IllegalArgumentException("Maze Path Width must be odd!");
+        if (mazePathWidth % 2 == 0) {
+            throw new IllegalArgumentException("Maze Path Width must be odd!");
+        }
         this.mazePathWidth = mazePathWidth;
     }
 
@@ -311,14 +314,19 @@ public class MazeSpawner {
         public @NotNull Set<BlockFace> getWalllessFaces() {
             Set<BlockFace> faces = EnumSet.noneOf(BlockFace.class);
             for (Entry<BlockFace, Boolean> entry : walls.entrySet()) {
-                if (!entry.getValue()) faces.add(entry.getKey());
+                if (!entry.getValue()) {
+                    faces.add(entry.getKey());
+                }
             }
             return faces;
         }
 
         public boolean hasAllWalls() {
-            for (Boolean bool : walls.values())
-                if (!bool) return false;
+            for (Boolean bool : walls.values()) {
+                if (!bool) {
+                    return false;
+                }
+            }
             return true;
         }
 

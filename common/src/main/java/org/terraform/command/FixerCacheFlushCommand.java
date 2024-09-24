@@ -33,10 +33,10 @@ public class FixerCacheFlushCommand extends TerraCommand {
 
     @Override
     public void execute(@NotNull CommandSender sender, Stack<String> args)
-	{
-    	NativeGeneratorPatcherPopulator.flushChanges();
-    	PhysicsUpdaterPopulator.flushChanges();
-    	sender.sendMessage("Flushing changes.");
+    {
+        NativeGeneratorPatcherPopulator.flushChanges();
+        PhysicsUpdaterPopulator.flushChanges();
+        sender.sendMessage("Flushing changes.");
     }
 
 }

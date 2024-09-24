@@ -127,7 +127,8 @@ public enum TerraLootTable {
     TerraLootTable(String key) {
         this.key = key;
     }
-    public @Nullable LootTable bukkit(){
+
+    public @Nullable LootTable bukkit() {
         return Bukkit.getLootTable(NamespacedKey.minecraft(this.key));
     }
 }

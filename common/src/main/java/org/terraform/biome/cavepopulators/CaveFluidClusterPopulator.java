@@ -18,45 +18,57 @@ public class CaveFluidClusterPopulator extends AbstractCaveClusterPopulator {
     Material fluid;
     int rY;
 
-	public CaveFluidClusterPopulator(float radius) {
-		super(radius);
-	}
-    @Override
-	public void oneUnit(@NotNull TerraformWorld tw, Random doNotUse, @Nullable SimpleBlock ceil, @Nullable SimpleBlock floor, boolean boundary) {
-    	if(ceil == null || floor == null) return;
-        if(rand == null)
-        {
-            rand = tw.getHashedRand(center.getX(),center.getY(),center.getZ());
+    public CaveFluidClusterPopulator(float radius) {
+        super(radius);
+    }
 
-            fluid = GenUtils.choice(rand, new Material[]{Material.WATER, Material.LAVA});
-            if(center.getY() < TerraformGeneratorPlugin.injector.getMinY() + 32) fluid = Material.LAVA;
+    @Override
+    public void oneUnit(@NotNull TerraformWorld tw,
+                        Random doNotUse,
+                        @Nullable SimpleBlock ceil,
+                        @Nullable SimpleBlock floor,
+                        boolean boundary)
+    {
+        if (ceil == null || floor == null) {
+            return;
+        }
+        if (rand == null) {
+            rand = tw.getHashedRand(center.getX(), center.getY(), center.getZ());
+
+            fluid = GenUtils.choice(rand, new Material[] {Material.WATER, Material.LAVA});
+            if (center.getY() < TerraformGeneratorPlugin.injector.getMinY() + 32) {
+                fluid = Material.LAVA;
+            }
             rY = 3 + rand.nextInt(3);
         }
         Material original = floor.getType();
-        for(int i = 0; i < rY; i++)
-        {
+        for (int i = 0; i < rY; i++) {
             // If the floor is above the pinned water level, set it to cave air
             // If not, set it to the solid boundary block, or the fluid
             // The exposedToMaterial check is REQUIRED as adjacent fluid sources
             // may spawn, and cave air may forcefully remove boundaries.
-            if(boundary)
+            if (boundary) {
                 floor.setType(original);
-            else if(floor.getY() <= lowestYCenter.getY())
+            }
+            else if (floor.getY() <= lowestYCenter.getY()) {
                 floor.setType(fluid);
-            else if(!BlockUtils.isExposedToMaterial(floor, BlockUtils.fluids)
-                && !BlockUtils.fluids.contains(floor.getUp().getType())) // isExposed only checks NSEW
+            }
+            else if (!BlockUtils.isExposedToMaterial(floor, BlockUtils.fluids)
+                     && !BlockUtils.fluids.contains(floor.getUp().getType())) // isExposed only checks NSEW
+            {
                 floor.setType(Material.CAVE_AIR);
+            }
 
             floor = floor.getDown();
 
             // Fix floating fluids
-            if(!floor.isSolid()){
+            if (!floor.isSolid()) {
                 floor.setType(original);
                 break;
             }
         }
 
     }
-    
-    
+
+
 }

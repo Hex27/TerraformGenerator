@@ -10,7 +10,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.GenUtils;
@@ -35,18 +35,20 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
             for (int z = lowerCorner[1]; z <= upperCorner[1]; z++) {
                 SimpleBlock b = new SimpleBlock(data, x, y, z);
                 if (b.getType() == Material.CAVE_AIR
-                        || b.getType() == Material.OAK_PLANKS
-                        || b.getType() == Material.OAK_SLAB
-                        || b.getType() == Material.GRAVEL) {
+                    || b.getType() == Material.OAK_PLANKS
+                    || b.getType() == Material.OAK_SLAB
+                    || b.getType() == Material.GRAVEL)
+                {
                     b.setType(GenUtils.randChoice(
                             Material.STONE_BRICKS,
                             Material.CRACKED_STONE_BRICKS,
                             Material.MOSSY_STONE_BRICKS,
                             Material.MOSSY_COBBLESTONE,
                             Material.COBBLESTONE,
-                            Material.CAVE_AIR));
+                            Material.CAVE_AIR
+                    ));
                     // Small chance to set a lantern
-                    if (TConfigOption.areDecorationsEnabled() && GenUtils.chance(rand, 1, 150)) {
+                    if (TConfig.areDecorationsEnabled() && GenUtils.chance(rand, 1, 150)) {
                         b.getUp().setType(Material.COBBLESTONE);
                         b.getUp(2).setType(Material.LANTERN);
                     }
@@ -60,7 +62,7 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
             int z = corner[1];
             Wall w = new Wall(new SimpleBlock(data, x, room.getY() + 1, z), BlockFace.NORTH);
             if (w.findCeiling(50) != null) {
-                if (TConfigOption.areDecorationsEnabled()) {
+                if (TConfig.areDecorationsEnabled()) {
                     w.LPillar(50, rand, Material.IRON_BARS);
                 }
             }
@@ -72,19 +74,22 @@ public class SmeltingHallPopulator extends RoomPopulatorAbstract {
         // Furnaces & Chests
         for (Entry<Wall, Integer> walls : room.getFourWalls(data, 4).entrySet()) {
             int type = rand.nextInt(3);
-            if (type == 0) continue;
+            if (type == 0) {
+                continue;
+            }
             Wall w = walls.getKey();
             int l = walls.getValue();
             for (int i = 0; i < l; i++) {
                 // Non-rail areas
-                if (TConfigOption.areDecorationsEnabled() && w.getType() == Material.CAVE_AIR) {
+                if (TConfig.areDecorationsEnabled() && w.getType() == Material.CAVE_AIR) {
                     if (type == 1) { // Furnaces
                         Furnace furnace = (Furnace) Bukkit.createBlockData(Material.FURNACE);
                         furnace.setFacing(w.getDirection());
                         for (int ny = 0; ny < room.getHeight() / 3; ny++) {
                             w.getRelative(0, ny, 0).setBlockData(furnace);
                         }
-                    } else if (GenUtils.chance(rand, 1, 5)) { // Chests
+                    }
+                    else if (GenUtils.chance(rand, 1, 5)) { // Chests
                         Chest chest = (Chest) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());
                         w.setBlockData(chest);

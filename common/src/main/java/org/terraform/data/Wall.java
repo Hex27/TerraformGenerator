@@ -7,21 +7,21 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.utils.BlockUtils;
 
-public class Wall extends SimpleBlock{
+public class Wall extends SimpleBlock {
     private final BlockFace direction;
 
     public Wall(@NotNull SimpleBlock block, BlockFace dir) {
-    	super(block.getPopData(), block.getX(), block.getY(), block.getZ());
+        super(block.getPopData(), block.getX(), block.getY(), block.getZ());
         this.direction = dir;
     }
 
     public Wall(@NotNull SimpleBlock block) {
-    	super(block.getPopData(), block.getX(), block.getY(), block.getZ());
+        super(block.getPopData(), block.getX(), block.getY(), block.getZ());
         this.direction = BlockFace.NORTH;
     }
-    
+
     public Wall(@NotNull PopulatorDataAbstract data, int x, int y, int z, BlockFace dir) {
-    	super(data,x,y,z);
+        super(data, x, y, z);
         this.direction = dir;
     }
 
@@ -37,19 +37,19 @@ public class Wall extends SimpleBlock{
     public @NotNull Wall getLeft() {
         return new Wall(this.getRelative(BlockUtils.getAdjacentFaces(direction)[0]), direction);
     }
-    
+
     public @NotNull Wall getUp() {
-    	return new Wall(super.getUp(), direction);
+        return new Wall(super.getUp(), direction);
     }
 
     public @NotNull Wall getUp(int i) {
-    	return new Wall(super.getUp(i), direction);
+        return new Wall(super.getUp(i), direction);
     }
 
     public @NotNull Wall getGround() {
         return new Wall(super.getGround(), direction);
     }
-    
+
     public @NotNull Wall getGroundOrDry() {
         return new Wall(super.getGroundOrDry(), direction);
     }
@@ -62,17 +62,21 @@ public class Wall extends SimpleBlock{
      * Gets the first solid block above this one
      */
     public Wall findCeiling(int cutoff) {
-    	SimpleBlock sb = super.findCeiling(cutoff);
-    	if(sb == null) return null;
-    	return new Wall(sb, direction);
+        SimpleBlock sb = super.findCeiling(cutoff);
+        if (sb == null) {
+            return null;
+        }
+        return new Wall(sb, direction);
     }
 
     /**
      * Gets the first solid block below this one
      */
     public Wall findFloor(int cutoff) {
-    	SimpleBlock sb = super.findFloor(cutoff);
-    	if(sb == null) return null;
+        SimpleBlock sb = super.findFloor(cutoff);
+        if (sb == null) {
+            return null;
+        }
         return new Wall(sb, direction);
     }
 
@@ -80,8 +84,10 @@ public class Wall extends SimpleBlock{
      * Gets the first solid block below this one
      */
     public Wall findNearestAirPocket(int cutoff) {
-    	SimpleBlock sb = super.findNearestAirPocket(cutoff);
-    	if(sb == null) return null;
+        SimpleBlock sb = super.findNearestAirPocket(cutoff);
+        if (sb == null) {
+            return null;
+        }
         return new Wall(sb, direction);
     }
 
@@ -89,17 +95,21 @@ public class Wall extends SimpleBlock{
      * Gets the first stone-like block below this one
      */
     public Wall findStonelikeFloor(int cutoff) {
-    	SimpleBlock sb = super.findStonelikeFloor(cutoff);
-    	if(sb == null) return null;
+        SimpleBlock sb = super.findStonelikeFloor(cutoff);
+        if (sb == null) {
+            return null;
+        }
         return new Wall(sb, direction);
     }
-    
+
     /**
      * Gets the first stone-like block above this one
      */
     public Wall findStonelikeCeiling(int cutoff) {
-    	SimpleBlock sb = super.findStonelikeCeiling(cutoff);
-    	if(sb == null) return null;
+        SimpleBlock sb = super.findStonelikeCeiling(cutoff);
+        if (sb == null) {
+            return null;
+        }
         return new Wall(super.findStonelikeCeiling(cutoff), direction);
     }
 
@@ -117,7 +127,7 @@ public class Wall extends SimpleBlock{
         }
         return null;
     }
-    
+
 
     /**
      * Gets the first solid block towards that blockface
@@ -150,9 +160,13 @@ public class Wall extends SimpleBlock{
     }
 
     public Wall getLeft(int it) {
-        if (it < 0) return getRight(-it);
+        if (it < 0) {
+            return getRight(-it);
+        }
         Wall w = this;
-        for (int i = 0; i < it; i++) w = w.getLeft();
+        for (int i = 0; i < it; i++) {
+            w = w.getLeft();
+        }
         return w;
     }
 
@@ -161,9 +175,13 @@ public class Wall extends SimpleBlock{
     }
 
     public Wall getRight(int it) {
-        if (it < 0) return getLeft(-it);
+        if (it < 0) {
+            return getLeft(-it);
+        }
         Wall w = this;
-        for (int i = 0; i < it; i++) w = w.getRight();
+        for (int i = 0; i < it; i++) {
+            w = w.getRight();
+        }
         return w;
     }
 
@@ -179,9 +197,13 @@ public class Wall extends SimpleBlock{
     }
 
     public Wall getRear(int it) {
-        if (it < 0) return getFront(-it);
+        if (it < 0) {
+            return getFront(-it);
+        }
         Wall w = this.clone();
-        for (int i = 0; i < it; i++) w = w.getRear();
+        for (int i = 0; i < it; i++) {
+            w = w.getRear();
+        }
         return w;
     }
 
@@ -190,20 +212,24 @@ public class Wall extends SimpleBlock{
     }
 
     public Wall getFront(int it) {
-        if (it < 0) return getRear(-it);
+        if (it < 0) {
+            return getRear(-it);
+        }
         Wall w = this.clone();
-        for (int i = 0; i < it; i++) w = w.getFront();
+        for (int i = 0; i < it; i++) {
+            w = w.getFront();
+        }
         return w;
     }
 
     public BlockFace getDirection() {
         return direction;
     }
-    
+
     public @NotNull Wall getDown(int i) {
         return new Wall(super.getDown(i), direction);
     }
-    
+
     public @NotNull Wall getDown() {
         return new Wall(super.getDown(), direction);
     }
@@ -223,11 +249,11 @@ public class Wall extends SimpleBlock{
 
     @Override
     public boolean equals(Object obj) {
-    	return super.equals(obj);
+        return super.equals(obj);
     }
-    
+
     public void lootTableChest(TerraLootTable table) {
-    	get().getPopData().lootTableChest(getX(), getY(), getZ(), table);
+        get().getPopData().lootTableChest(getX(), getY(), getZ(), table);
     }
 
 }

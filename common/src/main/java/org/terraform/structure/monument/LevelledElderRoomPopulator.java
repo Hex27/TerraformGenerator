@@ -15,8 +15,7 @@ import java.util.Random;
 
 public class LevelledElderRoomPopulator extends LevelledRoomPopulator {
 
-    public LevelledElderRoomPopulator(Random rand, MonumentDesign design,
-                                      boolean forceSpawn, boolean unique) {
+    public LevelledElderRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
     }
 
@@ -34,8 +33,9 @@ public class LevelledElderRoomPopulator extends LevelledRoomPopulator {
             Wall w = walls.getKey().getUp(4);
             int length = walls.getValue();
             for (int j = 0; j < length; j++) {
-                if (j % 2 == 0)
+                if (j % 2 == 0) {
                     w.LPillar(room.getHeight() - 1, rand, Material.PRISMARINE_BRICKS);
+                }
                 else {
                     w.LPillar(room.getHeight() - 1, rand, Material.PRISMARINE);
                     w.getUp(3).Pillar(4, rand, Material.SEA_LANTERN);
@@ -64,9 +64,6 @@ public class LevelledElderRoomPopulator extends LevelledRoomPopulator {
         }
 
         // Elder
-        data.addEntity(room.getX() + 3,
-                room.getY() + 8,
-                room.getZ() - 3,
-                EntityType.ELDER_GUARDIAN);
+        data.addEntity(room.getX() + 3, room.getY() + 8, room.getZ() - 3, EntityType.ELDER_GUARDIAN);
     }
 }

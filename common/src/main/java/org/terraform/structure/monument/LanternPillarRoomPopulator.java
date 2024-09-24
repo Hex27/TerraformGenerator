@@ -13,8 +13,7 @@ import java.util.Random;
 
 public class LanternPillarRoomPopulator extends MonumentRoomPopulator {
 
-    public LanternPillarRoomPopulator(Random rand, MonumentDesign design,
-                                      boolean forceSpawn, boolean unique) {
+    public LanternPillarRoomPopulator(Random rand, MonumentDesign design, boolean forceSpawn, boolean unique) {
         super(rand, design, forceSpawn, unique);
         // TODO Auto-generated constructor stub
     }
@@ -54,8 +53,10 @@ public class LanternPillarRoomPopulator extends MonumentRoomPopulator {
         w.LPillar(room.getHeight(), rand, Material.SEA_LANTERN);
 
         // Diagonals
-        for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces)
-            w.getRelative(face).LPillar(room.getHeight(), true, rand, Material.DARK_PRISMARINE, Material.PRISMARINE_WALL);
+        for (BlockFace face : BlockUtils.xzDiagonalPlaneBlockFaces) {
+            w.getRelative(face)
+             .LPillar(room.getHeight(), true, rand, Material.DARK_PRISMARINE, Material.PRISMARINE_WALL);
+        }
 
         // Direct faces
         for (BlockFace face : BlockUtils.directBlockFaces) {

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.Vector2f;
@@ -22,20 +22,17 @@ import java.util.Random;
 // A handy tool for creating mushroom stems with right curvature:
 // https://www.geogebra.org/classic/hg7ckgwz
 public class MushroomBuilder {
+    final FractalTypes.Mushroom type;
+    final int heightVariation = 0;
     Random rand;
     FastNoise noiseGen;
-
     @Nullable
     SimpleBlock stemTop;
-
-    final FractalTypes.Mushroom type;
     FractalTypes.MushroomCap capShape = FractalTypes.MushroomCap.ROUND;
     Material stemType = Material.MUSHROOM_STEM;
     Material capType = Material.RED_MUSHROOM_BLOCK;
     Material spotType = Material.MUSHROOM_STEM;
-
     int baseHeight = 18;
-    final int heightVariation = 0;
     float baseThickness = 3.8f;
 
     float segmentFactor = 2;
@@ -58,108 +55,106 @@ public class MushroomBuilder {
         switch (type) {
             case GIANT_BROWN_FUNNEL_MUSHROOM:
                 this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
-                        .setCapRadius(13)
-                        .setCapYOffset(-2)
-                        .setCapShape(FractalTypes.MushroomCap.FUNNEL);
+                    .setCapRadius(13)
+                    .setCapYOffset(-2)
+                    .setCapShape(FractalTypes.MushroomCap.FUNNEL);
                 break;
             case GIANT_BROWN_MUSHROOM:
                 this.setCapType(Material.BROWN_MUSHROOM_BLOCK);
                 break;
             case GIANT_RED_MUSHROOM:
-                this.setBaseThickness(6f)
-                        .setThicknessIncrement(1.5f)
-                        .setCapRadius(15)
-                        .setCapYOffset(-10);
+                this.setBaseThickness(6f).setThicknessIncrement(1.5f).setCapRadius(15).setCapYOffset(-10);
                 break;
             case MEDIUM_BROWN_FUNNEL_MUSHROOM:
                 this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
-                        .setCapRadius(5)
-                        .setCapYOffset(-1)
-                        .setBaseHeight(8)
-                        .setBaseThickness(1.2f)
-                        .setCapShape(FractalTypes.MushroomCap.FUNNEL);
+                    .setCapRadius(5)
+                    .setCapYOffset(-1)
+                    .setBaseHeight(8)
+                    .setBaseThickness(1.2f)
+                    .setCapShape(FractalTypes.MushroomCap.FUNNEL);
                 break;
             case MEDIUM_BROWN_MUSHROOM:
                 this.setCapType(Material.BROWN_MUSHROOM_BLOCK)
-		                .setCapRadius(5)
-		                .setCapYOffset(-2)
-		                .setBaseHeight(8)
-		                .setBaseThickness(1.2f);
+                    .setCapRadius(5)
+                    .setCapYOffset(-2)
+                    .setBaseHeight(8)
+                    .setBaseThickness(1.2f);
                 break;
             case MEDIUM_RED_MUSHROOM:
                 this.setBaseThickness(1.3f)
-                		.setBaseHeight(8)
-                        .setThicknessIncrement(1.2f)
-                        .setCapRadius(4.5f)
-                        .setCapYOffset(-3);
+                    .setBaseHeight(8)
+                    .setThicknessIncrement(1.2f)
+                    .setCapRadius(4.5f)
+                    .setCapYOffset(-3);
                 break;
             case SMALL_BROWN_MUSHROOM:
                 this.setBaseThickness(0)
-                        .setThicknessIncrement(0)
-                        .setBaseHeight(5)
-                        .setCapType(Material.BROWN_MUSHROOM_BLOCK)
-                        .setMinTilt(0)
-                        .setMaxTilt(Math.PI / 8)
-                        .setStemCurve(0.8f, 0.2f, 0.8f, 0.4f)
-                        .setFourAxisRotationOnly(true)
-                        .setCapShape(FractalTypes.MushroomCap.FLAT)
-                        .setCapRadius(3f)
-                        .setCapYOffset(0);
+                    .setThicknessIncrement(0)
+                    .setBaseHeight(5)
+                    .setCapType(Material.BROWN_MUSHROOM_BLOCK)
+                    .setMinTilt(0)
+                    .setMaxTilt(Math.PI / 8)
+                    .setStemCurve(0.8f, 0.2f, 0.8f, 0.4f)
+                    .setFourAxisRotationOnly(true)
+                    .setCapShape(FractalTypes.MushroomCap.FLAT)
+                    .setCapRadius(3f)
+                    .setCapYOffset(0);
                 break;
             case SMALL_RED_MUSHROOM:
                 this.setBaseThickness(0)
-                        .setThicknessIncrement(0.5f)
-                        .setBaseHeight(4)
-                        .setMaxTilt(Math.PI / 8)
-                        .setMinTilt(0)
-                        .setStemCurve(0.8f, 0.2f, 0.8f, 0.4f)
-                        .setFourAxisRotationOnly(true)
-                        .setCapRadius(2.3f)
-                        .setCapYOffset(-1);
+                    .setThicknessIncrement(0.5f)
+                    .setBaseHeight(4)
+                    .setMaxTilt(Math.PI / 8)
+                    .setMinTilt(0)
+                    .setStemCurve(0.8f, 0.2f, 0.8f, 0.4f)
+                    .setFourAxisRotationOnly(true)
+                    .setCapRadius(2.3f)
+                    .setCapYOffset(-1);
                 break;
             case SMALL_POINTY_RED_MUSHROOM:
                 this.setBaseThickness(0)
-                        .setThicknessIncrement(0)
-                        .setBaseHeight(6)
-                        .setMaxTilt(Math.PI / 18)
-                        .setMinTilt(0)
-                        .setFourAxisRotationOnly(true)
-                        .setStemCurve(0.8f, 0.2f, 0.8f, 0.4f)
-                        .setCapRadius(2.3f)
-                        .setCapYOffset(-2)
-                        .setCapShape(FractalTypes.MushroomCap.POINTY);
+                    .setThicknessIncrement(0)
+                    .setBaseHeight(6)
+                    .setMaxTilt(Math.PI / 18)
+                    .setMinTilt(0)
+                    .setFourAxisRotationOnly(true)
+                    .setStemCurve(0.8f, 0.2f, 0.8f, 0.4f)
+                    .setCapRadius(2.3f)
+                    .setCapYOffset(-2)
+                    .setCapShape(FractalTypes.MushroomCap.POINTY);
                 break;
             case TINY_RED_MUSHROOM:
                 this.setBaseThickness(0)
-                        .setThicknessIncrement(0)
-                        .setBaseHeight(4)
-                        .setMinTilt(0)
-                        .setMaxTilt(0)
-                        .setStemCurve(0.5f, 0.5f, 0.5f, 0.5f)
-                        .setSegmentFactor(1)
-                        .setCapRadius(1.2f)
-                        .setCapYOffset(-2)
-                        .setCapShape(FractalTypes.MushroomCap.POINTY);
+                    .setThicknessIncrement(0)
+                    .setBaseHeight(4)
+                    .setMinTilt(0)
+                    .setMaxTilt(0)
+                    .setStemCurve(0.5f, 0.5f, 0.5f, 0.5f)
+                    .setSegmentFactor(1)
+                    .setCapRadius(1.2f)
+                    .setCapYOffset(-2)
+                    .setCapShape(FractalTypes.MushroomCap.POINTY);
             case TINY_BROWN_MUSHROOM:
                 this.setBaseThickness(0)
-                        .setThicknessIncrement(0)
-                        .setBaseHeight(2)
-                        .setMinTilt(0)
-                        .setMaxTilt(0)
-                        .setStemCurve(0.5f, 0.5f, 0.5f, 0.5f)
-                        .setSegmentFactor(1)
-                        .setCapRadius(1.5f)
-                        .setCapYOffset(1)
-                        .setCapShape(FractalTypes.MushroomCap.ROUND)
-                        .setCapType(Material.BROWN_MUSHROOM_BLOCK);
+                    .setThicknessIncrement(0)
+                    .setBaseHeight(2)
+                    .setMinTilt(0)
+                    .setMaxTilt(0)
+                    .setStemCurve(0.5f, 0.5f, 0.5f, 0.5f)
+                    .setSegmentFactor(1)
+                    .setCapRadius(1.5f)
+                    .setCapYOffset(1)
+                    .setCapShape(FractalTypes.MushroomCap.ROUND)
+                    .setCapType(Material.BROWN_MUSHROOM_BLOCK);
                 break;
         }
     }
 
     private void replaceSphere(float radius, @NotNull SimpleBlock base, @NotNull Material type) {
         if (radius < 0.5) {
-            if (!base.isSolid())
+            if (!base.isSolid()) {
                 base.setType(type);
+            }
 
             return;
         }
@@ -172,10 +167,14 @@ public class MushroomBuilder {
                 for (int z = -Math.round(radius); z <= Math.round(radius); z++) {
                     SimpleBlock block = base.getRelative(x, y, z);
 
-                    if (Math.pow(x, 2) / Math.pow(radius, 2) +
-                            Math.pow(y, 2) / Math.pow(radius, 2) +
-                            Math.pow(z, 2) / Math.pow(radius, 2)
-                            <= 1 + 0.7 * noiseGen.GetNoise(block.getX(), block.getY(), block.getZ())) {
+                    if (Math.pow(x, 2) / Math.pow(radius, 2)
+                        + Math.pow(y, 2) / Math.pow(radius, 2)
+                        + Math.pow(z, 2) / Math.pow(radius, 2) <= 1 + 0.7 * noiseGen.GetNoise(
+                            block.getX(),
+                            block.getY(),
+                            block.getZ()
+                    ))
+                    {
                         if (!block.isSolid()) {
                             block.setType(type);
                         }
@@ -185,14 +184,23 @@ public class MushroomBuilder {
         }
     }
 
-    private void spawnSphericalCap(int seed, float r, float ry, @NotNull SimpleBlock base, boolean hardReplace, Material... type) {
+    private void spawnSphericalCap(int seed,
+                                   float r,
+                                   float ry,
+                                   @NotNull SimpleBlock base,
+                                   boolean hardReplace,
+                                   Material... type)
+    {
         Random rand = new Random(seed);
         // FastNoise noise = new FastNoise(seed);
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
         noiseGen.SetFrequency(1.4f);
 
         float belowY = -0.25f * 2 * ry;
-        float lowThreshold = Math.min((float) (0.6 / 5 * Math.min(r, ry)), 0.6f); // When radius < 5 mushrooms less hollow
+        float lowThreshold = Math.min(
+                (float) (0.6 / 5 * Math.min(r, ry)),
+                0.6f
+        ); // When radius < 5 mushrooms less hollow
 
         for (int x = Math.round(-r); x <= Math.round(r); x++) {
             for (int y = Math.round(belowY); y <= Math.round(ry); y++) {
@@ -206,11 +214,12 @@ public class MushroomBuilder {
 
                     SimpleBlock rel = base.getRelative(x, y, z);
                     double equationResult = Math.pow(x, 2) / Math.pow(r, 2)
-                            + Math.pow(y, 2) / Math.pow(ry, 2)
-                            + Math.pow(z, 2) / Math.pow(r, 2);
+                                            + Math.pow(y, 2) / Math.pow(ry, 2)
+                                            + Math.pow(z, 2) / Math.pow(r, 2);
 
                     if (equationResult <= 1 + 0.25 * Math.abs(noiseGen.GetNoise(x / r, y / ry, z / r))
-                            && equationResult >= lowThreshold) {
+                        && equationResult >= lowThreshold)
+                    {
 
                         if (hardReplace || !rel.isSolid()) {
                             rel.setType(GenUtils.randChoice(rand, type));
@@ -223,52 +232,77 @@ public class MushroomBuilder {
     }
 
     public void build(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        if (!TConfigOption.areTallMushroomsEnabled()) return;
-
-        if(TConfigOption.DEVSTUFF_VANILLA_MUSHROOMS.getBoolean()) {
-        	String schemName;
-        	if(this.type.toString().contains("RED"))
-        		schemName = VanillaMushroomBuilder.RED_MUSHROOM_CAP;
-        	else
-        		schemName = VanillaMushroomBuilder.BROWN_MUSHROOM_CAP;
-        	
-        	VanillaMushroomBuilder.buildVanillaMushroom(tw, data, x, y, z, schemName);
-        	return;
+        if (!TConfig.areTallMushroomsEnabled()) {
+            return;
         }
-    	
-    	this.noiseGen = new FastNoise((int) tw.getSeed());
+
+        if (TConfig.c.DEVSTUFF_VANILLA_MUSHROOMS) {
+            String schemName;
+            if (this.type.toString().contains("RED")) {
+                schemName = VanillaMushroomBuilder.RED_MUSHROOM_CAP;
+            }
+            else {
+                schemName = VanillaMushroomBuilder.BROWN_MUSHROOM_CAP;
+            }
+
+            VanillaMushroomBuilder.buildVanillaMushroom(tw, data, x, y, z, schemName);
+            return;
+        }
+
+        this.noiseGen = new FastNoise((int) tw.getSeed());
         this.rand = tw.getRand(16L * 16 * x + 16L * y + z);
         SimpleBlock base = new SimpleBlock(data, x, y, z);
-        if (this.stemTop == null) stemTop = base;
+        if (this.stemTop == null) {
+            stemTop = base;
+        }
 
         double initialAngle;
-        if (fourAxisRotationOnly)
+        if (fourAxisRotationOnly) {
             initialAngle = (Math.PI / 2.0) * Math.round(Math.random() * 4);
-        else initialAngle = 2 * Math.PI * Math.random();
+        }
+        else {
+            initialAngle = 2 * Math.PI * Math.random();
+        }
 
         int initialHeight = baseHeight + GenUtils.randInt(-heightVariation, heightVariation);
-        createStem(base,
-                GenUtils.randDouble(rand, minTilt, maxTilt),
-                initialAngle,
-                baseThickness,
-                initialHeight);
+        createStem(base, GenUtils.randDouble(rand, minTilt, maxTilt), initialAngle, baseThickness, initialHeight);
 
         switch (capShape) {
             case ROUND:
                 spawnSphericalCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-                        capRadius, capRadius, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                        capRadius,
+                        capRadius,
+                        stemTop.getRelative(0, capYOffset, 0),
+                        true,
+                        capType
+                );
                 break;
             case FLAT:
                 spawnSphericalCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-                        capRadius, 0.6f * capRadius, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                        capRadius,
+                        0.6f * capRadius,
+                        stemTop.getRelative(0, capYOffset, 0),
+                        true,
+                        capType
+                );
                 break;
             case POINTY:
                 spawnSphericalCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-                        capRadius, capRadius * 1.8f, stemTop.getRelative(0, capYOffset, 0), true, capType);
+                        capRadius,
+                        capRadius * 1.8f,
+                        stemTop.getRelative(0, capYOffset, 0),
+                        true,
+                        capType
+                );
                 break;
             case FUNNEL: // Implement funnel algorithm
                 spawnFunnelCap(tw.getHashedRand(x, y, z).nextInt(94929297),
-                        capRadius, capRadius * 0.7f, capRadius * 0.1f, stemTop.getRelative(0, capYOffset, 0), capType);
+                        capRadius,
+                        capRadius * 0.7f,
+                        capRadius * 0.1f,
+                        stemTop.getRelative(0, capYOffset, 0),
+                        capType
+                );
                 break;
         }
     }
@@ -279,7 +313,10 @@ public class MushroomBuilder {
         boolean oneBlockWide = thickness == 0;
 
         // The straight stem represented in 2d (x,y)
-        Vector2f stem2d = new Vector2f((float) (length * Math.cos(Math.PI / 2 - tilt)), (float) (length * Math.sin(Math.PI / 2 - tilt)));
+        Vector2f stem2d = new Vector2f(
+                (float) (length * Math.cos(Math.PI / 2 - tilt)),
+                (float) (length * Math.sin(Math.PI / 2 - tilt))
+        );
 
         // 2d control points
         Vector2f controlPoint1 = new Vector2f(curvatureControlPoint1.x * stem2d.x, curvatureControlPoint1.y * stem2d.y);
@@ -301,8 +338,11 @@ public class MushroomBuilder {
             lastSegment = base.getRelative(stem3d);
 
             if (!changedYs.contains(lastSegment.getY()) || !oneBlockWide) {
-                replaceSphere((float) (thickness / 2f + thicknessIncrement * thicknessIncrementCurve.calculate(1 - progress).y),
-                        lastSegment, stemType);
+                replaceSphere((float) (thickness / 2f + thicknessIncrement * thicknessIncrementCurve.calculate(1
+                                                                                                               - progress).y),
+                        lastSegment,
+                        stemType
+                );
 
                 changedYs.add(lastSegment.getY());
             }
@@ -311,7 +351,13 @@ public class MushroomBuilder {
         stemTop = lastSegment;
     }
 
-    private void spawnFunnelCap(int seed, float r, float height, float thickness, @NotNull SimpleBlock base, Material... type) {
+    private void spawnFunnelCap(int seed,
+                                float r,
+                                float height,
+                                float thickness,
+                                @NotNull SimpleBlock base,
+                                Material... type)
+    {
         Random rand = new Random(seed);
         // FastNoise noise = new FastNoise(seed);
         noiseGen.SetNoiseType(FastNoise.NoiseType.Simplex);
@@ -321,8 +367,9 @@ public class MushroomBuilder {
             for (int y = 0; y <= Math.round(3 * thickness); y++) {
                 for (int z = Math.round(-r); z <= Math.round(r); z++) {
                     // Replace blocks in the middle
-                    if (stemTop.getRelative(0, y, 0).getType() == stemType)
+                    if (stemTop.getRelative(0, y, 0).getType() == stemType) {
                         stemTop.getRelative(0, y, 0).setType(GenUtils.randChoice(rand, type));
+                    }
 
                     double distToCenter = Math.sqrt(x * x + z * z) / r;
 
@@ -333,9 +380,10 @@ public class MushroomBuilder {
                     SimpleBlock rel = base.getRelative(x, (int) Math.round(realY), z);
 
                     double equationResult = Math.pow(x / r, 2)
-                            // For height max height: https://www.geogebra.org/classic/k5nefypu
-                            + Math.pow(Math.abs(y) / (thickness / (1 - Math.pow(1 - (distToCenter + 0.1), 6))), 4)
-                            + Math.pow(z / r, 2);
+                                            // For height max height: https://www.geogebra.org/classic/k5nefypu
+                                            + Math.pow(Math.abs(y) / (thickness / (1 - Math.pow(1 - (distToCenter
+                                                                                                     + 0.1), 6))), 4)
+                                            + Math.pow(z / r, 2);
 
                     if (equationResult <= 1) {
                         rel.setType(GenUtils.randChoice(rand, type));
@@ -355,18 +403,21 @@ public class MushroomBuilder {
 
             // Points from middle to a point on circle with radius of 0.9r
             List<Vector2f> points = new BresenhamLine(new Vector2f(0, 0),
-                    new Vector2f((float) (0.9 * r * Math.cos(angle)), (float) (0.9 * r * Math.sin(angle)))).getPoints();
+                    new Vector2f((float) (0.9 * r * Math.cos(angle)), (float) (0.9 * r * Math.sin(angle)))
+            ).getPoints();
 
-            points:
+points:
             for (Vector2f point : points) {
                 SimpleBlock pointBase = base.getRelative(Math.round(point.x), 0, Math.round(point.y));
 
                 while (true) {
                     if (pointBase.isSolid()) {
-                        if (BlockUtils.isAir(pointBase.getDown().getType()))
+                        if (BlockUtils.isAir(pointBase.getDown().getType())) {
                             pointBase.getDown().setType(Material.MUSHROOM_STEM);
+                        }
                         continue points;
-                    } else {
+                    }
+                    else {
                         pointBase = pointBase.getUp();
                     }
 
@@ -452,7 +503,11 @@ public class MushroomBuilder {
     /**
      * @see MushroomBuilder#setStemCurve(Vector2f, Vector2f)
      */
-    private @NotNull MushroomBuilder setStemCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+    private @NotNull MushroomBuilder setStemCurve(float controlP1x,
+                                                  float controlP1y,
+                                                  float controlP2x,
+                                                  float controlP2y)
+    {
         return setStemCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
     }
 
@@ -460,6 +515,7 @@ public class MushroomBuilder {
      * Thickness increment is added to the **radius** of the stem
      * based on Bezier thickness increment curve. On the ground
      * level the width of the stem will be (width + 2 * thicknessIncrement).
+     *
      * @param thicknessIncrement Thickness increment towards the ground.
      */
     private @NotNull MushroomBuilder setThicknessIncrement(double thicknessIncrement) {
@@ -485,7 +541,11 @@ public class MushroomBuilder {
     /**
      * @see MushroomBuilder#setThicknessIncrementCurve(Vector2f, Vector2f)
      */
-    private @NotNull MushroomBuilder setThicknessIncrementCurve(float controlP1x, float controlP1y, float controlP2x, float controlP2y) {
+    private @NotNull MushroomBuilder setThicknessIncrementCurve(float controlP1x,
+                                                                float controlP1y,
+                                                                float controlP2x,
+                                                                float controlP2y)
+    {
         return setThicknessIncrementCurve(new Vector2f(controlP1x, controlP1y), new Vector2f(controlP2x, controlP2y));
     }
 

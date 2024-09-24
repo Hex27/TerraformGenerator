@@ -28,7 +28,8 @@ public class SilverfishNestPopulator extends RoomPopulatorAbstract {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
                 if (w.isSolid()) { // Don't block off pathways
-                    w.Pillar(room.getHeight() - 1, rand,
+                    w.Pillar(room.getHeight() - 1,
+                            rand,
                             Material.ANDESITE,
                             Material.ANDESITE,
                             Material.ANDESITE,
@@ -37,12 +38,24 @@ public class SilverfishNestPopulator extends RoomPopulatorAbstract {
                             Material.STONE_BRICK_SLAB,
                             Material.CRACKED_STONE_BRICKS,
                             Material.SANDSTONE,
-                            Material.STONE_BRICKS);
+                            Material.STONE_BRICKS
+                    );
 
                     // Make "lumps" on the walls
                     if (i > 1 && i < entry.getValue() - 2) {
-                        w.getFront().Pillar(room.getHeight() - 1, rand, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR,
-                                Material.STONE, Material.INFESTED_STONE, Material.INFESTED_STONE_BRICKS, Material.STONE_BRICKS, Material.ANDESITE);
+                        w.getFront().Pillar(room.getHeight() - 1,
+                                rand,
+                                Material.AIR,
+                                Material.AIR,
+                                Material.AIR,
+                                Material.AIR,
+                                Material.AIR,
+                                Material.STONE,
+                                Material.INFESTED_STONE,
+                                Material.INFESTED_STONE_BRICKS,
+                                Material.STONE_BRICKS,
+                                Material.ANDESITE
+                        );
                     }
 
                     // Spawn chests
@@ -50,11 +63,11 @@ public class SilverfishNestPopulator extends RoomPopulatorAbstract {
                         Directional chest = (Directional) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());
                         w.getFront().setBlockData(chest);
-                        data.lootTableChest(
-                                w.getFront().getX(),
+                        data.lootTableChest(w.getFront().getX(),
                                 w.getFront().getY(),
                                 w.getFront().getZ(),
-                                TerraLootTable.SIMPLE_DUNGEON);
+                                TerraLootTable.SIMPLE_DUNGEON
+                        );
                     }
                 }
 
@@ -73,8 +86,9 @@ public class SilverfishNestPopulator extends RoomPopulatorAbstract {
         }
 
         // Place a spawner if the nest is large
-        if (room.getWidthX() >= 10 && room.getWidthZ() >= 10)
+        if (room.getWidthX() >= 10 && room.getWidthZ() >= 10) {
             data.setSpawner(room.getX(), room.getY() + 1, room.getZ(), EntityType.SILVERFISH);
+        }
     }
 
 

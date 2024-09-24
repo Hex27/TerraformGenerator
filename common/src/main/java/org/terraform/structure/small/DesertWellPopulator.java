@@ -15,7 +15,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.main.config.TConfigOption;
+import org.terraform.main.config.TConfig;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
@@ -32,22 +32,31 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if (!isEnabled()) return;
+        if (!isEnabled()) {
+            return;
+        }
 
         Random random = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
         for (int[] coords : getCoordsFromMegaChunk(tw, mc)) {
             int x = coords[0];
             int z = coords[1];
-            if(x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ())
+            if (x >> 4 != data.getChunkX() || z >> 4 != data.getChunkZ()) {
                 continue;
+            }
             int height = GenUtils.getHighestGround(data, x, z);
-            spawnDesertWell(tw, random, data, x, height, z, tw.getBiomeBank(x,z) == BiomeBank.BADLANDS);
+            spawnDesertWell(tw, random, data, x, height, z, tw.getBiomeBank(x, z) == BiomeBank.BADLANDS);
         }
     }
 
-    public void spawnDesertWell(TerraformWorld tw, @NotNull Random random,
-                                @NotNull PopulatorDataAbstract data, int x, int y, int z, boolean badlandsWell) {
+    public void spawnDesertWell(TerraformWorld tw,
+                                @NotNull Random random,
+                                @NotNull PopulatorDataAbstract data,
+                                int x,
+                                int y,
+                                int z,
+                                boolean badlandsWell)
+    {
 
         SimpleBlock core = new SimpleBlock(data, x, y, z);
         TerraformGeneratorPlugin.logger.info("Spawning Desert Well at " + core.getCoords());
@@ -63,26 +72,44 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
             // Make sure the well is standing on a stable base
             for (int nx = -3; nx <= 3; nx++) {
                 for (int nz = -3; nz <= 3; nz++) {
-                    if (!badlandsWell)
-                        new Wall(core.getRelative(nx, -1, nz)).downLPillar(random, 10, Material.SANDSTONE, Material.CHISELED_SANDSTONE, Material.CUT_SANDSTONE,
-                                Material.SMOOTH_SANDSTONE);
-                    else
-                        new Wall(core.getRelative(nx, -1, nz)).downLPillar(random, 10, Material.RED_SANDSTONE, Material.CHISELED_RED_SANDSTONE, Material.CUT_RED_SANDSTONE,
-                                Material.SMOOTH_RED_SANDSTONE);
+                    if (!badlandsWell) {
+                        new Wall(core.getRelative(nx, -1, nz)).downLPillar(
+                                random,
+                                10,
+                                Material.SANDSTONE,
+                                Material.CHISELED_SANDSTONE,
+                                Material.CUT_SANDSTONE,
+                                Material.SMOOTH_SANDSTONE
+                        );
+                    }
+                    else {
+                        new Wall(core.getRelative(nx, -1, nz)).downLPillar(
+                                random,
+                                10,
+                                Material.RED_SANDSTONE,
+                                Material.CHISELED_RED_SANDSTONE,
+                                Material.CUT_RED_SANDSTONE,
+                                Material.SMOOTH_RED_SANDSTONE
+                        );
+                    }
                 }
             }
 
             // Drill hole down
             int depth = GenUtils.randInt(random, 5, 10);
-            if(core.getUp().getType() != Material.WATER)
+            if (core.getUp().getType() != Material.WATER) {
                 for (int i = 0; i < depth; i++) {
-                    if (i < depth - 3)
+                    if (i < depth - 3) {
                         core.getRelative(0, -i, 0).setType(Material.CAVE_AIR);
-                    else
+                    }
+                    else {
                         core.getRelative(0, -i, 0).setType(Material.WATER);
+                    }
                 }
+            }
 
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
 
@@ -90,24 +117,31 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 8291374),
-                (int) (TConfigOption.STRUCTURES_DESERTWELL_SPAWNRATIO
-                        .getDouble() * 10000),
-                10000);
+                (int) (TConfig.c.STRUCTURES_DESERTWELL_SPAWNRATIO * 10000),
+                10000
+        );
     }
+
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
-        if (!isEnabled()) return false;
+        if (!isEnabled()) {
+            return false;
+        }
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
         int[][] allCoords = getCoordsFromMegaChunk(tw, mc);
         for (int[] coords : allCoords) {
             if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
                 EnumSet<BiomeBank> biomes = GenUtils.getBiomesInChunk(tw, chunkX, chunkZ);
-                for(BiomeBank b:biomes) {
-                    if(b.getClimate() != BiomeClimate.HOT_BARREN) return false;
-                    if(b.getType() != BiomeType.FLAT) return false;
+                for (BiomeBank b : biomes) {
+                    if (b.getClimate() != BiomeClimate.HOT_BARREN) {
+                        return false;
+                    }
+                    if (b.getType() != BiomeType.FLAT) {
+                        return false;
+                    }
                 }
-                return rollSpawnRatio(tw,chunkX,chunkZ);
+                return rollSpawnRatio(tw, chunkX, chunkZ);
             }
         }
         return false;
@@ -115,10 +149,11 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public int[][] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-        int num = TConfigOption.STRUCTURES_DESERTWELL_COUNT_PER_MEGACHUNK.getInt();
+        int num = TConfig.c.STRUCTURES_DESERTWELL_COUNT_PER_MEGACHUNK;
         int[][] coords = new int[num][2];
-        for (int i = 0; i < num; i++)
-            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 819227*(1+i)));
+        for (int i = 0; i < num; i++) {
+            coords[i] = mc.getRandomCoords(tw.getHashedRand(mc.getX(), mc.getZ(), 819227 * (1 + i)));
+        }
         return coords;
     }
 
@@ -144,14 +179,19 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
 
     @Override
     public boolean isEnabled() {
-        return TConfigOption.areStructuresEnabled()
-               && TConfigOption.STRUCTURES_DESERTWELL_ENABLED.getBoolean()
-               && (TConfigOption.BIOME_DESERT_WEIGHT.getInt() > 0 || TConfigOption.BIOME_BADLANDS_WEIGHT.getInt() > 0);
+        return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_DESERTWELL_ENABLED && (
+                TConfig.c.BIOME_DESERT_WEIGHT > 0
+                || TConfig.c.BIOME_BADLANDS_WEIGHT > 0);
     }
 
     @Override
     public @NotNull Random getHashedRandom(@NotNull TerraformWorld world, int chunkX, int chunkZ) {
         return world.getHashedRand(189821, chunkX, chunkZ);
+    }
+
+    @Override
+    public int getChunkBufferDistance() {
+        return 1;
     }
 
     private static class DesertWellSchematicParser extends SchematicParser {
@@ -170,13 +210,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
         public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
 
             if (this.badlandsWell) {
-                data = Bukkit.createBlockData(
-                        StringUtils.replace(
-                                data.getAsString(),
-                                "sandstone",
-                                "red_sandstone"
-                        )
-                );
+                data = Bukkit.createBlockData(StringUtils.replace(data.getAsString(), "sandstone", "red_sandstone"));
                 if (data.getMaterial() == Material.RED_SANDSTONE && rand.nextInt(5) == 0) {
                     data = Bukkit.createBlockData(Material.CHISELED_RED_SANDSTONE);
                     super.applyData(block, data);
@@ -184,69 +218,67 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                 }
 
                 if (data.getMaterial() != Material.RED_SANDSTONE_STAIRS
-                        && data.getMaterial() != Material.RED_SANDSTONE_WALL
-                        && data.getMaterial().toString().contains("RED_SANDSTONE")) {
-                    data = Bukkit.createBlockData(
-                            StringUtils.replace(
-                                    data.getAsString(),
-                                    "red_sandstone",
-                                    GenUtils.randChoice(
-                                            rand,
-                                            Material.RED_SANDSTONE,
-                                            Material.SMOOTH_RED_SANDSTONE,
-                                            Material.CUT_RED_SANDSTONE
-                                    ).name().toLowerCase(Locale.ENGLISH)
-                            )
-                    );
+                    && data.getMaterial() != Material.RED_SANDSTONE_WALL
+                    && data.getMaterial().toString().contains("RED_SANDSTONE"))
+                {
+                    data = Bukkit.createBlockData(StringUtils.replace(data.getAsString(),
+                            "red_sandstone",
+                            GenUtils.randChoice(rand,
+                                    Material.RED_SANDSTONE,
+                                    Material.SMOOTH_RED_SANDSTONE,
+                                    Material.CUT_RED_SANDSTONE
+                            ).name().toLowerCase(Locale.ENGLISH)
+                    ));
                     super.applyData(block, data);
-                } else
+                }
+                else {
                     super.applyData(block, data);
+                }
                 return;
-            } else {
+            }
+            else {
                 if (data.getMaterial() == Material.SANDSTONE) {
-                    if(rand.nextInt(5) == 0)
-                    {
+                    if (rand.nextInt(5) == 0) {
                         data = Bukkit.createBlockData(Material.CHISELED_SANDSTONE);
                         super.applyData(block, data);
                         return;
                     }
-                    else if(Version.isAtLeast(20)
-                            && block.getY() == baseY
-                    && GenUtils.chance(rand, 1, 20))
-                    {
+                    else if (Version.isAtLeast(20) && block.getY() == baseY && GenUtils.chance(rand, 1, 20)) {
                         data = Bukkit.createBlockData(OneTwentyBlockHandler.SUSPICIOUS_SAND);
-                        super.applyData(block,data);
-                        block.getPopData().lootTableChest(block.getX(),block.getY(),block.getZ(), TerraLootTable.DESERT_WELL_ARCHAEOLOGY);
+                        super.applyData(block, data);
+                        block.getPopData()
+                             .lootTableChest(
+                                     block.getX(),
+                                     block.getY(),
+                                     block.getZ(),
+                                     TerraLootTable.DESERT_WELL_ARCHAEOLOGY
+                             );
                         return;
                     }
                 }
 
                 if (data.getMaterial() != Material.SANDSTONE_STAIRS
-                        && data.getMaterial() != Material.SANDSTONE_WALL
-                        && data.getMaterial().toString().contains("SANDSTONE")) {
-                    data = Bukkit.createBlockData(
-                            StringUtils.replace(
-                                    data.getAsString(),
-                                    "sandstone",
-                                    GenUtils.randChoice(
-                                            rand,
+                    && data.getMaterial() != Material.SANDSTONE_WALL
+                    && data.getMaterial().toString().contains("SANDSTONE"))
+                {
+                    data = Bukkit.createBlockData(StringUtils.replace(data.getAsString(),
+                            "sandstone",
+                            GenUtils.randChoice(rand,
                                             Material.SANDSTONE,
                                             Material.SMOOTH_SANDSTONE,
                                             Material.CUT_SANDSTONE
-                                    ).name().toLowerCase(Locale.ENGLISH)
-                            )
-                    );
+                                    )
+                                    .name()
+                                    .toLowerCase(Locale.ENGLISH)
+                    ));
                     super.applyData(block, data);
-                } else
+                }
+                else {
                     super.applyData(block, data);
+                }
             }
 
 
         }
-    }
-
-    @Override
-    public int getChunkBufferDistance() {
-        return 1;
     }
 }

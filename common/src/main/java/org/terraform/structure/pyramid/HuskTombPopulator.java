@@ -29,14 +29,20 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
                 if (w.isSolid()) { // Don't block off pathways
-                    if (w.getType().toString().contains("SAND"))
-                        w.Pillar(room.getHeight() - 1, rand,
+                    if (w.getType().toString().contains("SAND")) {
+                        w.Pillar(
+                                room.getHeight() - 1,
+                                rand,
                                 Material.SANDSTONE,
                                 Material.SANDSTONE_SLAB,
                                 Material.CUT_SANDSTONE,
-                                Material.CHISELED_SANDSTONE);
-                    else
-                        w.Pillar(room.getHeight() - 1, rand,
+                                Material.CHISELED_SANDSTONE
+                        );
+                    }
+                    else {
+                        w.Pillar(
+                                room.getHeight() - 1,
+                                rand,
                                 Material.ANDESITE,
                                 Material.ANDESITE,
                                 Material.ANDESITE,
@@ -44,17 +50,19 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
                                 Material.STONE_BRICKS,
                                 Material.STONE_BRICK_SLAB,
                                 Material.CRACKED_STONE_BRICKS,
-                                Material.STONE_BRICKS);
+                                Material.STONE_BRICKS
+                        );
+                    }
                     // Spawn chests
                     if (GenUtils.chance(this.rand, 1, 50) && i != 0 && i != entry.getValue() - 1) {
                         Directional chest = (Directional) Bukkit.createBlockData(Material.CHEST);
                         chest.setFacing(w.getDirection());
                         w.getFront().setBlockData(chest);
-                        data.lootTableChest(
-                                w.getFront().getX(),
+                        data.lootTableChest(w.getFront().getX(),
                                 w.getFront().getY(),
                                 w.getFront().getZ(),
-                                TerraLootTable.SIMPLE_DUNGEON);
+                                TerraLootTable.SIMPLE_DUNGEON
+                        );
                     }
                 }
 
@@ -68,8 +76,9 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
         // Ceiling erosions
         for (int i = 0; i < GenUtils.randInt(3, 10); i++) {
             int[] loc = room.randomCoords(rand, 1);
-            if (data.getType(loc[0], room.getY() + room.getHeight() + 1, loc[2]) == Material.SAND)
+            if (data.getType(loc[0], room.getY() + room.getHeight() + 1, loc[2]) == Material.SAND) {
                 data.setType(loc[0], room.getY() + room.getHeight() + 1, loc[2], Material.SANDSTONE);
+            }
             BlockUtils.dropDownBlock(new SimpleBlock(data, loc[0], room.getY() + room.getHeight(), loc[2]));
         }
     }
@@ -78,7 +87,6 @@ public class HuskTombPopulator extends RoomPopulatorAbstract {
     @Override
     public boolean canPopulate(@NotNull CubeRoom room) {
         // Don't compete with Crypt rooms for space
-        return room.getWidthX() >= 5 && room.getWidthZ() >= 5
-                && room.getWidthX() < 13 && room.getWidthZ() < 13;
+        return room.getWidthX() >= 5 && room.getWidthZ() >= 5 && room.getWidthX() < 13 && room.getWidthZ() < 13;
     }
 }

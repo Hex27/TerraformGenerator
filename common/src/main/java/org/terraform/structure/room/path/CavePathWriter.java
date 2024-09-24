@@ -6,7 +6,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.utils.BlockUtils;
 
-public class CavePathWriter extends PathWriter{
+public class CavePathWriter extends PathWriter {
     private final float rXMod;
     private final float rYMod;
     private final float rZMod;
@@ -24,10 +24,18 @@ public class CavePathWriter extends PathWriter{
     }
 
     @Override
-    public void apply(@NotNull PopulatorDataAbstract popData, @NotNull TerraformWorld tw, PathState.@NotNull PathNode node) {
-        BlockUtils.carveCaveAir((int) (node.center.hashCode() * tw.getSeed()),
-                node.pathWidth+rXMod, node.pathWidth+rYMod, node.pathWidth+rZMod,
-                new SimpleBlock(popData, node.center.getRelative(xOff,yOff,zOff)), false,
-                BlockUtils.caveCarveReplace);
+    public void apply(@NotNull PopulatorDataAbstract popData,
+                      @NotNull TerraformWorld tw,
+                      PathState.@NotNull PathNode node)
+    {
+        BlockUtils.carveCaveAir(
+                (int) (node.center.hashCode() * tw.getSeed()),
+                node.pathWidth + rXMod,
+                node.pathWidth + rYMod,
+                node.pathWidth + rZMod,
+                new SimpleBlock(popData, node.center.getRelative(xOff, yOff, zOff)),
+                false,
+                BlockUtils.caveCarveReplace
+        );
     }
 }
