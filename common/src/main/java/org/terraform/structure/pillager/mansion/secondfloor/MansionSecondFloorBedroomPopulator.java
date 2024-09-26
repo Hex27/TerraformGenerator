@@ -163,9 +163,8 @@ public class MansionSecondFloorBedroomPopulator extends MansionRoomPopulator {
                                                             .apply(w.getRight());
 
             BlockUtils.pickPottedPlant().build(w.getUp());
-            BlockUtils.pickPottedPlant().build(w.getLeft());
-            BlockUtils.pickPottedPlant().build(w.getRight());
-            w.getRight().getUp().setType();
+            BlockUtils.pickPottedPlant().build(w.getUp().getLeft());
+            BlockUtils.pickPottedPlant().build(w.getUp().getRight());
         }
         else {
             DecorationsBuilder.build(w,
