@@ -94,7 +94,7 @@ public class SavannaHandler extends BiomeHandler {
                                                                                .isSolid())
         {
             // Dense grass
-            if (GenUtils.chance(random, 5, 10)) {
+            if (GenUtils.chance(random, TConfig.c.BIOME_SAVANNA_TALLGRASSCHANCE, 10000)) {
                 PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
             }
         }

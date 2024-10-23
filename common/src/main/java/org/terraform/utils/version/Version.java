@@ -42,6 +42,7 @@ public class Version {
         V_1_20_R3("v1_20_R3", 20.3, 20.4),
         V_1_20_R4("v1_20_R4", 20.5, 20.6),
         V_1_21_R1("v1_21_R1", 21.0, 21.1),
+        V_1_21_R2("v1_21_R2", 21.2, 21.3),
         ;
         private final double[] versionDouble;
         private final String packageName;

@@ -8,9 +8,11 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.NaturalSpawnType;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -26,6 +28,7 @@ import org.terraform.utils.GenUtils;
 import java.io.FileNotFoundException;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
@@ -88,6 +91,19 @@ public class WitchHutPopulator extends MultiMegaChunkStructurePopulator {
         catch (FileNotFoundException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
+
+        //Register this as a swamp hut with custom spawns
+        //7x7x9 (x,y,z)
+        Objects.requireNonNull(TerraformGeneratorPlugin.injector.getICAData(data))
+               .registerNaturalSpawns(
+                NaturalSpawnType.WITCH,
+                x - 3,
+                    y,
+                z - 4,
+                x + 3,
+                y + 7,
+                z + 4
+            );
 
     }
 

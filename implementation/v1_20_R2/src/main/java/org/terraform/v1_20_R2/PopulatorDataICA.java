@@ -175,6 +175,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         ResourceKey<Structure> structureKey = switch (type) {
             case GUARDIAN -> BuiltinStructures.l; // Ocean Monument
             case PILLAGER -> BuiltinStructures.a; // Pillager Outpost
+            case WITCH -> BuiltinStructures.j; // Swamp Hut
         };
 
         // az is STRUCTURE

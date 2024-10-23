@@ -1,5 +1,5 @@
 package org.terraform.coregen;
 
 public enum NaturalSpawnType {
-    GUARDIAN, PILLAGER
+    GUARDIAN, PILLAGER, WITCH
 }

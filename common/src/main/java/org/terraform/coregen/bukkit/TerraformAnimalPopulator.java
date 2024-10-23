@@ -20,7 +20,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
     private static final AnimalPopulator[] ANIMAL_POPULATORS = {
             null, // Slot for goat
             null, // Slot for armadillo
-
+            null, // Slot for frog
             new AnimalPopulator(EntityType.PIG,
                     TConfig.c.ANIMALS_PIG_MINHERDSIZE,
                     TConfig.c.ANIMALS_PIG_MAXHERDSIZE,
@@ -357,6 +357,18 @@ public class TerraformAnimalPopulator extends BlockPopulator {
                     BiomeBank.SHATTERED_SAVANNA,
                     BiomeBank.BADLANDS,
                     BiomeBank.BADLANDS_CANYON
+            );
+        }
+        if (Version.isAtLeast(19)) {
+            ANIMAL_POPULATORS[2] = new AnimalPopulator(EntityType.valueOf("FROG"),
+                    TConfig.c.ANIMALS_FROG_MINHERDSIZE,
+                    TConfig.c.ANIMALS_FROG_MAXHERDSIZE,
+                    TConfig.c.ANIMALS_FROG_CHANCE,
+                    true,
+                    BiomeBank.SWAMP,
+                    BiomeBank.MUDDY_BOG,
+                    BiomeBank.MUDFLATS,
+                    BiomeBank.MANGROVE
             );
         }
     }

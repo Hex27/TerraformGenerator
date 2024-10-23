@@ -226,6 +226,8 @@ public class TConfig extends YamlFileInterface {
     public int BIOME_ERODED_PLAINS_WEIGHT = 6;
     @YamlKey("biome.savanna.weight")
     public int BIOME_SAVANNA_WEIGHT = 6;
+    @YamlKey("biome.savanna.tallgrass-chance-of-10000")
+    public int BIOME_SAVANNA_TALLGRASSCHANCE = 5000;
     @YamlKey("biome.muddybog.weight")
     public int BIOME_MUDDYBOG_WEIGHT = 2;
     @YamlKey("biome.forest.weight")
@@ -625,6 +627,13 @@ public class TConfig extends YamlFileInterface {
     public int ANIMALS_TURTLE_MAXHERDSIZE = 5;
     @YamlKey("animals.turtle.chance")
     public int ANIMALS_TURTLE_CHANCE = 1;
+    // FROG
+    @YamlKey("animals.frog.min-herd-size")
+    public int ANIMALS_FROG_MINHERDSIZE = 2;
+    @YamlKey("animals.frog.max-herd-size")
+    public int ANIMALS_FROG_MAXHERDSIZE = 5;
+    @YamlKey("animals.frog.chance")
+    public int ANIMALS_FROG_CHANCE = 1;
     // DOLPHIN
     @YamlKey("animals.dolphin.min-herd-size")
     public int ANIMALS_DOLPHIN_MINHERDSIZE = 1;
