@@ -15,11 +15,12 @@ import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.MazeSpawner;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     private static boolean debugSpawnMessage = false;
-    private int[][] POSITIONS;
+    private static HashMap<TerraformWorld,int[][]> POSITIONS = new HashMap<>();
 
     /**
      * @return x, z coords on the circumference of
@@ -37,8 +38,8 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     public int[][] strongholdPositions(@NotNull TerraformWorld tw) {
-        if (POSITIONS == null) {
-            POSITIONS = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
+        if (!POSITIONS.containsKey(tw)) {
+            int[][] positions = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
             int pos = 0;
             int radius = 1408;
             Random rand = tw.getHashedRand(1, 1, 1);
@@ -48,47 +49,47 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
                     TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + ", " + coords[1]);
                     debugSpawnMessage = true;
                 }
-                POSITIONS[pos++] = coords;
+                positions[pos++] = coords;
             }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("sp-1");
             for (int i = 0; i < 6; i++) {
-                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+                positions[pos++] = randomCircleCoords(rand, radius);
             }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("sp-2");
             for (int i = 0; i < 10; i++) {
-                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+                positions[pos++] = randomCircleCoords(rand, radius);
             }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("sp-3");
             for (int i = 0; i < 15; i++) {
-                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+                positions[pos++] = randomCircleCoords(rand, radius);
             }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("s-pop-4");
             for (int i = 0; i < 21; i++) {
-                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+                positions[pos++] = randomCircleCoords(rand, radius);
             }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("s-pop-5");
             for (int i = 0; i < 28; i++) {
-                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+                positions[pos++] = randomCircleCoords(rand, radius);
             }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("s-pop-6");
             for (int i = 0; i < 36; i++) {
-                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+                positions[pos++] = randomCircleCoords(rand, radius);
             }
             radius += 3072;
             // TerraformGeneratorPlugin.logger.debug("s-pop-7");
             for (int i = 0; i < 9; i++) {
-                POSITIONS[pos++] = randomCircleCoords(rand, radius);
+                positions[pos++] = randomCircleCoords(rand, radius);
             }
             // TerraformGeneratorPlugin.logger.debug("s-pop-8");
-
+            POSITIONS.put(tw,positions);
         }
-        return POSITIONS;
+        return POSITIONS.get(tw);
     }
 
     @Override

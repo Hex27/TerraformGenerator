@@ -1031,6 +1031,11 @@ public class FractalTreeBuilder {
                             if (GenUtils.chance(2, 10)) {
                                 dangleLeavesDown(rel, vines / 2, vines);
                             }
+                            else if (GenUtils.chance(1, 10))
+                            {
+                                rel.rsetType(BlockUtils.replacableByTrees, this.trunkType);
+                                BlockUtils.vineUp(rel, 4);
+                            }
                         }
                     }
                 }
