@@ -1,6 +1,7 @@
 package org.terraform.main.config;
 
 import org.avarion.yaml.YamlComment;
+import org.avarion.yaml.YamlFile;
 import org.avarion.yaml.YamlFileInterface;
 import org.avarion.yaml.YamlKey;
 
