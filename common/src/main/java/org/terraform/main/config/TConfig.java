@@ -7,6 +7,7 @@ import org.avarion.yaml.YamlKey;
 import java.io.File;
 import java.io.IOException;
 
+@YamlFile(lenient = Leniency.LENIENT)
 public class TConfig extends YamlFileInterface {
     public static TConfig c;
     public static void init(final File f) throws IOException {

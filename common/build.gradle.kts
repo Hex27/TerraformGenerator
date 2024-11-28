@@ -4,7 +4,7 @@ dependencies {
     compileOnly(group = "org.spigotmc", name = "spigot", version = "1.18-R0.1-SNAPSHOT")
 	// compileOnly(group = "org.spigotmc", name = "spigot", version = "1.16.4-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains:annotations:20.1.0")
-    compileOnly("com.github.AvarionMC:yaml:1.1.3")
+    compileOnly("com.github.AvarionMC:yaml:1.1.5")
 }
 
 // Set this to the lowest compat in implementation
