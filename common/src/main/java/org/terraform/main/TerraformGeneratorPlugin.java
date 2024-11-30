@@ -129,7 +129,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         String version = Version.getVersionPackage();
         logger.stdout("Detected version: " + version + ", number: " + Version.DOUBLE);
         try {
-            injector = Version.SupportedVersion.getInjector();
+            injector = Version.getInjector();
             if (injector != null) {
                 injector.startupTasks();
             }
