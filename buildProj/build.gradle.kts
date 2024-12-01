@@ -18,7 +18,7 @@ dependencies {
     implementation(project(":implementation:v1_20_R4"))
     implementation(project(":implementation:v1_21_R1"))
     implementation(project(":implementation:v1_21_R2"))
-    implementation("com.github.AvarionMC:yaml:1.1.5")
+    implementation("com.github.AvarionMC:yaml:1.1.7")
 }
 
 tasks.shadowJar {
