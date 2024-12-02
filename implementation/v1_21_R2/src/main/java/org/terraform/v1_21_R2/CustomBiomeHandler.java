@@ -14,6 +14,7 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.biome.BiomeFog.GrassColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Registry;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_21_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_21_R2.block.CraftBiome;
@@ -259,18 +260,18 @@ public class CustomBiomeHandler {
 
         List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
 
-        for (Biome biome : Biome.values()) {
-            if (biome == null || biome == Biome.CUSTOM) {
-                continue;
-            }
+        Registry.BIOME.iterator().forEachRemaining((Biome biome)->{
             try {
+                if(biome == null) return;
+                Holder<BiomeBase> holder = CraftBiome.bukkitToMinecraftHolder(biome);
+                if(holder == null) return;
                 // Preconditions.checkArgument(biome != Biome.CUSTOM, "Cannot use the biome %s", biome);
-                biomeBases.add(CraftBiome.bukkitToMinecraftHolder(biome));
+                biomeBases.add(holder);
             }
             catch (Throwable e) {
                 TerraformGeneratorPlugin.logger.info("Ignoring biome " + biome);
             }
-        }
+        });
 
         for (CustomBiomeType cbt : CustomBiomeType.values()) {
             if (cbt == CustomBiomeType.NONE) {
