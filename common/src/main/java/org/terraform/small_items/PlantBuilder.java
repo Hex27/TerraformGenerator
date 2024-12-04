@@ -7,6 +7,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.V_1_21_4;
 
 import java.util.Random;
 
@@ -49,6 +50,7 @@ public enum PlantBuilder {
     OXEYE_DAISY(Material.OXEYE_DAISY),
     CORNFLOWER(Material.CORNFLOWER),
     LILY_OF_THE_VALLEY(Material.LILY_OF_THE_VALLEY),
+    CLOSED_EYEBLOSSOM(V_1_21_4.CLOSED_EYEBLOSSOM),
 
     // Tall flowers
     LILAC(Material.LILAC, true),
@@ -116,7 +118,7 @@ public enum PlantBuilder {
             BlockUtils.setDoublePlant(data, x, y, z, material);
         }
         else {
-            data.setType(x, y, z, material);
+            data.lsetType(x, y, z, material);
         }
     }
 

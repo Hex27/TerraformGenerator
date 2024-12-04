@@ -14,7 +14,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 
 import java.util.Random;
 
@@ -52,7 +52,7 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         }
 
         // Already processed
-        if (ceil.getType() == OneOneNineBlockHandler.SCULK || floor.getType() == OneOneNineBlockHandler.SCULK) {
+        if (ceil.getType() == V_1_19.SCULK || floor.getType() == V_1_19.SCULK) {
             return;
         }
         // =========================
@@ -69,10 +69,10 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
 
             // Ceiling is ALWAYS sculk/veins
             if (BlockUtils.isStoneLike(ceil.getType())) {
-                ceil.setType(OneOneNineBlockHandler.SCULK);
+                ceil.setType(V_1_19.SCULK);
             }
             else {
-                MultipleFacing sculkVein = (MultipleFacing) Bukkit.createBlockData(OneOneNineBlockHandler.SCULK_VEIN);
+                MultipleFacing sculkVein = (MultipleFacing) Bukkit.createBlockData(V_1_19.SCULK_VEIN);
                 sculkVein.setFace(BlockFace.UP, true);
                 ceil.getDown().setBlockData(sculkVein);
             }
@@ -90,25 +90,25 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         // Ground is sculk
         // Ceiling is ALWAYS sculk/veins
         if (BlockUtils.isStoneLike(ceil.getType())) {
-            floor.setType(OneOneNineBlockHandler.SCULK);
+            floor.setType(V_1_19.SCULK);
         }
         else {
-            MultipleFacing sculkVein = (MultipleFacing) Bukkit.createBlockData(OneOneNineBlockHandler.SCULK_VEIN);
+            MultipleFacing sculkVein = (MultipleFacing) Bukkit.createBlockData(V_1_19.SCULK_VEIN);
             sculkVein.setFace(BlockFace.DOWN, true);
             floor.getUp().setBlockData(sculkVein);
         }
 
 
         if (GenUtils.chance(random, 1, 20)) { // Sculk Catalysts
-            floor.getUp().setType(OneOneNineBlockHandler.SCULK_CATALYST);
+            floor.getUp().setType(V_1_19.SCULK_CATALYST);
         }
         else if (GenUtils.chance(random, 1, 17)) { // Sculk Sensors
-            floor.getUp().setType(OneOneNineBlockHandler.SCULK_SENSOR);
+            floor.getUp().setType(V_1_19.SCULK_SENSOR);
         }
         else if (GenUtils.chance(random, 1, 25))
         // Sculk Shrieker
         {
-            floor.getUp().setType(OneOneNineBlockHandler.SCULK_SHRIEKER);
+            floor.getUp().setType(V_1_19.SCULK_SHRIEKER);
         }
 
 
@@ -121,9 +121,9 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
             for (BlockFace face : BlockUtils.directBlockFaces) {
                 SimpleBlock rel = target.getRelative(face);
                 if (BlockUtils.isStoneLike(rel.getType())) {
-                    rel.setType(OneOneNineBlockHandler.SCULK);
+                    rel.setType(V_1_19.SCULK);
                     if (BlockUtils.isAir(target.getType()) && GenUtils.chance(random, 1, 5)) {
-                        new MultipleFacingBuilder(OneOneNineBlockHandler.SCULK_VEIN).setFace(face, true).apply(target);
+                        new MultipleFacingBuilder(V_1_19.SCULK_VEIN).setFace(face, true).apply(target);
                     }
                 }
             }
@@ -135,7 +135,7 @@ public class DeepDarkClusterCavePopulator extends AbstractCaveClusterPopulator {
         // =========================
         if (TerraformGeneratorPlugin.injector.getICAData(ceil.getPopData()) instanceof PopulatorDataICABiomeWriterAbstract data) {
             while (floor.getY() < ceil.getY()) {
-                data.setBiome(floor.getX(), floor.getY(), floor.getZ(), OneOneNineBlockHandler.DEEP_DARK);
+                data.setBiome(floor.getX(), floor.getY(), floor.getZ(), V_1_19.DEEP_DARK);
                 floor = floor.getUp();
             }
         }

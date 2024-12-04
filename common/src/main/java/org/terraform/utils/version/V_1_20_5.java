@@ -3,7 +3,7 @@ package org.terraform.utils.version;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.EntityType;
 
-public class OneTwentyFiveBlockHandler {
+public class V_1_20_5 {
     public static final PatternType RHOMBUS = !Version.isAtLeast(20.5)
                                               ? PatternType.valueOf("RHOMBUS_MIDDLE")
                                               : PatternType.valueOf("RHOMBUS");

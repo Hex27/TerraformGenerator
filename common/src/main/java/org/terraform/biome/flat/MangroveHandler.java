@@ -23,7 +23,7 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 
 import java.util.Random;
 
@@ -41,7 +41,7 @@ public class MangroveHandler extends BiomeHandler {
 
     @Override
     public @NotNull Biome getBiome() {
-        return OneOneNineBlockHandler.MANGROVE_SWAMP;
+        return V_1_19.MANGROVE_SWAMP;
     }
 
     @Override
@@ -141,7 +141,7 @@ public class MangroveHandler extends BiomeHandler {
             BlockUtils.replaceCircularPatch(random.nextInt(9999),
                     3.5f,
                     new SimpleBlock(data, rawX, surfaceY, rawZ),
-                    OneOneNineBlockHandler.MUD
+                    V_1_19.MUD
             );
         }
     }
@@ -166,7 +166,7 @@ public class MangroveHandler extends BiomeHandler {
                     TreeDB.spawnBreathingRoots(
                             tw,
                             new SimpleBlock(data, treeX, treeY, treeZ),
-                            OneOneNineBlockHandler.MANGROVE_ROOTS
+                            V_1_19.MANGROVE_ROOTS
                     );
                     FractalTypes.Tree.SWAMP_TOP.build(
                             tw,

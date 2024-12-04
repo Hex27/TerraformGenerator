@@ -7,7 +7,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -235,14 +235,14 @@ public class FractalTypes {
                                              .setMinBranchHorizontalComponent(0.9f)
                                              .setMaxBranchHorizontalComponent(1.3f)
                                              .setBranchSpawnChance(0.2)
-                                             .setBranchMaterial(OneOneNineBlockHandler.MANGROVE_LOG)
-                                             .setRootMaterial(OneOneNineBlockHandler.MANGROVE_ROOTS)
+                                             .setBranchMaterial(V_1_19.MANGROVE_LOG)
+                                             .setRootMaterial(V_1_19.MANGROVE_ROOTS)
                                              .setTreeRootMultiplier(2f)
                                              .setTreeRootThreshold(3)
                                              .setFractalLeaves(new FractalLeaves().setWeepingLeaves(0.4f, 2)
                                                                                   .setRadius(4f)
                                                                                   .setRadiusY(1.5f)
-                                                                                  .setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES)
+                                                                                  .setMaterial(V_1_19.MANGROVE_LEAVES)
                                                                                   .setMangrovePropagules(true))),
         BIRCH_BIG,
         BIRCH_SMALL,

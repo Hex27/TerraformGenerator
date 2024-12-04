@@ -217,7 +217,9 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("biome.mushroomisland.weight")
     public int BIOME_MUSHROOM_ISLAND_WEIGHT = 1;
     @YamlKey("biome.plains.weight")
-    public int BIOME_PLAINS_WEIGHT = 10;
+    public int BIOME_PLAINS_WEIGHT = 7;
+    @YamlKey("biome.meadow.weight")
+    public int BIOME_MEADOW_WEIGHT = 3;
     @YamlKey("biome.elevatedplains.weight")
     public int BIOME_ELEVATED_PLAINS_WEIGHT = 8;
     @YamlKey("biome.petrifiedcliffs.weight")
@@ -268,6 +270,11 @@ public class TConfig extends YamlFileInterface {
     public int BIOME_SNOWY_WASTELAND_WEIGHT = 4;
     @YamlKey("biome.icespikes.weight")
     public int BIOME_ICE_SPIKES_WEIGHT = 2;
+    @YamlKey("biome.paleforest.weight")
+    public int BIOME_PALE_FOREST_WEIGHT = 2;
+    @YamlKey("biome.paleforest.creaking_tree_prob")
+    @YamlComment("Represents the chance (per tree) to spawn a creaking heart in it")
+    public double BIOME_PALE_FOREST_CREAKING_CHANCE = 0.085;
     @YamlKey("biome.darkforest.weight")
     public int BIOME_DARK_FOREST_WEIGHT = 5;
     @YamlKey("biome.darkforest.spawn-heads")
@@ -299,6 +306,8 @@ public class TConfig extends YamlFileInterface {
     public boolean TREES_SNOWY_TAIGA_BIG_ENABLED = true;
     @YamlKey("trees.big-dark-forest-trees.enabled")
     public boolean TREES_DARK_FOREST_BIG_ENABLED = true;
+    @YamlKey("trees.big-pale-forest-trees.enabled")
+    public boolean TREES_PALE_FOREST_BIG_ENABLED = true;
 
     // -=[MISC]=-
     // MISC_SMOOTH_DESIGN("misc.smooth-design",false),

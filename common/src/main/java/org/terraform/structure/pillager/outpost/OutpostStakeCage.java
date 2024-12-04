@@ -15,7 +15,7 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.WoodUtils;
 import org.terraform.utils.WoodUtils.WoodType;
 import org.terraform.utils.version.Version;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 
 import java.util.Map.Entry;
 import java.util.Random;
@@ -86,7 +86,7 @@ public class OutpostStakeCage extends RoomPopulatorAbstract {
                                 new SimpleBlock(data, room.getX(), room.getY(), room.getZ()).getGroundOrDry().getY()
                                 + 1,
                                 room.getZ(),
-                                OneOneNineBlockHandler.ALLAY
+                                V_1_19.ALLAY
                         );
                     }
 

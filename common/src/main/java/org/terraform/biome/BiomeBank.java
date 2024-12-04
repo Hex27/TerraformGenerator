@@ -23,6 +23,7 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -230,6 +231,7 @@ public enum BiomeBank {
 
     // FLAT
     PLAINS(new PlainsHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfig.c.BIOME_PLAINS_WEIGHT),
+    MEADOW(new MeadowHandler(), BiomeType.FLAT, BiomeClimate.TRANSITION, TConfig.c.BIOME_MEADOW_WEIGHT),
     ELEVATED_PLAINS(new ElevatedPlainsHandler(),
             BiomeType.FLAT,
             BiomeClimate.TRANSITION,
@@ -315,6 +317,11 @@ public enum BiomeBank {
             BiomeType.FLAT,
             BiomeClimate.HUMID_VEGETATION,
             TConfig.c.BIOME_DARK_FOREST_WEIGHT
+    ),
+    PALE_FOREST(new PaleForestHandler(),
+            BiomeType.FLAT,
+            BiomeClimate.HUMID_VEGETATION,
+            (Version.isAtLeast(21.4)) ? TConfig.c.BIOME_PALE_FOREST_WEIGHT : 0
     ),
     SWAMP(new SwampHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfig.c.BIOME_SWAMP_WEIGHT),
     MANGROVE(new MangroveHandler(),

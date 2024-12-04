@@ -12,7 +12,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
 import org.terraform.utils.noise.FastNoise;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 
 import java.util.Random;
 
@@ -64,7 +64,7 @@ public class AncientCityUtils {
                 for (float ny = -radius; ny <= radius; ny++) {
                     SimpleBlock rel = center.getRelative(Math.round(nx), Math.round(ny), Math.round(nz));
 
-                    if (!rel.isSolid() || rel.getType() == OneOneNineBlockHandler.SCULK_VEIN) {
+                    if (!rel.isSolid() || rel.getType() == V_1_19.SCULK_VEIN) {
                         continue;
                     }
                     // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
@@ -77,38 +77,38 @@ public class AncientCityUtils {
                         if (BlockUtils.isExposedToNonSolid(rel) || !rel.getDown().isSolid() || !rel.getUp().isSolid()) {
                             // Inner area of the circle is sculk
                             if (t.isTagged(rel.getType()) && equationResult <= 0.7 * (1 + 0.7 * noiseVal)) {
-                                rel.setType(OneOneNineBlockHandler.SCULK);
+                                rel.setType(V_1_19.SCULK);
 
                                 // If the above is not solid, place some decorations
                                 if (!rel.getUp().isSolid()) {
                                     if (!placedCatalyst && GenUtils.chance(random, 1, 40)) {
                                         placedCatalyst = true;
-                                        rel.getUp().setType(OneOneNineBlockHandler.SCULK_CATALYST);
+                                        rel.getUp().setType(V_1_19.SCULK_CATALYST);
                                     }
                                     else if (!placedSensor && GenUtils.chance(random, 1, 20)) {
                                         placedSensor = true;
-                                        rel.getUp().setType(OneOneNineBlockHandler.SCULK_SENSOR);
+                                        rel.getUp().setType(V_1_19.SCULK_SENSOR);
                                     }
                                     else if (!placedShrieker && GenUtils.chance(random, 1, 90)) {
                                         placedShrieker = true;
-                                        rel.getUp().setBlockData(OneOneNineBlockHandler.getActiveSculkShrieker());
+                                        rel.getUp().setBlockData(V_1_19.getActiveSculkShrieker());
                                     }
                                 }
                             }
-                            else if (rel.getType() != OneOneNineBlockHandler.SCULK_SHRIEKER
-                                     && rel.getType() != OneOneNineBlockHandler.SCULK_SENSOR
+                            else if (rel.getType() != V_1_19.SCULK_SHRIEKER
+                                     && rel.getType() != V_1_19.SCULK_SENSOR
                                      && !Tag.STAIRS.isTagged(rel.getType())
                                      && !Tag.SLABS.isTagged(rel.getType()))// Outer area are sculk veins
                             {
                                 for (BlockFace face : BlockUtils.sixBlockFaces) {
                                     SimpleBlock adj = rel.getRelative(face);
                                     if (adj.isAir()) {
-                                        new MultipleFacingBuilder(OneOneNineBlockHandler.SCULK_VEIN).setFace(
+                                        new MultipleFacingBuilder(V_1_19.SCULK_VEIN).setFace(
                                                 face.getOppositeFace(),
                                                 true
                                         ).apply(adj);
                                     }
-                                    else if (adj.getType() == OneOneNineBlockHandler.SCULK_VEIN) {
+                                    else if (adj.getType() == V_1_19.SCULK_VEIN) {
                                         MultipleFacing mf = (MultipleFacing) adj.getBlockData();
                                         mf.setFace(face.getOppositeFace(), true);
                                         adj.setBlockData(mf);

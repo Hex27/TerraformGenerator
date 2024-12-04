@@ -13,7 +13,7 @@ import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_20;
 
 import java.util.List;
 
@@ -102,7 +102,7 @@ public class SaplingOverrider implements Listener {
                 }
                 break;
             default:
-                if (baseBlock.getType() == OneTwentyBlockHandler.CHERRY_LEAVES) {
+                if (baseBlock.getType() == V_1_20.CHERRY_LEAVES) {
                     new FractalTreeBuilder(FractalTypes.Tree.CHERRY_SMALL).skipGradientCheck().build(tw, data, x, y, z);
                     return;
                 }

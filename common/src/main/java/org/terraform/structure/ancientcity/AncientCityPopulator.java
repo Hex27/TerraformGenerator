@@ -24,7 +24,7 @@ import org.terraform.utils.blockdata.MultipleFacingBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 import org.terraform.utils.version.Version;
 
 import java.util.HashSet;
@@ -141,7 +141,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
                     SimpleBlock rel = center.getRelative(Math.round(nx), Math.round(ny), Math.round(nz));
 
                     if (ica != null) {
-                        ica.setBiome(rel.getX(), rel.getY(), rel.getZ(), OneOneNineBlockHandler.DEEP_DARK);
+                        ica.setBiome(rel.getX(), rel.getY(), rel.getZ(), V_1_19.DEEP_DARK);
                     }
 
 
@@ -158,18 +158,18 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
                         if (BlockUtils.isExposedToNonSolid(rel) || !rel.getDown().isSolid() || !rel.getUp().isSolid()) {
                             // Inner area of the circle is sculk
                             if (equationResult <= 0.7 * (1 + 0.7 * noiseVal)) {
-                                rel.setType(OneOneNineBlockHandler.SCULK);
+                                rel.setType(V_1_19.SCULK);
 
                                 // If the above is not solid, place some decorations
                                 if (!rel.getUp().isSolid()) {
                                     if (GenUtils.chance(random, 1, 230)) {
-                                        rel.getUp().setType(OneOneNineBlockHandler.SCULK_CATALYST);
+                                        rel.getUp().setType(V_1_19.SCULK_CATALYST);
                                     }
                                     else if (GenUtils.chance(random, 1, 150)) {
-                                        rel.getUp().setType(OneOneNineBlockHandler.SCULK_SENSOR);
+                                        rel.getUp().setType(V_1_19.SCULK_SENSOR);
                                     }
                                     else if (GenUtils.chance(random, 1, 600)) {
-                                        rel.getUp().setBlockData(OneOneNineBlockHandler.getActiveSculkShrieker());
+                                        rel.getUp().setBlockData(V_1_19.getActiveSculkShrieker());
                                     }
                                 }
                             }
@@ -178,7 +178,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
                                 for (BlockFace face : BlockUtils.sixBlockFaces) {
                                     SimpleBlock adj = rel.getRelative(face);
                                     if (adj.isAir()) {
-                                        new MultipleFacingBuilder(OneOneNineBlockHandler.SCULK_VEIN).setFace(
+                                        new MultipleFacingBuilder(V_1_19.SCULK_VEIN).setFace(
                                                 face.getOppositeFace(),
                                                 true
                                         ).apply(adj);

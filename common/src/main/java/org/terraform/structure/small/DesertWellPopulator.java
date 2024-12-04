@@ -20,7 +20,7 @@ import org.terraform.schematic.SchematicParser;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.MultiMegaChunkStructurePopulator;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.Version;
 
 import java.io.FileNotFoundException;
@@ -244,7 +244,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                         return;
                     }
                     else if (Version.isAtLeast(20) && block.getY() == baseY && GenUtils.chance(rand, 1, 20)) {
-                        data = Bukkit.createBlockData(OneTwentyBlockHandler.SUSPICIOUS_SAND);
+                        data = Bukkit.createBlockData(V_1_20.SUSPICIOUS_SAND);
                         super.applyData(block, data);
                         block.getPopData()
                              .lootTableChest(

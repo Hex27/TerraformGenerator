@@ -25,8 +25,8 @@ import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.BeeHiveSpawner;
-import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_19;
+import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
@@ -167,8 +167,8 @@ public class FractalTreeBuilder {
                     .setMaxBend(1.1 * Math.PI / 6)
                     .setLengthDecrement(-0.5f)
                     .setMinThickness(1f)
-                    .setTrunkType(OneTwentyBlockHandler.CHERRY_LOG)
-                    .setFractalLeaves(new FractalLeaves().setMaterial(OneTwentyBlockHandler.CHERRY_LEAVES)
+                    .setTrunkType(V_1_20.CHERRY_LOG)
+                    .setFractalLeaves(new FractalLeaves().setMaterial(V_1_20.CHERRY_LEAVES)
                                                          .setRadius(3, 2f, 3));
                 break;
             case CHERRY_THICK:
@@ -184,8 +184,8 @@ public class FractalTreeBuilder {
                     .setMaxBend(1.1 * Math.PI / 6)
                     .setLengthDecrement(0.3f)
                     .setMinThickness(1f)
-                    .setTrunkType(OneTwentyBlockHandler.CHERRY_WOOD)
-                    .setFractalLeaves(new FractalLeaves().setMaterial(OneTwentyBlockHandler.CHERRY_LEAVES)
+                    .setTrunkType(V_1_20.CHERRY_WOOD)
+                    .setFractalLeaves(new FractalLeaves().setMaterial(V_1_20.CHERRY_LEAVES)
                                                          .setRadius(3, 2f, 3)
                                                          .setLeafNoiseFrequency(0.15f));
                 break;
@@ -402,10 +402,10 @@ public class FractalTreeBuilder {
                     .setMaxDepth(4)
                     .setLengthDecrement(0f)
                     .setHeightVariation(2)
-                    .setTrunkType(OneOneNineBlockHandler.MANGROVE_WOOD)
+                    .setTrunkType(V_1_19.MANGROVE_WOOD)
                     .setVines(7)
                     .setFractalLeaves(new FractalLeaves().setWeepingLeaves(0.4f, 7)
-                                                         .setMaterial(OneOneNineBlockHandler.MANGROVE_LEAVES)
+                                                         .setMaterial(V_1_19.MANGROVE_LEAVES)
                                                          .setRadius(5, 2, 5)
                                                          .setMangrovePropagules(true));
                 break;

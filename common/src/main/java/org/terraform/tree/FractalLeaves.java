@@ -15,7 +15,8 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
+import org.terraform.utils.version.V_1_21_4;
 import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public class FractalLeaves implements Cloneable {
     boolean snowy = false;
     float weepingLeavesChance = 0;
     int weepingLeavesLength = 0;
+    float paleVinesChance = 0;
+    int paleVinesLength = 0;
     boolean coralDecoration = false;
     boolean mangrovePropagules = false;
     int unitLeafSize = 0;
@@ -166,7 +169,7 @@ public class FractalLeaves implements Cloneable {
                                 relativeBlock.getDown()
                                              .rsetBlockData(
                                                      BlockUtils.replacableByTrees,
-                                                     OneOneNineBlockHandler.getHangingMangrovePropagule()
+                                                     V_1_19.getHangingMangrovePropagule()
                                              );
                             }
                         }
@@ -221,6 +224,14 @@ public class FractalLeaves implements Cloneable {
                                     weepingLeavesLength
                             );
                         }
+                        if (Version.isAtLeast(21.4)
+                            && paleVinesChance > 0 && Math.random() < paleVinesChance) {
+                            paleVines(
+                                    relativeBlock,
+                                    Math.round(paleVinesChance * paleVinesLength),
+                                    paleVinesLength
+                            );
+                        }
                     }
                 }
             }
@@ -261,6 +272,18 @@ public class FractalLeaves implements Cloneable {
         }
     }
 
+    private void paleVines(@NotNull SimpleBlock base, int minDist, int maxDist) {
+        int lowest = 0;
+        for (int i = 1; i <= GenUtils.randInt(minDist, maxDist); i++) {
+            if (BlockUtils.isAir(base.getRelative(0, -i, 0).getType())) {
+                base.getRelative(0, -i, 0).rsetBlockData(BlockUtils.replacableByTrees, V_1_21_4.PALE_HANGING_MOSS);
+                lowest++;
+            }
+            else break;
+        }
+        if(lowest > 0 )
+            base.getDown(lowest).setBlockData(V_1_21_4.PALE_HANGING_MOSS_TIP);
+    }
     private void weepingLeaves(@NotNull SimpleBlock base, int minDist, int maxDist) {
         Material material = this.material[rand.nextInt(this.material.length)];
         BlockData type = Bukkit.createBlockData(material);
@@ -346,6 +369,18 @@ public class FractalLeaves implements Cloneable {
 
     public @NotNull FractalLeaves setMangrovePropagules(boolean mangrovePropagules) {
         this.mangrovePropagules = mangrovePropagules;
+        return this;
+    }
+
+    /**
+     * Creates pale oak tree style tipped moss vines
+     *
+     * @param chance    chance of creating dangling leaves per block (0 - 1)
+     * @param maxLength maximum length of dangling leaves
+     */
+    public @NotNull FractalLeaves setPaleMossVines(float chance, int maxLength) {
+        this.paleVinesChance = chance;
+        this.paleVinesLength = maxLength;
         return this;
     }
 

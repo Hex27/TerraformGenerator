@@ -10,7 +10,7 @@ import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
 import org.terraform.populators.AnimalPopulator;
-import org.terraform.utils.version.OneTwentyFiveBlockHandler;
+import org.terraform.utils.version.V_1_20_5;
 import org.terraform.utils.version.Version;
 
 import java.util.Random;
@@ -348,7 +348,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
             );
         }
         if (Version.isAtLeast(20.5)) {
-            ANIMAL_POPULATORS[1] = new AnimalPopulator(OneTwentyFiveBlockHandler.ARMADILLO,
+            ANIMAL_POPULATORS[1] = new AnimalPopulator(V_1_20_5.ARMADILLO,
                     TConfig.c.ANIMALS_ARMADILLO_MINHERDSIZE,
                     TConfig.c.ANIMALS_ARMADILLO_MAXHERDSIZE,
                     TConfig.c.ANIMALS_ARMADILLO_CHANCE,

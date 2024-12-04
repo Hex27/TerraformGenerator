@@ -1,4 +1,4 @@
 package org.terraform.utils.version;
 
-public class OneTwentyOneBlockHandler {
+public class V_1_21 {
 }

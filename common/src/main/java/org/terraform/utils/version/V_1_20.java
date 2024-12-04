@@ -11,7 +11,7 @@ import org.terraform.utils.BlockUtils;
 import java.util.Locale;
 import java.util.Random;
 
-public class OneTwentyBlockHandler {
+public class V_1_20 {
     public static final @Nullable Material PITCHER_PLANT = !Version.isAtLeast(20)
                                                            ? Material.TALL_GRASS
                                                            : Material.getMaterial("PITCHER_PLANT");

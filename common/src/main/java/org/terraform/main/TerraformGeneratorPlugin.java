@@ -132,7 +132,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
             injector = Version.getInjector();
             if (injector != null) {
                 injector.startupTasks();
-            }
+            }else throw new ClassNotFoundException(); //injector no longer throws on no version mapping.
         }
         catch (ClassNotFoundException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);

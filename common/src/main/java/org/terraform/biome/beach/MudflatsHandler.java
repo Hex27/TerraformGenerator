@@ -8,7 +8,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 
 import java.util.Random;
 
@@ -21,13 +21,13 @@ public class MudflatsHandler extends BiomeHandler {
 
     @Override
     public @NotNull Biome getBiome() {
-        return OneOneNineBlockHandler.MANGROVE_SWAMP;
+        return V_1_19.MANGROVE_SWAMP;
     }
 
     @Override
     public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
         return new Material[] {
-                GenUtils.weightedRandomMaterial(rand, OneOneNineBlockHandler.MUD, 35, Material.GRASS_BLOCK, 10),
+                GenUtils.weightedRandomMaterial(rand, V_1_19.MUD, 35, Material.GRASS_BLOCK, 10),
                 GenUtils.randChoice(rand, Material.DIRT),
                 GenUtils.randChoice(rand, Material.DIRT),
                 GenUtils.randChoice(rand, Material.DIRT, Material.STONE),

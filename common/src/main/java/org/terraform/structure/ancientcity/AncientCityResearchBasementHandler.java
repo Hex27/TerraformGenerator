@@ -19,7 +19,7 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 
 public class AncientCityResearchBasementHandler {
 
@@ -206,7 +206,7 @@ public class AncientCityResearchBasementHandler {
                 pillarCent.getRelative(nx, 3, nz).setType(AncientCityUtils.deepslateTiles);
             }
         }
-        pillarCent.getUp().Pillar(2, OneOneNineBlockHandler.SCULK_SENSOR);
+        pillarCent.getUp().Pillar(2, V_1_19.SCULK_SENSOR);
         for (BlockFace face : BlockUtils.directBlockFaces) {
             new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS).setFacing(face.getOppositeFace())
                                                              .apply(pillarCent.getRelative(face, 2))

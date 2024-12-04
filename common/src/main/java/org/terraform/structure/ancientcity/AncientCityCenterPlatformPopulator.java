@@ -26,7 +26,7 @@ import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 import org.terraform.utils.version.Version;
 
 public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomPopulator {
@@ -238,10 +238,10 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         for (int radius = 0; radius <= headWidth; radius++) {
             for (BlockFace rel : BlockUtils.getAdjacentFaces(facing)) {
                 if (Version.isAtLeast(19)) {
-                    core.getRelative(rel, radius).setType(OneOneNineBlockHandler.REINFORCED_DEEPSLATE);
+                    core.getRelative(rel, radius).setType(V_1_19.REINFORCED_DEEPSLATE);
                     core.getUp(headHeight)
                         .getRelative(rel, radius)
-                        .setType(OneOneNineBlockHandler.REINFORCED_DEEPSLATE);
+                        .setType(V_1_19.REINFORCED_DEEPSLATE);
                 }
                 else if (radius % 2 == 0) {
                     core.getRelative(rel, radius).setType(AncientCityUtils.deepslateTiles);
@@ -283,7 +283,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
 
                 if (radius == headWidth) {
                     if (Version.isAtLeast(19)) {
-                        core.getRelative(rel, radius).Pillar(headHeight, OneOneNineBlockHandler.REINFORCED_DEEPSLATE);
+                        core.getRelative(rel, radius).Pillar(headHeight, V_1_19.REINFORCED_DEEPSLATE);
                     }
                     else {
                         core.getRelative(rel, radius)

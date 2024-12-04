@@ -14,7 +14,7 @@ import org.terraform.tree.FractalTypes;
 import org.terraform.tree.TreeDB;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneOneNineBlockHandler;
+import org.terraform.utils.version.V_1_19;
 
 import java.util.Random;
 
@@ -101,7 +101,7 @@ public class DarkForestRiverHandler extends BiomeHandler {
                 if (treeY < TerraformGenerator.seaLevel) {
                     // Don't do gradient checks for swamp trees, the mud is uneven.
                     // just make sure it's submerged
-                    TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data, sLoc), OneOneNineBlockHandler.MANGROVE_ROOTS);
+                    TreeDB.spawnBreathingRoots(tw, new SimpleBlock(data, sLoc), V_1_19.MANGROVE_ROOTS);
                     FractalTypes.Tree.SWAMP_TOP.build(
                             tw,
                             new SimpleBlock(data, sLoc),

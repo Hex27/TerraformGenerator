@@ -24,7 +24,7 @@ import org.terraform.utils.WoodUtils;
 import org.terraform.utils.WoodUtils.WoodType;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.Version;
 
 import java.util.HashMap;
@@ -260,7 +260,7 @@ public class AnimalFarmPopulator extends VillageHousePopulator {
             int animalCount = GenUtils.randInt(3, 7);
             EntityType animal = farmAnimals[random.nextInt(farmAnimals.length)];
             if (Version.isAtLeast(20) && pens == 0 && biome.getClimate() == BiomeClimate.HOT_BARREN) {
-                animal = OneTwentyBlockHandler.CAMEL;
+                animal = V_1_20.CAMEL;
                 animalCount = 2;
             }
             // Spawn animals

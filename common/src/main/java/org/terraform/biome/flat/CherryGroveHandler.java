@@ -18,7 +18,7 @@ import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.Version;
 
 import java.util.Random;
@@ -70,7 +70,7 @@ public class CherryGroveHandler extends BiomeHandler {
                                 rawX,
                                 surfaceY + 1,
                                 rawZ,
-                                OneTwentyBlockHandler.getPinkPetalData(GenUtils.randInt(1, 4))
+                                V_1_20.getPinkPetalData(GenUtils.randInt(1, 4))
                         );
                     }
                     else {

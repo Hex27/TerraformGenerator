@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
-import org.terraform.utils.version.OneTwentyFiveBlockHandler;
+import org.terraform.utils.version.V_1_20_5;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,7 +23,7 @@ public class BannerUtils {
             PatternType.BASE,
             PatternType.BORDER,
             PatternType.BRICKS,
-            OneTwentyFiveBlockHandler.CIRCLE,
+            V_1_20_5.CIRCLE,
             PatternType.CREEPER,
             PatternType.CROSS,
             PatternType.CURLY_BORDER,
@@ -43,7 +43,7 @@ public class BannerUtils {
             // PatternType.HALF_VERTICAL_RIGHT,
             PatternType.MOJANG,
             PatternType.PIGLIN,
-            OneTwentyFiveBlockHandler.RHOMBUS,
+            V_1_20_5.RHOMBUS,
             PatternType.SKULL,
             // PatternType.SMALL_STRIPES,
             PatternType.SQUARE_BOTTOM_LEFT,
@@ -217,13 +217,13 @@ public class BannerUtils {
      */
     public static @NotNull ArrayList<Pattern> getOminousBannerPatterns() {
         return new ArrayList<>() {{
-            add(new Pattern(DyeColor.CYAN, OneTwentyFiveBlockHandler.RHOMBUS));
+            add(new Pattern(DyeColor.CYAN, V_1_20_5.RHOMBUS));
             add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM));
             add(new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER));
             add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER));
             add(new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE));
             add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL));
-            add(new Pattern(DyeColor.LIGHT_GRAY, OneTwentyFiveBlockHandler.CIRCLE)); //
+            add(new Pattern(DyeColor.LIGHT_GRAY, V_1_20_5.CIRCLE)); //
             add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
         }};
     }

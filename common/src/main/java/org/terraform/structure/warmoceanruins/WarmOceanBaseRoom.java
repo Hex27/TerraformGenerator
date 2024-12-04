@@ -7,7 +7,7 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.Version;
 
 import java.util.Random;
@@ -38,7 +38,7 @@ public abstract class WarmOceanBaseRoom extends RoomPopulatorAbstract {
             {
                 if (Version.isAtLeast(20) && GenUtils.chance(rand, 3, 4)) {
                     if (data.getType(coords[0], coords[1], coords[2]) == Material.SAND) {
-                        data.setType(coords[0], coords[1], coords[2], OneTwentyBlockHandler.SUSPICIOUS_SAND);
+                        data.setType(coords[0], coords[1], coords[2], V_1_20.SUSPICIOUS_SAND);
                         data.lootTableChest(coords[0],
                                 coords[1],
                                 coords[2],
@@ -46,7 +46,7 @@ public abstract class WarmOceanBaseRoom extends RoomPopulatorAbstract {
                         );
                     }
                     else {
-                        data.setType(coords[0], coords[1], coords[2], OneTwentyBlockHandler.SUSPICIOUS_GRAVEL);
+                        data.setType(coords[0], coords[1], coords[2], V_1_20.SUSPICIOUS_GRAVEL);
                         data.lootTableChest(coords[0],
                                 coords[1],
                                 coords[2],

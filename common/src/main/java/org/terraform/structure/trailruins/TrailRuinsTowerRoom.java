@@ -15,7 +15,7 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.Version;
 
 import java.io.FileNotFoundException;
@@ -96,7 +96,7 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
             for (int i = 1; i < 3; i++) {
                 if (GenUtils.chance(random, 1, 4) && BlockUtils.isStoneLike(block.getUp(i).getType())) {
                     if (Version.isAtLeast(20) && GenUtils.chance(random, 1, 5)) {
-                        block.getUp(i).setType(OneTwentyBlockHandler.SUSPICIOUS_GRAVEL);
+                        block.getUp(i).setType(V_1_20.SUSPICIOUS_GRAVEL);
                         block.getPopData().lootTableChest(
                                 block.getX(),
                                 block.getY() + i,

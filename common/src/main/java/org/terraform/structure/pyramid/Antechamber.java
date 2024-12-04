@@ -15,7 +15,7 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.Version;
 
 import java.util.Random;
@@ -81,7 +81,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
                         0,
                         GenUtils.getSign(rand) * GenUtils.randInt(rand, 1, room.getWidthZ() / 2 - 1)
                 );
-                target.setType(OneTwentyBlockHandler.SUSPICIOUS_SAND);
+                target.setType(V_1_20.SUSPICIOUS_SAND);
                 data.lootTableChest(target.getX(),
                         target.getY(),
                         target.getZ(),

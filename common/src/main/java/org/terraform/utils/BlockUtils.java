@@ -21,14 +21,15 @@ import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
-import org.terraform.utils.version.OneOneNineBlockHandler;
-import org.terraform.utils.version.OneTwentyBlockHandler;
+import org.terraform.utils.version.V_1_19;
+import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class BlockUtils {
 
@@ -40,7 +41,7 @@ public class BlockUtils {
             Material.SPRUCE_SAPLING,
             Material.JUNGLE_SAPLING,
             Material.OAK_SAPLING,
-            OneTwentyBlockHandler.CHERRY_SAPLING,
+            V_1_20.CHERRY_SAPLING,
             Material.ACACIA_LEAVES,
             Material.AZALEA_LEAVES,
             Material.DARK_OAK_LEAVES,
@@ -48,7 +49,7 @@ public class BlockUtils {
             Material.SPRUCE_LEAVES,
             Material.JUNGLE_LEAVES,
             Material.OAK_LEAVES,
-            OneTwentyBlockHandler.CHERRY_LEAVES,
+            V_1_20.CHERRY_LEAVES,
             Material.FLOWERING_AZALEA_LEAVES,
             Material.BROWN_MUSHROOM,
             Material.RED_MUSHROOM,
@@ -64,7 +65,7 @@ public class BlockUtils {
             Material.TALL_GRASS,
             Material.LARGE_FERN,
             Material.HANGING_ROOTS,
-            OneTwentyBlockHandler.PITCHER_PLANT,
+            V_1_20.PITCHER_PLANT,
             Material.WATER,
             Material.AIR,
             Material.CAVE_AIR,
@@ -192,7 +193,7 @@ public class BlockUtils {
             Material.MYCELIUM,
             Material.ROOTED_DIRT,
             Material.DIRT_PATH,
-            OneOneNineBlockHandler.SCULK
+            V_1_19.SCULK
     );
     public static final EnumSet<Material> caveDecoratorMaterials = EnumSet.of(Material.ANDESITE_WALL,
             Material.DIORITE_WALL,
@@ -571,7 +572,10 @@ public class BlockUtils {
     }
 
     public static PlantBuilder pickFlower() {
-        return GenUtils.randChoice(FLOWER);
+        return pickFlower(GenUtils.RANDOMIZER);
+    }
+    public static PlantBuilder pickFlower(Random rand) {
+        return GenUtils.randChoice(rand, FLOWER);
     }
 
     public static PlantBuilder pickPottedPlant() {
@@ -720,11 +724,11 @@ public class BlockUtils {
 
         Bisected d = ((Bisected) Bukkit.createBlockData(doublePlant));
         d.setHalf(Half.BOTTOM);
-        data.setBlockData(x, y, z, d);
+        data.lsetBlockData(x, y, z, d);
 
         d = ((Bisected) Bukkit.createBlockData(doublePlant));
         d.setHalf(Half.TOP);
-        data.setBlockData(x, y + 1, z, d);
+        data.lsetBlockData(x, y + 1, z, d);
     }
 
     public static boolean isSameChunk(@NotNull Block a, @NotNull Block b) {
@@ -896,7 +900,39 @@ public class BlockUtils {
                 }
             }
         }
+    }
 
+    /**
+     * Passes the highest ground to a lambda function in a circle
+     */
+    public static void lambdaCircularPatch(int seed,
+                                            float radius,
+                                            @NotNull SimpleBlock base,
+                                           Consumer<SimpleBlock> lambda)
+    {
+        if (radius <= 0) {
+            return;
+        }
+        if (radius <= 0.5) {
+            lambda.accept(base);
+            return;
+        }
+
+        FastNoise noise = new FastNoise(seed);
+        noise.SetNoiseType(NoiseType.Simplex);
+        noise.SetFrequency(0.09f);
+
+        for (float x = -radius; x <= radius; x++) {
+            for (float z = -radius; z <= radius; z++) {
+                SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
+                rel = rel.getGround();
+
+                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2) + Math.pow(z, 2) / Math.pow(radius, 2);
+                if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(), rel.getZ())) {
+                    lambda.accept(rel);
+                }
+            }
+        }
     }
 
     public static void replaceSphere(int seed,
