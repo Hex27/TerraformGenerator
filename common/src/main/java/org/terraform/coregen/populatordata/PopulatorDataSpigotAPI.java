@@ -124,7 +124,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
     }
 
     @Override
-    public TerraformWorld getTerraformWorld() {
+    public @NotNull TerraformWorld getTerraformWorld() {
         return tw;
     }
 

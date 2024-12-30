@@ -266,7 +266,7 @@ public class PopulatorData extends PopulatorDataAbstract
     }
 
     @Override
-    public TerraformWorld getTerraformWorld() {
+    public @NotNull TerraformWorld getTerraformWorld() {
         return gen.getTerraformWorld();
     }
 

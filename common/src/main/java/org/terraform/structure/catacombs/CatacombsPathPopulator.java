@@ -42,10 +42,6 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
             return;
         }
 
-        Wall ceiling = core.findCeiling(10);
-        if (ceiling != null) {
-            ceiling = ceiling.getDown();
-        }
         Wall floor = core.getDown();
         if (!floor.isSolid()) {
             return; // Don't populate a path if there's no floor
@@ -167,14 +163,6 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
     @Override
     public int getPathWidth() {
         return 2;
-    }
-
-    public @NotNull Material getFenceMaterial() {
-        return Material.OAK_FENCE;
-    }
-
-    public @NotNull Material getSupportMaterial() {
-        return Material.OAK_LOG;
     }
 
 

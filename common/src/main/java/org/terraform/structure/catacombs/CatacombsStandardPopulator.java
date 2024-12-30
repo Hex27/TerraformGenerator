@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;
 import org.terraform.main.config.TConfig;
@@ -21,6 +22,7 @@ import org.terraform.utils.SphereBuilder.SphereType;
 import org.terraform.utils.blockdata.StairBuilder;
 
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Random;
 
 public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
@@ -129,15 +131,14 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
             SimpleBlock target = new SimpleBlock(data, coords[0], room.getY() + 1, coords[2]);
             target = target.getAtY(room.getY() + 1);
 
-            if (data instanceof PopulatorDataPostGen) {
-                Skeleton e = (Skeleton) ((PopulatorDataPostGen) data).getChunk()
-                                                                     .getWorld()
-                                                                     .spawnEntity(new Location(((PopulatorDataPostGen) data).getChunk()
-                                                                                                                            .getWorld(),
-                                                                             target.getX() + 0.5,
-                                                                             target.getY() + 0.3,
-                                                                             target.getZ() + 0.5), EntityType.SKELETON);
-                e.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
+            if (data instanceof PopulatorDataSpigotAPI) {
+                Skeleton e = (Skeleton) ((PopulatorDataSpigotAPI) data).lr
+                        .spawnEntity(new Location(
+                                        Objects.requireNonNull(data.getTerraformWorld()).getWorld(),
+                                        target.getX()+0.5, target.getY()+0.3, target.getZ()+0.5),
+                                EntityType.SKELETON);
+
+                Objects.requireNonNull(e.getEquipment()).setItemInMainHand(new ItemStack(Material.IRON_SWORD));
                 e.setPersistent(true);
             }
         }

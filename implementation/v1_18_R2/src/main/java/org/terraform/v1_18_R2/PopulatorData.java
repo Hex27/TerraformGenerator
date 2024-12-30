@@ -368,7 +368,7 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     }
 
     @Override
-    public TerraformWorld getTerraformWorld() {
+    public @NotNull TerraformWorld getTerraformWorld() {
         return gen.getTerraformWorld();
     }
 

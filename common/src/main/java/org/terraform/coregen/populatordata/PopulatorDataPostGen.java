@@ -170,7 +170,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     }
 
     @Override
-    public TerraformWorld getTerraformWorld() {
+    public @NotNull TerraformWorld getTerraformWorld() {
         return TerraformWorld.get(w);
     }
 

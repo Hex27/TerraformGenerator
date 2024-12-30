@@ -43,8 +43,9 @@ public class CatacombsCommand extends TerraCommand {
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
-
-        new CatacombsPopulator().spawnCatacombs(tw, new Random(), data, x, y, z);
+        p.sendMessage("Unimplemented.");
+        //This just doesn't work
+        //new CatacombsPopulator().spawnCatacombs(tw, new Random(), data, x, y, z);
     }
 
 }

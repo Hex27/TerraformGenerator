@@ -97,17 +97,19 @@ public class TerraformStructurePopulator extends BlockPopulator {
         // Carve each room
         ArrayList<CubeRoom> seenRooms = new ArrayList<>();
         state.roomPopulatorStates.forEach(roomLayoutGenerator -> roomLayoutGenerator.getRooms()
-                                                                                    .stream()
-                                                                                    // No rooms that have bounds beyond LR
-                                                                                    .filter(room -> room.isInRegion(lr))
-                                                                                    .forEach(room -> {
-                                                                                        seenRooms.add(room);
-                                                                                        roomLayoutGenerator.roomCarver.carveRoom(
-                                                                                                data,
-                                                                                                room,
-                                                                                                roomLayoutGenerator.wallMaterials
-                                                                                        );
-                                                                                    }));
+            .stream()
+            .filter(room -> chunkX == room.getX() >> 4 //Ensure that the center of the lr is the same chunk
+                            && chunkZ == room.getZ() >> 4
+                            && room.isInRegion(lr) // No rooms that have bounds beyond LR
+                    )
+            .forEach(room -> {
+                seenRooms.add(room);
+                roomLayoutGenerator.roomCarver.carveRoom(
+                        data,
+                        room,
+                        roomLayoutGenerator.wallMaterials
+                );
+            }));
 
         // Populate the paths
         seenNodes.forEach((node) -> {
@@ -116,7 +118,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
                 node.populator.populate(new PathPopulatorData(new Wall(
                         new SimpleBlock(data, node.center),
                         node.connected.size() == 1 ? node.connected.stream().findAny().get() : BlockFace.UP
-                ), node.pathWidth));
+                ), node.pathRadius));
             }
         });
 

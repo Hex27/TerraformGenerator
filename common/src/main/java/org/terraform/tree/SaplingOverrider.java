@@ -13,6 +13,7 @@ import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
+import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.V_1_20;
 
 import java.util.List;
@@ -60,7 +61,13 @@ public class SaplingOverrider implements Listener {
                 FractalTypes.Tree.NORMAL_SMALL.build(
                         tw,
                         new SimpleBlock(data, x, y, z),
-                        (nt -> nt.setCheckGradient(false))
+                        (nt -> {
+                            nt.setCheckGradient(false);
+                            //Let grown trees spawn beehives
+                            if(GenUtils.RANDOMIZER.nextInt(5) == 0)
+                                nt.setSpawnBees(true);
+                            return nt;
+                        })
                 );
                 break;
             case BIRCH_LEAVES:

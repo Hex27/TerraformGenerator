@@ -7,6 +7,7 @@ import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
@@ -109,6 +110,8 @@ public class MasterCavePopulatorDistributor {
                                                                                             int chunkZ)
     {
         HashMap<SimpleLocation, CaveClusterRegistry> locs = new HashMap<>();
+        //Don't waste compute if caves don't exist
+        if(!TConfig.areCavesEnabled()) return locs;
 
         for (CaveClusterRegistry type : CaveClusterRegistry.values()) {
             SimpleLocation[] positions = GenUtils.randomObjectPositions(tw.getHashedRand(

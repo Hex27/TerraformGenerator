@@ -33,13 +33,26 @@ public class PathState {
     /* General settings
     */
     public @NotNull PathWriter writer = new CavePathWriter(0, 0, 0, 0, 0, 0);
-    private int pathWidth = 3;
-    private int pathHeight = 3;
-    private int maxBend = -1;
+    private final int pathRadius;
+    private final int pathHeight;
+
+    //The algorithm doesn't use maxBend
+    private final int maxBend;
 
     public PathState(@NotNull RoomLayoutGenerator generator, @NotNull TerraformWorld tw)
     {
         this.generator = generator;
+        if(generator.getPathPop() != null)
+        {
+            this.pathRadius = generator.getPathPop().getPathWidth();
+            this.pathHeight = generator.getPathPop().getPathHeight();
+            this.maxBend = generator.getPathPop().getPathMaxBend();
+        }else{
+            this.pathRadius = 3;
+            this.pathHeight = 3;
+            this.maxBend = -1;
+        }
+
         if (!generator.genPaths()) {
             return;
         }
@@ -51,8 +64,7 @@ public class PathState {
         for (int i = 0; i < generator.getRooms().size(); i++) {
             CubeRoom room = rooms.get(i);
             baseNodes[i] = new PathNode(
-                    new SimpleLocation(room.getX(), room.getY(), room.getZ()),
-                    pathWidth,
+                    new SimpleLocation(room.getX(), room.getY(), room.getZ()), pathRadius,
                     generator.getPathPop()
             );
         }
@@ -95,8 +107,7 @@ public class PathState {
                     ? new SimpleLocation(one.center.getX(),
                             one.center.getY(),
                             two.center.getZ())
-                    : new SimpleLocation(two.center.getX(), one.center.getY(), one.center.getZ()),
-                    pathWidth,
+                    : new SimpleLocation(two.center.getX(), one.center.getY(), one.center.getZ()), pathRadius,
                     generator.getPathPop()
             );
             toAdd.add(newNode);
@@ -106,37 +117,13 @@ public class PathState {
         }
 
         // Add path nodes that lead from one to two
-        for (int i = pathWidth; i < one.center.distance(two.center); i++) {
-            toAdd.add(new PathNode(one.center.getRelative(oneConn, i), pathWidth, generator.getPathPop(), oneConn));
+        for (int i = pathRadius; i < one.center.distance(two.center); i++) {
+            toAdd.add(new PathNode(one.center.getRelative(oneConn, i), pathRadius, generator.getPathPop(), oneConn));
         }
     }
 
-    public int getPathWidth() {
-        return pathWidth;
-    }
-
-    public void setPathWidth(int pathWidth) {
-        this.pathWidth = pathWidth;
-    }
-
-    public int getPathHeight() {
-        return pathHeight;
-    }
-
-    public void setPathHeight(int pathHeight) {
-        this.pathHeight = pathHeight;
-    }
-
-    public int getMaxBend() {
-        return maxBend;
-    }
-
-    public void setMaxBend(int maxBend) {
-        this.maxBend = maxBend;
-    }
-
     public static class PathNode {
-        public final int pathWidth;
+        public final int pathRadius;
         public final @NotNull SimpleLocation center;
         public final PathPopulatorAbstract populator;
         public final HashSet<BlockFace> connected = new HashSet<>();
@@ -147,7 +134,7 @@ public class PathState {
                         PathPopulatorAbstract populator,
                         BlockFace... connections)
         {
-            this.pathWidth = pathWidth;
+            this.pathRadius = pathWidth;
             this.center = center;
             // Lock path nodes to a grid-like structure which will allow
             // path nodes to be spaced properly

@@ -30,9 +30,9 @@ public class CavePathWriter extends PathWriter {
     {
         BlockUtils.carveCaveAir(
                 (int) (node.center.hashCode() * tw.getSeed()),
-                node.pathWidth + rXMod,
-                node.pathWidth + rYMod,
-                node.pathWidth + rZMod,
+                node.pathRadius + rXMod,
+                node.pathRadius + rYMod,
+                node.pathRadius + rZMod,
                 new SimpleBlock(popData, node.center.getRelative(xOff, yOff, zOff)),
                 false,
                 BlockUtils.caveCarveReplace

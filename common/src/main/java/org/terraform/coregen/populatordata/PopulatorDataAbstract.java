@@ -109,11 +109,12 @@ public abstract class PopulatorDataAbstract {
 
     public abstract void lootTableChest(int x, int y, int z, TerraLootTable table);
 
-    public abstract @Nullable TerraformWorld getTerraformWorld();
+    public abstract @NotNull TerraformWorld getTerraformWorld();
 
     /**
-     * @Deprecated this shit is a meaningless hashcode
+     * @deprecated this shit is a meaningless hashcode
      */
+    @Deprecated
     @Override
     public int hashCode() {
         return this.getClass().getCanonicalName().hashCode();
@@ -121,8 +122,9 @@ public abstract class PopulatorDataAbstract {
 
 
     /**
-     * @Deprecated this shit is a meaningless comparison
+     * @deprecated this shit is a meaningless comparison
      */
+    @Deprecated
     @Override
     public boolean equals(@Nullable Object obj) {
         if (this == obj) {

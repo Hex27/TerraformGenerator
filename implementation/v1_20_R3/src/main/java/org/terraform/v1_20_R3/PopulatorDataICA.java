@@ -234,7 +234,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
 
     @Override
-    public TerraformWorld getTerraformWorld() {
+    public @NotNull TerraformWorld getTerraformWorld() {
         return tw;
     }
 

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.TerraformWorld;
 
@@ -98,7 +99,7 @@ public class PopulatorDataColumn extends PopulatorDataAbstract {
     }
 
     @Override
-    public TerraformWorld getTerraformWorld() {
+    public @NotNull TerraformWorld getTerraformWorld() {
         return delegate.getTerraformWorld();
     }
 }

@@ -105,7 +105,7 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new AncientCityLargePillarRoomPopulator(tw, occupied, gen, random, false, false));
 
         // Forcefully place the center platform in the middle
-        CubeRoom room = new CubeRoom(50, 50, 40, x, y, z);
+        CubeRoom room = new CubeRoom(46, 46, 40, x, y, z);
         room.setRoomPopulator(new AncientCityCenterPlatformPopulator(tw, occupied, gen, random, true, true));
         gen.getRooms().add(room);
 

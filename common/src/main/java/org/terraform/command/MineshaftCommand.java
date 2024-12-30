@@ -41,6 +41,7 @@ public class MineshaftCommand extends TerraCommand {
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
+        p.sendMessage("Unimplemented.");
         // lmao we're fucked
         // new MineshaftPopulator().spawnMineshaft(tw, new Random(), data, x, y, z);
     }

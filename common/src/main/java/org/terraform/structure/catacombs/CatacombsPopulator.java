@@ -5,21 +5,22 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
-import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
-import org.terraform.structure.SingleMegaChunkStructurePopulator;
+import org.terraform.structure.JigsawState;
+import org.terraform.structure.JigsawStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
+import org.terraform.structure.room.carver.StandardRoomCarver;
+import org.terraform.structure.room.path.CavePathWriter;
+import org.terraform.structure.room.path.PathState;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.Version;
 
 import java.util.Random;
 
-public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
+public class CatacombsPopulator extends JigsawStructurePopulator {
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
@@ -70,71 +71,18 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if (!isEnabled()) {
-            return;
-        }
+    public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
 
-        MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
+        JigsawState state = new JigsawState();
+
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
         int x = coords[0];
         int z = coords[1];
-        int height = HeightMap.getBlockHeight(tw, x, z);
         int minY = TConfig.c.STRUCTURES_CATACOMBS_MIN_Y;
-        if (!Version.isAtLeast(18) && minY < 0) {
-            minY = 8;
-        }
         int y = GenUtils.randInt(minY, TConfig.c.STRUCTURES_CATACOMBS_MAX_Y);
-
-
-        spawnCatacombs(tw, tw.getHashedRand(x, y, z, 1928374), data, x, y + 1, z, height - y > 25);
-    }
-
-    public void spawnCatacombs(@NotNull TerraformWorld tw,
-                               Random random,
-                               @NotNull PopulatorDataAbstract data,
-                               int x,
-                               int y,
-                               int z)
-    {
-        spawnCatacombs(tw, random, data, x, y, z, true);
-    }
-
-    public void spawnCatacombs(@NotNull TerraformWorld tw,
-                               Random random,
-                               @NotNull PopulatorDataAbstract data,
-                               int x,
-                               int y,
-                               int z,
-                               boolean doubleLevel)
-    {
-        spawnCatacombs(tw, random, data, x, y, z, doubleLevel, 10, 50);
-    }
-
-    private boolean canGoDeeper(@NotNull TerraformWorld tw, int y, @NotNull Random random) {
-        TerraformGeneratorPlugin.logger.info("TW MinY: "
-                                             + tw.minY
-                                             + ", Rolling chance: "
-                                             + ((int) (TConfig.c.STRUCTURES_CATACOMBS_SIZEROLLCHANCE
-                                                       * 10000d)));
-        return y > tw.minY + 10 && GenUtils.chance(random,
-                (int) (TConfig.c.STRUCTURES_CATACOMBS_SIZEROLLCHANCE * 10000d),
-                10000
-        );
-    }
-
-    public void spawnCatacombs(@NotNull TerraformWorld tw,
-                               Random random,
-                               @NotNull PopulatorDataAbstract data,
-                               int x,
-                               int y,
-                               int z,
-                               boolean doubleLevel,
-                               int numRooms,
-                               int range)
-    {
-        TerraformGeneratorPlugin.logger.info("Spawning catacombs at: " + x + "," + z);
-
+        int numRooms = 10;
+        int range = 50;
+        Random random = tw.getHashedRand(x, y, z, 1928374);
 
         // Level One
         Random hashedRand = tw.getHashedRand(x, y, z);
@@ -165,8 +113,13 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
             gen.registerRoomPopulator(new CatacombsStairwayPopulator(random, true, false));
             gen.registerRoomPopulator(new CatacombsDripstoneCavern(random, true, false));
         }
+        gen.roomCarver = new StandardRoomCarver(-1, Material.CAVE_AIR);//new CaveRoomCarver(1.5f,1.7f,1.5f,0.09f,0.03f);
         gen.calculateRoomPlacement();
-        gen.fill(data, tw, Material.CAVE_AIR);
+        PathState ps = gen.getOrCalculatePathState(tw);
+        ps.writer = new CavePathWriter(0f, 0f, 0f, 0, 2, 0);
+        gen.calculateRoomPopulators(tw);
+        state.roomPopulatorStates.add(gen);
+        //gen.fill(data, tw, Material.CAVE_AIR);
 
         int catacombLevels = 1;
         RoomLayoutGenerator previousGen;
@@ -230,11 +183,22 @@ public class CatacombsPopulator extends SingleMegaChunkStructurePopulator {
                 break; // no more stairways. Don't generate.
             }
 
-            TerraformGeneratorPlugin.logger.info("Additional Catacombs Level at: " + x + "," + z);
-
+            gen.roomCarver = new StandardRoomCarver(-1, Material.CAVE_AIR);//new CaveRoomCarver(1.5f,1.7f,1.5f,0.09f,0.03f);
             gen.calculateRoomPlacement();
-            gen.fill(data, tw, Material.CAVE_AIR);
+            ps = gen.getOrCalculatePathState(tw);
+            ps.writer = new CavePathWriter(0f, 0f, 0f, 0, 2, 0);
+            gen.calculateRoomPopulators(tw);
+            state.roomPopulatorStates.add(gen);
+            //gen.fill(data, tw, Material.CAVE_AIR);
         }
+        return state;
+    }
+
+    private boolean canGoDeeper(@NotNull TerraformWorld tw, int y, @NotNull Random random) {
+        return y > tw.minY + 10 && GenUtils.chance(random,
+                (int) (TConfig.c.STRUCTURES_CATACOMBS_SIZEROLLCHANCE * 10000d),
+                10000
+        );
     }
 
     @Override
