@@ -355,7 +355,7 @@ public class RoomLayoutGenerator {
     }
 
     /**
-     * @Deprecated don't use this for new structures. Use the new jigsaw system
+     * @deprecated don't use this for new structures. Use the new jigsaw system
      */
     @Deprecated
     public void runRoomPopulators(PopulatorDataAbstract data, @NotNull TerraformWorld tw) {
@@ -738,6 +738,11 @@ public class RoomLayoutGenerator {
         return this.pathPopulators;
     }
 
+    /**
+     *
+     * @deprecated Jigsaw system does not use path populators in this class
+     */
+    @Deprecated
     public boolean isPointInPath(@NotNull Wall w, int rearOffset, int includeWidth) {
         if (getPathPopulators().contains(new PathPopulatorData(w.getRear(rearOffset).getAtY(centY), 3))) {
             return true;

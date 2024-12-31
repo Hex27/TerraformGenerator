@@ -196,6 +196,9 @@ public class Wall extends SimpleBlock {
         return new Wall(super.getRelative(direction.getOppositeFace()), direction);
     }
 
+    public @NotNull Wall flip(){
+        return new Wall(this, direction.getOppositeFace());
+    }
     public Wall getRear(int it) {
         if (it < 0) {
             return getFront(-it);

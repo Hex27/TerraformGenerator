@@ -22,7 +22,6 @@ import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.CylinderBuilder;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
@@ -39,6 +38,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
                                               boolean unique)
     {
         super(tw, gen, rand, forceSpawn, unique);
+        this.doCarve = false;
     }
 
     @Override
@@ -49,10 +49,9 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         for (Entry<Wall, Integer> entry : this.effectiveRoom.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
-
                 if (i > 2 && i < entry.getValue() - 3 && i % 3 == 0) {
 
-                    if (!this.gen.isPointInPath(w, shrunkenWidth + 1, 2)) {
+                    if (!containsPaths.contains(w.get())) {
                         w.lsetType(Material.CHISELED_DEEPSLATE);
                         w.getUp().CorrectMultipleFacing(2);
                         w.getUp().LPillar(2, Material.DEEPSLATE_BRICK_WALL);
@@ -64,7 +63,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
                     }
                     for (BlockFace dir : BlockUtils.getAdjacentFaces(w.getDirection())) {
                         Wall rel = w.getRelative(dir);
-                        if (this.gen.isPointInPath(rel, shrunkenWidth + 1, 2)) {
+                        if (containsPaths.contains(rel.get())) {
                             continue;
                         }
 
@@ -126,6 +125,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
             }
         }
 
+        //Decorate the fire box with candles
         for (Entry<Wall, Integer> entry : fireBox.getFourWalls(data, 5).entrySet()) {
             Wall w = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
@@ -202,22 +202,6 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
             }
         }
 
-
-        // Debree and breakage
-        lowerCorner = effectiveRoom.getLowerCorner(6);
-        upperCorner = effectiveRoom.getUpperCorner(6);
-        for (int nx = lowerCorner[0]; nx <= upperCorner[0]; nx++) {
-            for (int nz = lowerCorner[1]; nz <= upperCorner[1]; nz++) {
-                if (GenUtils.chance(rand, 1, 200)) {
-                    new SphereBuilder(new Random(),
-                            new SimpleBlock(data, nx, effectiveRoom.getY(), nz),
-                            Material.AIR
-                    ).setRadius(2f).setSphereFrequency(0.15f).setHardReplace(true).build();
-                }
-            }
-        }
-
-
         CubeRoom basement = new CubeRoom(this.effectiveRoom.getWidthX(),
                 this.effectiveRoom.getWidthZ(),
                 6,
@@ -238,6 +222,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         for (int radius = 0; radius <= headWidth; radius++) {
             for (BlockFace rel : BlockUtils.getAdjacentFaces(facing)) {
                 if (Version.isAtLeast(19)) {
+                    assert V_1_19.REINFORCED_DEEPSLATE != null;
                     core.getRelative(rel, radius).setType(V_1_19.REINFORCED_DEEPSLATE);
                     core.getUp(headHeight)
                         .getRelative(rel, radius)

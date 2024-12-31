@@ -32,7 +32,9 @@ public abstract class PathPopulatorAbstract {
     /**
      * To return false if you want the default carver to happen.
      * Return true if you're handling everything here.
+     * @deprecated Jigsaw system uses PathWriter to do this.
      */
+    @Deprecated
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean customCarve(SimpleBlock base, BlockFace dir, int pathWidth) {
         return false;

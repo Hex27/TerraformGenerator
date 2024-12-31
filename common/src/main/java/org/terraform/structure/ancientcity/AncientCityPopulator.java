@@ -8,16 +8,20 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleLocation;
-import org.terraform.data.TerraformWorld;
+import org.terraform.data.*;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
+import org.terraform.structure.EmptyPathWriter;
+import org.terraform.structure.JigsawState;
+import org.terraform.structure.JigsawStructurePopulator;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayout;
 import org.terraform.structure.room.RoomLayoutGenerator;
+import org.terraform.structure.room.carver.CaveRoomCarver;
+import org.terraform.structure.room.carver.StandardRoomCarver;
+import org.terraform.structure.room.path.CavePathWriter;
+import org.terraform.structure.room.path.PathState;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
@@ -30,7 +34,8 @@ import org.terraform.utils.version.Version;
 import java.util.HashSet;
 import java.util.Random;
 
-public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
+public class AncientCityPopulator extends JigsawStructurePopulator {
+    public static final int RADIUS = 50;
 
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, @NotNull BiomeBank biome) {
@@ -60,32 +65,30 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
     }
 
     @Override
-    public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
-        if (!isEnabled()) {
-            return;
-        }
-
-        MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
+    public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc)
+    {
+        JigsawState state = new JigsawState();
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
         int x = coords[0];
         int z = coords[1];
-        // int height = HeightMap.getBlockHeight(tw, x, z);
         int minY = TConfig.c.STRUCTURES_ANCIENTCITY_MIN_Y;
-        // if(!Version.isAtLeast(18) && minY < 0) minY = 8;
         int y = GenUtils.randInt(minY, TConfig.c.STRUCTURES_ANCIENTCITY_MAX_Y);
+        Random random = tw.getHashedRand(x, y, z, 23412222);
 
-
-        spawnAncientCity(tw, tw.getHashedRand(x, y, z, 23412222), data, x, y + 1, z);
-    }
-
-    public void spawnAncientCity(@NotNull TerraformWorld tw,
-                                 @NotNull Random random,
-                                 @NotNull PopulatorDataAbstract data,
-                                 int x,
-                                 int y,
-                                 int z)
-    {
         TerraformGeneratorPlugin.logger.info("Spawning ancient city at: " + x + "," + y + "," + z);
+
+        //Cave carver
+        RoomLayoutGenerator carverGen = new RoomLayoutGenerator(GenUtils.RANDOMIZER, RoomLayout.RANDOM_BRUTEFORCE, 0, x,y,z, RADIUS);
+        for(int nx = ((((x-RADIUS)>>4)-1)<<4) + 7; nx <= ((((x+RADIUS)>>4)+1)<<4) + 7; nx+=16)
+            for(int nz = ((((z-RADIUS)>>4)-1)<<4) + 7; nz <= ((((z+RADIUS)>>4)+1)<<4) + 7; nz+=16)
+            {
+                carverGen.getRooms().add(new CubeRoom(1,1,5,nx, y, nz));
+            }
+        carverGen.roomCarver = new AncientCityBFSCarver(new SimpleLocation(x,y,z));
+        PathState ps = carverGen.getOrCalculatePathState(tw);
+        ps.writer = new EmptyPathWriter();
+        state.roomPopulatorStates.add(carverGen);
+
 
         // Level One
         HashSet<SimpleLocation> occupied = new HashSet<>();
@@ -104,104 +107,21 @@ public class AncientCityPopulator extends SingleMegaChunkStructurePopulator {
         gen.registerRoomPopulator(new AncientCityAltarPopulator(tw, occupied, gen, random, false, false));
         gen.registerRoomPopulator(new AncientCityLargePillarRoomPopulator(tw, occupied, gen, random, false, false));
 
-        // Forcefully place the center platform in the middle
-        CubeRoom room = new CubeRoom(46, 46, 40, x, y, z);
+        // Forcefully place the center platform in the middle.
+        SimpleChunkLocation centChunk = new SimpleChunkLocation(tw.getName(), x,y,z);
+        int centX = (centChunk.getX() << 4) + 8;
+        int centZ = (centChunk.getZ() << 4) + 8;
+        CubeRoom room = new CubeRoom(46, 46, 40, centX, y, centZ);
         room.setRoomPopulator(new AncientCityCenterPlatformPopulator(tw, occupied, gen, random, true, true));
         gen.getRooms().add(room);
 
-        gen.setCarveRooms(true);
-        gen.setCarveRoomsMultiplier(1.5f, 2f, 1.5f);
         gen.calculateRoomPlacement();
-        // gen.fill(data, tw, Material.CAVE_AIR);
-        gen.carvePathsOnly(data, tw, Material.CAVE_AIR);
-        gen.carveRoomsOnly(data, tw, Material.CAVE_AIR);
+        ps = gen.getOrCalculatePathState(tw);
+        ps.writer = new CavePathWriter(2f,2f,2f,0,0,0);
+        gen.calculateRoomPopulators(tw);
+        state.roomPopulatorStates.add(gen);
 
-        // Creep up the whole place.
-        float radius = 80;
-
-        FastNoise circleNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheEntry.BIOME_CAVECLUSTER_CIRCLENOISE, world -> {
-            FastNoise n = new FastNoise((int) (world.getSeed() * 11));
-            n.SetNoiseType(FastNoise.NoiseType.Simplex);
-            n.SetFrequency(0.09f);
-
-            return n;
-        });
-
-        SimpleBlock center = new SimpleBlock(data, x, y, z);
-        TerraformGeneratorPlugin.logger.info("Spawning sculk...");
-
-        PopulatorDataICABiomeWriterAbstract ica = null;
-        if (center.getPopData() instanceof PopulatorDataICABiomeWriterAbstract) {
-            ica = (PopulatorDataICABiomeWriterAbstract) center.getPopData();
-        }
-
-        for (float nx = -radius; nx <= radius; nx++) {
-            for (float nz = -radius; nz <= radius; nz++) {
-                for (float ny = -50; ny <= 50; ny++) {
-                    SimpleBlock rel = center.getRelative(Math.round(nx), Math.round(ny), Math.round(nz));
-
-                    if (ica != null) {
-                        ica.setBiome(rel.getX(), rel.getY(), rel.getZ(), V_1_19.DEEP_DARK);
-                    }
-
-
-                    if (!BlockUtils.isStoneLike(rel.getType())) {
-                        continue;
-                    }
-                    // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
-                    double equationResult = Math.pow(nx, 2) / Math.pow(radius, 2) + Math.pow(nz, 2) / Math.pow(
-                            radius,
-                            2
-                    ) + Math.pow(ny, 2) / Math.pow(50, 2);
-                    float noiseVal = circleNoise.GetNoise(rel.getX(), rel.getY(), rel.getZ());
-                    if (equationResult <= 1 + 0.7 * noiseVal) {
-                        if (BlockUtils.isExposedToNonSolid(rel) || !rel.getDown().isSolid() || !rel.getUp().isSolid()) {
-                            // Inner area of the circle is sculk
-                            if (equationResult <= 0.7 * (1 + 0.7 * noiseVal)) {
-                                rel.setType(V_1_19.SCULK);
-
-                                // If the above is not solid, place some decorations
-                                if (!rel.getUp().isSolid()) {
-                                    if (GenUtils.chance(random, 1, 230)) {
-                                        rel.getUp().setType(V_1_19.SCULK_CATALYST);
-                                    }
-                                    else if (GenUtils.chance(random, 1, 150)) {
-                                        rel.getUp().setType(V_1_19.SCULK_SENSOR);
-                                    }
-                                    else if (GenUtils.chance(random, 1, 600)) {
-                                        rel.getUp().setBlockData(V_1_19.getActiveSculkShrieker());
-                                    }
-                                }
-                            }
-                            else // Outer area are sculk veins
-                            {
-                                for (BlockFace face : BlockUtils.sixBlockFaces) {
-                                    SimpleBlock adj = rel.getRelative(face);
-                                    if (adj.isAir()) {
-                                        new MultipleFacingBuilder(V_1_19.SCULK_VEIN).setFace(
-                                                face.getOppositeFace(),
-                                                true
-                                        ).apply(adj);
-                                    }
-                                    else if (adj.getBlockData() instanceof MultipleFacing mf) {
-                                        if (mf.getAllowedFaces().contains(face.getOppositeFace())) {
-                                            mf.setFace(face.getOppositeFace(), true);
-                                        }
-                                        adj.setBlockData(mf);
-                                    }
-                                }
-                            }
-                        }
-                        else if (rel.getType() == Material.WATER) {
-                            rel.setType(Material.CAVE_AIR);
-                        }
-                    }
-                }
-            }
-        }
-
-        gen.populatePathsOnly();
-        gen.runRoomPopulators(data, tw);
+        return state;
     }
 
     @Override

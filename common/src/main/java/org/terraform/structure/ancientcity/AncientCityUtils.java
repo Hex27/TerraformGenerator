@@ -77,6 +77,7 @@ public class AncientCityUtils {
                         if (BlockUtils.isExposedToNonSolid(rel) || !rel.getDown().isSolid() || !rel.getUp().isSolid()) {
                             // Inner area of the circle is sculk
                             if (t.isTagged(rel.getType()) && equationResult <= 0.7 * (1 + 0.7 * noiseVal)) {
+                                assert V_1_19.SCULK != null;
                                 rel.setType(V_1_19.SCULK);
 
                                 // If the above is not solid, place some decorations

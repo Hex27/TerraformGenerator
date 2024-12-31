@@ -45,9 +45,9 @@ public class CrappyDebugStructureCommand extends TerraCommand {
         int z = p.getLocation().getBlockZ();
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
 
-        new AncientCityPopulator().spawnAncientCity(tw, new Random(), data, x, y, z);
-        p.teleport(new Location(p.getWorld(), x, y + 30, z));
-        p.sendMessage("Done.");
+        //new AncientCityPopulator().spawnAncientCity(tw, new Random(), data, x, y, z);
+        //p.teleport(new Location(p.getWorld(), x, y + 30, z));
+        p.sendMessage("Unimplemented.");
     }
 
 }

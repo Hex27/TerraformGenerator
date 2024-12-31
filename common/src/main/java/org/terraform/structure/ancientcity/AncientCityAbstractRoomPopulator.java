@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
 import org.terraform.structure.room.CarvedRoom;
@@ -13,12 +14,14 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.room.RoomPopulatorAbstract;
+import org.terraform.structure.room.path.PathState;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -27,7 +30,9 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
     protected final RoomLayoutGenerator gen;
     final TerraformWorld tw;
     protected int shrunkenWidth = 0;
-    protected @Nullable CubeRoom effectiveRoom = null;
+    protected @NotNull CubeRoom effectiveRoom = null;
+    protected HashSet<SimpleBlock> containsPaths = new HashSet<>();
+    protected boolean doCarve = true;
 
     public AncientCityAbstractRoomPopulator(TerraformWorld tw,
                                             RoomLayoutGenerator gen,
@@ -62,7 +67,8 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
         ));
 
         // Clear out space for the room
-        effectiveRoom.fillRoom(data, Material.CAVE_AIR);
+        if(doCarve)
+            effectiveRoom.fillRoom(data, Material.CAVE_AIR);
 
         // Room flooring
         int[] lowerCorner = effectiveRoom.getLowerCorner(0);
@@ -96,36 +102,65 @@ public abstract class AncientCityAbstractRoomPopulator extends RoomPopulatorAbst
             }
         }
 
+        //Stairs cannot go next to each other as they're width 3
+        boolean placedStairs = false;
         // Connect the paths to the rooms
+        //This is some scuffed code. In essence, PathNodes are placed in spaced intervals
+        // of 1 per 5 blocks. So if we check an area 5 times (j), we will find a path node (maybe)
         for (Entry<Wall, Integer> entry : room.getFourWalls(data, 0).entrySet()) {
             Wall w = entry.getKey().getDown();
             for (int i = shrunkenWidth; i < entry.getValue() - shrunkenWidth; i++) {
+                if(!placedStairs)
+                    for (int j = 1; j <= 7; j++) {
+                        SimpleLocation target = w.getRear(j).getAtY(room.getY()).getLoc();
+                        if (this.gen.getOrCalculatePathState(tw).nodes.contains(
+                                new PathState.PathNode(target, 1, null)))
+                        {
+                            placedStairs = true;
+                            //Room edge is the ledge of the effective room
+                            Wall roomEdge = w.getFront(shrunkenWidth+1).getAtY(effectiveRoom.getY()+1);
+                            containsPaths.add(roomEdge);
+                            containsPaths.add(roomEdge.getLeft());
+                            containsPaths.add(roomEdge.getRight());
 
-                if (this.gen.getPathPopulators().contains(new PathPopulatorData(w.getRear().getAtY(room.getY()), 3))) {
-                    // w.getUp(3).setType(Material.RED_WOOL);
-                    w.setType(AncientCityUtils.deepslateBricks);
-                    w.getLeft().setType(AncientCityUtils.deepslateBricks);
-                    w.getRight().setType(AncientCityUtils.deepslateBricks);
+                            if (depression > 0) {
+                                new StairwayBuilder(Material.DEEPSLATE_BRICK_STAIRS)
+                                        .setDownTypes(AncientCityUtils.deepslateBricks)
+                                        .setStairwayDirection(BlockFace.DOWN)
+                                        .setStopAtY(room.getY())
+                                        .build(roomEdge.getDown().getRear().flip())
+                                        .build(roomEdge.getDown().getRear().getLeft().flip())
+                                        .build(roomEdge.getDown().getRear().getRight().flip());
+                            }
+                            else {
+                                new StairwayBuilder(Material.DEEPSLATE_BRICK_STAIRS)
+                                        .setDownTypes(AncientCityUtils.deepslateBricks)
+                                        .setStairwayDirection(BlockFace.UP)
+                                        .setUpwardsCarveUntilNotSolid(false)
+                                        .setStopAtY(room.getY())
+                                        .build(roomEdge.getRear().flip())
+                                        .build(roomEdge.getRear().getLeft().flip())
+                                        .build(roomEdge.getRear().getRight().flip());
+                            }
+                            //Close potential holes between the stairs and the platform
+                            //This is exactly where the effective room's wall is
+                            Wall conn = roomEdge.getUp(-depression-1).getRear(Math.abs(depression)+1);
+                            for(int conni = 0; conni <= 5; conni++)
+                            {
+                                boolean wasBlocked = conn.getRear(conni).lsetType(Material.GRAY_WOOL);
+                                wasBlocked &= conn.getRear(conni).getLeft().lsetType(Material.GRAY_WOOL);
+                                wasBlocked &= conn.getRear(conni).getRight().lsetType(Material.GRAY_WOOL);
+                                //Ignore the corner 2's placement.
+                                conn.getRear(conni).getRight(2).lsetType(AncientCityUtils.deepslateBricks);
+                                conn.getRear(conni).getLeft(2).lsetType(AncientCityUtils.deepslateBricks);
+                                if(wasBlocked) break;
+                            }
 
-                    if (depression < 0) {
-                        new StairwayBuilder(Material.DEEPSLATE_BRICK_STAIRS).setDownTypes(AncientCityUtils.deepslateBricks)
-                                                                            .setStairwayDirection(BlockFace.DOWN)
-                                                                            .setStopAtY(effectiveRoom.getY())
-                                                                            .build(w.getFront())
-                                                                            .build(w.getFront().getLeft())
-                                                                            .build(w.getFront().getRight());
+                            break; //BREAK if you see a staircase.
+                        }
                     }
-                    else {
-                        new StairwayBuilder(Material.DEEPSLATE_BRICK_STAIRS).setDownTypes(AncientCityUtils.deepslateBricks)
-                                                                            .setStairwayDirection(BlockFace.UP)
-                                                                            .setUpwardsCarveUntilNotSolid(false)
-                                                                            .setStopAtY(effectiveRoom.getY())
-                                                                            .build(w.getUp().getFront())
-                                                                            .build(w.getUp().getFront().getLeft())
-                                                                            .build(w.getUp().getFront().getRight());
-                    }
-
-                }
+                else
+                    placedStairs = false;
                 w = w.getLeft();
             }
         }

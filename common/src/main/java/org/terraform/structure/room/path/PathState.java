@@ -63,8 +63,9 @@ public class PathState {
         // One starting node for each room
         for (int i = 0; i < generator.getRooms().size(); i++) {
             CubeRoom room = rooms.get(i);
+            SimpleLocation loc = new SimpleLocation(room.getX(), room.getY(), room.getZ());
             baseNodes[i] = new PathNode(
-                    new SimpleLocation(room.getX(), room.getY(), room.getZ()), pathRadius,
+                    loc, pathRadius,
                     generator.getPathPop()
             );
         }
@@ -117,7 +118,7 @@ public class PathState {
         }
 
         // Add path nodes that lead from one to two
-        for (int i = pathRadius; i < one.center.distance(two.center); i++) {
+        for (int i = 1; i < one.center.distance(two.center); i++) {
             toAdd.add(new PathNode(one.center.getRelative(oneConn, i), pathRadius, generator.getPathPop(), oneConn));
         }
     }

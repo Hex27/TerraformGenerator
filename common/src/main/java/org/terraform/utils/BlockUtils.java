@@ -208,6 +208,7 @@ public class BlockUtils {
             Material.MOSS_BLOCK,
             Material.MOSS_CARPET,
             Material.CAVE_VINES,
+            Material.CAVE_VINES_PLANT,
             Material.HANGING_ROOTS,
             Material.SPORE_BLOSSOM,
             Material.SMALL_DRIPLEAF,
@@ -382,7 +383,13 @@ public class BlockUtils {
                 stoneLike.add(mat);
             }
         }
-
+        if(Version.isAtLeast(19)){
+            caveDecoratorMaterials.add(V_1_19.SCULK);
+            caveDecoratorMaterials.add(V_1_19.SCULK_SENSOR);
+            caveDecoratorMaterials.add(V_1_19.SCULK_SHRIEKER);
+            caveDecoratorMaterials.add(V_1_19.SCULK_VEIN);
+            caveDecoratorMaterials.add(V_1_19.SCULK_CATALYST);
+        }
         badlandsStoneLike.addAll(stoneLike);
         caveCarveReplace.addAll(badlandsStoneLike);
         caveCarveReplace.addAll(caveDecoratorMaterials);

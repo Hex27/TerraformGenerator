@@ -13,7 +13,6 @@ import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
-import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomLayoutGenerator;
 
 public class AncientCityAltarPopulator extends AncientCityAbstractRoomPopulator {
@@ -40,7 +39,7 @@ public class AncientCityAltarPopulator extends AncientCityAbstractRoomPopulator 
                 if (i == entry.getValue() / 2) {
                     center = w;
                 }
-                if (this.gen.getPathPopulators().contains(new PathPopulatorData(w.getRear().getAtY(room.getY()), 3))) {
+                if (containsPaths.contains(w)) {
                     shouldPlaceAltar = false;
                     break;
                 }

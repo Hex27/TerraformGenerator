@@ -44,8 +44,8 @@ public class AncientCityCommand extends TerraCommand {
         int y = p.getLocation().getBlockY();
         int z = p.getLocation().getBlockZ();
         TerraformWorld tw = TerraformWorld.get(p.getWorld());
-
-        new AncientCityPopulator().spawnAncientCity(tw, new Random(), data, x, y, z);
+        p.sendMessage("Unimplemented.");
+        //new AncientCityPopulator().spawnAncientCity(tw, new Random(), data, x, y, z);
     }
 
 }

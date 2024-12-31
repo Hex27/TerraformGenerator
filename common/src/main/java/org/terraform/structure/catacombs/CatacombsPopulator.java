@@ -113,7 +113,7 @@ public class CatacombsPopulator extends JigsawStructurePopulator {
             gen.registerRoomPopulator(new CatacombsStairwayPopulator(random, true, false));
             gen.registerRoomPopulator(new CatacombsDripstoneCavern(random, true, false));
         }
-        gen.roomCarver = new StandardRoomCarver(-1, Material.CAVE_AIR);//new CaveRoomCarver(1.5f,1.7f,1.5f,0.09f,0.03f);
+        gen.roomCarver = new StandardRoomCarver(-1, Material.CAVE_AIR);
         gen.calculateRoomPlacement();
         PathState ps = gen.getOrCalculatePathState(tw);
         ps.writer = new CavePathWriter(0f, 0f, 0f, 0, 2, 0);

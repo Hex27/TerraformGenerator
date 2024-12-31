@@ -15,6 +15,7 @@ import org.terraform.structure.room.PathPopulatorAbstract;
 import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.utils.BlockUtils;
+import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 
@@ -26,9 +27,10 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
 
     private final RoomLayoutGenerator gen;
     private final HashSet<SimpleLocation> occupied;
-
+    private final Random rand;
     public AncientCityPathPopulator(Random rand, RoomLayoutGenerator gen, HashSet<SimpleLocation> occupied) {
         // private int state = 0;
+        this.rand = rand;
         this.gen = gen;
         this.occupied = occupied;
     }
@@ -37,17 +39,19 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
     public void populate(@NotNull PathPopulatorData ppd) {
 
         Wall core = new Wall(ppd.base, ppd.dir);
-
         // Do not populate in rooms.
         if (gen.isInRoom(new int[] {ppd.base.getX(), ppd.base.getZ()})) {
             return;
         }
 
-        if (ppd.isTurn) { // Turn area
+        if (ppd.isTurn || ppd.dir == BlockFace.UP) { // Turn area or crossroad
             for (int nx = -1; nx <= 1; nx++) {
                 for (int nz = -1; nz <= 1; nz++) {
                     core.getRelative(nx, 0, nz).setType(Material.GRAY_WOOL);
                 }
+            }
+            for(BlockFace face:BlockUtils.xzDiagonalPlaneBlockFaces){
+                core.getRelative(face,2).Pillar(GenUtils.randInt(rand, 4, 7), AncientCityUtils.deepslateBricks);
             }
             AncientCityUtils.placeSupportPillar(core.getDown());
 
@@ -60,40 +64,36 @@ public class AncientCityPathPopulator extends PathPopulatorAbstract {
         }
         else if (!ppd.isEnd) { // Straight path
             // main path
-            core.setType(Material.GRAY_WOOL);
-            core.getLeft().setType(Material.GRAY_WOOL);
-            core.getRight().setType(Material.GRAY_WOOL);
-            core.getUp().Pillar(3, Material.AIR);
 
-            new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS).setHalf(Half.TOP)
-                                                             .setFacing(BlockUtils.getLeft(ppd.dir))
-                                                             .lapply(core.getRight(2))
-                                                             .setFacing(BlockUtils.getRight(ppd.dir))
-                                                             .lapply(core.getLeft(2));
-
-            int state;
-            if (ppd.dir == BlockFace.NORTH) {
-                state = (-1 * core.getZ()) % 9;
-            }
-            else if (ppd.dir == BlockFace.SOUTH) {
-                state = core.getZ() % 9;
-            }
-            else if (ppd.dir == BlockFace.EAST) {
-                state = core.getX() % 9;
-            }
-            else // if(ppd.dir == BlockFace.WEST)
+            for(Wall floor : new Wall[]{ core.getRear(), core, core.getFront() })
             {
-                state = (-1 * core.getX()) % 9;
-            }
+                floor.setType(Material.GRAY_WOOL);
+                floor.getLeft().setType(Material.GRAY_WOOL);
+                floor.getRight().setType(Material.GRAY_WOOL);
+                floor.getUp().Pillar(3, Material.AIR);
 
-            if (state < 0) {
-                state += 9;
-            }
+                new StairBuilder(Material.DEEPSLATE_BRICK_STAIRS)
+                         .setHalf(Half.TOP)
+                         .setFacing(BlockUtils.getLeft(ppd.dir))
+                         .lapply(floor.getRight(2))
+                         .setFacing(BlockUtils.getRight(ppd.dir))
+                         .lapply(floor.getLeft(2));
+                int state = switch (ppd.dir) {
+                    case NORTH -> (-1 * floor.getZ()) % 9;
+                    case SOUTH -> floor.getZ() % 9;
+                    case EAST -> floor.getX() % 9;
+                    default -> (-1 * floor.getX()) % 9; //west
+                };
 
-            if (!ppd.isOverlapped) {
-                placeWallArc(core, state);
-            }
+                if (state < 0) {
+                    state += 9;
+                }
+
+                if (!ppd.isOverlapped) {
+                    placeWallArc(floor, state);
+                }
             // state++;
+            }
         }
         else { // End
             AncientCityPathMiniRoomPlacer.placeAltar(core);

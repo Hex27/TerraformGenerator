@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.generator.BlockPopulator;
@@ -28,6 +29,7 @@ import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.PathPopulatorData;
+import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.room.path.PathState;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 
@@ -82,17 +84,21 @@ public class TerraformStructurePopulator extends BlockPopulator {
         PopulatorDataAbstract data = new PopulatorDataSpigotAPI(lr, tw, chunkX, chunkZ);
 
         // Carve each path
-        HashSet<PathState.PathNode> seenNodes = new HashSet<>();
-        state.roomPopulatorStates.forEach(roomLayoutGenerator -> {
+        ArrayList<HashSet<PathState.PathNode>> seenNodes = new ArrayList<>();
+        for(int i = 0; i < state.roomPopulatorStates.size(); i++)
+        {
+            RoomLayoutGenerator roomLayoutGenerator = state.roomPopulatorStates.get(i);
+            HashSet<PathState.PathNode> nodes = new HashSet<>();
             final PathState pathState = roomLayoutGenerator.getOrCalculatePathState(tw);
             pathState.nodes.stream()
-                           // Filter to only those inside this chunk
-                           .filter(node -> node.center.getX() >> 4 == chunkX && node.center.getZ() >> 4 == chunkZ)
-                           .forEach(node -> {
-                               pathState.writer.apply(data, tw, node);
-                               seenNodes.add(node);
-                           });
-        });
+               // Filter to only those inside this chunk
+               .filter(node -> node.center.getX() >> 4 == chunkX && node.center.getZ() >> 4 == chunkZ)
+               .forEach(node -> {
+                   pathState.writer.apply(data, tw, node);
+                   nodes.add(node);
+               });
+            seenNodes.add(nodes);
+        }
 
         // Carve each room
         ArrayList<CubeRoom> seenRooms = new ArrayList<>();
@@ -104,15 +110,16 @@ public class TerraformStructurePopulator extends BlockPopulator {
                     )
             .forEach(room -> {
                 seenRooms.add(room);
-                roomLayoutGenerator.roomCarver.carveRoom(
-                        data,
-                        room,
-                        roomLayoutGenerator.wallMaterials
-                );
+                if(roomLayoutGenerator.roomCarver != null)
+                    roomLayoutGenerator.roomCarver.carveRoom(
+                            data,
+                            room,
+                            roomLayoutGenerator.wallMaterials
+                    );
             }));
 
         // Populate the paths
-        seenNodes.forEach((node) -> {
+        seenNodes.forEach((nodes)->nodes.forEach((node) -> {
             // If the path has a direction of up, it is a crossway.
             if (node.populator != null) {
                 node.populator.populate(new PathPopulatorData(new Wall(
@@ -120,10 +127,12 @@ public class TerraformStructurePopulator extends BlockPopulator {
                         node.connected.size() == 1 ? node.connected.stream().findAny().get() : BlockFace.UP
                 ), node.pathRadius));
             }
-        });
+        }));
 
         // Populate the rooms
-        seenRooms.forEach(room -> room.getPop().populate(data, room));
+        seenRooms.stream()
+                .filter(room -> room.getPop() != null)
+                .forEach(room -> room.getPop().populate(data, room));
     }
 
     // OLDER BLOCK POPULATOR API

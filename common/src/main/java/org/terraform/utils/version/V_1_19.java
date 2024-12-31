@@ -8,6 +8,8 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class V_1_19 {
 
     // public static final EntityType FROG = getEntityType("FROG", "FISH");
@@ -50,9 +52,8 @@ public class V_1_19 {
 
     // Pre-1.19 versions WILL NOT have any sculk related spawns.
     public static final @Nullable Material SCULK_VEIN = Material.getMaterial("SCULK_VEIN");
-    public static final @Nullable Material SCULK = !Version.isAtLeast(19)
-                                                   ? Material.getMaterial("STONE")
-                                                   : Material.getMaterial("SCULK");
+    public static final @Nullable Material SCULK = !Version.isAtLeast(19) ? Material.getMaterial(
+            "STONE") : Material.getMaterial("SCULK");
     public static final @Nullable Material SCULK_CATALYST = Material.getMaterial("SCULK_CATALYST");
     public static final @Nullable Material SCULK_SHRIEKER = Material.getMaterial("SCULK_SHRIEKER");
     public static final @Nullable Material SCULK_SENSOR = Material.getMaterial("SCULK_SENSOR");
