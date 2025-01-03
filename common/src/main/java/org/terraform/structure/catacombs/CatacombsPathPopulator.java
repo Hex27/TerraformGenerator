@@ -55,6 +55,9 @@ public class CatacombsPathPopulator extends PathPopulatorAbstract {
             }
         }
 
+        //Crossway
+        if(ppd.dir == BlockFace.UP) return;
+
         // Spawn supports
         boolean spawnSupports = true;
         for (BlockFace dir : BlockUtils.getAdjacentFaces(core.getDirection())) {
