@@ -104,10 +104,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
         ArrayList<CubeRoom> seenRooms = new ArrayList<>();
         state.roomPopulatorStates.forEach(roomLayoutGenerator -> roomLayoutGenerator.getRooms()
             .stream()
-            .filter(room -> chunkX == room.getX() >> 4 //Ensure that the center of the lr is the same chunk
-                            && chunkZ == room.getZ() >> 4
-                            && room.isInRegion(lr) // No rooms that have bounds beyond LR
-                    )
+            .filter(room -> room.canLRCarve(chunkX,chunkZ,lr))
             .forEach(room -> {
                 seenRooms.add(room);
                 if(roomLayoutGenerator.roomCarver != null)

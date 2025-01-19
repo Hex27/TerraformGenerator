@@ -134,9 +134,15 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
         return TConfig.areStructuresEnabled() && TConfig.c.STRUCTURES_ANCIENTCITY_ENABLED;
     }
 
-    // Underground structures don't need a decorative buffer
+    // Underground structures don't need a decorative buffer on the surface
     @Override
     public int getChunkBufferDistance() {
         return 0;
+    }
+
+    //But no cave decorations.
+    @Override
+    public int getCaveClusterBufferDistance() {
+        return 3;
     }
 }

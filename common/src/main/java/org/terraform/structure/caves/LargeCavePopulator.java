@@ -186,4 +186,8 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
     public int getChunkBufferDistance() {
         return 0;
     }
+    @Override
+    public int getCaveClusterBufferDistance() {
+        return 3;
+    }
 }

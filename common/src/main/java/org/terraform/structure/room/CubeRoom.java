@@ -481,6 +481,12 @@ public class CubeRoom {
         this.z = z;
     }
 
+    public boolean canLRCarve(int chunkX, int chunkZ, LimitedRegion lr){
+        return chunkX == x >> 4 //Ensure that the center of the lr is the same chunk
+                       && chunkZ == z >> 4
+                       && isInRegion(lr); // No rooms that have bounds beyond LR
+    }
+
     public void debugRedGround(@NotNull PopulatorDataAbstract data) {
         int[] lowerCorner = getLowerCorner();
         int[] upperCorner = getUpperCorner();

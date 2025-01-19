@@ -4,6 +4,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.carver.RoomCarver;
@@ -29,7 +30,9 @@ public class LargeCaveRoomCarver extends RoomCarver {
             }
             else {
                 // Ensure no fluid flows out
-                if (loc.getY() <= waterLevel) {
+                if (loc.getY() <= waterLevel
+                    || BlockUtils.isWet(new SimpleBlock(data,loc))
+                    || BlockUtils.isWet(new SimpleBlock(data,loc.getUp()))) {
                     data.setType(loc.getX(), loc.getY(), loc.getZ(), BlockUtils.stoneOrSlate(loc.getY()));
                 }
 

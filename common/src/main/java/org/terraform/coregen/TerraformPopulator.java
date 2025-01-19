@@ -219,14 +219,15 @@ public class TerraformPopulator extends BlockPopulator {
         for (OrePopulator ore : ORE_POPS) {
             ore.populate(tw, random, data);
         }
-
-        // Amethysts
-        amethystGeodePopulator.populate(tw, random, data);
-
+        
         // Get all biomes in a chunk
         EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
 
-        boolean canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
+        boolean[] canDecorate = StructureBufferDistanceHandler.canDecorateChunk(tw, data.getChunkX(), data.getChunkZ());
+
+        // Amethysts
+        if(canDecorate[1])
+            amethystGeodePopulator.populate(tw, random, data);
 
         // Small Populators run per block.
         for (int rawX = data.getChunkX() * 16; rawX <= data.getChunkX() * 16 + 16; rawX++) {
@@ -244,7 +245,7 @@ public class TerraformPopulator extends BlockPopulator {
         }
 
         // Only decorate disruptive features if the structures allow for them
-        if (canDecorate) {
+        if (canDecorate[0]) {
             for (BiomeBank bank : banks) {
                 bank.getHandler().populateLargeItems(tw, random, data);
             }
@@ -253,7 +254,7 @@ public class TerraformPopulator extends BlockPopulator {
 
         // Cave populators
         // They will recalculate biomes per block.
-        caveDistributor.populate(tw, random, data);
+        caveDistributor.populate(tw, random, data, canDecorate[1]);
 
         // Multi-megachunk structures
         for (MultiMegaChunkStructurePopulator spop : StructureRegistry.smallStructureRegistry) {

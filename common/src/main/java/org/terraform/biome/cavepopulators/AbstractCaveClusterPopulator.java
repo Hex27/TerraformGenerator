@@ -49,6 +49,10 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
         center = new SimpleBlock(ceil.getPopData(), ceil.getX(), (ceil.getY() + floor.getY()) / 2, ceil.getZ());
         int lowest = center.getY();
 
+        // If this is too close with a structure with a cave cluster suppressant, don't
+        // populate.
+
+
         // Perform a breadth-first search from the center.
 
         HashMap<SimpleBlock, Wall[]> seen = new HashMap<>();

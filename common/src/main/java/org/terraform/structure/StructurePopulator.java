@@ -27,4 +27,15 @@ public abstract class StructurePopulator {
     public int getChunkBufferDistance() {
         return 3;
     }
+
+
+    /**
+     * Refers to the buffer distance for cave cluster decorations.
+     * Things like Large Caves and Ancient Cities deal badly with them
+     * due to the large holes they carve. This leads to floating decorations.
+     * This suppresses cave decorations near the structure.
+     */
+    public int getCaveClusterBufferDistance() {
+        return 0;
+    }
 }

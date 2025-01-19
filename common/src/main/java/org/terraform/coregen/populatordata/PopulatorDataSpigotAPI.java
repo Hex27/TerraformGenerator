@@ -76,11 +76,19 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
 
     @Override
     public Biome getBiome(int rawX, int rawZ) {
+        if (!lr.isInRegion(rawX, 50, rawZ)) {
+            TerraformGeneratorPlugin.logger.error("Tried to access biome outside of LR bounds at: "+rawX + "," + rawZ + " from LR centered at chunk " + chunkX + "," + chunkZ);
+            return Biome.PLAINS;
+        }
         return lr.getBiome(rawX, 50, rawZ);
     }
 
     @Override
     public void addEntity(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
+        if (!lr.isInRegion(rawX, rawY, rawZ)) {
+            TerraformGeneratorPlugin.logger.error("Tried to add entity outside of LR bounds at: "+rawX + "," + rawZ + " from LR centered at chunk " + chunkX + "," + chunkZ);
+            return;
+        }
         lr.spawnEntity(new Location(tw.getWorld(), rawX, rawY, rawZ), type);
     }
 
@@ -97,6 +105,10 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
         if (!TConfig.areAnimalsEnabled()) {
+            return;
+        }
+        if (!lr.isInRegion(rawX, 50, rawZ)) {
+            TerraformGeneratorPlugin.logger.error("Tried to set spawner outside of LR bounds at: "+rawX + "," + rawZ + " from LR centered at chunk " + chunkX + "," + chunkZ);
             return;
         }
 
@@ -116,6 +128,10 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
 
     @Override
     public void lootTableChest(int x, int y, int z, @NotNull TerraLootTable table) {
+        if (!lr.isInRegion(x, y, z)) {
+            TerraformGeneratorPlugin.logger.error("Tried to lootTableChest outside of LR bounds at: "+x + "," + z + " from LR centered at chunk " + chunkX + "," + chunkZ);
+            return;
+        }
         BlockState s = lr.getBlockState(x, y, z);
         if (s instanceof Lootable t) {
             t.setLootTable(table.bukkit());

@@ -25,13 +25,13 @@ public class MasterCavePopulatorDistributor {
 
     private static final ArrayList<Class<?>> populatedBefore = new ArrayList<>();
 
-    public void populate(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-        HashMap<SimpleLocation, CaveClusterRegistry> clusters = calculateClusterLocations(
+    public void populate(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, boolean generateClusters) {
+        HashMap<SimpleLocation, CaveClusterRegistry> clusters = generateClusters ? calculateClusterLocations(
                 random,
                 tw,
                 data.getChunkX(),
                 data.getChunkZ()
-        );
+        ) : new HashMap<>();
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
