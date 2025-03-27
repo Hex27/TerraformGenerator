@@ -64,7 +64,7 @@ public enum HeightMap {
             });
 
             double height = perlin.GetNoise(x, z) * 2 * 7;
-            return height < 0 ? 0 : height;
+            return Math.max(0, height);
         }
     };
 
@@ -127,8 +127,7 @@ public enum HeightMap {
             return 0;
         }
         double depth = HeightMap.RIVER.getHeight(tw, x, z);
-        depth = depth < 0 ? 0 : depth;
-        return depth;
+        return Math.max(0, depth);
     }
 
     public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
