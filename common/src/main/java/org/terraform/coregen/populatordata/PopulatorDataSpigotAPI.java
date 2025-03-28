@@ -37,7 +37,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
     }
 
     @Override
-    public Material getType(int x, int y, int z) {
+    public @NotNull Material getType(int x, int y, int z) {
         if (!lr.isInRegion(x, y, z)) {
             // yes i fucking know this is bad
             return y > TerraformGenerator.seaLevel ? Material.AIR : Material.WATER;

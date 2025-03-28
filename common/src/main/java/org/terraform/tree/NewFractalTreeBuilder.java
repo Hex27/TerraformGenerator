@@ -17,6 +17,7 @@ import org.terraform.utils.version.BeeHiveSpawner;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 /**
@@ -55,6 +56,9 @@ public class NewFractalTreeBuilder implements Cloneable {
     private float noisePriority = 0.1f;
     private int leafSpawnDepth = 1;
     private FractalLeaves fractalLeaves;
+
+    private BiConsumer<Random, SimpleBlock> prePlacement = null;
+
     /**
      * This function determines how branches will decrease in length
      * each recursion.
@@ -86,8 +90,13 @@ public class NewFractalTreeBuilder implements Cloneable {
         if (!checkGradient(base.getPopData(), base.getX(), base.getZ())) {
             return false;
         }
+
+        // Do preprocessing
         int oriY = base.getY();
         Random random = tw.getHashedRand(base.getX(), base.getY(), base.getZ());
+        if(prePlacement != null)
+            prePlacement.accept(random, base);
+
         double displacementTheta = GenUtils.randDouble(random, 0, displacementThetaDelta);
         HashSet<SimpleBlock> prospectiveHives = new HashSet<>();
         double currentBranchTheta = GenUtils.randInt(random, 0, randomBranchSegmentCount);
@@ -612,6 +621,12 @@ public class NewFractalTreeBuilder implements Cloneable {
     @NotNull
     NewFractalTreeBuilder setGetBranchWidth(BiFunction<Float, Float, Float> getBranchWidth) {
         this.getBranchWidth = getBranchWidth;
+        return this;
+    }
+
+    @NotNull
+    NewFractalTreeBuilder setPrePlacement(BiConsumer<Random, SimpleBlock> func){
+        this.prePlacement = func;
         return this;
     }
 

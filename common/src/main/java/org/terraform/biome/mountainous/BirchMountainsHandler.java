@@ -18,6 +18,7 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.V_1_21_5;
 
 import java.util.Random;
 
@@ -63,12 +64,16 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
 
             if (GenUtils.chance(random, 1, 10)) {
-                PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
-                if (random.nextBoolean()) {
-                    PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
+                if (data.getType(rawX, surfaceY + 1, rawZ) != Material.AIR) {
+                    return;
                 }
-                else {
-                    BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
+                // Grass & Flowers
+                switch(random.nextInt(5)){
+                    case 0 -> PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
+                    case 1 -> PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
+                    case 2 -> BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
+                    case 3 -> PlantBuilder.BUSH.build(data, rawX, surfaceY + 1, rawZ);
+                    case 4 -> V_1_21_5.wildflowers(random, data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }

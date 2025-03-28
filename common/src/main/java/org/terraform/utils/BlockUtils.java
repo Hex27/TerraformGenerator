@@ -23,6 +23,7 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.version.V_1_19;
 import org.terraform.utils.version.V_1_20;
+import org.terraform.utils.version.V_1_21_5;
 import org.terraform.utils.version.Version;
 
 import java.util.EnumSet;
@@ -35,7 +36,10 @@ public class BlockUtils {
 
     // This is needed as REPLACABLE_BY_TREES is a 1.20 tag.
     // Also this has mushrooms and saplings, snow and coral fans
-    public static final EnumSet<Material> replacableByTrees = EnumSet.of(Material.ACACIA_SAPLING,
+    public static final EnumSet<Material> replacableByTrees = EnumSet.of(
+            Material.ACACIA_SAPLING,
+            V_1_21_5.BUSH,
+            V_1_21_5.FIREFLY_BUSH,
             Material.DARK_OAK_SAPLING,
             Material.BIRCH_SAPLING,
             Material.SPRUCE_SAPLING,
@@ -393,6 +397,12 @@ public class BlockUtils {
         badlandsStoneLike.addAll(stoneLike);
         caveCarveReplace.addAll(badlandsStoneLike);
         caveCarveReplace.addAll(caveDecoratorMaterials);
+        for(PlantBuilder pb:FLOWER)
+            replacableByTrees.add(pb.material);
+        if(Version.isAtLeast(21.5)){
+            replacableByTrees.add(V_1_21_5.LEAF_LITTER);
+            replacableByTrees.add(V_1_21_5.WILDFLOWERS);
+        }
 
         // init glass panes
         for (Material mat : Material.values()) {
@@ -915,7 +925,7 @@ public class BlockUtils {
     public static void lambdaCircularPatch(int seed,
                                             float radius,
                                             @NotNull SimpleBlock base,
-                                           Consumer<SimpleBlock> lambda)
+                                           Consumer<@NotNull SimpleBlock> lambda)
     {
         if (radius <= 0) {
             return;

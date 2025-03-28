@@ -81,7 +81,7 @@ public class PopulatorData extends PopulatorDataAbstract
         this.radius = radius;
     }
 
-    public Material getType(int x, int y, int z) {
+    public @NotNull Material getType(int x, int y, int z) {
         try {
             // return rlwa.getType(x, y, z);
             return CraftMagicNumbers.getMaterial(rlwa.a_(new BlockPosition(x, y, z)).b());

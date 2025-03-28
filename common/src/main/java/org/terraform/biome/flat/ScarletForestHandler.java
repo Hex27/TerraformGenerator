@@ -106,10 +106,8 @@ public class ScarletForestHandler extends BiomeHandler {
                     );
                 }
 
-                TaigaHandler.replacePodzol(tw.getHashedRand(sLoc.getX(), sLoc.getY(), sLoc.getZ()).nextInt(9999),
-                        7f,
-                        new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ())
-                );
+                BlockUtils.lambdaCircularPatch(random.nextInt(132798),7f, new SimpleBlock(data, sLoc),
+                 (b)->{if(BlockUtils.isDirtLike(b.getType()))b.setType(Material.PODZOL);});
             }
         }
 

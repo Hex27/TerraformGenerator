@@ -168,7 +168,7 @@ public class BiomeSection {
         return biome;
     }
 
-    private @Nullable BiomeBank parseBiomeBank() {
+    private @NotNull BiomeBank parseBiomeBank() {
         temperature = 3f * 2.5f * tw.getTemperatureOctave().GetNoise(this.x, this.z);
         moisture = 3f * 2.5f * tw.getMoistureOctave().GetNoise(this.x, this.z);
 
@@ -176,7 +176,7 @@ public class BiomeSection {
                 this,
                 temperature,
                 moisture
-        );// BiomeGrid.calculateBiome(BiomeType.FLAT, temperature, moisture);
+        );
     }
 
     /**

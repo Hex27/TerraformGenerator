@@ -48,7 +48,7 @@ public class PopulatorDataRecursiveICA extends PopulatorDataPostGen {
     }
 
     @Override
-    public Material getType(int x, int y, int z) {
+    public @NotNull Material getType(int x, int y, int z) {
         return getData(x, z).getType(x, y, z);
     }
 

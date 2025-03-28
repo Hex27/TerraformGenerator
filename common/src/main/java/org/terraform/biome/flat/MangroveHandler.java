@@ -126,6 +126,9 @@ public class MangroveHandler extends BiomeHandler {
                 }
             }
         }
+        else if(GenUtils.chance(random, 1, 30)){
+            PlantBuilder.FIREFLY_BUSH.build(data, rawX, surfaceY + 1, rawZ);
+        }
 
         if (BlockUtils.isWet(new SimpleBlock(data, rawX, surfaceY + 1, rawZ))
             && GenUtils.chance(random, 10, 100)

@@ -22,49 +22,6 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import java.util.Random;
 
 public class TaigaHandler extends BiomeHandler {
-    /**
-     * Replaces the highest dirt-like blocks with a noise-fuzzed
-     * circle of Podzol. Fuzzes the edges.
-     */
-    public static void replacePodzol(int seed, float radius, @NotNull SimpleBlock base) {
-        if (radius <= 0) {
-            return;
-        }
-        if (radius <= 0.5) {
-            // block.setReplaceType(ReplaceType.ALL);
-            base.setType(GenUtils.randChoice(new Random(seed), Material.PODZOL));
-            return;
-        }
-
-        FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(NoiseType.Simplex);
-        noise.SetFrequency(0.13f);
-        Random rand = new Random(seed);
-        for (float x = -radius; x <= radius; x++) {
-            for (float z = -radius; z <= radius; z++) {
-                SimpleBlock rel = base.getRelative(Math.round(x), 0, Math.round(z));
-                rel = rel.getGround();
-                if (!BlockUtils.isDirtLike(rel.getType())) {
-                    continue;
-                }
-                // double radiusSquared = Math.pow(trueRadius+noise.GetNoise(rel.getX(), rel.getY(), rel.getZ())*2,2);
-                double equationResult = Math.pow(x, 2) / Math.pow(radius, 2) + Math.pow(z, 2) / Math.pow(radius, 2);
-                double noiseVal = Math.abs(noise.GetNoise(rel.getX(), rel.getZ()));
-                if (equationResult <= 1.0 + noiseVal) {
-                    // if(rel.getLocation().distanceSquared(block.getLocation()) <= radiusSquared){
-                    if (equationResult * 4 > 0.7 + noiseVal) {
-                        if (rand.nextBoolean()) {
-                            rel.setType(Material.PODZOL);
-                        }
-                    }
-                    else {
-                        rel.setType(Material.PODZOL);
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public boolean isOcean() {
         return false;
@@ -159,28 +116,14 @@ public class TaigaHandler extends BiomeHandler {
                 sLoc.setY(treeY);
                 // Rarely spawn huge taiga trees
                 if (TConfig.c.TREES_TAIGA_BIG_ENABLED && GenUtils.chance(random, 1, 20)) {
-                    if (FractalTypes.Tree.TAIGA_BIG.build(tw,
+                    FractalTypes.Tree.TAIGA_BIG.build(tw,
                             new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ())
-                    ))
-                    {
-                        replacePodzol(
-                                tw.getHashedRand(sLoc.getX(), sLoc.getY(), sLoc.getZ()).nextInt(9999),
-                                5f,
-                                new SimpleBlock(data, sLoc.getX(), sLoc.getY() - 1, sLoc.getZ())
-                        );
-                    }
+                    );
                 }
                 else { // Normal trees
-                    if (FractalTypes.Tree.TAIGA_SMALL.build(tw,
+                    FractalTypes.Tree.TAIGA_SMALL.build(tw,
                             new SimpleBlock(data, sLoc.getX(), sLoc.getY(), sLoc.getZ())
-                    ))
-                    {
-                        replacePodzol(
-                                tw.getHashedRand(sLoc.getX(), sLoc.getY(), sLoc.getZ()).nextInt(9999),
-                                3.5f,
-                                new SimpleBlock(data, sLoc.getX(), sLoc.getY() - 1, sLoc.getZ())
-                        );
-                    }
+                    );
                 }
             }
         }
