@@ -1,0 +1,123 @@
+package org.terraform.v1_21_R4;
+
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import org.terraform.coregen.TerraLootTable;
+
+import java.util.HashMap;
+
+public class LootTableTranslator {
+
+    // I am indeed formally trained to properly structure my code
+    // I have however elected to completely ignore said training here
+    // 28/3/2025 this fucking comment will follow me forever
+    public static final HashMap<TerraLootTable, ResourceKey<LootTable>> translationMap = new HashMap<>() {{
+        put(TerraLootTable.SPAWN_BONUS_CHEST, LootTables.a);
+        put(TerraLootTable.END_CITY_TREASURE, LootTables.b);
+        put(TerraLootTable.SIMPLE_DUNGEON, LootTables.c);
+        put(TerraLootTable.VILLAGE_WEAPONSMITH, LootTables.d);
+        put(TerraLootTable.VILLAGE_TOOLSMITH, LootTables.e);
+        put(TerraLootTable.VILLAGE_ARMORER, LootTables.f);
+        put(TerraLootTable.VILLAGE_CARTOGRAPHER, LootTables.g);
+        put(TerraLootTable.VILLAGE_MASON, LootTables.h);
+        put(TerraLootTable.VILLAGE_SHEPHERD, LootTables.i);
+        put(TerraLootTable.VILLAGE_BUTCHER, LootTables.j);
+        put(TerraLootTable.VILLAGE_FLETCHER, LootTables.k);
+        put(TerraLootTable.VILLAGE_FISHER, LootTables.l);
+        put(TerraLootTable.VILLAGE_TANNERY, LootTables.m);
+        put(TerraLootTable.VILLAGE_TEMPLE, LootTables.n);
+        put(TerraLootTable.VILLAGE_DESERT_HOUSE, LootTables.o);
+        put(TerraLootTable.VILLAGE_PLAINS_HOUSE, LootTables.p);
+        put(TerraLootTable.VILLAGE_TAIGA_HOUSE, LootTables.q);
+        put(TerraLootTable.VILLAGE_SNOWY_HOUSE, LootTables.r);
+        put(TerraLootTable.VILLAGE_SAVANNA_HOUSE, LootTables.s);
+        put(TerraLootTable.ABANDONED_MINESHAFT, LootTables.t);
+        put(TerraLootTable.NETHER_BRIDGE, LootTables.u);
+        put(TerraLootTable.STRONGHOLD_LIBRARY, LootTables.v);
+        put(TerraLootTable.STRONGHOLD_CROSSING, LootTables.w);
+        put(TerraLootTable.STRONGHOLD_CORRIDOR, LootTables.x);
+        put(TerraLootTable.DESERT_PYRAMID, LootTables.y);
+        put(TerraLootTable.JUNGLE_TEMPLE, LootTables.z);
+        put(TerraLootTable.JUNGLE_TEMPLE_DISPENSER, LootTables.A);
+        put(TerraLootTable.IGLOO_CHEST, LootTables.B);
+        put(TerraLootTable.WOODLAND_MANSION, LootTables.C);
+        put(TerraLootTable.UNDERWATER_RUIN_SMALL, LootTables.D);
+        put(TerraLootTable.UNDERWATER_RUIN_BIG, LootTables.E);
+        put(TerraLootTable.BURIED_TREASURE, LootTables.F);
+        put(TerraLootTable.SHIPWRECK_MAP, LootTables.G);
+        put(TerraLootTable.SHIPWRECK_SUPPLY, LootTables.H);
+        put(TerraLootTable.SHIPWRECK_TREASURE, LootTables.I);
+        put(TerraLootTable.PILLAGER_OUTPOST, LootTables.J);
+        put(TerraLootTable.BASTION_TREASURE, LootTables.K);
+        put(TerraLootTable.BASTION_OTHER, LootTables.L);
+        put(TerraLootTable.BASTION_BRIDGE, LootTables.M);
+        put(TerraLootTable.BASTION_HOGLIN_STABLE, LootTables.N);
+        put(TerraLootTable.ANCIENT_CITY, LootTables.O);
+        put(TerraLootTable.ANCIENT_CITY_ICE_BOX, LootTables.P);
+        put(TerraLootTable.RUINED_PORTAL, LootTables.Q);
+        put(TerraLootTable.TRIAL_CHAMBERS_REWARD, LootTables.R);
+        put(TerraLootTable.TRIAL_CHAMBERS_REWARD_COMMON, LootTables.S);
+        put(TerraLootTable.TRIAL_CHAMBERS_REWARD_RARE, LootTables.T);
+        put(TerraLootTable.TRIAL_CHAMBERS_REWARD_UNIQUE, LootTables.U);
+        put(TerraLootTable.TRIAL_CHAMBERS_REWARD_OMINOUS, LootTables.V);
+        put(TerraLootTable.TRIAL_CHAMBERS_REWARD_OMINOUS_COMMON, LootTables.W);
+        put(TerraLootTable.TRIAL_CHAMBERS_REWARD_OMINOUS_RARE, LootTables.X);
+        put(TerraLootTable.TRIAL_CHAMBERS_REWARD_OMINOUS_UNIQUE, LootTables.Y);
+        put(TerraLootTable.TRIAL_CHAMBERS_SUPPLY, LootTables.Z);
+        put(TerraLootTable.TRIAL_CHAMBERS_CORRIDOR, LootTables.aa);
+        put(TerraLootTable.TRIAL_CHAMBERS_INTERSECTION, LootTables.ab);
+        put(TerraLootTable.TRIAL_CHAMBERS_INTERSECTION_BARREL, LootTables.ac);
+        put(TerraLootTable.TRIAL_CHAMBERS_ENTRANCE, LootTables.ad);
+        put(TerraLootTable.TRIAL_CHAMBERS_CORRIDOR_DISPENSER, LootTables.ae);
+        put(TerraLootTable.TRIAL_CHAMBERS_CHAMBER_DISPENSER, LootTables.af);
+        put(TerraLootTable.TRIAL_CHAMBERS_WATER_DISPENSER, LootTables.ag);
+        put(TerraLootTable.TRIAL_CHAMBERS_CORRIDOR_POT, LootTables.ah);
+        put(TerraLootTable.EQUIPMENT_TRIAL_CHAMBER, LootTables.ai);
+        put(TerraLootTable.EQUIPMENT_TRIAL_CHAMBER_RANGED, LootTables.aj);
+        put(TerraLootTable.EQUIPMENT_TRIAL_CHAMBER_MELEE, LootTables.ak);
+        put(TerraLootTable.FISHING, LootTables.am);
+        put(TerraLootTable.FISHING_JUNK, LootTables.an);
+        put(TerraLootTable.FISHING_TREASURE, LootTables.ao);
+        put(TerraLootTable.FISHING_FISH, LootTables.ap);
+        put(TerraLootTable.CAT_MORNING_GIFT, LootTables.aq);
+        put(TerraLootTable.ARMORER_GIFT, LootTables.ar);
+        put(TerraLootTable.BUTCHER_GIFT, LootTables.as);
+        put(TerraLootTable.CARTOGRAPHER_GIFT, LootTables.at);
+        put(TerraLootTable.CLERIC_GIFT, LootTables.au);
+        put(TerraLootTable.FARMER_GIFT, LootTables.av);
+        put(TerraLootTable.FISHERMAN_GIFT, LootTables.aw);
+        put(TerraLootTable.FLETCHER_GIFT, LootTables.ax);
+        put(TerraLootTable.LEATHERWORKER_GIFT, LootTables.ay);
+        put(TerraLootTable.LIBRARIAN_GIFT, LootTables.az);
+        put(TerraLootTable.MASON_GIFT, LootTables.aA);
+        put(TerraLootTable.SHEPHERD_GIFT, LootTables.aB);
+        put(TerraLootTable.TOOLSMITH_GIFT, LootTables.aC);
+        put(TerraLootTable.WEAPONSMITH_GIFT, LootTables.aD);
+        put(TerraLootTable.UNEMPLOYED_GIFT, LootTables.aE);
+        put(TerraLootTable.BABY_VILLAGER_GIFT, LootTables.aF);
+        put(TerraLootTable.SNIFFER_DIGGING, LootTables.aG);
+        put(TerraLootTable.PANDA_SNEEZE, LootTables.aH);
+        put(TerraLootTable.CHICKEN_LAY, LootTables.aI);
+        put(TerraLootTable.ARMADILLO_SHED, LootTables.aJ);
+        put(TerraLootTable.PIGLIN_BARTERING, LootTables.aK);
+        put(TerraLootTable.SPAWNER_TRIAL_CHAMBER_KEY, LootTables.aL);
+        put(TerraLootTable.SPAWNER_TRIAL_CHAMBER_CONSUMABLES, LootTables.aM);
+        put(TerraLootTable.SPAWNER_OMINOUS_TRIAL_CHAMBER_KEY, LootTables.aN);
+        put(TerraLootTable.SPAWNER_OMINOUS_TRIAL_CHAMBER_CONSUMABLES, LootTables.aO);
+        put(TerraLootTable.SPAWNER_TRIAL_ITEMS_TO_DROP_WHEN_OMINOUS, LootTables.aP);
+        put(TerraLootTable.BOGGED_SHEAR, LootTables.aQ);
+        put(TerraLootTable.SHEAR_MOOSHROOM, LootTables.aR);
+        put(TerraLootTable.SHEAR_RED_MOOSHROOM, LootTables.aS);
+        put(TerraLootTable.SHEAR_BROWN_MOOSHROOM, LootTables.aT);
+        put(TerraLootTable.SHEAR_SNOW_GOLEM, LootTables.aU);
+        put(TerraLootTable.SHEAR_SHEEP, LootTables.aV);
+        put(TerraLootTable.DESERT_WELL_ARCHAEOLOGY, LootTables.aX);
+        put(TerraLootTable.DESERT_PYRAMID_ARCHAEOLOGY, LootTables.aY);
+        put(TerraLootTable.TRAIL_RUINS_ARCHAEOLOGY_COMMON, LootTables.aZ);
+        put(TerraLootTable.TRAIL_RUINS_ARCHAEOLOGY_RARE, LootTables.ba);
+        put(TerraLootTable.OCEAN_RUIN_WARM_ARCHAEOLOGY, LootTables.bb);
+        put(TerraLootTable.OCEAN_RUIN_COLD_ARCHAEOLOGY, LootTables.bc);
+    }};
+
+}

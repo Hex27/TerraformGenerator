@@ -3,13 +3,18 @@ package org.terraform.tree;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.terraform.biome.flat.TaigaHandler;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.V_1_19;
+import org.terraform.utils.version.V_1_21_5;
+import org.terraform.utils.version.Version;
 
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Function;
 
 public class FractalTypes {
@@ -32,7 +37,10 @@ public class FractalTypes {
                                            .setFractalLeaves(new FractalLeaves().setWeepingLeaves(0.3f, 3)
                                                                                 .setRadius(4f)
                                                                                 .setRadiusY(2f))
-                                           .setSpawnBees(true),
+                                           .setSpawnBees(true)
+                                           .setPrePlacement((random, block) -> {
+                                               leafLitter(random, block, 6f);
+                                           }),
                 // Large Forest Tree
                 new NewFractalTreeBuilder().setOriginalTrunkLength(18)
                                            .setInitialBranchRadius(2f)
@@ -47,7 +55,10 @@ public class FractalTypes {
                                            .setFractalLeaves(new FractalLeaves().setWeepingLeaves(0.3f, 2)
                                                                                 .setRadius(4f)
                                                                                 .setRadiusY(2.5f))
-                                           .setSpawnBees(true),
+                                           .setSpawnBees(true)
+                                           .setPrePlacement((random, block) -> {
+                                               leafLitter(random, block, 6f);
+                                           }),
                 //            // Original Style Tree
                 new NewFractalTreeBuilder().setOriginalTrunkLength(18)
                                            .setInitialBranchRadius(2f)
@@ -66,6 +77,9 @@ public class FractalTypes {
                                                                                 .setRadius(4f)
                                                                                 .setRadiusY(2.5f))
                                            .setSpawnBees(true)
+                                           .setPrePlacement((random, block) -> {
+                                               leafLitter(random, block, 6f);
+                                           })
         ),
         NORMAL_SMALL(new NewFractalTreeBuilder().setTreeRootThreshold(0)
                                                 .setOriginalTrunkLength(4)
@@ -92,7 +106,10 @@ public class FractalTypes {
                                                                                      .setRadiusY(3f)
                                                                                      .setLeafNoiseFrequency(0.5f)
                                                                                      .setSemiSphereLeaves(true)
-                                                                                     .setMaterial(Material.OAK_LEAVES))),
+                                                                                     .setMaterial(Material.OAK_LEAVES))
+                                                .setPrePlacement((random, block) -> {
+                                                    leafLitter(random, block, 3.5f);
+                                                })),
         AZALEA_TOP(new NewFractalTreeBuilder().setTreeRootThreshold(0)
                                               .setOriginalTrunkLength(6)
                                               .setLengthVariance(1)
@@ -153,38 +170,49 @@ public class FractalTypes {
                                                                                   .setRadius(1.5f)
                                                                                   .setRadiusY(2.3f)
                                                                                   .setLeafNoiseFrequency(0.3f)
-                                                                                  .setMaterial(Material.SPRUCE_LEAVES))),
-        TAIGA_SMALL(
-                new NewFractalTreeBuilder().setTreeRootThreshold(0)
-                                           .setBranchMaterial(Material.SPRUCE_LOG)
-                                           .setOriginalTrunkLength(16)
-                                           .setLengthVariance(1)
-                                           .setInitialBranchRadius(0.8f)
-                                           .setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth)
-                                           .setBranchDecrement((currentBranchLength, totalTreeHeight) -> {
-                                               if (currentBranchLength < 10) {
-                                                   return 0f;
-                                               }
-                                               return Math.min(4, 0.5f * Math.max(0, 12 - totalTreeHeight));
-                                           })
-                                           .setCrownBranches(0)
-                                           .setMaxDepth(3)
-                                           .setMaxInitialNormalDelta(0.1)
-                                           .setMinInitialNormalDelta(-0.1)
-                                           .setMinBranchHorizontalComponent(1.5)
-                                           .setMaxBranchHorizontalComponent(2.0)
-                                           .setBranchSpawnChance(1.0)
-                                           .setRandomBranchSpawnCooldown(4)
-                                           .setRandomBranchClusterCount(4)
-                                           .setRandomBranchSegmentCount(4)
-                                           .setMinBranchSpawnLength(0.2f)
-                                           .setLeafSpawnDepth(0)
-                                           .setRootMaterial(Material.SPRUCE_WOOD)
-                                           .setFractalLeaves(new FractalLeaves().setWeepingLeaves(0.4f, 1)
-                                                                                .setConeLeaves(true)
-                                                                                .setRadius(1.3f)
-                                                                                .setRadiusY(2f)
-                                                                                .setMaterial(Material.SPRUCE_LEAVES)),
+                                                                                  .setMaterial(Material.SPRUCE_LEAVES))
+                                             .setPrePlacement((random, block) -> BlockUtils.lambdaCircularPatch(random.nextInt(
+                                                     132798), 5f, block, (b) -> {
+                                                 if (BlockUtils.isDirtLike(b.getType())) {
+                                                     b.setType(Material.PODZOL);
+                                                 }
+                                             }))),
+        TAIGA_SMALL(new NewFractalTreeBuilder().setTreeRootThreshold(0)
+                                               .setBranchMaterial(Material.SPRUCE_LOG)
+                                               .setOriginalTrunkLength(16)
+                                               .setLengthVariance(1)
+                                               .setInitialBranchRadius(0.8f)
+                                               .setGetBranchWidth((initialBranchWidth, branchRatio) -> initialBranchWidth)
+                                               .setBranchDecrement((currentBranchLength, totalTreeHeight) -> {
+                                                   if (currentBranchLength < 10) {
+                                                       return 0f;
+                                                   }
+                                                   return Math.min(4, 0.5f * Math.max(0, 12 - totalTreeHeight));
+                                               })
+                                               .setCrownBranches(0)
+                                               .setMaxDepth(3)
+                                               .setMaxInitialNormalDelta(0.1)
+                                               .setMinInitialNormalDelta(-0.1)
+                                               .setMinBranchHorizontalComponent(1.5)
+                                               .setMaxBranchHorizontalComponent(2.0)
+                                               .setBranchSpawnChance(1.0)
+                                               .setRandomBranchSpawnCooldown(4)
+                                               .setRandomBranchClusterCount(4)
+                                               .setRandomBranchSegmentCount(4)
+                                               .setMinBranchSpawnLength(0.2f)
+                                               .setLeafSpawnDepth(0)
+                                               .setRootMaterial(Material.SPRUCE_WOOD)
+                                               .setFractalLeaves(new FractalLeaves().setWeepingLeaves(0.4f, 1)
+                                                                                    .setConeLeaves(true)
+                                                                                    .setRadius(1.3f)
+                                                                                    .setRadiusY(2f)
+                                                                                    .setMaterial(Material.SPRUCE_LEAVES))
+                                               .setPrePlacement((random, block) -> BlockUtils.lambdaCircularPatch(random.nextInt(
+                                                       132798), 3.5f, block, (b) -> {
+                                                   if (BlockUtils.isDirtLike(b.getType())) {
+                                                       b.setType(Material.PODZOL);
+                                                   }
+                                               })),
                 new NewFractalTreeBuilder().setTreeRootThreshold(0)
                                            .setBranchMaterial(Material.SPRUCE_LOG)
                                            .setOriginalTrunkLength(18)
@@ -215,6 +243,12 @@ public class FractalTypes {
                                                                                 .setRadius(1.3f)
                                                                                 .setRadiusY(3f)
                                                                                 .setMaterial(Material.SPRUCE_LEAVES))
+                                           .setPrePlacement((random, block) -> BlockUtils.lambdaCircularPatch(random.nextInt(
+                                                   132798), 3.5f, block, (b) -> {
+                                               if (BlockUtils.isDirtLike(b.getType())) {
+                                                   b.setType(Material.PODZOL);
+                                               }
+                                           }))
         ),
         SCARLET_BIG,
         SCARLET_SMALL,
@@ -355,6 +389,18 @@ public class FractalTypes {
             else {
                 return new FractalTreeBuilder(this).build(tw, base);
             }
+        }
+
+        private static void leafLitter(Random random, SimpleBlock base, float radius) {
+            if (!Version.isAtLeast(21.5)) {
+                return;
+            }
+            BlockUtils.lambdaCircularPatch(random.nextInt(8903245), radius, base, (b) -> {
+                if (base.getUp().getType() == Material.AIR
+                    && random.nextInt(6) == 0) {
+                    V_1_21_5.leafLitter(random, b.getPopData(), b.getX(), b.getY() + 1, b.getZ());
+                }
+            });
         }
     }
 

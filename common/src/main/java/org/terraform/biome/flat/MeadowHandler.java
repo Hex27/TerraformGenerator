@@ -14,6 +14,7 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.V_1_21_5;
 
 import java.util.Random;
 
@@ -54,11 +55,10 @@ public class MeadowHandler extends BiomeHandler {
                 rawZ)))
         {
             if (GenUtils.chance(random, 1, 10)) { // Grass
-                if (GenUtils.chance(random, 6, 10)) {
-                    PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
-                    if (random.nextBoolean()) {
-                        PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
-                    }
+                switch(random.nextInt(4)){
+                    case 0, 1-> PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
+                    case 2 -> PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
+                    case 3 -> V_1_21_5.wildflowers(random, data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }

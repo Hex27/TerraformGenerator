@@ -65,7 +65,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         this.tw = tw;
     }
 
-    public Material getType(int x, int y, int z) {
+    public @NotNull Material getType(int x, int y, int z) {
         // return parent.getType(x, y, z);
         IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); // getState
         return CraftBlockData.fromData(ibd).getMaterial();

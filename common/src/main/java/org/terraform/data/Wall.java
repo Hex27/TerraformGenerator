@@ -14,6 +14,10 @@ public class Wall extends SimpleBlock {
         super(block.getPopData(), block.getX(), block.getY(), block.getZ());
         this.direction = dir;
     }
+    public Wall(@NotNull PopulatorDataAbstract data, @NotNull SimpleLocation loc, BlockFace dir) {
+        super(data, loc.getX(), loc.getY(), loc.getZ());
+        this.direction = dir;
+    }
 
     public Wall(@NotNull SimpleBlock block) {
         super(block.getPopData(), block.getX(), block.getY(), block.getZ());

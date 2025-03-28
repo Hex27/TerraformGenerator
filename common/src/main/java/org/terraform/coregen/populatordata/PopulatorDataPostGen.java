@@ -46,7 +46,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     }
 
     @Override
-    public @Nullable Material getType(int x, int y, int z) {
+    public @NotNull Material getType(int x, int y, int z) {
         return w.getBlockAt(x, y, z).getType();
     }
 

@@ -14,27 +14,13 @@ import java.util.Objects;
  *
  * @author wysohn
  */
-public class SimpleChunkLocation implements Cloneable {
-    private final String world;
-    private final int x;
-    private final int z;
-
-    public SimpleChunkLocation(String world, int x, int z) {
-        this.world = world;
-        this.x = x;
-        this.z = z;
-    }
-
+public final record SimpleChunkLocation(String world, int x, int z) implements Cloneable {
     public SimpleChunkLocation(String world, int x, int y, int z) {
-        this.world = world;
-        this.x = x >> 4;
-        this.z = z >> 4;
+        this(world, x>>4, z>>4);
     }
 
     public SimpleChunkLocation(@NotNull Chunk chunk) {
-        this.world = chunk.getWorld().getName();
-        this.x = chunk.getX();
-        this.z = chunk.getZ();
+        this(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
     public static @NotNull SimpleChunkLocation of(@NotNull Block block) {

@@ -14,6 +14,7 @@ import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
@@ -22,6 +23,8 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+import org.terraform.utils.version.V_1_21_5;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -129,26 +132,30 @@ public class BadlandsHandler extends BiomeHandler {
         if (base == Material.SAND || base == Material.RED_SAND) {
             if (GenUtils.chance(random, 1, 200)) {
 
-                boolean canSpawn = true;
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (data.getType(rawX + face.getModX(), surfaceY + 1, rawZ + face.getModZ()) != Material.AIR) {
-                        canSpawn = false;
+                        return;
                     }
                 }
                 // Prevent cactus from spawning on plateaus:
                 if (HeightMap.getBlockHeight(world, rawX, rawZ) + 5 < surfaceY) {
-                    canSpawn = false;
+                    return;
                 }
-                if (canSpawn && GenUtils.chance(1, 50)) {
+                if (GenUtils.chance(1, 50)) {
                     spawnDeadTree(data, rawX, surfaceY, rawZ);
                 }
-                else if (canSpawn) {
-                    PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 2, 5);
+                else if(GenUtils.chance(1, 30))
+                    PlantBuilder.FIREFLY_BUSH.build(data, rawX, surfaceY+1, rawZ);
+                else {
+                    int cactusHeight = PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 2, 5);
+                    if(Version.isAtLeast(21.5)
+                        && GenUtils.chance(random, 1, 10))
+                        data.setType(rawX, surfaceY+1+cactusHeight, rawZ, V_1_21_5.CACTUS_FLOWER);
                 }
             }
             else if (GenUtils.chance(random, 1, 80) && surfaceY > TerraformGenerator.seaLevel) {
-                PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
-            }
+                PlantBuilder.build(new SimpleBlock(data,rawX, surfaceY + 1,rawZ),
+                        PlantBuilder.DEAD_BUSH, PlantBuilder.SHORT_DRY_GRASS, PlantBuilder.TALL_DRY_GRASS);            }
         }
     }
 

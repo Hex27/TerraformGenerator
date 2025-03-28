@@ -23,9 +23,15 @@ public class V_1_21_4 {
                                              Material.valueOf("PALE_OAK_LEAVES") : Material.DARK_OAK_LEAVES;
     public static Material CLOSED_EYEBLOSSOM = Version.isAtLeast(21.4) ?
                                                Material.valueOf("CLOSED_EYEBLOSSOM") : Material.POPPY;
+
+    //this is so fucking stupid
     public static BlockData CREAKING_HEART = Version.isAtLeast(21.4) ?
-                                             Bukkit.createBlockData("minecraft:creaking_heart[active=true,natural=true]")
-                                                                     : Bukkit.createBlockData(Material.DARK_OAK_WOOD);
+                                             (
+                                                 Version.isAtLeast(21.5) ?
+                                                 Bukkit.createBlockData("minecraft:creaking_heart[creaking_heart_state=awake,natural=true]")
+                                                 : Bukkit.createBlockData("minecraft:creaking_heart[active=true,natural=true]")
+                                             )
+                                             : Bukkit.createBlockData(Material.DARK_OAK_WOOD);
     public static Material PALE_MOSS_CARPET = Version.isAtLeast(21.4) ?
                                             Material.valueOf("PALE_MOSS_CARPET") : Material.MOSS_CARPET;
 }

@@ -306,7 +306,7 @@ public class SimpleBlock {
         return z;
     }
 
-    public @Nullable Material getType() {
+    public @NotNull Material getType() {
         return popData.getType(x, y, z);
     }
 

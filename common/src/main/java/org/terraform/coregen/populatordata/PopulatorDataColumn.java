@@ -28,7 +28,7 @@ public class PopulatorDataColumn extends PopulatorDataAbstract {
     }
 
     @Override
-    public Material getType(int x, int y, int z) {
+    public @NotNull Material getType(int x, int y, int z) {
         if (x != constrainX || z != constrainZ) {
             throw new IllegalArgumentException("Column Constraint Read Violation");
         }
@@ -52,7 +52,7 @@ public class PopulatorDataColumn extends PopulatorDataAbstract {
     }
 
     @Override
-    public void setBlockData(int x, int y, int z, BlockData data) {
+    public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
         if (x != constrainX || z != constrainZ) {
             throw new IllegalArgumentException("Column Constraint Write Violation");
         }

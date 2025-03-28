@@ -1,7 +1,6 @@
-package org.terraform.v1_20_R2;
+package org.terraform.v1_21_R4;
 
 import net.minecraft.core.BlockPosition;
-import net.minecraft.core.EnumDirection;
 import net.minecraft.core.Holder;
 import net.minecraft.core.IRegistry;
 import net.minecraft.core.registries.Registries;
@@ -9,6 +8,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.vehicle.EntityMinecartChest;
 import net.minecraft.world.level.ChunkCoordIntPair;
 import net.minecraft.world.level.biome.BiomeBase;
@@ -24,8 +25,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_20_R2.block.CraftBiome;
-import org.bukkit.craftbukkit.v1_20_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_21_R4.block.CraftBiome;
+import org.bukkit.craftbukkit.v1_21_R4.block.data.CraftBlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -87,7 +89,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         }
         else {
             ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);// ResourceKey.a(IRegistry.aP, new MinecraftKey(cbt.getKey()));
-            Optional<Holder.c<BiomeBase>> optHolder = biomeRegistry.b(rkey); // getHolder
+            Optional<Holder.c<BiomeBase>> optHolder = biomeRegistry.a(rkey); // lookup
             if (optHolder.isEmpty()) {
                 TerraformGeneratorPlugin.logger.error("Custom biome was not found in the vanilla registry!");
                 targetBiome = CraftBiome.bukkitToMinecraftHolder(fallback);
@@ -109,7 +111,12 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     @Override
     public void setType(int x, int y, int z, @NotNull Material type) {
         // parent.setType(x, y, z, type);
-        ica.a(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
+        //ProtoChunk appears to ignore this flag. It's no longer a bool in 1.21.5.
+        //Not sure what "3" does.
+        //IChunkAccess.setBlockState
+        ica.a(new BlockPosition(x, y, z),
+                ((CraftBlockData) Bukkit.createBlockData(type)).getState(),
+                3);
 
         // ica.setType(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
     }
@@ -117,7 +124,8 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     @Override
     public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
         // parent.setBlockData(x, y, z, data);
-        ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), false);
+        //see setType
+        ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), 3);
 
     }
 
@@ -154,11 +162,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         // getBlockEntity
         TileEntity te = ica.c_(pos);
         if (te instanceof TileEntityLootable) {
-            TileEntityLootable.a(ica,
-                    RandomSource.a(tw.getHashedRand(x, y, z).nextLong()),
-                    pos,
-                    LootTableTranslator.translationMap.get(table)
-            );
+            ((TileEntityLootable) te).a(LootTableTranslator.translationMap.get(table));
         }
         else if (te instanceof BrushableBlockEntity)
         // BrushableBlockEntity.setLootTable
@@ -178,47 +182,87 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
             case WITCH -> BuiltinStructures.j; // Swamp Hut
         };
 
-        // az is STRUCTURE
-        IRegistry<Structure> featureRegistry = MinecraftServer.getServer().aU().d(Registries.az);
+        // ba is registryAccess
+        // a is lookup
+        // be is STRUCTURE
+        IRegistry<Structure> featureRegistry = MinecraftServer.getServer().ba().a(Registries.be).orElseThrow();
 
-        Structure structureFeature = featureRegistry.a(structureKey);
-
-        StructurePiece customBoundPiece = new OceanMonumentPieces.h(RandomSource.a(), x0, z0, EnumDirection.a);
-
-        PiecesContainer container = new PiecesContainer(new ArrayList<>() {{
-            add(customBoundPiece);
-        }});
-
-        StructureStart start = new StructureStart(structureFeature,
-                new ChunkCoordIntPair(chunkX, chunkZ),
-                0,
-                container
-        );
+        Structure structureFeature = featureRegistry.a(structureKey).get().a();
 
         try {
+            // Something's broken about EnumDirection's import. Might be a temporary thing.
+            Class<?> enumDirectionClass = Class.forName("net.minecraft.core.EnumDirection");
+            Field enumDirectionA = enumDirectionClass.getField("a");
+            enumDirectionA.setAccessible(true);
+            Class<OceanMonumentPieces.h> oceanMonumentPiecesHClass = OceanMonumentPieces.h.class;
+            StructurePiece customBoundPiece = (StructurePiece) oceanMonumentPiecesHClass.getConstructor(
+                    RandomSource.class,
+                    int.class,
+                    int.class,
+                    enumDirectionClass
+            ).newInstance(RandomSource.a(), x0, z0, enumDirectionA.get(null));
+
+            PiecesContainer container = new PiecesContainer(new ArrayList<>() {{
+                add(customBoundPiece);
+            }});
+
+            StructureStart start = new StructureStart(structureFeature,
+                    new ChunkCoordIntPair(chunkX, chunkZ),
+                    0,
+                    container
+            );
+
             Field i = StructureStart.class.getDeclaredField("h"); // boundingBox
             i.setAccessible(true);
             i.set(start, new StructureBoundingBox(x0, y0, z0, x1, y1, z1));
+
+            // ws.a() is getStructureManager
+            // a is setStartForStructure
+            /*setStartForStructure(
+             * SectionPosition sectionposition,
+             * Structure structure,
+             * StructureStart structurestart,
+             * StructureAccess structureaccess)**/
+            // ws.a().a(SectionPosition.a(x0,y0,z0), structureFeature, start, ica);
+
+            ica.a(structureFeature, start);
+            //    	ws.a().a( // setStartForFeature
+            //        		structureFeature,
+            //        		start);
+
+            // addReferenceForFeature
+            ica.a(structureFeature, new ChunkCoordIntPair(chunkX, chunkZ).a()); // a is toLong
         }
-        catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+        catch (NoSuchMethodException |
+               InstantiationException |
+               InvocationTargetException |
+               ClassNotFoundException |
+               NoSuchFieldException |
+               IllegalArgumentException |
+               IllegalAccessException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
         }
-
-        ica.a(structureFeature, start);
-        ica.a(structureFeature, new ChunkCoordIntPair(chunkX, chunkZ).a()); // a is toLong
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, @NotNull Random random) {
-        EntityMinecartChest entityminecartchest = new EntityMinecartChest(ws.getMinecraftWorld(),
-                (float) x + 0.5F,
-                (float) y + 0.5F,
-                (float) z + 0.5F
-        );
+        //EntityTypes.CHEST_MINECART.create(generatoraccessseed.getLevel(), EntitySpawnReason.CHUNK_GENERATION);
+        EntityMinecartChest entityminecartchest = (EntityMinecartChest) EntityTypes.z.a(
+                ws.getMinecraftWorld(), EntitySpawnReason.b);
 
-        entityminecartchest.a(LootTableTranslator.translationMap.get(table), random.nextLong());
-        ws.addFreshEntity(entityminecartchest, SpawnReason.CHUNK_GEN);
+        //For whatever reason, the mineshaft code does a null check.
+        if(entityminecartchest != null)
+        {
+            //setPosition
+            entityminecartchest.a_(
+                    (float) x + 0.5F,
+                    (float) y + 0.5F,
+                    (float) z + 0.5F
+            );
+            entityminecartchest.a(LootTableTranslator.translationMap.get(table), random.nextLong());
+            ws.addFreshEntity(entityminecartchest, SpawnReason.CHUNK_GEN);
+        }
     }
 
 

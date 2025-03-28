@@ -672,7 +672,7 @@ public enum BiomeBank {
     /**
      * Used to get a biomebank from temperature and moisture values.
      */
-    public static @Nullable BiomeBank selectBiome(@NotNull BiomeSection section, double temperature, double moisture) {
+    public static @NotNull BiomeBank selectBiome(@NotNull BiomeSection section, double temperature, double moisture) {
         Random sectionRand = section.getSectionRandom();
 
         BiomeType targetType = null;

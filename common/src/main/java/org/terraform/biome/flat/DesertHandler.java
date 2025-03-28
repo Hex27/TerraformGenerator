@@ -18,6 +18,8 @@ import org.terraform.small_items.PlantBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
+import org.terraform.utils.version.V_1_21_5;
+import org.terraform.utils.version.Version;
 
 import java.util.Random;
 
@@ -79,19 +81,23 @@ public class DesertHandler extends BiomeHandler {
         }
 
         if (base == Material.SAND) {
-            if (GenUtils.chance(random, 1, 100) || (GenUtils.chance(random, 1, 20) && cactusGathering)) {
-                boolean canSpawn = true;
+
+            //Checks for cactus
+            if (GenUtils.chance(random, 1, 100)
+                || (GenUtils.chance(random, 1, 20) && cactusGathering)) {
                 for (BlockFace face : BlockUtils.directBlockFaces) {
                     if (data.getType(rawX + face.getModX(), surfaceY + 1, rawZ + face.getModZ()) != Material.AIR) {
-                        canSpawn = false;
+                        return;
                     }
                 }
-                if (canSpawn) {
-                    PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 3, 5);
-                }
+                int cactusHeight = PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 3, 5);
+                if(Version.isAtLeast(21.5)
+                   && GenUtils.chance(random, 1, 10))
+                    data.setType(rawX, surfaceY+1+cactusHeight, rawZ, V_1_21_5.CACTUS_FLOWER);
             }
             else if (GenUtils.chance(random, 1, 80)) {
-                PlantBuilder.DEAD_BUSH.build(data, rawX, surfaceY + 1, rawZ);
+                PlantBuilder.build(new SimpleBlock(data,rawX, surfaceY+1,rawZ),
+                        PlantBuilder.DEAD_BUSH, PlantBuilder.SHORT_DRY_GRASS, PlantBuilder.TALL_DRY_GRASS);
             }
         }
     }

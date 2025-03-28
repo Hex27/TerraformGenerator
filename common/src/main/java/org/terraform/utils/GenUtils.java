@@ -614,10 +614,10 @@ public class GenUtils {
         return GenUtils.randDouble(new Random(), lowerBound * base, upperBound * base);
     }
 
-    public static <T> @Nullable T choice(@NotNull Random rand, T @NotNull [] array)
+    public static <T> @NotNull T choice(@NotNull Random rand, T @NotNull [] array)
     {
         if (array.length == 0) {
-            return null;
+            throw new IllegalArgumentException("Provided array was length 0");
         }
         if (array.length == 1) {
             return array[0];

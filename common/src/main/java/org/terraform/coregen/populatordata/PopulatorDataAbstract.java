@@ -16,17 +16,18 @@ import java.util.Random;
 public abstract class PopulatorDataAbstract {
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
+     * why the fuck were you nullable
      */
-    public abstract @Nullable Material getType(int x, int y, int z);
+    public abstract @NotNull Material getType(int x, int y, int z);
 
-    public @Nullable Material getType(@NotNull Vector v) {
+    public @NotNull Material getType(@NotNull Vector v) {
         return getType((int) Math.round(v.getX()), (int) Math.round(v.getY()), (int) Math.round(v.getZ()));
     }
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
-    public abstract @Nullable BlockData getBlockData(int x, int y, int z);
+    public abstract @NotNull BlockData getBlockData(int x, int y, int z);
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
@@ -53,13 +54,13 @@ public abstract class PopulatorDataAbstract {
             setBlockData(x, y, z, data);
         }
     }
-    public void lsetType(int x, int y, int z, Material... type) {
+    public void lsetType(int x, int y, int z, @NotNull Material... type) {
         if (!getType(x, y, z).isSolid()) {
             setType(x, y, z, type);
         }
     }
 
-    public void lsetType(@NotNull Vector v, Material... type) {
+    public void lsetType(@NotNull Vector v, @NotNull Material... type) {
         if (!getType(v).isSolid()) {
             setType(v, type);
         }
@@ -92,7 +93,7 @@ public abstract class PopulatorDataAbstract {
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
      */
-    public abstract void setBlockData(int x, int y, int z, BlockData data);
+    public abstract void setBlockData(int x, int y, int z, @NotNull BlockData data);
 
     /**
      * Refers to raw x,y,z coords, not the chunk 0-15 coords.
