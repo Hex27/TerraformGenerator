@@ -396,7 +396,7 @@ public class FractalTypes {
                 return;
             }
             BlockUtils.lambdaCircularPatch(random.nextInt(8903245), radius, base, (b) -> {
-                if (base.getUp().getType() == Material.AIR
+                if (b.getUp().getType() == Material.AIR
                     && random.nextInt(6) == 0) {
                     V_1_21_5.leafLitter(random, b.getPopData(), b.getX(), b.getY() + 1, b.getZ());
                 }
