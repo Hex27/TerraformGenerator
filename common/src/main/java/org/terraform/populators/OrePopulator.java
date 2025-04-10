@@ -17,6 +17,7 @@ import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.version.Version;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OrePopulator {
 
@@ -140,6 +141,11 @@ public class OrePopulator {
         }
     }
 
+    private static final ConcurrentHashMap<TerraformWorld, FastNoise> privateNoiseCache = new ConcurrentHashMap<>();
+    /**
+     * The profiler thinks that this method is EXTREMELY hot, so some cursed tactics
+     * were employed to try and make this method faster
+     */
     public void placeOre(int seed, @NotNull PopulatorDataAbstract data, int coreX, int coreY, int coreZ) {
         double size = GenUtils.randDouble(new Random(seed), minOreSize, maxOreSize);
         // Size is the volume of the sphere, so radius is:
@@ -154,54 +160,67 @@ public class OrePopulator {
             return;
         }
 
-        FastNoise noise = NoiseCacheHandler.getNoise(
-            data.getTerraformWorld(), NoiseCacheHandler.NoiseCacheEntry.ORE_SPHERENOISE,
-            (TerraformWorld tw)->{
-                FastNoise n = new FastNoise(seed);
-                n.SetNoiseType(NoiseType.Simplex);
-                n.SetFrequency(0.09f);
-                return n;
-        });
+        //We don't use the noisecachehandler for this, as it is too fast
+        // it started to create memory pressure on the created record keys.
+        //Profiler may be lying there.
+        FastNoise noise = privateNoiseCache.get(data.getTerraformWorld());
+        if(noise == null) {
+            noise = new FastNoise(seed);
+            noise.SetNoiseType(NoiseType.Simplex);
+            noise.SetFrequency(0.09f);
+            privateNoiseCache.put(data.getTerraformWorld(),noise);
+        }
+
+        //We know that this circle will NEVER cross short bounds.
+        // As such, we can encode each relative coordinate as a short.
 
         //BFS to fill this ore
-        ArrayDeque<SimpleLocation> bfsQueue = new ArrayDeque<>();
+        ArrayDeque<Long> bfsQueue = new ArrayDeque<>();
         HashSet<Integer> visited = new HashSet<>();
 
-        SimpleLocation core = new SimpleLocation(coreX,coreY,coreZ);
-        visited.add(core.hashCode());
-        bfsQueue.add(core);
+        visited.add(Objects.hash(0,0,0));
+        bfsQueue.add(0L); //Encoded as x || y || z
 
         while(bfsQueue.size() > 0){
-            SimpleLocation v = bfsQueue.remove();
-
+            long v = bfsQueue.remove();
+            short rZ = (short)(v & 0xffff);
+            short rY = (short)((v>>16) & 0xffff);
+            short rX = (short)((v>>32) & 0xffff); //decode by shifting and anding
             for(BlockFace face:BlockUtils.sixBlockFaces){
-                SimpleLocation rel = v.getRelative(face);
-                if(visited.contains(rel.hashCode())) continue;
-                visited.add(rel.hashCode());
+                long nX = rX + face.getModX();
+                long nY = rY + face.getModY();
+                long nZ = rZ + face.getModZ();
+                int hash = Objects.hash(nX,nY,nZ);
+                //If you fail to add to the set, it was already in it
+                if(!visited.add(hash)) continue;
+
                 // do not touch bedrock layer
-                if (rel.getY() <= TerraformGeneratorPlugin.injector.getMinY()
-                    || rel.getY() >= TerraformGeneratorPlugin.injector.getMaxY())
+                if (coreY+nY <= TerraformGeneratorPlugin.injector.getMinY()
+                    || coreY+nY >= TerraformGeneratorPlugin.injector.getMaxY())
                     continue;
-                double equationResult = Math.pow(rel.getX()-coreX, 2) / Math.pow(radius, 2)
-                                        + Math.pow(rel.getY()-coreY, 2) / Math.pow(radius, 2)
-                                        + Math.pow(rel.getZ()-coreZ, 2) / Math.pow(radius, 2);
-                if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(),rel.getY(),rel.getZ()))
-                    bfsQueue.add(rel);
+                double equationResult = Math.pow(nX, 2) / Math.pow(radius, 2)
+                                        + Math.pow(nY, 2) / Math.pow(radius, 2)
+                                        + Math.pow(nZ, 2) / Math.pow(radius, 2);
+                if (equationResult <= 1 + 0.7 * noise.GetNoise(nX+coreX,nY+coreY,nZ+coreZ))
+                    bfsQueue.add(nZ | (nY << 16) | nX << 32); //encode
 
             }
 
             //Process v
-            Material replaced = data.getType(v.getX(), v.getY(), v.getZ());
+            int x = rX+coreX;
+            int y = rY+coreY;
+            int z = rZ+coreZ;
+            Material replaced = data.getType(x,y,z);
             if (replaced == Material.STONE) {
-                data.setType(v.getX(), v.getY(), v.getZ(), type);
+                data.setType(x,y,z, type);
             }
             // Deepslate replacing other ores
             else if (type == Material.DEEPSLATE && BlockUtils.ores.contains(replaced)) {
-                data.setType(v.getX(), v.getY(), v.getZ(), BlockUtils.deepSlateVersion(replaced));
+                data.setType(x,y,z, BlockUtils.deepSlateVersion(replaced));
             }
             // Normal ores replacing deepslate
             else if (replaced == Material.DEEPSLATE) {
-                data.setType(v.getX(), v.getY(), v.getZ(), BlockUtils.deepSlateVersion(type));
+                data.setType(x,y,z, BlockUtils.deepSlateVersion(type));
             }
         }
     }

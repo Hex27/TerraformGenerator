@@ -131,9 +131,7 @@ public class NoiseCacheHandler {
         GENUTILS_RANDOMOBJ_NOISE,
 
         FRACTALTREES_LEAVES_NOISE,
-        FRACTALTREES_BASE_NOISE,
-
-        ORE_SPHERENOISE
+        FRACTALTREES_BASE_NOISE
     }
 
     public record NoiseCacheKey(TerraformWorld tw, NoiseCacheEntry entry) {}
