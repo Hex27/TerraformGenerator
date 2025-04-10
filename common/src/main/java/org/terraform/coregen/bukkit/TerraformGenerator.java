@@ -254,7 +254,7 @@ public class TerraformGenerator extends ChunkGenerator {
     public @NotNull List<BlockPopulator> getDefaultPopulators(@NotNull World world) {
         TerraformWorld tw = TerraformWorld.get(world);
         return new ArrayList<>() {{
-            add(new TerraformPopulator(tw));
+            add(new TerraformPopulator());
             add(new TerraformBukkitBlockPopulator(tw));
         }};
     }

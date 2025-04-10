@@ -185,7 +185,7 @@ public class RockyMountainsHandler extends AbstractMountainHandler {
         for (SimpleLocation sLoc : trees) {
             if (HeightMap.getTrueHeightGradient(data, sLoc.getX(), sLoc.getZ(), 3) < 1.4) { // trees
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                     && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))
                 {

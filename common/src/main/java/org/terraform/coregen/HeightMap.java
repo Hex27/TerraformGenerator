@@ -103,6 +103,7 @@ public enum HeightMap {
      */
     /*TODO: There are several calls to this in Biome Handlers.
      * Write a version that uses transformed height.
+     * 10/4/2025: Is this not already transformed height???
      */
     public static double getTrueHeightGradient(PopulatorDataAbstract data, int x, int z, int radius) {
         double totalChangeInGradient = 0;

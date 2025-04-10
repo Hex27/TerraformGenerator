@@ -3,22 +3,10 @@ package org.terraform.data;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleLocation {
-
-    protected int x;
-    protected int y;
-    protected int z;
-
-    public SimpleLocation(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+public record SimpleLocation(int x, int y, int z) {
 
     public SimpleLocation(@NotNull SimpleLocation other) {
-        this.x = other.x;
-        this.y = other.y;
-        this.z = other.z;
+        this(other.x, other.y, other.z);
     }
 
     public @NotNull SimpleLocation getRelative(int x, int y, int z) {
@@ -129,36 +117,11 @@ public class SimpleLocation {
         }
     }
 
-    @Override
-    public int hashCode() {
-        int prime = 93929798;
-        int hash = x * prime;
-        hash = (hash + y) * prime;
-        hash = (hash + z) * prime;
-
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof SimpleLocation sLoc) {
-            return sLoc.x == x && sLoc.y == y && sLoc.z == z;
-        }
-        return false;
-    }
-
     /**
      * @return the x
      */
     public int getX() {
         return x;
-    }
-
-    /**
-     * @param x the x to set
-     */
-    public void setX(int x) {
-        this.x = x;
     }
 
     /**
@@ -169,24 +132,10 @@ public class SimpleLocation {
     }
 
     /**
-     * @param y the y to set
-     */
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    /**
      * @return the z
      */
     public int getZ() {
         return z;
-    }
-
-    /**
-     * @param z the z to set
-     */
-    public void setZ(int z) {
-        this.z = z;
     }
 
     @Override

@@ -114,7 +114,7 @@ public class IceSpikesHandler extends BiomeHandler {
 
         for (SimpleLocation sLoc : spikes) {
             int spikeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(spikeY);
+            sLoc = sLoc.getAtY(spikeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                 && data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) == Material.SNOW_BLOCK)
             {

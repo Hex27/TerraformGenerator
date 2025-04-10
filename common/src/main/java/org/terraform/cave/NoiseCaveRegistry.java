@@ -6,6 +6,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
 
 public class NoiseCaveRegistry {
     private final TerraformWorld tw;
@@ -63,9 +64,16 @@ public class NoiseCaveRegistry {
      */
     public float yBarrier(@NotNull TerraformWorld tw, float x, float y, float z, float v, float barrier, float limit) {
 
-        FastNoise boundaryNoise = new FastNoise((int) tw.getSeed() * 5);
-        boundaryNoise.SetNoiseType(FastNoise.NoiseType.Simplex);
-        boundaryNoise.SetFrequency(0.01f);
+        FastNoise boundaryNoise = NoiseCacheHandler.getNoise(
+                tw,
+                NoiseCacheHandler.NoiseCacheEntry.CAVE_YBARRIER_NOISE,
+                world -> {
+                    FastNoise n = new FastNoise((int) tw.getSeed() * 5);
+                    n.SetNoiseType(FastNoise.NoiseType.Simplex);
+                    n.SetFrequency(0.01f);
+                    return n;
+                }
+        );
         barrier += 3 * boundaryNoise.GetNoise(x, z); // fuzz the boundary
 
         if (Math.abs(y - v) <= limit) {

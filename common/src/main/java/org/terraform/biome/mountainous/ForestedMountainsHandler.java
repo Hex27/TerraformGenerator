@@ -161,7 +161,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
         if (TConfig.c.TREES_JUNGLE_BIG_ENABLED) {
             for (SimpleLocation sLoc : bigTrees) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                     && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))
                 {
@@ -182,7 +182,7 @@ public class ForestedMountainsHandler extends AbstractMountainHandler {
 
         for (SimpleLocation sLoc : trees) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
 
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),

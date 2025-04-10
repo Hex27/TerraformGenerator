@@ -148,7 +148,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
                 continue;
             }
 
-            sLoc.setY(highestY);
+            sLoc = sLoc.getAtY(highestY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),
                     sLoc.getZ())))
@@ -175,7 +175,7 @@ public class ArchedCliffsHandler extends BiomeHandler {
                 if (grassBottom != null && grassBottom.getY() > TerraformGenerator.seaLevel) {
                     if (grassBottom.getType() == Material.GRASS_BLOCK) {
                         // Indicates that this area is valid for population
-                        sLoc.setY(grassBottom.getY());
+                        sLoc = sLoc.getAtY(grassBottom.getY());
 
                         FractalTypes.Mushroom type = switch (random.nextInt(6)) {
                             case 0 -> FractalTypes.Mushroom.MEDIUM_RED_MUSHROOM;

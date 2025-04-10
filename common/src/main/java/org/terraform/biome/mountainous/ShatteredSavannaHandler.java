@@ -175,7 +175,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 34);
         for (SimpleLocation sLoc : trees) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),
                     sLoc.getZ())))
@@ -194,7 +194,7 @@ public class ShatteredSavannaHandler extends AbstractMountainHandler {
         SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 35);
         for (SimpleLocation sLoc : poffs) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
             if (TConfig.arePlantsEnabled()
 				&& data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
 				&& BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()))

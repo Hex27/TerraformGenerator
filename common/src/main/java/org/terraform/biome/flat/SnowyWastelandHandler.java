@@ -82,7 +82,7 @@ public class SnowyWastelandHandler extends BiomeHandler {
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) != getBiome()) {
                 continue;
             }
-            sLoc.setY(GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ()));
+            sLoc = sLoc.getAtY(GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ()));
             if (data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) != Material.SNOW_BLOCK) {
                 continue;
             }

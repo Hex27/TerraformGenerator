@@ -198,9 +198,6 @@ public class TerraformPopulator extends BlockPopulator {
     );
     private final MasterCavePopulatorDistributor caveDistributor = new MasterCavePopulatorDistributor();
 
-    public TerraformPopulator(TerraformWorld tw) {
-    }
-
     @Override
     public void populate(@NotNull org.bukkit.generator.WorldInfo worldInfo,
                          @NotNull java.util.Random random,
@@ -215,6 +212,7 @@ public class TerraformPopulator extends BlockPopulator {
 
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         Random random = tw.getHashedRand(571162, data.getChunkX(), data.getChunkZ());
+
         // ores
         for (OrePopulator ore : ORE_POPS) {
             ore.populate(tw, random, data);

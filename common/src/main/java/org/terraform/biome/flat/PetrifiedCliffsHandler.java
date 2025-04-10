@@ -206,7 +206,7 @@ public class PetrifiedCliffsHandler extends BiomeHandler {
         for (SimpleLocation sLoc : trees) {
             if (random.nextBoolean()) {
                 int treeY = GenUtils.getTrueHighestBlock(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && data.getType(sLoc.getX(),
                         sLoc.getY(),
                         sLoc.getZ()).toString().endsWith("STONE"))

@@ -116,7 +116,7 @@ public class PaleForestHandler extends BiomeHandler {
         // Big trees and giant mushrooms
         for (SimpleLocation sLoc : bigTrees) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),
                     sLoc.getZ())))
@@ -140,7 +140,7 @@ public class PaleForestHandler extends BiomeHandler {
         // Small trees
         for (SimpleLocation sLoc : trees) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),
                     sLoc.getZ())))

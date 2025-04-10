@@ -127,7 +127,7 @@ public class SnowyTaigaHandler extends BiomeHandler {
         for (SimpleLocation sLoc : trees) {
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 // Rarely spawn huge taiga trees
                 if (TConfig.c.TREES_TAIGA_BIG_ENABLED && GenUtils.chance(random, 1, 20)) {
                     FractalTypes.Tree.TAIGA_BIG.build(

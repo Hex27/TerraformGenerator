@@ -161,7 +161,7 @@ public class ElevatedPlainsHandler extends BiomeHandler {
         for (SimpleLocation sLoc : trees) {
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 if (data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) != Material.GRASS_BLOCK) {
                     continue;
                 }

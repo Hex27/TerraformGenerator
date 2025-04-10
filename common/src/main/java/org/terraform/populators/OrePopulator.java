@@ -1,9 +1,11 @@
 package org.terraform.populators;
 
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
@@ -11,10 +13,10 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
+import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.version.Version;
 
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class OrePopulator {
 
@@ -25,7 +27,7 @@ public class OrePopulator {
     private final int maxNumberOfVeins; // Maximum number of veins per chunk
     private final int peakSpawnChanceHeight; // Optimal height for ore to spawn
     private final int maxSpawnHeight; // max y height where ore can be rarely found
-    private final BiomeBank[] requiredBiomes;
+    private final Set<BiomeBank> requiredBiomes;
     private final int maxDistance;
     private final boolean ignorePeakSpawnChance;
     private int minRange; // min spawn height
@@ -46,7 +48,7 @@ public class OrePopulator {
         this.maxNumberOfVeins = maxNumberOfVeins;
         this.peakSpawnChanceHeight = peakSpawnChanceHeight;
         this.maxSpawnHeight = maxSpawnHeight;
-        this.requiredBiomes = requiredBiomes;
+        this.requiredBiomes = Set.of(requiredBiomes);
         this.ignorePeakSpawnChance = ignorePeakSpawnChance;
         this.minRange = TerraformGeneratorPlugin.injector.getMinY() + 1;
         this.maxDistance = Math.max(
@@ -73,7 +75,7 @@ public class OrePopulator {
         this.minRange = minRange;
         this.peakSpawnChanceHeight = peakSpawnChanceHeight;
         this.maxSpawnHeight = maxSpawnHeight;
-        this.requiredBiomes = requiredBiomes;
+        this.requiredBiomes = Set.of(requiredBiomes);
         this.ignorePeakSpawnChance = ignorePeakSpawnChance;
         // this.minRange = TerraformGeneratorPlugin.injector.getMinY()+1;
         this.maxDistance = Math.max(
@@ -83,19 +85,10 @@ public class OrePopulator {
     }
 
     public void populate(@NotNull TerraformWorld world, @NotNull Random random, @NotNull PopulatorDataAbstract data) {
-        if (requiredBiomes.length > 0) {
+        if (requiredBiomes.size() > 0) {
             BiomeBank b = BiomeBank.getBiomeSectionFromChunk(world, data.getChunkX(), data.getChunkZ()).getBiomeBank();
-            boolean canPopulate = false;
-            for (BiomeBank comp : requiredBiomes) {
-                if (comp == b) {
-                    canPopulate = true;
-                    break;
-                }
-            }
-
-            if (!canPopulate) {
+            if(!requiredBiomes.contains(b))
                 return;
-            }
         }
 
         // Attempt maxNumberOfVeins number of times
@@ -147,7 +140,6 @@ public class OrePopulator {
         }
     }
 
-    // Don't use simpleblock to forcefully compress memory usage and GC invocations by this.
     public void placeOre(int seed, @NotNull PopulatorDataAbstract data, int coreX, int coreY, int coreZ) {
         double size = GenUtils.randDouble(new Random(seed), minOreSize, maxOreSize);
         // Size is the volume of the sphere, so radius is:
@@ -162,44 +154,54 @@ public class OrePopulator {
             return;
         }
 
-        FastNoise noise = new FastNoise(seed);
-        noise.SetNoiseType(NoiseType.Simplex);
-        noise.SetFrequency(0.09f);
+        FastNoise noise = NoiseCacheHandler.getNoise(
+            data.getTerraformWorld(), NoiseCacheHandler.NoiseCacheEntry.ORE_SPHERENOISE,
+            (TerraformWorld tw)->{
+                FastNoise n = new FastNoise(seed);
+                n.SetNoiseType(NoiseType.Simplex);
+                n.SetFrequency(0.09f);
+                return n;
+        });
 
-        for (double x = -radius; x <= radius; x++) {
-            for (double y = -radius; y <= radius; y++) {
-                for (double z = -radius; z <= radius; z++) {
-                    int relX = (int) Math.round(x) + coreX;
-                    int relY = (int) Math.round(y) + coreY;
-                    int relZ = (int) Math.round(z) + coreZ;
-                    if (relY > TerraformGeneratorPlugin.injector.getMaxY()
-                        || relY <= TerraformGeneratorPlugin.injector.getMinY()) // do not touch bedrock layer
-                    {
-                        continue;
-                    }
-                    // SimpleBlock rel = block.getRelative((int)Math.round(x), (int)Math.round(y), (int)Math.round(z));
-                    double equationResult = Math.pow(x, 2) / Math.pow(radius, 2)
-                                            + Math.pow(y, 2) / Math.pow(radius, 2)
-                                            + Math.pow(z, 2) / Math.pow(radius, 2);
-                    Material oreType = data.getType(relX, relY, relZ);
-                    if (equationResult <= 1 + 0.7 * noise.GetNoise(relX, relY, relZ)) {
-                        if (oreType == Material.STONE) {
-                            data.setType(relX, relY, relZ, type);
-                        }
-                        // 1.17 behaviour
-                        else if (Version.isAtLeast(17)) {
-                            // Deepslate replacing other ores
-                            if (type == Material.DEEPSLATE && BlockUtils.ores.contains(oreType)) {
-                                data.setType(relX, relY, relZ, BlockUtils.deepSlateVersion(oreType));
-                            }
-                            // Normal ores replacing deepslate
-                            else if (oreType == Material.DEEPSLATE) {
-                                data.setType(relX, relY, relZ, BlockUtils.deepSlateVersion(type));
-                            }
-                        }
+        //BFS to fill this ore
+        ArrayDeque<SimpleLocation> bfsQueue = new ArrayDeque<>();
+        HashSet<Integer> visited = new HashSet<>();
 
-                    }
-                }
+        SimpleLocation core = new SimpleLocation(coreX,coreY,coreZ);
+        visited.add(core.hashCode());
+        bfsQueue.add(core);
+
+        while(bfsQueue.size() > 0){
+            SimpleLocation v = bfsQueue.remove();
+
+            for(BlockFace face:BlockUtils.sixBlockFaces){
+                SimpleLocation rel = v.getRelative(face);
+                if(visited.contains(rel.hashCode())) continue;
+                visited.add(rel.hashCode());
+                // do not touch bedrock layer
+                if (rel.getY() <= TerraformGeneratorPlugin.injector.getMinY()
+                    || rel.getY() >= TerraformGeneratorPlugin.injector.getMaxY())
+                    continue;
+                double equationResult = Math.pow(rel.getX()-coreX, 2) / Math.pow(radius, 2)
+                                        + Math.pow(rel.getY()-coreY, 2) / Math.pow(radius, 2)
+                                        + Math.pow(rel.getZ()-coreZ, 2) / Math.pow(radius, 2);
+                if (equationResult <= 1 + 0.7 * noise.GetNoise(rel.getX(),rel.getY(),rel.getZ()))
+                    bfsQueue.add(rel);
+
+            }
+
+            //Process v
+            Material replaced = data.getType(v.getX(), v.getY(), v.getZ());
+            if (replaced == Material.STONE) {
+                data.setType(v.getX(), v.getY(), v.getZ(), type);
+            }
+            // Deepslate replacing other ores
+            else if (type == Material.DEEPSLATE && BlockUtils.ores.contains(replaced)) {
+                data.setType(v.getX(), v.getY(), v.getZ(), BlockUtils.deepSlateVersion(replaced));
+            }
+            // Normal ores replacing deepslate
+            else if (replaced == Material.DEEPSLATE) {
+                data.setType(v.getX(), v.getY(), v.getZ(), BlockUtils.deepSlateVersion(type));
             }
         }
     }
@@ -236,7 +238,7 @@ public class OrePopulator {
         return minRange;
     }
 
-    public BiomeBank[] getRequiredBiomes() {
+    public Set<BiomeBank> getRequiredBiomes() {
         return requiredBiomes;
     }
 

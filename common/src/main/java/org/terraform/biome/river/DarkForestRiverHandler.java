@@ -91,7 +91,7 @@ public class DarkForestRiverHandler extends BiomeHandler {
         SimpleLocation[] bigTrees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 24);
         for (SimpleLocation sLoc : bigTrees) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),
                     sLoc.getZ())))

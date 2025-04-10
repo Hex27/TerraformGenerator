@@ -149,7 +149,7 @@ public class ForestHandler extends BiomeHandler {
 
         for (SimpleLocation sLoc : trees) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),
                     sLoc.getZ())))
@@ -179,7 +179,7 @@ public class ForestHandler extends BiomeHandler {
         SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 10);
 
         for (SimpleLocation sLoc : rocks) {
-            sLoc.setY(GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ()));
+            sLoc = sLoc.getAtY(GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ()));
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()) {
                 if (BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()))
                     || data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) == Material.COBBLESTONE

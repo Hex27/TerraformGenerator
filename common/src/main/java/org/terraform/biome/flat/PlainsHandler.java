@@ -128,7 +128,7 @@ public class PlainsHandler extends BiomeHandler {
                 continue;
             }
 
-            sLoc.setY(highestY);
+            sLoc = sLoc.getAtY(highestY);
             switch(random.nextInt(5)){
                 case 0,1 -> {
                     if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()

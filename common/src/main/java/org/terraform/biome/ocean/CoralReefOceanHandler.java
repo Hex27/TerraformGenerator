@@ -86,7 +86,7 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
             if (coralY >= TerraformGenerator.seaLevel) {
                 continue;
             }
-            sLoc.setY(coralY);
+            sLoc = sLoc.getAtY(coralY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()) {
                 TreeDB.spawnRandomGiantCoral(tw, data, sLoc.getX(), sLoc.getY(), sLoc.getZ());
                 if (data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) == Material.GRAVEL) {
@@ -106,7 +106,7 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
             if (coralY >= TerraformGenerator.seaLevel) {
                 continue;
             }
-            sLoc.setY(coralY);
+            sLoc = sLoc.getAtY(coralY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && !data.getType(sLoc.getX(),
                     sLoc.getY() + 1,
                     sLoc.getZ()).isSolid())
@@ -128,7 +128,7 @@ public class CoralReefOceanHandler extends AbstractOceanHandler {
         for (SimpleLocation sLoc : rocks) {
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()) {
                 int rockY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(rockY);
+                sLoc = sLoc.getAtY(rockY);
                 if (data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) != Material.GRAVEL) {
                     continue;
                 }

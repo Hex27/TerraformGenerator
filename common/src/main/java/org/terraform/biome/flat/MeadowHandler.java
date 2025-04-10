@@ -119,7 +119,7 @@ public class MeadowHandler extends BiomeHandler {
                 continue;
             }
 
-            sLoc.setY(highestY);
+            sLoc = sLoc.getAtY(highestY);
             if (TConfig.arePlantsEnabled()
                 && data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                 && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))

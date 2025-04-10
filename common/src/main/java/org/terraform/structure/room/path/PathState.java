@@ -136,11 +136,11 @@ public class PathState {
                         BlockFace... connections)
         {
             this.pathRadius = pathWidth;
-            this.center = center;
+            int newX = (center.getX() / pathWidth) * pathWidth;
+            int newZ = (center.getZ() / pathWidth) * pathWidth;
             // Lock path nodes to a grid-like structure which will allow
             // path nodes to be spaced properly
-            this.center.setX((center.getX() / pathWidth) * pathWidth);
-            this.center.setZ((center.getZ() / pathWidth) * pathWidth);
+            this.center = new SimpleLocation(newX, center.y(), newZ);
             Collections.addAll(connected, connections);
             this.populator = populator;
         }
