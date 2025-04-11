@@ -25,7 +25,7 @@ public class StalactiteBuilder {
     }
 
     public void build(@NotNull Random rand, @NotNull Wall w) {
-        if (TConfig.areDecorationsEnabled()) {
+        if (!TConfig.areDecorationsEnabled()) {
             return;
         }
 

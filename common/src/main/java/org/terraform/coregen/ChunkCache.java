@@ -3,6 +3,7 @@ package org.terraform.coregen;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.datastructs.CompressedChunkBools;
 
 import java.util.Arrays;
 
@@ -25,7 +26,10 @@ public class ChunkCache {
      * blurredHeightCache will hold intermediate height blurring values
      * (calculated after dominantBiomeHeightCache)
      */
+    //11/4/2025 what the FUCK is this
     float[] arrayCache; // These 6 arrays are now one big array. No more nested pointers
+
+    CompressedChunkBools solids;
     BiomeBank[] biomeCache;
 
     public ChunkCache(TerraformWorld tw, int chunkX, int chunkZ) {
@@ -71,7 +75,23 @@ public class ChunkCache {
         */
         Arrays.fill(arrayCache, TerraformGeneratorPlugin.injector.getMinY() - 1);
 
+        //11/4/2025 not fucking adding more things to the sacred array are ya???
+        solids = new CompressedChunkBools();
+
         biomeCache = new BiomeBank[256];
+    }
+
+    public void cacheSolid(int interChunkX, int interChunkY, int interChunkZ)
+    {
+        solids.set(interChunkX,interChunkY,interChunkZ);
+    }
+    public void cacheNonSolid(int interChunkX, int interChunkY, int interChunkZ)
+    {
+        solids.unSet(interChunkX,interChunkY,interChunkZ);
+    }
+    public boolean isSolid(int interChunkX, int interChunkY, int interChunkZ)
+    {
+        return solids.isSet(interChunkX,interChunkY,interChunkZ);
     }
 
 
@@ -166,7 +186,6 @@ public class ChunkCache {
     public void cacheIntermediateBlurredHeight(int rawX, int rawZ, float value) {
         arrayCache[512 + (rawX & 0xF) + 16 * (rawZ & 0xF)] = value;
     }
-
 
     public BiomeBank getBiome(int rawX, int rawZ) {
         return biomeCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];

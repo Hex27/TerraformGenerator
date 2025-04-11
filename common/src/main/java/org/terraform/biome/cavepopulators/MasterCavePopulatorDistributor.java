@@ -1,8 +1,12 @@
 package org.terraform.biome.cavepopulators;
 
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.ChunkCache;
+import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.CoordPair;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
@@ -10,11 +14,9 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.Vector2f;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class will distribute ALL cave post-population to the right populators,
@@ -23,15 +25,17 @@ import java.util.Random;
  */
 public class MasterCavePopulatorDistributor {
 
-    private static final ArrayList<Class<?>> populatedBefore = new ArrayList<>();
+    private static final HashSet<Class<?>> populatedBefore = new HashSet<>();
 
     public void populate(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, boolean generateClusters) {
-        HashMap<SimpleLocation, CaveClusterRegistry> clusters = generateClusters ? calculateClusterLocations(
+        HashMap<CoordPair, CaveClusterRegistry> clusters = generateClusters ?
+           calculateClusterLocations(
                 random,
                 tw,
                 data.getChunkX(),
                 data.getChunkZ()
-        ) : new HashMap<>();
+           ) : new HashMap<>();
+        ChunkCache cache = TerraformGenerator.getCache(tw, data.getChunkX()<<4, data.getChunkZ()<<4);
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
@@ -40,22 +44,22 @@ public class MasterCavePopulatorDistributor {
                 int maxHeightForCaves = bank.getHandler().getMaxHeightForCaves(tw, x, z);
 
                 // Remove clusters when they're spawned.
-                CaveClusterRegistry reg = clusters.remove(new SimpleLocation(x, 0, z));
+                CaveClusterRegistry reg = clusters.remove(new CoordPair(x, z));
 
-                Collection<int[]> pairs = GenUtils.getCaveCeilFloors(data, x, z, 4);
+                Collection<CoordPair> pairs = getCaveCeilFloors(data, x, z, 4, cache);
 
                 // This is the index to spawn the cluster in.
                 int clusterPair = !pairs.isEmpty() ? random.nextInt(pairs.size()) : 0;
 
-                for (int[] pair : pairs) {
+                for (CoordPair pair : pairs) {
 
                     // Biome disallows caves above this height
-                    if (pair[0] > maxHeightForCaves) {
+                    if (pair.x() > maxHeightForCaves) {
                         continue;
                     }
 
-                    SimpleBlock ceil = new SimpleBlock(data, x, pair[0], z); // non-solid
-                    SimpleBlock floor = new SimpleBlock(data, x, pair[1], z); // solid
+                    SimpleBlock ceil = new SimpleBlock(data, x, pair.x(), z); // non-solid
+                    SimpleBlock floor = new SimpleBlock(data, x, pair.z(), z); // solid
 
                     // If this is wet, don't touch it.
                     // Don't populate inside amethysts
@@ -92,8 +96,7 @@ public class MasterCavePopulatorDistributor {
                     pop.populate(tw, random, ceil, floor);
 
                     // Locating and debug print
-                    if (!populatedBefore.contains(pop.getClass())) {
-                        populatedBefore.add(pop.getClass());
+                    if (populatedBefore.add(pop.getClass())) {
                         TerraformGeneratorPlugin.logger.info("Spawning "
                                                              + pop.getClass().getSimpleName()
                                                              + " at "
@@ -104,17 +107,17 @@ public class MasterCavePopulatorDistributor {
         }
     }
 
-    private @NotNull HashMap<SimpleLocation, CaveClusterRegistry> calculateClusterLocations(@NotNull Random rand,
-                                                                                            @NotNull TerraformWorld tw,
-                                                                                            int chunkX,
-                                                                                            int chunkZ)
+    private @NotNull HashMap<CoordPair, CaveClusterRegistry> calculateClusterLocations(@NotNull Random rand,
+                                                                                       @NotNull TerraformWorld tw,
+                                                                                       int chunkX,
+                                                                                       int chunkZ)
     {
-        HashMap<SimpleLocation, CaveClusterRegistry> locs = new HashMap<>();
+        HashMap<CoordPair, CaveClusterRegistry> locs = new HashMap<>();
         //Don't waste compute if caves don't exist
         if(!TConfig.areCavesEnabled()) return locs;
 
         for (CaveClusterRegistry type : CaveClusterRegistry.values()) {
-            SimpleLocation[] positions = GenUtils.randomObjectPositions(tw.getHashedRand(
+            CoordPair[] positions = GenUtils.vectorRandomObjectPositions(tw.getHashedRand(
                             chunkX,
                             type.getHashSeed(),
                             chunkZ
@@ -124,7 +127,7 @@ public class MasterCavePopulatorDistributor {
                     type.getSeparation(),
                     type.getPertub()
             );
-            for (SimpleLocation pos : positions) {
+            for (CoordPair pos : positions) {
                 if (locs.containsKey(pos))
                 // give a chance to replace the old one
                 {
@@ -139,5 +142,38 @@ public class MasterCavePopulatorDistributor {
         }
 
         return locs;
+    }
+
+    /**
+     * Uses the ChunkCache's optimised boolean holder
+     */
+    public static @NotNull Collection<CoordPair> getCaveCeilFloors(PopulatorDataAbstract data,
+                                                                   int x,
+                                                                   int z,
+                                                                   int minimumHeight,
+                                                                   ChunkCache cache)
+    {
+        //The check for transformedGround is ALREADY done here.
+        int y = GenUtils.getHighestGround(data, x, z);
+        final int INVAL = TerraformGeneratorPlugin.injector.getMinY() - 1;
+        int[] pair = {INVAL, INVAL};
+        List<CoordPair> list = new ArrayList<>();
+        // Subtract one as the first cave floor cannot be the surface
+        for (int ny = y - 1; ny > TerraformGeneratorPlugin.injector.getMinY(); ny--) {
+            //Material type = data.getType(x, ny, z); //maybe the rocks are the friends we make along the way
+            if (cache.isSolid(x&0xf,ny,z&0xf)) {
+                pair[1] = ny;
+                if (pair[0] - pair[1] >= minimumHeight) {
+                    list.add(new CoordPair(pair[0],pair[1]));
+                }
+                pair[0] = INVAL;
+                pair[1] = INVAL;
+            }
+            else if (pair[0] == INVAL) {
+                pair[0] = ny;
+            }
+        }
+
+        return list;
     }
 }
