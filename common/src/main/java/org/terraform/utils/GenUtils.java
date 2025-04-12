@@ -1,6 +1,5 @@
 package org.terraform.utils;
 
-import com.google.common.cache.LoadingCache;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +16,7 @@ import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.small_items.PlantBuilder;
+import org.terraform.utils.datastructs.ConcurrentLRUCache;
 import org.terraform.utils.noise.FastNoise;
 
 import java.util.*;
@@ -24,7 +24,7 @@ import java.util.*;
 public class GenUtils {
     public static final Random RANDOMIZER = new Random();
     private static final EnumSet<Material> BLACKLIST_HIGHEST_GROUND = EnumSet.noneOf(Material.class);
-    public static LoadingCache<ChunkCache, EnumSet<BiomeBank>> biomeQueryCache;
+    public static ConcurrentLRUCache<ChunkCache, EnumSet<BiomeBank>> biomeQueryCache;
 
     public static void initGenUtils() {
 
@@ -121,8 +121,7 @@ public class GenUtils {
     }
 
     public static @NotNull EnumSet<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ) {
-        ChunkCache key = new ChunkCache(tw, chunkX, chunkZ);
-        return biomeQueryCache.getUnchecked(key);
+        return biomeQueryCache.get(new ChunkCache(tw, chunkX, chunkZ));
     }
 
     /**

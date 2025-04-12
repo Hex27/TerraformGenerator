@@ -100,7 +100,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
 
         CoordPair[] positions = strongholdPositions(tw);
         for (CoordPair pos : positions) {
-            if (pos.x() >> 4 == chunkX && pos.z() >> 4 == chunkX) {
+            if ((pos.x() >> 4) == chunkX && (pos.z() >> 4) == chunkZ) {
                 return true;
             }
         }

@@ -1,6 +1,5 @@
 package org.terraform.coregen.bukkit;
 
-import com.google.common.cache.LoadingCache;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,17 +18,17 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.datastructs.ConcurrentLRUCache;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 public class TerraformGenerator extends ChunkGenerator {
     public static final List<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
     // Explode if a read is attempted. Transform Handlers are not supposed to read.
     private static final DudChunkData DUD = new DudChunkData();
-    public static LoadingCache<ChunkCache, ChunkCache> CHUNK_CACHE;
+    public static ConcurrentLRUCache<ChunkCache, ChunkCache> CHUNK_CACHE;
     public static int seaLevel = 62;
 
     public static void updateSeaLevelFromConfig() {
@@ -40,19 +39,10 @@ public class TerraformGenerator extends ChunkGenerator {
      * Refers to raw X and raw Z (block coords). NOT chunk coords.
      */
     public static @NotNull ChunkCache getCache(TerraformWorld tw, int x, int z) {
-        ChunkCache cache = new ChunkCache(tw, x, 0, z);
         // Note how it DOES NOT initInternalCache here
         // Cos this is the damn key
         // Don't fucking run calculations here
-        try {
-            return CHUNK_CACHE.get(cache);
-        }
-        catch (ExecutionException e) {
-            TerraformGeneratorPlugin.logger.stackTrace(e);
-            TerraformGeneratorPlugin.logger.stackTrace(e.getCause());
-            cache.initInternalCache();
-            return cache;
-        }
+        return CHUNK_CACHE.get(new ChunkCache(tw, x,0,z));
     }
 
     // This method ONLY fills transformedHeight with meaningful values,
@@ -80,8 +70,8 @@ public class TerraformGenerator extends ChunkGenerator {
                 // Check canNoiseCarve because carver caves may expose
                 // noise caves below, which contribute to height changes
                 {
-                    if (tw.noiseCaveRegistry.canGenerateCarve(rawX, y, rawZ, preciseHeight)
-                        || tw.noiseCaveRegistry.canNoiseCarve(rawX, y, rawZ, preciseHeight))
+                    if (tw.noiseCaveRegistry.canGenerateCarve(rawX, y, rawZ, preciseHeight, cache)
+                        || tw.noiseCaveRegistry.canNoiseCarve(rawX, y, rawZ, preciseHeight, cache))
                     {
                         cache.writeTransformedHeight(x, z, (short) (y - 1));
                     }
@@ -158,7 +148,7 @@ public class TerraformGenerator extends ChunkGenerator {
                     }
 
                     // Set cave air if a cave CAN be carved here
-                    if (tw.noiseCaveRegistry.canNoiseCarve(rawX, y, rawZ, height)) {
+                    if (tw.noiseCaveRegistry.canNoiseCarve(rawX, y, rawZ, height, cache)) {
                         chunkData.setBlock(x, y, z, Material.CAVE_AIR);
                         cache.cacheNonSolid(x,y,z);
                     }
@@ -180,7 +170,7 @@ public class TerraformGenerator extends ChunkGenerator {
                 // Carve caves HERE.
                 boolean mustUpdateHeight = true;
                 for (int y = (int) height; y > TerraformGeneratorPlugin.injector.getMinY(); y--) {
-                    if (tw.noiseCaveRegistry.canGenerateCarve(rawX, y, rawZ, height)
+                    if (tw.noiseCaveRegistry.canGenerateCarve(rawX, y, rawZ, height, cache)
                         || !chunkData.getType(x, y, z).isSolid())
                     {
                         chunkData.setBlock(x, y, z, Material.CAVE_AIR);

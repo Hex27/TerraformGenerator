@@ -1,13 +1,8 @@
 package org.terraform.utils.noise;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.terraform.data.TerraformWorld;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -18,7 +13,8 @@ import java.util.function.Function;
 public class NoiseCacheHandler {
 
     // Removed google's cache from this as it was a bottleneck in rapid reads
-    // in the noise generation phase. Since FastNoise is small, there's
+    // in the noise generation phase. Since FastNoise is small, and the
+    // set of storable things is bounded by this enum, there's
     // no reason to use a complex cache that frees things lazily - just store
     // everything and leave it there until the world is unloaded.
     private static final ConcurrentHashMap<NoiseCacheKey, FastNoise> NOISE_CACHE = new ConcurrentHashMap<>();

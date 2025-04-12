@@ -13,6 +13,10 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.terraform.main.config.TConfig;
 
+/**
+ * This hasn't been migrated to the new cache system, because it's uniquely a pain in the
+ * ass. It uses the cache with a variable timeout parameter, which is a huge pain.
+ */
 public class StructureLocator {
 
     private static final int[] TIMEDOUT = new int[] {-7, 13};

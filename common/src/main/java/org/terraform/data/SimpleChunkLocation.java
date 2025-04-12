@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @author wysohn
  */
-public final record SimpleChunkLocation(String world, int x, int z) implements Cloneable {
+public record SimpleChunkLocation(String world, int x, int z) implements Cloneable {
     public SimpleChunkLocation(String world, int x, int y, int z) {
         this(world, x>>4, z>>4);
     }
@@ -65,29 +65,6 @@ public final record SimpleChunkLocation(String world, int x, int z) implements C
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     public @NotNull SimpleChunkLocation clone() {
         return new SimpleChunkLocation(world, x, z);
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-
-        result = prime * result + world.hashCode();
-        result = prime * result + x;
-        result = prime * result + z;
-
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof SimpleChunkLocation other)) {
-            return false;
-        }
-        return this.x == other.x && this.z == other.z && Objects.equals(world, other.world);
     }
 
     @Override

@@ -153,8 +153,7 @@ public class MasterCavePopulatorDistributor {
                                                                    int minimumHeight,
                                                                    ChunkCache cache)
     {
-        //The check for transformedGround is ALREADY done here.
-        int y = GenUtils.getHighestGround(data, x, z);
+        int y = cache.getTransformedHeight(x&0xF, z&0xF);
         final int INVAL = TerraformGeneratorPlugin.injector.getMinY() - 1;
         int[] pair = {INVAL, INVAL};
         List<CoordPair> list = new ArrayList<>();

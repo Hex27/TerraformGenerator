@@ -1,8 +1,7 @@
 package org.terraform.main;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,6 +15,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.*;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.data.CoordPair;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
@@ -28,6 +28,7 @@ import org.terraform.tree.SaplingOverrider;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.bstats.TerraformGeneratorMetricsHandler;
+import org.terraform.utils.datastructs.ConcurrentLRUCache;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.version.Version;
 import org.terraform.watchdog.TfgWatchdogSuppressant;
@@ -98,30 +99,31 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         BiomeBank.initSinglesConfig(); // Initiates single biome modes.
 
         // Initialize chunk cache based on config size
-        TerraformGenerator.CHUNK_CACHE = CacheBuilder.newBuilder()
-                                                     .maximumSize(TConfig.c.DEVSTUFF_CHUNKCACHE_SIZE)
-                                                     .build(new ChunkCacheLoader());
+        TerraformGenerator.CHUNK_CACHE = new ConcurrentLRUCache<>(
+                TConfig.c.DEVSTUFF_CHUNKCACHE_SIZE,
+                (key)->{
+                    key.initInternalCache();
+                    return key;
+                });
 
         // Initialize biome query cache based on config size
-        GenUtils.biomeQueryCache = CacheBuilder.newBuilder()
-                                               .maximumSize(TConfig.c.DEVSTUFF_CHUNKBIOMES_SIZE)
-                                               .build(new CacheLoader<>() {
-                                                   @Override
-                                                   public @NotNull EnumSet<BiomeBank> load(@NotNull ChunkCache key) {
-                                                       EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
-                                                       int gridX = key.chunkX * 16;
-                                                       int gridZ = key.chunkZ * 16;
-                                                       for (int x = gridX; x < gridX + 16; x++) {
-                                                           for (int z = gridZ; z < gridZ + 16; z++) {
-                                                               BiomeBank bank = key.tw.getBiomeBank(x, z);
-                                                               if (!banks.contains(bank)) {
-                                                                   banks.add(bank);
-                                                               }
-                                                           }
-                                                       }
-                                                       return banks;
-                                                   }
-                                               });
+        GenUtils.biomeQueryCache = new ConcurrentLRUCache<>(
+                TConfig.c.DEVSTUFF_CHUNKBIOMES_SIZE,
+                (key) -> {
+                    EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
+                    int gridX = key.chunkX * 16;
+                    int gridZ = key.chunkZ * 16;
+                    for (int x = gridX; x < gridX + 16; x++) {
+                        for (int z = gridZ; z < gridZ + 16; z++) {
+                            BiomeBank bank = key.tw.getBiomeBank(x, z);
+                            if (!banks.contains(bank)) {
+                                banks.add(bank);
+                            }
+                        }
+                    }
+                    return banks;
+                }
+        );
 
         LangOpt.init(this);
         watchdogSuppressant = new TfgWatchdogSuppressant();

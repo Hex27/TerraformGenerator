@@ -1,11 +1,7 @@
 package org.terraform.coregen.bukkit;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.generator.BlockPopulator;
@@ -32,6 +28,7 @@ import org.terraform.structure.room.PathPopulatorData;
 import org.terraform.structure.room.RoomLayoutGenerator;
 import org.terraform.structure.room.path.PathState;
 import org.terraform.structure.stronghold.StrongholdPopulator;
+import org.terraform.utils.datastructs.ConcurrentLRUCache;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -40,13 +37,22 @@ import java.util.Random;
 
 public class TerraformStructurePopulator extends BlockPopulator {
 
-    private final LoadingCache<MegaChunk, JigsawState> jigsawCache = CacheBuilder.newBuilder()
-                                                                                 .maximumSize(20)
-                                                                                 .build(CacheLoader.from((mc) -> null));
+    private final ConcurrentLRUCache<MegaChunk, JigsawState> jigsawCache;
     private final TerraformWorld tw;
 
     public TerraformStructurePopulator(TerraformWorld tw) {
         this.tw = tw;
+        this.jigsawCache = new ConcurrentLRUCache<>(20, (mc)->{
+            BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
+            SingleMegaChunkStructurePopulator spop = getMegachunkStructure(mc, tw, biome);
+            if (spop == null) {
+                return null;
+            }
+            if (!(spop instanceof JigsawStructurePopulator jsp)) {
+                return null;
+            }
+            return jsp.calculateRoomPopulators(tw, mc);
+        });
     }
 
     // NEW BLOCK POPULATOR API
@@ -60,22 +66,9 @@ public class TerraformStructurePopulator extends BlockPopulator {
     {
         // Check if the nearest structure in this megachunk is close enough
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
 
-        JigsawState state = jigsawCache.getIfPresent(mc);
-        if (state == null) {
-            SingleMegaChunkStructurePopulator spop = getMegachunkStructure(mc, tw, biome);
-            if (spop == null) {
-                return;
-            }
-            if (!(spop instanceof JigsawStructurePopulator jsp)) {
-                return;
-            }
-            state = jsp.calculateRoomPopulators(tw, mc);
-            TerraformGeneratorPlugin.logger.info("Calculated structure at " + chunkX + "," + chunkZ);
-            jigsawCache.put(mc, state);
-        }
-
+        JigsawState state = jigsawCache.get(mc);
+        if(state == null) return;
         // Check if the room will be in range
         if (!state.isInRange(chunkX, chunkZ)) {
             return;

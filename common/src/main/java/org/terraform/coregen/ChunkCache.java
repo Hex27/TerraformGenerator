@@ -15,6 +15,7 @@ import java.util.Arrays;
 public class ChunkCache {
     public final TerraformWorld tw;
     public final int chunkX, chunkZ;
+    public static final float CHUNKCACHE_INVAL = TerraformGeneratorPlugin.injector.getMinY() - 1;
 
     /**
      * heightCache caches the FINAL height of the terrain (the one applied to the
@@ -40,6 +41,7 @@ public class ChunkCache {
     }
 
     /**
+     * 12/4/2025: WHY THE FUCK IS THIS IN RAW BLOCK COORDS
      * Y is not used, but will force the dev to remember that these are block coords.
      */
     public ChunkCache(TerraformWorld tw, int rawX, int rawY, int rawZ) {
@@ -65,7 +67,8 @@ public class ChunkCache {
         disgusting monster array with hardcoded numbers because of
         how speed sensitive this is.
         */
-        arrayCache = new float[1536]; // 6*256 for 6 separate caches
+        //12/4/2025, added one more 256 cache to this madness
+        arrayCache = new float[1792]; // 7*256 for 7 separate caches
 
         /*
         If arrays.fill gives further speed problems, just use
@@ -73,7 +76,7 @@ public class ChunkCache {
         Problems might occur because the lib itself uses a for loop.
         Optimization lies entirely at the mercy of the running JVM.
         */
-        Arrays.fill(arrayCache, TerraformGeneratorPlugin.injector.getMinY() - 1);
+        Arrays.fill(arrayCache, CHUNKCACHE_INVAL);
 
         //11/4/2025 not fucking adding more things to the sacred array are ya???
         solids = new CompressedChunkBools();
@@ -134,6 +137,18 @@ public class ChunkCache {
 
     public void writeTransformedHeight(int chunkSubX, int chunkSubZ, short val) {
         arrayCache[1280 + chunkSubX + 16 * chunkSubZ] = val;
+    }
+
+    /**
+     * As usual, the solution to any pain point is caching it like an idiot
+     * @return the noise calculated in NoiseCaveRegistry.YBarrier. Only the noise.
+     */
+    public float getYBarrierNoise(int chunkSubX, int chunkSubZ) {
+        return arrayCache[1536 + chunkSubX + 16 * chunkSubZ];
+    }
+
+    public void cacheYBarrierNoise(int chunkSubX, int chunkSubZ, float val) {
+        arrayCache[1536 + chunkSubX + 16 * chunkSubZ] = val;
     }
 
     /**
@@ -216,5 +231,10 @@ public class ChunkCache {
             return false;
         }
         return this.tw == chunk.tw && this.chunkX == chunk.chunkX && this.chunkZ == chunk.chunkZ;
+    }
+
+    @Override
+    public String toString(){
+        return tw.getName() + ":" + chunkX + "," + chunkZ;
     }
 }
