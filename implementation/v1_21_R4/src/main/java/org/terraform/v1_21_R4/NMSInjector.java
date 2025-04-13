@@ -139,7 +139,12 @@ public class NMSInjector extends NMSInjectorAbstract {
     public void storeBee(Beehive hive) {
         try {
             if (getTileEntity == null) {
-                getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
+                try {
+                    getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
+                }
+                catch (NoSuchMethodException nsme) {
+                    getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getBlockEntity");
+                }
                 getTileEntity.setAccessible(true);
             }
             TileEntityBeehive teb = (TileEntityBeehive) getTileEntity.invoke(hive);

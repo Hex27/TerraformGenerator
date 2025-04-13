@@ -3,11 +3,14 @@ package org.terraform.coregen.populatordata;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.RegionAccessor;
 import org.bukkit.block.Beehive;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Bee;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.generator.LimitedRegion;
@@ -20,6 +23,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 
+import java.lang.reflect.Method;
 import java.util.Random;
 
 public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
@@ -144,6 +148,9 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
         return tw;
     }
 
+    private boolean canUseNewApi = true;
+    private Method addEntity;
+    private Method createEntity;
     @Override
     public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
         if (!TConfig.areAnimalsEnabled()) return;
@@ -152,13 +159,31 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
             return; // just forget it
         }
 
-        setType(rawX, rawY, rawZ, Material.BEE_NEST);
 
+        setType(rawX, rawY, rawZ, Material.BEE_NEST);
         // I guess the above can fail sometimes. I don't know why.
         // Catch and throw because that's fucking stupid
         try {
             Beehive bukkitBeehive = (Beehive) lr.getBlockState(rawX, rawY, rawZ);
-            TerraformGeneratorPlugin.injector.storeBee(bukkitBeehive);
+
+            if(canUseNewApi){
+                try{
+                    if(addEntity == null)
+                    {
+                        addEntity = RegionAccessor.class.getDeclaredMethod("addEntity", Entity.class);
+                        createEntity = RegionAccessor.class.getDeclaredMethod("createEntity", Location.class, Class.class);
+                    }
+                    Bee bee = (Bee) createEntity.invoke(lr, new Location(bukkitBeehive.getWorld(), rawX,rawY,rawZ), Bee.class);
+                    //addEntity.invoke(lr, bee);
+                    bukkitBeehive.addEntity(bee);
+                }catch(Exception e){
+                    TerraformGeneratorPlugin.logger.info("Falling back to NMS bee spawning (addEntity api not present)");
+                    canUseNewApi = false;
+                }
+            }
+
+            if(!canUseNewApi)
+                TerraformGeneratorPlugin.injector.storeBee(bukkitBeehive);
         }
         catch (ClassCastException e) {
             TerraformGeneratorPlugin.logger.info("Failed to set beehive at " + rawX + "," + rawY + "," + rawZ);
