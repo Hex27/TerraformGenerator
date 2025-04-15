@@ -13,6 +13,17 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 
+/**
+ * A concurrent cache which protects the duplicate creation of values V.
+ * V should NOT be mutated by users. After a safe rewrite it should extend Record.
+ * This record should not get mutated in any way.
+ * <br>
+ * The point of this cache is to store REPEATABLE CALCULATIONS. It uses a very relaxed
+ * lock system and WILL NOT protect concurrent writes to the object instances V -
+ * it will only guarantee that one unique V exists for each K associated with it.
+ * @param <K>
+ * @param <V>
+ */
 public final class ConcurrentLRUCache<K,V> {
     private final int maxSize;
     private final ReadWriteLock rwlock = new ReentrantReadWriteLock();

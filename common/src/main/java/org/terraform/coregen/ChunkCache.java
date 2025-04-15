@@ -27,8 +27,11 @@ public class ChunkCache {
      * blurredHeightCache will hold intermediate height blurring values
      * (calculated after dominantBiomeHeightCache)
      */
-    //11/4/2025 what the FUCK is this
-    float[] arrayCache; // These 6 arrays are now one big array. No more nested pointers
+    float[] heightMapCache;
+    float[] highestGroundCache;
+    float[] transformedGroundCache;
+    float[] dominantBiomeHeightCache;
+    float[] yBarrierNoiseCache;
 
     CompressedChunkBools solids;
     BiomeBank[] biomeCache;
@@ -59,16 +62,16 @@ public class ChunkCache {
     }
 
     public void initInternalCache() {
-        /*
-        This used to be a nested for loop initiating 6 2D float arrays.
-        However, neither the compiler or JVM bothered optimizing it
-        and it became a fucking hotspot. Because of that, it is
-        more appropriate to just inline it manually into this
-        disgusting monster array with hardcoded numbers because of
-        how speed sensitive this is.
-        */
-        //12/4/2025, added one more 256 cache to this madness
-        arrayCache = new float[1792]; // 7*256 for 7 separate caches
+        dominantBiomeHeightCache = new float[256];
+        Arrays.fill(dominantBiomeHeightCache, CHUNKCACHE_INVAL);
+        heightMapCache = new float[256];
+        Arrays.fill(heightMapCache, CHUNKCACHE_INVAL);
+        transformedGroundCache = new float[256];
+        Arrays.fill(transformedGroundCache, CHUNKCACHE_INVAL);
+        yBarrierNoiseCache = new float[256];
+        Arrays.fill(yBarrierNoiseCache, CHUNKCACHE_INVAL);
+        highestGroundCache = new float[256];
+        Arrays.fill(highestGroundCache, CHUNKCACHE_INVAL);
 
         /*
         If arrays.fill gives further speed problems, just use
@@ -76,7 +79,6 @@ public class ChunkCache {
         Problems might occur because the lib itself uses a for loop.
         Optimization lies entirely at the mercy of the running JVM.
         */
-        Arrays.fill(arrayCache, CHUNKCACHE_INVAL);
 
         //11/4/2025 not fucking adding more things to the sacred array are ya???
         solids = new CompressedChunkBools();
@@ -105,7 +107,7 @@ public class ChunkCache {
           happens because the chunk coordinates are the LSB, so ANDing by
           0xF will return the bits needed to give 0-15.
          */
-        return arrayCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];
+        return dominantBiomeHeightCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];
     }
 
     /**
@@ -114,15 +116,15 @@ public class ChunkCache {
      * @param value dominant biome height to cache
      */
     public void cacheDominantBiomeHeight(int rawX, int rawZ, float value) {
-        arrayCache[(rawX & 0xF) + 16 * (rawZ & 0xF)] = value;
+        dominantBiomeHeightCache[(rawX & 0xF) + 16 * (rawZ & 0xF)] = value;
     }
 
     public double getHeightMapHeight(int rawX, int rawZ) {
-        return arrayCache[768 + (rawX & 0xF) + 16 * (rawZ & 0xF)];
+        return heightMapCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];
     }
 
     public short getHighestGround(int rawX, int rawZ) {
-        return (short) arrayCache[1024 + (rawX & 0xF) + 16 * (rawZ & 0xF)];
+        return (short) highestGroundCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];
     }
 
     /**
@@ -132,11 +134,11 @@ public class ChunkCache {
      * @return the ACTUAL mutable copy from the cache.
      */
     public short getTransformedHeight(int chunkSubX, int chunkSubZ) {
-        return (short) arrayCache[1280 + chunkSubX + 16 * chunkSubZ];
+        return (short) transformedGroundCache[chunkSubX + 16 * chunkSubZ];
     }
 
     public void writeTransformedHeight(int chunkSubX, int chunkSubZ, short val) {
-        arrayCache[1280 + chunkSubX + 16 * chunkSubZ] = val;
+        transformedGroundCache[chunkSubX + 16 * chunkSubZ] = val;
     }
 
     /**
@@ -144,11 +146,11 @@ public class ChunkCache {
      * @return the noise calculated in NoiseCaveRegistry.YBarrier. Only the noise.
      */
     public float getYBarrierNoise(int chunkSubX, int chunkSubZ) {
-        return arrayCache[1536 + chunkSubX + 16 * chunkSubZ];
+        return yBarrierNoiseCache[chunkSubX + 16 * chunkSubZ];
     }
 
     public void cacheYBarrierNoise(int chunkSubX, int chunkSubZ, float val) {
-        arrayCache[1536 + chunkSubX + 16 * chunkSubZ] = val;
+        yBarrierNoiseCache[chunkSubX + 16 * chunkSubZ] = val;
     }
 
     /**
@@ -157,7 +159,7 @@ public class ChunkCache {
      * @param value height to cache
      */
     public void cacheHeightMap(int rawX, int rawZ, double value) {
-        arrayCache[768 + (rawX & 0xF) + 16 * (rawZ & 0xF)] = (float) value;
+        heightMapCache[(rawX & 0xF) + 16 * (rawZ & 0xF)] = (float) value;
     }
 
     /**
@@ -166,40 +168,7 @@ public class ChunkCache {
      * @param value height to cache
      */
     public void cacheHighestGround(int rawX, int rawZ, short value) {
-        arrayCache[1024 + (rawX & 0xF) + 16 * (rawZ & 0xF)] = value;
-    }
-
-    public float getBlurredHeight(int rawX, int rawZ) {
-        return arrayCache[256 + (rawX & 0xF) + 16 * (rawZ & 0xF)];
-    }
-
-    /**
-     * MEANT FOR USE ONLY IN THE BLURRING PROCESS.
-     */
-    public double getIntermediateBlurHeight(int rawX, int rawZ)
-    {
-        return arrayCache[512 + (rawX & 0xF) + 16 * (rawZ & 0xF)];
-    }
-
-
-    /**
-     * @param rawX  BLOCK COORD x
-     * @param rawZ  BLOCK COORD z
-     * @param value height to cache
-     */
-    public void cacheBlurredHeight(int rawX, int rawZ, float value) {
-        arrayCache[256 + (rawX & 0xF) + 16 * (rawZ & 0xF)] = value;
-    }
-
-    /**
-     * MEANT FOR USE ONLY IN THE BLURRING PROCESS.
-     *
-     * @param rawX  BLOCK COORD x
-     * @param rawZ  BLOCK COORD z
-     * @param value height to cache
-     */
-    public void cacheIntermediateBlurredHeight(int rawX, int rawZ, float value) {
-        arrayCache[512 + (rawX & 0xF) + 16 * (rawZ & 0xF)] = value;
+        highestGroundCache[(rawX & 0xF) + 16 * (rawZ & 0xF)] = value;
     }
 
     public BiomeBank getBiome(int rawX, int rawZ) {

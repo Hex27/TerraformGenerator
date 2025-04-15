@@ -76,8 +76,10 @@ public class NoiseCaveRegistry {
                 }
         );
         float boundaryNoiseVal = cache.getYBarrierNoise(x & 0xF, z & 0xF);
-        if(boundaryNoiseVal == ChunkCache.CHUNKCACHE_INVAL)
+        if(boundaryNoiseVal == ChunkCache.CHUNKCACHE_INVAL) {
             boundaryNoiseVal = 3 * boundaryNoise.GetNoise(x, z);
+            cache.cacheYBarrierNoise(x & 0xF, z & 0xF, boundaryNoiseVal);
+        }
         barrier += boundaryNoiseVal; // fuzz the boundary
 
         if (Math.abs(y - v) <= limit) {
