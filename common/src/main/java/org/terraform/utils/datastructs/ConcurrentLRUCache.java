@@ -4,9 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.main.TerraformGeneratorPlugin;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -25,29 +24,48 @@ import java.util.function.Function;
  * @param <V>
  */
 public final class ConcurrentLRUCache<K,V> {
+    private final ThreadLocal<HashMap<K,LRUNode<K,V>>> localCache = ThreadLocal.withInitial(HashMap::new);
     private final int maxSize;
+    private final int localCacheSize;
     private final ReadWriteLock rwlock = new ReentrantReadWriteLock();
     private final Lock readLock = rwlock.readLock();
     private final Lock writeLock = rwlock.writeLock();
     private final HashMap<K,LRUNode<K,V>> keyToValue;
     private final Function<@NotNull K,@Nullable V> generator;
-    private int misses = 0;
-    private int hits = 0;
 
-    public ConcurrentLRUCache(int maxSize, Function<@NotNull K,@Nullable V> generator) {
+    //Benchmarking things. Comment out when not in use, as accessing them
+    // is not necessarily cheap.
+    //private int misses = 0;
+    //private int hits = 0;
+    private final String name;
+    //private final AtomicInteger localMisses = new AtomicInteger(0);
+    //private final AtomicInteger localHits = new AtomicInteger(0);
+
+    public ConcurrentLRUCache(String name, int maxSize, Function<@NotNull K,@Nullable V> generator) {
+        this.name = name;
         this.maxSize = maxSize;
+        this.localCacheSize = 5;
+        this.generator = generator;
+        this.keyToValue = new HashMap<>(maxSize);
+    }
+    public ConcurrentLRUCache(String name, int maxSize, int localMaxSize, Function<@NotNull K,@Nullable V> generator) {
+        this.name = name;
+        this.maxSize = maxSize;
+        this.localCacheSize = localMaxSize;
         this.generator = generator;
         this.keyToValue = new HashMap<>(maxSize);
     }
 
-    public V get(K key){
-        V retVal = null;
+    /**
+     * Starts acquiring locks and interacting with the global cache
+     */
+    private LRUNode<K,V> slowPathGet(K key){
         readLock.lock();
+        LRUNode<K,V> node = null;
         try{
-            LRUNode<K,V> node = keyToValue.get(key);
+            node = keyToValue.get(key);
             if(node != null){
-                hits++;
-                retVal = node.value;
+                //hits++;
                 //I don't really know if set needs to be used here.
                 //In theory, this only matters if someone is trying to write NOW,
                 // but that can't happen because this method holds a read lock.
@@ -55,38 +73,53 @@ public final class ConcurrentLRUCache<K,V> {
             }
         }finally{
             readLock.unlock();
-            if(retVal == null) //handle cache miss
-                retVal = calculateAndInsert(key);
-
+            if(node == null) //handle cache miss
+                node = calculateAndInsert(key);
         }
-        return retVal;
+        return node;
+    }
+
+    /**
+     * Checks the ThreadLocal hashmap first.
+     */
+    public V get(K key){
+        var localMap = localCache.get();
+        LRUNode<K,V> node = localMap.get(key);
+        if(node == null) {
+            //localMisses.incrementAndGet();
+            node = slowPathGet(key);
+            if(localMap.size() >= localCacheSize)
+                localMap.clear();
+            localMap.put(key,node);
+        }else {
+            //localHits.incrementAndGet();
+            node.lastAccess.lazySet(System.nanoTime());
+        }
+        return node.value;
     }
 
     /**
      * Assumes that the key was not already present
      */
-    private V calculateAndInsert(K key){
+    private LRUNode<K,V> calculateAndInsert(K key){
         writeLock.lock();
         //It's possible for two threads to miss the same key.
         // One of the threads will win in writing it first, so
-        // other threads can be just check and release their write lock.
-        V val;
+        // other threads can just check and release their write lock.
         LRUNode<K,V> node = keyToValue.get(key);
         try{
             if(node == null){
-                misses++;
+                //misses++;
                 if(keyToValue.size() >= maxSize) pruneLRU();
-                val = generator.apply(key);
-                LRUNode<K,V> newNode = new LRUNode<>(key, val);
-                keyToValue.put(key, newNode);
+                node = new LRUNode<>(key, generator.apply(key));
+                keyToValue.put(key, node);
             }else {
-                hits++;
-                val = node.value;
+                //hits++;
             }
         }finally{
             writeLock.unlock();
         }
-        return val;
+        return node;
     }
 
     /**
@@ -107,9 +140,11 @@ public final class ConcurrentLRUCache<K,V> {
             keyToValue.remove(nodes.get(index).key);
             index++;
         }
-        //TerraformGeneratorPlugin.logger.info("LRU pruned " + (index) + " entries. Current Hit Ratio: " + (hits/(hits+misses+1)));
-        hits = 0;
-        misses = 0;
+        //TerraformGeneratorPlugin.logger.info(name + " pruned " + (index) + " entries."
+        //                                     + "\n\t Current Hit Ratio: " + (((double)hits)/((double)(hits+misses+1)))
+        //                                     + "\n\t Local Hit Ratio: " + (((double)localHits.get())/((double)(localHits.get()+localMisses.get()+1))));
+        //hits = 0;
+        //misses = 0;
     }
 
     private static final class LRUNode<K,V> {

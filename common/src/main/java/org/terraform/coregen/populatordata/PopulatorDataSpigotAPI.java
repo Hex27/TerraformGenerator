@@ -148,9 +148,9 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
         return tw;
     }
 
-    private boolean canUseNewApi = true;
-    private Method addEntity;
-    private Method createEntity;
+    private static boolean canUseNewApi = true;
+    private static Method addEntity;
+    private static Method createEntity;
     @Override
     public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
         if (!TConfig.areAnimalsEnabled()) return;
@@ -158,7 +158,6 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
         if (!lr.isInRegion(rawX, rawY, rawZ)) {
             return; // just forget it
         }
-
 
         setType(rawX, rawY, rawZ, Material.BEE_NEST);
         // I guess the above can fail sometimes. I don't know why.

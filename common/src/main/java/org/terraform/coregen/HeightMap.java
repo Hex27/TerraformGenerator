@@ -80,7 +80,7 @@ public enum HeightMap {
     private static final int upscaleSize = 3;
     public static int spawnFlatRadiusSquared = -324534;
     private static final ConcurrentLRUCache<BiomeSection, SectionBlurCache> BLUR_CACHE = new ConcurrentLRUCache<>(
-        64, (sect)->{
+        "BLUR_CACHE",64, (sect)->{
             SectionBlurCache newCache = new SectionBlurCache(
                     sect,
                     new float[BiomeSection.sectionWidth+MASK_DIAMETER][BiomeSection.sectionWidth+MASK_DIAMETER],

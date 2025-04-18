@@ -42,7 +42,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
 
     public TerraformStructurePopulator(TerraformWorld tw) {
         this.tw = tw;
-        this.jigsawCache = new ConcurrentLRUCache<>(20, (mc)->{
+        this.jigsawCache = new ConcurrentLRUCache<>("jigsawCache",20, (mc)->{
             BiomeBank biome = mc.getCenterBiomeSection(tw).getBiomeBank();
             SingleMegaChunkStructurePopulator spop = getMegachunkStructure(mc, tw, biome);
             if (spop == null) {

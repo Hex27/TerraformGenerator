@@ -1,9 +1,6 @@
 package org.terraform.coregen;
 
 import org.terraform.biome.BiomeSection;
-import org.terraform.coregen.bukkit.TerraformGenerator;
-
-import java.util.Objects;
 
 public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[][] blurred) {
 
@@ -60,6 +57,9 @@ public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[
 
     @Override
     public boolean equals(Object o){
-       return sect.equals(o);
+        if(o instanceof SectionBlurCache s){
+            return s.sect.equals(sect);
+        }
+        return false;
     }
 }

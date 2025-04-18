@@ -347,23 +347,9 @@ public enum BiomeBank {
         }
     }};
     private static final ConcurrentLRUCache<BiomeSection, BiomeSection> BIOMESECTION_CACHE = new ConcurrentLRUCache<>(
+            "BIOMESECTION_CACHE",
             250,
             (key)->{key.doCalculations(); return key; }
-    );
-    // This is the most taxing calculation. Have a bigger cache.
-    private static final ConcurrentLRUCache<TWSimpleLocation, BiomeBank> HEIGHTINDEPENDENTBIOME_CACHE = new ConcurrentLRUCache<>(
-            500,
-            (key)->{
-                {
-                    // This optimisation doesn't work here. Many aesthetic options rely on
-                    // the fact that this is block-accurate. Calculating once per 4x4 blocks
-                    // creates obvious ugly 4x4 artifacts
-                    // x = (x >> 2) << 2; z = (z >> 2) << 2;
-
-                    BiomeSection mostDominant = BiomeSection.getMostDominantSection(key.tw(), key.x(), key.z());
-                    return Objects.requireNonNullElse(mostDominant.getBiomeBank(), BiomeBank.PLAINS);
-                }
-            }
     );
     // public static final BiomeBank[] VALUES = values();
     public static boolean debugPrint = false;
@@ -582,8 +568,17 @@ public enum BiomeBank {
      *
      * @return a biome type
      */
-    public static @NotNull BiomeBank calculateHeightIndependentBiome(TerraformWorld tw, int x, int z) {
-        return HEIGHTINDEPENDENTBIOME_CACHE.get(new TWSimpleLocation(tw, x, 0, z));
+    public static @NotNull BiomeBank calculateHeightIndependentBiome(TerraformWorld tw, int x, int z)
+    {
+        // This optimisation doesn't work here. Many aesthetic options rely on
+        // the fact that this is block-accurate. Calculating once per 4x4 blocks
+        // creates obvious ugly 4x4 artifacts
+        // x = (x >> 2) << 2; z = (z >> 2) << 2;
+
+        //There used to be a cache here, but it had an abysmal hitrate of near 0
+        // when caching 32 chunks
+        BiomeSection mostDominant = BiomeSection.getMostDominantSection(tw,x,z);
+        return Objects.requireNonNullElse(mostDominant.getBiomeBank(), BiomeBank.PLAINS);
     }
 
     public static void initSinglesConfig() {

@@ -100,6 +100,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
         // Initialize chunk cache based on config size
         TerraformGenerator.CHUNK_CACHE = new ConcurrentLRUCache<>(
+                "CHUNK_CACHE",
                 TConfig.c.DEVSTUFF_CHUNKCACHE_SIZE,
                 (key)->{
                     key.initInternalCache();
@@ -108,6 +109,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
         // Initialize biome query cache based on config size
         GenUtils.biomeQueryCache = new ConcurrentLRUCache<>(
+                "biomeQueryCache",
                 TConfig.c.DEVSTUFF_CHUNKBIOMES_SIZE,
                 (key) -> {
                     EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);

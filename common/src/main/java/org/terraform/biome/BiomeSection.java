@@ -21,6 +21,7 @@ public class BiomeSection {
     public static final int sectionWidth = (int) (1 << bitshifts);
     public static final int minSize = sectionWidth;
     public static final int dominanceThreshold = (int) (0.35 * sectionWidth);
+    public static final int dominanceThresholdSquared = dominanceThreshold*dominanceThreshold;
     private final int x;
     private final int z;
     private final TerraformWorld tw;
@@ -125,7 +126,7 @@ public class BiomeSection {
         BiomeSection homeSection = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
 
         // Don't calculate if distance is very close to center
-        if (target.distance(homeSection.getCenter()) <= dominanceThreshold) {
+        if (target.distanceSqr(homeSection.getCenter()) <= dominanceThresholdSquared) {
             return homeSection;
         }
 
