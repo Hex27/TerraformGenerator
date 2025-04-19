@@ -1,10 +1,5 @@
 package org.terraform.structure.ancientcity;
 
-import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Map.Entry;
-
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleLocation;
@@ -14,6 +9,11 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.schematic.TerraSchematic;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.structure.room.RoomLayoutGenerator;
+
+import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class AncientCityAltarPopulator extends AncientCityAbstractRoomPopulator {
 

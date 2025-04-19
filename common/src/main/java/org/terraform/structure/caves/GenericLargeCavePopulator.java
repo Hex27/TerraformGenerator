@@ -58,12 +58,13 @@ public class GenericLargeCavePopulator extends RoomPopulatorAbstract {
         assert data.getChunkZ() == room.getZ() >> 4;
 
         caveRoom.ceilFloorPairs.forEach((l, pair) -> {
-            if (pair[1] != null) {
-                populateFloor(new SimpleBlock(data, pair[1]), caveRoom.waterLevel);
+            if (pair.z() != LargeCaveRoomCarver.FLOOR_CEIL_NULL) {
+                populateFloor(new SimpleBlock(data, l.x(), pair.z(), l.z()), caveRoom.waterLevel);
             }
-            if (pair[0] != null && pair[1] != null) {
-                SimpleBlock ceil = new SimpleBlock(data, pair[0]);
-                SimpleBlock floor = new SimpleBlock(data, pair[1]);
+            if (pair.x() != LargeCaveRoomCarver.FLOOR_CEIL_NULL
+                && pair.z() != LargeCaveRoomCarver.FLOOR_CEIL_NULL) {
+                SimpleBlock ceil = new SimpleBlock(data, l.x(), pair.x(), l.z());
+                SimpleBlock floor = new SimpleBlock(data, l.x(), pair.z(), l.z());
                 int height = ceil.getY() - floor.getY();
 
                 populateCeilFloorPair(ceil, floor, height);

@@ -1,7 +1,5 @@
 package org.terraform.structure.pillager.mansion;
 
-import java.util.Random;
-
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.bukkit.TerraformGenerator;
@@ -11,6 +9,8 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.utils.GenUtils;
+
+import java.util.Random;
 
 public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 

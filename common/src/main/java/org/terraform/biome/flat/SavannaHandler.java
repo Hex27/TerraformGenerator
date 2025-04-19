@@ -114,7 +114,7 @@ public class SavannaHandler extends BiomeHandler {
         if (TConfig.c.TREES_SAVANNA_BIG_ENABLED) {
             for (SimpleLocation sLoc : trees) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                     && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))
                 {
@@ -134,7 +134,7 @@ public class SavannaHandler extends BiomeHandler {
             trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 32);
             for (SimpleLocation sLoc : trees) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                     && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))
                 {
@@ -154,7 +154,7 @@ public class SavannaHandler extends BiomeHandler {
             SimpleLocation[] poffs = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 31);
             for (SimpleLocation sLoc : poffs) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                     && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()))
                     && !data.getType(sLoc.getX(), sLoc.getY() + 1, sLoc.getZ()).isSolid())

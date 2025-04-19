@@ -1,12 +1,9 @@
 package org.terraform.utils.noise;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.terraform.data.TerraformWorld;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -15,17 +12,24 @@ import java.util.function.Function;
  */
 public class NoiseCacheHandler {
 
-    private static final LoadingCache<NoiseCacheHandler.NoiseCacheKey, FastNoise> NOISE_CACHE = CacheBuilder.newBuilder()
-                                                                                                            .maximumSize(
-                                                                                                                    300)
-                                                                                                            .build(new NoiseCacheLoader());
+    // Removed google's cache from this as it was a bottleneck in rapid reads
+    // in the noise generation phase. Since FastNoise is small, and the
+    // set of storable things is bounded by this enum, there's
+    // no reason to use a complex cache that frees things lazily - just store
+    // everything and leave it there until the world is unloaded.
+    private static final ConcurrentHashMap<NoiseCacheKey, FastNoise> NOISE_CACHE = new ConcurrentHashMap<>();
+    public static void flushNoiseCaches(TerraformWorld tw){
+        for(NoiseCacheKey k:NOISE_CACHE.keySet()){
+            if(k.tw.equals(tw)) NOISE_CACHE.remove(k);
+        }
+    }
 
     public static @NotNull FastNoise getNoise(TerraformWorld world,
                                               NoiseCacheEntry entry,
                                               @NotNull Function<TerraformWorld, FastNoise> noiseFunction)
     {
         NoiseCacheKey key = new NoiseCacheKey(world, entry);
-        FastNoise noise = NOISE_CACHE.getIfPresent(key);
+        FastNoise noise = NOISE_CACHE.get(key);
         if (noise == null) {
             noise = noiseFunction.apply(world);
             NOISE_CACHE.put(key, noise);
@@ -103,6 +107,7 @@ public class NoiseCacheHandler {
         CAVE_CHEESE_NOISE,
         CAVE_XRAVINE_NOISE,
         CAVE_XRAVINE_DETAILS,
+        CAVE_YBARRIER_NOISE,
 
         STRUCTURE_LARGECAVE_CARVER,
 
@@ -122,45 +127,10 @@ public class NoiseCacheHandler {
         GENUTILS_RANDOMOBJ_NOISE,
 
         FRACTALTREES_LEAVES_NOISE,
-        FRACTALTREES_BASE_NOISE,
+        FRACTALTREES_BASE_NOISE
     }
 
-    public static class NoiseCacheLoader extends CacheLoader<NoiseCacheHandler.NoiseCacheKey, FastNoise> {
-        /**
-         * Does not do loading.
-         * If this is null, the caller is responsible for inserting it.
-         */
-        @Override
-        public @Nullable FastNoise load(@NotNull NoiseCacheKey key) {
-            return null;
-        }
-    }
-
-    public static class NoiseCacheKey {
-        private final TerraformWorld tw;
-        private final NoiseCacheEntry entry;
-
-        public NoiseCacheKey(TerraformWorld world, NoiseCacheEntry entry) {
-            this.tw = world;
-            this.entry = entry;
-        }
-
-        @Override
-        public int hashCode() {
-            return tw.hashCode() ^ (entry.hashCode() * 31);
-        }
-
-        @Override
-        public boolean equals(Object other) {
-            if (other instanceof NoiseCacheKey o) {
-                if (!o.tw.getName().equals(tw.getName())) {
-                    return false;
-                }
-                return entry == o.entry;
-            }
-            return false;
-        }
-    }
+    public record NoiseCacheKey(TerraformWorld tw, NoiseCacheEntry entry) {}
 
 
 }

@@ -1,13 +1,13 @@
 package org.terraform.reflection;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.terraform.main.TerraformGeneratorPlugin;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.terraform.main.TerraformGeneratorPlugin;
 
 public class Pre14PrivateFieldHandler extends PrivateFieldHandler {
     private static final @Nullable MethodHandle FIELD_MODIFIERS;

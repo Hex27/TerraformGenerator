@@ -14,8 +14,8 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.WoodUtils;
 import org.terraform.utils.WoodUtils.WoodType;
-import org.terraform.utils.version.Version;
 import org.terraform.utils.version.V_1_19;
+import org.terraform.utils.version.Version;
 
 import java.util.Map.Entry;
 import java.util.Random;

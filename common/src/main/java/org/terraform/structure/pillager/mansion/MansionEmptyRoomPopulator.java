@@ -1,12 +1,12 @@
 package org.terraform.structure.pillager.mansion;
 
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.structure.room.CubeRoom;
+
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Used to mark that a room was considered, but does not need to generate anything.

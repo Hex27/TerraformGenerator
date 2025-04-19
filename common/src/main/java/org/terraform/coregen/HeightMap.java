@@ -4,14 +4,17 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.CoordPair;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.datastructs.ConcurrentLRUCache;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
+
+import java.util.HashMap;
 
 public enum HeightMap {
     /**
@@ -70,8 +73,21 @@ public enum HeightMap {
 
     public static final int defaultSeaLevel = 62;
     public static final float heightAmplifier = TConfig.c.HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER;
+    public static final int MASK_RADIUS = 5;
+    public static final int MASK_DIAMETER = (MASK_RADIUS * 2) + 1;
+    public static final int MASK_VOLUME = MASK_DIAMETER*MASK_DIAMETER;
     private static final int upscaleSize = 3;
     public static int spawnFlatRadiusSquared = -324534;
+    private static final ConcurrentLRUCache<BiomeSection, SectionBlurCache> BLUR_CACHE = new ConcurrentLRUCache<>(
+        "BLUR_CACHE",64, (sect)->{
+            SectionBlurCache newCache = new SectionBlurCache(
+                    sect,
+                    new float[BiomeSection.sectionWidth+MASK_DIAMETER][BiomeSection.sectionWidth+MASK_DIAMETER],
+                    new float[BiomeSection.sectionWidth+MASK_DIAMETER][BiomeSection.sectionWidth+MASK_DIAMETER]);
+            newCache.fillCache();
+            return newCache;
+        }
+    );
 
     /**
      * Returns the average increase or decrease in height for surrounding blocks compared to the provided height at those coords.
@@ -103,6 +119,7 @@ public enum HeightMap {
      */
     /*TODO: There are several calls to this in Biome Handlers.
      * Write a version that uses transformed height.
+     * 10/4/2025: Is this not already transformed height???
      */
     public static double getTrueHeightGradient(PopulatorDataAbstract data, int x, int z, int radius) {
         double totalChangeInGradient = 0;
@@ -131,10 +148,10 @@ public enum HeightMap {
     }
 
     public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
-        ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
+        ChunkCache cache = TerraformGenerator.getCache(tw, x>>4, z>>4);
 
         double cachedValue = cache.getHeightMapHeight(x, z);
-        if (cachedValue != TerraformGeneratorPlugin.injector.getMinY() - 1) {
+        if (cachedValue != ChunkCache.CHUNKCACHE_INVAL) {
             return cachedValue;
         }
 
@@ -161,13 +178,26 @@ public enum HeightMap {
         return height;
     }
 
-    private static float getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
-        ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
-        float h = cache.getDominantBiomeHeight(x, z);
-        if (h == TerraformGeneratorPlugin.injector.getMinY() - 1) {
+    /**
+     * Do not fucking call this anywhere outside the SectionBlurCache.
+     * This method used to cause cache thrashing as it can leave the chunk
+     * boundaries. This was fixed by just caching this with a stack
+     * variable, as it happened to be called in one place.
+     * <br><br>
+     * Do not call this anywhere else.
+     * @param x raw x coordinate
+     * @param z raw z coordinate
+     * @param dominantBiomeHeights This is a cache value for local caching.
+     * @return The dominant biome's height calculation. Must be blurred to be coherent with other biomes.
+     */
+    static float getDominantBiomeHeight(TerraformWorld tw, int x, int z, HashMap<CoordPair, Float> dominantBiomeHeights) {
+        CoordPair key = new CoordPair(x,z);
+        Float h = dominantBiomeHeights.get(key);
+        if (h == null) {
             // Upscale the biome
+            // This comes from computing each biome height one time per upscaleSize blocks
             if (x % upscaleSize != 0 && z % upscaleSize != 0) {
-                h = getDominantBiomeHeight(tw, x - (x % upscaleSize), z - (z % upscaleSize));
+                h = getDominantBiomeHeight(tw, x - (x % upscaleSize), z - (z % upscaleSize), dominantBiomeHeights);
             }
             else {
                 h = (float) BiomeBank.calculateHeightIndependentBiome(tw, x, z).getHandler().calculateHeight(tw, x, z);
@@ -175,8 +205,8 @@ public enum HeightMap {
                     h = (float) HeightMap.CORE.getHeight(tw, x, z);
                 }
             }
+            dominantBiomeHeights.put(key, h);
         }
-        cache.cacheDominantBiomeHeight(x, z, h);
         return h;
     }
 
@@ -189,62 +219,13 @@ public enum HeightMap {
      */
     public static double getRiverlessHeight(TerraformWorld tw, int x, int z) {
 
-        int maskRadius = 5;
-        int maskDiameter = (maskRadius * 2) + 1;
         // int maskDiameterSquared = maskDiameter*maskDiameter;
         double coreHeight;
 
-        ChunkCache mainCache = TerraformGenerator.getCache(tw, x, z);
+        BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
 
-        // If this chunk cache hasn't cached a blurred value,
-        if (mainCache.getBlurredHeight(x, z) == TerraformGeneratorPlugin.injector.getMinY() - 1) {
-
-            // Box blur across the biome section
-            // MegaChunk mc = new MegaChunk(x, 0, z);
-            BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
-
-            // For every point in the biome section, blur across the X axis.
-            for (int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
-                for (int relZ = sect.getLowerBounds().getZ() - maskRadius;
-                     relZ <= sect.getUpperBounds().getZ() + maskRadius;
-                     relZ++) {
-
-                    ChunkCache targetCache = TerraformGenerator.getCache(tw, relX, relZ);
-                    float lineTotalHeight = 0;
-                    for (int offsetX = -maskRadius; offsetX <= maskRadius; offsetX++) {
-                        lineTotalHeight += getDominantBiomeHeight(tw, relX + offsetX, relZ);
-                    }
-
-                    // Temporarily cache these X-Blurred values into chunkcache.
-                    // Do not purge values that are legitimate.
-                    if (targetCache.getIntermediateBlurHeight(relX, relZ)
-                        == TerraformGeneratorPlugin.injector.getMinY() - 1)
-                    {
-                        targetCache.cacheIntermediateBlurredHeight(relX, relZ, lineTotalHeight / maskDiameter);
-                    }
-                }
-            }
-
-            // For every point in the biome section, blur across the Z axis.
-            for (int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
-                for (int relZ = sect.getLowerBounds().getZ(); relZ <= sect.getUpperBounds().getZ(); relZ++) {
-
-                    ChunkCache targetCache = TerraformGenerator.getCache(tw, relX, relZ);
-                    float lineTotalHeight = 0;
-                    for (int offsetZ = -maskRadius; offsetZ <= maskRadius; offsetZ++) {
-                        ChunkCache queryCache = TerraformGenerator.getCache(tw, relX, relZ + offsetZ);
-
-                        // Note, this may accidentally blur twice for some Z values if
-                        // chunks generate in a specific weird order. That's (probably) fine.
-                        lineTotalHeight += (float) queryCache.getIntermediateBlurHeight(relX, relZ + offsetZ);
-                    }
-                    // final blurred value
-                    targetCache.cacheBlurredHeight(relX, relZ, lineTotalHeight / maskDiameter);
-                }
-            }
-        }
-
-        coreHeight = mainCache.getBlurredHeight(x, z);
+        // This will calculate a blur height
+        coreHeight = BLUR_CACHE.get(sect).getBlurredHeight(x,z);
 
         coreHeight += HeightMap.ATTRITION.getHeight(tw, x, z);
 

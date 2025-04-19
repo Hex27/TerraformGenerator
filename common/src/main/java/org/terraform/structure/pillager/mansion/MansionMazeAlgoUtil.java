@@ -1,18 +1,14 @@
 package org.terraform.structure.pillager.mansion;
 
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Stack;
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class MansionMazeAlgoUtil {
 

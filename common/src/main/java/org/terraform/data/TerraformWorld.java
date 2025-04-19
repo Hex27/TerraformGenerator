@@ -124,7 +124,7 @@ public class TerraformWorld {
      * @param z blockZ
      */
     public BiomeBank getBiomeBank(int x, int z) {
-        ChunkCache cache = TerraformGenerator.getCache(this, x, z);
+        ChunkCache cache = TerraformGenerator.getCache(this, x>>4, z>>4);
         BiomeBank cachedValue = cache.getBiome(x, z);
         if (!BiomeBank.debugPrint && cachedValue != null) {
             return cachedValue;
@@ -136,7 +136,7 @@ public class TerraformWorld {
     }
 
     public BiomeBank getBiomeBank(int x, int y, int z) {
-        ChunkCache cache = TerraformGenerator.getCache(this, x, z);
+        ChunkCache cache = TerraformGenerator.getCache(this, x>>4, z>>4);
         BiomeBank cachedValue = cache.getBiome(x, z);
         if (cachedValue != null) {
             return cachedValue;

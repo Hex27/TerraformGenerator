@@ -83,7 +83,13 @@ public class AnimalPopulator {
             int z = (data.getChunkZ() << 4) + GenUtils.randInt(random, 5, 7);
 
             // To account for solid ground that spawns above the noisemap (i.e. boulders/black spikes)
-            int height = GenUtils.getHighestGround(data, x, z) + 1;// HeightMap.getBlockHeight(world, x, z) + 2;
+            int height = GenUtils.getTransformedHeight(world,x,z)+1;
+
+            //Fallback to highest ground if it is solid
+            //This may lead to animals inside houses, but too bad i guess
+            if(data.getType(x,height,z).isSolid()){
+                height = GenUtils.getHighestGround(data, x, z) + 1;
+            }
 
             if (canSpawnInBiome(world.getBiomeBank(x, z))) {
                 if (!this.isAquatic && height > TerraformGenerator.seaLevel) {

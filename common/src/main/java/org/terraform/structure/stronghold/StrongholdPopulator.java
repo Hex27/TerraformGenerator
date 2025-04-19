@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.CoordPair;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -20,33 +21,29 @@ import java.util.Random;
 
 public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     private static boolean debugSpawnMessage = false;
-    private static HashMap<TerraformWorld,int[][]> POSITIONS = new HashMap<>();
+    private static final HashMap<TerraformWorld,CoordPair[]> POSITIONS = new HashMap<>();
 
     /**
      * @return x, z coords on the circumference of
      * a circle of the specified radius, center 0,0
      */
-    private static int[] randomCircleCoords(@NotNull Random rand, int radius) {
+    private static CoordPair randomCircleCoords(@NotNull Random rand, int radius) {
         double angle = rand.nextDouble() * Math.PI * 2;
         int x = (int) (Math.cos(angle) * radius);
         int z = (int) (Math.sin(angle) * radius);
-        return new int[] {x, z};
+        return new CoordPair(x, z);
     }
 
-    private static boolean areCoordsEqual(int @NotNull [] a, int x, int z) {
-        return a[0] == x && a[1] == z;
-    }
-
-    public int[][] strongholdPositions(@NotNull TerraformWorld tw) {
+    public CoordPair[] strongholdPositions(@NotNull TerraformWorld tw) {
         if (!POSITIONS.containsKey(tw)) {
-            int[][] positions = new int[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9][2];
+            CoordPair[] positions = new CoordPair[3 + 6 + 10 + 15 + 21 + 28 + 36 + 9];
             int pos = 0;
             int radius = 1408;
             Random rand = tw.getHashedRand(1, 1, 1);
             for (int i = 0; i < 3; i++) {
-                int[] coords = randomCircleCoords(rand, radius);
+                CoordPair coords = randomCircleCoords(rand, radius);
                 if (!debugSpawnMessage) {
-                    TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords[0] + ", " + coords[1]);
+                    TerraformGeneratorPlugin.logger.info("Will spawn stronghold at: " + coords);
                     debugSpawnMessage = true;
                 }
                 positions[pos++] = coords;
@@ -92,20 +89,19 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         return POSITIONS.get(tw);
     }
 
+
+    // This is possibly a performance bottleneck.
+    // Consider getting a better data structure to store this.
     @Override
     public boolean canSpawn(@NotNull TerraformWorld tw, int chunkX, int chunkZ, BiomeBank biome) {
         if (!isEnabled()) {
             return false;
         }
 
-        int[][] positions = strongholdPositions(tw);
-        for (int x = chunkX * 16; x < chunkX * 16 + 16; x++) {
-            for (int z = chunkZ * 16; z < chunkZ * 16 + 16; z++) {
-                for (int[] pos : positions) {
-                    if (areCoordsEqual(pos, x, z)) {
-                        return true;
-                    }
-                }
+        CoordPair[] positions = strongholdPositions(tw);
+        for (CoordPair pos : positions) {
+            if ((pos.x() >> 4) == chunkX && (pos.z() >> 4) == chunkZ) {
+                return true;
             }
         }
 
@@ -118,11 +114,11 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
             return;
         }
 
-        int[][] positions = strongholdPositions(tw);
+        CoordPair[] positions = strongholdPositions(tw);
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {
-                for (int[] pos : positions) {
-                    if (areCoordsEqual(pos, x, z)) {
+                for (CoordPair pos : positions) {
+                    if (pos.x() == x && pos.z() == z) {
 
                         // Strongholds no longer calculate from the surface.
                         // Just pick a directly underground location.
@@ -194,6 +190,7 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
         gen.forceAddRoom(25, 25, 15); // At least one room that can be the Portal room.
 
         CubeRoom stairwayOne = gen.forceAddRoom(5, 5, 18);
+        assert stairwayOne != null;
         stairwayOne.setRoomPopulator(new StairwayRoomPopulator(random, false, false));
         gen.registerRoomPopulator(new PortalRoomPopulator(random, true, true));
         gen.registerRoomPopulator(new LibraryRoomPopulator(random, false, false));
@@ -247,33 +244,33 @@ public class StrongholdPopulator extends SingleMegaChunkStructurePopulator {
     // This has to be kept. It is used to locate strongholds
     public int[] getNearestFeature(@NotNull TerraformWorld tw, int rawX, int rawZ) {
         double minDistanceSquared = Double.MAX_VALUE;
-        int[] min = null;
-        for (int[] loc : strongholdPositions(tw)) {
-            double distSqr = Math.pow(loc[0] - rawX, 2) + Math.pow(loc[1] - rawZ, 2);
+        CoordPair min = null;
+        for (CoordPair pos : strongholdPositions(tw)) {
+            double distSqr = Math.pow(pos.x() - rawX, 2) + Math.pow(pos.z() - rawZ, 2);
 
             if (min == null) {
                 minDistanceSquared = distSqr;
-                min = loc;
+                min = pos;
                 continue;
             }
 
             if (distSqr < minDistanceSquared) {
                 minDistanceSquared = distSqr;
-                min = loc;
+                min = pos;
             }
         }
-        return new int[] {min[0], min[1]};
+        assert min != null;
+        return new int[] {min.x(),min.z()};
     }
 
 
-    public int[] getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
-        int[][] positions = strongholdPositions(tw);
-        for (int[] pos : positions) {
-            if (mc.containsXZBlockCoords(pos[0], pos[1])) {
+    public CoordPair getCoordsFromMegaChunk(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
+        CoordPair[] positions = strongholdPositions(tw);
+        for (CoordPair pos : positions) {
+            if (mc.containsXZBlockCoords(pos.x(),pos.z())) {
                 return pos;
             }
         }
-
         return null;
     }
 

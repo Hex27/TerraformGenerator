@@ -16,9 +16,8 @@ public class V_1_19 {
 
     public static final EntityType ALLAY = getEntityType();
 
-    public static final @Nullable Material MUD = !Version.isAtLeast(19)
-                                                 ? Material.getMaterial("PODZOL")
-                                                 : Material.getMaterial("MUD");
+    public static final @NotNull Material MUD = Objects.requireNonNull(!Version.isAtLeast(19) ? Material.getMaterial(
+            "PODZOL") : Material.getMaterial("MUD"));
 
     public static final @Nullable Material MUD_BRICKS = !Version.isAtLeast(19)
                                                         ? Material.getMaterial("BRICKS")

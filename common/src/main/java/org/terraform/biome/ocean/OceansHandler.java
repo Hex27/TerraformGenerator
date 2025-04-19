@@ -94,7 +94,7 @@ public class OceansHandler extends AbstractOceanHandler {
         for (SimpleLocation sLoc : rocks) {
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()) {
                 int rockY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(rockY);
+                sLoc = sLoc.getAtY(rockY);
                 if (data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ()) != Material.GRAVEL) {
                     continue;
                 }

@@ -1,6 +1,5 @@
 package org.terraform.command;
 
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -8,9 +7,7 @@ import org.terraform.command.contants.TerraCommand;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
-import org.terraform.structure.ancientcity.AncientCityPopulator;
 
-import java.util.Random;
 import java.util.Stack;
 
 public class CrappyDebugStructureCommand extends TerraCommand {

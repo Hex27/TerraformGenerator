@@ -1,8 +1,5 @@
 package org.terraform.structure.ancientcity;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -10,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.version.V_1_19;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class AncientCityPillarSchematicParser extends SchematicParser {
 

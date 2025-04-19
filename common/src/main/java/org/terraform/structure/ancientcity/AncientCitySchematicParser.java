@@ -1,7 +1,5 @@
 package org.terraform.structure.ancientcity;
 
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -11,6 +9,8 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.data.SimpleBlock;
 import org.terraform.schematic.SchematicParser;
 import org.terraform.utils.GenUtils;
+
+import java.util.Random;
 
 public class AncientCitySchematicParser extends SchematicParser {
     @Override

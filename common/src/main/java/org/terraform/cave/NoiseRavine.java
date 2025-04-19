@@ -31,20 +31,6 @@ public class NoiseRavine extends NoiseCaveAbstract {
                     return n;
                 }
         );
-        FastNoise ravineFilter = NoiseCacheHandler.getNoise(
-                tw,
-                NoiseCacheHandler.NoiseCacheEntry.CAVE_XRAVINE_DETAILS,
-                world -> {
-                    FastNoise n = new FastNoise(tw.getHashedRand(156274631, 456912, 23458).nextInt());
-                    n.SetNoiseType(FastNoise.NoiseType.SimplexFractal);
-                    n.SetFrequency(0.03f);
-                    n.SetFractalOctaves(2);
-                    return n;
-                }
-        );
-
-        float xzStretcher = ravineFilter.GetNoise(rawX, rawZ);
-        float sign = xzStretcher / Math.abs(xzStretcher);
 
         // Stretch caves vertically so that they're not excessively spherical
         float ravine = ravineNoise.GetNoise(3 * rawX, y * 0.4f, 3 * rawZ);

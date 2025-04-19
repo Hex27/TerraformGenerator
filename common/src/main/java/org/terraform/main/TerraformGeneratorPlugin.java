@@ -1,18 +1,20 @@
 package org.terraform.main;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.*;
+import org.terraform.coregen.ChunkCache;
+import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.NMSInjectorAbstract;
+import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleChunkLocation;
@@ -27,6 +29,8 @@ import org.terraform.tree.SaplingOverrider;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.bstats.TerraformGeneratorMetricsHandler;
+import org.terraform.utils.datastructs.ConcurrentLRUCache;
+import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.version.Version;
 import org.terraform.watchdog.TfgWatchdogSuppressant;
 
@@ -43,7 +47,10 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     public static final Set<String> INJECTED_WORLDS = new HashSet<>();
     public static final @NotNull PrivateFieldHandler privateFieldHandler;
     public static TLogger logger;
-    public static @Nullable NMSInjectorAbstract injector;
+
+    //Injector "can" be null, but the plugin can be assumed to be completely broken
+    // in that case. Just crash.
+    public static @NotNull NMSInjectorAbstract injector;
     public static TfgWatchdogSuppressant watchdogSuppressant;
     private static TerraformGeneratorPlugin instance;
 
@@ -93,30 +100,32 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         BiomeBank.initSinglesConfig(); // Initiates single biome modes.
 
         // Initialize chunk cache based on config size
-        TerraformGenerator.CHUNK_CACHE = CacheBuilder.newBuilder()
-                                                     .maximumSize(TConfig.c.DEVSTUFF_CHUNKCACHE_SIZE)
-                                                     .build(new ChunkCacheLoader());
+        TerraformGenerator.CHUNK_CACHE = new ConcurrentLRUCache<>(
+                "CHUNK_CACHE",
+                TConfig.c.DEVSTUFF_CHUNKCACHE_SIZE,
+                (key)->{
+                    return new ChunkCache(key.tw(),key.x(),key.z());
+                });
 
         // Initialize biome query cache based on config size
-        GenUtils.biomeQueryCache = CacheBuilder.newBuilder()
-                                               .maximumSize(TConfig.c.DEVSTUFF_CHUNKBIOMES_SIZE)
-                                               .build(new CacheLoader<>() {
-                                                   @Override
-                                                   public @NotNull EnumSet<BiomeBank> load(@NotNull ChunkCache key) {
-                                                       EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
-                                                       int gridX = key.chunkX * 16;
-                                                       int gridZ = key.chunkZ * 16;
-                                                       for (int x = gridX; x < gridX + 16; x++) {
-                                                           for (int z = gridZ; z < gridZ + 16; z++) {
-                                                               BiomeBank bank = key.tw.getBiomeBank(x, z);
-                                                               if (!banks.contains(bank)) {
-                                                                   banks.add(bank);
-                                                               }
-                                                           }
-                                                       }
-                                                       return banks;
-                                                   }
-                                               });
+        GenUtils.biomeQueryCache = new ConcurrentLRUCache<>(
+                "biomeQueryCache",
+                TConfig.c.DEVSTUFF_CHUNKBIOMES_SIZE,
+                (key) -> {
+                    EnumSet<BiomeBank> banks = EnumSet.noneOf(BiomeBank.class);
+                    int gridX = key.chunkX * 16;
+                    int gridZ = key.chunkZ * 16;
+                    for (int x = gridX; x < gridX + 16; x++) {
+                        for (int z = gridZ; z < gridZ + 16; z++) {
+                            BiomeBank bank = key.tw.getBiomeBank(x, z);
+                            if (!banks.contains(bank)) {
+                                banks.add(bank);
+                            }
+                        }
+                    }
+                    return banks;
+                }
+        );
 
         LangOpt.init(this);
         watchdogSuppressant = new TfgWatchdogSuppressant();
@@ -191,7 +200,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
                     }
                     logger.stdout("Populating " + sc);
                     PopulatorDataPostGen data = new PopulatorDataPostGen(sc.toChunk());
-                    new TerraformPopulator(tw).populate(tw, data);
+                    new TerraformPopulator().populate(tw, data);
                     fixed++;
                 }
                 logger.stdout("&aSuccessfully finished fixing " + fixed + " pre-mature chunks!");
@@ -217,6 +226,15 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
             else {
                 logger.stdout("&cInjection failed.");
             }
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onWorldUnload(WorldUnloadEvent event){
+        if(INJECTED_WORLDS.contains(event.getWorld().getName())) {
+            logger.stdout("Flushing noise cache for world " + event.getWorld().getName());
+            NoiseCacheHandler.flushNoiseCaches(TerraformWorld.get(event.getWorld()));
         }
     }
 

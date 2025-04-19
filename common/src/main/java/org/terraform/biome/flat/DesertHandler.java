@@ -113,7 +113,7 @@ public class DesertHandler extends BiomeHandler {
 
         for (SimpleLocation sLoc : ribCages) {
             int ribY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(ribY - GenUtils.randInt(random, 0, 6));
+            sLoc = sLoc.getAtY(ribY - GenUtils.randInt(random, 0, 6));
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                 && data.getType(sLoc.getX(), ribY, sLoc.getZ()) == Material.SAND)
             {

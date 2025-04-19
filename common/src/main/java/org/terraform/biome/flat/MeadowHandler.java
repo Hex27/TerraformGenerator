@@ -10,8 +10,6 @@ import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
-import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.V_1_21_5;
@@ -49,7 +47,9 @@ public class MeadowHandler extends BiomeHandler {
                                    int rawZ,
                                    @NotNull PopulatorDataAbstract data)
     {
-        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK && !BlockUtils.isWet(new SimpleBlock(data,
+        //Air check skipped, as PlantBuilder and wildflowers checks for air
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
+            && !BlockUtils.isWet(new SimpleBlock(data,
                 rawX,
                 surfaceY,
                 rawZ)))
@@ -119,7 +119,7 @@ public class MeadowHandler extends BiomeHandler {
                 continue;
             }
 
-            sLoc.setY(highestY);
+            sLoc = sLoc.getAtY(highestY);
             if (TConfig.arePlantsEnabled()
                 && data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()
                 && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))

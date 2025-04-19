@@ -24,7 +24,6 @@ public class MossyCavePopulator extends AbstractCavePopulator {
     {
 
         int caveHeight = ceil.getY() - floor.getY();
-
         // Don't touch slabbed floors or stalagmites
         if (Tag.SLABS.isTagged(floor.getType()) || Tag.WALLS.isTagged(floor.getType())) {
             return;
@@ -65,27 +64,21 @@ public class MossyCavePopulator extends AbstractCavePopulator {
 
         // Stalagmites
         if (GenUtils.chance(random, 1, 35)) {
-            int h = caveHeight / 4;
-            if (h < 1) {
-                h = 1;
-            }
             Wall w = new Wall(floor.getUp(), BlockFace.NORTH);
             if (BlockUtils.isAir(w.getType())) {
-                if (w.getDown().getType() == Material.SAND || w.getUp().getType() == Material.SANDSTONE) {
+                if (floor.getType() == Material.SAND || floor.getType() == Material.SANDSTONE) {
                     new StalactiteBuilder(Material.SANDSTONE_WALL).setSolidBlockType(Material.SANDSTONE)
                                                                   .setFacingUp(true)
                                                                   .setVerticalSpace(caveHeight)
                                                                   .build(random, w);
                 }
-                // w.downLPillar(random, h, Material.SANDSTONE_WALL);
-                else if (w.getDown().getType() == Material.DEEPSLATE) {
+                else if (floor.getType() == Material.DEEPSLATE) {
                     new StalactiteBuilder(Material.COBBLED_DEEPSLATE_WALL).setSolidBlockType(Material.DEEPSLATE)
                                                                           .setFacingUp(true)
                                                                           .setVerticalSpace(caveHeight)
                                                                           .build(random, w);
-                    // w.downLPillar(random, h, Material.COBBLED_DEEPSLATE_WALL);
                 }
-                else if (BlockUtils.isStoneLike(w.getDown().getType())) {
+                else if (BlockUtils.isStoneLike(floor.getType())) {
                     new StalactiteBuilder(Material.COBBLESTONE_WALL, Material.MOSSY_COBBLESTONE_WALL).setSolidBlockType(Material.COBBLESTONE,
                             Material.MOSSY_COBBLESTONE
                     ).setFacingUp(true).setVerticalSpace(caveHeight).build(random, w);

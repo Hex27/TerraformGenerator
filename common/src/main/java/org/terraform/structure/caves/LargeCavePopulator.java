@@ -126,6 +126,12 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
                     continue;
                 }
 
+                //Don't carve 3 blocks under the surface
+                if(neighbour.getY() + 3 >= GenUtils.getTransformedHeight(tw, neighbour.getX(),neighbour.getZ())){
+                    nextToBoundary = true;
+                    continue;
+                }
+
                 // "Edges" are whether the neighbour satisfies the equation
                 double equationResult = Math.pow(neighbour.getX() - center.getX(), 2) / Math.pow(rX, 2)
                                         + Math.pow(neighbour.getY() - center.getY(), 2) / Math.pow(rY, 2)
@@ -141,7 +147,10 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
             }
 
             // Continue v processing. This is done here to detect boundaries.
-            caveRoom.toCarve.put(v, nextToBoundary);
+            caveRoom.toCarve.set(v);
+            caveRoom.boundaries.set(v, nextToBoundary);
+            if(!nextToBoundary && caveRoom.startingLoc == null)
+                caveRoom.startingLoc = v;
         }
 
         // Set water levels

@@ -1,11 +1,5 @@
 package org.terraform.structure.pillager.mansion;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleLocation;
@@ -13,6 +7,8 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
+import java.util.*;
 
 /**
  * Mansions will distribute room populators long after JigsawStructureBuilder's main

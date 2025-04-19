@@ -241,7 +241,7 @@ public class GorgeHandler extends BiomeHandler {
         for (SimpleLocation sLoc : rocks) {
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()) {
                 int rockY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(rockY);
+                sLoc = sLoc.getAtY(rockY);
                 if (rockY > TerraformGenerator.seaLevel - 18) {
                     continue;
                 }

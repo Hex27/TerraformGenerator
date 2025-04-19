@@ -1,9 +1,5 @@
 package org.terraform.structure.pillager.mansion.secondfloor;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -15,6 +11,10 @@ import org.terraform.structure.pillager.mansion.MansionRoomPopulator;
 import org.terraform.structure.pillager.mansion.MansionRoomSchematicParser;
 import org.terraform.structure.pillager.mansion.MansionRoomSize;
 import org.terraform.structure.room.CubeRoom;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Random;
 
 public class MansionSecondFloorBunkPopulator extends MansionRoomPopulator {
 

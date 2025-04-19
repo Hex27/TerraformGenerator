@@ -1,9 +1,5 @@
 package org.terraform.structure.pillager.mansion.ground;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +16,10 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.PaintingUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Random;
 
 public class MansionGroundLevelDiningRoomPopulator extends MansionRoomPopulator {
 

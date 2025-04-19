@@ -1,6 +1,5 @@
 package org.terraform.utils;
 
-import com.google.common.cache.LoadingCache;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.jetbrains.annotations.NotNull;
@@ -11,11 +10,13 @@ import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
+import org.terraform.data.CoordPair;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.small_items.PlantBuilder;
+import org.terraform.utils.datastructs.ConcurrentLRUCache;
 import org.terraform.utils.noise.FastNoise;
 
 import java.util.*;
@@ -23,7 +24,7 @@ import java.util.*;
 public class GenUtils {
     public static final Random RANDOMIZER = new Random();
     private static final EnumSet<Material> BLACKLIST_HIGHEST_GROUND = EnumSet.noneOf(Material.class);
-    public static LoadingCache<ChunkCache, EnumSet<BiomeBank>> biomeQueryCache;
+    public static ConcurrentLRUCache<ChunkCache, EnumSet<BiomeBank>> biomeQueryCache;
 
     public static void initGenUtils() {
 
@@ -75,30 +76,27 @@ public class GenUtils {
     /**
      * This will now use StoneLike, and not just any solid block.
      */
-    public static @NotNull Collection<int[]> getCaveCeilFloors(PopulatorDataAbstract data,
+    public static @NotNull Collection<CoordPair> getCaveCeilFloors(PopulatorDataAbstract data,
                                                                int x,
                                                                int z,
                                                                int minimumHeight)
     {
-        int y = data instanceof PopulatorDataSpigotAPI
-                ? getTransformedHeight(data.getTerraformWorld(), x, z)
-                : getHighestGround(data, x, z);
-        int[] pair = {TerraformGeneratorPlugin.injector.getMinY() - 1, TerraformGeneratorPlugin.injector.getMinY() - 1};
-        List<int[]> list = new ArrayList<>();
+        int y = getHighestGround(data, x, z); //The check for transformedGround is ALREADY done here.
+        final int INVAL = TerraformGeneratorPlugin.injector.getMinY() - 1;
+        int[] pair = {INVAL, INVAL};
+        List<CoordPair> list = new ArrayList<>();
         // Subtract one as the first cave floor cannot be the surface
         for (int ny = y - 1; ny > TerraformGeneratorPlugin.injector.getMinY(); ny--) {
             Material type = data.getType(x, ny, z);
             if (BlockUtils.isStoneLike(type)) {
                 pair[1] = ny;
                 if (pair[0] - pair[1] >= minimumHeight) {
-                    list.add(pair);
+                    list.add(new CoordPair(pair[0],pair[1]));
                 }
-                pair = new int[] {
-                        TerraformGeneratorPlugin.injector.getMinY() - 1,
-                        TerraformGeneratorPlugin.injector.getMinY() - 1
-                };
+                pair[0] = INVAL;
+                pair[1] = INVAL;
             }
-            else if (pair[0] == TerraformGeneratorPlugin.injector.getMinY() - 1) {
+            else if (pair[0] == INVAL) {
                 pair[0] = ny;
             }
         }
@@ -123,8 +121,7 @@ public class GenUtils {
     }
 
     public static @NotNull EnumSet<BiomeBank> getBiomesInChunk(TerraformWorld tw, int chunkX, int chunkZ) {
-        ChunkCache key = new ChunkCache(tw, chunkX, chunkZ);
-        return biomeQueryCache.getUnchecked(key);
+        return biomeQueryCache.get(new ChunkCache(tw, chunkX, chunkZ));
     }
 
     /**
@@ -391,7 +388,7 @@ public class GenUtils {
      */
     public static int getTransformedHeight(@NotNull TerraformWorld tw, int rawX, int rawZ)
     {
-        ChunkCache cache = TerraformGenerator.getCache(tw, rawX, rawZ);
+        ChunkCache cache = TerraformGenerator.getCache(tw, rawX>>4, rawZ>>4);
         int cachedY = cache.getTransformedHeight(rawX & 0xF, rawZ & 0xF);
         if (cachedY == TerraformGeneratorPlugin.injector.getMinY() - 1) {
             TerraformGenerator.buildFilledCache(tw, rawX >> 4, rawZ >> 4, cache);
@@ -419,7 +416,7 @@ public class GenUtils {
         }
 
         int y = TerraformGeneratorPlugin.injector.getMaxY() - 1;
-        ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x, z);
+        ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x>>4, z>>4);
         int cachedY = cache.getHighestGround(x, z);
         if (cachedY != TerraformGeneratorPlugin.injector.getMinY() - 1) {
             // Basic check to ensure block above is not ground
@@ -488,18 +485,18 @@ public class GenUtils {
      * @param maxPerturbation Max amount a point can move in each axis
      * @return Array of points
      */
-    public static Vector2f @NotNull [] vectorRandomObjectPositions(int seed,
-                                                                   int chunkX,
-                                                                   int chunkZ,
-                                                                   int distanceBetween,
-                                                                   float maxPerturbation)
+    public static CoordPair @NotNull [] vectorRandomObjectPositions(int seed,
+                                                                    int chunkX,
+                                                                    int chunkZ,
+                                                                    int distanceBetween,
+                                                                    float maxPerturbation)
     {
 
         FastNoise noise = new FastNoise(seed);
         noise.SetFrequency(1);
         noise.SetGradientPerturbAmp(maxPerturbation);
 
-        ArrayList<Vector2f> positions = new ArrayList<>();
+        ArrayList<CoordPair> positions = new ArrayList<>();
 
         // Calculate first grid element position in chunk
         // Fixme come up with better algorithm for calculating next grid item inside chunk
@@ -525,12 +522,12 @@ public class GenUtils {
                     && v.y >= (chunkZ << 4)
                     && v.y < (chunkZ << 4) + 16)
                 {
-                    positions.add(v);
+                    positions.add(new CoordPair((int) v.x, (int) v.y));
                 }
             }
         }
 
-        return positions.toArray(new Vector2f[0]);
+        return positions.toArray(new CoordPair[0]);
     }
 
     public static SimpleLocation @NotNull [] randomObjectPositions(@NotNull TerraformWorld world,
@@ -538,7 +535,7 @@ public class GenUtils {
                                                                    int chunkZ,
                                                                    int distanceBetween)
     {
-        Vector2f[] vecs = vectorRandomObjectPositions(
+        CoordPair[] vecs = vectorRandomObjectPositions(
                 (int) world.getSeed(),
                 chunkX,
                 chunkZ,
@@ -548,7 +545,7 @@ public class GenUtils {
         SimpleLocation[] locs = new SimpleLocation[vecs.length];
 
         for (int i = 0; i < vecs.length; i++) {
-            locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
+            locs[i] = new SimpleLocation((int) vecs[i].x(), 0, (int) vecs[i].z());
         }
 
         return locs;
@@ -563,7 +560,7 @@ public class GenUtils {
                                                                    int distanceBetween,
                                                                    float pertubMultiplier)
     {
-        Vector2f[] vecs = vectorRandomObjectPositions(
+        CoordPair[] vecs = vectorRandomObjectPositions(
                 (int) world.getSeed(),
                 chunkX,
                 chunkZ,
@@ -573,33 +570,7 @@ public class GenUtils {
         SimpleLocation[] locs = new SimpleLocation[vecs.length];
 
         for (int i = 0; i < vecs.length; i++) {
-            locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
-        }
-
-        return locs;
-    }
-
-    /**
-     * @param seed             for tighter control between points
-     * @param pertubMultiplier is normally 0.35.
-     */
-    public static SimpleLocation @NotNull [] randomObjectPositions(int seed,
-                                                                   int chunkX,
-                                                                   int chunkZ,
-                                                                   int distanceBetween,
-                                                                   float pertubMultiplier)
-    {
-        Vector2f[] vecs = vectorRandomObjectPositions(
-                seed,
-                chunkX,
-                chunkZ,
-                distanceBetween,
-                pertubMultiplier * distanceBetween
-        );
-        SimpleLocation[] locs = new SimpleLocation[vecs.length];
-
-        for (int i = 0; i < vecs.length; i++) {
-            locs[i] = new SimpleLocation((int) vecs[i].x, 0, (int) vecs[i].y);
+            locs[i] = new SimpleLocation((int) vecs[i].x(), 0, (int) vecs[i].z());
         }
 
         return locs;

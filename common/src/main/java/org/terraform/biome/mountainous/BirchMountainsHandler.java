@@ -109,7 +109,7 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
         for (SimpleLocation sLoc : trees) {
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()) {
                 int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-                sLoc.setY(treeY);
+                sLoc = sLoc.getAtY(treeY);
                 // Rarely spawn huge taiga trees
                 if (TConfig.c.TREES_BIRCH_BIG_ENABLED && GenUtils.chance(random, 1, 20)) {
                     new FractalTreeBuilder(FractalTypes.Tree.BIRCH_BIG).build(

@@ -1,6 +1,5 @@
 package org.terraform.biome.flat;
 
-import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +15,6 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 
 import java.util.Random;
@@ -52,7 +50,9 @@ public class PlainsHandler extends BiomeHandler {
                                    int rawZ,
                                    @NotNull PopulatorDataAbstract data)
     {
-        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK && !BlockUtils.isWet(new SimpleBlock(data,
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
+            && data.getType(rawX, surfaceY+1, rawZ) == Material.AIR
+            && !BlockUtils.isWet(new SimpleBlock(data,
                 rawX,
                 surfaceY,
                 rawZ)))
@@ -120,7 +120,7 @@ public class PlainsHandler extends BiomeHandler {
         }
 
         // Small trees or grass poffs
-        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), TConfig.c.BIOME_PLAINS_TREE_INTERVAL);
 
         for (SimpleLocation sLoc : trees) {
             int highestY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
@@ -128,7 +128,7 @@ public class PlainsHandler extends BiomeHandler {
                 continue;
             }
 
-            sLoc.setY(highestY);
+            sLoc = sLoc.getAtY(highestY);
             switch(random.nextInt(5)){
                 case 0,1 -> {
                     if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome()

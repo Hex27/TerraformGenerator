@@ -85,7 +85,7 @@ public class MushroomBeachHandler extends BiomeHandler {
         // Giant mushrooms
         for (SimpleLocation sLoc : bigTrees) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),
                     sLoc.getZ())))
@@ -108,49 +108,37 @@ public class MushroomBeachHandler extends BiomeHandler {
         // Small mushrooms and rocks
         for (SimpleLocation sLoc : smallDecorations) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
             if (data.getBiome(sLoc.getX(), sLoc.getZ()) == getBiome() && BlockUtils.isDirtLike(data.getType(sLoc.getX(),
                     sLoc.getY(),
                     sLoc.getZ())))
             {
                 int choice = random.nextInt(4);
                 switch (choice) {
-                    case 0:
-                        new MushroomBuilder(FractalTypes.Mushroom.SMALL_POINTY_RED_MUSHROOM).build(
-                                tw,
-                                data,
-                                sLoc.getX(),
-                                sLoc.getY() + 1,
-                                sLoc.getZ()
-                        );
-                        break;
-                    case 1:
-                        new MushroomBuilder(FractalTypes.Mushroom.SMALL_BROWN_MUSHROOM).build(
-                                tw,
-                                data,
-                                sLoc.getX(),
-                                sLoc.getY() + 1,
-                                sLoc.getZ()
-                        );
-                        break;
-                    case 2:
-                        new MushroomBuilder(FractalTypes.Mushroom.SMALL_RED_MUSHROOM).build(
-                                tw,
-                                data,
-                                sLoc.getX(),
-                                sLoc.getY() + 1,
-                                sLoc.getZ()
-                        );
-                        break;
-                    default:
-                        new MushroomBuilder(FractalTypes.Mushroom.TINY_RED_MUSHROOM).build(
-                                tw,
-                                data,
-                                sLoc.getX(),
-                                sLoc.getY() + 1,
-                                sLoc.getZ()
-                        );
-                        break;
+                    case 0 -> new MushroomBuilder(FractalTypes.Mushroom.SMALL_POINTY_RED_MUSHROOM).build(tw,
+                            data,
+                            sLoc.getX(),
+                            sLoc.getY() + 1,
+                            sLoc.getZ()
+                    );
+                    case 1 -> new MushroomBuilder(FractalTypes.Mushroom.SMALL_BROWN_MUSHROOM).build(tw,
+                            data,
+                            sLoc.getX(),
+                            sLoc.getY() + 1,
+                            sLoc.getZ()
+                    );
+                    case 2 -> new MushroomBuilder(FractalTypes.Mushroom.SMALL_RED_MUSHROOM).build(tw,
+                            data,
+                            sLoc.getX(),
+                            sLoc.getY() + 1,
+                            sLoc.getZ()
+                    );
+                    default -> new MushroomBuilder(FractalTypes.Mushroom.TINY_RED_MUSHROOM).build(tw,
+                            data,
+                            sLoc.getX(),
+                            sLoc.getY() + 1,
+                            sLoc.getZ()
+                    );
                 }
             }
         }

@@ -101,7 +101,7 @@ public class CherryGroveHandler extends BiomeHandler {
         for (SimpleLocation sLoc : trees) {
 
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
-            sLoc.setY(treeY);
+            sLoc = sLoc.getAtY(treeY);
 
             if (tw.getBiomeBank(sLoc.getX(), sLoc.getZ()) == BiomeBank.CHERRY_GROVE
                 && BlockUtils.isDirtLike(data.getType(sLoc.getX(), sLoc.getY(), sLoc.getZ())))

@@ -30,14 +30,8 @@ import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.structure.warmoceanruins.WarmOceanRuinsPopulator;
 import org.terraform.utils.version.Version;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Random;
 
 public class StructureRegistry {
 
