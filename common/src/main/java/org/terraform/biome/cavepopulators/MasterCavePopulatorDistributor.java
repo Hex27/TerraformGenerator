@@ -32,7 +32,7 @@ public class MasterCavePopulatorDistributor {
                 data.getChunkX(),
                 data.getChunkZ()
            ) : new HashMap<>();
-        ChunkCache cache = TerraformGenerator.getCache(tw, data.getChunkX()<<4, data.getChunkZ()<<4);
+        ChunkCache cache = TerraformGenerator.getCache(tw, data.getChunkX(), data.getChunkZ());
 
         for (int x = data.getChunkX() * 16; x < data.getChunkX() * 16 + 16; x++) {
             for (int z = data.getChunkZ() * 16; z < data.getChunkZ() * 16 + 16; z++) {

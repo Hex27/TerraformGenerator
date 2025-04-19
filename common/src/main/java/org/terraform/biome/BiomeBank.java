@@ -582,7 +582,7 @@ public enum BiomeBank {
         //There used to be a cache here, but it had an abysmal hitrate of near 0
         // when caching 32 chunks
         BiomeSection mostDominant = BiomeSection.getMostDominantSection(tw,x,z);
-        return Objects.requireNonNullElse(mostDominant.getBiomeBank(), BiomeBank.PLAINS);
+        return mostDominant.getBiomeBank();
     }
 
     public static void initSinglesConfig() {

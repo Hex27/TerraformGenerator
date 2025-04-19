@@ -2,8 +2,10 @@ package org.terraform.utils.datastructs;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -130,22 +132,32 @@ public final class ConcurrentLRUCache<K,V> {
      */
     private void pruneLRU(){
         ArrayList<LRUNode<K,V>> nodes = new ArrayList<>(keyToValue.values());
+
+        //A sort was replaced with this here, as Java collections yells about
+        // unstable sorting (the timestamp reordered objects).
+        //This stupid shit is O(2n), which is probably better than O(nlogn) for
+        // sorting, so i guess this is as good as it gets.
+        long min = Long.MAX_VALUE;
+        long max = Long.MIN_VALUE;
         for (LRUNode<K, V> node : nodes) {
-            node.snap();
+            long cmp = node.snap(); //Takes a snapshot of all times NOW
+            min = Math.min(cmp,min);
+            max = Math.max(cmp,max);
         }
-        //This weird long is to arbitrarily make the sort stable,
-        // because java really doesn't like it when you have an unstable
-        // sort for some reason.
-        nodes.sort(Comparator.comparingLong((node)-> (node.snapshot << 32) | node.hashCode()));
+
         //Find the midpoint between the oldest and newest entry
-        long midPoint = (nodes.get(nodes.size()-1).snapshot + nodes.get(0).snapshot)/2;
+        long midPoint = (min+max)/2;
 
         //Aggressively delete references before the midpoint
-        int index = 0;
-        while(index < nodes.size() && nodes.get(index).snapshot < midPoint){
-            keyToValue.remove(nodes.get(index).key);
-            index++;
+        //int pruned = 0;
+        for (LRUNode<K, V> node : nodes) {
+            if(node.snapshot < midPoint) {
+                keyToValue.remove(node.key);
+                //pruned++;
+            }
         }
+
+        //TerraformGeneratorPlugin.logger.info(name + " pruned " + (pruned) + " entries.");
         //TerraformGeneratorPlugin.logger.info(name + " pruned " + (index) + " entries."
         //                                     + "\n\t Current Hit Ratio: " + (((double)hits)/((double)(hits+misses+1)))
         //                                     + "\n\t Local Hit Ratio: " + (((double)localHits.get())/((double)(localHits.get()+localMisses.get()+1))));

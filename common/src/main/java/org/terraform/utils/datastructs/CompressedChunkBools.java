@@ -8,7 +8,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
  * This datastructure stores 16x16xworldheight booleans, associated with x,y,z coord pairs.
  */
 public class CompressedChunkBools {
-    //Each short is 16bits. This totals to 256 bits
+    //Each short is 16bits. This totals to 256 bits per y-layer
     short[][] matrix = new short[TerraformGeneratorPlugin.injector.getMaxY() - TerraformGeneratorPlugin.injector.getMinY()][16];
 
     public void set(int x, int y, int z){

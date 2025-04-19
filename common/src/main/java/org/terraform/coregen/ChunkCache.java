@@ -42,25 +42,7 @@ public class ChunkCache {
         initInternalCache();
     }
 
-    /**
-     * 12/4/2025: WHY THE FUCK IS THIS IN RAW BLOCK COORDS
-     * Y is not used, but will force the dev to remember that these are block coords.
-     */
-    public ChunkCache(TerraformWorld tw, int rawX, int rawY, int rawZ) {
-        this.tw = tw;
-        this.chunkX = getChunkCoordinate(rawX);
-        this.chunkZ = getChunkCoordinate(rawZ);
-        // initInternalCache(); THIS IS COMMENTED ON PURPOSE.
-        // THIS CONSTRUCTOR IS ONLY USED FOR CACHE HITS, SO DOES NOT INITIALIZE.
-        // Good practice mandates that we mark this constructor with protected,
-        // but the class calling this is in another package, so too bad!
-    }
-
-    public static int getChunkCoordinate(int coordinate) {
-        return coordinate >> 4;
-    }
-
-    public void initInternalCache() {
+    private void initInternalCache() {
         heightMapCache = new float[256];
         Arrays.fill(heightMapCache, CHUNKCACHE_INVAL);
         transformedGroundCache = new short[256];
@@ -79,7 +61,6 @@ public class ChunkCache {
 
         //11/4/2025 not fucking adding more things to the sacred array are ya???
         solids = new CompressedChunkBools();
-
         biomeCache = new BiomeBank[256];
     }
 

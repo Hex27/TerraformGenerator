@@ -388,7 +388,7 @@ public class GenUtils {
      */
     public static int getTransformedHeight(@NotNull TerraformWorld tw, int rawX, int rawZ)
     {
-        ChunkCache cache = TerraformGenerator.getCache(tw, rawX, rawZ);
+        ChunkCache cache = TerraformGenerator.getCache(tw, rawX>>4, rawZ>>4);
         int cachedY = cache.getTransformedHeight(rawX & 0xF, rawZ & 0xF);
         if (cachedY == TerraformGeneratorPlugin.injector.getMinY() - 1) {
             TerraformGenerator.buildFilledCache(tw, rawX >> 4, rawZ >> 4, cache);
@@ -416,7 +416,7 @@ public class GenUtils {
         }
 
         int y = TerraformGeneratorPlugin.injector.getMaxY() - 1;
-        ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x, z);
+        ChunkCache cache = TerraformGenerator.getCache(data.getTerraformWorld(), x>>4, z>>4);
         int cachedY = cache.getHighestGround(x, z);
         if (cachedY != TerraformGeneratorPlugin.injector.getMinY() - 1) {
             // Basic check to ensure block above is not ground

@@ -1,13 +1,14 @@
 package org.terraform.coregen;
 
 import org.terraform.biome.BiomeSection;
+import org.terraform.data.CoordPair;
 
 import java.util.HashMap;
 
 public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[][] blurred) {
 
     public void fillCache(){
-        HashMap<Long, Float> dominantBiomeHeights = new HashMap<>();
+        HashMap<CoordPair, Float> dominantBiomeHeights = new HashMap<>();
 
         // Box blur across the biome section
         // For every point in the biome section, blur across the X axis.

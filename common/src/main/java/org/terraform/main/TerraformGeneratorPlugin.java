@@ -11,6 +11,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
+import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.TerraformPopulator;
@@ -103,8 +104,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
                 "CHUNK_CACHE",
                 TConfig.c.DEVSTUFF_CHUNKCACHE_SIZE,
                 (key)->{
-                    key.initInternalCache();
-                    return key;
+                    return new ChunkCache(key.tw(),key.x(),key.z());
                 });
 
         // Initialize biome query cache based on config size

@@ -14,6 +14,7 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.data.DudChunkData;
 import org.terraform.data.SimpleChunkLocation;
+import org.terraform.data.TWCoordPair;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
@@ -32,7 +33,7 @@ public class TerraformGenerator extends ChunkGenerator {
     //This cache is NOT fucking used correctly.
     // By right, nobody's supposed to be writing to it at the same time, but in
     // practice, that doesn't matter
-    public static ConcurrentLRUCache<ChunkCache, ChunkCache> CHUNK_CACHE;
+    public static ConcurrentLRUCache<TWCoordPair, ChunkCache> CHUNK_CACHE;
     public static int seaLevel = 62;
 
     public static void updateSeaLevelFromConfig() {
@@ -40,13 +41,14 @@ public class TerraformGenerator extends ChunkGenerator {
     }
 
     /**
-     * Refers to raw X and raw Z (block coords). NOT chunk coords.
+     * @param x chunk X
+     * @param z chunk Z
      */
     public static @NotNull ChunkCache getCache(TerraformWorld tw, int x, int z) {
         // Note how it DOES NOT initInternalCache here
         // Cos this is the damn key
         // Don't fucking run calculations here
-        return CHUNK_CACHE.get(new ChunkCache(tw, x,0,z));
+        return CHUNK_CACHE.get(new TWCoordPair(tw, x,z));
     }
 
     // This method ONLY fills transformedHeight with meaningful values,
@@ -122,7 +124,7 @@ public class TerraformGenerator extends ChunkGenerator {
         TerraformGeneratorPlugin.watchdogSuppressant.tickWatchdog();
 
         TerraformWorld tw = TerraformWorld.get(worldInfo.getName(), worldInfo.getSeed());
-        ChunkCache cache = getCache(tw, chunkX<<4, chunkZ<<4);
+        ChunkCache cache = getCache(tw, chunkX, chunkZ);
 
         // For transformation ONLY
         Random transformRandom = tw.getHashedRand(chunkX, chunkZ, 31278);

@@ -13,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
  * @author wysohn
  */
 public record SimpleChunkLocation(String world, int x, int z) implements Cloneable {
+    public SimpleChunkLocation(TerraformWorld tw, int x, int z){
+        this(tw.getName(),x,z);
+    }
     public SimpleChunkLocation(String world, int x, int y, int z) {
         this(world, x>>4, z>>4);
     }

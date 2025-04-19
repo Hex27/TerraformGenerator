@@ -4,6 +4,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.CoordPair;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
@@ -147,7 +148,7 @@ public enum HeightMap {
     }
 
     public static double getPreciseHeight(TerraformWorld tw, int x, int z) {
-        ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
+        ChunkCache cache = TerraformGenerator.getCache(tw, x>>4, z>>4);
 
         double cachedValue = cache.getHeightMapHeight(x, z);
         if (cachedValue != ChunkCache.CHUNKCACHE_INVAL) {
@@ -178,15 +179,20 @@ public enum HeightMap {
     }
 
     /**
-     * Do not fucking call this anywhere outside the SectionBlurCache
+     * Do not fucking call this anywhere outside the SectionBlurCache.
+     * This method used to cause cache thrashing as it can leave the chunk
+     * boundaries. This was fixed by just caching this with a stack
+     * variable, as it happened to be called in one place.
+     * <br><br>
+     * Do not call this anywhere else.
      * @param x raw x coordinate
      * @param z raw z coordinate
      * @param dominantBiomeHeights This is a cache value for local caching.
      * @return The dominant biome's height calculation. Must be blurred to be coherent with other biomes.
      */
-    static float getDominantBiomeHeight(TerraformWorld tw, int x, int z, HashMap<Long, Float> dominantBiomeHeights) {
-        long packed = ((long)x) | (((long)z)<<32);
-        Float h = dominantBiomeHeights.get(packed);
+    static float getDominantBiomeHeight(TerraformWorld tw, int x, int z, HashMap<CoordPair, Float> dominantBiomeHeights) {
+        CoordPair key = new CoordPair(x,z);
+        Float h = dominantBiomeHeights.get(key);
         if (h == null) {
             // Upscale the biome
             // This comes from computing each biome height one time per upscaleSize blocks
@@ -199,7 +205,7 @@ public enum HeightMap {
                     h = (float) HeightMap.CORE.getHeight(tw, x, z);
                 }
             }
-            dominantBiomeHeights.put(packed, h);
+            dominantBiomeHeights.put(key, h);
         }
         return h;
     }
