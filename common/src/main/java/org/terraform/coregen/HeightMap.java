@@ -74,6 +74,7 @@ public enum HeightMap {
     public static final float heightAmplifier = TConfig.c.HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER;
     public static final int MASK_RADIUS = 5;
     public static final int MASK_DIAMETER = (MASK_RADIUS * 2) + 1;
+    public static final int MASK_VOLUME = MASK_DIAMETER*MASK_DIAMETER;
     private static final int upscaleSize = 3;
     public static int spawnFlatRadiusSquared = -324534;
     private static final ConcurrentLRUCache<BiomeSection, SectionBlurCache> BLUR_CACHE = new ConcurrentLRUCache<>(
@@ -178,6 +179,10 @@ public enum HeightMap {
 
     /**
      * Do not fucking call this anywhere outside the SectionBlurCache
+     * @param x raw x coordinate
+     * @param z raw z coordinate
+     * @param dominantBiomeHeights This is a cache value for local caching.
+     * @return The dominant biome's height calculation. Must be blurred to be coherent with other biomes.
      */
     static float getDominantBiomeHeight(TerraformWorld tw, int x, int z, HashMap<Long, Float> dominantBiomeHeights) {
         long packed = ((long)x) | (((long)z)<<32);

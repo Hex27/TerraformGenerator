@@ -50,7 +50,7 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
         double height = HeightMap.CORE.getHeight(tw, x, z);// HeightMap.MOUNTAINOUS.getHeight(tw, x, z); // Added here
 
         // Let mountains cut into adjacent sections.
-        double maxMountainRadius = ((double) BiomeSection.sectionWidth);
+        double maxMountainRadius = BiomeSection.sectionWidth;
         // Double attrition height
         height += HeightMap.ATTRITION.getHeight(tw, x, z);
 
@@ -93,7 +93,7 @@ public abstract class AbstractMountainHandler extends BiomeHandler {
                 }
                 break;
             case POSITIVE_Z:
-                if (sect.getRelative(1, 0).getOceanLevel() >= mt) {
+                if (sect.getRelative(0, 1).getOceanLevel() >= mt) {
                     minMultiplier = 1.25;
                 }
                 break;

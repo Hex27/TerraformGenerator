@@ -130,7 +130,13 @@ public final class ConcurrentLRUCache<K,V> {
      */
     private void pruneLRU(){
         ArrayList<LRUNode<K,V>> nodes = new ArrayList<>(keyToValue.values());
-        nodes.sort(Comparator.comparingLong(LRUNode::snap));
+        for (LRUNode<K, V> node : nodes) {
+            node.snap();
+        }
+        //This weird long is to arbitrarily make the sort stable,
+        // because java really doesn't like it when you have an unstable
+        // sort for some reason.
+        nodes.sort(Comparator.comparingLong((node)-> (node.snapshot << 32) | node.hashCode()));
         //Find the midpoint between the oldest and newest entry
         long midPoint = (nodes.get(nodes.size()-1).snapshot + nodes.get(0).snapshot)/2;
 

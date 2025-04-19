@@ -11,7 +11,8 @@ public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[
 
         // Box blur across the biome section
         // For every point in the biome section, blur across the X axis.
-        for (int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
+        for (int relX = sect.getLowerBounds().getX() - HeightMap.MASK_RADIUS;
+             relX <= sect.getUpperBounds().getX() + HeightMap.MASK_RADIUS; relX++) {
             for (int relZ = sect.getLowerBounds().getZ() - HeightMap.MASK_RADIUS;
                  relZ <= sect.getUpperBounds().getZ() + HeightMap.MASK_RADIUS;
                  relZ++) {
@@ -19,11 +20,12 @@ public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[
                 int arrIdZ = (relZ - (sect.getLowerBounds().getZ() - HeightMap.MASK_RADIUS));
                 float lineTotalHeight = 0;
                 for (int offsetX = -HeightMap.MASK_RADIUS; offsetX <= HeightMap.MASK_RADIUS; offsetX++) {
-                    lineTotalHeight += HeightMap.getDominantBiomeHeight(sect.getTw(), relX + offsetX, relZ, dominantBiomeHeights);
+                    lineTotalHeight += HeightMap.getDominantBiomeHeight(
+                            sect.getTw(), relX + offsetX, relZ, dominantBiomeHeights);
                 }
 
                 // Temporarily cache these X-Blurred values into chunkcache.
-                intermediate[arrIdX][arrIdZ] = lineTotalHeight / HeightMap.MASK_DIAMETER;
+                intermediate[arrIdX][arrIdZ] = lineTotalHeight;
             }
         }
 
@@ -41,7 +43,7 @@ public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[
                     lineTotalHeight += intermediate[arrIdX][querIdZ];
                 }
                 // final blurred value
-                blurred[arrIdX][arrIdZ] = lineTotalHeight / HeightMap.MASK_DIAMETER;
+                blurred[arrIdX][arrIdZ] = lineTotalHeight / HeightMap.MASK_VOLUME;
             }
         }
     }

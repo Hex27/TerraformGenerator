@@ -158,6 +158,8 @@ public class TConfig extends YamlFileInterface {
     // Biome specific
     @YamlKey("biome.rockymountains.weight")
     public int BIOME_ROCKY_MOUNTAINS_WEIGHT = 1;
+/*    @YamlKey("biome.windswepthills.weight")
+    public int BIOME_WINDSWEPTHILLS_WEIGHT = 1;*/
     @YamlKey("biome.forestedmountains.weight")
     public int BIOME_FORESTED_MOUNTAINS_WEIGHT = 1;
     @YamlKey("biome.badlandsmountains.weight")
@@ -214,6 +216,8 @@ public class TConfig extends YamlFileInterface {
     public int BIOME_MUSHROOM_ISLAND_WEIGHT = 1;
     @YamlKey("biome.plains.weight")
     public int BIOME_PLAINS_WEIGHT = 7;
+    @YamlKey("biome.plains.tree_interval")
+    public int BIOME_PLAINS_TREE_INTERVAL = 16;
     @YamlKey("biome.meadow.weight")
     public int BIOME_MEADOW_WEIGHT = 3;
     @YamlKey("biome.elevatedplains.weight")

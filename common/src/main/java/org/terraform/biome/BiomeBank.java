@@ -44,6 +44,11 @@ public enum BiomeBank {
             BiomeClimate.TRANSITION,
             TConfig.c.BIOME_ROCKY_MOUNTAINS_WEIGHT
     ),
+/*    WINDSWEPT_HILLS(new WindsweptHillsHandler(),
+            BiomeType.MOUNTAINOUS,
+            BiomeClimate.TRANSITION,
+            TConfig.c.BIOME_ROCKY_MOUNTAINS_WEIGHT
+    ),*/
     FORESTED_MOUNTAINS(new ForestedMountainsHandler(),
             BiomeType.MOUNTAINOUS,
             BiomeClimate.HUMID_VEGETATION,

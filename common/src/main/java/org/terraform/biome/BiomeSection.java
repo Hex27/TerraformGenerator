@@ -18,7 +18,7 @@ import java.util.Random;
 public class BiomeSection {
     // A BiomeSection is 128 blocks wide (Default of bitshift 7).
     public static final int bitshifts = TConfig.c.BIOME_SECTION_BITSHIFTS;
-    public static final int sectionWidth = (int) (1 << bitshifts);
+    public static final int sectionWidth = 1 << bitshifts;
     public static final int minSize = sectionWidth;
     public static final int dominanceThreshold = (int) (0.35 * sectionWidth);
     public static final int dominanceThresholdSquared = dominanceThreshold*dominanceThreshold;
@@ -165,7 +165,8 @@ public class BiomeSection {
         return BiomeBank.getBiomeSectionFromSectionCoords(this.tw, this.x + x, this.z + z, true);
     }
 
-    public @Nullable BiomeBank getBiomeBank() {
+    public @NotNull BiomeBank getBiomeBank() {
+        assert biome != null;
         return biome;
     }
 

@@ -120,7 +120,7 @@ public class PlainsHandler extends BiomeHandler {
         }
 
         // Small trees or grass poffs
-        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 16);
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), TConfig.c.BIOME_PLAINS_TREE_INTERVAL);
 
         for (SimpleLocation sLoc : trees) {
             int highestY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
