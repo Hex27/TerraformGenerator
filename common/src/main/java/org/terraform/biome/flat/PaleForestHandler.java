@@ -1,9 +1,7 @@
 package org.terraform.biome.flat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.block.data.Rotatable;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeHandler;
@@ -15,11 +13,9 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
 import org.terraform.tree.FractalTypes;
-import org.terraform.tree.MushroomBuilder;
 import org.terraform.tree.NewFractalTreeBuilder;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.version.V_1_21;
 import org.terraform.utils.version.V_1_21_4;
 
 import java.util.Random;

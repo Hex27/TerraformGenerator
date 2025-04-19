@@ -28,9 +28,8 @@ public class ChunkCache {
      * (calculated after dominantBiomeHeightCache)
      */
     float[] heightMapCache;
-    float[] highestGroundCache;
-    float[] transformedGroundCache;
-    float[] dominantBiomeHeightCache;
+    short[] highestGroundCache;
+    short[] transformedGroundCache;
     float[] yBarrierNoiseCache;
 
     CompressedChunkBools solids;
@@ -62,16 +61,14 @@ public class ChunkCache {
     }
 
     public void initInternalCache() {
-        dominantBiomeHeightCache = new float[256];
-        Arrays.fill(dominantBiomeHeightCache, CHUNKCACHE_INVAL);
         heightMapCache = new float[256];
         Arrays.fill(heightMapCache, CHUNKCACHE_INVAL);
-        transformedGroundCache = new float[256];
-        Arrays.fill(transformedGroundCache, CHUNKCACHE_INVAL);
+        transformedGroundCache = new short[256];
+        Arrays.fill(transformedGroundCache, (short) CHUNKCACHE_INVAL);
         yBarrierNoiseCache = new float[256];
         Arrays.fill(yBarrierNoiseCache, CHUNKCACHE_INVAL);
-        highestGroundCache = new float[256];
-        Arrays.fill(highestGroundCache, CHUNKCACHE_INVAL);
+        highestGroundCache = new short[256];
+        Arrays.fill(highestGroundCache, (short) CHUNKCACHE_INVAL);
 
         /*
         If arrays.fill gives further speed problems, just use
@@ -99,32 +96,12 @@ public class ChunkCache {
         return solids.isSet(interChunkX,interChunkY,interChunkZ);
     }
 
-
-    public float getDominantBiomeHeight(int rawX, int rawZ) {
-        /*
-          A general explanation of this shitty inlining:
-          rawX & 0xF will return internal chunk coordinates [0-15]. This
-          happens because the chunk coordinates are the LSB, so ANDing by
-          0xF will return the bits needed to give 0-15.
-         */
-        return dominantBiomeHeightCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];
-    }
-
-    /**
-     * @param rawX  BLOCK COORD x
-     * @param rawZ  BLOCK COORD z
-     * @param value dominant biome height to cache
-     */
-    public void cacheDominantBiomeHeight(int rawX, int rawZ, float value) {
-        dominantBiomeHeightCache[(rawX & 0xF) + 16 * (rawZ & 0xF)] = value;
-    }
-
     public double getHeightMapHeight(int rawX, int rawZ) {
         return heightMapCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];
     }
 
     public short getHighestGround(int rawX, int rawZ) {
-        return (short) highestGroundCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];
+        return highestGroundCache[(rawX & 0xF) + 16 * (rawZ & 0xF)];
     }
 
     /**
@@ -134,7 +111,7 @@ public class ChunkCache {
      * @return the ACTUAL mutable copy from the cache.
      */
     public short getTransformedHeight(int chunkSubX, int chunkSubZ) {
-        return (short) transformedGroundCache[chunkSubX + 16 * chunkSubZ];
+        return transformedGroundCache[chunkSubX + 16 * chunkSubZ];
     }
 
     public void writeTransformedHeight(int chunkSubX, int chunkSubZ, short val) {

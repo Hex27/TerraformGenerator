@@ -18,6 +18,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.blockdata.CommonMat;
 import org.terraform.utils.datastructs.ConcurrentLRUCache;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class TerraformGenerator extends ChunkGenerator {
     public static final List<SimpleChunkLocation> preWorldInitGen = new ArrayList<>();
     // Explode if a read is attempted. Transform Handlers are not supposed to read.
     private static final DudChunkData DUD = new DudChunkData();
+    //This cache is NOT fucking used correctly.
+    // By right, nobody's supposed to be writing to it at the same time, but in
+    // practice, that doesn't matter
     public static ConcurrentLRUCache<ChunkCache, ChunkCache> CHUNK_CACHE;
     public static int seaLevel = 62;
 
@@ -136,20 +140,20 @@ public class TerraformGenerator extends ChunkGenerator {
                 cache.writeTransformedHeight(x, z, (short) height);
 
                 // Fill stone up to the world height. Differentiate between deepslate or not.
-                chunkData.setRegion(x,3,z,x+1, (int) height+1,z+1, Material.STONE);
+                chunkData.setRegion(x,3,z,x+1, (int) height+1,z+1, CommonMat.STONE);
                 chunkData.setRegion(x,TerraformGeneratorPlugin.injector.getMinY(),z,
-                        x+1, 0,z+1, Material.DEEPSLATE);
+                        x+1, 0,z+1, CommonMat.DEEPSLATE);
 
                 //Iterate the remaining area to carve out caves
                 for (int y = (int) height; y >= TerraformGeneratorPlugin.injector.getMinY(); y--) {
                    if (y >= 0 && y <= 2) {
                        chunkData.setBlock(x, y, z, GenUtils.randChoice(
-                               dontCareRandom,Material.DEEPSLATE, Material.STONE));
+                               dontCareRandom,CommonMat.DEEPSLATE, CommonMat.STONE));
                     }
 
                     // Set cave air if a cave CAN be carved here
                     if (tw.noiseCaveRegistry.canNoiseCarve(rawX, y, rawZ, height, cache)) {
-                        chunkData.setBlock(x, y, z, Material.CAVE_AIR);
+                        chunkData.setBlock(x, y, z, CommonMat.CAVE_AIR);
                         cache.cacheNonSolid(x,y,z);
                     }
                     else cache.cacheSolid(x,y,z);
@@ -165,7 +169,7 @@ public class TerraformGenerator extends ChunkGenerator {
                     index++;
                 }
                 // Water for below certain heights
-                chunkData.setRegion(x, (int) (height + 1),z,x+1,seaLevel+1,z+1, Material.WATER);
+                chunkData.setRegion(x, (int) (height + 1),z,x+1,seaLevel+1,z+1, CommonMat.WATER);
 
                 // Carve caves HERE.
                 boolean mustUpdateHeight = true;
@@ -173,7 +177,7 @@ public class TerraformGenerator extends ChunkGenerator {
                     if (tw.noiseCaveRegistry.canGenerateCarve(rawX, y, rawZ, height, cache)
                         || !chunkData.getType(x, y, z).isSolid())
                     {
-                        chunkData.setBlock(x, y, z, Material.CAVE_AIR);
+                        chunkData.setBlock(x, y, z, CommonMat.CAVE_AIR);
                         cache.cacheNonSolid(x,y,z);
                         if (mustUpdateHeight) {
                             cache.writeTransformedHeight(x, z, (short) (y - 1));
@@ -194,7 +198,7 @@ public class TerraformGenerator extends ChunkGenerator {
                 // Up till y = minY+HEIGHT_MAP_BEDROCK_HEIGHT
                 for (int i = 1; i < TConfig.c.HEIGHT_MAP_BEDROCK_HEIGHT; i++) {
                     if (GenUtils.chance(dontCareRandom, TConfig.c.HEIGHT_MAP_BEDROCK_DENSITY, 100)) {
-                        chunkData.setBlock(x, TerraformGeneratorPlugin.injector.getMinY() + i, z, Material.BEDROCK);
+                        chunkData.setBlock(x, TerraformGeneratorPlugin.injector.getMinY() + i, z, CommonMat.BEDROCK);
                     }
                     else
                         break;
@@ -203,8 +207,7 @@ public class TerraformGenerator extends ChunkGenerator {
         }
         // After this whole song and dance, place bedrock in one operation
         chunkData.setRegion(0,TerraformGeneratorPlugin.injector.getMinY(), 0,
-                16,TerraformGeneratorPlugin.injector.getMinY()+1, 16,
-                Material.BEDROCK);
+                16,TerraformGeneratorPlugin.injector.getMinY()+1, 16, CommonMat.BEDROCK);
     }
 
     /**

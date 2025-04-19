@@ -52,7 +52,9 @@ public class PlainsHandler extends BiomeHandler {
                                    int rawZ,
                                    @NotNull PopulatorDataAbstract data)
     {
-        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK && !BlockUtils.isWet(new SimpleBlock(data,
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
+            && data.getType(rawX, surfaceY+1, rawZ) == Material.AIR
+            && !BlockUtils.isWet(new SimpleBlock(data,
                 rawX,
                 surfaceY,
                 rawZ)))

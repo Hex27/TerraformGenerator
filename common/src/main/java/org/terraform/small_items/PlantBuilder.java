@@ -138,7 +138,7 @@ public enum PlantBuilder {
         if (!TConfig.arePlantsEnabled()) {
             return 0;
         }
-
+        if(data.getType(x,y,z) != Material.AIR) return 0;
         return BlockUtils.spawnPillar(rand, data, x, y, z, material, minHeight, maxHeight);
     }
 
@@ -153,7 +153,8 @@ public enum PlantBuilder {
 
         int height = GenUtils.randInt(rand, minHeight, maxHeight);
         for (int i = 0; i < height; i++) {
-            block.getRelative(0, i, 0).setType(material);
+            if(!block.getRelative(0, i, 0).lsetType(material))
+                break;
         }
         return height;
     }

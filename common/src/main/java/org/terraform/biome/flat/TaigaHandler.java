@@ -63,7 +63,8 @@ public class TaigaHandler extends BiomeHandler {
                 }
         );
 
-        if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))) {
+        if (BlockUtils.isDirtLike(data.getType(rawX, surfaceY, rawZ))
+            && data.getType(rawX, surfaceY+1,rawZ) == Material.AIR) {
 
             // Generate sweet berry bushes
             if (TConfig.arePlantsEnabled()

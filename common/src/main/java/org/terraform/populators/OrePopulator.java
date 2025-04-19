@@ -1,7 +1,9 @@
 package org.terraform.populators;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -21,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class OrePopulator {
 
-    private final Material type;
+    private final BlockData type;
     private final int baseChance; // Chance to spawn per attempt to spawn
     private final int maxOreSize; // Maximum size of one vein
     private final int minOreSize;
@@ -42,7 +44,7 @@ public class OrePopulator {
                         boolean ignorePeakSpawnChance,
                         BiomeBank... requiredBiomes)
     {
-        this.type = type;
+        this.type = Bukkit.createBlockData(type);
         this.baseChance = baseChance;
         this.maxOreSize = maxOreSize;
         this.minOreSize = maxOreSize / 2;
@@ -68,7 +70,7 @@ public class OrePopulator {
                         boolean ignorePeakSpawnChance,
                         BiomeBank... requiredBiomes)
     {
-        this.type = type;
+        this.type = Bukkit.createBlockData(type);
         this.baseChance = baseChance;
         this.maxOreSize = maxOreSize;
         this.minOreSize = maxOreSize / 2;
@@ -135,7 +137,8 @@ public class OrePopulator {
                 }
 
                 // Generate ore with rough sphere size.
-                placeOre(Objects.hash(world.getSeed(), x, y, z), data, x, y, z);
+                //Seed cannot vary with x,y,z, it gets cached per world.
+                placeOre(Objects.hash(world.getSeed(),7118794), data, x, y, z);
 
             }
         }
@@ -156,7 +159,7 @@ public class OrePopulator {
         }
         if (radius <= 0.5) {
             // block.setReplaceType(ReplaceType.ALL);
-            data.setType(coreX, coreY, coreZ, GenUtils.randChoice(new Random(seed), type));
+            data.setBlockData(coreX, coreY, coreZ, GenUtils.randChoice(new Random(seed), type));
             return;
         }
 
@@ -212,21 +215,21 @@ public class OrePopulator {
             int z = rZ+coreZ;
             Material replaced = data.getType(x,y,z);
             if (replaced == Material.STONE) {
-                data.setType(x,y,z, type);
+                data.setBlockData(x,y,z, type);
             }
             // Deepslate replacing other ores
-            else if (type == Material.DEEPSLATE && BlockUtils.ores.contains(replaced)) {
-                data.setType(x,y,z, BlockUtils.deepSlateVersion(replaced));
+            else if (type.getMaterial() == Material.DEEPSLATE && BlockUtils.ores.contains(replaced)) {
+                data.setBlockData(x,y,z, BlockUtils.deepSlateVersion(replaced));
             }
             // Normal ores replacing deepslate
             else if (replaced == Material.DEEPSLATE) {
-                data.setType(x,y,z, BlockUtils.deepSlateVersion(type));
+                data.setBlockData(x,y,z, BlockUtils.deepSlateVersion(type.getMaterial()));
             }
         }
     }
 
     public Material getType() {
-        return type;
+        return type.getMaterial();
     }
 
     public int getBaseChance() {

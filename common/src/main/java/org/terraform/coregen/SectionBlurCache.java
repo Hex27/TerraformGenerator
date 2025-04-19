@@ -2,12 +2,14 @@ package org.terraform.coregen;
 
 import org.terraform.biome.BiomeSection;
 
+import java.util.HashMap;
+
 public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[][] blurred) {
 
     public void fillCache(){
+        HashMap<Long, Float> dominantBiomeHeights = new HashMap<>();
 
         // Box blur across the biome section
-
         // For every point in the biome section, blur across the X axis.
         for (int relX = sect.getLowerBounds().getX(); relX <= sect.getUpperBounds().getX(); relX++) {
             for (int relZ = sect.getLowerBounds().getZ() - HeightMap.MASK_RADIUS;
@@ -17,7 +19,7 @@ public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[
                 int arrIdZ = (relZ - (sect.getLowerBounds().getZ() - HeightMap.MASK_RADIUS));
                 float lineTotalHeight = 0;
                 for (int offsetX = -HeightMap.MASK_RADIUS; offsetX <= HeightMap.MASK_RADIUS; offsetX++) {
-                    lineTotalHeight += HeightMap.getDominantBiomeHeight(sect.getTw(), relX + offsetX, relZ);
+                    lineTotalHeight += HeightMap.getDominantBiomeHeight(sect.getTw(), relX + offsetX, relZ, dominantBiomeHeights);
                 }
 
                 // Temporarily cache these X-Blurred values into chunkcache.

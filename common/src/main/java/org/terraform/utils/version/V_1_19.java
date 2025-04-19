@@ -8,8 +8,6 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 public class V_1_19 {
 
     // public static final EntityType FROG = getEntityType("FROG", "FISH");

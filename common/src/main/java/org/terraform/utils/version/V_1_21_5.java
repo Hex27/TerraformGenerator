@@ -32,6 +32,7 @@ public class V_1_21_5 {
     public static void leafLitter(Random random, PopulatorDataAbstract data, int x, int y, int z){
         if(!Version.isAtLeast(21.5)) return;
         if(!TConfig.c.FEATURE_PLANTS_ENABLED) return;
+        if(data.getType(x,y,z) != Material.AIR) return;
         if(leafLitters == null)
             leafLitters = new BlockData[]{
                     Bukkit.createBlockData("leaf_litter[segment_amount=1]"),
@@ -47,6 +48,7 @@ public class V_1_21_5 {
     public static void wildflowers(Random random, PopulatorDataAbstract data, int x, int y, int z){
         if(!Version.isAtLeast(21.5)) return;
         if(!TConfig.c.FEATURE_PLANTS_ENABLED) return;
+        if(data.getType(x,y,z) != Material.AIR) return;
         if(wildflowerSet == null)
             wildflowerSet = new BlockData[]{
                     Bukkit.createBlockData("wildflowers[flower_amount=1]"),

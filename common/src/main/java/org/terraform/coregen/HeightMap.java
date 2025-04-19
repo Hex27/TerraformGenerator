@@ -1,13 +1,10 @@
 package org.terraform.coregen;
 
-import org.bukkit.Chunk;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeSection;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.CoordPair;
 import org.terraform.data.TerraformWorld;
-import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.datastructs.ConcurrentLRUCache;
@@ -16,7 +13,7 @@ import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
-import java.util.function.Function;
+import java.util.HashMap;
 
 public enum HeightMap {
     /**
@@ -179,13 +176,17 @@ public enum HeightMap {
         return height;
     }
 
-    static float getDominantBiomeHeight(TerraformWorld tw, int x, int z) {
-        ChunkCache cache = TerraformGenerator.getCache(tw, x, z);
-        float h = cache.getDominantBiomeHeight(x, z);
-        if (h == ChunkCache.CHUNKCACHE_INVAL) {
+    /**
+     * Do not fucking call this anywhere outside the SectionBlurCache
+     */
+    static float getDominantBiomeHeight(TerraformWorld tw, int x, int z, HashMap<Long, Float> dominantBiomeHeights) {
+        long packed = ((long)x) | (((long)z)<<32);
+        Float h = dominantBiomeHeights.get(packed);
+        if (h == null) {
             // Upscale the biome
+            // This comes from computing each biome height one time per upscaleSize blocks
             if (x % upscaleSize != 0 && z % upscaleSize != 0) {
-                h = getDominantBiomeHeight(tw, x - (x % upscaleSize), z - (z % upscaleSize));
+                h = getDominantBiomeHeight(tw, x - (x % upscaleSize), z - (z % upscaleSize), dominantBiomeHeights);
             }
             else {
                 h = (float) BiomeBank.calculateHeightIndependentBiome(tw, x, z).getHandler().calculateHeight(tw, x, z);
@@ -193,8 +194,8 @@ public enum HeightMap {
                     h = (float) HeightMap.CORE.getHeight(tw, x, z);
                 }
             }
+            dominantBiomeHeights.put(packed, h);
         }
-        cache.cacheDominantBiomeHeight(x, z, h);
         return h;
     }
 

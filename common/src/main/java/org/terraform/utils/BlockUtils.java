@@ -40,6 +40,8 @@ public class BlockUtils {
             Material.ACACIA_SAPLING,
             V_1_21_5.BUSH,
             V_1_21_5.FIREFLY_BUSH,
+            V_1_21_5.WILDFLOWERS,
+            V_1_21_5.LEAF_LITTER,
             Material.DARK_OAK_SAPLING,
             Material.BIRCH_SAPLING,
             Material.SPRUCE_SAPLING,
@@ -375,7 +377,7 @@ public class BlockUtils {
             Material.RED_BED,
             Material.YELLOW_BED
     };
-    private static final HashMap<String, Material> deepslateMap = new HashMap<>();
+    private static final HashMap<String, BlockData> deepslateMap = new HashMap<>();
 
     public static void initBlockUtils() {
         // init ores
@@ -399,10 +401,6 @@ public class BlockUtils {
         caveCarveReplace.addAll(caveDecoratorMaterials);
         for(PlantBuilder pb:FLOWER)
             replacableByTrees.add(pb.material);
-        if(Version.isAtLeast(21.5)){
-            replacableByTrees.add(V_1_21_5.LEAF_LITTER);
-            replacableByTrees.add(V_1_21_5.WILDFLOWERS);
-        }
 
         // init glass panes
         for (Material mat : Material.values()) {
@@ -738,6 +736,8 @@ public class BlockUtils {
         if (!TConfig.arePlantsEnabled()) {
             return;
         }
+        if(data.getType(x,y,z) != Material.AIR
+            || data.getType(x,y+1,z) != Material.AIR) return;
 
         Bisected d = ((Bisected) Bukkit.createBlockData(doublePlant));
         d.setHalf(Half.BOTTOM);
@@ -1830,19 +1830,18 @@ public class BlockUtils {
         }
     }
 
-    public static @NotNull Material deepSlateVersion(@NotNull Material target) {
-        Material mat = deepslateMap.get("DEEPSLATE_" + target);
-
-        if (mat == null) {
-            mat = Material.getMaterial("DEEPSLATE_" + target);
+    public static @NotNull BlockData deepSlateVersion(@NotNull Material target) {
+        BlockData data = deepslateMap.get("DEEPSLATE_" + target);
+        if (data == null) {
+            Material mat = Material.getMaterial("DEEPSLATE_" + target);
+            if (mat == null)
+                return Bukkit.createBlockData(target);
+            else {
+                data = Bukkit.createBlockData(mat);
+                deepslateMap.put("DEEPSLATE_" + target, data);
+            }
         }
-        if (mat == null) {
-            return target;
-        }
-        else {
-            deepslateMap.put("DEEPSLATE_" + target, mat);
-            return mat;
-        }
+        return data;
     }
 
 }

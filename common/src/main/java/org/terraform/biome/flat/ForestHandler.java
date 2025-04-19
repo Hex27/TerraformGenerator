@@ -112,9 +112,7 @@ public class ForestHandler extends BiomeHandler {
         }
         if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK) {
             if (GenUtils.chance(random, 1, 10)) {
-                if (data.getType(rawX, surfaceY + 1, rawZ) != Material.AIR) {
-                    return;
-                }
+                //Air check skipped, as PlantBuilder will check
                 // Grass & Flowers
                 switch(random.nextInt(4)){
                     case 0 -> PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);

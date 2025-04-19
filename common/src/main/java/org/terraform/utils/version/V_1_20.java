@@ -27,9 +27,6 @@ public class V_1_20 {
     public static final @Nullable Material CHERRY_SAPLING = !Version.isAtLeast(20)
                                                             ? Material.DARK_OAK_SAPLING
                                                             : Material.getMaterial("CHERRY_SAPLING");
-    public static final @Nullable Material PINK_PETALS = !Version.isAtLeast(20)
-                                                         ? Material.AIR
-                                                         : Material.getMaterial("PINK_PETALS");
     public static final @Nullable Material SUSPICIOUS_SAND = !Version.isAtLeast(20)
                                                              ? Material.SAND
                                                              : Material.getMaterial("SUSPICIOUS_SAND");

@@ -49,7 +49,9 @@ public class MeadowHandler extends BiomeHandler {
                                    int rawZ,
                                    @NotNull PopulatorDataAbstract data)
     {
-        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK && !BlockUtils.isWet(new SimpleBlock(data,
+        //Air check skipped, as PlantBuilder and wildflowers checks for air
+        if (data.getType(rawX, surfaceY, rawZ) == Material.GRASS_BLOCK
+            && !BlockUtils.isWet(new SimpleBlock(data,
                 rawX,
                 surfaceY,
                 rawZ)))
