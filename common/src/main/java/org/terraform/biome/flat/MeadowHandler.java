@@ -10,8 +10,6 @@ import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
 import org.terraform.small_items.PlantBuilder;
-import org.terraform.tree.FractalTreeBuilder;
-import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.V_1_21_5;

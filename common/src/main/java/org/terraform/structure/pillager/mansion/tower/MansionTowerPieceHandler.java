@@ -1,9 +1,5 @@
 package org.terraform.structure.pillager.mansion.tower;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +10,10 @@ import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class MansionTowerPieceHandler {
 

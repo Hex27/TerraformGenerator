@@ -1,7 +1,5 @@
 package org.terraform.structure.catacombs;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
@@ -16,6 +14,8 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
 import org.terraform.utils.blockdata.RotatableBuilder;
 import org.terraform.utils.blockdata.TrapdoorBuilder;
+
+import java.util.Random;
 
 public class CatacombsCasketRoomPopulator extends CatacombsStandardPopulator {
 

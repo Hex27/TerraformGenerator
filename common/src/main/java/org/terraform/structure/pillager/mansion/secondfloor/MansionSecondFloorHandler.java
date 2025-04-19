@@ -1,10 +1,5 @@
 package org.terraform.structure.pillager.mansion.secondfloor;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +10,11 @@ import org.terraform.structure.pillager.mansion.MansionJigsawBuilder;
 import org.terraform.structure.room.jigsaw.JigsawStructurePiece;
 import org.terraform.structure.room.jigsaw.JigsawType;
 import org.terraform.utils.BlockUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
 
 public class MansionSecondFloorHandler {
     public final @NotNull HashMap<SimpleLocation, JigsawStructurePiece> secondFloorPieces = new HashMap<>();

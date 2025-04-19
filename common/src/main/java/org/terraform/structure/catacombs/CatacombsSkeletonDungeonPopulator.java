@@ -1,8 +1,5 @@
 package org.terraform.structure.catacombs;
 
-import java.util.Random;
-import java.util.Map.Entry;
-
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +11,9 @@ import org.terraform.main.config.TConfig;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.blockdata.ChestBuilder;
+
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class CatacombsSkeletonDungeonPopulator extends CatacombsStandardPopulator {
 

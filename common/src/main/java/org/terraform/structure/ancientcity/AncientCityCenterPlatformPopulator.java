@@ -1,9 +1,5 @@
 package org.terraform.structure.ancientcity;
 
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,6 +23,10 @@ import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.version.V_1_19;
 import org.terraform.utils.version.Version;
+
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomPopulator {
 

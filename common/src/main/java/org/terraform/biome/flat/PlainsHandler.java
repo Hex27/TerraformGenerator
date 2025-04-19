@@ -1,6 +1,5 @@
 package org.terraform.biome.flat;
 
-import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +15,6 @@ import org.terraform.tree.FractalTreeBuilder;
 import org.terraform.tree.FractalTypes;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 
 import java.util.Random;

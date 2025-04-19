@@ -1,8 +1,5 @@
 package org.terraform.structure.pillager.mansion.secondfloor;
 
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
@@ -20,6 +17,9 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class MansionSecondFloorGrandStairwayPopulator extends MansionRoomPopulator {
 

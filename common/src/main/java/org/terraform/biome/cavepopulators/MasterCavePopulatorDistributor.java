@@ -1,6 +1,5 @@
 package org.terraform.biome.cavepopulators;
 
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.ChunkCache;
@@ -8,13 +7,11 @@ import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.CoordPair;
 import org.terraform.data.SimpleBlock;
-import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
-import org.terraform.utils.Vector2f;
 
 import java.util.*;
 

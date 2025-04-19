@@ -15,7 +15,10 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.version.V_1_19;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
 
 /**
  * This class pretends to be a room populator. It is in reality used to

@@ -1,12 +1,12 @@
 package org.terraform.structure.pillager.mansion;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.structure.pillager.mansion.ground.*;
 import org.terraform.structure.pillager.mansion.secondfloor.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public enum MansionRoomPopulatorRegistry {
 

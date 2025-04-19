@@ -1,7 +1,5 @@
 package org.terraform.structure.catacombs;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +9,8 @@ import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.Random;
 
 public class CatacombsPillarRoomPopulator extends CatacombsStandardPopulator {
 

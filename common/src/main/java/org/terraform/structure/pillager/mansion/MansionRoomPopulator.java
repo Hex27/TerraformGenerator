@@ -1,15 +1,15 @@
 package org.terraform.structure.pillager.mansion;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.room.CubeRoom;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Random;
 
 public abstract class MansionRoomPopulator {
 

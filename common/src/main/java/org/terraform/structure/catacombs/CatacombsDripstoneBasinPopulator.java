@@ -1,18 +1,14 @@
 package org.terraform.structure.catacombs;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.structure.room.CubeRoom;
-import org.terraform.utils.BlockUtils;
-import org.terraform.utils.CoralGenerator;
-import org.terraform.utils.CylinderBuilder;
-import org.terraform.utils.GenUtils;
-import org.terraform.utils.SphereBuilder;
+import org.terraform.utils.*;
 import org.terraform.utils.SphereBuilder.SphereType;
+
+import java.util.Random;
 
 public class CatacombsDripstoneBasinPopulator extends CatacombsStandardPopulator {
 

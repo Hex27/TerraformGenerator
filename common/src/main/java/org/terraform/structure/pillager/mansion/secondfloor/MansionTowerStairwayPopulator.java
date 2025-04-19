@@ -1,9 +1,5 @@
 package org.terraform.structure.pillager.mansion.secondfloor;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -19,6 +15,10 @@ import org.terraform.structure.pillager.mansion.MansionRoomSize;
 import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class MansionTowerStairwayPopulator extends MansionRoomPopulator {
 

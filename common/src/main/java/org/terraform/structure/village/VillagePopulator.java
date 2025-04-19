@@ -1,7 +1,5 @@
 package org.terraform.structure.village;
 
-import java.util.Random;
-
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -10,6 +8,8 @@ import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.village.plains.PlainsVillagePopulator;
 import org.terraform.utils.GenUtils;
+
+import java.util.Random;
 
 public class VillagePopulator extends SingleMegaChunkStructurePopulator {
 

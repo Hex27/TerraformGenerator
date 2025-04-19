@@ -2,7 +2,6 @@ package org.terraform.utils.datastructs;
 
 import org.terraform.data.CoordPair;
 import org.terraform.data.SimpleLocation;
-import org.terraform.main.TerraformGeneratorPlugin;
 
 import java.util.HashMap;
 

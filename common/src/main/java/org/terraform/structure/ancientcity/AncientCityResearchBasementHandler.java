@@ -1,9 +1,5 @@
 package org.terraform.structure.ancientcity;
 
-import java.util.Random;
-import java.io.FileNotFoundException;
-import java.util.Map.Entry;
-
 import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -20,6 +16,10 @@ import org.terraform.utils.StairwayBuilder;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.version.V_1_19;
+
+import java.io.FileNotFoundException;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class AncientCityResearchBasementHandler {
 

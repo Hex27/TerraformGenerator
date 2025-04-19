@@ -1,7 +1,6 @@
 package org.terraform.main;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,10 +11,11 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
-import org.terraform.coregen.*;
+import org.terraform.coregen.HeightMap;
+import org.terraform.coregen.NMSInjectorAbstract;
+import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
-import org.terraform.data.CoordPair;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;

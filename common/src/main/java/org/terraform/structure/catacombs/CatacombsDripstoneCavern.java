@@ -1,7 +1,5 @@
 package org.terraform.structure.catacombs;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -10,6 +8,8 @@ import org.terraform.structure.room.CubeRoom;
 import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
+
+import java.util.Random;
 
 public class CatacombsDripstoneCavern extends CatacombsStandardPopulator {
 

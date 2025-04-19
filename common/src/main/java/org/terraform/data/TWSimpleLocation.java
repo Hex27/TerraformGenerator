@@ -2,8 +2,6 @@ package org.terraform.data;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public record TWSimpleLocation(TerraformWorld tw, int x,int y, int z) {
 
     public TWSimpleLocation(TerraformWorld tw, @NotNull SimpleLocation loc) {

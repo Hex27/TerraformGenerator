@@ -1,8 +1,5 @@
 package org.terraform.structure.pillager.mansion.tower;
 
-import java.util.Random;
-import java.util.AbstractMap.SimpleEntry;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected.Half;
@@ -16,6 +13,9 @@ import org.terraform.utils.BlockUtils;
 import org.terraform.utils.blockdata.OrientableBuilder;
 import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Random;
 
 public class MansionBaseTowerWallPiece extends MansionTowerWallPiece {
 

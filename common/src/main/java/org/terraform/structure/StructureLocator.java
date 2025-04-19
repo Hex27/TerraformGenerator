@@ -1,17 +1,17 @@
 package org.terraform.structure;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.terraform.main.config.TConfig;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
 
 /**
  * This hasn't been migrated to the new cache system, because it's uniquely a pain in the

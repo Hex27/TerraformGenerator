@@ -8,7 +8,6 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.Wall;

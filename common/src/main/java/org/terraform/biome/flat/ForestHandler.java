@@ -1,6 +1,5 @@
 package org.terraform.biome.flat;
 
-import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,5 @@
 package org.terraform.structure.village.plains;
 
-import java.util.Random;
-import java.util.Map.Entry;
-
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +13,9 @@ import org.terraform.structure.room.RoomPopulatorAbstract;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.SphereBuilder.SphereType;
+
+import java.util.Map.Entry;
+import java.util.Random;
 
 public abstract class PlainsVillageAbstractRoomPopulator extends RoomPopulatorAbstract {
 
