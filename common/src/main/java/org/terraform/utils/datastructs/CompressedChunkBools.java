@@ -9,7 +9,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
  */
 public class CompressedChunkBools {
     //Each short is 16bits. This totals to 256 bits per y-layer
-    short[][] matrix = new short[TerraformGeneratorPlugin.injector.getMaxY() - TerraformGeneratorPlugin.injector.getMinY()][16];
+    short[][] matrix = new short[TerraformGeneratorPlugin.injector.getMaxY() - TerraformGeneratorPlugin.injector.getMinY() + 1][16];
 
     public void set(int x, int y, int z){
         matrix[y-TerraformGeneratorPlugin.injector.getMinY()][x] |= 0b1 << z;
