@@ -326,8 +326,8 @@ public class SimpleBlock {
         if (Tag.LEAVES.isTagged(type)) {
             // if (type.toString().contains("LEAVES")) {
             BlockData l = Bukkit.createBlockData(type);
-            if (l instanceof Leaves) {
-                ((Leaves) l).setPersistent(true);
+            if (l instanceof Leaves leaves) {
+                leaves.setPersistent(true);
             }
 
             setBlockData(l);
@@ -364,8 +364,8 @@ public class SimpleBlock {
             if (Tag.LEAVES.isTagged(type)) {
                 // if (type.toString().contains("LEAVES")) {
                 BlockData l = Bukkit.createBlockData(type);
-                if (l instanceof Leaves) {
-                    ((Leaves) l).setPersistent(true);
+                if (l instanceof Leaves leaves) {
+                    leaves.setPersistent(true);
                 }
 
                 ((IPopulatorDataPhysicsCapable) popData).setBlockData(x, y, z, l, updatePhysics);
@@ -727,10 +727,10 @@ public class SimpleBlock {
 
     public void waterlog(int height) {
         for (int i = 0; i < height; i++) {
-            if (this.getRelative(0, i, 0).getBlockData() instanceof Waterlogged) {
-                Waterlogged log = (Waterlogged) (this.getRelative(0, i, 0).getBlockData());
+            var rel = this.getRelative(0, i, 0);
+            if (rel.getBlockData() instanceof Waterlogged log) {
                 log.setWaterlogged(true);
-                this.getRelative(0, i, 0).setBlockData(log);
+                rel.setBlockData(log);
             }
         }
     }
@@ -843,6 +843,7 @@ public class SimpleBlock {
         return this.getRelative(0, -1, 0);
     }
 
+    @Override
     public @NotNull String toString() {
         return x + "," + y + "," + z;
     }

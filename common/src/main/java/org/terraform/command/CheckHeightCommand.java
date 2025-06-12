@@ -17,6 +17,7 @@ import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.structure.StructureRegistry;
 import org.terraform.utils.GenUtils;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 public class CheckHeightCommand extends TerraCommand {
@@ -104,7 +105,10 @@ public class CheckHeightCommand extends TerraCommand {
                           + dist
                           + " blocks away");
         }
-        p.sendMessage("Can decorate chunk: " + StructureBufferDistanceHandler.canDecorateChunk(tw, x >> 4, z >> 4));
+        p.sendMessage("Can decorate chunk: " + Arrays.toString(StructureBufferDistanceHandler.canDecorateChunk(tw,
+                x >> 4,
+                z >> 4
+        )));
         p.sendMessage("Temperature: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature());
         p.sendMessage("Moisture: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
         p.sendMessage("Biome edge factor (Gorge): " + new BiomeBlender(tw, true, true).setGridBlendingFactor(2)

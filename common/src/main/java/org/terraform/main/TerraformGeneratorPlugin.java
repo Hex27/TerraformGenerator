@@ -57,7 +57,9 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     static {
         PrivateFieldHandler handler;
         try {
-            Field.class.getDeclaredField("modifiers");
+            //getDeclaredField is used for its side effect. It should throw the error
+            // and use the other handler.
+            var _discard = Field.class.getDeclaredField("modifiers");
             handler = new Pre14PrivateFieldHandler();
         }
         catch (NoSuchFieldException | SecurityException ex) {

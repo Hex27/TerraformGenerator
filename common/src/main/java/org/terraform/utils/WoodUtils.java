@@ -5,9 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 
+import java.util.Objects;
+
 public class WoodUtils {
 
-    public static @Nullable Material getWoodForBiome(@NotNull BiomeBank biome, @NotNull WoodType wood) {
+    public static @NotNull Material getWoodForBiome(@NotNull BiomeBank biome, @NotNull WoodType wood) {
         return switch (biome) {
             case BADLANDS, BADLANDS_RIVER, SAVANNA, DESERT_MOUNTAINS, DESERT, DESERT_RIVER, BADLANDS_BEACH,
                  BADLANDS_CANYON -> wood.getWood(WoodSpecies.ACACIA);
@@ -71,8 +73,9 @@ public class WoodUtils {
 
         // I am the pinnacle of optimisation
         // Fear my absolutely unbeatable timings
-        public @Nullable Material getWood(@NotNull WoodSpecies species) {
-            return Material.getMaterial(template.replace("%WOOD%", species.toString()));
+        public @NotNull Material getWood(@NotNull WoodSpecies species) {
+            //This cannot be null
+            return Objects.requireNonNull(Material.getMaterial(template.replace("%WOOD%", species.toString())));
         }
     }
 

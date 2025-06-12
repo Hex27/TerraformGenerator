@@ -343,13 +343,6 @@ public enum BiomeBank {
     CHERRY_GROVE_BEACH(new CherryGroveBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
     SCARLET_FOREST_BEACH(new ScarletForestBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
     ;
-    public static final ArrayList<BiomeBank> FLAT = new ArrayList<>() {{
-        for (BiomeBank b : values()) {
-            if (b.getType() == BiomeType.FLAT) {
-                add(b);
-            }
-        }
-    }};
     private static final ConcurrentLRUCache<BiomeSection, BiomeSection> BIOMESECTION_CACHE = new ConcurrentLRUCache<>(
             "BIOMESECTION_CACHE",
             250,

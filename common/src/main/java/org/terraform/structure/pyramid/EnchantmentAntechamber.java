@@ -11,6 +11,7 @@ import org.terraform.data.Wall;
 import org.terraform.structure.room.CubeRoom;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -33,12 +34,12 @@ public class EnchantmentAntechamber extends Antechamber {
 
         SimpleBlock core = new SimpleBlock(data, room.getX(), room.getY() + 1, room.getZ());
         // Place shelves and Lecterns
-        HashMap<Wall, Integer> tableWalls = new HashMap<>() {{
-            put(new Wall(core.getRelative(2, 0, -2), BlockFace.SOUTH), 5);
-            put(new Wall(core.getRelative(-2, 0, 2), BlockFace.NORTH), 5);
-            put(new Wall(core.getRelative(2, 0, 2), BlockFace.WEST), 5);
-            put(new Wall(core.getRelative(-2, 0, -2), BlockFace.EAST), 5);
-        }};
+        Map<Wall, Integer> tableWalls = Map.of(
+            new Wall(core.getRelative(2, 0, -2), BlockFace.SOUTH), 5,
+            new Wall(core.getRelative(-2, 0, 2), BlockFace.NORTH), 5,
+            new Wall(core.getRelative(2, 0, 2), BlockFace.WEST), 5,
+            new Wall(core.getRelative(-2, 0, -2), BlockFace.EAST), 5
+        );
 
         for (Entry<Wall, Integer> entry : tableWalls.entrySet()) {
             Wall w = entry.getKey();

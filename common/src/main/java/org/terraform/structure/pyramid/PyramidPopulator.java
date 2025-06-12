@@ -28,6 +28,7 @@ import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Set;
 
 public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
@@ -217,7 +218,7 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
             level2.getRooms().add(stairwayTop);
         }
 
-        // Remove tombroom placeholder to allow other rooms to spawn there.
+        // Remove tomb room placeholder to allow other rooms to spawn there.
         level1.getRooms().remove(placeholder);
 
         // Fill Rooms
@@ -226,10 +227,10 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
 
         // ALL LEVEL 0 FLOORING IS STONE/COBBLE/ANDESITE.
         // Facilitates traps as there is no sandstone pressure plate
-        ArrayList<Material> toReplace = new ArrayList<>() {{
-            add(Material.SANDSTONE);
-            add(Material.CUT_SANDSTONE);
-        }};
+        Set<Material> toReplace = Set.of(
+            Material.SANDSTONE,
+            Material.CUT_SANDSTONE
+            );
         for (int nx = -50; nx <= 50; nx++) {
             for (int nz = -50; nz <= 50; nz++) {
                 if (toReplace.contains(data.getType(x + nx, y - 8, z + nz))) {

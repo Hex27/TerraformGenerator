@@ -21,17 +21,17 @@ import java.util.Locale;
 import java.util.Random;
 
 public class PlainsVillagePopulator extends VillagePopulator {
-    public @Nullable Material woodSlab = Material.OAK_SLAB;
-    public @Nullable Material woodPlank = Material.OAK_PLANKS;
-    public @Nullable Material woodLog = Material.OAK_LOG;
-    public @Nullable Material woodStrippedLog = Material.STRIPPED_OAK_LOG;
-    public @Nullable Material woodFence = Material.OAK_FENCE;
-    public @Nullable Material woodButton = Material.OAK_BUTTON;
-    public @Nullable Material woodTrapdoor = Material.OAK_TRAPDOOR;
-    public @Nullable Material woodDoor = Material.OAK_DOOR;
-    public @Nullable Material woodStairs = Material.OAK_STAIRS;
-    public @Nullable Material woodLeaves = Material.OAK_LEAVES;
-    public @Nullable Material woodPressurePlate = Material.OAK_PRESSURE_PLATE;
+    public @NotNull Material woodSlab = Material.OAK_SLAB;
+    public @NotNull Material woodPlank = Material.OAK_PLANKS;
+    public @NotNull Material woodLog = Material.OAK_LOG;
+    public @NotNull Material woodStrippedLog = Material.STRIPPED_OAK_LOG;
+    public @NotNull Material woodFence = Material.OAK_FENCE;
+    public @NotNull Material woodButton = Material.OAK_BUTTON;
+    public @NotNull Material woodTrapdoor = Material.OAK_TRAPDOOR;
+    public @NotNull Material woodDoor = Material.OAK_DOOR;
+    public @NotNull Material woodStairs = Material.OAK_STAIRS;
+    public @NotNull Material woodLeaves = Material.OAK_LEAVES;
+    public @NotNull Material woodPressurePlate = Material.OAK_PRESSURE_PLATE;
     public @NotNull String wood = "oak_";
 
     @Override
@@ -62,15 +62,11 @@ public class PlainsVillagePopulator extends VillagePopulator {
         int max = 30;
         while (max > 0 && !isFrontSpaceClear(w, frontSpaceGuarantee)) {
             switch (rand.nextInt(2 + 1)) {
-                case 0: // Move the house forward
-                    w = w.getFront().getGround().getRelative(0, elevation, 0);
-                    break;
-                case 1: // Turn the house
-                    w = new Wall(w.get(), BlockUtils.getTurnBlockFace(rand, w.getDirection()));
-                    break;
-                case 2:
-                    elevation += 2; // elevate more
-                    break;
+                case 0 -> // Move the house forward
+                        w = w.getFront().getGround().getRelative(0, elevation, 0);
+                case 1 -> // Turn the house
+                        w = new Wall(w.get(), BlockUtils.getTurnBlockFace(rand, w.getDirection()));
+                case 2 -> elevation += 2; // elevate more
             }
             max--;
         }

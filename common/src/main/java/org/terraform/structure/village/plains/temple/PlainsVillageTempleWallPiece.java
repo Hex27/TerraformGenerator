@@ -15,23 +15,23 @@ import org.terraform.utils.blockdata.SlabBuilder;
 import org.terraform.utils.blockdata.StairBuilder;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
 
 
-    private static final ArrayList<Material> BRIGHT_STAINED_GLASS_PANES = new ArrayList<>() {{
-        add(Material.BLUE_STAINED_GLASS_PANE);
-        add(Material.CYAN_STAINED_GLASS_PANE);
-        add(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
-        add(Material.LIME_STAINED_GLASS_PANE);
-        add(Material.MAGENTA_STAINED_GLASS_PANE);
-        add(Material.PINK_STAINED_GLASS_PANE);
-        add(Material.PURPLE_STAINED_GLASS_PANE);
-        add(Material.RED_STAINED_GLASS_PANE);
-        add(Material.YELLOW_STAINED_GLASS_PANE);
-    }};
+    private static final List<Material> BRIGHT_STAINED_GLASS_PANES = List.of(
+        Material.BLUE_STAINED_GLASS_PANE,
+        Material.CYAN_STAINED_GLASS_PANE,
+        Material.LIGHT_BLUE_STAINED_GLASS_PANE,
+        Material.LIME_STAINED_GLASS_PANE,
+        Material.MAGENTA_STAINED_GLASS_PANE,
+        Material.PINK_STAINED_GLASS_PANE,
+        Material.PURPLE_STAINED_GLASS_PANE,
+        Material.RED_STAINED_GLASS_PANE,
+        Material.YELLOW_STAINED_GLASS_PANE
+    );
 
 
     public PlainsVillageTempleWallPiece(int widthX, int height, int widthZ, JigsawType type, BlockFace[] validDirs) {
@@ -121,6 +121,7 @@ public class PlainsVillageTempleWallPiece extends JigsawStructurePiece {
             w = w.getLeft();
         }
 
+        assert core != null;
 
         new StairBuilder(Material.STONE_BRICK_STAIRS).setFacing(core.getDirection().getOppositeFace())
                                                      .apply(core.getFront());

@@ -62,8 +62,8 @@ public final class ConcurrentLRUCache<K,V> {
      * Starts acquiring locks and interacting with the global cache
      */
     private LRUNode<K,V> slowPathGet(K key){
-        readLock.lock();
         LRUNode<K,V> node = null;
+        readLock.lock();
         try{
             node = keyToValue.get(key);
             if(node != null){
@@ -104,12 +104,13 @@ public final class ConcurrentLRUCache<K,V> {
      * Assumes that the key was not already present
      */
     private LRUNode<K,V> calculateAndInsert(K key){
+        LRUNode<K,V> node;
         writeLock.lock();
-        //It's possible for two threads to miss the same key.
-        // One of the threads will win in writing it first, so
-        // other threads can just check and release their write lock.
-        LRUNode<K,V> node = keyToValue.get(key);
         try{
+            //It's possible for two threads to miss the same key.
+            // One of the threads will win in writing it first, so
+            // other threads can just check and release their write lock.
+            node = keyToValue.get(key);
             if(node == null){
                 //misses++;
                 if(keyToValue.size() >= maxSize) pruneLRU();

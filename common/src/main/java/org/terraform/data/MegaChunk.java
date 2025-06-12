@@ -31,7 +31,8 @@ public class MegaChunk {
 
     private static int blockCoordsToMega(int coord) {
         if (coord >= 0) {
-            return (int) (double) (coord / megaChunkBlockWidth);
+            //This used to be (int) (double) (coord / megaChunkBlockWidth); for whatever reason
+            return coord / megaChunkBlockWidth;
         }
         else {
             return (int) (-1.0 * (Math.ceil(((double) Math.abs(coord)) / ((double) megaChunkBlockWidth))));

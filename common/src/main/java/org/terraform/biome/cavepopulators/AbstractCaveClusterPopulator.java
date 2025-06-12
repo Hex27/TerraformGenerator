@@ -56,7 +56,7 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
         // Perform a breadth-first search from the center.
 
         HashMap<SimpleBlock, Wall[]> seen = new HashMap<>();
-        Queue<SimpleBlock> queue = new LinkedList<>();
+        Queue<SimpleBlock> queue = new ArrayDeque<>();
         queue.add(center); // Add the root element
         seen.put(center, new Wall[] {new Wall(ceil), new Wall(floor)});
 

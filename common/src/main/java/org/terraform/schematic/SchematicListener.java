@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,10 +24,9 @@ public class SchematicListener implements Listener {
     public static @NotNull ItemStack getWand() {
         ItemStack wand = new ItemStack(Material.GOLDEN_AXE);
         ItemMeta meta = wand.getItemMeta();
+        assert meta != null;
         meta.setDisplayName(WAND_NAME);
-        meta.setLore(new ArrayList<>() {{
-            add(ChatColor.RED + "-=[Developer's Tool]=-");
-        }});
+        meta.setLore(List.of(ChatColor.RED + "-=[Developer's Tool]=-"));
         wand.setItemMeta(meta);
 
         return wand;

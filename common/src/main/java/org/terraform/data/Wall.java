@@ -7,6 +7,8 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.utils.BlockUtils;
 
+import java.util.Objects;
+
 public class Wall extends SimpleBlock {
     private final BlockFace direction;
 
@@ -114,7 +116,7 @@ public class Wall extends SimpleBlock {
         if (sb == null) {
             return null;
         }
-        return new Wall(super.findStonelikeCeiling(cutoff), direction);
+        return new Wall(Objects.requireNonNull(super.findStonelikeCeiling(cutoff)), direction);
     }
 
     /**
@@ -190,7 +192,7 @@ public class Wall extends SimpleBlock {
     }
 
     /**
-     * @Deprecated Not needed anymore. Wall extends SimpleBlock now.
+     * @deprecated Not needed anymore. Wall extends SimpleBlock now.
      */
     public @NotNull SimpleBlock get() {
         return this;

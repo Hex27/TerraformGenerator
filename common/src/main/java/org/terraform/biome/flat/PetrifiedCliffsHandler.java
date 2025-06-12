@@ -23,15 +23,16 @@ import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Random;
 
 public class PetrifiedCliffsHandler extends BiomeHandler {
-    public static final HashSet<Material> endWithStones = new HashSet<>() {{
-        add(Material.STONE);
-        add(Material.MOSSY_COBBLESTONE);
-        add(Material.COBBLESTONE);
-    }};
+    public static final EnumSet<Material> endWithStones = EnumSet.of(
+        Material.STONE,
+        Material.MOSSY_COBBLESTONE,
+        Material.COBBLESTONE
+    );
     static BiomeBlender biomeBlender;
 
     private static @NotNull BiomeBlender getBiomeBlender(TerraformWorld tw) {

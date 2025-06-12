@@ -11,6 +11,7 @@ import org.terraform.main.config.TConfig;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -208,9 +209,7 @@ public class StructureLocator {
 
     private static @NotNull Collection<MegaChunk> getSurroundingChunks(@NotNull MegaChunk center, int radius) {
         if (radius == 0) {
-            return new ArrayList<>() {{
-                add(center);
-            }};
+            return List.of(center);
         }
         //     xxxxx
         // xxx  x   x
@@ -235,6 +234,7 @@ public class StructureLocator {
         return candidates;
     }
 
+    //9/5/2025 this is fuckin stupid
     public static class StructureLocatorCacheLoader extends CacheLoader<StructureLocatorKey, int[]> {
         /**
          * Does not do loading.

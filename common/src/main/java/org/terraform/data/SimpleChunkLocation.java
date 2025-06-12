@@ -28,10 +28,6 @@ public record SimpleChunkLocation(String world, int x, int z) implements Cloneab
         return new SimpleChunkLocation(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
     }
 
-    public static @NotNull Chunk toChunk(@NotNull SimpleChunkLocation loc) {
-        return Bukkit.getWorld(loc.world).getChunkAt(loc.x, loc.z);
-    }
-
     // world , x, z
     public static SimpleChunkLocation chunkStrToLoc(@Nullable String chunk) {
         if (chunk == null) {

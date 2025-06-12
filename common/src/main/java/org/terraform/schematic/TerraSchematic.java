@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class TerraSchematic {
     public static final String SCHEMATIC_FOLDER = File.separator + "schematic";
     public static final @NotNull HashMap<String, HashMap<Vector, BlockData>> cache = new HashMap<>();
@@ -74,7 +76,7 @@ public class TerraSchematic {
             wasInDataFolder = true;
         }
 
-        Scanner sc = new Scanner(is);    // file to be scanned
+        Scanner sc = new Scanner(is, UTF_8);    // file to be scanned
 
         String line = sc.nextLine(); // First line is the schematic's version.
         schem.VERSION_VALUE = Double.parseDouble(line);
@@ -84,8 +86,8 @@ public class TerraSchematic {
             if (line.isEmpty()) {
                 continue;
             }
-            String[] cont = line.split(":@:");
-            String[] v = cont[0].split(",");
+            String[] cont = line.split(":@:",-1);
+            String[] v = cont[0].split(",",-1);
             Vector key = new Vector(Integer.parseInt(v[0]), Integer.parseInt(v[1]), Integer.parseInt(v[2]));
             BlockData value;
             try {
@@ -264,7 +266,7 @@ public class TerraSchematic {
         }
 
         FileOutputStream outputStream = new FileOutputStream(outputFile);
-        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, UTF_8));
 
         // Append version header
         bufferedWriter.write(Version.DOUBLE + "");

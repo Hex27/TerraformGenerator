@@ -84,7 +84,6 @@ public class SwampHandler extends BiomeHandler {
                         t.setBranchMaterial(Material.OAK_LOG);
                         t.getFractalLeaves().setMaterial(Material.OAK_LEAVES);
                         t.getFractalLeaves().setMangrovePropagules(false);
-                        return null;
                     });
                 }
             }
