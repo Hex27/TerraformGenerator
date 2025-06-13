@@ -524,7 +524,7 @@ public enum BiomeBank {
                         TerraformGeneratorPlugin.logger.info("calculateBiome -> -> Comparison Section: "
                                                              + sect.toString());
                     }
-                    if (Objects.requireNonNull(sect.getBiomeBank()).isDry()) {
+                    if (sect.getBiomeBank().isDry()) {
                         int compDist = (int) sect.getDominanceBasedOnRadius(rawX, rawZ);
                         if (debugPrint) {
                             TerraformGeneratorPlugin.logger.info("calculateBiome -> -> -> Dominance: " + compDist);

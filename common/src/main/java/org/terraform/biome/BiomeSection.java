@@ -162,6 +162,10 @@ public class BiomeSection {
         return BiomeBank.getBiomeSectionFromSectionCoords(this.tw, this.x + x, this.z + z, true);
     }
 
+    public @NotNull BiomeSection getRelative(BiomeSubSection subSect) {
+        return getRelative(subSect.relX, subSect.relZ);
+    }
+
     public @NotNull BiomeBank getBiomeBank() {
         assert biome != null;
         return biome;
@@ -260,6 +264,8 @@ public class BiomeSection {
     /**
      * @return the subsection within this biome section that the coordinates belong in.
      * Works even if the coords are outside the biome section.
+     *
+     * 12/6/2025 WHAT THE FUCK IS THIS
      */
     public @NotNull BiomeSubSection getSubSection(int rawX, int rawZ) {
         // if(new BiomeSection(tw, rawX, rawZ).equals(this)) {

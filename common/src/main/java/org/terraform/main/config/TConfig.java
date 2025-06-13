@@ -85,11 +85,23 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("biome.moisture-frequency")
     public float BIOME_MOISTURE_FREQUENCY = 0.03f;
     @YamlKey("biome.mountainous-threshold")
-    public float BIOME_MOUNTAINOUS_THRESHOLD = 18.5f;
+    public float BIOME_MOUNTAINOUS_THRESHOLD = 10.5f;
+    @YamlKey("biome.mountainous-normal-peak-max")
+    public float BIOME_MOUNTAINOUS_BESIDE_NORMAL_PEAK_MAX = 1.6f;
+    @YamlKey("biome.mountainous-normal-peak-min")
+    public float BIOME_MOUNTAINOUS_BESIDE_NORMAL_PEAK_MIN = 1.4f;
+    @YamlKey("biome.mountainous-mount-peak-max")
+    public float BIOME_MOUNTAINOUS_BESIDE_MOUNT_PEAK_MAX = 2.7f;
+    @YamlKey("biome.mountainous-mount-peak-min")
+    public float BIOME_MOUNTAINOUS_BESIDE_MOUNT_PEAK_MIN = 2f;
+    @YamlKey("biome.mountainous-beside-ocean-connector-mult")
+    public float BIOME_MOUNTAINOUS_CONNECTOR_OCEAN_MULT = 1.25f;
+    @YamlKey("biome.mountainous-mount-connector-mult")
+    public float BIOME_MOUNTAINOUS_CONNECTOR_MOUNT_MULT = 1.7f;
     @YamlKey("biome.highmountains-threshold")
-    public float BIOME_HIGH_MOUNTAINOUS_THRESHOLD = 27.5f;
+    public float BIOME_HIGH_MOUNTAINOUS_THRESHOLD = 20.5f;
     @YamlKey("biome.mountainous-frequency")
-    public double BIOME_MOUNTAINOUS_FREQUENCY = 0.3d;
+    public double BIOME_MOUNTAINOUS_FREQUENCY = 0.1d;
     @YamlKey("biome.oceanic-frequency")
     public float BIOME_OCEANIC_FREQUENCY = 0.11f;
     @YamlKey("biome.oceanic-threshold")

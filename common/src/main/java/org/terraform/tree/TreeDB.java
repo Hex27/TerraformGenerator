@@ -149,6 +149,9 @@ public class TreeDB {
                                      )
                                      .getGround()
                                      .getUp();
+            //Sometimes these spawn on the sides of mountains in an ugly way.
+            if(core.getY() > TerraformGenerator.seaLevel + 2) continue;
+
             int min = core.getY() < TerraformGenerator.seaLevel ? TerraformGenerator.seaLevel - core.getY() + 1 : 1;
             core.LPillar(min + rand.nextInt(4), type);
         }
