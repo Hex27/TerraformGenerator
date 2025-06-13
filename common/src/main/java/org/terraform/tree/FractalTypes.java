@@ -14,6 +14,7 @@ import org.terraform.utils.version.Version;
 
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class FractalTypes {
@@ -365,7 +366,7 @@ public class FractalTypes {
         // No idea how bad that is.
         public boolean build(@NotNull TerraformWorld tw,
                              @NotNull SimpleBlock base,
-                             @Nullable Function<NewFractalTreeBuilder, Object> treeMutator)
+                             @Nullable Consumer<NewFractalTreeBuilder> treeMutator)
         {
             if (builders.length > 0) {
                 NewFractalTreeBuilder b = Objects.requireNonNull(GenUtils.choice(tw.getHashedRand(base.getX(),
@@ -375,7 +376,7 @@ public class FractalTypes {
                 if (treeMutator != null) {
                     try {
                         b = (NewFractalTreeBuilder) b.clone();
-                        treeMutator.apply(b);
+                        treeMutator.accept(b);
                     }
                     catch (CloneNotSupportedException e) {
                         // good luck m8

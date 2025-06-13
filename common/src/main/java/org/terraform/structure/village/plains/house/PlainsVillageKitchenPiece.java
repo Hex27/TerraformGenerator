@@ -1,5 +1,6 @@
 package org.terraform.structure.village.plains.house;
 
+import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -61,9 +62,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
 
         SimpleEntry<Wall, Integer> entry = this.getRoom().getWall(data, primaryWall, 0);
         Wall w = entry.getKey();
-        ArrayList<Material> utilities = new ArrayList<>() {{
-            add(Material.SMOKER);
-        }};
+        ArrayList<Material> utilities = Lists.newArrayList(Material.SMOKER);
         for (int i = 0; i < numUtilities; i++) {
             utilities.add(GenUtils.randChoice(random, Material.HOPPER, Material.FURNACE, Material.CRAFTING_TABLE));
         }
@@ -73,7 +72,7 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                 numUtilities--;
                 Material mat = utilities.get(numUtilities);
                 switch (mat) {
-                    case HOPPER:
+                    case HOPPER -> {
                         w.setType(mat);
                         if (w.getRear().getUp().getType() != Material.GLASS_PANE) {
                             Switch lever = (Switch) Bukkit.createBlockData(Material.LEVER);
@@ -82,16 +81,13 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                             lever.setFacing(w.getDirection());
                             w.getUp().setBlockData(lever);
                         }
-                        break;
-                    case FURNACE: // Furnace and smoker handled the same way
-                    case SMOKER:
+                    } // Furnace and smoker handled the same way
+                    case FURNACE, SMOKER -> {
                         new DirectionalBuilder(mat).setFacing(w.getDirection()).apply(w);
                         w.getUp().setType(plainsVillagePopulator.woodPressurePlate);
-
                         new StairBuilder(Material.BRICK_STAIRS).setFacing(w.getDirection().getOppositeFace())
-                                                               .setHalf(Bisected.Half.TOP)
+                                                               .setHalf(Half.TOP)
                                                                .apply(w.getUp(2));
-
                         Wall chimneyWall = w.getUp(3);
                         boolean hitCeiling = false;
                         int chimneyHeight = 0;
@@ -110,12 +106,10 @@ public class PlainsVillageKitchenPiece extends PlainsVillageStandardPiece {
                             chimneyWall = chimneyWall.getUp();
                         }
                         chimneyWall.setType(Material.BRICK_WALL);
-                        break;
-                    case CRAFTING_TABLE:
-                        w.setType(mat);
-                        break;
-                    default:
-                        break;
+                    }
+                    case CRAFTING_TABLE -> w.setType(mat);
+                    default -> {
+                    }
                 }
             }
             w = w.getLeft();

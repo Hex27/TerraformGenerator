@@ -1,5 +1,6 @@
 package org.terraform.structure.pillager.mansion;
 
+import com.google.common.collect.Maps;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleLocation;
@@ -26,28 +27,30 @@ import java.util.*;
 public class MansionCompoundRoomDistributor {
 
     // A map of populators and their respective room areas
-    public static final @NotNull HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators = new HashMap<>() {{
-        put(new MansionRoomSize(3, 3), MansionRoomPopulatorRegistry.GROUND_3_3.getPopulators());
-        put(new MansionRoomSize(2, 2), MansionRoomPopulatorRegistry.GROUND_2_2.getPopulators());
-        put(new MansionRoomSize(1, 2), MansionRoomPopulatorRegistry.GROUND_1_2.getPopulators());
-        put(new MansionRoomSize(2, 1), MansionRoomPopulatorRegistry.GROUND_2_1.getPopulators());
-        put(new MansionRoomSize(1, 1), MansionRoomPopulatorRegistry.GROUND_1_1.getPopulators());
-    }};
+    public static final @NotNull HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> groundFloorPopulators =
+            Maps.newHashMap(Map.of(
+        new MansionRoomSize(3, 3), MansionRoomPopulatorRegistry.GROUND_3_3.getPopulators(),
+        new MansionRoomSize(2, 2), MansionRoomPopulatorRegistry.GROUND_2_2.getPopulators(),
+        new MansionRoomSize(1, 2), MansionRoomPopulatorRegistry.GROUND_1_2.getPopulators(),
+        new MansionRoomSize(2, 1), MansionRoomPopulatorRegistry.GROUND_2_1.getPopulators(),
+        new MansionRoomSize(1, 1), MansionRoomPopulatorRegistry.GROUND_1_1.getPopulators()
+    ));
 
-    public static final @NotNull HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> secondFloorPopulators = new HashMap<>() {{
-        put(new MansionRoomSize(3, 3), MansionRoomPopulatorRegistry.SECOND_3_3.getPopulators());
-        put(new MansionRoomSize(2, 2), MansionRoomPopulatorRegistry.SECOND_2_2.getPopulators());
-        put(new MansionRoomSize(1, 2), MansionRoomPopulatorRegistry.SECOND_1_2.getPopulators());
-        put(new MansionRoomSize(2, 1), MansionRoomPopulatorRegistry.SECOND_2_1.getPopulators());
-        put(new MansionRoomSize(1, 1), MansionRoomPopulatorRegistry.SECOND_1_1.getPopulators());
-    }};
+    public static final @NotNull HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> secondFloorPopulators =
+            Maps.newHashMap(Map.of(
+        new MansionRoomSize(3, 3), MansionRoomPopulatorRegistry.SECOND_3_3.getPopulators(),
+        new MansionRoomSize(2, 2), MansionRoomPopulatorRegistry.SECOND_2_2.getPopulators(),
+        new MansionRoomSize(1, 2), MansionRoomPopulatorRegistry.SECOND_1_2.getPopulators(),
+        new MansionRoomSize(2, 1), MansionRoomPopulatorRegistry.SECOND_2_1.getPopulators(),
+        new MansionRoomSize(1, 1), MansionRoomPopulatorRegistry.SECOND_1_1.getPopulators()
+    ));
 
     public static void distributeRooms(@NotNull Collection<JigsawStructurePiece> pieces,
                                        @NotNull Random random,
                                        boolean isGround)
     {
 
-        HashMap<MansionRoomSize, ArrayList<MansionRoomPopulator>> activeRoomPool;
+        Map<MansionRoomSize, ArrayList<MansionRoomPopulator>> activeRoomPool;
         ArrayList<JigsawStructurePiece> shuffledList = new ArrayList<>(pieces);
 
         ArrayList<MansionRoomSize> potentialRoomSizes = new ArrayList<>();
@@ -88,7 +91,7 @@ public class MansionCompoundRoomDistributor {
                 // Force every room to generate at least once before generating duplicate types
                 Collections.shuffle(activeRoomPool.get(roomSize), random);
                 ArrayList<MansionRoomPopulator> populators = activeRoomPool.get(roomSize);
-                if (populators.size() <= 0) {
+                if (populators.isEmpty()) {
                     activeRoomPool.put(
                             roomSize,
                             MansionRoomPopulatorRegistry.getByRoomSize(roomSize, isGround).getPopulators()

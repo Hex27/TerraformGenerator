@@ -35,6 +35,7 @@ public enum MansionRoomPopulatorRegistry {
         this.populators.addAll(Arrays.asList(populators));
     }
 
+    //9/5/2025 wtf is this
     public static @Nullable MansionRoomPopulatorRegistry getByRoomSize(@NotNull MansionRoomSize size,
                                                                        boolean isGround)
     {

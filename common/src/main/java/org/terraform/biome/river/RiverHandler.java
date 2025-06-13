@@ -44,7 +44,8 @@ public class RiverHandler extends BiomeHandler {
     }
 
     public static void generateTallSeagrass(int x, int y, int z, @NotNull PopulatorDataAbstract data) {
-        if (data.getType(x, y, z) != Material.WATER || data.getType(x, y, z) != Material.WATER) {
+        if (data.getType(x, y, z) != Material.WATER
+            || data.getType(x, y+1, z) != Material.WATER) {
             return;
         }
         PlantBuilder.TALL_SEAGRASS.build(data, x, y, z);

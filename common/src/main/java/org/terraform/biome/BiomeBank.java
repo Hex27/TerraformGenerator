@@ -343,13 +343,6 @@ public enum BiomeBank {
     CHERRY_GROVE_BEACH(new CherryGroveBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
     SCARLET_FOREST_BEACH(new ScarletForestBeachHandler(), BiomeType.BEACH, BiomeClimate.COLD),
     ;
-    public static final ArrayList<BiomeBank> FLAT = new ArrayList<>() {{
-        for (BiomeBank b : values()) {
-            if (b.getType() == BiomeType.FLAT) {
-                add(b);
-            }
-        }
-    }};
     private static final ConcurrentLRUCache<BiomeSection, BiomeSection> BIOMESECTION_CACHE = new ConcurrentLRUCache<>(
             "BIOMESECTION_CACHE",
             250,
@@ -531,7 +524,7 @@ public enum BiomeBank {
                         TerraformGeneratorPlugin.logger.info("calculateBiome -> -> Comparison Section: "
                                                              + sect.toString());
                     }
-                    if (Objects.requireNonNull(sect.getBiomeBank()).isDry()) {
+                    if (sect.getBiomeBank().isDry()) {
                         int compDist = (int) sect.getDominanceBasedOnRadius(rawX, rawZ);
                         if (debugPrint) {
                             TerraformGeneratorPlugin.logger.info("calculateBiome -> -> -> Dominance: " + compDist);

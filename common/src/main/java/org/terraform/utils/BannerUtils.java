@@ -1,5 +1,6 @@
 package org.terraform.utils;
 
+import com.google.common.collect.Lists;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -216,15 +217,15 @@ public class BannerUtils {
      * Pattern:"bo",Color:BLACK
      */
     public static @NotNull ArrayList<Pattern> getOminousBannerPatterns() {
-        return new ArrayList<>() {{
-            add(new Pattern(DyeColor.CYAN, V_1_20_5.RHOMBUS));
-            add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM));
-            add(new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER));
-            add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER));
-            add(new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE));
-            add(new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL));
-            add(new Pattern(DyeColor.LIGHT_GRAY, V_1_20_5.CIRCLE)); //
-            add(new Pattern(DyeColor.BLACK, PatternType.BORDER));
-        }};
+        return Lists.newArrayList(
+            new Pattern(DyeColor.CYAN, V_1_20_5.RHOMBUS),
+            new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM),
+            new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER),
+            new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER),
+            new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE),
+            new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL),
+            new Pattern(DyeColor.LIGHT_GRAY, V_1_20_5.CIRCLE), //
+            new Pattern(DyeColor.BLACK, PatternType.BORDER)
+        );
     }
 }

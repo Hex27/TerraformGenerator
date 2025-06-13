@@ -66,7 +66,6 @@ public class SaplingOverrider implements Listener {
                             //Let grown trees spawn beehives
                             if(GenUtils.RANDOMIZER.nextInt(5) == 0)
                                 nt.setSpawnBees(true);
-                            return nt;
                         })
                 );
                 break;

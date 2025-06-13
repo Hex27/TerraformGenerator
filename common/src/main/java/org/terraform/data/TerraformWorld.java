@@ -3,7 +3,6 @@ package org.terraform.data;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.BiomeBank;
 import org.terraform.cave.NoiseCaveRegistry;
 import org.terraform.coregen.ChunkCache;
@@ -150,8 +149,8 @@ public class TerraformWorld {
         return worldName;
     }
 
-    public @Nullable World getWorld() {
-        return Bukkit.getWorld(worldName);
+    public @NotNull World getWorld() {
+        return Objects.requireNonNull(Bukkit.getWorld(worldName));
     }
 
     public @NotNull TerraformBukkitBlockPopulator getBukkitBlockPopulator() {

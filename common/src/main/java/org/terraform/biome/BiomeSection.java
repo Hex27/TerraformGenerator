@@ -10,10 +10,7 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class BiomeSection {
     // A BiomeSection is 128 blocks wide (Default of bitshift 7).
@@ -165,6 +162,10 @@ public class BiomeSection {
         return BiomeBank.getBiomeSectionFromSectionCoords(this.tw, this.x + x, this.z + z, true);
     }
 
+    public @NotNull BiomeSection getRelative(BiomeSubSection subSect) {
+        return getRelative(subSect.relX, subSect.relZ);
+    }
+
     public @NotNull BiomeBank getBiomeBank() {
         assert biome != null;
         return biome;
@@ -234,9 +235,7 @@ public class BiomeSection {
     public @NotNull Collection<BiomeSection> getRelativeSurroundingSections(int radius) {
         if (radius == 0) {
             BiomeSection target = this;
-            return new ArrayList<>() {{
-                add(target);
-            }};
+            return List.of(target);
         }
         //     xxxxx
         // xxx  x   x
@@ -265,6 +264,8 @@ public class BiomeSection {
     /**
      * @return the subsection within this biome section that the coordinates belong in.
      * Works even if the coords are outside the biome section.
+     *
+     * 12/6/2025 WHAT THE FUCK IS THIS
      */
     public @NotNull BiomeSubSection getSubSection(int rawX, int rawZ) {
         // if(new BiomeSection(tw, rawX, rawZ).equals(this)) {
@@ -316,10 +317,10 @@ public class BiomeSection {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof BiomeSection BiomeSection) {
-            return this.tw.getName().equals(BiomeSection.tw.getName())
-                   && this.x == BiomeSection.x
-                   && this.z == BiomeSection.z;
+        if (obj instanceof BiomeSection other) {
+            return this.tw.getName().equals(other.tw.getName())
+                   && this.x == other.x
+                   && this.z == other.z;
         }
         return false;
     }

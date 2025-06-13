@@ -145,53 +145,8 @@ public class BirchMountainsHandler extends AbstractMountainHandler {
      */
     @Override
     public double calculateHeight(@NotNull TerraformWorld tw, int x, int z) {
-        double coreRawHeight;
-        double height = HeightMap.CORE.getHeight(tw, x, z);// HeightMap.MOUNTAINOUS.getHeight(tw, x, z); // Added here
-
-        // Let mountains cut into adjacent sections.
-        double maxMountainRadius = ((double) BiomeSection.sectionWidth);
-        // Double attrition height
-        height += HeightMap.ATTRITION.getHeight(tw, x, z);
-        coreRawHeight = height;
-
-        BiomeSection sect = BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z);
-        if (sect.getBiomeBank().getType() != BiomeType.MOUNTAINOUS) {
-            sect = BiomeSection.getMostDominantSection(tw, x, z);
-        }
-
-        Random sectionRand = sect.getSectionRandom();
-        double maxPeak = getPeakMultiplier(sect, sectionRand);
-
-        // Let's just not offset the peak. This seems to give a better result.
-        SimpleLocation mountainPeak = sect.getCenter();
-
-        double distFromPeak = (1.42 * maxMountainRadius) - Math.sqrt(Math.pow(x - mountainPeak.getX(), 2) + Math.pow(
-                z
-                - mountainPeak.getZ(),
-                2
-        ));
-
-        double heightMultiplier = maxPeak * (distFromPeak / maxMountainRadius);
-
-        if (heightMultiplier < 1) {
-            heightMultiplier = 1;
-        }
-
-        height = height * heightMultiplier;
-
-        // If the height is too high, just force it to smooth out
-        if (height > 200) {
-            height = 200 + (height - 200) * 0.5;
-        }
-        if (height > 230) {
-            height = 230 + (height - 230) * 0.3;
-        }
-        if (height > 240) {
-            height = 240 + (height - 240) * 0.1;
-        }
-        if (height > 250) {
-            height = 250 + (height - 250) * 0.05;
-        }
+        double coreRawHeight = HeightMap.CORE.getHeight(tw, x, z);// HeightMap.MOUNTAINOUS.getHeight(tw, x, z); // Added here
+        double height = super.calculateHeight(tw,x,z);
 
         // Let rivers forcefully carve through birch mountains if they're deep enough.
         double riverDepth = HeightMap.getRawRiverDepth(tw, x, z); // HeightMap.RIVER.getHeight(tw, x, z);

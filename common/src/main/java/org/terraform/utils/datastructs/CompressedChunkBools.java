@@ -12,10 +12,12 @@ public class CompressedChunkBools {
     short[][] matrix = new short[TerraformGeneratorPlugin.injector.getMaxY() - TerraformGeneratorPlugin.injector.getMinY() + 1][16];
 
     public void set(int x, int y, int z){
-        matrix[y-TerraformGeneratorPlugin.injector.getMinY()][x] |= 0b1 << z;
+        int idY = y-TerraformGeneratorPlugin.injector.getMinY();
+        matrix[idY][x] = (short) (matrix[idY][x] | (0b1 << z));
     }
     public void unSet(int x, int y, int z){
-        matrix[y-TerraformGeneratorPlugin.injector.getMinY()][x] &= 255 ^ (0b1 << z);
+        int idY = y-TerraformGeneratorPlugin.injector.getMinY();
+        matrix[idY][x] = (short) (matrix[idY][x] & (255 ^ (0b1 << z)));
     }
 
     public boolean isSet(int x, int y, int z){

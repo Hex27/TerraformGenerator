@@ -250,10 +250,7 @@ public class TerraformGenerator extends ChunkGenerator {
     @Override
     public @NotNull List<BlockPopulator> getDefaultPopulators(@NotNull World world) {
         TerraformWorld tw = TerraformWorld.get(world);
-        return new ArrayList<>() {{
-            add(new TerraformPopulator());
-            add(new TerraformBukkitBlockPopulator(tw));
-        }};
+        return List.of(new TerraformPopulator(),new TerraformBukkitBlockPopulator(tw));
     }
 
     // Do exactly 0 of this, TFG now handles ALL of it.

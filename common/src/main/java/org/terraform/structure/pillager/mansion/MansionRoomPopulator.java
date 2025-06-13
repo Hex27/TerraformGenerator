@@ -1,6 +1,7 @@
 package org.terraform.structure.pillager.mansion;
 
 import org.bukkit.block.BlockFace;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.Wall;
@@ -28,8 +29,8 @@ public abstract class MansionRoomPopulator {
         return room;
     }
 
-    public @Nullable MansionRoomPopulator getInstance(CubeRoom room,
-                                                      HashMap<BlockFace, MansionInternalWallState> internalWalls)
+    public @NotNull MansionRoomPopulator getInstance(CubeRoom room,
+                                                     HashMap<BlockFace, MansionInternalWallState> internalWalls)
     {
         MansionRoomPopulator pop;
         try {
@@ -42,7 +43,7 @@ public abstract class MansionRoomPopulator {
                InvocationTargetException |
                SecurityException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
-            return null;
+            return null; //Error case
         }
     }
 

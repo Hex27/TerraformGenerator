@@ -96,7 +96,7 @@ public abstract class TerraCommand {
                                    final @NotNull String message)
     {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getUniqueId() == uuid) {
+            if (p.getUniqueId().equals(uuid)) {
                 p.sendMessage(message);
                 break;
             }
@@ -115,7 +115,7 @@ public abstract class TerraCommand {
         chatMsg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getUniqueId() == uuid) {
+            if (p.getUniqueId().equals(uuid)) {
                 p.spigot().sendMessage(chatMsg);
                 break;
             }

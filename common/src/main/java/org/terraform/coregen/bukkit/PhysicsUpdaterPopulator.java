@@ -17,10 +17,7 @@ import org.terraform.data.SimpleLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener {
@@ -117,7 +114,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
                                              + " chunks in cache)");
 
         int processed = 0;
-        for (SimpleChunkLocation scl : cache.keySet()) {
+        for (SimpleChunkLocation scl : Set.copyOf(cache.keySet())) {
             if (!scl.getWorld().equals(event.getWorld().getName())) {
                 continue;
             }

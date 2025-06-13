@@ -1,5 +1,6 @@
 package org.terraform.command;
 
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +16,10 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
 import org.terraform.structure.StructureBufferDistanceHandler;
 import org.terraform.structure.StructureRegistry;
+import org.terraform.utils.BlockUtils;
 import org.terraform.utils.GenUtils;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 public class CheckHeightCommand extends TerraCommand {
@@ -85,8 +88,9 @@ public class CheckHeightCommand extends TerraCommand {
         p.sendMessage("Biome Section Climate: " + section.getClimate());
         p.sendMessage("Biome Section Elevation: " + section.getOceanLevel());
         p.sendMessage("Surrounding Sections:");
-        for (BiomeSection sect : BiomeSection.getSurroundingSections(tw, x, z)) {
-            p.sendMessage("    - " + sect.toString() + "(" + sect.getBiomeBank() + ")");
+        for (BlockFace face: BlockUtils.directBlockFaces) {
+            BiomeSection rel = section.getRelative(face.getModX(),face.getModZ());
+            p.sendMessage("    - " + rel + "(" + rel.getBiomeBank() + ")");
         }
         for (SingleMegaChunkStructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if (spop == null) {
@@ -104,7 +108,10 @@ public class CheckHeightCommand extends TerraCommand {
                           + dist
                           + " blocks away");
         }
-        p.sendMessage("Can decorate chunk: " + StructureBufferDistanceHandler.canDecorateChunk(tw, x >> 4, z >> 4));
+        p.sendMessage("Can decorate chunk: " + Arrays.toString(StructureBufferDistanceHandler.canDecorateChunk(tw,
+                x >> 4,
+                z >> 4
+        )));
         p.sendMessage("Temperature: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getTemperature());
         p.sendMessage("Moisture: " + BiomeBank.getBiomeSectionFromBlockCoords(tw, x, z).getMoisture());
         p.sendMessage("Biome edge factor (Gorge): " + new BiomeBlender(tw, true, true).setGridBlendingFactor(2)
