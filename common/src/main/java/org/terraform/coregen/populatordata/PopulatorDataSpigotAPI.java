@@ -148,7 +148,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
         return tw;
     }
 
-    private static boolean canUseNewApi = true;
+    private static boolean canUseNewApi = false;
     private static Method addEntity;
     private static Method createEntity;
     @Override
@@ -165,7 +165,8 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
         try {
             Beehive bukkitBeehive = (Beehive) lr.getBlockState(rawX, rawY, rawZ);
 
-            if(canUseNewApi){
+            //This broke in 1.21.6, ngl im kinda sick of this shit. I'm going to stay with NMS for now.
+            /*if(canUseNewApi){
                 try{
                     if(addEntity == null)
                     {
@@ -179,7 +180,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
                     TerraformGeneratorPlugin.logger.info("Falling back to NMS bee spawning (addEntity api not present)");
                     canUseNewApi = false;
                 }
-            }
+            }*/
 
             if(!canUseNewApi)
                 TerraformGeneratorPlugin.injector.storeBee(bukkitBeehive);
