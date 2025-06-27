@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.jetbrains.annotations.NotNull;
+import org.terraform.biome.flat.PaleForestHandler;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
@@ -15,6 +16,7 @@ import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.V_1_20;
+import org.terraform.utils.version.V_1_21_4;
 
 import java.util.List;
 
@@ -110,6 +112,18 @@ public class SaplingOverrider implements Listener {
             default:
                 if (baseBlock.getType() == V_1_20.CHERRY_LEAVES) {
                     new FractalTreeBuilder(FractalTypes.Tree.CHERRY_SMALL).skipGradientCheck().build(tw, data, x, y, z);
+                    return;
+                }
+                if ( baseBlock.getType() == V_1_21_4.PALE_OAK_LEAVES) {
+                    FractalTypes.Tree.DARK_OAK_SMALL
+                            .build(
+                                tw,
+                                new SimpleBlock(data, x, y, z),
+                                (nt -> {
+                                    nt.setCheckGradient(false);
+                                    new PaleForestHandler().paleTreeMutator(nt);
+                                })
+                            );
                     return;
                 }
                 // Not handled by TG
