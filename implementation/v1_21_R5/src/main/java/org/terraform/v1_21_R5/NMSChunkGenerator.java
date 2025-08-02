@@ -396,6 +396,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
         SingleMegaChunkStructurePopulator[] spops = StructureRegistry.getLargeStructureForMegaChunk(tw, mc);
         int[] centerCoords = mc.getCenterBiomeSectionChunkCoords();
 
+        if (spops == null) {
+            TerraformGeneratorPlugin.logger.info(chunkcoordintpair.h + "," + chunkcoordintpair.i + " No structures found for this mega chunk");
+            return;
+        }
+
         for(SingleMegaChunkStructurePopulator pop:spops)
         {
             if(!(pop instanceof VanillaStructurePopulator vpop)) continue;
