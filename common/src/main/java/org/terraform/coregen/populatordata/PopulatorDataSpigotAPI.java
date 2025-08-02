@@ -193,7 +193,11 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
 
     @Override
     public void spawnMinecartWithChest(int x, int y, int z, @NotNull TerraLootTable table, Random random) {
-
+        if (!lr.isInRegion(x, y, z)) {
+            TerraformGeneratorPlugin.logger.error("Tried to spawn minecart outside of LR bounds at: "+x + "," + y + "," + z + " from LR centered at chunk " + chunkX + "," + chunkZ);
+            return;
+        }
+        
         StorageMinecart e = (StorageMinecart) lr.spawnEntity(
                 new Location(tw.getWorld(), x + 0.5f, y + 0.5f, z + 0.5f),
                 EntityType.MINECART_CHEST
