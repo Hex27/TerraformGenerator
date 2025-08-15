@@ -95,6 +95,7 @@ public class StructureRegistry {
      * @return the structure types that can spawn in this mega chunk
      * Only one is meant to be picked.
      */
+    @NotNull
     public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(@NotNull TerraformWorld tw,
                                                                                     @NotNull MegaChunk mc)
     {

@@ -395,7 +395,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
         MegaChunk mc = new MegaChunk(chunkcoordintpair.h, chunkcoordintpair.i);
         SingleMegaChunkStructurePopulator[] spops = StructureRegistry.getLargeStructureForMegaChunk(tw, mc);
         int[] centerCoords = mc.getCenterBiomeSectionChunkCoords();
-
+        if(spops == null) return;
         for(SingleMegaChunkStructurePopulator pop:spops)
         {
             if(!(pop instanceof VanillaStructurePopulator vpop)) continue;

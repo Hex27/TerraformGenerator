@@ -13,14 +13,21 @@ public class CompressedChunkBools {
 
     public void set(int x, int y, int z){
         int idY = y-TerraformGeneratorPlugin.injector.getMinY();
+        if (idY < 0 || idY >= matrix.length)
+            return;
         matrix[idY][x] = (short) (matrix[idY][x] | (0b1 << z));
     }
     public void unSet(int x, int y, int z){
         int idY = y-TerraformGeneratorPlugin.injector.getMinY();
+        if (idY < 0 || idY >= matrix.length)
+            return;
         matrix[idY][x] = (short) (matrix[idY][x] & (255 ^ (0b1 << z)));
     }
 
     public boolean isSet(int x, int y, int z){
-        return (matrix[y-TerraformGeneratorPlugin.injector.getMinY()][x] & (0b1 << z)) > 0;
+        int idY = y-TerraformGeneratorPlugin.injector.getMinY();
+        if (idY < 0 || idY >= matrix.length)
+            return false;
+        return (matrix[idY][x] & (0b1 << z)) > 0;
     }
 }
