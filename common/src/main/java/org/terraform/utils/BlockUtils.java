@@ -37,17 +37,10 @@ public class BlockUtils {
     // This is needed as REPLACABLE_BY_TREES is a 1.20 tag.
     // Also this has mushrooms and saplings, snow and coral fans
     public static final EnumSet<Material> replacableByTrees = EnumSet.of(
-            Material.ACACIA_SAPLING,
             V_1_21_5.BUSH,
             V_1_21_5.FIREFLY_BUSH,
             V_1_21_5.WILDFLOWERS,
             V_1_21_5.LEAF_LITTER,
-            Material.DARK_OAK_SAPLING,
-            Material.BIRCH_SAPLING,
-            Material.SPRUCE_SAPLING,
-            Material.JUNGLE_SAPLING,
-            Material.OAK_SAPLING,
-            V_1_20.CHERRY_SAPLING,
             Material.ACACIA_LEAVES,
             Material.AZALEA_LEAVES,
             Material.DARK_OAK_LEAVES,
@@ -401,6 +394,7 @@ public class BlockUtils {
         caveCarveReplace.addAll(caveDecoratorMaterials);
         for(PlantBuilder pb:FLOWER)
             replacableByTrees.add(pb.material);
+        replacableByTrees.addAll(Tag.SAPLINGS.getValues());
 
         // init glass panes
         for (Material mat : Material.values()) {

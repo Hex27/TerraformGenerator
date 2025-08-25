@@ -80,6 +80,11 @@ public class TConfig extends YamlFileInterface {
 
     // -=[BIOMES]=-
     // Biome globals
+    @YamlKey("biome.force.radius")
+    @YamlComment("Forces the blocks around 0,0 to be this biome. ROUNDS UP to the nearest biome section size. Does not disable rivers or beaches. Set to 0 to disable this.")
+    public int BIOME_FORCE_RADIUS = 0;
+    @YamlKey("biome.force.force-type")
+    public String BIOME_FORCED_BIOME = "PLAINS";
     @YamlKey("biome.temperature-frequency")
     public float BIOME_TEMPERATURE_FREQUENCY = 0.03f;
     @YamlKey("biome.moisture-frequency")

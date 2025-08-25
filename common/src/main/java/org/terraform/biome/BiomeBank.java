@@ -13,6 +13,8 @@ import org.terraform.biome.ocean.*;
 import org.terraform.biome.river.*;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.CoordPair;
+import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
@@ -642,6 +644,21 @@ public enum BiomeBank {
     public static @NotNull BiomeBank selectBiome(@NotNull BiomeSection section, double temperature, double moisture) {
         Random sectionRand = section.getSectionRandom();
 
+        if(TConfig.c.BIOME_FORCE_RADIUS > 0){
+            CoordPair lowerZoneBound = new CoordPair(
+                    (-TConfig.c.BIOME_FORCE_RADIUS)>>BiomeSection.bitshifts,
+                    (-TConfig.c.BIOME_FORCE_RADIUS)>>BiomeSection.bitshifts);
+            CoordPair upperZoneBound = new CoordPair(
+                    (TConfig.c.BIOME_FORCE_RADIUS)>>BiomeSection.bitshifts,
+                    (TConfig.c.BIOME_FORCE_RADIUS)>>BiomeSection.bitshifts);
+            if(lowerZoneBound.x() <= section.getX()
+                && section.getX() <= upperZoneBound.x()
+                && lowerZoneBound.z() <= section.getZ()
+               && section.getZ() <= upperZoneBound.z())
+            {
+                return BiomeBank.valueOf(TConfig.c.BIOME_FORCED_BIOME);
+            }
+        }
         BiomeType targetType = BiomeType.FLAT;
         BiomeClimate climate = BiomeClimate.selectClimate(temperature, moisture);
 

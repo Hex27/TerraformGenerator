@@ -959,7 +959,7 @@ public class FractalTreeBuilder {
 
         // Radius 0.5 is 1 block
         if (rX <= 0.5 && rY <= 0.5 && rZ <= 0.5) {
-            block.setType(type);
+            block.rsetType(BlockUtils.replacableByTrees, type);
             if (Tag.WALLS.isTagged(type)) {
                 BlockUtils.correctMultifacingData(block);
             }
