@@ -86,9 +86,14 @@ public class MasterCavePopulatorDistributor {
                          */
                         // If there is no cluster to spawn, then revert to the
                         // basic biome-based cave populator
-                        pop = (clusterPair == 0 && reg != null) ? reg.getPopulator(random) : bank.getCavePop();
+                        pop = (clusterPair == 0 && reg != null && TConfig.c.FEATURE_CAVECLUSTERS_ENABLED) ?
+                              reg.getPopulator(random) : bank.getCavePop();
                     }
                     clusterPair--;
+
+                    if(!(pop instanceof AbstractCaveClusterPopulator)
+                        && !TConfig.c.FEATURE_CAVEDECORATORS_ENABLED)
+                        pop = new EmptyCavePopulator();
 
                     pop.populate(tw, random, ceil, floor);
 

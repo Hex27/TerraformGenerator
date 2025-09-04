@@ -14,7 +14,6 @@ import org.terraform.biome.river.*;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.CoordPair;
-import org.terraform.data.SimpleLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
@@ -265,10 +264,20 @@ public enum BiomeBank {
             BiomeClimate.HUMID_VEGETATION,
             TConfig.c.BIOME_FOREST_WEIGHT
     ),
+    FLOWER_FOREST(new FlowerForestHandler(),
+            BiomeType.FLAT,
+            BiomeClimate.HUMID_VEGETATION,
+            TConfig.c.BIOME_FLOWERFOREST_WEIGHT
+    ),
     JUNGLE(new JungleHandler(),
             BiomeType.FLAT,
             BiomeClimate.HUMID_VEGETATION,
             TConfig.c.BIOME_JUNGLE_WEIGHT
+    ),
+    SPARSE_JUNGLE(new SparseJungleHandler(),
+            BiomeType.FLAT,
+            BiomeClimate.HUMID_VEGETATION,
+            TConfig.c.BIOME_SPARSE_JUNGLE_WEIGHT
     ),
     BAMBOO_FOREST(new BambooForestHandler(),
             BiomeType.FLAT,

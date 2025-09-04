@@ -23,67 +23,11 @@ import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ForestHandler extends BiomeHandler {
-
-    protected static void spawnRock(@NotNull Random rand, @NotNull PopulatorDataAbstract data, int x, int y, int z) {
-        ArrayList<int[]> locations = new ArrayList<>(20);
-        locations.add(new int[] {x, y, z});
-
-        locations.add(new int[] {x, y + 1, z});
-        locations.add(new int[] {x + 1, y + 1, z});
-        locations.add(new int[] {x - 1, y + 1, z});
-        locations.add(new int[] {x, y + 1, z + 1});
-        locations.add(new int[] {x, y + 1, z - 1});
-
-        locations.add(new int[] {x + 1, y, z});
-        locations.add(new int[] {x - 1, y, z});
-        locations.add(new int[] {x, y, z + 1});
-        locations.add(new int[] {x, y, z - 1});
-        locations.add(new int[] {x + 1, y, z});
-        locations.add(new int[] {x - 1, y, z + 1});
-        locations.add(new int[] {x + 1, y, z + 1});
-        locations.add(new int[] {x - 1, y, z - 1});
-
-        locations.add(new int[] {x, y - 1, z});
-        locations.add(new int[] {x + 1, y - 1, z});
-        locations.add(new int[] {x - 1, y - 1, z});
-        locations.add(new int[] {x, y - 1, z + 1});
-        locations.add(new int[] {x, y - 1, z - 1});
-
-        for (int[] coords : locations) {
-            int Tx = coords[0];
-            int Ty = coords[1];
-            int Tz = coords[2];
-            if (!data.getType(Tx, Ty, Tz).isSolid() || data.getType(Tx, Ty, Tz).toString().contains("LEAVES")) {
-                data.setType(
-                        Tx,
-                        Ty,
-                        Tz,
-                        GenUtils.randChoice(rand, Material.COBBLESTONE, Material.STONE, Material.MOSSY_COBBLESTONE)
-                );
-            }
-        }
-    }
-
-    @Override
-    public boolean isOcean() {
-        return false;
-    }
+public class FlowerForestHandler extends ForestHandler {
 
     @Override
     public @NotNull Biome getBiome() {
-        return Biome.FOREST;
-    }
-
-    @Override
-    public Material @NotNull [] getSurfaceCrust(@NotNull Random rand) {
-        return new Material[] {
-                GenUtils.weightedRandomMaterial(rand, Material.GRASS_BLOCK, 35, Material.PODZOL, 3),
-                Material.DIRT,
-                Material.DIRT,
-                GenUtils.randChoice(rand, Material.DIRT, Material.STONE),
-                GenUtils.randChoice(rand, Material.DIRT, Material.STONE)
-        };
+        return Biome.FLOWER_FOREST;
     }
 
     @Override
@@ -113,11 +57,12 @@ public class ForestHandler extends BiomeHandler {
             if (GenUtils.chance(random, 1, 10)) {
                 //Air check skipped, as PlantBuilder will check
                 // Grass & Flowers
-                switch(random.nextInt(4)){
+                switch(random.nextInt(12)){
                     case 0 -> PlantBuilder.GRASS.build(data, rawX, surfaceY + 1, rawZ);
-                    case 1 -> PlantBuilder.TALL_GRASS.build(data, rawX, surfaceY + 1, rawZ);
-                    case 2 -> BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
-                    case 3 -> PlantBuilder.BUSH.build(data, rawX, surfaceY + 1, rawZ);
+                    case 1 -> PlantBuilder.BUSH.build(data, rawX, surfaceY + 1, rawZ);
+                    case 2,3,4 -> BlockUtils.pickTallFlower().build(data, rawX, surfaceY + 1, rawZ);
+                    //Much higher chance for flowers
+                    default -> BlockUtils.pickFlower().build(data, rawX, surfaceY + 1, rawZ);
                 }
             }
         }
@@ -142,7 +87,7 @@ public class ForestHandler extends BiomeHandler {
         }
 
         // Small trees
-        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 8);
+        SimpleLocation[] trees = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 12);
 
         for (SimpleLocation sLoc : trees) {
             int treeY = GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ());
@@ -173,7 +118,7 @@ public class ForestHandler extends BiomeHandler {
         }
 
         // Small rocks
-        SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 10);
+        SimpleLocation[] rocks = GenUtils.randomObjectPositions(tw, data.getChunkX(), data.getChunkZ(), 15);
 
         for (SimpleLocation sLoc : rocks) {
             sLoc = sLoc.getAtY(GenUtils.getHighestGround(data, sLoc.getX(), sLoc.getZ()));

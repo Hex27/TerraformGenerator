@@ -108,7 +108,7 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
-        if (!TConfig.areAnimalsEnabled()) {
+        if (!TConfig.c.FEATURE_SPAWNERS_ENABLED) {
             return;
         }
         if (!lr.isInRegion(rawX, 50, rawZ)) {

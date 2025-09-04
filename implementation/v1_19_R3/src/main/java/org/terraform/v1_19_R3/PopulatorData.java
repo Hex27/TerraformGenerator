@@ -209,7 +209,7 @@ public class PopulatorData extends PopulatorDataAbstract
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
-        if (!TConfig.areAnimalsEnabled()) {
+        if (!TConfig.c.FEATURE_SPAWNERS_ENABLED) {
             return;
         }
 

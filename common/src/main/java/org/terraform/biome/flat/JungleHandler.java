@@ -239,7 +239,7 @@ public class JungleHandler extends BiomeHandler {
         }
     }
 
-    private void spawnStatue(@NotNull Random random,
+    protected void spawnStatue(@NotNull Random random,
                              @NotNull PopulatorDataAbstract data,
                              @NotNull SimpleLocation sLoc)
     {
@@ -261,7 +261,7 @@ public class JungleHandler extends BiomeHandler {
 
     }
 
-    private static class JungleStatueSchematicParser extends SchematicParser {
+    protected static class JungleStatueSchematicParser extends SchematicParser {
 
         public void applyData(@NotNull SimpleBlock block, @NotNull BlockData data) {
             if (data.getMaterial().toString().contains("COBBLESTONE")) {

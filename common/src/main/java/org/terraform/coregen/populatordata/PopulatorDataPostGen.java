@@ -133,7 +133,7 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
 
     @Override
     public void setSpawner(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
-        if (!TConfig.areAnimalsEnabled()) {
+        if (!TConfig.c.FEATURE_SPAWNERS_ENABLED) {
             return;
         }
 
