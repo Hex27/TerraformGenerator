@@ -8,6 +8,7 @@ import java.util.HashMap;
 public record SectionBlurCache(BiomeSection sect, float[][] intermediate, float[][] blurred) {
 
     public void fillCache(){
+        //this hashmap becomes a bottleneck when biomesection bitshifts is large.
         HashMap<CoordPair, Float> dominantBiomeHeights = new HashMap<>();
 
         // Box blur across the biome section

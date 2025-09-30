@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":implementation:v1_21_R3"))
     implementation(project(":implementation:v1_21_R4"))
     implementation(project(":implementation:v1_21_R5"))
+    implementation(project(":implementation:v1_21_R6"))
     implementation("com.github.AvarionMC:yaml:1.1.7")
 }
 
