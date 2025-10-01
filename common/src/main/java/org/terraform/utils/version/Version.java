@@ -66,7 +66,19 @@ public class Version {
             return null;
         }
 
-        return (NMSInjectorAbstract) Class.forName("org.terraform." + availableVersions.get(Version.DOUBLE) + ".NMSInjector")
+        String isPaper;
+        //https://www.spigotmc.org/threads/how-do-i-detect-if-a-server-is-running-paper.499064/
+        try {
+            // Any other works, just the shortest I could find.
+            Class.forName("com.destroystokyo.paper.ParticleBuilder");
+            isPaper = "paper.";
+        } catch (ClassNotFoundException ignored) {
+            isPaper = "";
+        }
+        return (NMSInjectorAbstract) Class.forName("org.terraform."
+                                                   + isPaper
+                                                   + availableVersions.get(Version.DOUBLE)
+                                                   + ".NMSInjector")
                                                   .getDeclaredConstructor()
                                                   .newInstance();
     }

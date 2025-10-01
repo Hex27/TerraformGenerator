@@ -22,10 +22,12 @@ dependencies {
     implementation(project(":implementation:v1_21_R4"))
     implementation(project(":implementation:v1_21_R5"))
     implementation(project(":implementation:v1_21_R6"))
+    implementation(project(":implementation:Paperv1_21_R6"))
     implementation("com.github.AvarionMC:yaml:1.1.7")
 }
 
 tasks.shadowJar {
+	dependsOn(":implementation:Paperv1_21_R6:shadowJar")
     doFirst {
         val yamlFile = file("${rootProject.projectDir}/common/src/main/resources/plugin.yml")
         val yaml = org.yaml.snakeyaml.Yaml()
@@ -36,10 +38,12 @@ tasks.shadowJar {
         archiveVersion.set(config["version"].toString())
         archiveClassifier.set("") // Don't add the '-all' postfix.
     }
-
+	
+	//wtf is this
     exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
 
-    relocate("io.papermc.lib", "org.terraform.lib")
+	//Wtf was this for
+    //relocate("io.papermc.lib", "org.terraform.lib")
 }
 
 tasks.register<Copy>("deploy") {
