@@ -1,20 +1,20 @@
 package org.terraform.v1_21_R6;
 
-import net.minecraft.server.level.PlayerChunkMap;
-import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.level.GeneratorAccessSeed;
-import net.minecraft.world.level.block.entity.TileEntityBeehive;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.chunk.IChunkAccess;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.chunk.status.WorldGenContext;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Beehive;
-import org.bukkit.craftbukkit.v1_21_R6.CraftChunk;
-import org.bukkit.craftbukkit.v1_21_R6.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R6.block.CraftBlockEntityState;
-import org.bukkit.craftbukkit.v1_21_R6.generator.CraftLimitedRegion;
+import org.bukkit.craftbukkit.CraftChunk;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.block.CraftBlockEntityState;
+import org.bukkit.craftbukkit.generator.CraftLimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.coregen.BlockDataFixerAbstract;
@@ -52,14 +52,14 @@ public class NMSInjector extends NMSInjectorAbstract {
     public boolean attemptInject(@NotNull World world) {
         try {
             CraftWorld cw = (CraftWorld) world;
-            WorldServer ws = cw.getHandle();
+            ServerLevel ws = cw.getHandle();
 
             // Force world to correct height
             TerraformWorld.get(world).minY = -64;
             TerraformWorld.get(world).maxY = 320;
 
-            // n is getChunkSource, g is getChunkGenerator()
-            ChunkGenerator delegate = ws.n().g();
+            // n is getChunkSource, g is getGenerator()
+            ChunkGenerator delegate = ws.getChunkSource().getGenerator();
 
             TerraformGeneratorPlugin.logger.info("NMSChunkGenerator Delegate is of type " + delegate.getClass()
                                                                                                     .getSimpleName());
@@ -72,8 +72,8 @@ public class NMSInjector extends NMSInjectorAbstract {
             // long i
             NMSChunkGenerator bpg = new NMSChunkGenerator(world.getName(), (int) world.getSeed(), delegate);
 
-            // Inject TerraformGenerator NMS chunk generator into playerchunkmap AND worldgencontext
-            PlayerChunkMap pcm = ws.n().a; // getChunkProvider().PlayerChunkMap
+            // Inject TerraformGenerator NMS chunk generator into ChunkMap AND worldgencontext
+            ChunkMap pcm = ws.getChunkSource().chunkMap; // getChunkProvider().ChunkMap
             // worldGenContext stores chunkGenerator, not pcm
             // Q is worldGenContext
             Field wgc = pcm.getClass().getDeclaredField("Q");
@@ -81,16 +81,16 @@ public class NMSInjector extends NMSInjectorAbstract {
             WorldGenContext worldGenContext = (WorldGenContext) wgc.get(pcm);
             // b is chunkGenerator
             wgc.set(pcm,
-                    new WorldGenContext(worldGenContext.a(),
+                    new WorldGenContext(worldGenContext.level(),
                             bpg,
-                            worldGenContext.c(),
-                            worldGenContext.d(),
-                            worldGenContext.e(),
-                            worldGenContext.f()
+                            worldGenContext.structureManager(),
+                            worldGenContext.lightEngine(),
+                            worldGenContext.mainThreadExecutor(),
+                            worldGenContext.unsavedListener()
                     )
             );
             TerraformGeneratorPlugin.logger.info("Post injection: getChunkSource().getChunkGenerator() is of type "
-                                                 + ws.n().g().getClass().getSimpleName());
+                                                 + ws.getChunkSource().getGenerator().getClass().getSimpleName());
         }
         catch (Throwable e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
@@ -103,9 +103,9 @@ public class NMSInjector extends NMSInjectorAbstract {
     @Override
     public @NotNull PopulatorDataICAAbstract getICAData(@NotNull Chunk chunk) {
         // ChunKStatus.FULL
-        IChunkAccess ica = ((CraftChunk) chunk).getHandle(ChunkStatus.n);
+        ChunkAccess ica = ((CraftChunk) chunk).getHandle(ChunkStatus.FULL);
         CraftWorld cw = (CraftWorld) chunk.getWorld();
-        WorldServer ws = cw.getHandle();
+        ServerLevel ws = cw.getHandle();
 
         TerraformWorld tw = TerraformWorld.get(chunk.getWorld());
         // return new PopulatorData(new RegionLimitedWorldAccess(ws, list), null, chunk.getX(), chunk.getZ());
@@ -116,14 +116,14 @@ public class NMSInjector extends NMSInjectorAbstract {
     public PopulatorDataICAAbstract getICAData(PopulatorDataAbstract data) {
         // This is for the damn bees
         if (data instanceof PopulatorDataSpigotAPI pdata) {
-            GeneratorAccessSeed gas = ((CraftLimitedRegion) pdata.lr).getHandle();
-            WorldServer ws = gas.getMinecraftWorld();
-            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.H()); // H is getSeed()
+            WorldGenLevel gas = ((CraftLimitedRegion) pdata.lr).getHandle();
+            ServerLevel ws = gas.getMinecraftWorld();
+            TerraformWorld tw = TerraformWorld.get(ws.getWorld().getName(), ws.getSeed()); // H is getSeed()
             return new PopulatorDataICA(
                     data,
                     tw,
                     ws,
-                    gas.a(data.getChunkX(), data.getChunkZ()),
+                    gas.getChunk(data.getChunkX(), data.getChunkZ()),
                     data.getChunkX(),
                     data.getChunkZ()
             );
@@ -147,14 +147,14 @@ public class NMSInjector extends NMSInjectorAbstract {
                 }
                 getTileEntity.setAccessible(true);
             }
-            TileEntityBeehive teb = (TileEntityBeehive) getTileEntity.invoke(hive);
+            BeehiveBlockEntity teb = (BeehiveBlockEntity) getTileEntity.invoke(hive);
             //
             //            NBTTagCompound nbttagcompound = new NBTTagCompound();
             //            nbttagcompound.a("id", "minecraft:bee");
-            // TileEntityBeehive.storeBee
-            // TileEntityBeehive.Occupant.create(1)
+            // BeehiveBlockEntity.storeBee
+            // BeehiveBlockEntity.Occupant.create(1)
             // Copied from world\level\levelgen\feature\treedecorators\WorldGenFeatureTreeBeehive.java
-            teb.a(TileEntityBeehive.c.a(GenUtils.RANDOMIZER.nextInt(599)));
+            teb.storeBee(BeehiveBlockEntity.Occupant.create(GenUtils.RANDOMIZER.nextInt(599)));
 
         }
         catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

@@ -1,21 +1,20 @@
 package org.terraform.v1_21_R6;
 
-import net.minecraft.core.BlockPosition;
-import net.minecraft.world.entity.EntityInsentient;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.level.GeneratorAccessSeed;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.entity.*;
-import net.minecraft.world.level.chunk.IChunkAccess;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_21_R6.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_21_R6.generator.CraftLimitedRegion;
-import org.bukkit.craftbukkit.v1_21_R6.util.CraftMagicNumbers;
-import org.bukkit.craftbukkit.v1_21_R6.util.RandomSourceWrapper;
-import org.bukkit.entity.EntityType;
+import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.generator.CraftLimitedRegion;
+import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.util.RandomSourceWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
@@ -35,31 +34,31 @@ import java.util.Random;
 public class PopulatorData extends PopulatorDataAbstract
         implements IPopulatorDataBaseHeightAccess, IPopulatorDataBeehiveEditor
 {
-    private static final HashMap<EntityType, EntityTypes<?>> entityTypesDict = new HashMap<>();
-    final GeneratorAccessSeed rlwa;
-    final IChunkAccess ica;
+    private static final HashMap<org.bukkit.entity.EntityType, EntityType<?>> EntityTypeDict = new HashMap<>();
+    final WorldGenLevel rlwa;
+    final ChunkAccess ica;
     private final int chunkX;
     private final int chunkZ;
     private final NMSChunkGenerator gen;
     private int radius = 1;
 
-    public PopulatorData(GeneratorAccessSeed rlwa, IChunkAccess ica, NMSChunkGenerator gen, int chunkX, int chunkZ) {
+    public PopulatorData(WorldGenLevel rlwa, ChunkAccess ica, NMSChunkGenerator gen, int chunkX, int chunkZ) {
         this.rlwa = rlwa;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.gen = gen;
         this.ica = ica;
 
-        if (entityTypesDict.isEmpty()) {
+        if (EntityTypeDict.isEmpty()) {
             for (EntityType type : EntityType.values()) {
                 if (type == EntityType.UNKNOWN) {
                     continue;
                 }
                 try {
-                    // EntityTypes.byString
-                    Optional<EntityTypes<?>> et = EntityTypes.a("minecraft:" + type.toString()
+                    // EntityType.byString
+                    Optional<EntityType<?>> et = EntityType.byString("minecraft:" + type.toString()
                                                                                    .toLowerCase(Locale.ENGLISH));
-                    et.ifPresent(entityTypes -> entityTypesDict.put(type, entityTypes));
+                    et.ifPresent(EntityType -> EntityTypeDict.put(type, EntityType));
                 }
                 catch (IllegalArgumentException e) {
                     TerraformGeneratorPlugin.logger.stackTrace(e);
@@ -75,7 +74,7 @@ public class PopulatorData extends PopulatorDataAbstract
     public @NotNull Material getType(int x, int y, int z) {
         try {
             // return rlwa.getType(x, y, z);
-            return CraftMagicNumbers.getMaterial(rlwa.a_(new BlockPosition(x, y, z)).b());
+            return CraftMagicNumbers.getMaterial(rlwa.getType(new BlockPos(x, y, z)).b());
         }
         catch (Exception e) {
             Bukkit.getLogger()
@@ -100,7 +99,7 @@ public class PopulatorData extends PopulatorDataAbstract
 
     public BlockData getBlockData(int x, int y, int z) {
         // return rlwa.getBlockData(x,y,z);
-        return CraftBlockData.fromData(rlwa.a_(new BlockPosition(x, y, z)));
+        return CraftBlockData.fromData(rlwa.getBlockData(new BlockPos(x, y, z)));
     }
 
     @Override
@@ -130,7 +129,7 @@ public class PopulatorData extends PopulatorDataAbstract
             }
         }
         else {
-            rlwa.a(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0);
+            rlwa.setBlockData(new BlockPos(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0);
         }
     }
 
@@ -161,7 +160,7 @@ public class PopulatorData extends PopulatorDataAbstract
             }
         }
         else {
-            rlwa.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), 0);
+            rlwa.setBlockData(new BlockPos(x, y, z), ((CraftBlockData) data).getState(), 0);
         }
     }
 
@@ -194,11 +193,11 @@ public class PopulatorData extends PopulatorDataAbstract
                 rawX,
                 rawY,
                 rawZ), type.getEntityClass(), true);
-        // EntityInsentient.setPersistenceRequired()
-        if (e instanceof EntityInsentient) {
-            ((EntityInsentient) e).gq();
+        // Mob.setPersistenceRequired()
+        if (e instanceof Mob) {
+            ((Mob) e).setPersistenceRequired();
         }
-        rlwa.b(e);
+        rlwa.addEntity(e); //used to be b
         // TerraformGeneratorPlugin.logger.info("Spawned " + e.getType() + " at " + rawX + " " + rawY + " " + rawZ);
     }
 
@@ -208,24 +207,24 @@ public class PopulatorData extends PopulatorDataAbstract
             return;
         }
 
-        BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
+        BlockPos pos = new BlockPos(rawX, rawY, rawZ);
 
         setType(rawX, rawY, rawZ, Material.SPAWNER);
-        Optional<TileEntityMobSpawner> opt = rlwa.a(pos, TileEntityTypes.j);
+        Optional<SpawnerBlockEntity> opt = rlwa.setBlockEntity(pos, TileEntityType.j);
 
         if (opt.isPresent()) {
-            TileEntityMobSpawner tileentity = opt.get();
+            SpawnerBlockEntity tileentity = opt.get();
             try {
                 // Refer to WorldGenDungeons
-                //                TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) tileentity;
+                //                SpawnerBlockEntity SpawnerBlockEntity = (SpawnerBlockEntity) tileentity;
                 //
-                //                tileentitymobspawner.setEntityId(this.randomEntityId(randomsource), randomsource);
+                //                SpawnerBlockEntity.setEntityId(this.randomEntityId(randomsource), randomsource);
 
                 // Fetch from ENTITY_TYPE (Q)'s map
                 // q is ENTITY_TYPE
-                EntityTypes<?> nmsEntity = entityTypesDict.get(type);
+                EntityType<?> nmsEntity = EntityTypeDict.get(type);
                 if (nmsEntity == null) {
-                    TerraformGeneratorPlugin.logger.error(type + " was not present in the entityTypesDict.");
+                    TerraformGeneratorPlugin.logger.error(type + " was not present in the EntityTypeDict.");
                 }
                 tileentity.a(nmsEntity, new RandomSourceWrapper(new Random()));
             }
@@ -247,10 +246,10 @@ public class PopulatorData extends PopulatorDataAbstract
 
     @Override
     public void lootTableChest(int x, int y, int z, TerraLootTable table) {
-        BlockPosition pos = new BlockPosition(x, y, z);
+        BlockPos pos = new BlockPos(x, y, z);
 
         // getBlockEntity
-        TileEntity te = rlwa.c_(pos);
+        TileEntity te = rlwa.getBlockEntity(pos);
         if (te instanceof TileEntityLootable) {
             ((TileEntityLootable) te).a(LootTableTranslator.translationMap.get(table));
         }
@@ -279,12 +278,12 @@ public class PopulatorData extends PopulatorDataAbstract
 
     @Override
     public void setBeehiveWithBee(int rawX, int rawY, int rawZ) {
-        BlockPosition pos = new BlockPosition(rawX, rawY, rawZ);
-        // TerraformGeneratorPlugin.logger.info(IRegistry.X.b(EntityTypes.h).toString());
+        BlockPos pos = new BlockPos(rawX, rawY, rawZ);
+        // TerraformGeneratorPlugin.logger.info(IRegistry.X.b(EntityType.h).toString());
         setType(rawX, rawY, rawZ, Material.BEE_NEST);
 
         try {
-            // TerraformGeneratorPlugin.logger.error("Failed to set beehive at (" + rawX + "," + rawY + "," + rawZ + ") " + BuiltInRegistries.h.b(entityTypesDict.get(EntityType.BEE)));
+            // TerraformGeneratorPlugin.logger.error("Failed to set beehive at (" + rawX + "," + rawY + "," + rawZ + ") " + BuiltInRegistries.h.b(EntityTypeDict.get(EntityType.BEE)));
             TileEntityBeehive tileentity = (TileEntityBeehive) rlwa.c_(pos);
             if (tileentity == null) { // retry?
                 setType(rawX, rawY, rawZ, Material.BEE_NEST);

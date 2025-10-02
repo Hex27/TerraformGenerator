@@ -1,33 +1,31 @@
 package org.terraform.v1_21_R6;
 
-import net.minecraft.core.BlockPosition;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.IRegistry;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.vehicle.EntityMinecartChest;
-import net.minecraft.world.level.ChunkCoordIntPair;
-import net.minecraft.world.level.biome.BiomeBase;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.MinecartChest;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
-import net.minecraft.world.level.block.entity.TileEntity;
-import net.minecraft.world.level.block.entity.TileEntityLootable;
-import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.chunk.IChunkAccess;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.structure.*;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentPieces;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_21_R6.block.CraftBiome;
-import org.bukkit.craftbukkit.v1_21_R6.block.data.CraftBlockData;
-import org.bukkit.entity.EntityType;
+import org.bukkit.craftbukkit.block.CraftBiome;
+import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
@@ -46,16 +44,16 @@ import java.util.Random;
 
 public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     private final PopulatorDataAbstract parent;
-    private final IChunkAccess ica;
+    private final ChunkAccess ica;
     private final int chunkX;
     private final int chunkZ;
-    private final WorldServer ws;
+    private final ServerLevel ws;
     private final TerraformWorld tw;
 
     public PopulatorDataICA(PopulatorDataAbstract parent,
                             TerraformWorld tw,
-                            WorldServer ws,
-                            IChunkAccess ica,
+                            ServerLevel ws,
+                            ChunkAccess ica,
                             int chunkX,
                             int chunkZ)
     {
@@ -69,27 +67,27 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     public @NotNull Material getType(int x, int y, int z) {
         // return parent.getType(x, y, z);
-        IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); // getState
+        BlockState ibd = ica.a_(new BlockPos(x, y, z)); // getState
         return CraftBlockData.fromData(ibd).getMaterial();
     }
 
     public BlockData getBlockData(int x, int y, int z) {
         // return parent.getBlockData(x, y, z);
-        IBlockData ibd = ica.a_(new BlockPosition(x, y, z)); // getState
+        BlockState ibd = ica.a_(new BlockPos(x, y, z)); // getState
         return CraftBlockData.fromData(ibd);
     }
 
     @Override
-    public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
-        IRegistry<BiomeBase> biomeRegistry = CustomBiomeHandler.getBiomeRegistry();
-        Holder<BiomeBase> targetBiome;
+    public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, org.bukkit.block.Biome fallback) {
+        Registry<Biome> biomeRegistry = CustomBiomeHandler.getBiomeRegistry();
+        Holder<Biome> targetBiome;
         if (cbt == CustomBiomeType.NONE) {
 
             targetBiome = CraftBiome.bukkitToMinecraftHolder(fallback);
         }
         else {
-            ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);// ResourceKey.a(IRegistry.aP, new MinecraftKey(cbt.getKey()));
-            Optional<Holder.c<BiomeBase>> optHolder = biomeRegistry.a(rkey); // lookup
+            ResourceKey<Biome> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);// ResourceKey.a(Registry.aP, new MinecraftKey(cbt.getKey()));
+            Optional<Holder.c<Biome>> optHolder = biomeRegistry.lookup(rkey); // lookup
             if (optHolder.isEmpty()) {
                 TerraformGeneratorPlugin.logger.error("Custom biome was not found in the vanilla registry!");
                 targetBiome = CraftBiome.bukkitToMinecraftHolder(fallback);
@@ -103,7 +101,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     }
 
     @Override
-    public void setBiome(int rawX, int rawY, int rawZ, Biome biome) {
+    public void setBiome(int rawX, int rawY, int rawZ, org.bukkit.block.Biome biome) {
         // TerraformGeneratorPlugin.logger.info("Set " + rawX + "," + rawY + "," + rawZ + " to " + biome);
         ica.setBiome(rawX >> 2, rawY >> 2, rawZ >> 2, CraftBiome.bukkitToMinecraftHolder(biome));
     }
@@ -113,19 +111,19 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         // parent.setType(x, y, z, type);
         //ProtoChunk appears to ignore this flag. It's no longer a bool in 1.21.5.
         //Not sure what "3" does.
-        //IChunkAccess.setBlockState
-        ica.a(new BlockPosition(x, y, z),
+        //ChunkAccess.setBlockState
+        ica.setBlockState(new BlockPos(x, y, z),
                 ((CraftBlockData) Bukkit.createBlockData(type)).getState(),
                 3);
 
-        // ica.setType(new BlockPosition(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
+        // ica.setType(new BlockPos(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), false);
     }
 
     @Override
     public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
         // parent.setBlockData(x, y, z, data);
         //see setType
-        ica.a(new BlockPosition(x, y, z), ((CraftBlockData) data).getState(), 3);
+        ica.setType(new BlockPos(x, y, z), ((CraftBlockData) data).getState(), 3);
 
     }
 
@@ -146,23 +144,23 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     }
 
     @Override
-    public void addEntity(int rawX, int rawY, int rawZ, EntityType type) {
+    public void addEntity(int rawX, int rawY, int rawZ, org.bukkit.entity.EntityType type) {
         parent.addEntity(rawX, rawY, rawZ, type);
     }
 
     @Override
-    public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
+    public void setSpawner(int rawX, int rawY, int rawZ, org.bukkit.entity.EntityType type) {
         parent.setSpawner(rawX, rawY, rawZ, type);
     }
 
     @Override
     public void lootTableChest(int x, int y, int z, TerraLootTable table) {
-        BlockPosition pos = new BlockPosition(x, y, z);
+        BlockPos pos = new BlockPos(x, y, z);
 
         // getBlockEntity
-        TileEntity te = ica.c_(pos);
-        if (te instanceof TileEntityLootable) {
-            ((TileEntityLootable) te).a(LootTableTranslator.translationMap.get(table));
+        BlockEntity te = ica.c_(pos);
+        if (te instanceof RandomizableContainerBlockEntity) {
+            ((RandomizableContainerBlockEntity) te).a(LootTableTranslator.translationMap.get(table));
         }
         else if (te instanceof BrushableBlockEntity)
         // BrushableBlockEntity.setLootTable
@@ -185,7 +183,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         // bg is registryAccess
         // a is lookup
         // bm is STRUCTURE
-        IRegistry<Structure> featureRegistry = MinecraftServer.getServer().bg().a(Registries.bm).orElseThrow();
+        Registry<Structure> featureRegistry = MinecraftServer.getServer().bg().a(Registries.bm).orElseThrow();
 
         Structure structureFeature = featureRegistry.a(structureKey).get().a();
 
@@ -207,7 +205,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
             }});
 
             StructureStart start = new StructureStart(structureFeature,
-                    new ChunkCoordIntPair(chunkX, chunkZ),
+                    new ChunkPos(chunkX, chunkZ),
                     0,
                     container
             );
@@ -231,7 +229,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
             //        		start);
 
             // addReferenceForFeature
-            ica.a(structureFeature, new ChunkCoordIntPair(chunkX, chunkZ).a()); // a is toLong
+            ica.a(structureFeature, new ChunkPos(chunkX, chunkZ).a()); // a is toLong
         }
         catch (NoSuchMethodException |
                InstantiationException |
@@ -247,21 +245,21 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     @SuppressWarnings("deprecation")
     @Override
     public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, @NotNull Random random) {
-        //EntityTypes.CHEST_MINECART.create(generatoraccessseed.getLevel(), EntitySpawnReason.CHUNK_GENERATION);
-        EntityMinecartChest entityminecartchest = (EntityMinecartChest) EntityTypes.A.a(
+        //EntityType.CHEST_MINECART.create(generatoraccessseed.getLevel(), EntitySpawnReason.CHUNK_GENERATION);
+        MinecartChest MinecartChest = (MinecartChest) EntityType.A.a(
                 ws.getMinecraftWorld(), EntitySpawnReason.b);
 
         //For whatever reason, the mineshaft code does a null check.
-        if(entityminecartchest != null)
+        if(MinecartChest != null)
         {
             //setPosition
-            entityminecartchest.a_(
+            MinecartChest.a_(
                     (float) x + 0.5F,
                     (float) y + 0.5F,
                     (float) z + 0.5F
             );
-            entityminecartchest.a(LootTableTranslator.translationMap.get(table), random.nextLong());
-            ws.addFreshEntity(entityminecartchest, SpawnReason.CHUNK_GEN);
+            MinecartChest.a(LootTableTranslator.translationMap.get(table), random.nextLong());
+            ws.addFreshEntity(MinecartChest, SpawnReason.CHUNK_GEN);
         }
     }
 

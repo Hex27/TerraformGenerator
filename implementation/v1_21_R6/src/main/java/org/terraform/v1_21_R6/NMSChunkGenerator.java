@@ -7,20 +7,20 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.*;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.RegionLimitedWorldAccess;
-import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.BlockColumn;
+import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.feature.FeatureCountTracker;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureBoundingBox;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
@@ -61,7 +61,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
     private final @NotNull MapRenderWorldProviderBiome mapRendererBS;
     private final @NotNull TerraformWorldProviderBiome twBS;
     private final @NotNull Method tryGenerateStructure;
-    private final ArrayList<MinecraftKey> possibleStructureSets = new ArrayList<>();
+    private final ArrayList<ResourceLocation> possibleStructureSets = new ArrayList<>();
 
     private final @NotNull Method getWriteableArea;
     private final @NotNull Supplier featuresPerStep;
@@ -70,22 +70,22 @@ public class NMSChunkGenerator extends ChunkGenerator {
             throws NoSuchMethodException, SecurityException, NoSuchFieldException, IllegalAccessException
     {
         super(
-                delegate.d(), // WorldChunkManager d() is getBiomeSource()
-                delegate.d); // Idk what generationSettingsGetter is
+                delegate.getBiomeSource(), // BiomeSource d() is getBiomeSource()
+                delegate.generationSettingsGetter); // Idk what generationSettingsGetter is
         tw = TerraformWorld.get(worldName, seed);
         this.delegate = delegate;
 
         // Set the long term biome handler to this one. The normal behaving one
         // is initiated inside the cave carver
-        mapRendererBS = new MapRenderWorldProviderBiome(tw, delegate.d());
-        twBS = new TerraformWorldProviderBiome(TerraformWorld.get(worldName, seed), delegate.d());
+        mapRendererBS = new MapRenderWorldProviderBiome(tw, delegate.getBiomeSource());
+        twBS = new TerraformWorldProviderBiome(TerraformWorld.get(worldName, seed), delegate.getBiomeSource());
 
         //This is needed for addVanillaFeatures
         Field f = ChunkGenerator.class.getDeclaredField("c");
         f.setAccessible(true);
         featuresPerStep = (Supplier) f.get(delegate);
 
-        getWriteableArea = ChunkGenerator.class.getDeclaredMethod("a", IChunkAccess.class);
+        getWriteableArea = ChunkGenerator.class.getDeclaredMethod("a", ChunkAccess.class);
         getWriteableArea.setAccessible(true);
 
         // This is tryGenerateStructure
@@ -95,26 +95,26 @@ public class NMSChunkGenerator extends ChunkGenerator {
         {
             if(pop instanceof VanillaStructurePopulator vsp)
             {
-                possibleStructureSets.add(MinecraftKey.a(vsp.structureRegistryKey)); // MinecraftKey.create
+                possibleStructureSets.add(ResourceLocation.parse(vsp.structureRegistryKey)); // ResourceLocation.create
             }
         }
         tryGenerateStructure = ChunkGenerator.class.getDeclaredMethod("a",
-                StructureSet.a.class,
+                StructureSet.StructureSelectionEntry.class,
                 StructureManager.class,
-                IRegistryCustom.class,
+                RegistryAccess.class,
                 RandomState.class,
                 StructureTemplateManager.class,
                 long.class,
-                IChunkAccess.class,
-                ChunkCoordIntPair.class,
-                SectionPosition.class,
+                ChunkAccess.class,
+                ChunkPos.class,
+                SectionPos.class,
                 ResourceKey.class);
         tryGenerateStructure.setAccessible(true);
     }
 
 
     @Override // getBiomeSource
-    public @NotNull WorldChunkManager d() {
+    public @NotNull BiomeSource getBiomeSource() {
         return mapRendererBS;
     }
 
@@ -123,64 +123,64 @@ public class NMSChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    protected @NotNull MapCodec<? extends ChunkGenerator> b() {
+    protected @NotNull MapCodec<? extends ChunkGenerator> codec() {
         return MapCodec.unit(null);
     }
 
     @Override // createBiomes
-    public @NotNull CompletableFuture<IChunkAccess> a(RandomState randomstate, Blender blender, StructureManager structuremanager, @NotNull IChunkAccess ichunkaccess)
+    public @NotNull CompletableFuture<ChunkAccess> createBiomes(RandomState randomstate, Blender blender, StructureManager structuremanager, @NotNull ChunkAccess ChunkAccess)
     {
         return CompletableFuture.supplyAsync(() -> {
-            return ichunkaccess; // Don't do any calculations here, biomes are set in applyCarvers
-        }, SystemUtils.h().a("init_biomes"));
-        //SystemUtils.backgroundExecutor().
+            return ChunkAccess; // Don't do any calculations here, biomes are set in applyCarvers
+        }, Util.backgroundExecutor().forName("init_biomes"));
+        //Util.backgroundExecutor().
     }
 
-    @Override // findNearestMapFeature
-    public Pair<BlockPosition, Holder<Structure>> a(WorldServer worldserver, @NotNull HolderSet<Structure> holderset,
-                                                    @NotNull BlockPosition blockposition, int i, boolean flag) {
+    @Override // findNearestMapStructure
+    public Pair<BlockPos, Holder<Structure>> findNearestMapStructure(ServerLevel ServerLevel, @NotNull HolderSet<Structure> holderset,
+                                                    @NotNull BlockPos BlockPos, int i, boolean flag) {
 
-        int pX = blockposition.u(); // getX
-        int pZ = blockposition.w(); // getZ
+        int pX = BlockPos.getX(); // getX
+        int pZ = BlockPos.getZ(); // getZ
 
         for(Holder<Structure> holder:holderset) {
-            Structure feature = holder.a();
+            Structure feature = holder.value();
             // StructureGenerator<?> structuregenerator = feature.;
             TerraformGeneratorPlugin.logger.info("Vanilla locate for " + feature.getClass().getName() + " invoked.");
 
-            if (holder.a().getClass() == StrongholdStructure.class) { // stronghold
+            if (holder.value().getClass() == StrongholdStructure.class) { // stronghold
                 int[] coords = new StrongholdPopulator().getNearestFeature(tw, pX, pZ);
-                return new Pair<>(new BlockPosition(coords[0], 20, coords[1]), holder);
+                return new Pair<>(new BlockPos(coords[0], 20, coords[1]), holder);
             }
             else if(!TConfig.c.DEVSTUFF_VANILLA_LOCATE_DISABLE)
             {
-                if (holder.a().getClass() == OceanMonumentStructure.class) { // Monument
+                if (holder.value().getClass() == OceanMonumentStructure.class) { // Monument
 
                     int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MonumentPopulator(), TConfig.c.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS);
 
                     return new Pair<>
-                            (new BlockPosition(coords[0], 50, coords[1]), holder);
-                } else if (holder.a().getClass() == WoodlandMansionStructure.class) { // Mansion
+                            (new BlockPos(coords[0], 50, coords[1]), holder);
+                } else if (holder.value().getClass() == WoodlandMansionStructure.class) { // Mansion
 
                     int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new MansionPopulator(), TConfig.c.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS);
 
                     return new Pair<>
-                            (new BlockPosition(coords[0], 50, coords[1]), holder);
-                } else if (holder.a() instanceof JigsawStructure
+                            (new BlockPos(coords[0], 50, coords[1]), holder);
+                } else if (holder.value() instanceof JigsawStructure
                            //bm is structure
-                        && MinecraftServer.getServer().bg().a(Registries.bm).orElseThrow().a(MinecraftKey.a("trial_chambers")) == holder.a()
+                        && MinecraftServer.getServer().registryAccess().lookup(Registries.STRUCTURE).orElseThrow().getValue(ResourceLocation.parse("trial_chambers")) == holder.value()
                 ) { // Trial Chamber
 
                     int[] coords = StructureLocator.locateSingleMegaChunkStructure(tw, pX, pZ, new TrialChamberPopulator(), TConfig.c.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS);
 
                     return new Pair<>
-                            (new BlockPosition(coords[0], 50, coords[1]), holder);
-                } else if (holder.a().getClass() == BuriedTreasureStructure.class) {
+                            (new BlockPos(coords[0], 50, coords[1]), holder);
+                } else if (holder.value().getClass() == BuriedTreasureStructure.class) {
                     // Buried Treasure
                     int[] coords = StructureLocator.locateMultiMegaChunkStructure(tw, new MegaChunk(pX, 0, pZ), new BuriedTreasurePopulator(), TConfig.c.DEVSTUFF_VANILLA_LOCATE_TIMEOUTMILLIS);
                     if(coords == null) return null;
                     return new Pair<>
-                            (new BlockPosition(coords[0], 50, coords[1]), holder);
+                            (new BlockPos(coords[0], 50, coords[1]), holder);
                 }
             }
         }
@@ -188,82 +188,75 @@ public class NMSChunkGenerator extends ChunkGenerator {
     }
 
     @Override // applyBiomeDecoration
-    public void a(GeneratorAccessSeed generatoraccessseed, IChunkAccess ichunkaccess, StructureManager structuremanager) {
-        delegate.a(generatoraccessseed, ichunkaccess, structuremanager);
+    public void applyBiomeDecoration(WorldGenLevel worldGenLevel, ChunkAccess ChunkAccess, StructureManager structuremanager) {
+        delegate.applyBiomeDecoration(worldGenLevel, ChunkAccess, structuremanager);
 
         // This triggers structure gen. Needed for VanillaStructurePopulator
-        addVanillaDecorations(generatoraccessseed,ichunkaccess, structuremanager);
+        addVanillaDecorations(worldGenLevel,ChunkAccess, structuremanager);
     }
 
     //This has to be overridden because calling the normal one will make vanilla
     // generate ores. The giant commented swath of stuff did it
     @Override
-    public void addVanillaDecorations(GeneratorAccessSeed generatoraccessseed, IChunkAccess ichunkaccess, StructureManager structuremanager) { // CraftBukkit
-        ChunkCoordIntPair chunkcoordintpair = ichunkaccess.f();
-        if (!SharedConstants.a(chunkcoordintpair)) {
-            SectionPosition sectionposition = SectionPosition.a(chunkcoordintpair, generatoraccessseed.at());
-            BlockPosition blockposition = sectionposition.j();
-            IRegistry<Structure> iregistry = generatoraccessseed.L_().f(Registries.bm);
-            Map<Integer, List<Structure>> map = (Map<Integer, List<Structure>>)iregistry.s().collect(Collectors.groupingBy((structurex) -> {
-                return structurex.c().ordinal();
+    public void addVanillaDecorations(WorldGenLevel worldGenLevel, ChunkAccess chunkAccess, StructureManager structuremanager) { // CraftBukkit
+        ChunkPos ChunkPos = chunkAccess.getPos();
+        if (!SharedConstants.debugVoidTerrain(ChunkPos)) {
+            SectionPos sectionPos = SectionPos.of(ChunkPos, worldGenLevel.getMinSectionY());
+            BlockPos BlockPos = sectionPos.origin();
+            Registry<Structure> iregistry = worldGenLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+            Map<Integer, List<Structure>> map = (Map<Integer, List<Structure>>)iregistry.stream().collect(Collectors.groupingBy((structurex) -> {
+                return structurex.step().ordinal();
             }));
             //This is private c
-            List<FeatureSorter.b> list = (List<FeatureSorter.b>)this.featuresPerStep.get();
-            SeededRandom seededrandom = new SeededRandom(new XoroshiroRandomSource(RandomSupport.a()));
-            long i = seededrandom.a(generatoraccessseed.H(), blockposition.u(), blockposition.w());
-            Set<Holder<BiomeBase>> set = new ObjectArraySet();
-            ChunkCoordIntPair.a(sectionposition.r(), 1).forEach((chunkcoordintpair1) -> {
-                IChunkAccess ichunkaccess1 = generatoraccessseed.a(chunkcoordintpair1.h, chunkcoordintpair1.i);
-                ChunkSection[] var4 = ichunkaccess1.d();
-                int var5 = var4.length;
+            List<FeatureSorter.StepFeatureData> list = (List<FeatureSorter.StepFeatureData>)this.featuresPerStep.get();
+            WorldgenRandom seededrandom = new WorldgenRandom(new XoroshiroRandomSource(RandomSupport.generateUniqueSeed()));
+            long i = seededrandom.setDecorationSeed(worldGenLevel.getSeed(), BlockPos.getX(), BlockPos.getZ());
+            Set<Holder<Biome>> set = new ObjectArraySet<Holder<Biome>>();
+            ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((ChunkPos1) -> {
+                ChunkAccess ichunkaccess1 = worldGenLevel.getChunk(ChunkPos1.x, ChunkPos1.z);
 
-                for(int var6 = 0; var6 < var5; ++var6) {
-                    ChunkSection chunksection = var4[var6];
-                    PalettedContainerRO<Holder<BiomeBase>> palettedcontainerro = chunksection.i();
+                for (LevelChunkSection chunksection : ichunkaccess1.getSections()) {
+                    PalettedContainerRO<Holder<Biome>> palettedcontainerro = chunksection.getBiomes();
+
                     Objects.requireNonNull(set);
-                    Objects.requireNonNull(set);
-                    palettedcontainerro.a(set::add);
+                    palettedcontainerro.getAll(set::add);
                 }
-
             });
-            set.retainAll(this.b.c());
+            set.retainAll(this.biomeSource.possibleBiomes());
             int j = list.size();
 
             try {
-                IRegistry iregistry1 = generatoraccessseed.L_().f(Registries.bj);
-                int k = Math.max(WorldGenStage.Decoration.values().length, j);
+                Registry iregistry1 = worldGenLevel.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE);
+                int k = Math.max(GenerationStep.Decoration.values().length, j);
 
                 for(int l = 0; l < k; ++l) {
                     int i1 = 0;
-                    if (structuremanager.a()) {
-                        for(Iterator var19 = ((List)map.getOrDefault(l, Collections.emptyList())).iterator(); var19.hasNext(); ++i1) {
-                            Structure structure = (Structure)var19.next();
-                            seededrandom.b(i, i1, l);
+                    if (structuremanager.shouldGenerateStructures()) {
+                        for (Structure structure : (List<Structure>) map.getOrDefault(l, Collections.emptyList())) {
+                            seededrandom.setFeatureSeed(i, i1, l);
                             Supplier<String> supplier = () -> {
-                                Optional optional = iregistry.d(structure).map(Object::toString);
-                                Objects.requireNonNull(structure);
+                                Optional optional = iregistry.getResourceKey(structure).map(Object::toString);
                                 Objects.requireNonNull(structure);
                                 return (String)optional.orElseGet(structure::toString);
                             };
 
                             try {
-                                generatoraccessseed.a(supplier);
-                                structuremanager.a(sectionposition, structure).forEach((structurestart) -> {
+                                worldGenLevel.setCurrentlyGenerating(supplier);
+                                structuremanager.startsForStructure(sectionPos, structure).forEach((structurestart) -> {
                                     try{
-                                        structurestart.a(generatoraccessseed, structuremanager, this,
-                                                seededrandom, (StructureBoundingBox) getWriteableArea.invoke(null,ichunkaccess),
-                                                chunkcoordintpair);
+                                        structurestart.placeInChunk(worldGenLevel, structuremanager, this,
+                                                seededrandom, (BoundingBox) getWriteableArea.invoke(null,chunkAccess),
+                                                ChunkPos);
                                     }catch(IllegalAccessException | InvocationTargetException e){
-                                        CrashReport crashreport = CrashReport.a(e, "TerraformGenerator");
+                                        CrashReport crashreport = CrashReport.forThrowable(e, "TerraformGenerator");
                                         throw new ReportedException(crashreport);
                                     }
                                 });
                             } catch (Exception var31) {
-                                CrashReport crashreport = CrashReport.a(var31, "Feature placement");
-                                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Feature");
+                                CrashReport crashreport = CrashReport.forThrowable(var31, "Feature placement");
+                                CrashReportCategory crashreportsystemdetails = crashreport.addCategory("Feature");
                                 Objects.requireNonNull(supplier);
-                                Objects.requireNonNull(supplier);
-                                crashreportsystemdetails.a("Description", supplier::get);
+                                crashreportsystemdetails.setDetail("Description", supplier::get);
                                 throw new ReportedException(crashreport);
                             }
                         }
@@ -305,11 +298,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
                             seededrandom.b(i, l1, l);
 
                             try {
-                                generatoraccessseed.a(supplier1);
-                                placedfeature.b(generatoraccessseed, this, seededrandom, blockposition);
+                                WorldGenLevel.a(supplier1);
+                                placedfeature.b(WorldGenLevel, this, seededrandom, BlockPos);
                             } catch (Exception var30) {
                                 CrashReport crashreport1 = CrashReport.a(var30, "Feature placement");
-                                CrashReportSystemDetails crashreportsystemdetails1 = crashreport1.a("Feature");
+                                CrashReportCategory crashreportsystemdetails1 = crashreport1.a("Feature");
                                 Objects.requireNonNull(supplier1);
                                 Objects.requireNonNull(supplier1);
                                 crashreportsystemdetails1.a("Description", supplier1::get);
@@ -320,13 +313,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
 */
                 }
 
-                generatoraccessseed.a((Supplier)null);
-                if (SharedConstants.aW) {
-                    FeatureCountTracker.a(generatoraccessseed.a());
+                worldGenLevel.setCurrentlyGenerating((Supplier)null);
+                if (SharedConstants.DEBUG_FEATURE_COUNT) {
+                    FeatureCountTracker.chunkDecorated(worldGenLevel.getLevel());
                 }
             } catch (Exception var32) {
-                CrashReport crashreport2 = CrashReport.a(var32, "Biome decoration");
-                crashreport2.a("Generation").a("CenterX", chunkcoordintpair.h).a("CenterZ", chunkcoordintpair.i).a("Decoration Seed", i);
+                CrashReport crashreport2 = CrashReport.forThrowable(var32, "Biome decoration");
+                crashreport2.addCategory("Generation").setDetail("CenterX", ChunkPos.x).setDetail("CenterZ", ChunkPos.z).setDetail("Decoration Seed", i);
                 throw new ReportedException(crashreport2);
             }
         }
@@ -335,23 +328,23 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
 
     @Override // applyCarvers
-    public void a(RegionLimitedWorldAccess regionlimitedworldaccess, long seed,
+    public void applyCarvers(WorldGenRegion worldGenRegion, long seed,
                   RandomState randomstate, BiomeManager biomemanager,
-                  StructureManager structuremanager, @NotNull IChunkAccess ichunkaccess)
+                  StructureManager structuremanager, @NotNull ChunkAccess chunkAccess)
     {
         // POPULATES BIOMES. IMPORTANT
         // (net.minecraft.world.level.biome.BiomeResolver,net.minecraft.world.level.biome.Climate$Sampler)
         // Use twBS as it is the biome provider that actually calculates biomes.
         // The other one only returns river/plains
-        ichunkaccess.a(this.twBS, null); // This can be null as its passed into twBS
+        chunkAccess.fillBiomesFromNoise(this.twBS, null); // This can be null as its passed into twBS
 
         // Call delegate applyCarvers to apply spigot ChunkGenerator;
-        delegate.a(regionlimitedworldaccess, seed, randomstate, biomemanager,structuremanager, ichunkaccess);
+        delegate.applyCarvers(worldGenRegion, seed, randomstate, biomemanager,structuremanager, chunkAccess);
     }
 
-    @Override // getSeaLevel
-    public int e() {
-        return delegate.e();
+    @Override // getGenDepth
+    public int getGenDepth() {
+        return delegate.getGenDepth();
     }
 
     /**
@@ -360,11 +353,11 @@ public class NMSChunkGenerator extends ChunkGenerator {
      * checks cut out and replaced with TFG code.
      */
     @Override
-    public void a(IRegistryCustom iregistrycustom, @NotNull ChunkGeneratorStructureState chunkgeneratorstructurestate, StructureManager structuremanager, @NotNull IChunkAccess ichunkaccess, StructureTemplateManager structuretemplatemanager, ResourceKey<World> resourcekey) {
-        ChunkCoordIntPair chunkcoordintpair = ichunkaccess.f(); // getPos
-        SectionPosition sectionposition = SectionPosition.a(ichunkaccess); // bottomOf
-        RandomState randomstate = chunkgeneratorstructurestate.c(); // randomState
-        MegaChunk mc = new MegaChunk(chunkcoordintpair.h, chunkcoordintpair.i);
+    public void createStructures(RegistryAccess registryAccess, @NotNull ChunkGeneratorStructureState chunkgeneratorstructurestate, StructureManager structuremanager, @NotNull ChunkAccess ChunkAccess, StructureTemplateManager structuretemplatemanager, ResourceKey<Level> resourcekey) {
+        ChunkPos ChunkPos = ChunkAccess.getPos(); // getPos
+        SectionPos sectionPos = SectionPos.bottomOf(ChunkAccess); // bottomOf
+        RandomState randomstate = chunkgeneratorstructurestate.randomState(); // randomState
+        MegaChunk mc = new MegaChunk(ChunkPos.x, ChunkPos.z);
         SingleMegaChunkStructurePopulator[] spops = StructureRegistry.getLargeStructureForMegaChunk(tw, mc);
         int[] centerCoords = mc.getCenterBiomeSectionChunkCoords();
         if(spops == null) return;
@@ -374,28 +367,28 @@ public class NMSChunkGenerator extends ChunkGenerator {
             // possibleStructureSets
             possibleStructureSets
                 .stream().filter((resourceLoc)->{
-                    return vpop.structureRegistryKey.equals(resourceLoc.a()); // MinecraftKey.getPath()
+                    return vpop.structureRegistryKey.equals(resourceLoc.getPath()); // ResourceLocation.getPath()
                 })
                 //Registries.STRUCTURE_SET
-                .map((resourceLoc)-> MinecraftServer.getServer().bg().a(Registries.bl).orElseThrow().a(resourceLoc))
+                .map((resourceLoc)-> MinecraftServer.getServer().registryAccess().lookup(Registries.STRUCTURE_SET).orElseThrow().getValue(resourceLoc))
                 .forEach((structureSet) -> {
-                StructurePlacement structureplacement = structureSet.b(); // placement()
-                List<StructureSet.a> list = structureSet.a(); // structures()
+                StructurePlacement structureplacement = structureSet.placement(); // placement()
+                List<StructureSet.StructureSelectionEntry> list = structureSet.structures(); // structures()
 
                 // This will be true depending on the structure manager
-                if (centerCoords[0] == chunkcoordintpair.h
-                        && centerCoords[1] == chunkcoordintpair.i) {
+                if (centerCoords[0] == ChunkPos.x
+                        && centerCoords[1] == ChunkPos.z) {
 
                     // d() -> getLevelSeed()
                     try{
-                        Object retVal = tryGenerateStructure.invoke(this, list.getFirst(), structuremanager, iregistrycustom, randomstate,
-                                structuretemplatemanager, chunkgeneratorstructurestate.d(),
-                                ichunkaccess, chunkcoordintpair, sectionposition, resourcekey);
-                        TerraformGeneratorPlugin.logger.info(chunkcoordintpair.h + "," + chunkcoordintpair.i + " will spawn a vanilla structure, with tryGenerateStructure == " + retVal);
+                        Object retVal = tryGenerateStructure.invoke(this, list.getFirst(), structuremanager, registryAccess, randomstate,
+                                structuretemplatemanager, chunkgeneratorstructurestate.getLevelSeed(),
+                                ChunkAccess, ChunkPos, sectionPos, resourcekey);
+                        TerraformGeneratorPlugin.logger.info(ChunkPos.x + "," + ChunkPos.z + " will spawn a vanilla structure, with tryGenerateStructure == " + retVal);
                     }
                     catch(Throwable t)
                     {
-                        TerraformGeneratorPlugin.logger.info(chunkcoordintpair.h + "," + chunkcoordintpair.i + " Failed to generate a vanilla structure");
+                        TerraformGeneratorPlugin.logger.info(ChunkPos.x + "," + ChunkPos.z + " Failed to generate a vanilla structure");
                         TerraformGeneratorPlugin.logger.stackTrace(t);
                     }
                 }
@@ -403,70 +396,70 @@ public class NMSChunkGenerator extends ChunkGenerator {
         }
     }
     @Override // createReferences. Structure related
-    public void a(GeneratorAccessSeed gas,StructureManager manager,IChunkAccess ica)
+    public void createReferences(WorldGenLevel gas,StructureManager manager,ChunkAccess ica)
     {
-        delegate.a(gas, manager, ica);
+        delegate.createReferences(gas, manager, ica);
     }
 
     @Override // getSpawnHeight
-    public int a(LevelHeightAccessor levelheightaccessor) {
+    public int getSpawnHeight(LevelHeightAccessor levelheightaccessor) {
         return 64;
     }
 
     @Override // fillFromNoise
-    public CompletableFuture<IChunkAccess> a(Blender blender,
+    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender,
                                              RandomState randomstate, StructureManager structuremanager,
-                                             IChunkAccess ichunkaccess) {
-        return delegate.a(blender,
+                                             ChunkAccess ChunkAccess) {
+        return delegate.fillFromNoise(blender,
                 randomstate, structuremanager,
-                ichunkaccess);
+                ChunkAccess);
     }
 
     @Override // buildSurface. Used to be buildBase
-    public void a(RegionLimitedWorldAccess regionlimitedworldaccess, StructureManager structuremanager, RandomState randomstate, IChunkAccess ichunkaccess)
+    public void buildSurface(WorldGenRegion worldGenRegion, StructureManager structuremanager, RandomState randomstate, ChunkAccess ChunkAccess)
     {
-        delegate.a(regionlimitedworldaccess, structuremanager, randomstate, ichunkaccess);
+        delegate.buildSurface(worldGenRegion, structuremanager, randomstate, ChunkAccess);
     }
 
 
     @Override // getBaseColumn
-    public BlockColumn a(int i, int j, LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
-        return this.delegate.a(i,j,levelheightaccessor,randomstate);
+    public NoiseColumn getBaseColumn(int i, int j, LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
+        return this.delegate.getBaseColumn(i,j,levelheightaccessor,randomstate);
     }
 
     // spawnOriginalMobs
-    public void a(RegionLimitedWorldAccess regionlimitedworldaccess) {
-        this.delegate.a(regionlimitedworldaccess);
+    public void spawnOriginalMobs(WorldGenRegion WorldGenRegion) {
+        this.delegate.spawnOriginalMobs(WorldGenRegion);
     }
 
 
     // getSeaLevel
     @Override
-    public int f() {
+    public int getSeaLevel() {
         return TerraformGenerator.seaLevel;
     }
 
     // getMinY
     @Override
-    public int g() {
-        return this.delegate.g();
+    public int getMinY() {
+        return this.delegate.getMinY();
     }
 
     @Override // getFirstFreeHeight
-    public int b(int i, int j, HeightMap.Type heightmap_type,
+    public int getFirstFreeHeight(int i, int j, Heightmap.Types heightmap_type,
                  LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
-        return this.a(i, j, heightmap_type, levelheightaccessor, randomstate);
+        return this.getFirstFreeHeight(i, j, heightmap_type, levelheightaccessor, randomstate);
     }
 
 
     @Override // getFirstOccupiedHeight
-    public int c(int i, int j, HeightMap.Type heightmap_type,
+    public int getFirstOccupiedHeight(int i, int j, Heightmap.Types heightmap_type,
                  LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
-        return this.a(i, j, heightmap_type, levelheightaccessor, randomstate) - 1;
+        return this.getFirstOccupiedHeight(i, j, heightmap_type, levelheightaccessor, randomstate) - 1;
     }
 
     @Override // getBaseHeight
-    public int a(int i, int j, HeightMap.Type heightmap_type, LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
+    public int getBaseHeight(int i, int j, Heightmap.Types heightmap_type, LevelHeightAccessor levelheightaccessor, RandomState randomstate) {
         // return delegate.a(x, z, var2, var3);
         return 100;
         // return org.terraform.coregen.HeightMap.getBlockHeight(tw, x, z);
@@ -476,7 +469,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
 
     @Override // addDebugScreenInfo
-    public void a(List<String> list, RandomState randomstate, BlockPosition blockposition) {
+    public void addDebugScreenInfo(List<String> list, RandomState randomstate, BlockPos BlockPos) {
 
     }
 
