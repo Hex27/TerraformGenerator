@@ -1,4 +1,4 @@
-package org.terraform.v1_21_R6;
+package org.terraform.paper.v1_21_R6;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -36,7 +36,7 @@ public class CustomBiomeHandler {
         // aN is BIOME
         // bg is registryAccess
         // a is lookup (for an optional)
-        return MinecraftServer.getServer().bg().a(ami.aN).orElseThrow();
+        return MinecraftServer.getServer().bg().a(Registries.aN).orElseThrow();
     }
 
     public static void init() {

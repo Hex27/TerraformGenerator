@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     shadow(project(":common"))
-	shadow(group = "org.spigotmc", name = "spigot", version = "1.21.9-R0.1-SNAPSHOT")
+	shadow(group = "org.spigotmc", name = "spigot", version = "1.21.9-R0.1-SNAPSHOT", classifier="remapped-obf")
 	shadow("org.jetbrains:annotations:20.1.0")
     shadow("com.github.AvarionMC:yaml:1.1.7")
 }

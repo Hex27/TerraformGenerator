@@ -1,6 +1,6 @@
 dependencies {
     implementation(project(":common"))
-	compileOnly(group = "org.spigotmc", name = "spigot", version = "1.21.9-R0.1-SNAPSHOT")
+	compileOnly(group = "org.spigotmc", name = "spigot", version = "1.21.9-R0.1-SNAPSHOT", classifier="remapped-obf")
 	compileOnly("org.jetbrains:annotations:20.1.0")
     compileOnly("com.github.AvarionMC:yaml:1.1.7")
 }
