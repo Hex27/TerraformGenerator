@@ -50,8 +50,8 @@ public class PopulatorData extends PopulatorDataAbstract
         this.ica = ica;
 
         if (EntityTypeDict.isEmpty()) {
-            for (EntityType type : EntityType.values()) {
-                if (type == EntityType.UNKNOWN) {
+            for (org.bukkit.entity.EntityType type : org.bukkit.entity.EntityType.values()) {
+                if (type == org.bukkit.entity.EntityType.UNKNOWN) {
                     continue;
                 }
                 try {
@@ -74,7 +74,7 @@ public class PopulatorData extends PopulatorDataAbstract
     public @NotNull Material getType(int x, int y, int z) {
         try {
             // return rlwa.getType(x, y, z);
-            return CraftMagicNumbers.getMaterial(rlwa.getType(new BlockPos(x, y, z)).b());
+            return CraftMagicNumbers.getMaterial(rlwa.getBlockState(new BlockPos(x, y, z)).getBlock());
         }
         catch (Exception e) {
             Bukkit.getLogger()
@@ -99,7 +99,7 @@ public class PopulatorData extends PopulatorDataAbstract
 
     public BlockData getBlockData(int x, int y, int z) {
         // return rlwa.getBlockData(x,y,z);
-        return CraftBlockData.fromData(rlwa.getBlockData(new BlockPos(x, y, z)));
+        return CraftBlockData.fromData(rlwa.getBlockState(new BlockPos(x, y, z)));
     }
 
     @Override
@@ -129,7 +129,7 @@ public class PopulatorData extends PopulatorDataAbstract
             }
         }
         else {
-            rlwa.setBlockData(new BlockPos(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0);
+            rlwa.setBlock(new BlockPos(x, y, z), ((CraftBlockData) Bukkit.createBlockData(type)).getState(), 0);
         }
     }
 
@@ -160,7 +160,7 @@ public class PopulatorData extends PopulatorDataAbstract
             }
         }
         else {
-            rlwa.setBlockData(new BlockPos(x, y, z), ((CraftBlockData) data).getState(), 0);
+            rlwa.setBlock(new BlockPos(x, y, z), ((CraftBlockData) data).getState(), 0);
         }
     }
 
@@ -181,14 +181,14 @@ public class PopulatorData extends PopulatorDataAbstract
     }
 
     @Override
-    public void addEntity(int rawX, int rawY, int rawZ, @NotNull EntityType type) {
+    public void addEntity(int rawX, int rawY, int rawZ, @NotNull org.bukkit.entity.EntityType type) {
         if (Math.abs((rawX >> 4) - chunkX) > 1 || Math.abs((rawZ >> 4) - chunkZ) > 1) {
             TerraformGeneratorPlugin.logger.info("Failed to spawn " + type + " as it was out of bounds.");
             return;
         }
 
         // Use this method for thread safety.
-        CraftLimitedRegion clr = new CraftLimitedRegion(rlwa, ica.f());
+        CraftLimitedRegion clr = new CraftLimitedRegion(rlwa, ica.getPos());
         net.minecraft.world.entity.Entity e = clr.createEntity(new Location(gen.getTerraformWorld().getWorld(),
                 rawX,
                 rawY,
@@ -197,12 +197,12 @@ public class PopulatorData extends PopulatorDataAbstract
         if (e instanceof Mob) {
             ((Mob) e).setPersistenceRequired();
         }
-        rlwa.addEntity(e); //used to be b
+        rlwa.addFreshEntity(e); //used to be b
         // TerraformGeneratorPlugin.logger.info("Spawned " + e.getType() + " at " + rawX + " " + rawY + " " + rawZ);
     }
 
     @Override
-    public void setSpawner(int rawX, int rawY, int rawZ, EntityType type) {
+    public void setSpawner(int rawX, int rawY, int rawZ, org.bukkit.entity.EntityType type) {
         if (!TConfig.c.FEATURE_SPAWNERS_ENABLED) {
             return;
         }
@@ -210,7 +210,7 @@ public class PopulatorData extends PopulatorDataAbstract
         BlockPos pos = new BlockPos(rawX, rawY, rawZ);
 
         setType(rawX, rawY, rawZ, Material.SPAWNER);
-        Optional<SpawnerBlockEntity> opt = rlwa.setBlockEntity(pos, TileEntityType.j);
+        Optional<SpawnerBlockEntity> opt = rlwa.getBlockEntity(pos, BlockEntityType.MOB_SPAWNER);
 
         if (opt.isPresent()) {
             SpawnerBlockEntity tileentity = opt.get();
@@ -226,7 +226,7 @@ public class PopulatorData extends PopulatorDataAbstract
                 if (nmsEntity == null) {
                     TerraformGeneratorPlugin.logger.error(type + " was not present in the EntityTypeDict.");
                 }
-                tileentity.a(nmsEntity, new RandomSourceWrapper(new Random()));
+                tileentity.setEntityId(nmsEntity, new RandomSourceWrapper(new Random()));
             }
             catch (IllegalArgumentException | SecurityException e) {
                 TerraformGeneratorPlugin.logger.stackTrace(e);
@@ -249,19 +249,19 @@ public class PopulatorData extends PopulatorDataAbstract
         BlockPos pos = new BlockPos(x, y, z);
 
         // getBlockEntity
-        TileEntity te = rlwa.getBlockEntity(pos);
-        if (te instanceof TileEntityLootable) {
-            ((TileEntityLootable) te).a(LootTableTranslator.translationMap.get(table));
+        BlockEntity te = rlwa.getBlockEntity(pos);
+        if (te instanceof RandomizableContainerBlockEntity rcb) {
+            rcb.setLootTable(LootTableTranslator.translationMap.get(table));
         }
-        else if (te instanceof BrushableBlockEntity)
+        else if (te instanceof BrushableBlockEntity bbe)
         // BrushableBlockEntity.setLootTable
         {
-            ((BrushableBlockEntity) te).a(LootTableTranslator.translationMap.get(table),
+            bbe.setLootTable(LootTableTranslator.translationMap.get(table),
                     gen.getTerraformWorld().getHashedRand(x, y, z).nextLong()
             );
         }
 
-        // TileEntityLootable.a(rlwa, RandomSource.a(gen.getTerraformWorld().getHashedRand(x, y, z).nextLong()), pos, LootTableTranslator.translationMap.get(table));
+        // RandomizableContainerBlockEntity.a(rlwa, RandomSource.a(gen.getTerraformWorld().getHashedRand(x, y, z).nextLong()), pos, LootTableTranslator.translationMap.get(table));
     }
 
     @Override
@@ -284,17 +284,17 @@ public class PopulatorData extends PopulatorDataAbstract
 
         try {
             // TerraformGeneratorPlugin.logger.error("Failed to set beehive at (" + rawX + "," + rawY + "," + rawZ + ") " + BuiltInRegistries.h.b(EntityTypeDict.get(EntityType.BEE)));
-            TileEntityBeehive tileentity = (TileEntityBeehive) rlwa.c_(pos);
+            BeehiveBlockEntity tileentity = (BeehiveBlockEntity) rlwa.getBlockEntity(pos);
             if (tileentity == null) { // retry?
                 setType(rawX, rawY, rawZ, Material.BEE_NEST);
-                tileentity = (TileEntityBeehive) rlwa.c_(pos);
+                tileentity = (BeehiveBlockEntity) rlwa.getBlockEntity(pos);
             }
             //
             //            NBTTagCompound nbttagcompound = new NBTTagCompound();
             //            nbttagcompound.a("id", "minecraft:bee");
-            // TileEntityBeehive.storeBee
-            // TileEntityBeehive.Occupant.create(1)
-            tileentity.a(TileEntityBeehive.c.a(GenUtils.RANDOMIZER.nextInt(599)));
+            // BeehiveBlockEntity.storeBee
+            // BeehiveBlockEntity.Occupant.create(1)
+            tileentity.storeBee(BeehiveBlockEntity.Occupant.create(GenUtils.RANDOMIZER.nextInt(599)));
         }
         catch (NullPointerException | IllegalArgumentException | SecurityException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);

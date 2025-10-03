@@ -80,12 +80,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
         mapRendererBS = new MapRenderWorldProviderBiome(tw, delegate.getBiomeSource());
         twBS = new TerraformWorldProviderBiome(TerraformWorld.get(worldName, seed), delegate.getBiomeSource());
 
-        //This is needed for addVanillaFeatures
-        Field f = ChunkGenerator.class.getDeclaredField("c");
+        //This is needed for addVanillaFeatures (c)
+        Field f = ChunkGenerator.class.getDeclaredField("featuresPerStep");
         f.setAccessible(true);
         featuresPerStep = (Supplier) f.get(delegate);
 
-        getWriteableArea = ChunkGenerator.class.getDeclaredMethod("a", ChunkAccess.class);
+        //a
+        getWriteableArea = ChunkGenerator.class.getDeclaredMethod("getWritableArea", ChunkAccess.class);
         getWriteableArea.setAccessible(true);
 
         // This is tryGenerateStructure
@@ -98,7 +99,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 possibleStructureSets.add(ResourceLocation.parse(vsp.structureRegistryKey)); // ResourceLocation.create
             }
         }
-        tryGenerateStructure = ChunkGenerator.class.getDeclaredMethod("a",
+        //a
+        tryGenerateStructure = ChunkGenerator.class.getDeclaredMethod("tryGenerateStructure",
                 StructureSet.StructureSelectionEntry.class,
                 StructureManager.class,
                 RegistryAccess.class,

@@ -76,7 +76,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             ChunkMap pcm = ws.getChunkSource().chunkMap; // getChunkProvider().ChunkMap
             // worldGenContext stores chunkGenerator, not pcm
             // Q is worldGenContext
-            Field wgc = pcm.getClass().getDeclaredField("Q");
+            Field wgc = pcm.getClass().getDeclaredField("worldGenContext");
             wgc.setAccessible(true);
             WorldGenContext worldGenContext = (WorldGenContext) wgc.get(pcm);
             // b is chunkGenerator

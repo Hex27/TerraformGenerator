@@ -45,12 +45,13 @@ public class CustomBiomeHandler {
         // This thing isn't actually writable, so we have to forcefully UNFREEZE IT
         // l is frozen
         try {
-            Field frozen = MappedRegistry.class.getDeclaredField("l");
+            Field frozen = MappedRegistry.class.getDeclaredField("frozen");
             frozen.setAccessible(true);
             frozen.set(registrywritable, false);
             TerraformGeneratorPlugin.logger.info("Unfreezing biome registry...");
         }
         catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+            TerraformGeneratorPlugin.logger.error(e1.toString());
             TerraformGeneratorPlugin.logger.stackTrace(e1);
         }
 
@@ -77,7 +78,7 @@ public class CustomBiomeHandler {
         }
 
         try {
-            Field frozen = MappedRegistry.class.getDeclaredField("l");
+            Field frozen = MappedRegistry.class.getDeclaredField("frozen");
             frozen.setAccessible(true);
             frozen.set(registrywritable, true);
             TerraformGeneratorPlugin.logger.info("Freezing biome registry");
@@ -97,7 +98,7 @@ public class CustomBiomeHandler {
         Biome forestbiome = forestBiomeHolder.value();
 
         // b is DEFAULT_REGISTRATION_INFO
-        Field defaultRegInfoField = ReloadableServerRegistries.class.getDeclaredField("b");
+        Field defaultRegInfoField = ReloadableServerRegistries.class.getDeclaredField("DEFAULT_REGISTRATION_INFO");
         defaultRegInfoField.setAccessible(true);
         Object regInfo = defaultRegInfoField.get(null);
 
@@ -121,13 +122,13 @@ public class CustomBiomeHandler {
         newBiomeBuilder.hasPrecipitation(forestbiome.hasPrecipitation()); // c is hasPrecipitation
 
         // k is mobSettings
-        Field biomeSettingMobsField = Biome.class.getDeclaredField("k");
+        Field biomeSettingMobsField = Biome.class.getDeclaredField("mobSettings");
         biomeSettingMobsField.setAccessible(true);
         MobSpawnSettings biomeSettingMobs = (MobSpawnSettings) biomeSettingMobsField.get(forestbiome);
         newBiomeBuilder.mobSpawnSettings(biomeSettingMobs);
 
         // j is generationSettings
-        Field biomeSettingGenField = Biome.class.getDeclaredField("j");
+        Field biomeSettingGenField = Biome.class.getDeclaredField("generationSettings");
         biomeSettingGenField.setAccessible(true);
         BiomeGenerationSettings biomeSettingGen = (BiomeGenerationSettings) biomeSettingGenField.get(forestbiome);
         newBiomeBuilder.generationSettings(biomeSettingGen);
@@ -208,7 +209,7 @@ public class CustomBiomeHandler {
 
         // a is MappedRegistry.register
         // Holder.c is Holder.Reference
-        Method register = registrywritable.getClass().getDeclaredMethod("a",
+        Method register = registrywritable.getClass().getDeclaredMethod("register",
                 net.minecraft.resources.ResourceKey.class,
                 Object.class,
                 Class.forName("net.minecraft.core.RegistrationInfo")
@@ -216,8 +217,8 @@ public class CustomBiomeHandler {
         register.setAccessible(true);
         Holder.Reference<Biome> holder = (Holder.Reference<Biome>) register.invoke(registrywritable, newKey, biome, regInfo);
 
-        // Holder.Reference.bindValue
-        Method bindValue = Holder.Reference.class.getDeclaredMethod("b", Object.class);
+        // b is Holder.Reference.bindValue
+        Method bindValue = Holder.Reference.class.getDeclaredMethod("bindValue", Object.class);
         bindValue.setAccessible(true);
         bindValue.invoke(holder, biome);
 
@@ -228,8 +229,8 @@ public class CustomBiomeHandler {
         Set<TagKey<Biome>> tags = new HashSet<TagKey<Biome>>();
         forestBiomeHolder.tags().forEach(tags::add);
 
-        // Holder.Reference.bindTags
-        Method bindTags = Holder.Reference.class.getDeclaredMethod("a",java.util.Collection.class);
+        // a is Holder.Reference.bindTags
+        Method bindTags = Holder.Reference.class.getDeclaredMethod("bindTags",java.util.Collection.class);
         bindTags.setAccessible(true);
         bindTags.invoke(holder, tags);
 

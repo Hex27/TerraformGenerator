@@ -1,6 +1,7 @@
 package org.terraform.v1_21_R6;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -39,6 +40,7 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -67,13 +69,13 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
 
     public @NotNull Material getType(int x, int y, int z) {
         // return parent.getType(x, y, z);
-        BlockState ibd = ica.a_(new BlockPos(x, y, z)); // getState
+        BlockState ibd = ica.getBlockState(new BlockPos(x, y, z)); // getState
         return CraftBlockData.fromData(ibd).getMaterial();
     }
 
     public BlockData getBlockData(int x, int y, int z) {
         // return parent.getBlockData(x, y, z);
-        BlockState ibd = ica.a_(new BlockPos(x, y, z)); // getState
+        BlockState ibd = ica.getBlockState(new BlockPos(x, y, z)); // getState
         return CraftBlockData.fromData(ibd);
     }
 
@@ -87,7 +89,7 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         }
         else {
             ResourceKey<Biome> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);// ResourceKey.a(Registry.aP, new MinecraftKey(cbt.getKey()));
-            Optional<Holder.c<Biome>> optHolder = biomeRegistry.lookup(rkey); // lookup
+            Optional<Holder.Reference<Biome>> optHolder = biomeRegistry.get(rkey); // lookup
             if (optHolder.isEmpty()) {
                 TerraformGeneratorPlugin.logger.error("Custom biome was not found in the vanilla registry!");
                 targetBiome = CraftBiome.bukkitToMinecraftHolder(fallback);
@@ -123,11 +125,11 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     public void setBlockData(int x, int y, int z, @NotNull BlockData data) {
         // parent.setBlockData(x, y, z, data);
         //see setType
-        ica.setType(new BlockPos(x, y, z), ((CraftBlockData) data).getState(), 3);
+        ica.setBlockState(new BlockPos(x, y, z), ((CraftBlockData) data).getState(), 3);
 
     }
 
-    public Biome getBiome(int rawX, int rawZ) {
+    public org.bukkit.block.Biome getBiome(int rawX, int rawZ) {
         return parent.getBiome(rawX, rawZ);
         // return tw.getBiomeBank(rawX, rawZ).getHandler().getBiome();// BiomeBank.calculateBiome(tw,tw.getTemperature(rawX, rawZ), y).getHandler().getBiome();// Biome.valueOf(ica
         // .getBiome(rawX, rawY, rawZ).l().replace("biome.minecraft.", "").toUpperCase(Locale.ENGLISH));
@@ -158,14 +160,14 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
         BlockPos pos = new BlockPos(x, y, z);
 
         // getBlockEntity
-        BlockEntity te = ica.c_(pos);
-        if (te instanceof RandomizableContainerBlockEntity) {
-            ((RandomizableContainerBlockEntity) te).a(LootTableTranslator.translationMap.get(table));
+        BlockEntity te = ica.getBlockEntity(pos);
+        if (te instanceof RandomizableContainerBlockEntity rcb) {
+            rcb.setLootTable(LootTableTranslator.translationMap.get(table));
         }
-        else if (te instanceof BrushableBlockEntity)
+        else if (te instanceof BrushableBlockEntity bbe)
         // BrushableBlockEntity.setLootTable
         {
-            ((BrushableBlockEntity) te).a(LootTableTranslator.translationMap.get(table),
+            bbe.setLootTable(LootTableTranslator.translationMap.get(table),
                     tw.getHashedRand(x, y, z).nextLong()
             );
         }
@@ -175,34 +177,32 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     @Override
     public void registerNaturalSpawns(@NotNull NaturalSpawnType type, int x0, int y0, int z0, int x1, int y1, int z1) {
         ResourceKey<Structure> structureKey = switch (type) {
-            case GUARDIAN -> BuiltinStructures.l; // Ocean Monument
-            case PILLAGER -> BuiltinStructures.a; // Pillager Outpost
-            case WITCH -> BuiltinStructures.j; // Swamp Hut
+            case GUARDIAN -> BuiltinStructures.OCEAN_MONUMENT; // Ocean Monument
+            case PILLAGER -> BuiltinStructures.PILLAGER_OUTPOST; // Pillager Outpost
+            case WITCH -> BuiltinStructures.SWAMP_HUT; // Swamp Hut
         };
 
         // bg is registryAccess
         // a is lookup
         // bm is STRUCTURE
-        Registry<Structure> featureRegistry = MinecraftServer.getServer().bg().a(Registries.bm).orElseThrow();
+        Registry<Structure> featureRegistry = MinecraftServer.getServer().registryAccess().lookup(Registries.STRUCTURE).orElseThrow();
 
-        Structure structureFeature = featureRegistry.a(structureKey).get().a();
+        Structure structureFeature = featureRegistry.getValue(structureKey);
 
         try {
             // Something's broken about EnumDirection's import. Might be a temporary thing.
-            Class<?> enumDirectionClass = Class.forName("net.minecraft.core.EnumDirection");
-            Field enumDirectionA = enumDirectionClass.getField("a");
-            enumDirectionA.setAccessible(true);
-            Class<OceanMonumentPieces.h> oceanMonumentPiecesHClass = OceanMonumentPieces.h.class;
+//            Class<?> enumDirectionClass = Class.forName("net.minecraft.core.Direction");
+//            Field enumDirectionA = enumDirectionClass.getField("DOWN");
+//            enumDirectionA.setAccessible(true);
+            Class<OceanMonumentPieces.MonumentBuilding> oceanMonumentPiecesHClass = OceanMonumentPieces.MonumentBuilding.class;
             StructurePiece customBoundPiece = (StructurePiece) oceanMonumentPiecesHClass.getConstructor(
                     RandomSource.class,
                     int.class,
                     int.class,
-                    enumDirectionClass
-            ).newInstance(RandomSource.a(), x0, z0, enumDirectionA.get(null));
+                    Direction.class
+            ).newInstance(RandomSource.create(), x0, z0, Direction.DOWN);
 
-            PiecesContainer container = new PiecesContainer(new ArrayList<>() {{
-                add(customBoundPiece);
-            }});
+            PiecesContainer container = new PiecesContainer(List.of(customBoundPiece));
 
             StructureStart start = new StructureStart(structureFeature,
                     new ChunkPos(chunkX, chunkZ),
@@ -210,9 +210,9 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
                     container
             );
 
-            Field i = StructureStart.class.getDeclaredField("h"); // boundingBox
+            Field i = StructureStart.class.getDeclaredField("cachedBoundingBox"); // h is cachedBoundingBox
             i.setAccessible(true);
-            i.set(start, new StructureBoundingBox(x0, y0, z0, x1, y1, z1));
+            i.set(start, new BoundingBox(x0, y0, z0, x1, y1, z1));
 
             // ws.a() is getStructureManager
             // a is setStartForStructure
@@ -223,18 +223,18 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
              * StructureAccess structureaccess)**/
             // ws.a().a(SectionPosition.a(x0,y0,z0), structureFeature, start, ica);
 
-            ica.a(structureFeature, start);
+            ica.setStartForStructure(structureFeature, start);
             //    	ws.a().a( // setStartForFeature
             //        		structureFeature,
             //        		start);
 
             // addReferenceForFeature
-            ica.a(structureFeature, new ChunkPos(chunkX, chunkZ).a()); // a is toLong
+            ica.addReferenceForStructure(structureFeature, new ChunkPos(chunkX, chunkZ).toLong()); // a is toLong
         }
         catch (NoSuchMethodException |
                InstantiationException |
                InvocationTargetException |
-               ClassNotFoundException |
+               //ClassNotFoundException |
                NoSuchFieldException |
                IllegalArgumentException |
                IllegalAccessException e) {
@@ -246,20 +246,20 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     @Override
     public void spawnMinecartWithChest(int x, int y, int z, TerraLootTable table, @NotNull Random random) {
         //EntityType.CHEST_MINECART.create(generatoraccessseed.getLevel(), EntitySpawnReason.CHUNK_GENERATION);
-        MinecartChest MinecartChest = (MinecartChest) EntityType.A.a(
-                ws.getMinecraftWorld(), EntitySpawnReason.b);
+        MinecartChest minecartChest = (MinecartChest) EntityType.CHEST_MINECART.create(
+                ws.getMinecraftWorld(), EntitySpawnReason.CHUNK_GENERATION);
 
         //For whatever reason, the mineshaft code does a null check.
-        if(MinecartChest != null)
+        if(minecartChest != null)
         {
             //setPosition
-            MinecartChest.a_(
+            minecartChest.setPos(
                     (float) x + 0.5F,
                     (float) y + 0.5F,
                     (float) z + 0.5F
             );
-            MinecartChest.a(LootTableTranslator.translationMap.get(table), random.nextLong());
-            ws.addFreshEntity(MinecartChest, SpawnReason.CHUNK_GEN);
+            minecartChest.setLootTable(LootTableTranslator.translationMap.get(table), random.nextLong());
+            ws.addFreshEntity(minecartChest);
         }
     }
 
