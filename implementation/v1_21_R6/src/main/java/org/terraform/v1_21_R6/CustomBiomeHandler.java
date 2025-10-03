@@ -228,7 +228,7 @@ public class CustomBiomeHandler {
 
         // a is Holder.Reference.bindTags
         var bindTags = new TerraformMethodHandler(Holder.Reference.class,
-                new String[]{"bindTags"},java.util.Collection.class);
+                new String[]{"bindTags", "a"},java.util.Collection.class);
         bindTags.method.invoke(holder, tags);
 
 
