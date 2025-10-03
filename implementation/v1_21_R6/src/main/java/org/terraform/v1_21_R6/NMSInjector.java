@@ -26,16 +26,16 @@ import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.GenUtils;
+import org.terraform.utils.version.TerraformFieldHandler;
+import org.terraform.utils.version.TerraformMethodHandler;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class NMSInjector extends NMSInjectorAbstract {
 
     // private boolean heightInjectSuccess = true;
 
-    private static @Nullable Method getTileEntity = null;
+    private static @Nullable TerraformMethodHandler getTileEntity = null;
 
     @Override
     public void startupTasks() {
@@ -76,11 +76,10 @@ public class NMSInjector extends NMSInjectorAbstract {
             ChunkMap pcm = ws.getChunkSource().chunkMap; // getChunkProvider().ChunkMap
             // worldGenContext stores chunkGenerator, not pcm
             // Q is worldGenContext
-            Field wgc = pcm.getClass().getDeclaredField("worldGenContext");
-            wgc.setAccessible(true);
-            WorldGenContext worldGenContext = (WorldGenContext) wgc.get(pcm);
+            var wgc = new TerraformFieldHandler(pcm.getClass(), "worldGenContext","Q");
+            WorldGenContext worldGenContext = (WorldGenContext) wgc.field.get(pcm);
             // b is chunkGenerator
-            wgc.set(pcm,
+            wgc.field.set(pcm,
                     new WorldGenContext(worldGenContext.level(),
                             bpg,
                             worldGenContext.structureManager(),
@@ -139,15 +138,10 @@ public class NMSInjector extends NMSInjectorAbstract {
     public void storeBee(Beehive hive) {
         try {
             if (getTileEntity == null) {
-                try {
-                    getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
-                }
-                catch (NoSuchMethodException nsme) {
-                    getTileEntity = CraftBlockEntityState.class.getDeclaredMethod("getBlockEntity");
-                }
-                getTileEntity.setAccessible(true);
+                getTileEntity = new TerraformMethodHandler(CraftBlockEntityState.class,
+                        new String[]{"getTileEntity","getBlockEntity"});
             }
-            BeehiveBlockEntity teb = (BeehiveBlockEntity) getTileEntity.invoke(hive);
+            BeehiveBlockEntity teb = (BeehiveBlockEntity) getTileEntity.method.invoke(hive);
             //
             //            NBTTagCompound nbttagcompound = new NBTTagCompound();
             //            nbttagcompound.a("id", "minecraft:bee");

@@ -19,9 +19,9 @@ import org.bukkit.craftbukkit.block.CraftBiome;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.version.TerraformFieldHandler;
+import org.terraform.utils.version.TerraformMethodHandler;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,14 +45,14 @@ public class CustomBiomeHandler {
         // This thing isn't actually writable, so we have to forcefully UNFREEZE IT
         // l is frozen
         try {
-            Field frozen = MappedRegistry.class.getDeclaredField("frozen");
-            frozen.setAccessible(true);
-            frozen.set(registrywritable, false);
+            var frozen = new TerraformFieldHandler(MappedRegistry.class, "frozen", "l");
+            frozen.field.set(registrywritable, false); //idk why intelliJ thinks this is an error
             TerraformGeneratorPlugin.logger.info("Unfreezing biome registry...");
         }
         catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
             TerraformGeneratorPlugin.logger.error(e1.toString());
             TerraformGeneratorPlugin.logger.stackTrace(e1);
+            return;
         }
 
         //p is createRegistrationLookup
@@ -78,9 +78,8 @@ public class CustomBiomeHandler {
         }
 
         try {
-            Field frozen = MappedRegistry.class.getDeclaredField("frozen");
-            frozen.setAccessible(true);
-            frozen.set(registrywritable, true);
+            var frozen = new TerraformFieldHandler(MappedRegistry.class, "frozen", "l");
+            frozen.field.set(registrywritable, true);
             TerraformGeneratorPlugin.logger.info("Freezing biome registry");
         }
         catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
@@ -98,9 +97,8 @@ public class CustomBiomeHandler {
         Biome forestbiome = forestBiomeHolder.value();
 
         // b is DEFAULT_REGISTRATION_INFO
-        Field defaultRegInfoField = ReloadableServerRegistries.class.getDeclaredField("DEFAULT_REGISTRATION_INFO");
-        defaultRegInfoField.setAccessible(true);
-        Object regInfo = defaultRegInfoField.get(null);
+        var defaultRegInfoField = new TerraformFieldHandler( ReloadableServerRegistries.class, "b","DEFAULT_REGISTRATION_INFO");
+        Object regInfo = defaultRegInfoField.field.get(null);
 
         // aN is BIOME
         ResourceKey<Biome> newKey = ResourceKey.create(
@@ -122,15 +120,14 @@ public class CustomBiomeHandler {
         newBiomeBuilder.hasPrecipitation(forestbiome.hasPrecipitation()); // c is hasPrecipitation
 
         // k is mobSettings
-        Field biomeSettingMobsField = Biome.class.getDeclaredField("mobSettings");
-        biomeSettingMobsField.setAccessible(true);
-        MobSpawnSettings biomeSettingMobs = (MobSpawnSettings) biomeSettingMobsField.get(forestbiome);
+        var biomeSettingMobsField = new TerraformFieldHandler(Biome.class, "mobSettings","k");
+        MobSpawnSettings biomeSettingMobs = (MobSpawnSettings) biomeSettingMobsField.field.get(forestbiome);
         newBiomeBuilder.mobSpawnSettings(biomeSettingMobs);
 
         // j is generationSettings
-        Field biomeSettingGenField = Biome.class.getDeclaredField("generationSettings");
-        biomeSettingGenField.setAccessible(true);
-        BiomeGenerationSettings biomeSettingGen = (BiomeGenerationSettings) biomeSettingGenField.get(forestbiome);
+        var biomeSettingGenField = new TerraformFieldHandler(Biome.class, "generationSettings", "j");
+
+        BiomeGenerationSettings biomeSettingGen = (BiomeGenerationSettings) biomeSettingGenField.field.get(forestbiome);
         newBiomeBuilder.generationSettings(biomeSettingGen);
 
         newBiomeBuilder.temperature(0.7F); // Temperature of biome
@@ -209,18 +206,18 @@ public class CustomBiomeHandler {
 
         // a is MappedRegistry.register
         // Holder.c is Holder.Reference
-        Method register = registrywritable.getClass().getDeclaredMethod("register",
+        var register = new TerraformMethodHandler(registrywritable.getClass(),
+                new String[]{"register", "a"},
                 net.minecraft.resources.ResourceKey.class,
                 Object.class,
                 Class.forName("net.minecraft.core.RegistrationInfo")
         );
-        register.setAccessible(true);
-        Holder.Reference<Biome> holder = (Holder.Reference<Biome>) register.invoke(registrywritable, newKey, biome, regInfo);
+        Holder.Reference<Biome> holder = (Holder.Reference<Biome>) register.method.invoke(registrywritable, newKey, biome, regInfo);
 
         // b is Holder.Reference.bindValue
-        Method bindValue = Holder.Reference.class.getDeclaredMethod("bindValue", Object.class);
-        bindValue.setAccessible(true);
-        bindValue.invoke(holder, biome);
+        var bindValue = new TerraformMethodHandler(Holder.Reference.class,
+                new String[]{"bindValue", "b"}, Object.class);
+        bindValue.method.invoke(holder, biome);
 
 
         //Biomes also have TagKeys (See minecraft.tags.BiomeTags)
@@ -230,9 +227,9 @@ public class CustomBiomeHandler {
         forestBiomeHolder.tags().forEach(tags::add);
 
         // a is Holder.Reference.bindTags
-        Method bindTags = Holder.Reference.class.getDeclaredMethod("bindTags",java.util.Collection.class);
-        bindTags.setAccessible(true);
-        bindTags.invoke(holder, tags);
+        var bindTags = new TerraformMethodHandler(Holder.Reference.class,
+                new String[]{"bindTags"},java.util.Collection.class);
+        bindTags.method.invoke(holder, tags);
 
 
         // what the fuck is happening here 23/4/2024

@@ -3,6 +3,7 @@ package org.terraform.utils.version;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.NMSInjectorAbstract;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
@@ -66,7 +67,17 @@ public class Version {
             return null;
         }
 
-        return (NMSInjectorAbstract) Class.forName("org.terraform." + availableVersions.get(Version.DOUBLE) + ".NMSInjector")
+        String spigotAppend;
+        //https://www.spigotmc.org/threads/how-do-i-detect-if-a-server-is-running-paper.499064/
+        try {
+            // Any other works, just the shortest I could find.
+            Class.forName("com.destroystokyo.paper.ParticleBuilder");
+            spigotAppend = "";
+        } catch (ClassNotFoundException ignored) {
+            TerraformGeneratorPlugin.logger.info("Spigot detected");
+            spigotAppend = "spigot.";
+        }
+        return (NMSInjectorAbstract) Class.forName("org.terraform." + spigotAppend + availableVersions.get(Version.DOUBLE) + ".NMSInjector")
                                                   .getDeclaredConstructor()
                                                   .newInstance();
     }

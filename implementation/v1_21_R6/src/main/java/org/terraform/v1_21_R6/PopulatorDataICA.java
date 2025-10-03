@@ -36,8 +36,8 @@ import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.version.TerraformFieldHandler;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -210,9 +210,9 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
                     container
             );
 
-            Field i = StructureStart.class.getDeclaredField("cachedBoundingBox"); // h is cachedBoundingBox
-            i.setAccessible(true);
-            i.set(start, new BoundingBox(x0, y0, z0, x1, y1, z1));
+            var cachedBoundingBox = new TerraformFieldHandler(StructureStart.class,
+                    "cachedBoundingBox", "h"); // h is cachedBoundingBox
+            cachedBoundingBox.field.set(start, new BoundingBox(x0, y0, z0, x1, y1, z1));
 
             // ws.a() is getStructureManager
             // a is setStartForStructure

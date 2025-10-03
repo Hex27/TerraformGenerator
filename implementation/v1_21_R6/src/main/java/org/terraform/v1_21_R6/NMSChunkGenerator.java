@@ -46,10 +46,10 @@ import org.terraform.structure.pillager.mansion.MansionPopulator;
 import org.terraform.structure.small.buriedtreasure.BuriedTreasurePopulator;
 import org.terraform.structure.stronghold.StrongholdPopulator;
 import org.terraform.structure.trialchamber.TrialChamberPopulator;
+import org.terraform.utils.version.TerraformFieldHandler;
+import org.terraform.utils.version.TerraformMethodHandler;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -60,10 +60,10 @@ public class NMSChunkGenerator extends ChunkGenerator {
     private final @NotNull TerraformWorld tw;
     private final @NotNull MapRenderWorldProviderBiome mapRendererBS;
     private final @NotNull TerraformWorldProviderBiome twBS;
-    private final @NotNull Method tryGenerateStructure;
+    private final @NotNull TerraformMethodHandler tryGenerateStructure;
     private final ArrayList<ResourceLocation> possibleStructureSets = new ArrayList<>();
 
-    private final @NotNull Method getWriteableArea;
+    private final @NotNull TerraformMethodHandler getWriteableArea;
     private final @NotNull Supplier featuresPerStep;
 
     public NMSChunkGenerator(String worldName, long seed, @NotNull ChunkGenerator delegate)
@@ -81,13 +81,13 @@ public class NMSChunkGenerator extends ChunkGenerator {
         twBS = new TerraformWorldProviderBiome(TerraformWorld.get(worldName, seed), delegate.getBiomeSource());
 
         //This is needed for addVanillaFeatures (c)
-        Field f = ChunkGenerator.class.getDeclaredField("featuresPerStep");
-        f.setAccessible(true);
-        featuresPerStep = (Supplier) f.get(delegate);
+
+        featuresPerStep = (Supplier) new TerraformFieldHandler(ChunkGenerator.class, "featuresPerStep", "c")
+                .field.get(delegate);
 
         //a
-        getWriteableArea = ChunkGenerator.class.getDeclaredMethod("getWritableArea", ChunkAccess.class);
-        getWriteableArea.setAccessible(true);
+        getWriteableArea = new TerraformMethodHandler(ChunkGenerator.class,
+                new String[]{"getWritableArea", "a"}, ChunkAccess.class);
 
         // This is tryGenerateStructure
         // Register VanillaStructurePopulators to allow Minecraft to properly
@@ -100,7 +100,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
             }
         }
         //a
-        tryGenerateStructure = ChunkGenerator.class.getDeclaredMethod("tryGenerateStructure",
+        tryGenerateStructure = new TerraformMethodHandler(ChunkGenerator.class,
+                new String[]{"tryGenerateStructure", "a"},
                 StructureSet.StructureSelectionEntry.class,
                 StructureManager.class,
                 RegistryAccess.class,
@@ -111,7 +112,6 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 ChunkPos.class,
                 SectionPos.class,
                 ResourceKey.class);
-        tryGenerateStructure.setAccessible(true);
     }
 
 
@@ -247,7 +247,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
                                 structuremanager.startsForStructure(sectionPos, structure).forEach((structurestart) -> {
                                     try{
                                         structurestart.placeInChunk(worldGenLevel, structuremanager, this,
-                                                seededrandom, (BoundingBox) getWriteableArea.invoke(null,chunkAccess),
+                                                seededrandom, (BoundingBox) getWriteableArea.method.invoke(null,chunkAccess),
                                                 ChunkPos);
                                     }catch(IllegalAccessException | InvocationTargetException e){
                                         CrashReport crashreport = CrashReport.forThrowable(e, "TerraformGenerator");
@@ -383,7 +383,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
 
                     // d() -> getLevelSeed()
                     try{
-                        Object retVal = tryGenerateStructure.invoke(this, list.getFirst(), structuremanager, registryAccess, randomstate,
+                        Object retVal = tryGenerateStructure.method.invoke(this, list.getFirst(), structuremanager, registryAccess, randomstate,
                                 structuretemplatemanager, chunkgeneratorstructurestate.getLevelSeed(),
                                 ChunkAccess, ChunkPos, sectionPos, resourcekey);
                         TerraformGeneratorPlugin.logger.info(ChunkPos.x + "," + ChunkPos.z + " will spawn a vanilla structure, with tryGenerateStructure == " + retVal);
