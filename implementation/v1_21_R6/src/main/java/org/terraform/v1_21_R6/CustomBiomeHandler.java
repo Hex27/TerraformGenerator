@@ -1,65 +1,64 @@
 package org.terraform.v1_21_R6;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.IRegistry;
-import net.minecraft.core.IRegistryWritable;
-import net.minecraft.core.RegistryMaterials;
+import net.minecraft.core.Registry;
+import net.minecraft.core.WritableRegistry;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.level.biome.*;
-import net.minecraft.world.level.biome.BiomeFog.GrassColor;
+import net.minecraft.world.level.GrassColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Registry;
-import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_21_R6.CraftServer;
-import org.bukkit.craftbukkit.v1_21_R6.block.CraftBiome;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.block.CraftBiome;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.custombiomes.CustomBiomeType;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.utils.version.TerraformFieldHandler;
+import org.terraform.utils.version.TerraformMethodHandler;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CustomBiomeHandler {
 
-    public static final HashMap<CustomBiomeType, ResourceKey<BiomeBase>> terraformGenBiomeRegistry = new HashMap<>();
+    public static final HashMap<CustomBiomeType, ResourceKey<Biome>> terraformGenBiomeRegistry = new HashMap<>();
 
-    public static IRegistry<BiomeBase> getBiomeRegistry()
+    public static Registry<Biome> getBiomeRegistry()
     {
         // aN is BIOME
         // bg is registryAccess
         // a is lookup (for an optional)
-        return MinecraftServer.getServer().bg().a(Registries.aN).orElseThrow();
+        return MinecraftServer.getServer().registryAccess().lookup(Registries.BIOME).orElseThrow();
     }
 
     public static void init() {
         CraftServer craftserver = (CraftServer) Bukkit.getServer();
         DedicatedServer dedicatedserver = craftserver.getServer();
-        IRegistryWritable<BiomeBase> registrywritable = (IRegistryWritable<BiomeBase>) getBiomeRegistry();
+        WritableRegistry<Biome> registrywritable = (WritableRegistry<Biome>) getBiomeRegistry();
 
         // This thing isn't actually writable, so we have to forcefully UNFREEZE IT
         // l is frozen
         try {
-            Field frozen = RegistryMaterials.class.getDeclaredField("l");
-            frozen.setAccessible(true);
-            frozen.set(registrywritable, false);
+            var frozen = new TerraformFieldHandler(MappedRegistry.class, "frozen", "l");
+            frozen.field.set(registrywritable, false); //idk why intelliJ thinks this is an error
             TerraformGeneratorPlugin.logger.info("Unfreezing biome registry...");
         }
         catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+            TerraformGeneratorPlugin.logger.error(e1.toString());
             TerraformGeneratorPlugin.logger.stackTrace(e1);
+            return;
         }
 
         //p is createRegistrationLookup
         //b is getOrThrow
         //a is value()
-        Holder<BiomeBase> forestbiome = registrywritable.p().b(Biomes.i); // forest
+        Holder<Biome> forestbiome = registrywritable.createRegistrationLookup().getOrThrow(Biomes.FOREST); // forest
 
         for (CustomBiomeType type : CustomBiomeType.values()) {
             if (type == CustomBiomeType.NONE) {
@@ -68,7 +67,7 @@ public class CustomBiomeHandler {
 
             try {
                 assert forestbiome != null;
-                registerCustomBiomeBase(type, dedicatedserver, registrywritable, forestbiome);
+                registerCustomBiome(type, dedicatedserver, registrywritable, forestbiome);
                 TerraformGeneratorPlugin.logger.info("Registered custom biome: " + type.toString()
                                                                                        .toLowerCase(Locale.ENGLISH));
             }
@@ -79,9 +78,8 @@ public class CustomBiomeHandler {
         }
 
         try {
-            Field frozen = RegistryMaterials.class.getDeclaredField("l");
-            frozen.setAccessible(true);
-            frozen.set(registrywritable, true);
+            var frozen = new TerraformFieldHandler(MappedRegistry.class, "frozen", "l");
+            frozen.field.set(registrywritable, true);
             TerraformGeneratorPlugin.logger.info("Freezing biome registry");
         }
         catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
@@ -90,96 +88,94 @@ public class CustomBiomeHandler {
 
     }
 
-    private static void registerCustomBiomeBase(@NotNull CustomBiomeType biomeType,
+    private static void registerCustomBiome(@NotNull CustomBiomeType biomeType,
                                                 DedicatedServer dedicatedserver,
-                                                @NotNull IRegistryWritable<BiomeBase> registrywritable,
-                                                @NotNull Holder<BiomeBase> forestBiomeHolder) throws Throwable
+                                                @NotNull WritableRegistry<Biome> registrywritable,
+                                                @NotNull Holder<Biome> forestBiomeHolder) throws Throwable
     {
 
-        BiomeBase forestbiome = forestBiomeHolder.a();
+        Biome forestbiome = forestBiomeHolder.value();
 
         // b is DEFAULT_REGISTRATION_INFO
-        Field defaultRegInfoField = ReloadableServerRegistries.class.getDeclaredField("b");
-        defaultRegInfoField.setAccessible(true);
-        Object regInfo = defaultRegInfoField.get(null);
+        var defaultRegInfoField = new TerraformFieldHandler( ReloadableServerRegistries.class, "b","DEFAULT_REGISTRATION_INFO");
+        Object regInfo = defaultRegInfoField.field.get(null);
 
         // aN is BIOME
-        ResourceKey<BiomeBase> newKey = ResourceKey.a(
-                Registries.aN,
-                MinecraftKey.a("terraformgenerator", biomeType.toString().toLowerCase(Locale.ENGLISH))
+        ResourceKey<Biome> newKey = ResourceKey.create(
+                Registries.BIOME,
+                ResourceLocation.fromNamespaceAndPath("terraformgenerator", biomeType.toString().toLowerCase(Locale.ENGLISH))
         );
 
-        // BiomeBase.a is BiomeBuilder
-        BiomeBase.a newBiomeBuilder = new BiomeBase.a();
+        // Biome.a is BiomeBuilder
+        Biome.BiomeBuilder newBiomeBuilder = new Biome.BiomeBuilder();
 
-        // BiomeBase.b is ClimateSettings
+        // Biome.b is ClimateSettings
         // d is temperatureModifier
         // This temperature modifier stuff is more cleanly handled below.
-        //		Class<?> climateSettingsClass = Class.forName("net.minecraft.world.level.biome.BiomeBase.b");
+        //		Class<?> climateSettingsClass = Class.forName("net.minecraft.world.level.biome.Biome.b");
         //		Field temperatureModififierField = climateSettingsClass.getDeclaredField("d");
         //		temperatureModififierField.setAccessible(true);
 
         // i is climateSettings
-        newBiomeBuilder.a(forestbiome.c()); // c is getPrecipitation
+        newBiomeBuilder.hasPrecipitation(forestbiome.hasPrecipitation()); // c is hasPrecipitation
 
         // k is mobSettings
-        Field biomeSettingMobsField = BiomeBase.class.getDeclaredField("k");
-        biomeSettingMobsField.setAccessible(true);
-        BiomeSettingsMobs biomeSettingMobs = (BiomeSettingsMobs) biomeSettingMobsField.get(forestbiome);
-        newBiomeBuilder.a(biomeSettingMobs);
+        var biomeSettingMobsField = new TerraformFieldHandler(Biome.class, "mobSettings","k");
+        MobSpawnSettings biomeSettingMobs = (MobSpawnSettings) biomeSettingMobsField.field.get(forestbiome);
+        newBiomeBuilder.mobSpawnSettings(biomeSettingMobs);
 
         // j is generationSettings
-        Field biomeSettingGenField = BiomeBase.class.getDeclaredField("j");
-        biomeSettingGenField.setAccessible(true);
-        BiomeSettingsGeneration biomeSettingGen = (BiomeSettingsGeneration) biomeSettingGenField.get(forestbiome);
-        newBiomeBuilder.a(biomeSettingGen);
+        var biomeSettingGenField = new TerraformFieldHandler(Biome.class, "generationSettings", "j");
 
-        newBiomeBuilder.a(0.7F); // Temperature of biome
-        newBiomeBuilder.b(biomeType.getRainFall()); // Downfall of biome
+        BiomeGenerationSettings biomeSettingGen = (BiomeGenerationSettings) biomeSettingGenField.field.get(forestbiome);
+        newBiomeBuilder.generationSettings(biomeSettingGen);
 
-        // BiomeBase.TemperatureModifier.a will make your biome normal
-        // BiomeBase.TemperatureModifier.b will make your biome frozen
+        newBiomeBuilder.temperature(0.7F); // Temperature of biome
+        newBiomeBuilder.downfall(biomeType.getRainFall()); // Downfall of biome
+
+        // Biome.TemperatureModifier.a will make your biome normal
+        // Biome.TemperatureModifier.b will make your biome frozen
         if (biomeType.isCold()) {
-            newBiomeBuilder.a(BiomeBase.TemperatureModifier.b);
+            newBiomeBuilder.temperatureAdjustment(Biome.TemperatureModifier.FROZEN);
         }
         else {
-            newBiomeBuilder.a(BiomeBase.TemperatureModifier.a);
+            newBiomeBuilder.temperatureAdjustment(Biome.TemperatureModifier.NONE);
         }
 
         //newFog is BiomeSpecialEffects.Builder
-        BiomeFog.a newFog = new BiomeFog.a();
+        BiomeSpecialEffects.Builder newFog = new BiomeSpecialEffects.Builder();
         newFog
             //idk what this does
-            .a(GrassColor.a)
+            //.grassColorOverride(GrassColor.getDefaultColor())
             //fogColor
-            .a(biomeType.getFogColor().isEmpty()
-               ? forestbiome.e()
+            .fogColor(biomeType.getFogColor().isEmpty()
+               ? forestbiome.getFogColor()
                : Integer.parseInt(biomeType.getFogColor(), 16))
             //waterColor
-            .b(biomeType.getWaterColor().isEmpty()
-               ? forestbiome.j()
+            .waterColor(biomeType.getWaterColor().isEmpty()
+               ? forestbiome.getWaterColor()
                : Integer.parseInt(biomeType.getWaterColor(), 16))
             //waterFogColor
-            .c(biomeType.getWaterFogColor().isEmpty()
-                 ? forestbiome.k()
+            .waterFogColor(biomeType.getWaterFogColor().isEmpty()
+                 ? forestbiome.getWaterFogColor()
                  : Integer.parseInt(biomeType.getWaterFogColor(), 16))
             //skyColor
-            .d(biomeType.getSkyColor().isEmpty()
-               ? forestbiome.a()
+            .skyColor(biomeType.getSkyColor().isEmpty()
+               ? forestbiome.getSkyColor()
                : Integer.parseInt(biomeType.getSkyColor(), 16))
             //foliageColor
-            .e(biomeType.getFoliageColor().isEmpty()
-                 ? forestbiome.e()
+            .foliageColorOverride(biomeType.getFoliageColor().isEmpty()
+                 ? forestbiome.getFoliageColor()
                  : Integer.parseInt(biomeType.getFoliageColor(), 16))
             //grassColorOverride
-            .g(biomeType.getGrassColor().isEmpty()
+            .grassColorOverride(biomeType.getGrassColor().isEmpty()
                  ? Integer.parseInt("79C05A", 16)
                  : Integer.parseInt(biomeType.getGrassColor(), 16));
 
         //biomeBuilder.specialEffects(BiomeSpecialEffects$Builder.build())
-        newBiomeBuilder.a(newFog.b());
+        newBiomeBuilder.specialEffects(newFog.build());
 
-        BiomeBase biome = newBiomeBuilder.a(); // biomebuilder.build();
+        Biome biome = newBiomeBuilder.build(); // biomebuilder.build();
 
         // Inject into the data registry for biomes
         // RegistryGeneration.a(RegistryGeneration.i, newKey, biome);
@@ -187,8 +183,8 @@ public class CustomBiomeHandler {
         // p is createRegistrationLookup
         // a is get. This replaced a contains() check.
         // get().b() is get().isBound(). If it is bound, its used.
-        if (registrywritable.p().a(newKey).isPresent()
-            && registrywritable.p().a(newKey).get().b()) {
+        if (registrywritable.createRegistrationLookup().get(newKey).isPresent()
+            && registrywritable.createRegistrationLookup().get(newKey).get().isBound()) {
             TerraformGeneratorPlugin.logger.info(newKey + " was already registered. Was there a plugin/server reload?");
             return;
         }
@@ -197,43 +193,43 @@ public class CustomBiomeHandler {
         // al is BIOMES
         // aW is registryAccess
         // d is registryOrThrow
-        // RegistryMaterials<BiomeBase> registry = (RegistryMaterials<BiomeBase>) getBiomeRegistry();
+        // MappedRegistry<Biome> registry = (MappedRegistry<Biome>) getBiomeRegistry();
 
         // Inject unregisteredIntrusiveHolders with a new map to allow intrusive holders
         // m is unregisteredIntrusiveHolders
-        // Field unregisteredIntrusiveHolders = RegistryMaterials.class.getDeclaredField("m");
+        // Field unregisteredIntrusiveHolders = MappedRegistry.class.getDeclaredField("m");
         // unregisteredIntrusiveHolders.setAccessible(true);
         // unregisteredIntrusiveHolders.set(registrywritable, new IdentityHashMap<>());
 
         // f is createIntrusiveHolder
         // registrywritable.f(biome);
 
-        // a is RegistryMaterials.register
+        // a is MappedRegistry.register
         // Holder.c is Holder.Reference
-        Method register = registrywritable.getClass().getDeclaredMethod("a",
+        var register = new TerraformMethodHandler(registrywritable.getClass(),
+                new String[]{"register", "a"},
                 net.minecraft.resources.ResourceKey.class,
                 Object.class,
                 Class.forName("net.minecraft.core.RegistrationInfo")
         );
-        register.setAccessible(true);
-        Holder.c<BiomeBase> holder = (Holder.c<BiomeBase>) register.invoke(registrywritable, newKey, biome, regInfo);
+        Holder.Reference<Biome> holder = (Holder.Reference<Biome>) register.method.invoke(registrywritable, newKey, biome, regInfo);
 
-        // Holder.Reference.bindValue
-        Method bindValue = Holder.c.class.getDeclaredMethod("b", Object.class);
-        bindValue.setAccessible(true);
-        bindValue.invoke(holder, biome);
+        // b is Holder.Reference.bindValue
+        var bindValue = new TerraformMethodHandler(Holder.Reference.class,
+                new String[]{"bindValue", "b"}, Object.class);
+        bindValue.method.invoke(holder, biome);
 
 
         //Biomes also have TagKeys (See minecraft.tags.BiomeTags)
         // Clone the plains tag keys
         //forestBiomeHolder.tags().toList()
-        Set<TagKey<BiomeBase>> tags = new HashSet<TagKey<BiomeBase>>();
-        forestBiomeHolder.c().forEach(tags::add);
+        Set<TagKey<Biome>> tags = new HashSet<TagKey<Biome>>();
+        forestBiomeHolder.tags().forEach(tags::add);
 
-        // Holder.Reference.bindTags
-        Method bindTags = Holder.c.class.getDeclaredMethod("a",java.util.Collection.class);
-        bindTags.setAccessible(true);
-        bindTags.invoke(holder, tags);
+        // a is Holder.Reference.bindTags
+        var bindTags = new TerraformMethodHandler(Holder.Reference.class,
+                new String[]{"bindTags", "a"},java.util.Collection.class);
+        bindTags.method.invoke(holder, tags);
 
 
         // what the fuck is happening here 23/4/2024
@@ -250,17 +246,17 @@ public class CustomBiomeHandler {
     }
 
 
-    public static Set<Holder<BiomeBase>> biomeListToBiomeBaseSet(@NotNull IRegistry<BiomeBase> registry) {
+    public static Set<Holder<Biome>> biomeListToBiomeSet(@NotNull Registry<Biome> registry) {
 
-        List<Holder<BiomeBase>> biomeBases = new ArrayList<>();
+        List<Holder<Biome>> Biomes = new ArrayList<>();
 
-        Registry.BIOME.iterator().forEachRemaining((Biome biome)->{
+        org.bukkit.Registry.BIOME.iterator().forEachRemaining((org.bukkit.block.Biome biome)->{
             try {
                 if(biome == null) return;
-                Holder<BiomeBase> holder = CraftBiome.bukkitToMinecraftHolder(biome);
+                Holder<Biome> holder = CraftBiome.bukkitToMinecraftHolder(biome);
                 if(holder == null) return;
                 // Preconditions.checkArgument(biome != Biome.CUSTOM, "Cannot use the biome %s", biome);
-                biomeBases.add(holder);
+                Biomes.add(holder);
             }
             catch (Throwable e) {
                 TerraformGeneratorPlugin.logger.info("Ignoring biome " + biome);
@@ -271,13 +267,13 @@ public class CustomBiomeHandler {
             if (cbt == CustomBiomeType.NONE) {
                 continue;
             }
-            ResourceKey<BiomeBase> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);
+            ResourceKey<Biome> rkey = CustomBiomeHandler.terraformGenBiomeRegistry.get(cbt);
             // TerraformGeneratorPlugin.logger.info(cbt + " --- " + rkey);
             // Holder.c is Holder.Reference. It implements Holder. No idk why.
-            Optional<Holder.c<BiomeBase>> holder = registry.a(rkey);
-            holder.ifPresent(biomeBases::add);
+            Optional<Holder.Reference<Biome>> holder = registry.get(rkey);
+            holder.ifPresent(Biomes::add);
         }
 
-        return Set.copyOf(biomeBases);
+        return Set.copyOf(Biomes);
     }
 }

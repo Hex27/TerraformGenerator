@@ -1,5 +1,6 @@
 plugins {
-    java
+    java;
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19" apply false
 }
 
 subprojects {
@@ -7,16 +8,11 @@ subprojects {
 
     group = "org.terraform"
     repositories {
-        // mavenLocal()
         mavenCentral()
+		//For SpecialSource
+		maven("https://hub.spigotmc.org/nexus/content/repositories/public/")
         maven("https://repo.codemc.io/repository/nms/")
-		// maven("https://libraries.minecraft.net/minecraft-server")
 		maven("https://repo.papermc.io/repository/maven-public/")
 		maven("https://jitpack.io")
     }
-//    Handle this inside each implementation as different minecraft versions support a different max jvm version
-//    java {
-//        sourceCompatibility = JavaVersion.VERSION_16
-//        targetCompatibility = JavaVersion.VERSION_16
-//    }
 }

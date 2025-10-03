@@ -23,9 +23,19 @@ dependencies {
     implementation(project(":implementation:v1_21_R5"))
     implementation(project(":implementation:v1_21_R6"))
     implementation("com.github.AvarionMC:yaml:1.1.7")
+	
+	if(project.hasProperty("includeSpigot")){
+		implementation(project(":implementation:Spigotv1_21_R6"))
+	}
 }
 
 tasks.shadowJar {
+
+	//Make the spigot build shadow itself
+	if(project.hasProperty("includeSpigot")){
+		dependsOn(":implementation:Spigotv1_21_R6:remap")
+	}
+	
     doFirst {
         val yamlFile = file("${rootProject.projectDir}/common/src/main/resources/plugin.yml")
         val yaml = org.yaml.snakeyaml.Yaml()
