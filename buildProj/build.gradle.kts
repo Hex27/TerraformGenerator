@@ -29,7 +29,7 @@ dependencies {
 tasks.shadowJar {
 
 	//Make the spigot build shadow itself
-	dependsOn(":implementation:Spigotv1_21_R6:remapToObs")
+	dependsOn(":implementation:Spigotv1_21_R6:remap")
 	
     doFirst {
         val yamlFile = file("${rootProject.projectDir}/common/src/main/resources/plugin.yml")
