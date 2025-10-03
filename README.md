@@ -34,7 +34,15 @@ cd TerraformGenerator
 gradlew buildProj:shadowJar
 ```
 
-The jar at `buildProj/build/libs/buildProj-all.jar` is the plugin.
+The jar at `buildProj/build/libs/TerraformGenerator{some version}.jar` is the plugin.
+
+As for version 24.0.0, for Minecraft 1.21.9 and up, this command will only build for paper.
+
+To build for Spigot, you must:
+1. Run Buildtools with --remapped for --rev 1.21.9 (and likely for every subsequent version)
+2. Change the gradle command to `gradlew buildProj:shadowJar -PincludeSpigot=true`
+
+If this gets too cumbersome, the buildscript may be changed to allowed a flag for building just the latest version.
 
 <h2 name="support">Support</h2>
 
