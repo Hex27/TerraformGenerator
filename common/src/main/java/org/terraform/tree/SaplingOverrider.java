@@ -76,8 +76,13 @@ public class SaplingOverrider implements Listener {
                 break;
             case JUNGLE_LEAVES:
 
-                if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES_JUNGLE && isLarge) {
-                    new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).skipGradientCheck().build(tw, data, x, y, z);
+                if(isLarge){
+                    if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES_JUNGLE) {
+                        new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).skipGradientCheck().build(tw, data, x, y, z);
+                    } else {
+                        event.setCancelled(wasCancelled);
+                        return;
+                    }
                 }
                 else {
                     TreeDB.spawnSmallJungleTree(true, tw, data, x, y, z);
@@ -91,16 +96,21 @@ public class SaplingOverrider implements Listener {
                 );
                 break;
             case SPRUCE_LEAVES:
-                if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES_SPRUCE && isLarge) {
-                    FractalTypes.Tree.TAIGA_BIG.build(tw,
-                            new SimpleBlock(data, x, y, z),
-                            (nt -> nt.setCheckGradient(false))
-                    );
-                    // Set the original podzol radius
-                    event.getBlocks()
-                         .stream()
-                         .filter((b) -> b.getType() == Material.PODZOL)
-                         .forEach((b) -> data.setType(b.getX(), b.getY(), b.getZ(), b.getType()));
+                if (isLarge) {
+                    if(TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES_SPRUCE){
+                        FractalTypes.Tree.TAIGA_BIG.build(tw,
+                                new SimpleBlock(data, x, y, z),
+                                (nt -> nt.setCheckGradient(false))
+                        );
+                        // Set the original podzol radius
+                        event.getBlocks()
+                             .stream()
+                             .filter((b) -> b.getType() == Material.PODZOL)
+                             .forEach((b) -> data.setType(b.getX(), b.getY(), b.getZ(), b.getType()));
+                    }else {
+                        event.setCancelled(wasCancelled);
+                        return;
+                    }
                 }
                 else {
                     FractalTypes.Tree.TAIGA_SMALL.build(tw,
