@@ -76,6 +76,14 @@ public class Version {
         } catch (ClassNotFoundException ignored) {
             TerraformGeneratorPlugin.logger.info("Spigot detected");
             spigotAppend = "spigot.";
+            try{
+                Class.forName("org.terraform." + spigotAppend + availableVersions.get(Version.DOUBLE) + ".NMSInjector")
+                     .getDeclaredConstructor()
+                     .newInstance();
+            }catch(ClassNotFoundException ignoreAgain){
+                TerraformGeneratorPlugin.logger.stdout("There was no spigot package for this version. This is fine if you are BELOW 1.21.9.");
+                spigotAppend = "";
+            }
         }
         return (NMSInjectorAbstract) Class.forName("org.terraform." + spigotAppend + availableVersions.get(Version.DOUBLE) + ".NMSInjector")
                                                   .getDeclaredConstructor()
