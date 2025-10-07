@@ -65,7 +65,7 @@ public class CherryGroveHandler extends BiomeHandler {
             if (GenUtils.chance(random, 2, 10)) { // Grass
                 if (GenUtils.chance(random, 8, 10)) {
                     // Pink petals. No longer generate tall grass.
-                    if (Version.isAtLeast(20) && TConfig.arePlantsEnabled() && GenUtils.chance(random, 6, 10)) {
+                    if (Version.VERSION.isAtLeast(Version.v1_20) && TConfig.arePlantsEnabled() && GenUtils.chance(random, 6, 10)) {
                         data.setBlockData(
                                 rawX,
                                 surfaceY + 1,
@@ -136,7 +136,7 @@ public class CherryGroveHandler extends BiomeHandler {
                             );
                         }
                         // No spore blossoms on 1.20 as the new cherry trees already drop petals
-                        if (!Version.isAtLeast(20)) {
+                        if (!Version.VERSION.isAtLeast(Version.v1_20)) {
                             for (int rX = sLoc.getX() - 6; rX <= sLoc.getX() + 6; rX++) {
                                 for (int rZ = sLoc.getZ() - 6; rZ <= sLoc.getZ() + 6; rZ++) {
                                     Wall ceil = new Wall(new SimpleBlock(data, rX, sLoc.getY(), rZ)).findCeiling(15);

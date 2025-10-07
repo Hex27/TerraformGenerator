@@ -332,7 +332,7 @@ public enum BiomeBank {
     PALE_FOREST(new PaleForestHandler(),
             BiomeType.FLAT,
             BiomeClimate.HUMID_VEGETATION,
-            (Version.isAtLeast(21.4)) ? TConfig.c.BIOME_PALE_FOREST_WEIGHT : 0
+            (Version.VERSION.isAtLeast(Version.v1_21_4)) ? TConfig.c.BIOME_PALE_FOREST_WEIGHT : 0
     ),
     SWAMP(new SwampHandler(), BiomeType.FLAT, BiomeClimate.HUMID_VEGETATION, TConfig.c.BIOME_SWAMP_WEIGHT),
     MANGROVE(new MangroveHandler(),

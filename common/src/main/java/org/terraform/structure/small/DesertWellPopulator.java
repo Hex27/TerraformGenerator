@@ -243,7 +243,7 @@ public class DesertWellPopulator extends MultiMegaChunkStructurePopulator {
                         super.applyData(block, data);
                         return;
                     }
-                    else if (Version.isAtLeast(20) && block.getY() == baseY && GenUtils.chance(rand, 1, 20)) {
+                    else if (Version.VERSION.isAtLeast(Version.v1_20) && block.getY() == baseY && GenUtils.chance(rand, 1, 20)) {
                         data = Bukkit.createBlockData(V_1_20.SUSPICIOUS_SAND);
                         super.applyData(block, data);
                         block.getPopData()

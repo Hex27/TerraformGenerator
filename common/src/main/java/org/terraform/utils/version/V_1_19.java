@@ -16,42 +16,42 @@ public class V_1_19 {
 
     public static final EntityType ALLAY = getEntityType();
 
-    public static final @NotNull Material MUD = Objects.requireNonNull(!Version.isAtLeast(19) ? Material.getMaterial(
+    public static final @NotNull Material MUD = Objects.requireNonNull(!Version.VERSION.isAtLeast(Version.v1_19_4) ? Material.getMaterial(
             "PODZOL") : Material.getMaterial("MUD"));
 
-    public static final @Nullable Material MUD_BRICKS = !Version.isAtLeast(19)
+    public static final @Nullable Material MUD_BRICKS = !Version.VERSION.isAtLeast(Version.v1_19_4)
                                                         ? Material.getMaterial("BRICKS")
                                                         : Material.getMaterial("MUD_BRICKS");
 
-    public static final @Nullable Material REINFORCED_DEEPSLATE = !Version.isAtLeast(19) ? Material.getMaterial(
+    public static final @Nullable Material REINFORCED_DEEPSLATE = !Version.VERSION.isAtLeast(Version.v1_19_4) ? Material.getMaterial(
             "POLISHED_DIORITE") : Material.getMaterial("REINFORCED_DEEPSLATE");
 
 
-    public static final @Nullable Material MANGROVE_LEAVES = !Version.isAtLeast(19)
+    public static final @Nullable Material MANGROVE_LEAVES = !Version.VERSION.isAtLeast(Version.v1_19_4)
                                                              ? Material.getMaterial("OAK_LEAVES")
                                                              : Material.getMaterial("MANGROVE_LEAVES");
-    public static final @Nullable Material MANGROVE_LOG = !Version.isAtLeast(19)
+    public static final @Nullable Material MANGROVE_LOG = !Version.VERSION.isAtLeast(Version.v1_19_4)
                                                           ? Material.getMaterial("OAK_LOG")
                                                           : Material.getMaterial("MANGROVE_LOG");
-    public static final @Nullable Material MANGROVE_WOOD = !Version.isAtLeast(19)
+    public static final @Nullable Material MANGROVE_WOOD = !Version.VERSION.isAtLeast(Version.v1_19_4)
                                                            ? Material.getMaterial("OAK_WOOD")
                                                            : Material.getMaterial("MANGROVE_WOOD");
-    public static final @Nullable Material MANGROVE_PROPAGULE = !Version.isAtLeast(19)
+    public static final @Nullable Material MANGROVE_PROPAGULE = !Version.VERSION.isAtLeast(Version.v1_19_4)
                                                                 ? Material.getMaterial("AIR")
                                                                 : Material.getMaterial("MANGROVE_PROPAGULE");
-    public static final @Nullable Material MANGROVE_ROOTS = !Version.isAtLeast(19)
+    public static final @Nullable Material MANGROVE_ROOTS = !Version.VERSION.isAtLeast(Version.v1_19_4)
                                                             ? Material.getMaterial("OAK_WOOD")
                                                             : Material.getMaterial("MANGROVE_ROOTS");
-    public static final @Nullable Material MUDDY_MANGROVE_ROOTS = !Version.isAtLeast(19) ? Material.getMaterial(
+    public static final @Nullable Material MUDDY_MANGROVE_ROOTS = !Version.VERSION.isAtLeast(Version.v1_19_4) ? Material.getMaterial(
             "OAK_WOOD") : Material.getMaterial("MUDDY_MANGROVE_ROOTS");
 
-    public static final @Nullable Material MANGROVE_FENCE = !Version.isAtLeast(19)
+    public static final @Nullable Material MANGROVE_FENCE = !Version.VERSION.isAtLeast(Version.v1_19_4)
                                                             ? Material.getMaterial("OAK_FENCE")
                                                             : Material.getMaterial("MANGROVE_FENCE");
 
     // Pre-1.19 versions WILL NOT have any sculk related spawns.
     public static final @Nullable Material SCULK_VEIN = Material.getMaterial("SCULK_VEIN");
-    public static final @Nullable Material SCULK = !Version.isAtLeast(19) ? Material.getMaterial(
+    public static final @Nullable Material SCULK = !Version.VERSION.isAtLeast(Version.v1_19_4) ? Material.getMaterial(
             "STONE") : Material.getMaterial("SCULK");
     public static final @Nullable Material SCULK_CATALYST = Material.getMaterial("SCULK_CATALYST");
     public static final @Nullable Material SCULK_SHRIEKER = Material.getMaterial("SCULK_SHRIEKER");

@@ -39,7 +39,7 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
             return false;
         }
 
-        if (!Version.isAtLeast(19)) {
+        if (!Version.VERSION.isAtLeast(Version.v1_19_4)) {
             return false;
         }
 

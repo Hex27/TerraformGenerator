@@ -72,7 +72,7 @@ public abstract class Antechamber extends RoomPopulatorAbstract {
         center.setType(Material.BLUE_TERRACOTTA);
 
         // If at 1.20, spawn suspicious sand in the floor
-        if (Version.isAtLeast(20)) {
+        if (Version.VERSION.isAtLeast(Version.v1_20)) {
             for (int i = 0; i < TConfig.c.STRUCTURES_PYRAMID_SUSPICIOUS_SAND_COUNT_PER_ANTECHAMBER; i++) {
                 SimpleBlock target = center.getRelative(GenUtils.getSign(rand) * GenUtils.randInt(rand,
                                 1,

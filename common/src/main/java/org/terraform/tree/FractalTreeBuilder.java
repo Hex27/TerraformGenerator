@@ -736,7 +736,7 @@ public class FractalTreeBuilder {
         drawLine(base, two, (int) (size), thickness);
 
 
-        if (beeHive == null && Version.isAtLeast(15.1) && GenUtils.chance(rand, (int) (beeChance * 1000.0), 1000)) {
+        if (beeHive == null && GenUtils.chance(rand, (int) (beeChance * 1000.0), 1000)) {
             for (int i = 0; i < 3; i++) {
                 if (!two.getRelative(0, -i, 0).isSolid()) {
                     beeHive = two.getRelative(0, -i, 0);

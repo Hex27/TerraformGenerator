@@ -56,7 +56,7 @@ public class StructureRegistry {
         registerStructure(StructureType.MEGA_DUNGEON, new StrongholdPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new MansionPopulator());
         registerStructure(StructureType.MEGA_DUNGEON, new AncientCityPopulator());
-        if (Version.isAtLeast(21)) {
+        if (Version.VERSION.isAtLeast(Version.v1_21)) {
             registerStructure(StructureType.MEGA_DUNGEON, new TrialChamberPopulator());
         }
 

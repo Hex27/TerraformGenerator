@@ -114,16 +114,13 @@ public class TLogger {
         }
     }
 
+    //Never suppress stack traces
     public void stackTrace(@NotNull Throwable e) {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[TerraformGenerator][!] " + e.getMessage());
         for (StackTraceElement stackTraceElement : e.getStackTrace()) {
             final String message = stackTraceElement.toString();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[TerraformGenerator][!] " + message);
 
-            if (suppressConsoleLogs) {
-                LOGGER.log(Level.SEVERE, "[!] " + message);
-            }
-            else {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[TerraformGenerator][!] " + message);
-            }
         }
     }
 }

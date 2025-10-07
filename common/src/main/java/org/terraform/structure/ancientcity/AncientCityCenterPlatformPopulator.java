@@ -221,7 +221,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
         int generalFuzzSize = 3;
         for (int radius = 0; radius <= headWidth; radius++) {
             for (BlockFace rel : BlockUtils.getAdjacentFaces(facing)) {
-                if (Version.isAtLeast(19)) {
+                if (Version.VERSION.isAtLeast(Version.v1_19_4)) {
                     assert V_1_19.REINFORCED_DEEPSLATE != null;
                     core.getRelative(rel, radius).setType(V_1_19.REINFORCED_DEEPSLATE);
                     core.getUp(headHeight)
@@ -267,7 +267,7 @@ public class AncientCityCenterPlatformPopulator extends AncientCityAbstractRoomP
                     );
 
                 if (radius == headWidth) {
-                    if (Version.isAtLeast(19)) {
+                    if (Version.VERSION.isAtLeast(Version.v1_19_4)) {
                         core.getRelative(rel, radius).Pillar(headHeight, V_1_19.REINFORCED_DEEPSLATE);
                     }
                     else {

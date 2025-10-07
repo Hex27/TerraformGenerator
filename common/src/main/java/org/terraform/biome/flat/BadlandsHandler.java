@@ -148,7 +148,7 @@ public class BadlandsHandler extends BiomeHandler {
                     PlantBuilder.FIREFLY_BUSH.build(data, rawX, surfaceY+1, rawZ);
                 else {
                     int cactusHeight = PlantBuilder.CACTUS.build(random, data, rawX, surfaceY + 1, rawZ, 2, 5);
-                    if(Version.isAtLeast(21.5)
+                    if(Version.VERSION.isAtLeast(Version.v1_21_5)
                         && GenUtils.chance(random, 1, 10))
                         data.setType(rawX, surfaceY+1+cactusHeight, rawZ, V_1_21_5.CACTUS_FLOWER);
                 }

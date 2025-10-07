@@ -269,7 +269,7 @@ public class TerraSchematic {
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, UTF_8));
 
         // Append version header
-        bufferedWriter.write(Version.DOUBLE + "");
+        bufferedWriter.write(Version.VERSION.getSchematicHeader());
         bufferedWriter.newLine();
 
         for (Entry<Vector, BlockData> entry : data.entrySet()) {

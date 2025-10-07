@@ -127,7 +127,7 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
                 PlantBuilder.FLOWERING_AZALEA.build(floor.getUp());
             }
         }
-        else if (Version.isAtLeast(17) && GenUtils.chance(random, 1, 7)) { // Dripleaves
+        else if (GenUtils.chance(random, 1, 7)) { // Dripleaves
             if (TConfig.arePlantsEnabled()) {
                 if (random.nextBoolean()) {
                     new DirectionalBuilder(Material.BIG_DRIPLEAF).setFacing(BlockUtils.getDirectBlockFace(random))

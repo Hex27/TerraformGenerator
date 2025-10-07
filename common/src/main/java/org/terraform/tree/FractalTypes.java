@@ -392,7 +392,7 @@ public class FractalTypes {
         }
 
         private static void leafLitter(Random random, SimpleBlock base, float radius) {
-            if (!Version.isAtLeast(21.5)) {
+            if (!Version.VERSION.isAtLeast(Version.v1_21_5)) {
                 return;
             }
             BlockUtils.lambdaCircularPatch(random.nextInt(8903245), radius, base, (b) -> {

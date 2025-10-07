@@ -194,6 +194,7 @@ public class Wall extends SimpleBlock {
     /**
      * @deprecated Not needed anymore. Wall extends SimpleBlock now.
      */
+    @Deprecated
     public @NotNull SimpleBlock get() {
         return this;
     }

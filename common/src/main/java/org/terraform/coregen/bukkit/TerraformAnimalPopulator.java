@@ -337,17 +337,16 @@ public class TerraformAnimalPopulator extends BlockPopulator {
 
     public TerraformAnimalPopulator(TerraformWorld tw) {
         this.tw = tw;
-        if (Version.isAtLeast(17)) {
-            ANIMAL_POPULATORS[0] = new AnimalPopulator(EntityType.valueOf("GOAT"),
-                    TConfig.c.ANIMALS_GOAT_MINHERDSIZE,
-                    TConfig.c.ANIMALS_GOAT_MAXHERDSIZE,
-                    TConfig.c.ANIMALS_GOAT_CHANCE,
-                    true,
-                    BiomeBank.ROCKY_MOUNTAINS,
-                    BiomeBank.SNOWY_MOUNTAINS
-            );
-        }
-        if (Version.isAtLeast(20.5)) {
+        ANIMAL_POPULATORS[0] = new AnimalPopulator(EntityType.valueOf("GOAT"),
+                TConfig.c.ANIMALS_GOAT_MINHERDSIZE,
+                TConfig.c.ANIMALS_GOAT_MAXHERDSIZE,
+                TConfig.c.ANIMALS_GOAT_CHANCE,
+                true,
+                BiomeBank.ROCKY_MOUNTAINS,
+                BiomeBank.SNOWY_MOUNTAINS
+        );
+
+        if (Version.VERSION.isAtLeast(Version.v1_20_5)) {
             ANIMAL_POPULATORS[1] = new AnimalPopulator(V_1_20_5.ARMADILLO,
                     TConfig.c.ANIMALS_ARMADILLO_MINHERDSIZE,
                     TConfig.c.ANIMALS_ARMADILLO_MAXHERDSIZE,
@@ -359,7 +358,7 @@ public class TerraformAnimalPopulator extends BlockPopulator {
                     BiomeBank.BADLANDS_CANYON
             );
         }
-        if (Version.isAtLeast(19)) {
+        if (Version.VERSION.isAtLeast(Version.v1_19_4)) {
             ANIMAL_POPULATORS[2] = new AnimalPopulator(EntityType.valueOf("FROG"),
                     TConfig.c.ANIMALS_FROG_MINHERDSIZE,
                     TConfig.c.ANIMALS_FROG_MAXHERDSIZE,

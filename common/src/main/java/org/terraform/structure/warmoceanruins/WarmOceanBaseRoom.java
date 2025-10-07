@@ -36,7 +36,7 @@ public abstract class WarmOceanBaseRoom extends RoomPopulatorAbstract {
             if (data.getType(coords[0], coords[1], coords[2]) == Material.SAND
                 || data.getType(coords[0], coords[1], coords[2]) == Material.GRAVEL)
             {
-                if (Version.isAtLeast(20) && GenUtils.chance(rand, 3, 4)) {
+                if (Version.VERSION.isAtLeast(Version.v1_20) && GenUtils.chance(rand, 3, 4)) {
                     if (data.getType(coords[0], coords[1], coords[2]) == Material.SAND) {
                         data.setType(coords[0], coords[1], coords[2], V_1_20.SUSPICIOUS_SAND);
                         data.lootTableChest(coords[0],

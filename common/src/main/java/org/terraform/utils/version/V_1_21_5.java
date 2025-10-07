@@ -11,26 +11,26 @@ import org.terraform.utils.BlockUtils;
 import java.util.Random;
 
 public class V_1_21_5 {
-    public static Material BUSH = Version.isAtLeast(21.5) ?
+    public static Material BUSH = Version.VERSION.isAtLeast(Version.v1_21_5) ?
                                        Material.valueOf("BUSH") : Material.GRASS;
-    public static Material FIREFLY_BUSH = Version.isAtLeast(21.5) ?
+    public static Material FIREFLY_BUSH = Version.VERSION.isAtLeast(Version.v1_21_5) ?
                                   Material.valueOf("FIREFLY_BUSH") : Material.GRASS;
-    public static Material CACTUS_FLOWER = Version.isAtLeast(21.5) ?
+    public static Material CACTUS_FLOWER = Version.VERSION.isAtLeast(Version.v1_21_5) ?
                                            Material.valueOf("CACTUS_FLOWER") : Material.CACTUS;
-    public static Material SHORT_DRY_GRASS = Version.isAtLeast(21.5) ?
+    public static Material SHORT_DRY_GRASS = Version.VERSION.isAtLeast(Version.v1_21_5) ?
                                            Material.valueOf("SHORT_DRY_GRASS") : Material.DEAD_BUSH;
-    public static Material TALL_DRY_GRASS = Version.isAtLeast(21.5) ?
+    public static Material TALL_DRY_GRASS = Version.VERSION.isAtLeast(Version.v1_21_5) ?
                                             Material.valueOf("TALL_DRY_GRASS") : Material.DEAD_BUSH;
-    public static Material LEAF_LITTER = Version.isAtLeast(21.5) ?
+    public static Material LEAF_LITTER = Version.VERSION.isAtLeast(Version.v1_21_5) ?
                                             Material.valueOf("LEAF_LITTER") : Material.GRASS;
-    public static Material WILDFLOWERS = Version.isAtLeast(21.5) ?
+    public static Material WILDFLOWERS = Version.VERSION.isAtLeast(Version.v1_21_5) ?
                                             Material.valueOf("WILDFLOWERS") : Material.DANDELION;
     private static BlockData[] leafLitters;
 
     private static BlockData[] wildflowerSet;
 
     public static void leafLitter(Random random, PopulatorDataAbstract data, int x, int y, int z){
-        if(!Version.isAtLeast(21.5)) return;
+        if(!Version.VERSION.isAtLeast(Version.v1_21_5)) return;
         if(!TConfig.c.FEATURE_PLANTS_ENABLED) return;
         if(data.getType(x,y,z) != Material.AIR) return;
         if(leafLitters == null)
@@ -46,7 +46,7 @@ public class V_1_21_5 {
     }
 
     public static void wildflowers(Random random, PopulatorDataAbstract data, int x, int y, int z){
-        if(!Version.isAtLeast(21.5)) return;
+        if(!Version.VERSION.isAtLeast(Version.v1_21_5)) return;
         if(!TConfig.c.FEATURE_PLANTS_ENABLED) return;
         if(data.getType(x,y,z) != Material.AIR) return;
         if(wildflowerSet == null)

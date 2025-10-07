@@ -397,7 +397,7 @@ public class MansionRoofHandler {
                     }
 
                     // If lucky, spawn allays
-                    if (Version.isAtLeast(19) && rand.nextBoolean()) {
+                    if (Version.VERSION.isAtLeast(Version.v1_19_4) && rand.nextBoolean()) {
                         for (int i = 0; i < 1 + rand.nextInt(3); i++) {
                             data.addEntity(core.getX(), core.getY(), core.getZ(), V_1_19.ALLAY);
                         }

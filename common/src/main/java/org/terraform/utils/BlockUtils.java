@@ -382,7 +382,7 @@ public class BlockUtils {
                 stoneLike.add(mat);
             }
         }
-        if(Version.isAtLeast(19)){
+        if(Version.VERSION.isAtLeast(Version.v1_19_4)){
             caveDecoratorMaterials.add(V_1_19.SCULK);
             caveDecoratorMaterials.add(V_1_19.SCULK_SENSOR);
             caveDecoratorMaterials.add(V_1_19.SCULK_SHRIEKER);
@@ -1319,7 +1319,7 @@ public class BlockUtils {
      */
     public static void correctSurroundingMultifacingData(@NotNull SimpleBlock target) {
         if (!(target.getBlockData() instanceof MultipleFacing)) {
-            if (Version.isAtLeast(16.1) && Tag.WALLS.isTagged(target.getType())) {
+            if (Tag.WALLS.isTagged(target.getType())) {
                 v1_16_R1_BlockDataFixer.correctSurroundingWallData(target);
             }
             return;

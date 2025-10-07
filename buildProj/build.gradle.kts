@@ -30,6 +30,11 @@ dependencies {
 }
 
 tasks.shadowJar {
+    //This will break all versions before 1.21.9.
+    // Can't do much about that.
+    manifest {
+        attributes["paperweight-mappings-namespace"] = "mojang"
+    }
 
 	//Make the spigot build shadow itself
 	if(project.hasProperty("includeSpigot")){

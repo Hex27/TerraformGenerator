@@ -67,7 +67,7 @@ public class OutpostStakeCage extends RoomPopulatorAbstract {
 
         }
 
-        if (Version.isAtLeast(19)) {
+        if (Version.VERSION.isAtLeast(Version.v1_19_4)) {
             // Spawn the mob.
             switch (rand.nextInt(3)) {
                 case 0:

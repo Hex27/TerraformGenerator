@@ -12,25 +12,25 @@ import java.util.Locale;
 import java.util.Random;
 
 public class V_1_20 {
-    public static final @Nullable Material PITCHER_PLANT = !Version.isAtLeast(20)
+    public static final @Nullable Material PITCHER_PLANT = !Version.VERSION.isAtLeast(Version.v1_20)
                                                            ? Material.TALL_GRASS
                                                            : Material.getMaterial("PITCHER_PLANT");
-    public static final @Nullable Material CHERRY_LOG = !Version.isAtLeast(20)
+    public static final @Nullable Material CHERRY_LOG = !Version.VERSION.isAtLeast(Version.v1_20)
                                                         ? Material.DARK_OAK_LOG
                                                         : Material.getMaterial("CHERRY_LOG");
-    public static final @Nullable Material CHERRY_WOOD = !Version.isAtLeast(20)
+    public static final @Nullable Material CHERRY_WOOD = !Version.VERSION.isAtLeast(Version.v1_20)
                                                          ? Material.DARK_OAK_WOOD
                                                          : Material.getMaterial("CHERRY_WOOD");
-    public static final @Nullable Material CHERRY_LEAVES = !Version.isAtLeast(20)
+    public static final @Nullable Material CHERRY_LEAVES = !Version.VERSION.isAtLeast(Version.v1_20)
                                                            ? Material.DARK_OAK_LEAVES
                                                            : Material.getMaterial("CHERRY_LEAVES");
-    public static final @Nullable Material CHERRY_SAPLING = !Version.isAtLeast(20)
+    public static final @Nullable Material CHERRY_SAPLING = !Version.VERSION.isAtLeast(Version.v1_20)
                                                             ? Material.DARK_OAK_SAPLING
                                                             : Material.getMaterial("CHERRY_SAPLING");
-    public static final @Nullable Material SUSPICIOUS_SAND = !Version.isAtLeast(20)
+    public static final @Nullable Material SUSPICIOUS_SAND = !Version.VERSION.isAtLeast(Version.v1_20)
                                                              ? Material.SAND
                                                              : Material.getMaterial("SUSPICIOUS_SAND");
-    public static final @Nullable Material SUSPICIOUS_GRAVEL = !Version.isAtLeast(20)
+    public static final @Nullable Material SUSPICIOUS_GRAVEL = !Version.VERSION.isAtLeast(Version.v1_20)
                                                                ? Material.GRAVEL
                                                                : Material.getMaterial("SUSPICIOUS_GRAVEL");
 

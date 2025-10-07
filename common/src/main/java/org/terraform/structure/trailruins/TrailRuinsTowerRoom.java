@@ -95,7 +95,7 @@ public class TrailRuinsTowerRoom extends RoomPopulatorAbstract {
             super.applyData(block, data);
             for (int i = 1; i < 3; i++) {
                 if (GenUtils.chance(random, 1, 4) && BlockUtils.isStoneLike(block.getUp(i).getType())) {
-                    if (Version.isAtLeast(20) && GenUtils.chance(random, 1, 5)) {
+                    if (Version.VERSION.isAtLeast(Version.v1_20) && GenUtils.chance(random, 1, 5)) {
                         block.getUp(i).setType(V_1_20.SUSPICIOUS_GRAVEL);
                         block.getPopData().lootTableChest(
                                 block.getX(),

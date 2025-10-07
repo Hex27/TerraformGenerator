@@ -53,7 +53,7 @@ public class TrailRuinsHutRoom extends RoomPopulatorAbstract {
         }
 
         // Suspicious gravel
-        if (Version.isAtLeast(20)) {
+        if (Version.VERSION.isAtLeast(Version.v1_20)) {
             for (int i = 0; i < rand.nextInt(4); i++) {
                 int[] coords = room.randomCoords(rand);
                 data.setType(coords[0], room.getY(), coords[2], V_1_20.SUSPICIOUS_GRAVEL);

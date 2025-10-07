@@ -164,7 +164,7 @@ public class FractalLeaves implements Cloneable {
                         // cache this block so that getType and setType aren't called for already processed blocks
                         occupiedLeaves.add(relativeBlock);
 
-                        if (mangrovePropagules && Version.isAtLeast(19) && !BlockUtils.isWet(relativeBlock.getDown())) {
+                        if (mangrovePropagules && Version.VERSION.isAtLeast(Version.v1_19_4) && !BlockUtils.isWet(relativeBlock.getDown())) {
                             if (GenUtils.chance(1, 50)) {
                                 relativeBlock.getDown()
                                              .rsetBlockData(
@@ -224,7 +224,7 @@ public class FractalLeaves implements Cloneable {
                                     weepingLeavesLength
                             );
                         }
-                        if (Version.isAtLeast(21.4)
+                        if (Version.VERSION.isAtLeast(Version.v1_21_4)
                             && paleVinesChance > 0 && Math.random() < paleVinesChance) {
                             paleVines(
                                     relativeBlock,
