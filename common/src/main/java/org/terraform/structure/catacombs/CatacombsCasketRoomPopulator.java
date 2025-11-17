@@ -65,8 +65,7 @@ public class CatacombsCasketRoomPopulator extends CatacombsStandardPopulator {
                 if (TConfig.areDecorationsEnabled()) {
                     new ChestBuilder(Material.CHEST).setFacing(BlockUtils.getLeft(target.getDirection()))
                                                     .setLootTable(TerraLootTable.SIMPLE_DUNGEON)
-                                                    .apply(target)
-                                                    .extend(target, target.getFront(), false);
+                                                    .extend(target, target.getFront(), true);
                 }
                 break;
             case 1:
