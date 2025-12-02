@@ -1,5 +1,6 @@
 package org.terraform.v1_21_R6;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -53,6 +54,11 @@ public class BlockDataFixer extends BlockDataFixerAbstract {
 
     @Override
     public String updateSchematic(double schematicVersion, String schematic) {
+        if(schematicVersion < 21.9){ //This is always true now
+            //Chains are now iron_chain
+            schematic = StringUtils.replace(schematic, ":chain[", ":iron_chain[");
+
+        }
         return schematic;
     }
 
