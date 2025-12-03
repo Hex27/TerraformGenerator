@@ -28,6 +28,7 @@ import org.terraform.structure.trialchamber.TrialChamberPopulator;
 import org.terraform.structure.village.VillagePopulator;
 import org.terraform.structure.villagehouse.VillageHousePopulator;
 import org.terraform.structure.warmoceanruins.WarmOceanRuinsPopulator;
+import org.terraform.utils.datastructs.ConcurrentLRUCache;
 import org.terraform.utils.version.Version;
 
 import java.util.*;
@@ -43,73 +44,10 @@ public class StructureRegistry {
     public static final Map<StructureType, SingleMegaChunkStructurePopulator[]> largeStructureRegistry = new EnumMap<>(
             StructureType.class);
     public static final Collection<MultiMegaChunkStructurePopulator> smallStructureRegistry = new ArrayList<>();
-    private static final HashMap<MegaChunkKey, SingleMegaChunkStructurePopulator[]> queryCache = new HashMap<>();
-
-
-    public static void init() {
-        registerStructure(StructureType.VILLAGE, new VillageHousePopulator());
-        registerStructure(StructureType.VILLAGE, new VillagePopulator());
-        registerStructure(StructureType.VILLAGE, new OutpostPopulator());
-
-        registerStructure(StructureType.MEGA_DUNGEON, new PyramidPopulator());
-        registerStructure(StructureType.MEGA_DUNGEON, new MonumentPopulator());
-        registerStructure(StructureType.MEGA_DUNGEON, new StrongholdPopulator());
-        registerStructure(StructureType.MEGA_DUNGEON, new MansionPopulator());
-        registerStructure(StructureType.MEGA_DUNGEON, new AncientCityPopulator());
-        if (Version.VERSION.isAtLeast(Version.v1_21)) {
-            registerStructure(StructureType.MEGA_DUNGEON, new TrialChamberPopulator());
-        }
-
-        registerStructure(StructureType.LARGE_CAVE, new LargeCavePopulator());
-
-        registerStructure(StructureType.LARGE_MISC, new MineshaftPopulator());
-        registerStructure(StructureType.LARGE_MISC, new CatacombsPopulator());
-        registerStructure(StructureType.LARGE_MISC, new BadlandsMinePopulator());
-        registerStructure(StructureType.LARGE_MISC, new WarmOceanRuinsPopulator());
-        registerStructure(StructureType.LARGE_MISC, new TrailRuinsPopulator());
-
-        registerStructure(StructureType.SMALL, new SmallDungeonPopulator());
-        registerStructure(StructureType.SMALL, new ShipwreckPopulator());
-        registerStructure(StructureType.SMALL, new BuriedTreasurePopulator());
-        registerStructure(StructureType.SMALL, new RuinedPortalPopulator());
-        registerStructure(StructureType.SMALL, new IglooPopulator());
-        registerStructure(StructureType.SMALL, new DesertWellPopulator());
-        registerStructure(StructureType.SMALL, new WitchHutPopulator());
-    }
-
-    /**
-     * Assumes that the supplied type is a singlemegachunkstructurepopulator.
-     */
-    public static @Nullable StructureType getStructureType(@NotNull Class<? extends SingleMegaChunkStructurePopulator> populatorType) {
-        for (Entry<StructureType, SingleMegaChunkStructurePopulator[]> entry : largeStructureRegistry.entrySet()) {
-            for (SingleMegaChunkStructurePopulator pops : entry.getValue()) {
-                if (populatorType.isInstance(pops)) {
-                    return entry.getKey();
-                }
-            }
-        }
-        return null; // Invalid populator Type.
-    }
-
-    /**
-     * @return the structure types that can spawn in this mega chunk
-     * Only one is meant to be picked.
-     */
-    @NotNull
-    public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(@NotNull TerraformWorld tw,
-                                                                                    @NotNull MegaChunk mc)
-    {
-        // TerraformGeneratorPlugin.logger.info("getLargeStructureForMegaChunkQuery: " + mc.getX() + "," + mc.getZ());
-        // Clear the cache if it gets big.
-        if (queryCache.size() > 50) {
-            queryCache.clear();
-        }
-        MegaChunkKey key = new MegaChunkKey(tw, mc);
-        // Don't re-calculate
-        if (queryCache.containsKey(key)) {
-            return queryCache.get(key);
-        }
-
+    private static final ConcurrentLRUCache<MegaChunkKey, SingleMegaChunkStructurePopulator[]> queryCache
+            = new ConcurrentLRUCache<>("structureQueryCache",50, (MegaChunkKey key)->{
+        TerraformWorld tw = key.tw;
+        MegaChunk mc = key.mc;
         Random structRand = tw.getHashedRand(9, mc.getX(), mc.getZ());
         int maxStructures = 3; // GenUtils.randInt(structRand, 1, TConfigOption.STRUCTURES_MEGACHUNK_MAXSTRUCTURES);
         SingleMegaChunkStructurePopulator[] pops = new SingleMegaChunkStructurePopulator[maxStructures];
@@ -175,11 +113,65 @@ public class StructureRegistry {
         SingleMegaChunkStructurePopulator[] returnVal = new SingleMegaChunkStructurePopulator[size];
         System.arraycopy(pops, 0, returnVal, 0, size);
 
-        // cache
-        queryCache.put(key, returnVal);
         return returnVal;
+    });
+
+
+    public static void init() {
+        registerStructure(StructureType.VILLAGE, new VillageHousePopulator());
+        registerStructure(StructureType.VILLAGE, new VillagePopulator());
+        registerStructure(StructureType.VILLAGE, new OutpostPopulator());
+
+        registerStructure(StructureType.MEGA_DUNGEON, new PyramidPopulator());
+        registerStructure(StructureType.MEGA_DUNGEON, new MonumentPopulator());
+        registerStructure(StructureType.MEGA_DUNGEON, new StrongholdPopulator());
+        registerStructure(StructureType.MEGA_DUNGEON, new MansionPopulator());
+        registerStructure(StructureType.MEGA_DUNGEON, new AncientCityPopulator());
+        if (Version.VERSION.isAtLeast(Version.v1_21)) {
+            registerStructure(StructureType.MEGA_DUNGEON, new TrialChamberPopulator());
+        }
+
+        registerStructure(StructureType.LARGE_CAVE, new LargeCavePopulator());
+
+        registerStructure(StructureType.LARGE_MISC, new MineshaftPopulator());
+        registerStructure(StructureType.LARGE_MISC, new CatacombsPopulator());
+        registerStructure(StructureType.LARGE_MISC, new BadlandsMinePopulator());
+        registerStructure(StructureType.LARGE_MISC, new WarmOceanRuinsPopulator());
+        registerStructure(StructureType.LARGE_MISC, new TrailRuinsPopulator());
+
+        registerStructure(StructureType.SMALL, new SmallDungeonPopulator());
+        registerStructure(StructureType.SMALL, new ShipwreckPopulator());
+        registerStructure(StructureType.SMALL, new BuriedTreasurePopulator());
+        registerStructure(StructureType.SMALL, new RuinedPortalPopulator());
+        registerStructure(StructureType.SMALL, new IglooPopulator());
+        registerStructure(StructureType.SMALL, new DesertWellPopulator());
+        registerStructure(StructureType.SMALL, new WitchHutPopulator());
     }
 
+    /**
+     * Assumes that the supplied type is a singlemegachunkstructurepopulator.
+     */
+    public static @Nullable StructureType getStructureType(@NotNull Class<? extends SingleMegaChunkStructurePopulator> populatorType) {
+        for (Entry<StructureType, SingleMegaChunkStructurePopulator[]> entry : largeStructureRegistry.entrySet()) {
+            for (SingleMegaChunkStructurePopulator pops : entry.getValue()) {
+                if (populatorType.isInstance(pops)) {
+                    return entry.getKey();
+                }
+            }
+        }
+        return null; // Invalid populator Type.
+    }
+
+    /**
+     * @return the structure types that can spawn in this mega chunk
+     * Only one is meant to be picked.
+     */
+    @NotNull
+    public static SingleMegaChunkStructurePopulator[] getLargeStructureForMegaChunk(@NotNull TerraformWorld tw,
+                                                                                    @NotNull MegaChunk mc)
+    {
+        return queryCache.get(new MegaChunkKey(tw,mc));
+    }
 
     // Implementing FisherYates shuffle
     private static Object @NotNull [] shuffleArray(@NotNull Random rand, Object[] ar) {
