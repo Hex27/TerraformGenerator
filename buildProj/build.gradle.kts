@@ -22,10 +22,13 @@ dependencies {
     implementation(project(":implementation:v1_21_R4"))
     implementation(project(":implementation:v1_21_R5"))
     implementation(project(":implementation:v1_21_R6"))
+    implementation(project(":implementation:v1_21_R7"))
     implementation("com.github.AvarionMC:yaml:1.1.7")
 	
 	if(project.hasProperty("includeSpigot")){
+		//Also change the one in shadowJar. Remember to have --remapped in Buildtools.
 		implementation(project(":implementation:Spigotv1_21_R6"))
+		implementation(project(":implementation:Spigotv1_21_R7"))
 	}
 }
 
@@ -39,6 +42,7 @@ tasks.shadowJar {
 	//Make the spigot build shadow itself
 	if(project.hasProperty("includeSpigot")){
 		dependsOn(":implementation:Spigotv1_21_R6:remap")
+		dependsOn(":implementation:Spigotv1_21_R7:remap")
 	}
 	
     doFirst {

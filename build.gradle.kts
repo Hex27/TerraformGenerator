@@ -9,6 +9,10 @@ subprojects {
     group = "org.terraform"
     repositories {
         mavenCentral()
+		
+		//For spigot local jars
+		mavenLocal()
+		
 		//For SpecialSource
 		maven("https://hub.spigotmc.org/nexus/content/repositories/public/")
         maven("https://repo.codemc.io/repository/nms/")

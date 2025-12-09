@@ -30,6 +30,7 @@ public enum Version {
     v1_21_8("v1_21_R5",17),
     v1_21_9("v1_21_R6",18),
     v1_21_10("v1_21_R6",19),
+    v1_21_11("v1_21_R7",20),
     ;
     final String packName;
     final int priority;
@@ -51,8 +52,6 @@ public enum Version {
     }
 
     public static final Version VERSION = toVersion(Bukkit.getServer().getBukkitVersion().split("-")[0]);
-
-    private final static Map<Double, String> availableVersions = new HashMap<>();
 
     /**
      * @param version a string like "1.20.4"

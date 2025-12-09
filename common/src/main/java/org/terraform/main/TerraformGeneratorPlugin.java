@@ -77,8 +77,6 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         super.onEnable();
-        GenUtils.initGenUtils();
-        BlockUtils.initBlockUtils();
         instance = this;
 
         try {
@@ -92,6 +90,10 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
         logger = new TLogger();
         lang = new LanguageManager(this, TConfig.c);
+
+        GenUtils.initGenUtils();
+        BlockUtils.initBlockUtils();
+
 
         // Initiate the height map flat radius value
         HeightMap.spawnFlatRadiusSquared = TConfig.c.HEIGHT_MAP_SPAWN_FLAT_RADIUS;
