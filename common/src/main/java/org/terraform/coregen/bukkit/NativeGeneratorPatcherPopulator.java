@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NativeGeneratorPatcherPopulator extends BlockPopulator implements Listener {
 
     // SimpleChunkLocation to a collection of location:blockdata entries marked for repair.
-    public static final @NotNull Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
+    private static final @NotNull Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
     private static boolean flushIsQueued = false;
 
     public NativeGeneratorPatcherPopulator() {
@@ -46,13 +46,12 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
         }
 
         SimpleChunkLocation scl = new SimpleChunkLocation(world, x, y, z);
-        if (!cache.containsKey(scl)) {
-            cache.put(scl, new ArrayList<>());
-        }
+        Collection<Object[]> cached = cache.getOrDefault(scl,new ArrayList<>());
         //        cacheContents.put(data.getMaterial(), cacheContents.getOrDefault(data.getMaterial(),0)+1);
-        cache.get(scl).add(new Object[] {
+        cached.add(new Object[] {
                 new int[] {x, y, z}, data
         });
+        cache.put(scl, cached);
     }
 
     public static void flushChanges() {
