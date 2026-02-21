@@ -374,7 +374,7 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
     }
 
     private void spawnShaftPlatform(@NotNull SimpleBlock center) {
-        BlockUtils.carveCaveAir(new Random().nextInt(777123),
+        BlockUtils.carveCaveAir(GenUtils.positiveHashMod(center.getX(), center.getY(), center.getZ(), 777123),
                 2.5f,
                 1.5f,
                 2.5f,
