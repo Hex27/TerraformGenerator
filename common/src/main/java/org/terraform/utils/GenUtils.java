@@ -608,4 +608,18 @@ public class GenUtils {
 
         return 1 + 3 * (-1 + (chunkCoord + 1) / 3);
     }
+
+    /**
+     * Computes a deterministic non-negative hash from coordinates, bounded by a modulo value.
+     * Useful for seeding game tick values (e.g., bee occupant ticks) based on position.
+     *
+     * @param x      X coordinate
+     * @param y      Y coordinate
+     * @param z      Z coordinate
+     * @param modulo The upper bound (exclusive) for the result
+     * @return A value in range [0, modulo)
+     */
+    public static int positiveHashMod(int x, int y, int z, int modulo) {
+        return (Objects.hash(x, y, z) & 0x7FFFFFFF) % modulo;
+    }
 }

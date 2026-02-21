@@ -24,7 +24,7 @@ public class ShaftRoomPopulator extends RoomPopulatorAbstract {
         // Carve upward shaft. Replace stone-like objects and cave decorations.
         for (int i = 8; i < 20; i++) {
             BlockUtils.carveCaveAir(
-                    new Random().nextInt(777123),
+                    GenUtils.positiveHashMod(room.getX(), room.getY() + i, room.getZ(), 777123),
                     (room.getWidthX() - 4) / 2f,
                     5,
                     (room.getWidthZ() - 4) / 2f,
