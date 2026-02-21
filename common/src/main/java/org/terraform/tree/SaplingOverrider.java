@@ -14,11 +14,11 @@ import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
-import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.V_1_21_4;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SaplingOverrider implements Listener {
 
@@ -67,8 +67,9 @@ public class SaplingOverrider implements Listener {
                             nt.setCheckGradient(false);
                             nt.setPrePlacement(null); // Do NOT set leaf litters
                             // Let grown trees spawn beehives
-                            if (GenUtils.RANDOMIZER.nextInt(5) == 0)
+                            if (ThreadLocalRandom.current().nextInt(5) == 0) {
                                 nt.setSpawnBees(true);
+                            }
                         }));
                 break;
             case BIRCH_LEAVES:
