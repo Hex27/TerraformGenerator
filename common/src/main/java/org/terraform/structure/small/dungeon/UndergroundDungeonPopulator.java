@@ -58,19 +58,22 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
 
         int x = spawnCoords[0];// data.getChunkX()*16 + random.nextInt(16);
         int z = spawnCoords[1];// data.getChunkZ()*16 + random.nextInt(16);
+
         Random rand = this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ());
 
-        int y = HeightMap.getBlockHeight(tw, x, z) - GenUtils.randInt(
-                rand,
-                15,
-                50
-        );// GenUtils.getHighestGround(data, x, z)
+        // Cap the base height to prevent the dungeon from generating out the world height limit.
+        // 20-block buffer for the dungeon height/decorations.
+        int baseHeight = Math.min(HeightMap.getBlockHeight(tw, x, z), tw.maxY - 20);
+        int y = baseHeight - GenUtils.randInt(rand, 15, 50);
 
-        if (y < 10) {
-            y = 10;
+        // Support 1.18+ negative coordinates.
+        int safeMinY = tw.minY + 10;
+        if (y < safeMinY) {
+            y = safeMinY;
         }
 
-        while (!data.getType(x, y, z).isSolid()) {
+        // Ensure we don't decrement y below the world's minimum height
+        while (y > tw.minY && !data.getType(x, y, z).isSolid()) {
             y--;
         }
 
@@ -204,7 +207,13 @@ public class UndergroundDungeonPopulator extends SmallDungeonPopulator {
             type = EntityType.DROWNED;
         }
 
-        data.setSpawner(x, y + 1, z, type);
+        // Safe check max or min height for place
+        int spawnerY = y + 1;
+        if (spawnerY >= tw.minY && spawnerY < tw.maxY) {
+            data.setSpawner(x, spawnerY, z, type);
+        } else {
+            TerraformGeneratorPlugin.logger.info("Underground Dungeon spawner at " + x + "," + spawnerY + "," + z + " skipped (out of bounds)");
+        }
 
         // Spawn chests
         ArrayList<Entry<Wall, Integer>> entries = new ArrayList<>();

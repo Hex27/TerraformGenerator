@@ -52,7 +52,6 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
 
         // int y = GenUtils.getHighestGround(data, x, z);
 
-
         spawnDungeonRoom(x, z, tw, rand, data);
     }
 
@@ -63,6 +62,7 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
                                  @NotNull PopulatorDataAbstract data)
     {
         TerraformGeneratorPlugin.logger.info("Spawning Drowned Dungeon at " + x + "," + z);
+
         int setIndex = rand.nextInt(sets.length);
         Material[] set = sets[setIndex];
         int radius = GenUtils.randInt(rand, 5, 10);
@@ -76,9 +76,19 @@ public class DrownedDungeonPopulator extends SmallDungeonPopulator {
 
                 int y = HeightMap.getBlockHeight(tw, x, z);// GenUtils.getHighestGround(data, nx + x, nz + z);
 
+                // Skip positions too close to world height bounds to avoid invalid block placement
+                if (y >= tw.maxY - 10 || y < tw.minY) {
+                    continue;
+                }
+
                 // Spawner
                 if (nx == 0 && nz == 0) {
-                    data.setSpawner(x, y + 1, z, EntityType.DROWNED);
+                    int spawnerY = y + 1;
+                    if (spawnerY >= tw.minY && spawnerY < tw.maxY) {
+                        data.setSpawner(x, spawnerY, z, EntityType.DROWNED);
+                    } else {
+                        TerraformGeneratorPlugin.logger.info("Drowned Dungeon spawner at " + x + "," + spawnerY + "," + z + " skipped (out of bounds)");
+                    }
                     continue;
                 }
 
