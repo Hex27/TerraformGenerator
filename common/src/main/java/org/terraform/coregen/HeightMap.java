@@ -172,6 +172,7 @@ public enum HeightMap {
 
         if (heightAmplifier != 1f && height > TerraformGenerator.seaLevel) {
             height += heightAmplifier * (height - TerraformGenerator.seaLevel);
+			height = Math.min(tw.maxY, Math.max(tw.minY, height));
         }
 
         cache.cacheHeightMap(x, z, height);
