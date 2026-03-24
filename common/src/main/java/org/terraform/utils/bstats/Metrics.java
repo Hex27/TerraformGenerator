@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.terraform.main.TerraformGeneratorPlugin;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -82,7 +83,7 @@ public class Metrics {
                 enabled,
                 this::appendPlatformData,
                 this::appendServiceData,
-                submitDataTask -> Bukkit.getScheduler().runTask(plugin, submitDataTask),
+                submitDataTask -> TerraformGeneratorPlugin.taskScheduler.execSyncGlobal(submitDataTask), //Bukkit.getScheduler().runTask(plugin, submitDataTask),
                 plugin::isEnabled,
                 (message, error) -> this.plugin.getLogger().log(Level.WARNING, message, error),
                 (message) -> this.plugin.getLogger().log(Level.INFO, message),
@@ -90,6 +91,7 @@ public class Metrics {
                 logSentData,
                 logResponseStatusText
         );
+
     }
 
     /**

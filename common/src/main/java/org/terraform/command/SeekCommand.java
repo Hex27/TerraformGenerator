@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
@@ -96,7 +95,7 @@ public class SeekCommand extends TerraCommand implements Listener {
 
         long startTime = System.currentTimeMillis();
 
-        BukkitRunnable runnable = new BukkitRunnable() {
+        Runnable runnable = new Runnable() {
             public void run() {
                 int[] loc = StructureLocator.locateMultiMegaChunkStructure(tw, center, populator, -1);
                 long timeTaken = System.currentTimeMillis() - startTime;
@@ -120,7 +119,7 @@ public class SeekCommand extends TerraCommand implements Listener {
                 }
             }
         };
-        runnable.runTaskAsynchronously(plugin);
+        TerraformGeneratorPlugin.taskScheduler.execAsync(runnable);
     }
 
     private void generateSingleMegaChunkStructure(@NotNull World w,
@@ -133,7 +132,7 @@ public class SeekCommand extends TerraCommand implements Listener {
 
         long startTime = System.currentTimeMillis();
 
-        BukkitRunnable runnable = new BukkitRunnable() {
+        Runnable runnable = new Runnable() {
             public void run() {
                 int[] loc = StructureLocator.locateSingleMegaChunkStructure(tw, center, populator, -1);
                 long timeTaken = System.currentTimeMillis() - startTime;
@@ -157,7 +156,7 @@ public class SeekCommand extends TerraCommand implements Listener {
                 }
             }
         };
-        runnable.runTaskAsynchronously(plugin);
+        TerraformGeneratorPlugin.taskScheduler.execAsync(runnable);
     }
 
     private void syncSendMessage(String message) {

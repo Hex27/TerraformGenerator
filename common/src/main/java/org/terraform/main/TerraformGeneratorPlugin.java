@@ -16,6 +16,9 @@ import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.coregen.folia.AbstractScheduler;
+import org.terraform.coregen.folia.BukkitScheduler;
+import org.terraform.coregen.folia.FoliaScheduler;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
@@ -44,6 +47,7 @@ import java.util.Set;
 
 public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
 
+    public static AbstractScheduler taskScheduler;
     public static final Set<String> INJECTED_WORLDS = new HashSet<>();
     public static final @NotNull PrivateFieldHandler privateFieldHandler;
     public static TLogger logger;
@@ -78,6 +82,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         super.onEnable();
         instance = this;
+        taskScheduler = isFolia() ? new FoliaScheduler() : new BukkitScheduler();
 
         try {
             TConfig.init(new File(getDataFolder(), "config.yml"));
@@ -252,4 +257,12 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         return lang;
     }
 
+    private static boolean isFolia() {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 }

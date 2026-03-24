@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.BlockPopulator;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.SimpleLocation;
@@ -36,13 +35,13 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
 
         if (!flushIsQueued && cache.size() > TConfig.c.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY) {
             flushIsQueued = true;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    flushChanges();
-                    flushIsQueued = false;
-                }
-            }.runTask(TerraformGeneratorPlugin.get());
+            TerraformGeneratorPlugin.taskScheduler.execSyncRegion(
+                    Objects.requireNonNull(Bukkit.getWorld(world)),
+                    loc.getX()<<4, loc.getZ()<<4,
+                    () -> {
+                        flushChanges();
+                        flushIsQueued = false;
+                    });
         }
 
         SimpleChunkLocation scl = new SimpleChunkLocation(world, loc.getX(), loc.getY(), loc.getZ());

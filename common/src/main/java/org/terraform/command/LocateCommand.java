@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
+import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
@@ -114,7 +114,7 @@ public class LocateCommand extends TerraCommand implements Listener {
 
         long startTime = System.currentTimeMillis();
 
-        BukkitRunnable runnable = new BukkitRunnable() {
+        Runnable runnable = new Runnable() {
             public void run() {
                 int[] loc = StructureLocator.locateMultiMegaChunkStructure(tw, center, populator, -1);
                 long timeTaken = System.currentTimeMillis() - startTime;
@@ -123,7 +123,7 @@ public class LocateCommand extends TerraCommand implements Listener {
                 syncSendMessage(p, populator, loc);
             }
         };
-        runnable.runTaskAsynchronously(plugin);
+        TerraformGeneratorPlugin.taskScheduler.execAsync(runnable);
     }
 
     private void locateSingleMegaChunkStructure(@NotNull Player p, @NotNull SingleMegaChunkStructurePopulator populator)
@@ -140,7 +140,7 @@ public class LocateCommand extends TerraCommand implements Listener {
 
         long startTime = System.currentTimeMillis();
 
-        BukkitRunnable runnable = new BukkitRunnable() {
+        Runnable runnable = new Runnable() {
             public void run() {
                 int[] loc = StructureLocator.locateSingleMegaChunkStructure(tw, center, populator, -1);
                 long timeTaken = System.currentTimeMillis() - startTime;
@@ -149,7 +149,7 @@ public class LocateCommand extends TerraCommand implements Listener {
                 syncSendMessage(p, populator, loc);
             }
         };
-        runnable.runTaskAsynchronously(plugin);
+        TerraformGeneratorPlugin.taskScheduler.execAsync(runnable);
     }
 
     private void syncSendMessage(UUID uuid, String msg) {
@@ -163,7 +163,7 @@ public class LocateCommand extends TerraCommand implements Listener {
             syncSendMessage(uuid, ChatColor.RED + "Failed to find structure. Somehow.");
             return;
         }
-
+        //getHighestY was invoking terrain generation. Use Heightmap instead.
         syncSendMessageTP(uuid,
                 "Locate",
                 ChatColor.GREEN
@@ -171,8 +171,7 @@ public class LocateCommand extends TerraCommand implements Listener {
                 + populator.getClass().getSimpleName()
                 + "] "
                 + LangOpt.COMMAND_LOCATE_LOCATE_COORDS.parse("%x%", loc[0] + "", "%z%", loc[1] + ""),
-                loc[0],
-                getHighestY(TerraformWorld.get(p.getWorld()), loc[0], loc[1]),
+                loc[0], HeightMap.getBlockHeight(TerraformWorld.get(p.getWorld()),loc[0],loc[1]),//getHighestY(TerraformWorld.get(p.getWorld()), loc[0], loc[1]),
                 loc[1]
         );
     }

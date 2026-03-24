@@ -5,6 +5,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
+import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.material.MaterialData;
@@ -311,6 +312,11 @@ public class PreviewCommand extends TerraCommand {
         @Override
         public int getMaxHeight() {
             return 0;
+        }
+
+        @Override
+        public @NotNull BiomeProvider vanillaBiomeProvider() {
+            return null;
         }
     }
 }

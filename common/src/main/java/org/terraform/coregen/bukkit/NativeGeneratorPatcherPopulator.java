@@ -9,16 +9,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.BlockPopulator;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.SimpleChunkLocation;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NativeGeneratorPatcherPopulator extends BlockPopulator implements Listener {
@@ -36,13 +32,14 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 
         if (!flushIsQueued && cache.size() > TConfig.c.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY) {
             flushIsQueued = true;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
+
+            TerraformGeneratorPlugin.taskScheduler.execSyncRegion(
+                    Objects.requireNonNull(Bukkit.getWorld(world)),
+                x<<4,z<<4, () -> {
                     flushChanges();
                     flushIsQueued = false;
                 }
-            }.runTask(TerraformGeneratorPlugin.get());
+            );
         }
 
         SimpleChunkLocation scl = new SimpleChunkLocation(world, x, y, z);

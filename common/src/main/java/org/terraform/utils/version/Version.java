@@ -31,6 +31,7 @@ public enum Version {
     v1_21_9("v1_21_R6",18),
     v1_21_10("v1_21_R6",19),
     v1_21_11("v1_21_R7",20),
+    v26_1("v26_1",21),
     ;
     final String packName;
     final int priority;
@@ -39,6 +40,7 @@ public enum Version {
         this.priority = priority;
     }
 
+    //Man what the fuck is this now
     public String getSchematicHeader(){
         return this.toString().replace("v1_","").replace("_",".");
     }

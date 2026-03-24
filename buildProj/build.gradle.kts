@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradleup.shadow").version("9.0.0-beta2")
+    id("com.gradleup.shadow").version("9.4.0")
 }
 
 buildscript {
@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":implementation:v1_21_R5"))
     implementation(project(":implementation:v1_21_R6"))
     implementation(project(":implementation:v1_21_R7"))
+    implementation(project(":implementation:v26_1"))
     implementation("com.github.AvarionMC:yaml:1.1.7")
 	
 	if(project.hasProperty("includeSpigot")){

@@ -3,7 +3,6 @@ package org.terraform.command;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
@@ -50,13 +49,15 @@ public class LocateBiomeCommand extends TerraCommand {
 
         if (!args.isEmpty()) {
             try {
-                new Task(
-                        p.getUniqueId(),
-                        TerraformWorld.get(p.getWorld()),
-                        p.getLocation().getBlockX(),
-                        p.getLocation().getBlockZ(),
-                        (BiomeBank) this.parseArguments(sender, args).get(0)
-                ).runTaskAsynchronously(TerraformGeneratorPlugin.get());
+                TerraformGeneratorPlugin.taskScheduler.execAsync(
+                        new Task(
+                                p.getUniqueId(),
+                                TerraformWorld.get(p.getWorld()),
+                                p.getLocation().getBlockX(),
+                                p.getLocation().getBlockZ(),
+                                (BiomeBank) this.parseArguments(sender, args).get(0)
+                        )
+                );
             }
             catch (IllegalArgumentException e) {
                 sender.sendMessage(LangOpt.COMMAND_LOCATEBIOME_INVALIDBIOME.parse());
@@ -126,7 +127,7 @@ public class LocateBiomeCommand extends TerraCommand {
         }
     }
 
-    private class Task extends BukkitRunnable {
+    private class Task implements Runnable {
         final UUID p;
         final BiomeBank b;
         final TerraformWorld tw;
