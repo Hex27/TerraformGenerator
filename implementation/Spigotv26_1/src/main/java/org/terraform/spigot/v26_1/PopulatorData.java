@@ -1,4 +1,4 @@
-package org.terraform.v26_1;
+package org.terraform.spigot.v26_1;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
@@ -99,7 +99,7 @@ public class PopulatorData extends PopulatorDataAbstract
 
     public BlockData getBlockData(int x, int y, int z) {
         // return rlwa.getBlockData(x,y,z);
-        return CraftBlockData.createData(rlwa.getBlockState(new BlockPos(x, y, z)));
+        return CraftBlockData.fromData(rlwa.getBlockState(new BlockPos(x, y, z)));
     }
 
     @Override

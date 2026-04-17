@@ -1,10 +1,6 @@
-plugins {
-  id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
-}
-
 dependencies {
     compileOnly(project(":common"))
-    paperweight.paperDevBundle("26.1.1.build.9-alpha")
+	compileOnly("org.spigotmc:spigot:26.1-R0.1-SNAPSHOT")
 	
 	compileOnly("org.jetbrains:annotations:20.1.0")
     compileOnly("com.github.AvarionMC:yaml:1.1.7")

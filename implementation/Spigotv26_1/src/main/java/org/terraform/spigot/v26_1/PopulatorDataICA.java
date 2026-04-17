@@ -1,4 +1,4 @@
-package org.terraform.v26_1;
+package org.terraform.spigot.v26_1;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,7 +39,10 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.utils.version.TerraformFieldHandler;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     private final PopulatorDataAbstract parent;
@@ -67,13 +70,13 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
     public @NotNull Material getType(int x, int y, int z) {
         // return parent.getType(x, y, z);
         BlockState ibd = ica.getBlockState(new BlockPos(x, y, z)); // getState
-        return CraftBlockData.createData(ibd).getMaterial();
+        return CraftBlockData.fromData(ibd).getMaterial();
     }
 
     public BlockData getBlockData(int x, int y, int z) {
         // return parent.getBlockData(x, y, z);
         BlockState ibd = ica.getBlockState(new BlockPos(x, y, z)); // getState
-        return CraftBlockData.createData(ibd);
+        return CraftBlockData.fromData(ibd);
     }
 
     @Override
@@ -96,15 +99,13 @@ public class PopulatorDataICA extends PopulatorDataICABiomeWriterAbstract {
             }
         }
 
-        ica.setNoiseBiome(rawX >> 2, rawY >> 2, rawZ >> 2, targetBiome);
+        ica.setBiome(rawX >> 2, rawY >> 2, rawZ >> 2, targetBiome);
     }
 
     @Override
     public void setBiome(int rawX, int rawY, int rawZ, org.bukkit.block.Biome biome) {
         // TerraformGeneratorPlugin.logger.info("Set " + rawX + "," + rawY + "," + rawZ + " to " + biome);
-        ica.setNoiseBiome(rawX >> 2, rawY >> 2, rawZ >> 2,
-                Objects.requireNonNull(CraftBiome.bukkitToMinecraftHolder(biome))
-        );
+        ica.setBiome(rawX >> 2, rawY >> 2, rawZ >> 2, CraftBiome.bukkitToMinecraftHolder(biome));
     }
 
     @Override

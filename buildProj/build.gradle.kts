@@ -30,6 +30,7 @@ dependencies {
 		//Also change the one in shadowJar. Remember to have --remapped in Buildtools.
 		implementation(project(":implementation:Spigotv1_21_R6"))
 		implementation(project(":implementation:Spigotv1_21_R7"))
+		implementation(project(":implementation:Spigotv26_1"))
 	}
 }
 
