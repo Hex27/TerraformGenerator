@@ -33,7 +33,7 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
         }
 
         // MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        // int[] coords = mc.getCenterBiomeSectionBlockCoords();      	
+        // int[] coords = mc.getCenterBiomeSectionBlockCoords();
         // Do not spawn ancient cities in non-mountains, like vanilla
         if (biome.getType() != BiomeType.MOUNTAINOUS && biome.getType() != BiomeType.HIGH_MOUNTAINOUS) {
             return false;
@@ -49,13 +49,11 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
     private boolean rollSpawnRatio(@NotNull TerraformWorld tw, int chunkX, int chunkZ) {
         return GenUtils.chance(tw.getHashedRand(chunkX, chunkZ, 123122),
                 (int) (TConfig.c.STRUCTURES_ANCIENTCITY_SPAWNRATIO * 10000),
-                10000
-        );
+                10000);
     }
 
     @Override
-    public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc)
-    {
+    public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         JigsawState state = new JigsawState();
         int[] coords = mc.getCenterBiomeSectionBlockCoords();
         int x = coords[0];
@@ -66,18 +64,17 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
 
         TerraformGeneratorPlugin.logger.info("Spawning ancient city at: " + x + "," + y + "," + z);
 
-        //Cave carver
-        RoomLayoutGenerator carverGen = new RoomLayoutGenerator(GenUtils.RANDOMIZER, RoomLayout.RANDOM_BRUTEFORCE, 0, x,y,z, RADIUS);
-        for(int nx = ((((x-RADIUS)>>4)-1)<<4) + 7; nx <= ((((x+RADIUS)>>4)+1)<<4) + 7; nx+=16)
-            for(int nz = ((((z-RADIUS)>>4)-1)<<4) + 7; nz <= ((((z+RADIUS)>>4)+1)<<4) + 7; nz+=16)
-            {
-                carverGen.getRooms().add(new CubeRoom(1,1,5,nx, y, nz));
+        // Cave carver
+        RoomLayoutGenerator carverGen = new RoomLayoutGenerator(GenUtils.RANDOMIZER, RoomLayout.RANDOM_BRUTEFORCE, 0, x,
+                y, z, RADIUS);
+        for (int nx = ((((x - RADIUS) >> 4) - 1) << 4) + 7; nx <= ((((x + RADIUS) >> 4) + 1) << 4) + 7; nx += 16)
+            for (int nz = ((((z - RADIUS) >> 4) - 1) << 4) + 7; nz <= ((((z + RADIUS) >> 4) + 1) << 4) + 7; nz += 16) {
+                carverGen.getRooms().add(new CubeRoom(1, 1, 5, nx, y, nz));
             }
-        carverGen.roomCarver = new AncientCityBFSCarver(new SimpleLocation(x,y,z));
+        carverGen.roomCarver = new AncientCityBFSCarver(new SimpleLocation(x, y, z));
         PathState ps = carverGen.getOrCalculatePathState(tw);
         ps.writer = new EmptyPathWriter();
         state.roomPopulatorStates.add(carverGen);
-
 
         // Level One
         HashSet<SimpleLocation> occupied = new HashSet<>();
@@ -97,7 +94,7 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
         gen.registerRoomPopulator(new AncientCityLargePillarRoomPopulator(tw, occupied, gen, random, false, false));
 
         // Forcefully place the center platform in the middle.
-        SimpleChunkLocation centChunk = new SimpleChunkLocation(tw.getName(), x,y,z);
+        SimpleChunkLocation centChunk = new SimpleChunkLocation(tw.getName(), x, y, z);
         int centX = (centChunk.getX() << 4) + 8;
         int centZ = (centChunk.getZ() << 4) + 8;
         CubeRoom room = new CubeRoom(46, 46, 40, centX, y, centZ);
@@ -106,7 +103,7 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
 
         gen.calculateRoomPlacement();
         ps = gen.getOrCalculatePathState(tw);
-        ps.writer = new CavePathWriter(2f,2f,2f,0,0,0);
+        ps.writer = new CavePathWriter(2f, 2f, 2f, 0, 0, 0);
         gen.calculateRoomPopulators(tw);
         state.roomPopulatorStates.add(gen);
 
@@ -129,7 +126,7 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
         return 0;
     }
 
-    //But no cave decorations.
+    // But no cave decorations.
     @Override
     public int getCaveClusterBufferDistance() {
         return 3;

@@ -294,7 +294,7 @@ public class PopulatorData extends PopulatorDataAbstract
             //            nbttagcompound.a("id", "minecraft:bee");
             // TileEntityBeehive.storeBee
             // TileEntityBeehive.Occupant.create(1)
-            tileentity.a(TileEntityBeehive.c.a(GenUtils.RANDOMIZER.nextInt(599)));
+            tileentity.a(TileEntityBeehive.c.a(GenUtils.positiveHashMod(rawX, rawY, rawZ, 599)));
         }
         catch (NullPointerException | IllegalArgumentException | SecurityException e) {
             TerraformGeneratorPlugin.logger.stackTrace(e);
