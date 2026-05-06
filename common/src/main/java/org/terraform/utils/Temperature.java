@@ -1,5 +1,6 @@
 package org.terraform.utils;
 
+//TODO: This looks like a glitch waiting to happen
 public class Temperature {
     public static final float SNOWY = -2;
     public static final float DESERT = 2;

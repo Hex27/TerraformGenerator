@@ -308,6 +308,7 @@ public class GenUtils {
         return rand.nextDouble() * (max - min) + min;
     }
 
+    //17 Apr 2026 Mother of fucking bad names???
     public static int getHighestX(@NotNull PopulatorDataAbstract data, int x, int z, Material X) {
         int y = TerraformGeneratorPlugin.injector.getMaxY() - 1;
         while (y > TerraformGeneratorPlugin.injector.getMinY() && data.getType(x, y, z) != X) {
