@@ -32,6 +32,9 @@ public enum Version {
     v1_21_10("v1_21_R6",19),
     v1_21_11("v1_21_R7",20),
     v26_1("v26_1",21),
+    v26_1_1("v26_1",22),
+    v26_1_2("v26_1",23),
+    v26_2("v26_2",24),
     ;
     final String packName;
     final int priority;

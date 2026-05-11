@@ -131,6 +131,14 @@ public class TConfig extends YamlFileInterface {
     public int BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE = 5;
     @YamlKey("biome.cave.dripstone-cluster.maxsize")
     public int BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE = 11;
+    @YamlKey("biome.cave.sulfur-cluster.separation")
+    public int BIOME_CAVE_SULFURCLUSTER_SEPARATION = 128;
+    @YamlKey("biome.cave.sulfur-cluster.separation-maxpertub")
+    public double BIOME_CAVE_SULFURCLUSTER_MAXPERTUB = 0.35d;
+    @YamlKey("biome.cave.sulfur-cluster.minsize")
+    public int BIOME_CAVE_SULFURCLUSTER_MINSIZE = 10;
+    @YamlKey("biome.cave.sulfur-cluster.maxsize")
+    public int BIOME_CAVE_SULFURCLUSTER_MAXSIZE = 16;
     @YamlKey("biome.cave.lush-cluster.separation")
     public int BIOME_CAVE_LUSHCLUSTER_SEPARATION = 64;
     @YamlKey("biome.cave.lush-cluster.separation-maxpertub")

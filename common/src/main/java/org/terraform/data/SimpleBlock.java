@@ -242,7 +242,7 @@ public class SimpleBlock {
     }
 
 
-    public int countAdjacentsThatMatchType(BlockFace @NotNull [] faces, Material @NotNull ... types) {
+    public int countAdjacentsThatMatchType(BlockFace @NotNull [] faces, Iterable<Material> types) {
         int i = 0;
         for (BlockFace face : faces) {
             for (Material type : types) {
@@ -276,6 +276,22 @@ public class SimpleBlock {
     public boolean hasAdjacentSolid(BlockFace @NotNull [] faces) {
         for (BlockFace face : faces) {
             if (getRelative(face).isSolid()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean allAdjacentSolid(BlockFace @NotNull [] faces) {
+        for (BlockFace face : faces) {
+            if (!getRelative(face).isSolid()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean anyAdjacentAir(BlockFace @NotNull [] faces) {
+        for (BlockFace face : faces) {
+            if (getRelative(face).isAir()) {
                 return true;
             }
         }
@@ -854,5 +870,9 @@ public class SimpleBlock {
 
     public void rsetBlockData(@NotNull EnumSet<Material> toReplace, BlockData data) {
         popData.rsetBlockData(this.toVector(), toReplace, data);
+    }
+
+    public boolean isInBound(){
+        return popData.isInBound(x,y,z);
     }
 }

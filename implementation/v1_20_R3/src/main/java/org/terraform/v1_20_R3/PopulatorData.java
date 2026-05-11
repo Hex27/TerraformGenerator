@@ -273,6 +273,11 @@ public class PopulatorData extends PopulatorDataAbstract
     }
 
     @Override
+    public boolean isInBound(int x, int y, int z) {
+        return rlwa.f_(new BlockPosition(x,y,z));
+    }
+
+    @Override
     public int getBaseHeight(int rawX, int rawZ) {
         // (int i, int j, HeightMap.Type heightmap_type, LevelHeightAccessor levelheightaccessor, RandomState randomstate)
         return 100;

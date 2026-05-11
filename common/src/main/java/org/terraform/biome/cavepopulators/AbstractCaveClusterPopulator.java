@@ -24,6 +24,12 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
         this.radius = radius;
     }
 
+    /**
+     *
+     * @param ceil representing the ceiling
+     * @param floor representing the floor
+     * @param isBoundary is true when this x/z position is the edge of the cluster
+     */
     protected abstract void oneUnit(TerraformWorld tw,
                                     Random random,
                                     SimpleBlock ceil,
@@ -69,7 +75,7 @@ public abstract class AbstractCaveClusterPopulator extends AbstractCavePopulator
             Wall vFloor = seen.get(v)[1];
             lowest = Math.min(vFloor.getY(), lowest);
             ceilFloorPairs.add(new SimpleBlock[] {
-                    vCeil.get(), vFloor.get()
+                    vCeil, vFloor
             });
             // TerraformGeneratorPlugin.logger.info("NLOOP: " + v);
 

@@ -112,6 +112,7 @@ public abstract class PopulatorDataAbstract {
 
     public abstract @NotNull TerraformWorld getTerraformWorld();
 
+    public abstract boolean isInBound(int x, int y, int z);
     /**
      * @deprecated this shit is a meaningless hashcode
      */

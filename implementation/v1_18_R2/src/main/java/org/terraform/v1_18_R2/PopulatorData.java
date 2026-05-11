@@ -25,6 +25,7 @@ import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.bukkit.NativeGeneratorPatcherPopulator;
 import org.terraform.coregen.populatordata.IPopulatorDataBaseHeightAccess;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.SimpleChunkLocation;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
@@ -370,6 +371,11 @@ public class PopulatorData extends PopulatorDataAbstract implements IPopulatorDa
     @Override
     public @NotNull TerraformWorld getTerraformWorld() {
         return gen.getTerraformWorld();
+    }
+
+    @Override
+    public boolean isInBound(int x, int y, int z) {
+        return rlwa.e_(new BlockPosition(x,y,z));
     }
 
     @Override

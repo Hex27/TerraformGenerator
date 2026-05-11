@@ -148,6 +148,11 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
         return tw;
     }
 
+    @Override
+    public boolean isInBound(int x, int y, int z) {
+        return lr.isInRegion(x,y,z);
+    }
+
     private static boolean canUseNewApi = false;
     private static Method addEntity;
     private static Method createEntity;
