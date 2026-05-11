@@ -18,12 +18,13 @@ import org.terraform.main.config.TConfig;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener {
 
     // SimpleChunkLocation to a collection of simplelocations
     public static final @NotNull Map<SimpleChunkLocation, Collection<SimpleLocation>> cache = new ConcurrentHashMap<>();
-    private static boolean flushIsQueued = false;
+    private static final AtomicBoolean flushIsQueued = new AtomicBoolean(false);
     // private final TerraformWorld tw;
 
     public PhysicsUpdaterPopulator() {
@@ -33,15 +34,8 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
 
     public static void pushChange(String world, @NotNull SimpleLocation loc) {
 
-        if (!flushIsQueued && cache.size() > TConfig.c.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY) {
-            flushIsQueued = true;
-            TerraformGeneratorPlugin.taskScheduler.execSyncRegion(
-                    Objects.requireNonNull(Bukkit.getWorld(world)),
-                    loc.getX()<<4, loc.getZ()<<4,
-                    () -> {
-                        flushChanges();
-                        flushIsQueued = false;
-                    });
+        if (!flushIsQueued.get() && cache.size() > TConfig.c.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY) {
+            flushChanges();
         }
 
         SimpleChunkLocation scl = new SimpleChunkLocation(world, loc.getX(), loc.getY(), loc.getZ());
@@ -53,7 +47,10 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
     }
 
     public static void flushChanges() {
+        flushIsQueued.set(true);
+
         if (cache.isEmpty()) {
+            flushIsQueued.set(false);
             return;
         }
         TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Flushing repairs ("
@@ -65,25 +62,24 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
             if (w == null) {
                 continue;
             }
-            if (w.isChunkLoaded(scl.getX(), scl.getZ())) {
-                Collection<SimpleLocation> changes = cache.remove(scl);
-                if (changes != null) {
-                    for (SimpleLocation entry : changes) {
-                        Block target = w.getBlockAt(entry.getX(), entry.getY(), entry.getZ());
-                        // Set block physics by calling setBlockData
-                        // Note that this should not be used for complex blocks.
-                        BlockData old = target.getBlockData();
-                        TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] " + target.getLocation());
-                        target.setType(Material.AIR);
-                        target.setBlockData(old, true);
-                    }
-                }
-            }
-            else {
-                // Let the event handler do it
-                w.loadChunk(scl.getX(), scl.getZ());
+            Collection<SimpleLocation> changes = cache.remove(scl);
+            if (changes != null) {
+                TerraformGeneratorPlugin.taskScheduler.execSyncRegion(w,
+                    scl.getX(), scl.getZ(),
+                    ()-> {
+                        for (SimpleLocation entry : changes) {
+                            Block target = w.getBlockAt(entry.getX(), entry.getY(), entry.getZ());
+                            // Set block physics by calling setBlockData
+                            // Note that this should not be used for complex blocks.
+                            BlockData old = target.getBlockData();
+                            TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] " + target.getLocation());
+                            target.setType(Material.AIR);
+                            target.setBlockData(old, true);
+                        }
+                    });
             }
         }
+        flushIsQueued.set(false);
     }
 
     @Override

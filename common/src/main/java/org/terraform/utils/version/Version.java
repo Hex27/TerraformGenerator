@@ -56,7 +56,7 @@ public enum Version {
         return priority >= other.priority;
     }
 
-    public static final Version VERSION = toVersion(Bukkit.getServer().getBukkitVersion().split("-")[0]);
+    public static final Version VERSION = toVersion(Bukkit.getServer().getMinecraftVersion().split("-")[0]);
 
     /**
      * @param version a string like "1.20.4"

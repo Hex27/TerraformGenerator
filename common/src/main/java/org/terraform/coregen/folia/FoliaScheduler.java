@@ -3,7 +3,6 @@ package org.terraform.coregen.folia;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler;
 import org.terraform.main.TerraformGeneratorPlugin;
 
 public class FoliaScheduler implements AbstractScheduler {

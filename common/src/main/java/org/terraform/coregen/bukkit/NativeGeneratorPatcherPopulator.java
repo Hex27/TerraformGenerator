@@ -16,12 +16,13 @@ import org.terraform.main.config.TConfig;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NativeGeneratorPatcherPopulator extends BlockPopulator implements Listener {
 
     // SimpleChunkLocation to a collection of location:blockdata entries marked for repair.
     private static final @NotNull Map<SimpleChunkLocation, Collection<Object[]>> cache = new ConcurrentHashMap<>();
-    private static boolean flushIsQueued = false;
+    private static final AtomicBoolean flushIsQueued = new AtomicBoolean(false);
 
     public NativeGeneratorPatcherPopulator() {
         // this.tw = tw;
@@ -30,16 +31,8 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
 
     public static void pushChange(String world, int x, int y, int z, BlockData data) {
 
-        if (!flushIsQueued && cache.size() > TConfig.c.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY) {
-            flushIsQueued = true;
-
-            TerraformGeneratorPlugin.taskScheduler.execSyncRegion(
-                    Objects.requireNonNull(Bukkit.getWorld(world)),
-                x<<4,z<<4, () -> {
-                    flushChanges();
-                    flushIsQueued = false;
-                }
-            );
+        if (!flushIsQueued.get() && cache.size() > TConfig.c.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY) {
+            flushChanges();
         }
 
         SimpleChunkLocation scl = new SimpleChunkLocation(world, x, y, z);
@@ -52,7 +45,10 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
     }
 
     public static void flushChanges() {
+        flushIsQueued.set(true);
+
         if (cache.isEmpty()) {
+            flushIsQueued.set(false);
             return;
         }
         TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Flushing repairs ("
@@ -64,25 +60,24 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
             if (w == null) {
                 continue;
             }
-            if (w.isChunkLoaded(scl.getX(), scl.getZ())) {
-                // TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher]   - Flushing changes to loaded chunk...");
-                Collection<Object[]> changes = cache.remove(scl);
-                if (changes != null) {
-                    for (Object[] entry : changes) {
-                        int[] loc = (int[]) entry[0];
-                        BlockData data = (BlockData) entry[1];
-                        w.getBlockAt(loc[0], loc[1], loc[2]).setBlockData(data, false);
-                    }
-                }
-            }
-            else {
-                // Let the event handler do it
-                // TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher]   - Loading a chunk to flush changes...");
-                w.loadChunk(scl.getX(), scl.getZ());
+            Collection<Object[]> changes = cache.remove(scl);
+            if (changes != null) {
+                TerraformGeneratorPlugin.taskScheduler.execSyncRegion(w,
+                        scl.getX(), scl.getZ(),
+                        ()->{
+                            for (Object[] entry : changes) {
+                                int[] loc = (int[]) entry[0];
+                                BlockData data = (BlockData) entry[1];
+                                w.getBlockAt(loc[0], loc[1], loc[2]).setBlockData(data, false);
+                            }
+                        });
             }
         }
+        flushIsQueued.set(false);
     }
 
+    //This method uses the deprecated bukkit populate because it comes after the
+    // normal API's populate
     @Override
     public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         SimpleChunkLocation scl = new SimpleChunkLocation(chunk);
