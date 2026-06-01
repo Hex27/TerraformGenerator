@@ -3,18 +3,23 @@ package org.terraform.coregen.folia;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
-import io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler;
 import org.terraform.main.TerraformGeneratorPlugin;
 
+/**
+ * This is called FoliaScheduler, but Paper also has the region scheduler
+ * methods
+ */
 public class FoliaScheduler implements AbstractScheduler {
     @Override
-    public void execSyncRegion(@NotNull World world,
-                               int chunkX,
-                               int chunkZ,
-                               @NotNull Runnable run)
+    public void execAsyncRegion(@NotNull World world,
+                                int chunkX,
+                                int chunkZ,
+                                @NotNull Runnable run)
     {
-        Bukkit.getRegionScheduler().execute(TerraformGeneratorPlugin.get(),
-            world, chunkX, chunkZ, run);
+       world.getChunkAtAsync(chunkX, chunkZ)
+         .thenAccept((c)->
+             Bukkit.getRegionScheduler().execute(TerraformGeneratorPlugin.get(),
+             world, chunkX, chunkZ, run));
     }
 
     @Override

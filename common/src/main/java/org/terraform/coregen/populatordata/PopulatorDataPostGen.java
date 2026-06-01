@@ -175,6 +175,12 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
     }
 
     @Override
+    public boolean isInBound(int x, int y, int z) {
+        //PostGen is the one that writes everywhere
+        return true;
+    }
+
+    @Override
     public void setBiome(int rawX, int rawY, int rawZ, CustomBiomeType cbt, Biome fallback) {
         PopulatorDataICAAbstract icad = TerraformGeneratorPlugin.injector.getICAData(w.getBlockAt(rawX, rawY, rawZ)
                                                                                       .getChunk());

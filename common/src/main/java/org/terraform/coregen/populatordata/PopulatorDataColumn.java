@@ -102,4 +102,9 @@ public class PopulatorDataColumn extends PopulatorDataAbstract {
     public @NotNull TerraformWorld getTerraformWorld() {
         return delegate.getTerraformWorld();
     }
+
+    @Override
+    public boolean isInBound(int x, int y, int z) {
+        return x == constrainX && z == constrainZ;
+    }
 }

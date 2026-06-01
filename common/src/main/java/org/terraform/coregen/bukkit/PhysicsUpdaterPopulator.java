@@ -17,13 +17,11 @@ import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener {
 
     // SimpleChunkLocation to a collection of simplelocations
-    public static final @NotNull Map<SimpleChunkLocation, Collection<SimpleLocation>> cache = new ConcurrentHashMap<>();
-    private static boolean flushIsQueued = false;
+    public static final @NotNull Map<SimpleChunkLocation, Collection<SimpleLocation>> cache = new HashMap<>();
     // private final TerraformWorld tw;
 
     public PhysicsUpdaterPopulator() {
@@ -32,27 +30,27 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
     }
 
     public static void pushChange(String world, @NotNull SimpleLocation loc) {
+        synchronized (cache){
+            if (cache.size() > TConfig.c.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY) {
+                flushChanges();
+            }
 
-        if (!flushIsQueued && cache.size() > TConfig.c.DEVSTUFF_FLUSH_PATCHER_CACHE_FREQUENCY) {
-            flushIsQueued = true;
-            TerraformGeneratorPlugin.taskScheduler.execSyncRegion(
-                    Objects.requireNonNull(Bukkit.getWorld(world)),
-                    loc.getX()<<4, loc.getZ()<<4,
-                    () -> {
-                        flushChanges();
-                        flushIsQueued = false;
-                    });
+            SimpleChunkLocation scl = new SimpleChunkLocation(world, loc.getX(), loc.getY(), loc.getZ());
+            if (!cache.containsKey(scl)) {
+                cache.put(scl, new ArrayList<>());
+            }
+
+            cache.get(scl).add(loc);
         }
-
-        SimpleChunkLocation scl = new SimpleChunkLocation(world, loc.getX(), loc.getY(), loc.getZ());
-        if (!cache.containsKey(scl)) {
-            cache.put(scl, new ArrayList<>());
-        }
-
-        cache.get(scl).add(loc);
     }
 
-    public static void flushChanges() {
+    public static void syncAndFlush(){
+        synchronized (cache){
+            flushChanges();
+        }
+    }
+    private static void flushChanges() {
+
         if (cache.isEmpty()) {
             return;
         }
@@ -65,23 +63,21 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
             if (w == null) {
                 continue;
             }
-            if (w.isChunkLoaded(scl.getX(), scl.getZ())) {
-                Collection<SimpleLocation> changes = cache.remove(scl);
-                if (changes != null) {
-                    for (SimpleLocation entry : changes) {
-                        Block target = w.getBlockAt(entry.getX(), entry.getY(), entry.getZ());
-                        // Set block physics by calling setBlockData
-                        // Note that this should not be used for complex blocks.
-                        BlockData old = target.getBlockData();
-                        TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] " + target.getLocation());
-                        target.setType(Material.AIR);
-                        target.setBlockData(old, true);
-                    }
-                }
-            }
-            else {
-                // Let the event handler do it
-                w.loadChunk(scl.getX(), scl.getZ());
+            Collection<SimpleLocation> changes = cache.remove(scl);
+            if (changes != null) {
+                TerraformGeneratorPlugin.taskScheduler.execAsyncRegion(w,
+                    scl.getX(), scl.getZ(),
+                    ()-> {
+                        for (SimpleLocation entry : changes) {
+                            Block target = w.getBlockAt(entry.getX(), entry.getY(), entry.getZ());
+                            // Set block physics by calling setBlockData
+                            // Note that this should not be used for complex blocks.
+                            BlockData old = target.getBlockData();
+                            //TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] " + target.getLocation());
+                            target.setType(Material.AIR);
+                            target.setBlockData(old, true);
+                        }
+                    });
             }
         }
     }
@@ -89,7 +85,12 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
     @Override
     public void populate(@NotNull World world, @NotNull Random random, @NotNull Chunk chunk) {
         SimpleChunkLocation scl = new SimpleChunkLocation(chunk);
-        Collection<SimpleLocation> changes = cache.remove(scl);
+        Collection<SimpleLocation> changes;
+
+        synchronized (cache){
+            changes = cache.remove(scl);
+        }
+
         if (changes != null) {
             // TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Detected anomalous generation by NMS on " + scl + ". Running repairs on " + changes.size() + " blocks");
             for (SimpleLocation entry : changes) {
@@ -111,32 +112,34 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
                                              + " ("
                                              + cache.size()
                                              + " chunks in cache)");
+        synchronized (cache){
+            int processed = 0;
+            for (SimpleChunkLocation scl : Set.copyOf(cache.keySet())) {
+                if (!scl.getWorld().equals(event.getWorld().getName())) {
+                    continue;
+                }
+                Collection<SimpleLocation> changes = cache.remove(scl);
+                if (changes != null) {
+                    // TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Detected anomalous generation by NMS on " + scl + ". Running repairs on " + changes.size() + " blocks");
+                    for (SimpleLocation entry : changes) {
+                        Block target = event.getWorld().getBlockAt(entry.getX(), entry.getY(), entry.getZ());
+                        // Set block physics by calling setBlockData
+                        // Note that this should not be used for complex blocks.
+                        BlockData old = target.getBlockData();
+                        target.setType(Material.AIR);
+                        target.setBlockData(old, true);
+                    }
+                }
 
-        int processed = 0;
-        for (SimpleChunkLocation scl : Set.copyOf(cache.keySet())) {
-            if (!scl.getWorld().equals(event.getWorld().getName())) {
-                continue;
-            }
-            Collection<SimpleLocation> changes = cache.remove(scl);
-            if (changes != null) {
-                // TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Detected anomalous generation by NMS on " + scl + ". Running repairs on " + changes.size() + " blocks");
-                for (SimpleLocation entry : changes) {
-                    Block target = event.getWorld().getBlockAt(entry.getX(), entry.getY(), entry.getZ());
-                    // Set block physics by calling setBlockData
-                    // Note that this should not be used for complex blocks.
-                    BlockData old = target.getBlockData();
-                    target.setType(Material.AIR);
-                    target.setBlockData(old, true);
+                processed++;
+                if (processed % 20 == 0) {
+                    TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Processed "
+                                                         + processed
+                                                         + " more chunks");
                 }
             }
-
-            processed++;
-            if (processed % 20 == 0) {
-                TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Processed "
-                                                     + processed
-                                                     + " more chunks");
-            }
         }
+
     }
 
 }

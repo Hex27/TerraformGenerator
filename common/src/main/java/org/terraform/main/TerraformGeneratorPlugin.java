@@ -17,7 +17,7 @@ import org.terraform.coregen.NMSInjectorAbstract;
 import org.terraform.coregen.TerraformPopulator;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.folia.AbstractScheduler;
-import org.terraform.coregen.folia.BukkitScheduler;
+import org.terraform.coregen.folia.SpigotScheduler;
 import org.terraform.coregen.folia.FoliaScheduler;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.data.SimpleChunkLocation;
@@ -82,14 +82,14 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         super.onEnable();
         instance = this;
-        taskScheduler = isFolia() ? new FoliaScheduler() : new BukkitScheduler();
+        taskScheduler = isPaperOrFolia() ? new FoliaScheduler() : new SpigotScheduler();
 
         try {
             TConfig.init(new File(getDataFolder(), "config.yml"));
         }
         catch (IOException e) {
             getLogger().severe("Failed to load config.yml: " + e.getMessage());
-            getPluginLoader().disablePlugin(this);
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
@@ -144,8 +144,7 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         new TerraformCommandManager(this, "terraform", "terra");
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new SchematicListener(), this);
-        String version = Version.VERSION.getPackName();
-        logger.stdout("Detected version: " + version + ", packName: " + Version.VERSION.getPackName());
+        logger.stdout("Detected version: " + Version.VERSION_STRING + ", plugin will use Version."+ Version.VERSION + ", packName: " + Version.VERSION.getPackName());
         try {
             injector = Version.getInjector();
             if (injector != null) {
@@ -257,9 +256,9 @@ public class TerraformGeneratorPlugin extends JavaPlugin implements Listener {
         return lang;
     }
 
-    private static boolean isFolia() {
+    private static boolean isPaperOrFolia() {
         try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            Class.forName("io.papermc.paper.world.MoonPhase");
             return true;
         } catch (ClassNotFoundException e) {
             return false;
