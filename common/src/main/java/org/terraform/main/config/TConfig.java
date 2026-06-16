@@ -151,6 +151,7 @@ public class TConfig extends YamlFileInterface {
     public float BIOME_DEEP_OCEANIC_THRESHOLD = 27f;
     @YamlKey("biome.dithering")
     public double BIOME_DITHER = 0.04d;
+    @YamlComment("Controls the size of each biome. Changing this also changes the distance between each structure. The default 7 means that each biome is 2^7=128 blocks wide.")
     @YamlKey("biome.biomesection-bitshifts")
     public int BIOME_SECTION_BITSHIFTS = 7;
     @YamlKey("biome.clay-deposit-radius")
@@ -385,9 +386,14 @@ public class TConfig extends YamlFileInterface {
     // -=[CAVES]=-
     @YamlKey("caves.allow-flooded-caves")
     public boolean CAVES_ALLOW_FLOODED_CAVES = false;
+
+    @YamlComment("Bounded from 0.0 to 1.0. At 1.0, caves are completely blocked at a 200 block radius around each structure. Otherwise, caves gradually shrink towards large structures (even if they're on land). Does not apply to Strongholds.")
+    @YamlKey("caves.structure-suppression-threshold")
+    public float CAVES_STRUCTURE_SUPPRESSION_THRESHOLD = 0.5f;
     // CAVES_ALLOW_FLOODED_RAVINES("caves.allow-flooded-ravines",true),
 
     // -=[STRUCTURES]=-
+    @YamlComment("This controls the distance between each large structure. By default, each biome section is 128 blocks wide")
     @YamlKey("structures.technical.megachunk.numbiomesections")
     public int STRUCTURES_MEGACHUNK_NUMBIOMESECTIONS = 4;
     @YamlKey("structures.technical.megachunk.max-structures-per-megachunk")
