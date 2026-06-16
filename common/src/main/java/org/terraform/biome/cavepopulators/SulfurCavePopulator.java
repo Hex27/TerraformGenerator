@@ -70,7 +70,7 @@ public class SulfurCavePopulator extends AbstractCaveClusterPopulator {
         if (blockIdx == 0 //Only when base block is sulfur
             && GenUtils.chance(random, 1, 7)) {
             int h = Math.clamp(caveHeight / 4,1,4);
-            BlockUtils.downLPointedDripstone(GenUtils.randInt(1, h), ceil.getDown());
+            V_26_2.downLPointedSulfurSpike(GenUtils.randInt(1, h), ceil.getDown());
         }
 
         // =========================
@@ -84,7 +84,7 @@ public class SulfurCavePopulator extends AbstractCaveClusterPopulator {
         if (blockIdx == 0 //Only when base block is sulfur
             && GenUtils.chance(random, 1, 7)) {
             int h = Math.clamp(caveHeight / 4,1,4);
-            BlockUtils.upLPointedDripstone(GenUtils.randInt(1, h), floor.getUp());
+            V_26_2.upLPointedSulfurSpike(GenUtils.randInt(1, h), floor.getUp());
         }else if(!boundary)
             bfsWaterPool(floor); //sulfur pools
 
@@ -119,8 +119,13 @@ public class SulfurCavePopulator extends AbstractCaveClusterPopulator {
         // =========================
         // Surface vents
         // =========================
-        if (GenUtils.chance(tw.getHashedRand(ceil.getX(),ceil.getY(),ceil.getZ()),
-                1, 500)) {
+        //Resort to spawning 1 spring per cave, as there's a race condition
+        // for spawning springs in adjacent chunks.
+        if (floor.getX() == center.getX()
+                && floor.getZ() == center.getZ()
+                //&& GenUtils.chance(tw.getHashedRand(ceil.getX(),ceil.getY(),ceil.getZ()),
+                //1, 500)
+        ) {
             SimpleBlock base = ceil.getGround();
             if ( !BlockUtils.isWet(base.getUp())) {
                 spawnSurfaceSpring(tw.getRand(base.hashCode()), base);
@@ -170,7 +175,10 @@ public class SulfurCavePopulator extends AbstractCaveClusterPopulator {
 
                 if(candidate.getDown().isSolid()) {
                     toSetWater.add(candidate);
-                    candidate.getDown().setType(V_26_2.SULFUR,V_26_2.SULFUR,V_26_2.SULFUR,V_26_2.SULFUR,V_26_2.POTENT_SULFUR);
+                    if(GenUtils.chance(1,5))
+                        candidate.getDown().setBlockData(V_26_2.WET_POTENT_SULFUR);
+                    else
+                        candidate.getDown().setType(V_26_2.SULFUR);
                 }
             }
         }
@@ -216,7 +224,10 @@ public class SulfurCavePopulator extends AbstractCaveClusterPopulator {
                         //clear 2 additional blocks up to get rid of stuff like flowers
                         cons.getAtY(waterY+waterDepth).Pillar(2+cons.getY()-waterY, Material.AIR);
                         cons.getAtY(waterY+1).Pillar(waterDepth, Material.WATER);
-                        cons.getAtY(waterY).setType(V_26_2.SULFUR,V_26_2.SULFUR,V_26_2.SULFUR,V_26_2.SULFUR,V_26_2.POTENT_SULFUR);
+                        if(GenUtils.chance(1,5))
+                            cons.getAtY(waterY).getDown().setBlockData(V_26_2.WET_POTENT_SULFUR);
+                        else
+                            cons.getAtY(waterY).getDown().setType(V_26_2.SULFUR);
 
                     }
                     else if(dsqr <= 18)
@@ -224,7 +235,7 @@ public class SulfurCavePopulator extends AbstractCaveClusterPopulator {
                         int height = cons.getY()-waterY+1+waterDepth+rand.nextInt(3);
                         cons.getAtY(waterY).Pillar(height, V_26_2.SULFUR);
                         if(rand.nextBoolean())
-                            BlockUtils.upLPointedDripstone(1, cons.getAtY(waterY+height));
+                            V_26_2.upLPointedSulfurSpike(1, cons.getAtY(waterY+height));
                     }
                     else if(dsqr <= 20)
                         cons.getDown(cons.getY()-waterY).Pillar(cons.getY()-waterY+1+waterDepth+rand.nextInt(2), V_26_2.SULFUR);

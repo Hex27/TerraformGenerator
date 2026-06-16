@@ -21,10 +21,7 @@ import org.terraform.utils.blockdata.StairBuilder;
 import org.terraform.utils.blockdata.fixers.v1_16_R1_BlockDataFixer;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.FastNoise.NoiseType;
-import org.terraform.utils.version.V_1_19;
-import org.terraform.utils.version.V_1_20;
-import org.terraform.utils.version.V_1_21_5;
-import org.terraform.utils.version.Version;
+import org.terraform.utils.version.*;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -388,6 +385,13 @@ public class BlockUtils {
             caveDecoratorMaterials.add(V_1_19.SCULK_SHRIEKER);
             caveDecoratorMaterials.add(V_1_19.SCULK_VEIN);
             caveDecoratorMaterials.add(V_1_19.SCULK_CATALYST);
+        }
+        if(Version.VERSION.isAtLeast(Version.v26_2)){
+            stoneLike.add(V_26_2.SULFUR);
+            stoneLike.add(V_26_2.POTENT_SULFUR);
+            stoneLike.add(V_26_2.CINNABAR);
+            caveDecoratorMaterials.add(V_26_2.SULFUR_SPIKE);
+
         }
         badlandsStoneLike.addAll(stoneLike);
         caveCarveReplace.addAll(badlandsStoneLike);
