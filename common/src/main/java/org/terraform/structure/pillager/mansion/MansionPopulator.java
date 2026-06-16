@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.CoordPair;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
@@ -57,8 +58,8 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
 
 
         // If it is below sea level, DON'T SPAWN IT.
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
-        int y = GenUtils.getHighestGround(data, coords[0], coords[1]);
+        CoordPair coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int y = GenUtils.getHighestGround(data, coords.x(), coords.z());
         if (y < TerraformGenerator.seaLevel) {
             y = TerraformGenerator.seaLevel;
         }
@@ -68,9 +69,9 @@ public class MansionPopulator extends SingleMegaChunkStructurePopulator {
                 TConfig.c.STRUCTURES_MANSION_SIZE,
                 TConfig.c.STRUCTURES_MANSION_SIZE,
                 data,
-                coords[0],
+                coords.x(),
                 y,
-                coords[1]
+                coords.z()
         );
         builder.generate(new Random());
         builder.build(new Random());

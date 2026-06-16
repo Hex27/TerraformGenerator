@@ -5,10 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleChunkLocation;
-import org.terraform.data.SimpleLocation;
-import org.terraform.data.TerraformWorld;
+import org.terraform.data.*;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.structure.JigsawState;
@@ -40,10 +37,10 @@ public class LargeCavePopulator extends JigsawStructurePopulator {
     public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc) {
         JigsawState state = new JigsawState();
 
-        int[] spawnCoords = mc.getCenterBiomeSectionBlockCoords();
+        CoordPair spawnCoords = mc.getCenterBiomeSectionBlockCoords();
 
-        int x = spawnCoords[0];
-        int z = spawnCoords[1];
+        int x = spawnCoords.x();
+        int z = spawnCoords.z();
         Random rand = tw.getHashedRand(x, z, 79810139);
 
         FastNoise noise = NoiseCacheHandler.getNoise(tw,

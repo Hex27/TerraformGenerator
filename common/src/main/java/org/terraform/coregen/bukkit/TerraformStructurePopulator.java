@@ -12,10 +12,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleBlock;
-import org.terraform.data.TerraformWorld;
-import org.terraform.data.Wall;
+import org.terraform.data.*;
 import org.terraform.event.TerraformStructureSpawnEvent;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
@@ -163,10 +160,10 @@ public class TerraformStructurePopulator extends BlockPopulator {
         }
 
         // Only check singlemegachunkstructures if this chunk is a central chunk.
-        int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
+        CoordPair chunkCoords = mc.getCenterBiomeSectionChunkCoords();
         // TerraformGeneratorPlugin.logger.info("[v] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
-        if (chunkCoords[0] == data.getChunkX() && chunkCoords[1] == data.getChunkZ()) {
-            int[] blockCoords = mc.getCenterBiomeSectionBlockCoords();
+        if (chunkCoords.x() == data.getChunkX() && chunkCoords.z() == data.getChunkZ()) {
+            CoordPair blockCoords = mc.getCenterBiomeSectionBlockCoords();
 
             // TerraformGeneratorPlugin.logger.info("[!] MC(" + mc.getX() + "," + mc.getZ() + ") - " + data.getChunkX() + "," + data.getChunkZ() + " - Center: " + chunkCoords[0] + "," + chunkCoords[1]);
             for (SingleMegaChunkStructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
@@ -193,8 +190,8 @@ public class TerraformStructurePopulator extends BlockPopulator {
                                                          + ","
                                                          + data.getChunkZ());
                     Bukkit.getPluginManager()
-                          .callEvent(new TerraformStructureSpawnEvent(blockCoords[0],
-                                  blockCoords[1],
+                          .callEvent(new TerraformStructureSpawnEvent(blockCoords.x(),
+                                  blockCoords.z(),
                                   spop.getClass().getName()
                           ));
                     spop.populate(tw, data);
@@ -208,7 +205,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
                                                                              @NotNull TerraformWorld tw,
                                                                              BiomeBank biome)
     {
-        int[] chunkCoords = mc.getCenterBiomeSectionChunkCoords();
+        CoordPair chunkCoords = mc.getCenterBiomeSectionChunkCoords();
         for (SingleMegaChunkStructurePopulator spop : StructureRegistry.getLargeStructureForMegaChunk(tw, mc)) {
             if (spop == null) {
                 continue;
@@ -220,7 +217,7 @@ public class TerraformStructurePopulator extends BlockPopulator {
                 continue;
             }
             // TerraformGeneratorPlugin.logger.info("[v]       MC(" + mc.getX() + "," + mc.getZ() + ") - Checking " + spop.getClass().getName());
-            if (TConfig.areStructuresEnabled() && spop.canSpawn(tw, chunkCoords[0], chunkCoords[1], biome)) {
+            if (TConfig.areStructuresEnabled() && spop.canSpawn(tw, chunkCoords.x(), chunkCoords.z(), biome)) {
                 return spop;
             }
         }

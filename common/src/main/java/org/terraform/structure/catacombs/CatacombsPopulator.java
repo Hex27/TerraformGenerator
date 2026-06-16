@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
+import org.terraform.data.CoordPair;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
@@ -29,7 +30,7 @@ public class CatacombsPopulator extends JigsawStructurePopulator {
         }
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBiomeSectionBlockCoords();
+        CoordPair coords = mc.getCenterBiomeSectionBlockCoords();
 
         // Do not spawn catacombs under deep oceans, there's no space.
         if (biome.getType() == BiomeType.DEEP_OCEANIC) {
@@ -54,7 +55,7 @@ public class CatacombsPopulator extends JigsawStructurePopulator {
         }
 
         // Do height and space checks
-        int height = HeightMap.getBlockHeight(tw, coords[0], coords[1]);
+        int height = HeightMap.getBlockHeight(tw, coords.x(), coords.z());
         if (height < TConfig.c.STRUCTURES_CATACOMBS_MAX_Y + 15) {
             // Way too little space. Abort generation.
             return false;
@@ -75,9 +76,9 @@ public class CatacombsPopulator extends JigsawStructurePopulator {
 
         JigsawState state = new JigsawState();
 
-        int[] coords = mc.getCenterBiomeSectionBlockCoords();
-        int x = coords[0];
-        int z = coords[1];
+        CoordPair coords = mc.getCenterBiomeSectionBlockCoords();
+        int x = coords.x();
+        int z = coords.z();
         int minY = TConfig.c.STRUCTURES_CATACOMBS_MIN_Y;
         int y = GenUtils.randInt(minY, TConfig.c.STRUCTURES_CATACOMBS_MAX_Y);
         int numRooms = 10;

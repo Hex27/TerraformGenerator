@@ -6,6 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.CoordPair;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;
@@ -24,9 +25,9 @@ public class MountainhousePopulator extends VillageHousePopulator {
     @Override
     public void populate(@NotNull TerraformWorld tw, @NotNull PopulatorDataAbstract data) {
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
+        CoordPair coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords.x();// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords.z();// data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
 
         // Forcefully sink the house downwards to try and make it more tolerant to wackiness

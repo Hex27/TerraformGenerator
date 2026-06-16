@@ -13,6 +13,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.TerraLootTable;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.CoordPair;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -92,11 +93,11 @@ public class BadlandsMinePopulator extends JigsawStructurePopulator {
 
         // Find a suitable spawn direction
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] spawnCoords = mc.getCenterBiomeSectionBlockCoords();
+        CoordPair spawnCoords = mc.getCenterBiomeSectionBlockCoords();
 
         // This is in the middle of a plateau.
         // This must extend out until the entrance is found.
-        SimpleBlock spawnSpot = new SimpleBlock(data, spawnCoords[0], 0, spawnCoords[1]).getGround();
+        SimpleBlock spawnSpot = new SimpleBlock(data, spawnCoords.x(), 0, spawnCoords.z()).getGround();
 
         // The plateau (by right,) should generate as a distorted circle.
         // As such, the direction can be random.

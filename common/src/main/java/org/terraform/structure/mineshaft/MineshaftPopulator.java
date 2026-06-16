@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
 import org.terraform.coregen.HeightMap;
+import org.terraform.data.CoordPair;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -66,9 +67,9 @@ public class MineshaftPopulator extends JigsawStructurePopulator {
     {
         JigsawState state = new JigsawState();
 
-        int[] coords = mc.getCenterBiomeSectionBlockCoords();
-        int x = coords[0];
-        int z = coords[1];
+        CoordPair coords = mc.getCenterBiomeSectionBlockCoords();
+        int x = coords.x();
+        int z = coords.z();
 
         int y;
         if (!badlandsMineshaft) {

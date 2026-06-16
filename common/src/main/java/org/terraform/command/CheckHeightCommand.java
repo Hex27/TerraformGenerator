@@ -80,9 +80,9 @@ public class CheckHeightCommand extends TerraCommand {
         p.sendMessage("Mega Chunk: " + mc.getX() + "," + mc.getZ());
         p.sendMessage("Mega Chunk Center: " + mc.getCenterBlockCoords()[0] + "," + mc.getCenterBlockCoords()[1]);
         p.sendMessage("Mega Chunk BiomeSection Center: "
-                      + mc.getCenterBiomeSectionBlockCoords()[0]
+                      + mc.getCenterBiomeSectionBlockCoords().x()
                       + ","
-                      + mc.getCenterBiomeSectionBlockCoords()[1]);
+                      + mc.getCenterBiomeSectionBlockCoords().z());
 
         p.sendMessage("Biome Section: " + section);
         p.sendMessage("Biome Section Climate: " + section.getClimate());

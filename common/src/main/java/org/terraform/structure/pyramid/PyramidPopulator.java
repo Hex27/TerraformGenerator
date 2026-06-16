@@ -9,10 +9,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleBlock;
-import org.terraform.data.TerraformWorld;
-import org.terraform.data.Wall;
+import org.terraform.data.*;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.structure.SingleMegaChunkStructurePopulator;
@@ -59,9 +56,9 @@ public class PyramidPopulator extends SingleMegaChunkStructurePopulator {
             return;
         }
 
-        int[] coords = new MegaChunk(data.getChunkX(), data.getChunkZ()).getCenterBiomeSectionBlockCoords();
-        int x = coords[0];
-        int z = coords[1];
+        CoordPair coords = new MegaChunk(data.getChunkX(), data.getChunkZ()).getCenterBiomeSectionBlockCoords();
+        int x = coords.x();
+        int z = coords.z();
 
         int y = HeightMap.getBlockHeight(tw, x, z);// GenUtils.getHighestGround(data, x, z);
         try {

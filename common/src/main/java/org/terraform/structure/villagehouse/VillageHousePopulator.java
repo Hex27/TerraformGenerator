@@ -5,6 +5,7 @@ import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.HeightMap;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
+import org.terraform.data.CoordPair;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
@@ -38,15 +39,15 @@ public class VillageHousePopulator extends SingleMegaChunkStructurePopulator {
         }
 
         MegaChunk mc = new MegaChunk(chunkX, chunkZ);
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
-        if (coords[0] >> 4 == chunkX && coords[1] >> 4 == chunkZ) {
+        CoordPair coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        if (coords.x() >> 4 == chunkX && coords.z() >> 4 == chunkZ) {
 
             if (!biome.isDry()) {
                 return false;
             }
 
             // If it is below sea level, DON'T SPAWN IT.
-            if (HeightMap.getBlockHeight(tw, coords[0], coords[1]) > TerraformGenerator.seaLevel) {
+            if (HeightMap.getBlockHeight(tw, coords.x(), coords.z()) > TerraformGenerator.seaLevel) {
                 if (biome == (BiomeBank.DESERT) || biome == (BiomeBank.BADLANDS) || biome == (BiomeBank.ICE_SPIKES)) {
                     return TConfig.c.STRUCTURES_ANIMALFARM_ENABLED && rollSpawnRatio(tw,
                             chunkX,

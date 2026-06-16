@@ -3,10 +3,7 @@ package org.terraform.structure.ancientcity;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.BiomeType;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleChunkLocation;
-import org.terraform.data.SimpleLocation;
-import org.terraform.data.TerraformWorld;
+import org.terraform.data.*;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.structure.EmptyPathWriter;
@@ -57,9 +54,9 @@ public class AncientCityPopulator extends JigsawStructurePopulator {
     public @NotNull JigsawState calculateRoomPopulators(@NotNull TerraformWorld tw, @NotNull MegaChunk mc)
     {
         JigsawState state = new JigsawState();
-        int[] coords = mc.getCenterBiomeSectionBlockCoords();
-        int x = coords[0];
-        int z = coords[1];
+        CoordPair coords = mc.getCenterBiomeSectionBlockCoords();
+        int x = coords.x();
+        int z = coords.z();
         int minY = TConfig.c.STRUCTURES_ANCIENTCITY_MIN_Y;
         int y = GenUtils.randInt(minY, TConfig.c.STRUCTURES_ANCIENTCITY_MAX_Y);
         Random random = tw.getHashedRand(x, y, z, 23412222);

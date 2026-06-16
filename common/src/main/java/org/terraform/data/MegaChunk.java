@@ -96,7 +96,7 @@ public class MegaChunk {
     /**
      * Used for structure spawning. They need the center of biome sections.
      */
-    public int[] getCenterBiomeSectionBlockCoords() {
+    public CoordPair getCenterBiomeSectionBlockCoords() {
 
         int lowX = getCenterBlockCoords()[0];
         int lowZ = getCenterBlockCoords()[1];
@@ -108,13 +108,13 @@ public class MegaChunk {
         int centerOfSectionZ = (sectionZ << BiomeSection.bitshifts) + BiomeSection.sectionWidth / 2;
 
         // TerraformGeneratorPlugin.logger.info("MC(" + this.x + "," + this.z + "):(" + (lowX + megaChunkBlockWidth/2) + "," + (lowZ + megaChunkBlockWidth/2) + ")");
-        return new int[] {centerOfSectionX, centerOfSectionZ};
+        return new CoordPair(centerOfSectionX, centerOfSectionZ);
     }
 
-    public int[] getCenterBiomeSectionChunkCoords() {
-        int[] coords = getCenterBiomeSectionBlockCoords();
+    public CoordPair getCenterBiomeSectionChunkCoords() {
+        CoordPair coords = getCenterBiomeSectionBlockCoords();
 
-        return new int[] {coords[0] >> 4, coords[1] >> 4};
+        return coords.chunkify();
     }
 
     public int[] getUpperCornerBlockCoords() {
@@ -150,8 +150,8 @@ public class MegaChunk {
     }
 
     public @NotNull BiomeSection getCenterBiomeSection(TerraformWorld tw) {
-        int[] coords = getCenterBiomeSectionBlockCoords();
-        return BiomeBank.getBiomeSectionFromBlockCoords(tw, coords[0], coords[1]);
+        CoordPair coords = getCenterBiomeSectionBlockCoords();
+        return BiomeBank.getBiomeSectionFromBlockCoords(tw, coords.x(), coords.z());
     }
 
     public boolean containsXZBlockCoords(int x, int z) {

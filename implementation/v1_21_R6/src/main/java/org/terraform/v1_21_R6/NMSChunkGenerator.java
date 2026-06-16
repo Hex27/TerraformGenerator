@@ -32,6 +32,7 @@ import net.minecraft.world.level.levelgen.structure.structures.WoodlandMansionSt
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
+import org.terraform.data.CoordPair;
 import org.terraform.data.MegaChunk;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
@@ -361,7 +362,7 @@ public class NMSChunkGenerator extends ChunkGenerator {
         RandomState randomstate = chunkgeneratorstructurestate.randomState(); // randomState
         MegaChunk mc = new MegaChunk(ChunkPos.x, ChunkPos.z);
         SingleMegaChunkStructurePopulator[] spops = StructureRegistry.getLargeStructureForMegaChunk(tw, mc);
-        int[] centerCoords = mc.getCenterBiomeSectionChunkCoords();
+        CoordPair centerCoords = mc.getCenterBiomeSectionChunkCoords();
         if(spops == null) return;
         for(SingleMegaChunkStructurePopulator pop:spops)
         {
@@ -378,8 +379,8 @@ public class NMSChunkGenerator extends ChunkGenerator {
                 List<StructureSet.StructureSelectionEntry> list = structureSet.structures(); // structures()
 
                 // This will be true depending on the structure manager
-                if (centerCoords[0] == ChunkPos.x
-                        && centerCoords[1] == ChunkPos.z) {
+                if (centerCoords.x() == ChunkPos.x
+                        && centerCoords.z() == ChunkPos.z) {
 
                     // d() -> getLevelSeed()
                     try{

@@ -12,10 +12,7 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
-import org.terraform.data.MegaChunk;
-import org.terraform.data.SimpleBlock;
-import org.terraform.data.TerraformWorld;
-import org.terraform.data.Wall;
+import org.terraform.data.*;
 import org.terraform.main.TerraformGeneratorPlugin;
 import org.terraform.main.config.TConfig;
 import org.terraform.schematic.TerraSchematic;
@@ -38,9 +35,9 @@ public class FarmhousePopulator extends VillageHousePopulator {
         }
 
         MegaChunk mc = new MegaChunk(data.getChunkX(), data.getChunkZ());
-        int[] coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
-        int x = coords[0];// data.getChunkX()*16 + random.nextInt(16);
-        int z = coords[1];// data.getChunkZ()*16 + random.nextInt(16);
+        CoordPair coords = mc.getCenterBiomeSectionBlockCoords(); // getCoordsFromMegaChunk(tw, mc);
+        int x = coords.x();// data.getChunkX()*16 + random.nextInt(16);
+        int z = coords.z();// data.getChunkZ()*16 + random.nextInt(16);
         int height = GenUtils.getHighestGround(data, x, z);
         spawnFarmHouse(tw, this.getHashedRandom(tw, data.getChunkX(), data.getChunkZ()), data, x, height + 1, z);
     }
