@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
 import org.terraform.biome.cavepopulators.cluster.AbstractCaveClusterPopulator;
 import org.terraform.biome.cavepopulators.cluster.CaveClusterRegistry;
+import org.terraform.biome.cavepopulators.noisecluster.AbstractNoiseClusterPopulator;
+import org.terraform.biome.cavepopulators.noisecluster.CaveNoiseClusterRegistry;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -24,9 +26,13 @@ import java.util.*;
  */
 public class MasterCavePopulatorDistributor {
 
+    private ThreadLocal<Collection<AbstractNoiseClusterPopulator>> noiseClusterPopulators = ThreadLocal.withInitial(
+            CaveNoiseClusterRegistry::initiateNoiseClusterPopulators
+    );
     private static final HashSet<Class<?>> populatedBefore = new HashSet<>();
 
     public void populate(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, boolean generateClusters) {
+
         HashMap<CoordPair, CaveClusterRegistry> clusters = generateClusters ?
                                                            calculateClusterLocations(
                 random,
@@ -70,7 +76,7 @@ public class MasterCavePopulatorDistributor {
                         continue;
                     }
 
-                    AbstractCavePopulator pop;
+                    AbstractCavePopulator pop = null;
 
                     /*
                      * Deep cave floors will use the deep cave populator.
@@ -86,10 +92,22 @@ public class MasterCavePopulatorDistributor {
                          * will populate the surrounding surfaces in a fuzzy
                          * radius.
                          */
-                        // If there is no cluster to spawn, then revert to the
-                        // basic biome-based cave populator
-                        pop = (clusterPair == 0 && reg != null && TConfig.c.FEATURE_CAVECLUSTERS_ENABLED) ?
-                              reg.getPopulator(random) : bank.getCavePop();
+                        //Check if a cave cluster can spawn
+                        if((clusterPair == 0 && reg != null && TConfig.c.FEATURE_CAVECLUSTERS_ENABLED)){
+                            pop = reg.getPopulator(random);
+                        }
+                        else{ //If no cluster can spawn, try noise clusters
+                            for(var noiseCluster:noiseClusterPopulators.get()){
+                                if(noiseCluster.canSpawnCluster(tw,ceil.getX(),ceil.getY(),ceil.getZ())
+                                   || noiseCluster.canSpawnCluster(tw,floor.getX(),floor.getY(),floor.getZ())){
+                                    pop = noiseCluster;
+                                    break;
+                                }
+                            }
+                        }
+                        //If not, use biome caves
+                        if(pop == null) pop = bank.getCavePop();
+
                     }
                     clusterPair--;
 

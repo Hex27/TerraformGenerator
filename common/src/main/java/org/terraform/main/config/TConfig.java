@@ -131,14 +131,13 @@ public class TConfig extends YamlFileInterface {
     public int BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE = 5;
     @YamlKey("biome.cave.dripstone-cluster.maxsize")
     public int BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE = 11;
-    @YamlKey("biome.cave.sulfur-cluster.separation")
-    public int BIOME_CAVE_SULFURCLUSTER_SEPARATION = 128;
-    @YamlKey("biome.cave.sulfur-cluster.separation-maxpertub")
-    public double BIOME_CAVE_SULFURCLUSTER_MAXPERTUB = 0.35d;
-    @YamlKey("biome.cave.sulfur-cluster.minsize")
-    public int BIOME_CAVE_SULFURCLUSTER_MINSIZE = 14;
-    @YamlKey("biome.cave.sulfur-cluster.maxsize")
-    public int BIOME_CAVE_SULFURCLUSTER_MAXSIZE = 18;
+    @YamlKey("biome.cave.sulfur-cluster.threshold")
+    public float BIOME_CAVE_SULFUR_THRESHOLD = 0.8f;
+    @YamlKey("biome.cave.sulfur-cluster.frequency")
+    public float BIOME_CAVE_SULFUR_FREQUENCY = 0.0015f;
+    @YamlComment("Chance for a sulfur spring to spawn for each block. Bounded between 0 and 1")
+    @YamlKey("biome.cave.sulfur-cluster.spring-chance")
+    public double BIOME_CAVE_SULFUR_SPRING_CHANCE = 0.002f;
     @YamlKey("biome.cave.lush-cluster.separation")
     public int BIOME_CAVE_LUSHCLUSTER_SEPARATION = 64;
     @YamlKey("biome.cave.lush-cluster.separation-maxpertub")

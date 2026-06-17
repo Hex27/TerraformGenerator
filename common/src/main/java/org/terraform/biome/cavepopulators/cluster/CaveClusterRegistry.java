@@ -19,10 +19,10 @@ public enum CaveClusterRegistry {
             TConfig.c.BIOME_CAVE_CRYSTALLINECLUSTER_SEPARATION,
             (float)TConfig.c.BIOME_CAVE_CRYSTALLINECLUSTER_MAXPERTUB
     ),
-    SULFUR(8927342,
-            TConfig.c.BIOME_CAVE_SULFURCLUSTER_SEPARATION,
-            (float)TConfig.c.BIOME_CAVE_SULFURCLUSTER_MAXPERTUB
-    ),
+//    SULFUR(8927342,
+//            TConfig.c.BIOME_CAVE_SULFURCLUSTER_SEPARATION,
+//            (float)TConfig.c.BIOME_CAVE_SULFURCLUSTER_MAXPERTUB
+//    ),
     FLUID(79183628, 40, 0.2f),
     ;
 
@@ -42,10 +42,10 @@ public enum CaveClusterRegistry {
                     TConfig.c.BIOME_CAVE_LUSHCLUSTER_MINSIZE,
                     TConfig.c.BIOME_CAVE_LUSHCLUSTER_MAXSIZE
             ), false);
-            case SULFUR -> new SulfurClusterCavePopulator(GenUtils.randInt(random,
-                    TConfig.c.BIOME_CAVE_SULFURCLUSTER_MINSIZE,
-                    TConfig.c.BIOME_CAVE_SULFURCLUSTER_MAXSIZE
-            ));
+//            case SULFUR -> new SulfurClusterCavePopulator(GenUtils.randInt(random,
+//                    TConfig.c.BIOME_CAVE_SULFURCLUSTER_MINSIZE,
+//                    TConfig.c.BIOME_CAVE_SULFURCLUSTER_MAXSIZE
+//            ));
             case DRIPSTONE -> new DripstoneClusterCavePopulator(GenUtils.randInt(random,
                     TConfig.c.BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE,
                     TConfig.c.BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE
