@@ -1,8 +1,9 @@
-package org.terraform.biome.cavepopulators;
+package org.terraform.biome.cavepopulators.cluster;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
+import org.terraform.biome.cavepopulators.AbstractCavePopulator;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.data.Wall;

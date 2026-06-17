@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.type.SeaPickle;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.biome.cavepopulators.LushClusterCavePopulator;
+import org.terraform.biome.cavepopulators.cluster.LushClusterCavePopulator;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;

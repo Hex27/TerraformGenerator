@@ -1,4 +1,4 @@
-package org.terraform.biome.cavepopulators;
+package org.terraform.biome.cavepopulators.cluster;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -19,7 +19,7 @@ import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SulfurCavePopulator extends AbstractCaveClusterPopulator {
+public class SulfurClusterCavePopulator extends AbstractCaveClusterPopulator {
 
     private static final Material[] BLOCKS = new Material[]{
             V_26_2.SULFUR,
@@ -27,7 +27,7 @@ public class SulfurCavePopulator extends AbstractCaveClusterPopulator {
             V_26_2.CINNABAR
     };
 
-    public SulfurCavePopulator(float radius) {
+    public SulfurClusterCavePopulator(float radius) {
         super(radius);
     }
 

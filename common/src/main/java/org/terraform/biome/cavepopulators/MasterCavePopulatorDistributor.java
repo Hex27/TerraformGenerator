@@ -2,6 +2,8 @@ package org.terraform.biome.cavepopulators;
 
 import org.jetbrains.annotations.NotNull;
 import org.terraform.biome.BiomeBank;
+import org.terraform.biome.cavepopulators.cluster.AbstractCaveClusterPopulator;
+import org.terraform.biome.cavepopulators.cluster.CaveClusterRegistry;
 import org.terraform.coregen.ChunkCache;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
@@ -26,7 +28,7 @@ public class MasterCavePopulatorDistributor {
 
     public void populate(@NotNull TerraformWorld tw, @NotNull Random random, @NotNull PopulatorDataAbstract data, boolean generateClusters) {
         HashMap<CoordPair, CaveClusterRegistry> clusters = generateClusters ?
-           calculateClusterLocations(
+                                                           calculateClusterLocations(
                 random,
                 tw,
                 data.getChunkX(),

@@ -1,4 +1,4 @@
-package org.terraform.biome.cavepopulators;
+package org.terraform.biome.cavepopulators.cluster;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -18,7 +18,6 @@ import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.blockdata.BisectedBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
-import org.terraform.utils.version.Version;
 
 import java.util.Random;
 

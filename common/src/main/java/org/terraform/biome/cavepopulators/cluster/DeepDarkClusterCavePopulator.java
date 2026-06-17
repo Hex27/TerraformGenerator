@@ -1,4 +1,4 @@
-package org.terraform.biome.cavepopulators;
+package org.terraform.biome.cavepopulators.cluster;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

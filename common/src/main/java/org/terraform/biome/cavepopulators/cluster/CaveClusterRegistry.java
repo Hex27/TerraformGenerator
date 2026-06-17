@@ -1,4 +1,4 @@
-package org.terraform.biome.cavepopulators;
+package org.terraform.biome.cavepopulators.cluster;
 
 import org.jetbrains.annotations.NotNull;
 import org.terraform.main.config.TConfig;
@@ -42,7 +42,7 @@ public enum CaveClusterRegistry {
                     TConfig.c.BIOME_CAVE_LUSHCLUSTER_MINSIZE,
                     TConfig.c.BIOME_CAVE_LUSHCLUSTER_MAXSIZE
             ), false);
-            case SULFUR -> new SulfurCavePopulator(GenUtils.randInt(random,
+            case SULFUR -> new SulfurClusterCavePopulator(GenUtils.randInt(random,
                     TConfig.c.BIOME_CAVE_SULFURCLUSTER_MINSIZE,
                     TConfig.c.BIOME_CAVE_SULFURCLUSTER_MAXSIZE
             ));

@@ -1,4 +1,4 @@
-package org.terraform.biome.cavepopulators;
+package org.terraform.biome.cavepopulators.cluster;
 
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
