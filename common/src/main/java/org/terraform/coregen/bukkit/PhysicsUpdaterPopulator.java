@@ -112,33 +112,7 @@ public class PhysicsUpdaterPopulator extends BlockPopulator implements Listener 
                                              + " ("
                                              + cache.size()
                                              + " chunks in cache)");
-        synchronized (cache){
-            int processed = 0;
-            for (SimpleChunkLocation scl : Set.copyOf(cache.keySet())) {
-                if (!scl.getWorld().equals(event.getWorld().getName())) {
-                    continue;
-                }
-                Collection<SimpleLocation> changes = cache.remove(scl);
-                if (changes != null) {
-                    // TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Detected anomalous generation by NMS on " + scl + ". Running repairs on " + changes.size() + " blocks");
-                    for (SimpleLocation entry : changes) {
-                        Block target = event.getWorld().getBlockAt(entry.getX(), entry.getY(), entry.getZ());
-                        // Set block physics by calling setBlockData
-                        // Note that this should not be used for complex blocks.
-                        BlockData old = target.getBlockData();
-                        target.setType(Material.AIR);
-                        target.setBlockData(old, true);
-                    }
-                }
-
-                processed++;
-                if (processed % 20 == 0) {
-                    TerraformGeneratorPlugin.logger.info("[PhysicsUpdaterPopulator] Processed "
-                                                         + processed
-                                                         + " more chunks");
-                }
-            }
-        }
+        syncAndFlush();
 
     }
 

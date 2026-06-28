@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.data.TerraformWorld;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -17,7 +18,11 @@ public class NoiseCacheHandler {
     // set of storable things is bounded by this enum, there's
     // no reason to use a complex cache that frees things lazily - just store
     // everything and leave it there until the world is unloaded.
-    private static final ThreadLocal<HashMap<NoiseCacheKey, FastNoise>> NOISE_CACHE = ThreadLocal.withInitial(HashMap::new);
+    // This is a concurrent hash map instead of a hashmap because there are
+    // some weird instances where the hashmap instance is thrown around different
+    // threads after unpacking.
+    private static final ThreadLocal<ConcurrentHashMap<NoiseCacheKey, FastNoise>> NOISE_CACHE = ThreadLocal.withInitial(
+            ConcurrentHashMap::new);
     public static void flushNoiseCaches(TerraformWorld tw){
         for(NoiseCacheKey k:NOISE_CACHE.get().keySet()){
             if(k.tw.equals(tw)) NOISE_CACHE.get().remove(k);

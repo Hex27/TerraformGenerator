@@ -114,30 +114,7 @@ public class NativeGeneratorPatcherPopulator extends BlockPopulator implements L
                                              + " ("
                                              + cache.size()
                                              + " chunks in cache), triggered by world unload");
-        synchronized (cache){
-
-            int processed = 0;
-            for (SimpleChunkLocation scl : cache.keySet()) {
-                if (!scl.getWorld().equals(event.getWorld().getName())) {
-                    continue;
-                }
-                Collection<FlushCacheEntry> changes = cache.get(scl);
-                if (changes != null) {
-                    for (FlushCacheEntry entry : changes) {
-                        event.getWorld().getBlockAt(entry.x,entry.y,entry.z).setBlockData(entry.data, false);
-                    }
-                }
-
-                processed++;
-                if (processed % 20 == 0) {
-                    TerraformGeneratorPlugin.logger.info("[NativeGeneratorPatcher] Processed "
-                                                         + processed
-                                                         + "/"
-                                                         + cache.size()
-                                                         + " chunks");
-                }
-            }
-        }
+        syncAndFlush();
     }
 
     private record FlushCacheEntry(int x, int y, int z, BlockData data){
