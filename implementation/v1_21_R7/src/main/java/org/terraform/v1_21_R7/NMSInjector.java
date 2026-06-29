@@ -148,7 +148,7 @@ public class NMSInjector extends NMSInjectorAbstract {
             // BeehiveBlockEntity.storeBee
             // BeehiveBlockEntity.Occupant.create(1)
             // Copied from world\level\levelgen\feature\treedecorators\WorldGenFeatureTreeBeehive.java
-            teb.storeBee(BeehiveBlockEntity.Occupant.create(GenUtils.RANDOMIZER.nextInt(599)));
+            teb.storeBee(BeehiveBlockEntity.Occupant.create(GenUtils.positiveHashMod(hive.getX(), hive.getY(), hive.getZ(), 599)));
 
         }
         catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

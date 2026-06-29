@@ -57,7 +57,7 @@ public class ShaftTopPopulator extends RoomPopulatorAbstract {
 
                 // Clear a space
                 BlockUtils.carveCaveAir(
-                        new Random().nextInt(777123),
+                        GenUtils.positiveHashMod(target.getX(), room.getY(), target.getZ(), 777123),
                         3,
                         5,
                         3,
