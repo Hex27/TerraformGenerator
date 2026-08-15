@@ -1,6 +1,7 @@
 package org.terraform.coregen.populatordata;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.RegionAccessor;
@@ -92,6 +93,9 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
         if (!lr.isInRegion(rawX, rawY, rawZ)) {
             TerraformGeneratorPlugin.logger.error("Tried to add entity outside of LR bounds at: "+rawX + "," + rawZ + " from LR centered at chunk " + chunkX + "," + chunkZ);
             return;
+        }
+        if (tw.getWorld().getDifficulty() == Difficulty.PEACEFUL && isHostileMob(type)) {
+            return; // Do not spawn hostile mobs on peaceful servers
         }
         lr.spawnEntity(new Location(tw.getWorld(), rawX, rawY, rawZ), type);
     }

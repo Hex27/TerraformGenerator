@@ -1,5 +1,6 @@
 package org.terraform.structure.catacombs;
 
+import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.Bisected.Half;
@@ -130,7 +131,8 @@ public class CatacombsStandardPopulator extends RoomPopulatorAbstract {
             SimpleBlock target = new SimpleBlock(data, coords[0], room.getY() + 1, coords[2]);
             target = target.getAtY(room.getY() + 1);
 
-            if (data instanceof PopulatorDataSpigotAPI) {
+            if (data instanceof PopulatorDataSpigotAPI
+                && data.getTerraformWorld().getWorld().getDifficulty() != Difficulty.PEACEFUL) {
                 Skeleton e = (Skeleton) ((PopulatorDataSpigotAPI) data).lr
                         .spawnEntity(new Location(
                                         Objects.requireNonNull(data.getTerraformWorld()).getWorld(),

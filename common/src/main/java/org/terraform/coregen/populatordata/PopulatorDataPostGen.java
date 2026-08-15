@@ -1,6 +1,7 @@
 package org.terraform.coregen.populatordata;
 
 import org.bukkit.*;
+import org.bukkit.Difficulty;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -122,6 +123,9 @@ public class PopulatorDataPostGen extends PopulatorDataICABiomeWriterAbstract im
 
     @Override
     public void addEntity(int x, int y, int z, @NotNull EntityType type) {
+        if (w.getDifficulty() == Difficulty.PEACEFUL && isHostileMob(type)) {
+            return; // Do not spawn hostile mobs on peaceful servers
+        }
         // Always offset by 0.5 to prevent them spawning in corners.
         // Y is offset by a small bit to prevent falling through weird spawning areas
         Entity e = c.getWorld().spawnEntity(new Location(c.getWorld(), x + 0.5, y + 0.3, z + 0.5), type);

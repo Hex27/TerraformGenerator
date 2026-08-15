@@ -1,9 +1,11 @@
 package org.terraform.coregen.populatordata;
 
+import org.bukkit.Difficulty;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -101,6 +103,17 @@ public abstract class PopulatorDataAbstract {
     public abstract @Nullable Biome getBiome(int rawX, int rawZ);
 
     public abstract void addEntity(int rawX, int rawY, int rawZ, EntityType type);
+
+    /**
+     * Returns true if the given EntityType is a hostile monster that must not be
+     * spawned in Peaceful difficulty. Uses Bukkit's Monster interface, which covers
+     * Witch, Skeleton, Husk, Drowned, Guardian, Elder Guardian, Cave Spider,
+     * Spider, Silverfish, Vindicator, Evoker, Pillager, and all other hostiles.
+     */
+    public static boolean isHostileMob(@NotNull EntityType type) {
+        Class<?> cls = type.getEntityClass();
+        return cls != null && Monster.class.isAssignableFrom(cls);
+    }
 
     public abstract int getChunkX();
 
