@@ -1,4 +1,4 @@
-package org.terraform.biome.cavepopulators.cluster;
+package org.terraform.biome.cavepopulators.noisecluster;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -18,25 +18,48 @@ import org.terraform.utils.SphereBuilder;
 import org.terraform.utils.blockdata.BisectedBuilder;
 import org.terraform.utils.blockdata.DirectionalBuilder;
 import org.terraform.utils.blockdata.MultipleFacingBuilder;
+import org.terraform.utils.noise.FastNoise;
+import org.terraform.utils.noise.NoiseCacheHandler;
+import org.terraform.utils.version.V_26_2;
 
 import java.util.Random;
 
-public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
+public class LushNoiseClusterPopulator extends AbstractNoiseClusterPopulator{
 
-    private final boolean isForLargeCave;
+    private static final Material[] BLOCKS = new Material[]{
+            V_26_2.SULFUR,
+            Material.GRANITE, //Boundary block
+            V_26_2.CINNABAR
+    };
+    @Override
+    public boolean canSpawnCluster(TerraformWorld tw, int x, int y, int z) {
 
-    public LushClusterCavePopulator(float radius, boolean isForLargeCave) {
-        super(radius);
-        this.isForLargeCave = isForLargeCave;
+        FastNoise thresholdNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheHandler.NoiseCacheEntry.BIOME_CAVE_SULFUR_THRESNOISE, world -> {
+            FastNoise n = new FastNoise((int) (tw.getSeed() ^ 567413293));
+            n.SetNoiseType(FastNoise.NoiseType.Simplex);
+            n.SetFrequency(TConfig.c.BIOME_CAVE_LUSH_FREQUENCY);
+
+            return n;
+        });
+
+        return thresholdNoise.GetNoise(x,y,z) > TConfig.c.BIOME_CAVE_LUSH_THRESHOLD;
+    }
+    @Override
+    public void populate(@NotNull TerraformWorld tw,
+                        @NotNull Random random,
+                        @NotNull SimpleBlock ceil,
+                        @NotNull SimpleBlock floor)
+    {
+        oneUnit(tw, random, ceil, floor, false);
     }
 
-    @Override
-    public void oneUnit(@NotNull TerraformWorld tw,
+    public static void oneUnit(@NotNull TerraformWorld tw,
                         @NotNull Random random,
                         @NotNull SimpleBlock ceil,
                         @NotNull SimpleBlock floor,
-                        boolean boundary)
+                        boolean isForLargeCave)
     {
+
 
         // =========================
         // Upper decorations
@@ -106,6 +129,17 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
         // Lower decorations
         // =========================
 
+        // The lush caves place pools of water which wreck cache height calculations.
+        // This means floor especially must be re-corrected.
+        if (floor.isAir()
+            || floor.doAdjacentsMatchType(new BlockFace[]{
+                    BlockFace.SELF, BlockFace.EAST,
+                    BlockFace.NORTH, BlockFace.SOUTH,
+                    BlockFace.WEST, BlockFace.DOWN
+                }, Material.WATER)) {
+            return;
+        }
+
         // If floor is submerged, set it to clay, then don't touch it.
         if (BlockUtils.isWet(floor.getUp())) {
             if (!isForLargeCave) {
@@ -161,14 +195,26 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
                             random,
                             target,
                             Material.WATER
-                    ).setSphereType(SphereBuilder.SphereType.LOWER_SEMISPHERE)
-                     .setCointainmentMaterials(Material.CLAY)
-                     .setRX(3)
-                     .setRY(2)
-                     .setRZ(3)
-                     .setDoLiquidContainment(true)
-                     .setHardReplace(true)
-                     .build();
+                    )
+                            .setSphereType(SphereBuilder.SphereType.LOWER_SEMISPHERE)
+                            .setReplaceSolidsDuringLiquidContainment(true)
+                            .setContainmentMaterials(Material.CLAY)
+                            .setRX(4)
+                            .setRY(3)
+                            .setRZ(4)
+                            .setDoLiquidContainment(true)
+                            .setHardReplace(true)
+                            .build();
+                    new SphereBuilder(
+                            random,
+                            target.getUp(),
+                            Material.AIR)
+                            .setSphereType(SphereBuilder.SphereType.UPPER_SEMISPHERE)
+                            .setRX(4)
+                            .setRY(4)
+                            .setRZ(4)
+                            .addToWhitelist(BlockUtils.caveDecoratorMaterials)
+                            .build();
                 }
 
                 // Replace the walls with moss, and line with lichen
@@ -201,6 +247,5 @@ public class LushClusterCavePopulator extends AbstractCaveClusterPopulator {
             }
         }
     }
-
 
 }

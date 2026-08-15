@@ -131,21 +131,27 @@ public class TConfig extends YamlFileInterface {
     public int BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE = 5;
     @YamlKey("biome.cave.dripstone-cluster.maxsize")
     public int BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE = 11;
+
+    @YamlComment("Decrease the number to make lush caves smaller")
+    @YamlKey("biome.cave.lush-cluster.threshold")
+    public float BIOME_CAVE_LUSH_THRESHOLD = 0.85f;
+
+    @YamlComment("Decrease the number to make lush caves more spaced out AND bigger")
+    @YamlKey("biome.cave.lush-cluster.frequency")
+    public float BIOME_CAVE_LUSH_FREQUENCY = 0.0010f;
+
+    @YamlComment("Decrease the number to make sulfur caves smaller")
     @YamlKey("biome.cave.sulfur-cluster.threshold")
     public float BIOME_CAVE_SULFUR_THRESHOLD = 0.8f;
+
+    @YamlComment("Decrease the number to make sulfur caves more spaced out AND bigger")
     @YamlKey("biome.cave.sulfur-cluster.frequency")
     public float BIOME_CAVE_SULFUR_FREQUENCY = 0.0015f;
+
     @YamlComment("Chance for a sulfur spring to spawn for each block. Bounded between 0 and 1")
     @YamlKey("biome.cave.sulfur-cluster.spring-chance")
     public double BIOME_CAVE_SULFUR_SPRING_CHANCE = 0.002f;
-    @YamlKey("biome.cave.lush-cluster.separation")
-    public int BIOME_CAVE_LUSHCLUSTER_SEPARATION = 64;
-    @YamlKey("biome.cave.lush-cluster.separation-maxpertub")
-    public double BIOME_CAVE_LUSHCLUSTER_MAXPERTUB = 0.35d;
-    @YamlKey("biome.cave.lush-cluster.minsize")
-    public int BIOME_CAVE_LUSHCLUSTER_MINSIZE = 10;
-    @YamlKey("biome.cave.lush-cluster.maxsize")
-    public int BIOME_CAVE_LUSHCLUSTER_MAXSIZE = 15;
+
     @YamlKey("biome.deep-oceanic-threshold")
     public float BIOME_DEEP_OCEANIC_THRESHOLD = 27f;
     @YamlKey("biome.dithering")
@@ -382,6 +388,13 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("dev-stuff.vanilla-disable-locate")
     public boolean DEVSTUFF_VANILLA_LOCATE_DISABLE = false;
 
+    @YamlComment("DOES NOT CHANGE WORLD HEIGHT. This is a dev option for overriding height limits to work with height-changing datapacks.")
+    @YamlKey("dev-stuff.override-min-height")
+    public int DEVSTUFF_OVERRIDE_MINHEIGHT = -64;
+    @YamlComment("DOES NOT CHANGE WORLD HEIGHT. This is a dev option for overriding height limits to work with height-changing datapacks.")
+    @YamlKey("dev-stuff.override-max-height")
+    public int DEVSTUFF_OVERRIDE_MAXHEIGHT = 320;
+
     // -=[CAVES]=-
     @YamlKey("caves.allow-flooded-caves")
     public boolean CAVES_ALLOW_FLOODED_CAVES = false;
@@ -389,6 +402,14 @@ public class TConfig extends YamlFileInterface {
     @YamlComment("Bounded from 0.0 to 1.0. At 1.0, caves are completely blocked at a 200 block radius around each structure. Otherwise, caves gradually shrink towards large structures (even if they're on land). Does not apply to Strongholds.")
     @YamlKey("caves.structure-suppression-threshold")
     public float CAVES_STRUCTURE_SUPPRESSION_THRESHOLD = 0.5f;
+
+    @YamlComment("Controls the size of cave caverns underground. Make it even lower (more negative) to shrink caves and vice versa.")
+    @YamlKey("caves.noisecabves.cheesecave-threshold")
+    public float CAVES_NOISECAVES_CHEESECAVE_THRESHOLD = -0.3f;
+    @YamlComment("Controls the size of noise ravines. Make it even lower (more negative) to shrink noise ravines and vice versa.")
+    @YamlKey("caves.noisecabves.noiseravine-threshold")
+    public float CAVES_NOISECAVES_NOISERAVINE_THRESHOLD = -1.3f;
+
     // CAVES_ALLOW_FLOODED_RAVINES("caves.allow-flooded-ravines",true),
 
     // -=[STRUCTURES]=-

@@ -3,6 +3,7 @@ package org.terraform.cave;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.data.TerraformWorld;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.noise.FastNoise;
 import org.terraform.utils.noise.NoiseCacheHandler;
 
@@ -37,7 +38,7 @@ public class NoiseRavine extends NoiseCaveAbstract {
         // Multiply by a filter that varies with depth relative to height.
         // At depth 50 blocks, force to 0
         ravine *= (float) (filter * 0.5885 * Math.log(RAVINE_DEPTH + 1 - (height - y))); // ASSUMPTION: y <= height.
-        return ravine <= -1.3f;
+        return ravine <= TConfig.c.CAVES_NOISECAVES_NOISERAVINE_THRESHOLD;
     }
     //    private static float smallest = 0;
 }

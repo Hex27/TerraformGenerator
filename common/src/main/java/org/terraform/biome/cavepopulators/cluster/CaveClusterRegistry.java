@@ -7,10 +7,6 @@ import org.terraform.utils.GenUtils;
 import java.util.Random;
 
 public enum CaveClusterRegistry {
-    LUSH(9527213,
-            TConfig.c.BIOME_CAVE_LUSHCLUSTER_SEPARATION,
-            (float)TConfig.c.BIOME_CAVE_LUSHCLUSTER_MAXPERTUB
-    ),
     DRIPSTONE(5902907,
             TConfig.c.BIOME_CAVE_DRIPSTONECLUSTER_SEPARATION,
             (float)TConfig.c.BIOME_CAVE_DRIPSTONECLUSTER_MAXPERTUB
@@ -38,14 +34,6 @@ public enum CaveClusterRegistry {
 
     public @NotNull AbstractCaveClusterPopulator getPopulator(@NotNull Random random) {
         return switch (this) {
-            case LUSH -> new LushClusterCavePopulator(GenUtils.randInt(random,
-                    TConfig.c.BIOME_CAVE_LUSHCLUSTER_MINSIZE,
-                    TConfig.c.BIOME_CAVE_LUSHCLUSTER_MAXSIZE
-            ), false);
-//            case SULFUR -> new SulfurClusterCavePopulator(GenUtils.randInt(random,
-//                    TConfig.c.BIOME_CAVE_SULFURCLUSTER_MINSIZE,
-//                    TConfig.c.BIOME_CAVE_SULFURCLUSTER_MAXSIZE
-//            ));
             case DRIPSTONE -> new DripstoneClusterCavePopulator(GenUtils.randInt(random,
                     TConfig.c.BIOME_CAVE_DRIPSTONECLUSTER_MINSIZE,
                     TConfig.c.BIOME_CAVE_DRIPSTONECLUSTER_MAXSIZE

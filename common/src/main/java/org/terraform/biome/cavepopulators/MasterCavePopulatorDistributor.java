@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class MasterCavePopulatorDistributor {
 
-    private ThreadLocal<Collection<AbstractNoiseClusterPopulator>> noiseClusterPopulators = ThreadLocal.withInitial(
+    private final ThreadLocal<Collection<AbstractNoiseClusterPopulator>> noiseClusterPopulators = ThreadLocal.withInitial(
             CaveNoiseClusterRegistry::initiateNoiseClusterPopulators
     );
     private static final HashSet<Class<?>> populatedBefore = new HashSet<>();

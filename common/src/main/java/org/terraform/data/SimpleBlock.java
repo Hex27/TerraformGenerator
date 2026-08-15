@@ -265,9 +265,10 @@ public class SimpleBlock {
         return false;
     }
 
-    public void replaceAdjacentNonLiquids(BlockFace @NotNull [] faces, Material liquid, Material... types) {
+    public void replaceAdjacentNonLiquids(BlockFace @NotNull [] faces, boolean alsoReplaceSolids, Material liquid, Material... types) {
         for (BlockFace face : faces) {
-            if (!getRelative(face).isSolid() && getRelative(face).getType() != liquid) {
+            if ((alsoReplaceSolids || !getRelative(face).isSolid())
+                && getRelative(face).getType() != liquid) {
                 getRelative(face).setType(types);
             }
         }

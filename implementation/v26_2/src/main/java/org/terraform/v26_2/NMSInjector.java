@@ -25,6 +25,7 @@ import org.terraform.coregen.populatordata.PopulatorDataPostGen;
 import org.terraform.coregen.populatordata.PopulatorDataSpigotAPI;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.TerraformGeneratorPlugin;
+import org.terraform.main.config.TConfig;
 import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.TerraformFieldHandler;
 import org.terraform.utils.version.TerraformMethodHandler;
@@ -55,8 +56,8 @@ public class NMSInjector extends NMSInjectorAbstract {
             ServerLevel ws = cw.getHandle();
 
             // Force world to correct height
-            TerraformWorld.get(world).minY = -64;
-            TerraformWorld.get(world).maxY = 320;
+            TerraformWorld.get(world).minY = getMinY();
+            TerraformWorld.get(world).maxY = getMaxY();
 
             // n is getChunkSource, g is getGenerator()
             ChunkGenerator delegate = ws.getChunkSource().getGenerator();
@@ -158,12 +159,12 @@ public class NMSInjector extends NMSInjectorAbstract {
 
     @Override
     public int getMinY() {
-        return -64;
+        return TConfig.c.DEVSTUFF_OVERRIDE_MINHEIGHT;
     }
 
     @Override
     public int getMaxY() {
-        return 320;
+        return TConfig.c.DEVSTUFF_OVERRIDE_MAXHEIGHT;
     }
 
 }

@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.data.type.SeaPickle;
 import org.jetbrains.annotations.NotNull;
-import org.terraform.biome.cavepopulators.cluster.LushClusterCavePopulator;
+import org.terraform.biome.cavepopulators.noisecluster.LushNoiseClusterPopulator;
 import org.terraform.coregen.populatordata.PopulatorDataICABiomeWriterAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
@@ -104,7 +104,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator {
         }
 
         // Invoke OneUnit from the lush cave populator
-        new LushClusterCavePopulator(10, true).oneUnit(tw, new Random(), ceil, floor, false);
+        LushNoiseClusterPopulator.oneUnit(tw, new Random(), ceil, floor, true);
 
         // Spawn potential stalactites and stalagmites
         if (GenUtils.chance(rand, 1, 150)) {
@@ -117,6 +117,7 @@ public class LargeLushCavePopulator extends GenericLargeCavePopulator {
         // set biome
         PopulatorDataICABiomeWriterAbstract biomeWriter = (PopulatorDataICABiomeWriterAbstract) TerraformGeneratorPlugin.injector.getICAData(
                 ceil.getPopData());
+        assert biomeWriter != null;
         for (int ny = floor.getY(); ny <= ceil.getY(); ny++) {
             biomeWriter.setBiome(floor.getX(), ny, floor.getZ(), Biome.LUSH_CAVES);
         }

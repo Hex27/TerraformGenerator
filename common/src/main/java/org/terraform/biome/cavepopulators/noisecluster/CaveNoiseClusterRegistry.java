@@ -10,6 +10,7 @@ import java.util.List;
 public class CaveNoiseClusterRegistry {
     public static Collection<AbstractNoiseClusterPopulator> initiateNoiseClusterPopulators(){
         ArrayList<AbstractNoiseClusterPopulator> populators = new ArrayList<>();
+        populators.add(new LushNoiseClusterPopulator());
         if(Version.VERSION.isAtLeast(Version.v26_2))
             populators.add(new SulfurNoiseClusterPopulator());
         return populators;

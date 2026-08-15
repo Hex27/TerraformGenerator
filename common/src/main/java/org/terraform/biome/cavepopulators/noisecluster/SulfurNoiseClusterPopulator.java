@@ -53,12 +53,6 @@ public class SulfurNoiseClusterPopulator extends AbstractNoiseClusterPopulator{
 
         int caveHeight = ceil.getY() - floor.getY();
 
-        // This seems to be a legacy check that doesn't need to be done anymore.
-        // Check in game if this is an issue.
-        //if (Tag.SLABS.isTagged(floor.getType()) || Tag.WALLS.isTagged(floor.getType())) {
-        //    floor = floor.getDown();
-        //}
-
         //Cheap out and do 2D noise. We will see if that's noticeable in-game
         var noiseGen = NoiseCacheHandler.getNoise(tw,
                 NoiseCacheHandler.NoiseCacheEntry.BIOME_SULFURCAVE_BLOCKNOISE,

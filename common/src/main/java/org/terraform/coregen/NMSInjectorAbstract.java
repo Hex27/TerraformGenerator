@@ -27,6 +27,7 @@ public abstract class NMSInjectorAbstract {
     public abstract PopulatorDataICAAbstract getICAData(Chunk chunk);
 
     /**
+     * 15 Aug 2026 this being nullable is a bizarre decision
      * @param data must be instance of Version-specific PopulatorData
      * @return a populatorDataICA instance.
      */
