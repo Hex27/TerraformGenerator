@@ -134,11 +134,11 @@ public class TConfig extends YamlFileInterface {
 
     @YamlComment("Decrease the number to make lush caves smaller")
     @YamlKey("biome.cave.lush-cluster.threshold")
-    public float BIOME_CAVE_LUSH_THRESHOLD = 0.85f;
+    public float BIOME_CAVE_LUSH_THRESHOLD = 0.68f;
 
     @YamlComment("Decrease the number to make lush caves more spaced out AND bigger")
     @YamlKey("biome.cave.lush-cluster.frequency")
-    public float BIOME_CAVE_LUSH_FREQUENCY = 0.0010f;
+    public float BIOME_CAVE_LUSH_FREQUENCY = 0.010f;
 
     @YamlComment("Decrease the number to make sulfur caves smaller")
     @YamlKey("biome.cave.sulfur-cluster.threshold")
