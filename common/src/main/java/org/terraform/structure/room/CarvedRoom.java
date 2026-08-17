@@ -5,8 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.terraform.coregen.populatordata.PopulatorDataAbstract;
 import org.terraform.data.SimpleBlock;
 import org.terraform.utils.BlockUtils;
-
-import java.util.Random;
+import org.terraform.utils.GenUtils;
 
 public class CarvedRoom extends CubeRoom {
 
@@ -30,7 +29,7 @@ public class CarvedRoom extends CubeRoom {
     public void fillRoom(@NotNull PopulatorDataAbstract data, int tile, Material[] mat, Material fillMat) {
         int heightOffset = height - (2 * height / 3);
         BlockUtils.carveCaveAir(
-                new Random().nextInt(9999291),
+                GenUtils.positiveHashMod(x, y, z, 9999291),
                 xMultiplier * (widthX / 2f),
                 yMultiplier * (2 * height / 3f),
                 zMultiplier * (widthZ / 2f),
