@@ -3,7 +3,6 @@ package org.terraform.utils.noise;
 import org.jetbrains.annotations.NotNull;
 import org.terraform.data.TerraformWorld;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -101,7 +100,8 @@ public class NoiseCacheHandler {
 
         BIOME_SWAMP_MUDNOISE,
 
-        BIOME_CAVE_SULFUR_THRESNOISE,
+        BIOME_CAVE_LUSH_THRESHNOISE,
+        BIOME_CAVE_SULFUR_THRESHNOISE,
         BIOME_CAVECLUSTER_CIRCLENOISE,
         BIOME_SULFURCAVE_BLOCKNOISE,
 

@@ -18,9 +18,14 @@ public class TConfig extends YamlFileInterface {
 
     // -=[HEIGHTMAP]=-
     @YamlKey("heightmap.core-frequency")
+    @YamlComment("A higher core frequency causes land height to vary in shorter distance.")
     public float HEIGHT_MAP_CORE_FREQUENCY = 0.003f;
     @YamlKey("heightmap.river-frequency")
+    @YamlComment("A higher frequency means thinner, but closer rivers.")
     public float HEIGHT_MAP_RIVER_FREQUENCY = 0.005f;
+    @YamlKey("heightmap.rivers-enabled")
+    @YamlComment("Set to false to disable rivers entirely.")
+    public boolean HEIGHT_MAP_RIVERS_ENABLED = true;
     @YamlKey("heightmap.land-height-amplifier")
     public float HEIGHT_MAP_LAND_HEIGHT_AMPLIFIER = 1f;
     @YamlKey("heightmap.sea-level")

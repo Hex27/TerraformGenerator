@@ -30,7 +30,7 @@ public class SulfurNoiseClusterPopulator extends AbstractNoiseClusterPopulator{
     @Override
     public boolean canSpawnCluster(TerraformWorld tw, int x, int y, int z) {
 
-        FastNoise thresholdNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheHandler.NoiseCacheEntry.BIOME_CAVE_SULFUR_THRESNOISE, world -> {
+        FastNoise thresholdNoise = NoiseCacheHandler.getNoise(tw, NoiseCacheHandler.NoiseCacheEntry.BIOME_CAVE_SULFUR_THRESHNOISE, world -> {
             FastNoise n = new FastNoise((int) (tw.getSeed() ^ 183127902));
             n.SetNoiseType(FastNoise.NoiseType.Simplex);
             n.SetFrequency(TConfig.c.BIOME_CAVE_SULFUR_FREQUENCY);

@@ -140,6 +140,8 @@ public enum HeightMap {
     }
 
     public static double getRawRiverDepth(TerraformWorld tw, int x, int z) {
+        if(!TConfig.c.HEIGHT_MAP_RIVERS_ENABLED) return 0;
+
         if (Math.pow(x, 2) + Math.pow(z, 2) < spawnFlatRadiusSquared) {
             return 0;
         }
