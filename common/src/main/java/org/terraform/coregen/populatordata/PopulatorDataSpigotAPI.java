@@ -127,7 +127,8 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
             // throw an error
             CreatureSpawner spawner = (CreatureSpawner) lr.getBlockState(rawX, rawY, rawZ);
             spawner.setSpawnedType(type);
-            spawner.update(true, false);
+            lr.setBlockState(rawX,rawY,rawZ,spawner);
+            //spawner.update(true, false);
         }
         catch (ClassCastException e) {
             TerraformGeneratorPlugin.logger.info("Failed to set spawner at " + rawX + "," + rawY + "," + rawZ);
@@ -143,7 +144,8 @@ public class PopulatorDataSpigotAPI extends PopulatorDataAbstract
         BlockState s = lr.getBlockState(x, y, z);
         if (s instanceof Lootable t) {
             t.setLootTable(table.bukkit());
-            s.update(true, false);
+            lr.setBlockState(x,y,z,s);
+            //s.update(true, false);
         }
     }
 
