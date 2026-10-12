@@ -85,7 +85,7 @@ public class AbandonedCampPopulator  extends MultiMegaChunkStructurePopulator {
         // x  x
         //X    x Camp of height 3 will occupy a breadth of 4
         SimpleBlock rotSource = null;
-
+        boolean spawnedChest = false;
         for(int height = campHeight; height>0; height--){
             for(int depth = 0; depth<=campDepth; depth++){
                 int delta = 0; //Track the even width of the tent
@@ -112,7 +112,9 @@ public class AbandonedCampPopulator  extends MultiMegaChunkStructurePopulator {
                             base.getUp().Pillar(2, fence);
                             BlockUtils.correctMultifacingData(base.getUp());
                             BlockUtils.correctMultifacingData(base.getUp(2));
-                        }else if(GenUtils.chance(1,10)){
+                        }else if(GenUtils.chance(1,10)
+                        || (!spawnedChest && depth == campDepth-1)){ //Guarantee chest spawn
+                            spawnedChest = true;
                             //otherwise, that's where the chests go
                             new ChestBuilder(Material.CHEST)
                                     .setFacing(side.getOppositeFace())

@@ -27,6 +27,7 @@ import org.terraform.utils.noise.FastNoise.NoiseType;
 import org.terraform.utils.noise.NoiseCacheHandler;
 import org.terraform.utils.noise.NoiseCacheHandler.NoiseCacheEntry;
 import org.terraform.utils.version.V_26_3;
+import org.terraform.utils.version.Version;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -140,15 +141,17 @@ public class DappledForestHandler extends BiomeHandler {
                             if(target.getUp().isAir()
                                && random.nextInt(5) == 0)
                                 PlantBuilder.build(target.getUp(), PlantBuilder.BROWN_MUSHROOM);
-                            for(BlockFace face:BlockUtils.getAdjacentFaces(w.getDirection())){
-                                if(!target.getRelative(face).isAir()
-                                   || random.nextInt(3) != 0) continue;
 
-                                BlockData shelfShroom = Bukkit.createBlockData(V_26_3.SHELF_MUSHROOM);
-                                ((Directional) shelfShroom).setFacing(face);
-                                ((Ageable) shelfShroom).setAge(random.nextInt(((Ageable)shelfShroom).getMaximumAge()));
-                                target.getRelative(face).setBlockData(shelfShroom);
-                            }
+                            if(Version.VERSION.isAtLeast(Version.v26_3))
+                                for(BlockFace face:BlockUtils.getAdjacentFaces(w.getDirection())){
+                                    if(!target.getRelative(face).isAir()
+                                       || random.nextInt(3) != 0) continue;
+
+                                    BlockData shelfShroom = Bukkit.createBlockData(V_26_3.SHELF_MUSHROOM);
+                                    ((Directional) shelfShroom).setFacing(face);
+                                    ((Ageable) shelfShroom).setAge(random.nextInt(((Ageable)shelfShroom).getMaximumAge()));
+                                    target.getRelative(face).setBlockData(shelfShroom);
+                                }
                         }
                     }
                 }

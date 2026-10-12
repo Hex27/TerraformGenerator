@@ -19,6 +19,7 @@ import org.terraform.utils.GenUtils;
 import org.terraform.utils.version.V_1_20;
 import org.terraform.utils.version.V_1_21_4;
 import org.terraform.utils.version.V_26_3;
+import org.terraform.utils.version.Version;
 
 import java.util.HashSet;
 import java.util.List;
@@ -146,19 +147,20 @@ public class SaplingOverrider implements Listener {
                             );
                     return;
                 }
-                if (Set.of(V_26_3.RED_POPLAR_LEAVES,
-                           V_26_3.ORANGE_POPLAR_LEAVES,
-                           V_26_3.YELLOW_POPLAR_LEAVES)
-                       .contains(baseBlock.getType())) {
-                    FractalTypes.Tree.NORMAL_SMALL
-                            .build(
-                                    tw,
-                                    new SimpleBlock(data, x, y, z),
-                                    (nt -> {
-                                        nt.setCheckGradient(false);
-                                        DappledForestHandler.PoplarMutator(nt);
-                                    })
-                            );
+                if(Version.VERSION.isAtLeast(Version.v26_3))
+                    if (Set.of(V_26_3.RED_POPLAR_LEAVES,
+                               V_26_3.ORANGE_POPLAR_LEAVES,
+                               V_26_3.YELLOW_POPLAR_LEAVES)
+                           .contains(baseBlock.getType())) {
+                        FractalTypes.Tree.NORMAL_SMALL
+                                .build(
+                                        tw,
+                                        new SimpleBlock(data, x, y, z),
+                                        (nt -> {
+                                            nt.setCheckGradient(false);
+                                            DappledForestHandler.PoplarMutator(nt);
+                                        })
+                                );
                     return;
                 }
                 // Not handled by TG

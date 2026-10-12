@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.terraform.command.contants.IntegerArgument;
 import org.terraform.command.contants.InvalidArgumentException;
 import org.terraform.command.contants.TerraCommand;
 import org.terraform.command.contants.TerraCommandArgument;
@@ -32,6 +33,7 @@ public class LocateCommand extends TerraCommand implements Listener {
         super(plugin, aliases);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.parameters.add(new StructurePopulatorArgument("structureType", true));
+        this.parameters.add(new IntegerArgument("skip", true));
     }
 
     @EventHandler
@@ -77,6 +79,7 @@ public class LocateCommand extends TerraCommand implements Listener {
             return;
         }
         StructurePopulator spop = (StructurePopulator) params.get(0); // TODO: Get populator by name
+        int skip = params.size() == 2 ? (int) params.get(1) : 0;
 
         if (!spop.isEnabled() && !(spop instanceof StrongholdPopulator)) {
             p.sendMessage(LangOpt.COMMAND_LOCATE_STRUCTURE_NOT_ENABLED.parse());
@@ -85,6 +88,8 @@ public class LocateCommand extends TerraCommand implements Listener {
 
         // Stronghold Special Case
         if (spop instanceof StrongholdPopulator) {
+            if(skip != 0)
+                p.sendMessage(LangOpt.COMMAND_LOCATE_SKIP_UNIMPLEMENTED.parse());
             final TerraformWorld tw = TerraformWorld.get(p.getWorld());
             int[] coords = ((StrongholdPopulator) spop).getNearestFeature(tw,
                     p.getLocation().getBlockX(),
@@ -95,14 +100,14 @@ public class LocateCommand extends TerraCommand implements Listener {
         }
 
         if (spop instanceof SingleMegaChunkStructurePopulator) {
-            locateSingleMegaChunkStructure(p, (SingleMegaChunkStructurePopulator) spop);
+            locateSingleMegaChunkStructure(p, (SingleMegaChunkStructurePopulator) spop, skip);
         }
         else {
-            locateMultiMegaChunkStructure(p, (MultiMegaChunkStructurePopulator) spop);
+            locateMultiMegaChunkStructure(p, (MultiMegaChunkStructurePopulator) spop, skip);
         }
     }
 
-    private void locateMultiMegaChunkStructure(@NotNull Player p, @NotNull MultiMegaChunkStructurePopulator populator) {
+    private void locateMultiMegaChunkStructure(@NotNull Player p, @NotNull MultiMegaChunkStructurePopulator populator, int skip) {
 
         MegaChunk center = new MegaChunk(p.getLocation().getBlockX(),
                 p.getLocation().getBlockY(),
@@ -116,7 +121,7 @@ public class LocateCommand extends TerraCommand implements Listener {
 
         Runnable runnable = new Runnable() {
             public void run() {
-                int[] loc = StructureLocator.locateMultiMegaChunkStructure(tw, center, populator, -1);
+                int[] loc = StructureLocator.locateMultiMegaChunkStructure(tw, center, populator, -1, skip);
                 long timeTaken = System.currentTimeMillis() - startTime;
 
                 syncSendMessage(uuid, LangOpt.COMMAND_LOCATE_COMPLETED_TASK.parse("%time%", timeTaken + ""));
@@ -126,8 +131,10 @@ public class LocateCommand extends TerraCommand implements Listener {
         TerraformGeneratorPlugin.taskScheduler.execAsync(runnable);
     }
 
-    private void locateSingleMegaChunkStructure(@NotNull Player p, @NotNull SingleMegaChunkStructurePopulator populator)
+    private void locateSingleMegaChunkStructure(@NotNull Player p, @NotNull SingleMegaChunkStructurePopulator populator, int skip)
     {
+        if(skip != 0)
+            p.sendMessage(LangOpt.COMMAND_LOCATE_SKIP_UNIMPLEMENTED.parse());
 
         MegaChunk center = new MegaChunk(p.getLocation().getBlockX(),
                 p.getLocation().getBlockY(),

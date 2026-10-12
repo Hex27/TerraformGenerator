@@ -15,7 +15,9 @@ public enum LangOpt {
     COMMAND_LOCATEBIOME_DISABLED("&cThis biome is disabled."),
     COMMAND_LOCATE_LIST_HEADER("&e-==[&bStructure Handlers&e]==-"),
     COMMAND_LOCATE_LIST_ENTRY("&e - &b%entry%"),
-    COMMAND_LOCATE_COMPLETED_TASK("&aCompleted Locate task (%time%ms)");
+    COMMAND_LOCATE_COMPLETED_TASK("&aCompleted Locate task (%time%ms)"),
+    COMMAND_LOCATE_SKIP_UNIMPLEMENTED("&cSkip is not implemented for that structure type. Ignoring it."),
+    ;
 
     private final String path;
     private String value;

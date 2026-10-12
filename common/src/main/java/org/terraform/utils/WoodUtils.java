@@ -82,7 +82,7 @@ public class WoodUtils {
                 species = WoodSpecies.DARK_OAK;
 
             if(species == WoodSpecies.POPLAR
-               && !Version.VERSION.isAtLeast(Version.v1_21_4))
+               && !Version.VERSION.isAtLeast(Version.v26_3))
                 species = WoodSpecies.BIRCH;
 
             //This cannot be null

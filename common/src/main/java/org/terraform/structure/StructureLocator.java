@@ -25,17 +25,24 @@ public class StructureLocator {
     private static final LoadingCache<StructureLocatorKey, int[]> STRUCTURELOCATION_CACHE = CacheBuilder.newBuilder()
                                                                                                         .maximumSize(300)
                                                                                                         .build(new StructureLocatorCacheLoader());
-
     public static int[] locateMultiMegaChunkStructure(TerraformWorld tw,
                                                       @NotNull MegaChunk center,
                                                       @NotNull MultiMegaChunkStructurePopulator populator,
                                                       int timeoutMillis)
     {
+        return locateMultiMegaChunkStructure(tw,center,populator,timeoutMillis,0);
+    }
+    public static int[] locateMultiMegaChunkStructure(TerraformWorld tw,
+                                                      @NotNull MegaChunk center,
+                                                      @NotNull MultiMegaChunkStructurePopulator populator,
+                                                      int timeoutMillis,
+                                                      int skip)
+    {
 
         if (!populator.isEnabled()) {
             return null;
         }
-        StructureLocatorKey cacheKey = new StructureLocatorKey(center, tw, populator);
+        StructureLocatorKey cacheKey = new StructureLocatorKey(center, tw, populator,skip);
 
         // Do not use the cache if timeout is -1.
         // /terra locate should keep re-running this code for debug purposes.
@@ -74,6 +81,10 @@ public class StructureLocator {
                             coords[1] >> 4
                     ))
                     {
+                        if(skip > 0){
+                            skip--;
+                            continue;
+                        }
                         found = true;
                         blockX = coords[0];
                         blockZ = coords[1];
@@ -111,7 +122,7 @@ public class StructureLocator {
             return null;
         }
 
-        StructureLocatorKey cacheKey = new StructureLocatorKey(center, tw, populator);
+        StructureLocatorKey cacheKey = new StructureLocatorKey(center, tw, populator,0);
 
         // Do not use the cache if timeout is -1.
         // /terra locate should keep re-running this code for debug purposes.
@@ -247,32 +258,7 @@ public class StructureLocator {
         }
     }
 
-    private static class StructureLocatorKey {
-        private final MegaChunk mc;
-        private final TerraformWorld tw;
-        private final StructurePopulator pop;
-
-        public StructureLocatorKey(MegaChunk mc, TerraformWorld tw, StructurePopulator pop) {
-            super();
-            this.mc = mc;
-            this.tw = tw;
-            this.pop = pop;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof StructureLocatorKey other) {
-                if (other.mc.equals(mc) && other.tw.getName().equals(tw.getName())) {
-                    return pop.getClass().isInstance(other.pop);
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(mc, tw, pop.getClass());
-        }
+    private record StructureLocatorKey(MegaChunk mc, TerraformWorld tw, StructurePopulator pop, int skip) {
     }
 
 }

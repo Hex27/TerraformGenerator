@@ -366,8 +366,10 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("misc.custom-small-trees-from-saplings.big-spruce-tree")
     public boolean MISC_SAPLING_CUSTOM_TREES_BIGTREES_SPRUCE = true;
     @YamlKey("misc.trees.only-use-logs-no-wood")
-    public boolean MISC_TREES_FORCE_LOGS = false;
+    @YamlComment("TerraformGenerator classically generates trees with the Wood block and not the Log block. This option overrides this behaviour to use logs instead.")
+    public boolean MISC_TREES_FORCE_LOGS = true;
     @YamlKey("misc.trees.ground-gradient-limit")
+    @YamlComment("The gradient refers to the steepness of the ground before tree generation is stopped. Higher gradient allows trees to generate in steeper slopes.")
     public double MISC_TREES_GRADIENT_LIMIT = 1.3d;
     @YamlKey("misc.use-slabs-to-smooth-terrain")
     public boolean MISC_USE_SLABS_TO_SMOOTH = true;
@@ -528,7 +530,7 @@ public class TConfig extends YamlFileInterface {
     @YamlKey("structures.abandonedcamp.spawnratio")
     public double STRUCTURES_ABANDONEDCAMP_SPAWNRATIO = 0.7d;
     @YamlKey("structures.abandonedcamp.count-per-megachunk")
-    public int STRUCTURES_ABANDONEDCAMP_COUNT_PER_MEGACHUNK = 1;
+    public int STRUCTURES_ABANDONEDCAMP_COUNT_PER_MEGACHUNK = 2;
     @YamlKey("structures.igloo.spawnratio")
     public double STRUCTURES_IGLOO_SPAWNRATIO = 0.8d;
     @YamlKey("structures.igloo.enabled")
