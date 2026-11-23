@@ -1,17 +1,19 @@
 package org.terraform.tree;
 
-import org.bukkit.Material;
-import org.bukkit.Tag;
+import org.bukkit.*;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.terraform.biome.flat.DappledForestHandler;
 import org.terraform.biome.flat.PaleForestHandler;
 import org.terraform.coregen.bukkit.TerraformGenerator;
 import org.terraform.coregen.populatordata.PopulatorDataPostGen;
+import org.terraform.coregen.populatordata.PopulatorDataWriteTracker;
 import org.terraform.data.SimpleBlock;
 import org.terraform.data.TerraformWorld;
 import org.terraform.main.config.TConfig;
@@ -21,17 +23,20 @@ import org.terraform.utils.version.V_1_21_4;
 import org.terraform.utils.version.V_26_3;
 import org.terraform.utils.version.Version;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class SaplingOverrider implements Listener {
 
     /**
-     * Use priority highest to allow other plugins to modify event.getBlocks
+     * Use priority lowest to intercept the event before anything else tries
      */
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onTreeGrow(@NotNull StructureGrowEvent event) {
+        if(event instanceof TerraformStructureGrowEvent) {
+            return;
+        }
         if (!TConfig.areTreesEnabled()) {
             return;
         }
@@ -40,12 +45,10 @@ public class SaplingOverrider implements Listener {
             return;
         }
         TerraformWorld tw = TerraformWorld.get(event.getWorld());
-        PopulatorDataPostGen data = new PopulatorDataPostGen(event.getLocation().getChunk());
+        PopulatorDataWriteTracker data = new PopulatorDataWriteTracker(new PopulatorDataPostGen(event.getLocation().getChunk()));
         int x = event.getLocation().getBlockX();
         int y = event.getLocation().getBlockY();
         int z = event.getLocation().getBlockZ();
-        boolean wasCancelled = event.isCancelled();
-        event.setCancelled(true);
 
         boolean isLarge = event.getBlocks().size() > 150;
         List<BlockState> baseBlocks = event.getBlocks()
@@ -53,7 +56,6 @@ public class SaplingOverrider implements Listener {
                                            .filter((b) -> Tag.LEAVES.isTagged(b.getType()))
                                            .toList();
         if (baseBlocks.isEmpty()) {   // Leafless trees are not trees
-            event.setCancelled(false);
             return;
         }
         BlockState baseBlock = baseBlocks.get(0);
@@ -86,7 +88,6 @@ public class SaplingOverrider implements Listener {
                     if (TConfig.c.MISC_SAPLING_CUSTOM_TREES_BIGTREES_JUNGLE) {
                         new FractalTreeBuilder(FractalTypes.Tree.JUNGLE_BIG).skipGradientCheck().build(tw, data, x, y, z);
                     } else {
-                        event.setCancelled(wasCancelled);
                         return;
                     }
                 }
@@ -117,7 +118,6 @@ public class SaplingOverrider implements Listener {
                              .filter((b) -> b.getType() == Material.PODZOL)
                              .forEach((b) -> data.setType(b.getX(), b.getY(), b.getZ(), b.getType()));
                     }else {
-                        event.setCancelled(wasCancelled);
                         return;
                     }
                 }
@@ -133,9 +133,8 @@ public class SaplingOverrider implements Listener {
             default:
                 if (baseBlock.getType() == V_1_20.CHERRY_LEAVES) {
                     new FractalTreeBuilder(FractalTypes.Tree.CHERRY_SMALL).skipGradientCheck().build(tw, data, x, y, z);
-                    return;
                 }
-                if ( baseBlock.getType() == V_1_21_4.PALE_OAK_LEAVES) {
+                else if ( baseBlock.getType() == V_1_21_4.PALE_OAK_LEAVES) {
                     FractalTypes.Tree.DARK_OAK_SMALL
                             .build(
                                 tw,
@@ -145,27 +144,48 @@ public class SaplingOverrider implements Listener {
                                     new PaleForestHandler().paleTreeMutator(nt);
                                 })
                             );
-                    return;
                 }
-                if(Version.VERSION.isAtLeast(Version.v26_3))
+                else if(Version.VERSION.isAtLeast(Version.v26_3))
+                {
                     if (Set.of(V_26_3.RED_POPLAR_LEAVES,
                                V_26_3.ORANGE_POPLAR_LEAVES,
                                V_26_3.YELLOW_POPLAR_LEAVES)
                            .contains(baseBlock.getType())) {
-                        FractalTypes.Tree.NORMAL_SMALL
-                                .build(
-                                        tw,
-                                        new SimpleBlock(data, x, y, z),
-                                        (nt -> {
-                                            nt.setCheckGradient(false);
-                                            DappledForestHandler.PoplarMutator(nt);
-                                        })
-                                );
+                        FractalTypes.Tree.NORMAL_SMALL.build(
+                                tw, new SimpleBlock(data, x, y, z), (nt -> {
+                                    nt.setCheckGradient(false);
+                                    DappledForestHandler.PoplarMutator(nt);
+                                })
+                        );
+                    }
+                }else{
+                    // Not handled by TG
                     return;
                 }
-                // Not handled by TG
-                event.setCancelled(wasCancelled);
-                break;
+        }
+        if(!data.written.isEmpty()){
+            event.setCancelled(true);
+            ArrayList<BlockState> states = new ArrayList<>();
+            data.written.forEach((loc,blockData)->{
+                states.add(event.getWorld().getBlockState(loc.x(),loc.y(),loc.z()));
+            });
+            var newEv = new TerraformStructureGrowEvent(event.getLocation(),
+                    event.getSpecies(), event.isFromBonemeal(),
+                    event.getPlayer(),
+                    List.copyOf(states));
+            Bukkit.getServer().getPluginManager().callEvent(newEv);
+        }
+    }
+
+    public static class TerraformStructureGrowEvent extends StructureGrowEvent{
+
+        public TerraformStructureGrowEvent(@NotNull Location location,
+                                           @NotNull TreeType species,
+                                           boolean bonemeal,
+                                           @Nullable Player player,
+                                           @NotNull List<BlockState> blocks)
+        {
+            super(location, species, bonemeal, player, blocks);
         }
     }
 }
